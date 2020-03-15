@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">rpg</string>
     <string name="appIcon">20 sided dice</string>
+    <string name="appName">D&amp;D Master</string>
 </resources>
