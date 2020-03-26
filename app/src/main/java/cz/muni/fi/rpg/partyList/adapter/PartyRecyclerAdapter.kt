@@ -1,4 +1,4 @@
-package cz.muni.fi.rpg.partyList
+package cz.muni.fi.rpg.partyList.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup

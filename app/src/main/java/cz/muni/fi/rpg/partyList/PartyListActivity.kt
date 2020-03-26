@@ -2,15 +2,14 @@ package cz.muni.fi.rpg.partyList
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.widget.Toast
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import cz.muni.fi.rpg.R
+import cz.muni.fi.rpg.partyList.adapter.PartyRecyclerAdapter
 import kotlinx.android.synthetic.main.activity_party_list.*
 
 class PartyListActivity : AppCompatActivity() {
@@ -38,7 +37,8 @@ class PartyListActivity : AppCompatActivity() {
 
         partyListRecycler.layoutManager = LinearLayoutManager(applicationContext);
 
-        val adapter = PartyRecyclerAdapter(db, user.uid);
+        val adapter =
+            PartyRecyclerAdapter(db, user.uid);
         adapter.startListening();
         partyListRecycler.adapter = adapter;
 
