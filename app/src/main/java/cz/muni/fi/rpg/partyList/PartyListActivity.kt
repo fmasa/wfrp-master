@@ -2,7 +2,9 @@ package cz.muni.fi.rpg.partyList
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.auth.FirebaseAuth
@@ -39,5 +41,9 @@ class PartyListActivity : AppCompatActivity() {
         val adapter = PartyRecyclerAdapter(db, user.uid);
         adapter.startListening();
         partyListRecycler.adapter = adapter;
+
+        assembleNewParty.setOnClickListener {
+            AssemblePartyDialog(user.uid).show(supportFragmentManager, "AssemblePartyDialog");
+        }
     }
 }

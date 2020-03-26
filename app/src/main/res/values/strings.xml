@@ -2,4 +2,8 @@
     <string name="app_name">rpg</string>
     <string name="appIcon">20 sided dice</string>
     <string name="appName">D&amp;D Master</string>
+    <string name="assembleParty_title">Assemble New Party</string>
+    <string name="label_party_name">Party Name</string>
+    <string name="assembleParty_button_positive">create</string>
+    <string name="assemblyParty_submit">create</string>
 </resources>
