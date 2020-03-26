@@ -6,7 +6,7 @@ import com.google.android.gms.tasks.Task
 import cz.muni.fi.rpg.common.ViewHolder
 
 interface PartyRepository {
-    fun save(party: Party): Task<Void>
+    suspend fun save(party: Party)
 
     fun <VH : ViewHolder<Party>> forUser(
         userId: String,

@@ -13,6 +13,8 @@ import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.model.firestore.FirestorePartyRepository
 import cz.muni.fi.rpg.partyList.adapter.PartyHolder
 import kotlinx.android.synthetic.main.activity_party_list.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 
 class PartyListActivity : AppCompatActivity() {
 

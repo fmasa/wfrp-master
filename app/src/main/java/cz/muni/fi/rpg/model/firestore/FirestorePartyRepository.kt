@@ -14,6 +14,7 @@ import cz.muni.fi.rpg.model.PartyRepository
 import cz.muni.fi.rpg.model.infrastructure.GsonSnapshotParser
 import cz.muni.fi.rpg.model.infrastructure.UUIDAdapter
 import cz.muni.fi.rpg.partyList.adapter.FirestoreRecyclerAdapter
+import kotlinx.coroutines.tasks.await
 import java.util.*
 
 class FirestorePartyRepository : PartyRepository {
@@ -22,11 +23,11 @@ class FirestorePartyRepository : PartyRepository {
         .registerTypeAdapter(UUID::class.java, UUIDAdapter())
         .create()
 
-    override fun save(party: Party): Task<Void> {
-        return parties.document(party.id.toString()).set(
+    override suspend fun save(party: Party) {
+        parties.document(party.id.toString()).set(
             gson.fromJson(gson.toJson(party), Map::class.java),
             SetOptions.merge()
-        );
+        ).await();
     }
 
     override fun <VH : ViewHolder<Party>> forUser(
