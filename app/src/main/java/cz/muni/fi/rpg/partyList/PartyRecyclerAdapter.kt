@@ -6,13 +6,14 @@ import com.firebase.ui.firestore.FirestoreRecyclerAdapter
 import com.firebase.ui.firestore.FirestoreRecyclerOptions
 import com.google.firebase.firestore.FirebaseFirestore
 import cz.muni.fi.rpg.R
+import cz.muni.fi.rpg.model.infrastructure.GsonSnapshotParser
 import cz.muni.fi.rpg.model.Party
 
 class PartyRecyclerAdapter(db: FirebaseFirestore, userId: String) : FirestoreRecyclerAdapter<Party, PartyHolder>(
     FirestoreRecyclerOptions.Builder<Party>()
     .setQuery(
         db.collection("parties").whereArrayContains("users", userId),
-        Party::class.java
+        GsonSnapshotParser(Party::class.java)
     ).build()
 ) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PartyHolder {

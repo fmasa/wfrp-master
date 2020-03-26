@@ -1,12 +1,17 @@
 package cz.muni.fi.rpg.model
-
-import com.google.common.collect.ImmutableList
+import java.util.*
 
 data class Party(
-    val id: String? = null,
-    val name: String? = null,
-    val gameMasterId: String? = null,
-    val users: List<String>? = null,
-    val accessCode: String? = null
+    val id: UUID,
+    val name: String,
+    val gameMasterId: String
 ) {
+    private val users = setOf(gameMasterId);
+    private val accessCode = generateAccessCode();
+
+    init {
+        require(id.version() == 4) {"Party identifier must be UUIDv4"}
+        require(name.isNotEmpty()) {"Party name must not be empty"}
+        require(gameMasterId.isNotEmpty()) {"Game master must not be empty"}
+    }
 }
