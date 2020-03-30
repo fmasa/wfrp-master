@@ -48,6 +48,7 @@ class PartyListActivity : AppCompatActivity() {
 
         assembleNewParty.setOnClickListener {
             AssemblePartyDialog(user.uid).show(supportFragmentManager, "AssemblePartyDialog");
+            fabMenu.collapse()
         }
     }
 }

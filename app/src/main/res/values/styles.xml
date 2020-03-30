@@ -8,4 +8,14 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="menu_labels_style">
+        <item name="android:paddingLeft">4dp</item>
+        <item name="android:paddingRight">4dp</item>
+        <item name="android:paddingTop">2dp</item>
+        <item name="android:paddingBottom">2dp</item>
+        <item name="android:background">@drawable/fab_label</item>
+        <item name="android:textColor">@color/colorFabLabelText</item>
+        <item name="android:elevation">6dp</item>
+    </style>
+
 </resources>
