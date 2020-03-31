@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "723151893906",
+    "firebase_url": "https://dnd-master-58fca.firebaseio.com",
+    "project_id": "dnd-master-58fca",
+    "storage_bucket": "dnd-master-58fca.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:723151893906:android:b001abe54ab88730c53d4b",
+        "android_client_info": {
+          "package_name": "cz.muni.fi.rpg"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "723151893906-q1ij6ocfq9bl7ssomm6d813rm3drfp9h.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "cz.muni.fi.rpg",
+            "certificate_hash": "be2015c91edcc5cdc7cea224ab871a06d645937a"
+          }
+        },
+        {
+          "client_id": "723151893906-jcpa54h9uvdk614pj82ap53m4d4jmcd4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDO4Y4wWcY4HdYcsp8zcLMpMjwUJ_9q3Fw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "723151893906-jcpa54h9uvdk614pj82ap53m4d4jmcd4.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
