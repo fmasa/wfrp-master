@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
+import cz.muni.fi.rpg.partyList.PartyListActivity
 
 class MainActivity : AppCompatActivity() {
     private lateinit var auth: FirebaseAuth
