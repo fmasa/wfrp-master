@@ -7,14 +7,12 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.ktx.firestore
-import com.google.firebase.ktx.Firebase
+import cz.muni.fi.rpg.GameMasterActivity
 import cz.muni.fi.rpg.R
+import cz.muni.fi.rpg.model.Party
 import cz.muni.fi.rpg.model.firestore.FirestorePartyRepository
 import cz.muni.fi.rpg.partyList.adapter.PartyHolder
 import kotlinx.android.synthetic.main.activity_party_list.*
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 
 class PartyListActivity : AppCompatActivity() {
 
@@ -42,13 +40,31 @@ class PartyListActivity : AppCompatActivity() {
 
         partyListRecycler.layoutManager = LinearLayoutManager(applicationContext);
 
-        partyListRecycler.adapter = parties.forUser(user.uid) {
-            PartyHolder(LayoutInflater.from(it.context).inflate(R.layout.party_item, it, false))
-        }
+        partyListRecycler.adapter = parties.forUser(
+            user.uid,
+            {
+                PartyHolder(
+                    LayoutInflater.from(it.context).inflate(
+                        R.layout.party_item,
+                        it,
+                        false
+                    )
+                )
+            },
+            this::goToGameMasterActivity
+        )
 
         assembleNewParty.setOnClickListener {
-            AssemblePartyDialog(user.uid).show(supportFragmentManager, "AssemblePartyDialog");
+            AssemblePartyDialog(user.uid, this::goToGameMasterActivity)
+                .show(supportFragmentManager, "AssemblePartyDialog")
             fabMenu.collapse()
         }
+    }
+
+    private fun goToGameMasterActivity(party: Party) {
+        val intent = Intent(this, GameMasterActivity::class.java);
+        intent.putExtra(GameMasterActivity.EXTRA_PARTY_ID, party.id.toString())
+
+        startActivity(intent)
     }
 }

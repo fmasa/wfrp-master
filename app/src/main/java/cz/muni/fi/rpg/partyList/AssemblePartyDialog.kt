@@ -13,7 +13,9 @@ import kotlinx.coroutines.*
 import java.util.*
 import kotlin.coroutines.CoroutineContext
 
-class AssemblePartyDialog(private val userId: String
+class AssemblePartyDialog(
+    private val userId: String,
+    private val onSuccessListener: (Party) -> Unit
 ) : DialogFragment(), CoroutineScope {
     override val coroutineContext: CoroutineContext get() = Dispatchers.Main
 
@@ -48,6 +50,7 @@ class AssemblePartyDialog(private val userId: String
             ).show()
 
             dismiss()
+            onSuccessListener(party)
         }
     }
 }
