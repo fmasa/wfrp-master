@@ -3,5 +3,7 @@
     <color name="colorPrimary">#6200EE</color>
     <color name="colorPrimaryDark">#3700B3</color>
     <color name="colorAccent">#03DAC5</color>
-    <color name="colorFabText">#000000</color>
+    <color name="colorFabText">#FFFFFF</color>
+    <color name="colorFabLabelText">#000000</color>
+    <color name="colorFabLabelBackground">#ffffff</color>
 </resources>

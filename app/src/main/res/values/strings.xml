@@ -6,5 +6,6 @@
     <string name="label_party_name">Party Name</string>
     <string name="assembleParty_button_positive">create</string>
     <string name="assemblyParty_submit">create</string>
+    <string name="scanCode_title">Join using QR code</string>
     <string name="group_icon_description">Group icon</string>
 </resources>
