@@ -4,24 +4,26 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.auth.FirebaseAuth
 import cz.muni.fi.rpg.GameMasterActivity
 import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.model.Party
-import cz.muni.fi.rpg.model.firestore.FirestorePartyRepository
+import cz.muni.fi.rpg.model.PartyRepository
 import cz.muni.fi.rpg.partyList.adapter.PartyHolder
+import dagger.android.support.DaggerAppCompatActivity
 import kotlinx.android.synthetic.main.activity_party_list.*
+import javax.inject.Inject
 
-class PartyListActivity : AppCompatActivity() {
+class PartyListActivity : DaggerAppCompatActivity() {
+    @Inject
+    lateinit var parties: PartyRepository
+
+    @Inject
+    lateinit var auth: FirebaseAuth
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        val parties = FirestorePartyRepository();
-
-        val auth = FirebaseAuth.getInstance();
 
         val user = auth.currentUser;
 

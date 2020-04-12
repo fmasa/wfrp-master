@@ -4,20 +4,24 @@ import android.app.Dialog
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
-import androidx.fragment.app.DialogFragment
 import com.google.android.material.textfield.TextInputEditText
 import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.model.Party
-import cz.muni.fi.rpg.model.firestore.FirestorePartyRepository
+import cz.muni.fi.rpg.model.PartyRepository
+import dagger.android.support.DaggerDialogFragment
 import kotlinx.coroutines.*
 import java.util.*
+import javax.inject.Inject
 import kotlin.coroutines.CoroutineContext
 
 class AssemblePartyDialog(
     private val userId: String,
     private val onSuccessListener: (Party) -> Unit
-) : DialogFragment(), CoroutineScope {
+) : DaggerDialogFragment(), CoroutineScope {
     override val coroutineContext: CoroutineContext get() = Dispatchers.Main
+
+    @Inject
+    lateinit var parties: PartyRepository
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val activity = requireActivity();
@@ -40,7 +44,7 @@ class AssemblePartyDialog(
 
         launch {
             withContext(Dispatchers.IO) {
-                FirestorePartyRepository().save(party)
+                parties.save(party)
             }
 
             Toast.makeText(

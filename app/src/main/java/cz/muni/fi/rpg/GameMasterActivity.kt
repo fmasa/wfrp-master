@@ -1,10 +1,10 @@
 package cz.muni.fi.rpg
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import dagger.android.support.DaggerAppCompatActivity
 import java.util.*
 
-class GameMasterActivity : AppCompatActivity() {
+class GameMasterActivity : DaggerAppCompatActivity() {
     companion object {
         const val EXTRA_PARTY_ID = "partyId"
     }
