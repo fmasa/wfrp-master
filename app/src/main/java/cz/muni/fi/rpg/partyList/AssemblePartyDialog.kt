@@ -4,11 +4,11 @@ import android.app.Dialog
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
-import com.google.android.material.textfield.TextInputEditText
 import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.model.Party
 import cz.muni.fi.rpg.model.PartyRepository
 import dagger.android.support.DaggerDialogFragment
+import kotlinx.android.synthetic.main.dialog_asssemble_party.*
 import kotlinx.coroutines.*
 import java.util.*
 import javax.inject.Inject
@@ -36,7 +36,7 @@ class AssemblePartyDialog(
     }
 
     private fun dialogSubmitted() {
-        val partyNameInput = requireDialog().findViewById<TextInputEditText>(R.id.partyName)
+        val partyNameInput = requireDialog().partyName
 
         val party = Party(UUID.randomUUID(), partyNameInput.text.toString(), userId);
 
