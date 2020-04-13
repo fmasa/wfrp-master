@@ -15,7 +15,7 @@ import dagger.android.support.DaggerAppCompatActivity
 import kotlinx.android.synthetic.main.activity_party_list.*
 import javax.inject.Inject
 
-class PartyListActivity : DaggerAppCompatActivity() {
+class PartyListActivity : DaggerAppCompatActivity(R.layout.activity_party_list) {
     @Inject
     lateinit var parties: PartyRepository
 
@@ -37,8 +37,6 @@ class PartyListActivity : DaggerAppCompatActivity() {
 
             return
         }
-
-        setContentView(R.layout.activity_party_list)
 
         supportActionBar?.title = getString(R.string.party_activity_title)
 

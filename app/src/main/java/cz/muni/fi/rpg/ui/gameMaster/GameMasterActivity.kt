@@ -13,7 +13,7 @@ import kotlinx.coroutines.withContext
 import java.util.UUID
 import javax.inject.Inject
 
-class GameMasterActivity : DaggerAppCompatActivity(),
+class GameMasterActivity : DaggerAppCompatActivity(R.layout.activity_game_master),
     CoroutineScope by CoroutineScope(Dispatchers.Default) {
     companion object {
         const val EXTRA_PARTY_ID = "partyId"
@@ -32,8 +32,6 @@ class GameMasterActivity : DaggerAppCompatActivity(),
 
         partyId = intent.getStringExtra(EXTRA_PARTY_ID)?.let { UUID.fromString(it) }
             ?: throw IllegalAccessException("'$EXTRA_PARTY_ID' must be provided")
-
-        setContentView(R.layout.activity_game_master)
 
         launch {
             val party = parties.get(partyId)

@@ -10,14 +10,9 @@ import cz.muni.fi.rpg.ui.partyList.PartyListActivity
 import dagger.android.support.DaggerAppCompatActivity
 import javax.inject.Inject
 
-class MainActivity : DaggerAppCompatActivity() {
+class MainActivity : DaggerAppCompatActivity(R.layout.activity_main) {
     @Inject
     lateinit var auth: FirebaseAuth
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-    }
 
     override fun onStart() {
         super.onStart()
