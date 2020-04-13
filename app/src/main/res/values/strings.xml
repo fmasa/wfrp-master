@@ -9,4 +9,5 @@
     <string name="scanCode_title">Join using QR code</string>
     <string name="group_icon_description">Group icon</string>
     <string name="qr_code_description">QR code</string>
+    <string name="party_activity_title">Parties</string>
 </resources>

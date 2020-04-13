@@ -40,8 +40,9 @@ class PartyListActivity : DaggerAppCompatActivity() {
 
         setContentView(R.layout.activity_party_list)
 
-        partyListRecycler.layoutManager = LinearLayoutManager(applicationContext);
+        supportActionBar?.title = getString(R.string.party_activity_title)
 
+        partyListRecycler.layoutManager = LinearLayoutManager(applicationContext);
         partyListRecycler.adapter = parties.forUser(
             user.uid,
             {
