@@ -8,8 +8,8 @@ import com.google.firebase.firestore.SetOptions
 import com.google.gson.Gson
 import cz.muni.fi.rpg.common.OnClickListener
 import cz.muni.fi.rpg.common.ViewHolder
-import cz.muni.fi.rpg.model.Party
-import cz.muni.fi.rpg.model.PartyRepository
+import cz.muni.fi.rpg.model.domain.party.Party
+import cz.muni.fi.rpg.model.domain.party.PartyRepository
 import cz.muni.fi.rpg.model.infrastructure.GsonSnapshotParser
 import cz.muni.fi.rpg.partyList.adapter.FirestoreRecyclerAdapter
 import kotlinx.coroutines.tasks.await

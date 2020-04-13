@@ -8,8 +8,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.auth.FirebaseAuth
 import cz.muni.fi.rpg.GameMasterActivity
 import cz.muni.fi.rpg.R
-import cz.muni.fi.rpg.model.Party
-import cz.muni.fi.rpg.model.PartyRepository
+import cz.muni.fi.rpg.model.domain.party.Party
+import cz.muni.fi.rpg.model.domain.party.PartyRepository
 import cz.muni.fi.rpg.partyList.adapter.PartyHolder
 import dagger.android.support.DaggerAppCompatActivity
 import kotlinx.android.synthetic.main.activity_party_list.*

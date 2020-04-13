@@ -1,4 +1,5 @@
-package cz.muni.fi.rpg.model
+package cz.muni.fi.rpg.model.domain.party
+import cz.muni.fi.rpg.model.generateAccessCode
 import java.util.*
 
 data class Party(
@@ -15,5 +16,6 @@ data class Party(
         require(gameMasterId.isNotEmpty()) {"Game master must not be empty"}
     }
 
-    fun getInvitation() = InvitationToken(id, accessCode)
+    fun getInvitation() =
+        InvitationToken(id, accessCode)
 }

@@ -1,8 +1,7 @@
-package cz.muni.fi.rpg.model
+package cz.muni.fi.rpg.model.domain.party
 
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.gms.tasks.Task
 import cz.muni.fi.rpg.common.OnClickListener
 import cz.muni.fi.rpg.common.ViewHolder
 import java.util.*

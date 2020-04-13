@@ -5,8 +5,8 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import cz.muni.fi.rpg.R
-import cz.muni.fi.rpg.model.Party
-import cz.muni.fi.rpg.model.PartyRepository
+import cz.muni.fi.rpg.model.domain.party.Party
+import cz.muni.fi.rpg.model.domain.party.PartyRepository
 import dagger.android.support.DaggerDialogFragment
 import kotlinx.android.synthetic.main.dialog_asssemble_party.*
 import kotlinx.coroutines.*
@@ -38,7 +38,11 @@ class AssemblePartyDialog(
     private fun dialogSubmitted() {
         val partyNameInput = requireDialog().partyName
 
-        val party = Party(UUID.randomUUID(), partyNameInput.text.toString(), userId);
+        val party = Party(
+            UUID.randomUUID(),
+            partyNameInput.text.toString(),
+            userId
+        );
 
         val context = requireContext()
 

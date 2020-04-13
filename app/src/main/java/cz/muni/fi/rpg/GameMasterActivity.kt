@@ -2,7 +2,7 @@ package cz.muni.fi.rpg
 
 import android.os.Bundle
 import com.google.gson.Gson
-import cz.muni.fi.rpg.model.PartyRepository
+import cz.muni.fi.rpg.model.domain.party.PartyRepository
 import dagger.android.support.DaggerAppCompatActivity
 import kotlinx.android.synthetic.main.activity_game_master.*
 import kotlinx.coroutines.CoroutineScope

@@ -1,4 +1,4 @@
-package cz.muni.fi.rpg.model
+package cz.muni.fi.rpg.model.domain.party
 
 import java.util.UUID
 
