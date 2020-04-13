@@ -14,4 +14,6 @@ data class Party(
         require(name.isNotEmpty()) {"Party name must not be empty"}
         require(gameMasterId.isNotEmpty()) {"Game master must not be empty"}
     }
+
+    fun getInvitation() = InvitationToken(id, accessCode)
 }
