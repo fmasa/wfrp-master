@@ -1,4 +1,4 @@
-package cz.muni.fi.rpg.partyList
+package cz.muni.fi.rpg.ui.partyList
 
 import android.app.Dialog
 import android.os.Bundle

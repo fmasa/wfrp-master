@@ -1,8 +1,8 @@
 package cz.muni.fi.rpg.di
 
-import cz.muni.fi.rpg.GameMasterActivity
-import cz.muni.fi.rpg.MainActivity
-import cz.muni.fi.rpg.partyList.PartyListActivity
+import cz.muni.fi.rpg.ui.gameMaster.GameMasterActivity
+import cz.muni.fi.rpg.ui.MainActivity
+import cz.muni.fi.rpg.ui.partyList.PartyListActivity
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
 

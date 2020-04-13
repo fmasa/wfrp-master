@@ -1,4 +1,4 @@
-package cz.muni.fi.rpg.partyList.adapter
+package cz.muni.fi.rpg.ui.partyList.adapter
 
 import android.view.View
 import cz.muni.fi.rpg.common.OnClickListener

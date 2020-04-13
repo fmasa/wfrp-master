@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".GameMasterActivity">
+    tools:context=".ui.gameMaster.GameMasterActivity">
 
     <TextView
         android:layout_width="match_parent"
@@ -15,7 +15,7 @@
         android:textAlignment="center"
         app:layout_constraintBottom_toTopOf="@id/partyInviteQrCode"/>
 
-    <cz.muni.fi.rpg.views.QrCode
+    <cz.muni.fi.rpg.ui.views.QrCode
         android:id="@+id/partyInviteQrCode"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"

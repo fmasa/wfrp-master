@@ -1,4 +1,4 @@
-package cz.muni.fi.rpg.views
+package cz.muni.fi.rpg.ui.views
 
 import android.content.Context
 import android.graphics.Bitmap

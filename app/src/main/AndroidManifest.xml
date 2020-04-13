@@ -10,9 +10,9 @@
         android:supportsRtl="true"
         android:name=".Application"
         android:theme="@style/AppTheme">
-        <activity android:name=".GameMasterActivity"></activity>
-        <activity android:name=".partyList.PartyListActivity" />
-        <activity android:name=".MainActivity">
+        <activity android:name=".ui.gameMaster.GameMasterActivity"></activity>
+        <activity android:name="cz.muni.fi.rpg.ui.partyList.PartyListActivity" />
+        <activity android:name=".ui.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

@@ -1,7 +1,8 @@
-package cz.muni.fi.rpg
+package cz.muni.fi.rpg.ui.gameMaster
 
 import android.os.Bundle
 import com.google.gson.Gson
+import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.model.domain.party.PartyRepository
 import dagger.android.support.DaggerAppCompatActivity
 import kotlinx.android.synthetic.main.activity_game_master.*
@@ -30,7 +31,7 @@ class GameMasterActivity : DaggerAppCompatActivity(),
         super.onCreate(savedInstanceState)
 
         partyId = intent.getStringExtra(EXTRA_PARTY_ID)?.let { UUID.fromString(it) }
-            ?: throw IllegalAccessException("'${EXTRA_PARTY_ID}' must be provided")
+            ?: throw IllegalAccessException("'$EXTRA_PARTY_ID' must be provided")
 
         setContentView(R.layout.activity_game_master)
 

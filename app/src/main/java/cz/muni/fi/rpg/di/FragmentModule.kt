@@ -1,6 +1,6 @@
 package cz.muni.fi.rpg.di
 
-import cz.muni.fi.rpg.partyList.AssemblePartyDialog
+import cz.muni.fi.rpg.ui.partyList.AssemblePartyDialog
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
 

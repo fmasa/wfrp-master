@@ -1,4 +1,4 @@
-package cz.muni.fi.rpg.partyList
+package cz.muni.fi.rpg.ui.partyList
 
 import android.content.Intent
 import android.os.Bundle
@@ -6,11 +6,11 @@ import android.view.LayoutInflater
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.auth.FirebaseAuth
-import cz.muni.fi.rpg.GameMasterActivity
+import cz.muni.fi.rpg.ui.gameMaster.GameMasterActivity
 import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.model.domain.party.Party
 import cz.muni.fi.rpg.model.domain.party.PartyRepository
-import cz.muni.fi.rpg.partyList.adapter.PartyHolder
+import cz.muni.fi.rpg.ui.partyList.adapter.PartyHolder
 import dagger.android.support.DaggerAppCompatActivity
 import kotlinx.android.synthetic.main.activity_party_list.*
 import javax.inject.Inject
