@@ -21,8 +21,6 @@ class PartyListActivity : AuthenticatedActivity(R.layout.activity_party_list) {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        supportActionBar?.title = getString(R.string.party_activity_title)
-
         partyListRecycler.layoutManager = LinearLayoutManager(applicationContext);
         partyListRecycler.adapter = parties.forUser(
             getUserId(),
