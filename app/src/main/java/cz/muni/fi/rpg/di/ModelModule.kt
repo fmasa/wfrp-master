@@ -6,7 +6,9 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
+import cz.muni.fi.rpg.model.domain.invitation.InvitationProcessor
 import cz.muni.fi.rpg.model.domain.party.PartyRepository
+import cz.muni.fi.rpg.model.firestore.FirestoreInvitationProcessor
 import cz.muni.fi.rpg.model.firestore.FirestorePartyRepository
 import cz.muni.fi.rpg.model.infrastructure.UUIDAdapter
 import dagger.Module
@@ -26,6 +28,10 @@ class ModelModule {
     @Provides
     fun parties(gson: Gson, firestore: FirebaseFirestore): PartyRepository =
         FirestorePartyRepository(gson, firestore)
+
+    @Provides
+    fun invitationProcessor(firestore: FirebaseFirestore, gson: Gson): InvitationProcessor =
+        FirestoreInvitationProcessor(firestore, gson)
 
     @Provides
     fun auth() = FirebaseAuth.getInstance()

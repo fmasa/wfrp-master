@@ -7,8 +7,8 @@ data class Party(
     val name: String,
     val gameMasterId: String
 ) {
-    private val users = setOf(gameMasterId);
     private val accessCode = generateAccessCode();
+    private val users = setOf(gameMasterId);
 
     init {
         require(id.version() == 4) {"Party identifier must be UUIDv4"}
@@ -16,6 +16,5 @@ data class Party(
         require(gameMasterId.isNotEmpty()) {"Game master must not be empty"}
     }
 
-    fun getInvitation() =
-        InvitationToken(id, accessCode)
+    fun getInvitation() = InvitationToken(id, accessCode)
 }

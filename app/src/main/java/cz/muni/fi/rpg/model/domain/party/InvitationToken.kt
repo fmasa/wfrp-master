@@ -4,5 +4,5 @@ import java.util.UUID
 
 data class InvitationToken(
     val partyId: UUID,
-    private val accessCode: String
+    val accessCode: String
 )
