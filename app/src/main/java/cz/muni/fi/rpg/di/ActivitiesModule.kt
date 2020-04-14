@@ -1,6 +1,7 @@
 package cz.muni.fi.rpg.di
 
 import cz.muni.fi.rpg.ui.AuthenticatedActivity
+import cz.muni.fi.rpg.ui.JoinPartyActivity
 import cz.muni.fi.rpg.ui.gameMaster.GameMasterActivity
 import cz.muni.fi.rpg.ui.MainActivity
 import cz.muni.fi.rpg.ui.partyList.PartyListActivity
@@ -20,4 +21,7 @@ abstract class ActivitiesModule {
 
     @ContributesAndroidInjector
     abstract fun gameMasterActivity(): GameMasterActivity
+
+    @ContributesAndroidInjector
+    abstract fun joinPartyActivity(): JoinPartyActivity
 }

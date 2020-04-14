@@ -9,6 +9,7 @@ import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.model.domain.party.Party
 import cz.muni.fi.rpg.model.domain.party.PartyRepository
 import cz.muni.fi.rpg.ui.AuthenticatedActivity
+import cz.muni.fi.rpg.ui.JoinPartyActivity
 import cz.muni.fi.rpg.ui.partyList.adapter.PartyHolder
 import kotlinx.android.synthetic.main.activity_party_list.*
 import javax.inject.Inject
@@ -40,6 +41,11 @@ class PartyListActivity : AuthenticatedActivity(R.layout.activity_party_list) {
         assembleNewParty.setOnClickListener {
             AssemblePartyDialog(getUserId(), this::goToGameMasterActivity)
                 .show(supportFragmentManager, "AssemblePartyDialog")
+            fabMenu.collapse()
+        }
+
+        scanQrCode.setOnClickListener {
+            startActivity(Intent(this, JoinPartyActivity::class.java))
             fabMenu.collapse()
         }
     }
