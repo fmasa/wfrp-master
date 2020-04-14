@@ -1,4 +1,4 @@
-package cz.muni.fi.rpg.ui
+package cz.muni.fi.rpg.ui.joinParty
 
 import android.Manifest
 import android.content.pm.PackageManager
@@ -13,7 +13,7 @@ import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.model.domain.invitation.InvalidInvitation
 import cz.muni.fi.rpg.model.domain.invitation.InvitationProcessor
 import cz.muni.fi.rpg.model.domain.party.InvitationToken
-import dagger.android.support.DaggerAppCompatActivity
+import cz.muni.fi.rpg.ui.AuthenticatedActivity
 import kotlinx.android.synthetic.main.activity_join_party.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers

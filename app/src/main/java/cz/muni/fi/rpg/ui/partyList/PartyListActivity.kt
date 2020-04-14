@@ -9,7 +9,7 @@ import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.model.domain.party.Party
 import cz.muni.fi.rpg.model.domain.party.PartyRepository
 import cz.muni.fi.rpg.ui.AuthenticatedActivity
-import cz.muni.fi.rpg.ui.JoinPartyActivity
+import cz.muni.fi.rpg.ui.joinParty.JoinPartyActivity
 import cz.muni.fi.rpg.ui.partyList.adapter.PartyHolder
 import kotlinx.android.synthetic.main.activity_party_list.*
 import javax.inject.Inject
