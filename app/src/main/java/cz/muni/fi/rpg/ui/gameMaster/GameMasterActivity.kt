@@ -4,7 +4,7 @@ import android.os.Bundle
 import com.google.gson.Gson
 import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.model.domain.party.PartyRepository
-import dagger.android.support.DaggerAppCompatActivity
+import cz.muni.fi.rpg.ui.AuthenticatedActivity
 import kotlinx.android.synthetic.main.activity_game_master.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -13,7 +13,7 @@ import kotlinx.coroutines.withContext
 import java.util.UUID
 import javax.inject.Inject
 
-class GameMasterActivity : DaggerAppCompatActivity(R.layout.activity_game_master),
+class GameMasterActivity : AuthenticatedActivity(R.layout.activity_game_master),
     CoroutineScope by CoroutineScope(Dispatchers.Default) {
     companion object {
         const val EXTRA_PARTY_ID = "partyId"
