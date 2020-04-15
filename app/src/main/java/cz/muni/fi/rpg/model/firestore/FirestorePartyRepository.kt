@@ -1,5 +1,6 @@
 package cz.muni.fi.rpg.model.firestore
 
+import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.RecyclerView
 import com.firebase.ui.firestore.FirestoreRecyclerOptions
 import com.google.firebase.firestore.FirebaseFirestore
@@ -42,15 +43,13 @@ class FirestorePartyRepository @Inject constructor(
 
     override fun forUser(
         userId: String,
+        lifecycleOwner: LifecycleOwner,
         viewHolderFactory: ViewHolderFactory<Party>
     ): RecyclerView.Adapter<ViewHolder<Party>> {
         val options = FirestoreRecyclerOptions.Builder<Party>()
+            .setLifecycleOwner(lifecycleOwner)
             .setQuery(parties.whereArrayContains("users", userId), parser).build()
 
-        val adapter = FirestoreRecyclerAdapter(options, viewHolderFactory);
-
-        adapter.startListening()
-
-        return adapter
+        return FirestoreRecyclerAdapter(options, viewHolderFactory)
     }
 }
