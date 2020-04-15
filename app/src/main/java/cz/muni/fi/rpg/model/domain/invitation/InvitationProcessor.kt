@@ -7,6 +7,7 @@ interface InvitationProcessor {
      * Gives user access to the party
      *
      * @throws InvalidInvitation
+     * @throws AlreadyInParty
      */
     suspend fun accept(userId: String, invitation: Invitation)
 }

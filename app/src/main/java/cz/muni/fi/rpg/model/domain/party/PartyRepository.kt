@@ -9,7 +9,10 @@ import java.util.*
 interface PartyRepository {
     suspend fun save(party: Party)
 
-    suspend fun get(id: UUID): Party;
+    /**
+     * @throws PartyNotFound
+     */
+    suspend fun get(id: UUID): Party
 
     /**
      * Creates RecyclerView Adapter with parties that user has access to

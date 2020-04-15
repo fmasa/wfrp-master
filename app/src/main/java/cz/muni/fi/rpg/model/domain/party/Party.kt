@@ -8,7 +8,7 @@ data class Party(
     val gameMasterId: String
 ) {
     private val accessCode = generateAccessCode();
-    private val users = setOf(gameMasterId);
+    val users = setOf(gameMasterId);
 
     init {
         require(id.version() == 4) {"Party identifier must be UUIDv4"}

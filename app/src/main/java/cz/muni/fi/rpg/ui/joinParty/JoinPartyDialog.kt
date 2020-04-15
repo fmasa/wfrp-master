@@ -10,6 +10,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.core.text.bold
 import androidx.fragment.app.DialogFragment
 import cz.muni.fi.rpg.R
+import cz.muni.fi.rpg.model.domain.invitation.AlreadyInParty
 import cz.muni.fi.rpg.model.domain.invitation.InvalidInvitation
 import cz.muni.fi.rpg.model.domain.invitation.InvitationProcessor
 import cz.muni.fi.rpg.model.domain.party.Invitation
@@ -98,14 +99,23 @@ class JoinPartyDialog(
             try {
                 invitationProcessor.accept(userId, invitation)
                 onSuccessListener()
-            } catch (e: InvalidInvitation) {
-                val error = "Invitation token is not valid"
-                Log.e(tag, error, e)
-                Toast.makeText(requireActivity(), error, Toast.LENGTH_SHORT).show()
 
-                dismissAndNotify()
+                return@launch
+            } catch (e: InvalidInvitation) {
+                invitationError(getString(R.string.error_invalid_invitation), e)
+            } catch (e: AlreadyInParty) {
+                invitationError(getString(R.string.error_already_party_member), e)
+            } catch (e: Throwable) {
+                Log.e(tag, "Uknown invitation error", e)
+                invitationError(getString(R.string.error_unkown), e)
             }
+
+            dismissAndNotify()
         }
     }
 
+    private fun invitationError(message: String, e: Throwable) {
+        Log.w(tag, e)
+        Toast.makeText(requireActivity(), message, Toast.LENGTH_SHORT).show()
+    }
 }

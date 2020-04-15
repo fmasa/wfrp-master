@@ -4,11 +4,13 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.firebase.ui.firestore.FirestoreRecyclerOptions
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.FirebaseFirestoreException
 import com.google.firebase.firestore.SetOptions
 import com.google.gson.Gson
 import cz.muni.fi.rpg.common.OnClickListener
 import cz.muni.fi.rpg.common.ViewHolder
 import cz.muni.fi.rpg.model.domain.party.Party
+import cz.muni.fi.rpg.model.domain.party.PartyNotFound
 import cz.muni.fi.rpg.model.domain.party.PartyRepository
 import cz.muni.fi.rpg.model.infrastructure.GsonSnapshotParser
 import cz.muni.fi.rpg.ui.partyList.adapter.FirestoreRecyclerAdapter
@@ -31,9 +33,12 @@ class FirestorePartyRepository @Inject constructor(
     }
 
     override suspend fun get(id: UUID): Party {
-        val party = parties.document(id.toString()).get().await();
-
-        return this.parser.parseSnapshot(party);
+        try {
+            val party = parties.document(id.toString()).get().await();
+            return this.parser.parseSnapshot(party);
+        } catch (e: FirebaseFirestoreException) {
+            throw PartyNotFound(id, e)
+        }
     }
 
     override fun <VH : ViewHolder<Party>> forUser(

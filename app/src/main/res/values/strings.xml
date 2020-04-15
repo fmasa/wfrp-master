@@ -19,4 +19,7 @@
     <string name="join_party_dialog_party_name">You are joining</string>
     <string name="join_party_dialog_prompt">Do you want to continue?</string>
     <string name="button_continue">Continue</string>
+    <string name="error_already_party_member">You are already member of this party</string>
+    <string name="error_invalid_invitation">Invitation token is not valid</string>
+    <string name="error_unkown">Unknown error occurred</string>
 </resources>
