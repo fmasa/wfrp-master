@@ -1,14 +1,13 @@
 package cz.muni.fi.rpg.model.firestore
 
-import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.firebase.ui.firestore.FirestoreRecyclerOptions
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.FirebaseFirestoreException
 import com.google.firebase.firestore.SetOptions
 import com.google.gson.Gson
-import cz.muni.fi.rpg.common.OnClickListener
 import cz.muni.fi.rpg.common.ViewHolder
+import cz.muni.fi.rpg.common.ViewHolderFactory
 import cz.muni.fi.rpg.model.domain.party.Party
 import cz.muni.fi.rpg.model.domain.party.PartyNotFound
 import cz.muni.fi.rpg.model.domain.party.PartyRepository
@@ -41,15 +40,14 @@ class FirestorePartyRepository @Inject constructor(
         }
     }
 
-    override fun <VH : ViewHolder<Party>> forUser(
+    override fun forUser(
         userId: String,
-        viewHolderFactory: (parent: ViewGroup) -> VH,
-        onClickListener: OnClickListener<Party>
-    ) : RecyclerView.Adapter<VH> {
+        viewHolderFactory: ViewHolderFactory<Party>
+    ): RecyclerView.Adapter<ViewHolder<Party>> {
         val options = FirestoreRecyclerOptions.Builder<Party>()
             .setQuery(parties.whereArrayContains("users", userId), parser).build()
 
-        val adapter = FirestoreRecyclerAdapter(options, viewHolderFactory, onClickListener);
+        val adapter = FirestoreRecyclerAdapter(options, viewHolderFactory);
 
         adapter.startListening()
 

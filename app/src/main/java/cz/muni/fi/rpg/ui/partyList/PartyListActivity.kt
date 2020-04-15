@@ -22,19 +22,12 @@ class PartyListActivity : AuthenticatedActivity(R.layout.activity_party_list) {
         super.onCreate(savedInstanceState)
 
         partyListRecycler.layoutManager = LinearLayoutManager(applicationContext);
-        partyListRecycler.adapter = parties.forUser(
-            getUserId(),
-            {
-                PartyHolder(
-                    LayoutInflater.from(it.context).inflate(
-                        R.layout.party_item,
-                        it,
-                        false
-                    )
-                )
-            },
-            this::goToGameMasterActivity
-        )
+        partyListRecycler.adapter = parties.forUser(getUserId()) {
+            PartyHolder(
+                layoutInflater.inflate(R.layout.party_item, it, false),
+                this::goToGameMasterActivity
+            )
+        }
 
         assembleNewParty.setOnClickListener {
             AssemblePartyDialog(getUserId(), this::goToGameMasterActivity)
