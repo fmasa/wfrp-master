@@ -14,25 +14,34 @@ import cz.muni.fi.rpg.model.infrastructure.UUIDAdapter
 import dagger.Module
 import dagger.Provides
 import java.util.*
+import javax.inject.Singleton
 
 @Module
 class ModelModule {
     @Provides
+    @Singleton
     fun gson(): Gson = GsonBuilder()
         .registerTypeAdapter(UUID::class.java, UUIDAdapter())
         .create()
 
     @Provides
+    @Singleton
     fun firestore() = Firebase.firestore
 
     @Provides
+    @Singleton
     fun parties(gson: Gson, firestore: FirebaseFirestore): PartyRepository =
         FirestorePartyRepository(gson, firestore)
 
     @Provides
-    fun invitationProcessor(firestore: FirebaseFirestore): InvitationProcessor =
-        FirestoreInvitationProcessor(firestore)
+    @Singleton
+    fun invitationProcessor(
+        firestore: FirebaseFirestore,
+        parties: PartyRepository
+    ): InvitationProcessor =
+        FirestoreInvitationProcessor(firestore, parties)
 
     @Provides
+    @Singleton
     fun auth() = FirebaseAuth.getInstance()
 }
