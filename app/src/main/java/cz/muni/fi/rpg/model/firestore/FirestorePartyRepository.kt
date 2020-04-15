@@ -23,7 +23,7 @@ class FirestorePartyRepository @Inject constructor(
     firestore: FirebaseFirestore
 ) : PartyRepository {
     private val parties = firestore.collection("parties");
-    private val parser = GsonSnapshotParser(Party::class.java, gson);
+    private val parser = GsonSnapshotParser(Party::class, gson);
 
     override suspend fun save(party: Party) {
         parties.document(party.id.toString()).set(
