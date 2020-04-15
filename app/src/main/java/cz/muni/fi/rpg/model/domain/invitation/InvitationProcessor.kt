@@ -1,6 +1,6 @@
 package cz.muni.fi.rpg.model.domain.invitation
 
-import cz.muni.fi.rpg.model.domain.party.InvitationToken
+import cz.muni.fi.rpg.model.domain.party.Invitation
 
 interface InvitationProcessor {
     /**
@@ -8,5 +8,5 @@ interface InvitationProcessor {
      *
      * @throws InvalidInvitation
      */
-    suspend fun accept(userId: String, invitation: InvitationToken)
+    suspend fun accept(userId: String, invitation: Invitation)
 }

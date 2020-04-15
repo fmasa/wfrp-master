@@ -30,8 +30,8 @@ class ModelModule {
         FirestorePartyRepository(gson, firestore)
 
     @Provides
-    fun invitationProcessor(firestore: FirebaseFirestore, gson: Gson): InvitationProcessor =
-        FirestoreInvitationProcessor(firestore, gson)
+    fun invitationProcessor(firestore: FirebaseFirestore): InvitationProcessor =
+        FirestoreInvitationProcessor(firestore)
 
     @Provides
     fun auth() = FirebaseAuth.getInstance()

@@ -3,6 +3,7 @@ package cz.muni.fi.rpg.ui.joinParty
 import android.Manifest
 import android.content.pm.PackageManager
 import android.util.Log
+import android.view.MotionEvent
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -10,20 +11,14 @@ import com.google.gson.Gson
 import com.google.gson.JsonSyntaxException
 import com.google.zxing.Result
 import cz.muni.fi.rpg.R
-import cz.muni.fi.rpg.model.domain.invitation.InvalidInvitation
 import cz.muni.fi.rpg.model.domain.invitation.InvitationProcessor
-import cz.muni.fi.rpg.model.domain.party.InvitationToken
+import cz.muni.fi.rpg.model.domain.party.Invitation
 import cz.muni.fi.rpg.ui.AuthenticatedActivity
 import kotlinx.android.synthetic.main.activity_join_party.*
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import me.dm7.barcodescanner.zxing.ZXingScannerView
 import javax.inject.Inject
 
-
 class JoinPartyActivity : AuthenticatedActivity(R.layout.activity_join_party),
-    CoroutineScope by CoroutineScope(Dispatchers.Main),
     ZXingScannerView.ResultHandler {
     companion object {
         private const val CAMERA_PERMISSION_CODE = 1
@@ -91,33 +86,32 @@ class JoinPartyActivity : AuthenticatedActivity(R.layout.activity_join_party),
 
     override fun handleResult(result: Result) {
         try {
-            acceptInvitation(gson.fromJson(result.text, InvitationToken::class.java))
-        } catch (e: InvalidInvitation) {
-            val error = "Invitation token is not valid"
-            Log.e(localClassName, error, e)
-            Toast.makeText(this, error, Toast.LENGTH_SHORT).show()
-            scanner.resumeCameraPreview(this)
+            val invitation = deserializeInvitation(result.text)
+
+            Log.d(localClassName, result.text)
+
+            JoinPartyDialog(getUserId(), invitation, invitationProcessor)
+                .setOnErrorListener { resumeScanning() }
+                .setOnSuccessListener { finish() }
+                .setOnDismissListener { resumeScanning() }
+                .show(supportFragmentManager, "JoinPartyDialog")
         } catch (e: JsonSyntaxException) {
             val error = "QR code is not valid party invitation"
 
             Log.e(localClassName, error, e)
             Toast.makeText(this, error, Toast.LENGTH_SHORT).show()
-            scanner.resumeCameraPreview(this)
+            resumeScanning()
         }
     }
 
-    private fun acceptInvitation(invitation: InvitationToken) {
-        launch {
-            try {
-                invitationProcessor.accept(getUserId(), invitation)
-
-                Toast.makeText(applicationContext, "Successfully joined party!", Toast.LENGTH_SHORT)
-                    .show()
-
-                finish()
-            } catch (e: InvalidInvitation) {
-                Log.e(localClassName, "Invitation token is not valid", e)
-            }
-        }
+    override fun onTouchEvent(event: MotionEvent?): Boolean {
+        return false
     }
+
+    /**
+     * @throws JsonSyntaxException
+     */
+    private fun deserializeInvitation(json: String) = gson.fromJson(json, Invitation::class.java)
+
+    private fun resumeScanning() = scanner.resumeCameraPreview(this)
 }
