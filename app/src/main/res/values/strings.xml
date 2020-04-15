@@ -9,7 +9,9 @@
     <string name="scanCode_title">Join using QR code</string>
     <string name="group_icon_description">Group icon</string>
     <string name="qr_code_description">QR code</string>
-    <string name="party_activity_title">Parties</string>
+
+    <string name="title_party_activity">Parties</string>
+    <string name="title_joinParty">Join party using QR code…</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

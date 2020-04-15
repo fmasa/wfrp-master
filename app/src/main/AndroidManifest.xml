@@ -14,7 +14,7 @@
         android:theme="@style/AppTheme">
         <activity android:name=".ui.gameMaster.GameMasterActivity"></activity>
         <activity android:name=".ui.partyList.PartyListActivity"
-            android:label="@string/party_activity_title"/>
+            android:label="@string/title_party_activity"/>
         <activity android:name=".ui.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -22,7 +22,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.joinParty.JoinPartyActivity" />
+        <activity android:name=".ui.joinParty.JoinPartyActivity" android:label="@string/title_joinParty"/>
     </application>
 
 </manifest>
