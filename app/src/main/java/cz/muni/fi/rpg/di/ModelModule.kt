@@ -6,8 +6,10 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
+import cz.muni.fi.rpg.model.domain.character.CharacterRepository
 import cz.muni.fi.rpg.model.domain.invitation.InvitationProcessor
 import cz.muni.fi.rpg.model.domain.party.PartyRepository
+import cz.muni.fi.rpg.model.firestore.FirestoreCharacterRepository
 import cz.muni.fi.rpg.model.firestore.FirestoreInvitationProcessor
 import cz.muni.fi.rpg.model.firestore.FirestorePartyRepository
 import cz.muni.fi.rpg.model.infrastructure.UUIDAdapter
@@ -32,6 +34,11 @@ class ModelModule {
     @Singleton
     fun parties(gson: Gson, firestore: FirebaseFirestore): PartyRepository =
         FirestorePartyRepository(gson, firestore)
+
+    @Provides
+    @Singleton
+    fun characters(gson: Gson, firestore: FirebaseFirestore): CharacterRepository =
+        FirestoreCharacterRepository(gson, firestore)
 
     @Provides
     @Singleton
