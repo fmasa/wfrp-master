@@ -2,13 +2,13 @@ package cz.muni.fi.rpg.ui.partyList
 
 import android.content.Intent
 import android.os.Bundle
-import android.view.LayoutInflater
 import androidx.recyclerview.widget.LinearLayoutManager
 import cz.muni.fi.rpg.ui.gameMaster.GameMasterActivity
 import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.model.domain.party.Party
 import cz.muni.fi.rpg.model.domain.party.PartyRepository
 import cz.muni.fi.rpg.ui.AuthenticatedActivity
+import cz.muni.fi.rpg.ui.PartyScopedActivity
 import cz.muni.fi.rpg.ui.joinParty.JoinPartyActivity
 import cz.muni.fi.rpg.ui.partyList.adapter.PartyHolder
 import kotlinx.android.synthetic.main.activity_party_list.*
@@ -43,7 +43,7 @@ class PartyListActivity : AuthenticatedActivity(R.layout.activity_party_list) {
 
     private fun goToGameMasterActivity(party: Party) {
         val intent = Intent(this, GameMasterActivity::class.java);
-        intent.putExtra(GameMasterActivity.EXTRA_PARTY_ID, party.id.toString())
+        intent.putExtra(PartyScopedActivity.EXTRA_PARTY_ID, party.id.toString())
 
         startActivity(intent)
     }
