@@ -25,4 +25,5 @@
     <string name="error_invalid_invitation">Invitation token is not valid</string>
     <string name="error_unkown">Unknown error occurred</string>
     <string name="invitation_code_description">Players can join using this code</string>
+    <string name="title_characterCreation">Describe your character…</string>
 </resources>

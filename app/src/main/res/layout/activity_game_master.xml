@@ -6,21 +6,27 @@
     android:layout_height="match_parent"
     tools:context=".ui.gameMaster.GameMasterActivity">
 
-    <TextView
+    <ListView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/invitation_code_description"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
         style="@style/TextAppearance.AppCompat.Headline"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
+        android:text="@string/invitation_code_description"
         android:textAlignment="center"
-        app:layout_constraintBottom_toTopOf="@id/partyInviteQrCode"/>
+        app:layout_constraintBottom_toTopOf="@id/partyInviteQrCode" />
 
     <cz.muni.fi.rpg.ui.views.QrCode
         android:id="@+id/partyInviteQrCode"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        android:layout_margin="16dp"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
