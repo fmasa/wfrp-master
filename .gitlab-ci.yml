@@ -1,4 +1,4 @@
-image: circleci/android:api-24
+image: circleci/android:api-24-node
 
 stages:
     - check
@@ -7,17 +7,34 @@ stages:
 before_script:
     - export GRADLE_USER_HOME=$(pwd)/.gradle
 
-cache:
-    paths:
-        - .gradle/wrapper
-        - .gradle/caches
+.gradle:
+    cache:
+        paths:
+            - .gradle/wrapper
+            - .gradle/caches
 
-Run all checks:
+Run Gradle checks:
+    extends: .gradle
     stage: check
     script:
         - ./gradlew check
+    cache:
+        paths:
+            - .gradle/wrapper
+            - .gradle/caches
+
+Test Firestore rules:
+    stage: check
+    cache:
+        paths:
+            - node_modules
+    script:
+        - curl -sL firebase.tools | bash
+        - yarn install
+        - yarn test
 
 Build APK (debug):
+    extends: .gradle
     stage: build
     script:
         - ./gradlew assembleDebug
@@ -28,9 +45,9 @@ Build APK (debug):
         expose_as: Debug APK
 
 Deploy Firebase changes:
-    image: devillex/docker-firebase:slim
     stage: build
     only:
         - master
     script:
+        - curl -sL firebase.tools | bash
         - firebase deploy
