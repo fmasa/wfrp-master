@@ -4,6 +4,8 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
+import androidx.navigation.findNavController
+import androidx.navigation.ui.setupWithNavController
 import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.model.domain.character.Character
 import cz.muni.fi.rpg.model.domain.character.CharacterNotFound
@@ -11,6 +13,7 @@ import cz.muni.fi.rpg.model.domain.character.CharacterRepository
 import cz.muni.fi.rpg.model.domain.party.Party
 import cz.muni.fi.rpg.ui.PartyScopedActivity
 import cz.muni.fi.rpg.ui.characterCreation.CharacterCreationActivity
+import kotlinx.android.synthetic.main.activity_character.*
 import kotlinx.coroutines.*
 import javax.inject.Inject
 
@@ -38,6 +41,9 @@ class CharacterActivity : PartyScopedActivity(R.layout.activity_character),
                 openCharacterCreation(e)
             }
         }
+
+        val navController = findNavController(R.id.nav_host_fragment)
+        navigation.setupWithNavController(navController)
     }
 
     private suspend fun openCharacterCreation(e: CharacterNotFound) {

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@+id/navigation_character_stats">
+
+    <fragment
+        android:id="@+id/navigation_character_stats"
+        android:name="cz.muni.fi.rpg.ui.character.CharacterStatsFragment"
+        tools:layout="@layout/fragment_character_stats" />
+
+    <fragment
+        android:id="@+id/navigation_character_inventory"
+        android:name="cz.muni.fi.rpg.ui.character.InventoryFragment"
+        tools:layout="@layout/fragment_inventory" />
+</navigation>
