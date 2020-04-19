@@ -14,10 +14,6 @@ import javax.inject.Inject
 
 class GameMasterActivity: PartyScopedActivity(R.layout.activity_game_master),
     CoroutineScope by CoroutineScope(Dispatchers.Default) {
-
-    @Inject
-    lateinit var parties: PartyRepository
-
     @Inject
     lateinit var gson: Gson
 

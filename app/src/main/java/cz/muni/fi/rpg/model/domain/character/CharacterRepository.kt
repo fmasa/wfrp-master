@@ -9,6 +9,11 @@ import java.util.UUID
 interface CharacterRepository {
     suspend fun save(partyId: UUID, character: Character)
 
+    /**
+     * @throws CharacterNotFound
+     */
+    suspend fun get(partyId: UUID, userId: String): Character
+
     suspend fun hasCharacterInParty(userId: String, partyId: UUID) : Boolean
 
     fun inParty(

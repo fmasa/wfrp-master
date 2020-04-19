@@ -9,6 +9,7 @@ import cz.muni.fi.rpg.model.domain.party.Party
 import cz.muni.fi.rpg.model.domain.party.PartyRepository
 import cz.muni.fi.rpg.ui.AuthenticatedActivity
 import cz.muni.fi.rpg.ui.PartyScopedActivity
+import cz.muni.fi.rpg.ui.character.CharacterActivity
 import cz.muni.fi.rpg.ui.characterCreation.CharacterCreationActivity
 import cz.muni.fi.rpg.ui.joinParty.JoinPartyActivity
 import cz.muni.fi.rpg.ui.partyList.adapter.PartyHolder
@@ -31,7 +32,7 @@ class PartyListActivity : AuthenticatedActivity(R.layout.activity_party_list) {
                 if (it.gameMasterId == getUserId()) {
                     openParty(it, GameMasterActivity::class)
                 } else {
-                    openParty(it, CharacterCreationActivity::class)
+                    openParty(it, CharacterActivity::class)
                 }
             }
         }

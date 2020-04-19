@@ -4,11 +4,13 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.RecyclerView
 import com.firebase.ui.firestore.FirestoreRecyclerOptions
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.FirebaseFirestoreException
 import com.google.firebase.firestore.SetOptions
 import com.google.gson.Gson
 import cz.muni.fi.rpg.common.ViewHolder
 import cz.muni.fi.rpg.common.ViewHolderFactory
 import cz.muni.fi.rpg.model.domain.character.Character
+import cz.muni.fi.rpg.model.domain.character.CharacterNotFound
 import cz.muni.fi.rpg.model.domain.character.CharacterRepository
 import cz.muni.fi.rpg.model.infrastructure.GsonSnapshotParser
 import cz.muni.fi.rpg.ui.partyList.adapter.FirestoreRecyclerAdapter
@@ -28,6 +30,20 @@ class FirestoreCharacterRepository @Inject constructor(
             gson.fromJson(gson.toJson(character), Map::class.java),
             SetOptions.merge()
         ).await()
+    }
+
+    override suspend fun get(partyId: UUID, userId: String): Character {
+        try {
+            val character = characters(partyId).document(userId).get().await()
+
+            if (character.data === null) {
+                throw CharacterNotFound(userId, partyId)
+            }
+
+            return parser.parseSnapshot(character);
+        } catch (e: FirebaseFirestoreException) {
+            throw CharacterNotFound(userId, partyId, e)
+        }
     }
 
     override suspend fun hasCharacterInParty(userId: String, partyId: UUID): Boolean {
