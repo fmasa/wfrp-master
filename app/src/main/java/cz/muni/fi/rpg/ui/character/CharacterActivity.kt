@@ -7,10 +7,8 @@ import android.widget.Toast
 import androidx.navigation.findNavController
 import androidx.navigation.ui.setupWithNavController
 import cz.muni.fi.rpg.R
-import cz.muni.fi.rpg.model.domain.character.Character
 import cz.muni.fi.rpg.model.domain.character.CharacterNotFound
 import cz.muni.fi.rpg.model.domain.character.CharacterRepository
-import cz.muni.fi.rpg.model.domain.party.Party
 import cz.muni.fi.rpg.ui.PartyScopedActivity
 import cz.muni.fi.rpg.ui.characterCreation.CharacterCreationActivity
 import kotlinx.android.synthetic.main.activity_character.*
@@ -22,20 +20,17 @@ class CharacterActivity : PartyScopedActivity(R.layout.activity_character),
     @Inject
     lateinit var characters: CharacterRepository
 
-    private lateinit var party: Party
-    private lateinit var character: Character
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        val party = async { parties.get(getPartyId()) }
+        val character = async { characters.get(getPartyId(), getUserId()) }
+
         launch {
             try {
-                party = parties.get(getPartyId())
-                character = characters.get(getPartyId(), getUserId())
-
                 withContext(Dispatchers.Main) {
-                    supportActionBar?.title = character.name
-                    supportActionBar?.subtitle = party.name
+                    supportActionBar?.title = character.await().name
+                    supportActionBar?.subtitle = party.await().name
                 }
             } catch (e: CharacterNotFound) {
                 openCharacterCreation(e)
