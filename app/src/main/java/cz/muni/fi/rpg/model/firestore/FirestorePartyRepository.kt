@@ -3,24 +3,27 @@ package cz.muni.fi.rpg.model.firestore
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.firebase.ui.firestore.FirestoreRecyclerOptions
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.FirebaseFirestoreException
 import com.google.firebase.firestore.SetOptions
-import com.google.firebase.firestore.ktx.firestore
-import com.google.firebase.ktx.Firebase
-import com.google.gson.GsonBuilder
+import com.google.gson.Gson
+import cz.muni.fi.rpg.common.OnClickListener
 import cz.muni.fi.rpg.common.ViewHolder
-import cz.muni.fi.rpg.model.Party
-import cz.muni.fi.rpg.model.PartyRepository
+import cz.muni.fi.rpg.model.domain.party.Party
+import cz.muni.fi.rpg.model.domain.party.PartyNotFound
+import cz.muni.fi.rpg.model.domain.party.PartyRepository
 import cz.muni.fi.rpg.model.infrastructure.GsonSnapshotParser
-import cz.muni.fi.rpg.model.infrastructure.UUIDAdapter
-import cz.muni.fi.rpg.partyList.adapter.FirestoreRecyclerAdapter
+import cz.muni.fi.rpg.ui.partyList.adapter.FirestoreRecyclerAdapter
 import kotlinx.coroutines.tasks.await
 import java.util.*
+import javax.inject.Inject
 
-class FirestorePartyRepository : PartyRepository {
-    private val parties = Firebase.firestore.collection("parties");
-    private val gson = GsonBuilder()
-        .registerTypeAdapter(UUID::class.java, UUIDAdapter())
-        .create()
+class FirestorePartyRepository @Inject constructor(
+    private val gson: Gson,
+    firestore: FirebaseFirestore
+) : PartyRepository {
+    private val parties = firestore.collection("parties");
+    private val parser = GsonSnapshotParser(Party::class.java, gson);
 
     override suspend fun save(party: Party) {
         parties.document(party.id.toString()).set(
@@ -29,17 +32,24 @@ class FirestorePartyRepository : PartyRepository {
         ).await();
     }
 
+    override suspend fun get(id: UUID): Party {
+        try {
+            val party = parties.document(id.toString()).get().await();
+            return this.parser.parseSnapshot(party);
+        } catch (e: FirebaseFirestoreException) {
+            throw PartyNotFound(id, e)
+        }
+    }
+
     override fun <VH : ViewHolder<Party>> forUser(
         userId: String,
-        viewHolderFactory: (parent: ViewGroup) -> VH
+        viewHolderFactory: (parent: ViewGroup) -> VH,
+        onClickListener: OnClickListener<Party>
     ) : RecyclerView.Adapter<VH> {
         val options = FirestoreRecyclerOptions.Builder<Party>()
-            .setQuery(
-                parties.whereArrayContains("users", userId),
-                GsonSnapshotParser(Party::class.java)
-            ).build()
+            .setQuery(parties.whereArrayContains("users", userId), parser).build()
 
-        val adapter = FirestoreRecyclerAdapter(options, viewHolderFactory);
+        val adapter = FirestoreRecyclerAdapter(options, viewHolderFactory, onClickListener);
 
         adapter.startListening()
 

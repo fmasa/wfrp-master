@@ -8,4 +8,21 @@
     <string name="assemblyParty_submit">create</string>
     <string name="scanCode_title">Join using QR code</string>
     <string name="group_icon_description">Group icon</string>
+    <string name="qr_code_description">QR code</string>
+
+    <string name="title_party_activity">Parties</string>
+    <string name="title_joinParty">Join party using QR code…</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="button_cancel">Cancel</string>
+    <string name="qr_scan_prompt">Scan the code provided by your GM</string>
+    <string name="join_party_dialog_title">Join party</string>
+    <string name="join_party_dialog_party_name">You are joining</string>
+    <string name="join_party_dialog_prompt">Do you want to continue?</string>
+    <string name="button_continue">Continue</string>
+    <string name="error_already_party_member">You are already member of this party</string>
+    <string name="error_invalid_invitation">Invitation token is not valid</string>
+    <string name="error_unkown">Unknown error occurred</string>
+    <string name="invitation_code_description">Players can join using this code</string>
 </resources>
