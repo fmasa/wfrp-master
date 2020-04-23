@@ -36,7 +36,6 @@ class CharacterCreationActivity : PartyScopedActivity(R.layout.activity_characte
                     "Wizard",
                     Race.ELF,
                     Stats(
-                        wounds = 6,
                         weaponSkill = 35,
                         ballisticSkill = 40,
                         strength = 30,
@@ -46,7 +45,7 @@ class CharacterCreationActivity : PartyScopedActivity(R.layout.activity_characte
                         willPower = 40,
                         fellowship = 42
                     ),
-                    Points(insanity = 0, fate = 3, fortune = 3)
+                    Points(insanity = 0, fate = 3, fortune = 3, wounds = 6)
                 )
             )
 

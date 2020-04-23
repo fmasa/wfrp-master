@@ -1,7 +1,6 @@
 package cz.muni.fi.rpg.model.domain.character
 
 data class Stats(
-    val wounds: Int,
     val weaponSkill: Int,
     val ballisticSkill: Int,
     val strength: Int,
@@ -24,7 +23,5 @@ data class Stats(
                 fellowship
             ).all { it in 0..100 }
         )
-
-        require(wounds >= 0)
     }
 }
