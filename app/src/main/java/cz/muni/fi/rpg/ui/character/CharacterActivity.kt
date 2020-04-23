@@ -4,36 +4,34 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
+import androidx.lifecycle.observe
 import androidx.navigation.findNavController
 import androidx.navigation.ui.setupWithNavController
 import cz.muni.fi.rpg.R
-import cz.muni.fi.rpg.model.domain.character.CharacterNotFound
 import cz.muni.fi.rpg.model.domain.character.CharacterRepository
 import cz.muni.fi.rpg.ui.PartyScopedActivity
 import cz.muni.fi.rpg.ui.characterCreation.CharacterCreationActivity
 import kotlinx.android.synthetic.main.activity_character.*
-import kotlinx.coroutines.*
 import javax.inject.Inject
 
-class CharacterActivity : PartyScopedActivity(R.layout.activity_character),
-    CoroutineScope by CoroutineScope(Dispatchers.Default) {
+class CharacterActivity : PartyScopedActivity(R.layout.activity_character) {
     @Inject
     lateinit var characters: CharacterRepository
+
+    private val party by lazy { parties.getLive(getPartyId()) }
+    private val character by lazy { characters.getLive(getPartyId(), getUserId()) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val party = async { parties.get(getPartyId()) }
-        val character = async { characters.get(getPartyId(), getUserId()) }
+        character.observe(this) {
+            it.mapLeft { openCharacterCreation() }
+            it.map { character -> supportActionBar?.title = character.name }
+        }
 
-        launch {
-            try {
-                withContext(Dispatchers.Main) {
-                    supportActionBar?.title = character.await().name
-                    supportActionBar?.subtitle = party.await().name
-                }
-            } catch (e: CharacterNotFound) {
-                openCharacterCreation(e)
+        party.observe(this) {
+            it.map { party ->
+                supportActionBar?.subtitle = party.name
             }
         }
 
@@ -41,16 +39,14 @@ class CharacterActivity : PartyScopedActivity(R.layout.activity_character),
         navigation.setupWithNavController(navController)
     }
 
-    private suspend fun openCharacterCreation(e: CharacterNotFound) {
-        Log.e(localClassName, e.message ?: "Character not found", e);
+    private fun openCharacterCreation() {
+        Log.e(localClassName, "Character not found");
 
-        withContext(Dispatchers.Main) {
-            Toast.makeText(
-                applicationContext,
-                "Error: Your character was not found",
-                Toast.LENGTH_SHORT
-            ).show()
-        }
+        Toast.makeText(
+            applicationContext,
+            "Error: Your character was not found",
+            Toast.LENGTH_SHORT
+        ).show()
 
         val intent = Intent(this, CharacterCreationActivity::class.java)
         intent.putExtra(EXTRA_PARTY_ID, getPartyId().toString())

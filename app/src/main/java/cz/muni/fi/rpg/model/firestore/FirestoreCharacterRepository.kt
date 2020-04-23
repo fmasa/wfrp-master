@@ -4,7 +4,6 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.RecyclerView
 import com.firebase.ui.firestore.FirestoreRecyclerOptions
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.FirebaseFirestoreException
 import com.google.firebase.firestore.SetOptions
 import com.google.gson.Gson
 import cz.muni.fi.rpg.common.ViewHolder
@@ -32,19 +31,13 @@ class FirestoreCharacterRepository @Inject constructor(
         ).await()
     }
 
-    override suspend fun get(partyId: UUID, userId: String): Character {
-        try {
-            val character = characters(partyId).document(userId).get().await()
-
-            if (character.data === null) {
-                throw CharacterNotFound(userId, partyId)
-            }
-
-            return parser.parseSnapshot(character);
-        } catch (e: FirebaseFirestoreException) {
-            throw CharacterNotFound(userId, partyId, e)
+    override fun getLive(partyId: UUID, userId: String) =
+        DocumentLiveData(characters(partyId).document(userId)) {
+            it.bimap(
+                { e -> CharacterNotFound(userId, partyId, e) },
+                { snapshot -> parser.parseSnapshot(snapshot) }
+            )
         }
-    }
 
     override suspend fun hasCharacterInParty(userId: String, partyId: UUID): Boolean {
         return characters(partyId).whereEqualTo("userId", userId).get().await().size() != 0

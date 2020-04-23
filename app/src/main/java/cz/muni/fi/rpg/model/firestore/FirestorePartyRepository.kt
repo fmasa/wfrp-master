@@ -41,6 +41,13 @@ class FirestorePartyRepository @Inject constructor(
         }
     }
 
+    override fun getLive(id: UUID) = DocumentLiveData(parties.document(id.toString())) {
+        it.bimap(
+            { e -> PartyNotFound(id, e) },
+            { snapshot -> parser.parseSnapshot(snapshot) }
+        )
+    }
+
     override fun forUser(
         userId: String,
         lifecycleOwner: LifecycleOwner,
