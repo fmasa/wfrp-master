@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.lifecycle.observe
 import com.google.gson.Gson
 import cz.muni.fi.rpg.R
+import cz.muni.fi.rpg.model.right
 import cz.muni.fi.rpg.ui.PartyScopedActivity
 import kotlinx.android.synthetic.main.activity_game_master.*
 import kotlinx.coroutines.*
@@ -14,16 +15,12 @@ class GameMasterActivity : PartyScopedActivity(R.layout.activity_game_master),
     @Inject
     lateinit var gson: Gson
 
-    private val party by lazy { parties.getLive(getPartyId()) }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        party.observe(this) {
-            it.map { party ->
-                supportActionBar?.title = party.name
-                async { partyInviteQrCode.drawCode(gson.toJson(party.getInvitation())) }
-            }
+        partyViewModel.party.right().observe(this) {party ->
+            supportActionBar?.title = party.name
+            launch { partyInviteQrCode.drawCode(gson.toJson(party.getInvitation())) }
         }
     }
 }

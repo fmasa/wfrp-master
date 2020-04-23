@@ -25,8 +25,6 @@ class CharacterActivity : PartyScopedActivity(R.layout.activity_character) {
         viewModelProvider.factory(getPartyId(), getUserId())
     }
 
-    private val party by lazy { parties.getLive(getPartyId()).right() }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -35,7 +33,9 @@ class CharacterActivity : PartyScopedActivity(R.layout.activity_character) {
             it.map { character -> supportActionBar?.title = character.name }
         }
 
-        party.observe(this) { party -> supportActionBar?.subtitle = party.name }
+        partyViewModel.party
+            .right()
+            .observe(this) { supportActionBar?.subtitle = it.name }
 
         val navController = findNavController(R.id.nav_host_fragment)
         navigation.setupWithNavController(navController)

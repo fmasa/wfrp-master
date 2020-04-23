@@ -1,8 +1,10 @@
 package cz.muni.fi.rpg.ui
 
 import android.os.Bundle
+import androidx.activity.viewModels
 import androidx.annotation.LayoutRes
-import cz.muni.fi.rpg.model.domain.party.PartyRepository
+import cz.muni.fi.rpg.viewModels.PartyViewModel
+import cz.muni.fi.rpg.viewModels.PartyViewModelProvider
 import java.util.*
 import javax.inject.Inject
 
@@ -13,7 +15,11 @@ abstract class PartyScopedActivity(@LayoutRes contentLayoutId: Int) :
     }
 
     @Inject
-    protected lateinit var parties: PartyRepository
+    lateinit var partyViewModelProvider: PartyViewModelProvider
+
+    protected val partyViewModel: PartyViewModel by viewModels {
+        partyViewModelProvider.provide(getPartyId())
+    }
 
     private lateinit var partyId: UUID
 
