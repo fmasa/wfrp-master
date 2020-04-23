@@ -12,7 +12,6 @@ import cz.muni.fi.rpg.model.domain.character.Character
 import cz.muni.fi.rpg.model.domain.character.CharacterNotFound
 import cz.muni.fi.rpg.model.domain.character.CharacterRepository
 import cz.muni.fi.rpg.model.infrastructure.GsonSnapshotParser
-import cz.muni.fi.rpg.ui.partyList.adapter.FirestoreRecyclerAdapter
 import kotlinx.coroutines.tasks.await
 import java.util.*
 import javax.inject.Inject
@@ -53,7 +52,10 @@ class FirestoreCharacterRepository @Inject constructor(
             .setQuery(characters(partyId), parser)
             .build()
 
-        return FirestoreRecyclerAdapter(options, viewHolderFactory)
+        return FirestoreRecyclerAdapter(
+            options,
+            viewHolderFactory
+        )
     }
 
     private fun characters(partyId: UUID) =

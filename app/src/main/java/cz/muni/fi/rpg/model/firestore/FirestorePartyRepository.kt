@@ -13,7 +13,6 @@ import cz.muni.fi.rpg.model.domain.party.Party
 import cz.muni.fi.rpg.model.domain.party.PartyNotFound
 import cz.muni.fi.rpg.model.domain.party.PartyRepository
 import cz.muni.fi.rpg.model.infrastructure.GsonSnapshotParser
-import cz.muni.fi.rpg.ui.partyList.adapter.FirestoreRecyclerAdapter
 import kotlinx.coroutines.tasks.await
 import java.util.*
 import javax.inject.Inject
@@ -57,6 +56,9 @@ class FirestorePartyRepository @Inject constructor(
             .setLifecycleOwner(lifecycleOwner)
             .setQuery(parties.whereArrayContains("users", userId), parser).build()
 
-        return FirestoreRecyclerAdapter(options, viewHolderFactory)
+        return FirestoreRecyclerAdapter(
+            options,
+            viewHolderFactory
+        )
     }
 }

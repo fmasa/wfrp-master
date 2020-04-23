@@ -1,4 +1,4 @@
-package cz.muni.fi.rpg.ui.partyList.adapter
+package cz.muni.fi.rpg.model.firestore
 
 import android.view.ViewGroup
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter
