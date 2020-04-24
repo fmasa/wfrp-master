@@ -1,0 +1,66 @@
+rules_version = '2';
+
+service cloud.firestore {
+    match /databases/{database}/documents {
+   
+        match /parties/{party=**} {
+            allow read: if request.auth.uid != null
+                        && request.auth.uid in resource.data.users;
+        }
+
+        match /parties/{partyId} {
+            allow create: if request.auth != null && isValidNewParty(request.resource.data, request.auth.uid);
+            allow write: if request.auth != null && onlyUserAdded();
+
+            match /characters/{userId} {
+                allow write: if hasAccessToParty()
+                                && request.resource.data.userId == userId
+                                && request.resource.data.userId == request.auth.uid;
+                allow read: if hasAccessToParty();
+            }
+
+            function isValidNewParty(party, uid) {
+                return party.keys().toSet() == ["id", "name", "users", "gameMasterId", "accessCode"].toSet()
+                    && party.id is string && party.id == partyId
+                    && party.id.matches("^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$")
+                    && party.name is string && party.name != ""
+                    && party.users == [uid]
+                    && party.gameMasterId == uid
+                    && party.accessCode is string && party.accessCode != "";
+            }
+
+            function invitation(party) {
+                return {"partyId": party.id, "accessCode": party.accessCode};
+            }
+
+            function hasInvitation(userId, invitation) {
+                return invitation in get(/databases/$(database)/documents/users/$(userId)).data.invitations;
+            }
+
+            function hasAccessToParty() {
+                return request.auth.uid != null
+                    && request.auth.uid in get(/databases/$(database)/documents/parties/$(partyId)).data.users
+            }
+
+            function onlyUserAdded() {
+                let userId = request.auth.uid;
+                let diff = resource.data.diff(request.resource.data);
+                let originalUsers = resource.data.users;
+                let newUsers = request.resource.data.users;
+                let invitation = invitation(resource.data);
+
+                return diff.affectedKeys() == ["users"].toSet()
+                    && hasInvitation(userId, invitation)
+                    && originalUsers.toSet().union([userId].toSet()) == newUsers.toSet();
+            }
+        }
+
+        match /users/{user} {
+            allow write: if request.auth.uid != null && user == request.auth.uid && isValidUser(request.resource.data);
+
+            function isValidUser(data) {
+                return data.keys() == ["invitations"] && data.invitations is list
+            }
+        }
+    }
+}
