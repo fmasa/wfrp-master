@@ -47,6 +47,11 @@ class CharacterStatsFragment : DaggerFragment(R.layout.fragment_character_stats)
                 insanityPoints.value = points.insanity
             }
 
+        Transformations.map(viewModel.character.right()) { character -> character.race }
+            .observe(viewLifecycleOwner) {
+                race.text = getString(it.getReadableNameId())
+            }
+
         wounds.setIncrementListener(viewModel::incrementWounds)
         wounds.setDecrementListener(viewModel::decrementWounds)
 

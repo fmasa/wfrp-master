@@ -33,4 +33,10 @@
     <string name="label_fortune_points">Fortune</string>
     <string name="label_fate_points">Fate</string>
     <string name="label_insanity_points">Insanity</string>
+
+    <string name="race_dwarf">Dwarf</string>
+    <string name="race_elf">Elf</string>
+    <string name="race_gnome">Gnome</string>
+    <string name="race_halfling">Halfling</string>
+    <string name="race_human">Human</string>
 </resources>
