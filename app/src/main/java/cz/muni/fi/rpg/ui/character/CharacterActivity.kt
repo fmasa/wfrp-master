@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
 import androidx.activity.viewModels
+import androidx.core.os.bundleOf
 import androidx.lifecycle.observe
 import androidx.navigation.findNavController
 import androidx.navigation.ui.setupWithNavController
@@ -37,8 +38,7 @@ class CharacterActivity : PartyScopedActivity(R.layout.activity_character) {
             .right()
             .observe(this) { supportActionBar?.subtitle = it.name }
 
-        val navController = findNavController(R.id.nav_host_fragment)
-        navigation.setupWithNavController(navController)
+        initializeNavigation()
     }
 
     private fun openCharacterCreation() {
@@ -55,5 +55,22 @@ class CharacterActivity : PartyScopedActivity(R.layout.activity_character) {
 
         startActivity(intent)
         finish()
+    }
+
+    private fun initializeNavigation() {
+        val arguments = bundleOf(
+            CharacterStatsFragment.ARG_PARTY_ID to getPartyId().toString(),
+            CharacterStatsFragment.ARG_USER_ID to getUserId()
+        )
+
+        val navController = findNavController(R.id.nav_host_fragment)
+        navController.setGraph(R.navigation.mobile_navigation, arguments)
+        navigation.setupWithNavController(navController)
+        navigation.setOnNavigationItemSelectedListener { item ->
+            navController.popBackStack(item.itemId, true)
+            navController.navigate(item.itemId, arguments)
+
+            return@setOnNavigationItemSelectedListener false
+        }
     }
 }

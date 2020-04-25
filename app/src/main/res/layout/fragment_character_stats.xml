@@ -6,6 +6,62 @@
     android:layout_height="match_parent"
     tools:context=".ui.character.CharacterStatsFragment">
 
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:paddingTop="16dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <cz.muni.fi.rpg.ui.views.CharacterPoint
+                android:id="@+id/wounds"
+                android:gravity="center"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toStartOf="@id/fortunePoints"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:name="@string/label_wounds" />
+
+            <cz.muni.fi.rpg.ui.views.CharacterPoint
+                android:id="@+id/fortunePoints"
+                android:gravity="center"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toStartOf="@id/fatePoints"
+                app:layout_constraintHorizontal_chainStyle="spread_inside"
+                app:layout_constraintStart_toEndOf="@id/wounds"
+                app:layout_constraintTop_toTopOf="parent"
+                app:name="@string/label_fortune_points" />
+
+            <cz.muni.fi.rpg.ui.views.CharacterPoint
+                android:id="@+id/fatePoints"
+                android:gravity="center"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toStartOf="@id/insanityPoints"
+                app:layout_constraintHorizontal_chainStyle="spread_inside"
+                app:layout_constraintStart_toEndOf="@id/fortunePoints"
+                app:layout_constraintTop_toTopOf="parent"
+                app:name="@string/label_fate_points" />
+
+            <cz.muni.fi.rpg.ui.views.CharacterPoint
+                android:id="@+id/insanityPoints"
+                android:gravity="center"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_chainStyle="spread_inside"
+                app:layout_constraintStart_toEndOf="@id/fatePoints"
+                app:layout_constraintTop_toTopOf="parent"
+                app:name="@string/label_insanity_points" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.cardview.widget.CardView>
+
     <TextView
         android:id="@+id/text_home"
         android:layout_width="match_parent"
@@ -15,9 +71,9 @@
         android:layout_marginEnd="8dp"
         android:textAlignment="center"
         android:textSize="20sp"
+        android:text="TODO: Add character stats"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:text="TODO: Add character stats"/>
+        app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

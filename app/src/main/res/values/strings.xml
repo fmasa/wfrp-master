@@ -29,4 +29,8 @@
     <string name="title_character_stats">Character Detail</string>
     <string name="title_character_inventory">Inventory</string>
     <string name="title_notifications">Notifications</string>
+    <string name="label_wounds">Wounds</string>
+    <string name="label_fortune_points">Fortune</string>
+    <string name="label_fate_points">Fate</string>
+    <string name="label_insanity_points">Insanity</string>
 </resources>

@@ -4,6 +4,7 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.RecyclerView
 import com.firebase.ui.firestore.FirestoreRecyclerOptions
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.FirebaseFirestoreException
 import com.google.firebase.firestore.SetOptions
 import com.google.gson.Gson
 import cz.muni.fi.rpg.common.ViewHolder
@@ -28,6 +29,14 @@ class FirestoreCharacterRepository @Inject constructor(
             gson.fromJson(gson.toJson(character), Map::class.java),
             SetOptions.merge()
         ).await()
+    }
+
+    override suspend fun get(partyId: UUID, userId: String): Character {
+        try {
+            return parser.parseSnapshot(characters(partyId).document(userId).get().await())
+        } catch (e: FirebaseFirestoreException) {
+            throw CharacterNotFound(userId, partyId, e)
+        }
     }
 
     override fun getLive(partyId: UUID, userId: String) =

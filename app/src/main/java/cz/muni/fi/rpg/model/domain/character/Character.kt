@@ -6,9 +6,13 @@ data class Character(
     private val career: String,
     private val race: Race,
     private val stats: Stats,
-    private val points: Points
+    var points: Points
 ) {
     init {
         require(listOf(name, userId, career).all { it.isNotEmpty() })
+    }
+
+    fun updatePoints(newPoints: Points) {
+        points = newPoints
     }
 }

@@ -1,10 +1,10 @@
 package cz.muni.fi.rpg.model.domain.character
 
 data class Points(
-    private val insanity: Int,
-    private val fate: Int,
-    private val fortune: Int,
-    private val wounds: Int
+   val insanity: Int,
+   val fate: Int,
+   val fortune: Int,
+   val wounds: Int
 ) {
     init {
         require(insanity >= 0)
