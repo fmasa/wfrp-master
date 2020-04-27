@@ -5,7 +5,7 @@ data class Character(
     val userId: String,
     val career: String,
     val race: Race,
-    private val stats: Stats,
+    val stats: Stats,
     var points: Points
 ) {
     init {

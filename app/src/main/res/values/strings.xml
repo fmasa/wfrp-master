@@ -29,10 +29,14 @@
     <string name="title_character_stats">Character Detail</string>
     <string name="title_character_inventory">Inventory</string>
     <string name="title_notifications">Notifications</string>
+
     <string name="label_wounds">Wounds</string>
     <string name="label_fortune_points">Fortune</string>
     <string name="label_fate_points">Fate</string>
     <string name="label_insanity_points">Insanity</string>
+
+    <string name="label_weapon_skill">Weapon Skill</string>
+    <string name="label_ballistic_skill">Ballistic Skill</string>
 
     <string name="race_dwarf">Dwarf</string>
     <string name="race_elf">Elf</string>

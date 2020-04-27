@@ -42,7 +42,16 @@ class CharacterStatsFragment : DaggerFragment(R.layout.fragment_character_stats)
                 .toString()
         }
 
+        bindStats()
         bindPoints()
+    }
+
+    private fun bindStats() {
+        Transformations.map(viewModel.character.right()) { character -> character.stats }
+            .observe(viewLifecycleOwner) { stats ->
+                weaponSkill.value = stats.weaponSkill
+                ballisticSkill.value = stats.ballisticSkill
+            }
     }
 
     private fun bindPoints() {

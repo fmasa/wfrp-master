@@ -3,4 +3,8 @@
     <declare-styleable name="CharacterPoint">
         <attr name="name" format="string"/>
     </declare-styleable>
+    <declare-styleable name="CharacterStat">
+        <attr name="statName" format="string"/>
+        <attr name="editable" format="boolean"/>
+    </declare-styleable>
 </resources>
