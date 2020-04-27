@@ -34,6 +34,14 @@ class CharacterStatsFragment : DaggerFragment(R.layout.fragment_character_stats)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        viewModel.character.right().observe(viewLifecycleOwner) { character ->
+            raceAndCareer.text = StringBuilder()
+                .append(getString(character.race.getReadableNameId()))
+                .append(" ")
+                .append(character.career)
+                .toString()
+        }
+
         bindPoints()
     }
 
@@ -45,11 +53,6 @@ class CharacterStatsFragment : DaggerFragment(R.layout.fragment_character_stats)
                 fortunePoints.value = points.fortune
                 fatePoints.value = points.fate
                 insanityPoints.value = points.insanity
-            }
-
-        Transformations.map(viewModel.character.right()) { character -> character.race }
-            .observe(viewLifecycleOwner) {
-                race.text = getString(it.getReadableNameId())
             }
 
         wounds.setIncrementListener(viewModel::incrementWounds)

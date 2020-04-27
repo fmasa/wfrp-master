@@ -3,7 +3,7 @@ package cz.muni.fi.rpg.model.domain.character
 data class Character(
     val name: String,
     val userId: String,
-    private val career: String,
+    val career: String,
     val race: Race,
     private val stats: Stats,
     var points: Points
