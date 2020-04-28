@@ -62,6 +62,7 @@ class CharacterStatsFragment : DaggerFragment(R.layout.fragment_character_stats)
                 intelligence.value = stats.intelligence
                 willPower.value = stats.willPower
                 fellowship.value = stats.fellowship
+                magic.value = stats.magic
             }
     }
 

@@ -37,6 +37,7 @@
 
     <string name="label_weapon_skill">Weapon Skill</string>
     <string name="label_ballistic_skill">Ballistic Skill</string>
+    <string name="label_magic">Magic</string>
     <string name="label_fellowship">Fellowship</string>
     <string name="label_will_power">Will Power</string>
     <string name="label_intelligence">Intelligence</string>

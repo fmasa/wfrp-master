@@ -43,7 +43,8 @@ class CharacterCreationActivity : PartyScopedActivity(R.layout.activity_characte
                         agility = 41,
                         intelligence = 32,
                         willPower = 40,
-                        fellowship = 42
+                        fellowship = 42,
+                        magic = 2
                     ),
                     Points(insanity = 0, fate = 3, fortune = 3, maxWounds = 6, wounds = 6)
                 )

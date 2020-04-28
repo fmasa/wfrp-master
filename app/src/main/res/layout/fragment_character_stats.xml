@@ -111,7 +111,6 @@
 
             <cz.muni.fi.rpg.ui.views.CharacterStat
                 android:id="@+id/weaponSkill"
-                android:layout_marginEnd="18dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:layout_constraintEnd_toStartOf="@id/ballisticSkill"
@@ -123,13 +122,24 @@
             <cz.muni.fi.rpg.ui.views.CharacterStat
                 android:id="@+id/ballisticSkill"
                 android:layout_width="wrap_content"
-                android:layout_marginStart="18dp"
+                android:layout_marginStart="32dp"
+                android:layout_marginEnd="28dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:statName="@string/label_ballistic_skill" />
+
+
+            <cz.muni.fi.rpg.ui.views.CharacterStat
+                android:id="@+id/magic"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_chainStyle="packed"
-                app:layout_constraintStart_toEndOf="@id/weaponSkill"
+                app:layout_constraintStart_toEndOf="@id/ballisticSkill"
                 app:layout_constraintTop_toTopOf="parent"
-                app:statName="@string/label_ballistic_skill" />
+                app:statName="@string/label_magic" />
 
             <!-- Second row -->
             <cz.muni.fi.rpg.ui.views.CharacterStat
@@ -147,19 +157,19 @@
                 android:src="@drawable/ic_arrow_forward"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:layout_constraintStart_toStartOf="@id/weaponSkill"
+                app:layout_constraintStart_toStartOf="@id/ballisticSkill"
                 app:layout_constraintEnd_toEndOf="@id/ballisticSkill"
-                app:layout_constraintTop_toBottomOf="@id/weaponSkill"
+                app:layout_constraintBottom_toBottomOf="@id/strength"
                 android:gravity="center"
-                android:layout_marginTop="44dp"
+                android:layout_marginBottom="12dp"
                 />
             <cz.muni.fi.rpg.ui.views.CharacterStat
                 android:id="@+id/strengthBonus"
                 android:layout_marginTop="16dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:layout_constraintStart_toStartOf="@id/ballisticSkill"
-                app:layout_constraintEnd_toEndOf="@id/ballisticSkill"
+                app:layout_constraintStart_toStartOf="@id/magic"
+                app:layout_constraintEnd_toEndOf="@id/magic"
                 app:layout_constraintTop_toBottomOf="@id/weaponSkill"
                 app:statName="@string/label_strength_bonus" />
 
@@ -179,19 +189,19 @@
                 android:src="@drawable/ic_arrow_forward"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:layout_constraintStart_toStartOf="@id/weaponSkill"
+                app:layout_constraintStart_toStartOf="@id/ballisticSkill"
                 app:layout_constraintEnd_toEndOf="@id/ballisticSkill"
-                app:layout_constraintTop_toBottomOf="@id/strength"
+                app:layout_constraintBottom_toBottomOf="@id/toughness"
                 android:gravity="center"
-                android:layout_marginTop="44dp"
+                android:layout_marginBottom="12dp"
                 />
             <cz.muni.fi.rpg.ui.views.CharacterStat
                 android:id="@+id/toughnessBonus"
                 android:layout_marginTop="16dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:layout_constraintStart_toStartOf="@id/ballisticSkill"
-                app:layout_constraintEnd_toEndOf="@id/ballisticSkill"
+                app:layout_constraintStart_toStartOf="@id/magic"
+                app:layout_constraintEnd_toEndOf="@id/magic"
                 app:layout_constraintTop_toBottomOf="@id/strength"
                 app:statName="@string/label_toughness_bonus" />
 
@@ -199,7 +209,7 @@
             <cz.muni.fi.rpg.ui.views.CharacterStat
                 android:id="@+id/agility"
                 android:layout_marginEnd="8dp"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="20dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:layout_constraintEnd_toStartOf="@id/intelligence"
@@ -209,7 +219,7 @@
 
             <cz.muni.fi.rpg.ui.views.CharacterStat
                 android:id="@+id/intelligence"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="20dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:layout_constraintEnd_toStartOf="@id/willPower"
@@ -221,7 +231,7 @@
             <cz.muni.fi.rpg.ui.views.CharacterStat
                 android:id="@+id/willPower"
                 android:layout_width="wrap_content"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="20dp"
                 android:layout_height="wrap_content"
                 app:layout_constraintEnd_toStartOf="@id/intelligence"
                 app:layout_constraintHorizontal_chainStyle="packed"
@@ -232,7 +242,7 @@
             <cz.muni.fi.rpg.ui.views.CharacterStat
                 android:id="@+id/fellowship"
                 android:layout_width="wrap_content"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="20dp"
                 android:layout_height="wrap_content"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/willPower"
