@@ -1,6 +1,7 @@
 package cz.muni.fi.rpg.ui.joinParty
 
 import android.app.Dialog
+import android.content.DialogInterface
 import android.os.Bundle
 import android.text.SpannableStringBuilder
 import android.util.Log
@@ -15,9 +16,7 @@ import cz.muni.fi.rpg.model.domain.invitation.InvalidInvitation
 import cz.muni.fi.rpg.model.domain.invitation.InvitationProcessor
 import cz.muni.fi.rpg.model.domain.party.Invitation
 import kotlinx.android.synthetic.main.dialog_join_party.view.*
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 
 typealias Listener = () -> Unit
 
@@ -30,6 +29,8 @@ class JoinPartyDialog(
     private var onSuccessListener: Listener = {}
     private var onErrorListener: Listener = {}
     private var onDismissListener: Listener = {}
+
+    private var joining: Job? = null
 
     fun setOnSuccessListener(listener: Listener): JoinPartyDialog {
         onSuccessListener = listener
@@ -49,10 +50,11 @@ class JoinPartyDialog(
         return this
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    override fun onCancel(dialog: DialogInterface) {
+        super.onCancel(dialog)
 
-        isCancelable = false
+        joining?.cancel()
+        dismissAndNotify()
     }
 
     private fun dismissAndNotify() {
@@ -73,7 +75,6 @@ class JoinPartyDialog(
         val dialog = AlertDialog.Builder(activity)
             .setTitle(R.string.join_party_dialog_title)
             .setView(view)
-            .setCancelable(false)
             .setPositiveButton(R.string.button_continue, null)
             .setNegativeButton(R.string.button_cancel) { _, _ -> dismissAndNotify() }
             .create()
@@ -95,7 +96,7 @@ class JoinPartyDialog(
         dialog.getButton(AlertDialog.BUTTON_POSITIVE).isEnabled = false
         dialog.getButton(AlertDialog.BUTTON_NEGATIVE).isEnabled = false
 
-        launch {
+        joining = launch {
             try {
                 invitationProcessor.accept(userId, invitation)
                 onSuccessListener()
@@ -105,6 +106,7 @@ class JoinPartyDialog(
                 invitationError(getString(R.string.error_invalid_invitation), e)
             } catch (e: AlreadyInParty) {
                 invitationError(getString(R.string.error_already_party_member), e)
+            } catch (e: CancellationException) {
             } catch (e: Throwable) {
                 Log.e(tag, "Uknown invitation error", e)
                 invitationError(getString(R.string.error_unkown), e)
