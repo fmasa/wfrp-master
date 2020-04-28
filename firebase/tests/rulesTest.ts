@@ -40,6 +40,33 @@ const validParty = () => ({
     users: [validPartyGameMasterId],
 });
 
+function validCharacter (userId: string) {
+    return {
+        name: "Sigmar",
+        userId: userId,
+        career: "God",
+        race: "HUMAN",
+        stats: {
+            weaponSkill: 35,
+            ballisticSkill: 35,
+            strength: 10,
+            toughness: 10,
+            agility: 10,
+            intelligence: 10,
+            willPower: 10,
+            fellowship: 10,
+            magic: 4,
+        },
+        points: {
+            insanity: 1,
+            fate: 3,
+            fortune: 2,
+            wounds: 10,
+            maxWounds: 10,
+        }
+    }
+}
+
 async function createValidParty(): Promise<ReturnType<typeof validParty>> {
     const party = validParty();
 
@@ -56,6 +83,26 @@ async function setUserInvitation(userId: string, partyId: string, accessCode: st
         .collection("users")
         .doc(userId)
         .set({"invitations": [{partyId, accessCode}]})
+}
+
+function withoutField<T extends object>(object: T, field: string) : Partial<T> {
+    return Object.fromEntries(Object.entries(object).filter(([fieldName]) => fieldName === field));
+}
+
+/**
+ * Returns Party ID
+ */
+async function createUserAccessibleParty(userId: string): Promise<string> {
+    const party = await createValidParty();
+
+    await setUserInvitation(userId, party.id, party.accessCode);
+
+    authedApp(userId)
+        .collection("parties")
+        .doc(party.id)
+        .set({...party, users: [...party.users, userId]});
+
+    return party.id;
 }
 
 /*
@@ -218,5 +265,140 @@ class Database {
             invitations: [],
             otherField: "what?",
         }))
+    }
+
+    @test
+    async "should let users to create their character in party they have access to"() {
+        const userId = "user123";
+        const partyId = await createUserAccessibleParty(userId);
+
+        const character = authedApp(userId)
+            .collection("parties")
+            .doc(partyId)
+            .collection("characters")
+            .doc(userId);
+
+        await firebase.assertSucceeds(character.set(validCharacter(userId)));
+    }
+
+    async "should NOT let users to create their character in party they DON'T have access to"() {
+        const userId = "user123";
+        const partyId = await createUserAccessibleParty("another-user");
+
+        const character = authedApp(userId)
+            .collection("parties")
+            .doc(partyId)
+            .collection("characters")
+            .doc(userId);
+
+        await firebase.assertFails(character.set(validCharacter(userId)));
+    }
+
+    async "should not let users create incomplete character"() {
+        const userId = "user123";
+        const partyId = await createUserAccessibleParty(userId);
+
+        const character = authedApp(userId)
+            .collection("parties")
+            .doc(partyId)
+            .collection("characters")
+            .doc(userId);
+
+        const data = validCharacter(userId);
+
+        for (const field of Object.keys(data)) {
+            const newData = {...data};
+
+            delete newData[field];
+
+            await firebase.assertFails(character.set(newData));
+        }
+    }
+
+    @test
+    async "should not let users create character with invalid data"() {
+        const userId = "user123";
+        const partyId = await createUserAccessibleParty(userId);
+
+        const character = authedApp(userId)
+            .collection("parties")
+            .doc(partyId)
+            .collection("characters")
+            .doc(userId);
+
+
+        const data = validCharacter(userId);
+
+        // Empty character name
+        await firebase.assertFails(character.set({...data, name: ""}));
+
+        // User ID not matching document key
+        await firebase.assertFails(character.set({...data, userId: "foo"}));
+
+        // Empty career
+        await firebase.assertFails(character.set({...data, career: ""}));
+
+        // Invalid race
+        await firebase.assertFails(character.set({...data, race: "ORC"}));
+
+        // Extra field
+        await firebase.assertFails(character.set({...data, extraField: "foo"}));
+    }
+
+    @test
+    async "should not let users create character with invalid stats"() {
+        const userId = "user123";
+        const partyId = await createUserAccessibleParty(userId);
+
+        const character = authedApp(userId)
+            .collection("parties")
+            .doc(partyId)
+            .collection("characters")
+            .doc(userId);
+
+        const data = validCharacter(userId);
+
+        for (const stat in Object.keys(data.stats)) {
+            const newData = {...data, stats: withoutField(data.stats, stat)};
+
+            // Missing stat
+            await firebase.assertFails(character.set(newData));
+
+            newData.stats[stat] = -1;
+
+            // Negative stat
+            await firebase.assertFails(character.set(newData));
+        }
+    }
+
+    @test
+    async "should not let users create character with invalid points"() {
+        const userId = "user123";
+        const partyId = await createUserAccessibleParty(userId);
+
+        const character = authedApp(userId)
+            .collection("parties")
+            .doc(partyId)
+            .collection("characters")
+            .doc(userId);
+
+        const data = validCharacter(userId);
+
+        await firebase.assertFails(character.set({...data, stats: {...data.stats, extraStat: 10}}));
+
+        const withPoints = (point: string, value: number) => ({...data, points: {...data.points, [point]: value}});
+
+        for (const point in data.points) {
+            // Negative point
+            await firebase.assertFails(character.set(withPoints(point, -1)));
+        }
+
+        await firebase.assertSucceeds(character.set(withPoints('fortune', data.points.fate - 1)));
+        await firebase.assertSucceeds(character.set(withPoints('fortune', data.points.fate)));
+        await firebase.assertFails(character.set(withPoints('fortune', data.points.fate + 1)));
+
+        await firebase.assertSucceeds(character.set(withPoints('wounds', data.points.maxWounds - 1)));
+        await firebase.assertSucceeds(character.set(withPoints('wounds', data.points.maxWounds)));
+        await firebase.assertFails(character.set(withPoints('wounds', data.points.maxWounds + 1)));
     }
 }
