@@ -15,7 +15,7 @@
 
         <TextView
             android:id="@+id/raceAndCareer"
-            style="@style/TextAppearance.AppCompat.Large"
+            style="@style/TextAppearance.AppCompat.Subhead"
             android:padding="16dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
