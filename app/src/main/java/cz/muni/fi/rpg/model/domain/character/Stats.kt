@@ -10,6 +10,12 @@ data class Stats(
     val willPower: Int,
     val fellowship: Int
 ) {
+    val strengthBonus: Int
+        get() = strength / 10
+
+    val toughnessBonus: Int
+        get() = toughness / 10
+
     init {
         require(
             listOf(

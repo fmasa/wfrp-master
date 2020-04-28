@@ -93,27 +93,133 @@
 
             <cz.muni.fi.rpg.ui.views.CharacterStat
                 android:id="@+id/weaponSkill"
-                app:statName="@string/label_weapon_skill"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintEnd_toStartOf="@id/ballisticSkill"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintHorizontal_chainStyle="packed"
-                android:layout_marginEnd="8dp"
+                android:layout_marginEnd="18dp"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toStartOf="@id/ballisticSkill"
+                app:layout_constraintHorizontal_chainStyle="packed"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:statName="@string/label_weapon_skill" />
 
             <cz.muni.fi.rpg.ui.views.CharacterStat
                 android:id="@+id/ballisticSkill"
-                app:statName="@string/label_ballistic_skill"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintStart_toEndOf="@id/weaponSkill"
-                app:layout_constraintHorizontal_chainStyle="packed"
-                app:layout_constraintEnd_toEndOf="parent"
-
                 android:layout_width="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_height="wrap_content"/>
+                android:layout_marginStart="18dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_chainStyle="packed"
+                app:layout_constraintStart_toEndOf="@id/weaponSkill"
+                app:layout_constraintTop_toTopOf="parent"
+                app:statName="@string/label_ballistic_skill" />
 
+            <!-- Second row -->
+            <cz.muni.fi.rpg.ui.views.CharacterStat
+                android:id="@+id/strength"
+                android:layout_marginTop="16dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="@id/weaponSkill"
+                app:layout_constraintEnd_toEndOf="@id/weaponSkill"
+                app:layout_constraintTop_toBottomOf="@id/weaponSkill"
+                app:statName="@string/label_strength" />
+
+            <ImageView
+                android:id="@+id/strengthArrow"
+                android:src="@drawable/ic_arrow_forward"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="@id/weaponSkill"
+                app:layout_constraintEnd_toEndOf="@id/ballisticSkill"
+                app:layout_constraintTop_toBottomOf="@id/weaponSkill"
+                android:gravity="center"
+                android:layout_marginTop="44dp"
+                />
+            <cz.muni.fi.rpg.ui.views.CharacterStat
+                android:id="@+id/strengthBonus"
+                android:layout_marginTop="16dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="@id/ballisticSkill"
+                app:layout_constraintEnd_toEndOf="@id/ballisticSkill"
+                app:layout_constraintTop_toBottomOf="@id/weaponSkill"
+                app:statName="@string/label_strength_bonus" />
+
+            <!-- Third row -->
+            <cz.muni.fi.rpg.ui.views.CharacterStat
+                android:id="@+id/toughness"
+                android:layout_marginTop="16dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="@id/weaponSkill"
+                app:layout_constraintEnd_toEndOf="@id/weaponSkill"
+                app:layout_constraintTop_toBottomOf="@id/strength"
+                app:statName="@string/label_toughness" />
+
+            <ImageView
+                android:id="@+id/toughnessArrow"
+                android:src="@drawable/ic_arrow_forward"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="@id/weaponSkill"
+                app:layout_constraintEnd_toEndOf="@id/ballisticSkill"
+                app:layout_constraintTop_toBottomOf="@id/strength"
+                android:gravity="center"
+                android:layout_marginTop="44dp"
+                />
+            <cz.muni.fi.rpg.ui.views.CharacterStat
+                android:id="@+id/toughnessBonus"
+                android:layout_marginTop="16dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="@id/ballisticSkill"
+                app:layout_constraintEnd_toEndOf="@id/ballisticSkill"
+                app:layout_constraintTop_toBottomOf="@id/strength"
+                app:statName="@string/label_toughness_bonus" />
+
+            <!-- Fourth row -->
+            <cz.muni.fi.rpg.ui.views.CharacterStat
+                android:id="@+id/agility"
+                android:layout_marginEnd="8dp"
+                android:layout_marginTop="16dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toStartOf="@id/intelligence"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/toughness"
+                app:statName="@string/label_agility" />
+
+            <cz.muni.fi.rpg.ui.views.CharacterStat
+                android:id="@+id/intelligence"
+                android:layout_marginTop="16dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toStartOf="@id/willPower"
+                app:layout_constraintHorizontal_chainStyle="packed"
+                app:layout_constraintStart_toEndOf="@id/agility"
+                app:layout_constraintTop_toBottomOf="@id/toughness"
+                app:statName="@string/label_intelligence" />
+
+            <cz.muni.fi.rpg.ui.views.CharacterStat
+                android:id="@+id/willPower"
+                android:layout_width="wrap_content"
+                android:layout_marginTop="16dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toStartOf="@id/intelligence"
+                app:layout_constraintHorizontal_chainStyle="packed"
+                app:layout_constraintStart_toEndOf="@id/fellowship"
+                app:layout_constraintTop_toBottomOf="@id/toughness"
+                app:statName="@string/label_will_power" />
+
+            <cz.muni.fi.rpg.ui.views.CharacterStat
+                android:id="@+id/fellowship"
+                android:layout_width="wrap_content"
+                android:layout_marginTop="16dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/willPower"
+                app:layout_constraintTop_toBottomOf="@id/toughness"
+                app:statName="@string/label_fellowship" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
 

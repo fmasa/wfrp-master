@@ -37,6 +37,14 @@
 
     <string name="label_weapon_skill">Weapon Skill</string>
     <string name="label_ballistic_skill">Ballistic Skill</string>
+    <string name="label_fellowship">Fellowship</string>
+    <string name="label_will_power">Will Power</string>
+    <string name="label_intelligence">Intelligence</string>
+    <string name="label_agility">Agility</string>
+    <string name="label_toughness_bonus">TB</string>
+    <string name="label_toughness">Toughness</string>
+    <string name="label_strength_bonus">SB</string>
+    <string name="label_strength">Strength</string>
 
     <string name="race_dwarf">Dwarf</string>
     <string name="race_elf">Elf</string>

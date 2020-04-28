@@ -51,6 +51,17 @@ class CharacterStatsFragment : DaggerFragment(R.layout.fragment_character_stats)
             .observe(viewLifecycleOwner) { stats ->
                 weaponSkill.value = stats.weaponSkill
                 ballisticSkill.value = stats.ballisticSkill
+
+                strength.value = stats.strength
+                strengthBonus.value = stats.strengthBonus
+
+                toughness.value = stats.toughness
+                toughnessBonus.value = stats.toughnessBonus
+
+                agility.value = stats.agility
+                intelligence.value = stats.intelligence
+                willPower.value = stats.willPower
+                fellowship.value = stats.fellowship
             }
     }
 
