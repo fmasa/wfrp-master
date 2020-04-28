@@ -14,4 +14,6 @@ data class Points(
         require(wounds in 0..maxWounds)
         require(maxWounds > 0)
     }
+
+    fun isHeavilyWounded() = wounds < 2;
 }
