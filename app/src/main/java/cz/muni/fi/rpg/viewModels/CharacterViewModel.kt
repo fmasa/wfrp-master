@@ -38,7 +38,7 @@ class CharacterViewModel(
         launch {
             val character = characters.get(partyId, userId)
             try {
-                character.updatePoints(mutation(character.points))
+                character.updatePoints(mutation(character.getPoints()))
                 characters.save(partyId, character)
             } catch (e: IllegalArgumentException) {
             }
