@@ -45,7 +45,7 @@ class CharacterCreationActivity : PartyScopedActivity(R.layout.activity_characte
                         willPower = 40,
                         fellowship = 42
                     ),
-                    Points(insanity = 0, fate = 3, fortune = 3, wounds = 6)
+                    Points(insanity = 0, fate = 3, fortune = 3, maxWounds = 6, wounds = 6)
                 )
             )
 
