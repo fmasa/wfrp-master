@@ -51,4 +51,5 @@
     <string name="race_gnome">Gnome</string>
     <string name="race_halfling">Halfling</string>
     <string name="race_human">Human</string>
+    <string name="button_edit_stats">Edit stats</string>
 </resources>
