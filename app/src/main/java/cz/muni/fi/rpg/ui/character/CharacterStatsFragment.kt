@@ -70,6 +70,8 @@ class CharacterStatsFragment : DaggerFragment(R.layout.fragment_character_stats)
             .map(viewModel.character.right()) { character -> character.getPoints() }
             .observe(viewLifecycleOwner) { points ->
                 wounds.value = points.wounds
+                wounds.setColor(if (points.wounds < 2) R.color.colorDanger else R.color.colorText)
+
                 fortunePoints.value = points.fortune
                 fatePoints.value = points.fate
                 insanityPoints.value = points.insanity
