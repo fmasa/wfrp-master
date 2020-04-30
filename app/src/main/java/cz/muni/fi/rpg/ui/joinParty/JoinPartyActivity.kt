@@ -104,10 +104,6 @@ class JoinPartyActivity : AuthenticatedActivity(R.layout.activity_join_party),
         }
     }
 
-    override fun onTouchEvent(event: MotionEvent?): Boolean {
-        return false
-    }
-
     /**
      * @throws JsonSyntaxException
      */
