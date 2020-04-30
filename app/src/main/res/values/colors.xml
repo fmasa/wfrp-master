@@ -6,4 +6,6 @@
     <color name="colorFabText">#FFFFFF</color>
     <color name="colorFabLabelText">#000000</color>
     <color name="colorFabLabelBackground">#ffffff</color>
+    <color name="colorText">#000000</color>
+    <color name="colorDanger">#b50c0f</color>
 </resources>

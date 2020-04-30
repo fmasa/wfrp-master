@@ -25,4 +25,32 @@
     <string name="error_invalid_invitation">Invitation token is not valid</string>
     <string name="error_unkown">Unknown error occurred</string>
     <string name="invitation_code_description">Players can join using this code</string>
+    <string name="title_characterCreation">Describe your character…</string>
+    <string name="title_character_stats">Character Detail</string>
+    <string name="title_character_inventory">Inventory</string>
+    <string name="title_notifications">Notifications</string>
+
+    <string name="label_wounds">Wounds</string>
+    <string name="label_fortune_points">Fortune</string>
+    <string name="label_fate_points">Fate</string>
+    <string name="label_insanity_points">Insanity</string>
+
+    <string name="label_weapon_skill">Weapon Skill</string>
+    <string name="label_ballistic_skill">Ballistic Skill</string>
+    <string name="label_magic">Magic</string>
+    <string name="label_fellowship">Fellowship</string>
+    <string name="label_will_power">Will Power</string>
+    <string name="label_intelligence">Intelligence</string>
+    <string name="label_agility">Agility</string>
+    <string name="label_toughness_bonus">TB</string>
+    <string name="label_toughness">Toughness</string>
+    <string name="label_strength_bonus">SB</string>
+    <string name="label_strength">Strength</string>
+
+    <string name="race_dwarf">Dwarf</string>
+    <string name="race_elf">Elf</string>
+    <string name="race_gnome">Gnome</string>
+    <string name="race_halfling">Halfling</string>
+    <string name="race_human">Human</string>
+    <string name="button_edit_stats">Edit stats</string>
 </resources>

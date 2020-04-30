@@ -23,6 +23,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".ui.joinParty.JoinPartyActivity" android:label="@string/title_joinParty"/>
+        <activity android:name=".ui.characterCreation.CharacterCreationActivity" android:label="@string/title_characterCreation"/>
+        <activity android:name=".ui.character.CharacterActivity" />
     </application>
 
 </manifest>

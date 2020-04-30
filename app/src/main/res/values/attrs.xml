@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="CharacterPoint">
+        <attr name="name" format="string"/>
+    </declare-styleable>
+    <declare-styleable name="CharacterStat">
+        <attr name="statName" format="string"/>
+        <attr name="editable" format="boolean"/>
+    </declare-styleable>
+</resources>

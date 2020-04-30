@@ -15,8 +15,52 @@ service cloud.firestore {
             match /characters/{userId} {
                 allow write: if hasAccessToParty()
                                 && request.resource.data.userId == userId
-                                && request.resource.data.userId == request.auth.uid;
+                                && request.resource.data.userId == request.auth.uid
+                                && isValidCharacter(request.resource.data);
                 allow read: if hasAccessToParty();
+            }
+
+            function isValidCharacter(character) {
+                return character.keys().toSet() == ["name", "career", "points", "race", "stats", "userId"].toSet()
+                    && character.name is string && character.name != ""
+                    && character.career is string && character.career != ""
+                    && character.race is string && character.race in ["HUMAN", "ELF", "DWARF", "HALFLING", "GNOME"]
+                    && arePointsValid(character.points)
+                    && areStatsValid(character.stats);
+            }
+
+            function arePointsValid(points) {
+                return points is map
+                    && points.keys().toSet() == ["insanity", "fate", "fortune", "maxWounds", "wounds"].toSet()
+                    && points.insanity is int && points.insanity >= 0
+                    && points.fate is int && points.fate >= 0
+                    && points.fortune is int && points.fortune >= 0 && points.fortune <= points.fate
+                    && points.maxWounds is int && points.maxWounds >= 0
+                    && points.wounds is int && points.wounds >= 0 && points.wounds <= points.maxWounds;
+            }
+
+            function areStatsValid(stats) {
+                return stats is map
+                    && stats.keys().toSet() == [
+                        "weaponSkill",
+                        "ballisticSkill",
+                        "strength",
+                        "toughness",
+                        "agility",
+                        "intelligence",
+                        "willPower",
+                        "fellowship",
+                        "magic"
+                    ].toSet()
+                    && stats.weaponSkill >= 0 && stats.weaponSkill <= 100
+                    && stats.ballisticSkill >= 0 && stats.ballisticSkill <= 100
+                    && stats.strength >= 0 && stats.strength <= 100
+                    && stats.toughness >= 0 && stats.toughness <= 100
+                    && stats.agility >= 0 && stats.agility <= 100
+                    && stats.intelligence >= 0 && stats.intelligence <= 100
+                    && stats.willPower >= 0 && stats.willPower <= 100
+                    && stats.fellowship >= 0 && stats.fellowship <= 100
+                    && stats.magic >= 0 && stats.magic <= 100;
             }
 
             function isValidNewParty(party, uid) {

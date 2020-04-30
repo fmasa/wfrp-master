@@ -1,9 +1,11 @@
 package cz.muni.fi.rpg.model.domain.party
 
-import android.view.ViewGroup
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.LiveData
 import androidx.recyclerview.widget.RecyclerView
-import cz.muni.fi.rpg.common.OnClickListener
+import arrow.core.Either
 import cz.muni.fi.rpg.common.ViewHolder
+import cz.muni.fi.rpg.common.ViewHolderFactory
 import java.util.*
 
 interface PartyRepository {
@@ -14,12 +16,14 @@ interface PartyRepository {
      */
     suspend fun get(id: UUID): Party
 
+    fun getLive(id: UUID): LiveData<Either<PartyNotFound, Party>>
+
     /**
      * Creates RecyclerView Adapter with parties that user has access to
      */
-    fun <VH : ViewHolder<Party>> forUser(
+    fun forUser(
         userId: String,
-        viewHolderFactory: (parent: ViewGroup) -> VH,
-        onClickListener: OnClickListener<Party>
-    ): RecyclerView.Adapter<VH>
+        lifecycleOwner: LifecycleOwner,
+        viewHolderFactory: ViewHolderFactory<Party>
+    ): RecyclerView.Adapter<ViewHolder<Party>>
 }
