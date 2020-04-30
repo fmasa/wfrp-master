@@ -3,7 +3,6 @@ package cz.muni.fi.rpg.ui.character
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.core.os.bundleOf
 import androidx.lifecycle.observe
@@ -43,12 +42,6 @@ class CharacterActivity : PartyScopedActivity(R.layout.activity_character) {
 
     private fun openCharacterCreation() {
         Log.e(localClassName, "Character not found");
-
-        Toast.makeText(
-            applicationContext,
-            "Error: Your character was not found",
-            Toast.LENGTH_SHORT
-        ).show()
 
         val intent = Intent(this, CharacterCreationActivity::class.java)
         intent.putExtra(EXTRA_PARTY_ID, getPartyId().toString())
