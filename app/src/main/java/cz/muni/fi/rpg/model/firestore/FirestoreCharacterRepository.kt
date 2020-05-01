@@ -1,14 +1,9 @@
 package cz.muni.fi.rpg.model.firestore
 
-import androidx.lifecycle.LifecycleOwner
-import androidx.recyclerview.widget.RecyclerView
-import com.firebase.ui.firestore.FirestoreRecyclerOptions
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.FirebaseFirestoreException
 import com.google.firebase.firestore.SetOptions
 import com.google.gson.Gson
-import cz.muni.fi.rpg.common.ViewHolder
-import cz.muni.fi.rpg.common.ViewHolderFactory
 import cz.muni.fi.rpg.model.domain.character.Character
 import cz.muni.fi.rpg.model.domain.character.CharacterNotFound
 import cz.muni.fi.rpg.model.domain.character.CharacterRepository
@@ -51,21 +46,7 @@ class FirestoreCharacterRepository @Inject constructor(
         return characters(partyId).whereEqualTo("userId", userId).get().await().size() != 0
     }
 
-    override fun inParty(
-        partyId: UUID,
-        lifecycleOwner: LifecycleOwner,
-        viewHolderFactory: ViewHolderFactory<Character>
-    ): RecyclerView.Adapter<ViewHolder<Character>> {
-        val options = FirestoreRecyclerOptions.Builder<Character>()
-            .setLifecycleOwner(lifecycleOwner)
-            .setQuery(characters(partyId), parser)
-            .build()
-
-        return FirestoreRecyclerAdapter(
-            options,
-            viewHolderFactory
-        )
-    }
+    override fun inParty(partyId: UUID) = QueryLiveData(characters(partyId), parser)
 
     private fun characters(partyId: UUID) =
         parties.document(partyId.toString()).collection(COLLECTION_CHARACTERS)

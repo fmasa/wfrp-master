@@ -1,11 +1,8 @@
 package cz.muni.fi.rpg.model.domain.character
 
-import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
-import androidx.recyclerview.widget.RecyclerView
 import arrow.core.Either
-import cz.muni.fi.rpg.common.ViewHolder
-import cz.muni.fi.rpg.common.ViewHolderFactory
+import cz.muni.fi.rpg.model.domain.party.Party
 import java.util.UUID
 
 interface CharacterRepository {
@@ -20,9 +17,5 @@ interface CharacterRepository {
 
     suspend fun hasCharacterInParty(userId: String, partyId: UUID) : Boolean
 
-    fun inParty(
-        partyId: UUID,
-        lifecycleOwner: LifecycleOwner,
-        viewHolderFactory: ViewHolderFactory<Character>
-    ): RecyclerView.Adapter<ViewHolder<Character>>
+    fun inParty(partyId: UUID): LiveData<List<Character>>
 }

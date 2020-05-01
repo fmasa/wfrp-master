@@ -1,14 +1,9 @@
 package cz.muni.fi.rpg.model.firestore
 
-import androidx.lifecycle.LifecycleOwner
-import androidx.recyclerview.widget.RecyclerView
-import com.firebase.ui.firestore.FirestoreRecyclerOptions
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.FirebaseFirestoreException
 import com.google.firebase.firestore.SetOptions
 import com.google.gson.Gson
-import cz.muni.fi.rpg.common.ViewHolder
-import cz.muni.fi.rpg.common.ViewHolderFactory
 import cz.muni.fi.rpg.model.domain.party.Party
 import cz.muni.fi.rpg.model.domain.party.PartyNotFound
 import cz.muni.fi.rpg.model.domain.party.PartyRepository
@@ -47,18 +42,6 @@ class FirestorePartyRepository @Inject constructor(
         )
     }
 
-    override fun forUser(
-        userId: String,
-        lifecycleOwner: LifecycleOwner,
-        viewHolderFactory: ViewHolderFactory<Party>
-    ): RecyclerView.Adapter<ViewHolder<Party>> {
-        val options = FirestoreRecyclerOptions.Builder<Party>()
-            .setLifecycleOwner(lifecycleOwner)
-            .setQuery(parties.whereArrayContains("users", userId), parser).build()
-
-        return FirestoreRecyclerAdapter(
-            options,
-            viewHolderFactory
-        )
-    }
+    override fun forUser(userId: String) =
+        QueryLiveData(parties.whereArrayContains("users", userId), parser)
 }
