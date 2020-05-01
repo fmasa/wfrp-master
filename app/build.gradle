@@ -5,16 +5,22 @@ apply plugin: 'com.google.gms.google-services'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'androidx.navigation.safeargs.kotlin'
 
+def playStoreJsonFile = file('./play_store_credentials.json')
+
+if (playStoreJsonFile.isFile()) {
+    apply plugin: 'com.github.triplet.play'
+}
+
 android {
     compileSdkVersion 29
     buildToolsVersion "29.0.3"
 
     defaultConfig {
-        applicationId "cz.muni.fi.rpg"
+        applicationId "cz.frantisekmasa.dnd"
         minSdkVersion 24
         targetSdkVersion 29
         versionCode 1
-        versionName "1.0"
+        versionName "0.1"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
@@ -34,9 +40,19 @@ android {
         //
     }
 
+    signingConfigs {
+        release {
+            storeFile file(".keystore")
+            storePassword System.getenv("KEYSTORE_PASSWORD")
+            keyAlias "uploadKey"
+            keyPassword System.getenv("KEY_PASSWORD")
+        }
+    }
+
     buildTypes {
         release {
             minifyEnabled false
+            signingConfig signingConfigs.release
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
@@ -53,6 +69,19 @@ android {
         jvmTarget = "1.8"
     }
 
+}
+
+
+if (playStoreJsonFile.exists()) {
+    play {
+        defaultToAppBundles = true
+        track = System.getenv("PLAY_STORE_TRACK")
+        serviceAccountCredentials = playStoreJsonFile
+        resolutionStrategy = "auto"
+        outputProcessor {
+            versionNameOverride = "$versionNameOverride.$versionCode"
+        }
+    }
 }
 
 dependencies {
