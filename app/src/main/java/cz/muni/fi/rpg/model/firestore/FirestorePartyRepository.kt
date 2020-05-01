@@ -1,5 +1,7 @@
 package cz.muni.fi.rpg.model.firestore
 
+import androidx.lifecycle.LiveData
+import arrow.core.Either
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.FirebaseFirestoreException
 import com.google.firebase.firestore.SetOptions
@@ -35,13 +37,12 @@ class FirestorePartyRepository @Inject constructor(
         }
     }
 
-    override fun getLive(id: UUID) = DocumentLiveData(parties.document(id.toString())) {
-        it.bimap(
-            { e -> PartyNotFound(id, e) },
-            { snapshot -> parser.parseSnapshot(snapshot) }
-        )
+    override fun getLive(id: UUID): LiveData<Either<PartyNotFound, Party>> {
+        return DocumentLiveData(parties.document(id.toString())) {
+            it.bimap({ e -> PartyNotFound(id, e) }, { snapshot -> parser.parseSnapshot(snapshot) })
+        }
     }
 
-    override fun forUser(userId: String) =
+    override fun forUser(userId: String): LiveData<List<Party>> =
         QueryLiveData(parties.whereArrayContains("users", userId), parser)
 }

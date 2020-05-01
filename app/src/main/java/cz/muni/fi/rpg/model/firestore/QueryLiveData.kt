@@ -7,7 +7,7 @@ import com.firebase.ui.firestore.SnapshotParser
 import com.google.firebase.firestore.ListenerRegistration
 import com.google.firebase.firestore.Query
 
-class QueryLiveData<T>(
+internal class QueryLiveData<T>(
     private val query: Query,
     private val snapshotParser: SnapshotParser<T>
 ) : MutableLiveData<List<T>>() {
