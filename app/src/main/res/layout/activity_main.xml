@@ -4,10 +4,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.MainActivity" android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+    android:background="@drawable/ic_launcher_background"
+    tools:context=".ui.MainActivity">
 
     <ImageView
-        android:id="@+id/diceLogo"
+        android:id="@+id/logo"
         android:contentDescription="@string/appIcon"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -16,7 +17,8 @@
         android:layout_marginBottom="140dp"
         android:layout_height="wrap_content"
         android:layout_width="wrap_content"
-        android:src="@drawable/dice"/>
+        android:elevation="8dp"
+        android:src="@drawable/splash_screen_image"/>
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -24,7 +26,8 @@
         app:layout_constraintRight_toRightOf="parent"
         android:text="@string/appName"
         android:layout_marginTop="30dp"
+        android:textColor="@color/colorSplashScreenText"
         style="@style/TextAppearance.AppCompat.Display1"
-        app:layout_constraintTop_toBottomOf="@id/diceLogo"/>
+        app:layout_constraintTop_toBottomOf="@id/logo"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
