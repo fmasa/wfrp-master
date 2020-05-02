@@ -8,4 +8,5 @@
     <color name="colorFabLabelBackground">#ffffff</color>
     <color name="colorText">#000000</color>
     <color name="colorDanger">#b50c0f</color>
+    <color name="colorEmptyState">#585858</color>
 </resources>

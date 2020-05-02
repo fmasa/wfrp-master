@@ -2,6 +2,7 @@ package cz.muni.fi.rpg.ui.partyList
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import androidx.lifecycle.observe
 import androidx.recyclerview.widget.LinearLayoutManager
 import cz.muni.fi.rpg.ui.gameMaster.GameMasterActivity
@@ -35,7 +36,19 @@ class PartyListActivity : AuthenticatedActivity(R.layout.activity_party_list) {
         }
         partyListRecycler.adapter = adapter
 
-        parties.forUser(getUserId()).observe(this) { adapter.submitList(it)}
+        parties.forUser(getUserId()).observe(this) {
+            adapter.submitList(it)
+
+            if (it.isNotEmpty()) {
+                noPartiesIcon.visibility = View.GONE
+                noPartiesText.visibility = View.GONE
+                partyListRecycler.visibility = View.VISIBLE
+            } else {
+                noPartiesIcon.visibility = View.VISIBLE
+                noPartiesText.visibility = View.VISIBLE
+                partyListRecycler.visibility = View.GONE
+            }
+        }
 
         assembleNewParty.setOnClickListener {
             AssemblePartyDialog(getUserId()) { openParty(it, GameMasterActivity::class) }
