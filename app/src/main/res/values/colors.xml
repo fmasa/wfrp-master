@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#6200EE</color>
-    <color name="colorPrimaryDark">#3700B3</color>
-    <color name="colorAccent">#03DAC5</color>
+    <color name="colorPrimary">#B71C1C</color>
+    <color name="colorPrimaryDark">#a71414</color>
+    <color name="colorAccent">#a71414</color>
     <color name="colorFabText">#FFFFFF</color>
     <color name="colorFabLabelText">#000000</color>
     <color name="colorFabLabelBackground">#ffffff</color>
     <color name="colorText">#000000</color>
-    <color name="colorDanger">#b50c0f</color>
+    <color name="colorDanger">#B71C1C</color>
     <color name="colorEmptyState">#585858</color>
     <color name="colorSplashScreenText">#eaeaea</color>
 </resources>
