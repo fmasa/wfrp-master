@@ -2,11 +2,13 @@ package cz.muni.fi.rpg.ui
 
 import android.content.Intent
 import android.os.Bundle
-import android.os.PersistableBundle
-import android.util.Log
+import android.view.Menu
+import android.view.MenuItem
 import android.widget.Toast
 import androidx.annotation.LayoutRes
 import com.google.firebase.auth.FirebaseAuth
+import cz.muni.fi.rpg.R
+import cz.muni.fi.rpg.ui.common.AboutDialog
 import dagger.android.support.DaggerAppCompatActivity
 import javax.inject.Inject
 
@@ -33,6 +35,22 @@ abstract class AuthenticatedActivity(@LayoutRes contentLayoutId: Int) :
         }
 
         userId = user.uid
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        super.onCreateOptionsMenu(menu)
+
+        menuInflater.inflate(R.menu.overflow_menu, menu)
+
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == R.id.actionAbout) {
+            AboutDialog().show(supportFragmentManager, "AboutDialog")
+        }
+
+        return super.onOptionsItemSelected(item)
     }
 
     protected fun getUserId() = userId
