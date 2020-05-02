@@ -24,7 +24,7 @@
         android:layout_height="wrap_content"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        android:text="@string/appName"
+        android:text="@string/app_name"
         android:layout_marginTop="30dp"
         android:textColor="@color/colorSplashScreenText"
         style="@style/TextAppearance.AppCompat.Display1"
