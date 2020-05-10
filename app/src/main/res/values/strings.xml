@@ -101,4 +101,5 @@
     <string name="error_value_is_0">Value cannot be 0</string>
     <string name="error_cannot_be_empty">Cannot be empty!</string>
     <string name="error_value_over_100">Cannot be higher than 100</string>
+    <string name="title_character_skills"><![CDATA[Skills & Talents]]></string>
 </resources>

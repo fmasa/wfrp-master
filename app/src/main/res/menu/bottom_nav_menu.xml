@@ -7,6 +7,11 @@
         android:title="@string/title_character_stats" />
 
     <item
+        android:id="@+id/navigation_character_skills"
+        android:icon="@drawable/ic_skills"
+        android:title="@string/title_character_skills" />
+
+    <item
         android:id="@+id/navigation_character_inventory"
         android:icon="@drawable/ic_inventory"
         android:title="@string/title_character_inventory" />
