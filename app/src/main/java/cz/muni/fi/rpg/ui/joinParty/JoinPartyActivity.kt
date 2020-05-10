@@ -3,12 +3,11 @@ package cz.muni.fi.rpg.ui.joinParty
 import android.Manifest
 import android.content.pm.PackageManager
 import android.util.Log
-import android.view.MotionEvent
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import com.google.gson.Gson
-import com.google.gson.JsonSyntaxException
+import com.fasterxml.jackson.core.JsonProcessingException
+import com.fasterxml.jackson.databind.json.JsonMapper
 import com.google.zxing.Result
 import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.model.domain.invitation.InvitationProcessor
@@ -25,7 +24,7 @@ class JoinPartyActivity : AuthenticatedActivity(R.layout.activity_join_party),
     }
 
     @Inject
-    lateinit var gson: Gson
+    lateinit var jsonMapper: JsonMapper
 
     @Inject
     lateinit var invitationProcessor: InvitationProcessor
@@ -95,7 +94,7 @@ class JoinPartyActivity : AuthenticatedActivity(R.layout.activity_join_party),
                 .setOnSuccessListener { finish() }
                 .setOnDismissListener { resumeScanning() }
                 .show(supportFragmentManager, "JoinPartyDialog")
-        } catch (e: JsonSyntaxException) {
+        } catch (e: JsonProcessingException) {
             val error = "QR code is not valid party invitation"
 
             Log.e(localClassName, error, e)
@@ -105,9 +104,9 @@ class JoinPartyActivity : AuthenticatedActivity(R.layout.activity_join_party),
     }
 
     /**
-     * @throws JsonSyntaxException
+     * @throws JsonProcessingException
      */
-    private fun deserializeInvitation(json: String) = gson.fromJson(json, Invitation::class.java)
+    private fun deserializeInvitation(json: String) = jsonMapper.readValue(json, Invitation::class.java)
 
     private fun resumeScanning() = scanner.resumeCameraPreview(this)
 }

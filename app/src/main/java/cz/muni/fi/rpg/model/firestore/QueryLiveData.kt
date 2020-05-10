@@ -4,9 +4,9 @@ import androidx.lifecycle.MutableLiveData
 import com.google.firebase.firestore.ListenerRegistration
 import com.google.firebase.firestore.Query
 
-internal class QueryLiveData<T>(
+internal class QueryLiveData<T: Any>(
     private val query: Query,
-    private val snapshotParser: SnapshotParser<T>
+    private val snapshotParser: AggregateMapper<T>
 ) : MutableLiveData<List<T>>() {
     private var listener: ListenerRegistration? = null
 
@@ -18,7 +18,7 @@ internal class QueryLiveData<T>(
             snapshot?.let {
                 value = snapshot
                     .asIterable()
-                    .map(snapshotParser::parseSnapshot)
+                    .map(snapshotParser::fromDocumentSnapshot)
             }
         }
     }

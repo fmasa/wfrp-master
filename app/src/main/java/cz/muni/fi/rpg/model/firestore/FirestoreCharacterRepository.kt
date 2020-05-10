@@ -1,36 +1,35 @@
 package cz.muni.fi.rpg.model.firestore
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import arrow.core.Either
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.FirebaseFirestoreException
 import com.google.firebase.firestore.SetOptions
-import com.google.gson.Gson
 import cz.muni.fi.rpg.model.domain.character.Character
 import cz.muni.fi.rpg.model.domain.character.CharacterNotFound
 import cz.muni.fi.rpg.model.domain.character.CharacterRepository
-import cz.muni.fi.rpg.model.infrastructure.GsonSnapshotParser
 import kotlinx.coroutines.tasks.await
 import java.util.*
 import javax.inject.Inject
 
-class FirestoreCharacterRepository @Inject constructor(
-    gson: Gson,
-    firestore: FirebaseFirestore
+internal class FirestoreCharacterRepository @Inject constructor(
+    firestore: FirebaseFirestore,
+    private val mapper: AggregateMapper<Character>
 ) : CharacterRepository {
+    private val tag = this::class.simpleName
     private val parties = firestore.collection(COLLECTION_PARTIES)
-    private val parser = GsonSnapshotParser(Character::class, gson)
 
     override suspend fun save(partyId: UUID, character: Character) {
-        characters(partyId).document(character.userId).set(
-            character,
-            SetOptions.merge()
-        ).await()
+        val data = mapper.toDocumentData(character)
+
+        Log.d(tag,"Saving character $data in party $partyId to firestore")
+        characters(partyId).document(character.userId).set(data, SetOptions.merge()).await()
     }
 
     override suspend fun get(partyId: UUID, userId: String): Character {
         try {
-            return parser.parseSnapshot(characters(partyId).document(userId).get().await())
+            return mapper.fromDocumentSnapshot(characters(partyId).document(userId).get().await())
         } catch (e: FirebaseFirestoreException) {
             throw CharacterNotFound(userId, partyId, e)
         }
@@ -41,7 +40,7 @@ class FirestoreCharacterRepository @Inject constructor(
         userId: String
     ): LiveData<Either<CharacterNotFound, Character>> {
         return DocumentLiveData(characters(partyId).document(userId)) {
-            it.bimap({ e -> CharacterNotFound(userId, partyId, e) }, parser::parseSnapshot)
+            it.bimap({ e -> CharacterNotFound(userId, partyId, e) }, mapper::fromDocumentSnapshot)
         }
     }
 
@@ -50,7 +49,7 @@ class FirestoreCharacterRepository @Inject constructor(
     }
 
     override fun inParty(partyId: UUID): LiveData<List<Character>> =
-        QueryLiveData(characters(partyId), parser)
+        QueryLiveData(characters(partyId), mapper)
 
     private fun characters(partyId: UUID) =
         parties.document(partyId.toString()).collection(COLLECTION_CHARACTERS)

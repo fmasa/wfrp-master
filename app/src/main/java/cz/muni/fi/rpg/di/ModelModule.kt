@@ -1,30 +1,35 @@
 package cz.muni.fi.rpg.di
 
+import com.fasterxml.jackson.databind.json.JsonMapper
+import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
+import com.fasterxml.jackson.module.kotlin.registerKotlinModule
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
-import com.google.gson.Gson
-import com.google.gson.GsonBuilder
+import cz.muni.fi.rpg.model.domain.character.Character
 import cz.muni.fi.rpg.model.domain.character.CharacterRepository
 import cz.muni.fi.rpg.model.domain.invitation.InvitationProcessor
+import cz.muni.fi.rpg.model.domain.party.Party
 import cz.muni.fi.rpg.model.domain.party.PartyRepository
 import cz.muni.fi.rpg.model.firestore.FirestoreCharacterRepository
 import cz.muni.fi.rpg.model.firestore.FirestoreInvitationProcessor
 import cz.muni.fi.rpg.model.firestore.FirestorePartyRepository
-import cz.muni.fi.rpg.model.infrastructure.UUIDAdapter
+import cz.muni.fi.rpg.model.firestore.jackson.JacksonAggregateMapper
 import dagger.Module
 import dagger.Provides
-import java.util.*
 import javax.inject.Singleton
 
 @Module
 class ModelModule {
     @Provides
     @Singleton
-    fun gson(): Gson = GsonBuilder()
-        .registerTypeAdapter(UUID::class.java, UUIDAdapter())
-        .create()
+    fun jsonMapper(): JsonMapper {
+        val mapper = JsonMapper()
+        mapper.registerKotlinModule()
+
+        return mapper
+    }
 
     @Provides
     @Singleton
@@ -32,13 +37,24 @@ class ModelModule {
 
     @Provides
     @Singleton
-    fun parties(gson: Gson, firestore: FirebaseFirestore): PartyRepository =
-        FirestorePartyRepository(gson, firestore)
+    fun parties(firestore: FirebaseFirestore): PartyRepository =
+        FirestorePartyRepository(firestore,
+            JacksonAggregateMapper(
+                Party::class,
+                jacksonTypeRef()
+            )
+        )
 
     @Provides
     @Singleton
-    fun characters(gson: Gson, firestore: FirebaseFirestore): CharacterRepository =
-        FirestoreCharacterRepository(gson, firestore)
+    fun characters(firestore: FirebaseFirestore): CharacterRepository =
+        FirestoreCharacterRepository(
+            firestore,
+            JacksonAggregateMapper(
+                Character::class,
+                jacksonTypeRef()
+            )
+        )
 
     @Provides
     @Singleton
