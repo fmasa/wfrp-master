@@ -8,28 +8,11 @@ import androidx.lifecycle.observe
 import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.model.right
 import cz.muni.fi.rpg.viewModels.CharacterViewModel
-import cz.muni.fi.rpg.viewModels.CharacterViewModelProvider
 import dagger.android.support.DaggerFragment
 import kotlinx.android.synthetic.main.fragment_character_stats.*
-import java.util.*
-import javax.inject.Inject
 
 class CharacterStatsFragment : DaggerFragment(R.layout.fragment_character_stats) {
-    companion object {
-        const val ARG_PARTY_ID = "pointFragment_partyId"
-        const val ARG_USER_ID = "pointFragment_userId"
-    }
-
-    @Inject
-    lateinit var viewModelFactory: CharacterViewModelProvider
-
-    private val viewModel: CharacterViewModel by activityViewModels {
-        viewModelFactory.factory(
-            arguments?.getString(ARG_PARTY_ID)?.let(UUID::fromString)
-                ?: error("Party ID must be set!"),
-            arguments?.getString(ARG_USER_ID) ?: error("User ID must be set!")
-        )
-    }
+    private val viewModel: CharacterViewModel by activityViewModels()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
