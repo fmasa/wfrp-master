@@ -10,8 +10,13 @@
         android:name="cz.muni.fi.rpg.ui.character.CharacterStatsFragment"
         tools:layout="@layout/fragment_character_stats" />
 
-    <fragment android:id="@+id/navigation_character_skills"
-        android:name="cz.muni.fi.rpg.ui.character.CharacterSkillsFragment"/>
+    <fragment
+        android:id="@+id/navigation_character_skills"
+        android:name="cz.muni.fi.rpg.ui.character.CharacterSkillsFragment" />
+
+    <fragment
+        android:id="@+id/navigation_character_spells"
+        android:name="cz.muni.fi.rpg.ui.character.CharacterSpellsFragment" />
 
     <fragment
         android:id="@+id/navigation_character_inventory"

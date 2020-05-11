@@ -18,4 +18,9 @@
         <item name="android:elevation">6dp</item>
     </style>
 
+    <style name="BottomNavigationView" parent="TextAppearance.AppCompat.Caption" />
+    <style name="BottomNavigationView.Active" parent="TextAppearance.AppCompat.Caption">
+        <item name="android:textColor">@color/colorPrimary</item>
+    </style>
+
 </resources>
