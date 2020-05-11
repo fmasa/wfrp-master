@@ -4,18 +4,32 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:textAlignment="center"
-        android:textSize="20sp"
-        android:text="TODO: Add spells"
+    <ImageView
+        android:id="@+id/noSpellsIcon"
+        android:layout_width="60pt"
+        android:layout_height="60pt"
+        android:layout_marginTop="-50dp"
+        android:src="@drawable/ic_spells"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintVertical_bias="0.4"
+        android:visibility="gone"
+        android:tint="@color/colorEmptyState"
+        />
+    <TextView
+        android:id="@+id/noSpellsText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:textAlignment="center"
+        app:layout_constraintTop_toBottomOf="@id/noSpellsIcon"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        style="@style/TextAppearance.AppCompat.Large"
+        android:textColor="@color/colorEmptyState"
+        android:text="@string/no_spells"
+        />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
