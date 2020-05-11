@@ -18,7 +18,7 @@ import java.util.*
 import javax.inject.Inject
 
 class FirestoreCharacterRepository @Inject constructor(
-    private val gson: Gson,
+    gson: Gson,
     firestore: FirebaseFirestore
 ) : CharacterRepository {
     private val parties = firestore.collection(COLLECTION_PARTIES)
@@ -26,7 +26,7 @@ class FirestoreCharacterRepository @Inject constructor(
 
     override suspend fun save(partyId: UUID, character: Character) {
         characters(partyId).document(character.userId).set(
-            gson.fromJson(gson.toJson(character), Map::class.java),
+            character,
             SetOptions.merge()
         ).await()
     }

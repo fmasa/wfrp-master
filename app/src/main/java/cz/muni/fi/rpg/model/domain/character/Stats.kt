@@ -1,5 +1,7 @@
 package cz.muni.fi.rpg.model.domain.character
 
+import com.google.firebase.firestore.Exclude
+
 data class Stats(
     val weaponSkill: Int,
     val ballisticSkill: Int,
@@ -12,10 +14,10 @@ data class Stats(
     val magic: Int
 ) {
     val strengthBonus: Int
-        get() = strength / 10
+        @Exclude get() = strength / 10
 
     val toughnessBonus: Int
-        get() = toughness / 10
+        @Exclude get() = toughness / 10
 
     init {
         require(
