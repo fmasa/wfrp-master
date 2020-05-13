@@ -18,7 +18,14 @@
         <item name="android:elevation">6dp</item>
     </style>
 
-    <style name="BottomNavigationView" parent="TextAppearance.AppCompat.Caption" />
+    <style name="TabTextAppearance" parent="TextAppearance.AppCompat.Caption">
+        <item name="android:textSize">13sp</item>
+    </style>
+    <style name="TabLayout" parent="Widget.Design.TabLayout">
+        <item name="tabTextAppearance">@style/TabTextAppearance</item>
+        <item name="tabSelectedTextColor">@color/colorPrimaryDark</item>
+        <item name="android:background">@color/colorCardBackground</item>
+    </style>
     <style name="BottomNavigationView.Active" parent="TextAppearance.AppCompat.Caption">
         <item name="android:textColor">@color/colorPrimary</item>
     </style>

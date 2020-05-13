@@ -32,7 +32,7 @@
     <string name="error_unkown">Unknown error occurred</string>
     <string name="invitation_code_description">Players can join using this code</string>
     <string name="title_characterCreation">Describe your character…</string>
-    <string name="title_character_stats">Characteristics</string>
+    <string name="title_character_stats">Attributes</string>
     <string name="title_character_inventory">Inventory</string>
     <string name="title_notifications">Notifications</string>
 
@@ -102,6 +102,6 @@
     <string name="error_value_is_0">Value cannot be 0</string>
     <string name="error_cannot_be_empty">Cannot be empty!</string>
     <string name="error_value_over_100">Cannot be higher than 100</string>
-    <string name="title_character_skills"><![CDATA[Skills & Talents]]></string>
+    <string name="title_character_skills">Skills</string>
     <string name="title_character_spells">Spells</string>
 </resources>
