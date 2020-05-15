@@ -7,6 +7,7 @@ import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.ArrayAdapter
 import androidx.appcompat.app.AlertDialog
+import androidx.core.os.bundleOf
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.DialogFragment
 import com.google.android.material.textfield.TextInputEditText
@@ -21,6 +22,18 @@ typealias OnSuccessListener = (Skill) -> Unit
 class SkillDialog : DialogFragment() {
     private var userAttemptedSubmit: Boolean = false
     private var onSuccessListener: OnSuccessListener = {}
+
+    companion object {
+        fun newInstance(existingSkill: Skill?): SkillDialog {
+            val fragment = SkillDialog()
+
+            fragment.arguments = bundleOf("skill" to existingSkill)
+
+            return fragment
+        }
+    }
+
+    val skill: Skill? by lazy { arguments?.getParcelable<Skill>("skill") }
 
     fun setOnSuccessListener(listener: OnSuccessListener): SkillDialog {
         onSuccessListener = listener
@@ -49,9 +62,11 @@ class SkillDialog : DialogFragment() {
                 .hideSoftInputFromWindow(it.windowToken, 0)
         }
 
+        setDefaults(view)
+
         val dialog = AlertDialog.Builder(activity)
-            .setTitle(R.string.title_addSkill)
             .setView(view)
+            .setTitle(if (skill != null) null else getString(R.string.title_addSkill))
             .setPositiveButton(R.string.button_save) { _, _ -> }
             .setNegativeButton(R.string.button_cancel) { _, _ ->}
             .create()
@@ -63,6 +78,15 @@ class SkillDialog : DialogFragment() {
         }
 
         return dialog
+    }
+
+    private fun setDefaults(view: View) {
+        val skill = this.skill ?: return
+
+        view.skillName.setText(skill.name)
+        view.skillDescription.setText(skill.description)
+        view.skillCharacteristic.setText(getString(skill.characteristic.getReadableNameId()), false)
+        view.skillAdvanced.isChecked = skill.advanced
     }
 
     private fun dialogSubmitted(dialog: AlertDialog, view: View) {
@@ -85,7 +109,7 @@ class SkillDialog : DialogFragment() {
 
         onSuccessListener(
             Skill(
-                UUID.randomUUID(),
+                this.skill?.id ?: UUID.randomUUID(),
                 view.skillAdvanced.isChecked,
                 selectedCharacteristic(view),
                 name,

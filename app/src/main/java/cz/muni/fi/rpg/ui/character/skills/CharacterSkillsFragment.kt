@@ -8,6 +8,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import cz.muni.fi.rpg.R
+import cz.muni.fi.rpg.model.domain.skills.Skill
 import cz.muni.fi.rpg.ui.character.skills.adapter.SkillAdapter
 import cz.muni.fi.rpg.viewModels.CharacterViewModel
 import kotlinx.android.synthetic.main.fragment_character_skills.*
@@ -25,7 +26,7 @@ class CharacterSkillsFragment : Fragment(R.layout.fragment_character_skills),
         super.onViewCreated(view, savedInstanceState)
 
         skillList.layoutManager = LinearLayoutManager(context)
-        val adapter = SkillAdapter(layoutInflater) {}
+        val adapter = SkillAdapter(layoutInflater) { openSkillDialog(it) }
         skillList.adapter = adapter
 
         viewModel.skills.observe(viewLifecycleOwner, Observer { skills ->
@@ -43,14 +44,18 @@ class CharacterSkillsFragment : Fragment(R.layout.fragment_character_skills),
         })
 
         addSkillButton.setOnClickListener {
-            val dialog = SkillDialog()
-            dialog.setOnSuccessListener { skill ->
-                launch {
-                    viewModel.saveSkill(skill)
-
-                    withContext(Dispatchers.Main) { dialog.dismiss() }
-                }
-            }.show(childFragmentManager, "SkillDialog")
+            openSkillDialog(null)
         }
+    }
+
+    private fun openSkillDialog(existingSkill: Skill?) {
+        val dialog = SkillDialog.newInstance(existingSkill)
+        dialog.setOnSuccessListener { skill ->
+            launch {
+                viewModel.saveSkill(skill)
+
+                withContext(Dispatchers.Main) { dialog.dismiss() }
+            }
+        }.show(childFragmentManager, "SkillDialog")
     }
 }
