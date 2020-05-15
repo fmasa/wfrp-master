@@ -5,12 +5,13 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import cz.muni.fi.rpg.R
-import cz.muni.fi.rpg.common.OnClickListener
+import cz.muni.fi.rpg.common.EntityListener
 import cz.muni.fi.rpg.model.domain.skills.Skill
 
 class SkillAdapter(
     private val layoutInflater: LayoutInflater,
-    private val onClickListener: OnClickListener<Skill>
+    private val onClickListener: EntityListener<Skill>,
+    private val onRemoveListener: EntityListener<Skill>
 ) : ListAdapter<Skill, SkillHolder>(
     object : DiffUtil.ItemCallback<Skill>() {
         override fun areItemsTheSame(oldItem: Skill, newItem: Skill) = oldItem.id == newItem.id
@@ -21,7 +22,8 @@ class SkillAdapter(
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SkillHolder {
         return SkillHolder(
             layoutInflater.inflate(R.layout.skill_item, parent, false),
-            onClickListener
+            onClickListener,
+            onRemoveListener
         )
     }
 

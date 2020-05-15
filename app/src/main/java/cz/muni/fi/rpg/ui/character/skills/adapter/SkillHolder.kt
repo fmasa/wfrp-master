@@ -3,14 +3,15 @@ package cz.muni.fi.rpg.ui.character.skills.adapter
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import cz.muni.fi.rpg.R
-import cz.muni.fi.rpg.common.OnClickListener
+import cz.muni.fi.rpg.common.EntityListener
 import cz.muni.fi.rpg.model.domain.skills.Skill
 import cz.muni.fi.rpg.model.domain.skills.SkillCharacteristic
 import kotlinx.android.synthetic.main.skill_item.view.*
 
 class SkillHolder(
     private val view: View,
-    private val onClickListener: OnClickListener<Skill>
+    private val onClickListener: EntityListener<Skill>,
+    private val onRemoveListener: EntityListener<Skill>
 ) : RecyclerView.ViewHolder(view) {
     fun bind(skill: Skill) {
         view.skillItemTitle.text = skill.name;
@@ -26,7 +27,15 @@ class SkillHolder(
                 SkillCharacteristic.WILL_POWER -> R.drawable.ic_will_power
             }
         )
+        
+        view.setOnCreateContextMenuListener { menu, v, menuInfo ->
+            menu.add(0, v.id, 0, "Remove skill")
+                .setOnMenuItemClickListener {
+                    onRemoveListener(skill)
 
+                    return@setOnMenuItemClickListener false
+                }
+        }
         view.setOnClickListener { onClickListener(skill) };
     }
 }

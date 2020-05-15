@@ -26,7 +26,11 @@ class CharacterSkillsFragment : Fragment(R.layout.fragment_character_skills),
         super.onViewCreated(view, savedInstanceState)
 
         skillList.layoutManager = LinearLayoutManager(context)
-        val adapter = SkillAdapter(layoutInflater) { openSkillDialog(it) }
+        val adapter = SkillAdapter(
+            layoutInflater,
+            { openSkillDialog(it) },
+            { launch {viewModel.removeSkill(it) }}
+        )
         skillList.adapter = adapter
 
         viewModel.skills.observe(viewLifecycleOwner, Observer { skills ->

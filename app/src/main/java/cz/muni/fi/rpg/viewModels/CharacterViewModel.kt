@@ -41,6 +41,8 @@ class CharacterViewModel(
 
     suspend fun saveSkill(skill: Skill) = skillRepository.save(characterId, skill)
 
+    suspend fun removeSkill(skill: Skill) = skillRepository.remove(characterId, skill.id)
+
     suspend fun addMoney(amount: Money) {
         val character = characters.get(partyId, userId)
         try {
