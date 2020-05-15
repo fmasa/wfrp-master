@@ -674,6 +674,7 @@ class Skills extends Suite {
         characteristic: "FELLOWSHIP",
         name: "Haggle",
         description: "Lower the price of goods",
+        mastery: 1,
     };
 
     async before() {
@@ -794,7 +795,13 @@ class Skills extends Suite {
                 {name: ""},
 
                 // Unknown characteristic
-                {characteristic: "NICENCESS"}
+                {characteristic: "NICENCESS"},
+
+                // Too large mastery
+                {mastery: 4},
+
+                // Too small mastery
+                {mastery: 0},
 
             ].map(doc => firebase.assertFails(skillDoc.set({...this.skill, ...doc})))
         );

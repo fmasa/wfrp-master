@@ -27,6 +27,15 @@ class SkillHolder(
                 SkillCharacteristic.WILL_POWER -> R.drawable.ic_will_power
             }
         )
+
+        view.skillItemMastery.setImageResource(
+            when (skill.mastery) {
+                1 -> R.drawable.ic_skill_mastery_1
+                2 -> R.drawable.ic_skill_mastery_2
+                3 -> R.drawable.ic_skill_mastery_3
+                else -> error("Invalid skill mastery")
+            }
+        )
         
         view.setOnCreateContextMenuListener { menu, v, menuInfo ->
             menu.add(0, v.id, 0, "Remove skill")

@@ -10,9 +10,11 @@ data class Skill(
     val advanced: Boolean,
     val characteristic: SkillCharacteristic,
     val name: String,
-    val description: String
+    val description: String,
+    val mastery: Int = 1
 ): Parcelable {
     init {
         require(name.isNotEmpty())
+        require(mastery in 1..3)
     }
 }

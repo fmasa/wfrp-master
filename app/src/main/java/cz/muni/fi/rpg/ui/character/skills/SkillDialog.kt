@@ -10,7 +10,6 @@ import androidx.appcompat.app.AlertDialog
 import androidx.core.os.bundleOf
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.DialogFragment
-import com.google.android.material.textfield.TextInputEditText
 import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.model.domain.skills.Skill
 import cz.muni.fi.rpg.model.domain.skills.SkillCharacteristic
@@ -113,7 +112,8 @@ class SkillDialog : DialogFragment() {
                 view.skillAdvanced.isChecked,
                 selectedCharacteristic(view),
                 name,
-                description
+                description,
+                selectedMastery(view)
             )
         )
     }
@@ -128,6 +128,15 @@ class SkillDialog : DialogFragment() {
         }
 
         error("User somehow managed to select something he was not supposed to")
+    }
+
+    private fun selectedMastery(view: View): Int {
+        return when (view.skillMastery.checkedRadioButtonId) {
+            R.id.skillMasteryLevel1 -> 1
+            R.id.skillMasteryLevel2 -> 2
+            R.id.skillMasteryLevel3 -> 3
+            else -> error("Unknown radio button for mastery")
+        }
     }
 
     private fun nameInputChanged(view: View) {

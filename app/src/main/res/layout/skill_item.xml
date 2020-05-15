@@ -48,5 +48,13 @@
             android:maxLines="1"
             android:ellipsize="end"/>
 
+        <ImageView
+            android:id="@+id/skillItemMastery"
+            android:layout_width="24dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_height="24dp"/>
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.cardview.widget.CardView>
