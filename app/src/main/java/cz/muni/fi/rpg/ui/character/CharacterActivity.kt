@@ -11,6 +11,7 @@ import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.model.domain.character.CharacterId
 import cz.muni.fi.rpg.model.right
 import cz.muni.fi.rpg.ui.PartyScopedActivity
+import cz.muni.fi.rpg.ui.character.skills.CharacterSkillsFragment
 import cz.muni.fi.rpg.ui.characterCreation.CharacterCreationActivity
 import cz.muni.fi.rpg.ui.characterCreation.CharacterEditActivity
 import cz.muni.fi.rpg.ui.common.StaticFragmentsViewPagerAdapter
@@ -54,7 +55,6 @@ class CharacterActivity : PartyScopedActivity(R.layout.activity_character), Char
         partyViewModel.party
             .right()
             .observe(this) { supportActionBar?.subtitle = it.name }
-
 
         pager.adapter = StaticFragmentsViewPagerAdapter(
             this,
