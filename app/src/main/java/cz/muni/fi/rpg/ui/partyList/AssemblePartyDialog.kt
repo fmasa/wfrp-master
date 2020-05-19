@@ -63,7 +63,7 @@ class AssemblePartyDialog(
             return
         }
 
-        val party = Party(UUID.randomUUID(), partyName.toString(), userId)
+        val party = Party(UUID.randomUUID(), partyName.toString().trim(), userId)
 
         val context = requireContext()
 
