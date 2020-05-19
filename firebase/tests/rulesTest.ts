@@ -143,7 +143,12 @@ class Database {
             .collection("parties")
             .doc(data.id);
 
+        // Empty name
         await firebase.assertFails(party.set({...data, name: ""}));
+
+        // Whitespaces only name
+        await firebase.assertFails(party.set({...data, name: "\t \r"}));
+
         await firebase.assertSucceeds(party.set(data))
     }
 
@@ -332,11 +337,17 @@ class Database {
         // Empty character name
         await firebase.assertFails(character.set({...data, name: ""}));
 
+        // Whitespaces only name
+        await firebase.assertFails(character.set({...data, name: "\t \r"}));
+
         // User ID not matching document key
         await firebase.assertFails(character.set({...data, userId: "foo"}));
 
         // Empty career
         await firebase.assertFails(character.set({...data, career: ""}));
+
+        // Whitespaces only career
+        await firebase.assertFails(character.set({...data, career: "\t \r"}));
 
         // Invalid race
         await firebase.assertFails(character.set({...data, race: "ORC"}));

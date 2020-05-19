@@ -22,8 +22,8 @@ service cloud.firestore {
 
             function isValidCharacter(character) {
                 return character.keys().toSet() == ["name", "career", "points", "race", "stats", "userId"].toSet()
-                    && character.name is string && character.name != ""
-                    && character.career is string && character.career != ""
+                    && character.name is string && character.name.replace('\\s', '') != ""
+                    && character.career is string && character.career.replace('\\s', '') != ""
                     && character.race is string && character.race in ["HUMAN", "ELF", "DWARF", "HALFLING", "GNOME"]
                     && arePointsValid(character.points)
                     && areStatsValid(character.stats);
@@ -67,7 +67,7 @@ service cloud.firestore {
                 return party.keys().toSet() == ["id", "name", "users", "gameMasterId", "accessCode"].toSet()
                     && party.id is string && party.id == partyId
                     && party.id.matches("^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$")
-                    && party.name is string && party.name != ""
+                    && party.name is string && party.name.replace('\\s', '') != ""
                     && party.users == [uid]
                     && party.gameMasterId == uid
                     && party.accessCode is string && party.accessCode != "";

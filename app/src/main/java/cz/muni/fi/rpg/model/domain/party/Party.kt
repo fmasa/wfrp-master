@@ -12,7 +12,7 @@ data class Party(
 
     init {
         require(id.version() == 4) {"Party identifier must be UUIDv4"}
-        require(name.isNotEmpty()) {"Party name must not be empty"}
+        require(name.isNotBlank()) {"Party name must not be empty"}
         require(gameMasterId.isNotEmpty()) {"Game master must not be empty"}
     }
 
