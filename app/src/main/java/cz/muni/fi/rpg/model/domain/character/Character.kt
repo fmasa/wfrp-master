@@ -9,7 +9,7 @@ data class Character(
     private var points: Points
 ) {
     init {
-        require(listOf(name, userId, career).all { it.isNotEmpty() })
+        require(listOf(name, userId, career).all { it.isNotBlank() })
     }
 
     fun getPoints(): Points = points
