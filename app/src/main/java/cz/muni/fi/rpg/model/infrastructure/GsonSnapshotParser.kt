@@ -1,8 +1,8 @@
 package cz.muni.fi.rpg.model.infrastructure
 
-import com.firebase.ui.firestore.SnapshotParser
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.gson.Gson
+import cz.muni.fi.rpg.model.firestore.SnapshotParser
 import kotlin.reflect.KClass
 
 class GsonSnapshotParser<T : Any>(

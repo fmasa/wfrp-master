@@ -9,7 +9,7 @@ import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestoreException
 import com.google.firebase.firestore.ListenerRegistration
 
-class DocumentLiveData<T>(
+internal class DocumentLiveData<T>(
     private val document: DocumentReference,
     private val snapshotProcessor: (result: Either<FirebaseFirestoreException?, DocumentSnapshot>) -> T
 ) : MutableLiveData<T>() {

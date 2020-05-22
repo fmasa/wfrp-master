@@ -2,6 +2,8 @@ package cz.muni.fi.rpg.ui.partyList
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
+import androidx.lifecycle.observe
 import androidx.recyclerview.widget.LinearLayoutManager
 import cz.muni.fi.rpg.ui.gameMaster.GameMasterActivity
 import cz.muni.fi.rpg.R
@@ -10,9 +12,8 @@ import cz.muni.fi.rpg.model.domain.party.PartyRepository
 import cz.muni.fi.rpg.ui.AuthenticatedActivity
 import cz.muni.fi.rpg.ui.PartyScopedActivity
 import cz.muni.fi.rpg.ui.character.CharacterActivity
-import cz.muni.fi.rpg.ui.characterCreation.CharacterCreationActivity
 import cz.muni.fi.rpg.ui.joinParty.JoinPartyActivity
-import cz.muni.fi.rpg.ui.partyList.adapter.PartyHolder
+import cz.muni.fi.rpg.ui.partyList.adapter.PartyAdapter
 import kotlinx.android.synthetic.main.activity_party_list.*
 import javax.inject.Inject
 import kotlin.reflect.KClass
@@ -25,15 +26,27 @@ class PartyListActivity : AuthenticatedActivity(R.layout.activity_party_list) {
         super.onCreate(savedInstanceState)
 
         partyListRecycler.layoutManager = LinearLayoutManager(applicationContext)
-        partyListRecycler.adapter = parties.forUser(getUserId(), this) { group ->
-            PartyHolder(
-                layoutInflater.inflate(R.layout.party_item, group, false)
-            ) {
-                if (it.gameMasterId == getUserId()) {
-                    openParty(it, GameMasterActivity::class)
-                } else {
-                    openParty(it, CharacterActivity::class)
-                }
+
+        val adapter = PartyAdapter(layoutInflater) {
+            if (it.gameMasterId == getUserId()) {
+                openParty(it, GameMasterActivity::class)
+            } else {
+                openParty(it, CharacterActivity::class)
+            }
+        }
+        partyListRecycler.adapter = adapter
+
+        parties.forUser(getUserId()).observe(this) {
+            adapter.submitList(it)
+
+            if (it.isNotEmpty()) {
+                noPartiesIcon.visibility = View.GONE
+                noPartiesText.visibility = View.GONE
+                partyListRecycler.visibility = View.VISIBLE
+            } else {
+                noPartiesIcon.visibility = View.VISIBLE
+                noPartiesText.visibility = View.VISIBLE
+                partyListRecycler.visibility = View.GONE
             }
         }
 
