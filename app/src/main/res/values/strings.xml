@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">D&amp;D Master</string>
+    <string name="app_name">WFRP Master</string>
     <string name="appIcon">20 sided dice</string>
     <string name="assembleParty_title">Assemble New Party</string>
     <string name="label_party_name">Party Name</string>
