@@ -299,6 +299,7 @@ class Database {
         await firebase.assertFails(character.set(validCharacter(userId)));
     }
 
+    @test
     async "should not let users create incomplete character"() {
         const userId = "user123";
         const partyId = await createUserAccessibleParty(userId);
