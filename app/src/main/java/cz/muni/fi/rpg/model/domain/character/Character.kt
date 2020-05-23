@@ -1,5 +1,8 @@
 package cz.muni.fi.rpg.model.domain.character
 
+import cz.muni.fi.rpg.model.domain.common.Money
+import java.lang.IllegalArgumentException
+
 data class Character(
     val name: String,
     val userId: String,
@@ -8,9 +11,28 @@ data class Character(
     private val stats: Stats,
     private var points: Points
 ) {
+    private var money: Money = Money.zero()
+
     init {
         require(listOf(name, userId, career).all { it.isNotBlank() })
     }
+
+    fun receiveMoney(amount: Money) {
+        money += amount
+    }
+
+    /**
+     * @throws NotEnoughMoney
+     */
+    fun giveMoney(amount: Money) {
+        try {
+            money -= amount
+        } catch (e: IllegalArgumentException) {
+            throw NotEnoughMoney(amount, e)
+        }
+    }
+
+    fun getMoney() = money
 
     fun getPoints(): Points = points
 

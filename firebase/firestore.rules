@@ -35,19 +35,26 @@ service cloud.firestore {
                     }
                 }
 
+                function areMoneyValid(money) {
+                    return money is map
+                        && money.keys().toSet() == ["pennies"].toSet()
+                        && money.pennies is int && money.pennies >= 0;
+                }
+
                 function canEditCharacter() {
                     return hasAccessToParty()
                         && (isGameMaster() || request.auth.uid == userId);
                 }
 
                 function isValidCharacter(character) {
-                    return character.keys().toSet() == ["name", "career", "points", "race", "stats", "userId"].toSet()
+                    return character.keys().toSet() == ["name", "career", "points", "race", "stats", "userId", "money"].toSet()
                         && character.userId == userId
                         && character.name is string && isNotBlank(character.name)
                         && character.career is string && isNotBlank(character.career)
                         && character.race is string && character.race in ["HUMAN", "ELF", "DWARF", "HALFLING", "GNOME"]
                         && arePointsValid(character.points)
-                        && areStatsValid(character.stats);
+                        && areStatsValid(character.stats)
+                    && areMoneyValid(character.money);
                 }
             }
 

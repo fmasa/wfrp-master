@@ -66,6 +66,9 @@ function validCharacter (userId: string) {
             fortune: 2,
             wounds: 10,
             maxWounds: 10,
+        },
+        money: {
+            pennies: 1000,
         }
     }
 }
@@ -387,6 +390,12 @@ class Database extends Suite {
 
         // Invalid race
         await firebase.assertFails(character.set({...data, race: "ORC"}));
+
+        // Negative amount of money
+        await firebase.assertFails(character.set({...data, money: {pennies: -1}}));
+
+        // Invalid money
+        await firebase.assertFails(character.set({...data, money: {}}));
 
         // Extra field
         await firebase.assertFails(character.set({...data, extraField: "foo"}));
