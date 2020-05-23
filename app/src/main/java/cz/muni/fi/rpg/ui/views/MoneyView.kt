@@ -8,19 +8,19 @@ import cz.muni.fi.rpg.model.domain.common.Money
 import kotlinx.android.synthetic.main.view_money.view.*
 
 class MoneyView(context: Context, attrs: AttributeSet) : LinearLayout(context, attrs) {
+    private var value: Money = Money.zero()
+
     private var _value: Money = Money.zero()
 
-    var value: Money
-        get() = _value
-        set(newValue) {
-            if (_value == newValue) return
+    fun setValue(value: Money) {
+        if (value == this.value) return
 
-            _value = newValue
+        this.value = value
 
-            crowns.text = newValue.getCrowns().toString()
-            shillings.text = newValue.getShillings().toString()
-            pennies.text = newValue.getPennies().toString()
-        }
+        crowns.text = value.getCrowns().toString()
+        shillings.text = value.getShillings().toString()
+        pennies.text = value.getPennies().toString()
+    }
 
     init {
         inflate(getContext(), R.layout.view_money, this)

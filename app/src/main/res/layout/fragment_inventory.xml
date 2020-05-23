@@ -6,6 +6,16 @@
     android:layout_height="match_parent"
     tools:context=".ui.character.InventoryFragment">
 
+    <cz.muni.fi.rpg.ui.views.MoneyView
+        android:id="@+id/characterMoney"
+        android:layout_width="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:clickable="true"
+        android:focusable="true"
+        android:foreground="?attr/selectableItemBackground"
+        android:layout_height="wrap_content"/>
+
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
