@@ -25,7 +25,6 @@ class CharacterStatsCreationFragment : Fragment() {
     lateinit var magic: EditText
     lateinit var strength: EditText
     lateinit var toughness: EditText
-    lateinit var wounds: EditText
     lateinit var agility: EditText
     lateinit var intelligence: EditText
     lateinit var willPower: EditText
@@ -50,7 +49,6 @@ class CharacterStatsCreationFragment : Fragment() {
         magic = v.MagicTextFill
         strength = v.StrengthTextFill
         toughness = v.ToughnessTextFill
-        wounds = v.WoundsTextFill
         agility = v.AgilityTextFill
         intelligence = v.IntelligenceTextFill
         willPower = v.WillPowerTextFill
