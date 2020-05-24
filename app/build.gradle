@@ -3,7 +3,6 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'com.google.gms.google-services'
 apply plugin: 'kotlin-kapt'
-apply plugin: 'androidx.navigation.safeargs.kotlin'
 
 def playStoreJsonFile = file('./play_store_credentials.json')
 
@@ -126,11 +125,5 @@ dependencies {
     implementation 'com.google.dagger:dagger-android-support:2.27'
     annotationProcessor 'com.google.dagger:dagger-compiler:2.27'
 
-    // Arrow functional library
-    def arrow_version = "0.10.4"
-    dependencies {
-        implementation "io.arrow-kt:arrow-core:$arrow_version"
-        implementation "io.arrow-kt:arrow-syntax:$arrow_version"
-        kapt "io.arrow-kt:arrow-meta:$arrow_version"
-    }
+    implementation "io.arrow-kt:arrow-core:0.10.4"
 }
