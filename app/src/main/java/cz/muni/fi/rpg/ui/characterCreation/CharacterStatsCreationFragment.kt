@@ -18,8 +18,8 @@ class CharacterStatsCreationFragment : Fragment() {
         fun saveCharacter()
     }
 
-    lateinit var previousButton: Button
-    lateinit var finishButton: Button
+    private lateinit var previousButton: Button
+    private lateinit var finishButton: Button
     lateinit var weaponSkill: EditText
     lateinit var ballisticSkill: EditText
     lateinit var magic: EditText
@@ -40,7 +40,6 @@ class CharacterStatsCreationFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         val v = inflater.inflate(R.layout.fragment_character_stats_creation, container, false)
-        val activity = activity
 
         previousButton = v.button_previous
         finishButton = v.button_finish
@@ -56,13 +55,25 @@ class CharacterStatsCreationFragment : Fragment() {
 
         previousButton.setOnClickListener{
             listener.switchFragment(0)
-            //(activity as CharacterCreationActivity).switchFragment(0)
         }
 
         finishButton.setOnClickListener{
+            checkValues()
             listener.saveCharacter()
         }
         return v
+    }
+
+    private fun checkValues() {
+        if (weaponSkill.text.toString().isBlank()) weaponSkill.setText("0")
+        if (ballisticSkill.text.toString().isBlank()) ballisticSkill.setText("0")
+        if (magic.text.toString().isBlank()) magic.setText("0")
+        if (strength.text.toString().isBlank()) strength.setText("0")
+        if (toughness.text.toString().isBlank()) toughness.setText("0")
+        if (agility.text.toString().isBlank()) agility.setText("0")
+        if (intelligence.text.toString().isBlank()) intelligence.setText("0")
+        if (willPower.text.toString().isBlank()) willPower.setText("0")
+        if (fellowship.text.toString().isBlank()) fellowship.setText("0")
     }
 
     fun setCharacterStatsCreationListener(callback: CharacterStatsCreationListener) {

@@ -18,8 +18,8 @@ class CharacterCreationActivity : PartyScopedActivity(R.layout.activity_characte
     CharacterInfoCreationFragment.CharacterInfoCreationListener {
     @Inject
     lateinit var characters: CharacterRepository
-    val statsCreationFragment = CharacterStatsCreationFragment()
-    val infoCreationFragment = CharacterInfoCreationFragment()
+    private val statsCreationFragment = CharacterStatsCreationFragment()
+    private val infoCreationFragment = CharacterInfoCreationFragment()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,33 +38,7 @@ class CharacterCreationActivity : PartyScopedActivity(R.layout.activity_characte
                 replace(R.id.frame_layout_character_creation, infoCreationFragment)
                 commit()
             }
-
-//            characters.save(
-//                getPartyId(),
-//                Character(
-//                    "Unknown Soldier",
-//                    getUserId(),
-//                    "Wizard",
-//                    Race.ELF,
-//                    Stats(
-//                        weaponSkill = 35,
-//                        ballisticSkill = 40,
-//                        strength = 30,
-//                        toughness = 60,
-//                        agility = 41,
-//                        intelligence = 32,
-//                        willPower = 40,
-//                        fellowship = 42,
-//                        magic = 2
-//                    ),
-//                    Points(insanity = 0, fate = 3, fortune = 3, maxWounds = 6, wounds = 6)
-//                )
-//            )
-//
-//            toast("Your character have been created")
         }
-
-//        finish()
     }
 
      override fun onAttachFragment(fragment: Fragment) {
@@ -98,9 +72,9 @@ class CharacterCreationActivity : PartyScopedActivity(R.layout.activity_characte
             characters.save(
                 getPartyId(),
                 Character(
-                    infoCreationFragment.characterName.toString(),
+                    infoCreationFragment.characterName.text.toString(),
                     getUserId(),
-                    infoCreationFragment.characterCarrer.toString(),
+                    infoCreationFragment.characterCareer.text.toString(),
                     infoCreationFragment.characterRace,
                     Stats(
                         weaponSkill = statsCreationFragment.weaponSkill.text.toString().toInt(),
