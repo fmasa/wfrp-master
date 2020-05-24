@@ -1,7 +1,5 @@
 package cz.muni.fi.rpg.model.domain.character
 
-import com.google.firebase.firestore.Exclude
-
 data class Points(
    val insanity: Int,
    val fate: Int,
@@ -17,6 +15,5 @@ data class Points(
         require(maxWounds > 0)
     }
 
-    @Exclude
     fun isHeavilyWounded() = wounds < 2;
 }
