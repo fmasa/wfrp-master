@@ -17,6 +17,21 @@ android {
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        //
+        // Firestore emulator setup
+        //
+        Properties properties = new Properties()
+        File propertiesFile = project.rootProject.file("local.properties");
+
+        if (propertiesFile.exists()) {
+            properties.load(propertiesFile.newDataInputStream())
+        }
+
+        buildConfigField 'String', 'FIRESTORE_EMULATOR_URL', '"' + properties.getOrDefault('dev.firestoreEmulatorUrl', '') + '"'
+        //
+        // End of Firestore Emulator setup
+        //
     }
 
     buildTypes {
@@ -87,6 +102,6 @@ dependencies {
     dependencies {
         implementation "io.arrow-kt:arrow-core:$arrow_version"
         implementation "io.arrow-kt:arrow-syntax:$arrow_version"
-        kapt    "io.arrow-kt:arrow-meta:$arrow_version"
+        kapt "io.arrow-kt:arrow-meta:$arrow_version"
     }
 }

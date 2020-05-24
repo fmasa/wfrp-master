@@ -6,7 +6,9 @@ import com.fasterxml.jackson.module.kotlin.registerKotlinModule
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.firestore.ktx.firestoreSettings
 import com.google.firebase.ktx.Firebase
+import cz.muni.fi.rpg.BuildConfig
 import cz.muni.fi.rpg.model.domain.character.Character
 import cz.muni.fi.rpg.model.domain.character.CharacterRepository
 import cz.muni.fi.rpg.model.domain.invitation.InvitationProcessor
@@ -33,7 +35,19 @@ class ModelModule {
 
     @Provides
     @Singleton
-    fun firestore() = Firebase.firestore
+    fun firestore(): FirebaseFirestore {
+        val firestore = Firebase.firestore
+
+        if (BuildConfig.FIRESTORE_EMULATOR_URL != "") {
+            firestore.firestoreSettings = firestoreSettings {
+                host = BuildConfig.FIRESTORE_EMULATOR_URL
+                isSslEnabled = false
+                isPersistenceEnabled = false
+            }
+        }
+
+        return firestore
+    }
 
     @Provides
     @Singleton
