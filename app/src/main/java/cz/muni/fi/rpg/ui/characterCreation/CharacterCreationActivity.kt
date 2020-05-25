@@ -18,8 +18,8 @@ class CharacterCreationActivity : PartyScopedActivity(R.layout.activity_characte
     CharacterInfoCreationFragment.CharacterInfoCreationListener {
     @Inject
     lateinit var characters: CharacterRepository
-    private val statsCreationFragment = CharacterStatsCreationFragment()
-    private val infoCreationFragment = CharacterInfoCreationFragment()
+    private val statsCreationFragment = CharacterStatsCreationFragment().let { it.setCharacterStatsCreationListener(this) }
+    private val infoCreationFragment = CharacterInfoCreationFragment().let { it.setCharacterInfoCreationListener(this) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,18 +40,6 @@ class CharacterCreationActivity : PartyScopedActivity(R.layout.activity_characte
             }
         }
     }
-
-     override fun onAttachFragment(fragment: Fragment) {
-        if (fragment is CharacterStatsCreationFragment) {
-            fragment.setCharacterStatsCreationListener(this)
-        }
-
-         if (fragment is CharacterInfoCreationFragment) {
-             fragment.setCharacterInfoCreationListener(this)
-         }
-    }
-
-
 
     public override fun switchFragment(id: Number) {
         if (id == 0)

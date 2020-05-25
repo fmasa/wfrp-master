@@ -82,28 +82,24 @@
             android:id="@+id/radioButtonRaceHalfling"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:checked="false"
             android:text="@string/race_halfling" />
 
         <RadioButton
             android:id="@+id/radioButtonRaceElf"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:checked="false"
             android:text="@string/race_elf" />
 
         <RadioButton
             android:id="@+id/radioButtonRaceDwarf"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:checked="false"
             android:text="@string/race_dwarf" />
 
         <RadioButton
             android:id="@+id/radioButtonRaceGnome"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:checked="false"
             android:text="@string/race_gnome" />
     </RadioGroup>
 

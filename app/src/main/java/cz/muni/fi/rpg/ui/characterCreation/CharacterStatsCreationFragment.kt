@@ -30,10 +30,6 @@ class CharacterStatsCreationFragment : Fragment() {
     lateinit var willPower: EditText
     lateinit var fellowship: EditText
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -76,8 +72,9 @@ class CharacterStatsCreationFragment : Fragment() {
         if (fellowship.text.toString().isBlank()) fellowship.setText("0")
     }
 
-    fun setCharacterStatsCreationListener(callback: CharacterStatsCreationListener) {
+    fun setCharacterStatsCreationListener(callback: CharacterStatsCreationListener): CharacterStatsCreationFragment {
         this.listener = callback
+        return this
     }
 
 }

@@ -27,10 +27,6 @@ class CharacterInfoCreationFragment : Fragment() {
     lateinit var characterRace: Race
     private lateinit var nextButton: Button
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -66,8 +62,9 @@ class CharacterInfoCreationFragment : Fragment() {
         return v
     }
 
-    fun setCharacterInfoCreationListener(callback: CharacterInfoCreationListener) {
+    fun setCharacterInfoCreationListener(callback: CharacterInfoCreationListener): CharacterInfoCreationFragment {
         this.listener = callback
+        return this
     }
 
 }
