@@ -14,7 +14,6 @@ import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.model.domain.character.Race
 import kotlinx.android.synthetic.main.fragment_character_info_creation.view.*
 
-
 class CharacterInfoCreationFragment : Fragment() {
     lateinit var listener: CharacterInfoCreationListener
 
@@ -49,17 +48,25 @@ class CharacterInfoCreationFragment : Fragment() {
         nextButton = v.button_next
 
         nextButton.setOnClickListener{
-            if (characterName.text.toString().isBlank()) {
-                Toast.makeText(context, "Fill in the name of the character", Toast.LENGTH_SHORT).show()
-            }
-            else if (characterCareer.text.toString().isBlank()) {
-                Toast.makeText(context, "Fill in the career of the character", Toast.LENGTH_SHORT).show()
-            } else {
-                listener.switchFragment(1)
-            }
+            nextClicked() }
 
-        }
         return v
+    }
+
+    private fun nextClicked() {
+        showErrorIfNecessary(characterName)
+        showErrorIfNecessary(characterCareer)
+        if (characterName.text.isNullOrBlank() || characterCareer.text.isNullOrBlank()) {
+            return
+        }
+        listener.switchFragment(1)
+    }
+
+    private fun showErrorIfNecessary(input: EditText) {
+        input.error =
+        if (input.text.toString().isBlank()) {
+            ("Cannot be empty!")
+        } else null
     }
 
     fun setCharacterInfoCreationListener(callback: CharacterInfoCreationListener): CharacterInfoCreationFragment {

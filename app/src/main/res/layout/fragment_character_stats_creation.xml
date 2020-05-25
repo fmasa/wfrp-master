@@ -13,24 +13,19 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <TextView
+            style="@style/TextAppearance.AppCompat.Subhead"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:text="@string/title_character_creation_2"
+            android:textAlignment="center"
+            app:layout_constraintBottom_toBottomOf="parent" />
 
-            <TextView
-                style="@style/TextAppearance.AppCompat.Headline"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/title_character_creation_2"
-                android:textAlignment="center"
-                app:layout_constraintBottom_toBottomOf="parent" />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
 
     <TextView
         android:id="@+id/WeaponSkillText"
-        android:layout_width="wrap_content"
+        android:layout_width="120dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="44dp"
@@ -52,7 +47,7 @@
 
     <TextView
         android:id="@+id/BallisticSkillText"
-        android:layout_width="wrap_content"
+        android:layout_width="120dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
@@ -74,7 +69,7 @@
 
     <TextView
         android:id="@+id/StrengthText"
-        android:layout_width="wrap_content"
+        android:layout_width="120dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
@@ -96,7 +91,7 @@
 
     <TextView
         android:id="@+id/ToughnessText"
-        android:layout_width="wrap_content"
+        android:layout_width="120dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
@@ -116,105 +111,148 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/ToughnessText" />
 
+    <TextView
+        android:id="@+id/FateText"
+        android:layout_width="120dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:text="@string/label_fate_points"
+        android:textSize="8pt"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/ToughnessTextFill" />
+
+    <EditText
+        android:id="@+id/FateTextFill"
+        android:layout_width="100dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:text="0"
+        android:inputType="number"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/FateText" />
 
     <TextView
         android:id="@+id/AgilityText"
-        android:layout_width="wrap_content"
+        android:layout_width="120dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="244dp"
+        android:layout_marginEnd="16dp"
         android:layout_marginTop="44dp"
         android:text="@string/label_agility"
         android:textSize="8pt"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/HeadlineCard" />
 
     <EditText
         android:id="@+id/AgilityTextFill"
         android:layout_width="100dp"
         android:layout_height="40dp"
-        android:layout_marginStart="244dp"
+        android:layout_marginEnd="36dp"
         android:layout_marginTop="8dp"
         android:text="0"
         android:inputType="number"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/AgilityText" />
 
     <TextView
         android:id="@+id/IntelligenceText"
-        android:layout_width="wrap_content"
+        android:layout_width="120dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="244dp"
+        android:layout_marginEnd="16dp"
         android:layout_marginTop="16dp"
         android:text="@string/label_intelligence"
         android:textSize="8pt"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/AgilityTextFill" />
 
     <EditText
         android:id="@+id/IntelligenceTextFill"
         android:layout_width="100dp"
         android:layout_height="40dp"
-        android:layout_marginStart="244dp"
+        android:layout_marginEnd="36dp"
         android:layout_marginTop="8dp"
         android:text="0"
         android:inputType="number"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/IntelligenceText" />
 
     <TextView
         android:id="@+id/WillPowerText"
-        android:layout_width="wrap_content"
+        android:layout_width="120dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="244dp"
+        android:layout_marginEnd="16dp"
         android:layout_marginTop="16dp"
         android:text="@string/label_will_power"
         android:textSize="8pt"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/IntelligenceTextFill" />
 
     <EditText
         android:id="@+id/WillPowerTextFill"
         android:layout_width="100dp"
         android:layout_height="40dp"
-        android:layout_marginStart="244dp"
+        android:layout_marginEnd="36dp"
         android:layout_marginTop="8dp"
         android:text="0"
         android:inputType="number"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/WillPowerText" />
 
     <TextView
         android:id="@+id/FellowshipText"
-        android:layout_width="wrap_content"
+        android:layout_width="120dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="244dp"
+        android:layout_marginEnd="16dp"
         android:layout_marginTop="16dp"
         android:text="@string/label_fellowship"
         android:textSize="8pt"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/WillPowerTextFill" />
 
     <EditText
         android:id="@+id/FellowshipTextFill"
         android:layout_width="100dp"
         android:layout_height="40dp"
-        android:layout_marginStart="244dp"
+        android:layout_marginEnd="36dp"
         android:layout_marginTop="8dp"
         android:text="0"
         android:inputType="number"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/FellowshipText" />
 
     <TextView
+        android:id="@+id/WoundsText"
+        android:layout_width="120dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginTop="16dp"
+        android:text="@string/label_wounds"
+        android:textSize="8pt"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/FellowshipTextFill" />
+
+    <EditText
+        android:id="@+id/WoundsTextFill"
+        android:layout_width="100dp"
+        android:layout_height="40dp"
+        android:layout_marginEnd="36dp"
+        android:layout_marginTop="8dp"
+        android:text="0"
+        android:inputType="number"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/WoundsText" />
+
+    <TextView
         android:id="@+id/MagicText"
-        android:layout_width="wrap_content"
+        android:layout_width="120dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="148dp"
         android:layout_marginTop="16dp"
         android:text="@string/label_magic"
         android:textSize="8pt"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/ToughnessTextFill" />
+        app:layout_constraintTop_toBottomOf="@id/FateTextFill" />
 
     <EditText
         android:id="@+id/MagicTextFill"
@@ -226,7 +264,6 @@
         android:inputType="number"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/MagicText" />
-
 
 
     <Button
