@@ -1,65 +1,42 @@
 package cz.muni.fi.rpg.ui.characterCreation
 
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
-import android.widget.Button
 import android.widget.EditText
-import android.widget.Toast
 
 import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.model.domain.character.Race
+import kotlinx.android.synthetic.main.fragment_character_info_creation.*
 import kotlinx.android.synthetic.main.fragment_character_info_creation.view.*
 
-class CharacterInfoCreationFragment : Fragment() {
+data class CharacterInfo(var name: String, var race: Race, var career: String)
+
+class CharacterInfoCreationFragment : Fragment(R.layout.fragment_character_info_creation) {
     lateinit var listener: CharacterInfoCreationListener
 
+    lateinit var characterInfo: CharacterInfo
+
     public interface CharacterInfoCreationListener {
-        fun switchFragment(id: Number)
+        fun nextFragment()
     }
 
-    lateinit var characterName: EditText
-    lateinit var characterCareer: EditText
-    lateinit var characterRace: Race
-    private lateinit var nextButton: Button
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        val v = inflater.inflate(R.layout.fragment_character_info_creation, container, false)
-
-        characterName = v.NameTextFill
-        characterCareer = v.CareerTextFill
-        if (v.radioButtonRaceHuman.isChecked)
-            characterRace = Race.HUMAN
-        if (v.radioButtonRaceDwarf.isChecked)
-            characterRace = Race.DWARF
-        if (v.radioButtonRaceElf.isChecked)
-            characterRace = Race.ELF
-        if (v.radioButtonRaceGnome.isChecked)
-            characterRace = Race.GNOME
-        if (v.radioButtonRaceHalfling.isChecked)
-            characterRace = Race.HALFLING
-        nextButton = v.button_next
-
-        nextButton.setOnClickListener{
-            nextClicked() }
-
-        return v
+        button_next.setOnClickListener{
+            nextClicked(view)
+        }
     }
 
-    private fun nextClicked() {
-        showErrorIfNecessary(characterName)
-        showErrorIfNecessary(characterCareer)
-        if (characterName.text.isNullOrBlank() || characterCareer.text.isNullOrBlank()) {
+    private fun nextClicked(view: View) {
+        showErrorIfNecessary(view.NameTextFill)
+        showErrorIfNecessary(view.CareerTextFill)
+        if (view.NameTextFill.text.isNullOrBlank() || view.CareerTextFill.text.isNullOrBlank()) {
             return
         }
-        listener.switchFragment(1)
+        saveData(view)
+        listener.nextFragment()
     }
 
     private fun showErrorIfNecessary(input: EditText) {
@@ -74,4 +51,26 @@ class CharacterInfoCreationFragment : Fragment() {
         return this
     }
 
+    private fun saveData(view: View) {
+        val name = view.NameTextFill.text.toString()
+        var race = Race.HUMAN
+        val career = view.CareerTextFill.text.toString()
+
+        if (view.radioButtonRaceHuman.isChecked)
+            race = Race.HUMAN
+        if (view.radioButtonRaceDwarf.isChecked)
+            race = Race.DWARF
+        if (view.radioButtonRaceElf.isChecked)
+            race = Race.ELF
+        if (view.radioButtonRaceGnome.isChecked)
+            race = Race.GNOME
+        if (view.radioButtonRaceHalfling.isChecked)
+            race = Race.HALFLING
+
+        characterInfo = CharacterInfo(name, race, career)
+    }
+
+    fun getData() : CharacterInfo {
+        return characterInfo
+    }
 }

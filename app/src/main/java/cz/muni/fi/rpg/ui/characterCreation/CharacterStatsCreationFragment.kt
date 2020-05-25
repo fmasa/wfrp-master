@@ -1,75 +1,59 @@
 package cz.muni.fi.rpg.ui.characterCreation
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
-import android.widget.Button
-import android.widget.EditText
 import androidx.fragment.app.Fragment
 import cz.muni.fi.rpg.R
+import cz.muni.fi.rpg.model.domain.character.Points
+import cz.muni.fi.rpg.model.domain.character.Stats
+import kotlinx.android.synthetic.main.fragment_character_stats_creation.*
 import kotlinx.android.synthetic.main.fragment_character_stats_creation.view.*
 
-class CharacterStatsCreationFragment : Fragment() {
+class CharacterStatsCreationFragment : Fragment(R.layout.fragment_character_stats_creation) {
     lateinit var listener: CharacterStatsCreationListener
 
     public interface CharacterStatsCreationListener {
-        fun switchFragment(id: Number)
+        fun previousFragment()
         fun saveCharacter()
     }
 
-    private lateinit var previousButton: Button
-    private lateinit var finishButton: Button
-    lateinit var weaponSkill: EditText
-    lateinit var ballisticSkill: EditText
-    lateinit var magic: EditText
-    lateinit var strength: EditText
-    lateinit var toughness: EditText
-    lateinit var agility: EditText
-    lateinit var intelligence: EditText
-    lateinit var willPower: EditText
-    lateinit var fellowship: EditText
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        val v = inflater.inflate(R.layout.fragment_character_stats_creation, container, false)
-
-        previousButton = v.button_previous
-        finishButton = v.button_finish
-        weaponSkill = v.WeaponSkillTextFill
-        ballisticSkill = v.BallisticSkillTextFill
-        magic = v.MagicTextFill
-        strength = v.StrengthTextFill
-        toughness = v.ToughnessTextFill
-        agility = v.AgilityTextFill
-        intelligence = v.IntelligenceTextFill
-        willPower = v.WillPowerTextFill
-        fellowship = v.FellowshipTextFill
-
-        previousButton.setOnClickListener{
-            listener.switchFragment(0)
+        button_previous.setOnClickListener{
+            listener.previousFragment()
         }
 
-        finishButton.setOnClickListener{
-            checkValues()
+        button_finish.setOnClickListener{
+            checkValues(view)
             listener.saveCharacter()
         }
-        return v
+
     }
 
-    private fun checkValues() {
-        if (weaponSkill.text.toString().isBlank()) weaponSkill.setText("0")
-        if (ballisticSkill.text.toString().isBlank()) ballisticSkill.setText("0")
-        if (magic.text.toString().isBlank()) magic.setText("0")
-        if (strength.text.toString().isBlank()) strength.setText("0")
-        if (toughness.text.toString().isBlank()) toughness.setText("0")
-        if (agility.text.toString().isBlank()) agility.setText("0")
-        if (intelligence.text.toString().isBlank()) intelligence.setText("0")
-        if (willPower.text.toString().isBlank()) willPower.setText("0")
-        if (fellowship.text.toString().isBlank()) fellowship.setText("0")
+    private fun checkValues(view: View) {
+        if (view.WeaponSkillTextFill.text.toString().isBlank()) view.WeaponSkillTextFill .setText("0")
+        if (view.BallisticSkillTextFill.text.toString().isBlank()) view.BallisticSkillTextFill.setText("0")
+        if (view.MagicTextFill.text.toString().isBlank()) view.MagicTextFill.setText("0")
+        if (view.StrengthTextFill.toString().isBlank()) view.StrengthTextFill.setText("0")
+        if (view.ToughnessTextFill.text.toString().isBlank()) view.ToughnessTextFill.setText("0")
+        if (view.AgilityTextFill.text.toString().isBlank()) view.AgilityTextFill.setText("0")
+        if (view.IntelligenceTextFill.text.toString().isBlank()) view.IntelligenceTextFill.setText("0")
+        if (view.WillPowerTextFill.text.toString().isBlank()) view.WillPowerTextFill.setText("0")
+        if (view.FellowshipTextFill.text.toString().isBlank()) view.FellowshipTextFill.setText("0")
+        if (view.WoundsTextFill .text.toString().isBlank()) view.WoundsTextFill.setText("0")
+        if (view.FateTextFill.text.toString().isBlank()) view.FateTextFill.setText("0")
+    }
+
+    fun getData() : Pair <Stats,Points> {
+        val stats = Stats(view?.WeaponSkillTextFill?.text.toString().toInt(), view?.BallisticSkillTextFill?.text.toString().toInt(),
+            view?.StrengthTextFill?.text.toString().toInt(), view?.ToughnessTextFill?.text.toString().toInt(), view?.AgilityTextFill?.text.toString().toInt(),
+            view?.IntelligenceTextFill?.text.toString().toInt(), view?.WillPowerTextFill?.text.toString().toInt(), view?.FellowshipTextFill?.text.toString().toInt(),
+            view?.MagicTextFill?.text.toString().toInt())
+        val points = Points(0, view?.FateTextFill?.text.toString().toInt(), view?.FateTextFill?.text.toString().toInt(),
+            view?.WoundsTextFill?.text.toString().toInt(), 6)
+
+        return Pair(stats, points)
     }
 
     fun setCharacterStatsCreationListener(callback: CharacterStatsCreationListener): CharacterStatsCreationFragment {
