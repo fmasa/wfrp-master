@@ -23,12 +23,8 @@ class GameMasterActivity : PartyScopedActivity(R.layout.activity_game_master),
     @Inject
     lateinit var characterRepo: CharacterRepository
 
-    fun setViewVisibility(view: View, visible: Boolean) {
-        if (visible) {
-            view.visibility = View.VISIBLE
-        } else {
-            View.GONE
-        }
+    private fun setViewVisibility(view: View, visible: Boolean) {
+        view.visibility = if (visible) View.VISIBLE else View.GONE
     }
 
     private fun setEmptyCollectionView(isEmpty: Boolean) {
@@ -43,24 +39,24 @@ class GameMasterActivity : PartyScopedActivity(R.layout.activity_game_master),
         partyViewModel.party.right().observe(this) { party ->
             supportActionBar?.title = party.name
             launch { partyInviteQrCode.drawCode(jsonMapper.writeValueAsString(party.getInvitation())) }
+        }
 
-            characterRepo.inParty(party.id).observe(this) { characters ->
-                if (characters.isNotEmpty()) {
-                    val adapter = CharacterAdapter(layoutInflater)
-                    {
-                        val intent = Intent(this, CharacterActivity::class.java);
-                        intent.putExtra(PartyScopedActivity.EXTRA_PARTY_ID, party.id.toString())
-                        startActivity(intent)
-                    }
-                    characterListRecycler.adapter = adapter
-                    characterListRecycler.layoutManager = LinearLayoutManager(applicationContext)
-
-                    adapter.submitList(characters)
-
-                    setEmptyCollectionView(false)
-                } else {
-                    setEmptyCollectionView(true)
+        characterRepo.inParty(getPartyId()).observe(this) { characters ->
+            if (characters.isNotEmpty()) {
+                val adapter = CharacterAdapter(layoutInflater)
+                {
+                    val intent = Intent(this, CharacterActivity::class.java);
+                    intent.putExtra(PartyScopedActivity.EXTRA_PARTY_ID, getPartyId().toString())
+                    startActivity(intent)
                 }
+                characterListRecycler.adapter = adapter
+                characterListRecycler.layoutManager = LinearLayoutManager(applicationContext)
+
+                adapter.submitList(characters)
+
+                setEmptyCollectionView(false)
+            } else {
+                setEmptyCollectionView(true)
             }
         }
     }
