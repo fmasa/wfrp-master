@@ -61,7 +61,7 @@ class CharacterActivity : PartyScopedActivity(R.layout.activity_character), Char
             arrayOf(
                 { CharacterStatsFragment() },
                 { CharacterSkillsFragment() },
-                { CharacterSpellsFragment() },
+//                { CharacterSpellsFragment() },
                 { InventoryFragment() }
             )
         )
@@ -76,11 +76,11 @@ class CharacterActivity : PartyScopedActivity(R.layout.activity_character), Char
                     tab.setText(R.string.title_character_skills)
                     tab.setIcon(R.drawable.ic_skills)
                 }
+//                2 -> {
+//                    tab.setText(R.string.title_character_spells)
+//                    tab.setIcon(R.drawable.ic_spells)
+//                }
                 2 -> {
-                    tab.setText(R.string.title_character_spells)
-                    tab.setIcon(R.drawable.ic_spells)
-                }
-                3 -> {
                     tab.setText(R.string.title_character_inventory)
                     tab.setIcon(R.drawable.ic_inventory)
                 }
