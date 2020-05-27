@@ -13,8 +13,8 @@
     <string name="title_party_activity">Parties</string>
     <string name="title_joinParty">Join party using QR code…</string>
 
-    <string name="title_character_creation_1">Character info</string>
-    <string name="title_character_creation_2">Character stats</string>
+    <string name="title_character_creation_info">Character info</string>
+    <string name="title_character_creation_stats">Character stats</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
@@ -32,6 +32,16 @@
     <string name="title_character_stats">Character Detail</string>
     <string name="title_character_inventory">Inventory</string>
     <string name="title_notifications">Notifications</string>
+
+    <string name="button_next">Next</string>
+    <string name="button_previous">Previous</string>
+    <string name="button_finish">Finish</string>
+
+    <string name="label_name">Name</string>
+    <string name="label_race">Race</string>
+    <string name="label_career">Career</string>
+    <string name="hint_fill_name">Fill in the name</string>
+    <string name="hint_fill_career">Fill in the name</string>
 
     <string name="label_wounds">Wounds</string>
     <string name="label_fortune_points">Fortune</string>

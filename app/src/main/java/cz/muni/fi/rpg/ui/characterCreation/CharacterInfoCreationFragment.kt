@@ -58,13 +58,13 @@ class CharacterInfoCreationFragment : Fragment(R.layout.fragment_character_info_
 
         if (view.radioButtonRaceHuman.isChecked)
             race = Race.HUMAN
-        if (view.radioButtonRaceDwarf.isChecked)
+        else if (view.radioButtonRaceDwarf.isChecked)
             race = Race.DWARF
-        if (view.radioButtonRaceElf.isChecked)
+        else if (view.radioButtonRaceElf.isChecked)
             race = Race.ELF
-        if (view.radioButtonRaceGnome.isChecked)
+        else if (view.radioButtonRaceGnome.isChecked)
             race = Race.GNOME
-        if (view.radioButtonRaceHalfling.isChecked)
+        else if (view.radioButtonRaceHalfling.isChecked)
             race = Race.HALFLING
 
         characterInfo = CharacterInfo(name, race, career)

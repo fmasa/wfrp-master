@@ -17,7 +17,7 @@
             style="@style/TextAppearance.AppCompat.Subhead"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/title_character_creation_2"
+            android:text="@string/title_character_creation_stats"
             android:textAlignment="center"
             app:layout_constraintBottom_toBottomOf="parent" />
 
@@ -271,7 +271,7 @@
         android:layout_width="150dp"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
-        android:text="Previous"
+        android:text="@string/button_previous"
         android:textSize="20dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/button_finish"
@@ -283,7 +283,7 @@
         android:layout_width="150dp"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
-        android:text="Finish"
+        android:text="@string/button_finish"
         android:textSize="20dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

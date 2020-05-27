@@ -17,7 +17,7 @@
             style="@style/TextAppearance.AppCompat.Subhead"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/title_character_creation_1"
+            android:text="@string/title_character_creation_info"
             android:textAlignment="center"
             app:layout_constraintBottom_toBottomOf="parent" />
     </androidx.cardview.widget.CardView>
@@ -29,7 +29,7 @@
         android:layout_marginTop="44dp"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
-        android:text="Name"
+        android:text="@string/label_name"
         android:textSize="10pt"
         app:layout_constraintTop_toBottomOf="@id/HeadlineCard" />
 
@@ -39,7 +39,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
-        android:hint="Fill in the name"
+        android:hint="@string/hint_fill_name"
         android:inputType="text"/>
 
     <TextView
@@ -49,7 +49,7 @@
         android:layout_marginTop="44dp"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
-        android:text="Race"
+        android:text="@string/label_race"
         android:textSize="10pt"
         app:layout_constraintTop_toBottomOf="@id/NameTextFill" />
 
@@ -103,7 +103,7 @@
         android:layout_marginTop="44dp"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
-        android:text="Career"
+        android:text="@string/label_career"
         android:textSize="10pt"
         app:layout_constraintTop_toBottomOf="@id/radioGroup" />
 
@@ -113,7 +113,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
-        android:hint="Fill in the career"
+        android:hint="@string/hint_fill_career"
         android:inputType="text"/>
 
     <Button
@@ -125,7 +125,7 @@
         android:layout_height="wrap_content"
         android:textSize="20dp"
         android:layout_margin="16dp"
-        android:text="Next" />
+        android:text="@string/button_next" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
