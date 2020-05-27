@@ -91,7 +91,7 @@ async function setUserInvitation(userId: string, partyId: string, accessCode: st
         .set({"invitations": [{partyId, accessCode}]})
 }
 
-function withoutField<T extends object>(object: T, field: string) : Partial<T> {
+function withoutField(object: object, field: string) : object {
     return Object.fromEntries(Object.entries(object).filter(([fieldName]) => fieldName === field));
 }
 
