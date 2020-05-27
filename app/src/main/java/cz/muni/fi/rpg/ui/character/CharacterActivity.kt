@@ -51,19 +51,6 @@ class CharacterActivity : PartyScopedActivity(R.layout.activity_character) {
     }
 
     private fun initializeNavigation() {
-        val arguments = bundleOf(
-            CharacterStatsFragment.ARG_PARTY_ID to getPartyId().toString(),
-            CharacterStatsFragment.ARG_USER_ID to getUserId()
-        )
-
-        val navController = findNavController(R.id.nav_host_fragment)
-        navController.setGraph(R.navigation.mobile_navigation, arguments)
-        navigation.setupWithNavController(navController)
-        navigation.setOnNavigationItemSelectedListener { item ->
-            navController.popBackStack(item.itemId, true)
-            navController.navigate(item.itemId, arguments)
-
-            return@setOnNavigationItemSelectedListener false
-        }
+        navigation.setupWithNavController(findNavController(R.id.nav_host_fragment))
     }
 }
