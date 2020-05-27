@@ -1,8 +1,12 @@
 package cz.muni.fi.rpg.viewModels
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
+import cz.muni.fi.rpg.model.domain.character.CharacterId
 import cz.muni.fi.rpg.model.domain.character.CharacterRepository
 import cz.muni.fi.rpg.model.domain.character.Points
+import cz.muni.fi.rpg.model.domain.inventory.InventoryItem
+import cz.muni.fi.rpg.model.domain.inventory.InventoryItemRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -11,10 +15,14 @@ import kotlin.math.min
 
 class CharacterViewModel(
     private val characters: CharacterRepository,
+    private val inventoryItems: InventoryItemRepository,
     private val partyId: UUID,
     private val userId: String
 ) : ViewModel(), CoroutineScope by CoroutineScope(Dispatchers.Default) {
+    private val characterId = CharacterId(partyId, userId)
     val character = characters.getLive(partyId, userId)
+
+    val inventory: LiveData<List<InventoryItem>> = inventoryItems.findAllForCharacter(characterId)
 
     fun incrementWounds() = updatePoints { it.copy(wounds = it.wounds + 1) }
     fun decrementWounds() = updatePoints { it.copy(wounds = it.wounds - 1) }
