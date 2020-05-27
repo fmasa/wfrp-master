@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".ui.characterCreation.CharacterInfoCreationFragment">
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/HeadlineCard"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            style="@style/TextAppearance.AppCompat.Subhead"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/title_character_creation_info"
+            android:textAlignment="center"
+            app:layout_constraintBottom_toBottomOf="parent" />
+    </androidx.cardview.widget.CardView>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/NameText"
+        android:layout_marginTop="44dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:text="@string/label_name"
+        android:textSize="10pt"
+        app:layout_constraintTop_toBottomOf="@id/HeadlineCard" />
+
+    <EditText
+        app:layout_constraintTop_toBottomOf="@id/NameText"
+        android:id="@+id/NameTextFill"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:hint="@string/hint_fill_name"
+        android:inputType="text"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/RaceText"
+        android:layout_marginTop="44dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:text="@string/label_race"
+        android:textSize="10pt"
+        app:layout_constraintTop_toBottomOf="@id/NameTextFill" />
+
+    <RadioGroup
+        android:id="@+id/radioGroup"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/RaceText">
+
+        <RadioButton
+            android:id="@+id/radioButtonRaceHuman"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:checked="true"
+            android:text="@string/race_human" />
+
+        <RadioButton
+            android:id="@+id/radioButtonRaceHalfling"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/race_halfling" />
+
+        <RadioButton
+            android:id="@+id/radioButtonRaceElf"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/race_elf" />
+
+        <RadioButton
+            android:id="@+id/radioButtonRaceDwarf"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/race_dwarf" />
+
+        <RadioButton
+            android:id="@+id/radioButtonRaceGnome"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/race_gnome" />
+    </RadioGroup>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/CareerText"
+        android:layout_marginTop="44dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:text="@string/label_career"
+        android:textSize="10pt"
+        app:layout_constraintTop_toBottomOf="@id/radioGroup" />
+
+    <EditText
+        app:layout_constraintTop_toBottomOf="@id/CareerText"
+        android:id="@+id/CareerTextFill"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:hint="@string/hint_fill_career"
+        android:inputType="text"/>
+
+    <Button
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:id="@+id/button_next"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:textSize="20dp"
+        android:layout_margin="16dp"
+        android:text="@string/button_next" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
