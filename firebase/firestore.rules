@@ -29,7 +29,7 @@ service cloud.firestore {
                     function isValidInventoryItem(item) {
                         return item.keys().toSet() == ["id", "name", "description", "quantity"].toSet()
                             && item.id is string && item.id == itemId && isValidUuid(item.id)
-                            && item.name is string && item.name.replace('\\s', '') != ""
+                            && item.name is string && isNotBlank(item.name)
                             && item.description is string
                             && item.quantity is int && item.quantity > 0;
                     }
@@ -43,8 +43,8 @@ service cloud.firestore {
                 function isValidCharacter(character) {
                     return character.keys().toSet() == ["name", "career", "points", "race", "stats", "userId"].toSet()
                         && character.userId == userId
-                        && character.name is string && character.name.replace('\\s', '') != ""
-                        && character.career is string && character.career.replace('\\s', '') != ""
+                        && character.name is string && isNotBlank(character.name)
+                        && character.career is string && isNotBlank(character.career)
                         && character.race is string && character.race in ["HUMAN", "ELF", "DWARF", "HALFLING", "GNOME"]
                         && arePointsValid(character.points)
                         && areStatsValid(character.stats);
@@ -92,7 +92,7 @@ service cloud.firestore {
             function isValidNewParty(party, uid) {
                 return party.keys().toSet() == ["id", "name", "users", "gameMasterId", "accessCode"].toSet()
                     && party.id is string && party.id == partyId && isValidUuid(party.id)
-                    && party.name is string && party.name.replace('\\s', '') != ""
+                    && party.name is string && isNotBlank(party.name)
                     && party.users == [uid]
                     && party.gameMasterId == uid
                     && party.accessCode is string && party.accessCode != "";
@@ -136,5 +136,12 @@ service cloud.firestore {
                 return data.keys() == ["invitations"] && data.invitations is list
             }
         }
+    }
+
+    //
+    // Returns true if string contains at least one character that is not a whitespace
+    //
+    function isNotBlank(value) {
+        return value.replace('\\s', '') != ""
     }
 }
