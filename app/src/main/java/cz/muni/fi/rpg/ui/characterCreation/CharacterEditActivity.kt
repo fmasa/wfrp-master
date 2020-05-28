@@ -1,13 +1,10 @@
 package cz.muni.fi.rpg.ui.characterCreation
 
-import android.os.Bundle
 import androidx.fragment.app.Fragment
 import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.model.domain.character.Character
 import cz.muni.fi.rpg.model.domain.character.CharacterRepository
-import cz.muni.fi.rpg.ui.AuthenticatedActivity
 import cz.muni.fi.rpg.ui.PartyScopedActivity
-import dagger.android.AndroidInjection
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

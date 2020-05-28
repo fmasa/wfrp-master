@@ -19,7 +19,7 @@ import cz.muni.fi.rpg.viewModels.CharacterViewModelProvider
 import kotlinx.android.synthetic.main.activity_character.*
 import javax.inject.Inject
 
-class CharacterActivity : PartyScopedActivity(R.layout.activity_character), CharacterStatsFragment.CharacterStatsListener  {
+class CharacterActivity : PartyScopedActivity(R.layout.activity_character), CharacterStatsFragment.CharacterStatsListener {
     companion object {
         private const val EXTRA_CHARACTER_ID = "characterId";
 
@@ -31,7 +31,6 @@ class CharacterActivity : PartyScopedActivity(R.layout.activity_character), Char
             packageContext.startActivity(intent)
         }
     }
-
     @Inject
     lateinit var viewModelProvider: CharacterViewModelProvider
 
