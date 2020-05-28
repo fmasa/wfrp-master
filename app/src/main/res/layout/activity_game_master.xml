@@ -6,20 +6,15 @@
     android:layout_height="match_parent"
     tools:context=".ui.gameMaster.GameMasterActivity">
 
-    <ListView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
     <androidx.cardview.widget.CardView
+        android:id="@+id/qr_card"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:cardCornerRadius="4dp"
         android:layout_marginHorizontal="8dp"
         android:layout_marginBottom="8dp"
         app:cardElevation="2dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         >
         <LinearLayout
@@ -41,5 +36,42 @@
                 android:layout_height="wrap_content"/>
         </LinearLayout>
     </androidx.cardview.widget.CardView>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/characterListRecycler"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toBottomOf="@+id/qr_card"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:visibility="gone"
+        />
+
+    <ImageView
+        android:id="@+id/noCharactersIcon"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:src="@drawable/ic_invite_people"
+        app:layout_constraintTop_toBottomOf="@+id/qr_card"
+        app:layout_constraintBottom_toTopOf="@+id/noCharactersText"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:visibility="gone"
+        android:tint="@color/colorEmptyState"
+        />
+
+    <TextView
+        android:id="@+id/noCharactersText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:textAlignment="center"
+        app:layout_constraintTop_toBottomOf="@+id/noCharactersIcon"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        style="@style/TextAppearance.AppCompat.Large"
+        android:textColor="@color/colorEmptyState"
+        android:text="@string/no_characters_in_party_prompt"
+        />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
