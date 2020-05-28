@@ -1,5 +1,6 @@
 package cz.muni.fi.rpg.viewModels
 
+import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import cz.muni.fi.rpg.model.domain.character.CharacterId
@@ -7,10 +8,9 @@ import cz.muni.fi.rpg.model.domain.character.CharacterRepository
 import cz.muni.fi.rpg.model.domain.character.Points
 import cz.muni.fi.rpg.model.domain.inventory.InventoryItem
 import cz.muni.fi.rpg.model.domain.inventory.InventoryItemRepository
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 import java.util.UUID
+import javax.inject.Inject
 import kotlin.math.min
 
 class CharacterViewModel(
@@ -26,7 +26,6 @@ class CharacterViewModel(
 
     fun incrementWounds() = updatePoints { it.copy(wounds = it.wounds + 1) }
     fun decrementWounds() = updatePoints { it.copy(wounds = it.wounds - 1) }
-
     fun incrementFortunePoints() = updatePoints { it.copy(fortune = it.fortune + 1) }
     fun decrementFortunePoints() = updatePoints { it.copy(fortune = it.fortune - 1) }
 
@@ -49,6 +48,14 @@ class CharacterViewModel(
                 character.updatePoints(mutation(character.getPoints()))
                 characters.save(partyId, character)
             } catch (e: IllegalArgumentException) {
+            }
+        }
+    }
+
+    fun saveInventoryItem(inventoryItem: InventoryItem) {
+        GlobalScope.launch {
+            withContext(Dispatchers.IO) {
+                inventoryItems.save(characterId, inventoryItem)
             }
         }
     }

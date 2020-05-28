@@ -4,19 +4,57 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.character.InventoryFragment">
+    tools:context=".ui.character.InventoryFragment"
+    android:layout_marginBottom="50dp">
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/inventoryRecycler"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:visibility="gone"
+        />
+
+    <ImageView
+        android:id="@+id/noInventoryItemIcon"
+        android:src="@drawable/ic_empty_inventory"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/noInventoryItemText"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:visibility="gone"
+        android:tint="@color/colorEmptyState"
+        android:layout_height="match_parent"
+        android:layout_width="match_parent" />
 
     <TextView
-        android:layout_width="match_parent"
+        android:id="@+id/noInventoryItemText"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
+        android:visibility="gone"
         android:textAlignment="center"
-        android:textSize="20sp"
+        app:layout_constraintTop_toBottomOf="@id/noInventoryItemIcon"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:text="TODO: Add inventory"/>
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        style="@style/TextAppearance.AppCompat.Large"
+        android:textColor="@color/colorEmptyState"
+        android:text="@string/no_inventory_item_prompt"
+        />
+
+    <com.getbase.floatingactionbutton.FloatingActionButton
+        android:id="@+id/addNewInventoryItemButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:fab_colorNormal="@color/colorPrimary"
+        app:fab_colorPressed="@color/colorPrimaryDark"
+        app:fab_icon="@drawable/ic_inventory_item_add"
+        android:layout_margin="16dp"
+        app:fab_labelStyle="@style/menu_labels_style"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -71,4 +71,12 @@
 
     <string name="character_icon_description">Character icon</string>
     <string name="no_characters_in_party_prompt">No player has joined this party yet.</string>>
+
+    <string name="inventory_item_icon_description">Inventory item icon</string>
+    <string name="no_inventory_item_prompt">There is no item in your inventory.</string>
+    <string name="createInventoryItemTitle">Create new inventory item</string>
+    <string name="createInventoryItemSubmit">Create</string>
+    <string name="inventory_item_description_label">Description</string>
+    <string name="inventory_item_name_label">Name</string>
+    <string name="createInventoryItemCancel">Cancel</string>
 </resources>
