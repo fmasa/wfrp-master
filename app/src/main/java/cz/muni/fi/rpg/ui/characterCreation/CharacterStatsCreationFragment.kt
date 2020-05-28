@@ -5,6 +5,7 @@ import android.view.View
 import android.widget.EditText
 import androidx.fragment.app.Fragment
 import cz.muni.fi.rpg.R
+import cz.muni.fi.rpg.model.domain.character.Character
 import cz.muni.fi.rpg.model.domain.character.Points
 import cz.muni.fi.rpg.model.domain.character.Stats
 import kotlinx.android.synthetic.main.fragment_character_stats_creation.*
@@ -12,6 +13,8 @@ import kotlinx.android.synthetic.main.fragment_character_stats_creation.view.*
 
 class CharacterStatsCreationFragment : Fragment(R.layout.fragment_character_stats_creation) {
     lateinit var listener: CharacterStatsCreationListener
+
+    lateinit var character: Character
 
     public interface CharacterStatsCreationListener {
         fun previousFragment()
@@ -31,6 +34,7 @@ class CharacterStatsCreationFragment : Fragment(R.layout.fragment_character_stat
             }
         }
 
+        setDefaultValues()
     }
 
     private fun checkValues(view: View): Boolean {
@@ -53,8 +57,28 @@ class CharacterStatsCreationFragment : Fragment(R.layout.fragment_character_stat
         return true
     }
 
+    fun getCharacterData(character: Character) {
+        this.character = character
+    }
+
+    private fun setDefaultValues() {
+        view?.WeaponSkillTextFill?.setText(character.getStats().weaponSkill.toString())
+        view?.BallisticSkillTextFill?.setText(character.getStats().ballisticSkill.toString())
+        view?.StrengthTextFill?.setText(character.getStats().strength.toString())
+        view?.ToughnessTextFill?.setText(character.getStats().toughness.toString())
+        view?.FateTextFill?.setText(character.getPoints().fate.toString())
+        view?.AgilityTextFill?.setText(character.getStats().agility.toString())
+        view?.IntelligenceTextFill?.setText(character.getStats().intelligence.toString())
+        view?.WillPowerTextFill?.setText(character.getStats().willPower.toString())
+        view?.FellowshipTextFill?.setText(character.getStats().fellowship.toString())
+        view?.WoundsTextFill?.setText(character.getPoints().maxWounds.toString())
+        view?.MagicTextFill?.setText(character.getStats().magic.toString())
+        view?.button_previous?.text = getString(R.string.button_edit_info)
+        view?.button_finish?.text = getString(R.string.button_submit)
+    }
+
     private fun showError(input: EditText) {
-        input.error = ("Value cannot be 0")
+        input.error = (getString(R.string.error_value_is_0))
     }
 
     fun getData() : Pair <Stats,Points> {

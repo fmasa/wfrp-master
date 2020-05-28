@@ -6,6 +6,7 @@ import cz.muni.fi.rpg.ui.gameMaster.GameMasterActivity
 import cz.muni.fi.rpg.ui.MainActivity
 import cz.muni.fi.rpg.ui.character.CharacterActivity
 import cz.muni.fi.rpg.ui.characterCreation.CharacterCreationActivity
+import cz.muni.fi.rpg.ui.characterCreation.CharacterEditActivity
 import cz.muni.fi.rpg.ui.partyList.PartyListActivity
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
@@ -29,6 +30,9 @@ abstract class ActivitiesModule {
 
     @ContributesAndroidInjector
     abstract fun characterCreationActivity(): CharacterCreationActivity
+
+    @ContributesAndroidInjector
+    abstract fun characterEditActivity(): CharacterEditActivity
 
     @ContributesAndroidInjector
     abstract fun characterActivity(): CharacterActivity

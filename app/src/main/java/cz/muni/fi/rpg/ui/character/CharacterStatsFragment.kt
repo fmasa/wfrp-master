@@ -1,5 +1,6 @@
 package cz.muni.fi.rpg.ui.character
 
+import android.content.Context
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.activityViewModels
@@ -13,6 +14,20 @@ import kotlinx.android.synthetic.main.fragment_character_stats.*
 
 class CharacterStatsFragment : DaggerFragment(R.layout.fragment_character_stats) {
     private val viewModel: CharacterViewModel by activityViewModels()
+    private var listener: CharacterStatsListener? = null
+
+    interface CharacterStatsListener {
+        fun openCharacterEdit()
+    }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        listener = context as? CharacterStatsListener
+        if (listener == null) {
+            throw ClassCastException("$context must implement CharacterStatsListener")
+        }
+
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -27,6 +42,10 @@ class CharacterStatsFragment : DaggerFragment(R.layout.fragment_character_stats)
 
         bindStats()
         bindPoints()
+
+        button_edit_stats.setOnClickListener() {
+            listener?.openCharacterEdit()
+        }
     }
 
     private fun bindStats() {
