@@ -83,6 +83,8 @@ class InventoryFragment : DaggerFragment(R.layout.fragment_inventory) {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+	super.onViewCreated(view, savedInstanceState)
+
 	Transformations.map(viewModel.character.right()) { character -> character.getMoney() }
             .observe(viewLifecycleOwner, characterMoney::setValue)
 
@@ -101,7 +103,5 @@ class InventoryFragment : DaggerFragment(R.layout.fragment_inventory) {
             adapter.submitList(items)
             setEmptyCollectionView(items.isEmpty())
         }
-
-        super.onViewCreated(view, savedInstanceState)
     }
 }
