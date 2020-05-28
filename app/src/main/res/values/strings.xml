@@ -68,4 +68,12 @@
     <string name="button_edit_stats">Edit stats</string>
     <string name="no_parties_prompt">Assemble your first party\n or join the existing one.</string>
     <string name="iconsAttribution">Icons made by Delapouite and Lorc.\nAvailable on https://game-icons.net</string>
+
+    <string name="inventory_item_icon_description">Inventory item icon</string>
+    <string name="no_inventory_item_prompt">There is no item in your inventory.</string>
+    <string name="createInventoryItemTitle">Create new inventory item</string>
+    <string name="createInventoryItemSubmit">Create</string>
+    <string name="inventory_item_description_label">Description</string>
+    <string name="inventory_item_name_label">Name</string>
+    <string name="createInventoryItemCancel">Cancel</string>
 </resources>
