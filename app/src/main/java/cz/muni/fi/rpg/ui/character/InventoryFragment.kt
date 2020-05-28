@@ -2,13 +2,17 @@ package cz.muni.fi.rpg.ui.character
 
 import android.app.AlertDialog
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.model.domain.inventory.InventoryItem
 import cz.muni.fi.rpg.model.domain.inventory.InventoryItemId
+import cz.muni.fi.rpg.model.domain.inventory.InventoryItemRepository
 import dagger.android.support.DaggerFragment
 import kotlinx.android.synthetic.main.fragment_inventory.view.*
 import kotlinx.android.synthetic.main.inventory_item_edit_dialog.view.*
+import javax.inject.Inject
 import android.widget.Toast
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.observe
@@ -17,6 +21,7 @@ import cz.muni.fi.rpg.model.domain.character.CharacterId
 import cz.muni.fi.rpg.ui.character.adapter.InventoryAdapter
 import cz.muni.fi.rpg.viewModels.CharacterViewModel
 import kotlinx.android.synthetic.main.fragment_inventory.*
+import kotlinx.coroutines.*
 
 class InventoryFragment : DaggerFragment(R.layout.fragment_inventory) {
     private var inputError = ""
@@ -33,9 +38,9 @@ class InventoryFragment : DaggerFragment(R.layout.fragment_inventory) {
         setViewVisibility(inventoryRecycler, !isEmpty)
     }
 
-
     private fun showDialog(){
         val view = requireActivity().layoutInflater.inflate(R.layout.inventory_item_edit_dialog, null)
+
         AlertDialog.Builder(activity)
             .setTitle(R.string.createInventoryItemTitle)
             .setView(view)
@@ -98,5 +103,10 @@ class InventoryFragment : DaggerFragment(R.layout.fragment_inventory) {
             adapter.submitList(items)
             setEmptyCollectionView(items.isEmpty())
         }
+
+
+
+
+
     }
 }
