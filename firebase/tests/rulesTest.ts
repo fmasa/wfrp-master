@@ -3,6 +3,9 @@ import {suite, test} from "mocha-typescript"
 import * as fs from "fs";
 import {uuid} from "uuidv4";
 
+type CollectionReference = firebase.firestore.CollectionReference;
+type Firestore = firebase.firestore.Firestore;
+
 /*
  * ============
  *    Setup
@@ -19,7 +22,7 @@ const rules = fs.readFileSync(__dirname + "/../firestore.rules", "utf8");
  * @param {object} uid the object to use for authentication (typically {uid: some-uid})
  * @return {object} the app.
  */
-function authedApp(uid: string | null): firebase.firestore.Firestore {
+function authedApp(uid: string | null): Firestore {
     return firebase
         .initializeTestApp({projectId, auth: uid === null ? null : {uid}})
         .firestore();
@@ -67,7 +70,10 @@ function validCharacter (userId: string) {
     }
 }
 
-async function createValidParty(): Promise<ReturnType<typeof validParty>> {
+type Character = ReturnType<typeof validCharacter>;
+type Party = ReturnType<typeof validParty>;
+
+async function createValidParty(): Promise<Party> {
     const party = validParty();
 
     await authedApp(party.gameMasterId)
@@ -85,24 +91,50 @@ async function setUserInvitation(userId: string, partyId: string, accessCode: st
         .set({"invitations": [{partyId, accessCode}]})
 }
 
-function withoutField<T extends object>(object: T, field: string) : Partial<T> {
+function withoutField(object: object, field: string) : object {
     return Object.fromEntries(Object.entries(object).filter(([fieldName]) => fieldName === field));
 }
 
 /**
- * Returns Party ID
+ * Returns Party
  */
-async function createUserAccessibleParty(userId: string): Promise<string> {
+async function createUserAccessibleParty(userId: string): Promise<Party> {
     const party = await createValidParty();
 
     await setUserInvitation(userId, party.id, party.accessCode);
 
-    authedApp(userId)
+    const updatedParty = {...party, users: [...party.users, userId]};
+
+    await authedApp(userId)
         .collection("parties")
         .doc(party.id)
-        .set({...party, users: [...party.users, userId]});
+        .set(updatedParty);
 
-    return party.id;
+    return updatedParty;
+}
+
+async function joinParty(party: Party, userId: string): Promise<void> {
+    const app = authedApp(userId);
+
+    await setUserInvitation(userId, party.id, party.accessCode);
+
+    await app.collection("parties")
+        .doc(party.id)
+        .set({users: firebase.firestore.FieldValue.arrayUnion(userId)}, {merge: true});
+}
+
+async function createCharacter(partyId: string, userId: string): Promise<Character> {
+    const document = authedApp(userId)
+        .collection("parties")
+        .doc(partyId)
+        .collection("characters")
+        .doc(userId);
+
+    const character = validCharacter(userId);
+
+    await document.set(character);
+
+    return character;
 }
 
 /*
@@ -110,22 +142,25 @@ async function createUserAccessibleParty(userId: string): Promise<string> {
  *  Test Cases
  * ============
  */
-before(async () => {
-    await firebase.loadFirestoreRules({projectId, rules});
-});
+abstract class Suite
+{
+    static async before() {
+        await firebase.loadFirestoreRules({projectId, rules});
+    }
 
-beforeEach(async () => {
-    // Clear the database between tests
-    await firebase.clearFirestoreData({projectId});
-});
+    async before() {
+        // Clear the database between tests
+        await firebase.clearFirestoreData({projectId});
+    }
 
-after(async () => {
-    await Promise.all(firebase.apps().map(app => app.delete()));
-    console.log(`View rule coverage information at ${coverageUrl}\n`);
-});
+    static async after() {
+        await Promise.all(firebase.apps().map(app => app.delete()));
+        console.log(`View rule coverage information at ${coverageUrl}\n`);
+    }
+}
 
 @suite
-class Database {
+class Database extends Suite {
     @test
     async "require users to log in before creating a party"() {
         const data = validParty();
@@ -275,7 +310,7 @@ class Database {
     @test
     async "should let users to create their character in party they have access to"() {
         const userId = "user123";
-        const partyId = await createUserAccessibleParty(userId);
+        const partyId = (await createUserAccessibleParty(userId)).id;
 
         const character = authedApp(userId)
             .collection("parties")
@@ -288,7 +323,7 @@ class Database {
 
     async "should NOT let users to create their character in party they DON'T have access to"() {
         const userId = "user123";
-        const partyId = await createUserAccessibleParty("another-user");
+        const partyId = (await createUserAccessibleParty("another-user")).id;
 
         const character = authedApp(userId)
             .collection("parties")
@@ -302,7 +337,7 @@ class Database {
     @test
     async "should not let users create incomplete character"() {
         const userId = "user123";
-        const partyId = await createUserAccessibleParty(userId);
+        const partyId = (await createUserAccessibleParty(userId)).id;
 
         const character = authedApp(userId)
             .collection("parties")
@@ -324,7 +359,7 @@ class Database {
     @test
     async "should not let users create character with invalid data"() {
         const userId = "user123";
-        const partyId = await createUserAccessibleParty(userId);
+        const partyId = (await createUserAccessibleParty(userId)).id;
 
         const character = authedApp(userId)
             .collection("parties")
@@ -360,7 +395,7 @@ class Database {
     @test
     async "should not let users create character with invalid stats"() {
         const userId = "user123";
-        const partyId = await createUserAccessibleParty(userId);
+        const partyId = (await createUserAccessibleParty(userId)).id;
 
         const character = authedApp(userId)
             .collection("parties")
@@ -386,7 +421,7 @@ class Database {
     @test
     async "should not let users create character with invalid points"() {
         const userId = "user123";
-        const partyId = await createUserAccessibleParty(userId);
+        const partyId = (await createUserAccessibleParty(userId)).id;
 
         const character = authedApp(userId)
             .collection("parties")
@@ -412,5 +447,206 @@ class Database {
         await firebase.assertSucceeds(character.set(withPoints('wounds', data.points.maxWounds - 1)));
         await firebase.assertSucceeds(character.set(withPoints('wounds', data.points.maxWounds)));
         await firebase.assertFails(character.set(withPoints('wounds', data.points.maxWounds + 1)));
+    }
+
+    @test
+    async "should let users update their character"() {
+        const userId = "user123";
+        const partyId = (await createUserAccessibleParty(userId)).id;
+        await createCharacter(partyId, userId);
+
+        const document = authedApp(userId)
+            .collection("parties")
+            .doc(partyId)
+            .collection("characters")
+            .doc(userId);
+
+        await firebase.assertSucceeds(document.set({points: {insanity: 10}}, {merge: true}));
+    }
+
+    @test
+    async "should let game master update character"() {
+        const userId = "user123";
+        const party = await createUserAccessibleParty(userId);
+        await createCharacter(party.id, userId);
+
+        const document = authedApp(party.gameMasterId)
+            .collection("parties")
+            .doc(party.id)
+            .collection("characters")
+            .doc(userId);
+
+        await firebase.assertSucceeds(document.set({points: {insanity: 10}}, {merge: true}));
+    }
+
+    @test
+    async "should NOT let users update other users character"() {
+        const userId = "user123";
+        const otherUserId = "user345";
+
+        const party = await createUserAccessibleParty(userId);
+        await createCharacter(party.id, userId);
+        await joinParty(party, otherUserId);
+
+        const document = authedApp(otherUserId)
+            .collection("parties")
+            .doc(party.id)
+            .collection("characters")
+            .doc(userId);
+
+        await firebase.assertFails(document.set({points: {insanity: 10}}, {merge: true}));
+    }
+}
+
+@suite
+class Inventory extends Suite {
+    private partyId: string;
+    private gameMasterId: string;
+    private readonly userId1 = 'user123';
+    private readonly userId2 = 'user345';
+
+    private inventoryItem = {
+        id: uuid(),
+        quantity: 1,
+        name: "Sword of Chaos Champion",
+        description: "Trust me, you don't want to show it to people",
+    };
+
+    async before() {
+        await super.before();
+
+        const party = await createValidParty();
+        this.partyId = party.id;
+        this.gameMasterId = party.gameMasterId;
+
+        await joinParty(party, this.userId1);
+        await joinParty(party, this.userId2);
+
+        await createCharacter(party.id, this.userId1);
+        await createCharacter(party.id, this.userId2);
+    }
+
+    private inventoryItems(app: Firestore, userId: string): CollectionReference
+    {
+        return app.collection("parties")
+            .doc(this.partyId)
+            .collection("characters")
+            .doc(userId)
+            .collection("inventory");
+    }
+
+    @test
+    async "user (and GM) can add item to his inventory"() {
+        for (const userId of [this.userId1, this.gameMasterId]) {
+            const items = this.inventoryItems(authedApp(userId), this.userId1);
+
+            await firebase.assertSucceeds(items.doc(this.inventoryItem.id).set(this.inventoryItem));
+        }
+    }
+
+    @test
+    async "other users CANNOT add item to character's inventory"() {
+        for (const userId of [this.userId2, 'user-not-in-party']) {
+            const items = this.inventoryItems(authedApp(userId), this.userId1);
+
+            await firebase.assertFails(items.doc(this.inventoryItem.id).set(this.inventoryItem));
+        }
+    }
+
+    @test
+    async "user (and GM) can update item in his inventory"() {
+        for (const userId of [this.userId1, this.gameMasterId]) {
+            const items = this.inventoryItems(authedApp(userId), this.userId1);
+            await items.doc(this.inventoryItem.id).set(this.inventoryItem);
+
+            await firebase.assertSucceeds(items.doc(this.inventoryItem.id).set({quantity: 100}, {merge: true}));
+        }
+    }
+
+    @test
+    async "other users CANNOT update item in character's inventory"() {
+        for (const userId of [this.userId2, 'user-not-in-party']) {
+            await this.inventoryItems(authedApp(this.userId1), this.userId1).doc(this.inventoryItem.id).set(this.inventoryItem);
+            const items = this.inventoryItems(authedApp(userId), this.userId1);
+
+            await firebase.assertFails(items.doc(this.inventoryItem.id).set({quantity: 100}, {merge: true}));
+        }
+    }
+
+    @test
+    async "user (and GM) can remove item from his inventory"() {
+        for (const userId of [this.userId1, this.gameMasterId]) {
+            const items = this.inventoryItems(authedApp(userId), this.userId1);
+            await items.doc(this.inventoryItem.id).set(this.inventoryItem);
+
+            await firebase.assertSucceeds(items.doc(this.inventoryItem.id).delete());
+        }
+    }
+
+    @test
+    async "other users CANNOT remove item from character's inventory"() {
+        for (const userId of [this.userId2, 'user-not-in-party']) {
+            await this.inventoryItems(authedApp(this.userId1), this.userId1).doc(this.inventoryItem.id).set(this.inventoryItem);
+            const items = this.inventoryItems(authedApp(userId), this.userId1);
+
+            await firebase.assertFails(items.doc(this.inventoryItem.id).delete());
+        }
+    }
+
+    @test
+    async "all party members can read each other's inventory"() {
+        for (const userId of [this.userId1, this.userId2, this.gameMasterId]) {
+            await this.inventoryItems(authedApp(userId), this.userId1).get();
+        }
+    }
+
+    @test
+    async "inventory item with field missing CANNOT be saved"() {
+        const items = this.inventoryItems(authedApp(this.userId1), this.userId1);
+
+        await Promise.all(Object.keys(this.inventoryItem).map(field => {
+            const item = {...this.inventoryItem};
+            const itemId = item.id;
+
+            delete item[field];
+
+            return firebase.assertFails(items.doc(itemId).set(item));
+        }));
+    }
+
+    @test
+    async "item with invalid field CANNOT be saved"() {
+        const itemDoc = this.inventoryItems(authedApp(this.userId1), this.userId1).doc(this.inventoryItem.id);
+
+        await Promise.all(
+            [
+                // ID not matching document ID
+                {id: uuid()},
+
+                // ID is not valid UUID
+                {id: "foo"},
+
+                // Empty name
+                {name: ""},
+
+                // Name with nothing but whitespaces
+                {name: " \t\r"},
+
+                // Zero quantity
+                {quantity: 0},
+
+                // Negative quantity
+                {quantity: -1}
+            ].map(doc => firebase.assertFails(itemDoc.set({...this.inventoryItem, ...doc})))
+        );
+
+        await Promise.all(Object.keys(this.inventoryItem).map(field => {
+            return firebase.assertFails(
+                itemDoc.set({
+                    ...this.inventoryItem,
+                    [field]: typeof this.inventoryItem[field] == 'string' ? true : 'foo',
+                })
+            );
+        }));
     }
 }

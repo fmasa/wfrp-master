@@ -13,20 +13,42 @@ service cloud.firestore {
             allow write: if request.auth != null && onlyUserAdded();
 
             match /characters/{userId} {
-                allow write: if hasAccessToParty()
-                                && request.resource.data.userId == userId
-                                && request.resource.data.userId == request.auth.uid
+                allow create: if hasAccessToParty()
+                                && userId == request.auth.uid
                                 && isValidCharacter(request.resource.data);
+                allow update: if canEditCharacter()
+                              && isValidCharacter(request.resource.data);
                 allow read: if hasAccessToParty();
-            }
 
-            function isValidCharacter(character) {
-                return character.keys().toSet() == ["name", "career", "points", "race", "stats", "userId"].toSet()
-                    && character.name is string && character.name.replace('\\s', '') != ""
-                    && character.career is string && character.career.replace('\\s', '') != ""
-                    && character.race is string && character.race in ["HUMAN", "ELF", "DWARF", "HALFLING", "GNOME"]
-                    && arePointsValid(character.points)
-                    && areStatsValid(character.stats);
+                match /inventory/{itemId} {
+                    allow read: if hasAccessToParty();
+                    allow create: if canEditCharacter() && isValidInventoryItem(request.resource.data);
+                    allow update: if canEditCharacter() && isValidInventoryItem(request.resource.data);
+                    allow delete: if canEditCharacter();
+
+                    function isValidInventoryItem(item) {
+                        return item.keys().toSet() == ["id", "name", "description", "quantity"].toSet()
+                            && item.id is string && item.id == itemId && isValidUuid(item.id)
+                            && item.name is string && isNotBlank(item.name)
+                            && item.description is string
+                            && item.quantity is int && item.quantity > 0;
+                    }
+                }
+
+                function canEditCharacter() {
+                    return hasAccessToParty()
+                        && (isGameMaster() || request.auth.uid == userId);
+                }
+
+                function isValidCharacter(character) {
+                    return character.keys().toSet() == ["name", "career", "points", "race", "stats", "userId"].toSet()
+                        && character.userId == userId
+                        && character.name is string && isNotBlank(character.name)
+                        && character.career is string && isNotBlank(character.career)
+                        && character.race is string && character.race in ["HUMAN", "ELF", "DWARF", "HALFLING", "GNOME"]
+                        && arePointsValid(character.points)
+                        && areStatsValid(character.stats);
+                }
             }
 
             function arePointsValid(points) {
@@ -63,11 +85,14 @@ service cloud.firestore {
                     && stats.magic >= 0 && stats.magic <= 100;
             }
 
+            function isValidUuid(maybeUuid) {
+                return maybeUuid.matches("^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$")
+            }
+
             function isValidNewParty(party, uid) {
                 return party.keys().toSet() == ["id", "name", "users", "gameMasterId", "accessCode"].toSet()
-                    && party.id is string && party.id == partyId
-                    && party.id.matches("^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$")
-                    && party.name is string && party.name.replace('\\s', '') != ""
+                    && party.id is string && party.id == partyId && isValidUuid(party.id)
+                    && party.name is string && isNotBlank(party.name)
                     && party.users == [uid]
                     && party.gameMasterId == uid
                     && party.accessCode is string && party.accessCode != "";
@@ -81,8 +106,13 @@ service cloud.firestore {
                 return invitation in get(/databases/$(database)/documents/users/$(userId)).data.invitations;
             }
 
+            function isGameMaster() {
+                return request.auth != null
+                    && request.auth.uid == get(/databases/$(database)/documents/parties/$(partyId)).data.gameMasterId
+            }
+
             function hasAccessToParty() {
-                return request.auth.uid != null
+                return request.auth != null
                     && request.auth.uid in get(/databases/$(database)/documents/parties/$(partyId)).data.users
             }
 
@@ -106,5 +136,12 @@ service cloud.firestore {
                 return data.keys() == ["invitations"] && data.invitations is list
             }
         }
+    }
+
+    //
+    // Returns true if string contains at least one character that is not a whitespace
+    //
+    function isNotBlank(value) {
+        return value.replace('\\s', '') != ""
     }
 }

@@ -11,10 +11,13 @@ import com.google.firebase.ktx.Firebase
 import cz.muni.fi.rpg.BuildConfig
 import cz.muni.fi.rpg.model.domain.character.Character
 import cz.muni.fi.rpg.model.domain.character.CharacterRepository
+import cz.muni.fi.rpg.model.domain.inventory.InventoryItem
+import cz.muni.fi.rpg.model.domain.inventory.InventoryItemRepository
 import cz.muni.fi.rpg.model.domain.invitation.InvitationProcessor
 import cz.muni.fi.rpg.model.domain.party.Party
 import cz.muni.fi.rpg.model.domain.party.PartyRepository
 import cz.muni.fi.rpg.model.firestore.FirestoreCharacterRepository
+import cz.muni.fi.rpg.model.firestore.FirestoreInventoryItemRepository
 import cz.muni.fi.rpg.model.firestore.FirestoreInvitationProcessor
 import cz.muni.fi.rpg.model.firestore.FirestorePartyRepository
 import cz.muni.fi.rpg.model.firestore.jackson.JacksonAggregateMapper
@@ -66,6 +69,17 @@ class ModelModule {
             firestore,
             JacksonAggregateMapper(
                 Character::class,
+                jacksonTypeRef()
+            )
+        )
+
+    @Provides
+    @Singleton
+    fun inventoryItems(firestore: FirebaseFirestore): InventoryItemRepository =
+        FirestoreInventoryItemRepository(
+            firestore,
+            JacksonAggregateMapper(
+                InventoryItem::class,
                 jacksonTypeRef()
             )
         )
