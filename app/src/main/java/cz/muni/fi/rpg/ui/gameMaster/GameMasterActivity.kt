@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.fasterxml.jackson.databind.json.JsonMapper
 import cz.muni.fi.rpg.R
 import android.view.View
+import cz.muni.fi.rpg.model.domain.character.CharacterId
 import cz.muni.fi.rpg.model.domain.character.CharacterRepository
 import cz.muni.fi.rpg.model.right
 import cz.muni.fi.rpg.ui.PartyScopedActivity
@@ -55,12 +56,7 @@ class GameMasterActivity : PartyScopedActivity(R.layout.activity_game_master),
         characterRepo.inParty(getPartyId()).observe(this) { characters ->
             if (characters.isNotEmpty()) {
                 val adapter = CharacterAdapter(layoutInflater)
-                {
-                    val intent = Intent(this, CharacterActivity::class.java);
-                    intent.putExtra(PartyScopedActivity.EXTRA_PARTY_ID, getPartyId().toString())
-                    intent.putExtra(CharacterActivity.EXTRA_CHARACTER_ID, it.userId)
-                    startActivity(intent)
-                }
+                { CharacterActivity.start(CharacterId(getPartyId(), it.userId), this) }
                 characterListRecycler.adapter = adapter
                 characterListRecycler.layoutManager = LinearLayoutManager(applicationContext)
 

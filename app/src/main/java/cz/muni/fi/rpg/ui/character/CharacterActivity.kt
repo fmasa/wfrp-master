@@ -20,7 +20,7 @@ import javax.inject.Inject
 
 class CharacterActivity : PartyScopedActivity(R.layout.activity_character) {
     companion object {
-        const val EXTRA_CHARACTER_ID = "characterId";
+        private const val EXTRA_CHARACTER_ID = "characterId";
 
         fun start(characterId: CharacterId, packageContext: Context) {
             val intent = Intent(packageContext, CharacterActivity::class.java);
