@@ -92,7 +92,6 @@ class InventoryFragment : DaggerFragment(R.layout.fragment_inventory) {
         inventoryRecycler.layoutManager = LinearLayoutManager(context)
         inventoryRecycler.adapter = adapter
 
-
         viewModel.inventory.observe(this) { items->
             adapter.submitList(items)
             setEmptyCollectionView(items.isEmpty())
