@@ -86,4 +86,6 @@
     <string name="not_enough_money">Character does not have enough money</string>
     <string name="money_subtract">Subtract</string>
     <string name="money_add">Add</string>
+    <string name="button_invite">Invite players</string>
+    <string name="title_characters">Characters</string>
 </resources>
