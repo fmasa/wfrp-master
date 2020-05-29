@@ -35,7 +35,6 @@ class InventoryFragment : DaggerFragment(R.layout.fragment_inventory) {
 
     private fun showDialog(){
         val view = requireActivity().layoutInflater.inflate(R.layout.inventory_item_edit_dialog, null)
-
         AlertDialog.Builder(activity)
             .setTitle(R.string.createInventoryItemTitle)
             .setView(view)
@@ -98,10 +97,5 @@ class InventoryFragment : DaggerFragment(R.layout.fragment_inventory) {
             adapter.submitList(items)
             setEmptyCollectionView(items.isEmpty())
         }
-
-
-
-
-
     }
 }
