@@ -34,9 +34,9 @@ class CharacterStatsFragment : DaggerFragment(R.layout.fragment_character_stats)
 
         viewModel.character.right().observe(viewLifecycleOwner) { character ->
             raceAndCareer.text = StringBuilder()
-                .append(getString(character.race.getReadableNameId()))
+                .append(getString(character.getRace().getReadableNameId()))
                 .append(" ")
-                .append(character.career)
+                .append(character.getCareer())
                 .toString()
         }
 

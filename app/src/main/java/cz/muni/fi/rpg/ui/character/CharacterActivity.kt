@@ -47,11 +47,8 @@ class CharacterActivity : PartyScopedActivity(R.layout.activity_character), Char
         super.onCreate(savedInstanceState)
 
         viewModel.character.observe(this) {
-            it.mapLeft {
-                CharacterCreationActivity.start(getPartyId(), this)
-                finish()
-            }
-            it.map { character -> supportActionBar?.title = character.name }
+            it.mapLeft { openCharacterCreation() }
+            it.map { character -> supportActionBar?.title = character.getName() }
         }
 
         partyViewModel.party

@@ -54,9 +54,9 @@ class CharacterInfoCreationFragment : Fragment(R.layout.fragment_character_info_
         if (character == null) {
             return
         }
-        view?.NameTextFill?.setText(character!!.name)
-        view?.CareerTextFill?.setText(character!!.career)
-        when (character!!.race) {
+        view?.NameTextFill?.setText(character!!.getName())
+        view?.CareerTextFill?.setText(character!!.getCareer())
+        when (character!!.getRace()) {
             Race.HUMAN -> view?.radioButtonRaceHuman?.isChecked = true
             Race.DWARF -> view?.radioButtonRaceDwarf?.isChecked = true
             Race.ELF -> view?.radioButtonRaceElf?.isChecked = true

@@ -4,10 +4,10 @@ import cz.muni.fi.rpg.model.domain.common.Money
 import java.lang.IllegalArgumentException
 
 data class Character(
-    var name: String,
+    private var name: String,
     val userId: String,
-    var career: String,
-    var race: Race,
+    private var career: String,
+    private var race: Race,
     private var stats: Stats,
     private var points: Points
 ) {
@@ -18,6 +18,7 @@ data class Character(
     }
 
     fun update(name: String, career: String, race: Race, stats: Stats, points: Points) {
+        require(listOf(name, career).all { it.isNotBlank() })
         this.name = name
         this.career = career
         this.race = race
@@ -39,6 +40,12 @@ data class Character(
             throw NotEnoughMoney(amount, e)
         }
     }
+
+    fun getName(): String = name
+
+    fun getCareer(): String = career
+
+    fun getRace(): Race = race
 
     fun getMoney() = money
 
