@@ -4,7 +4,7 @@ import java.util.*
 
 typealias InventoryItemId = UUID
 
-class InventoryItem(
+data class InventoryItem(
     val id: InventoryItemId,
     val name: String,
     val description: String,
