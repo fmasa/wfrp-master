@@ -34,7 +34,7 @@ class InventoryFragment : DaggerFragment(R.layout.fragment_inventory) {
     }
 
 
-    private fun ShowDialog(){
+    private fun showDialog(){
         val view = activity!!.layoutInflater.inflate(R.layout.inventory_item_edit_dialog, null)
         AlertDialog.Builder(activity)
             .setTitle(R.string.createInventoryItemTitle)
