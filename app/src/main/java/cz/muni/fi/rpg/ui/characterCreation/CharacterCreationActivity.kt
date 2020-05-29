@@ -1,5 +1,7 @@
 package cz.muni.fi.rpg.ui.characterCreation
 
+import android.content.Context
+import android.content.Intent
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import cz.muni.fi.rpg.R
@@ -9,11 +11,20 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.util.*
 import javax.inject.Inject
 
 class CharacterCreationActivity : PartyScopedActivity(R.layout.activity_character_creation),
     CoroutineScope by CoroutineScope(Dispatchers.Default), CharacterStatsCreationFragment.CharacterStatsCreationListener,
     CharacterInfoCreationFragment.CharacterInfoCreationListener {
+    companion object {
+        fun start(partyId: UUID, packageContext: Context) {
+            val intent = Intent(packageContext, CharacterCreationActivity::class.java)
+            intent.putExtra(EXTRA_PARTY_ID, partyId.toString())
+
+            packageContext.startActivity(intent)
+        }
+    }
     @Inject
     lateinit var characters: CharacterRepository
     private lateinit var currentFragment: Fragment
