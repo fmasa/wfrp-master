@@ -1,24 +1,45 @@
 package cz.muni.fi.rpg.ui.characterCreation
 
+import android.content.Context
+import android.content.Intent
 import androidx.fragment.app.Fragment
 import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.model.domain.character.Character
+import cz.muni.fi.rpg.model.domain.character.CharacterId
 import cz.muni.fi.rpg.model.domain.character.CharacterRepository
 import cz.muni.fi.rpg.ui.PartyScopedActivity
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.util.*
 import javax.inject.Inject
 
 class CharacterEditActivity : PartyScopedActivity(R.layout.activity_character_edit),
     CoroutineScope by CoroutineScope(Dispatchers.Default), CharacterStatsCreationFragment.CharacterStatsCreationListener,
     CharacterInfoCreationFragment.CharacterInfoCreationListener {
 
+    companion object {
+        const val EXTRA_CHARACTER_ID = "characterId";
+
+        fun start(characterId: CharacterId, packageContext: Context) {
+            val intent = Intent(packageContext, CharacterEditActivity::class.java);
+            intent.putExtra(EXTRA_PARTY_ID, characterId.partyId.toString())
+            intent.putExtra(EXTRA_CHARACTER_ID, characterId.userId)
+
+            packageContext.startActivity(intent)
+        }
+    }
+
     @Inject
     lateinit var characters: CharacterRepository
     private lateinit var currentFragment: Fragment
     private val statsCreationFragment = CharacterStatsCreationFragment().let { it.setCharacterStatsCreationListener(this) }
     private val infoCreationFragment = CharacterInfoCreationFragment().let { it.setCharacterInfoCreationListener(this) }
+
+    private val characterId by lazy {
+        intent.getStringExtra(EXTRA_CHARACTER_ID)
+            ?: throw IllegalAccessException("'${EXTRA_CHARACTER_ID}' must be provided")
+    }
 
     override fun onStart() {
         super.onStart()
@@ -45,7 +66,8 @@ class CharacterEditActivity : PartyScopedActivity(R.layout.activity_character_ed
                 getPartyId(),
                 Character(
                     info.name,
-                    getUserId(),
+                    characterId,
+                    //getUserId(),
                     info.career,
                     info.race,
                     statsAndPoints.first,

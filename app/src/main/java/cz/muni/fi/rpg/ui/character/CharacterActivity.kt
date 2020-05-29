@@ -66,6 +66,8 @@ class CharacterActivity : PartyScopedActivity(R.layout.activity_character), Char
 
         val intent = Intent(this, CharacterCreationActivity::class.java)
         intent.putExtra(EXTRA_PARTY_ID, getPartyId().toString())
+        intent.putExtra(CharacterCreationActivity.EXTRA_CHARACTER_ID, characterId)
+
 
         startActivity(intent)
         finish()
@@ -74,6 +76,8 @@ class CharacterActivity : PartyScopedActivity(R.layout.activity_character), Char
     override fun openCharacterEdit() {
         val intent = Intent(this, CharacterEditActivity::class.java)
         intent.putExtra(EXTRA_PARTY_ID, getPartyId().toString())
+        intent.putExtra(CharacterEditActivity.EXTRA_CHARACTER_ID, characterId)
+
 
         startActivity(intent)
         finish()
