@@ -1,6 +1,9 @@
 <resources>
     <string name="app_name">WFRP Master</string>
     <string name="appIcon">20 sided dice</string>
+
+    <string name="button_submit">Submit</string>
+
     <string name="assembleParty_title">Assemble New Party</string>
     <string name="label_party_name">Party Name</string>
     <string name="assembleParty_button_positive">create</string>
@@ -75,4 +78,12 @@
     <string name="gold_coins_shortcut">gc</string>
     <string name="silver_shillings_shortcut">s</string>
     <string name="brass_pennies_shortcut">p</string>
+
+    <string name="label_coins">Coins</string>
+    <string name="label_shillings">Shillings</string>
+    <string name="label_pennies">Pennies</string>
+    <string name="title_transaction_end">money</string>
+    <string name="not_enough_money">Character does not have enough money</string>
+    <string name="money_give">Give</string>
+    <string name="money_receive">Receive</string>
 </resources>
