@@ -33,8 +33,8 @@ class CharacterEditActivity : PartyScopedActivity(R.layout.activity_character_ed
                 commit()
             }
 
-            statsCreationFragment.getCharacterData(character)
-            infoCreationFragment.getCharacterData(character)
+            statsCreationFragment.setCharacterData(character)
+            infoCreationFragment.setCharacterData(character)
             currentFragment = infoCreationFragment
         }
     }
@@ -61,16 +61,14 @@ class CharacterEditActivity : PartyScopedActivity(R.layout.activity_character_ed
     }
 
     override fun nextFragment() {
-        when (currentFragment) {
-            statsCreationFragment -> return
-            infoCreationFragment -> switchFragment(1)
+        if(currentFragment == infoCreationFragment) {
+            switchFragment(1)
         }
     }
 
     override fun previousFragment() {
-        when (currentFragment) {
-            statsCreationFragment -> switchFragment(0)
-            infoCreationFragment -> return
+        if(currentFragment == statsCreationFragment) {
+            switchFragment(0)
         }
     }
 

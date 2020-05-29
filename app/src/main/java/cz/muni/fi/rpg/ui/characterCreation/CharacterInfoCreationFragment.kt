@@ -21,9 +21,9 @@ class CharacterInfoCreationFragment : Fragment(R.layout.fragment_character_info_
 
     lateinit var characterInfo: CharacterInfo
 
-    lateinit var character : Character
+    var character : Character? = null
 
-    public interface CharacterInfoCreationListener {
+    interface CharacterInfoCreationListener {
         fun nextFragment()
     }
 
@@ -46,14 +46,17 @@ class CharacterInfoCreationFragment : Fragment(R.layout.fragment_character_info_
         listener.nextFragment()
     }
 
-    fun getCharacterData(character: Character) {
+    fun setCharacterData(character: Character) {
         this.character = character
     }
 
     private fun setDefaultValues() {
-        view?.NameTextFill?.setText(character.name)
-        view?.CareerTextFill?.setText(character.career)
-        when (character.race) {
+        if (character == null) {
+            return
+        }
+        view?.NameTextFill?.setText(character!!.name)
+        view?.CareerTextFill?.setText(character!!.career)
+        when (character!!.race) {
             Race.HUMAN -> view?.radioButtonRaceHuman?.isChecked = true
             Race.DWARF -> view?.radioButtonRaceDwarf?.isChecked = true
             Race.ELF -> view?.radioButtonRaceElf?.isChecked = true
@@ -79,13 +82,13 @@ class CharacterInfoCreationFragment : Fragment(R.layout.fragment_character_info_
         val name = view.NameTextFill.text.toString()
         val career = view.CareerTextFill.text.toString()
 
-        var race: Race = when(radioGroup.checkedRadioButtonId) {
+        val race: Race = when(radioGroup.checkedRadioButtonId) {
             R.id.radioButtonRaceHuman -> Race.HUMAN
             R.id.radioButtonRaceDwarf -> Race.DWARF
             R.id.radioButtonRaceElf -> Race.ELF
             R.id.radioButtonRaceGnome -> Race.GNOME
             R.id.radioButtonRaceHalfling -> Race.HALFLING
-            else -> Race.HUMAN
+            else -> error("No race selected")
         }
 
         characterInfo = CharacterInfo(name, race, career)

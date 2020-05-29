@@ -48,17 +48,15 @@ class CharacterCreationActivity : PartyScopedActivity(R.layout.activity_characte
         }
     }
 
-    public override fun nextFragment() {
-        when (currentFragment) {
-            statsCreationFragment -> return
-            infoCreationFragment -> switchFragment(1)
+    override fun nextFragment() {
+        if(currentFragment == infoCreationFragment) {
+            switchFragment(1)
         }
     }
 
-    public override fun previousFragment() {
-        when (currentFragment) {
-            statsCreationFragment -> switchFragment(0)
-            infoCreationFragment -> return
+    override fun previousFragment() {
+        if(currentFragment == statsCreationFragment) {
+            switchFragment(0)
         }
     }
 
@@ -80,7 +78,7 @@ class CharacterCreationActivity : PartyScopedActivity(R.layout.activity_characte
         }
     }
 
-    public override fun saveCharacter() {
+    override fun saveCharacter() {
         launch {
             val statsAndPoints = statsCreationFragment.getData()
             val info = infoCreationFragment.getData()

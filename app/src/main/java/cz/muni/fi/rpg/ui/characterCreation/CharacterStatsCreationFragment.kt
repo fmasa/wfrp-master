@@ -14,9 +14,9 @@ import kotlinx.android.synthetic.main.fragment_character_stats_creation.view.*
 class CharacterStatsCreationFragment : Fragment(R.layout.fragment_character_stats_creation) {
     lateinit var listener: CharacterStatsCreationListener
 
-    lateinit var character: Character
+    var character: Character? = null
 
-    public interface CharacterStatsCreationListener {
+    interface CharacterStatsCreationListener {
         fun previousFragment()
         fun saveCharacter()
     }
@@ -57,22 +57,25 @@ class CharacterStatsCreationFragment : Fragment(R.layout.fragment_character_stat
         return true
     }
 
-    fun getCharacterData(character: Character) {
+    fun setCharacterData(character: Character) {
         this.character = character
     }
 
     private fun setDefaultValues() {
-        view?.WeaponSkillTextFill?.setText(character.getStats().weaponSkill.toString())
-        view?.BallisticSkillTextFill?.setText(character.getStats().ballisticSkill.toString())
-        view?.StrengthTextFill?.setText(character.getStats().strength.toString())
-        view?.ToughnessTextFill?.setText(character.getStats().toughness.toString())
-        view?.FateTextFill?.setText(character.getPoints().fate.toString())
-        view?.AgilityTextFill?.setText(character.getStats().agility.toString())
-        view?.IntelligenceTextFill?.setText(character.getStats().intelligence.toString())
-        view?.WillPowerTextFill?.setText(character.getStats().willPower.toString())
-        view?.FellowshipTextFill?.setText(character.getStats().fellowship.toString())
-        view?.WoundsTextFill?.setText(character.getPoints().maxWounds.toString())
-        view?.MagicTextFill?.setText(character.getStats().magic.toString())
+        if (character == null) {
+            return
+        }
+        view?.WeaponSkillTextFill?.setText(character!!.getStats().weaponSkill.toString())
+        view?.BallisticSkillTextFill?.setText(character!!.getStats().ballisticSkill.toString())
+        view?.StrengthTextFill?.setText(character!!.getStats().strength.toString())
+        view?.ToughnessTextFill?.setText(character!!.getStats().toughness.toString())
+        view?.FateTextFill?.setText(character!!.getPoints().fate.toString())
+        view?.AgilityTextFill?.setText(character!!.getStats().agility.toString())
+        view?.IntelligenceTextFill?.setText(character!!.getStats().intelligence.toString())
+        view?.WillPowerTextFill?.setText(character!!.getStats().willPower.toString())
+        view?.FellowshipTextFill?.setText(character!!.getStats().fellowship.toString())
+        view?.WoundsTextFill?.setText(character!!.getPoints().maxWounds.toString())
+        view?.MagicTextFill?.setText(character!!.getStats().magic.toString())
         view?.button_previous?.text = getString(R.string.button_edit_info)
         view?.button_finish?.text = getString(R.string.button_submit)
     }
