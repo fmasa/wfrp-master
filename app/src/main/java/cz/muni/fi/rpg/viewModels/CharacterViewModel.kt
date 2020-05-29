@@ -38,10 +38,10 @@ class CharacterViewModel(
     fun incrementInsanityPoints() = updatePoints { it.copy(insanity = it.insanity + 1) }
     fun decrementInsanityPoints() = updatePoints { it.copy(insanity = it.insanity - 1) }
 
-    suspend fun receiveMoney(amount: Money) {
+    suspend fun addMoney(amount: Money) {
         val character = characters.get(partyId, userId)
         try {
-            character.receiveMoney(amount)
+            character.addMoney(amount)
             characters.save(partyId, character)
         } catch (e: IllegalArgumentException) {
         }
@@ -50,9 +50,9 @@ class CharacterViewModel(
     /**
      * @throws NotEnoughMoney
      */
-    suspend fun giveMoney(amount: Money) {
+    suspend fun subtractMoney(amount: Money) {
         val character = characters.get(partyId, userId)
-        character.giveMoney(amount)
+        character.subtractMoney(amount)
         characters.save(partyId, character)
     }
 

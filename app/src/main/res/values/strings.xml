@@ -84,6 +84,6 @@
     <string name="label_pennies">Pennies</string>
     <string name="title_transaction_end">money</string>
     <string name="not_enough_money">Character does not have enough money</string>
-    <string name="money_give">Give</string>
-    <string name="money_receive">Receive</string>
+    <string name="money_subtract">Subtract</string>
+    <string name="money_add">Add</string>
 </resources>

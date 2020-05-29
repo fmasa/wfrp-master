@@ -33,7 +33,7 @@ class TransactionDialog(
             ArrayAdapter(
                 requireContext(),
                 R.layout.title_spinner_dropdown_item,
-                listOf(getString(R.string.money_give), getString(R.string.money_receive))
+                listOf(getString(R.string.money_subtract), getString(R.string.money_add))
             ),
             R.layout.title_spinner_item,
             layoutInflater
@@ -62,9 +62,9 @@ class TransactionDialog(
         launch {
             try {
                 if (view.directionSpinner.selectedItemId == 0L) {
-                    viewModel.giveMoney(amount)
+                    viewModel.subtractMoney(amount)
                 } else {
-                    viewModel.receiveMoney(amount)
+                    viewModel.addMoney(amount)
                 }
 
                 dismiss()

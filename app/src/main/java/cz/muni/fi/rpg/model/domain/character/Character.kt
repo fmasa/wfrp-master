@@ -17,14 +17,14 @@ data class Character(
         require(listOf(name, userId, career).all { it.isNotBlank() })
     }
 
-    fun receiveMoney(amount: Money) {
+    fun addMoney(amount: Money) {
         money += amount
     }
 
     /**
      * @throws NotEnoughMoney
      */
-    fun giveMoney(amount: Money) {
+    fun subtractMoney(amount: Money) {
         try {
             money -= amount
         } catch (e: IllegalArgumentException) {
