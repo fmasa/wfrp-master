@@ -78,7 +78,7 @@ class InventoryFragment : DaggerFragment(R.layout.fragment_inventory) {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        view.addNewInventoryItemButton.setOnClickListener(){ ShowDialog() }
+        view.addNewInventoryItemButton.setOnClickListener(){ showDialog() }
 
         val adapter = InventoryAdapter(layoutInflater)
         inventoryRecycler.layoutManager = LinearLayoutManager(context)
