@@ -4,17 +4,25 @@ import cz.muni.fi.rpg.model.domain.common.Money
 import java.lang.IllegalArgumentException
 
 data class Character(
-    val name: String,
+    var name: String,
     val userId: String,
-    val career: String,
-    val race: Race,
-    private val stats: Stats,
+    var career: String,
+    var race: Race,
+    private var stats: Stats,
     private var points: Points
 ) {
     private var money: Money = Money.zero()
 
     init {
         require(listOf(name, userId, career).all { it.isNotBlank() })
+    }
+
+    fun update(name: String, career: String, race: Race, stats: Stats, points: Points) {
+        this.name = name
+        this.career = career
+        this.race = race
+        this.stats = stats
+        this.points = points
     }
 
     fun addMoney(amount: Money) {

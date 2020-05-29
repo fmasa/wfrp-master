@@ -19,15 +19,7 @@ class CharacterEditActivity : PartyScopedActivity(R.layout.activity_character_ed
     CharacterInfoCreationFragment.CharacterInfoCreationListener {
 
     companion object {
-        const val EXTRA_CHARACTER_ID = "characterId";
-
-        fun start(characterId: CharacterId, packageContext: Context) {
-            val intent = Intent(packageContext, CharacterEditActivity::class.java);
-            intent.putExtra(EXTRA_PARTY_ID, characterId.partyId.toString())
-            intent.putExtra(EXTRA_CHARACTER_ID, characterId.userId)
-
-            packageContext.startActivity(intent)
-        }
+        const val EXTRA_CHARACTER_ID = "characterId"
     }
 
     @Inject
@@ -61,19 +53,10 @@ class CharacterEditActivity : PartyScopedActivity(R.layout.activity_character_ed
         launch {
             val statsAndPoints = statsCreationFragment.getData()
             val info = infoCreationFragment.getData()
+            val character = characters.get(getPartyId(), characterId)
 
-            characters.save(
-                getPartyId(),
-                Character(
-                    info.name,
-                    characterId,
-                    //getUserId(),
-                    info.career,
-                    info.race,
-                    statsAndPoints.first,
-                    statsAndPoints.second
-                )
-            )
+            character.update(info.name, info.career, info.race, statsAndPoints.first, statsAndPoints.second)
+            characters.save(getPartyId(), character)
 
         }
         finish()

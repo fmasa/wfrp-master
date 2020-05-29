@@ -84,21 +84,18 @@ class CharacterCreationActivity : PartyScopedActivity(R.layout.activity_characte
         launch {
             val statsAndPoints = statsCreationFragment.getData()
             val info = infoCreationFragment.getData()
-            Log.d("CHARID: ", characterId)
 
             characters.save(
                 getPartyId(),
                 Character(
                     info.name,
                     characterId,
-                    //getUserId(),
                     info.career,
                     info.race,
                     statsAndPoints.first,
                     statsAndPoints.second
                 )
             )
-
             toast("Your character has been created")
         }
     finish()
