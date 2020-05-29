@@ -87,7 +87,7 @@ class InventoryFragment : DaggerFragment(R.layout.fragment_inventory) {
             TransactionDialog(viewModel).show(parentFragmentManager, "TransactionDialog")
         }
 
-        view.addNewInventoryItemButton.setOnClickListener(){ ShowDialog() }
+        view.addNewInventoryItemButton.setOnClickListener(){ showDialog() }
 
         val adapter = InventoryAdapter(layoutInflater)
         inventoryRecycler.layoutManager = LinearLayoutManager(context)
