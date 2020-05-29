@@ -44,6 +44,18 @@ Build APK (debug):
             - app-debug.apk
         expose_as: Debug APK
 
+Publish to Google Play:
+    extends: .gradle
+    stage: build
+    only:
+        - master
+    script:
+        - cp "$PLAY_STORE_JSON_FILE" app/play_store_credentials.json
+        - echo "$KEYSTORE_FILE_BASE64" | base64 -d > app/.keystore
+        - echo -n "$KEYSTORE_PASSWORD" | sha256sum
+        - sha1sum app/.keystore
+        - ./gradlew publishRelease --no-daemon
+
 Deploy Firebase changes:
     stage: build
     only:

@@ -8,5 +8,13 @@
       "host": "0.0.0.0",
       "port": 8080
     }
+  },
+  "hosting": {
+    "public": "webapp",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ]
   }
 }

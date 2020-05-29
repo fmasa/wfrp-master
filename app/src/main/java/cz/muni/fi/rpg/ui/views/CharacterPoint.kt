@@ -4,6 +4,7 @@ import android.content.Context
 import android.util.AttributeSet
 import android.widget.LinearLayout
 import androidx.annotation.ColorRes
+import androidx.core.content.ContextCompat
 import cz.muni.fi.rpg.R
 import kotlinx.android.synthetic.main.view_character_point.view.*
 
@@ -29,7 +30,7 @@ class CharacterPoint(context: Context, attrs: AttributeSet) : LinearLayout(conte
     }
 
     fun setColor(@ColorRes color: Int) {
-        characterPointValue.setTextColor(resources.getColor(color, null))
+        characterPointValue.setTextColor(ContextCompat.getColor(context, color))
     }
 
     fun setIncrementListener(listener: () -> Unit) {
