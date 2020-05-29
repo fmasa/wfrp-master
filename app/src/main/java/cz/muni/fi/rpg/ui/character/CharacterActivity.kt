@@ -1,14 +1,15 @@
 package cz.muni.fi.rpg.ui.character
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.viewModels
-import androidx.core.os.bundleOf
 import androidx.lifecycle.observe
 import androidx.navigation.findNavController
 import androidx.navigation.ui.setupWithNavController
 import cz.muni.fi.rpg.R
+import cz.muni.fi.rpg.model.domain.character.CharacterId
 import cz.muni.fi.rpg.model.right
 import cz.muni.fi.rpg.ui.PartyScopedActivity
 import cz.muni.fi.rpg.ui.characterCreation.CharacterCreationActivity
@@ -18,11 +19,28 @@ import kotlinx.android.synthetic.main.activity_character.*
 import javax.inject.Inject
 
 class CharacterActivity : PartyScopedActivity(R.layout.activity_character) {
+    companion object {
+        const val EXTRA_CHARACTER_ID = "characterId";
+
+        fun start(characterId: CharacterId, packageContext: Context) {
+            val intent = Intent(packageContext, CharacterActivity::class.java);
+            intent.putExtra(EXTRA_PARTY_ID, characterId.partyId.toString())
+            intent.putExtra(EXTRA_CHARACTER_ID, characterId.userId)
+
+            packageContext.startActivity(intent)
+        }
+    }
+
     @Inject
     lateinit var viewModelProvider: CharacterViewModelProvider
 
+    private val characterId by lazy {
+        intent.getStringExtra(EXTRA_CHARACTER_ID)
+            ?: throw IllegalAccessException("'${EXTRA_CHARACTER_ID}' must be provided")
+    }
+
     private val viewModel: CharacterViewModel by viewModels {
-        viewModelProvider.factory(getPartyId(), getUserId())
+        viewModelProvider.factory(getPartyId(), characterId)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

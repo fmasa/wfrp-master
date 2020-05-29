@@ -1,5 +1,6 @@
 package cz.muni.fi.rpg.ui.gameMaster
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.lifecycle.observe
@@ -14,10 +15,20 @@ import cz.muni.fi.rpg.ui.character.CharacterActivity
 import cz.muni.fi.rpg.ui.gameMaster.adapter.CharacterAdapter
 import kotlinx.android.synthetic.main.activity_game_master.*
 import kotlinx.coroutines.*
+import java.util.*
 import javax.inject.Inject
 
 class GameMasterActivity : PartyScopedActivity(R.layout.activity_game_master),
     CoroutineScope by CoroutineScope(Dispatchers.Default) {
+    companion object {
+        fun start(partyId: UUID, packageContext: Context) {
+            val intent = Intent(packageContext, GameMasterActivity::class.java);
+            intent.putExtra(EXTRA_PARTY_ID, partyId.toString())
+
+            packageContext.startActivity(intent)
+        }
+    }
+
     @Inject
     lateinit var jsonMapper: JsonMapper
     @Inject
@@ -47,6 +58,7 @@ class GameMasterActivity : PartyScopedActivity(R.layout.activity_game_master),
                 {
                     val intent = Intent(this, CharacterActivity::class.java);
                     intent.putExtra(PartyScopedActivity.EXTRA_PARTY_ID, getPartyId().toString())
+                    intent.putExtra(CharacterActivity.EXTRA_CHARACTER_ID, it.userId)
                     startActivity(intent)
                 }
                 characterListRecycler.adapter = adapter

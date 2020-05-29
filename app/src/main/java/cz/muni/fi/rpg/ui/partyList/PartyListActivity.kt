@@ -7,16 +7,14 @@ import androidx.lifecycle.observe
 import androidx.recyclerview.widget.LinearLayoutManager
 import cz.muni.fi.rpg.ui.gameMaster.GameMasterActivity
 import cz.muni.fi.rpg.R
-import cz.muni.fi.rpg.model.domain.party.Party
+import cz.muni.fi.rpg.model.domain.character.CharacterId
 import cz.muni.fi.rpg.model.domain.party.PartyRepository
 import cz.muni.fi.rpg.ui.AuthenticatedActivity
-import cz.muni.fi.rpg.ui.PartyScopedActivity
 import cz.muni.fi.rpg.ui.character.CharacterActivity
 import cz.muni.fi.rpg.ui.joinParty.JoinPartyActivity
 import cz.muni.fi.rpg.ui.partyList.adapter.PartyAdapter
 import kotlinx.android.synthetic.main.activity_party_list.*
 import javax.inject.Inject
-import kotlin.reflect.KClass
 
 class PartyListActivity : AuthenticatedActivity(R.layout.activity_party_list) {
     @Inject
@@ -29,9 +27,9 @@ class PartyListActivity : AuthenticatedActivity(R.layout.activity_party_list) {
 
         val adapter = PartyAdapter(layoutInflater) {
             if (it.gameMasterId == getUserId()) {
-                openParty(it, GameMasterActivity::class)
+                GameMasterActivity.start(it.id, this)
             } else {
-                openParty(it, CharacterActivity::class)
+                CharacterActivity.start(CharacterId(it.id, getUserId()), this)
             }
         }
         partyListRecycler.adapter = adapter
@@ -51,7 +49,7 @@ class PartyListActivity : AuthenticatedActivity(R.layout.activity_party_list) {
         }
 
         assembleNewParty.setOnClickListener {
-            AssemblePartyDialog(getUserId()) { openParty(it, GameMasterActivity::class) }
+            AssemblePartyDialog(getUserId()) { party -> GameMasterActivity.start(party.id, this) }
                 .show(supportFragmentManager, "AssemblePartyDialog")
             fabMenu.collapse()
         }
@@ -60,12 +58,5 @@ class PartyListActivity : AuthenticatedActivity(R.layout.activity_party_list) {
             startActivity(Intent(this, JoinPartyActivity::class.java))
             fabMenu.collapse()
         }
-    }
-
-    private fun <T : PartyScopedActivity> openParty(party: Party, activityClass: KClass<T>) {
-        val intent = Intent(this, activityClass.java);
-        intent.putExtra(PartyScopedActivity.EXTRA_PARTY_ID, party.id.toString())
-
-        startActivity(intent)
     }
 }
