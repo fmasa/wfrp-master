@@ -4,7 +4,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import cz.muni.fi.rpg.model.domain.character.CharacterId
 import cz.muni.fi.rpg.model.domain.character.CharacterRepository
+import cz.muni.fi.rpg.model.domain.character.NotEnoughMoney
 import cz.muni.fi.rpg.model.domain.character.Points
+import cz.muni.fi.rpg.model.domain.common.Money
 import cz.muni.fi.rpg.model.domain.inventory.InventoryItem
 import cz.muni.fi.rpg.model.domain.inventory.InventoryItemRepository
 import kotlinx.coroutines.CoroutineScope
@@ -35,6 +37,24 @@ class CharacterViewModel(
 
     fun incrementInsanityPoints() = updatePoints { it.copy(insanity = it.insanity + 1) }
     fun decrementInsanityPoints() = updatePoints { it.copy(insanity = it.insanity - 1) }
+
+    suspend fun addMoney(amount: Money) {
+        val character = characters.get(partyId, userId)
+        try {
+            character.addMoney(amount)
+            characters.save(partyId, character)
+        } catch (e: IllegalArgumentException) {
+        }
+    }
+
+    /**
+     * @throws NotEnoughMoney
+     */
+    suspend fun subtractMoney(amount: Money) {
+        val character = characters.get(partyId, userId)
+        character.subtractMoney(amount)
+        characters.save(partyId, character)
+    }
 
     private fun addFatePoints(addition: Int) = updatePoints {
         val newFatePoints = it.fate + addition

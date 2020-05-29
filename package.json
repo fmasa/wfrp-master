@@ -6,7 +6,7 @@
     "test": "firebase emulators:exec --only firestore 'mocha --timeout=10000 firebase/tests/**/*.ts'"
   },
   "devDependencies": {
-    "@firebase/testing": "^0.19.1",
+    "@firebase/testing": "^0.15.1",
     "@types/mocha": "^7.0.2",
     "mocha": "^7.1.1",
     "mocha-typescript": "^1.1.17",
