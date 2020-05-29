@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_height="wrap_content"
+    android:layout_margin="6dp"
+    android:layout_width="match_parent"
+    android:orientation="vertical">
+
+    <TextView
+        style="@style/TextAppearance.AppCompat.Title"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_width="match_parent"
+        android:text="@string/invitation_code_description"
+        android:textAlignment="center" />
+
+    <cz.muni.fi.rpg.ui.views.QrCode
+        android:id="@+id/partyInviteQrCode"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent" />
+</LinearLayout>

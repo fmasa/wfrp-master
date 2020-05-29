@@ -3,7 +3,6 @@ package cz.muni.fi.rpg.ui.character
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.viewModels
 import androidx.lifecycle.observe
 import androidx.navigation.findNavController
@@ -20,7 +19,7 @@ import javax.inject.Inject
 
 class CharacterActivity : PartyScopedActivity(R.layout.activity_character) {
     companion object {
-        const val EXTRA_CHARACTER_ID = "characterId";
+        private const val EXTRA_CHARACTER_ID = "characterId";
 
         fun start(characterId: CharacterId, packageContext: Context) {
             val intent = Intent(packageContext, CharacterActivity::class.java);
@@ -47,7 +46,10 @@ class CharacterActivity : PartyScopedActivity(R.layout.activity_character) {
         super.onCreate(savedInstanceState)
 
         viewModel.character.observe(this) {
-            it.mapLeft { openCharacterCreation() }
+            it.mapLeft {
+                CharacterCreationActivity.start(getPartyId(), this)
+                finish()
+            }
             it.map { character -> supportActionBar?.title = character.name }
         }
 
@@ -56,16 +58,6 @@ class CharacterActivity : PartyScopedActivity(R.layout.activity_character) {
             .observe(this) { supportActionBar?.subtitle = it.name }
 
         initializeNavigation()
-    }
-
-    private fun openCharacterCreation() {
-        Log.e(localClassName, "Character not found");
-
-        val intent = Intent(this, CharacterCreationActivity::class.java)
-        intent.putExtra(EXTRA_PARTY_ID, getPartyId().toString())
-
-        startActivity(intent)
-        finish()
     }
 
     private fun initializeNavigation() {
