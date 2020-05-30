@@ -1,6 +1,6 @@
 package cz.muni.fi.rpg.ui.character
 
-import android.app.AlertDialog
+import androidx.appcompat.app.AlertDialog
 import android.os.Bundle
 import android.view.View
 import android.widget.EditText
@@ -11,7 +11,6 @@ import dagger.android.support.DaggerFragment
 import kotlinx.android.synthetic.main.fragment_inventory.view.*
 import kotlinx.android.synthetic.main.inventory_item_edit_dialog.view.*
 import android.widget.Toast
-import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.observe
@@ -21,7 +20,6 @@ import cz.muni.fi.rpg.model.right
 import cz.muni.fi.rpg.ui.character.adapter.InventoryAdapter
 import cz.muni.fi.rpg.ui.character.inventory.TransactionDialog
 import cz.muni.fi.rpg.viewModels.CharacterViewModel
-import kotlinx.android.synthetic.main.character_item.view.*
 import kotlinx.android.synthetic.main.fragment_inventory.*
 import kotlinx.coroutines.*
 
@@ -42,8 +40,8 @@ class InventoryFragment : DaggerFragment(R.layout.fragment_inventory), Coroutine
     }
 
     private fun showDialog() {
-        val view =
-            requireActivity().layoutInflater.inflate(R.layout.inventory_item_edit_dialog, null)
+        val activity = requireActivity()
+        val view = activity.layoutInflater.inflate(R.layout.inventory_item_edit_dialog, null)
         dialog = AlertDialog.Builder(activity)
             .setTitle(R.string.createInventoryItemTitle)
             .setView(view)
