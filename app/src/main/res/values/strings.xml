@@ -88,6 +88,15 @@
     <string name="money_add">Add</string>
     <string name="button_invite">Invite players</string>
     <string name="title_characters">Characters</string>
+
+    <string name="inventory_item_icon_description">Inventory item icon</string>
+    <string name="no_inventory_item_prompt">There is no item in your inventory.</string>
+    <string name="createInventoryItemTitle">Create new inventory item</string>
+    <string name="createInventoryItemSubmit">Create</string>
+    <string name="inventory_item_description_label">Description</string>
+    <string name="inventory_item_name_label">Name</string>
+    <string name="createInventoryItemCancel">Cancel</string>
+
     <string name="button_edit_info">Edit info</string>
     <string name="error_value_is_0">Value cannot be 0</string>
     <string name="error_cannot_be_empty">Cannot be empty!</string>
