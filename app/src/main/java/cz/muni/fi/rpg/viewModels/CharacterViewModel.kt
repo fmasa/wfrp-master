@@ -72,11 +72,7 @@ class CharacterViewModel(
         }
     }
 
-    fun saveInventoryItem(inventoryItem: InventoryItem) {
-        GlobalScope.launch {
-            withContext(Dispatchers.IO) {
-                inventoryItems.save(characterId, inventoryItem)
-            }
-        }
+    suspend fun saveInventoryItem(inventoryItem: InventoryItem) {
+        inventoryItems.save(characterId, inventoryItem)
     }
 }

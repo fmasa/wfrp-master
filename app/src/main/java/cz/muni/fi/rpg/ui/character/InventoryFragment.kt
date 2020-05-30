@@ -3,6 +3,7 @@ package cz.muni.fi.rpg.ui.character
 import android.app.AlertDialog
 import android.os.Bundle
 import android.view.View
+import android.widget.EditText
 import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.model.domain.inventory.InventoryItem
 import cz.muni.fi.rpg.model.domain.inventory.InventoryItemId
@@ -10,6 +11,7 @@ import dagger.android.support.DaggerFragment
 import kotlinx.android.synthetic.main.fragment_inventory.view.*
 import kotlinx.android.synthetic.main.inventory_item_edit_dialog.view.*
 import android.widget.Toast
+import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.observe
@@ -19,12 +21,15 @@ import cz.muni.fi.rpg.model.right
 import cz.muni.fi.rpg.ui.character.adapter.InventoryAdapter
 import cz.muni.fi.rpg.ui.character.inventory.TransactionDialog
 import cz.muni.fi.rpg.viewModels.CharacterViewModel
+import kotlinx.android.synthetic.main.character_item.view.*
 import kotlinx.android.synthetic.main.fragment_inventory.*
+import kotlinx.coroutines.*
 
-class InventoryFragment : DaggerFragment(R.layout.fragment_inventory) {
+class InventoryFragment : DaggerFragment(R.layout.fragment_inventory), CoroutineScope by CoroutineScope(Dispatchers.Default) {
     private var inputError = ""
     private lateinit var characterId: CharacterId
     private val viewModel: CharacterViewModel by activityViewModels()
+    private lateinit var dialog: AlertDialog
 
     private fun setViewVisibility(view: View, visible: Boolean) {
         view.visibility = if (visible) View.VISIBLE else View.GONE
@@ -36,69 +41,109 @@ class InventoryFragment : DaggerFragment(R.layout.fragment_inventory) {
         setViewVisibility(inventoryRecycler, !isEmpty)
     }
 
-    private fun showDialog(){
-        val view = requireActivity().layoutInflater.inflate(R.layout.inventory_item_edit_dialog, null)
-        AlertDialog.Builder(activity)
+    private fun showDialog() {
+        val view =
+            requireActivity().layoutInflater.inflate(R.layout.inventory_item_edit_dialog, null)
+        dialog = AlertDialog.Builder(activity)
             .setTitle(R.string.createInventoryItemTitle)
             .setView(view)
-            .setPositiveButton(R.string.createInventoryItemSubmit) { _, _ -> onNewItemSubmited(view) }
-            .setNeutralButton(R.string.createInventoryItemCancel) { _, _ -> }
+            .setPositiveButton(R.string.createInventoryItemSubmit, null)
+            .setNeutralButton(R.string.createInventoryItemCancel, null)
             .create()
-            .show()
+        dialog.setOnShowListener {
+            dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener {
+                onNewItemSubmited(view)
+            }
+        }
+        dialog.show()
     }
 
     private fun onNewItemSubmited(view: View) {
+        launch {
+            try {
+                if (checkItemValidity(view)) {
+                    val inventoryItem = createInventoryItem(view)
+                    withContext(Dispatchers.Main) {
+                        viewModel.saveInventoryItem(inventoryItem)
+                        // TODO Extract to resources
+                        Toast.makeText(
+                            context,
+                            "Item '${inventoryItem.name}' was added to your inventory.",
+                            Toast.LENGTH_LONG
+                        ).show()
+
+                        dialog.dismiss()
+                    }
+                }
+            } catch (e: Exception) {
+                withContext(Dispatchers.Main) {
+                    Toast.makeText(
+                        context,
+                        "Item couldn't be added to your inventory.",
+                        Toast.LENGTH_LONG
+                    ).show()
+                }
+            }
+        }
+    }
+
+    private fun createInventoryItem(view: View): InventoryItem {
+        val id = InventoryItemId.randomUUID()
         val name = view.newInventoryItemName.text.toString().trim()
         val description = view.newInventoryItemDescription.text.toString().trim()
+        // TODO in next versions make editable
         val quantity = 1
-
-        if (checkItemValidity(name, description, quantity)){
-            val inventoryItem = InventoryItem(InventoryItemId.randomUUID(), name,  description, quantity)
-            viewModel.saveInventoryItem(inventoryItem)
-            // TODO Extract to resources
-            Toast.makeText(context, "Item '${inventoryItem.name}' was added to your inventory.", Toast.LENGTH_LONG).show()
-        }
-        else{
-            showError()
-        }
+        return InventoryItem(id, name, description, quantity)
     }
 
-    private fun showError() {
-        Toast.makeText(context, inputError, Toast.LENGTH_LONG).show()
+    private fun showError(view: EditText, message: String) {
+        view.error = message
     }
 
-    private fun checkItemValidity(name: String, description: String, quantity: Int): Boolean {
-        if(name.isBlank()) {
-            inputError = "Name cannot be blank."
-            return false
-        } else if (quantity <= 0) {
-            inputError = "Quantity must be >= 0."
+    private fun checkEditTextValue(
+        view: EditText,
+        predicate: (EditText) -> Boolean,
+        message: String
+    ): Boolean {
+        if (!predicate(view)) {
+            showError(view, message)
             return false
         }
-
         return true
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-	super.onViewCreated(view, savedInstanceState)
+    private fun checkItemValidity(view: View): Boolean {
+        val name = view.newInventoryItemName
 
-	Transformations.map(viewModel.character.right()) { character -> character.getMoney() }
+        var valid = true
+        valid = valid && checkEditTextValue(
+            name,
+            { it -> it.text.isNotBlank() },
+            "Name cannot be blank."
+        )
+
+        return valid
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        Transformations.map(viewModel.character.right()) { character -> character.getMoney() }
             .observe(viewLifecycleOwner, characterMoney::setValue)
 
         characterMoney.setOnClickListener {
             TransactionDialog(viewModel).show(parentFragmentManager, "TransactionDialog")
         }
 
-        view.addNewInventoryItemButton.setOnClickListener(){ showDialog() }
+        view.addNewInventoryItemButton.setOnClickListener() { showDialog() }
 
         val adapter = InventoryAdapter(layoutInflater)
         inventoryRecycler.layoutManager = LinearLayoutManager(context)
         inventoryRecycler.adapter = adapter
 
-        viewModel.inventory.observe(this) { items->
+        viewModel.inventory.observe(viewLifecycleOwner) { items ->
             adapter.submitList(items)
             setEmptyCollectionView(items.isEmpty())
         }
     }
 }
-
