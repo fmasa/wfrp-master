@@ -1,19 +1,19 @@
 package cz.muni.fi.rpg.ui.characterCreation
 
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import cz.muni.fi.rpg.R
-import cz.muni.fi.rpg.model.domain.character.*
+import cz.muni.fi.rpg.model.domain.character.CharacterRepository
 import cz.muni.fi.rpg.ui.PartyScopedActivity
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import java.util.*
 import javax.inject.Inject
 
-class CharacterCreationActivity : PartyScopedActivity(R.layout.activity_character_creation),
+class CharacterEditActivity : PartyScopedActivity(R.layout.activity_character_edit),
     CoroutineScope by CoroutineScope(Dispatchers.Default), CharacterStatsCreationFragment.CharacterStatsCreationListener,
     CharacterInfoCreationFragment.CharacterInfoCreationListener {
+
     companion object {
         const val EXTRA_CHARACTER_ID = "characterId"
     }
@@ -33,17 +33,29 @@ class CharacterCreationActivity : PartyScopedActivity(R.layout.activity_characte
         super.onStart()
 
         launch {
-            if (characters.hasCharacterInParty(getUserId(), getPartyId())) {
-                toast("You already have active character in this party")
-                return@launch
-            }
-
+            val character = characters.get(getPartyId(), getUserId())
             supportFragmentManager.beginTransaction().apply {
-                replace(R.id.frame_layout_character_creation, infoCreationFragment)
+                replace(R.id.frame_layout_character_edit, infoCreationFragment)
                 commit()
             }
+
+            statsCreationFragment.setCharacterData(character)
+            infoCreationFragment.setCharacterData(character)
             currentFragment = infoCreationFragment
         }
+    }
+
+    override fun saveCharacter() {
+        launch {
+            val statsAndPoints = statsCreationFragment.getData()
+            val info = infoCreationFragment.getData()
+            val character = characters.get(getPartyId(), characterId)
+
+            character.update(info.name, info.career, info.race, statsAndPoints.first, statsAndPoints.second)
+            characters.save(getPartyId(), character)
+
+        }
+        finish()
     }
 
     override fun nextFragment() {
@@ -58,48 +70,20 @@ class CharacterCreationActivity : PartyScopedActivity(R.layout.activity_characte
         }
     }
 
+
     private fun switchFragment(id: Number) {
         if (id == 0) {
             supportFragmentManager.beginTransaction().apply {
-                replace(R.id.frame_layout_character_creation, infoCreationFragment)
+                replace(R.id.frame_layout_character_edit, infoCreationFragment)
                 commit()
             }
             currentFragment = infoCreationFragment
-        }
-
-        if (id == 1) {
+        } else if (id == 1) {
             supportFragmentManager.beginTransaction().apply {
-                replace(R.id.frame_layout_character_creation, statsCreationFragment)
+                replace(R.id.frame_layout_character_edit, statsCreationFragment)
                 commit()
             }
             currentFragment = statsCreationFragment
-        }
-    }
-
-    override fun saveCharacter() {
-        launch {
-            val statsAndPoints = statsCreationFragment.getData()
-            val info = infoCreationFragment.getData()
-
-            characters.save(
-                getPartyId(),
-                Character(
-                    info.name,
-                    characterId,
-                    info.career,
-                    info.race,
-                    statsAndPoints.first,
-                    statsAndPoints.second
-                )
-            )
-            toast("Your character has been created")
-        }
-    finish()
-    }
-
-    private suspend fun toast(message: String) {
-        withContext(Dispatchers.Main) {
-            Toast.makeText(applicationContext, message, Toast.LENGTH_SHORT).show()
         }
     }
 }

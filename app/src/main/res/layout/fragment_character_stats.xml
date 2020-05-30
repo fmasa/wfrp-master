@@ -26,6 +26,7 @@
                 android:layout_height="wrap_content" />
 
             <Button
+                android:id="@+id/button_edit_stats"
                 android:drawableStart="@drawable/ic_edit"
                 android:drawablePadding="6dp"
                 android:layout_width="wrap_content"
