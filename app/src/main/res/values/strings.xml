@@ -96,4 +96,8 @@
     <string name="inventory_item_description_label">Description</string>
     <string name="inventory_item_name_label">Name</string>
     <string name="createInventoryItemCancel">Cancel</string>
+
+    <string name="button_edit_info">Edit info</string>
+    <string name="error_value_is_0">Value cannot be 0</string>
+    <string name="error_cannot_be_empty">Cannot be empty!</string>
 </resources>

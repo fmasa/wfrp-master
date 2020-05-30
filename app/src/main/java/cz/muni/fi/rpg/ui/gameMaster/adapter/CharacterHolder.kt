@@ -11,10 +11,9 @@ class CharacterHolder(
     private val onClickListener: OnClickListener<Character>
 ) : RecyclerView.ViewHolder(itemView) {
     fun bind(item: Character) {
-        itemView.character_name.text = item.name
-        itemView.character_race.setText(item.race.getReadableNameId())
-        itemView.character_job.text = item.career
-
+        itemView.character_name.text = item.getName()
+        itemView.character_race.text = item.getRace().name
+        itemView.character_job.text = item.getCareer()
         itemView.setOnClickListener { onClickListener(item) };
     }
 }
