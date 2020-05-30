@@ -98,3 +98,4 @@ class InventoryFragment : DaggerFragment(R.layout.fragment_inventory) {
         }
     }
 }
+
