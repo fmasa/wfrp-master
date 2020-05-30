@@ -1,8 +1,5 @@
 package cz.muni.fi.rpg.ui.characterCreation
 
-import android.content.Context
-import android.content.Intent
-import android.util.Log
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import cz.muni.fi.rpg.R
@@ -12,7 +9,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.util.*
 import javax.inject.Inject
 
 class CharacterCreationActivity : PartyScopedActivity(R.layout.activity_character_creation),

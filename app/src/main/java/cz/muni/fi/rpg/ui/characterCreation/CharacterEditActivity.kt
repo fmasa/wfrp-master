@@ -1,11 +1,7 @@
 package cz.muni.fi.rpg.ui.characterCreation
 
-import android.content.Context
-import android.content.Intent
 import androidx.fragment.app.Fragment
 import cz.muni.fi.rpg.R
-import cz.muni.fi.rpg.model.domain.character.Character
-import cz.muni.fi.rpg.model.domain.character.CharacterId
 import cz.muni.fi.rpg.model.domain.character.CharacterRepository
 import cz.muni.fi.rpg.ui.PartyScopedActivity
 import kotlinx.coroutines.CoroutineScope

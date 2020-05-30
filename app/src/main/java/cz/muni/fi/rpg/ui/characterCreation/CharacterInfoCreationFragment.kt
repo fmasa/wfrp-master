@@ -4,12 +4,9 @@ import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.View
 import android.widget.EditText
-import androidx.lifecycle.LiveData
-import arrow.core.Either
 
 import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.model.domain.character.Character
-import cz.muni.fi.rpg.model.domain.character.CharacterNotFound
 import cz.muni.fi.rpg.model.domain.character.Race
 import kotlinx.android.synthetic.main.fragment_character_info_creation.*
 import kotlinx.android.synthetic.main.fragment_character_info_creation.view.*
