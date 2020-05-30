@@ -10,18 +10,19 @@
     <cz.muni.fi.rpg.ui.views.MoneyView
         android:id="@+id/characterMoney"
         android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:clickable="true"
         android:focusable="true"
         android:foreground="?attr/selectableItemBackground"
-        android:layout_height="wrap_content"/>
+        />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/inventoryRecycler"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_constraintTop_toTopOf="parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/characterMoney"
         app:layout_constraintStart_toStartOf="parent"
         android:visibility="gone"
         />

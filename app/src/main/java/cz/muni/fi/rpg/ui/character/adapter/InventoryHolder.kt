@@ -12,6 +12,7 @@ class InventoryHolder(
     fun bind(item: InventoryItem) {
         view.inventoryItemName.text = item.name
         view.inventoryItemDescription.text = item.description
-        view.inventoryItemQuantity.text = item.quantity.toString()
+        view.inventoryItemDescription.visibility =
+            if (item.description.isBlank()) View.GONE else View.VISIBLE
     }
 }

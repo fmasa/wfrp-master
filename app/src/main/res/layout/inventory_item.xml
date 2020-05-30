@@ -32,19 +32,8 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="4dp"
-            android:textSize="16sp"
+            android:textSize="20sp"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintLeft_toRightOf="@id/inventoryItemIcon"
-            />
-
-        <TextView
-            android:id="@+id/inventoryItemQuantity"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="4dp"
-            android:textSize="16sp"
-            app:layout_constraintTop_toBottomOf="@id/inventoryItemName"
             app:layout_constraintLeft_toRightOf="@id/inventoryItemIcon"
             />
 
@@ -55,7 +44,8 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="4dp"
             android:textSize="16sp"
-            app:layout_constraintTop_toBottomOf="@+id/inventoryItemQuantity"
+            android:textStyle="italic"
+            app:layout_constraintTop_toBottomOf="@+id/inventoryItemName"
             app:layout_constraintLeft_toRightOf="@id/inventoryItemIcon"
             />
 
