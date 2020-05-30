@@ -57,31 +57,28 @@ class InventoryFragment : DaggerFragment(R.layout.fragment_inventory), Coroutine
     }
 
     private fun onNewItemSubmited(view: View) {
-        launch {
-            try {
-                if (checkItemValidity(view)) {
-                    val inventoryItem = createInventoryItem(view)
-                    withContext(Dispatchers.Main) {
-                        viewModel.saveInventoryItem(inventoryItem)
-                        // TODO Extract to resources
-                        Toast.makeText(
-                            context,
-                            "Item '${inventoryItem.name}' was added to your inventory.",
-                            Toast.LENGTH_LONG
-                        ).show()
+        try {
+            if (checkItemValidity(view)) {
+                val inventoryItem = createInventoryItem(view)
+                launch {
+                    viewModel.saveInventoryItem(inventoryItem)
+                }
 
-                        dialog.dismiss()
-                    }
-                }
-            } catch (e: Exception) {
-                withContext(Dispatchers.Main) {
-                    Toast.makeText(
-                        context,
-                        "Item couldn't be added to your inventory.",
-                        Toast.LENGTH_LONG
-                    ).show()
-                }
+                // TODO Extract to resources
+                Toast.makeText(
+                    context,
+                    "Item '${inventoryItem.name}' was added to your inventory.",
+                    Toast.LENGTH_LONG
+                ).show()
+
+                dialog.dismiss()
             }
+        } catch (e: Exception) {
+            Toast.makeText(
+                context,
+                "Item couldn't be added to your inventory.",
+                Toast.LENGTH_LONG
+            ).show()
         }
     }
 
