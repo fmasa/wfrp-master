@@ -62,16 +62,18 @@ class InventoryFragment : DaggerFragment(R.layout.fragment_inventory), Coroutine
                 val inventoryItem = createInventoryItem(view)
                 launch {
                     viewModel.saveInventoryItem(inventoryItem)
+
+                    withContext(Dispatchers.Main) {
+                        // TODO Extract to resources
+                        Toast.makeText(
+                            context,
+                            "Item '${inventoryItem.name}' was added to your inventory.",
+                            Toast.LENGTH_LONG
+                        ).show()
+
+                        dialog.dismiss()
+                    }
                 }
-
-                // TODO Extract to resources
-                Toast.makeText(
-                    context,
-                    "Item '${inventoryItem.name}' was added to your inventory.",
-                    Toast.LENGTH_LONG
-                ).show()
-
-                dialog.dismiss()
             }
         } catch (e: Exception) {
             Toast.makeText(
