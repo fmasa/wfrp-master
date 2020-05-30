@@ -42,6 +42,7 @@
         app:layout_constraintEnd_toStartOf="@id/shillingsInput"
         app:layout_constraintHorizontal_chainStyle="packed"
         app:layout_constraintStart_toStartOf="parent"
+        android:maxLength="6"
         app:layout_constraintTop_toBottomOf="@id/crownsLabel" />
 
     <TextView
@@ -65,6 +66,7 @@
         app:layout_constraintEnd_toStartOf="@id/penniesInput"
         app:layout_constraintHorizontal_chainStyle="packed"
         app:layout_constraintStart_toEndOf="@id/crownsInput"
+        android:maxLength="6"
         app:layout_constraintTop_toTopOf="@id/crownsInput" />
 
     <TextView
@@ -86,6 +88,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_chainStyle="packed"
         app:layout_constraintStart_toEndOf="@id/shillingsInput"
+        android:maxLength="6"
         app:layout_constraintTop_toTopOf="@id/crownsInput" />
 
     <TextView
