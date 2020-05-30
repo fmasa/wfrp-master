@@ -11,10 +11,13 @@ import kotlinx.android.synthetic.main.fragment_inventory.view.*
 import kotlinx.android.synthetic.main.inventory_item_edit_dialog.view.*
 import android.widget.Toast
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Transformations
 import androidx.lifecycle.observe
 import androidx.recyclerview.widget.LinearLayoutManager
 import cz.muni.fi.rpg.model.domain.character.CharacterId
+import cz.muni.fi.rpg.model.right
 import cz.muni.fi.rpg.ui.character.adapter.InventoryAdapter
+import cz.muni.fi.rpg.ui.character.inventory.TransactionDialog
 import cz.muni.fi.rpg.viewModels.CharacterViewModel
 import kotlinx.android.synthetic.main.fragment_inventory.*
 
