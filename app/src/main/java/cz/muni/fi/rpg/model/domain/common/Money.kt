@@ -1,5 +1,7 @@
 package cz.muni.fi.rpg.model.domain.common
 
+import kotlin.math.min
+
 data class Money(private val pennies: Int) : Comparable<Money> {
     companion object {
         private const val SHILLINGS_IN_CROWNS = 20
@@ -22,7 +24,10 @@ data class Money(private val pennies: Int) : Comparable<Money> {
 
     fun getCrowns() = pennies / PENNIES_IN_SHILLING / SHILLINGS_IN_CROWNS
 
-    operator fun plus(other: Money) = Money(pennies + other.pennies)
+    operator fun plus(other: Money) = Money(
+        min(pennies.toLong() + other.pennies.toLong(), Int.MAX_VALUE.toLong()).toInt()
+    )
+
     operator fun minus(other: Money) = Money(pennies - other.pennies)
 
     override fun compareTo(other: Money) = pennies.compareTo(other.pennies)

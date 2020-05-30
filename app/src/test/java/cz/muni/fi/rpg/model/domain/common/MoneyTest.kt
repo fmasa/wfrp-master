@@ -35,4 +35,23 @@ class MoneyTest {
     fun negativeAmountThrowsException() {
         Money.pennies(-1)
     }
+
+    /**
+     * This may seem horrible from Money VO implementation standpoint,
+     * but since this object is only used for in-game currency,
+     * maximum limit of [Int.MAX_VALUE] is ok.
+     *
+     * Also note that this is huge amount of money,
+     * that PCs should never be able to obtain (for comparison,
+     * peasants in Warhammer Fantasy World earn a yearly wage of 9-to-15 Crowns).
+     *
+     * We don't know how to show this in UI anyway for now ¯\_(ツ)_/¯
+     */
+    @Test
+    fun preventIntegerOverflow() {
+        assertEquals(
+            Money.pennies(Int.MAX_VALUE),
+            Money.pennies(Int.MAX_VALUE) + Money.pennies(Int.MAX_VALUE)
+        )
+    }
 }
