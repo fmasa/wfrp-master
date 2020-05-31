@@ -11,29 +11,39 @@ import cz.muni.fi.rpg.model.domain.character.Stats
 import kotlinx.android.synthetic.main.fragment_character_stats_creation.*
 
 class CharacterStatsCreationFragment : Fragment(R.layout.fragment_character_stats_creation) {
-    lateinit var listener: CharacterStatsCreationListener
-
     var character: Character? = null
-
-    interface CharacterStatsCreationListener {
-        fun previousFragment()
-        fun saveCharacter()
-    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        button_previous.setOnClickListener{
-            listener.previousFragment()
-        }
-
-        button_finish.setOnClickListener{
-            if(checkValues()) {
-                listener.saveCharacter()
-            }
-        }
-
         setDefaultValues()
+    }
+
+    fun submit(): Pair<Stats, Points>? {
+        if (! checkValues()) {
+            return null
+        }
+
+        return Pair(
+            Stats(
+                WeaponSkillTextFill.text.toString().toInt(),
+                BallisticSkillTextFill.text.toString().toInt(),
+                StrengthTextFill.text.toString().toInt(),
+                ToughnessTextFill.text.toString().toInt(),
+                AgilityTextFill.text.toString().toInt(),
+                IntelligenceTextFill.text.toString().toInt(),
+                WillPowerTextFill.text.toString().toInt(),
+                FellowshipTextFill.text.toString().toInt(),
+                MagicTextFill.text.toString().toInt()
+            ),
+            Points(
+                0,
+                FateTextFill.text.toString().toInt(),
+                FateTextFill.text.toString().toInt(),
+                WoundsTextFill.text.toString().toInt(),
+                WoundsTextFill.text.toString().toInt()
+            )
+        )
     }
 
     private fun checkValues(): Boolean {
@@ -70,6 +80,7 @@ class CharacterStatsCreationFragment : Fragment(R.layout.fragment_character_stat
 
     fun setCharacterData(character: Character) {
         this.character = character
+        setDefaultValues()
     }
 
     private fun setDefaultValues() {
@@ -86,8 +97,6 @@ class CharacterStatsCreationFragment : Fragment(R.layout.fragment_character_stat
         FellowshipTextFill.setText(character.getStats().fellowship.toString())
         WoundsTextFill.setText(character.getPoints().maxWounds.toString())
         MagicTextFill.setText(character.getStats().magic.toString())
-        button_previous.text = getString(R.string.button_edit_info)
-        button_finish.text = getString(R.string.button_submit)
     }
 
     private fun showError(input: EditText, type: Int) {
@@ -97,21 +106,4 @@ class CharacterStatsCreationFragment : Fragment(R.layout.fragment_character_stat
             input.error = (getString(R.string.error_value_over_100))
         }
     }
-
-    fun getData() : Pair <Stats,Points> {
-        val stats = Stats(WeaponSkillTextFill.text.toString().toInt(), BallisticSkillTextFill.text.toString().toInt(),
-            StrengthTextFill.text.toString().toInt(), ToughnessTextFill.text.toString().toInt(), AgilityTextFill.text.toString().toInt(),
-            IntelligenceTextFill.text.toString().toInt(), WillPowerTextFill.text.toString().toInt(), FellowshipTextFill.text.toString().toInt(),
-            MagicTextFill.text.toString().toInt())
-        val points = Points(0, FateTextFill.text.toString().toInt(), FateTextFill.text.toString().toInt(),
-            WoundsTextFill.text.toString().toInt(), WoundsTextFill.text.toString().toInt())
-
-        return Pair(stats, points)
-    }
-
-    fun setCharacterStatsCreationListener(callback: CharacterStatsCreationListener): CharacterStatsCreationFragment {
-        this.listener = callback
-        return this
-    }
-
 }

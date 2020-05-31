@@ -6,23 +6,6 @@
     android:layout_height="match_parent"
     tools:context=".ui.characterCreation.CharacterStatsCreationFragment">
 
-    <androidx.cardview.widget.CardView
-        android:id="@+id/HeadlineCard"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <TextView
-            style="@style/TextAppearance.AppCompat.Subhead"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/title_character_creation_stats"
-            android:textAlignment="center"
-            app:layout_constraintBottom_toBottomOf="parent" />
-
-    </androidx.cardview.widget.CardView>
-
     <TextView
         android:id="@+id/WeaponSkillText"
         android:layout_width="120dp"
@@ -32,7 +15,7 @@
         android:text="@string/label_weapon_skill"
         android:textSize="8pt"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/HeadlineCard" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
         android:id="@+id/WeaponSkillTextFill"
@@ -146,8 +129,8 @@
         android:layout_marginTop="44dp"
         android:text="@string/label_agility"
         android:textSize="8pt"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/HeadlineCard" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <EditText
         android:id="@+id/AgilityTextFill"
@@ -275,29 +258,4 @@
         android:maxLength="3"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/MagicText" />
-
-
-    <Button
-        android:id="@+id/button_previous"
-        android:layout_width="150dp"
-        android:layout_height="wrap_content"
-        android:layout_margin="16dp"
-        android:text="@string/button_previous"
-        android:textSize="20dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/button_finish"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <Button
-        android:id="@+id/button_finish"
-        android:layout_width="150dp"
-        android:layout_height="wrap_content"
-        android:layout_margin="16dp"
-        android:text="@string/button_finish"
-        android:textSize="20dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/button_previous" />
 </androidx.constraintlayout.widget.ConstraintLayout>

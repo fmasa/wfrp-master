@@ -11,39 +11,30 @@ import cz.muni.fi.rpg.model.domain.character.Race
 import kotlinx.android.synthetic.main.fragment_character_info_creation.*
 
 class CharacterInfoCreationFragment : Fragment(R.layout.fragment_character_info_creation) {
-    lateinit var listener: CharacterInfoCreationListener
-
-    private lateinit var characterInfo: CharacterInfo
-
     var character : Character? = null
-
-    interface CharacterInfoCreationListener {
-        fun nextFragment()
-    }
 
     data class CharacterInfo(var name: String, var race: Race, var career: String)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        button_next.setOnClickListener{
-            nextClicked()
-        }
         setDefaultValues()
     }
 
-    private fun nextClicked() {
+    fun submit(): CharacterInfo? {
         showErrorIfNecessary(NameTextFill)
         showErrorIfNecessary(CareerTextFill)
+
         if (NameTextFill.text.isNullOrBlank() || CareerTextFill.text.isNullOrBlank()) {
-            return
+            return null
         }
-        saveData()
-        listener.nextFragment()
+
+        return createCharacterInfo()
     }
 
     fun setCharacterData(character: Character) {
         this.character = character
+        setDefaultValues()
     }
 
     private fun setDefaultValues() {
@@ -58,8 +49,6 @@ class CharacterInfoCreationFragment : Fragment(R.layout.fragment_character_info_
             Race.GNOME -> radioButtonRaceGnome.isChecked = true
             Race.HALFLING -> radioButtonRaceHalfling.isChecked = true
         }
-
-        button_next.text = getString(R.string.button_edit_stats)
     }
 
     private fun showErrorIfNecessary(input: EditText) {
@@ -69,12 +58,7 @@ class CharacterInfoCreationFragment : Fragment(R.layout.fragment_character_info_
         } else null
     }
 
-    fun setCharacterInfoCreationListener(callback: CharacterInfoCreationListener): CharacterInfoCreationFragment {
-        this.listener = callback
-        return this
-    }
-
-    private fun saveData() {
+    private fun createCharacterInfo(): CharacterInfo {
         val name = NameTextFill.text.toString()
         val career = CareerTextFill.text.toString()
 
@@ -87,10 +71,6 @@ class CharacterInfoCreationFragment : Fragment(R.layout.fragment_character_info_
             else -> error("No race selected")
         }
 
-        characterInfo = CharacterInfo(name, race, career)
-    }
-
-    fun getData() : CharacterInfo {
-        return characterInfo
+        return CharacterInfo(name, race, career)
     }
 }
