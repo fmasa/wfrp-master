@@ -105,8 +105,6 @@ class CharacterActivity : PartyScopedActivity(R.layout.activity_character), Char
         intent.putExtra(EXTRA_PARTY_ID, getPartyId().toString())
         intent.putExtra(CharacterEditActivity.EXTRA_CHARACTER_ID, characterId)
 
-
         startActivity(intent)
-        finish()
     }
 }
