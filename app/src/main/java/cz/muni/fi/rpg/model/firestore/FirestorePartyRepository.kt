@@ -6,6 +6,7 @@ import arrow.core.Either
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.FirebaseFirestoreException
 import com.google.firebase.firestore.SetOptions
+import cz.muni.fi.rpg.model.domain.common.CouldNotConnectToBackend
 import cz.muni.fi.rpg.model.domain.party.Party
 import cz.muni.fi.rpg.model.domain.party.PartyNotFound
 import cz.muni.fi.rpg.model.domain.party.PartyRepository
@@ -14,7 +15,7 @@ import java.util.*
 import javax.inject.Inject
 
 internal class FirestorePartyRepository @Inject constructor(
-    firestore: FirebaseFirestore,
+    private val firestore: FirebaseFirestore,
     private val mapper: AggregateMapper<Party>
 ) : PartyRepository {
     private val tag = this::class.simpleName
@@ -24,7 +25,18 @@ internal class FirestorePartyRepository @Inject constructor(
         val data = mapper.toDocumentData(party)
 
         Log.d(tag,"Saving party $data to firestore")
-        parties.document(party.id.toString()).set(data, SetOptions.merge()).await();
+        try {
+            firestore.runTransaction { transaction ->
+                transaction.set(parties.document(party.id.toString()), data, SetOptions.merge())
+                null
+            }.await()
+        } catch (e: FirebaseFirestoreException) {
+            if (e.code == FirebaseFirestoreException.Code.UNAVAILABLE) {
+                throw CouldNotConnectToBackend(e)
+            }
+
+            throw e
+        }
     }
 
     override suspend fun get(id: UUID): Party {
