@@ -13,14 +13,13 @@ import cz.muni.fi.rpg.model.right
 import cz.muni.fi.rpg.ui.PartyScopedActivity
 import cz.muni.fi.rpg.ui.character.skills.CharacterSkillsFragment
 import cz.muni.fi.rpg.ui.characterCreation.CharacterCreationActivity
-import cz.muni.fi.rpg.ui.characterCreation.CharacterEditActivity
 import cz.muni.fi.rpg.ui.common.StaticFragmentsViewPagerAdapter
 import cz.muni.fi.rpg.viewModels.CharacterViewModel
 import cz.muni.fi.rpg.viewModels.CharacterViewModelProvider
 import kotlinx.android.synthetic.main.activity_character.*
 import javax.inject.Inject
 
-class CharacterActivity : PartyScopedActivity(R.layout.activity_character), CharacterStatsFragment.CharacterStatsListener {
+class CharacterActivity : PartyScopedActivity(R.layout.activity_character) {
     companion object {
         private const val EXTRA_CHARACTER_ID = "characterId";
 
@@ -98,13 +97,5 @@ class CharacterActivity : PartyScopedActivity(R.layout.activity_character), Char
 
         startActivity(intent)
         finish()
-    }
-
-    override fun openCharacterEdit() {
-        val intent = Intent(this, CharacterEditActivity::class.java)
-        intent.putExtra(EXTRA_PARTY_ID, getPartyId().toString())
-        intent.putExtra(CharacterEditActivity.EXTRA_CHARACTER_ID, characterId)
-
-        startActivity(intent)
     }
 }

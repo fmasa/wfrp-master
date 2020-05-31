@@ -1,7 +1,10 @@
 package cz.muni.fi.rpg.ui.characterCreation
 
+import android.content.Context
+import android.content.Intent
 import android.view.View
 import cz.muni.fi.rpg.R
+import cz.muni.fi.rpg.model.domain.character.CharacterId
 import cz.muni.fi.rpg.model.domain.character.CharacterRepository
 import cz.muni.fi.rpg.model.domain.character.Points
 import cz.muni.fi.rpg.model.domain.character.Stats
@@ -14,7 +17,15 @@ class CharacterEditActivity : PartyScopedActivity(R.layout.activity_character_ed
     CoroutineScope by CoroutineScope(Dispatchers.Default) {
 
     companion object {
-        const val EXTRA_CHARACTER_ID = "characterId"
+        const val EXTRA_USER_ID = "characterId"
+
+        fun start(characterId: CharacterId, packageContext: Context) {
+            val intent = Intent(packageContext, CharacterEditActivity::class.java)
+            intent.putExtra(EXTRA_PARTY_ID, characterId.partyId.toString())
+            intent.putExtra(EXTRA_USER_ID, characterId.userId)
+
+            packageContext.startActivity(intent)
+        }
     }
 
     private lateinit var characterStats: CharacterStatsFormFragment
@@ -24,8 +35,11 @@ class CharacterEditActivity : PartyScopedActivity(R.layout.activity_character_ed
     lateinit var characters: CharacterRepository
 
     private val characterId by lazy {
-        intent.getStringExtra(EXTRA_CHARACTER_ID)
-            ?: throw IllegalAccessException("'${EXTRA_CHARACTER_ID}' must be provided")
+        CharacterId(
+            getPartyId(),
+            intent.getStringExtra(EXTRA_USER_ID)
+                ?: throw IllegalAccessException("'${EXTRA_USER_ID}' must be provided")
+        )
     }
 
     override fun onStart() {
@@ -37,7 +51,7 @@ class CharacterEditActivity : PartyScopedActivity(R.layout.activity_character_ed
             supportFragmentManager.findFragmentById(R.id.characterInfo) as CharacterInfoFormFragment
 
         launch {
-            val character = characters.get(getPartyId(), characterId)
+            val character = characters.get(characterId.partyId, characterId.userId)
 
             withContext(Dispatchers.Main) {
                 characterStats.setCharacterData(character)
@@ -69,7 +83,7 @@ class CharacterEditActivity : PartyScopedActivity(R.layout.activity_character_ed
         info: CharacterInfoFormFragment.CharacterInfo,
         statsAndPoints: Pair<Stats, Points>
     ) {
-        val character = characters.get(getPartyId(), characterId)
+        val character = characters.get(characterId.partyId, characterId.userId)
 
         character.update(
             info.name,
