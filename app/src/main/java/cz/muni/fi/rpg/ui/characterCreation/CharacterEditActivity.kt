@@ -33,7 +33,7 @@ class CharacterEditActivity : PartyScopedActivity(R.layout.activity_character_ed
         super.onStart()
 
         launch {
-            val character = characters.get(getPartyId(), getUserId())
+            val character = characters.get(getPartyId(), characterId)
             supportFragmentManager.beginTransaction().apply {
                 replace(R.id.frame_layout_character_edit, infoCreationFragment)
                 commit()
