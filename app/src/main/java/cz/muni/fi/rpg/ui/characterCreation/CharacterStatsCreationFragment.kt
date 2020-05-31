@@ -50,8 +50,20 @@ class CharacterStatsCreationFragment : Fragment(R.layout.fragment_character_stat
         if (view.WoundsTextFill.text.toString().isBlank()) view.WoundsTextFill.setText("0")
         if (view.FateTextFill.text.toString().isBlank()) view.FateTextFill.setText("0")
 
+        if (view.WeaponSkillTextFill.text.toString().toInt() > 100) { showError(view.WeaponSkillTextFill, 1); return false}
+        if (view.BallisticSkillTextFill.text.toString().toInt() > 100) { showError(view.BallisticSkillTextFill, 1); return false}
+        if (view.MagicTextFill.text.toString().toInt() > 100) { showError(view.MagicTextFill, 1); return false}
+        if (view.StrengthTextFill.text.toString().toInt() > 100) { showError(view.StrengthTextFill, 1); return false}
+        if (view.ToughnessTextFill.text.toString().toInt() > 100) { showError(view.ToughnessTextFill, 1); return false}
+        if (view.AgilityTextFill.text.toString().toInt() > 100) { showError(view.AgilityTextFill, 1); return false}
+        if (view.IntelligenceTextFill.text.toString().toInt() > 100) { showError(view.IntelligenceTextFill, 1); return false}
+        if (view.WillPowerTextFill.text.toString().toInt() > 100) { showError(view.WillPowerTextFill, 1); return false}
+        if (view.FellowshipTextFill.text.toString().toInt() > 100) { showError(view.FellowshipTextFill, 1); return false}
+        if (view.WoundsTextFill.text.toString().toInt() > 100) { showError(view.WoundsTextFill, 1); return false}
+        if (view.FateTextFill.text.toString().toInt() > 100) { showError(view.FateTextFill, 1); return false}
+
         if (view.WoundsTextFill.text.toString().toInt() == 0) {
-            showError(view.WoundsTextFill)
+            showError(view.WoundsTextFill, 0)
             return false
         }
         return true
@@ -80,8 +92,13 @@ class CharacterStatsCreationFragment : Fragment(R.layout.fragment_character_stat
         view?.button_finish?.text = getString(R.string.button_submit)
     }
 
-    private fun showError(input: EditText) {
-        input.error = (getString(R.string.error_value_is_0))
+    private fun showError(input: EditText, type: Int) {
+        if (type == 0) {
+            input.error = (getString(R.string.error_value_is_0))
+        } else {
+            input.error = (getString(R.string.error_value_over_100))
+        }
+
     }
 
     fun getData() : Pair <Stats,Points> {
