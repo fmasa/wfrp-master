@@ -11,18 +11,19 @@ import cz.muni.fi.rpg.model.domain.character.Race
 import kotlinx.android.synthetic.main.fragment_character_info_creation.*
 import kotlinx.android.synthetic.main.fragment_character_info_creation.view.*
 
-data class CharacterInfo(var name: String, var race: Race, var career: String)
 
 class CharacterInfoCreationFragment : Fragment(R.layout.fragment_character_info_creation) {
     lateinit var listener: CharacterInfoCreationListener
 
-    lateinit var characterInfo: CharacterInfo
+    private lateinit var characterInfo: CharacterInfo
 
     var character : Character? = null
 
     interface CharacterInfoCreationListener {
         fun nextFragment()
     }
+
+    data class CharacterInfo(var name: String, var race: Race, var career: String)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
