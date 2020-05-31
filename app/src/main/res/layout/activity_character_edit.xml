@@ -34,7 +34,7 @@
 
             <androidx.fragment.app.FragmentContainerView
                 android:id="@+id/characterInfo"
-                android:name="cz.muni.fi.rpg.ui.characterCreation.CharacterInfoCreationFragment"
+                android:name="cz.muni.fi.rpg.ui.characterCreation.CharacterInfoFormFragment"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 
@@ -47,7 +47,7 @@
 
             <androidx.fragment.app.FragmentContainerView
                 android:id="@+id/characterStats"
-                android:name="cz.muni.fi.rpg.ui.characterCreation.CharacterStatsCreationFragment"
+                android:name="cz.muni.fi.rpg.ui.characterCreation.CharacterStatsFormFragment"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
         </LinearLayout>

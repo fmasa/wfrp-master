@@ -8,9 +8,9 @@ import android.widget.EditText
 import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.model.domain.character.Character
 import cz.muni.fi.rpg.model.domain.character.Race
-import kotlinx.android.synthetic.main.fragment_character_info_creation.*
+import kotlinx.android.synthetic.main.fragment_character_info_form.*
 
-class CharacterInfoCreationFragment : Fragment(R.layout.fragment_character_info_creation) {
+class CharacterInfoFormFragment : Fragment(R.layout.fragment_character_info_form) {
     var character : Character? = null
 
     data class CharacterInfo(var name: String, var race: Race, var career: String)

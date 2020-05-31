@@ -8,9 +8,9 @@ import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.model.domain.character.Character
 import cz.muni.fi.rpg.model.domain.character.Points
 import cz.muni.fi.rpg.model.domain.character.Stats
-import kotlinx.android.synthetic.main.fragment_character_stats_creation.*
+import kotlinx.android.synthetic.main.fragment_character_stats_form.*
 
-class CharacterStatsCreationFragment : Fragment(R.layout.fragment_character_stats_creation) {
+class CharacterStatsFormFragment : Fragment(R.layout.fragment_character_stats_form) {
     var character: Character? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

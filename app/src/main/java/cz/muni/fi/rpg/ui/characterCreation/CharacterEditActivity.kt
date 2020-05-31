@@ -1,9 +1,7 @@
 package cz.muni.fi.rpg.ui.characterCreation
 
 import android.view.View
-import android.widget.Toast
 import cz.muni.fi.rpg.R
-import cz.muni.fi.rpg.model.domain.character.Character
 import cz.muni.fi.rpg.model.domain.character.CharacterRepository
 import cz.muni.fi.rpg.model.domain.character.Points
 import cz.muni.fi.rpg.model.domain.character.Stats
@@ -19,8 +17,8 @@ class CharacterEditActivity : PartyScopedActivity(R.layout.activity_character_ed
         const val EXTRA_CHARACTER_ID = "characterId"
     }
 
-    private lateinit var characterStats: CharacterStatsCreationFragment
-    private lateinit var characterInfo: CharacterInfoCreationFragment
+    private lateinit var characterStats: CharacterStatsFormFragment
+    private lateinit var characterInfo: CharacterInfoFormFragment
 
     @Inject
     lateinit var characters: CharacterRepository
@@ -34,9 +32,9 @@ class CharacterEditActivity : PartyScopedActivity(R.layout.activity_character_ed
         super.onStart()
 
         characterStats =
-            supportFragmentManager.findFragmentById(R.id.characterStats) as CharacterStatsCreationFragment
+            supportFragmentManager.findFragmentById(R.id.characterStats) as CharacterStatsFormFragment
         characterInfo =
-            supportFragmentManager.findFragmentById(R.id.characterInfo) as CharacterInfoCreationFragment
+            supportFragmentManager.findFragmentById(R.id.characterInfo) as CharacterInfoFormFragment
 
         launch {
             val character = characters.get(getPartyId(), characterId)
@@ -68,7 +66,7 @@ class CharacterEditActivity : PartyScopedActivity(R.layout.activity_character_ed
     }
 
     private suspend fun updateCharacter(
-        info: CharacterInfoCreationFragment.CharacterInfo,
+        info: CharacterInfoFormFragment.CharacterInfo,
         statsAndPoints: Pair<Stats, Points>
     ) {
         val character = characters.get(getPartyId(), characterId)

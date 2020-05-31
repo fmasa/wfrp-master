@@ -23,10 +23,10 @@ class CharacterCreationActivity : PartyScopedActivity(R.layout.activity_characte
     @Inject
     lateinit var characters: CharacterRepository
     private lateinit var currentFragment: Fragment
-    private val statsCreationFragment = CharacterStatsCreationFragment()
-    private val infoCreationFragment = CharacterInfoCreationFragment()
+    private val statsCreationFragment = CharacterStatsFormFragment()
+    private val infoCreationFragment = CharacterInfoFormFragment()
 
-    private var characterInfo: CharacterInfoCreationFragment.CharacterInfo? = null
+    private var characterInfo: CharacterInfoFormFragment.CharacterInfo? = null
 
     private val characterId by lazy {
         intent.getStringExtra(EXTRA_CHARACTER_ID)
@@ -90,7 +90,7 @@ class CharacterCreationActivity : PartyScopedActivity(R.layout.activity_characte
     }
 
     private fun saveCharacter(
-        info: CharacterInfoCreationFragment.CharacterInfo,
+        info: CharacterInfoFormFragment.CharacterInfo,
         stats: Stats,
         points: Points
     ) {
