@@ -48,7 +48,6 @@ class ModelModule {
             firestore.firestoreSettings = firestoreSettings {
                 host = BuildConfig.FIRESTORE_EMULATOR_URL
                 isSslEnabled = false
-                isPersistenceEnabled = false
             }
         }
 
