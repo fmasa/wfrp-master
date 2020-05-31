@@ -14,13 +14,11 @@ import kotlinx.android.synthetic.main.dialog_asssemble_party.view.*
 import kotlinx.coroutines.*
 import java.util.*
 import javax.inject.Inject
-import kotlin.coroutines.CoroutineContext
 
 class AssemblePartyDialog(
     private val userId: String,
     private val onSuccessListener: (Party) -> Unit
-) : DaggerDialogFragment(), CoroutineScope {
-    override val coroutineContext: CoroutineContext get() = Dispatchers.Main
+) : DaggerDialogFragment(), CoroutineScope by CoroutineScope(Dispatchers.Main) {
 
     @Inject
     lateinit var parties: PartyRepository
