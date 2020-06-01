@@ -15,7 +15,6 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.observe
 import androidx.recyclerview.widget.LinearLayoutManager
-import cz.muni.fi.rpg.model.domain.character.CharacterId
 import cz.muni.fi.rpg.model.right
 import cz.muni.fi.rpg.ui.character.adapter.InventoryAdapter
 import cz.muni.fi.rpg.ui.character.inventory.TransactionDialog
@@ -47,13 +46,13 @@ class InventoryFragment : DaggerFragment(R.layout.fragment_inventory), Coroutine
             .create()
         dialog.setOnShowListener {
             dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener {
-                onNewItemSubmited(view, dialog)
+                onNewItemSubmitted(view, dialog)
             }
         }
         dialog.show()
     }
 
-    private fun onNewItemSubmited(view: View, dialog: AlertDialog) {
+    private fun onNewItemSubmitted(view: View, dialog: AlertDialog) {
         try {
             if (checkItemValidity(view)) {
                 val inventoryItem = createInventoryItem(view)
