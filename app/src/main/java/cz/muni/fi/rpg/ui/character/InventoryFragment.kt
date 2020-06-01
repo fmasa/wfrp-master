@@ -134,7 +134,10 @@ class InventoryFragment : DaggerFragment(R.layout.fragment_inventory), Coroutine
 
         view.addNewInventoryItemButton.setOnClickListener() { showDialog() }
 
-        val adapter = InventoryAdapter(layoutInflater)
+        val adapter = InventoryAdapter(
+            layoutInflater,
+            onRemoveListener = { launch { viewModel.removeInventoryItem(it) } }
+        )
         inventoryRecycler.layoutManager = LinearLayoutManager(context)
         inventoryRecycler.adapter = adapter
 

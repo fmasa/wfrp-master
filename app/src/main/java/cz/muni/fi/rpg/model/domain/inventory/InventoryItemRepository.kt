@@ -21,4 +21,9 @@ interface InventoryItemRepository {
      * @throws InventoryItemNotFound when inventory item does not exist.
      */
     suspend fun get(characterId: CharacterId, itemId: InventoryItemId): InventoryItem
+
+    /**
+     * Removes item from inventory or does nothing if given item is not in user's inventory
+     */
+    suspend fun remove(characterId: CharacterId, itemId: InventoryItemId)
 }
