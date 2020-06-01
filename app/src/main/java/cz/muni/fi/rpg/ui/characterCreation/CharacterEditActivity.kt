@@ -6,8 +6,6 @@ import android.view.View
 import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.model.domain.character.CharacterId
 import cz.muni.fi.rpg.model.domain.character.CharacterRepository
-import cz.muni.fi.rpg.model.domain.character.Points
-import cz.muni.fi.rpg.model.domain.character.Stats
 import cz.muni.fi.rpg.ui.PartyScopedActivity
 import kotlinx.android.synthetic.main.activity_character_edit.*
 import kotlinx.coroutines.*
@@ -84,16 +82,18 @@ class CharacterEditActivity : PartyScopedActivity(R.layout.activity_character_ed
 
     private suspend fun updateCharacter(
         info: CharacterInfoFormFragment.CharacterInfo,
-        statsAndPoints: Pair<Stats, Points>
+        characterStatsData: CharacterStatsData
     ) {
         val character = characters.get(characterId.partyId, characterId.userId)
+        val points = character.getPoints()
 
         character.update(
             info.name,
             info.career,
             info.race,
-            statsAndPoints.first,
-            statsAndPoints.second
+            characterStatsData.stats,
+            points.updateFate(characterStatsData.fatePoints)
+                .updateMaxWounds(characterStatsData.maxWounds)
         )
 
         characters.save(getPartyId(), character)
