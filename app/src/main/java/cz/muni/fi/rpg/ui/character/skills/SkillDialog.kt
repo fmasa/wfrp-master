@@ -86,6 +86,12 @@ class SkillDialog : DialogFragment() {
         view.skillDescription.setText(skill.description)
         view.skillCharacteristic.setText(getString(skill.characteristic.getReadableNameId()), false)
         view.skillAdvanced.isChecked = skill.advanced
+        view.skillMastery.check(when (skill.mastery) {
+            1 -> R.id.skillMasteryLevel1
+            2 -> R.id.skillMasteryLevel2
+            3 -> R.id.skillMasteryLevel3
+            else -> error("Mastery must be value between 1 and 3, ${skill.mastery} given")
+        })
     }
 
     private fun dialogSubmitted(dialog: AlertDialog, view: View) {
