@@ -25,7 +25,6 @@ import kotlinx.coroutines.*
 
 class InventoryFragment : DaggerFragment(R.layout.fragment_inventory), CoroutineScope by CoroutineScope(Dispatchers.Default) {
     private val viewModel: CharacterViewModel by activityViewModels()
-    private lateinit var dialog: AlertDialog
 
     private fun setViewVisibility(view: View, visible: Boolean) {
         view.visibility = if (visible) View.VISIBLE else View.GONE
@@ -40,7 +39,7 @@ class InventoryFragment : DaggerFragment(R.layout.fragment_inventory), Coroutine
     private fun showDialog() {
         val activity = requireActivity()
         val view = activity.layoutInflater.inflate(R.layout.inventory_item_edit_dialog, null)
-        dialog = AlertDialog.Builder(activity)
+        val dialog = AlertDialog.Builder(activity)
             .setTitle(R.string.createInventoryItemTitle)
             .setView(view)
             .setPositiveButton(R.string.createInventoryItemSubmit, null)
@@ -48,13 +47,13 @@ class InventoryFragment : DaggerFragment(R.layout.fragment_inventory), Coroutine
             .create()
         dialog.setOnShowListener {
             dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener {
-                onNewItemSubmited(view)
+                onNewItemSubmited(view, dialog)
             }
         }
         dialog.show()
     }
 
-    private fun onNewItemSubmited(view: View) {
+    private fun onNewItemSubmited(view: View, dialog: AlertDialog) {
         try {
             if (checkItemValidity(view)) {
                 val inventoryItem = createInventoryItem(view)
