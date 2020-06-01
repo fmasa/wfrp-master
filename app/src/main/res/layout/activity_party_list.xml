@@ -16,9 +16,7 @@
 
     <ImageView
         android:id="@+id/noPartiesIcon"
-        android:layout_width="80pt"
-        android:layout_height="80pt"
-        android:layout_marginTop="-50dp"
+        style="@style/EmptyStateIcon"
         android:src="@drawable/ic_rally_the_troops"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -26,19 +24,14 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintVertical_bias="0.4"
         android:visibility="gone"
-        android:tint="@color/colorEmptyState"
         />
     <TextView
         android:id="@+id/noPartiesText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         android:visibility="gone"
-        android:textAlignment="center"
         app:layout_constraintTop_toBottomOf="@id/noPartiesIcon"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        style="@style/TextAppearance.AppCompat.Large"
-        android:textColor="@color/colorEmptyState"
+        style="@style/EmptyStateText"
         android:text="@string/no_parties_prompt"
         />
 

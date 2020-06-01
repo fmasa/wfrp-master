@@ -1,11 +1,65 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-
-    <FrameLayout
-        android:id="@+id/frame_layout_character_creation"
+    <TextView
+        android:id="@+id/stepTitle"
+        style="@style/TextAppearance.AppCompat.Subhead"
+        android:padding="16dp"
+        android:textAlignment="center"
+        android:layout_weight="0"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
-</androidx.constraintlayout.widget.ConstraintLayout>
+        android:layout_height="wrap_content"/>
+
+    <View
+        android:background="?android:attr/dividerHorizontal"
+        android:layout_height="1dp"
+        android:layout_width="match_parent" />
+
+    <ScrollView
+        android:layout_weight="1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <FrameLayout
+            android:id="@+id/frame_layout_character_creation"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </ScrollView>
+
+    <View
+        android:id="@+id/divider"
+        android:background="?android:attr/dividerHorizontal"
+        android:layout_height="1dp"
+        android:layout_width="match_parent" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_weight="0"
+        android:layout_width="match_parent"
+        android:padding="6dp"
+        android:layout_height="wrap_content">
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/buttonPrevious"
+            android:textColor="@color/colorText"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
+            android:drawableStart="@drawable/ic_caret_left"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/buttonNext"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawableEnd="@drawable/ic_caret_right"
+            android:textAlignment="textEnd"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>

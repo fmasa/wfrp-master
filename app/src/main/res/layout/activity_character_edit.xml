@@ -1,13 +1,79 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.characterCreation.CharacterEditActivity">
 
     <FrameLayout
-        android:id="@+id/frame_layout_character_edit"
+        android:id="@+id/progressBar"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
-</androidx.constraintlayout.widget.ConstraintLayout>
+        android:layout_weight="1"
+        android:layout_height="wrap_content">
+
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            />
+    </FrameLayout>
+
+    <ScrollView
+        android:id="@+id/mainView"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:orientation="vertical"
+            android:layout_height="wrap_content">
+
+            <androidx.fragment.app.FragmentContainerView
+                android:id="@+id/characterInfo"
+                android:name="cz.muni.fi.rpg.ui.characterCreation.CharacterInfoFormFragment"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <View
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="20dp"
+                android:background="?android:attr/dividerHorizontal"
+                android:layout_height="1dp"
+                android:layout_width="match_parent" />
+
+            <androidx.fragment.app.FragmentContainerView
+                android:id="@+id/characterStats"
+                android:name="cz.muni.fi.rpg.ui.characterCreation.CharacterStatsFormFragment"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+
+    </ScrollView>
+
+    <View
+        android:background="?android:attr/dividerHorizontal"
+        android:layout_height="1dp"
+        android:layout_width="match_parent" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_weight="0"
+        android:layout_width="match_parent"
+        android:padding="2dp"
+        android:layout_height="wrap_content">
+
+        <Button
+            android:id="@+id/saveButton"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:enabled="false"
+            android:text="Save"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>

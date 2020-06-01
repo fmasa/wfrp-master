@@ -29,5 +29,16 @@
     <style name="BottomNavigationView.Active" parent="TextAppearance.AppCompat.Caption">
         <item name="android:textColor">@color/colorPrimary</item>
     </style>
+    <style name="EmptyStateText" parent="TextAppearance.AppCompat.Medium">
+        <item name="android:textColor">@color/colorEmptyState</item>
+        <item name="android:textAlignment">center</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+    <style name="EmptyStateIcon">
+        <item name="tint">@color/colorEmptyState</item>
+        <item name="android:layout_width">@dimen/empty_state_drawable_size</item>
+        <item name="android:layout_height">@dimen/empty_state_drawable_size</item>
+    </style>
 
 </resources>

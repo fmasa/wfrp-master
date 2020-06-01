@@ -29,29 +29,22 @@
 
     <ImageView
         android:id="@+id/noInventoryItemIcon"
-        android:src="@drawable/ic_empty_inventory"
+        android:src="@drawable/ic_inventory"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/noInventoryItemText"
+        app:layout_constraintVertical_bias="0.4"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         android:visibility="gone"
-        android:tint="@color/colorEmptyState"
-        android:layout_height="match_parent"
-        android:layout_width="match_parent" />
+        style="@style/EmptyStateIcon" />
 
     <TextView
         android:id="@+id/noInventoryItemText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         android:visibility="gone"
-        android:textAlignment="center"
         app:layout_constraintTop_toBottomOf="@id/noInventoryItemIcon"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        style="@style/TextAppearance.AppCompat.Large"
-        android:textColor="@color/colorEmptyState"
+        style="@style/EmptyStateText"
         android:text="@string/no_inventory_item_prompt"
         />
 
@@ -61,7 +54,7 @@
         android:layout_height="wrap_content"
         app:fab_colorNormal="@color/colorPrimary"
         app:fab_colorPressed="@color/colorPrimaryDark"
-        app:fab_icon="@drawable/ic_inventory_item_add"
+        app:fab_icon="@drawable/ic_add"
         android:layout_margin="16dp"
         app:fab_labelStyle="@style/menu_labels_style"
         app:layout_constraintBottom_toBottomOf="parent"

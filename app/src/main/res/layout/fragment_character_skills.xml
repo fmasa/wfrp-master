@@ -15,10 +15,8 @@
         android:layout_height="match_parent"/>
 
     <ImageView
+        style="@style/EmptyStateIcon"
         android:id="@+id/noSkillsIcon"
-        android:layout_width="60pt"
-        android:layout_height="60pt"
-        android:layout_marginTop="-50dp"
         android:src="@drawable/ic_skills"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -26,19 +24,14 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintVertical_bias="0.4"
         android:visibility="gone"
-        android:tint="@color/colorEmptyState"
         />
     <TextView
         android:id="@+id/noSkillsText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         android:visibility="gone"
-        android:textAlignment="center"
         app:layout_constraintTop_toBottomOf="@id/noSkillsIcon"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        style="@style/TextAppearance.AppCompat.Large"
-        android:textColor="@color/colorEmptyState"
+        style="@style/EmptyStateText"
         android:text="@string/no_skills"
         />
 

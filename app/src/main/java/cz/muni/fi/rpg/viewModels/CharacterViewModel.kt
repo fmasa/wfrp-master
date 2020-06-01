@@ -22,7 +22,7 @@ class CharacterViewModel(
     private val partyId: UUID,
     private val userId: String
 ) : ViewModel(), CoroutineScope by CoroutineScope(Dispatchers.Default) {
-    private val characterId = CharacterId(partyId, userId)
+    val characterId = CharacterId(partyId, userId)
     val character = characters.getLive(partyId, userId)
     val skills = skillRepository.forCharacter(characterId)
 

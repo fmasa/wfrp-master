@@ -1,89 +1,101 @@
 package cz.muni.fi.rpg.ui.characterCreation
 
-import androidx.fragment.app.Fragment
+import android.content.Context
+import android.content.Intent
+import android.view.View
 import cz.muni.fi.rpg.R
+import cz.muni.fi.rpg.model.domain.character.CharacterId
 import cz.muni.fi.rpg.model.domain.character.CharacterRepository
+import cz.muni.fi.rpg.model.domain.character.Points
+import cz.muni.fi.rpg.model.domain.character.Stats
 import cz.muni.fi.rpg.ui.PartyScopedActivity
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import java.util.*
+import kotlinx.android.synthetic.main.activity_character_edit.*
+import kotlinx.coroutines.*
 import javax.inject.Inject
 
 class CharacterEditActivity : PartyScopedActivity(R.layout.activity_character_edit),
-    CoroutineScope by CoroutineScope(Dispatchers.Default), CharacterStatsCreationFragment.CharacterStatsCreationListener,
-    CharacterInfoCreationFragment.CharacterInfoCreationListener {
+    CoroutineScope by CoroutineScope(Dispatchers.Default) {
 
     companion object {
-        const val EXTRA_CHARACTER_ID = "characterId"
+        const val EXTRA_USER_ID = "characterId"
+
+        fun start(characterId: CharacterId, packageContext: Context) {
+            val intent = Intent(packageContext, CharacterEditActivity::class.java)
+            intent.putExtra(EXTRA_PARTY_ID, characterId.partyId.toString())
+            intent.putExtra(EXTRA_USER_ID, characterId.userId)
+
+            packageContext.startActivity(intent)
+        }
     }
+
+    private lateinit var characterStats: CharacterStatsFormFragment
+    private lateinit var characterInfo: CharacterInfoFormFragment
 
     @Inject
     lateinit var characters: CharacterRepository
-    private lateinit var currentFragment: Fragment
-    private val statsCreationFragment = CharacterStatsCreationFragment().let { it.setCharacterStatsCreationListener(this) }
-    private val infoCreationFragment = CharacterInfoCreationFragment().let { it.setCharacterInfoCreationListener(this) }
 
     private val characterId by lazy {
-        intent.getStringExtra(EXTRA_CHARACTER_ID)
-            ?: throw IllegalAccessException("'${EXTRA_CHARACTER_ID}' must be provided")
+        CharacterId(
+            getPartyId(),
+            intent.getStringExtra(EXTRA_USER_ID)
+                ?: throw IllegalAccessException("'${EXTRA_USER_ID}' must be provided")
+        )
     }
 
     override fun onStart() {
         super.onStart()
 
+        characterStats =
+            supportFragmentManager.findFragmentById(R.id.characterStats) as CharacterStatsFormFragment
+        characterInfo =
+            supportFragmentManager.findFragmentById(R.id.characterInfo) as CharacterInfoFormFragment
+
+        supportActionBar?.subtitle = getString(R.string.subtitle_edit_character)
+
         launch {
-            val character = characters.get(getPartyId(), characterId)
-            supportFragmentManager.beginTransaction().apply {
-                replace(R.id.frame_layout_character_edit, infoCreationFragment)
-                commit()
+            val character = characters.get(characterId.partyId, characterId.userId)
+
+            withContext(Dispatchers.Main) {
+                supportActionBar?.title = character.getName()
+                characterStats.setCharacterData(character)
+                characterInfo.setCharacterData(character)
             }
 
-            statsCreationFragment.setCharacterData(character)
-            infoCreationFragment.setCharacterData(character)
-            currentFragment = infoCreationFragment
-        }
-    }
-
-    override fun saveCharacter() {
-        launch {
-            val statsAndPoints = statsCreationFragment.getData()
-            val info = infoCreationFragment.getData()
-            val character = characters.get(getPartyId(), characterId)
-
-            character.update(info.name, info.career, info.race, statsAndPoints.first, statsAndPoints.second)
-            characters.save(getPartyId(), character)
-
-        }
-        finish()
-    }
-
-    override fun nextFragment() {
-        if(currentFragment == infoCreationFragment) {
-            switchFragment(1)
-        }
-    }
-
-    override fun previousFragment() {
-        if(currentFragment == statsCreationFragment) {
-            switchFragment(0)
-        }
-    }
-
-
-    private fun switchFragment(id: Number) {
-        if (id == 0) {
-            supportFragmentManager.beginTransaction().apply {
-                replace(R.id.frame_layout_character_edit, infoCreationFragment)
-                commit()
+            withContext(Dispatchers.Main) {
+                progressBar.visibility = View.GONE
+                mainView.visibility = View.VISIBLE
+                saveButton.isEnabled = true
             }
-            currentFragment = infoCreationFragment
-        } else if (id == 1) {
-            supportFragmentManager.beginTransaction().apply {
-                replace(R.id.frame_layout_character_edit, statsCreationFragment)
-                commit()
-            }
-            currentFragment = statsCreationFragment
         }
+
+        saveButton.setOnClickListener {
+            val characterInfoData = characterInfo.submit()
+            val characterStatsData = characterStats.submit()
+
+            if (characterInfoData != null && characterStatsData != null) {
+                saveButton.isEnabled = false
+                launch {
+                    updateCharacter(characterInfoData, characterStatsData)
+                    finish()
+                }
+            }
+        }
+    }
+
+    private suspend fun updateCharacter(
+        info: CharacterInfoFormFragment.CharacterInfo,
+        statsAndPoints: Pair<Stats, Points>
+    ) {
+        val character = characters.get(characterId.partyId, characterId.userId)
+
+        character.update(
+            info.name,
+            info.career,
+            info.race,
+            statsAndPoints.first,
+            statsAndPoints.second
+        )
+
+        characters.save(getPartyId(), character)
     }
 }

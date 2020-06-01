@@ -7,4 +7,5 @@
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="coin_drawable_width">18dp</dimen>
     <dimen name="fabMargin">16dp</dimen>
+    <dimen name="empty_state_drawable_size">60pt</dimen>
 </resources>

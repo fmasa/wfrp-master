@@ -1,12 +1,15 @@
 package cz.muni.fi.rpg.ui.partyList
 
 import android.app.Dialog
+import android.content.DialogInterface
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.core.widget.addTextChangedListener
 import cz.muni.fi.rpg.R
+import cz.muni.fi.rpg.model.domain.common.CouldNotConnectToBackend
 import cz.muni.fi.rpg.model.domain.party.Party
 import cz.muni.fi.rpg.model.domain.party.PartyRepository
 import dagger.android.support.DaggerDialogFragment
@@ -14,18 +17,18 @@ import kotlinx.android.synthetic.main.dialog_asssemble_party.view.*
 import kotlinx.coroutines.*
 import java.util.*
 import javax.inject.Inject
-import kotlin.coroutines.CoroutineContext
 
 class AssemblePartyDialog(
     private val userId: String,
     private val onSuccessListener: (Party) -> Unit
-) : DaggerDialogFragment(), CoroutineScope {
-    override val coroutineContext: CoroutineContext get() = Dispatchers.Main
+) : DaggerDialogFragment(), CoroutineScope by CoroutineScope(Dispatchers.Main) {
 
     @Inject
     lateinit var parties: PartyRepository
 
     private var userAttemptedToSubmit = false
+
+    private var pendingJob : Job? = null
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val activity = requireActivity();
@@ -44,14 +47,14 @@ class AssemblePartyDialog(
 
         dialog.setOnShowListener {
             dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener {
-                dialogSubmitted(view)
+                dialogSubmitted(dialog, view)
             }
         }
 
         return dialog
     }
 
-    private fun dialogSubmitted(view: View) {
+    private fun dialogSubmitted(dialog: AlertDialog, view: View) {
         val partyNameInput = view.partyName;
         val partyName = partyNameInput.text
 
@@ -65,18 +68,32 @@ class AssemblePartyDialog(
 
         val party = Party(UUID.randomUUID(), partyName.toString().trim(), userId)
 
-        val context = requireContext()
+        dialog.getButton(AlertDialog.BUTTON_POSITIVE).isEnabled = false
+        view.progress.visibility = View.VISIBLE
+        view.mainView.visibility = View.GONE
 
-        launch {
-            withContext(Dispatchers.IO) {
+        pendingJob = launch {
+            try {
                 parties.save(party)
+                toast("Party $partyName was created")
+                withContext(Dispatchers.Main) { onSuccessListener(party) }
+            } catch (e: CouldNotConnectToBackend) {
+                Log.e(tag, e.toString())
+                toast(getString(R.string.error_party_creation_no_connection))
+            } finally {
+                withContext(Dispatchers.Main) { dismiss() }
             }
-
-            Toast.makeText(context, "Party $partyName was created", Toast.LENGTH_LONG).show()
-
-            dismiss()
-            onSuccessListener(party)
         }
+    }
+
+    override fun onDismiss(dialog: DialogInterface) {
+        super.onDismiss(dialog)
+
+        pendingJob?.cancel()
+    }
+
+    private suspend fun toast(message: String) = withContext(Dispatchers.Main) {
+        Toast.makeText(requireContext(), message, Toast.LENGTH_LONG).show()
     }
 
     private fun showErrorIfNecessary(view: View) {
