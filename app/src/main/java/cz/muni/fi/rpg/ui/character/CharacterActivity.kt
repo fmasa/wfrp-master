@@ -6,14 +6,15 @@ import android.os.Bundle
 import android.util.Log
 import androidx.activity.viewModels
 import androidx.lifecycle.observe
-import androidx.navigation.findNavController
-import androidx.navigation.ui.setupWithNavController
+import com.google.android.material.tabs.TabLayoutMediator
 import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.model.domain.character.CharacterId
 import cz.muni.fi.rpg.model.right
 import cz.muni.fi.rpg.ui.PartyScopedActivity
+import cz.muni.fi.rpg.ui.character.skills.CharacterSkillsFragment
 import cz.muni.fi.rpg.ui.characterCreation.CharacterCreationActivity
 import cz.muni.fi.rpg.ui.characterCreation.CharacterEditActivity
+import cz.muni.fi.rpg.ui.common.StaticFragmentsViewPagerAdapter
 import cz.muni.fi.rpg.viewModels.CharacterViewModel
 import cz.muni.fi.rpg.viewModels.CharacterViewModelProvider
 import kotlinx.android.synthetic.main.activity_character.*
@@ -55,7 +56,36 @@ class CharacterActivity : PartyScopedActivity(R.layout.activity_character), Char
             .right()
             .observe(this) { supportActionBar?.subtitle = it.name }
 
-        initializeNavigation()
+        pager.adapter = StaticFragmentsViewPagerAdapter(
+            this,
+            arrayOf(
+                { CharacterStatsFragment() },
+                { CharacterSkillsFragment() },
+//                { CharacterSpellsFragment() },
+                { InventoryFragment() }
+            )
+        )
+
+        TabLayoutMediator(tabLayout, pager) { tab, position ->
+            when (position) {
+                0 -> {
+                    tab.setText(R.string.title_character_stats)
+                    tab.setIcon(R.drawable.ic_character)
+                }
+                1 -> {
+                    tab.setText(R.string.title_character_skills)
+                    tab.setIcon(R.drawable.ic_skills)
+                }
+//                2 -> {
+//                    tab.setText(R.string.title_character_spells)
+//                    tab.setIcon(R.drawable.ic_spells)
+//                }
+                2 -> {
+                    tab.setText(R.string.title_character_inventory)
+                    tab.setIcon(R.drawable.ic_inventory)
+                }
+            }
+        }.attach()
     }
 
     private fun openCharacterCreation() {
@@ -78,9 +108,5 @@ class CharacterActivity : PartyScopedActivity(R.layout.activity_character), Char
 
         startActivity(intent)
         finish()
-    }
-
-    private fun initializeNavigation() {
-        navigation.setupWithNavController(findNavController(R.id.nav_host_fragment))
     }
 }

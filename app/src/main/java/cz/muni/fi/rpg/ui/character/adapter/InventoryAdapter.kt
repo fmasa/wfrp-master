@@ -5,7 +5,6 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.DiffUtil
 import cz.muni.fi.rpg.R
-import cz.muni.fi.rpg.common.OnClickListener
 import cz.muni.fi.rpg.model.domain.inventory.InventoryItem
 
 class InventoryAdapter(

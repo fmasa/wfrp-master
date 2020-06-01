@@ -16,10 +16,13 @@ import cz.muni.fi.rpg.model.domain.inventory.InventoryItemRepository
 import cz.muni.fi.rpg.model.domain.invitation.InvitationProcessor
 import cz.muni.fi.rpg.model.domain.party.Party
 import cz.muni.fi.rpg.model.domain.party.PartyRepository
+import cz.muni.fi.rpg.model.domain.skills.Skill
+import cz.muni.fi.rpg.model.domain.skills.SkillRepository
 import cz.muni.fi.rpg.model.firestore.FirestoreCharacterRepository
 import cz.muni.fi.rpg.model.firestore.FirestoreInventoryItemRepository
 import cz.muni.fi.rpg.model.firestore.FirestoreInvitationProcessor
 import cz.muni.fi.rpg.model.firestore.FirestorePartyRepository
+import cz.muni.fi.rpg.model.firestore.FirestoreSkillRepository
 import cz.muni.fi.rpg.model.firestore.jackson.JacksonAggregateMapper
 import dagger.Module
 import dagger.Provides
@@ -83,6 +86,11 @@ class ModelModule {
                 jacksonTypeRef()
             )
         )
+
+    @Provides
+    @Singleton
+    fun skills(firestore: FirebaseFirestore): SkillRepository =
+        FirestoreSkillRepository(firestore, JacksonAggregateMapper(Skill::class, jacksonTypeRef()))
 
     @Provides
     @Singleton

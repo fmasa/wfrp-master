@@ -5,12 +5,12 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import cz.muni.fi.rpg.R
-import cz.muni.fi.rpg.common.OnClickListener
+import cz.muni.fi.rpg.common.EntityListener
 import cz.muni.fi.rpg.model.domain.party.Party
 
 class PartyAdapter(
     private val layoutInflater: LayoutInflater,
-    private val onClickListener: OnClickListener<Party>
+    private val onClickListener: EntityListener<Party>
 ) : ListAdapter<Party, PartyHolder>(
     object : DiffUtil.ItemCallback<Party>() {
         override fun areItemsTheSame(oldItem: Party, newItem: Party) = oldItem.id == newItem.id

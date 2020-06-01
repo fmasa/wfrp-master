@@ -5,12 +5,12 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import cz.muni.fi.rpg.R
-import cz.muni.fi.rpg.common.OnClickListener
+import cz.muni.fi.rpg.common.EntityListener
 import cz.muni.fi.rpg.model.domain.character.Character
 
 class CharacterAdapter(
     private val layoutInflater: LayoutInflater,
-    private val onClickListener: OnClickListener<Character>
+    private val onClickListener: EntityListener<Character>
 ) : ListAdapter<Character, CharacterHolder>(
     object:  DiffUtil.ItemCallback<Character>() {
         override fun areItemsTheSame(oldItem: Character, newItem: Character): Boolean =

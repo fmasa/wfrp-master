@@ -1,6 +1,5 @@
 package cz.muni.fi.rpg.viewModels
 
-import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import cz.muni.fi.rpg.model.domain.character.CharacterId
@@ -10,19 +9,22 @@ import cz.muni.fi.rpg.model.domain.character.Points
 import cz.muni.fi.rpg.model.domain.common.Money
 import cz.muni.fi.rpg.model.domain.inventory.InventoryItem
 import cz.muni.fi.rpg.model.domain.inventory.InventoryItemRepository
+import cz.muni.fi.rpg.model.domain.skills.Skill
+import cz.muni.fi.rpg.model.domain.skills.SkillRepository
 import kotlinx.coroutines.*
 import java.util.UUID
-import javax.inject.Inject
 import kotlin.math.min
 
 class CharacterViewModel(
     private val characters: CharacterRepository,
     private val inventoryItems: InventoryItemRepository,
+    private val skillRepository: SkillRepository,
     private val partyId: UUID,
     private val userId: String
 ) : ViewModel(), CoroutineScope by CoroutineScope(Dispatchers.Default) {
     private val characterId = CharacterId(partyId, userId)
     val character = characters.getLive(partyId, userId)
+    val skills = skillRepository.forCharacter(characterId)
 
     val inventory: LiveData<List<InventoryItem>> = inventoryItems.findAllForCharacter(characterId)
 
@@ -36,6 +38,10 @@ class CharacterViewModel(
 
     fun incrementInsanityPoints() = updatePoints { it.copy(insanity = it.insanity + 1) }
     fun decrementInsanityPoints() = updatePoints { it.copy(insanity = it.insanity - 1) }
+
+    suspend fun saveSkill(skill: Skill) = skillRepository.save(characterId, skill)
+
+    suspend fun removeSkill(skill: Skill) = skillRepository.remove(characterId, skill.id)
 
     suspend fun addMoney(amount: Money) {
         val character = characters.get(partyId, userId)

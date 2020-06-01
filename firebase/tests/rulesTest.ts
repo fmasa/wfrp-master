@@ -2,6 +2,7 @@ import * as firebase from "@firebase/testing";
 import {suite, test} from "mocha-typescript"
 import * as fs from "fs";
 import {uuid} from "uuidv4";
+import {assertFails} from "@firebase/testing";
 
 type CollectionReference = firebase.firestore.CollectionReference;
 type Firestore = firebase.firestore.Firestore;
@@ -654,6 +655,162 @@ class Inventory extends Suite {
                 itemDoc.set({
                     ...this.inventoryItem,
                     [field]: typeof this.inventoryItem[field] == 'string' ? true : 'foo',
+                })
+            );
+        }));
+    }
+}
+
+@suite
+class Skills extends Suite {
+    private partyId: string;
+    private gameMasterId: string;
+    private readonly userId1 = 'user123';
+    private readonly userId2 = 'user345';
+
+    private skill = {
+        id: uuid(),
+        advanced: false,
+        characteristic: "FELLOWSHIP",
+        name: "Haggle",
+        description: "Lower the price of goods",
+        mastery: 1,
+    };
+
+    async before() {
+        await super.before();
+
+        const party = await createValidParty();
+        this.partyId = party.id;
+        this.gameMasterId = party.gameMasterId;
+
+        await joinParty(party, this.userId1);
+        await joinParty(party, this.userId2);
+
+        await createCharacter(party.id, this.userId1);
+        await createCharacter(party.id, this.userId2);
+    }
+
+    private skills(app: Firestore, userId: string): CollectionReference
+    {
+        return app.collection("parties")
+            .doc(this.partyId)
+            .collection("characters")
+            .doc(userId)
+            .collection("skills");
+    }
+
+    @test
+    async "user (and GM) can add skill to his character"() {
+        for (const userId of [this.userId1, this.gameMasterId]) {
+            const skills = this.skills(authedApp(userId), this.userId1);
+
+            await firebase.assertSucceeds(skills.doc(this.skill.id).set(this.skill));
+        }
+    }
+
+    @test
+    async "other users CANNOT add skill to character"() {
+        for (const userId of [this.userId2, 'user-not-in-party']) {
+            const skills = this.skills(authedApp(userId), this.userId1);
+
+            await firebase.assertFails(skills.doc(this.skill.id).set(this.skill));
+        }
+    }
+
+    @test
+    async "user (and GM) can update skills of his character"() {
+        for (const userId of [this.userId1, this.gameMasterId]) {
+            const skills = this.skills(authedApp(userId), this.userId1);
+            await skills.doc(this.skill.id).set(this.skill);
+
+            await firebase.assertSucceeds(skills.doc(this.skill.id).set({advanced: true}, {merge: true}));
+        }
+    }
+
+    @test
+    async "other users CANNOT update skill of character"() {
+        for (const userId of [this.userId2, 'user-not-in-party']) {
+            await this.skills(authedApp(this.userId1), this.userId1).doc(this.skill.id).set(this.skill);
+            const skills = this.skills(authedApp(userId), this.userId1);
+
+            await firebase.assertFails(skills.doc(this.skill.id).set({advanced: true}, {merge: true}));
+        }
+    }
+
+    @test
+    async "user (and GM) can remove skill of his character"() {
+        for (const userId of [this.userId1, this.gameMasterId]) {
+            const skills = this.skills(authedApp(userId), this.userId1);
+            await skills.doc(this.skill.id).set(this.skill);
+
+            await firebase.assertSucceeds(skills.doc(this.skill.id).delete());
+        }
+    }
+
+    @test
+    async "other users CANNOT remove skill of character"() {
+        for (const userId of [this.userId2, 'user-not-in-party']) {
+            await this.skills(authedApp(this.userId1), this.userId1).doc(this.skill.id).set(this.skill);
+            const skills = this.skills(authedApp(userId), this.userId1);
+
+            await firebase.assertFails(skills.doc(this.skill.id).delete());
+        }
+    }
+
+    @test
+    async "all party members can read skills"() {
+        for (const userId of [this.userId1, this.userId2, this.gameMasterId]) {
+            await this.skills(authedApp(userId), this.userId1).get();
+        }
+    }
+
+    @test
+    async "skill with field missing CANNOT be saved"() {
+        const skills = this.skills(authedApp(this.userId1), this.userId1);
+
+        await Promise.all(Object.keys(this.skill).map(field => {
+            const skill = {...this.skill};
+            const skillId = skill.id;
+
+            delete skill[field];
+
+            return firebase.assertFails(skills.doc(skillId).set(skill));
+        }));
+    }
+
+    @test
+    async "skill with invalid field CANNOT be saved"() {
+        const skillDoc = this.skills(authedApp(this.userId1), this.userId1).doc(this.skill.id);
+
+        await Promise.all(
+            [
+                // ID not matching document ID
+                {id: uuid()},
+
+                // ID is not valid UUID
+                {id: "foo"},
+
+                // Empty name
+                {name: ""},
+
+                // Unknown characteristic
+                {characteristic: "NICENCESS"},
+
+                // Too large mastery
+                {mastery: 4},
+
+                // Too small mastery
+                {mastery: 0},
+
+            ].map(doc => firebase.assertFails(skillDoc.set({...this.skill, ...doc})))
+        );
+
+        await Promise.all(Object.keys(this.skill).map(field => {
+            return firebase.assertFails(
+                skillDoc.set({
+                    ...this.skill,
+                    [field]: typeof this.skill[field] == 'string' ? true : 'foo',
                 })
             );
         }));
