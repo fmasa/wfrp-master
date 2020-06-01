@@ -15,4 +15,5 @@
     <color name="colorEmptyState">#585858</color>
     <color name="colorSplashScreenText">#eaeaea</color>
     <color name="colorCardBackground">#FFFFFF</color>
+    <color name="colorBackgroundUnderCard">#fafafa</color>
 </resources>
