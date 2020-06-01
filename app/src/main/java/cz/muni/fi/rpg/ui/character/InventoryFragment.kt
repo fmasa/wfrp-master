@@ -109,14 +109,7 @@ class InventoryFragment : DaggerFragment(R.layout.fragment_inventory), Coroutine
     private fun checkItemValidity(view: View): Boolean {
         val name = view.newInventoryItemName
 
-        var valid = true
-        valid = valid && checkEditTextValue(
-            name,
-            { it -> it.text.isNotBlank() },
-            "Name cannot be blank."
-        )
-
-        return valid
+        return checkEditTextValue(name, { it.text.isNotBlank() }, "Name cannot be blank.")
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
