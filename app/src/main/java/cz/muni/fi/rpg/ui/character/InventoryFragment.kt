@@ -24,8 +24,6 @@ import kotlinx.android.synthetic.main.fragment_inventory.*
 import kotlinx.coroutines.*
 
 class InventoryFragment : DaggerFragment(R.layout.fragment_inventory), CoroutineScope by CoroutineScope(Dispatchers.Default) {
-    private var inputError = ""
-    private lateinit var characterId: CharacterId
     private val viewModel: CharacterViewModel by activityViewModels()
     private lateinit var dialog: AlertDialog
 
