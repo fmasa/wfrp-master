@@ -42,8 +42,8 @@ class InventoryFragment : DaggerFragment(R.layout.fragment_inventory), Coroutine
         val dialog = AlertDialog.Builder(activity)
             .setTitle(R.string.createInventoryItemTitle)
             .setView(view)
-            .setPositiveButton(R.string.createInventoryItemSubmit, null)
-            .setNeutralButton(R.string.createInventoryItemCancel, null)
+            .setPositiveButton(R.string.button_save, null)
+            .setNeutralButton(R.string.button_cancel, null)
             .create()
         dialog.setOnShowListener {
             dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener {

@@ -1,7 +1,12 @@
 <resources>
     <string name="appIcon">20 sided dice</string>
 
+    <!-- Common UI elements -->
+    <string name="button_finish">Finish</string>
+    <string name="button_save">Save</string>
+    <string name="button_cancel">Cancel</string>
     <string name="button_submit">Submit</string>
+    <!-- end of Common UI elements -->
 
     <string name="assembleParty_title">Assemble New Party</string>
     <string name="label_party_name">Party Name</string>
@@ -16,8 +21,6 @@
     <string name="title_party_activity">Parties</string>
     <string name="title_joinParty">Join party using QR code…</string>
 
-    <string name="button_save">Save</string>
-
     <!-- Skill Dialog -->
     <string name="label_skill_name">Skill Name</string>
     <string name="label_skill_description">Skill Description (Optional)</string>
@@ -29,7 +32,6 @@
     <string name="title_character_creation_stats">Character stats</string>
 
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="button_cancel">Cancel</string>
     <string name="qr_scan_prompt">Scan the code provided by your GM</string>
     <string name="join_party_dialog_title">Join party</string>
     <string name="join_party_dialog_party_name">You are joining</string>
@@ -43,10 +45,6 @@
     <string name="title_character_stats">Attributes</string>
     <string name="title_character_inventory">Inventory</string>
     <string name="title_notifications">Notifications</string>
-
-    <string name="button_next">Next</string>
-    <string name="button_previous">Previous</string>
-    <string name="button_finish">Finish</string>
 
     <string name="label_name">Name</string>
     <string name="label_race">Race</string>
@@ -103,10 +101,8 @@
     <string name="inventory_item_icon_description">Inventory item icon</string>
     <string name="no_inventory_item_prompt">There is no item in your inventory.</string>
     <string name="createInventoryItemTitle">Create new inventory item</string>
-    <string name="createInventoryItemSubmit">Create</string>
     <string name="inventory_item_description_label">Description</string>
     <string name="inventory_item_name_label">Name</string>
-    <string name="createInventoryItemCancel">Cancel</string>
 
     <string name="button_edit_info">Edit info</string>
     <string name="error_value_is_0">Value cannot be 0</string>
