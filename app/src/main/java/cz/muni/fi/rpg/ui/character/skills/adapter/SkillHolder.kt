@@ -37,12 +37,12 @@ class SkillHolder(
             }
         )
         
-        view.setOnCreateContextMenuListener { menu, v, menuInfo ->
-            menu.add(0, v.id, 0, "Remove skill")
+        view.setOnCreateContextMenuListener { menu, v, _ ->
+            menu.add(0, v.id, 0, R.string.remove)
                 .setOnMenuItemClickListener {
                     onRemoveListener(skill)
 
-                    return@setOnMenuItemClickListener false
+                    false
                 }
         }
         view.setOnClickListener { onClickListener(skill) };

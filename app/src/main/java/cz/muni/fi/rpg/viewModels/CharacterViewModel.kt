@@ -81,4 +81,8 @@ class CharacterViewModel(
     suspend fun saveInventoryItem(inventoryItem: InventoryItem) {
         inventoryItems.save(characterId, inventoryItem)
     }
+
+    suspend fun removeInventoryItem(inventoryItem: InventoryItem) {
+        inventoryItems.remove(characterId, inventoryItem.id)
+    }
 }

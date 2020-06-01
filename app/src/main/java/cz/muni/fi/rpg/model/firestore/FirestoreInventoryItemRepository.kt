@@ -45,6 +45,10 @@ internal class FirestoreInventoryItemRepository(
         }
     }
 
+    override suspend fun remove(characterId: CharacterId, itemId: InventoryItemId) {
+        inventoryItems(characterId).document(itemId.toString()).delete().await()
+    }
+
     private fun inventoryItems(characterId: CharacterId): CollectionReference {
         return parties.document(characterId.partyId.toString())
             .collection(COLLECTION_CHARACTERS)
