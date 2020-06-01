@@ -1,5 +1,4 @@
 <resources>
-    <string name="app_name">WFRP Master</string>
     <string name="appIcon">20 sided dice</string>
 
     <string name="button_submit">Submit</string>

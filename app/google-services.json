@@ -37,6 +37,35 @@
     },
     {
       "client_info": {
+        "mobilesdk_app_id": "1:723151893906:android:4849d9ce070afc3ac53d4b",
+        "android_client_info": {
+          "package_name": "cz.frantisekmasa.dnd.debug"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "723151893906-jcpa54h9uvdk614pj82ap53m4d4jmcd4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDO4Y4wWcY4HdYcsp8zcLMpMjwUJ_9q3Fw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "723151893906-jcpa54h9uvdk614pj82ap53m4d4jmcd4.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
         "mobilesdk_app_id": "1:723151893906:android:b001abe54ab88730c53d4b",
         "android_client_info": {
           "package_name": "cz.muni.fi.rpg"
