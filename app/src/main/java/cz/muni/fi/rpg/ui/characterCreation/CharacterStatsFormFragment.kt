@@ -10,6 +10,12 @@ import cz.muni.fi.rpg.model.domain.character.Points
 import cz.muni.fi.rpg.model.domain.character.Stats
 import kotlinx.android.synthetic.main.fragment_character_stats_form.*
 
+internal data class CharacterStatsData(
+    val stats: Stats,
+    val maxWounds: Int,
+    val fatePoints: Int
+)
+
 class CharacterStatsFormFragment : Fragment(R.layout.fragment_character_stats_form) {
     var character: Character? = null
 
@@ -19,12 +25,12 @@ class CharacterStatsFormFragment : Fragment(R.layout.fragment_character_stats_fo
         setDefaultValues()
     }
 
-    fun submit(): Pair<Stats, Points>? {
+    internal fun submit(): CharacterStatsData? {
         if (! checkValues()) {
             return null
         }
 
-        return Pair(
+        return CharacterStatsData(
             Stats(
                 WeaponSkillTextFill.text.toString().toInt(),
                 BallisticSkillTextFill.text.toString().toInt(),
@@ -36,13 +42,8 @@ class CharacterStatsFormFragment : Fragment(R.layout.fragment_character_stats_fo
                 FellowshipTextFill.text.toString().toInt(),
                 MagicTextFill.text.toString().toInt()
             ),
-            Points(
-                0,
-                FateTextFill.text.toString().toInt(),
-                FateTextFill.text.toString().toInt(),
-                WoundsTextFill.text.toString().toInt(),
-                WoundsTextFill.text.toString().toInt()
-            )
+            WoundsTextFill.text.toString().toInt(),
+            FateTextFill.text.toString().toInt()
         )
     }
 

@@ -59,7 +59,17 @@ class CharacterCreationActivity : PartyScopedActivity(R.layout.activity_characte
                         return@setOnClickListener
                     }
 
-                    saveCharacter(characterInfo, data.first, data.second)
+                    saveCharacter(
+                        characterInfo,
+                        data.stats,
+                        Points(
+                            insanity = 0,
+                            fate = data.fatePoints,
+                            fortune = data.fatePoints,
+                            wounds = data.maxWounds,
+                            maxWounds = data.maxWounds
+                        )
+                    )
                 }
             }
         }

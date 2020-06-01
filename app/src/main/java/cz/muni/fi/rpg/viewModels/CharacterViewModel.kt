@@ -61,11 +61,7 @@ class CharacterViewModel(
         characters.save(partyId, character)
     }
 
-    private fun addFatePoints(addition: Int) = updatePoints {
-        val newFatePoints = it.fate + addition
-
-        it.copy(fate = newFatePoints, fortune = min(it.fortune, newFatePoints))
-    }
+    private fun addFatePoints(addition: Int) = updatePoints { it.updateFate(it.fate + addition) }
 
     private fun updatePoints(mutation: (points: Points) -> Points) {
         launch {
