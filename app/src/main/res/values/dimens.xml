@@ -8,4 +8,5 @@
     <dimen name="coin_drawable_width">18dp</dimen>
     <dimen name="fabMargin">16dp</dimen>
     <dimen name="empty_state_drawable_size">60pt</dimen>
+    <dimen name="long_ui_bottom_padding">20dp</dimen>
 </resources>
