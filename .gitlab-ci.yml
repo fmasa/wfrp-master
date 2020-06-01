@@ -1,4 +1,4 @@
-image: circleci/android:api-24-node
+image: circleci/android:api-29-node
 
 stages:
     - check
