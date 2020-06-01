@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_marginBottom="1dp"
-    app:cardCornerRadius="0dp"
     android:foreground="?attr/selectableItemBackground"
-    app:cardElevation="2dp"
-    >
+    app:cardCornerRadius="0dp"
+    app:cardElevation="2dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/inventoryItemLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="20dp"
@@ -17,37 +17,36 @@
 
         <ImageView
             android:id="@+id/inventoryItemIcon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:background="@drawable/circle_background"
+            android:tint="@color/colorFabText"
+            android:padding="10dp"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             android:src="@drawable/ic_inventory"
-            app:layout_constraintTop_toTopOf="parent"
+            android:contentDescription="@string/inventory_item_icon_description"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            android:contentDescription="@string/inventory_item_icon_description"
-            />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/inventoryItemName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:layout_marginTop="4dp"
-            android:textSize="20sp"
-            app:layout_constraintTop_toTopOf="parent"
+            android:textSize="18sp"
             app:layout_constraintLeft_toRightOf="@id/inventoryItemIcon"
-            />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/inventoryItemDescription"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:layout_marginTop="4dp"
-            android:textSize="16sp"
+            android:layout_marginTop="2dp"
+            android:textSize="14sp"
             android:textStyle="italic"
-            app:layout_constraintTop_toBottomOf="@+id/inventoryItemName"
             app:layout_constraintLeft_toRightOf="@id/inventoryItemIcon"
-            />
+            app:layout_constraintTop_toBottomOf="@+id/inventoryItemName" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.cardview.widget.CardView>

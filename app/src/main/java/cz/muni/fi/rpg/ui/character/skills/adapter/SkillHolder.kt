@@ -1,6 +1,7 @@
 package cz.muni.fi.rpg.ui.character.skills.adapter
 
 import android.view.View
+import androidx.constraintlayout.widget.ConstraintSet
 import androidx.recyclerview.widget.RecyclerView
 import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.common.EntityListener
@@ -16,6 +17,21 @@ class SkillHolder(
     fun bind(skill: Skill) {
         view.skillItemTitle.text = skill.name;
         view.skillItemDescription.text = skill.description
+
+        if (skill.description.isBlank()) {
+            view.skillItemDescription.visibility = View.GONE
+
+            ConstraintSet().apply {
+                clone(view.skillItemLayout)
+                connect(
+                    R.id.skillItemTitle,
+                    ConstraintSet.BOTTOM,
+                    ConstraintSet.PARENT_ID,
+                    ConstraintSet.BOTTOM
+                )
+                applyTo(view.skillItemLayout)
+            }
+        }
 
         view.skillIcon.setImageResource(
             when (skill.characteristic) {
