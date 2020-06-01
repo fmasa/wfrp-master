@@ -76,7 +76,7 @@ class CharacterCreationActivity : PartyScopedActivity(R.layout.activity_characte
             R.string.title_character_creation_info,
             infoCreationFragment,
             null,
-            R.string.button_edit_stats
+            R.string.button_edit
         )
     }
 

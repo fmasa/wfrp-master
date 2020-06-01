@@ -50,10 +50,13 @@ class CharacterEditActivity : PartyScopedActivity(R.layout.activity_character_ed
         characterInfo =
             supportFragmentManager.findFragmentById(R.id.characterInfo) as CharacterInfoFormFragment
 
+        supportActionBar?.subtitle = getString(R.string.subtitle_edit_character)
+
         launch {
             val character = characters.get(characterId.partyId, characterId.userId)
 
             withContext(Dispatchers.Main) {
+                supportActionBar?.title = character.getName()
                 characterStats.setCharacterData(character)
                 characterInfo.setCharacterData(character)
             }
