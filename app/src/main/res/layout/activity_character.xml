@@ -8,7 +8,6 @@
         android:id="@+id/tabLayout"
         style="@style/TabLayout"
         android:layout_width="match_parent"
-        android:layout_marginBottom="12dp"
         android:elevation="8dp"
         android:layout_height="wrap_content" />
     <androidx.viewpager2.widget.ViewPager2
