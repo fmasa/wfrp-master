@@ -22,7 +22,8 @@ import cz.muni.fi.rpg.viewModels.CharacterViewModel
 import kotlinx.android.synthetic.main.fragment_inventory.*
 import kotlinx.coroutines.*
 
-class InventoryFragment : DaggerFragment(R.layout.fragment_inventory), CoroutineScope by CoroutineScope(Dispatchers.Default) {
+class InventoryFragment : DaggerFragment(R.layout.fragment_inventory),
+    CoroutineScope by CoroutineScope(Dispatchers.Default) {
     private val viewModel: CharacterViewModel by activityViewModels()
 
     private fun setViewVisibility(view: View, visible: Boolean) {
@@ -53,30 +54,21 @@ class InventoryFragment : DaggerFragment(R.layout.fragment_inventory), Coroutine
     }
 
     private fun onNewItemSubmitted(view: View, dialog: AlertDialog) {
-        try {
-            if (checkItemValidity(view)) {
-                val inventoryItem = createInventoryItem(view)
-                launch {
-                    viewModel.saveInventoryItem(inventoryItem)
+        if (! checkItemValidity(view)) {
+            return
+        }
 
-                    withContext(Dispatchers.Main) {
-                        // TODO Extract to resources
-                        Toast.makeText(
-                            context,
-                            "Item '${inventoryItem.name}' was added to your inventory.",
-                            Toast.LENGTH_LONG
-                        ).show()
+        val inventoryItem = createInventoryItem(view)
 
-                        dialog.dismiss()
-                    }
-                }
+        launch {
+            try {
+                viewModel.saveInventoryItem(inventoryItem)
+
+                toast(getString(R.string.inventory_toast_item_added, inventoryItem.name))
+                dialog.dismiss()
+            } catch (e: java.lang.Exception) {
+                toast("Item couldn't be added to your inventory.")
             }
-        } catch (e: Exception) {
-            Toast.makeText(
-                context,
-                "Item couldn't be added to your inventory.",
-                Toast.LENGTH_LONG
-            ).show()
         }
     }
 
@@ -134,5 +126,9 @@ class InventoryFragment : DaggerFragment(R.layout.fragment_inventory), Coroutine
             adapter.submitList(items)
             setEmptyCollectionView(items.isEmpty())
         }
+    }
+
+    private suspend fun toast(message: String) {
+        withContext(Dispatchers.Main) { Toast.makeText(context, message, Toast.LENGTH_LONG).show() }
     }
 }
