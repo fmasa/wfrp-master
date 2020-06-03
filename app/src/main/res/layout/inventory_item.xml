@@ -30,23 +30,52 @@
 
         <TextView
             android:id="@+id/inventoryItemName"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
+            android:maxLines="1"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:textSize="18sp"
-            app:layout_constraintLeft_toRightOf="@id/inventoryItemIcon"
+            android:layout_marginEnd="5dp"
+            android:ellipsize="end"
+            app:layout_constraintEnd_toStartOf="@id/timesSymbol"
+            app:layout_constraintStart_toEndOf="@id/inventoryItemIcon"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/inventoryItemDescription"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
+            android:maxLines="1"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
+            android:layout_marginEnd="5dp"
             android:layout_marginTop="2dp"
             android:textSize="14sp"
             android:textStyle="italic"
-            app:layout_constraintLeft_toRightOf="@id/inventoryItemIcon"
+            android:ellipsize="end"
+            app:layout_constraintEnd_toStartOf="@id/timesSymbol"
+            app:layout_constraintStart_toEndOf="@id/inventoryItemIcon"
             app:layout_constraintTop_toBottomOf="@+id/inventoryItemName" />
 
+        <TextView
+            android:id="@+id/timesSymbol"
+            style="@style/TextAppearance.AppCompat.Medium"
+            android:layout_width="wrap_content"
+            android:text="@string/multiplication_symbol"
+            android:visibility="gone"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="4dp"
+            app:layout_constraintBottom_toBottomOf="@id/quantity"
+            app:layout_constraintEnd_toStartOf="@id/quantity"
+            app:layout_constraintTop_toTopOf="@id/quantity" />
+
+        <TextView
+            android:id="@+id/quantity"
+            style="@style/TextAppearance.AppCompat.Medium"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@id/inventoryItemIcon"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/inventoryItemIcon" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.cardview.widget.CardView>

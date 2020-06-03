@@ -17,6 +17,12 @@ class InventoryHolder(
         view.inventoryItemName.text = item.name
         view.inventoryItemDescription.text = item.description
 
+        if (item.quantity > 1) {
+            view.quantity.text = item.quantity.toString()
+            view.quantity.visibility = View.VISIBLE
+            view.timesSymbol.visibility = View.VISIBLE
+        }
+
         if (item.description.isBlank()) {
             view.inventoryItemDescription.visibility = View.GONE
 

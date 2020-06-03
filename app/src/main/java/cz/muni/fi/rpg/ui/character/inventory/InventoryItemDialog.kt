@@ -5,10 +5,12 @@ import android.os.Bundle
 import android.view.View
 import android.widget.EditText
 import android.widget.Toast
+import androidx.annotation.StringRes
 import androidx.appcompat.app.AlertDialog
 import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.activityViewModels
+import com.google.android.material.textfield.TextInputLayout
 import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.model.domain.inventory.InventoryItem
 import cz.muni.fi.rpg.model.domain.inventory.InventoryItemId
@@ -19,7 +21,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class InventoryItemDialog : DialogFragment(), CoroutineScope by CoroutineScope(Dispatchers.Default) {
+class InventoryItemDialog : DialogFragment(),
+    CoroutineScope by CoroutineScope(Dispatchers.Default) {
 
     private val viewModel: CharacterViewModel by activityViewModels()
 
@@ -46,6 +49,7 @@ class InventoryItemDialog : DialogFragment(), CoroutineScope by CoroutineScope(D
         existingItem?.let {
             view.itemName.setText(it.name)
             view.itemDescription.setText(it.description)
+            view.itemQuantity.setText(it.quantity.toString())
         }
 
         val dialog = AlertDialog.Builder(requireContext())
@@ -65,7 +69,7 @@ class InventoryItemDialog : DialogFragment(), CoroutineScope by CoroutineScope(D
     }
 
     private fun onDialogSubmitted(view: View) {
-        if (! checkItemValidity(view)) {
+        if (!checkItemValidity(view)) {
             return
         }
 
@@ -83,22 +87,27 @@ class InventoryItemDialog : DialogFragment(), CoroutineScope by CoroutineScope(D
         }
     }
 
-    private fun createInventoryItem(view: View): InventoryItem {
-        val id = this.existingItem?.id ?: InventoryItemId.randomUUID()
-        val name = view.itemName.text.toString().trim()
-        val description = view.itemDescription.text.toString().trim()
-        // TODO in next versions make editable
-        val quantity = 1
-        return InventoryItem(id, name, description, quantity)
-    }
+    private fun createInventoryItem(view: View) = InventoryItem(
+        id = this.existingItem?.id ?: InventoryItemId.randomUUID(),
+        name = view.itemName.text.toString().trim(),
+        description = view.itemDescription.text.toString().trim(),
+        quantity = view.itemQuantity.text.toString().toInt()
+    )
 
     private fun checkEditTextValue(
         view: EditText,
         predicate: (EditText) -> Boolean,
-        message: String
+        @StringRes message: Int
     ): Boolean {
         if (!predicate(view)) {
-            showError(view, message)
+            val parent = view.parent.parent
+
+            if (parent is TextInputLayout) {
+                parent.error = getString(message)
+            } else {
+                view.error = getString(message)
+            }
+
             return false
         }
         return true
@@ -107,11 +116,15 @@ class InventoryItemDialog : DialogFragment(), CoroutineScope by CoroutineScope(D
     private fun checkItemValidity(view: View): Boolean {
         val name = view.itemName
 
-        return checkEditTextValue(name, { it.text.isNotBlank() }, "Name cannot be blank.")
-    }
-
-    private fun showError(view: EditText, message: String) {
-        view.error = message
+        return checkEditTextValue(name, { it.text.isNotBlank() }, R.string.error_name_blank) &&
+                checkEditTextValue(
+                    view.itemQuantity,
+                    {
+                        val value = it.text.toString().toIntOrNull()
+                        value != null && value > 0
+                    },
+                    R.string.error_invalid_quantity
+                )
     }
 
     private suspend fun toast(message: String) {

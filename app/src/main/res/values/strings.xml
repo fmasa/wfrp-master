@@ -103,6 +103,7 @@
     <string name="createInventoryItemTitle">Create new inventory item</string>
     <string name="inventory_item_description_label">Description</string>
     <string name="inventory_item_name_label">Name</string>
+    <string name="inventory_item_quantity">Quantity</string>
 
     <string name="button_edit_info">Edit info</string>
     <string name="error_value_is_0">Value cannot be 0</string>
@@ -116,4 +117,7 @@
     <string name="label_skill_mastery">Mastery</string>
     <string name="remove">Remove</string>
     <string name="inventory_toast_item_saved">Item was saved.</string>
+    <string name="multiplication_symbol">×</string>
+    <string name="error_name_blank">Name cannot be blank.</string>
+    <string name="error_invalid_quantity">Quantity must be number greater than 0</string>
 </resources>
