@@ -115,5 +115,5 @@
     <string name="label_skill_characteristic">Characteristic</string>
     <string name="label_skill_mastery">Mastery</string>
     <string name="remove">Remove</string>
-    <string name="inventory_toast_item_added">Item \'%s\' was added to your inventory.</string>
+    <string name="inventory_toast_item_saved">Item was saved.</string>
 </resources>

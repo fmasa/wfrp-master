@@ -6,6 +6,7 @@ import android.view.View
 import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.activityViewModels
 import cz.muni.fi.rpg.R
@@ -22,12 +23,33 @@ class InventoryItemDialog : DialogFragment(), CoroutineScope by CoroutineScope(D
 
     private val viewModel: CharacterViewModel by activityViewModels()
 
+    private val existingItem: InventoryItem? by lazy {
+        arguments?.getParcelable<InventoryItem>(ARGUMENT_ITEM)
+    }
+
+    companion object {
+        private const val ARGUMENT_ITEM = "item"
+
+        fun newInstance(existingItem: InventoryItem?): InventoryItemDialog {
+            val fragment = InventoryItemDialog()
+
+            fragment.arguments = bundleOf(ARGUMENT_ITEM to existingItem)
+
+            return fragment
+        }
+    }
+
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val activity = requireActivity()
         val view = activity.layoutInflater.inflate(R.layout.inventory_item_edit_dialog, null)
 
+        existingItem?.let {
+            view.itemName.setText(it.name)
+            view.itemDescription.setText(it.description)
+        }
+
         val dialog = AlertDialog.Builder(requireContext())
-            .setTitle(R.string.createInventoryItemTitle)
+            .setTitle(if (existingItem != null) null else getString(R.string.createInventoryItemTitle))
             .setView(view)
             .setPositiveButton(R.string.button_save, null)
             .setNeutralButton(R.string.button_cancel, null)
@@ -53,7 +75,7 @@ class InventoryItemDialog : DialogFragment(), CoroutineScope by CoroutineScope(D
             try {
                 viewModel.saveInventoryItem(inventoryItem)
 
-                toast(getString(R.string.inventory_toast_item_added, inventoryItem.name))
+                toast(getString(R.string.inventory_toast_item_saved))
                 dismiss()
             } catch (e: java.lang.Exception) {
                 toast("Item couldn't be added to your inventory.")
@@ -62,9 +84,9 @@ class InventoryItemDialog : DialogFragment(), CoroutineScope by CoroutineScope(D
     }
 
     private fun createInventoryItem(view: View): InventoryItem {
-        val id = InventoryItemId.randomUUID()
-        val name = view.newInventoryItemName.text.toString().trim()
-        val description = view.newInventoryItemDescription.text.toString().trim()
+        val id = this.existingItem?.id ?: InventoryItemId.randomUUID()
+        val name = view.itemName.text.toString().trim()
+        val description = view.itemDescription.text.toString().trim()
         // TODO in next versions make editable
         val quantity = 1
         return InventoryItem(id, name, description, quantity)
@@ -82,9 +104,8 @@ class InventoryItemDialog : DialogFragment(), CoroutineScope by CoroutineScope(D
         return true
     }
 
-
     private fun checkItemValidity(view: View): Boolean {
-        val name = view.newInventoryItemName
+        val name = view.itemName
 
         return checkEditTextValue(name, { it.text.isNotBlank() }, "Name cannot be blank.")
     }

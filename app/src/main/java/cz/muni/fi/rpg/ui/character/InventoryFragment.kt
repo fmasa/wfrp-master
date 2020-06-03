@@ -9,6 +9,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.observe
 import androidx.recyclerview.widget.LinearLayoutManager
+import cz.muni.fi.rpg.model.domain.inventory.InventoryItem
 import cz.muni.fi.rpg.model.right
 import cz.muni.fi.rpg.ui.character.adapter.InventoryAdapter
 import cz.muni.fi.rpg.ui.character.inventory.InventoryItemDialog
@@ -31,8 +32,9 @@ class InventoryFragment : DaggerFragment(R.layout.fragment_inventory),
         setViewVisibility(inventoryRecycler, !isEmpty)
     }
 
-    private fun showDialog() {
-        InventoryItemDialog().show(childFragmentManager, "InventoryItemDialog")
+    private fun showDialog(existingItem: InventoryItem?) {
+        InventoryItemDialog.newInstance(existingItem)
+            .show(childFragmentManager, "InventoryItemDialog")
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -45,10 +47,11 @@ class InventoryFragment : DaggerFragment(R.layout.fragment_inventory),
             TransactionDialog(viewModel).show(parentFragmentManager, "TransactionDialog")
         }
 
-        view.addNewInventoryItemButton.setOnClickListener() { showDialog() }
+        view.addNewInventoryItemButton.setOnClickListener { showDialog(null) }
 
         val adapter = InventoryAdapter(
             layoutInflater,
+            onClickListener = this::showDialog,
             onRemoveListener = { launch { viewModel.removeInventoryItem(it) } }
         )
         inventoryRecycler.layoutManager = LinearLayoutManager(context)
