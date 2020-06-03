@@ -56,7 +56,7 @@ class InventoryItemDialog : DialogFragment(),
             .setTitle(if (existingItem != null) null else getString(R.string.createInventoryItemTitle))
             .setView(view)
             .setPositiveButton(R.string.button_save, null)
-            .setNeutralButton(R.string.button_cancel, null)
+            .setNegativeButton(R.string.button_cancel, null)
             .create()
 
         dialog.setOnShowListener {
