@@ -10,6 +10,7 @@ import cz.muni.fi.rpg.model.domain.inventory.InventoryItem
 
 class InventoryAdapter(
     private val layoutInflater: LayoutInflater,
+    private val onClickListener: EntityListener<InventoryItem>,
     private val onRemoveListener: EntityListener<InventoryItem>
 ) : ListAdapter<InventoryItem, InventoryHolder>(
     object : DiffUtil.ItemCallback<InventoryItem>() {
@@ -21,7 +22,8 @@ class InventoryAdapter(
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): InventoryHolder {
         return InventoryHolder(
             layoutInflater.inflate(R.layout.inventory_item, parent, false),
-            onRemoveListener
+            onClickListener = onClickListener,
+            onRemoveListener = onRemoveListener
         )
     }
 

@@ -40,5 +40,8 @@
         <item name="android:layout_width">@dimen/empty_state_drawable_size</item>
         <item name="android:layout_height">@dimen/empty_state_drawable_size</item>
     </style>
+    <style name="OutlinedInput" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <item name="android:layout_marginBottom">8dp</item>
+    </style>
 
 </resources>
