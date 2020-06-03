@@ -1,22 +1,17 @@
 package cz.muni.fi.rpg.ui.character
 
-import androidx.appcompat.app.AlertDialog
 import android.os.Bundle
 import android.view.View
-import android.widget.EditText
 import cz.muni.fi.rpg.R
-import cz.muni.fi.rpg.model.domain.inventory.InventoryItem
-import cz.muni.fi.rpg.model.domain.inventory.InventoryItemId
 import dagger.android.support.DaggerFragment
 import kotlinx.android.synthetic.main.fragment_inventory.view.*
-import kotlinx.android.synthetic.main.inventory_item_edit_dialog.view.*
-import android.widget.Toast
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.observe
 import androidx.recyclerview.widget.LinearLayoutManager
 import cz.muni.fi.rpg.model.right
 import cz.muni.fi.rpg.ui.character.adapter.InventoryAdapter
+import cz.muni.fi.rpg.ui.character.inventory.InventoryItemDialog
 import cz.muni.fi.rpg.ui.character.inventory.TransactionDialog
 import cz.muni.fi.rpg.viewModels.CharacterViewModel
 import kotlinx.android.synthetic.main.fragment_inventory.*
@@ -37,70 +32,7 @@ class InventoryFragment : DaggerFragment(R.layout.fragment_inventory),
     }
 
     private fun showDialog() {
-        val activity = requireActivity()
-        val view = activity.layoutInflater.inflate(R.layout.inventory_item_edit_dialog, null)
-        val dialog = AlertDialog.Builder(activity)
-            .setTitle(R.string.createInventoryItemTitle)
-            .setView(view)
-            .setPositiveButton(R.string.button_save, null)
-            .setNeutralButton(R.string.button_cancel, null)
-            .create()
-        dialog.setOnShowListener {
-            dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener {
-                onNewItemSubmitted(view, dialog)
-            }
-        }
-        dialog.show()
-    }
-
-    private fun onNewItemSubmitted(view: View, dialog: AlertDialog) {
-        if (! checkItemValidity(view)) {
-            return
-        }
-
-        val inventoryItem = createInventoryItem(view)
-
-        launch {
-            try {
-                viewModel.saveInventoryItem(inventoryItem)
-
-                toast(getString(R.string.inventory_toast_item_added, inventoryItem.name))
-                dialog.dismiss()
-            } catch (e: java.lang.Exception) {
-                toast("Item couldn't be added to your inventory.")
-            }
-        }
-    }
-
-    private fun createInventoryItem(view: View): InventoryItem {
-        val id = InventoryItemId.randomUUID()
-        val name = view.newInventoryItemName.text.toString().trim()
-        val description = view.newInventoryItemDescription.text.toString().trim()
-        // TODO in next versions make editable
-        val quantity = 1
-        return InventoryItem(id, name, description, quantity)
-    }
-
-    private fun showError(view: EditText, message: String) {
-        view.error = message
-    }
-
-    private fun checkEditTextValue(
-        view: EditText,
-        predicate: (EditText) -> Boolean,
-        message: String
-    ): Boolean {
-        if (!predicate(view)) {
-            showError(view, message)
-            return false
-        }
-        return true
-    }
-
-    private fun checkItemValidity(view: View): Boolean {
-        val name = view.newInventoryItemName
-
-        return checkEditTextValue(name, { it.text.isNotBlank() }, "Name cannot be blank.")
+        InventoryItemDialog().show(childFragmentManager, "InventoryItemDialog")
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -126,9 +58,5 @@ class InventoryFragment : DaggerFragment(R.layout.fragment_inventory),
             adapter.submitList(items)
             setEmptyCollectionView(items.isEmpty())
         }
-    }
-
-    private suspend fun toast(message: String) {
-        withContext(Dispatchers.Main) { Toast.makeText(context, message, Toast.LENGTH_LONG).show() }
     }
 }
