@@ -3,7 +3,7 @@ package cz.muni.fi.rpg.di
 import cz.muni.fi.rpg.ui.AuthenticatedActivity
 import cz.muni.fi.rpg.ui.joinParty.JoinPartyActivity
 import cz.muni.fi.rpg.ui.gameMaster.GameMasterActivity
-import cz.muni.fi.rpg.ui.MainActivity
+import cz.muni.fi.rpg.ui.StartupActivity
 import cz.muni.fi.rpg.ui.character.CharacterActivity
 import cz.muni.fi.rpg.ui.characterCreation.CharacterCreationActivity
 import cz.muni.fi.rpg.ui.characterCreation.CharacterEditActivity
@@ -17,7 +17,7 @@ abstract class ActivitiesModule {
     abstract fun authenticatedActivity(): AuthenticatedActivity
 
     @ContributesAndroidInjector
-    abstract fun mainActivity(): MainActivity
+    abstract fun startupActivity(): StartupActivity
 
     @ContributesAndroidInjector
     abstract fun partyListActivity(): PartyListActivity

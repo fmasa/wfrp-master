@@ -1,7 +1,6 @@
 package cz.muni.fi.rpg.ui
 
 import android.content.Intent
-import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
@@ -10,7 +9,7 @@ import cz.muni.fi.rpg.ui.partyList.PartyListActivity
 import dagger.android.support.DaggerAppCompatActivity
 import javax.inject.Inject
 
-class MainActivity : DaggerAppCompatActivity(R.layout.activity_main) {
+class StartupActivity : DaggerAppCompatActivity(R.layout.activity_startup) {
     @Inject
     lateinit var auth: FirebaseAuth
 

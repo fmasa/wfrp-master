@@ -26,7 +26,7 @@ abstract class AuthenticatedActivity(@LayoutRes contentLayoutId: Int) :
         val user = auth.currentUser
 
         if (user == null) {
-            startActivity(Intent(this, MainActivity::class.java))
+            startActivity(Intent(this, StartupActivity::class.java))
 
             Toast.makeText(applicationContext, "You have been logged out", Toast.LENGTH_SHORT)
                 .show()
