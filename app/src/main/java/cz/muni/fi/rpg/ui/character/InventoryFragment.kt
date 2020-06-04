@@ -2,8 +2,8 @@ package cz.muni.fi.rpg.ui.character
 
 import android.os.Bundle
 import android.view.View
+import androidx.fragment.app.Fragment
 import cz.muni.fi.rpg.R
-import dagger.android.support.DaggerFragment
 import kotlinx.android.synthetic.main.fragment_inventory.view.*
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Transformations
@@ -18,7 +18,7 @@ import cz.muni.fi.rpg.viewModels.CharacterViewModel
 import kotlinx.android.synthetic.main.fragment_inventory.*
 import kotlinx.coroutines.*
 
-class InventoryFragment : DaggerFragment(R.layout.fragment_inventory),
+class InventoryFragment : Fragment(R.layout.fragment_inventory),
     CoroutineScope by CoroutineScope(Dispatchers.Default) {
     private val viewModel: CharacterViewModel by activityViewModels()
 

@@ -4,7 +4,6 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import androidx.activity.viewModels
 import androidx.lifecycle.observe
 import com.google.android.material.tabs.TabLayoutMediator
 import cz.muni.fi.rpg.R
@@ -15,9 +14,9 @@ import cz.muni.fi.rpg.ui.character.skills.CharacterSkillsFragment
 import cz.muni.fi.rpg.ui.characterCreation.CharacterCreationActivity
 import cz.muni.fi.rpg.ui.common.StaticFragmentsViewPagerAdapter
 import cz.muni.fi.rpg.viewModels.CharacterViewModel
-import cz.muni.fi.rpg.viewModels.CharacterViewModelProvider
 import kotlinx.android.synthetic.main.activity_character.*
-import javax.inject.Inject
+import org.koin.android.viewmodel.ext.android.viewModel
+import org.koin.core.parameter.parametersOf
 
 class CharacterActivity : PartyScopedActivity(R.layout.activity_character) {
     companion object {
@@ -31,16 +30,14 @@ class CharacterActivity : PartyScopedActivity(R.layout.activity_character) {
             packageContext.startActivity(intent)
         }
     }
-    @Inject
-    lateinit var viewModelProvider: CharacterViewModelProvider
 
     private val characterId by lazy {
         intent.getStringExtra(EXTRA_CHARACTER_ID)
             ?: throw IllegalAccessException("'${EXTRA_CHARACTER_ID}' must be provided")
     }
 
-    private val viewModel: CharacterViewModel by viewModels {
-        viewModelProvider.factory(getPartyId(), characterId)
+    private val viewModel: CharacterViewModel by viewModel {
+        parametersOf(CharacterId(getPartyId(), characterId))
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

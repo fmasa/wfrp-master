@@ -11,9 +11,8 @@ import cz.muni.fi.rpg.model.domain.character.CharacterNotFound
 import cz.muni.fi.rpg.model.domain.character.CharacterRepository
 import kotlinx.coroutines.tasks.await
 import java.util.*
-import javax.inject.Inject
 
-internal class FirestoreCharacterRepository @Inject constructor(
+internal class FirestoreCharacterRepository(
     firestore: FirebaseFirestore,
     private val mapper: AggregateMapper<Character>
 ) : CharacterRepository {

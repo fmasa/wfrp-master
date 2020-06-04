@@ -19,11 +19,9 @@ class CharacterViewModel(
     private val characters: CharacterRepository,
     private val inventoryItems: InventoryItemRepository,
     private val skillRepository: SkillRepository,
-    private val partyId: UUID,
-    private val userId: String
+    val characterId: CharacterId
 ) : ViewModel(), CoroutineScope by CoroutineScope(Dispatchers.Default) {
-    val characterId = CharacterId(partyId, userId)
-    val character = characters.getLive(partyId, userId)
+    val character = characters.getLive(characterId.partyId, characterId.userId)
     val skills = skillRepository.forCharacter(characterId)
 
     val inventory: LiveData<List<InventoryItem>> = inventoryItems.findAllForCharacter(characterId)
@@ -44,10 +42,10 @@ class CharacterViewModel(
     suspend fun removeSkill(skill: Skill) = skillRepository.remove(characterId, skill.id)
 
     suspend fun addMoney(amount: Money) {
-        val character = characters.get(partyId, userId)
+        val character = characters.get(characterId.partyId, characterId.userId)
         try {
             character.addMoney(amount)
-            characters.save(partyId, character)
+            characters.save(characterId.partyId, character)
         } catch (e: IllegalArgumentException) {
         }
     }
@@ -56,19 +54,19 @@ class CharacterViewModel(
      * @throws NotEnoughMoney
      */
     suspend fun subtractMoney(amount: Money) {
-        val character = characters.get(partyId, userId)
+        val character = characters.get(characterId.partyId, characterId.userId)
         character.subtractMoney(amount)
-        characters.save(partyId, character)
+        characters.save(characterId.partyId, character)
     }
 
     private fun addFatePoints(addition: Int) = updatePoints { it.updateFate(it.fate + addition) }
 
     private fun updatePoints(mutation: (points: Points) -> Points) {
         launch {
-            val character = characters.get(partyId, userId)
+            val character = characters.get(characterId.partyId, characterId.userId)
             try {
                 character.updatePoints(mutation(character.getPoints()))
-                characters.save(partyId, character)
+                characters.save(characterId.partyId, character)
             } catch (e: IllegalArgumentException) {
             }
         }

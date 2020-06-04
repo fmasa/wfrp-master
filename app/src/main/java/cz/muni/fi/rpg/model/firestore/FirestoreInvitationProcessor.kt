@@ -10,9 +10,8 @@ import cz.muni.fi.rpg.model.domain.party.PartyNotFound
 import cz.muni.fi.rpg.model.domain.party.PartyRepository
 import kotlinx.coroutines.tasks.await
 import java.util.*
-import javax.inject.Inject
 
-class FirestoreInvitationProcessor @Inject constructor(
+class FirestoreInvitationProcessor(
     private val firestore: FirebaseFirestore,
     private val parties: PartyRepository
 ) : InvitationProcessor {

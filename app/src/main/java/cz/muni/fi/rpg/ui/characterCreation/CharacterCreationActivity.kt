@@ -12,7 +12,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import javax.inject.Inject
+import org.koin.android.ext.android.inject
 
 class CharacterCreationActivity : PartyScopedActivity(R.layout.activity_character_creation),
     CoroutineScope by CoroutineScope(Dispatchers.Default) {
@@ -20,8 +20,7 @@ class CharacterCreationActivity : PartyScopedActivity(R.layout.activity_characte
         const val EXTRA_CHARACTER_ID = "characterId"
     }
 
-    @Inject
-    lateinit var characters: CharacterRepository
+    private val characters: CharacterRepository by inject()
     private lateinit var currentFragment: Fragment
     private val statsCreationFragment = CharacterStatsFormFragment()
     private val infoCreationFragment = CharacterInfoFormFragment()

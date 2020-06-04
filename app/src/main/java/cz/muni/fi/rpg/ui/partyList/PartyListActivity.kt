@@ -14,11 +14,11 @@ import cz.muni.fi.rpg.ui.character.CharacterActivity
 import cz.muni.fi.rpg.ui.joinParty.JoinPartyActivity
 import cz.muni.fi.rpg.ui.partyList.adapter.PartyAdapter
 import kotlinx.android.synthetic.main.activity_party_list.*
-import javax.inject.Inject
+import org.koin.android.ext.android.inject
 
 class PartyListActivity : AuthenticatedActivity(R.layout.activity_party_list) {
-    @Inject
-    lateinit var parties: PartyRepository
+
+    private val parties: PartyRepository by inject()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,8 +49,11 @@ class PartyListActivity : AuthenticatedActivity(R.layout.activity_party_list) {
         }
 
         assembleNewParty.setOnClickListener {
-            AssemblePartyDialog(getUserId()) { party -> GameMasterActivity.start(party.id, this) }
-                .show(supportFragmentManager, "AssemblePartyDialog")
+            AssemblePartyDialog(
+                getUserId(),
+                { party -> GameMasterActivity.start(party.id, this) },
+                parties
+            ).show(supportFragmentManager, "AssemblePartyDialog")
             fabMenu.collapse()
         }
 

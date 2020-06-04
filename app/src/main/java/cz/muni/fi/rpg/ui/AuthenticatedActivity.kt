@@ -6,17 +6,16 @@ import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
 import androidx.annotation.LayoutRes
+import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
 import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.ui.common.AboutDialog
-import dagger.android.support.DaggerAppCompatActivity
-import javax.inject.Inject
+import org.koin.android.ext.android.inject
 
 abstract class AuthenticatedActivity(@LayoutRes contentLayoutId: Int) :
-    DaggerAppCompatActivity(contentLayoutId) {
+    AppCompatActivity(contentLayoutId) {
 
-    @Inject
-    protected lateinit var auth: FirebaseAuth
+    private val auth: FirebaseAuth by inject()
 
     private lateinit var userId: String
 

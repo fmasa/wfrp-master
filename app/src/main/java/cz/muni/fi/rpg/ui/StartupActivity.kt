@@ -3,15 +3,14 @@ package cz.muni.fi.rpg.ui
 import android.content.Intent
 import android.util.Log
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
 import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.ui.partyList.PartyListActivity
-import dagger.android.support.DaggerAppCompatActivity
-import javax.inject.Inject
+import org.koin.android.ext.android.inject
 
-class StartupActivity : DaggerAppCompatActivity(R.layout.activity_startup) {
-    @Inject
-    lateinit var auth: FirebaseAuth
+class StartupActivity : AppCompatActivity(R.layout.activity_startup) {
+    private val auth: FirebaseAuth by inject()
 
     override fun onStart() {
         super.onStart()

@@ -2,6 +2,7 @@ package cz.muni.fi.rpg.ui.character
 
 import android.os.Bundle
 import android.view.View
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.observe
@@ -9,10 +10,9 @@ import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.model.right
 import cz.muni.fi.rpg.ui.characterCreation.CharacterEditActivity
 import cz.muni.fi.rpg.viewModels.CharacterViewModel
-import dagger.android.support.DaggerFragment
 import kotlinx.android.synthetic.main.fragment_character_stats.*
 
-class CharacterStatsFragment : DaggerFragment(R.layout.fragment_character_stats) {
+class CharacterStatsFragment : Fragment(R.layout.fragment_character_stats) {
     private val viewModel: CharacterViewModel by activityViewModels()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

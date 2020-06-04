@@ -9,7 +9,7 @@ import cz.muni.fi.rpg.model.domain.character.CharacterRepository
 import cz.muni.fi.rpg.ui.PartyScopedActivity
 import kotlinx.android.synthetic.main.activity_character_edit.*
 import kotlinx.coroutines.*
-import javax.inject.Inject
+import org.koin.android.ext.android.inject
 
 class CharacterEditActivity : PartyScopedActivity(R.layout.activity_character_edit),
     CoroutineScope by CoroutineScope(Dispatchers.Default) {
@@ -29,8 +29,7 @@ class CharacterEditActivity : PartyScopedActivity(R.layout.activity_character_ed
     private lateinit var characterStats: CharacterStatsFormFragment
     private lateinit var characterInfo: CharacterInfoFormFragment
 
-    @Inject
-    lateinit var characters: CharacterRepository
+    private val characters: CharacterRepository by inject()
 
     private val characterId by lazy {
         CharacterId(

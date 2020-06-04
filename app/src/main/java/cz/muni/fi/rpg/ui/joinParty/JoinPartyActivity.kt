@@ -15,7 +15,7 @@ import cz.muni.fi.rpg.model.domain.party.Invitation
 import cz.muni.fi.rpg.ui.AuthenticatedActivity
 import kotlinx.android.synthetic.main.activity_join_party.*
 import me.dm7.barcodescanner.zxing.ZXingScannerView
-import javax.inject.Inject
+import org.koin.android.ext.android.inject
 
 class JoinPartyActivity : AuthenticatedActivity(R.layout.activity_join_party),
     ZXingScannerView.ResultHandler {
@@ -23,11 +23,8 @@ class JoinPartyActivity : AuthenticatedActivity(R.layout.activity_join_party),
         private const val CAMERA_PERMISSION_CODE = 1
     }
 
-    @Inject
-    lateinit var jsonMapper: JsonMapper
-
-    @Inject
-    lateinit var invitationProcessor: InvitationProcessor
+    private val jsonMapper: JsonMapper by inject()
+    private val invitationProcessor: InvitationProcessor by inject()
 
     override fun onRequestPermissionsResult(
         requestCode: Int,
