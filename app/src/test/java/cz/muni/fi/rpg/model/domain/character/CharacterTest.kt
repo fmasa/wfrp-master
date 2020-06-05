@@ -11,7 +11,7 @@ class CharacterTest {
         "Writer",
         Race.HALFLING,
         Stats(20, 40, 2, 4, 8, 5, 5, 4, 0),
-        Points(0, 4, 4, 5, 5)
+        Points(0, 4, 4, 5, 5, 0)
     )
 
     @Test
