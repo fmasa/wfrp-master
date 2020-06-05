@@ -12,9 +12,8 @@ import cz.muni.fi.rpg.model.domain.party.PartyNotFound
 import cz.muni.fi.rpg.model.domain.party.PartyRepository
 import kotlinx.coroutines.tasks.await
 import java.util.*
-import javax.inject.Inject
 
-internal class FirestorePartyRepository @Inject constructor(
+internal class FirestorePartyRepository(
     private val firestore: FirebaseFirestore,
     private val mapper: AggregateMapper<Party>
 ) : PartyRepository {

@@ -2,23 +2,28 @@ package cz.muni.fi.rpg.ui
 
 import android.content.Intent
 import android.os.Bundle
-import android.view.Menu
-import android.view.MenuItem
 import android.widget.Toast
 import androidx.annotation.LayoutRes
+import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
-import cz.muni.fi.rpg.R
-import cz.muni.fi.rpg.ui.common.AboutDialog
-import dagger.android.support.DaggerAppCompatActivity
-import javax.inject.Inject
+import cz.muni.fi.rpg.viewModels.AuthenticationViewModel
+import org.koin.android.ext.android.inject
+import org.koin.android.viewmodel.ext.android.viewModel
 
 abstract class AuthenticatedActivity(@LayoutRes contentLayoutId: Int) :
-    DaggerAppCompatActivity(contentLayoutId) {
+    AppCompatActivity(contentLayoutId) {
 
-    @Inject
-    protected lateinit var auth: FirebaseAuth
+    private val auth: FirebaseAuth by inject()
 
     private lateinit var userId: String
+
+    private val authViewModel: AuthenticationViewModel by viewModel()
+
+    private val authListener = FirebaseAuth.AuthStateListener {
+        if (it.currentUser == null) {
+            goToStartup()
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,7 +31,7 @@ abstract class AuthenticatedActivity(@LayoutRes contentLayoutId: Int) :
         val user = auth.currentUser
 
         if (user == null) {
-            startActivity(Intent(this, MainActivity::class.java))
+            goToStartup()
 
             Toast.makeText(applicationContext, "You have been logged out", Toast.LENGTH_SHORT)
                 .show()
@@ -37,21 +42,25 @@ abstract class AuthenticatedActivity(@LayoutRes contentLayoutId: Int) :
         userId = user.uid
     }
 
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        super.onCreateOptionsMenu(menu)
+    override fun onStart() {
+        super.onStart()
 
-        menuInflater.inflate(R.menu.overflow_menu, menu)
-
-        return true
+        auth.addAuthStateListener(authListener)
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (item.itemId == R.id.actionAbout) {
-            AboutDialog().show(supportFragmentManager, "AboutDialog")
-        }
+    override fun onStop() {
+        super.onStop()
 
-        return super.onOptionsItemSelected(item)
+        auth.removeAuthStateListener(authListener)
     }
 
-    protected fun getUserId() = userId
+    fun getUserId() = userId
+
+    private fun goToStartup() {
+        startActivity(Intent(this, StartupActivity::class.java))
+
+        Toast.makeText(applicationContext, "You have been logged out", Toast.LENGTH_SHORT)
+            .show()
+        finish()
+    }
 }

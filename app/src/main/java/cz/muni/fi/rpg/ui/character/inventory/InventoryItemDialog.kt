@@ -9,36 +9,43 @@ import androidx.annotation.StringRes
 import androidx.appcompat.app.AlertDialog
 import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
-import androidx.fragment.app.activityViewModels
 import com.google.android.material.textfield.TextInputLayout
 import cz.muni.fi.rpg.R
+import cz.muni.fi.rpg.model.domain.character.CharacterId
 import cz.muni.fi.rpg.model.domain.inventory.InventoryItem
 import cz.muni.fi.rpg.model.domain.inventory.InventoryItemId
-import cz.muni.fi.rpg.viewModels.CharacterViewModel
+import cz.muni.fi.rpg.viewModels.InventoryViewModel
 import kotlinx.android.synthetic.main.inventory_item_edit_dialog.view.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import org.koin.android.viewmodel.ext.android.viewModel
+import org.koin.core.parameter.parametersOf
 
 class InventoryItemDialog : DialogFragment(),
     CoroutineScope by CoroutineScope(Dispatchers.Default) {
-
-    private val viewModel: CharacterViewModel by activityViewModels()
-
     private val existingItem: InventoryItem? by lazy {
-        arguments?.getParcelable<InventoryItem>(ARGUMENT_ITEM)
+        requireArguments().getParcelable<InventoryItem>(ARGUMENT_ITEM)
     }
+    private val characterId: CharacterId by lazy {
+        requireNotNull(requireArguments().getParcelable<CharacterId>(ARGUMENT_CHARACTER_ID))
+    }
+
+    private val viewModel: InventoryViewModel by viewModel { parametersOf(characterId) }
 
     companion object {
         private const val ARGUMENT_ITEM = "item"
+        private const val ARGUMENT_CHARACTER_ID = "characterId"
 
-        fun newInstance(existingItem: InventoryItem?): InventoryItemDialog {
-            val fragment = InventoryItemDialog()
-
-            fragment.arguments = bundleOf(ARGUMENT_ITEM to existingItem)
-
-            return fragment
+        fun newInstance(
+            characterId: CharacterId,
+            existingItem: InventoryItem?
+        ) = InventoryItemDialog().apply {
+            arguments = bundleOf(
+                ARGUMENT_CHARACTER_ID to characterId,
+                ARGUMENT_ITEM to existingItem
+            )
         }
     }
 

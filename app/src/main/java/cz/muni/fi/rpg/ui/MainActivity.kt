@@ -1,43 +1,47 @@
 package cz.muni.fi.rpg.ui
 
-import android.content.Intent
 import android.os.Bundle
-import android.util.Log
-import android.widget.Toast
-import com.google.firebase.auth.FirebaseAuth
+import com.google.android.material.navigation.NavigationView
+import androidx.navigation.findNavController
+import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.navigateUp
+import androidx.navigation.ui.setupActionBarWithNavController
+import androidx.navigation.ui.setupWithNavController
+import androidx.drawerlayout.widget.DrawerLayout
+import androidx.appcompat.widget.Toolbar
 import cz.muni.fi.rpg.R
-import cz.muni.fi.rpg.ui.partyList.PartyListActivity
-import dagger.android.support.DaggerAppCompatActivity
-import javax.inject.Inject
+import org.koin.androidx.fragment.android.setupKoinFragmentFactory
 
-class MainActivity : DaggerAppCompatActivity(R.layout.activity_main) {
-    @Inject
-    lateinit var auth: FirebaseAuth
+class MainActivity : AuthenticatedActivity(R.layout.activity_main) {
 
-    override fun onStart() {
-        super.onStart()
+    private lateinit var appBarConfiguration: AppBarConfiguration
 
-        val currentUser = auth.currentUser;
+    override fun onCreate(savedInstanceState: Bundle?) {
+        setupKoinFragmentFactory()
 
-        if (currentUser != null) {
-            showPartyList()
-            return
+        super.onCreate(savedInstanceState)
+
+        val toolbar: Toolbar = findViewById(R.id.toolbar)
+        setSupportActionBar(toolbar)
+
+        val drawerLayout: DrawerLayout = findViewById(R.id.drawer_layout)
+        val navView: NavigationView = findViewById(R.id.nav_view)
+        val navController = findNavController(R.id.nav_host_fragment)
+        navController.addOnDestinationChangedListener { _, _, _ ->
+            supportActionBar?.subtitle = null
         }
 
-        auth.signInAnonymously().addOnCompleteListener(this) { task ->
-            if (task.isSuccessful) {
-                Log.d(null, "User has signed in successfully")
+        appBarConfiguration = AppBarConfiguration(
+            setOf(R.id.nav_party_list, R.id.nav_character, R.id.nav_game_master),
+            drawerLayout
+        )
 
-                showPartyList()
-            } else {
-                Log.e(null, "Anonymous sign-in has failed", task.exception);
-                Toast.makeText(baseContext, "Authentication failed.", Toast.LENGTH_SHORT).show()
-            }
-        }
+        setupActionBarWithNavController(navController, appBarConfiguration)
+        navView.setupWithNavController(navController)
     }
 
-    private fun showPartyList() {
-        startActivity(Intent(this, PartyListActivity::class.java))
-        finish()
+    override fun onSupportNavigateUp(): Boolean {
+        val navController = findNavController(R.id.nav_host_fragment)
+        return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
     }
 }

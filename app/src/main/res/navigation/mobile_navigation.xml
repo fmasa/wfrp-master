@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@+id/nav_party_list">
+
+    <fragment
+        android:id="@+id/nav_party_list"
+        android:name="cz.muni.fi.rpg.ui.partyList.PartyListFragment"
+        android:label="@string/title_party_activity">
+        <action
+            android:id="@+id/startGameMasterFragment"
+            app:destination="@id/nav_game_master"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left" />
+        <action
+            android:id="@+id/openCharacter"
+            app:destination="@id/nav_character"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_game_master"
+        android:name="cz.muni.fi.rpg.ui.gameMaster.GameMasterFragment">
+        <argument
+            android:name="partyId"
+            app:argType="java.util.UUID" />
+        <action
+            android:id="@+id/openCharacter"
+            app:destination="@id/nav_character" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_character"
+        android:name="cz.muni.fi.rpg.ui.character.CharacterFragment">
+        <argument
+            android:name="characterId"
+            app:argType="cz.muni.fi.rpg.model.domain.character.CharacterId" />
+        <action
+            android:id="@+id/editCharacter"
+            app:destination="@id/nav_character_edit" />
+        <action
+            android:id="@+id/createCharacter"
+            app:destination="@id/nav_character_create"
+            app:popUpTo="@id/nav_party_list" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_character_edit"
+        android:name="cz.muni.fi.rpg.ui.character.edit.CharacterEditFragment">
+        <argument
+            android:name="characterId"
+            app:argType="cz.muni.fi.rpg.model.domain.character.CharacterId" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_character_create"
+        android:name="cz.muni.fi.rpg.ui.characterCreation.CharacterCreationFragment"
+        android:label="@string/title_characterCreation">
+        <argument
+            android:name="partyId"
+            app:argType="java.util.UUID" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_about"
+        android:name="cz.muni.fi.rpg.ui.common.AboutFragment"
+        android:label="@string/about" />
+</navigation>

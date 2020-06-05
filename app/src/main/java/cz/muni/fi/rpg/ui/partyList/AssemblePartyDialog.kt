@@ -8,23 +8,20 @@ import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.core.widget.addTextChangedListener
+import androidx.fragment.app.DialogFragment
 import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.model.domain.common.CouldNotConnectToBackend
 import cz.muni.fi.rpg.model.domain.party.Party
 import cz.muni.fi.rpg.model.domain.party.PartyRepository
-import dagger.android.support.DaggerDialogFragment
 import kotlinx.android.synthetic.main.dialog_asssemble_party.view.*
 import kotlinx.coroutines.*
 import java.util.*
-import javax.inject.Inject
 
 class AssemblePartyDialog(
     private val userId: String,
-    private val onSuccessListener: (Party) -> Unit
-) : DaggerDialogFragment(), CoroutineScope by CoroutineScope(Dispatchers.Main) {
-
-    @Inject
-    lateinit var parties: PartyRepository
+    private val onSuccessListener: (Party) -> Unit,
+    private val parties: PartyRepository
+) : DialogFragment(), CoroutineScope by CoroutineScope(Dispatchers.Main) {
 
     private var userAttemptedToSubmit = false
 

@@ -4,6 +4,7 @@ apply plugin: 'kotlin-android-extensions'
 apply plugin: 'com.google.gms.google-services'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'com.google.firebase.crashlytics'
+apply plugin: "androidx.navigation.safeargs.kotlin"
 
 def playStoreJsonFile = file('./play_store_credentials.json')
 
@@ -94,6 +95,9 @@ dependencies {
     implementation 'androidx.core:core-ktx:1.2.0'
     implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
     implementation 'com.fasterxml.jackson.module:jackson-module-kotlin:2.11.0'
+    implementation "org.koin:koin-android:2.1.5"
+    implementation "org.koin:koin-android-viewmodel:2.1.5"
+    implementation "org.koin:koin-androidx-fragment:2.1.5"
 
     // Firebase-related dependencies
     implementation 'com.google.firebase:firebase-analytics:17.4.2'
@@ -122,14 +126,6 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
-
-    // Dagger DIC
-    api 'com.google.dagger:dagger:2.27'
-    kapt 'com.google.dagger:dagger-compiler:2.27'
-    implementation 'com.google.dagger:dagger-android:2.27'
-    kapt 'com.google.dagger:dagger-android-processor:2.27'
-    implementation 'com.google.dagger:dagger-android-support:2.27'
-    annotationProcessor 'com.google.dagger:dagger-compiler:2.27'
 
     implementation "io.arrow-kt:arrow-core:0.10.4"
 }

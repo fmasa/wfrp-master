@@ -7,13 +7,13 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.FirebaseFirestoreException
 import com.google.firebase.firestore.SetOptions
 import cz.muni.fi.rpg.model.domain.character.Character
+import cz.muni.fi.rpg.model.domain.character.CharacterId
 import cz.muni.fi.rpg.model.domain.character.CharacterNotFound
 import cz.muni.fi.rpg.model.domain.character.CharacterRepository
 import kotlinx.coroutines.tasks.await
 import java.util.*
-import javax.inject.Inject
 
-internal class FirestoreCharacterRepository @Inject constructor(
+internal class FirestoreCharacterRepository(
     firestore: FirebaseFirestore,
     private val mapper: AggregateMapper<Character>
 ) : CharacterRepository {
@@ -27,20 +27,22 @@ internal class FirestoreCharacterRepository @Inject constructor(
         characters(partyId).document(character.userId).set(data, SetOptions.merge()).await()
     }
 
-    override suspend fun get(partyId: UUID, userId: String): Character {
+    override suspend fun get(characterId: CharacterId): Character {
         try {
-            return mapper.fromDocumentSnapshot(characters(partyId).document(userId).get().await())
+            return mapper.fromDocumentSnapshot(
+                characters(characterId.partyId)
+                    .document(characterId.userId)
+                    .get()
+                    .await()
+            )
         } catch (e: FirebaseFirestoreException) {
-            throw CharacterNotFound(userId, partyId, e)
+            throw CharacterNotFound(characterId, e)
         }
     }
 
-    override fun getLive(
-        partyId: UUID,
-        userId: String
-    ): LiveData<Either<CharacterNotFound, Character>> {
-        return DocumentLiveData(characters(partyId).document(userId)) {
-            it.bimap({ e -> CharacterNotFound(userId, partyId, e) }, mapper::fromDocumentSnapshot)
+    override fun getLive(characterId: CharacterId): LiveData<Either<CharacterNotFound, Character>> {
+        return DocumentLiveData(characters(characterId.partyId).document(characterId.userId)) {
+            it.bimap({ e -> CharacterNotFound(characterId, e) }, mapper::fromDocumentSnapshot)
         }
     }
 

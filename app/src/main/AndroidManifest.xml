@@ -12,13 +12,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ui.characterCreation.CharacterEditActivity"/>
-        <activity android:name=".ui.gameMaster.GameMasterActivity" />
-        <activity
-            android:name=".ui.partyList.PartyListActivity"
-            android:label="@string/title_party_activity" />
         <activity
             android:name=".ui.MainActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".ui.StartupActivity"
             android:theme="@style/Theme.AppCompat.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -29,10 +27,6 @@
         <activity
             android:name=".ui.joinParty.JoinPartyActivity"
             android:label="@string/title_joinParty" />
-        <activity
-            android:name=".ui.characterCreation.CharacterCreationActivity"
-            android:label="@string/title_characterCreation" />
-        <activity android:name=".ui.character.CharacterActivity" />
     </application>
 
 </manifest>

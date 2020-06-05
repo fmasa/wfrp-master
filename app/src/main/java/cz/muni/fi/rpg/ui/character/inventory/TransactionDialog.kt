@@ -11,7 +11,7 @@ import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.model.domain.character.NotEnoughMoney
 import cz.muni.fi.rpg.model.domain.common.Money
 import cz.muni.fi.rpg.ui.common.adapters.SpinnerAdapterWithWidthMatchingSelectedItem
-import cz.muni.fi.rpg.viewModels.CharacterViewModel
+import cz.muni.fi.rpg.viewModels.InventoryViewModel
 import kotlinx.android.synthetic.main.dialog_transaction.view.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -19,7 +19,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 class TransactionDialog(
-    private val viewModel: CharacterViewModel
+    private val viewModel: InventoryViewModel
 ) : DialogFragment(),
     CoroutineScope by CoroutineScope(Dispatchers.Default) {
 

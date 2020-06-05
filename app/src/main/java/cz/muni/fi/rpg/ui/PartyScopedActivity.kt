@@ -1,12 +1,11 @@
 package cz.muni.fi.rpg.ui
 
 import android.os.Bundle
-import androidx.activity.viewModels
 import androidx.annotation.LayoutRes
 import cz.muni.fi.rpg.viewModels.PartyViewModel
-import cz.muni.fi.rpg.viewModels.PartyViewModelProvider
+import org.koin.android.viewmodel.ext.android.viewModel
+import org.koin.core.parameter.parametersOf
 import java.util.*
-import javax.inject.Inject
 
 abstract class PartyScopedActivity(@LayoutRes contentLayoutId: Int) :
     AuthenticatedActivity(contentLayoutId){
@@ -14,12 +13,7 @@ abstract class PartyScopedActivity(@LayoutRes contentLayoutId: Int) :
         const val EXTRA_PARTY_ID = "partyId"
     }
 
-    @Inject
-    lateinit var partyViewModelProvider: PartyViewModelProvider
-
-    protected val partyViewModel: PartyViewModel by viewModels {
-        partyViewModelProvider.provide(getPartyId())
-    }
+    protected val partyViewModel: PartyViewModel by viewModel { parametersOf(getPartyId()) }
 
     private lateinit var partyId: UUID
 
