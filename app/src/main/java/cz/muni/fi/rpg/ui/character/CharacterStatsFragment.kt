@@ -30,16 +30,21 @@ class CharacterStatsFragment : Fragment(R.layout.fragment_character_stats) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        bindTopBar()
+        bindStats()
+        bindPoints()
+    }
+
+    private fun bindTopBar() {
         viewModel.character.right().observe(viewLifecycleOwner) { character ->
             raceAndCareer.text = StringBuilder()
                 .append(getString(character.getRace().getReadableNameId()))
                 .append(" ")
                 .append(character.getCareer())
                 .toString()
-        }
 
-        bindStats()
-        bindPoints()
+            xpPoints.text = getString(R.string.xp_points, 0)
+        }
     }
 
     private fun bindStats() {
