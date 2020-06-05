@@ -35,9 +35,7 @@ import cz.muni.fi.rpg.ui.characterCreation.CharacterInfoFormFragment
 import cz.muni.fi.rpg.ui.characterCreation.CharacterStatsFormFragment
 import cz.muni.fi.rpg.ui.gameMaster.GameMasterFragment
 import cz.muni.fi.rpg.ui.partyList.PartyListFragment
-import cz.muni.fi.rpg.viewModels.AuthenticationViewModel
-import cz.muni.fi.rpg.viewModels.CharacterViewModel
-import cz.muni.fi.rpg.viewModels.PartyViewModel
+import cz.muni.fi.rpg.viewModels.*
 import org.koin.android.viewmodel.dsl.viewModel
 import org.koin.androidx.fragment.dsl.fragment
 import org.koin.dsl.module
@@ -96,7 +94,10 @@ val appModule = module {
      * ViewModels
      */
     viewModel { (partyId: UUID) -> PartyViewModel(get(), partyId) }
-    viewModel { (characterId: CharacterId) -> CharacterViewModel(get(), get(), get(), get(), characterId)}
+    viewModel { (characterId: CharacterId) -> CharacterViewModel(characterId, get())}
+    viewModel { (characterId: CharacterId) -> CharacterStatsViewModel(characterId, get()) }
+    viewModel { (characterId: CharacterId) -> InventoryViewModel(characterId, get(), get()) }
+    viewModel { (characterId: CharacterId) -> SkillsViewModel(characterId, get()) }
     viewModel { AuthenticationViewModel(get()) }
 
     /**

@@ -10,7 +10,7 @@ import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.model.domain.character.CharacterId
 import cz.muni.fi.rpg.model.domain.skills.Skill
 import cz.muni.fi.rpg.ui.character.skills.adapter.SkillAdapter
-import cz.muni.fi.rpg.viewModels.CharacterViewModel
+import cz.muni.fi.rpg.viewModels.SkillsViewModel
 import kotlinx.android.synthetic.main.fragment_character_skills.*
 import org.koin.android.viewmodel.ext.android.viewModel
 import kotlinx.coroutines.CoroutineScope
@@ -29,7 +29,7 @@ class CharacterSkillsFragment : Fragment(R.layout.fragment_character_skills),
         }
     }
 
-    private val viewModel: CharacterViewModel by viewModel {
+    private val viewModel: SkillsViewModel by viewModel {
         parametersOf(arguments?.getParcelable(ARGUMENT_CHARACTER_ID))
     }
 

@@ -6,19 +6,16 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import cz.muni.fi.rpg.R
 import kotlinx.android.synthetic.main.fragment_inventory.view.*
-import androidx.lifecycle.Transformations
 import androidx.lifecycle.observe
 import androidx.recyclerview.widget.LinearLayoutManager
 import cz.muni.fi.rpg.model.domain.character.CharacterId
 import cz.muni.fi.rpg.model.domain.inventory.InventoryItem
-import cz.muni.fi.rpg.model.right
 import cz.muni.fi.rpg.ui.character.adapter.InventoryAdapter
 import cz.muni.fi.rpg.ui.character.inventory.InventoryItemDialog
 import cz.muni.fi.rpg.ui.character.inventory.TransactionDialog
-import cz.muni.fi.rpg.viewModels.CharacterViewModel
+import cz.muni.fi.rpg.viewModels.InventoryViewModel
 import kotlinx.android.synthetic.main.fragment_inventory.*
 import kotlinx.coroutines.*
-import org.koin.android.viewmodel.ext.android.sharedViewModel
 import org.koin.android.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 
@@ -31,7 +28,12 @@ class InventoryFragment : Fragment(R.layout.fragment_inventory),
             arguments = bundleOf(ARGUMENT_CHARACTER_ID to characterId)
         }
     }
-    private val viewModel: CharacterViewModel by sharedViewModel {
+
+    private val characterId: CharacterId by lazy {
+        requireNotNull(requireArguments().getParcelable<CharacterId>(ARGUMENT_CHARACTER_ID))
+    }
+
+    private val viewModel: InventoryViewModel by viewModel {
         parametersOf(arguments?.getParcelable(ARGUMENT_CHARACTER_ID))
     }
 
@@ -46,15 +48,14 @@ class InventoryFragment : Fragment(R.layout.fragment_inventory),
     }
 
     private fun showDialog(existingItem: InventoryItem?) {
-        InventoryItemDialog.newInstance(existingItem)
+        InventoryItemDialog.newInstance(characterId, existingItem)
             .show(childFragmentManager, "InventoryItemDialog")
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        Transformations.map(viewModel.character.right()) { character -> character.getMoney() }
-            .observe(viewLifecycleOwner, characterMoney::setValue)
+        viewModel.money.observe(viewLifecycleOwner, characterMoney::setValue)
 
         characterMoney.setOnClickListener {
             TransactionDialog(viewModel).show(parentFragmentManager, "TransactionDialog")

@@ -9,9 +9,8 @@ import androidx.lifecycle.observe
 import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.model.domain.character.CharacterId
 import cz.muni.fi.rpg.model.right
-import cz.muni.fi.rpg.viewModels.CharacterViewModel
+import cz.muni.fi.rpg.viewModels.CharacterStatsViewModel
 import kotlinx.android.synthetic.main.fragment_character_stats.*
-import org.koin.android.viewmodel.ext.android.sharedViewModel
 import org.koin.android.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 
@@ -24,7 +23,7 @@ class CharacterStatsFragment : Fragment(R.layout.fragment_character_stats) {
         }
     }
 
-    private val viewModel: CharacterViewModel by sharedViewModel {
+    private val viewModel: CharacterStatsViewModel by viewModel {
         parametersOf(arguments?.getParcelable(ARGUMENT_CHARACTER_ID))
     }
 
