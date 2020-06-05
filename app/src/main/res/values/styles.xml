@@ -6,6 +6,7 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="actionOverflowButtonStyle">@style/ActionBarIcon</item>
     </style>
 
     <style name="menu_labels_style">
@@ -21,27 +22,45 @@
     <style name="TabTextAppearance" parent="TextAppearance.AppCompat.Caption">
         <item name="android:textSize">13sp</item>
     </style>
+
     <style name="TabLayout" parent="Widget.Design.TabLayout">
         <item name="tabTextAppearance">@style/TabTextAppearance</item>
         <item name="tabSelectedTextColor">@color/colorPrimaryDark</item>
         <item name="android:background">@color/colorCardBackground</item>
     </style>
+
     <style name="BottomNavigationView.Active" parent="TextAppearance.AppCompat.Caption">
         <item name="android:textColor">@color/colorPrimary</item>
     </style>
+
     <style name="EmptyStateText" parent="TextAppearance.AppCompat.Medium">
         <item name="android:textColor">@color/colorEmptyState</item>
         <item name="android:textAlignment">center</item>
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
     </style>
+
     <style name="EmptyStateIcon">
         <item name="tint">@color/colorEmptyState</item>
         <item name="android:layout_width">@dimen/empty_state_drawable_size</item>
         <item name="android:layout_height">@dimen/empty_state_drawable_size</item>
     </style>
+
     <style name="OutlinedInput" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
         <item name="android:layout_marginBottom">8dp</item>
+    </style>
+
+    <style name="AppTheme.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+    <style name="ActionBarIcon" parent="@style/Widget.AppCompat.ActionButton.Overflow" >
+        <item name="android:tint">@color/colorSplashScreenText</item>
     </style>
 
 </resources>

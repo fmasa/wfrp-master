@@ -2,18 +2,31 @@ package cz.muni.fi.rpg.ui.character
 
 import android.os.Bundle
 import android.view.View
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.observe
 import cz.muni.fi.rpg.R
+import cz.muni.fi.rpg.model.domain.character.CharacterId
 import cz.muni.fi.rpg.model.right
-import cz.muni.fi.rpg.ui.characterCreation.CharacterEditActivity
 import cz.muni.fi.rpg.viewModels.CharacterViewModel
 import kotlinx.android.synthetic.main.fragment_character_stats.*
+import org.koin.android.viewmodel.ext.android.sharedViewModel
+import org.koin.android.viewmodel.ext.android.viewModel
+import org.koin.core.parameter.parametersOf
 
 class CharacterStatsFragment : Fragment(R.layout.fragment_character_stats) {
-    private val viewModel: CharacterViewModel by activityViewModels()
+    companion object {
+        private const val ARGUMENT_CHARACTER_ID = "CHARACTER_ID"
+
+        fun newInstance(characterId: CharacterId) = CharacterStatsFragment().apply {
+            arguments = bundleOf(ARGUMENT_CHARACTER_ID to characterId)
+        }
+    }
+
+    private val viewModel: CharacterViewModel by sharedViewModel {
+        parametersOf(arguments?.getParcelable(ARGUMENT_CHARACTER_ID))
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -28,10 +41,6 @@ class CharacterStatsFragment : Fragment(R.layout.fragment_character_stats) {
 
         bindStats()
         bindPoints()
-
-        button_edit_stats.setOnClickListener {
-            CharacterEditActivity.start(viewModel.characterId, requireContext())
-        }
     }
 
     private fun bindStats() {

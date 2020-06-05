@@ -9,20 +9,23 @@ import cz.muni.fi.rpg.model.domain.character.Points
 import cz.muni.fi.rpg.model.domain.common.Money
 import cz.muni.fi.rpg.model.domain.inventory.InventoryItem
 import cz.muni.fi.rpg.model.domain.inventory.InventoryItemRepository
+import cz.muni.fi.rpg.model.domain.party.Party
+import cz.muni.fi.rpg.model.domain.party.PartyRepository
 import cz.muni.fi.rpg.model.domain.skills.Skill
 import cz.muni.fi.rpg.model.domain.skills.SkillRepository
+import cz.muni.fi.rpg.model.right
 import kotlinx.coroutines.*
-import java.util.UUID
-import kotlin.math.min
 
 class CharacterViewModel(
     private val characters: CharacterRepository,
     private val inventoryItems: InventoryItemRepository,
     private val skillRepository: SkillRepository,
+    parties: PartyRepository,
     val characterId: CharacterId
 ) : ViewModel(), CoroutineScope by CoroutineScope(Dispatchers.Default) {
     val character = characters.getLive(characterId.partyId, characterId.userId)
     val skills = skillRepository.forCharacter(characterId)
+    val party: LiveData<Party> = parties.getLive(characterId.partyId).right()
 
     val inventory: LiveData<List<InventoryItem>> = inventoryItems.findAllForCharacter(characterId)
 

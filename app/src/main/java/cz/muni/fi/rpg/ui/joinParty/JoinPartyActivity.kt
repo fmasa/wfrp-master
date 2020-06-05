@@ -1,6 +1,8 @@
 package cz.muni.fi.rpg.ui.joinParty
 
 import android.Manifest
+import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.util.Log
 import android.widget.Toast
@@ -21,6 +23,10 @@ class JoinPartyActivity : AuthenticatedActivity(R.layout.activity_join_party),
     ZXingScannerView.ResultHandler {
     companion object {
         private const val CAMERA_PERMISSION_CODE = 1
+
+        fun start(packageContext: Context) {
+            packageContext.startActivity(Intent(packageContext, JoinPartyActivity::class.java))
+        }
     }
 
     private val jsonMapper: JsonMapper by inject()

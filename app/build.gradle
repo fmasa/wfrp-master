@@ -4,6 +4,7 @@ apply plugin: 'kotlin-android-extensions'
 apply plugin: 'com.google.gms.google-services'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'com.google.firebase.crashlytics'
+apply plugin: "androidx.navigation.safeargs.kotlin"
 
 def playStoreJsonFile = file('./play_store_credentials.json')
 
@@ -96,6 +97,7 @@ dependencies {
     implementation 'com.fasterxml.jackson.module:jackson-module-kotlin:2.11.0'
     implementation "org.koin:koin-android:2.1.5"
     implementation "org.koin:koin-android-viewmodel:2.1.5"
+    implementation "org.koin:koin-androidx-fragment:2.1.5"
 
     // Firebase-related dependencies
     implementation 'com.google.firebase:firebase-analytics:17.4.2'

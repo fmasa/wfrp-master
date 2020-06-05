@@ -4,39 +4,37 @@ import android.view.View
 import android.widget.Toast
 import androidx.annotation.StringRes
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.model.domain.character.*
-import cz.muni.fi.rpg.ui.PartyScopedActivity
+import cz.muni.fi.rpg.ui.common.BaseFragment
+import cz.muni.fi.rpg.viewModels.AuthenticationViewModel
 import kotlinx.android.synthetic.main.activity_character_creation.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import org.koin.android.ext.android.inject
+import org.koin.android.viewmodel.ext.android.sharedViewModel
 
-class CharacterCreationActivity : PartyScopedActivity(R.layout.activity_character_creation),
+class CharacterCreationFragment(
+    private val characters: CharacterRepository
+) : BaseFragment(R.layout.activity_character_creation),
     CoroutineScope by CoroutineScope(Dispatchers.Default) {
-    companion object {
-        const val EXTRA_CHARACTER_ID = "characterId"
-    }
+    private val args: CharacterCreationFragmentArgs by navArgs()
+    private val authentication: AuthenticationViewModel by sharedViewModel()
 
-    private val characters: CharacterRepository by inject()
     private lateinit var currentFragment: Fragment
     private val statsCreationFragment = CharacterStatsFormFragment()
     private val infoCreationFragment = CharacterInfoFormFragment()
 
     private var characterInfo: CharacterInfoFormFragment.CharacterInfo? = null
 
-    private val characterId by lazy {
-        intent.getStringExtra(EXTRA_CHARACTER_ID)
-            ?: throw IllegalAccessException("'${EXTRA_CHARACTER_ID}' must be provided")
-    }
-
     override fun onStart() {
         super.onStart()
 
         launch {
-            if (characters.hasCharacterInParty(getUserId(), getPartyId())) {
+            if (characters.hasCharacterInParty(authentication.getUserId(), args.partyId)) {
                 toast("You already have active character in this party")
                 return@launch
             }
@@ -105,12 +103,12 @@ class CharacterCreationActivity : PartyScopedActivity(R.layout.activity_characte
     ) {
         launch {
             characters.save(
-                getPartyId(),
-                Character(info.name, characterId, info.career, info.race, stats, points)
+                args.partyId,
+                Character(info.name, authentication.getUserId(), info.career, info.race, stats, points)
             )
             toast("Your character has been created")
 
-            finish()
+            findNavController().popBackStack()
         }
 
     }
@@ -121,7 +119,7 @@ class CharacterCreationActivity : PartyScopedActivity(R.layout.activity_characte
         @StringRes previousButtonTextResId: Int?,
         @StringRes nextButtonTextResId: Int
     ) {
-        supportFragmentManager.beginTransaction().apply {
+        childFragmentManager.beginTransaction().apply {
             replace(R.id.frame_layout_character_creation, fragment)
             commit()
         }
@@ -139,7 +137,7 @@ class CharacterCreationActivity : PartyScopedActivity(R.layout.activity_characte
 
     private suspend fun toast(message: String) {
         withContext(Dispatchers.Main) {
-            Toast.makeText(applicationContext, message, Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
         }
     }
 }

@@ -6,7 +6,6 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
 import cz.muni.fi.rpg.R
-import cz.muni.fi.rpg.ui.partyList.PartyListActivity
 import org.koin.android.ext.android.inject
 
 class StartupActivity : AppCompatActivity(R.layout.activity_startup) {
@@ -35,7 +34,7 @@ class StartupActivity : AppCompatActivity(R.layout.activity_startup) {
     }
 
     private fun showPartyList() {
-        startActivity(Intent(this, PartyListActivity::class.java))
+        startActivity(Intent(this, MainActivity::class.java))
         finish()
     }
 }

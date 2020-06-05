@@ -1,10 +1,10 @@
 package cz.muni.fi.rpg.di
 
+import androidx.navigation.fragment.NavHostFragment
 import com.fasterxml.jackson.databind.json.JsonMapper
 import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
 import com.fasterxml.jackson.module.kotlin.registerKotlinModule
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.firestoreSettings
 import com.google.firebase.ktx.Firebase
@@ -25,9 +25,21 @@ import cz.muni.fi.rpg.model.firestore.FirestoreInventoryItemRepository
 import cz.muni.fi.rpg.model.firestore.FirestorePartyRepository
 import cz.muni.fi.rpg.model.firestore.FirestoreSkillRepository
 import cz.muni.fi.rpg.model.firestore.jackson.JacksonAggregateMapper
+import cz.muni.fi.rpg.ui.character.CharacterFragment
+import cz.muni.fi.rpg.ui.character.CharacterStatsFragment
+import cz.muni.fi.rpg.ui.character.InventoryFragment
+import cz.muni.fi.rpg.ui.character.edit.CharacterEditFragment
+import cz.muni.fi.rpg.ui.character.skills.CharacterSkillsFragment
+import cz.muni.fi.rpg.ui.characterCreation.CharacterCreationFragment
+import cz.muni.fi.rpg.ui.characterCreation.CharacterInfoFormFragment
+import cz.muni.fi.rpg.ui.characterCreation.CharacterStatsFormFragment
+import cz.muni.fi.rpg.ui.gameMaster.GameMasterFragment
+import cz.muni.fi.rpg.ui.partyList.PartyListFragment
+import cz.muni.fi.rpg.viewModels.AuthenticationViewModel
 import cz.muni.fi.rpg.viewModels.CharacterViewModel
 import cz.muni.fi.rpg.viewModels.PartyViewModel
 import org.koin.android.viewmodel.dsl.viewModel
+import org.koin.androidx.fragment.dsl.fragment
 import org.koin.dsl.module
 import java.util.*
 import kotlin.reflect.KClass
@@ -84,5 +96,21 @@ val appModule = module {
      * ViewModels
      */
     viewModel { (partyId: UUID) -> PartyViewModel(get(), partyId) }
-    viewModel { (characterId: CharacterId) -> CharacterViewModel(get(), get(), get(), characterId)}
+    viewModel { (characterId: CharacterId) -> CharacterViewModel(get(), get(), get(), get(), characterId)}
+    viewModel { AuthenticationViewModel(get()) }
+
+    /**
+     * Fragments
+     */
+    fragment { CharacterFragment() }
+    fragment { GameMasterFragment(get(), get()) }
+    fragment { NavHostFragment() }
+    fragment { PartyListFragment(get()) }
+    fragment { CharacterEditFragment(get()) }
+    fragment { CharacterStatsFragment() }
+    fragment { CharacterSkillsFragment() }
+    fragment { InventoryFragment() }
+    fragment { CharacterInfoFormFragment() }
+    fragment { CharacterStatsFormFragment() }
+    fragment { CharacterCreationFragment(get()) }
 }

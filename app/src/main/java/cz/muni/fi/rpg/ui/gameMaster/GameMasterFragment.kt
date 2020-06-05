@@ -1,38 +1,33 @@
 package cz.muni.fi.rpg.ui.gameMaster
 
-import android.content.Context
-import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import androidx.lifecycle.observe
+import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.fasterxml.jackson.databind.json.JsonMapper
 import cz.muni.fi.rpg.R
-import android.view.View
 import cz.muni.fi.rpg.model.domain.character.CharacterId
 import cz.muni.fi.rpg.model.domain.character.CharacterRepository
 import cz.muni.fi.rpg.model.domain.party.Invitation
 import cz.muni.fi.rpg.model.right
-import cz.muni.fi.rpg.ui.PartyScopedActivity
-import cz.muni.fi.rpg.ui.character.CharacterActivity
+import cz.muni.fi.rpg.ui.common.BaseFragment
 import cz.muni.fi.rpg.ui.gameMaster.adapter.CharacterAdapter
+import cz.muni.fi.rpg.viewModels.PartyViewModel
 import kotlinx.android.synthetic.main.activity_game_master.*
-import kotlinx.coroutines.*
-import org.koin.android.ext.android.inject
-import java.util.*
+import org.koin.core.parameter.parametersOf
+import org.koin.android.viewmodel.ext.android.viewModel
 
-class GameMasterActivity : PartyScopedActivity(R.layout.activity_game_master),
-    CoroutineScope by CoroutineScope(Dispatchers.Default) {
-    companion object {
-        fun start(partyId: UUID, packageContext: Context) {
-            val intent = Intent(packageContext, GameMasterActivity::class.java);
-            intent.putExtra(EXTRA_PARTY_ID, partyId.toString())
+class GameMasterFragment(
+    private val jsonMapper: JsonMapper,
+    private val characterRepository: CharacterRepository
 
-            packageContext.startActivity(intent)
-        }
-    }
+) : BaseFragment(R.layout.activity_game_master) {
 
-    private val jsonMapper: JsonMapper by inject()
-    private val characterRepo: CharacterRepository by inject()
+    private val args: GameMasterFragmentArgs by navArgs()
+
+    private val partyViewModel: PartyViewModel by viewModel { parametersOf(args.partyId) }
 
     private lateinit var invitation: Invitation
 
@@ -46,23 +41,29 @@ class GameMasterActivity : PartyScopedActivity(R.layout.activity_game_master),
         setViewVisibility(characterListRecycler, !isEmpty)
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
-        partyViewModel.party.right().observe(this) { party ->
-            supportActionBar?.title = party.name
+        partyViewModel.party.right().observe(viewLifecycleOwner) { party ->
+            setTitle(party.name)
             inviteButton.isEnabled = true
             invitation = party.getInvitation()
         }
 
         inviteButton.setOnClickListener { showQrCode() }
 
-        characterRepo.inParty(getPartyId()).observe(this) { characters ->
+        characterRepository.inParty(args.partyId).observe(viewLifecycleOwner) { characters ->
             if (characters.isNotEmpty()) {
                 val adapter = CharacterAdapter(layoutInflater)
-                { CharacterActivity.start(CharacterId(getPartyId(), it.userId), this) }
+                {
+                    findNavController()
+                        .navigate(
+                            GameMasterFragmentDirections
+                                .openCharacter((CharacterId(args.partyId, it.userId)))
+                        )
+                }
                 characterListRecycler.adapter = adapter
-                characterListRecycler.layoutManager = LinearLayoutManager(applicationContext)
+                characterListRecycler.layoutManager = LinearLayoutManager(context)
 
                 adapter.submitList(characters)
 
@@ -75,6 +76,6 @@ class GameMasterActivity : PartyScopedActivity(R.layout.activity_game_master),
 
     private fun showQrCode() {
         QrCodeDialog(invitation, jsonMapper)
-            .show(supportFragmentManager, QrCodeDialog::class.simpleName)
+            .show(requireActivity().supportFragmentManager, QrCodeDialog::class.simpleName)
     }
 }
