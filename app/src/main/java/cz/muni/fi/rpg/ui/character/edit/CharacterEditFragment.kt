@@ -37,7 +37,7 @@ class CharacterEditFragment(
         setSubtitle(getString(R.string.subtitle_edit_character))
 
         launch {
-            val character = characters.get(args.characterId.partyId, args.characterId.userId)
+            val character = characters.get(args.characterId)
 
             withContext(Dispatchers.Main) {
                 setTitle(character.getName())
@@ -72,7 +72,7 @@ class CharacterEditFragment(
         info: CharacterInfoFormFragment.CharacterInfo,
         characterStatsData: CharacterStatsData
     ) {
-        val character = characters.get(args.characterId.partyId, args.characterId.userId)
+        val character = characters.get(args.characterId)
         val points = character.getPoints()
 
         character.update(

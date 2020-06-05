@@ -23,7 +23,7 @@ class CharacterViewModel(
     parties: PartyRepository,
     val characterId: CharacterId
 ) : ViewModel(), CoroutineScope by CoroutineScope(Dispatchers.Default) {
-    val character = characters.getLive(characterId.partyId, characterId.userId)
+    val character = characters.getLive(characterId)
     val skills = skillRepository.forCharacter(characterId)
     val party: LiveData<Party> = parties.getLive(characterId.partyId).right()
 
@@ -45,7 +45,7 @@ class CharacterViewModel(
     suspend fun removeSkill(skill: Skill) = skillRepository.remove(characterId, skill.id)
 
     suspend fun addMoney(amount: Money) {
-        val character = characters.get(characterId.partyId, characterId.userId)
+        val character = characters.get(characterId)
         try {
             character.addMoney(amount)
             characters.save(characterId.partyId, character)
@@ -57,7 +57,7 @@ class CharacterViewModel(
      * @throws NotEnoughMoney
      */
     suspend fun subtractMoney(amount: Money) {
-        val character = characters.get(characterId.partyId, characterId.userId)
+        val character = characters.get(characterId)
         character.subtractMoney(amount)
         characters.save(characterId.partyId, character)
     }
@@ -66,7 +66,7 @@ class CharacterViewModel(
 
     private fun updatePoints(mutation: (points: Points) -> Points) {
         launch {
-            val character = characters.get(characterId.partyId, characterId.userId)
+            val character = characters.get(characterId)
             try {
                 character.updatePoints(mutation(character.getPoints()))
                 characters.save(characterId.partyId, character)
