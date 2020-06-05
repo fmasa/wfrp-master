@@ -1,6 +1,9 @@
 package cz.muni.fi.rpg.ui.character.edit
 
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -29,6 +32,8 @@ class CharacterEditFragment(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        setHasOptionsMenu(true)
+
         characterStats =
             childFragmentManager.findFragmentById(R.id.characterStats) as CharacterStatsFormFragment
         characterInfo =
@@ -48,16 +53,23 @@ class CharacterEditFragment(
             withContext(Dispatchers.Main) {
                 progressBar.visibility = View.GONE
                 mainView.visibility = View.VISIBLE
-                saveButton.isEnabled = true
             }
         }
+    }
 
-        saveButton.setOnClickListener {
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        super.onCreateOptionsMenu(menu, inflater)
+
+        inflater.inflate(R.menu.character_edit_menu, menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == R.id.actionSave) {
             val characterInfoData = characterInfo.submit()
             val characterStatsData = characterStats.submit()
 
             if (characterInfoData != null && characterStatsData != null) {
-                saveButton.isEnabled = false
+                item.isEnabled = false
                 launch {
                     updateCharacter(characterInfoData, characterStatsData)
                     withContext(Dispatchers.Main) {
@@ -66,6 +78,8 @@ class CharacterEditFragment(
                 }
             }
         }
+
+        return super.onOptionsItemSelected(item)
     }
 
     private suspend fun updateCharacter(

@@ -51,29 +51,5 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
         </LinearLayout>
-
     </ScrollView>
-
-    <View
-        android:background="?android:attr/dividerHorizontal"
-        android:layout_height="1dp"
-        android:layout_width="match_parent" />
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_weight="0"
-        android:layout_width="match_parent"
-        android:padding="2dp"
-        android:layout_height="wrap_content">
-
-        <Button
-            android:id="@+id/saveButton"
-            style="@style/Widget.MaterialComponents.Button.TextButton"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:enabled="false"
-            android:text="Save"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
 </LinearLayout>
