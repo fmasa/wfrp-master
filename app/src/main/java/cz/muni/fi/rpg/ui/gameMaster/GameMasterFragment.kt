@@ -15,7 +15,7 @@ import cz.muni.fi.rpg.model.right
 import cz.muni.fi.rpg.ui.common.BaseFragment
 import cz.muni.fi.rpg.ui.gameMaster.adapter.CharacterAdapter
 import cz.muni.fi.rpg.viewModels.PartyViewModel
-import kotlinx.android.synthetic.main.activity_game_master.*
+import kotlinx.android.synthetic.main.fragment_game_master.*
 import org.koin.core.parameter.parametersOf
 import org.koin.android.viewmodel.ext.android.viewModel
 
@@ -23,7 +23,7 @@ class GameMasterFragment(
     private val jsonMapper: JsonMapper,
     private val characterRepository: CharacterRepository
 
-) : BaseFragment(R.layout.activity_game_master) {
+) : BaseFragment(R.layout.fragment_game_master) {
 
     private val args: GameMasterFragmentArgs by navArgs()
 

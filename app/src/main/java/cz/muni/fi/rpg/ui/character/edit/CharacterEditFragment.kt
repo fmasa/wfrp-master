@@ -13,7 +13,7 @@ import cz.muni.fi.rpg.ui.characterCreation.CharacterInfoFormFragment
 import cz.muni.fi.rpg.ui.characterCreation.CharacterStatsData
 import cz.muni.fi.rpg.ui.characterCreation.CharacterStatsFormFragment
 import cz.muni.fi.rpg.ui.common.BaseFragment
-import kotlinx.android.synthetic.main.activity_character_edit.*
+import kotlinx.android.synthetic.main.fragment_character_edit.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -21,7 +21,7 @@ import kotlinx.coroutines.withContext
 
 class CharacterEditFragment(
     private val characters: CharacterRepository
-) : BaseFragment(R.layout.activity_character_edit),
+) : BaseFragment(R.layout.fragment_character_edit),
     CoroutineScope by CoroutineScope(Dispatchers.Default) {
 
     private val args: CharacterEditFragmentArgs by navArgs()

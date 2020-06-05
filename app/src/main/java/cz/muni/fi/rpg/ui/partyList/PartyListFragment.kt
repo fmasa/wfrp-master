@@ -12,13 +12,13 @@ import cz.muni.fi.rpg.ui.common.BaseFragment
 import cz.muni.fi.rpg.ui.joinParty.JoinPartyActivity
 import cz.muni.fi.rpg.ui.partyList.adapter.PartyAdapter
 import cz.muni.fi.rpg.viewModels.AuthenticationViewModel
-import kotlinx.android.synthetic.main.activity_party_list.*
+import kotlinx.android.synthetic.main.fragment_party_list.*
 import org.koin.android.viewmodel.ext.android.sharedViewModel
 import java.util.*
 
 class PartyListFragment(
     private val parties: PartyRepository
-) : BaseFragment(R.layout.activity_party_list) {
+) : BaseFragment(R.layout.fragment_party_list) {
 
     private val authViewModel: AuthenticationViewModel by sharedViewModel()
 

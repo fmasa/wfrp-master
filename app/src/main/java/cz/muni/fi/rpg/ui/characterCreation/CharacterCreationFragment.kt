@@ -10,7 +10,7 @@ import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.model.domain.character.*
 import cz.muni.fi.rpg.ui.common.BaseFragment
 import cz.muni.fi.rpg.viewModels.AuthenticationViewModel
-import kotlinx.android.synthetic.main.activity_character_creation.*
+import kotlinx.android.synthetic.main.fragment_character_creation.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -19,7 +19,7 @@ import org.koin.android.viewmodel.ext.android.sharedViewModel
 
 class CharacterCreationFragment(
     private val characters: CharacterRepository
-) : BaseFragment(R.layout.activity_character_creation),
+) : BaseFragment(R.layout.fragment_character_creation),
     CoroutineScope by CoroutineScope(Dispatchers.Default) {
     private val args: CharacterCreationFragmentArgs by navArgs()
     private val authentication: AuthenticationViewModel by sharedViewModel()

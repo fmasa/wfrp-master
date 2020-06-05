@@ -17,11 +17,11 @@ import cz.muni.fi.rpg.ui.common.BaseFragment
 import cz.muni.fi.rpg.ui.common.StaticFragmentsViewPagerAdapter
 import cz.muni.fi.rpg.viewModels.CharacterViewModel
 import cz.muni.fi.rpg.viewModels.PartyViewModel
-import kotlinx.android.synthetic.main.activity_character.*
+import kotlinx.android.synthetic.main.fragment_character.*
 import org.koin.android.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 
-class CharacterFragment : BaseFragment(R.layout.activity_character) {
+class CharacterFragment : BaseFragment(R.layout.fragment_character) {
     private val args: CharacterFragmentArgs by navArgs()
 
     private val viewModel: CharacterViewModel by viewModel { parametersOf(args.characterId) }
