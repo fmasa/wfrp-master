@@ -2,6 +2,7 @@ package cz.muni.fi.rpg.ui.character
 
 import android.os.Bundle
 import android.view.View
+import androidx.appcompat.app.AlertDialog
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Transformations
@@ -10,11 +11,17 @@ import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.model.domain.character.CharacterId
 import cz.muni.fi.rpg.model.right
 import cz.muni.fi.rpg.viewModels.CharacterStatsViewModel
+import kotlinx.android.synthetic.main.dialog_xp.view.*
 import kotlinx.android.synthetic.main.fragment_character_stats.*
+import kotlinx.android.synthetic.main.fragment_character_stats.view.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import org.koin.android.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 
-class CharacterStatsFragment : Fragment(R.layout.fragment_character_stats) {
+class CharacterStatsFragment : Fragment(R.layout.fragment_character_stats),
+    CoroutineScope by CoroutineScope(Dispatchers.Default) {
     companion object {
         private const val ARGUMENT_CHARACTER_ID = "CHARACTER_ID"
 
@@ -43,7 +50,11 @@ class CharacterStatsFragment : Fragment(R.layout.fragment_character_stats) {
                 .append(character.getCareer())
                 .toString()
 
-            xpPoints.text = getString(R.string.xp_points, 0)
+            xpPoints.text = getString(R.string.xp_points, character.getPoints().experience)
+
+            xpPoints.setOnClickListener {
+                openExperiencePointsDialog(character.getPoints().experience)
+            }
         }
     }
 
@@ -90,5 +101,22 @@ class CharacterStatsFragment : Fragment(R.layout.fragment_character_stats) {
 
         insanityPoints.setIncrementListener(viewModel::incrementInsanityPoints)
         insanityPoints.setDecrementListener(viewModel::decrementInsanityPoints)
+    }
+
+    private fun openExperiencePointsDialog(currentXpPoints: Int) {
+        val view = layoutInflater.inflate(R.layout.dialog_xp, null, false)
+
+        view.xpPointsInput.setText(currentXpPoints.toString())
+
+        AlertDialog.Builder(requireContext())
+            .setTitle("Change amount of XP")
+            .setView(view)
+            .setPositiveButton(R.string.button_save) { _, _ ->
+                val xpPoints = view.xpPointsInput.text.toString().toInt()
+                launch {
+                    viewModel.updateExperiencePoints(xpPoints)
+                }
+            }.create()
+            .show()
     }
 }

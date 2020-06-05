@@ -64,7 +64,8 @@ class CharacterCreationFragment(
                             fate = data.fatePoints,
                             fortune = data.fatePoints,
                             wounds = data.maxWounds,
-                            maxWounds = data.maxWounds
+                            maxWounds = data.maxWounds,
+                            experience = 0
                         )
                     )
                 }

@@ -62,6 +62,7 @@ function validCharacter (userId: string) {
             magic: 4,
         },
         points: {
+            experience: 100,
             insanity: 1,
             fate: 3,
             fortune: 2,
@@ -457,6 +458,10 @@ class Database extends Suite {
         await firebase.assertSucceeds(character.set(withPoints('wounds', data.points.maxWounds - 1)));
         await firebase.assertSucceeds(character.set(withPoints('wounds', data.points.maxWounds)));
         await firebase.assertFails(character.set(withPoints('wounds', data.points.maxWounds + 1)));
+
+        await firebase.assertSucceeds(character.set(withPoints('experience', 1)));
+        await firebase.assertSucceeds(character.set(withPoints('experience', 0)));
+        await firebase.assertFails(character.set(withPoints('experience', -1)));
     }
 
     @test

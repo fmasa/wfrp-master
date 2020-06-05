@@ -132,4 +132,5 @@
     <string name="menu_slideshow">Slideshow</string>
     <string name="about">About</string>
     <string name="xp_points">%1$d XP</string>
+    <string name="xp_long">Experience points</string>
 </resources>

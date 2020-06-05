@@ -7,7 +7,8 @@ data class Points(
    val fate: Int,
    val fortune: Int,
    val wounds: Int,
-   val maxWounds: Int
+   val maxWounds: Int,
+   val experience: Int
 ) {
     init {
         require(insanity >= 0)
@@ -15,6 +16,7 @@ data class Points(
         require(fortune in 0..fate)
         require(wounds in 0..maxWounds)
         require(maxWounds > 0)
+        require(experience >= 0)
     }
 
     fun updateMaxWounds(newMaxWounds: Int) = copy(

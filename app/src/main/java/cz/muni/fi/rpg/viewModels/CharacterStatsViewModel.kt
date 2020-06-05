@@ -19,8 +19,11 @@ class CharacterStatsViewModel(
 
     val character: LiveData<Either<CharacterNotFound, Character>> = characters.getLive(characterId)
 
+    fun updateExperiencePoints(xpPoints: Int) = updatePoints { it.copy(experience = xpPoints) }
+
     fun incrementWounds() = updatePoints { it.copy(wounds = it.wounds + 1) }
     fun decrementWounds() = updatePoints { it.copy(wounds = it.wounds - 1) }
+
     fun incrementFortunePoints() = updatePoints { it.copy(fortune = it.fortune + 1) }
     fun decrementFortunePoints() = updatePoints { it.copy(fortune = it.fortune - 1) }
 
