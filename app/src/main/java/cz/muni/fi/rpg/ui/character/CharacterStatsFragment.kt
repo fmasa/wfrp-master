@@ -112,7 +112,7 @@ class CharacterStatsFragment : Fragment(R.layout.fragment_character_stats),
             .setTitle("Change amount of XP")
             .setView(view)
             .setPositiveButton(R.string.button_save) { _, _ ->
-                val xpPoints = view.xpPointsInput.text.toString().toInt()
+                val xpPoints = view.xpPointsInput.text.toString().toIntOrNull() ?: 0
                 launch {
                     viewModel.updateExperiencePoints(xpPoints)
                 }
