@@ -32,7 +32,7 @@ import cz.muni.fi.rpg.ui.character.CharacterStatsFragment
 import cz.muni.fi.rpg.ui.character.InventoryFragment
 import cz.muni.fi.rpg.ui.character.edit.CharacterEditFragment
 import cz.muni.fi.rpg.ui.character.skills.CharacterSkillsFragment
-import cz.muni.fi.rpg.ui.character.skills.TalentsFragment
+import cz.muni.fi.rpg.ui.character.skills.talents.TalentsFragment
 import cz.muni.fi.rpg.ui.characterCreation.CharacterCreationFragment
 import cz.muni.fi.rpg.ui.characterCreation.CharacterInfoFormFragment
 import cz.muni.fi.rpg.ui.characterCreation.CharacterStatsFormFragment

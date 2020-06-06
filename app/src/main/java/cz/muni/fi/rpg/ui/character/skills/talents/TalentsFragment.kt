@@ -1,4 +1,4 @@
-package cz.muni.fi.rpg.ui.character.skills
+package cz.muni.fi.rpg.ui.character.skills.talents
 
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
@@ -12,7 +12,8 @@ class TalentsFragment : Fragment(R.layout.fragment_talents) {
     companion object {
         private const val ARGUMENT_CHARACTER_ID = "CHARACTER_ID"
 
-        fun newInstance(characterId: CharacterId) = TalentsFragment().apply {
+        fun newInstance(characterId: CharacterId) = TalentsFragment()
+            .apply {
             arguments = bundleOf(ARGUMENT_CHARACTER_ID to characterId)
         }
     }
