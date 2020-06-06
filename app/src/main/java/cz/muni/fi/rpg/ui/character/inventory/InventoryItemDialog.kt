@@ -3,17 +3,15 @@ package cz.muni.fi.rpg.ui.character.inventory
 import android.app.Dialog
 import android.os.Bundle
 import android.view.View
-import android.widget.EditText
 import android.widget.Toast
-import androidx.annotation.StringRes
 import androidx.appcompat.app.AlertDialog
 import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
-import com.google.android.material.textfield.TextInputLayout
 import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.model.domain.character.CharacterId
 import cz.muni.fi.rpg.model.domain.inventory.InventoryItem
 import cz.muni.fi.rpg.model.domain.inventory.InventoryItemId
+import cz.muni.fi.rpg.ui.common.forms.Form
 import cz.muni.fi.rpg.viewModels.InventoryViewModel
 import kotlinx.android.synthetic.main.inventory_item_edit_dialog.view.*
 import kotlinx.coroutines.CoroutineScope
@@ -66,17 +64,37 @@ class InventoryItemDialog : DialogFragment(),
             .setNegativeButton(R.string.button_cancel, null)
             .create()
 
+
+        val form = Form().apply {
+            addTextInput(view.itemNameLayout).apply {
+                setMaxLength(InventoryItem.NAME_MAX_LENGTH)
+                setNotBlank(getString(R.string.error_name_blank))
+            }
+
+            addTextInput(view.itemDescriptionLayout).apply {
+                setMaxLength(InventoryItem.DESCRIPTION_MAX_LENGTH)
+            }
+
+            addTextInput(view.itemQuantityLayout).apply {
+                addLiveRule(getString(R.string.error_invalid_quantity)) {
+                    val value = it.toString().toIntOrNull()
+
+                    value != null && value > 0
+                }
+            }
+        }
+
         dialog.setOnShowListener {
             dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener {
-                onDialogSubmitted(view)
+                onDialogSubmitted(form, view)
             }
         }
 
         return dialog
     }
 
-    private fun onDialogSubmitted(view: View) {
-        if (!checkItemValidity(view)) {
+    private fun onDialogSubmitted(form: Form, view: View) {
+        if (!form.validate()) {
             return
         }
 
@@ -100,39 +118,6 @@ class InventoryItemDialog : DialogFragment(),
         description = view.itemDescription.text.toString().trim(),
         quantity = view.itemQuantity.text.toString().toInt()
     )
-
-    private fun checkEditTextValue(
-        view: EditText,
-        predicate: (EditText) -> Boolean,
-        @StringRes message: Int
-    ): Boolean {
-        if (!predicate(view)) {
-            val parent = view.parent.parent
-
-            if (parent is TextInputLayout) {
-                parent.error = getString(message)
-            } else {
-                view.error = getString(message)
-            }
-
-            return false
-        }
-        return true
-    }
-
-    private fun checkItemValidity(view: View): Boolean {
-        val name = view.itemName
-
-        return checkEditTextValue(name, { it.text.isNotBlank() }, R.string.error_name_blank) &&
-                checkEditTextValue(
-                    view.itemQuantity,
-                    {
-                        val value = it.text.toString().toIntOrNull()
-                        value != null && value > 0
-                    },
-                    R.string.error_invalid_quantity
-                )
-    }
 
     private suspend fun toast(message: String) {
         withContext(Dispatchers.Main) { Toast.makeText(context, message, Toast.LENGTH_LONG).show() }

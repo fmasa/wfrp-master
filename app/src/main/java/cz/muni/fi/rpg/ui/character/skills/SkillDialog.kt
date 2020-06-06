@@ -8,18 +8,17 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.ArrayAdapter
 import androidx.appcompat.app.AlertDialog
 import androidx.core.os.bundleOf
-import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.DialogFragment
 import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.model.domain.skills.Skill
 import cz.muni.fi.rpg.model.domain.skills.SkillCharacteristic
+import cz.muni.fi.rpg.ui.common.forms.Form
 import kotlinx.android.synthetic.main.dialog_skill.view.*
 import java.util.UUID
 
 typealias OnSuccessListener = (Skill) -> Unit
 
 class SkillDialog : DialogFragment() {
-    private var userAttemptedSubmit: Boolean = false
     private var onSuccessListener: OnSuccessListener = {}
 
     companion object {
@@ -52,6 +51,17 @@ class SkillDialog : DialogFragment() {
             .map { getString(it.getReadableNameId()) }
             .sorted()
 
+        val form = Form().apply {
+            addTextInput(view.skillNameLayout).apply {
+                setMaxLength(Skill.NAME_MAX_LENGTH)
+                setNotBlank(getString(R.string.error_skill_name_empty))
+            }
+
+            addTextInput(view.skillDescriptionLayout).apply {
+                setMaxLength(Skill.DESCRIPTION_MAX_LENGTH)
+            }
+        }
+
         characteristicSpinner.setAdapter(
             ArrayAdapter(requireContext(), R.layout.dropdown_menu_popup_item, characteristics)
         )
@@ -72,7 +82,7 @@ class SkillDialog : DialogFragment() {
 
         dialog.setOnShowListener {
             dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener {
-                dialogSubmitted(dialog, view)
+                dialogSubmitted(dialog, view, form)
             }
         }
 
@@ -94,18 +104,11 @@ class SkillDialog : DialogFragment() {
         })
     }
 
-    private fun dialogSubmitted(dialog: AlertDialog, view: View) {
+    private fun dialogSubmitted(dialog: AlertDialog, view: View, form: Form) {
         val name = view.skillName.text.toString()
         val description = view.skillDescription.text.toString()
 
-        if (! userAttemptedSubmit) {
-            view.skillName.addTextChangedListener { nameInputChanged(view) }
-            nameInputChanged(view)
-
-            userAttemptedSubmit = true
-        }
-
-        if (name.isEmpty()) {
+        if (!form.validate()) {
             return
         }
 
@@ -143,11 +146,5 @@ class SkillDialog : DialogFragment() {
             R.id.skillMasteryLevel3 -> 3
             else -> error("Unknown radio button for mastery")
         }
-    }
-
-    private fun nameInputChanged(view: View) {
-        view.skillNameLayout.error = if (view.skillName.text.toString().isEmpty())
-            getString(R.string.error_skill_name_empty)
-        else null
     }
 }

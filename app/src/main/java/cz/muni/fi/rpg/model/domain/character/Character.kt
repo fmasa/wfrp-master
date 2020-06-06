@@ -11,14 +11,20 @@ data class Character(
     private var stats: Stats,
     private var points: Points
 ) {
+    companion object {
+        const val NAME_MAX_LENGTH = 50
+    }
+
     private var money: Money = Money.zero()
 
     init {
         require(listOf(name, userId, career).all { it.isNotBlank() })
+        require(name.length <= NAME_MAX_LENGTH) { "Character name is too long"}
     }
 
     fun update(name: String, career: String, race: Race, stats: Stats, points: Points) {
         require(listOf(name, career).all { it.isNotBlank() })
+        require(name.length <= NAME_MAX_LENGTH) { "Character name is too long"}
         this.name = name
         this.career = career
         this.race = race
