@@ -95,7 +95,7 @@ val appModule = module {
     viewModel { (characterId: CharacterId) -> CharacterStatsViewModel(characterId, get()) }
     viewModel { (characterId: CharacterId) -> InventoryViewModel(characterId, get(), get()) }
     viewModel { (characterId: CharacterId) -> SkillsViewModel(characterId, get()) }
-    viewModel { (characterId: CharacterId) -> TalentsViewModel(characterId) }
+    viewModel { (characterId: CharacterId) -> TalentsViewModel(characterId, get()) }
     viewModel { AuthenticationViewModel(get()) }
 
     /**

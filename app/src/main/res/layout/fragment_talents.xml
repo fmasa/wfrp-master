@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     style="@style/CardContainer">
+
     <LinearLayout
         android:gravity="center"
         android:layout_height="wrap_content"
@@ -17,11 +18,10 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/talentList"
             android:layout_height="match_parent"
-            android:layout_width="match_parent"
-            android:visibility="gone" />
+            android:layout_width="match_parent" />
 
         <Button
-            android:id="@+id/addTalentsButton"
+            android:id="@+id/addTalentButton"
             style="@style/Widget.MaterialComponents.Button.OutlinedButton"
             android:layout_gravity="center"
             android:layout_height="wrap_content"
