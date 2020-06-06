@@ -525,26 +525,27 @@ class Database extends Suite {
     }
 }
 
-@suite
-class Inventory extends Suite {
-    private partyId: string;
-    private gameMasterId: string;
-    private readonly userId1 = 'user123';
-    private readonly userId2 = 'user345';
 
-    private inventoryItem = {
-        id: uuid(),
-        quantity: 1,
-        name: "Sword of Chaos Champion",
-        description: "Trust me, you don't want to show it to people",
-    };
+abstract class CharacterSubCollectionSuite extends Suite {
+    private _partyId: string
+    private _gameMasterId: string;
+    protected readonly userId1 = 'user123';
+    protected readonly userId2 = 'user345';
+
+    protected get partyId(): string {
+        return this._partyId;
+    }
+
+    protected get gameMasterId(): string {
+        return this._gameMasterId;
+    }
 
     async before() {
         await super.before();
 
         const party = await createValidParty();
-        this.partyId = party.id;
-        this.gameMasterId = party.gameMasterId;
+        this._partyId = party.id;
+        this._gameMasterId = party.gameMasterId;
 
         await joinParty(party, this.userId1);
         await joinParty(party, this.userId2);
@@ -552,6 +553,16 @@ class Inventory extends Suite {
         await createCharacter(party.id, this.userId1);
         await createCharacter(party.id, this.userId2);
     }
+}
+
+@suite
+class Inventory extends CharacterSubCollectionSuite {
+    private inventoryItem = {
+        id: uuid(),
+        quantity: 1,
+        name: "Sword of Chaos Champion",
+        description: "Trust me, you don't want to show it to people",
+    };
 
     private inventoryItems(app: Firestore, userId: string): CollectionReference
     {
@@ -685,12 +696,7 @@ class Inventory extends Suite {
 }
 
 @suite
-class Skills extends Suite {
-    private partyId: string;
-    private gameMasterId: string;
-    private readonly userId1 = 'user123';
-    private readonly userId2 = 'user345';
-
+class Skills extends CharacterSubCollectionSuite {
     private skill = {
         id: uuid(),
         advanced: false,
@@ -699,20 +705,6 @@ class Skills extends Suite {
         description: "Lower the price of goods",
         mastery: 1,
     };
-
-    async before() {
-        await super.before();
-
-        const party = await createValidParty();
-        this.partyId = party.id;
-        this.gameMasterId = party.gameMasterId;
-
-        await joinParty(party, this.userId1);
-        await joinParty(party, this.userId2);
-
-        await createCharacter(party.id, this.userId1);
-        await createCharacter(party.id, this.userId2);
-    }
 
     private skills(app: Firestore, userId: string): CollectionReference
     {
