@@ -78,4 +78,28 @@
         <item name="cardElevation">2dp</item>
     </style>
 
+    <style name="RecyclerViewItemIcon">
+        <item name="android:background">@drawable/circle_background</item>
+        <item name="android:tint">@color/colorFabText</item>
+        <item name="android:padding">10dp</item>
+        <item name="android:layout_width">40dp</item>
+        <item name="android:layout_height">40dp</item>
+    </style>
+
+    <style name="RecyclerViewItemTitle">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:ellipsize">end</item>
+    </style>
+
+    <style name="RecyclerViewItemDescription">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textStyle">italic</item>
+        <item name="android:ellipsize">end</item>
+    </style>
 </resources>
