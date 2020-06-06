@@ -9,7 +9,7 @@
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/skillNameLayout"
-        style="@style/OutlinedInput"
+        style="@style/OutlinedInputWithCounter"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="@string/label_skill_name">
@@ -23,8 +23,7 @@
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/skillDescriptionLayout"
-        style="@style/OutlinedInput"
-        android:layout_marginBottom="8dp"
+        style="@style/OutlinedInputWithCounter"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="@string/label_skill_description">

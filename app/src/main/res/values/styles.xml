@@ -47,7 +47,11 @@
     </style>
 
     <style name="OutlinedInput" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
-        <item name="android:layout_marginBottom">8dp</item>
+        <item name="android:layout_marginBottom">14dp</item>
+    </style>
+
+    <style name="OutlinedInputWithCounter" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <item name="android:layout_marginBottom">0dp</item>
     </style>
 
     <style name="AppTheme.NoActionBar">

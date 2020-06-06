@@ -206,6 +206,9 @@ class Database extends Suite {
         // Empty name
         await firebase.assertFails(parties.doc(data.id).set({...data, name: ""}));
 
+        // Name too long
+        await firebase.assertFails(parties.doc(data.id).set({...data, name: "a".repeat(51)}));
+
         // Empty access code
         await firebase.assertFails(parties.doc(data.id).set({...data, accessCode: ""}));
 
@@ -378,6 +381,12 @@ class Database extends Suite {
         // Empty character name
         await firebase.assertFails(character.set({...data, name: ""}));
 
+        // Character name too long
+        await firebase.assertFails(character.set({...data, name: "a".repeat(51)}));
+
+        // Character description too long
+        await firebase.assertFails(character.set({...data, description: "a".repeat(201)}));
+
         // Whitespaces only name
         await firebase.assertFails(character.set({...data, name: "\t \r"}));
 
@@ -386,6 +395,9 @@ class Database extends Suite {
 
         // Empty career
         await firebase.assertFails(character.set({...data, career: ""}));
+
+        // Career too long
+        await firebase.assertFails(character.set({...data, career: "a".repeat(51)}));
 
         // Whitespaces only career
         await firebase.assertFails(character.set({...data, career: "\t \r"}));
@@ -644,8 +656,14 @@ class Inventory extends Suite {
                 // Empty name
                 {name: ""},
 
+                // Name too long
+                {name: "a".repeat(51)},
+
                 // Name with nothing but whitespaces
                 {name: " \t\r"},
+
+                // Description too long
+                {description: "a".repeat(201)},
 
                 // Zero quantity
                 {quantity: 0},
@@ -799,6 +817,9 @@ class Skills extends Suite {
                 // Empty name
                 {name: ""},
 
+                // Name too long
+                {name: "a".repeat(51)},
+
                 // Unknown characteristic
                 {characteristic: "NICENCESS"},
 
@@ -807,6 +828,9 @@ class Skills extends Suite {
 
                 // Too small mastery
                 {mastery: 0},
+
+                // Description too long
+                {description: "a".repeat(201)},
 
             ].map(doc => firebase.assertFails(skillDoc.set({...this.skill, ...doc})))
         );

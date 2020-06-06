@@ -29,8 +29,8 @@ service cloud.firestore {
                     function isValidInventoryItem(item) {
                         return item.keys().toSet() == ["id", "name", "description", "quantity"].toSet()
                             && item.id is string && item.id == itemId && isValidUuid(item.id)
-                            && item.name is string && isNotBlank(item.name)
-                            && item.description is string
+                            && item.name is string && isNotBlank(item.name) && item.name.size() <= 50
+                            && item.description is string && item.description.size() <= 200
                             && item.quantity is int && item.quantity > 0;
                     }
                 }
@@ -44,8 +44,8 @@ service cloud.firestore {
                     function isValidSkill(skill) {
                         return skill.keys().toSet() == ["id", "name", "description", "advanced", "characteristic", "mastery"].toSet()
                             && skill.id is string && skill.id == skillId && isValidUuid(skill.id)
-                            && skill.name is string && skill.name != ""
-                            && skill.description is string
+                            && skill.name is string && isNotBlank(skill.name) && skill.name.size() <= 50
+                            && skill.description is string && skill.description.size() <= 200
                             && skill.advanced is bool
                             && skill.mastery is int && skill.mastery >= 1 && skill.mastery <= 3
                             && skill.characteristic in ["AGILITY", "INTELLIGENCE", "FELLOWSHIP", "STRENGTH", "TOUGHNESS", "WILL_POWER"]
@@ -66,8 +66,8 @@ service cloud.firestore {
                 function isValidCharacter(character) {
                     return character.keys().toSet() == ["name", "career", "points", "race", "stats", "userId", "money"].toSet()
                         && character.userId == userId
-                        && character.name is string && isNotBlank(character.name)
-                        && character.career is string && isNotBlank(character.career)
+                        && character.name is string && isNotBlank(character.name) && character.name.size() <= 50
+                        && character.career is string && isNotBlank(character.career) && character.career.size() <= 50
                         && character.race is string && character.race in ["HUMAN", "ELF", "DWARF", "HALFLING", "GNOME"]
                         && arePointsValid(character.points)
                         && areStatsValid(character.stats)
@@ -117,7 +117,7 @@ service cloud.firestore {
             function isValidNewParty(party, uid) {
                 return party.keys().toSet() == ["id", "name", "users", "gameMasterId", "accessCode"].toSet()
                     && party.id is string && party.id == partyId && isValidUuid(party.id)
-                    && party.name is string && isNotBlank(party.name)
+                    && party.name is string && isNotBlank(party.name) && party.name.size() <= 50
                     && party.users == [uid]
                     && party.gameMasterId == uid
                     && party.accessCode is string && party.accessCode != "";

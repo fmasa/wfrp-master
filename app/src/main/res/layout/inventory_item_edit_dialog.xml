@@ -7,9 +7,10 @@
     android:padding="@dimen/dialogPadding">
 
     <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/itemNameLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        style="@style/OutlinedInput"
+        style="@style/OutlinedInputWithCounter"
         android:hint="@string/inventory_item_name_label">
 
         <com.google.android.material.textfield.TextInputEditText
@@ -20,6 +21,7 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/itemQuantityLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         style="@style/OutlinedInput"
@@ -35,9 +37,10 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/itemDescriptionLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        style="@style/OutlinedInput"
+        style="@style/OutlinedInputWithCounter"
         android:hint="@string/inventory_item_description_label">
 
         <com.google.android.material.textfield.TextInputEditText
