@@ -4,12 +4,14 @@ import android.os.Bundle
 import android.view.View
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.commit
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.model.domain.character.CharacterId
 import cz.muni.fi.rpg.model.domain.skills.Skill
 import cz.muni.fi.rpg.ui.character.skills.adapter.SkillAdapter
+import cz.muni.fi.rpg.ui.character.skills.talents.TalentsFragment
 import cz.muni.fi.rpg.viewModels.SkillsViewModel
 import kotlinx.android.synthetic.main.fragment_character_skills.*
 import org.koin.android.viewmodel.ext.android.viewModel
@@ -29,9 +31,11 @@ class CharacterSkillsFragment : Fragment(R.layout.fragment_character_skills),
         }
     }
 
-    private val viewModel: SkillsViewModel by viewModel {
-        parametersOf(arguments?.getParcelable(ARGUMENT_CHARACTER_ID))
+    private val characterId: CharacterId by lazy {
+        requireNotNull(arguments?.getParcelable<CharacterId>(ARGUMENT_CHARACTER_ID))
     }
+
+    private val viewModel: SkillsViewModel by viewModel { parametersOf(characterId) }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -40,7 +44,7 @@ class CharacterSkillsFragment : Fragment(R.layout.fragment_character_skills),
         val adapter = SkillAdapter(
             layoutInflater,
             { openSkillDialog(it) },
-            { launch {viewModel.removeSkill(it) }}
+            { launch { viewModel.removeSkill(it) } }
         )
         skillList.adapter = adapter
 
@@ -60,6 +64,10 @@ class CharacterSkillsFragment : Fragment(R.layout.fragment_character_skills),
 
         addSkillButton.setOnClickListener {
             openSkillDialog(null)
+        }
+
+        childFragmentManager.commit {
+            replace(R.id.talentsFragment, TalentsFragment.newInstance(characterId))
         }
     }
 

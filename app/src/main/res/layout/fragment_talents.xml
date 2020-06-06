@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/CardContainer">
+
+    <LinearLayout
+        android:gravity="center"
+        android:layout_height="wrap_content"
+        android:layout_marginVertical="16dp"
+        android:layout_width="match_parent"
+        android:orientation="vertical">
+
+        <TextView
+            style="@style/TextAppearance.AppCompat.Title"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:text="@string/title_character_talents" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/talentList"
+            android:layout_height="match_parent"
+            android:layout_width="match_parent" />
+
+        <Button
+            android:id="@+id/addTalentButton"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            android:layout_gravity="center"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:layout_width="wrap_content"
+            android:text="@string/title_talent_add" />
+    </LinearLayout>
+</androidx.cardview.widget.CardView>

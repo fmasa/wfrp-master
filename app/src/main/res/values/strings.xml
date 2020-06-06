@@ -16,6 +16,7 @@
     <string name="scanCode_title">Join using QR code</string>
     <string name="group_icon_description">Group icon</string>
     <string name="skill_icon_description">Icon with characteristic related to this skill</string>
+    <string name="talent_icon_description">Generic talent icon</string>
     <string name="qr_code_description">QR code</string>
 
     <string name="title_party_activity">Parties</string>
@@ -25,8 +26,13 @@
     <string name="label_skill_name">Skill Name</string>
     <string name="label_skill_description">Skill Description (Optional)</string>
     <string name="label_skill_advanced">Advanced</string>
-    <string name="error_skill_name_empty">Skill Name cannot be empty</string>
+    <string name="error_skill_name_empty">Skill name cannot be empty</string>
 
+
+    <!-- Talent Dialog -->
+    <string name="title_talent_add">Add Talent</string>
+    <string name="label_description">Description (Optional)</string>
+    <string name="error_talent_name_empty">Talent name cannot be empty</string>
 
     <string name="title_character_creation_info">Character info</string>
     <string name="title_character_creation_stats">Character stats</string>
@@ -111,6 +117,7 @@
     <string name="error_value_over_100">Cannot be higher than 100</string>
     <string name="error_party_creation_no_connection">You need to be connected to internet to create parties</string>
     <string name="title_character_skills">Skills</string>
+    <string name="title_character_talents">Talents</string>
     <string name="title_character_spells">Spells</string>
     <string name="title_addSkill">Add Skill</string>
     <string name="label_skill_characteristic">Characteristic</string>

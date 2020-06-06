@@ -52,6 +52,20 @@ service cloud.firestore {
                     }
                 }
 
+                match /talents/{talentId} {
+                    allow read: if hasAccessToParty();
+                    allow create: if canEditCharacter() && isValidTalent(request.resource.data);
+                    allow update: if canEditCharacter() && isValidTalent(request.resource.data);
+                    allow delete: if canEditCharacter();
+
+                    function isValidTalent(talent) {
+                        return talent.keys().toSet() == ["id", "name", "description"].toSet()
+                            && talent.id is string && talent.id == talentId && isValidUuid(talent.id)
+                            && talent.name is string && isNotBlank(talent.name) && talent.name.size() <= 50
+                            && talent.description is string && talent.description.size() <= 200
+                    }
+                }
+
                 function areMoneyValid(money) {
                     return money is map
                         && money.keys().toSet() == ["pennies"].toSet()

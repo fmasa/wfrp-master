@@ -525,26 +525,27 @@ class Database extends Suite {
     }
 }
 
-@suite
-class Inventory extends Suite {
-    private partyId: string;
-    private gameMasterId: string;
-    private readonly userId1 = 'user123';
-    private readonly userId2 = 'user345';
 
-    private inventoryItem = {
-        id: uuid(),
-        quantity: 1,
-        name: "Sword of Chaos Champion",
-        description: "Trust me, you don't want to show it to people",
-    };
+abstract class CharacterSubCollectionSuite extends Suite {
+    private _partyId: string
+    private _gameMasterId: string;
+    protected readonly userId1 = 'user123';
+    protected readonly userId2 = 'user345';
+
+    protected get partyId(): string {
+        return this._partyId;
+    }
+
+    protected get gameMasterId(): string {
+        return this._gameMasterId;
+    }
 
     async before() {
         await super.before();
 
         const party = await createValidParty();
-        this.partyId = party.id;
-        this.gameMasterId = party.gameMasterId;
+        this._partyId = party.id;
+        this._gameMasterId = party.gameMasterId;
 
         await joinParty(party, this.userId1);
         await joinParty(party, this.userId2);
@@ -552,6 +553,16 @@ class Inventory extends Suite {
         await createCharacter(party.id, this.userId1);
         await createCharacter(party.id, this.userId2);
     }
+}
+
+@suite
+class Inventory extends CharacterSubCollectionSuite {
+    private inventoryItem = {
+        id: uuid(),
+        quantity: 1,
+        name: "Sword of Chaos Champion",
+        description: "Trust me, you don't want to show it to people",
+    };
 
     private inventoryItems(app: Firestore, userId: string): CollectionReference
     {
@@ -685,12 +696,7 @@ class Inventory extends Suite {
 }
 
 @suite
-class Skills extends Suite {
-    private partyId: string;
-    private gameMasterId: string;
-    private readonly userId1 = 'user123';
-    private readonly userId2 = 'user345';
-
+class Skills extends CharacterSubCollectionSuite {
     private skill = {
         id: uuid(),
         advanced: false,
@@ -699,20 +705,6 @@ class Skills extends Suite {
         description: "Lower the price of goods",
         mastery: 1,
     };
-
-    async before() {
-        await super.before();
-
-        const party = await createValidParty();
-        this.partyId = party.id;
-        this.gameMasterId = party.gameMasterId;
-
-        await joinParty(party, this.userId1);
-        await joinParty(party, this.userId2);
-
-        await createCharacter(party.id, this.userId1);
-        await createCharacter(party.id, this.userId2);
-    }
 
     private skills(app: Firestore, userId: string): CollectionReference
     {
@@ -840,6 +832,138 @@ class Skills extends Suite {
                 skillDoc.set({
                     ...this.skill,
                     [field]: typeof this.skill[field] == 'string' ? true : 'foo',
+                })
+            );
+        }));
+    }
+}
+
+
+@suite
+class Talents extends CharacterSubCollectionSuite {
+    private talent = {
+        id: uuid(),
+        name: "Sneaky brieky",
+        description: "+ 1O to sneak rolls",
+    };
+
+    private talents(app: Firestore, userId: string): CollectionReference
+    {
+        return app.collection("parties")
+            .doc(this.partyId)
+            .collection("characters")
+            .doc(userId)
+            .collection("talents");
+    }
+
+    @test
+    async "user (and GM) can add talent to his character"() {
+        for (const userId of [this.userId1, this.gameMasterId]) {
+            const talents = this.talents(authedApp(userId), this.userId1);
+
+            await firebase.assertSucceeds(talents.doc(this.talent.id).set(this.talent));
+        }
+    }
+
+    @test
+    async "other users CANNOT add talent to character"() {
+        for (const userId of [this.userId2, 'user-not-in-party']) {
+            const talents = this.talents(authedApp(userId), this.userId1);
+
+            await firebase.assertFails(talents.doc(this.talent.id).set(this.talent));
+        }
+    }
+
+    @test
+    async "user (and GM) can update talent of his character"() {
+        for (const userId of [this.userId1, this.gameMasterId]) {
+            const talents = this.talents(authedApp(userId), this.userId1);
+            await talents.doc(this.talent.id).set(this.talent);
+
+            await firebase.assertSucceeds(talents.doc(this.talent.id).set({description: "Better desc."}, {merge: true}));
+        }
+    }
+
+    @test
+    async "other users CANNOT update talent of character"() {
+        for (const userId of [this.userId2, 'user-not-in-party']) {
+            await this.talents(authedApp(this.userId1), this.userId1).doc(this.talent.id).set(this.talent);
+            const talents = this.talents(authedApp(userId), this.userId1);
+
+            await firebase.assertFails(talents.doc(this.talent.id).set({advanced: true}, {merge: true}));
+        }
+    }
+
+    @test
+    async "user (and GM) can remove talent of his character"() {
+        for (const userId of [this.userId1, this.gameMasterId]) {
+            const talents = this.talents(authedApp(userId), this.userId1);
+            await talents.doc(this.talent.id).set(this.talent);
+
+            await firebase.assertSucceeds(talents.doc(this.talent.id).delete());
+        }
+    }
+
+    @test
+    async "other users CANNOT remove talent of character"() {
+        for (const userId of [this.userId2, 'user-not-in-party']) {
+            await this.talents(authedApp(this.userId1), this.userId1).doc(this.talent.id).set(this.talent);
+            const talents = this.talents(authedApp(userId), this.userId1);
+
+            await firebase.assertFails(talents.doc(this.talent.id).delete());
+        }
+    }
+
+    @test
+    async "all party members can read talents"() {
+        for (const userId of [this.userId1, this.userId2, this.gameMasterId]) {
+            await this.talents(authedApp(userId), this.userId1).get();
+        }
+    }
+
+    @test
+    async "skill with field missing CANNOT be saved"() {
+        const skills = this.talents(authedApp(this.userId1), this.userId1);
+
+        await Promise.all(Object.keys(this.talent).map(field => {
+            const talent = {...this.talent};
+            const talentId = talent.id;
+
+            delete talent[field];
+
+            return firebase.assertFails(skills.doc(talentId).set(talent));
+        }));
+    }
+
+    @test
+    async "talent with invalid field CANNOT be saved"() {
+        const talentDoc = this.talents(authedApp(this.userId1), this.userId1).doc(this.talent.id);
+
+        await Promise.all(
+            [
+                // ID not matching document ID
+                {id: uuid()},
+
+                // ID is not valid UUID
+                {id: "foo"},
+
+                // Empty name
+                {name: ""},
+
+                // Name too long
+                {name: "a".repeat(51)},
+
+                // Description too long
+                {description: "a".repeat(201)},
+
+            ].map(doc => firebase.assertFails(talentDoc.set({...this.talent, ...doc})))
+        );
+
+        await Promise.all(Object.keys(this.talent).map(field => {
+            return firebase.assertFails(
+                talentDoc.set({
+                    ...this.talent,
+                    [field]: typeof this.talent[field] == 'string' ? true : 'foo',
                 })
             );
         }));
