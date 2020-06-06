@@ -19,6 +19,8 @@ import cz.muni.fi.rpg.model.domain.party.Party
 import cz.muni.fi.rpg.model.domain.party.PartyRepository
 import cz.muni.fi.rpg.model.domain.skills.Skill
 import cz.muni.fi.rpg.model.domain.skills.SkillRepository
+import cz.muni.fi.rpg.model.domain.talents.Talent
+import cz.muni.fi.rpg.model.domain.talents.TalentRepository
 import cz.muni.fi.rpg.model.firestore.*
 import cz.muni.fi.rpg.model.firestore.FirestoreCharacterRepository
 import cz.muni.fi.rpg.model.firestore.FirestoreInventoryItemRepository
@@ -78,18 +80,12 @@ val appModule = module {
     single<InventoryItemRepository> {
         FirestoreInventoryItemRepository(get(), aggregateMapper(InventoryItem::class))
     }
-
     single<CharacterRepository> {
         FirestoreCharacterRepository(get(), aggregateMapper(Character::class))
     }
-
-    single<PartyRepository> {
-        FirestorePartyRepository(get(), aggregateMapper(Party::class))
-    }
-
-    single<SkillRepository> {
-        FirestoreSkillRepository(get(), aggregateMapper(Skill::class))
-    }
+    single<PartyRepository> { FirestorePartyRepository(get(), aggregateMapper(Party::class)) }
+    single<SkillRepository> { FirestoreSkillRepository(get(), aggregateMapper(Skill::class)) }
+    single<TalentRepository> { FirestoreTalentRepository(get(), aggregateMapper(Talent::class)) }
 
     /**
      * ViewModels
