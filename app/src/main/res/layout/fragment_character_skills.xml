@@ -3,9 +3,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/colorBackgroundUnderCard"
     tools:context=".ui.character.skills.CharacterSkillsFragment">
 
     <LinearLayout
+        android:orientation="vertical"
         android:layout_width="match_parent"
         android:paddingBottom="@dimen/long_ui_bottom_padding"
         android:layout_height="wrap_content">
@@ -60,5 +62,10 @@
                     android:text="@string/title_addSkill" />
             </LinearLayout>
         </androidx.cardview.widget.CardView>
+
+        <FrameLayout
+            android:id="@+id/talentsFragment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
     </LinearLayout>
 </ScrollView>

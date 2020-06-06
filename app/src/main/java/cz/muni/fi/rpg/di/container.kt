@@ -30,6 +30,7 @@ import cz.muni.fi.rpg.ui.character.CharacterStatsFragment
 import cz.muni.fi.rpg.ui.character.InventoryFragment
 import cz.muni.fi.rpg.ui.character.edit.CharacterEditFragment
 import cz.muni.fi.rpg.ui.character.skills.CharacterSkillsFragment
+import cz.muni.fi.rpg.ui.character.skills.TalentsFragment
 import cz.muni.fi.rpg.ui.characterCreation.CharacterCreationFragment
 import cz.muni.fi.rpg.ui.characterCreation.CharacterInfoFormFragment
 import cz.muni.fi.rpg.ui.characterCreation.CharacterStatsFormFragment
@@ -98,6 +99,7 @@ val appModule = module {
     viewModel { (characterId: CharacterId) -> CharacterStatsViewModel(characterId, get()) }
     viewModel { (characterId: CharacterId) -> InventoryViewModel(characterId, get(), get()) }
     viewModel { (characterId: CharacterId) -> SkillsViewModel(characterId, get()) }
+    viewModel { (characterId: CharacterId) -> TalentsViewModel(characterId) }
     viewModel { AuthenticationViewModel(get()) }
 
     /**
@@ -114,4 +116,5 @@ val appModule = module {
     fragment { CharacterInfoFormFragment() }
     fragment { CharacterStatsFormFragment() }
     fragment { CharacterCreationFragment(get()) }
+    fragment { TalentsFragment() }
 }
