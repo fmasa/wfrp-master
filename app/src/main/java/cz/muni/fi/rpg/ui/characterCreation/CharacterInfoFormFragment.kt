@@ -8,6 +8,7 @@ import android.widget.EditText
 import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.model.domain.character.Character
 import cz.muni.fi.rpg.model.domain.character.Race
+import cz.muni.fi.rpg.ui.common.forms.Form
 import kotlinx.android.synthetic.main.fragment_character_info_form.*
 
 class CharacterInfoFormFragment : Fragment(R.layout.fragment_character_info_form) {
@@ -15,17 +16,28 @@ class CharacterInfoFormFragment : Fragment(R.layout.fragment_character_info_form
 
     data class CharacterInfo(var name: String, var race: Race, var career: String)
 
+    private lateinit var form: Form
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        form = Form().apply {
+            addTextInput(nameLayout).apply {
+                setNotBlank(getString(R.string.error_cannot_be_empty))
+                setMaxLength(Character.NAME_MAX_LENGTH)
+            }
+
+            addTextInput(careerLayout).apply {
+                setNotBlank(getString(R.string.error_cannot_be_empty))
+                setMaxLength(Character.CAREER_MAX_LENGTH)
+            }
+        }
 
         setDefaultValues()
     }
 
     fun submit(): CharacterInfo? {
-        showErrorIfNecessary(NameTextFill)
-        showErrorIfNecessary(CareerTextFill)
-
-        if (NameTextFill.text.isNullOrBlank() || CareerTextFill.text.isNullOrBlank()) {
+        if (!form.validate()) {
             return null
         }
 
@@ -40,8 +52,8 @@ class CharacterInfoFormFragment : Fragment(R.layout.fragment_character_info_form
     private fun setDefaultValues() {
         val character = this.character ?: return
 
-        NameTextFill.setText(character.getName())
-        CareerTextFill.setText(character.getCareer())
+        nameEditText.setText(character.getName())
+        careerEditText.setText(character.getCareer())
         when (character.getRace()) {
             Race.HUMAN -> radioButtonRaceHuman.isChecked = true
             Race.DWARF -> radioButtonRaceDwarf.isChecked = true
@@ -51,16 +63,9 @@ class CharacterInfoFormFragment : Fragment(R.layout.fragment_character_info_form
         }
     }
 
-    private fun showErrorIfNecessary(input: EditText) {
-        input.error =
-        if (input.text.toString().isBlank()) {
-            (getString(R.string.error_cannot_be_empty))
-        } else null
-    }
-
     private fun createCharacterInfo(): CharacterInfo {
-        val name = NameTextFill.text.toString()
-        val career = CareerTextFill.text.toString()
+        val name = nameEditText.text.toString()
+        val career = careerEditText.text.toString()
 
         val race: Race = when(radioGroup.checkedRadioButtonId) {
             R.id.radioButtonRaceHuman -> Race.HUMAN
