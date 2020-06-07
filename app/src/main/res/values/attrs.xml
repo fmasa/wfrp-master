@@ -7,4 +7,7 @@
         <attr name="statName" format="string"/>
         <attr name="editable" format="boolean"/>
     </declare-styleable>
+    <declare-styleable name="TextInput">
+        <attr name="inputLabel" format="string"/>
+    </declare-styleable>
 </resources>

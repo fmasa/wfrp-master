@@ -3,27 +3,16 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:padding="20dp"
     tools:context=".ui.characterCreation.CharacterInfoFormFragment">
 
-    <TextView
+    <cz.muni.fi.rpg.ui.views.TextInput
+        android:id="@+id/nameInput"
+        app:inputLabel="@string/label_name"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/label_name"
-        android:textSize="19sp"/>
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/nameLayout"
-        android:layout_width="match_parent"
-        style="@style/OutlinedInputWithCounter"
-        android:layout_marginTop="4dp"
-        android:layout_height="wrap_content">
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/nameEditText"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-    </com.google.android.material.textfield.TextInputLayout>
+        android:layout_height="wrap_content"/>
 
     <TextView
         android:layout_width="match_parent"
@@ -69,22 +58,10 @@
             android:text="@string/race_gnome" />
     </RadioGroup>
 
-    <TextView
+    <cz.muni.fi.rpg.ui.views.TextInput
+        android:id="@+id/careerInput"
         android:layout_marginTop="16dp"
+        app:inputLabel="@string/label_career"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/label_career"
-        android:textSize="19sp"/>
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/careerLayout"
-        android:layout_width="match_parent"
-        style="@style/OutlinedInputWithCounter"
-        android:layout_marginTop="4dp"
-        android:layout_height="wrap_content">
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/careerEditText"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-    </com.google.android.material.textfield.TextInputLayout>
+        android:layout_height="wrap_content"/>
 </LinearLayout>

@@ -22,12 +22,12 @@ class CharacterInfoFormFragment : Fragment(R.layout.fragment_character_info_form
         super.onViewCreated(view, savedInstanceState)
 
         form = Form().apply {
-            addTextInput(nameLayout).apply {
+            addTextInput(nameInput).apply {
                 setNotBlank(getString(R.string.error_cannot_be_empty))
                 setMaxLength(Character.NAME_MAX_LENGTH)
             }
 
-            addTextInput(careerLayout).apply {
+            addTextInput(careerInput).apply {
                 setNotBlank(getString(R.string.error_cannot_be_empty))
                 setMaxLength(Character.CAREER_MAX_LENGTH)
             }
@@ -52,8 +52,8 @@ class CharacterInfoFormFragment : Fragment(R.layout.fragment_character_info_form
     private fun setDefaultValues() {
         val character = this.character ?: return
 
-        nameEditText.setText(character.getName())
-        careerEditText.setText(character.getCareer())
+        nameInput.setDefaultValue(character.getName())
+        careerInput.setDefaultValue(character.getCareer())
         when (character.getRace()) {
             Race.HUMAN -> radioButtonRaceHuman.isChecked = true
             Race.DWARF -> radioButtonRaceDwarf.isChecked = true
@@ -64,8 +64,8 @@ class CharacterInfoFormFragment : Fragment(R.layout.fragment_character_info_form
     }
 
     private fun createCharacterInfo(): CharacterInfo {
-        val name = nameEditText.text.toString()
-        val career = careerEditText.text.toString()
+        val name = nameInput.getValue()
+        val career = careerInput.getValue()
 
         val race: Race = when(radioGroup.checkedRadioButtonId) {
             R.id.radioButtonRaceHuman -> Race.HUMAN
