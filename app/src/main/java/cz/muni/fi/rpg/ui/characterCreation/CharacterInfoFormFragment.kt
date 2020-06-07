@@ -3,7 +3,6 @@ package cz.muni.fi.rpg.ui.characterCreation
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.View
-import android.widget.EditText
 
 import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.model.domain.character.Character
@@ -57,8 +56,8 @@ class CharacterInfoFormFragment : Fragment(R.layout.fragment_character_info_form
         when (character.getRace()) {
             Race.HUMAN -> radioButtonRaceHuman.isChecked = true
             Race.DWARF -> radioButtonRaceDwarf.isChecked = true
-            Race.ELF -> radioButtonRaceElf.isChecked = true
-            Race.GNOME -> radioButtonRaceGnome.isChecked = true
+            Race.HIGH_ELF -> radioButtonRaceElf.isChecked = true
+            Race.WOOD_ELF -> radioButtonRaceGnome.isChecked = true
             Race.HALFLING -> radioButtonRaceHalfling.isChecked = true
         }
     }
@@ -70,8 +69,8 @@ class CharacterInfoFormFragment : Fragment(R.layout.fragment_character_info_form
         val race: Race = when(radioGroup.checkedRadioButtonId) {
             R.id.radioButtonRaceHuman -> Race.HUMAN
             R.id.radioButtonRaceDwarf -> Race.DWARF
-            R.id.radioButtonRaceElf -> Race.ELF
-            R.id.radioButtonRaceGnome -> Race.GNOME
+            R.id.radioButtonRaceElf -> Race.HIGH_ELF
+            R.id.radioButtonRaceGnome -> Race.WOOD_ELF
             R.id.radioButtonRaceHalfling -> Race.HALFLING
             else -> error("No race selected")
         }

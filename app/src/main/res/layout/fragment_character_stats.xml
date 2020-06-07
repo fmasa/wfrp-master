@@ -87,22 +87,11 @@
                         android:gravity="center"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        app:layout_constraintEnd_toStartOf="@id/insanityPoints"
+                        app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintHorizontal_chainStyle="spread_inside"
                         app:layout_constraintStart_toEndOf="@id/fortunePoints"
                         app:layout_constraintTop_toTopOf="parent"
                         app:name="@string/label_fate_points" />
-
-                    <cz.muni.fi.rpg.ui.views.CharacterPoint
-                        android:id="@+id/insanityPoints"
-                        android:gravity="center"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintHorizontal_chainStyle="spread_inside"
-                        app:layout_constraintStart_toEndOf="@id/fatePoints"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:name="@string/label_insanity_points" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </androidx.cardview.widget.CardView>
 

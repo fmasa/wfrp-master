@@ -43,7 +43,7 @@
             android:id="@+id/radioButtonRaceElf"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/race_elf" />
+            android:text="@string/race_high_elf" />
 
         <RadioButton
             android:id="@+id/radioButtonRaceDwarf"
@@ -55,7 +55,7 @@
             android:id="@+id/radioButtonRaceGnome"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/race_gnome" />
+            android:text="@string/race_wood_elf" />
     </RadioGroup>
 
     <cz.muni.fi.rpg.ui.views.TextInput

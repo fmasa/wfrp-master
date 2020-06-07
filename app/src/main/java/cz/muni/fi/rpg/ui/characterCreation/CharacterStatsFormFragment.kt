@@ -62,15 +62,17 @@ class CharacterStatsFormFragment : Fragment(R.layout.fragment_character_stats_fo
 
         return CharacterStatsData(
             Stats(
-                weaponSkillInput.getValue().toInt(),
-                ballisticSkillInput.getValue().toInt(),
-                strengthInput.getValue().toInt(),
-                toughnessInput.getValue().toInt(),
-                agilityInput.getValue().toInt(),
-                intelligenceInput.getValue().toInt(),
-                willPowerInput.getValue().toInt(),
-                fellowshipInput.getValue().toInt(),
-                magicInput.getValue().toInt()
+                agility = agilityInput.getValue().toInt(),
+                ballisticSkill = ballisticSkillInput.getValue().toInt(),
+                dexterity = 0,
+                fellowship = fellowshipInput.getValue().toInt(),
+                initiative = 0,
+                intelligence = intelligenceInput.getValue().toInt(),
+                magic = magicInput.getValue().toInt(),
+                strength = strengthInput.getValue().toInt(),
+                toughness = toughnessInput.getValue().toInt(),
+                weaponSkill = weaponSkillInput.getValue().toInt(),
+                willPower = willPowerInput.getValue().toInt()
             ),
             woundsInput.getValue().toInt(),
             fatePointsInput.getValue().toInt()

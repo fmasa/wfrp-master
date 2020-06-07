@@ -52,6 +52,8 @@ function validCharacter (userId: string) {
         race: "HUMAN",
         stats: {
             weaponSkill: 35,
+            dexterity: 20,
+            initiative: 10,
             ballisticSkill: 35,
             strength: 10,
             toughness: 10,
@@ -62,12 +64,15 @@ function validCharacter (userId: string) {
             magic: 4,
         },
         points: {
+            corruption: 2,
             experience: 100,
-            insanity: 1,
             fate: 3,
             fortune: 2,
             wounds: 10,
             maxWounds: 10,
+            resilience: 10,
+            resolve: 5,
+            sin: 4,
         },
         money: {
             pennies: 1000,
@@ -488,7 +493,7 @@ class Database extends Suite {
             .collection("characters")
             .doc(userId);
 
-        await firebase.assertSucceeds(document.set({points: {insanity: 10}}, {merge: true}));
+        await firebase.assertSucceeds(document.set({points: {resilience: 10}}, {merge: true}));
     }
 
     @test
@@ -503,7 +508,7 @@ class Database extends Suite {
             .collection("characters")
             .doc(userId);
 
-        await firebase.assertSucceeds(document.set({points: {insanity: 10}}, {merge: true}));
+        await firebase.assertSucceeds(document.set({points: {resilience: 10}}, {merge: true}));
     }
 
     @test
@@ -521,7 +526,7 @@ class Database extends Suite {
             .collection("characters")
             .doc(userId);
 
-        await firebase.assertFails(document.set({points: {insanity: 10}}, {merge: true}));
+        await firebase.assertFails(document.set({points: {resilience: 10}}, {merge: true}));
     }
 }
 

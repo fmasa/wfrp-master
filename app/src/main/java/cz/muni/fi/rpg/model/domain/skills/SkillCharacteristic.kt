@@ -5,6 +5,7 @@ import cz.muni.fi.rpg.R
 
 enum class SkillCharacteristic {
     AGILITY,
+    DEXTERITY,
     INTELLIGENCE,
     FELLOWSHIP,
     STRENGTH,
@@ -15,6 +16,7 @@ enum class SkillCharacteristic {
     fun getReadableNameId(): Int {
         return when (this) {
             AGILITY -> R.string.label_agility
+            DEXTERITY -> R.string.label_dexterity
             INTELLIGENCE -> R.string.label_intelligence
             FELLOWSHIP -> R.string.label_fellowship
             STRENGTH -> R.string.label_strength

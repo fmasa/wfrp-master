@@ -48,7 +48,7 @@ service cloud.firestore {
                             && skill.description is string && skill.description.size() <= 200
                             && skill.advanced is bool
                             && skill.mastery is int && skill.mastery >= 1 && skill.mastery <= 3
-                            && skill.characteristic in ["AGILITY", "INTELLIGENCE", "FELLOWSHIP", "STRENGTH", "TOUGHNESS", "WILL_POWER"]
+                            && skill.characteristic in ["AGILITY", "DEXTERITY", "INTELLIGENCE", "FELLOWSHIP", "STRENGTH", "TOUGHNESS", "WILL_POWER"]
                     }
                 }
 
@@ -82,7 +82,7 @@ service cloud.firestore {
                         && character.userId == userId
                         && character.name is string && isNotBlank(character.name) && character.name.size() <= 50
                         && character.career is string && isNotBlank(character.career) && character.career.size() <= 50
-                        && character.race is string && character.race in ["HUMAN", "ELF", "DWARF", "HALFLING", "GNOME"]
+                        && character.race is string && character.race in ["HUMAN", "HIGH_ELF", "DWARF", "HALFLING", "WOOD_ELF"]
                         && arePointsValid(character.points)
                         && areStatsValid(character.stats)
                     && areMoneyValid(character.money);
@@ -91,11 +91,24 @@ service cloud.firestore {
 
             function arePointsValid(points) {
                 return points is map
-                    && points.keys().toSet() == ["insanity", "fate", "fortune", "maxWounds", "wounds", "experience"].toSet()
-                    && points.insanity is int && points.insanity >= 0
+                    && points.keys().toSet() == [
+                        "corruption",
+                        "experience",
+                        "fate",
+                        "fortune",
+                        "maxWounds",
+                        "resilience",
+                        "resolve",
+                        "sin",
+                        "wounds"
+                    ].toSet()
+                    && points.corruption is int && points.corruption >= 0
                     && points.fate is int && points.fate >= 0
                     && points.fortune is int && points.fortune >= 0 && points.fortune <= points.fate
                     && points.maxWounds is int && points.maxWounds >= 0
+                    && points.resolve is int && points.resolve >= 0
+                    && points.resilience is int && points.resilience >= 0
+                    && points.sin is int && points.sin >= 0
                     && points.wounds is int && points.wounds >= 0 && points.wounds <= points.maxWounds
                     && points.experience is int && points.experience >= 0;
             }
@@ -103,25 +116,29 @@ service cloud.firestore {
             function areStatsValid(stats) {
                 return stats is map
                     && stats.keys().toSet() == [
-                        "weaponSkill",
+                        "agility",
                         "ballisticSkill",
+                        "dexterity",
+                        "fellowship",
+                        "initiative",
+                        "intelligence",
+                        "magic",
                         "strength",
                         "toughness",
-                        "agility",
-                        "intelligence",
-                        "willPower",
-                        "fellowship",
-                        "magic"
+                        "weaponSkill",
+                        "willPower"
                     ].toSet()
-                    && stats.weaponSkill >= 0 && stats.weaponSkill <= 100
+                    && stats.agility >= 0 && stats.agility <= 100
                     && stats.ballisticSkill >= 0 && stats.ballisticSkill <= 100
+                    && stats.dexterity >= 0 && stats.dexterity <= 100
+                    && stats.fellowship >= 0 && stats.fellowship <= 100
+                    && stats.initiative >= 0 && stats.initiative <= 100
+                    && stats.intelligence >= 0 && stats.intelligence <= 100
+                    && stats.magic >= 0 && stats.magic <= 100
                     && stats.strength >= 0 && stats.strength <= 100
                     && stats.toughness >= 0 && stats.toughness <= 100
-                    && stats.agility >= 0 && stats.agility <= 100
-                    && stats.intelligence >= 0 && stats.intelligence <= 100
-                    && stats.willPower >= 0 && stats.willPower <= 100
-                    && stats.fellowship >= 0 && stats.fellowship <= 100
-                    && stats.magic >= 0 && stats.magic <= 100;
+                    && stats.weaponSkill >= 0 && stats.weaponSkill <= 100
+                    && stats.willPower >= 0 && stats.willPower <= 100;
             }
 
             function isValidUuid(maybeUuid) {

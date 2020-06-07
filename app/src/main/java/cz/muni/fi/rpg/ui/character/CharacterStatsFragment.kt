@@ -87,7 +87,6 @@ class CharacterStatsFragment : Fragment(R.layout.fragment_character_stats),
 
                 fortunePoints.value = points.fortune
                 fatePoints.value = points.fate
-                insanityPoints.value = points.insanity
             }
 
         wounds.setIncrementListener(viewModel::incrementWounds)
@@ -98,9 +97,6 @@ class CharacterStatsFragment : Fragment(R.layout.fragment_character_stats),
 
         fatePoints.setIncrementListener(viewModel::incrementFatePoints)
         fatePoints.setDecrementListener(viewModel::decrementFatePoints)
-
-        insanityPoints.setIncrementListener(viewModel::incrementInsanityPoints)
-        insanityPoints.setDecrementListener(viewModel::decrementInsanityPoints)
     }
 
     private fun openExperiencePointsDialog(currentXpPoints: Int) {

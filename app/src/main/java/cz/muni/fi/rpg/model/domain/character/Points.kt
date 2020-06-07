@@ -3,17 +3,22 @@ package cz.muni.fi.rpg.model.domain.character
 import kotlin.math.min
 
 data class Points(
-   val insanity: Int,
-   val fate: Int,
-   val fortune: Int,
-   val wounds: Int,
-   val maxWounds: Int,
-   val experience: Int
+    val corruption: Int,
+    val fate: Int,
+    val fortune: Int,
+    val wounds: Int,
+    val maxWounds: Int,
+    val resilience: Int,
+    val resolve: Int,
+    val sin: Int,
+    val experience: Int
 ) {
     init {
-        require(insanity >= 0)
+        require(corruption >= 0)
         require(fate >= 0)
-        require(fortune in 0..fate)
+        require(fortune >= 0)
+        require(resilience >= 0)
+        require(resolve >= 0)
         require(wounds in 0..maxWounds)
         require(maxWounds > 0)
         require(experience >= 0)
@@ -22,11 +27,6 @@ data class Points(
     fun updateMaxWounds(newMaxWounds: Int) = copy(
         maxWounds = newMaxWounds,
         wounds = min(newMaxWounds, wounds)
-    )
-
-    fun updateFate(newFate: Int) = copy(
-        fate = newFate,
-        fortune = min(newFate, fortune)
     )
 
     fun isHeavilyWounded() = wounds < 2;
