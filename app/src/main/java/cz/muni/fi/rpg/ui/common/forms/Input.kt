@@ -13,11 +13,13 @@ class Input(private val layout: TextInputLayout) {
     /**
      * Limits maximum number of characters allowed in EditText
      */
-    fun setMaxLength(maxLength: Int) {
+    fun setMaxLength(maxLength: Int, showCounter: Boolean = true) {
         layout.apply {
             editText?.filters = arrayOf(InputFilter.LengthFilter(maxLength))
-            isCounterEnabled = true
-            counterMaxLength = maxLength
+            if (showCounter) {
+                isCounterEnabled = true
+                counterMaxLength = maxLength
+            }
         }
     }
 

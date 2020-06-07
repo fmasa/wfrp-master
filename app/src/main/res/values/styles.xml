@@ -102,4 +102,8 @@
         <item name="android:textStyle">italic</item>
         <item name="android:ellipsize">end</item>
     </style>
+
+    <style name="InputLabel">
+        <item name="android:textSize">19sp</item>
+    </style>
 </resources>
