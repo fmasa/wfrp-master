@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
     tools:context=".ui.characterCreation.CharacterInfoFormFragment">
 
     <TextView
@@ -14,11 +14,9 @@
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
         android:text="@string/label_name"
-        android:textSize="10pt"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:textSize="10pt"/>
 
     <EditText
-        app:layout_constraintTop_toBottomOf="@id/NameText"
         android:id="@+id/NameTextFill"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -30,23 +28,19 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/RaceText"
-        android:layout_marginTop="44dp"
+        android:layout_marginTop="16dp"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
         android:text="@string/label_race"
-        android:textSize="10pt"
-        app:layout_constraintTop_toBottomOf="@id/NameTextFill" />
+        android:textSize="10pt"/>
 
     <RadioGroup
         android:id="@+id/radioGroup"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
-        android:layout_marginTop="16dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/RaceText">
+        android:layout_marginTop="16dp">
 
         <RadioButton
             android:id="@+id/radioButtonRaceHuman"
@@ -88,15 +82,13 @@
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
         android:text="@string/label_career"
-        android:textSize="10pt"
-        app:layout_constraintTop_toBottomOf="@id/radioGroup" />
+        android:textSize="10pt"/>
 
     <EditText
-        app:layout_constraintTop_toBottomOf="@id/CareerText"
         android:id="@+id/CareerTextFill"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
         android:hint="@string/hint_fill_career"
         android:inputType="text"/>
-</androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>
