@@ -60,12 +60,15 @@ class CharacterCreationFragment(
                         characterInfo,
                         data.stats,
                         Points(
-                            insanity = 0,
                             fate = data.fatePoints,
                             fortune = data.fatePoints,
                             wounds = data.maxWounds,
                             maxWounds = data.maxWounds,
-                            experience = 0
+                            experience = 0,
+                            resilience = 0,
+                            resolve = 0,
+                            corruption = 0,
+                            sin = 0
                         )
                     )
                 }

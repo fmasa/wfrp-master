@@ -12,7 +12,7 @@ class CharacterHolder(
 ) : RecyclerView.ViewHolder(itemView) {
     fun bind(item: Character) {
         itemView.character_name.text = item.getName()
-        itemView.character_race.text = item.getRace().name
+        itemView.character_race.setText(item.getRace().getReadableNameId())
         itemView.character_job.text = item.getCareer()
         itemView.setOnClickListener { onClickListener(item) };
     }

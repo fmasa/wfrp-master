@@ -4,18 +4,18 @@ import cz.muni.fi.rpg.R
 
 enum class Race {
     HUMAN,
-    ELF,
+    HIGH_ELF,
     DWARF,
-    HALFLING,
-    GNOME;
+    WOOD_ELF,
+    HALFLING;
 
     fun getReadableNameId(): Int {
         return when (this) {
             HUMAN -> R.string.race_human
-            ELF -> R.string.race_elf
+            HIGH_ELF -> R.string.race_high_elf
             DWARF -> R.string.race_dwarf
             HALFLING -> R.string.race_halfling
-            GNOME -> R.string.race_gnome
+            WOOD_ELF -> R.string.race_wood_elf
         }
     }
 }

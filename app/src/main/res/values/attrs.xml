@@ -7,4 +7,9 @@
         <attr name="statName" format="string"/>
         <attr name="editable" format="boolean"/>
     </declare-styleable>
+    <declare-styleable name="TextInput">
+        <attr name="inputLabel" format="string"/>
+        <attr name="android:maxLength" format="integer" min="0"/>
+        <attr name="android:inputType"/>
+    </declare-styleable>
 </resources>

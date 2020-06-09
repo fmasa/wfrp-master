@@ -94,8 +94,7 @@ class CharacterEditFragment(
             info.career,
             info.race,
             characterStatsData.stats,
-            points.updateFate(characterStatsData.fatePoints)
-                .updateMaxWounds(characterStatsData.maxWounds)
+            points.updateMaxWounds(characterStatsData.maxWounds)
         )
 
         characters.save(args.characterId.partyId, character)

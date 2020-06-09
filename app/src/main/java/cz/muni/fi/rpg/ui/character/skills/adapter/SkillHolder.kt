@@ -36,6 +36,7 @@ class SkillHolder(
         view.skillIcon.setImageResource(
             when (skill.characteristic) {
                 SkillCharacteristic.AGILITY -> R.drawable.ic_agility
+                SkillCharacteristic.DEXTERITY -> R.drawable.ic_dexterity
                 SkillCharacteristic.INTELLIGENCE -> R.drawable.ic_intelligence
                 SkillCharacteristic.FELLOWSHIP -> R.drawable.ic_fellowship
                 SkillCharacteristic.STRENGTH -> R.drawable.ic_strength

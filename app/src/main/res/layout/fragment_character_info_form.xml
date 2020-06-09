@@ -1,52 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:padding="24dp"
     tools:context=".ui.characterCreation.CharacterInfoFormFragment">
 
-    <TextView
+    <cz.muni.fi.rpg.ui.views.TextInput
+        android:id="@+id/nameInput"
+        app:inputLabel="@string/label_name"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/NameText"
-        android:layout_marginTop="44dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
-        android:text="@string/label_name"
-        android:textSize="10pt"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <EditText
-        app:layout_constraintTop_toBottomOf="@id/NameText"
-        android:id="@+id/NameTextFill"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="16dp"
-        android:hint="@string/hint_fill_name"
-        android:inputType="text"/>
+        android:layout_height="wrap_content"/>
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/RaceText"
-        android:layout_marginTop="44dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
+        android:layout_marginTop="16dp"
         android:text="@string/label_race"
-        android:textSize="10pt"
-        app:layout_constraintTop_toBottomOf="@id/NameTextFill" />
+        android:textSize="19sp"/>
 
     <RadioGroup
         android:id="@+id/radioGroup"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginTop="16dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/RaceText">
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
         <RadioButton
             android:id="@+id/radioButtonRaceHuman"
@@ -65,7 +43,7 @@
             android:id="@+id/radioButtonRaceElf"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/race_elf" />
+            android:text="@string/race_high_elf" />
 
         <RadioButton
             android:id="@+id/radioButtonRaceDwarf"
@@ -77,26 +55,13 @@
             android:id="@+id/radioButtonRaceGnome"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/race_gnome" />
+            android:text="@string/race_wood_elf" />
     </RadioGroup>
 
-    <TextView
+    <cz.muni.fi.rpg.ui.views.TextInput
+        android:id="@+id/careerInput"
+        android:layout_marginTop="16dp"
+        app:inputLabel="@string/label_career"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/CareerText"
-        android:layout_marginTop="44dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
-        android:text="@string/label_career"
-        android:textSize="10pt"
-        app:layout_constraintTop_toBottomOf="@id/radioGroup" />
-
-    <EditText
-        app:layout_constraintTop_toBottomOf="@id/CareerText"
-        android:id="@+id/CareerTextFill"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="16dp"
-        android:hint="@string/hint_fill_career"
-        android:inputType="text"/>
-</androidx.constraintlayout.widget.ConstraintLayout>
+        android:layout_height="wrap_content"/>
+</LinearLayout>
