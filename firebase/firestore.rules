@@ -106,8 +106,8 @@ service cloud.firestore {
                     && points.fate is int && points.fate >= 0
                     && points.fortune is int && points.fortune >= 0 && points.fortune <= points.fate
                     && points.maxWounds is int && points.maxWounds >= 0
-                    && points.resolve is int && points.resolve >= 0
                     && points.resilience is int && points.resilience >= 0
+                    && points.resolve is int && points.resolve >= 0 && points.resolve <= points.resilience
                     && points.sin is int && points.sin >= 0
                     && points.wounds is int && points.wounds >= 0 && points.wounds <= points.maxWounds
                     && points.experience is int && points.experience >= 0;
