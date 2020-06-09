@@ -27,8 +27,8 @@ class CharacterStatsViewModel(
     fun incrementFortunePoints() = updatePoints { it.copy(fortune = it.fortune + 1) }
     fun decrementFortunePoints() = updatePoints { it.copy(fortune = it.fortune - 1) }
 
-    fun incrementFatePoints() = updatePoints { it.copy(fate = it.fate + 1) }
-    fun decrementFatePoints() = updatePoints { it.copy(fate = it.fate - 1) }
+    fun incrementFatePoints() = updatePoints { it.updateFate(it.fate + 1) }
+    fun decrementFatePoints() = updatePoints { it.updateFate(it.fate - 1) }
 
     private fun updatePoints(mutation: (points: Points) -> Points) {
         launch {

@@ -472,6 +472,10 @@ class Database extends Suite {
         await firebase.assertSucceeds(character.set(withPoints('fortune', data.points.fate)));
         await firebase.assertFails(character.set(withPoints('fortune', data.points.fate + 1)));
 
+        await firebase.assertSucceeds(character.set(withPoints('resolve', data.points.resilience - 1)));
+        await firebase.assertSucceeds(character.set(withPoints('resolve', data.points.resilience)));
+        await firebase.assertFails(character.set(withPoints('resolve', data.points.resilience + 1)));
+
         await firebase.assertSucceeds(character.set(withPoints('wounds', data.points.maxWounds - 1)));
         await firebase.assertSucceeds(character.set(withPoints('wounds', data.points.maxWounds)));
         await firebase.assertFails(character.set(withPoints('wounds', data.points.maxWounds + 1)));
