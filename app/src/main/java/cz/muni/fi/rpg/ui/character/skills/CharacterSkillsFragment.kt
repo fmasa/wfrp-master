@@ -5,13 +5,16 @@ import android.view.View
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
-import androidx.lifecycle.Observer
+import androidx.lifecycle.observe
 import androidx.recyclerview.widget.LinearLayoutManager
 import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.model.domain.character.CharacterId
 import cz.muni.fi.rpg.model.domain.skills.Skill
+import cz.muni.fi.rpg.model.right
 import cz.muni.fi.rpg.ui.character.skills.adapter.SkillAdapter
 import cz.muni.fi.rpg.ui.character.skills.talents.TalentsFragment
+import cz.muni.fi.rpg.ui.common.CombinedLiveData
+import cz.muni.fi.rpg.viewModels.CharacterViewModel
 import cz.muni.fi.rpg.viewModels.SkillsViewModel
 import kotlinx.android.synthetic.main.fragment_character_skills.*
 import org.koin.android.viewmodel.ext.android.viewModel
@@ -35,6 +38,7 @@ class CharacterSkillsFragment : Fragment(R.layout.fragment_character_skills),
         requireNotNull(arguments?.getParcelable<CharacterId>(ARGUMENT_CHARACTER_ID))
     }
 
+    private val characterVm: CharacterViewModel by viewModel { parametersOf(characterId) }
     private val viewModel: SkillsViewModel by viewModel { parametersOf(characterId) }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -48,19 +52,27 @@ class CharacterSkillsFragment : Fragment(R.layout.fragment_character_skills),
         )
         skillList.adapter = adapter
 
-        viewModel.skills.observe(viewLifecycleOwner, Observer { skills ->
-            adapter.submitList(skills.sortedBy { it.name })
+        CombinedLiveData(viewModel.skills, characterVm.character.right())
+            .observe(viewLifecycleOwner) { pair ->
+                val skills = pair.first
+                val stats = pair.second.getStats()
 
-            if (skills.isNotEmpty()) {
-                skillList.visibility = View.VISIBLE
-                noSkillsIcon.visibility = View.GONE
-                noSkillsText.visibility = View.GONE
-            } else {
-                skillList.visibility = View.GONE
-                noSkillsIcon.visibility = View.VISIBLE
-                noSkillsText.visibility = View.VISIBLE
+                adapter.submitList(
+                    skills
+                        .sortedBy { it.name }
+                        .map { Pair(it, stats) }
+                )
+
+                if (skills.isNotEmpty()) {
+                    skillList.visibility = View.VISIBLE
+                    noSkillsIcon.visibility = View.GONE
+                    noSkillsText.visibility = View.GONE
+                } else {
+                    skillList.visibility = View.GONE
+                    noSkillsIcon.visibility = View.VISIBLE
+                    noSkillsText.visibility = View.VISIBLE
+                }
             }
-        })
 
         addSkillButton.setOnClickListener {
             openSkillDialog(null)

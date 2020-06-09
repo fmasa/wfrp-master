@@ -60,6 +60,15 @@ class SkillDialog : DialogFragment() {
             addTextInput(view.skillDescriptionLayout).apply {
                 setMaxLength(Skill.DESCRIPTION_MAX_LENGTH)
             }
+
+            view.advancesInput.setDefaultValue("0")
+            addTextInput(view.advancesInput).apply {
+                setNotBlank("Advances must be number greater than 0")
+                addLiveRule("Advances must be number greater than 0") {
+                    val value = it.toString().toIntOrNull()
+                    value != null && value > 0
+                }
+            }
         }
 
         characteristicSpinner.setAdapter(
@@ -96,12 +105,7 @@ class SkillDialog : DialogFragment() {
         view.skillDescription.setText(skill.description)
         view.skillCharacteristic.setText(getString(skill.characteristic.getReadableNameId()), false)
         view.skillAdvanced.isChecked = skill.advanced
-        view.skillMastery.check(when (skill.mastery) {
-            1 -> R.id.skillMasteryLevel1
-            2 -> R.id.skillMasteryLevel2
-            3 -> R.id.skillMasteryLevel3
-            else -> error("Mastery must be value between 1 and 3, ${skill.mastery} given")
-        })
+        view.advancesInput.setDefaultValue(skill.advances.toString())
     }
 
     private fun dialogSubmitted(dialog: AlertDialog, view: View, form: Form) {
@@ -122,7 +126,7 @@ class SkillDialog : DialogFragment() {
                 selectedCharacteristic(view),
                 name,
                 description,
-                selectedMastery(view)
+                view.advancesInput.getValue().toInt()
             )
         )
     }
@@ -137,14 +141,5 @@ class SkillDialog : DialogFragment() {
         }
 
         error("User somehow managed to select something he was not supposed to")
-    }
-
-    private fun selectedMastery(view: View): Int {
-        return when (view.skillMastery.checkedRadioButtonId) {
-            R.id.skillMasteryLevel1 -> 1
-            R.id.skillMasteryLevel2 -> 2
-            R.id.skillMasteryLevel3 -> 3
-            else -> error("Unknown radio button for mastery")
-        }
     }
 }

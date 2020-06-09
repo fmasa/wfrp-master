@@ -44,8 +44,8 @@
         <AutoCompleteTextView
             android:id="@+id/skillCharacteristic"
             android:layout_width="match_parent"
-            android:editable="false"
             android:layout_height="wrap_content"
+            android:editable="false"
             tools:ignore="Deprecated" />
 
     </com.google.android.material.textfield.TextInputLayout>
@@ -54,41 +54,17 @@
         android:id="@+id/skillAdvanced"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
         android:checked="true"
         android:text="@string/label_skill_advanced"
-        android:layout_marginTop="8dp"
         app:switchPadding="4dp" />
 
-    <TextView
-        android:layout_marginTop="4dp"
+    <cz.muni.fi.rpg.ui.views.TextInput
+        android:id="@+id/advancesInput"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        style="@style/TextAppearance.MaterialComponents.Body1"
-        android:text="@string/label_skill_mastery"/>
-    <RadioGroup
-        android:id="@+id/skillMastery"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:checkedButton="@+id/first"
-        android:orientation="horizontal">
-        <RadioButton
-            android:id="@+id/skillMasteryLevel1"
-            android:checked="true"
-            android:drawableEnd="@drawable/ic_skill_mastery_1"
-            android:layout_width="wrap_content"
-            android:layout_marginEnd="16dp"
-            android:layout_height="wrap_content"/>
-        <RadioButton
-            android:id="@+id/skillMasteryLevel2"
-            android:drawableEnd="@drawable/ic_skill_mastery_2"
-            android:layout_width="wrap_content"
-            android:layout_marginEnd="16dp"
-            android:layout_height="wrap_content"/>
-        <RadioButton
-            android:id="@+id/skillMasteryLevel3"
-            android:drawableEnd="@drawable/ic_skill_mastery_3"
-            android:layout_width="wrap_content"
-            android:layout_marginEnd="16dp"
-            android:layout_height="wrap_content"/>
-    </RadioGroup>
+        android:layout_marginTop="16dp"
+        android:inputType="number"
+        android:maxLength="3"
+        app:inputLabel="@string/label_skill_advances" />
 </LinearLayout>

@@ -5,6 +5,7 @@ import androidx.constraintlayout.widget.ConstraintSet
 import androidx.recyclerview.widget.RecyclerView
 import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.common.EntityListener
+import cz.muni.fi.rpg.model.domain.character.Stats
 import cz.muni.fi.rpg.model.domain.skills.Skill
 import cz.muni.fi.rpg.model.domain.skills.SkillCharacteristic
 import kotlinx.android.synthetic.main.skill_item.view.*
@@ -14,7 +15,7 @@ class SkillHolder(
     private val onClickListener: EntityListener<Skill>,
     private val onRemoveListener: EntityListener<Skill>
 ) : RecyclerView.ViewHolder(view) {
-    fun bind(skill: Skill) {
+    fun bind(skill: Skill, stats: Stats) {
         view.skillItemTitle.text = skill.name;
         view.skillItemDescription.text = skill.description
 
@@ -45,15 +46,9 @@ class SkillHolder(
             }
         )
 
-        view.skillItemMastery.setImageResource(
-            when (skill.mastery) {
-                1 -> R.drawable.ic_skill_mastery_1
-                2 -> R.drawable.ic_skill_mastery_2
-                3 -> R.drawable.ic_skill_mastery_3
-                else -> error("Invalid skill mastery")
-            }
-        )
-        
+        view.skillLevelValue.text =
+            (calculateBaseLevel(skill.characteristic, stats) + skill.advances).toString()
+
         view.setOnCreateContextMenuListener { menu, v, _ ->
             menu.add(0, v.id, 0, R.string.remove)
                 .setOnMenuItemClickListener {
@@ -63,5 +58,17 @@ class SkillHolder(
                 }
         }
         view.setOnClickListener { onClickListener(skill) };
+    }
+
+    private fun calculateBaseLevel(characteristic: SkillCharacteristic, stats: Stats): Int {
+        return when (characteristic) {
+            SkillCharacteristic.AGILITY -> stats.agility
+            SkillCharacteristic.DEXTERITY -> stats.dexterity
+            SkillCharacteristic.FELLOWSHIP -> stats.fellowship
+            SkillCharacteristic.INTELLIGENCE -> stats.intelligence
+            SkillCharacteristic.STRENGTH -> stats.strength
+            SkillCharacteristic.TOUGHNESS -> stats.toughness
+            SkillCharacteristic.WILL_POWER -> stats.willPower
+        }
     }
 }
