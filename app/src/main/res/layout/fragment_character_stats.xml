@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/colorBackgroundUnderCard"
     android:orientation="vertical"
     tools:context=".ui.character.CharacterStatsFragment">
 
@@ -12,22 +13,24 @@
         android:layout_height="wrap_content">
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            tools:ignore="MissingConstraints"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:clipToPadding="false"
+            android:paddingHorizontal="8dp"
+            android:paddingBottom="@dimen/long_ui_bottom_padding"
+            tools:ignore="MissingConstraints">
 
             <androidx.constraintlayout.helper.widget.Flow
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
+                app:constraint_referenced_ids="mainCard,woundsCard,pointsCard,statsCard"
                 app:flow_maxElementsWrap="1"
-                app:flow_verticalGap="16dp"
                 app:flow_verticalBias="0"
+                app:flow_verticalGap="16dp"
                 app:flow_wrapMode="aligned"
-                app:constraint_referenced_ids="mainCard,pointsCard,statsCard"
-                />
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/mainCard"
@@ -41,220 +44,204 @@
                     <TextView
                         android:id="@+id/raceAndCareer"
                         style="@style/TextAppearance.AppCompat.Subhead"
-                        android:padding="16dp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:padding="16dp"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <Button
                         android:id="@+id/xpPoints"
+                        style="?attr/materialButtonOutlinedStyle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="16dp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        style="?attr/materialButtonOutlinedStyle"
-                        />
+                        app:layout_constraintTop_toTopOf="parent" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/woundsCard"
+                style="@style/CardContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="16dp">
+
+                    <androidx.constraintlayout.helper.widget.Flow
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:constraint_referenced_ids="wounds,corruptionPoints,sinPoints"
+                        app:flow_horizontalAlign="end"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <cz.muni.fi.rpg.ui.views.CharacterPoint
+                        android:id="@+id/wounds"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:name="@string/label_wounds" />
+
+                    <cz.muni.fi.rpg.ui.views.CharacterPoint
+                        android:id="@+id/corruptionPoints"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:name="Corruption" />
+
+                    <cz.muni.fi.rpg.ui.views.CharacterPoint
+                        android:id="@+id/sinPoints"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:name="Sin" />
+
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </androidx.cardview.widget.CardView>
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/pointsCard"
-                android:layout_marginTop="16dp"
+                style="@style/CardContainer"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
-                    android:paddingTop="16dp"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:paddingTop="16dp">
+
+                    <androidx.constraintlayout.helper.widget.Flow
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        app:constraint_referenced_ids="resolvePoints,resiliencePoints,pointsDivider,fortunePoints,fatePoints"
+                        app:flow_horizontalStyle="spread"
+                        app:flow_wrapMode="chain" />
 
                     <cz.muni.fi.rpg.ui.views.CharacterPoint
-                        android:id="@+id/wounds"
-                        android:gravity="center"
+                        android:id="@+id/resolvePoints"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        app:layout_constraintEnd_toStartOf="@id/fortunePoints"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:name="@string/label_wounds" />
+                        app:name="@string/label_resolve" />
+
+                    <cz.muni.fi.rpg.ui.views.CharacterPoint
+                        android:id="@+id/resiliencePoints"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:name="@string/label_resilience" />
+
+                    <View
+                        android:id="@+id/pointsDivider"
+                        android:layout_width="20dp"
+                        android:layout_height="0dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
 
                     <cz.muni.fi.rpg.ui.views.CharacterPoint
                         android:id="@+id/fortunePoints"
-                        android:gravity="center"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        app:layout_constraintEnd_toStartOf="@id/fatePoints"
-                        app:layout_constraintHorizontal_chainStyle="spread_inside"
-                        app:layout_constraintStart_toEndOf="@id/wounds"
-                        app:layout_constraintTop_toTopOf="parent"
+                        android:gravity="center"
                         app:name="@string/label_fortune_points" />
 
                     <cz.muni.fi.rpg.ui.views.CharacterPoint
                         android:id="@+id/fatePoints"
-                        android:gravity="center"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintHorizontal_chainStyle="spread_inside"
-                        app:layout_constraintStart_toEndOf="@id/fortunePoints"
-                        app:layout_constraintTop_toTopOf="parent"
+                        android:gravity="center"
                         app:name="@string/label_fate_points" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </androidx.cardview.widget.CardView>
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/statsCard"
-                android:layout_marginTop="16dp"
+                style="@style/CardContainer"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
-                    android:paddingTop="16dp"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:paddingTop="16dp">
+
+                    <androidx.constraintlayout.helper.widget.Flow
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:constraint_referenced_ids="weaponSkill,ballisticSkill,strength,toughness,initiative,agility,dexterity,intelligence,willPower,fellowship"
+                        app:flow_horizontalStyle="spread"
+                        app:flow_maxElementsWrap="5"
+                        app:flow_wrapMode="aligned" />
+
+                    <cz.muni.fi.rpg.ui.views.CharacterStat
+                        android:id="@+id/initiative"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:statName="INI" />
+
+                    <cz.muni.fi.rpg.ui.views.CharacterStat
+                        android:id="@+id/dexterity"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:statName="DEX" />
+
 
                     <cz.muni.fi.rpg.ui.views.CharacterStat
                         android:id="@+id/weaponSkill"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        app:layout_constraintEnd_toStartOf="@id/ballisticSkill"
-                        app:layout_constraintHorizontal_chainStyle="packed"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:statName="@string/label_weapon_skill" />
+                        app:statName="WS" />
 
                     <cz.muni.fi.rpg.ui.views.CharacterStat
                         android:id="@+id/ballisticSkill"
                         android:layout_width="wrap_content"
-                        android:layout_marginStart="32dp"
-                        android:layout_marginEnd="28dp"
                         android:layout_height="wrap_content"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:statName="@string/label_ballistic_skill" />
+                        app:statName="BS" />
 
-
-                    <cz.muni.fi.rpg.ui.views.CharacterStat
-                        android:id="@+id/magic"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintHorizontal_chainStyle="packed"
-                        app:layout_constraintStart_toEndOf="@id/ballisticSkill"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:statName="UNUSED" />
-
-                    <!-- Second row -->
                     <cz.muni.fi.rpg.ui.views.CharacterStat
                         android:id="@+id/strength"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:layout_marginTop="16dp"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        app:layout_constraintEnd_toEndOf="@id/weaponSkill"
-                        app:layout_constraintStart_toStartOf="@id/weaponSkill"
-                        app:layout_constraintTop_toBottomOf="@id/weaponSkill"
-                        app:statName="@string/label_strength" />
-
-                    <ImageView
-                        android:id="@+id/strengthArrow"
-                        android:src="@drawable/ic_arrow_forward"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:layout_marginBottom="12dp"
-                        app:layout_constraintBottom_toBottomOf="@id/strength"
-                        app:layout_constraintEnd_toEndOf="@id/ballisticSkill"
-                        app:layout_constraintStart_toStartOf="@id/ballisticSkill" />
-
-                    <cz.muni.fi.rpg.ui.views.CharacterStat
-                        android:id="@+id/strengthBonus"
-                        android:layout_marginTop="16dp"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        app:layout_constraintEnd_toEndOf="@id/magic"
-                        app:layout_constraintStart_toStartOf="@id/magic"
-                        app:layout_constraintTop_toBottomOf="@id/weaponSkill"
-                        app:statName="@string/label_strength_bonus" />
+                        app:statName="STR" />
 
                     <!-- Third row -->
                     <cz.muni.fi.rpg.ui.views.CharacterStat
                         android:id="@+id/toughness"
-                        android:layout_marginTop="16dp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        app:layout_constraintEnd_toEndOf="@id/weaponSkill"
-                        app:layout_constraintStart_toStartOf="@id/weaponSkill"
-                        app:layout_constraintTop_toBottomOf="@id/strength"
-                        app:statName="@string/label_toughness" />
-
-                    <ImageView
-                        android:id="@+id/toughnessArrow"
-                        android:src="@drawable/ic_arrow_forward"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:layout_marginBottom="12dp"
-                        app:layout_constraintBottom_toBottomOf="@id/toughness"
-                        app:layout_constraintEnd_toEndOf="@id/ballisticSkill"
-                        app:layout_constraintStart_toStartOf="@id/ballisticSkill" />
-
-                    <cz.muni.fi.rpg.ui.views.CharacterStat
-                        android:id="@+id/toughnessBonus"
-                        android:layout_marginTop="16dp"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        app:layout_constraintEnd_toEndOf="@id/magic"
-                        app:layout_constraintStart_toStartOf="@id/magic"
-                        app:layout_constraintTop_toBottomOf="@id/strength"
-                        app:statName="@string/label_toughness_bonus" />
+                        app:statName="TGH" />
 
                     <!-- Fourth row -->
                     <cz.muni.fi.rpg.ui.views.CharacterStat
                         android:id="@+id/agility"
-                        android:layout_marginEnd="8dp"
-                        android:layout_marginTop="20dp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        app:layout_constraintEnd_toStartOf="@id/intelligence"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/toughness"
-                        app:statName="@string/label_agility" />
+                        android:layout_marginTop="20dp"
+                        android:layout_marginEnd="8dp"
+                        app:statName="AGL" />
 
                     <cz.muni.fi.rpg.ui.views.CharacterStat
                         android:id="@+id/intelligence"
-                        android:layout_marginTop="20dp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        app:layout_constraintEnd_toStartOf="@id/willPower"
-                        app:layout_constraintHorizontal_chainStyle="packed"
-                        app:layout_constraintStart_toEndOf="@id/agility"
-                        app:layout_constraintTop_toBottomOf="@id/toughness"
-                        app:statName="@string/label_intelligence" />
+                        app:statName="INT" />
 
                     <cz.muni.fi.rpg.ui.views.CharacterStat
                         android:id="@+id/willPower"
                         android:layout_width="wrap_content"
-                        android:layout_marginTop="20dp"
                         android:layout_height="wrap_content"
-                        app:layout_constraintEnd_toStartOf="@id/intelligence"
-                        app:layout_constraintHorizontal_chainStyle="packed"
-                        app:layout_constraintStart_toEndOf="@id/fellowship"
-                        app:layout_constraintTop_toBottomOf="@id/toughness"
-                        app:statName="@string/label_will_power" />
+                        app:statName="WLP" />
 
                     <cz.muni.fi.rpg.ui.views.CharacterStat
                         android:id="@+id/fellowship"
                         android:layout_width="wrap_content"
-                        android:layout_marginTop="20dp"
                         android:layout_height="wrap_content"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toEndOf="@id/willPower"
-                        app:layout_constraintTop_toBottomOf="@id/toughness"
-                        app:statName="@string/label_fellowship" />
+                        app:statName="FEL" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </androidx.cardview.widget.CardView>
 

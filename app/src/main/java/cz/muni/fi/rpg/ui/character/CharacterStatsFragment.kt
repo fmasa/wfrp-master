@@ -9,11 +9,12 @@ import androidx.lifecycle.Transformations
 import androidx.lifecycle.observe
 import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.model.domain.character.CharacterId
+import cz.muni.fi.rpg.model.domain.character.Points
 import cz.muni.fi.rpg.model.right
+import cz.muni.fi.rpg.ui.views.CharacterPoint
 import cz.muni.fi.rpg.viewModels.CharacterStatsViewModel
 import kotlinx.android.synthetic.main.dialog_xp.view.*
 import kotlinx.android.synthetic.main.fragment_character_stats.*
-import kotlinx.android.synthetic.main.fragment_character_stats.view.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -65,10 +66,10 @@ class CharacterStatsFragment : Fragment(R.layout.fragment_character_stats),
                 ballisticSkill.value = stats.ballisticSkill
 
                 strength.value = stats.strength
-                strengthBonus.value = stats.strengthBonus
+//                strengthBonus.value = stats.strengthBonus
 
                 toughness.value = stats.toughness
-                toughnessBonus.value = stats.toughnessBonus
+//                toughnessBonus.value = stats.toughnessBonus
 
                 agility.value = stats.agility
                 intelligence.value = stats.intelligence
@@ -84,18 +85,36 @@ class CharacterStatsFragment : Fragment(R.layout.fragment_character_stats),
                 wounds.value = points.wounds
                 wounds.setColor(if (points.isHeavilyWounded()) R.color.colorDanger else R.color.colorText)
 
+                corruptionPoints.value = points.corruption
+                sinPoints.value = points.sin
+                resolvePoints.value = points.resolve
+                resiliencePoints.value = points.resilience
                 fortunePoints.value = points.fortune
                 fatePoints.value = points.fate
             }
 
-        wounds.setIncrementListener(viewModel::incrementWounds)
-        wounds.setDecrementListener(viewModel::decrementWounds)
+        val points = mapOf<CharacterPoint, (p: Points, addition: Int) -> Points>(
+            wounds to { p, addition -> p.copy(wounds = p.wounds + addition)},
+            corruptionPoints to {p, addition -> p.copy(corruption = p.corruption + addition)},
+            sinPoints to {p, addition -> p.copy(sin = p.sin + addition)},
+            fortunePoints to { p, addition -> p.copy(fortune = p.fortune + addition)},
+            fatePoints to { p, addition -> p.updateFate(p.fate + addition)},
+            resolvePoints to {p, addition -> p.copy(resolve = p.resolve + addition)},
+            resiliencePoints to {p, addition -> p.updateResilience(p.resilience + addition)}
+        )
 
-        fortunePoints.setIncrementListener(viewModel::incrementFortunePoints)
-        fortunePoints.setDecrementListener(viewModel::decrementFortunePoints)
+        points.forEach {
+            val pointsView = it.key
+            val mutator = it.value
 
-        fatePoints.setIncrementListener(viewModel::incrementFatePoints)
-        fatePoints.setDecrementListener(viewModel::decrementFatePoints)
+            pointsView.setIncrementListener {
+                viewModel.updatePoints { points -> mutator(points, 1) }
+            }
+
+            pointsView.setDecrementListener {
+                viewModel.updatePoints { points -> mutator(points, -1) }
+            }
+        }
     }
 
     private fun openExperiencePointsDialog(currentXpPoints: Int) {

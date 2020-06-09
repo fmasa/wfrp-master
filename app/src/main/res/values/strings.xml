@@ -144,4 +144,7 @@
     <string name="xp_points">%1$d XP</string>
     <string name="xp_long">Experience points</string>
     <string name="error_required">Required</string>
+    <string name="label_resilience">Resilience</string>
+    <string name="label_resolve">Resolve</string>
+    <string name="label_initiative">Initiative</string>
 </resources>
