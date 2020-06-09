@@ -116,22 +116,4 @@
         android:layout_width="120dp"
         android:layout_height="wrap_content"
         app:inputLabel="@string/label_wounds" />
-
-    <androidx.constraintlayout.widget.Barrier
-        android:id="@+id/barrier"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:barrierDirection="bottom"
-        app:constraint_referenced_ids="column1,column2" />
-
-    <cz.muni.fi.rpg.ui.views.TextInput
-        android:layout_marginTop="16dp"
-        android:id="@+id/magicInput"
-        android:layout_width="120dp"
-        android:layout_height="wrap_content"
-        android:inputType="number"
-        app:inputLabel="@string/label_magic"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/barrier" />
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -10,8 +10,7 @@ data class Stats(
     val intelligence: Int,
     val initiative: Int,
     val willPower: Int,
-    val fellowship: Int,
-    val magic: Int
+    val fellowship: Int
 ) {
     val strengthBonus: Int
         get() = strength / 10
@@ -31,8 +30,7 @@ data class Stats(
                 initiative,
                 intelligence,
                 willPower,
-                fellowship,
-                magic
+                fellowship
             ).all { it in 0..100 }
         )
     }

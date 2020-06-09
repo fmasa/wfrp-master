@@ -42,12 +42,12 @@ service cloud.firestore {
                     allow delete: if canEditCharacter();
 
                     function isValidSkill(skill) {
-                        return skill.keys().toSet() == ["id", "name", "description", "advanced", "characteristic", "mastery"].toSet()
+                        return skill.keys().toSet() == ["id", "name", "description", "advanced", "characteristic", "advances"].toSet()
                             && skill.id is string && skill.id == skillId && isValidUuid(skill.id)
                             && skill.name is string && isNotBlank(skill.name) && skill.name.size() <= 50
                             && skill.description is string && skill.description.size() <= 200
                             && skill.advanced is bool
-                            && skill.mastery is int && skill.mastery >= 1 && skill.mastery <= 3
+                            && skill.advances is int && skill.advances >= 0
                             && skill.characteristic in ["AGILITY", "DEXTERITY", "INTELLIGENCE", "FELLOWSHIP", "STRENGTH", "TOUGHNESS", "WILL_POWER"]
                     }
                 }
@@ -122,7 +122,6 @@ service cloud.firestore {
                         "fellowship",
                         "initiative",
                         "intelligence",
-                        "magic",
                         "strength",
                         "toughness",
                         "weaponSkill",
@@ -134,7 +133,6 @@ service cloud.firestore {
                     && stats.fellowship >= 0 && stats.fellowship <= 100
                     && stats.initiative >= 0 && stats.initiative <= 100
                     && stats.intelligence >= 0 && stats.intelligence <= 100
-                    && stats.magic >= 0 && stats.magic <= 100
                     && stats.strength >= 0 && stats.strength <= 100
                     && stats.toughness >= 0 && stats.toughness <= 100
                     && stats.weaponSkill >= 0 && stats.weaponSkill <= 100

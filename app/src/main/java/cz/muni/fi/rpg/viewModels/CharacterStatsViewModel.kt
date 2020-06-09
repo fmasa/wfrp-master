@@ -21,16 +21,7 @@ class CharacterStatsViewModel(
 
     fun updateExperiencePoints(xpPoints: Int) = updatePoints { it.copy(experience = xpPoints) }
 
-    fun incrementWounds() = updatePoints { it.copy(wounds = it.wounds + 1) }
-    fun decrementWounds() = updatePoints { it.copy(wounds = it.wounds - 1) }
-
-    fun incrementFortunePoints() = updatePoints { it.copy(fortune = it.fortune + 1) }
-    fun decrementFortunePoints() = updatePoints { it.copy(fortune = it.fortune - 1) }
-
-    fun incrementFatePoints() = updatePoints { it.updateFate(it.fate + 1) }
-    fun decrementFatePoints() = updatePoints { it.updateFate(it.fate - 1) }
-
-    private fun updatePoints(mutation: (points: Points) -> Points) {
+    fun updatePoints(mutation: (points: Points) -> Points) {
         launch {
             val character = characters.get(characterId)
             try {

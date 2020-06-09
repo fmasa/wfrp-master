@@ -65,7 +65,6 @@
     <string name="label_weapon_skill">Weapon Skill</string>
     <string name="label_ballistic_skill">Ballistic Skill</string>
     <string name="label_dexterity">Dexterity</string>
-    <string name="label_magic">Magic</string>
     <string name="label_fellowship">Fellowship</string>
     <string name="label_will_power">Will Power</string>
     <string name="label_intelligence">Intelligence</string>
@@ -119,9 +118,13 @@
     <string name="title_character_skills">Skills</string>
     <string name="title_character_talents">Talents</string>
     <string name="title_character_spells">Spells</string>
+
+    <!-- Skills -->
     <string name="title_addSkill">Add Skill</string>
     <string name="label_skill_characteristic">Characteristic</string>
-    <string name="label_skill_mastery">Mastery</string>
+    <string name="label_skill_advances">Advances</string>
+    <string name="skill_level_shortcut">lvl</string>
+
     <string name="remove">Remove</string>
     <string name="inventory_toast_item_saved">Item was saved.</string>
     <string name="multiplication_symbol">×</string>
@@ -141,4 +144,7 @@
     <string name="xp_points">%1$d XP</string>
     <string name="xp_long">Experience points</string>
     <string name="error_required">Required</string>
+    <string name="label_resilience">Resilience</string>
+    <string name="label_resolve">Resolve</string>
+    <string name="label_initiative">Initiative</string>
 </resources>

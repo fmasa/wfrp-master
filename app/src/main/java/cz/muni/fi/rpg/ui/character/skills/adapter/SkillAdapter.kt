@@ -6,16 +6,28 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.common.EntityListener
+import cz.muni.fi.rpg.model.domain.character.Stats
 import cz.muni.fi.rpg.model.domain.skills.Skill
 
 class SkillAdapter(
     private val layoutInflater: LayoutInflater,
     private val onClickListener: EntityListener<Skill>,
     private val onRemoveListener: EntityListener<Skill>
-) : ListAdapter<Skill, SkillHolder>(
-    object : DiffUtil.ItemCallback<Skill>() {
-        override fun areItemsTheSame(oldItem: Skill, newItem: Skill) = oldItem.id == newItem.id
-        override fun areContentsTheSame(oldItem: Skill, newItem: Skill) = oldItem == newItem
+) : ListAdapter<Pair<Skill, Stats>, SkillHolder>(
+    object : DiffUtil.ItemCallback<Pair<Skill, Stats>>() {
+        override fun areItemsTheSame(
+            oldItem: Pair<Skill, Stats>,
+            newItem: Pair<Skill, Stats>
+        ): Boolean {
+            return oldItem.first.id == newItem.first.id
+        }
+
+        override fun areContentsTheSame(
+            oldItem: Pair<Skill, Stats>,
+            newItem: Pair<Skill, Stats>
+        ): Boolean {
+            return oldItem == newItem
+        }
     }
 ) {
 
@@ -28,6 +40,7 @@ class SkillAdapter(
     }
 
     override fun onBindViewHolder(holder: SkillHolder, position: Int) {
-        holder.bind(getItem(position))
+        val item = getItem(position)
+        holder.bind(item.first, item.second)
     }
 }

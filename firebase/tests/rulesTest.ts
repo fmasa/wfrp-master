@@ -61,7 +61,6 @@ function validCharacter (userId: string) {
             intelligence: 10,
             willPower: 10,
             fellowship: 10,
-            magic: 4,
         },
         points: {
             corruption: 2,
@@ -712,7 +711,7 @@ class Skills extends CharacterSubCollectionSuite {
         characteristic: "FELLOWSHIP",
         name: "Haggle",
         description: "Lower the price of goods",
-        mastery: 1,
+        advances: 1,
     };
 
     private skills(app: Firestore, userId: string): CollectionReference
@@ -824,10 +823,7 @@ class Skills extends CharacterSubCollectionSuite {
                 // Unknown characteristic
                 {characteristic: "NICENCESS"},
 
-                // Too large mastery
-                {mastery: 4},
-
-                // Too small mastery
+                // Negative advances
                 {mastery: 0},
 
                 // Description too long
