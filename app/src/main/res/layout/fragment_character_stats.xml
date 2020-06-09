@@ -146,7 +146,7 @@
                         app:layout_constraintHorizontal_chainStyle="packed"
                         app:layout_constraintStart_toEndOf="@id/ballisticSkill"
                         app:layout_constraintTop_toTopOf="parent"
-                        app:statName="@string/label_magic" />
+                        app:statName="UNUSED" />
 
                     <!-- Second row -->
                     <cz.muni.fi.rpg.ui.views.CharacterStat

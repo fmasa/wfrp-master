@@ -33,8 +33,7 @@ class CharacterStatsFormFragment : Fragment(R.layout.fragment_character_stats_fo
             willPowerInput,
             fellowshipInput,
             woundsInput,
-            fatePointsInput,
-            magicInput
+            fatePointsInput
         )
 
         form = Form()
@@ -68,7 +67,6 @@ class CharacterStatsFormFragment : Fragment(R.layout.fragment_character_stats_fo
                 fellowship = fellowshipInput.getValue().toInt(),
                 initiative = 0,
                 intelligence = intelligenceInput.getValue().toInt(),
-                magic = magicInput.getValue().toInt(),
                 strength = strengthInput.getValue().toInt(),
                 toughness = toughnessInput.getValue().toInt(),
                 weaponSkill = weaponSkillInput.getValue().toInt(),
@@ -97,6 +95,5 @@ class CharacterStatsFormFragment : Fragment(R.layout.fragment_character_stats_fo
         willPowerInput.setDefaultValue(character.getStats().willPower.toString())
         fellowshipInput.setDefaultValue(character.getStats().fellowship.toString())
         woundsInput.setDefaultValue(character.getPoints().maxWounds.toString())
-        magicInput.setDefaultValue(character.getStats().magic.toString())
     }
 }

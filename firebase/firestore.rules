@@ -122,7 +122,6 @@ service cloud.firestore {
                         "fellowship",
                         "initiative",
                         "intelligence",
-                        "magic",
                         "strength",
                         "toughness",
                         "weaponSkill",
@@ -134,7 +133,6 @@ service cloud.firestore {
                     && stats.fellowship >= 0 && stats.fellowship <= 100
                     && stats.initiative >= 0 && stats.initiative <= 100
                     && stats.intelligence >= 0 && stats.intelligence <= 100
-                    && stats.magic >= 0 && stats.magic <= 100
                     && stats.strength >= 0 && stats.strength <= 100
                     && stats.toughness >= 0 && stats.toughness <= 100
                     && stats.weaponSkill >= 0 && stats.weaponSkill <= 100

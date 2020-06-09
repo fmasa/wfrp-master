@@ -61,7 +61,6 @@ function validCharacter (userId: string) {
             intelligence: 10,
             willPower: 10,
             fellowship: 10,
-            magic: 4,
         },
         points: {
             corruption: 2,
