@@ -41,6 +41,10 @@ const validParty = () => ({
     name: "Emperor's Fury",
     accessCode: "123456",
     gameMasterId: validPartyGameMasterId,
+    ambitions: {
+        shortTerm: 'Kill monsters!',
+        longTerm: 'Buy a farm',
+    },
     users: [validPartyGameMasterId],
 });
 
@@ -72,6 +76,10 @@ function validCharacter (userId: string) {
             resilience: 10,
             resolve: 5,
             sin: 4,
+        },
+        ambitions: {
+            shortTerm: 'Kill monsters!',
+            longTerm: 'Buy a farm',
         },
         money: {
             pennies: 1000,
@@ -221,6 +229,18 @@ class Database extends Suite {
 
         // Unknown field
         await firebase.assertFails(parties.doc(data.id).set({...data, otherField: 15}));
+
+        // Invalid ambition object type
+        await firebase.assertFails(parties.doc(data.id).set({...data, ambitions: "foo"}));
+
+        // Invalid ambition field type
+        await firebase.assertFails(parties.doc(data.id).set({...data, ambitions: {shortTerm: "foo", longTerm: 1}}));
+
+        // Ambition text too long
+        await firebase.assertFails(
+            parties.doc(data.id)
+                .set({...data, ambitions: {shortTerm: "f".repeat(410), longTerm: 1}})
+        );
     }
 
     @test
@@ -417,6 +437,12 @@ class Database extends Suite {
 
         // Extra field
         await firebase.assertFails(character.set({...data, extraField: "foo"}));
+
+        // Invalid ambition object type
+        await firebase.assertFails(character.set({...data, ambitions: "foo"}));
+
+        // Invalid ambition field type
+        await firebase.assertFails(character.set({...data, ambitions: {shortTerm: "foo", longTerm: 1}}));
     }
 
     @test

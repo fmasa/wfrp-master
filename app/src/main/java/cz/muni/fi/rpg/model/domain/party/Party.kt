@@ -1,11 +1,13 @@
 package cz.muni.fi.rpg.model.domain.party
+import cz.muni.fi.rpg.model.domain.common.Ambitions
 import cz.muni.fi.rpg.model.generateAccessCode
 import java.util.*
 
 data class Party(
     val id: UUID,
     val name: String,
-    val gameMasterId: String
+    val gameMasterId: String,
+    private var ambitions: Ambitions = Ambitions("", "")
 ) {
     companion object {
         const val NAME_MAX_LENGTH = 50

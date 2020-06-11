@@ -78,14 +78,15 @@ service cloud.firestore {
                 }
 
                 function isValidCharacter(character) {
-                    return character.keys().toSet() == ["name", "career", "points", "race", "stats", "userId", "money"].toSet()
+                    return character.keys().toSet() == ["name", "career", "points", "race", "stats", "userId", "money", "ambitions"].toSet()
                         && character.userId == userId
                         && character.name is string && isNotBlank(character.name) && character.name.size() <= 50
                         && character.career is string && isNotBlank(character.career) && character.career.size() <= 50
                         && character.race is string && character.race in ["HUMAN", "HIGH_ELF", "DWARF", "HALFLING", "WOOD_ELF"]
                         && arePointsValid(character.points)
                         && areStatsValid(character.stats)
-                    && areMoneyValid(character.money);
+                        && areMoneyValid(character.money)
+                        && areAmbitionsValid(character.ambitions);
                 }
             }
 
@@ -143,13 +144,20 @@ service cloud.firestore {
                 return maybeUuid.matches("^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$")
             }
 
+            function areAmbitionsValid(ambitions) {
+                return ambitions is map && ambitions.keys().toSet() == ["shortTerm", "longTerm"].toSet()
+                    && ambitions.shortTerm is string && ambitions.shortTerm.size() <= 400
+                    && ambitions.longTerm is string && ambitions.longTerm.size() <= 400;
+            }
+
             function isValidNewParty(party, uid) {
-                return party.keys().toSet() == ["id", "name", "users", "gameMasterId", "accessCode"].toSet()
+                return party.keys().toSet() == ["id", "name", "users", "gameMasterId", "accessCode", "ambitions"].toSet()
                     && party.id is string && party.id == partyId && isValidUuid(party.id)
                     && party.name is string && isNotBlank(party.name) && party.name.size() <= 50
                     && party.users == [uid]
                     && party.gameMasterId == uid
-                    && party.accessCode is string && party.accessCode != "";
+                    && party.accessCode is string && party.accessCode != ""
+                    && areAmbitionsValid(party.ambitions);
             }
 
             function invitation(party) {
