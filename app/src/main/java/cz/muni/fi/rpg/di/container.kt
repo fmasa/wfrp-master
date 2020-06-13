@@ -9,6 +9,8 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.firestoreSettings
 import com.google.firebase.ktx.Firebase
 import cz.muni.fi.rpg.BuildConfig
+import cz.muni.fi.rpg.model.cache.CharacterRepositoryIdentityMap
+import cz.muni.fi.rpg.model.cache.PartyRepositoryIdentityMap
 import cz.muni.fi.rpg.model.domain.character.Character
 import cz.muni.fi.rpg.model.domain.character.CharacterId
 import cz.muni.fi.rpg.model.domain.character.CharacterRepository
@@ -81,9 +83,17 @@ val appModule = module {
         FirestoreInventoryItemRepository(get(), aggregateMapper(InventoryItem::class))
     }
     single<CharacterRepository> {
-        FirestoreCharacterRepository(get(), aggregateMapper(Character::class))
+        CharacterRepositoryIdentityMap(
+            10,
+            FirestoreCharacterRepository(get(), aggregateMapper(Character::class))
+        )
     }
-    single<PartyRepository> { FirestorePartyRepository(get(), aggregateMapper(Party::class)) }
+    single<PartyRepository> {
+        PartyRepositoryIdentityMap(
+            10,
+            FirestorePartyRepository(get(), aggregateMapper(Party::class))
+        )
+    }
     single<SkillRepository> { FirestoreSkillRepository(get(), aggregateMapper(Skill::class)) }
     single<TalentRepository> { FirestoreTalentRepository(get(), aggregateMapper(Talent::class)) }
 
