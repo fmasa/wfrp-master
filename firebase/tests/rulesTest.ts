@@ -353,6 +353,7 @@ class Database extends Suite {
         await firebase.assertSucceeds(character.set(validCharacter(userId)));
     }
 
+    @test
     async "should NOT let users to create their character in party they DON'T have access to"() {
         const userId = "user123";
         const partyId = (await createUserAccessibleParty("another-user")).id;
