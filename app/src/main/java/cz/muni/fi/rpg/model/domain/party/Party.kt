@@ -23,5 +23,11 @@ data class Party(
         require(gameMasterId.isNotEmpty()) {"Game master must not be empty"}
     }
 
+    fun updateAmbitions(ambitions: Ambitions) {
+        this.ambitions = ambitions
+    }
+
+    fun getAmbitions() = ambitions
+
     fun getInvitation() = Invitation(id, name, accessCode)
 }
