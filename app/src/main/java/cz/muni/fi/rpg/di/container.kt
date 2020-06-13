@@ -30,6 +30,7 @@ import cz.muni.fi.rpg.model.firestore.FirestorePartyRepository
 import cz.muni.fi.rpg.model.firestore.FirestoreSkillRepository
 import cz.muni.fi.rpg.model.firestore.jackson.JacksonAggregateMapper
 import cz.muni.fi.rpg.ui.character.CharacterFragment
+import cz.muni.fi.rpg.ui.character.CharacterMiscFragment
 import cz.muni.fi.rpg.ui.character.CharacterStatsFragment
 import cz.muni.fi.rpg.ui.character.InventoryFragment
 import cz.muni.fi.rpg.ui.character.edit.CharacterEditFragment
@@ -101,8 +102,9 @@ val appModule = module {
      * ViewModels
      */
     viewModel { (partyId: UUID) -> PartyViewModel(get(), partyId) }
-    viewModel { (characterId: CharacterId) -> CharacterViewModel(characterId, get())}
     viewModel { (characterId: CharacterId) -> CharacterStatsViewModel(characterId, get()) }
+    viewModel { (characterId: CharacterId) -> CharacterMiscViewModel(characterId, get(), get()) }
+    viewModel { (characterId: CharacterId) -> CharacterViewModel(characterId, get())}
     viewModel { (characterId: CharacterId) -> InventoryViewModel(characterId, get(), get()) }
     viewModel { (characterId: CharacterId) -> SkillsViewModel(characterId, get()) }
     viewModel { (characterId: CharacterId) -> TalentsViewModel(characterId, get()) }
@@ -116,6 +118,7 @@ val appModule = module {
     fragment { NavHostFragment() }
     fragment { PartyListFragment(get()) }
     fragment { CharacterEditFragment(get()) }
+    fragment { CharacterMiscFragment() }
     fragment { CharacterStatsFragment() }
     fragment { CharacterSkillsFragment() }
     fragment { InventoryFragment() }

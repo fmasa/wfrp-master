@@ -14,5 +14,6 @@
     </declare-styleable>
     <declare-styleable name="AmbitionsCard">
         <attr name="title" format="string"/>
+        <attr name="titleDrawable" format="reference"/>
     </declare-styleable>
 </resources>

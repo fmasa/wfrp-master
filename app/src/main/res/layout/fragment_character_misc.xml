@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorBackgroundUnderCard"
+    android:orientation="vertical"
+    tools:context=".ui.character.CharacterMiscFragment">
+
+    <LinearLayout
+        android:paddingBottom="@dimen/long_ui_bottom_padding"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <cz.muni.fi.rpg.ui.views.AmbitionsCard
+            android:id="@+id/characterAmbitionsCard"
+            style="@style/CardContainer"
+            android:clickable="true"
+            android:focusable="true"
+            android:foreground="?attr/selectableItemBackground"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:title="@string/title_character_ambitions" />
+
+        <cz.muni.fi.rpg.ui.views.AmbitionsCard
+            android:id="@+id/partyAmbitionsCard"
+            style="@style/CardContainer"
+            android:layout_marginTop="20dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:titleDrawable="@drawable/ic_group"
+            app:title="@string/title_party_ambitions" />
+    </LinearLayout>
+</ScrollView>

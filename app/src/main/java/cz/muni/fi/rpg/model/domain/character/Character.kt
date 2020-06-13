@@ -61,11 +61,17 @@ data class Character(
 
     fun getMoney() = money
 
+    fun updatePoints(newPoints: Points) {
+        points = newPoints
+    }
+
     fun getPoints(): Points = points
 
     fun getStats(): Stats = stats
 
-    fun updatePoints(newPoints: Points) {
-        points = newPoints
+    fun updateAmbitions(ambitions: Ambitions) {
+        this.ambitions = ambitions
     }
+
+    fun getAmbitions(): Ambitions = ambitions
 }

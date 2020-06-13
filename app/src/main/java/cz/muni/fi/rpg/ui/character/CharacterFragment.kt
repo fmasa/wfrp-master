@@ -46,7 +46,8 @@ class CharacterFragment : BaseFragment(R.layout.fragment_character) {
                 { CharacterStatsFragment.newInstance(args.characterId) },
                 { CharacterSkillsFragment.newInstance(args.characterId) },
 //                { CharacterSpellsFragment() },
-                { InventoryFragment.newInstance(args.characterId) }
+                { InventoryFragment.newInstance(args.characterId) },
+                { CharacterMiscFragment.newInstance(args.characterId) }
             )
         )
 
@@ -67,6 +68,10 @@ class CharacterFragment : BaseFragment(R.layout.fragment_character) {
                 2 -> {
                     tab.setText(R.string.title_character_inventory)
                     tab.setIcon(R.drawable.ic_inventory)
+                }
+                3 -> {
+                    tab.setText(R.string.title_misc)
+                    tab.setIcon(R.drawable.ic_info)
                 }
             }
         }.attach()

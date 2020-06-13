@@ -150,7 +150,9 @@
 
     <!-- Ambitions -->
     <string name="title_party_ambitions">Party ambitions</string>
+    <string name="title_character_ambitions">Character ambitions</string>
     <string name="label_ambition_short_term">Short-term</string>
     <string name="label_ambition_long_term">Long-term</string>
     <string name="note_ambition_not_filled">Ambition not filled</string>
+    <string name="title_misc">Misc</string>
 </resources>
