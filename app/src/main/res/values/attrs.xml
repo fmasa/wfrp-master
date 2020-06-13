@@ -12,4 +12,7 @@
         <attr name="android:maxLength" format="integer" min="0"/>
         <attr name="android:inputType"/>
     </declare-styleable>
+    <declare-styleable name="AmbitionsCard">
+        <attr name="title" format="string"/>
+    </declare-styleable>
 </resources>
