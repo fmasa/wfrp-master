@@ -177,7 +177,7 @@ abstract class Suite
 }
 
 @suite
-class Database extends Suite {
+class Parties extends Suite {
     @test
     async "require users to log in before creating a party"() {
         const data = validParty();
@@ -557,6 +557,19 @@ class Database extends Suite {
             .doc(userId);
 
         await firebase.assertFails(document.set({points: {resilience: 10}}, {merge: true}));
+    }
+
+    @test
+    async "should let GM edit ambitions"() {
+        const party = await createValidParty();
+
+        const document = authedApp(party.gameMasterId)
+            .collection("parties")
+            .doc(party.id);
+
+        await firebase.assertSucceeds(
+            document.update("ambitions", {shortTerm: "Completely new ambitions!", longTerm: "We don't think that far"})
+        )
     }
 }
 

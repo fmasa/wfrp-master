@@ -10,7 +10,8 @@ service cloud.firestore {
 
         match /parties/{partyId} {
             allow create: if request.auth != null && isValidNewParty(request.resource.data, request.auth.uid);
-            allow write: if request.auth != null && onlyUserAdded();
+            allow write: if request.auth != null
+                         && ((isGameMaster() && isValidPartyEdit()) || onlyUserAdded());
 
             match /characters/{userId} {
                 allow create: if hasAccessToParty()
@@ -157,6 +158,14 @@ service cloud.firestore {
                     && party.users == [uid]
                     && party.gameMasterId == uid
                     && party.accessCode is string && party.accessCode != ""
+                    && areAmbitionsValid(party.ambitions);
+            }
+
+            function isValidPartyEdit() {
+                let party = request.resource.data;
+                let diff = resource.data.diff(request.resource.data);
+
+                return ["ambitions"].toSet().hasAll(diff.affectedKeys())
                     && areAmbitionsValid(party.ambitions);
             }
 
