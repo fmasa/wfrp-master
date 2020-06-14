@@ -13,6 +13,7 @@ import cz.muni.fi.rpg.model.domain.character.CharacterRepository
 import cz.muni.fi.rpg.model.domain.party.Invitation
 import cz.muni.fi.rpg.model.right
 import cz.muni.fi.rpg.ui.common.BaseFragment
+import cz.muni.fi.rpg.ui.common.ChangeAmbitionsDialog
 import cz.muni.fi.rpg.ui.gameMaster.adapter.CharacterAdapter
 import cz.muni.fi.rpg.viewModels.PartyViewModel
 import kotlinx.android.synthetic.main.fragment_game_master.*
@@ -44,10 +45,21 @@ class GameMasterFragment(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+
         partyViewModel.party.right().observe(viewLifecycleOwner) { party ->
             setTitle(party.name)
-            inviteButton.isEnabled = true
             invitation = party.getInvitation()
+
+            inviteButton.isEnabled = true
+
+            ambitionsCard.setValue(party.getAmbitions())
+            ambitionsCard.setOnClickListener {
+                ChangeAmbitionsDialog
+                    .newInstance(getString(R.string.title_party_ambitions), party.getAmbitions())
+                    .setOnSaveListener {
+                        partyViewModel.updatePartyAmbitions(it)
+                    }.show(childFragmentManager, "ChangeAmbitionsDialog")
+            }
         }
 
         inviteButton.setOnClickListener { showQrCode() }

@@ -9,6 +9,8 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.firestoreSettings
 import com.google.firebase.ktx.Firebase
 import cz.muni.fi.rpg.BuildConfig
+import cz.muni.fi.rpg.model.cache.CharacterRepositoryIdentityMap
+import cz.muni.fi.rpg.model.cache.PartyRepositoryIdentityMap
 import cz.muni.fi.rpg.model.domain.character.Character
 import cz.muni.fi.rpg.model.domain.character.CharacterId
 import cz.muni.fi.rpg.model.domain.character.CharacterRepository
@@ -28,6 +30,7 @@ import cz.muni.fi.rpg.model.firestore.FirestorePartyRepository
 import cz.muni.fi.rpg.model.firestore.FirestoreSkillRepository
 import cz.muni.fi.rpg.model.firestore.jackson.JacksonAggregateMapper
 import cz.muni.fi.rpg.ui.character.CharacterFragment
+import cz.muni.fi.rpg.ui.character.CharacterMiscFragment
 import cz.muni.fi.rpg.ui.character.CharacterStatsFragment
 import cz.muni.fi.rpg.ui.character.InventoryFragment
 import cz.muni.fi.rpg.ui.character.edit.CharacterEditFragment
@@ -81,9 +84,17 @@ val appModule = module {
         FirestoreInventoryItemRepository(get(), aggregateMapper(InventoryItem::class))
     }
     single<CharacterRepository> {
-        FirestoreCharacterRepository(get(), aggregateMapper(Character::class))
+        CharacterRepositoryIdentityMap(
+            10,
+            FirestoreCharacterRepository(get(), aggregateMapper(Character::class))
+        )
     }
-    single<PartyRepository> { FirestorePartyRepository(get(), aggregateMapper(Party::class)) }
+    single<PartyRepository> {
+        PartyRepositoryIdentityMap(
+            10,
+            FirestorePartyRepository(get(), aggregateMapper(Party::class))
+        )
+    }
     single<SkillRepository> { FirestoreSkillRepository(get(), aggregateMapper(Skill::class)) }
     single<TalentRepository> { FirestoreTalentRepository(get(), aggregateMapper(Talent::class)) }
 
@@ -91,8 +102,9 @@ val appModule = module {
      * ViewModels
      */
     viewModel { (partyId: UUID) -> PartyViewModel(get(), partyId) }
-    viewModel { (characterId: CharacterId) -> CharacterViewModel(characterId, get())}
     viewModel { (characterId: CharacterId) -> CharacterStatsViewModel(characterId, get()) }
+    viewModel { (characterId: CharacterId) -> CharacterMiscViewModel(characterId, get(), get()) }
+    viewModel { (characterId: CharacterId) -> CharacterViewModel(characterId, get())}
     viewModel { (characterId: CharacterId) -> InventoryViewModel(characterId, get(), get()) }
     viewModel { (characterId: CharacterId) -> SkillsViewModel(characterId, get()) }
     viewModel { (characterId: CharacterId) -> TalentsViewModel(characterId, get()) }
@@ -106,6 +118,7 @@ val appModule = module {
     fragment { NavHostFragment() }
     fragment { PartyListFragment(get()) }
     fragment { CharacterEditFragment(get()) }
+    fragment { CharacterMiscFragment() }
     fragment { CharacterStatsFragment() }
     fragment { CharacterSkillsFragment() }
     fragment { InventoryFragment() }

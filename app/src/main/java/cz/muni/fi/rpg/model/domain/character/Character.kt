@@ -1,5 +1,6 @@
 package cz.muni.fi.rpg.model.domain.character
 
+import cz.muni.fi.rpg.model.domain.common.Ambitions
 import cz.muni.fi.rpg.model.domain.common.Money
 import java.lang.IllegalArgumentException
 
@@ -9,7 +10,8 @@ data class Character(
     private var career: String,
     private var race: Race,
     private var stats: Stats,
-    private var points: Points
+    private var points: Points,
+    private var ambitions: Ambitions = Ambitions("", "")
 ) {
     companion object {
         const val NAME_MAX_LENGTH = 50
@@ -59,11 +61,17 @@ data class Character(
 
     fun getMoney() = money
 
+    fun updatePoints(newPoints: Points) {
+        points = newPoints
+    }
+
     fun getPoints(): Points = points
 
     fun getStats(): Stats = stats
 
-    fun updatePoints(newPoints: Points) {
-        points = newPoints
+    fun updateAmbitions(ambitions: Ambitions) {
+        this.ambitions = ambitions
     }
+
+    fun getAmbitions(): Ambitions = ambitions
 }

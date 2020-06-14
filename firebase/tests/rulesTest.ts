@@ -41,6 +41,10 @@ const validParty = () => ({
     name: "Emperor's Fury",
     accessCode: "123456",
     gameMasterId: validPartyGameMasterId,
+    ambitions: {
+        shortTerm: 'Kill monsters!',
+        longTerm: 'Buy a farm',
+    },
     users: [validPartyGameMasterId],
 });
 
@@ -72,6 +76,10 @@ function validCharacter (userId: string) {
             resilience: 10,
             resolve: 5,
             sin: 4,
+        },
+        ambitions: {
+            shortTerm: 'Kill monsters!',
+            longTerm: 'Buy a farm',
         },
         money: {
             pennies: 1000,
@@ -169,7 +177,7 @@ abstract class Suite
 }
 
 @suite
-class Database extends Suite {
+class Parties extends Suite {
     @test
     async "require users to log in before creating a party"() {
         const data = validParty();
@@ -221,6 +229,18 @@ class Database extends Suite {
 
         // Unknown field
         await firebase.assertFails(parties.doc(data.id).set({...data, otherField: 15}));
+
+        // Invalid ambition object type
+        await firebase.assertFails(parties.doc(data.id).set({...data, ambitions: "foo"}));
+
+        // Invalid ambition field type
+        await firebase.assertFails(parties.doc(data.id).set({...data, ambitions: {shortTerm: "foo", longTerm: 1}}));
+
+        // Ambition text too long
+        await firebase.assertFails(
+            parties.doc(data.id)
+                .set({...data, ambitions: {shortTerm: "f".repeat(410), longTerm: 1}})
+        );
     }
 
     @test
@@ -333,6 +353,7 @@ class Database extends Suite {
         await firebase.assertSucceeds(character.set(validCharacter(userId)));
     }
 
+    @test
     async "should NOT let users to create their character in party they DON'T have access to"() {
         const userId = "user123";
         const partyId = (await createUserAccessibleParty("another-user")).id;
@@ -417,6 +438,12 @@ class Database extends Suite {
 
         // Extra field
         await firebase.assertFails(character.set({...data, extraField: "foo"}));
+
+        // Invalid ambition object type
+        await firebase.assertFails(character.set({...data, ambitions: "foo"}));
+
+        // Invalid ambition field type
+        await firebase.assertFails(character.set({...data, ambitions: {shortTerm: "foo", longTerm: 1}}));
     }
 
     @test
@@ -530,6 +557,19 @@ class Database extends Suite {
             .doc(userId);
 
         await firebase.assertFails(document.set({points: {resilience: 10}}, {merge: true}));
+    }
+
+    @test
+    async "should let GM edit ambitions"() {
+        const party = await createValidParty();
+
+        const document = authedApp(party.gameMasterId)
+            .collection("parties")
+            .doc(party.id);
+
+        await firebase.assertSucceeds(
+            document.update("ambitions", {shortTerm: "Completely new ambitions!", longTerm: "We don't think that far"})
+        )
     }
 }
 

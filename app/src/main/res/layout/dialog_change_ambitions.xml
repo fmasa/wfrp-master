@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:padding="@dimen/dialogPadding">
+
+    <ProgressBar
+        android:layout_width="match_parent"
+        android:layout_gravity="center"
+        android:visibility="gone"
+        android:layout_height="match_parent"
+        android:id="@+id/progress" />
+
+    <LinearLayout
+        android:id="@+id/mainView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <cz.muni.fi.rpg.ui.views.TextInput
+            app:inputLabel="@string/label_ambition_short_term"
+            android:id="@+id/shortTermAmbitionInput"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        <cz.muni.fi.rpg.ui.views.TextInput
+            app:inputLabel="@string/label_ambition_long_term"
+            android:id="@+id/longTermAmbitionInput"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+    </LinearLayout>
+</FrameLayout>
