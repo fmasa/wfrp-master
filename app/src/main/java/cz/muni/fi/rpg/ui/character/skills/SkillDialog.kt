@@ -61,7 +61,7 @@ class SkillDialog : DialogFragment() {
                 setMaxLength(Skill.DESCRIPTION_MAX_LENGTH)
             }
 
-            view.advancesInput.setDefaultValue("0")
+            view.advancesInput.setDefaultValue("1")
             addTextInput(view.advancesInput).apply {
                 setNotBlank("Advances must be number greater than 0")
                 addLiveRule("Advances must be number greater than 0") {

@@ -5,7 +5,7 @@
 
     <TextView
         android:id="@+id/label"
-        android:textSize="19sp"
+        android:textSize="18sp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 

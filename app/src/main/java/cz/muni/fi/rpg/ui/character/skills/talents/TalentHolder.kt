@@ -16,6 +16,7 @@ class TalentHolder(
     fun bind(talent: Talent) {
         view.talentItemTitle.text = talent.name;
         view.talentItemDescription.text = talent.description
+        view.takenValue.text = talent.taken.toString()
 
         if (talent.description.isBlank()) {
             view.talentItemDescription.visibility = View.GONE
