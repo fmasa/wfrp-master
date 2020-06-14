@@ -43,12 +43,12 @@ class TalentDialog : DialogFragment() {
         val view = inflater.inflate(R.layout.dialog_talent, null);
 
         val form = Form().apply {
-            addTextInput(view.talentNameLayout).apply {
+            addTextInput(view.talentNameInput).apply {
                 setMaxLength(Talent.NAME_MAX_LENGTH)
                 setNotBlank(getString(R.string.error_talent_name_empty))
             }
 
-            addTextInput(view.talentDescriptionLayout).apply {
+            addTextInput(view.talentDescriptionInput).apply {
                 setMaxLength(Talent.DESCRIPTION_MAX_LENGTH)
             }
         }
@@ -74,13 +74,13 @@ class TalentDialog : DialogFragment() {
     private fun setDefaults(view: View) {
         val talent = this.talent ?: return
 
-        view.talentName.setText(talent.name)
-        view.talentDescription.setText(talent.description)
+        view.talentNameInput.setDefaultValue(talent.name)
+        view.talentDescriptionInput.setDefaultValue(talent.description)
     }
 
     private fun dialogSubmitted(dialog: AlertDialog, view: View, form: Form) {
-        val name = view.talentName.text.toString()
-        val description = view.talentDescription.text.toString()
+        val name = view.talentNameInput.getValue()
+        val description = view.talentDescriptionInput.getValue()
 
         if (!form.validate()) {
             return
@@ -90,7 +90,7 @@ class TalentDialog : DialogFragment() {
         dialog.getButton(AlertDialog.BUTTON_NEGATIVE).isEnabled = false
 
         onSuccessListener(
-            Talent(this.talent?.id ?: UUID.randomUUID(), name, description)
+            Talent(this.talent?.id ?: UUID.randomUUID(), name, description, 1)
         )
     }
 }
