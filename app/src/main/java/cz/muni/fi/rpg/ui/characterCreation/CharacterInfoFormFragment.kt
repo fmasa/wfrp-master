@@ -13,7 +13,12 @@ import kotlinx.android.synthetic.main.fragment_character_info_form.*
 class CharacterInfoFormFragment : Fragment(R.layout.fragment_character_info_form) {
     var character : Character? = null
 
-    data class CharacterInfo(var name: String, var race: Race, var career: String)
+    data class CharacterInfo(
+        val name: String,
+        val race: Race,
+        val career: String,
+        val socialClass: String
+    )
 
     private lateinit var form: Form
 
@@ -29,6 +34,11 @@ class CharacterInfoFormFragment : Fragment(R.layout.fragment_character_info_form
             addTextInput(careerInput).apply {
                 setNotBlank(getString(R.string.error_cannot_be_empty))
                 setMaxLength(Character.CAREER_MAX_LENGTH)
+            }
+
+            addTextInput(socialClassInput).apply {
+                setNotBlank(getString(R.string.error_cannot_be_empty))
+                setMaxLength(Character.SOCIAL_CLASS_MAX_LENGTH)
             }
         }
 
@@ -65,6 +75,7 @@ class CharacterInfoFormFragment : Fragment(R.layout.fragment_character_info_form
     private fun createCharacterInfo(): CharacterInfo {
         val name = nameInput.getValue()
         val career = careerInput.getValue()
+        val socialClass = socialClassInput.getValue()
 
         val race: Race = when(radioGroup.checkedRadioButtonId) {
             R.id.radioButtonRaceHuman -> Race.HUMAN
@@ -75,6 +86,11 @@ class CharacterInfoFormFragment : Fragment(R.layout.fragment_character_info_form
             else -> error("No race selected")
         }
 
-        return CharacterInfo(name, race, career)
+        return CharacterInfo(
+            name = name,
+            race = race,
+            career = career,
+            socialClass = socialClass
+        )
     }
 }

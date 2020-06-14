@@ -8,6 +8,7 @@ data class Character(
     private var name: String,
     val userId: String,
     private var career: String,
+    private var socialClass: String,
     private var race: Race,
     private var stats: Stats,
     private var points: Points,
@@ -16,23 +17,34 @@ data class Character(
     companion object {
         const val NAME_MAX_LENGTH = 50
         const val CAREER_MAX_LENGTH = 50
+        const val SOCIAL_CLASS_MAX_LENGTH = 50
     }
 
     private var money: Money = Money.zero()
 
     init {
         require(listOf(name, userId, career).all { it.isNotBlank() })
-        require(name.length <= NAME_MAX_LENGTH) { "Character name is too long"}
-        require(career.length <= CAREER_MAX_LENGTH) { "Career is too long"}
+        require(name.length <= NAME_MAX_LENGTH) { "Character name is too long" }
+        require(career.length <= CAREER_MAX_LENGTH) { "Career is too long" }
+        require(socialClass.length <= SOCIAL_CLASS_MAX_LENGTH) { "Social class is too long" }
     }
 
-    fun update(name: String, career: String, race: Race, stats: Stats, points: Points) {
+    fun update(
+        name: String,
+        career: String,
+        socialClass: String,
+        race: Race,
+        stats: Stats,
+        points: Points
+    ) {
         require(listOf(name, career).all { it.isNotBlank() })
-        require(name.length <= NAME_MAX_LENGTH) { "Character name is too long"}
-        require(career.length <= CAREER_MAX_LENGTH) { "Career is too long"}
+        require(name.length <= NAME_MAX_LENGTH) { "Character name is too long" }
+        require(career.length <= CAREER_MAX_LENGTH) { "Career is too long" }
+        require(socialClass.length <= SOCIAL_CLASS_MAX_LENGTH) { "Social class is too long" }
 
         this.name = name
         this.career = career
+        this.socialClass = socialClass
         this.race = race
         this.stats = stats
         this.points = points
@@ -58,6 +70,8 @@ data class Character(
     fun getCareer(): String = career
 
     fun getRace(): Race = race
+
+    fun getSocialClass(): String = socialClass
 
     fun getMoney() = money
 

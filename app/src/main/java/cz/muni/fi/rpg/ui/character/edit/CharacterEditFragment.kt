@@ -92,6 +92,7 @@ class CharacterEditFragment(
         character.update(
             info.name,
             info.career,
+            info.socialClass,
             info.race,
             characterStatsData.stats,
             points.updateMaxWounds(characterStatsData.maxWounds)
