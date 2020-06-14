@@ -24,11 +24,12 @@ import cz.muni.fi.rpg.model.domain.skills.SkillRepository
 import cz.muni.fi.rpg.model.domain.talents.Talent
 import cz.muni.fi.rpg.model.domain.talents.TalentRepository
 import cz.muni.fi.rpg.model.firestore.*
-import cz.muni.fi.rpg.model.firestore.FirestoreCharacterRepository
-import cz.muni.fi.rpg.model.firestore.FirestoreInventoryItemRepository
-import cz.muni.fi.rpg.model.firestore.FirestorePartyRepository
-import cz.muni.fi.rpg.model.firestore.FirestoreSkillRepository
 import cz.muni.fi.rpg.model.firestore.jackson.JacksonAggregateMapper
+import cz.muni.fi.rpg.model.firestore.repositories.FirestoreCharacterRepository
+import cz.muni.fi.rpg.model.firestore.repositories.FirestoreInventoryItemRepository
+import cz.muni.fi.rpg.model.firestore.repositories.FirestorePartyRepository
+import cz.muni.fi.rpg.model.firestore.repositories.FirestoreSkillRepository
+import cz.muni.fi.rpg.model.firestore.repositories.FirestoreTalentRepository
 import cz.muni.fi.rpg.ui.character.CharacterFragment
 import cz.muni.fi.rpg.ui.character.CharacterMiscFragment
 import cz.muni.fi.rpg.ui.character.CharacterStatsFragment
@@ -81,22 +82,41 @@ val appModule = module {
      * Repositories
      */
     single<InventoryItemRepository> {
-        FirestoreInventoryItemRepository(get(), aggregateMapper(InventoryItem::class))
+        FirestoreInventoryItemRepository(
+            get(),
+            aggregateMapper(InventoryItem::class)
+        )
     }
     single<CharacterRepository> {
         CharacterRepositoryIdentityMap(
             10,
-            FirestoreCharacterRepository(get(), aggregateMapper(Character::class))
+            FirestoreCharacterRepository(
+                get(),
+                aggregateMapper(Character::class)
+            )
         )
     }
     single<PartyRepository> {
         PartyRepositoryIdentityMap(
             10,
-            FirestorePartyRepository(get(), aggregateMapper(Party::class))
+            FirestorePartyRepository(
+                get(),
+                aggregateMapper(Party::class)
+            )
         )
     }
-    single<SkillRepository> { FirestoreSkillRepository(get(), aggregateMapper(Skill::class)) }
-    single<TalentRepository> { FirestoreTalentRepository(get(), aggregateMapper(Talent::class)) }
+    single<SkillRepository> {
+        FirestoreSkillRepository(
+            get(),
+            aggregateMapper(Skill::class)
+        )
+    }
+    single<TalentRepository> {
+        FirestoreTalentRepository(
+            get(),
+            aggregateMapper(Talent::class)
+        )
+    }
 
     /**
      * ViewModels
