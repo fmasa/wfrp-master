@@ -21,14 +21,18 @@ import cz.muni.fi.rpg.model.domain.party.Party
 import cz.muni.fi.rpg.model.domain.party.PartyRepository
 import cz.muni.fi.rpg.model.domain.skills.Skill
 import cz.muni.fi.rpg.model.domain.skills.SkillRepository
+import cz.muni.fi.rpg.model.domain.spells.Spell
+import cz.muni.fi.rpg.model.domain.spells.SpellRepository
 import cz.muni.fi.rpg.model.domain.talents.Talent
 import cz.muni.fi.rpg.model.domain.talents.TalentRepository
 import cz.muni.fi.rpg.model.firestore.*
 import cz.muni.fi.rpg.model.firestore.jackson.JacksonAggregateMapper
+import cz.muni.fi.rpg.model.firestore.repositories.*
 import cz.muni.fi.rpg.model.firestore.repositories.FirestoreCharacterRepository
 import cz.muni.fi.rpg.model.firestore.repositories.FirestoreInventoryItemRepository
 import cz.muni.fi.rpg.model.firestore.repositories.FirestorePartyRepository
 import cz.muni.fi.rpg.model.firestore.repositories.FirestoreSkillRepository
+import cz.muni.fi.rpg.model.firestore.repositories.FirestoreSpellRepository
 import cz.muni.fi.rpg.model.firestore.repositories.FirestoreTalentRepository
 import cz.muni.fi.rpg.ui.character.CharacterFragment
 import cz.muni.fi.rpg.ui.character.CharacterMiscFragment
@@ -78,6 +82,7 @@ val appModule = module {
 
         mapper
     }
+
     /**
      * Repositories
      */
@@ -115,6 +120,12 @@ val appModule = module {
         FirestoreTalentRepository(
             get(),
             aggregateMapper(Talent::class)
+        )
+    }
+    single<SpellRepository> {
+        FirestoreSpellRepository(
+            get(),
+            aggregateMapper(Spell::class)
         )
     }
 
