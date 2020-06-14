@@ -890,6 +890,7 @@ class Talents extends CharacterSubCollectionSuite {
         id: uuid(),
         name: "Sneaky brieky",
         description: "+ 1O to sneak rolls",
+        taken: 5,
     };
 
     private talents(app: Firestore, userId: string): CollectionReference
@@ -1001,6 +1002,11 @@ class Talents extends CharacterSubCollectionSuite {
                 // Description too long
                 {description: "a".repeat(201)},
 
+                // Taken too many times
+                {taken: 1000},
+
+                // Taken too few times
+                {taken: 0},
             ].map(doc => firebase.assertFails(talentDoc.set({...this.talent, ...doc})))
         );
 

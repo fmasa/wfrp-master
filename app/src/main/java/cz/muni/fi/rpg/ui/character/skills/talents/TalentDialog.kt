@@ -51,6 +51,14 @@ class TalentDialog : DialogFragment() {
             addTextInput(view.talentDescriptionInput).apply {
                 setMaxLength(Talent.DESCRIPTION_MAX_LENGTH)
             }
+
+            addTextInput(view.talentTakenInput).apply {
+                setNotBlank("Taken must be number greater than 0")
+                addLiveRule("Taken must be number greater than 0") {
+                    val value = it.toString().toIntOrNull()
+                    value != null && value > 0
+                }
+            }
         }
 
         setDefaults(view)
@@ -59,7 +67,7 @@ class TalentDialog : DialogFragment() {
             .setView(view)
             .setTitle(if (talent != null) null else getString(R.string.title_talent_add))
             .setPositiveButton(R.string.button_save) { _, _ -> }
-            .setNegativeButton(R.string.button_cancel) { _, _ ->}
+            .setNegativeButton(R.string.button_cancel) { _, _ -> }
             .create()
 
         dialog.setOnShowListener {
@@ -72,15 +80,19 @@ class TalentDialog : DialogFragment() {
     }
 
     private fun setDefaults(view: View) {
+        view.talentTakenInput.setDefaultValue("1")
+
         val talent = this.talent ?: return
 
         view.talentNameInput.setDefaultValue(talent.name)
         view.talentDescriptionInput.setDefaultValue(talent.description)
+        view.talentTakenInput.setDefaultValue(talent.taken.toString())
     }
 
     private fun dialogSubmitted(dialog: AlertDialog, view: View, form: Form) {
         val name = view.talentNameInput.getValue()
         val description = view.talentDescriptionInput.getValue()
+        val taken = view.talentTakenInput.getValue().toInt()
 
         if (!form.validate()) {
             return
@@ -89,8 +101,6 @@ class TalentDialog : DialogFragment() {
         dialog.getButton(AlertDialog.BUTTON_POSITIVE).isEnabled = false
         dialog.getButton(AlertDialog.BUTTON_NEGATIVE).isEnabled = false
 
-        onSuccessListener(
-            Talent(this.talent?.id ?: UUID.randomUUID(), name, description, 1)
-        )
+        onSuccessListener(Talent(this.talent?.id ?: UUID.randomUUID(), name, description, taken))
     }
 }

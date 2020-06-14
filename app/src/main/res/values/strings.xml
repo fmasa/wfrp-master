@@ -33,6 +33,7 @@
     <string name="title_talent_add">Add Talent</string>
     <string name="label_description">Description (Optional)</string>
     <string name="error_talent_name_empty">Talent name cannot be empty</string>
+    <string name="label_talent_taken">Taken</string>
 
     <string name="title_character_creation_info">Character info</string>
     <string name="title_character_creation_stats">Character stats</string>

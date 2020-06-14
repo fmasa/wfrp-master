@@ -18,4 +18,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:inputLabel="@string/label_description" />
+
+    <cz.muni.fi.rpg.ui.views.TextInput
+        android:id="@+id/talentTakenInput"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:inputType="number"
+        android:maxLength="3"
+        app:inputLabel="@string/label_talent_taken" />
 </LinearLayout>
