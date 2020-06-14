@@ -19,7 +19,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:text="@string/label_race"
-        android:textSize="19sp"/>
+        android:textSize="18sp"/>
 
     <RadioGroup
         android:id="@+id/radioGroup"
