@@ -8,7 +8,6 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.observe
 import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.model.domain.character.CharacterId
-import cz.muni.fi.rpg.model.right
 import cz.muni.fi.rpg.ui.common.ChangeAmbitionsDialog
 import cz.muni.fi.rpg.viewModels.CharacterMiscViewModel
 import kotlinx.android.synthetic.main.dialog_xp.view.*
@@ -61,12 +60,9 @@ internal class CharacterMiscFragment : Fragment(R.layout.fragment_character_misc
 
     private fun bindTopBar() {
         viewModel.character.observe(viewLifecycleOwner) { character ->
-            raceAndCareer.text = StringBuilder()
-                .append(getString(character.getRace().getReadableNameId()))
-                .append(" ")
-                .append(character.getCareer())
-                .toString()
-
+            raceValue.setText(character.getRace().getReadableNameId())
+            careerValue.text = character.getCareer()
+            socialClassValue.text = character.getSocialClass()
             xpPoints.text = getString(R.string.xp_points, character.getPoints().experience)
 
             xpPoints.setOnClickListener {

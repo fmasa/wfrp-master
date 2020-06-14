@@ -63,6 +63,8 @@ class CharacterInfoFormFragment : Fragment(R.layout.fragment_character_info_form
 
         nameInput.setDefaultValue(character.getName())
         careerInput.setDefaultValue(character.getCareer())
+        socialClassInput.setDefaultValue(character.getSocialClass())
+
         when (character.getRace()) {
             Race.HUMAN -> radioButtonRaceHuman.isChecked = true
             Race.DWARF -> radioButtonRaceDwarf.isChecked = true
