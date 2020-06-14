@@ -11,6 +11,7 @@
     <color name="colorFabLabelText">#000000</color>
     <color name="colorFabLabelBackground">#ffffff</color>
     <color name="colorText">#000000</color>
+    <color name="colorGray">#4e636c</color>
     <color name="colorDanger">#B71C1C</color>
     <color name="colorEmptyState">#585858</color>
     <color name="colorSplashScreenText">#eaeaea</color>

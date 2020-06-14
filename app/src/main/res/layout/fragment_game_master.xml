@@ -41,7 +41,7 @@
                     android:layout_width="60dp"
                     android:layout_height="60dp"
                     android:layout_gravity="center"
-                    android:src="@drawable/ic_invite_people"
+                    android:src="@drawable/ic_group"
                     android:tint="@color/colorEmptyState"
                     android:visibility="gone" />
 

@@ -53,6 +53,7 @@ function validCharacter (userId: string) {
         name: "Sigmar",
         userId: userId,
         career: "God",
+        socialClass: "Warrior",
         race: "HUMAN",
         stats: {
             weaponSkill: 35,
@@ -426,6 +427,15 @@ class Parties extends Suite {
 
         // Whitespaces only career
         await firebase.assertFails(character.set({...data, career: "\t \r"}));
+
+        // Empty social class
+        await firebase.assertFails(character.set({...data, socialClass: ""}));
+
+        // Social class too long
+        await firebase.assertFails(character.set({...data, socialClass: "a".repeat(51)}));
+
+        // Whitespaces only social class
+        await firebase.assertFails(character.set({...data, socialClass: "\t \r"}));
 
         // Invalid race
         await firebase.assertFails(character.set({...data, race: "ORC"}));

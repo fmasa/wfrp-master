@@ -80,10 +80,11 @@ service cloud.firestore {
                 }
 
                 function isValidCharacter(character) {
-                    return character.keys().toSet() == ["name", "career", "points", "race", "stats", "userId", "money", "ambitions"].toSet()
+                    return character.keys().toSet() == ["name", "career", "socialClass", "points", "race", "stats", "userId", "money", "ambitions"].toSet()
                         && character.userId == userId
                         && character.name is string && isNotBlank(character.name) && character.name.size() <= 50
                         && character.career is string && isNotBlank(character.career) && character.career.size() <= 50
+                        && character.socialClass is string && isNotBlank(character.socialClass) && character.socialClass.size() <= 50
                         && character.race is string && character.race in ["HUMAN", "HIGH_ELF", "DWARF", "HALFLING", "WOOD_ELF"]
                         && arePointsValid(character.points)
                         && areStatsValid(character.stats)

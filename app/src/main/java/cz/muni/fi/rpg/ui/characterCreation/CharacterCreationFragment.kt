@@ -108,7 +108,15 @@ class CharacterCreationFragment(
         launch {
             characters.save(
                 args.partyId,
-                Character(info.name, authentication.getUserId(), info.career, info.race, stats, points)
+                Character(
+                    name = info.name,
+                    userId = authentication.getUserId(),
+                    career = info.career,
+                    socialClass = info.socialClass,
+                    race = info.race,
+                    stats = stats,
+                    points = points
+                )
             )
             toast("Your character has been created")
 

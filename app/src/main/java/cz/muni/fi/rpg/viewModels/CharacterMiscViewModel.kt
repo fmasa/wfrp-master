@@ -27,4 +27,12 @@ class CharacterMiscViewModel(
 
         characters.save(characterId.partyId, character)
     }
+
+    suspend fun updateExperiencePoints(xpPoints: Int) {
+        val character = characters.get(characterId)
+
+        character.updatePoints(character.getPoints().copy(experience = xpPoints))
+
+        characters.save(characterId.partyId, character)
+    }
 }

@@ -58,6 +58,13 @@
             android:text="@string/race_wood_elf" />
     </RadioGroup>
 
+
+    <cz.muni.fi.rpg.ui.views.TextInput
+        android:id="@+id/socialClassInput"
+        app:inputLabel="@string/label_social_class"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
     <cz.muni.fi.rpg.ui.views.TextInput
         android:id="@+id/careerInput"
         android:layout_marginTop="16dp"

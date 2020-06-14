@@ -56,8 +56,7 @@
     <string name="label_name">Name</string>
     <string name="label_race">Race</string>
     <string name="label_career">Career</string>
-    <string name="hint_fill_name">Fill in the name</string>
-    <string name="hint_fill_career">Fill in the career</string>
+    <string name="label_social_class">Class</string>
 
     <string name="label_wounds">Wounds</string>
     <string name="label_fortune_points">Fortune</string>
