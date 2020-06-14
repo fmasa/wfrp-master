@@ -1,32 +1,52 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:orientation="vertical"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content"
+    android:orientation="horizontal"
     android:gravity="center"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content">
 
     <TextView
-        style="@style/TextAppearance.AppCompat.Subhead"
         android:id="@+id/label"
+        style="@style/TextAppearance.AppCompat.Subhead"
+        android:textAlignment="center"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        />
+
+    <ImageButton
+        android:id="@+id/characterPointDown"
+        style="@style/IconOnlyButton"
+        android:src="@drawable/ic_remove_circle"
+        android:tint="@color/colorGray"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        />
-    <ImageButton
-        style="@style/Widget.AppCompat.Button.Borderless"
-        android:id="@+id/characterPointUp"
-        android:src="@drawable/ic_arrow_up"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        app:layout_constraintEnd_toStartOf="@id/characterPointValue"
+        app:layout_constraintTop_toTopOf="@id/characterPointValue"
+        app:layout_constraintBottom_toBottomOf="@id/characterPointValue" />
+
     <TextView
         android:id="@+id/characterPointValue"
+        style="@style/TextAppearance.AppCompat.Large"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        style="@style/TextAppearance.AppCompat.Headline"
         android:text="\?"
-        />
+        app:layout_constraintTop_toBottomOf="@id/label"
+        app:layout_constraintStart_toStartOf="@id/label"
+        app:layout_constraintEnd_toEndOf="@id/label" />
+
     <ImageButton
-        style="@style/Widget.AppCompat.Button.Borderless"
-        android:id="@+id/characterPointDown"
-        android:src="@drawable/ic_arrow_down"
+        android:id="@+id/characterPointUp"
+        style="@style/IconOnlyButton"
+        android:src="@drawable/ic_add_circle"
+        android:tint="@color/colorGray"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
-</LinearLayout>
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toEndOf="@id/characterPointValue"
+        app:layout_constraintTop_toTopOf="@id/characterPointValue"
+        app:layout_constraintBottom_toBottomOf="@id/characterPointValue"
+        />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
