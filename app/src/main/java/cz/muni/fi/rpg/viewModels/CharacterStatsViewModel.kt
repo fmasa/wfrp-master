@@ -19,8 +19,6 @@ class CharacterStatsViewModel(
 
     val character: LiveData<Either<CharacterNotFound, Character>> = characters.getLive(characterId)
 
-    fun updateExperiencePoints(xpPoints: Int) = updatePoints { it.copy(experience = xpPoints) }
-
     fun updatePoints(mutation: (points: Points) -> Points) {
         launch {
             val character = characters.get(characterId)
