@@ -16,4 +16,8 @@ class SpellsViewModel(
     suspend fun saveSpell(spell: Spell) {
         spellRepository.save(characterId, spell)
     }
+
+    suspend fun removeSpell(spell: Spell) {
+        spellRepository.remove(characterId, spell.id)
+    }
 }
