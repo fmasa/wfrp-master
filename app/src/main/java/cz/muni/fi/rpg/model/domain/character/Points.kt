@@ -39,5 +39,5 @@ data class Points(
         resolve = min(resolve, newResilience)
     )
 
-    fun isHeavilyWounded() = wounds < 2;
+    fun isHeavilyWounded() = wounds < 2
 }

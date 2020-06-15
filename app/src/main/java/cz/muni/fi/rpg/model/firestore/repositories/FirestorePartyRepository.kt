@@ -21,7 +21,7 @@ internal class FirestorePartyRepository(
     private val mapper: AggregateMapper<Party>
 ) : PartyRepository {
     private val tag = this::class.simpleName
-    private val parties = firestore.collection("parties");
+    private val parties = firestore.collection("parties")
 
     override suspend fun save(party: Party) {
         val data = mapper.toDocumentData(party)
@@ -43,8 +43,8 @@ internal class FirestorePartyRepository(
 
     override suspend fun get(id: UUID): Party {
         try {
-            val party = parties.document(id.toString()).get().await();
-            return this.mapper.fromDocumentSnapshot(party);
+            val party = parties.document(id.toString()).get().await()
+            return this.mapper.fromDocumentSnapshot(party)
         } catch (e: FirebaseFirestoreException) {
             throw PartyNotFound(id, e)
         }

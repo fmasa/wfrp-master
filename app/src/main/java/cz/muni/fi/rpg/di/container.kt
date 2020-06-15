@@ -27,7 +27,6 @@ import cz.muni.fi.rpg.model.domain.talents.Talent
 import cz.muni.fi.rpg.model.domain.talents.TalentRepository
 import cz.muni.fi.rpg.model.firestore.*
 import cz.muni.fi.rpg.model.firestore.jackson.JacksonAggregateMapper
-import cz.muni.fi.rpg.model.firestore.repositories.*
 import cz.muni.fi.rpg.model.firestore.repositories.FirestoreCharacterRepository
 import cz.muni.fi.rpg.model.firestore.repositories.FirestoreInventoryItemRepository
 import cz.muni.fi.rpg.model.firestore.repositories.FirestorePartyRepository
@@ -64,6 +63,7 @@ val appModule = module {
     single {
         val firestore = Firebase.firestore
 
+        @Suppress("ConstantConditionIf")
         if (BuildConfig.FIRESTORE_EMULATOR_URL != "") {
             firestore.firestoreSettings = firestoreSettings {
                 host = BuildConfig.FIRESTORE_EMULATOR_URL

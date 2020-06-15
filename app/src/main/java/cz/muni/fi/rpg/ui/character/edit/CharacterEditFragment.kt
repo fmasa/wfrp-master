@@ -9,7 +9,6 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.model.domain.character.CharacterRepository
-import cz.muni.fi.rpg.model.domain.character.Stats
 import cz.muni.fi.rpg.ui.characterCreation.CharacterInfoFormFragment
 import cz.muni.fi.rpg.ui.characterCreation.CharacterStatsFormFragment
 import cz.muni.fi.rpg.ui.common.BaseFragment

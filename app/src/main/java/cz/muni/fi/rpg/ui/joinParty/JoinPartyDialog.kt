@@ -63,7 +63,7 @@ class JoinPartyDialog(
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        val activity = requireActivity();
+        val activity = requireActivity()
         val view = activity.layoutInflater.inflate(R.layout.dialog_join_party, null)
 
         view.partyNamePrompt.text = SpannableStringBuilder()
@@ -108,7 +108,7 @@ class JoinPartyDialog(
                 invitationError(getString(R.string.error_already_party_member), e)
             } catch (e: CancellationException) {
             } catch (e: Throwable) {
-                Log.e(tag, "Uknown invitation error", e)
+                Log.e(tag, getString(R.string.error_unkown), e)
                 invitationError(getString(R.string.error_unkown), e)
             }
 

@@ -18,7 +18,7 @@ internal class FirestoreInventoryItemRepository(
     private val mapper: AggregateMapper<InventoryItem>
 ) : InventoryItemRepository {
     private val tag = this::class.simpleName
-    private val parties = firestore.collection(COLLECTION_PARTIES);
+    private val parties = firestore.collection(COLLECTION_PARTIES)
 
     override fun findAllForCharacter(characterId: CharacterId) =
         QueryLiveData(

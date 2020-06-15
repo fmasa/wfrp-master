@@ -11,8 +11,8 @@ class PartyHolder(
     private val onClickListener: EntityListener<Party>
 ) : RecyclerView.ViewHolder(view) {
     fun bind(item: Party) {
-        view.party_item_title.text = item.name;
+        view.party_item_title.text = item.name
 
-        view.setOnClickListener { onClickListener(item) };
+        view.setOnClickListener { onClickListener(item) }
     }
 }

@@ -14,7 +14,7 @@ class TalentHolder(
     private val onRemoveListener: EntityListener<Talent>
 ) : RecyclerView.ViewHolder(view) {
     fun bind(talent: Talent) {
-        view.talentItemTitle.text = talent.name;
+        view.talentItemTitle.text = talent.name
         view.talentItemDescription.text = talent.description
         view.takenValue.text = talent.taken.toString()
 
@@ -41,6 +41,6 @@ class TalentHolder(
                     false
                 }
         }
-        view.setOnClickListener { onClickListener(talent) };
+        view.setOnClickListener { onClickListener(talent) }
     }
 }

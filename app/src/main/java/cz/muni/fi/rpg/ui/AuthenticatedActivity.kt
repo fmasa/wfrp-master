@@ -17,8 +17,6 @@ abstract class AuthenticatedActivity(@LayoutRes contentLayoutId: Int) :
 
     private lateinit var userId: String
 
-    private val authViewModel: AuthenticationViewModel by viewModel()
-
     private val authListener = FirebaseAuth.AuthStateListener {
         if (it.currentUser == null) {
             goToStartup()

@@ -10,8 +10,6 @@ import kotlinx.android.synthetic.main.view_money.view.*
 class MoneyView(context: Context, attrs: AttributeSet) : LinearLayout(context, attrs) {
     private var value: Money = Money.zero()
 
-    private var _value: Money = Money.zero()
-
     fun setValue(value: Money) {
         if (value == this.value) return
 

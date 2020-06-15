@@ -14,7 +14,7 @@ class StartupActivity : AppCompatActivity(R.layout.activity_startup) {
     override fun onStart() {
         super.onStart()
 
-        val currentUser = auth.currentUser;
+        val currentUser = auth.currentUser
 
         if (currentUser != null) {
             showPartyList()
@@ -27,7 +27,7 @@ class StartupActivity : AppCompatActivity(R.layout.activity_startup) {
 
                 showPartyList()
             } else {
-                Log.e(null, "Anonymous sign-in has failed", task.exception);
+                Log.e(null, "Anonymous sign-in has failed", task.exception)
                 Toast.makeText(baseContext, "Authentication failed.", Toast.LENGTH_SHORT).show()
             }
         }

@@ -19,7 +19,7 @@ data class InventoryItem(
     }
 
     init {
-        require(name.isNotBlank()) { "Inventory item must have non-blank name" };
+        require(name.isNotBlank()) { "Inventory item must have non-blank name" }
         require(quantity > 0) { "Inventory item quantity must be > 0" }
         require(name.length <= NAME_MAX_LENGTH) { "Maximum allowed name length is $NAME_MAX_LENGTH" }
         require(description.length <= DESCRIPTION_MAX_LENGTH) { "Maximum allowed description length is $DESCRIPTION_MAX_LENGTH" }
