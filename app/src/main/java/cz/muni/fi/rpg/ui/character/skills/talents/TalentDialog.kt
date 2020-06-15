@@ -7,15 +7,14 @@ import androidx.appcompat.app.AlertDialog
 import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
 import cz.muni.fi.rpg.R
+import cz.muni.fi.rpg.common.EntityListener
 import cz.muni.fi.rpg.model.domain.talents.Talent
 import cz.muni.fi.rpg.ui.common.forms.Form
 import kotlinx.android.synthetic.main.dialog_talent.view.*
 import java.util.*
 
-typealias OnSuccessListener = (Talent) -> Unit
-
 class TalentDialog : DialogFragment() {
-    private var onSuccessListener: OnSuccessListener = {}
+    private var onSuccessListener: EntityListener<Talent> = {}
 
     companion object {
         fun newInstance(existingTalent: Talent?): TalentDialog {
@@ -29,7 +28,7 @@ class TalentDialog : DialogFragment() {
 
     val talent: Talent? by lazy { arguments?.getParcelable<Talent>("talent") }
 
-    fun setOnSuccessListener(listener: OnSuccessListener): TalentDialog {
+    fun setOnSuccessListener(listener: EntityListener<Talent>): TalentDialog {
         onSuccessListener = listener
 
         return this

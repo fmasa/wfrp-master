@@ -10,16 +10,15 @@ import androidx.appcompat.app.AlertDialog
 import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
 import cz.muni.fi.rpg.R
+import cz.muni.fi.rpg.common.EntityListener
 import cz.muni.fi.rpg.model.domain.skills.Skill
 import cz.muni.fi.rpg.model.domain.skills.SkillCharacteristic
 import cz.muni.fi.rpg.ui.common.forms.Form
 import kotlinx.android.synthetic.main.dialog_skill.view.*
 import java.util.UUID
 
-typealias OnSuccessListener = (Skill) -> Unit
-
 class SkillDialog : DialogFragment() {
-    private var onSuccessListener: OnSuccessListener = {}
+    private var onSuccessListener: EntityListener<Skill> = {}
 
     companion object {
         fun newInstance(existingSkill: Skill?): SkillDialog {
@@ -33,7 +32,7 @@ class SkillDialog : DialogFragment() {
 
     val skill: Skill? by lazy { arguments?.getParcelable<Skill>("skill") }
 
-    fun setOnSuccessListener(listener: OnSuccessListener): SkillDialog {
+    fun setOnSuccessListener(listener: EntityListener<Skill>): SkillDialog {
         onSuccessListener = listener
 
         return this

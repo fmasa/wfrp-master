@@ -15,7 +15,7 @@ interface TalentRepository {
 
     /**
      * Removes given talent from character's talent list
-     * or does nothing if given talent is not associated to user
+     * or does nothing if given talent is not associated to user or it does not exist
      */
     suspend fun remove(characterId: CharacterId, talentId: UUID)
 

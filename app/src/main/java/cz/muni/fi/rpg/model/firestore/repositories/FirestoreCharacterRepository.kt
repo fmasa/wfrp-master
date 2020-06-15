@@ -1,4 +1,4 @@
-package cz.muni.fi.rpg.model.firestore
+package cz.muni.fi.rpg.model.firestore.repositories
 
 import android.util.Log
 import androidx.lifecycle.LiveData
@@ -10,6 +10,7 @@ import cz.muni.fi.rpg.model.domain.character.Character
 import cz.muni.fi.rpg.model.domain.character.CharacterId
 import cz.muni.fi.rpg.model.domain.character.CharacterNotFound
 import cz.muni.fi.rpg.model.domain.character.CharacterRepository
+import cz.muni.fi.rpg.model.firestore.*
 import kotlinx.coroutines.tasks.await
 import java.util.*
 
@@ -41,7 +42,11 @@ internal class FirestoreCharacterRepository(
     }
 
     override fun getLive(characterId: CharacterId): LiveData<Either<CharacterNotFound, Character>> {
-        return DocumentLiveData(characters(characterId.partyId).document(characterId.userId)) {
+        return DocumentLiveData(
+            characters(
+                characterId.partyId
+            ).document(characterId.userId)
+        ) {
             it.bimap({ e -> CharacterNotFound(characterId, e) }, mapper::fromDocumentSnapshot)
         }
     }

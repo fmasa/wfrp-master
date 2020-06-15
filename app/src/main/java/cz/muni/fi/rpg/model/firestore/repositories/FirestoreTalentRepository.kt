@@ -1,10 +1,11 @@
-package cz.muni.fi.rpg.model.firestore
+package cz.muni.fi.rpg.model.firestore.repositories
 
 import androidx.lifecycle.LiveData
 import com.google.firebase.firestore.FirebaseFirestore
 import cz.muni.fi.rpg.model.domain.character.CharacterId
 import cz.muni.fi.rpg.model.domain.talents.Talent
 import cz.muni.fi.rpg.model.domain.talents.TalentRepository
+import cz.muni.fi.rpg.model.firestore.*
 import kotlinx.coroutines.tasks.await
 import java.util.*
 
@@ -13,7 +14,11 @@ internal class FirestoreTalentRepository(
     private val mapper: AggregateMapper<Talent>
 ) : TalentRepository {
     override fun findAllForCharacter(characterId: CharacterId): LiveData<List<Talent>> {
-        return QueryLiveData(talentsCollection(characterId), mapper)
+        return QueryLiveData(
+            talentsCollection(
+                characterId
+            ), mapper
+        )
     }
 
     override suspend fun remove(characterId: CharacterId, talentId: UUID) {

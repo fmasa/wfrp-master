@@ -1,4 +1,4 @@
-package cz.muni.fi.rpg.model.firestore
+package cz.muni.fi.rpg.model.firestore.repositories
 
 import android.util.Log
 import androidx.lifecycle.LiveData
@@ -10,6 +10,9 @@ import cz.muni.fi.rpg.model.domain.common.CouldNotConnectToBackend
 import cz.muni.fi.rpg.model.domain.party.Party
 import cz.muni.fi.rpg.model.domain.party.PartyNotFound
 import cz.muni.fi.rpg.model.domain.party.PartyRepository
+import cz.muni.fi.rpg.model.firestore.AggregateMapper
+import cz.muni.fi.rpg.model.firestore.DocumentLiveData
+import cz.muni.fi.rpg.model.firestore.QueryLiveData
 import kotlinx.coroutines.tasks.await
 import java.util.*
 
@@ -48,11 +51,22 @@ internal class FirestorePartyRepository(
     }
 
     override fun getLive(id: UUID): LiveData<Either<PartyNotFound, Party>> {
-        return DocumentLiveData(parties.document(id.toString())) {
-            it.bimap({ e -> PartyNotFound(id, e) }, { snapshot -> mapper.fromDocumentSnapshot(snapshot) })
+        return DocumentLiveData(
+            parties.document(
+                id.toString()
+            )
+        ) {
+            it.bimap(
+                { e -> PartyNotFound(id, e) },
+                { snapshot -> mapper.fromDocumentSnapshot(snapshot) })
         }
     }
 
     override fun forUser(userId: String): LiveData<List<Party>> =
-        QueryLiveData(parties.whereArrayContains("users", userId), mapper)
+        QueryLiveData(
+            parties.whereArrayContains(
+                "users",
+                userId
+            ), mapper
+        )
 }

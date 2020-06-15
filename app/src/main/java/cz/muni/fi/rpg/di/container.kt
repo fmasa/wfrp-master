@@ -21,14 +21,19 @@ import cz.muni.fi.rpg.model.domain.party.Party
 import cz.muni.fi.rpg.model.domain.party.PartyRepository
 import cz.muni.fi.rpg.model.domain.skills.Skill
 import cz.muni.fi.rpg.model.domain.skills.SkillRepository
+import cz.muni.fi.rpg.model.domain.spells.Spell
+import cz.muni.fi.rpg.model.domain.spells.SpellRepository
 import cz.muni.fi.rpg.model.domain.talents.Talent
 import cz.muni.fi.rpg.model.domain.talents.TalentRepository
 import cz.muni.fi.rpg.model.firestore.*
-import cz.muni.fi.rpg.model.firestore.FirestoreCharacterRepository
-import cz.muni.fi.rpg.model.firestore.FirestoreInventoryItemRepository
-import cz.muni.fi.rpg.model.firestore.FirestorePartyRepository
-import cz.muni.fi.rpg.model.firestore.FirestoreSkillRepository
 import cz.muni.fi.rpg.model.firestore.jackson.JacksonAggregateMapper
+import cz.muni.fi.rpg.model.firestore.repositories.*
+import cz.muni.fi.rpg.model.firestore.repositories.FirestoreCharacterRepository
+import cz.muni.fi.rpg.model.firestore.repositories.FirestoreInventoryItemRepository
+import cz.muni.fi.rpg.model.firestore.repositories.FirestorePartyRepository
+import cz.muni.fi.rpg.model.firestore.repositories.FirestoreSkillRepository
+import cz.muni.fi.rpg.model.firestore.repositories.FirestoreSpellRepository
+import cz.muni.fi.rpg.model.firestore.repositories.FirestoreTalentRepository
 import cz.muni.fi.rpg.ui.character.CharacterFragment
 import cz.muni.fi.rpg.ui.character.CharacterMiscFragment
 import cz.muni.fi.rpg.ui.character.CharacterStatsFragment
@@ -77,26 +82,52 @@ val appModule = module {
 
         mapper
     }
+
     /**
      * Repositories
      */
     single<InventoryItemRepository> {
-        FirestoreInventoryItemRepository(get(), aggregateMapper(InventoryItem::class))
+        FirestoreInventoryItemRepository(
+            get(),
+            aggregateMapper(InventoryItem::class)
+        )
     }
     single<CharacterRepository> {
         CharacterRepositoryIdentityMap(
             10,
-            FirestoreCharacterRepository(get(), aggregateMapper(Character::class))
+            FirestoreCharacterRepository(
+                get(),
+                aggregateMapper(Character::class)
+            )
         )
     }
     single<PartyRepository> {
         PartyRepositoryIdentityMap(
             10,
-            FirestorePartyRepository(get(), aggregateMapper(Party::class))
+            FirestorePartyRepository(
+                get(),
+                aggregateMapper(Party::class)
+            )
         )
     }
-    single<SkillRepository> { FirestoreSkillRepository(get(), aggregateMapper(Skill::class)) }
-    single<TalentRepository> { FirestoreTalentRepository(get(), aggregateMapper(Talent::class)) }
+    single<SkillRepository> {
+        FirestoreSkillRepository(
+            get(),
+            aggregateMapper(Skill::class)
+        )
+    }
+    single<TalentRepository> {
+        FirestoreTalentRepository(
+            get(),
+            aggregateMapper(Talent::class)
+        )
+    }
+    single<SpellRepository> {
+        FirestoreSpellRepository(
+            get(),
+            aggregateMapper(Spell::class)
+        )
+    }
 
     /**
      * ViewModels
@@ -107,6 +138,7 @@ val appModule = module {
     viewModel { (characterId: CharacterId) -> CharacterViewModel(characterId, get())}
     viewModel { (characterId: CharacterId) -> InventoryViewModel(characterId, get(), get()) }
     viewModel { (characterId: CharacterId) -> SkillsViewModel(characterId, get()) }
+    viewModel { (characterId: CharacterId) -> SpellsViewModel(characterId, get()) }
     viewModel { (characterId: CharacterId) -> TalentsViewModel(characterId, get()) }
     viewModel { AuthenticationViewModel(get()) }
 
