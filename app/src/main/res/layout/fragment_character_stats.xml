@@ -50,6 +50,7 @@
                         android:layout_height="wrap_content"
                         app:constraint_referenced_ids="wounds,corruptionPoints,sinPoints"
                         app:flow_horizontalAlign="end"
+                        app:flow_wrapMode="aligned"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
