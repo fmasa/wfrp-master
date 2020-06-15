@@ -66,7 +66,7 @@
         android:id="@+id/weaponSkillLabel"
         style="@style/InputLabel"
         android:layout_width="wrap_content"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
         android:text="@string/label_weapon_skill"
         app:layout_constraintBottom_toBottomOf="@id/weaponSkillInput"
         app:layout_constraintStart_toStartOf="parent"
