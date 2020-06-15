@@ -12,4 +12,8 @@ class SpellsViewModel(
 ) : ViewModel() {
 
     val spells: LiveData<List<Spell>> = spellRepository.findAllForCharacter(characterId)
+
+    suspend fun saveSpell(spell: Spell) {
+        spellRepository.save(characterId, spell)
+    }
 }

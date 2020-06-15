@@ -8,9 +8,12 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.observe
 import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.model.domain.character.CharacterId
+import cz.muni.fi.rpg.ui.character.spells.SpellDialog
 import cz.muni.fi.rpg.ui.common.toggleVisibility
 import cz.muni.fi.rpg.viewModels.SpellsViewModel
+import kotlinx.android.synthetic.main.fragment_character_spells.*
 import kotlinx.android.synthetic.main.fragment_character_spells.view.*
+import kotlinx.android.synthetic.main.fragment_character_spells.view.addNewSpellButton
 import org.koin.android.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 
@@ -31,6 +34,11 @@ class CharacterSpellsFragment : Fragment(R.layout.fragment_character_spells) {
     private val viewModel: SpellsViewModel by viewModel { parametersOf(characterId) }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        addNewSpellButton.setOnClickListener {
+            SpellDialog.newInstance(characterId, null)
+                .show(childFragmentManager, "SpellDialog")
+        }
+
         viewModel.spells.observe(viewLifecycleOwner) {
             val noSpells = it.isEmpty()
 

@@ -1,7 +1,10 @@
 package cz.muni.fi.rpg.model.domain.spells
 
+import android.os.Parcelable
+import kotlinx.android.parcel.Parcelize
 import java.util.UUID
 
+@Parcelize
 data class Spell(
     val id: UUID,
     val name: String,
@@ -10,7 +13,7 @@ data class Spell(
     val duration: String,
     val castingNumber: Int,
     val effect: String
-) {
+): Parcelable {
     companion object {
         const val NAME_MAX_LENGTH = 50
         const val RANGE_MAX_LENGTH = 50
