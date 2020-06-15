@@ -34,7 +34,11 @@ class CharacterFragment : BaseFragment(R.layout.fragment_character) {
 
         viewModel.character.observe(viewLifecycleOwner) {
             it.mapLeft { openCharacterCreation() }
-            it.map { character -> setTitle(character.getName()) }
+            it.map {
+                character -> setTitle(character.getName())
+                mainView.visibility = View.VISIBLE
+                progress.visibility = View.GONE
+            }
         }
 
         partyVm.party.right()
