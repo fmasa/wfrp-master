@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:ignore="MissingConstraints">
+
+    <androidx.constraintlayout.helper.widget.Flow
+        android:layout_margin="16dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:constraint_referenced_ids="maxWoundsInput, fatePointsInput, resiliencePointsInput"
+        app:flow_horizontalGap="16dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <cz.muni.fi.rpg.ui.views.TextInput
+        android:id="@+id/maxWoundsInput"
+        android:layout_width="0dp"
+        android:maxLength="3"
+        android:inputType="number"
+        android:layout_height="wrap_content"
+        app:inputLabel="@string/label_wounds" />
+
+    <cz.muni.fi.rpg.ui.views.TextInput
+        android:id="@+id/fatePointsInput"
+        android:layout_width="0dp"
+        android:maxLength="3"
+        android:inputType="number"
+        android:layout_height="wrap_content"
+        app:inputLabel="@string/label_fate_points" />
+
+    <cz.muni.fi.rpg.ui.views.TextInput
+        android:id="@+id/resiliencePointsInput"
+        android:layout_width="0dp"
+        android:maxLength="3"
+        android:inputType="number"
+        android:layout_height="wrap_content"
+        app:inputLabel="@string/label_resilience" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

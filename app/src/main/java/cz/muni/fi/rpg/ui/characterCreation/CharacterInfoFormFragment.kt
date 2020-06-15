@@ -1,17 +1,16 @@
 package cz.muni.fi.rpg.ui.characterCreation
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.View
-
 import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.model.domain.character.Character
 import cz.muni.fi.rpg.model.domain.character.Race
 import cz.muni.fi.rpg.ui.common.forms.Form
 import kotlinx.android.synthetic.main.fragment_character_info_form.*
 
-class CharacterInfoFormFragment : Fragment(R.layout.fragment_character_info_form) {
-    var character : Character? = null
+class CharacterInfoFormFragment :
+    CharacterFormStep<CharacterInfoFormFragment.CharacterInfo>(R.layout.fragment_character_info_form) {
+    var character: Character? = null
 
     data class CharacterInfo(
         val name: String,
@@ -25,7 +24,7 @@ class CharacterInfoFormFragment : Fragment(R.layout.fragment_character_info_form
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        form = Form().apply {
+        form = Form(requireContext()).apply {
             addTextInput(nameInput).apply {
                 setNotBlank(getString(R.string.error_cannot_be_empty))
                 setMaxLength(Character.NAME_MAX_LENGTH)
@@ -45,7 +44,7 @@ class CharacterInfoFormFragment : Fragment(R.layout.fragment_character_info_form
         setDefaultValues()
     }
 
-    fun submit(): CharacterInfo? {
+    override fun submit(): CharacterInfo? {
         if (!form.validate()) {
             return null
         }
@@ -53,7 +52,7 @@ class CharacterInfoFormFragment : Fragment(R.layout.fragment_character_info_form
         return createCharacterInfo()
     }
 
-    fun setCharacterData(character: Character) {
+    override fun setCharacterData(character: Character) {
         this.character = character
         setDefaultValues()
     }
@@ -79,7 +78,7 @@ class CharacterInfoFormFragment : Fragment(R.layout.fragment_character_info_form
         val career = careerInput.getValue()
         val socialClass = socialClassInput.getValue()
 
-        val race: Race = when(radioGroup.checkedRadioButtonId) {
+        val race: Race = when (radioGroup.checkedRadioButtonId) {
             R.id.radioButtonRaceHuman -> Race.HUMAN
             R.id.radioButtonRaceDwarf -> Race.DWARF
             R.id.radioButtonRaceElf -> Race.HIGH_ELF

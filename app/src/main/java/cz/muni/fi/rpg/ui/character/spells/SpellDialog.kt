@@ -51,7 +51,7 @@ class SpellDialog : DialogFragment(),
 
         val view = inflater.inflate(R.layout.dialog_spell, null);
 
-        val form = Form().apply {
+        val form = Form(requireContext()).apply {
             addTextInput(view.spellNameInput).apply {
                 setMaxLength(Spell.NAME_MAX_LENGTH)
                 setNotBlank(getString(R.string.error_cannot_be_empty))

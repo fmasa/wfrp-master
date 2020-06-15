@@ -5,115 +5,317 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="24dp"
-    tools:ignore="MissingConstraints"
-    tools:context=".ui.characterCreation.CharacterStatsFormFragment">
+    tools:context=".ui.characterCreation.CharacterStatsFormFragment"
+    tools:ignore="MissingConstraints">
+
+    <TextView
+        android:id="@+id/currentLabel"
+        style="@style/InputLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/label_current"
+        app:layout_constraintEnd_toEndOf="@id/weaponSkillInput"
+        app:layout_constraintStart_toStartOf="@id/weaponSkillInput"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        style="@style/InputLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/label_max"
+        app:layout_constraintEnd_toEndOf="@id/maxWeaponSkillInput"
+        app:layout_constraintStart_toStartOf="@id/maxWeaponSkillInput"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.constraintlayout.helper.widget.Flow
         android:id="@+id/column1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:constraint_referenced_ids="weaponSkillInput, ballisticSkillInput, strengthInput, toughnessInput, fatePointsInput"
-        app:flow_maxElementsWrap="1"
-        app:flow_verticalBias="0"
-        app:flow_verticalGap="16dp"
+        android:layout_marginTop="10dp"
+        app:flow_horizontalGap="8dp"
+        app:constraint_referenced_ids="
+            weaponSkillInput,
+            maxWeaponSkillInput,
+            ballisticSkillInput,
+            maxBallisticSkillInput,
+            strengthInput,
+            maxStrengthInput,
+            toughnessInput,
+            maxToughnessInput,
+            agilityInput,
+            maxAgilityInput,
+            intelligenceInput,
+            maxIntelligenceInput,
+            willPowerInput,
+            maxWillPowerInput,
+            fellowshipInput,
+            maxFellowshipInput,
+            initiativeInput,
+            maxInitiativeInput,
+            dexterityInput,
+            maxDexterityInput
+        "
+        app:flow_horizontalAlign="start"
+        app:flow_maxElementsWrap="2"
         app:flow_wrapMode="aligned"
-        app:layout_constraintEnd_toStartOf="@id/column2"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_chainStyle="spread"
+        app:layout_constraintTop_toBottomOf="@id/currentLabel" />
+
+    <TextView
+        android:id="@+id/weaponSkillLabel"
+        style="@style/InputLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:text="@string/label_weapon_skill"
+        app:layout_constraintBottom_toBottomOf="@id/weaponSkillInput"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="@id/weaponSkillInput" />
 
     <cz.muni.fi.rpg.ui.views.TextInput
         android:id="@+id/weaponSkillInput"
         android:maxLength="3"
+        android:textAlignment="center"
+        android:gravity="center"
         android:inputType="number"
-        android:layout_width="120dp"
-        android:layout_height="wrap_content"
-        app:inputLabel="@string/label_weapon_skill" />
+        android:layout_width="80dp"
+        android:layout_height="wrap_content" />
+
+    <cz.muni.fi.rpg.ui.views.TextInput
+        android:id="@+id/maxWeaponSkillInput"
+        android:maxLength="3"
+        android:inputType="number"
+        android:layout_width="80dp"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:id="@+id/ballisticSkillLabel"
+        style="@style/InputLabel"
+        android:gravity="center_vertical"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:text="@string/label_ballistic_skill"
+        app:layout_constraintBottom_toBottomOf="@id/ballisticSkillInput"
+        app:layout_constraintStart_toStartOf="@id/weaponSkillLabel"
+        app:layout_constraintTop_toTopOf="@id/ballisticSkillInput" />
 
     <cz.muni.fi.rpg.ui.views.TextInput
         android:id="@+id/ballisticSkillInput"
         android:maxLength="3"
         android:inputType="number"
-        android:layout_width="120dp"
-        android:layout_height="wrap_content"
-        app:inputLabel="@string/label_ballistic_skill" />
+        android:layout_width="80dp"
+        android:layout_height="wrap_content" />
+
+    <cz.muni.fi.rpg.ui.views.TextInput
+        android:id="@+id/maxBallisticSkillInput"
+        android:maxLength="3"
+        android:inputType="number"
+        android:layout_width="80dp"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:id="@+id/strengthLabel"
+        style="@style/InputLabel"
+        android:gravity="center_vertical"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:text="@string/label_strength"
+        app:layout_constraintBottom_toBottomOf="@id/strengthInput"
+        app:layout_constraintStart_toStartOf="@id/weaponSkillLabel"
+        app:layout_constraintTop_toTopOf="@id/strengthInput" />
 
     <cz.muni.fi.rpg.ui.views.TextInput
         android:id="@+id/strengthInput"
         android:maxLength="3"
         android:inputType="number"
-        android:layout_width="120dp"
-        android:layout_height="wrap_content"
-        app:inputLabel="@string/label_strength" />
+        android:layout_width="80dp"
+        android:layout_height="wrap_content" />
+
+    <cz.muni.fi.rpg.ui.views.TextInput
+        android:id="@+id/maxStrengthInput"
+        android:maxLength="3"
+        android:inputType="number"
+        android:layout_width="80dp"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:id="@+id/toughnessLabel"
+        style="@style/InputLabel"
+        android:gravity="center_vertical"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:text="@string/label_toughness"
+        app:layout_constraintBottom_toBottomOf="@id/toughnessInput"
+        app:layout_constraintStart_toStartOf="@id/weaponSkillLabel"
+        app:layout_constraintTop_toTopOf="@id/toughnessInput" />
 
     <cz.muni.fi.rpg.ui.views.TextInput
         android:id="@+id/toughnessInput"
         android:maxLength="3"
         android:inputType="number"
-        android:layout_width="120dp"
-        android:layout_height="wrap_content"
-        app:inputLabel="@string/label_toughness" />
+        android:layout_width="80dp"
+        android:layout_height="wrap_content" />
 
     <cz.muni.fi.rpg.ui.views.TextInput
-        android:id="@+id/fatePointsInput"
+        android:id="@+id/maxToughnessInput"
         android:maxLength="3"
         android:inputType="number"
-        android:layout_width="120dp"
-        android:layout_height="wrap_content"
-        app:inputLabel="@string/label_fate_points" />
+        android:layout_width="80dp"
+        android:layout_height="wrap_content" />
 
-
-    <androidx.constraintlayout.helper.widget.Flow
-        android:id="@+id/column2"
+    <TextView
+        android:id="@+id/agilityLabel"
+        style="@style/InputLabel"
+        android:gravity="center_vertical"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:constraint_referenced_ids="agilityInput, intelligenceInput,willPowerInput,fellowshipInput,woundsInput"
-        app:flow_maxElementsWrap="1"
-        app:flow_verticalBias="0"
-        app:flow_verticalGap="16dp"
-        app:flow_wrapMode="aligned"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_chainStyle="spread"
-        app:layout_constraintStart_toEndOf="@id/column1"
-        app:layout_constraintTop_toTopOf="@id/column1" />
+        android:layout_height="0dp"
+        android:text="@string/label_agility"
+        app:layout_constraintBottom_toBottomOf="@id/agilityInput"
+        app:layout_constraintStart_toStartOf="@id/weaponSkillLabel"
+        app:layout_constraintTop_toTopOf="@id/agilityInput" />
 
     <cz.muni.fi.rpg.ui.views.TextInput
         android:id="@+id/agilityInput"
         android:maxLength="3"
         android:inputType="number"
-        android:layout_width="120dp"
-        android:layout_height="wrap_content"
-        app:inputLabel="@string/label_agility" />
+        android:layout_width="80dp"
+        android:layout_height="wrap_content" />
+
+    <cz.muni.fi.rpg.ui.views.TextInput
+        android:id="@+id/maxAgilityInput"
+        android:maxLength="3"
+        android:inputType="number"
+        android:layout_width="80dp"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:id="@+id/intelligenceLabel"
+        style="@style/InputLabel"
+        android:gravity="center_vertical"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:text="@string/label_intelligence"
+        app:layout_constraintBottom_toBottomOf="@id/intelligenceInput"
+        app:layout_constraintStart_toStartOf="@id/weaponSkillLabel"
+        app:layout_constraintTop_toTopOf="@id/intelligenceInput" />
 
     <cz.muni.fi.rpg.ui.views.TextInput
         android:id="@+id/intelligenceInput"
         android:maxLength="3"
         android:inputType="number"
-        android:layout_width="120dp"
-        android:layout_height="wrap_content"
-        app:inputLabel="@string/label_intelligence" />
+        android:layout_width="80dp"
+        android:layout_height="wrap_content" />
+
+    <cz.muni.fi.rpg.ui.views.TextInput
+        android:id="@+id/maxIntelligenceInput"
+        android:maxLength="3"
+        android:inputType="number"
+        android:layout_width="80dp"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:id="@+id/willPowerLabel"
+        style="@style/InputLabel"
+        android:gravity="center_vertical"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:text="@string/label_will_power"
+        app:layout_constraintBottom_toBottomOf="@id/willPowerInput"
+        app:layout_constraintStart_toStartOf="@id/weaponSkillLabel"
+        app:layout_constraintTop_toTopOf="@id/willPowerInput" />
 
     <cz.muni.fi.rpg.ui.views.TextInput
         android:id="@+id/willPowerInput"
         android:maxLength="3"
         android:inputType="number"
-        android:layout_width="120dp"
-        android:layout_height="wrap_content"
-        app:inputLabel="@string/label_will_power" />
+        android:layout_width="80dp"
+        android:layout_height="wrap_content" />
+
+    <cz.muni.fi.rpg.ui.views.TextInput
+        android:id="@+id/maxWillPowerInput"
+        android:maxLength="3"
+        android:inputType="number"
+        android:layout_width="80dp"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:id="@+id/fellowshipLabel"
+        style="@style/InputLabel"
+        android:gravity="center_vertical"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:text="@string/label_fellowship"
+        app:layout_constraintBottom_toBottomOf="@id/fellowshipInput"
+        app:layout_constraintStart_toStartOf="@id/weaponSkillLabel"
+        app:layout_constraintTop_toTopOf="@id/fellowshipInput" />
 
     <cz.muni.fi.rpg.ui.views.TextInput
         android:id="@+id/fellowshipInput"
         android:maxLength="3"
         android:inputType="number"
-        android:layout_width="120dp"
-        android:layout_height="wrap_content"
-        app:inputLabel="@string/label_fellowship" />
+        android:layout_width="80dp"
+        android:layout_height="wrap_content" />
 
     <cz.muni.fi.rpg.ui.views.TextInput
-        android:id="@+id/woundsInput"
+        android:id="@+id/maxFellowshipInput"
         android:maxLength="3"
         android:inputType="number"
-        android:layout_width="120dp"
-        android:layout_height="wrap_content"
-        app:inputLabel="@string/label_wounds" />
+        android:layout_width="80dp"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:id="@+id/initiativeLabel"
+        style="@style/InputLabel"
+        android:gravity="center_vertical"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:text="@string/label_initiative"
+        app:layout_constraintBottom_toBottomOf="@id/initiativeInput"
+        app:layout_constraintStart_toStartOf="@id/weaponSkillLabel"
+        app:layout_constraintTop_toTopOf="@id/initiativeInput" />
+
+    <cz.muni.fi.rpg.ui.views.TextInput
+        android:id="@+id/initiativeInput"
+        style="@style/InputLabel"
+        android:maxLength="3"
+        android:inputType="number"
+        android:layout_width="80dp"
+        android:layout_height="wrap_content" />
+
+
+    <cz.muni.fi.rpg.ui.views.TextInput
+        android:id="@+id/maxInitiativeInput"
+        style="@style/InputLabel"
+        android:maxLength="3"
+        android:inputType="number"
+        android:layout_width="80dp"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:id="@+id/dexterityLabel"
+        style="@style/InputLabel"
+        android:gravity="center_vertical"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:text="@string/label_dexterity"
+        app:layout_constraintBottom_toBottomOf="@id/dexterityInput"
+        app:layout_constraintStart_toStartOf="@id/weaponSkillLabel"
+        app:layout_constraintTop_toTopOf="@id/dexterityInput" />
+
+    <cz.muni.fi.rpg.ui.views.TextInput
+        android:id="@+id/dexterityInput"
+        style="@style/InputLabel"
+        android:maxLength="3"
+        android:inputType="number"
+        android:layout_width="80dp"
+        android:layout_height="wrap_content" />
+
+
+    <cz.muni.fi.rpg.ui.views.TextInput
+        android:id="@+id/maxDexterityInput"
+        style="@style/InputLabel"
+        android:maxLength="3"
+        android:inputType="number"
+        android:layout_width="80dp"
+        android:layout_height="wrap_content" />
 </androidx.constraintlayout.widget.ConstraintLayout>

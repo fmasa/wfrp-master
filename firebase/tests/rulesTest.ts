@@ -67,6 +67,18 @@ function validCharacter (userId: string) {
             willPower: 10,
             fellowship: 10,
         },
+        maxStats: {
+            weaponSkill: 35,
+            dexterity: 20,
+            initiative: 10,
+            ballisticSkill: 35,
+            strength: 10,
+            toughness: 10,
+            agility: 10,
+            intelligence: 10,
+            willPower: 10,
+            fellowship: 10,
+        },
         points: {
             corruption: 2,
             experience: 100,
@@ -475,9 +487,13 @@ class Parties extends Suite {
             // Missing stat
             await firebase.assertFails(character.set(newData));
 
-            newData.stats[stat] = -1;
 
             // Negative stat
+            newData.stats[stat] = -1;
+            await firebase.assertFails(character.set(newData));
+
+            // Current stat larger than max value
+            newData.stats[stat] = newData.maxStats[stat] + 1
             await firebase.assertFails(character.set(newData));
         }
     }

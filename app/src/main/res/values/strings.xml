@@ -45,8 +45,7 @@
     <string name="label_spell_range">Range</string>
 
 
-    <string name="title_character_creation_info">Character info</string>
-    <string name="title_character_creation_stats">Character stats</string>
+    <string name="title_character_creation_info">Basic info</string>
 
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="qr_scan_prompt">Scan the code provided by your GM</string>
@@ -69,6 +68,7 @@
     <string name="label_social_class">Class</string>
 
     <string name="label_wounds">Wounds</string>
+    <string name="label_max_wounds">Max. Wounds</string>
     <string name="label_fortune_points">Fortune</string>
     <string name="label_fate_points">Fate</string>
 
@@ -124,6 +124,7 @@
     <string name="error_value_is_0">Value cannot be 0</string>
     <string name="error_cannot_be_empty">Cannot be empty!</string>
     <string name="error_value_over_100">Cannot be higher than 100</string>
+    <string name="error_value_over_max">Cannot be higher than maximum value</string>
     <string name="error_party_creation_no_connection">You need to be connected to internet to create parties</string>
     <string name="title_character_skills">Skills</string>
     <string name="title_character_talents">Talents</string>
@@ -164,4 +165,7 @@
     <string name="note_ambition_not_filled">Ambition not filled</string>
     <string name="title_misc">Misc</string>
     <string name="spell_casting_number_shortcut">CN</string>
+    <string name="title_character_creation_points">Point pools</string>
+    <string name="label_current">Current</string>
+    <string name="label_max">Max</string>
 </resources>

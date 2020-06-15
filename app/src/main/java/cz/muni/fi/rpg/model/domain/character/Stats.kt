@@ -12,12 +12,6 @@ data class Stats(
     val willPower: Int,
     val fellowship: Int
 ) {
-    val strengthBonus: Int
-        get() = strength / 10
-
-    val toughnessBonus: Int
-        get() = toughness / 10
-
     init {
         require(
             listOf(
@@ -33,5 +27,18 @@ data class Stats(
                 fellowship
             ).all { it in 0..100 }
         )
+    }
+
+    fun allLowerOrEqualTo(other: Stats): Boolean {
+        return weaponSkill <= other.weaponSkill
+                && dexterity <= other.dexterity
+                && ballisticSkill <= other.ballisticSkill
+                && strength <= other.strength
+                && toughness <= other.toughness
+                && agility <= other.agility
+                && intelligence <= other.intelligence
+                && initiative <= other.initiative
+                && willPower <= other.willPower
+                && fellowship <= other.fellowship
     }
 }

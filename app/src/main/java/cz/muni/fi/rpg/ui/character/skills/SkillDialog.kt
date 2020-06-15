@@ -50,7 +50,7 @@ class SkillDialog : DialogFragment() {
             .map { getString(it.getReadableNameId()) }
             .sorted()
 
-        val form = Form().apply {
+        val form = Form(requireContext()).apply {
             addTextInput(view.skillNameLayout).apply {
                 setMaxLength(Skill.NAME_MAX_LENGTH)
                 setNotBlank(getString(R.string.error_skill_name_empty))
