@@ -33,10 +33,7 @@ class PartyListFragment(
             if (it.gameMasterId == authViewModel.getUserId()) {
                 openGameMasterFragment(it.id)
             } else {
-                findNavController().navigate(
-                    PartyListFragmentDirections
-                        .openCharacter(CharacterId(partyId = it.id, userId = userId))
-                )
+                openCharacter(it.id, userId)
             }
         }
         partyListRecycler.adapter = adapter
@@ -58,7 +55,11 @@ class PartyListFragment(
         assembleNewParty.setOnClickListener {
             AssemblePartyDialog(
                 userId,
-                { party -> openGameMasterFragment(party.id) },
+                { party ->
+                    if (party.isSinglePlayer())
+                        openCharacter(party.id, userId)
+                    else openGameMasterFragment(party.id)
+                },
                 parties
             ).show(childFragmentManager, "AssemblePartyDialog")
             fabMenu.collapse()
@@ -72,4 +73,11 @@ class PartyListFragment(
 
     private fun openGameMasterFragment(partyId: UUID) = findNavController()
         .navigate(PartyListFragmentDirections.startGameMasterFragment(partyId))
+
+    private fun openCharacter(partyId: UUID, userId: String) {
+        findNavController().navigate(
+            PartyListFragmentDirections
+                .openCharacter(CharacterId(partyId = partyId, userId = userId))
+        )
+    }
 }

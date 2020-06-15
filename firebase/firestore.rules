@@ -191,7 +191,7 @@ service cloud.firestore {
                     && party.id is string && party.id == partyId && isValidUuid(party.id)
                     && party.name is string && isNotBlank(party.name) && party.name.size() <= 50
                     && party.users == [uid]
-                    && party.gameMasterId == uid
+                    && (party.gameMasterId == uid || party.gameMasterId == null)
                     && party.accessCode is string && party.accessCode != ""
                     && areAmbitionsValid(party.ambitions);
             }

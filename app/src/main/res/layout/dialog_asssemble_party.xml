@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:padding="@dimen/dialogPadding">
 
     <ProgressBar
+        android:id="@+id/progress"
         android:layout_width="match_parent"
         android:layout_gravity="center"
         android:visibility="gone"
-        android:layout_height="match_parent"
-        android:id="@+id/progress" />
+        android:layout_height="match_parent" />
 
     <LinearLayout
         android:id="@+id/mainView"
@@ -18,19 +18,23 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/partyNameLayout"
-            app:counterEnabled="true"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        <cz.muni.fi.rpg.ui.views.TextInput
+            android:id="@+id/partyNameInput"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/label_party_name">
+            app:inputLabel="@string/label_party_name" />
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/partyName"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+        <com.google.android.material.checkbox.MaterialCheckBox
+            android:id="@+id/singlePlayerCheckbox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/label_checkbox_single_player" />
 
-        </com.google.android.material.textfield.TextInputLayout>
+        <TextView
+            android:id="@+id/singlePlayerWarning"
+            android:visibility="gone"
+            android:text="You won't have access to GM tools!"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
     </LinearLayout>
 </FrameLayout>

@@ -12,8 +12,9 @@ import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.model.domain.common.CouldNotConnectToBackend
 import cz.muni.fi.rpg.model.domain.party.Party
 import cz.muni.fi.rpg.model.domain.party.PartyRepository
-import cz.muni.fi.rpg.ui.common.forms.Input
+import cz.muni.fi.rpg.ui.common.forms.Form
 import kotlinx.android.synthetic.main.dialog_asssemble_party.view.*
+import kotlinx.android.synthetic.main.dialog_asssemble_party.view.singlePlayerWarning
 import kotlinx.coroutines.*
 import java.util.*
 
@@ -24,6 +25,8 @@ class AssemblePartyDialog(
 ) : DialogFragment(), CoroutineScope by CoroutineScope(Dispatchers.Main) {
     private var pendingJob: Job? = null
 
+    private lateinit var form: Form
+
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val activity = requireActivity()
 
@@ -31,11 +34,17 @@ class AssemblePartyDialog(
 
         val view = inflater.inflate(R.layout.dialog_asssemble_party, null)
 
-        val input = Input(view.partyNameLayout, requireContext()).apply {
-            setMaxLength(Party.NAME_MAX_LENGTH)
-            addLiveRule(R.string.assembleParty_party_name_blank) {
-                !it.isNullOrBlank()
+        form = Form(requireContext()).apply {
+            addTextInput(view.partyNameInput).apply {
+                setMaxLength(Party.NAME_MAX_LENGTH)
+                addLiveRule(R.string.assembleParty_party_name_blank) {
+                    !it.isNullOrBlank()
+                }
             }
+        }
+
+        view.singlePlayerCheckbox.setOnCheckedChangeListener { _, isChecked ->
+            view.singlePlayerWarning.visibility = if (isChecked) View.VISIBLE else View.GONE
         }
 
         val dialog = AlertDialog.Builder(activity)
@@ -46,21 +55,24 @@ class AssemblePartyDialog(
 
         dialog.setOnShowListener {
             dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener {
-                dialogSubmitted(input, dialog, view)
+                dialogSubmitted(dialog, view)
             }
         }
 
         return dialog
     }
 
-    private fun dialogSubmitted(input: Input, dialog: AlertDialog, view: View) {
-        if (!input.validate()) {
+    private fun dialogSubmitted(dialog: AlertDialog, view: View) {
+        if (!form.validate()) {
             return
         }
 
-        val partyName = input.getValue()
+        val partyId = UUID.randomUUID()
+        val partyName = view.partyNameInput.getValue()
 
-        val party = Party(UUID.randomUUID(), partyName, userId)
+        val party = if (view.singlePlayerCheckbox.isChecked)
+            Party.singlePlayerParty(partyId, partyName, userId)
+        else Party.multiPlayerParty(partyId, partyName, userId)
 
         dialog.getButton(AlertDialog.BUTTON_POSITIVE).isEnabled = false
         view.progress.visibility = View.VISIBLE
