@@ -41,7 +41,7 @@ class TalentDialog : DialogFragment() {
 
         val view = inflater.inflate(R.layout.dialog_talent, null);
 
-        val form = Form().apply {
+        val form = Form(requireContext()).apply {
             addTextInput(view.talentNameInput).apply {
                 setMaxLength(Talent.NAME_MAX_LENGTH)
                 setNotBlank(getString(R.string.error_talent_name_empty))

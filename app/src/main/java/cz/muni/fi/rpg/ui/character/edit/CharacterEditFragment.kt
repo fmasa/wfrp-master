@@ -9,8 +9,8 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.model.domain.character.CharacterRepository
+import cz.muni.fi.rpg.model.domain.character.Stats
 import cz.muni.fi.rpg.ui.characterCreation.CharacterInfoFormFragment
-import cz.muni.fi.rpg.ui.characterCreation.CharacterStatsData
 import cz.muni.fi.rpg.ui.characterCreation.CharacterStatsFormFragment
 import cz.muni.fi.rpg.ui.common.BaseFragment
 import kotlinx.android.synthetic.main.fragment_character_edit.*
@@ -65,13 +65,13 @@ class CharacterEditFragment(
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId == R.id.actionSave) {
-            val characterInfoData = characterInfo.submit()
-            val characterStatsData = characterStats.submit()
+            val info = characterInfo.submit()
+            val stats = characterStats.submit()
 
-            if (characterInfoData != null && characterStatsData != null) {
+            if (info != null && stats != null) {
                 item.isEnabled = false
                 launch {
-                    updateCharacter(characterInfoData, characterStatsData)
+                    updateCharacter(info, stats)
                     withContext(Dispatchers.Main) {
                         findNavController().popBackStack()
                     }
@@ -84,7 +84,7 @@ class CharacterEditFragment(
 
     private suspend fun updateCharacter(
         info: CharacterInfoFormFragment.CharacterInfo,
-        characterStatsData: CharacterStatsData
+        stats: Stats
     ) {
         val character = characters.get(args.characterId)
         val points = character.getPoints()
@@ -94,8 +94,8 @@ class CharacterEditFragment(
             info.career,
             info.socialClass,
             info.race,
-            characterStatsData.stats,
-            points.updateMaxWounds(characterStatsData.maxWounds)
+            stats,
+            points
         )
 
         characters.save(args.characterId.partyId, character)

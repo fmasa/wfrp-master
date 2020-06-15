@@ -31,9 +31,9 @@ class AssemblePartyDialog(
 
         val view = inflater.inflate(R.layout.dialog_asssemble_party, null)
 
-        val input = Input(view.partyNameLayout).apply {
+        val input = Input(view.partyNameLayout, requireContext()).apply {
             setMaxLength(Party.NAME_MAX_LENGTH)
-            addLiveRule(getString(R.string.assembleParty_party_name_blank)) {
+            addLiveRule(R.string.assembleParty_party_name_blank) {
                 !it.isNullOrBlank()
             }
         }

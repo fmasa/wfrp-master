@@ -24,7 +24,7 @@ class CharacterInfoFormFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        form = Form().apply {
+        form = Form(requireContext()).apply {
             addTextInput(nameInput).apply {
                 setNotBlank(getString(R.string.error_cannot_be_empty))
                 setMaxLength(Character.NAME_MAX_LENGTH)

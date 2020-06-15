@@ -25,17 +25,20 @@ class CharacterCreationFragment(
 
     private val labels = arrayOf(
         R.string.title_character_creation_info,
-        R.string.title_character_stats
+        R.string.title_character_stats,
+        R.string.title_character_creation_points
     )
 
     private val fragments = arrayOf<Fragment>(
         CharacterInfoFormFragment(),
-        CharacterStatsFormFragment()
+        CharacterStatsFormFragment(),
+        CharacterPointsFormFragment()
     )
 
     private var currentFragmentIndex = 0
 
     private var characterInfo: CharacterInfoFormFragment.CharacterInfo? = null
+    private var characterStatsData: Stats? = null
 
     override fun onStart() {
         super.onStart()
@@ -62,17 +65,28 @@ class CharacterCreationFragment(
                         return@setOnClickListener
                     }
 
+                    characterStatsData = data
+                }
+                is CharacterPointsFormFragment -> {
+                    val info = characterInfo
+                    val stats = characterStatsData
+                    val points = currentFragment.submit()
+
+                    if (info == null || stats == null || points == null) {
+                        return@setOnClickListener
+                    }
+
                     saveCharacter(
-                        characterInfo,
-                        data.stats,
+                        info,
+                        stats,
                         Points(
-                            fate = data.fatePoints,
-                            fortune = data.fatePoints,
-                            wounds = data.maxWounds,
-                            maxWounds = data.maxWounds,
+                            fate = points.fate,
+                            fortune = points.fate,
+                            wounds = points.maxWounds,
+                            maxWounds = points.maxWounds,
                             experience = 0,
-                            resilience = 0,
-                            resolve = 0,
+                            resilience = points.resilience,
+                            resolve = points.resilience,
                             corruption = 0,
                             sin = 0
                         )

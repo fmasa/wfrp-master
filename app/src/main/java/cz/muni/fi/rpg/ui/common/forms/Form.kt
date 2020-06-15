@@ -1,18 +1,19 @@
 package cz.muni.fi.rpg.ui.common.forms
 
+import android.content.Context
 import android.view.View
 import androidx.annotation.IdRes
 import com.google.android.material.textfield.TextInputLayout
 import cz.muni.fi.rpg.ui.views.TextInput
 
-class Form() {
+class Form(private val context: Context) {
     /**
      * Layout ID resource to Input object
      */
     private var inputs: MutableMap<Int, Input> = mutableMapOf()
 
     fun addTextInput(view: TextInput): Input {
-        val input = Input(view.getTextInputLayout())
+        val input = Input(view.getTextInputLayout(), context)
 
         addInputUnderId(view.id, input)
 
@@ -20,7 +21,7 @@ class Form() {
     }
 
     fun addTextInput(view: TextInputLayout): Input {
-        val input = Input(view)
+        val input = Input(view, context)
 
         addInputUnderId(view.id, input)
 

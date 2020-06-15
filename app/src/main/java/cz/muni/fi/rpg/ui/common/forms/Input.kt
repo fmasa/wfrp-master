@@ -1,11 +1,13 @@
 package cz.muni.fi.rpg.ui.common.forms
 
+import android.content.Context
 import android.text.Editable
 import android.text.InputFilter
+import androidx.annotation.StringRes
 import androidx.core.widget.addTextChangedListener
 import com.google.android.material.textfield.TextInputLayout
 
-class Input(private val layout: TextInputLayout) {
+class Input(private val layout: TextInputLayout, private val context: Context) {
     private val validators: MutableList<Validator> = mutableListOf()
 
     private var liveValidationRegistered = false
@@ -32,6 +34,15 @@ class Input(private val layout: TextInputLayout) {
         validators.add(Validator(errorMessage, rule, true))
     }
 
+    /**
+     * Adds predicate that must be true for input to be considered valid
+     *
+     * After input is validated for the first time
+     */
+    fun addLiveRule(@StringRes errorMessageId: Int, rule: (Editable?) -> Boolean) {
+        addLiveRule(context.getString(errorMessageId), rule)
+    }
+
     fun setNotBlank(errorMessage: String) {
         addLiveRule(errorMessage) { !it.isNullOrBlank() }
     }
@@ -49,6 +60,10 @@ class Input(private val layout: TextInputLayout) {
         layout.error = null
 
         return true
+    }
+
+    fun setDefaultValue(value: String) {
+        layout.editText?.setText(value)
     }
 
     /**

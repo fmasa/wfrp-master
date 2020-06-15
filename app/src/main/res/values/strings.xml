@@ -163,4 +163,5 @@
     <string name="note_ambition_not_filled">Ambition not filled</string>
     <string name="title_misc">Misc</string>
     <string name="spell_casting_number_shortcut">CN</string>
+    <string name="title_character_creation_points">Point pools</string>
 </resources>

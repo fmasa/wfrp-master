@@ -61,7 +61,7 @@ class ChangeAmbitionsDialog : DialogFragment(),
         view.shortTermAmbitionInput.setDefaultValue(defaults.shortTerm)
         view.longTermAmbitionInput.setDefaultValue(defaults.longTerm)
 
-        form = Form().apply {
+        form = Form(requireContext()).apply {
             addTextInput(view.shortTermAmbitionInput).apply {
                 setMaxLength(Ambitions.MAX_LENGTH)
             }

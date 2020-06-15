@@ -12,7 +12,7 @@
         android:id="@+id/column1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:constraint_referenced_ids="weaponSkillInput, ballisticSkillInput, strengthInput, toughnessInput, fatePointsInput"
+        app:constraint_referenced_ids="weaponSkillInput, ballisticSkillInput, strengthInput, toughnessInput"
         app:flow_maxElementsWrap="1"
         app:flow_verticalBias="0"
         app:flow_verticalGap="16dp"
@@ -54,20 +54,11 @@
         android:layout_height="wrap_content"
         app:inputLabel="@string/label_toughness" />
 
-    <cz.muni.fi.rpg.ui.views.TextInput
-        android:id="@+id/fatePointsInput"
-        android:maxLength="3"
-        android:inputType="number"
-        android:layout_width="120dp"
-        android:layout_height="wrap_content"
-        app:inputLabel="@string/label_fate_points" />
-
-
     <androidx.constraintlayout.helper.widget.Flow
         android:id="@+id/column2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:constraint_referenced_ids="agilityInput, intelligenceInput,willPowerInput,fellowshipInput,woundsInput"
+        app:constraint_referenced_ids="agilityInput, intelligenceInput,willPowerInput,fellowshipInput"
         app:flow_maxElementsWrap="1"
         app:flow_verticalBias="0"
         app:flow_verticalGap="16dp"
@@ -108,12 +99,4 @@
         android:layout_width="120dp"
         android:layout_height="wrap_content"
         app:inputLabel="@string/label_fellowship" />
-
-    <cz.muni.fi.rpg.ui.views.TextInput
-        android:id="@+id/woundsInput"
-        android:maxLength="3"
-        android:inputType="number"
-        android:layout_width="120dp"
-        android:layout_height="wrap_content"
-        app:inputLabel="@string/label_wounds" />
 </androidx.constraintlayout.widget.ConstraintLayout>

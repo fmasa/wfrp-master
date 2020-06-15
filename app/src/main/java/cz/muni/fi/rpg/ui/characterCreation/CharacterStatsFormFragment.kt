@@ -2,21 +2,14 @@ package cz.muni.fi.rpg.ui.characterCreation
 
 import android.os.Bundle
 import android.view.View
-import androidx.fragment.app.Fragment
 import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.model.domain.character.Character
 import cz.muni.fi.rpg.model.domain.character.Stats
 import cz.muni.fi.rpg.ui.common.forms.Form
 import kotlinx.android.synthetic.main.fragment_character_stats_form.*
 
-data class CharacterStatsData(
-    val stats: Stats,
-    val maxWounds: Int,
-    val fatePoints: Int
-)
-
 class CharacterStatsFormFragment :
-    CharacterFormStep<CharacterStatsData>(R.layout.fragment_character_stats_form) {
+    CharacterFormStep<Stats>(R.layout.fragment_character_stats_form) {
     var character: Character? = null
 
     private lateinit var form: Form
@@ -32,12 +25,10 @@ class CharacterStatsFormFragment :
             agilityInput,
             intelligenceInput,
             willPowerInput,
-            fellowshipInput,
-            woundsInput,
-            fatePointsInput
+            fellowshipInput
         )
 
-        form = Form()
+        form = Form(requireContext())
 
         fields.forEach { input ->
             input.setDefaultValue("0")
@@ -49,32 +40,25 @@ class CharacterStatsFormFragment :
             }
         }
 
-        form.getInput(R.id.woundsInput)
-            .addLiveRule(getString(R.string.error_value_is_0)) { it.toString().toInt() > 0 }
-
         setDefaultValues()
     }
 
-    override fun submit(): CharacterStatsData? {
+    override fun submit(): Stats? {
         if (!form.validate()) {
             return null
         }
 
-        return CharacterStatsData(
-            Stats(
-                agility = agilityInput.getValue().toInt(),
-                ballisticSkill = ballisticSkillInput.getValue().toInt(),
-                dexterity = 0,
-                fellowship = fellowshipInput.getValue().toInt(),
-                initiative = 0,
-                intelligence = intelligenceInput.getValue().toInt(),
-                strength = strengthInput.getValue().toInt(),
-                toughness = toughnessInput.getValue().toInt(),
-                weaponSkill = weaponSkillInput.getValue().toInt(),
-                willPower = willPowerInput.getValue().toInt()
-            ),
-            woundsInput.getValue().toInt(),
-            fatePointsInput.getValue().toInt()
+        return Stats(
+            agility = agilityInput.getValue().toInt(),
+            ballisticSkill = ballisticSkillInput.getValue().toInt(),
+            dexterity = 0,
+            fellowship = fellowshipInput.getValue().toInt(),
+            initiative = 0,
+            intelligence = intelligenceInput.getValue().toInt(),
+            strength = strengthInput.getValue().toInt(),
+            toughness = toughnessInput.getValue().toInt(),
+            weaponSkill = weaponSkillInput.getValue().toInt(),
+            willPower = willPowerInput.getValue().toInt()
         )
     }
 
@@ -90,11 +74,9 @@ class CharacterStatsFormFragment :
         ballisticSkillInput.setDefaultValue(character.getStats().ballisticSkill.toString())
         strengthInput.setDefaultValue(character.getStats().strength.toString())
         toughnessInput.setDefaultValue(character.getStats().toughness.toString())
-        fatePointsInput.setDefaultValue(character.getPoints().fate.toString())
         agilityInput.setDefaultValue(character.getStats().agility.toString())
         intelligenceInput.setDefaultValue(character.getStats().intelligence.toString())
         willPowerInput.setDefaultValue(character.getStats().willPower.toString())
         fellowshipInput.setDefaultValue(character.getStats().fellowship.toString())
-        woundsInput.setDefaultValue(character.getPoints().maxWounds.toString())
     }
 }

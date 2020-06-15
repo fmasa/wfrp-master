@@ -65,7 +65,7 @@ class InventoryItemDialog : DialogFragment(),
             .create()
 
 
-        val form = Form().apply {
+        val form = Form(requireContext()).apply {
             addTextInput(view.itemNameLayout).apply {
                 setMaxLength(InventoryItem.NAME_MAX_LENGTH)
                 setNotBlank(getString(R.string.error_name_blank))
