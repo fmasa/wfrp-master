@@ -110,6 +110,7 @@ class CharacterEditFragment(
             info.socialClass,
             info.race,
             stats,
+            stats,
             points.updateMaxWounds(maxWounds)
         )
 

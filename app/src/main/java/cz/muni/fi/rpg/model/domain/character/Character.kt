@@ -11,6 +11,7 @@ data class Character(
     private var socialClass: String,
     private var race: Race,
     private var stats: Stats,
+    private var maxStats: Stats,
     private var points: Points,
     private var ambitions: Ambitions = Ambitions("", "")
 ) {
@@ -35,18 +36,20 @@ data class Character(
         socialClass: String,
         race: Race,
         stats: Stats,
+        maxStats: Stats,
         points: Points
     ) {
         require(listOf(name, career).all { it.isNotBlank() })
         require(name.length <= NAME_MAX_LENGTH) { "Character name is too long" }
         require(career.length <= CAREER_MAX_LENGTH) { "Career is too long" }
         require(socialClass.length <= SOCIAL_CLASS_MAX_LENGTH) { "Social class is too long" }
-
+        require(stats.allSmallerThan(maxStats)) { "Stats cannot be larger than max stats" }
         this.name = name
         this.career = career
         this.socialClass = socialClass
         this.race = race
         this.stats = stats
+        this.maxStats = maxStats
         this.points = points
     }
 
