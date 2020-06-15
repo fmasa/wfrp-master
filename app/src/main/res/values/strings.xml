@@ -45,8 +45,7 @@
     <string name="label_spell_range">Range</string>
 
 
-    <string name="title_character_creation_info">Character info</string>
-    <string name="title_character_creation_stats">Character stats</string>
+    <string name="title_character_creation_info">Basic info</string>
 
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="qr_scan_prompt">Scan the code provided by your GM</string>

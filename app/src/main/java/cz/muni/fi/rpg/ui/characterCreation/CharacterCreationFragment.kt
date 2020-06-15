@@ -2,7 +2,6 @@ package cz.muni.fi.rpg.ui.characterCreation
 
 import android.view.View
 import android.widget.Toast
-import androidx.annotation.StringRes
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -24,9 +23,17 @@ class CharacterCreationFragment(
     private val args: CharacterCreationFragmentArgs by navArgs()
     private val authentication: AuthenticationViewModel by sharedViewModel()
 
-    private lateinit var currentFragment: Fragment
-    private val statsCreationFragment = CharacterStatsFormFragment()
-    private val infoCreationFragment = CharacterInfoFormFragment()
+    private val labels = arrayOf(
+        R.string.title_character_creation_info,
+        R.string.title_character_stats
+    )
+
+    private val fragments = arrayOf<Fragment>(
+        CharacterInfoFormFragment(),
+        CharacterStatsFormFragment()
+    )
+
+    private var currentFragmentIndex = 0
 
     private var characterInfo: CharacterInfoFormFragment.CharacterInfo? = null
 
@@ -39,18 +46,17 @@ class CharacterCreationFragment(
                 return@launch
             }
 
-            withContext(Dispatchers.Main) { showInfoFragment() }
+            withContext(Dispatchers.Main) { showStep(0) }
         }
 
         buttonNext.setOnClickListener {
-            when (currentFragment) {
-                infoCreationFragment -> {
-                    characterInfo = infoCreationFragment.submit() ?: return@setOnClickListener
-                    showStatsFragment()
+            when (val currentFragment = fragments[currentFragmentIndex]) {
+                is CharacterInfoFormFragment -> {
+                    characterInfo = currentFragment.submit() ?: return@setOnClickListener
                 }
-                statsCreationFragment -> {
+                is CharacterStatsFormFragment -> {
                     val characterInfo = this.characterInfo
-                    val data = statsCreationFragment.submit()
+                    val data = currentFragment.submit()
 
                     if (characterInfo == null || data == null) {
                         return@setOnClickListener
@@ -73,31 +79,17 @@ class CharacterCreationFragment(
                     )
                 }
             }
+
+            if (currentFragmentIndex < fragments.size - 1) {
+                showStep(currentFragmentIndex + 1)
+            }
         }
 
         buttonPrevious.setOnClickListener {
-            if (currentFragment == statsCreationFragment) {
-                showInfoFragment()
+            if (currentFragmentIndex != 0) {
+                showStep(currentFragmentIndex - 1)
             }
         }
-    }
-
-    private fun showInfoFragment() {
-        showStep(
-            R.string.title_character_creation_info,
-            infoCreationFragment,
-            null,
-            R.string.button_edit
-        )
-    }
-
-    private fun showStatsFragment() {
-        showStep(
-            R.string.title_character_creation_stats,
-            statsCreationFragment,
-            R.string.button_edit_info,
-            R.string.button_finish
-        )
     }
 
     private fun saveCharacter(
@@ -125,25 +117,21 @@ class CharacterCreationFragment(
 
     }
 
-    private fun showStep(
-        @StringRes titleResId: Int,
-        fragment: Fragment,
-        @StringRes previousButtonTextResId: Int?,
-        @StringRes nextButtonTextResId: Int
-    ) {
+    private fun showStep(index: Int) {
         childFragmentManager.beginTransaction().apply {
-            replace(R.id.frame_layout_character_creation, fragment)
+            replace(R.id.frame_layout_character_creation, fragments[index])
             commit()
         }
-        currentFragment = fragment
-        buttonNext.setText(nextButtonTextResId)
-        stepTitle.setText(titleResId)
 
-        if (previousButtonTextResId != null) {
-            buttonPrevious.visibility = View.VISIBLE
-            buttonPrevious.setText(previousButtonTextResId)
-        } else {
+        buttonNext.setText(if (index == (fragments.size - 1)) R.string.button_finish else labels[index + 1])
+        stepTitle.setText(labels[index])
+        currentFragmentIndex = index
+
+        if (index == 0) {
             buttonPrevious.visibility = View.GONE
+        } else {
+            buttonPrevious.visibility = View.VISIBLE
+            buttonPrevious.setText(labels[index - 1])
         }
     }
 

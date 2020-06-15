@@ -9,13 +9,14 @@ import cz.muni.fi.rpg.model.domain.character.Stats
 import cz.muni.fi.rpg.ui.common.forms.Form
 import kotlinx.android.synthetic.main.fragment_character_stats_form.*
 
-internal data class CharacterStatsData(
+data class CharacterStatsData(
     val stats: Stats,
     val maxWounds: Int,
     val fatePoints: Int
 )
 
-class CharacterStatsFormFragment : Fragment(R.layout.fragment_character_stats_form) {
+class CharacterStatsFormFragment :
+    CharacterFormStep<CharacterStatsData>(R.layout.fragment_character_stats_form) {
     var character: Character? = null
 
     private lateinit var form: Form
@@ -49,12 +50,12 @@ class CharacterStatsFormFragment : Fragment(R.layout.fragment_character_stats_fo
         }
 
         form.getInput(R.id.woundsInput)
-            .addLiveRule(getString(R.string.error_value_is_0)) { it.toString().toInt() > 0}
+            .addLiveRule(getString(R.string.error_value_is_0)) { it.toString().toInt() > 0 }
 
         setDefaultValues()
     }
 
-    internal fun submit(): CharacterStatsData? {
+    override fun submit(): CharacterStatsData? {
         if (!form.validate()) {
             return null
         }
@@ -77,7 +78,7 @@ class CharacterStatsFormFragment : Fragment(R.layout.fragment_character_stats_fo
         )
     }
 
-    fun setCharacterData(character: Character) {
+    override fun setCharacterData(character: Character) {
         this.character = character
         setDefaultValues()
     }
