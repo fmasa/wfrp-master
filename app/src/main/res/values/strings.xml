@@ -188,4 +188,6 @@
     <string name="label_privacy_policy">Privacy Policy</string>
     <string name="label_psychology_input">Psychology (Optional)</string>
     <string name="label_motivation_input">Motivation (Optional)</string>
+    <string name="label_psychology">Psychology</string>
+    <string name="label_motivation">Motivation</string>
 </resources>
