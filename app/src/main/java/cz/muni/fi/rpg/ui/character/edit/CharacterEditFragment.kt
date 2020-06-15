@@ -97,7 +97,7 @@ class CharacterEditFragment(
     }
 
     private suspend fun updateCharacter(
-        info: CharacterInfoFormFragment.CharacterInfo,
+        info: CharacterInfoFormFragment.Data,
         statsData: CharacterStatsFormFragment.Data,
         maxWounds: Int
     ) {

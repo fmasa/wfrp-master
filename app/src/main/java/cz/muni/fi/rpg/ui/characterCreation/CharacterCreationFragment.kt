@@ -40,7 +40,7 @@ class CharacterCreationFragment(
 
     private var currentFragmentIndex = 0
 
-    private var characterInfo: CharacterInfoFormFragment.CharacterInfo? = null
+    private var characterInfo: CharacterInfoFormFragment.Data? = null
     private var characterStatsData: CharacterStatsFormFragment.Data? = null
 
     override fun onStart() {
@@ -124,7 +124,7 @@ class CharacterCreationFragment(
     }
 
     private fun saveCharacter(
-        info: CharacterInfoFormFragment.CharacterInfo,
+        info: CharacterInfoFormFragment.Data,
         statsData: CharacterStatsFormFragment.Data,
         points: Points
     ) {
