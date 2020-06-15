@@ -17,7 +17,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="8dp"
         android:text="@string/label_race"
         android:textSize="18sp"/>
 
@@ -61,14 +61,29 @@
 
     <cz.muni.fi.rpg.ui.views.TextInput
         android:id="@+id/socialClassInput"
+        android:layout_marginTop="8dp"
         app:inputLabel="@string/label_social_class"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 
     <cz.muni.fi.rpg.ui.views.TextInput
         android:id="@+id/careerInput"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="8dp"
         app:inputLabel="@string/label_career"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <cz.muni.fi.rpg.ui.views.TextInput
+        android:id="@+id/psychologyInput"
+        android:layout_marginTop="8dp"
+        app:inputLabel="@string/label_psychology_input"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <cz.muni.fi.rpg.ui.views.TextInput
+        android:id="@+id/motivationInput"
+        android:layout_marginTop="12dp"
+        app:inputLabel="@string/label_motivation_input"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 </LinearLayout>

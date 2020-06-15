@@ -15,6 +15,8 @@ class CharacterInfoFormFragment :
         private const val STATE_RACE = "infoRace"
         private const val STATE_CAREER = "infoCareer"
         private const val STATE_SOCIAL_CLASS = "infoClass"
+        private const val STATE_PSYCHOLOGY = "infoPsychology"
+        private const val STATE_MOTIVATION = "infoMotivation"
     }
 
     var character: Character? = null
@@ -23,7 +25,9 @@ class CharacterInfoFormFragment :
         val name: String,
         val race: Race,
         val career: String,
-        val socialClass: String
+        val socialClass: String,
+        val psychology: String,
+        val motivation: String
     )
 
     private lateinit var form: Form
@@ -33,6 +37,8 @@ class CharacterInfoFormFragment :
             outState.putInt(STATE_RACE, radioGroup.checkedRadioButtonId)
             outState.putString(STATE_CAREER, careerInput.getValue())
             outState.putString(STATE_SOCIAL_CLASS, socialClassInput.getValue())
+            outState.putString(STATE_PSYCHOLOGY, psychologyInput.getValue())
+            outState.putString(STATE_MOTIVATION, motivationInput.getValue())
 
         super.onSaveInstanceState(outState)
     }
@@ -54,6 +60,14 @@ class CharacterInfoFormFragment :
             addTextInput(socialClassInput).apply {
                 setNotBlank(getString(R.string.error_cannot_be_empty))
                 setMaxLength(Character.SOCIAL_CLASS_MAX_LENGTH)
+            }
+
+            addTextInput(psychologyInput).apply {
+                setMaxLength(Character.PSYCHOLOGY_MAX_LENGTH)
+            }
+
+            addTextInput(motivationInput).apply {
+                setMaxLength(Character.MOTIVATION_MAX_LENGTH)
             }
         }
 
@@ -86,6 +100,8 @@ class CharacterInfoFormFragment :
         nameInput.setDefaultValue(character.getName())
         careerInput.setDefaultValue(character.getCareer())
         socialClassInput.setDefaultValue(character.getSocialClass())
+        psychologyInput.setDefaultValue(character.getPsychology())
+        motivationInput.setDefaultValue(character.getMotivation())
 
         when (character.getRace()) {
             Race.HUMAN -> radioButtonRaceHuman.isChecked = true
@@ -114,7 +130,9 @@ class CharacterInfoFormFragment :
             name = name,
             race = race,
             career = career,
-            socialClass = socialClass
+            socialClass = socialClass,
+            psychology = psychologyInput.getValue(),
+            motivation = motivationInput.getValue()
         )
     }
 }

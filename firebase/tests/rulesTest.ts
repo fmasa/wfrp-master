@@ -94,6 +94,8 @@ function validCharacter (userId: string) {
             shortTerm: 'Kill monsters!',
             longTerm: 'Buy a farm',
         },
+        psychology: "Hates greenskins",
+        motivation: "Faith in humanity",
         money: {
             pennies: 1000,
         }
@@ -435,7 +437,7 @@ class Parties extends Suite {
         // Character description too long
         await firebase.assertFails(character.set({...data, description: "a".repeat(201)}));
 
-        // Whitespaces only name
+        // Whitespaces only name+
         await firebase.assertFails(character.set({...data, name: "\t \r"}));
 
         // User ID not matching document key
@@ -461,6 +463,12 @@ class Parties extends Suite {
 
         // Invalid race
         await firebase.assertFails(character.set({...data, race: "ORC"}));
+
+        // Psychology too long
+        await firebase.assertFails(character.set({...data, psychology: "a".repeat(201)}));
+
+        // Motivation too long
+        await firebase.assertFails(character.set({...data, motivation: "a".repeat(201)}));
 
         // Negative amount of money
         await firebase.assertFails(character.set({...data, money: {pennies: -1}}));

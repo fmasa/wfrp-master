@@ -186,4 +186,6 @@
 
     <string name="privacy_policy_url">https://dnd-master-58fca.web.app/privacy-policy.html</string>
     <string name="label_privacy_policy">Privacy Policy</string>
+    <string name="label_psychology_input">Psychology (Optional)</string>
+    <string name="label_motivation_input">Motivation (Optional)</string>
 </resources>

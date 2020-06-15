@@ -110,7 +110,9 @@ class CharacterEditFragment(
             info.race,
             statsData.stats,
             statsData.maxStats,
-            points.updateMaxWounds(maxWounds)
+            points.updateMaxWounds(maxWounds),
+            info.psychology,
+            info.motivation
         )
 
         characters.save(args.characterId.partyId, character)
