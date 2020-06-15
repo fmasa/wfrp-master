@@ -257,7 +257,7 @@ class Parties extends Suite {
     }
 
     @test
-    async "should only let users create party with them being gameMaster"() {
+    async "should let users create party with them being gameMaster"() {
         const data = validParty();
         const party = authedApp(data.gameMasterId)
             .collection("parties")
@@ -265,6 +265,16 @@ class Parties extends Suite {
 
         await firebase.assertFails(party.set({...data, gameMasterId: "different-user"}));
         await firebase.assertSucceeds(party.set(data))
+    }
+
+    @test
+    async "should let users create party without GM (AKA Single-player party)"() {
+        const data = validParty();
+        const party = authedApp(data.gameMasterId)
+            .collection("parties")
+            .doc(data.id);
+
+        await firebase.assertSucceeds(party.set({...data, gameMasterId: null}));
     }
 
     @test

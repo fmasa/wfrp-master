@@ -168,4 +168,5 @@
     <string name="title_character_creation_points">Point pools</string>
     <string name="label_current">Current</string>
     <string name="label_max">Max</string>
+    <string name="label_checkbox_single_player">Create Single-Player Party</string>
 </resources>
