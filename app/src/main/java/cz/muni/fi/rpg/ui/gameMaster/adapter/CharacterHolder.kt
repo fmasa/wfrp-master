@@ -14,6 +14,6 @@ class CharacterHolder(
         itemView.character_name.text = item.getName()
         itemView.character_race.setText(item.getRace().getReadableNameId())
         itemView.character_job.text = item.getCareer()
-        itemView.setOnClickListener { onClickListener(item) };
+        itemView.setOnClickListener { onClickListener(item) }
     }
 }

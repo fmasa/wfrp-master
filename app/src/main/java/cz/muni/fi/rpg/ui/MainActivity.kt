@@ -1,16 +1,21 @@
 package cz.muni.fi.rpg.ui
 
+import android.content.ActivityNotFoundException
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
-import com.google.android.material.navigation.NavigationView
+import android.view.MenuItem
+import androidx.appcompat.widget.Toolbar
+import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
-import androidx.drawerlayout.widget.DrawerLayout
-import androidx.appcompat.widget.Toolbar
+import com.google.android.material.navigation.NavigationView
 import cz.muni.fi.rpg.R
 import org.koin.androidx.fragment.android.setupKoinFragmentFactory
+
 
 class MainActivity : AuthenticatedActivity(R.layout.activity_main) {
 
@@ -43,5 +48,32 @@ class MainActivity : AuthenticatedActivity(R.layout.activity_main) {
     override fun onSupportNavigateUp(): Boolean {
         val navController = findNavController(R.id.nav_host_fragment)
         return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
+    }
+
+    fun reportIssue(item: MenuItem) {
+        val intent = Intent(Intent.ACTION_SEND).apply {
+            type = "plain/text"
+            putExtra(Intent.EXTRA_EMAIL, arrayOf(getString(R.string.issue_email_address)))
+            putExtra(Intent.EXTRA_SUBJECT, getString(R.string.issue_email_subject))
+        }
+        startActivity(Intent.createChooser(intent, ""))
+    }
+
+    fun rateApp(item: MenuItem) {
+        val intent = Intent(Intent.ACTION_VIEW).apply {
+            data = Uri.parse(getString(R.string.store_listing_url))
+            setPackage("com.android.vending")
+        }
+
+        startActivity(intent)
+    }
+
+    fun openPrivacyPolicy(item: MenuItem) {
+        val urlString = getString(R.string.privacy_policy_url)
+        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(urlString)).apply {
+            addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        }
+
+        startActivity(intent)
     }
 }

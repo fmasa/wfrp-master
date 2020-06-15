@@ -16,7 +16,7 @@ class SkillHolder(
     private val onRemoveListener: EntityListener<Skill>
 ) : RecyclerView.ViewHolder(view) {
     fun bind(skill: Skill, stats: Stats) {
-        view.skillItemTitle.text = skill.name;
+        view.skillItemTitle.text = skill.name
         view.skillItemDescription.text = skill.description
 
         if (skill.description.isBlank()) {
@@ -57,7 +57,7 @@ class SkillHolder(
                     false
                 }
         }
-        view.setOnClickListener { onClickListener(skill) };
+        view.setOnClickListener { onClickListener(skill) }
     }
 
     private fun calculateBaseLevel(characteristic: SkillCharacteristic, stats: Stats): Int {

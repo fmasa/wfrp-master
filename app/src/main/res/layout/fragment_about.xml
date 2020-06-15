@@ -15,10 +15,16 @@
         android:textAlignment="center"
         android:layout_height="wrap_content"/>
     <TextView
+        style="@style/TextAppearance.AppCompat.Medium"
+        android:text="@string/about_body"
+        android:textAlignment="center"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+    <TextView
         android:layout_marginTop="10dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Icons"
+        android:text="@string/title_about_icons"
         style="@style/TextAppearance.AppCompat.Medium"
         android:textAlignment="center"/>
     <TextView

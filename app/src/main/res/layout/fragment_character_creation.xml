@@ -20,12 +20,13 @@
         android:layout_width="match_parent" />
 
     <ScrollView
+        android:fillViewport="true"
         android:layout_weight="1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-
-        <FrameLayout
-            android:id="@+id/frame_layout_character_creation"
+        <androidx.viewpager2.widget.ViewPager2
+            android:id="@+id/wizardPager"
+            android:fillViewport="true"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
     </ScrollView>

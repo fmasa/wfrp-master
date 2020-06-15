@@ -8,7 +8,7 @@ import java.util.*
 
 fun generateAccessCode(): String {
     // TODO: Replace with better strategy
-    return UUID.randomUUID().toString();
+    return UUID.randomUUID().toString()
 }
 
 fun <L, R> LiveData<Either<L, R>>.right(): LiveData<R> {

@@ -103,7 +103,7 @@
     <string name="silver_shillings_shortcut">s</string>
     <string name="brass_pennies_shortcut">p</string>
 
-    <string name="label_coins">Coins</string>
+    <string name="label_crowns">Crowns</string>
     <string name="label_shillings">Shillings</string>
     <string name="label_pennies">Pennies</string>
     <string name="title_transaction_end">money</string>
@@ -169,4 +169,21 @@
     <string name="label_current">Current</string>
     <string name="label_max">Max</string>
     <string name="label_checkbox_single_player">Create Single-Player Party</string>
+
+    <string name="description_character_point_down">Decrease points amount by 1</string>
+    <string name="description_character_point_up">Increase points amount by 1</string>
+    <string name="report_issue">Report an Issue</string>
+    <string name="issue_email_address">frantisekmasa1+wfrp-master@gmail.com</string>
+    <string name="issue_email_subject">Issue Report for WFRP Master</string>
+    <string name="title_about_icons">Icons</string>
+    <string name="about_body">
+        This application was created by František Maša and his student peers, now it\'s developed
+        in free time by František Maša.\n
+        If you like the app, please consider rating WFRP Master on Google Play.
+    </string>
+    <string name="store_listing_url">https://play.google.com/store/apps/details?id=cz.frantisekmasa.dnd</string>
+    <string name="rate_app">Rate the App</string>
+
+    <string name="privacy_policy_url">https://dnd-master-58fca.web.app/privacy-policy.html</string>
+    <string name="label_privacy_policy">Privacy Policy</string>
 </resources>

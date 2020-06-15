@@ -2,9 +2,7 @@ package cz.muni.fi.rpg.ui.views
 
 import android.content.Context
 import android.text.InputFilter
-import android.text.InputType
 import android.util.AttributeSet
-import android.view.Gravity
 import android.view.View
 import android.widget.LinearLayout
 import androidx.core.content.res.getIntegerOrThrow

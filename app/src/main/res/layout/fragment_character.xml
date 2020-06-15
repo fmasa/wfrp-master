@@ -1,21 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-
-    <com.google.android.material.tabs.TabLayout
-        android:id="@+id/tabLayout"
-        style="@style/TabLayout"
-        android:layout_width="match_parent"
-        android:elevation="8dp"
-        app:tabMode="fixed"
+    <ProgressBar
+        android:id="@+id/progress"
+        android:layout_width="wrap_content"
+        android:layout_gravity="center"
         android:layout_height="wrap_content" />
 
-    <androidx.viewpager2.widget.ViewPager2
-        android:id="@+id/pager"
+    <LinearLayout
+        android:id="@+id/mainView"
+        android:visibility="gone"
+        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent">
 
-</LinearLayout>
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/tabLayout"
+            style="@style/TabLayout"
+            android:layout_width="match_parent"
+            android:elevation="8dp"
+            android:layout_height="wrap_content"
+            app:tabMode="fixed" />
+
+        <androidx.viewpager2.widget.ViewPager2
+            android:id="@+id/pager"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+    </LinearLayout>
+</FrameLayout>

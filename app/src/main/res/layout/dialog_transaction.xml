@@ -1,16 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:orientation="vertical"
     android:padding="@dimen/dialogPadding"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    tools:ignore="MissingConstraints">
 
     <Spinner
         android:id="@+id/directionSpinner"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="@id/crownsLabel"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
@@ -22,77 +24,40 @@
         app:layout_constraintStart_toEndOf="@id/directionSpinner"
         app:layout_constraintTop_toTopOf="@id/directionSpinner" />
 
-    <TextView
-        android:id="@+id/crownsLabel"
-        style="@style/TextAppearance.MaterialComponents.Body1"
-        android:layout_width="wrap_content"
-        android:labelFor="@id/crownsInput"
-        android:text="@string/label_coins"
-        android:layout_marginEnd="20dp"
+    <androidx.constraintlayout.helper.widget.Flow
+        android:layout_marginTop="20dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
-        app:layout_constraintStart_toStartOf="@id/crownsInput"
+        app:constraint_referenced_ids="crownsInput,shillingsInput,penniesInput"
+        app:flow_horizontalGap="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/directionSpinner" />
 
-    <EditText
+    <cz.muni.fi.rpg.ui.views.TextInput
         android:id="@+id/crownsInput"
-        android:inputType="number"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        app:layout_constraintEnd_toStartOf="@id/shillingsInput"
-        app:layout_constraintHorizontal_chainStyle="packed"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintHorizontal_weight="1"
+        android:inputType="number"
         android:maxLength="6"
-        app:layout_constraintTop_toBottomOf="@id/crownsLabel" />
-
-    <TextView
-        android:id="@+id/shillingsLabel"
-        style="@style/TextAppearance.MaterialComponents.Body1"
-        android:layout_width="wrap_content"
-        android:labelFor="@id/shillingsInput"
-        android:text="@string/label_shillings"
-        android:layout_marginEnd="20dp"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toTopOf="@id/shillingsInput"
-        app:layout_constraintStart_toStartOf="@id/shillingsInput" />
+        app:inputLabel="@string/label_crowns" />
 
-    <EditText
+    <cz.muni.fi.rpg.ui.views.TextInput
         android:id="@+id/shillingsInput"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
         android:inputType="number"
-        android:layout_marginStart="10dp"
-        android:layout_marginEnd="10dp"
-        app:layout_constraintEnd_toStartOf="@id/penniesInput"
-        app:layout_constraintHorizontal_chainStyle="packed"
-        app:layout_constraintHorizontal_weight="1"
-        app:layout_constraintStart_toEndOf="@id/crownsInput"
         android:maxLength="6"
-        app:layout_constraintTop_toTopOf="@id/crownsInput" />
-
-    <TextView
-        android:id="@+id/penniesLabel"
-        style="@style/TextAppearance.MaterialComponents.Body1"
-        android:layout_width="wrap_content"
-        android:labelFor="@id/penniesInput"
-        android:text="@string/label_pennies"
-        android:layout_marginEnd="20dp"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toTopOf="@id/penniesInput"
-        app:layout_constraintStart_toStartOf="@id/penniesInput" />
+        app:inputLabel="@string/label_shillings" />
 
-    <EditText
+    <cz.muni.fi.rpg.ui.views.TextInput
         android:id="@+id/penniesInput"
         android:inputType="number"
+        android:maxLength="6"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_chainStyle="packed"
-        app:layout_constraintHorizontal_weight="1"
-        app:layout_constraintStart_toEndOf="@id/shillingsInput"
-        android:maxLength="6"
-        app:layout_constraintTop_toTopOf="@id/crownsInput" />
+        app:inputLabel="@string/label_pennies" />
+
 
     <TextView
         android:id="@+id/notEnoughMoneyError"
@@ -102,8 +67,7 @@
         android:textColor="@color/colorDanger"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="@id/penniesInput"
-        app:layout_constraintStart_toStartOf="@id/crownsInput"
-        app:layout_constraintTop_toBottomOf="@id/crownsInput" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

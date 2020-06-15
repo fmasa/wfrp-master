@@ -16,10 +16,10 @@
         android:id="@+id/launcherIcon"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        android:layout_width="108dp"
+        android:layout_width="80dp"
         android:layout_marginTop="40dp"
-        android:layout_height="108dp"
-        android:src="@drawable/ic_launcher_foreground"/>
+        android:layout_height="80dp"
+        android:src="@drawable/splash_screen_image"/>
     <TextView
         app:layout_constraintTop_toTopOf="@id/launcherIcon"
         app:layout_constraintBottom_toBottomOf="@id/launcherIcon"

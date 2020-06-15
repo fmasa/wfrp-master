@@ -28,7 +28,7 @@ data class Party(
         )
     }
 
-    private val accessCode = generateAccessCode();
+    private val accessCode = generateAccessCode()
 
     init {
         require(id.version() == 4) {"Party identifier must be UUIDv4"}

@@ -39,11 +39,11 @@ class SkillDialog : DialogFragment() {
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        val activity = requireActivity();
+        val activity = requireActivity()
 
-        val inflater = activity.layoutInflater;
+        val inflater = activity.layoutInflater
 
-        val view = inflater.inflate(R.layout.dialog_skill, null);
+        val view = inflater.inflate(R.layout.dialog_skill, null)
 
         val characteristicSpinner = view.skillCharacteristic
         val characteristics = SkillCharacteristic.values()

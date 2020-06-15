@@ -9,10 +9,17 @@ import cz.muni.fi.rpg.ui.common.forms.Form
 import kotlinx.android.synthetic.main.fragment_character_info_form.*
 
 class CharacterInfoFormFragment :
-    CharacterFormStep<CharacterInfoFormFragment.CharacterInfo>(R.layout.fragment_character_info_form) {
+    CharacterFormStep<CharacterInfoFormFragment.Data>(R.layout.fragment_character_info_form) {
+    companion object {
+        private const val STATE_NAME = "infoName"
+        private const val STATE_RACE = "infoRace"
+        private const val STATE_CAREER = "infoCareer"
+        private const val STATE_SOCIAL_CLASS = "infoClass"
+    }
+
     var character: Character? = null
 
-    data class CharacterInfo(
+    data class Data(
         val name: String,
         val race: Race,
         val career: String,
@@ -20,6 +27,15 @@ class CharacterInfoFormFragment :
     )
 
     private lateinit var form: Form
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        outState.putString(STATE_NAME, nameInput.getValue())
+            outState.putInt(STATE_RACE, radioGroup.checkedRadioButtonId)
+            outState.putString(STATE_CAREER, careerInput.getValue())
+            outState.putString(STATE_SOCIAL_CLASS, socialClassInput.getValue())
+
+        super.onSaveInstanceState(outState)
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -42,9 +58,16 @@ class CharacterInfoFormFragment :
         }
 
         setDefaultValues()
+
+        savedInstanceState?.let {
+            it.getString(STATE_NAME)?.let(nameInput::setDefaultValue)
+            it.getInt(STATE_RACE).let(radioGroup::check)
+            it.getString(STATE_CAREER)?.let(careerInput::setDefaultValue)
+            it.getString(STATE_SOCIAL_CLASS)?.let(socialClassInput::setDefaultValue)
+        }
     }
 
-    override fun submit(): CharacterInfo? {
+    override fun submit(): Data? {
         if (!form.validate()) {
             return null
         }
@@ -73,7 +96,7 @@ class CharacterInfoFormFragment :
         }
     }
 
-    private fun createCharacterInfo(): CharacterInfo {
+    private fun createCharacterInfo(): Data {
         val name = nameInput.getValue()
         val career = careerInput.getValue()
         val socialClass = socialClassInput.getValue()
@@ -87,7 +110,7 @@ class CharacterInfoFormFragment :
             else -> error("No race selected")
         }
 
-        return CharacterInfo(
+        return Data(
             name = name,
             race = race,
             career = career,

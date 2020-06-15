@@ -13,7 +13,7 @@ import cz.muni.fi.rpg.model.right
 class CharacterMiscViewModel(
     private val characterId: CharacterId,
     private val characters: CharacterRepository,
-    private val parties: PartyRepository
+    parties: PartyRepository
 ) : ViewModel() {
 
     val party: LiveData<Party> = parties.getLive(characterId.partyId).right()

@@ -45,11 +45,11 @@ class SpellDialog : DialogFragment(),
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        val activity = requireActivity();
+        val activity = requireActivity()
 
-        val inflater = activity.layoutInflater;
+        val inflater = activity.layoutInflater
 
-        val view = inflater.inflate(R.layout.dialog_spell, null);
+        val view = inflater.inflate(R.layout.dialog_spell, null)
 
         val form = Form(requireContext()).apply {
             addTextInput(view.spellNameInput).apply {
