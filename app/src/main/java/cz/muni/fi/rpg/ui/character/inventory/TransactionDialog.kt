@@ -11,6 +11,7 @@ import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.model.domain.character.NotEnoughMoney
 import cz.muni.fi.rpg.model.domain.common.Money
 import cz.muni.fi.rpg.ui.common.adapters.SpinnerAdapterWithWidthMatchingSelectedItem
+import cz.muni.fi.rpg.ui.views.TextInput
 import cz.muni.fi.rpg.viewModels.InventoryViewModel
 import kotlinx.android.synthetic.main.dialog_transaction.view.*
 import kotlinx.coroutines.CoroutineScope
@@ -74,5 +75,5 @@ class TransactionDialog(
         }
     }
 
-    private fun getIntValue(view: EditText) = view.text.toString().toIntOrNull() ?: 0
+    private fun getIntValue(view: TextInput) = view.getValue().toIntOrNull() ?: 0
 }

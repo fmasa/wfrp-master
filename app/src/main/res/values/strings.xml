@@ -103,7 +103,7 @@
     <string name="silver_shillings_shortcut">s</string>
     <string name="brass_pennies_shortcut">p</string>
 
-    <string name="label_coins">Coins</string>
+    <string name="label_crowns">Crowns</string>
     <string name="label_shillings">Shillings</string>
     <string name="label_pennies">Pennies</string>
     <string name="title_transaction_end">money</string>
