@@ -1,5 +1,6 @@
 package cz.muni.fi.rpg.ui.characterCreation
 
+import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.fragment.app.Fragment
@@ -38,7 +39,7 @@ class CharacterCreationFragment(
     private var currentFragmentIndex = 0
 
     private var characterInfo: CharacterInfoFormFragment.CharacterInfo? = null
-    private var characterStatsData: Stats? = null
+    private var characterStatsData: CharacterStatsFormFragment.Data? = null
 
     override fun onStart() {
         super.onStart()
@@ -69,16 +70,16 @@ class CharacterCreationFragment(
                 }
                 is CharacterPointsFormFragment -> {
                     val info = characterInfo
-                    val stats = characterStatsData
+                    val statsData = characterStatsData
                     val points = currentFragment.submit()
 
-                    if (info == null || stats == null || points == null) {
+                    if (info == null || statsData == null || points == null) {
                         return@setOnClickListener
                     }
 
                     saveCharacter(
                         info,
-                        stats,
+                        statsData,
                         Points(
                             fate = points.fate,
                             fortune = points.fate,
@@ -108,10 +109,11 @@ class CharacterCreationFragment(
 
     private fun saveCharacter(
         info: CharacterInfoFormFragment.CharacterInfo,
-        stats: Stats,
+        statsData: CharacterStatsFormFragment.Data,
         points: Points
     ) {
         launch {
+            Log.d(tag, "Creating character")
             characters.save(
                 args.partyId,
                 Character(
@@ -120,7 +122,8 @@ class CharacterCreationFragment(
                     career = info.career,
                     socialClass = info.socialClass,
                     race = info.race,
-                    stats = stats,
+                    stats = statsData.stats,
+                    maxStats = statsData.maxStats,
                     points = points
                 )
             )

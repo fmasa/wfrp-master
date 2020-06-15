@@ -43,7 +43,7 @@ data class Character(
         require(name.length <= NAME_MAX_LENGTH) { "Character name is too long" }
         require(career.length <= CAREER_MAX_LENGTH) { "Career is too long" }
         require(socialClass.length <= SOCIAL_CLASS_MAX_LENGTH) { "Social class is too long" }
-        require(stats.allSmallerThan(maxStats)) { "Stats cannot be larger than max stats" }
+        require(stats.allLowerOrEqualTo(maxStats)) { "Stats cannot be larger than max stats" }
         this.name = name
         this.career = career
         this.socialClass = socialClass
@@ -85,6 +85,7 @@ data class Character(
     fun getPoints(): Points = points
 
     fun getStats(): Stats = stats
+    fun getMaxStats(): Stats = maxStats
 
     fun updateAmbitions(ambitions: Ambitions) {
         this.ambitions = ambitions

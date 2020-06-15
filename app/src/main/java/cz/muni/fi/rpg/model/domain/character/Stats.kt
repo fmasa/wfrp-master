@@ -36,16 +36,16 @@ data class Stats(
         )
     }
 
-    fun allSmallerThan(other: Stats): Boolean {
-        return weaponSkill < other.weaponSkill
-                && dexterity < other.dexterity
-                && ballisticSkill < other.ballisticSkill
-                && strength < other.strength
-                && toughness < other.toughness
-                && agility < other.agility
-                && intelligence < other.intelligence
-                && initiative < other.initiative
-                && willPower < other.willPower
-                && fellowship < other.fellowship
+    fun allLowerOrEqualTo(other: Stats): Boolean {
+        return weaponSkill <= other.weaponSkill
+                && dexterity <= other.dexterity
+                && ballisticSkill <= other.ballisticSkill
+                && strength <= other.strength
+                && toughness <= other.toughness
+                && agility <= other.agility
+                && intelligence <= other.intelligence
+                && initiative <= other.initiative
+                && willPower <= other.willPower
+                && fellowship <= other.fellowship
     }
 }

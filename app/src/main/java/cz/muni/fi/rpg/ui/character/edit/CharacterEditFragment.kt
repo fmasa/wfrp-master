@@ -81,12 +81,12 @@ class CharacterEditFragment(
         }
 
         val info = characterInfo.submit()
-        val stats = characterStats.submit()
+        val statsData = characterStats.submit()
 
-        if (info != null && stats != null && form.validate()) {
+        if (info != null && statsData != null && form.validate()) {
             item.isEnabled = false
             launch {
-                updateCharacter(info, stats, maxWoundsInput.getValue().toInt())
+                updateCharacter(info, statsData, maxWoundsInput.getValue().toInt())
                 withContext(Dispatchers.Main) {
                     findNavController().popBackStack()
                 }
@@ -98,7 +98,7 @@ class CharacterEditFragment(
 
     private suspend fun updateCharacter(
         info: CharacterInfoFormFragment.CharacterInfo,
-        stats: Stats,
+        statsData: CharacterStatsFormFragment.Data,
         maxWounds: Int
     ) {
         val character = characters.get(args.characterId)
@@ -109,8 +109,8 @@ class CharacterEditFragment(
             info.career,
             info.socialClass,
             info.race,
-            stats,
-            stats,
+            statsData.stats,
+            statsData.maxStats,
             points.updateMaxWounds(maxWounds)
         )
 

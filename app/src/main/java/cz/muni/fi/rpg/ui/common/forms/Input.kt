@@ -12,6 +12,8 @@ class Input(private val layout: TextInputLayout, private val context: Context) {
 
     private var liveValidationRegistered = false
 
+    private var showErrorInEditText = false
+
     /**
      * Limits maximum number of characters allowed in EditText
      */
@@ -23,6 +25,15 @@ class Input(private val layout: TextInputLayout, private val context: Context) {
                 counterMaxLength = maxLength
             }
         }
+    }
+
+    /**
+     * Disables errors below edit text and replaces those with native "popup" errors
+     *
+     * This is useful mainly for inputs with small width
+     */
+    fun setShowErrorInEditText() {
+        showErrorInEditText = true
     }
 
     /**
@@ -50,7 +61,7 @@ class Input(private val layout: TextInputLayout, private val context: Context) {
     fun validate(): Boolean {
         for (validator in validators) {
             if (!validator.rule(layout.editText?.text)) {
-                layout.error = validator.errorMessage
+                showError(validator.errorMessage)
                 registerLiveValidationIfNecessary()
 
                 return false
@@ -79,7 +90,7 @@ class Input(private val layout: TextInputLayout, private val context: Context) {
         layout.editText?.addTextChangedListener {
             for (validator in validators.filter { it.isLiveValidationSupported }) {
                 if (!validator.rule(layout.editText?.text)) {
-                    layout.error = validator.errorMessage
+                    showError(validator.errorMessage)
 
                     return@addTextChangedListener
                 }
@@ -87,5 +98,13 @@ class Input(private val layout: TextInputLayout, private val context: Context) {
         }
 
         liveValidationRegistered = true
+    }
+
+    private fun showError(message: String) {
+        if (showErrorInEditText) {
+            layout.editText?.error = message
+        } else {
+            layout.error = message
+        }
     }
 }

@@ -124,6 +124,7 @@
     <string name="error_value_is_0">Value cannot be 0</string>
     <string name="error_cannot_be_empty">Cannot be empty!</string>
     <string name="error_value_over_100">Cannot be higher than 100</string>
+    <string name="error_value_over_max">Cannot be higher than maximum value</string>
     <string name="error_party_creation_no_connection">You need to be connected to internet to create parties</string>
     <string name="title_character_skills">Skills</string>
     <string name="title_character_talents">Talents</string>
@@ -165,4 +166,6 @@
     <string name="title_misc">Misc</string>
     <string name="spell_casting_number_shortcut">CN</string>
     <string name="title_character_creation_points">Point pools</string>
+    <string name="label_current">Current</string>
+    <string name="label_max">Max</string>
 </resources>
