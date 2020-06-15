@@ -9,7 +9,11 @@
             android:orderInCategory="100"
             android:title="@string/about" />
         <item
-            android:id="@+id/nav_report_issue"
+            android:checkable="false"
+            android:icon="@drawable/ic_review"
+            android:onClick="rateApp"
+            android:title="@string/rate_app"/>
+        <item
             android:checkable="false"
             android:icon="@drawable/ic_bug_report"
             android:onClick="reportIssue"

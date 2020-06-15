@@ -181,4 +181,6 @@
         in free time by František Maša.\n
         If you like the app, please consider rating WFRP Master on Google Play.
     </string>
+    <string name="store_listing_url">https://play.google.com/store/apps/details?id=cz.frantisekmasa.dnd</string>
+    <string name="rate_app">Rate the app</string>
 </resources>

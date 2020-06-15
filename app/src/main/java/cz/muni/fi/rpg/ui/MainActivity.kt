@@ -1,6 +1,7 @@
 package cz.muni.fi.rpg.ui
 
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.MenuItem
 import androidx.appcompat.widget.Toolbar
@@ -55,5 +56,14 @@ class MainActivity : AuthenticatedActivity(R.layout.activity_main) {
             putExtra(Intent.EXTRA_SUBJECT, getString(R.string.issue_email_subject))
         }
         startActivity(Intent.createChooser(intent, ""))
+    }
+
+    fun rateApp(item: MenuItem) {
+        val intent = Intent(Intent.ACTION_VIEW).apply {
+            data = Uri.parse(getString(R.string.store_listing_url))
+            setPackage("com.android.vending")
+        }
+
+        startActivity(intent)
     }
 }
