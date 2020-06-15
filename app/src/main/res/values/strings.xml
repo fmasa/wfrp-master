@@ -60,7 +60,7 @@
     <string name="invitation_code_description">Players can join using this code</string>
     <string name="title_characterCreation">Describe your character…</string>
     <string name="title_character_stats">Attributes</string>
-    <string name="title_character_inventory">Inventory</string>
+    <string name="title_character_trappings">Trappings</string>
     <string name="title_notifications">Notifications</string>
 
     <string name="label_name">Name</string>

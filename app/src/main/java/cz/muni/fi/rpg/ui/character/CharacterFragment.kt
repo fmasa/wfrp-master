@@ -70,7 +70,7 @@ class CharacterFragment : BaseFragment(R.layout.fragment_character) {
                     tab.setIcon(R.drawable.ic_spells)
                 }
                 4 -> {
-                    tab.setText(R.string.title_character_inventory)
+                    tab.setText(R.string.title_character_trappings)
                     tab.setIcon(R.drawable.ic_inventory)
                 }
             }
