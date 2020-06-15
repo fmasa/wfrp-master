@@ -96,6 +96,7 @@ function validCharacter (userId: string) {
         },
         psychology: "Hates greenskins",
         motivation: "Faith in humanity",
+        mutation: "Three legs!",
         money: {
             pennies: 1000,
         }
@@ -469,6 +470,9 @@ class Parties extends Suite {
 
         // Motivation too long
         await firebase.assertFails(character.set({...data, motivation: "a".repeat(201)}));
+
+        // Mutation too long
+        await firebase.assertFails(character.set({...data, mutation: "a".repeat(201)}));
 
         // Negative amount of money
         await firebase.assertFails(character.set({...data, money: {pennies: -1}}));

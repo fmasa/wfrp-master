@@ -15,7 +15,8 @@ data class Character(
     private var stats: Stats,
     private var maxStats: Stats,
     private var points: Points,
-    private var ambitions: Ambitions = Ambitions("", "")
+    private var ambitions: Ambitions = Ambitions("", ""),
+    private var mutation: String = ""
 ) {
     companion object {
         const val NAME_MAX_LENGTH = 50
@@ -23,6 +24,7 @@ data class Character(
         const val SOCIAL_CLASS_MAX_LENGTH = 50
         const val PSYCHOLOGY_MAX_LENGTH = 200
         const val MOTIVATION_MAX_LENGTH = 200
+        const val MUTATION_MAX_LENGTH = 200
     }
 
     private var money: Money = Money.zero()
@@ -34,6 +36,7 @@ data class Character(
         require(socialClass.length <= SOCIAL_CLASS_MAX_LENGTH) { "Social class is too long" }
         require(psychology.length <= PSYCHOLOGY_MAX_LENGTH) { "Psychology is too long" }
         require(motivation.length <= MOTIVATION_MAX_LENGTH) { "Motivation is too long" }
+        require(mutation.length <= MUTATION_MAX_LENGTH) { "Mutation is too long" }
     }
 
     fun update(
@@ -109,4 +112,6 @@ data class Character(
     fun getPsychology() = psychology
 
     fun getMotivation() = motivation
+
+    fun getMutation() = mutation
 }
