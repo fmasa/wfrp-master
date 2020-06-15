@@ -43,35 +43,35 @@ class CharacterFragment : BaseFragment(R.layout.fragment_character) {
         pager.adapter = StaticFragmentsViewPagerAdapter(
             this,
             arrayOf(
+                { CharacterMiscFragment.newInstance(args.characterId) },
                 { CharacterStatsFragment.newInstance(args.characterId) },
                 { CharacterSkillsFragment.newInstance(args.characterId) },
                 { CharacterSpellsFragment.newInstance(args.characterId) },
-                { InventoryFragment.newInstance(args.characterId) },
-                { CharacterMiscFragment.newInstance(args.characterId) }
+                { InventoryFragment.newInstance(args.characterId) }
             )
         )
 
         TabLayoutMediator(tabLayout, pager) { tab, position ->
             when (position) {
                 0 -> {
+                    tab.setText(R.string.title_misc)
+                    tab.setIcon(R.drawable.ic_info)
+                }
+                1 -> {
                     tab.setText(R.string.title_character_stats)
                     tab.setIcon(R.drawable.ic_character)
                 }
-                1 -> {
+                2 -> {
                     tab.setText(R.string.title_character_skills)
                     tab.setIcon(R.drawable.ic_skills)
                 }
-                2 -> {
+                3 -> {
                     tab.setText(R.string.title_character_spells)
                     tab.setIcon(R.drawable.ic_spells)
                 }
-                3 -> {
+                4 -> {
                     tab.setText(R.string.title_character_inventory)
                     tab.setIcon(R.drawable.ic_inventory)
-                }
-                4 -> {
-                    tab.setText(R.string.title_misc)
-                    tab.setIcon(R.drawable.ic_info)
                 }
             }
         }.attach()
