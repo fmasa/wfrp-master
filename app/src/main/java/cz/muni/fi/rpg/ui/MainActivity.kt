@@ -1,5 +1,6 @@
 package cz.muni.fi.rpg.ui
 
+import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -62,6 +63,15 @@ class MainActivity : AuthenticatedActivity(R.layout.activity_main) {
         val intent = Intent(Intent.ACTION_VIEW).apply {
             data = Uri.parse(getString(R.string.store_listing_url))
             setPackage("com.android.vending")
+        }
+
+        startActivity(intent)
+    }
+
+    fun openPrivacyPolicy(item: MenuItem) {
+        val urlString = getString(R.string.privacy_policy_url)
+        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(urlString)).apply {
+            addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         }
 
         startActivity(intent)
