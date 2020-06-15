@@ -10,6 +10,12 @@ import kotlinx.android.synthetic.main.fragment_character_points_form.*
 class CharacterPointsFormFragment :
     CharacterFormStep<CharacterPointsFormFragment.Data>(R.layout.fragment_character_points_form) {
 
+    companion object {
+        const val STATE_MAX_WOUNDS = "maxWounds"
+        const val STATE_FATE_POINTS = "fatePoints"
+        const val STATE_RESILIENCE_POINTS = "resiliencePoints"
+    }
+
     data class Data(
         val maxWounds: Int,
         val fate: Int,
@@ -17,6 +23,14 @@ class CharacterPointsFormFragment :
     )
 
     private lateinit var form: Form
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        outState.putString(STATE_MAX_WOUNDS, maxWoundsInput.getValue())
+        outState.putString(STATE_FATE_POINTS, fatePointsInput.getValue())
+        outState.putString(STATE_RESILIENCE_POINTS, resiliencePointsInput.getValue())
+
+        super.onSaveInstanceState(outState)
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -39,6 +53,12 @@ class CharacterPointsFormFragment :
                 addLiveRule(R.string.error_required) { !it.isNullOrBlank() }
                 addLiveRule(R.string.error_value_over_100) { it.toString().toInt() <= 100 }
             }
+        }
+
+        savedInstanceState?.let {
+            it.getString(STATE_MAX_WOUNDS)?.let(maxWoundsInput::setDefaultValue)
+            it.getString(STATE_FATE_POINTS)?.let(fatePointsInput::setDefaultValue)
+            it.getString(STATE_RESILIENCE_POINTS)?.let(resiliencePointsInput::setDefaultValue)
         }
     }
 

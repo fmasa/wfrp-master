@@ -9,6 +9,7 @@ import androidx.navigation.fragment.navArgs
 import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.model.domain.character.*
 import cz.muni.fi.rpg.ui.common.BaseFragment
+import cz.muni.fi.rpg.ui.common.StaticFragmentsViewPagerAdapter
 import cz.muni.fi.rpg.viewModels.AuthenticationViewModel
 import kotlinx.android.synthetic.main.fragment_character_creation.*
 import kotlinx.coroutines.CoroutineScope
@@ -21,6 +22,7 @@ class CharacterCreationFragment(
     private val characters: CharacterRepository
 ) : BaseFragment(R.layout.fragment_character_creation),
     CoroutineScope by CoroutineScope(Dispatchers.Default) {
+
     private val args: CharacterCreationFragmentArgs by navArgs()
     private val authentication: AuthenticationViewModel by sharedViewModel()
 
@@ -30,10 +32,10 @@ class CharacterCreationFragment(
         R.string.title_character_creation_points
     )
 
-    private val fragments = arrayOf<Fragment>(
-        CharacterInfoFormFragment(),
-        CharacterStatsFormFragment(),
-        CharacterPointsFormFragment()
+    private val fragmentFactories = arrayOf<() -> Fragment>(
+        { CharacterInfoFormFragment() },
+        { CharacterStatsFormFragment() },
+        { CharacterPointsFormFragment() }
     )
 
     private var currentFragmentIndex = 0
@@ -53,8 +55,18 @@ class CharacterCreationFragment(
             withContext(Dispatchers.Main) { showStep(0) }
         }
 
+        wizardPager.isUserInputEnabled = false
+        wizardPager.adapter = StaticFragmentsViewPagerAdapter(
+            this,
+            arrayOf(
+                { CharacterInfoFormFragment() },
+                { CharacterStatsFormFragment() },
+                { CharacterPointsFormFragment() }
+            )
+        )
+
         buttonNext.setOnClickListener {
-            when (val currentFragment = fragments[currentFragmentIndex]) {
+            when (val currentFragment = currentStep()) {
                 is CharacterInfoFormFragment -> {
                     characterInfo = currentFragment.submit() ?: return@setOnClickListener
                 }
@@ -95,7 +107,7 @@ class CharacterCreationFragment(
                 }
             }
 
-            if (currentFragmentIndex < fragments.size - 1) {
+            if (currentFragmentIndex < fragmentFactories.size - 1) {
                 showStep(currentFragmentIndex + 1)
             }
         }
@@ -105,6 +117,10 @@ class CharacterCreationFragment(
                 showStep(currentFragmentIndex - 1)
             }
         }
+    }
+
+    private fun currentStep(): Fragment? {
+        return childFragmentManager.findFragmentByTag("f$currentFragmentIndex")
     }
 
     private fun saveCharacter(
@@ -135,12 +151,9 @@ class CharacterCreationFragment(
     }
 
     private fun showStep(index: Int) {
-        childFragmentManager.beginTransaction().apply {
-            replace(R.id.frame_layout_character_creation, fragments[index])
-            commit()
-        }
+        wizardPager.setCurrentItem(index, false)
 
-        buttonNext.setText(if (index == (fragments.size - 1)) R.string.button_finish else labels[index + 1])
+        buttonNext.setText(if (index == (fragmentFactories.size - 1)) R.string.button_finish else labels[index + 1])
         stepTitle.setText(labels[index])
         currentFragmentIndex = index
 
