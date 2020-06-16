@@ -10,6 +10,8 @@ class CharacterTest {
         "123",
         "Writer",
         "Noble",
+        "Does not like orcs",
+        "Food",
         Race.HALFLING,
         Stats(20, 40, 2, 4, 8, 5, 5, 4, 0, 10),
         Stats(20, 40, 2, 4, 8, 5, 5, 4, 0, 10),

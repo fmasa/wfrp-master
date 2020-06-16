@@ -9,16 +9,22 @@ data class Character(
     val userId: String,
     private var career: String,
     private var socialClass: String,
+    private var psychology: String,
+    private var motivation: String,
     private var race: Race,
     private var stats: Stats,
     private var maxStats: Stats,
     private var points: Points,
-    private var ambitions: Ambitions = Ambitions("", "")
+    private var ambitions: Ambitions = Ambitions("", ""),
+    private var mutation: String = ""
 ) {
     companion object {
         const val NAME_MAX_LENGTH = 50
         const val CAREER_MAX_LENGTH = 50
         const val SOCIAL_CLASS_MAX_LENGTH = 50
+        const val PSYCHOLOGY_MAX_LENGTH = 200
+        const val MOTIVATION_MAX_LENGTH = 200
+        const val MUTATION_MAX_LENGTH = 200
     }
 
     private var money: Money = Money.zero()
@@ -28,6 +34,9 @@ data class Character(
         require(name.length <= NAME_MAX_LENGTH) { "Character name is too long" }
         require(career.length <= CAREER_MAX_LENGTH) { "Career is too long" }
         require(socialClass.length <= SOCIAL_CLASS_MAX_LENGTH) { "Social class is too long" }
+        require(psychology.length <= PSYCHOLOGY_MAX_LENGTH) { "Psychology is too long" }
+        require(motivation.length <= MOTIVATION_MAX_LENGTH) { "Motivation is too long" }
+        require(mutation.length <= MUTATION_MAX_LENGTH) { "Mutation is too long" }
     }
 
     fun update(
@@ -37,13 +46,18 @@ data class Character(
         race: Race,
         stats: Stats,
         maxStats: Stats,
-        points: Points
+        points: Points,
+        psychology: String,
+        motivation: String
     ) {
         require(listOf(name, career).all { it.isNotBlank() })
         require(name.length <= NAME_MAX_LENGTH) { "Character name is too long" }
         require(career.length <= CAREER_MAX_LENGTH) { "Career is too long" }
         require(socialClass.length <= SOCIAL_CLASS_MAX_LENGTH) { "Social class is too long" }
         require(stats.allLowerOrEqualTo(maxStats)) { "Stats cannot be larger than max stats" }
+        require(psychology.length <= PSYCHOLOGY_MAX_LENGTH) { "Psychology is too long" }
+        require(motivation.length <= MOTIVATION_MAX_LENGTH) { "Motivation is too long" }
+
         this.name = name
         this.career = career
         this.socialClass = socialClass
@@ -51,6 +65,8 @@ data class Character(
         this.stats = stats
         this.maxStats = maxStats
         this.points = points
+        this.psychology = psychology
+        this.motivation = motivation
     }
 
     fun addMoney(amount: Money) {
@@ -92,4 +108,10 @@ data class Character(
     }
 
     fun getAmbitions(): Ambitions = ambitions
+
+    fun getPsychology() = psychology
+
+    fun getMotivation() = motivation
+
+    fun getMutation() = mutation
 }

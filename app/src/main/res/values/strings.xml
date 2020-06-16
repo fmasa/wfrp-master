@@ -33,7 +33,7 @@
     <string name="title_talent_add">Add Talent</string>
     <string name="label_description">Description (Optional)</string>
     <string name="error_talent_name_empty">Talent name cannot be empty</string>
-    <string name="label_talent_taken">Taken</string>
+    <string name="label_talent_taken">Times taken</string>
 
     <!-- Spell Dialog -->
     <string name="title_spell_add">Add Spell</string>
@@ -186,4 +186,8 @@
 
     <string name="privacy_policy_url">https://dnd-master-58fca.web.app/privacy-policy.html</string>
     <string name="label_privacy_policy">Privacy Policy</string>
+    <string name="label_psychology_input">Psychology (Optional)</string>
+    <string name="label_motivation_input">Motivation (Optional)</string>
+    <string name="label_psychology">Psychology</string>
+    <string name="label_motivation">Motivation</string>
 </resources>

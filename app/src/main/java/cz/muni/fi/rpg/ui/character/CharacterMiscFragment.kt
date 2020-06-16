@@ -63,8 +63,10 @@ internal class CharacterMiscFragment : Fragment(R.layout.fragment_character_misc
             raceValue.setText(character.getRace().getReadableNameId())
             careerValue.text = character.getCareer()
             socialClassValue.text = character.getSocialClass()
-            xpPoints.text = getString(R.string.xp_points, character.getPoints().experience)
+            psychologyValue.text = character.getPsychology()
+            motivationValue.text = character.getMotivation()
 
+            xpPoints.text = getString(R.string.xp_points, character.getPoints().experience)
             xpPoints.setOnClickListener {
                 openExperiencePointsDialog(character.getPoints().experience)
             }
