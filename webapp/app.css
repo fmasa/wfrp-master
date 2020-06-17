@@ -6,6 +6,17 @@ body {
     padding: 0;
 }
 
+#header {
+    background-color: #a71414;
+    color: white;
+    padding: 6px;
+}
+
+#header h1 {
+    font-size: 20px;
+    text-align: center;
+}
+
 #message {
     background: white;
     max-width: 640px;
