@@ -38,6 +38,7 @@ Publish to Google Play:
     stage: build
     only:
         - master
+        - tags
     script:
         - cp "$PLAY_STORE_JSON_FILE" app/play_store_credentials.json
         - echo "$KEYSTORE_FILE_BASE64" | base64 -d > app/.keystore
