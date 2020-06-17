@@ -60,6 +60,7 @@ internal class CharacterMiscFragment : Fragment(R.layout.fragment_character_misc
 
     private fun bindTopBar() {
         viewModel.character.observe(viewLifecycleOwner) { character ->
+            nameValue.text = character.getName()
             raceValue.setText(character.getRace().getReadableNameId())
             careerValue.text = character.getCareer()
             socialClassValue.text = character.getSocialClass()

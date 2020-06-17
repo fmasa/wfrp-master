@@ -26,18 +26,6 @@
                 android:layout_height="wrap_content"
                 tools:ignore="MissingConstraints">
 
-
-
-                <Button
-                    android:id="@+id/xpPoints"
-                    style="?attr/materialButtonOutlinedStyle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="16dp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-
                 <androidx.constraintlayout.helper.widget.Flow
                     android:id="@+id/flow1"
                     android:layout_width="match_parent"
@@ -45,6 +33,7 @@
                     android:orientation="vertical"
                     android:layout_height="wrap_content"
                     app:constraint_referenced_ids="
+                    nameRow,
                     careerLabel,
                     careerValue,
                     raceLabel,
@@ -60,7 +49,45 @@
                     app:flow_horizontalStyle="spread"
                     app:flow_horizontalAlign="start"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/xpPoints" />
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/nameRow"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:id="@+id/nameLabel"
+                        android:text="@string/label_name"
+                        android:layout_width="wrap_content"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        android:layout_height="wrap_content" />
+
+                    <TextView
+                        android:id="@+id/nameValue"
+                        app:layout_constraintTop_toBottomOf="@id/nameLabel"
+                        app:layout_constraintStart_toStartOf="@id/nameLabel"
+                        app:layout_constraintHorizontal_bias="0"
+                        style="@style/TextAppearance.AppCompat.Medium"
+                        android:textColor="@color/colorText"
+                        android:paddingBottom="6dp"
+                        android:layout_width="0dp"
+                        android:maxLines="1"
+                        android:layout_marginEnd="5dp"
+                        android:ellipsize="end"
+                        app:layout_constraintEnd_toStartOf="@id/xpPoints"
+                        android:layout_height="wrap_content" />
+
+
+                    <Button
+                        android:id="@+id/xpPoints"
+                        style="?attr/materialButtonOutlinedStyle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="16dp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <TextView
                     android:id="@+id/careerLabel"
