@@ -8,11 +8,15 @@ import com.google.ads.consent.ConsentStatus
 import com.google.ads.mediation.admob.AdMobAdapter
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.AdView
+import com.google.android.gms.ads.MobileAds
 
 class AdManager(private val context: Context) {
     private var showNonPersonalizedAdsOnly: Boolean = true
 
     fun initialize() {
+        // Setup AdMob
+        MobileAds.initialize(context) { }
+
         val consentInformation = ConsentInformation.getInstance(context)
         val publisherIds = arrayOf("pub-0123456789012345")
 
