@@ -147,7 +147,7 @@ class CharacterCreationFragment(
             )
             toast("Your character has been created")
 
-            findNavController().popBackStack()
+            withContext(Dispatchers.Main) { findNavController().popBackStack() }
         }
 
     }
