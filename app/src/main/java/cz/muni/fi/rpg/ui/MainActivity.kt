@@ -14,10 +14,14 @@ import androidx.navigation.ui.setupWithNavController
 import com.google.android.gms.ads.MobileAds
 import com.google.android.material.navigation.NavigationView
 import cz.muni.fi.rpg.R
+import cz.muni.fi.rpg.ui.common.AdManager
+import org.koin.android.ext.android.inject
 import org.koin.androidx.fragment.android.setupKoinFragmentFactory
 
 
 class MainActivity : AuthenticatedActivity(R.layout.activity_main) {
+
+    private val adManager: AdManager by inject()
 
     private lateinit var appBarConfiguration: AppBarConfiguration
 
@@ -43,9 +47,7 @@ class MainActivity : AuthenticatedActivity(R.layout.activity_main) {
 
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
-
-        // Setup AdMob
-        MobileAds.initialize(this) { }
+        adManager.initialize()
     }
 
     override fun onSupportNavigateUp(): Boolean {
