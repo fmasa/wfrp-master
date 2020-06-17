@@ -43,6 +43,7 @@ import cz.muni.fi.rpg.ui.character.skills.talents.TalentsFragment
 import cz.muni.fi.rpg.ui.characterCreation.CharacterCreationFragment
 import cz.muni.fi.rpg.ui.characterCreation.CharacterInfoFormFragment
 import cz.muni.fi.rpg.ui.characterCreation.CharacterStatsFormFragment
+import cz.muni.fi.rpg.ui.common.AdManager
 import cz.muni.fi.rpg.ui.gameMaster.GameMasterFragment
 import cz.muni.fi.rpg.ui.partyList.PartyListFragment
 import cz.muni.fi.rpg.viewModels.*
@@ -129,6 +130,8 @@ val appModule = module {
         )
     }
 
+    single { AdManager(get()) }
+
     /**
      * ViewModels
      */
@@ -145,7 +148,7 @@ val appModule = module {
     /**
      * Fragments
      */
-    fragment { CharacterFragment() }
+    fragment { CharacterFragment(get()) }
     fragment { GameMasterFragment(get(), get()) }
     fragment { NavHostFragment() }
     fragment { PartyListFragment(get()) }

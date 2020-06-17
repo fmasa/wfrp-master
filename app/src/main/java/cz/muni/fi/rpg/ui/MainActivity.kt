@@ -1,6 +1,5 @@
 package cz.muni.fi.rpg.ui
 
-import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -12,6 +11,7 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
+import com.google.android.gms.ads.MobileAds
 import com.google.android.material.navigation.NavigationView
 import cz.muni.fi.rpg.R
 import org.koin.androidx.fragment.android.setupKoinFragmentFactory
@@ -43,6 +43,9 @@ class MainActivity : AuthenticatedActivity(R.layout.activity_main) {
 
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
+
+        // Setup AdMob
+        MobileAds.initialize(this) { }
     }
 
     override fun onSupportNavigateUp(): Boolean {
@@ -50,6 +53,7 @@ class MainActivity : AuthenticatedActivity(R.layout.activity_main) {
         return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
     }
 
+    @Suppress("UNUSED_PARAMETER")
     fun reportIssue(item: MenuItem) {
         val intent = Intent(Intent.ACTION_SEND).apply {
             type = "plain/text"
@@ -59,6 +63,7 @@ class MainActivity : AuthenticatedActivity(R.layout.activity_main) {
         startActivity(Intent.createChooser(intent, ""))
     }
 
+    @Suppress("UNUSED_PARAMETER")
     fun rateApp(item: MenuItem) {
         val intent = Intent(Intent.ACTION_VIEW).apply {
             data = Uri.parse(getString(R.string.store_listing_url))
@@ -68,6 +73,7 @@ class MainActivity : AuthenticatedActivity(R.layout.activity_main) {
         startActivity(intent)
     }
 
+    @Suppress("UNUSED_PARAMETER")
     fun openPrivacyPolicy(item: MenuItem) {
         val urlString = getString(R.string.privacy_policy_url)
         val intent = Intent(Intent.ACTION_VIEW, Uri.parse(urlString)).apply {

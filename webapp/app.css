@@ -6,9 +6,20 @@ body {
     padding: 0;
 }
 
+#header {
+    background-color: #a71414;
+    color: white;
+    padding: 6px;
+}
+
+#header h1 {
+    font-size: 20px;
+    text-align: center;
+}
+
 #message {
     background: white;
-    max-width: 360px;
+    max-width: 640px;
     margin: 100px auto 16px;
     padding: 32px 24px 16px;
     border-radius: 3px;
