@@ -7,19 +7,19 @@ import androidx.fragment.app.DialogFragment
 import com.fasterxml.jackson.databind.json.JsonMapper
 import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.model.domain.party.Invitation
-import kotlinx.android.synthetic.main.dialog_qr_code.view.*
+import kotlinx.android.synthetic.main.dialog_invitation.view.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class QrCodeDialog(
+class InvitationDialog(
     private val invitation: Invitation,
     private val jsonMapper: JsonMapper
 ) : DialogFragment(), CoroutineScope by CoroutineScope(Dispatchers.Default) {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        val view = requireActivity().layoutInflater.inflate(R.layout.dialog_qr_code, null)
+        val view = requireActivity().layoutInflater.inflate(R.layout.dialog_invitation, null)
 
         val dialog = AlertDialog.Builder(requireContext())
             .setView(view)

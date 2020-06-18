@@ -87,7 +87,7 @@ class GameMasterFragment(
     }
 
     private fun showQrCode() {
-        QrCodeDialog(invitation, jsonMapper)
-            .show(requireActivity().supportFragmentManager, QrCodeDialog::class.simpleName)
+        InvitationDialog(invitation, jsonMapper)
+            .show(requireActivity().supportFragmentManager, InvitationDialog::class.simpleName)
     }
 }
