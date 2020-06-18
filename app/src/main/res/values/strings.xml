@@ -20,7 +20,7 @@
     <string name="qr_code_description">QR code</string>
 
     <string name="title_party_activity">Parties</string>
-    <string name="title_joinParty">Join party using QR code…</string>
+    <string name="title_joinParty">Join party</string>
 
     <!-- Skill Dialog -->
     <string name="label_skill_name">Skill Name</string>
@@ -49,7 +49,6 @@
 
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="qr_scan_prompt">Scan the code provided by your GM</string>
-    <string name="join_party_dialog_title">Join party</string>
     <string name="join_party_dialog_party_name">You are joining</string>
     <string name="join_party_dialog_prompt">Do you want to continue?</string>
     <string name="button_continue">Continue</string>
@@ -190,4 +189,5 @@
     <string name="label_motivation_input">Motivation (Optional)</string>
     <string name="label_psychology">Psychology</string>
     <string name="label_motivation">Motivation</string>
+    <string name="share_link">Share link</string>
 </resources>

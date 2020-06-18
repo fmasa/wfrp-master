@@ -73,7 +73,7 @@ class JoinPartyDialog(
             .append(".")
 
         val dialog = AlertDialog.Builder(activity)
-            .setTitle(R.string.join_party_dialog_title)
+            .setTitle(R.string.title_joinParty)
             .setView(view)
             .setPositiveButton(R.string.button_continue, null)
             .setNegativeButton(R.string.button_cancel) { _, _ -> dismissAndNotify() }

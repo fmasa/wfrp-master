@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_height="wrap_content"
-    android:layout_margin="6dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:padding="@dimen/dialogPadding"
     android:layout_width="match_parent"
     android:orientation="vertical">
 
@@ -17,4 +18,13 @@
         android:id="@+id/partyInviteQrCode"
         android:layout_height="wrap_content"
         android:layout_width="match_parent" />
+    
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/shareButton"
+        android:enabled="false"
+        app:icon="@drawable/ic_share"
+        app:iconGravity="textStart"
+        android:text="@string/share_link"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
 </LinearLayout>

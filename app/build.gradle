@@ -55,6 +55,7 @@ android {
             applicationIdSuffix ".debug"
             resValue "string", "app_name", "[Debug] WFRP Master"
             resValue "string", "character_ad_unit_id", "ca-app-pub-3940256099942544/6300978111"
+            manifestPlaceholders = [analytics_deactivated: "true"]
         }
 
         release {
@@ -63,6 +64,7 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             resValue "string", "app_name", "WFRP Master"
             resValue "string", "character_ad_unit_id", "ca-app-pub-8647604386686373/9919978313"
+            manifestPlaceholders = [analytics_deactivated: "false"]
         }
     }
 
@@ -107,6 +109,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-firestore-ktx:21.4.3'
     implementation 'com.google.firebase:firebase-analytics-ktx:17.4.3'
     implementation 'com.google.firebase:firebase-crashlytics:17.0.1'
+    implementation 'com.google.firebase:firebase-dynamic-links-ktx:19.1.0'
 
     implementation 'com.getbase:floatingactionbutton:1.10.1'
 
