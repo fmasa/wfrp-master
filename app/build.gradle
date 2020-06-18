@@ -107,6 +107,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-firestore-ktx:21.4.3'
     implementation 'com.google.firebase:firebase-analytics-ktx:17.4.3'
     implementation 'com.google.firebase:firebase-crashlytics:17.0.1'
+    implementation 'com.google.firebase:firebase-dynamic-links-ktx:19.1.0'
 
     implementation 'com.getbase:floatingactionbutton:1.10.1'
 
