@@ -20,7 +20,7 @@
     <string name="qr_code_description">QR code</string>
 
     <string name="title_party_activity">Parties</string>
-    <string name="title_joinParty">Join party using QR code…</string>
+    <string name="title_joinParty">Join party…</string>
 
     <!-- Skill Dialog -->
     <string name="label_skill_name">Skill Name</string>
