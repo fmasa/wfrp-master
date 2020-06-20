@@ -34,11 +34,12 @@ class CharacterFragment(
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        Timber.d("Created view for CharacterFragment (characterId = ${args.characterId})")
 
         setHasOptionsMenu(true)
 
         viewModel.character.observe(viewLifecycleOwner) {
-            it.mapLeft { openCharacterCreation(it) }
+            it.mapLeft { e -> openCharacterCreation(e) }
             it.map {
                 character -> setTitle(character.getName())
                 mainView.visibility = View.VISIBLE
