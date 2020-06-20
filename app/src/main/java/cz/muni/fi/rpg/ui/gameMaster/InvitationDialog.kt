@@ -8,6 +8,7 @@ import android.view.View
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
 import com.fasterxml.jackson.databind.json.JsonMapper
+import com.google.firebase.dynamiclinks.ktx.androidParameters
 import com.google.firebase.dynamiclinks.ktx.dynamicLinks
 import com.google.firebase.dynamiclinks.ktx.shortLinkAsync
 import com.google.firebase.ktx.Firebase
@@ -54,7 +55,8 @@ class InvitationDialog(
         jsonInvitation: String
     ) {
         val link = Firebase.dynamicLinks.shortLinkAsync {
-            link = Uri.parse("https://play.google.com/store/apps/details?id=cz.frantisekmasa.dnd&invitation=$jsonInvitation")
+            link = Uri.parse("https://dnd-master-58fca.web.app/app/invitation?invitation=$jsonInvitation")
+            androidParameters {  }
             domainUriPrefix = "https://wfrp.page.link"
         }.await()
 

@@ -84,6 +84,16 @@ body {
     color: #000;
 }
 
+.main-screenshot {
+    width: 30%;
+    float: left;
+    margin-right: 16px;
+}
+
+.clear {
+    clear: both;
+}
+
 @media (max-width: 600px) {
     body, #message {
         margin-top: 0;
