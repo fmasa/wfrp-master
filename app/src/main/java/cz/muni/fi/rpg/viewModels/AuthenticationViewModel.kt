@@ -1,9 +1,9 @@
 package cz.muni.fi.rpg.viewModels
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.tasks.await
+import timber.log.Timber
 
 class AuthenticationViewModel(private val auth: FirebaseAuth) : ViewModel() {
 
@@ -14,12 +14,13 @@ class AuthenticationViewModel(private val auth: FirebaseAuth) : ViewModel() {
      */
     suspend fun authenticateAnonymously(): Boolean {
         return try {
+            Timber.d("Starting Firebase anonymous sign in")
             auth.signInAnonymously().await()
-            Log.d(null, "User has signed in successfully")
+            Timber.d("User has signed in successfully")
 
             true
         } catch (e: Throwable) {
-            Log.e("AuthenticationViewModel", "Anonymous sign-in has failed", e)
+            Timber.e(e, "Anonymous sign-in has failed")
             false
         }
     }

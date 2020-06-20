@@ -4,7 +4,6 @@ import android.app.Dialog
 import android.content.DialogInterface
 import android.os.Bundle
 import android.text.SpannableStringBuilder
-import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
@@ -17,6 +16,7 @@ import cz.muni.fi.rpg.model.domain.invitation.InvitationProcessor
 import cz.muni.fi.rpg.model.domain.party.Invitation
 import kotlinx.android.synthetic.main.dialog_join_party.view.*
 import kotlinx.coroutines.*
+import timber.log.Timber
 
 typealias Listener = () -> Unit
 
@@ -108,7 +108,7 @@ class JoinPartyDialog(
                 invitationError(getString(R.string.error_already_party_member), e)
             } catch (e: CancellationException) {
             } catch (e: Throwable) {
-                Log.e(tag, getString(R.string.error_unkown), e)
+                Timber.e(e, getString(R.string.error_unkown))
                 invitationError(getString(R.string.error_unkown), e)
             }
 
@@ -117,7 +117,6 @@ class JoinPartyDialog(
     }
 
     private fun invitationError(message: String, e: Throwable) {
-        Log.w(tag, e)
         Toast.makeText(requireActivity(), message, Toast.LENGTH_SHORT).show()
     }
 }

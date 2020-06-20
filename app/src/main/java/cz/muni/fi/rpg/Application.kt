@@ -1,10 +1,13 @@
 package cz.muni.fi.rpg
 
+import com.google.firebase.crashlytics.FirebaseCrashlytics
+import cz.muni.fi.rpg.common.log.CrashlyticsTree
+import cz.muni.fi.rpg.common.log.KoinTimberLogger
 import cz.muni.fi.rpg.di.appModule
 import org.koin.android.ext.koin.androidContext
-import org.koin.android.ext.koin.androidLogger
 import org.koin.androidx.fragment.koin.fragmentFactory
 import org.koin.core.context.startKoin
+import timber.log.Timber
 import android.app.Application as BaseApplication
 
 class Application : BaseApplication() {
@@ -16,9 +19,15 @@ class Application : BaseApplication() {
 
             // declare used Android context
             androidContext(this@Application)
-            androidLogger()
+            logger(KoinTimberLogger())
             // declare modules
             modules(appModule)
         }
+
+        Timber.plant(
+            if (BuildConfig.DEBUG)
+                Timber.DebugTree()
+            else CrashlyticsTree(FirebaseCrashlytics.getInstance())
+        )
     }
 }

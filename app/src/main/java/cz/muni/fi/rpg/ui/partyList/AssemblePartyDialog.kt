@@ -3,7 +3,6 @@ package cz.muni.fi.rpg.ui.partyList
 import android.app.Dialog
 import android.content.DialogInterface
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
@@ -16,6 +15,7 @@ import cz.muni.fi.rpg.ui.common.forms.Form
 import kotlinx.android.synthetic.main.dialog_asssemble_party.view.*
 import kotlinx.android.synthetic.main.dialog_asssemble_party.view.singlePlayerWarning
 import kotlinx.coroutines.*
+import timber.log.Timber
 import java.util.*
 
 class AssemblePartyDialog(
@@ -78,14 +78,20 @@ class AssemblePartyDialog(
         view.progress.visibility = View.VISIBLE
         view.mainView.visibility = View.GONE
 
+        Timber.d("Dialog submitted, trying to assemble new party")
+
         pendingJob = launch {
             try {
                 parties.save(party)
                 toast("Party $partyName was created")
+                Timber.d(tag, "Party $partyName was successfully created")
                 withContext(Dispatchers.Main) { onSuccessListener(party) }
             } catch (e: CouldNotConnectToBackend) {
-                Log.e(tag, e.toString())
+                Timber.i(e, "User could not assemble party, because (s)he is offline")
                 toast(getString(R.string.error_party_creation_no_connection))
+            } catch (e: Throwable) {
+                toast(getString(R.string.error_unkown))
+                Timber.e(e)
             } finally {
                 withContext(Dispatchers.Main) { dismiss() }
             }

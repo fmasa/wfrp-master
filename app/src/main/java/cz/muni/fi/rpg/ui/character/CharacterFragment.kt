@@ -1,7 +1,6 @@
 package cz.muni.fi.rpg.ui.character
 
 import android.os.Bundle
-import android.util.Log
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
@@ -11,6 +10,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.google.android.material.tabs.TabLayoutMediator
 import cz.muni.fi.rpg.R
+import cz.muni.fi.rpg.model.domain.character.CharacterNotFound
 import cz.muni.fi.rpg.model.right
 import cz.muni.fi.rpg.ui.character.skills.CharacterSkillsFragment
 import cz.muni.fi.rpg.ui.common.AdManager
@@ -21,6 +21,7 @@ import cz.muni.fi.rpg.viewModels.PartyViewModel
 import kotlinx.android.synthetic.main.fragment_character.*
 import org.koin.android.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
+import timber.log.Timber
 
 
 class CharacterFragment(
@@ -37,7 +38,7 @@ class CharacterFragment(
         setHasOptionsMenu(true)
 
         viewModel.character.observe(viewLifecycleOwner) {
-            it.mapLeft { openCharacterCreation() }
+            it.mapLeft { openCharacterCreation(it) }
             it.map {
                 character -> setTitle(character.getName())
                 mainView.visibility = View.VISIBLE
@@ -104,8 +105,8 @@ class CharacterFragment(
         return super.onOptionsItemSelected(item)
     }
 
-    private fun openCharacterCreation() {
-        Log.e("CharacterFragment", "Character not found")
+    private fun openCharacterCreation(e: CharacterNotFound) {
+        Timber.e(e, "Character not found")
 
         findNavController()
             .navigate(CharacterFragmentDirections.createCharacter(args.characterId.partyId))
