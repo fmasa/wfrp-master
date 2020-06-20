@@ -4,7 +4,6 @@ import android.app.Dialog
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
@@ -20,6 +19,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
+import timber.log.Timber
 
 class InvitationDialog(
     private val invitation: Invitation,
@@ -58,7 +58,7 @@ class InvitationDialog(
             domainUriPrefix = "https://wfrp.page.link"
         }.await()
 
-        Log.d(tag, "Invitation link was generated: ${link.shortLink}")
+        Timber.d("Invitation link was generated: ${link.shortLink}")
 
         withContext(Dispatchers.Main) {
             view.shareButton.setOnClickListener {

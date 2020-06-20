@@ -1,6 +1,5 @@
 package cz.muni.fi.rpg.model.firestore.repositories
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import arrow.core.Either
 import com.google.firebase.firestore.FirebaseFirestore
@@ -14,19 +13,19 @@ import cz.muni.fi.rpg.model.firestore.AggregateMapper
 import cz.muni.fi.rpg.model.firestore.DocumentLiveData
 import cz.muni.fi.rpg.model.firestore.QueryLiveData
 import kotlinx.coroutines.tasks.await
+import timber.log.Timber
 import java.util.*
 
 internal class FirestorePartyRepository(
     private val firestore: FirebaseFirestore,
     private val mapper: AggregateMapper<Party>
 ) : PartyRepository {
-    private val tag = this::class.simpleName
     private val parties = firestore.collection("parties")
 
     override suspend fun save(party: Party) {
         val data = mapper.toDocumentData(party)
 
-        Log.d(tag,"Saving party $data to firestore")
+        Timber.d("Saving party $data to firestore")
         try {
             firestore.runTransaction { transaction ->
                 transaction.set(parties.document(party.id.toString()), data, SetOptions.merge())

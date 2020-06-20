@@ -1,6 +1,5 @@
 package cz.muni.fi.rpg.model.firestore.repositories
 
-import android.util.Log
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.FirebaseFirestoreException
@@ -12,12 +11,12 @@ import cz.muni.fi.rpg.model.domain.inventory.InventoryItemNotFound
 import cz.muni.fi.rpg.model.domain.inventory.InventoryItemRepository
 import cz.muni.fi.rpg.model.firestore.*
 import kotlinx.coroutines.tasks.await
+import timber.log.Timber
 
 internal class FirestoreInventoryItemRepository(
     firestore: FirebaseFirestore,
     private val mapper: AggregateMapper<InventoryItem>
 ) : InventoryItemRepository {
-    private val tag = this::class.simpleName
     private val parties = firestore.collection(COLLECTION_PARTIES)
 
     override fun findAllForCharacter(characterId: CharacterId) =
@@ -28,7 +27,7 @@ internal class FirestoreInventoryItemRepository(
 
     override suspend fun save(characterId: CharacterId, item: InventoryItem) {
         val data = mapper.toDocumentData(item)
-        Log.d(tag,"Saving inventory item $data for character $characterId")
+        Timber.d("Saving inventory item $data for character $characterId")
 
         inventoryItems(characterId)
             .document(item.id.toString())

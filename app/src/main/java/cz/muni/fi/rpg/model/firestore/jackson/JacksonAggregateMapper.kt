@@ -1,6 +1,5 @@
 package cz.muni.fi.rpg.model.firestore.jackson
 
-import android.util.Log
 import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility
 import com.fasterxml.jackson.annotation.PropertyAccessor
 import com.fasterxml.jackson.core.type.TypeReference
@@ -8,6 +7,7 @@ import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.google.firebase.firestore.DocumentSnapshot
 import cz.muni.fi.rpg.model.firestore.AggregateMapper
 import cz.muni.fi.rpg.model.firestore.DocumentData
+import timber.log.Timber
 import kotlin.reflect.KClass
 
 internal class JacksonAggregateMapper<T : Any>(
@@ -21,7 +21,7 @@ internal class JacksonAggregateMapper<T : Any>(
         .setVisibility(PropertyAccessor.IS_GETTER, Visibility.NONE)
 
     override fun fromDocumentSnapshot(snapshot: DocumentSnapshot): T {
-        Log.d("JacksonAggregateMapper", "Mapping document $snapshot to ${aggregateType.simpleName}")
+        Timber.d("Mapping document $snapshot to ${aggregateType.simpleName}")
         return mapper.convertValue(snapshot.data, aggregateType.java)
     }
 

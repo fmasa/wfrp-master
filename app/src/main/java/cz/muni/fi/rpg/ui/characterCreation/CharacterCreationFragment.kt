@@ -1,6 +1,5 @@
 package cz.muni.fi.rpg.ui.characterCreation
 
-import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.fragment.app.Fragment
@@ -17,6 +16,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.koin.android.viewmodel.ext.android.sharedViewModel
+import timber.log.Timber
 
 class CharacterCreationFragment(
     private val characters: CharacterRepository
@@ -129,7 +129,7 @@ class CharacterCreationFragment(
         points: Points
     ) {
         launch {
-            Log.d(tag, "Creating character")
+            Timber.d("Creating character")
             characters.save(
                 args.partyId,
                 Character(

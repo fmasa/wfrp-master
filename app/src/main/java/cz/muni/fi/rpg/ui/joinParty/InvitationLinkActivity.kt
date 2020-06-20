@@ -1,7 +1,6 @@
 package cz.muni.fi.rpg.ui.joinParty
 
 import android.content.Intent
-import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.fasterxml.jackson.databind.json.JsonMapper
@@ -18,12 +17,10 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
 import org.koin.android.ext.android.inject
+import timber.log.Timber
 
 class InvitationLinkActivity : AppCompatActivity(R.layout.activity_invitation_link),
     CoroutineScope by CoroutineScope(Dispatchers.Default) {
-    companion object {
-        const val tag = "InvitationLinkActivity"
-    }
 
     private val auth: AuthenticationViewModel by inject()
     private val jsonMapper: JsonMapper by inject()
@@ -48,7 +45,7 @@ class InvitationLinkActivity : AppCompatActivity(R.layout.activity_invitation_li
             val invitationJson = link.getQueryParameter("invitation")
 
             if (invitationJson == null) {
-                Log.d(tag, "Dynamic link URI does not have 'invitation' query parameter")
+                Timber.d("Dynamic link URI does not have 'invitation' query parameter")
 
                 withContext(Dispatchers.Main) { openPartyList() }
                 return
@@ -65,7 +62,7 @@ class InvitationLinkActivity : AppCompatActivity(R.layout.activity_invitation_li
                     .show(supportFragmentManager, "JoinPartyDialog")
             }
         } catch (e: Throwable) {
-            Log.w("MainActivity", "Could not process Dynamic Link data", e)
+            Timber.w(e, "Could not process Dynamic Link data")
             withContext(Dispatchers.Main) {
                 Toast.makeText(applicationContext, "Invalid link", Toast.LENGTH_SHORT).show()
                 openPartyList()

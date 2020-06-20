@@ -1,6 +1,5 @@
 package cz.muni.fi.rpg.model.firestore.repositories
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import arrow.core.Either
 import com.google.firebase.firestore.FirebaseFirestore
@@ -12,19 +11,19 @@ import cz.muni.fi.rpg.model.domain.character.CharacterNotFound
 import cz.muni.fi.rpg.model.domain.character.CharacterRepository
 import cz.muni.fi.rpg.model.firestore.*
 import kotlinx.coroutines.tasks.await
+import timber.log.Timber
 import java.util.*
 
 internal class FirestoreCharacterRepository(
     firestore: FirebaseFirestore,
     private val mapper: AggregateMapper<Character>
 ) : CharacterRepository {
-    private val tag = this::class.simpleName
     private val parties = firestore.collection(COLLECTION_PARTIES)
 
     override suspend fun save(partyId: UUID, character: Character) {
         val data = mapper.toDocumentData(character)
 
-        Log.d(tag,"Saving character $data in party $partyId to firestore")
+        Timber.d("Saving character $data in party $partyId to firestore")
         characters(partyId).document(character.userId).set(data, SetOptions.merge()).await()
     }
 

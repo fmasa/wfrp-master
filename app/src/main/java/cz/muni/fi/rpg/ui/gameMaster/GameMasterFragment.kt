@@ -19,6 +19,7 @@ import cz.muni.fi.rpg.viewModels.PartyViewModel
 import kotlinx.android.synthetic.main.fragment_game_master.*
 import org.koin.core.parameter.parametersOf
 import org.koin.android.viewmodel.ext.android.viewModel
+import timber.log.Timber
 
 class GameMasterFragment(
     private val jsonMapper: JsonMapper,
@@ -44,6 +45,7 @@ class GameMasterFragment(
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        Timber.d("Created view for GameMasterFragment (partyId = ${args.partyId}")
 
 
         partyViewModel.party.right().observe(viewLifecycleOwner) { party ->

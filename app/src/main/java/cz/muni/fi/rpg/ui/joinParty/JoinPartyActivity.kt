@@ -4,7 +4,6 @@ import android.Manifest
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.util.Log
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -18,6 +17,7 @@ import cz.muni.fi.rpg.ui.AuthenticatedActivity
 import kotlinx.android.synthetic.main.activity_join_party.*
 import me.dm7.barcodescanner.zxing.ZXingScannerView
 import org.koin.android.ext.android.inject
+import timber.log.Timber
 
 class JoinPartyActivity : AuthenticatedActivity(R.layout.activity_join_party),
     ZXingScannerView.ResultHandler {
@@ -88,9 +88,8 @@ class JoinPartyActivity : AuthenticatedActivity(R.layout.activity_join_party),
 
     override fun handleResult(result: Result) {
         try {
+            Timber.d("Scanned QR code with content ${result.text}")
             val invitation = deserializeInvitation(result.text)
-
-            Log.d(localClassName, result.text)
 
             JoinPartyDialog(getUserId(), invitation, invitationProcessor)
                 .setOnErrorListener { resumeScanning() }
@@ -100,7 +99,7 @@ class JoinPartyActivity : AuthenticatedActivity(R.layout.activity_join_party),
         } catch (e: JsonProcessingException) {
             val error = "QR code is not valid party invitation"
 
-            Log.e(localClassName, error, e)
+            Timber.d(e, error)
             Toast.makeText(this, error, Toast.LENGTH_SHORT).show()
             resumeScanning()
         }

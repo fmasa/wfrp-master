@@ -20,6 +20,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.koin.android.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
+import timber.log.Timber
 
 class InventoryItemDialog : DialogFragment(),
     CoroutineScope by CoroutineScope(Dispatchers.Default) {
@@ -106,8 +107,9 @@ class InventoryItemDialog : DialogFragment(),
 
                 toast(getString(R.string.inventory_toast_item_saved))
                 dismiss()
-            } catch (e: java.lang.Exception) {
+            } catch (e: Throwable) {
                 toast("Item couldn't be added to your inventory.")
+                Timber.e(e)
             }
         }
     }

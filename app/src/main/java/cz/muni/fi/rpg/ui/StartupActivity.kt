@@ -4,6 +4,7 @@ import android.content.Intent
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import cz.muni.fi.rpg.R
+import cz.muni.fi.rpg.common.log.Reporter
 import cz.muni.fi.rpg.viewModels.AuthenticationViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -21,6 +22,7 @@ class StartupActivity : AppCompatActivity(R.layout.activity_startup),
 
         launch {
             if (viewModel.isAuthenticated() || viewModel.authenticateAnonymously()) {
+                Reporter.setUserId(viewModel.getUserId())
                 showPartyList()
             } else {
                 withContext(Dispatchers.Main) {
