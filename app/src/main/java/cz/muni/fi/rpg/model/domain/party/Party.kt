@@ -36,6 +36,8 @@ data class Party(
         require(name.length <= NAME_MAX_LENGTH) {"Party name is too long"}
     }
 
+    fun getPlayerCounts(): Int = users.size - 1
+
     fun isSinglePlayer() = gameMasterId == null
 
     fun updateAmbitions(ambitions: Ambitions) {

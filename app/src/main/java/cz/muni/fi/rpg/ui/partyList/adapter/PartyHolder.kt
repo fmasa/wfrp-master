@@ -13,6 +13,14 @@ class PartyHolder(
     fun bind(item: Party) {
         view.party_item_title.text = item.name
 
+        val playersCount = item.getPlayerCounts()
+
+        if (playersCount > 0) {
+            view.playersCount.text = playersCount.toString()
+            view.playersCount.visibility = View.VISIBLE
+            view.playersCountIcon.visibility = View.VISIBLE
+        }
+
         view.setOnClickListener { onClickListener(item) }
     }
 }
