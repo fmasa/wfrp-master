@@ -6,8 +6,8 @@
     android:layout_marginBottom="1dp"
     android:clickable="true"
     android:focusable="true"
-    app:cardCornerRadius="0dp"
     android:foreground="?attr/selectableItemBackground"
+    app:cardCornerRadius="0dp"
     app:cardElevation="2dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -21,19 +21,43 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/ic_group_circle"
+            android:contentDescription="@string/group_icon_description"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            android:contentDescription="@string/group_icon_description" />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/party_item_title"
+            style="@style/RecyclerViewItemTitle"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="4dp"
+            app:layout_constraintBottom_toBottomOf="@id/icon"
+            app:layout_constraintEnd_toStartOf="@id/playersCountIcon"
+            app:layout_constraintStart_toEndOf="@id/icon"
+            app:layout_constraintTop_toTopOf="@id/icon" />
+
+        <ImageView
+            android:id="@+id/playersCountIcon"
+            style="@style/TextAppearance.AppCompat.Medium"
+            android:visibility="gone"
+            android:src="@drawable/ic_character"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginEnd="4dp"
+            app:layout_constraintBottom_toBottomOf="@id/icon"
+            app:layout_constraintEnd_toStartOf="@id/playersCount"
+            app:layout_constraintTop_toTopOf="@id/icon" />
+
+        <TextView
+            android:id="@+id/playersCount"
+            style="@style/TextAppearance.AppCompat.Medium"
+            android:visibility="gone"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="4dp"
-            android:textSize="16sp"
-            app:layout_constraintLeft_toRightOf="@id/icon"
-            app:layout_constraintTop_toTopOf="@id/icon" />
+            android:textColor="@color/colorText"
+            android:text="0"
+            app:layout_constraintBottom_toBottomOf="@id/playersCountIcon"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/playersCountIcon" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.cardview.widget.CardView>

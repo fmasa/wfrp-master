@@ -17,7 +17,6 @@ import cz.muni.fi.rpg.ui.common.AdManager
 import cz.muni.fi.rpg.ui.common.BaseFragment
 import cz.muni.fi.rpg.ui.common.StaticFragmentsViewPagerAdapter
 import cz.muni.fi.rpg.viewModels.CharacterViewModel
-import cz.muni.fi.rpg.viewModels.PartyViewModel
 import kotlinx.android.synthetic.main.fragment_character.*
 import org.koin.android.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
@@ -27,10 +26,9 @@ import timber.log.Timber
 class CharacterFragment(
     private val adManager: AdManager
 ) : BaseFragment(R.layout.fragment_character) {
-    private val args: CharacterFragmentArgs by navArgs()
 
+    private val args: CharacterFragmentArgs by navArgs()
     private val viewModel: CharacterViewModel by viewModel { parametersOf(args.characterId) }
-    private val partyVm: PartyViewModel by viewModel { parametersOf(args.characterId.partyId) }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -47,7 +45,7 @@ class CharacterFragment(
             }
         }
 
-        partyVm.party.right()
+        viewModel.party.right()
             .observe(viewLifecycleOwner) { setSubtitle(it.name) }
 
         pager.adapter = StaticFragmentsViewPagerAdapter(

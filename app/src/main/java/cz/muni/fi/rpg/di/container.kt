@@ -135,10 +135,10 @@ val appModule = module {
     /**
      * ViewModels
      */
-    viewModel { (partyId: UUID) -> PartyViewModel(get(), partyId) }
     viewModel { (characterId: CharacterId) -> CharacterStatsViewModel(characterId, get()) }
     viewModel { (characterId: CharacterId) -> CharacterMiscViewModel(characterId, get(), get()) }
-    viewModel { (characterId: CharacterId) -> CharacterViewModel(characterId, get())}
+    viewModel { (characterId: CharacterId) -> CharacterViewModel(characterId, get(), get())}
+    viewModel { (partyId: UUID) -> GameMasterViewModel(partyId, get(), get()) }
     viewModel { (characterId: CharacterId) -> InventoryViewModel(characterId, get(), get()) }
     viewModel { (characterId: CharacterId) -> SkillsViewModel(characterId, get()) }
     viewModel { (characterId: CharacterId) -> SpellsViewModel(characterId, get()) }
@@ -149,7 +149,7 @@ val appModule = module {
      * Fragments
      */
     fragment { CharacterFragment(get()) }
-    fragment { GameMasterFragment(get(), get()) }
+    fragment { GameMasterFragment(get()) }
     fragment { NavHostFragment() }
     fragment { PartyListFragment(get()) }
     fragment { CharacterEditFragment(get()) }
