@@ -63,8 +63,8 @@ class GameMasterFragment(
 
         inviteButton.setOnClickListener { showQrCode() }
 
-        viewModel.characters.observe(viewLifecycleOwner) { characters ->
-            if (characters.isNotEmpty()) {
+        viewModel.getPlayers().observe(viewLifecycleOwner) { players ->
+            if (players.isNotEmpty()) {
                 val adapter = CharacterAdapter(layoutInflater)
                 {
                     findNavController()
@@ -76,7 +76,7 @@ class GameMasterFragment(
                 characterListRecycler.adapter = adapter
                 characterListRecycler.layoutManager = LinearLayoutManager(context)
 
-                adapter.submitList(characters)
+                adapter.submitList(players)
 
                 setEmptyCollectionView(false)
             } else {
