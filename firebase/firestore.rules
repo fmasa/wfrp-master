@@ -203,10 +203,14 @@ service cloud.firestore {
                     && ambitions.longTerm is string && ambitions.longTerm.size() <= 400;
             }
 
+            function isValidPartyName(name) {
+                return name is string && isNotBlank(name) && name.size() <= 50;
+            }
+
             function isValidNewParty(party, uid) {
                 return party.keys().toSet() == ["id", "name", "users", "gameMasterId", "accessCode", "ambitions"].toSet()
                     && party.id is string && party.id == partyId && isValidUuid(party.id)
-                    && party.name is string && isNotBlank(party.name) && party.name.size() <= 50
+                    && isValidPartyName(party.name)
                     && party.users == [uid]
                     && (party.gameMasterId == uid || party.gameMasterId == null)
                     && party.accessCode is string && party.accessCode != ""
@@ -217,8 +221,9 @@ service cloud.firestore {
                 let party = request.resource.data;
                 let diff = resource.data.diff(request.resource.data);
 
-                return ["ambitions"].toSet().hasAll(diff.affectedKeys())
-                    && areAmbitionsValid(party.ambitions);
+                return ["ambitions", "name"].toSet().hasAll(diff.affectedKeys())
+                    && areAmbitionsValid(party.ambitions)
+                    && isValidPartyName(party.name);
             }
 
             function invitation(party) {

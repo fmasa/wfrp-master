@@ -5,7 +5,7 @@ import java.util.*
 
 data class Party(
     val id: UUID,
-    val name: String,
+    private var name: String,
     val gameMasterId: String?,
     val users: Set<String>,
     private var ambitions: Ambitions = Ambitions("", "")
@@ -42,6 +42,14 @@ data class Party(
 
     fun updateAmbitions(ambitions: Ambitions) {
         this.ambitions = ambitions
+    }
+
+    fun rename(name: String) {
+        this.name = name
+    }
+
+    fun getName(): String {
+        return name;
     }
 
     fun getAmbitions() = ambitions

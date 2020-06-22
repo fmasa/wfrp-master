@@ -46,7 +46,7 @@ class GameMasterFragment(
 
 
         viewModel.party.right().observe(viewLifecycleOwner) { party ->
-            setTitle(party.name)
+            setTitle(party.getName())
             invitation = party.getInvitation()
 
             inviteButton.isEnabled = true

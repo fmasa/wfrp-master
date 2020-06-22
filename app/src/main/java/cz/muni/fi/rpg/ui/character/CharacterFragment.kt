@@ -46,7 +46,7 @@ class CharacterFragment(
         }
 
         viewModel.party.right()
-            .observe(viewLifecycleOwner) { setSubtitle(it.name) }
+            .observe(viewLifecycleOwner) { setSubtitle(it.getName()) }
 
         pager.adapter = StaticFragmentsViewPagerAdapter(
             this,
