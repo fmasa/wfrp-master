@@ -1,7 +1,11 @@
 package cz.muni.fi.rpg.ui.gameMaster
 
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
+import android.widget.Toast
 import androidx.lifecycle.observe
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -27,6 +31,8 @@ class GameMasterFragment(
     private val args: GameMasterFragmentArgs by navArgs()
 
     private val viewModel: GameMasterViewModel by viewModel { parametersOf(args.partyId) }
+
+    private lateinit var partyName: String
 
     private lateinit var invitation: Invitation
 
@@ -59,6 +65,10 @@ class GameMasterFragment(
                         viewModel.updatePartyAmbitions(it)
                     }.show(childFragmentManager, "ChangeAmbitionsDialog")
             }
+
+
+            partyName = party.getName()
+            setHasOptionsMenu(true)
         }
 
         inviteButton.setOnClickListener { showQrCode() }
@@ -83,6 +93,20 @@ class GameMasterFragment(
                 setEmptyCollectionView(true)
             }
         }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        super.onCreateOptionsMenu(menu, inflater)
+
+        inflater.inflate(R.menu.edit_menu, menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == R.id.actionEdit) {
+            RenamePartyDialog.newInstance(args.partyId, partyName).show(childFragmentManager, null)
+        }
+
+        return super.onOptionsItemSelected(item)
     }
 
     private fun showQrCode() {

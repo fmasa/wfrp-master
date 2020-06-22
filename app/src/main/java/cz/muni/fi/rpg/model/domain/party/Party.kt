@@ -1,15 +1,18 @@
 package cz.muni.fi.rpg.model.domain.party
+import android.os.Parcelable
 import cz.muni.fi.rpg.model.domain.common.Ambitions
 import cz.muni.fi.rpg.model.generateAccessCode
+import kotlinx.android.parcel.Parcelize
 import java.util.*
 
+@Parcelize
 data class Party(
     val id: UUID,
     private var name: String,
     val gameMasterId: String?,
     val users: Set<String>,
     private var ambitions: Ambitions = Ambitions("", "")
-) {
+) : Parcelable {
     companion object {
         const val NAME_MAX_LENGTH = 50
 
