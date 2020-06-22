@@ -52,6 +52,14 @@ class GameMasterViewModel(
         }
     }
 
+    suspend fun renameParty(newName: String) {
+        val party = parties.get(partyId)
+
+        party.rename(newName)
+
+        parties.save(party)
+    }
+
     suspend fun updatePartyAmbitions(ambitions: Ambitions) {
         val party = parties.get(partyId)
 

@@ -619,6 +619,30 @@ class Parties extends Suite {
             document.update("ambitions", {shortTerm: "Completely new ambitions!", longTerm: "We don't think that far"})
         )
     }
+
+    @test
+    async "should let GM rename party"() {
+        const party = await createValidParty();
+
+        const document = authedApp(party.gameMasterId)
+            .collection("parties")
+            .doc(party.id);
+
+        await firebase.assertSucceeds(document.update("name", "New cool name"))
+    }
+
+
+    @test
+    async "should NOT let player rename party"() {
+        const userId = "user123";
+        const party = await createUserAccessibleParty(userId);
+
+        const document = authedApp(userId)
+            .collection("parties")
+            .doc(party.id);
+
+        await firebase.assertFails(document.update("name", "New cool name"))
+    }
 }
 
 

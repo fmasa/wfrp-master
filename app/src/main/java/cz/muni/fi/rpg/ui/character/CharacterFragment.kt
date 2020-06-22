@@ -46,7 +46,7 @@ class CharacterFragment(
         }
 
         viewModel.party.right()
-            .observe(viewLifecycleOwner) { setSubtitle(it.name) }
+            .observe(viewLifecycleOwner) { setSubtitle(it.getName()) }
 
         pager.adapter = StaticFragmentsViewPagerAdapter(
             this,
@@ -90,7 +90,7 @@ class CharacterFragment(
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
 
-        inflater.inflate(R.menu.character_menu, menu)
+        inflater.inflate(R.menu.edit_menu, menu)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
