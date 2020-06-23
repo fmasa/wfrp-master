@@ -25,7 +25,7 @@ import kotlinx.coroutines.withContext
 import org.koin.core.parameter.parametersOf
 
 class CharacterSkillsFragment : Fragment(R.layout.fragment_character_skills),
-    CoroutineScope by CoroutineScope(Dispatchers.Default) {
+    CoroutineScope by CoroutineScope(Dispatchers.Default), SkillDialog.Listener {
     companion object {
         private const val ARGUMENT_CHARACTER_ID = "CHARACTER_ID"
 
@@ -83,14 +83,15 @@ class CharacterSkillsFragment : Fragment(R.layout.fragment_character_skills),
         }
     }
 
-    private fun openSkillDialog(existingSkill: Skill?) {
-        val dialog = SkillDialog.newInstance(existingSkill)
-        dialog.setOnSuccessListener { skill ->
-            launch {
-                viewModel.saveSkill(skill)
+    override fun onSkillSave(skill: Skill, dialog: SkillDialog) {
+        launch {
+            viewModel.saveSkill(skill)
 
-                withContext(Dispatchers.Main) { dialog.dismiss() }
-            }
-        }.show(childFragmentManager, "SkillDialog")
+            withContext(Dispatchers.Main) { dialog.dismiss() }
+        }
+    }
+
+    private fun openSkillDialog(existingSkill: Skill?) {
+        SkillDialog.newInstance(existingSkill).show(childFragmentManager, null)
     }
 }

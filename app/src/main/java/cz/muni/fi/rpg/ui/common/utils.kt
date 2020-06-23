@@ -19,3 +19,7 @@ fun Fragment.stringArgument(name: String) = lazy {
 inline fun <reified T : Parcelable> Fragment.parcelableArgument(name: String) = lazy {
     requireArguments().getParcelable<T>(name) ?: error("Argument $name was not passed")
 }
+
+inline fun <reified T : Parcelable> Fragment.optionalParcelableArgument(name: String) = lazy {
+    requireArguments().getParcelable<T>(name)
+}

@@ -10,32 +10,35 @@ import androidx.appcompat.app.AlertDialog
 import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
 import cz.muni.fi.rpg.R
-import cz.muni.fi.rpg.common.EntityListener
 import cz.muni.fi.rpg.model.domain.skills.Skill
 import cz.muni.fi.rpg.model.domain.skills.SkillCharacteristic
 import cz.muni.fi.rpg.ui.common.forms.Form
+import cz.muni.fi.rpg.ui.common.optionalParcelableArgument
 import kotlinx.android.synthetic.main.dialog_skill.view.*
 import java.util.UUID
 
 class SkillDialog : DialogFragment() {
-    private var onSuccessListener: EntityListener<Skill> = {}
+    interface Listener {
+        fun onSkillSave(skill: Skill, dialog: SkillDialog)
+    }
 
     companion object {
-        fun newInstance(existingSkill: Skill?): SkillDialog {
-            val fragment = SkillDialog()
-
-            fragment.arguments = bundleOf("skill" to existingSkill)
-
-            return fragment
+        fun newInstance(existingSkill: Skill?): SkillDialog = SkillDialog().apply {
+            arguments = bundleOf("skill" to existingSkill)
         }
     }
 
-    val skill: Skill? by lazy { arguments?.getParcelable<Skill>("skill") }
+    private lateinit var listener: Listener
 
-    fun setOnSuccessListener(listener: EntityListener<Skill>): SkillDialog {
-        onSuccessListener = listener
+    val skill: Skill? by optionalParcelableArgument("skill")
 
-        return this
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        val parentFragment = requireParentFragment()
+        check(parentFragment is Listener) { "$parentFragment must implement SkillDialog.Listener"}
+
+        listener = parentFragment
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
@@ -118,7 +121,7 @@ class SkillDialog : DialogFragment() {
         dialog.getButton(AlertDialog.BUTTON_POSITIVE).isEnabled = false
         dialog.getButton(AlertDialog.BUTTON_NEGATIVE).isEnabled = false
 
-        onSuccessListener(
+        listener.onSkillSave(
             Skill(
                 this.skill?.id ?: UUID.randomUUID(),
                 view.skillAdvanced.isChecked,
@@ -126,7 +129,8 @@ class SkillDialog : DialogFragment() {
                 name,
                 description,
                 view.advancesInput.getValue().toInt()
-            )
+            ),
+            this
         )
     }
 
