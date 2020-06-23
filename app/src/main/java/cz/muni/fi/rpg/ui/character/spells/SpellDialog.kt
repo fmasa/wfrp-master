@@ -11,6 +11,8 @@ import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.model.domain.character.CharacterId
 import cz.muni.fi.rpg.model.domain.spells.Spell
 import cz.muni.fi.rpg.ui.common.forms.Form
+import cz.muni.fi.rpg.ui.common.optionalParcelableArgument
+import cz.muni.fi.rpg.ui.common.parcelableArgument
 import cz.muni.fi.rpg.viewModels.SpellsViewModel
 import kotlinx.android.synthetic.main.dialog_spell.view.*
 import kotlinx.coroutines.CoroutineScope
@@ -36,13 +38,9 @@ class SpellDialog : DialogFragment(),
         }
     }
 
-    private val existingSpell: Spell? by lazy { requireArguments().getParcelable<Spell>("spell") }
-    private val viewModel: SpellsViewModel by viewModel {
-        parametersOf(
-            requireArguments().getParcelable<CharacterId>("characterId")
-                ?: error("Character ID not set")
-        )
-    }
+    private val existingSpell: Spell? by optionalParcelableArgument("spell")
+    private val characterId: CharacterId by parcelableArgument("characterId")
+    private val viewModel: SpellsViewModel by viewModel { parametersOf(characterId) }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val activity = requireActivity()

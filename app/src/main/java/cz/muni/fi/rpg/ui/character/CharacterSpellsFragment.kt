@@ -11,6 +11,7 @@ import cz.muni.fi.rpg.model.domain.character.CharacterId
 import cz.muni.fi.rpg.model.domain.spells.Spell
 import cz.muni.fi.rpg.ui.character.spells.SpellDialog
 import cz.muni.fi.rpg.ui.character.spells.adapter.SpellAdapter
+import cz.muni.fi.rpg.ui.common.parcelableArgument
 import cz.muni.fi.rpg.ui.common.toggleVisibility
 import cz.muni.fi.rpg.viewModels.SpellsViewModel
 import kotlinx.android.synthetic.main.fragment_character_spells.*
@@ -32,10 +33,7 @@ class CharacterSpellsFragment : Fragment(R.layout.fragment_character_spells),
         }
     }
 
-    private val characterId: CharacterId by lazy {
-        requireArguments().getParcelable<CharacterId>(ARGUMENT_CHARACTER_ID)
-            ?: error("Character ID not set")
-    }
+    private val characterId: CharacterId by parcelableArgument(ARGUMENT_CHARACTER_ID)
 
     private val viewModel: SpellsViewModel by viewModel { parametersOf(characterId) }
 

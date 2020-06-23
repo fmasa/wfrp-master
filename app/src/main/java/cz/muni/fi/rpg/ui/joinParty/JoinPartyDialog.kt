@@ -1,54 +1,60 @@
 package cz.muni.fi.rpg.ui.joinParty
 
 import android.app.Dialog
+import android.content.Context
 import android.content.DialogInterface
 import android.os.Bundle
 import android.text.SpannableStringBuilder
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.core.os.bundleOf
 import androidx.core.text.bold
 import androidx.fragment.app.DialogFragment
 import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.model.domain.invitation.AlreadyInParty
 import cz.muni.fi.rpg.model.domain.invitation.InvalidInvitation
-import cz.muni.fi.rpg.model.domain.invitation.InvitationProcessor
 import cz.muni.fi.rpg.model.domain.party.Invitation
+import cz.muni.fi.rpg.ui.common.parcelableArgument
+import cz.muni.fi.rpg.ui.common.stringArgument
+import cz.muni.fi.rpg.viewModels.JoinPartyViewModel
 import kotlinx.android.synthetic.main.dialog_join_party.view.*
 import kotlinx.coroutines.*
+import org.koin.android.viewmodel.ext.android.viewModel
 import timber.log.Timber
 
-typealias Listener = () -> Unit
+class JoinPartyDialog : DialogFragment(), CoroutineScope by CoroutineScope(Dispatchers.Main) {
+    companion object {
+        fun newInstance(
+            userId: String,
+            invitation: Invitation
+        ) = JoinPartyDialog().apply{
+            arguments = bundleOf(
+                "userId" to userId,
+                "invitation" to invitation
+            )
+        }
+    }
+    interface Listener {
+        fun onSuccessfulPartyJoin()
+        fun onDialogDismiss()
+    }
 
-class JoinPartyDialog(
-    private val userId: String,
-    private val invitation: Invitation,
-    private val invitationProcessor: InvitationProcessor
-) : DialogFragment(), CoroutineScope by CoroutineScope(Dispatchers.Main) {
+    private val viewModel: JoinPartyViewModel by viewModel()
 
-    private var onSuccessListener: Listener = {}
-    private var onErrorListener: Listener = {}
-    private var onDismissListener: Listener = {}
+    private val userId by stringArgument("userId")
+    private val invitation: Invitation by parcelableArgument("invitation")
+
+    private lateinit var listener: Listener
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+
+        check(context is Listener) { "$context must implement JoinPartyDialog.Listener" }
+        listener = context
+    }
 
     private var joining: Job? = null
-
-    fun setOnSuccessListener(listener: Listener): JoinPartyDialog {
-        onSuccessListener = listener
-
-        return this
-    }
-
-    fun setOnErrorListener(listener: Listener): JoinPartyDialog {
-        onErrorListener = listener
-
-        return this
-    }
-
-    fun setOnDismissListener(listener: Listener): JoinPartyDialog {
-        onDismissListener = listener
-
-        return this
-    }
 
     override fun onCancel(dialog: DialogInterface) {
         super.onCancel(dialog)
@@ -59,7 +65,7 @@ class JoinPartyDialog(
 
     private fun dismissAndNotify() {
         dismiss()
-        onDismissListener()
+        listener.onDialogDismiss()
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
@@ -98,8 +104,8 @@ class JoinPartyDialog(
 
         joining = launch {
             try {
-                invitationProcessor.accept(userId, invitation)
-                onSuccessListener()
+                viewModel.acceptInvitation(userId, invitation)
+                listener.onSuccessfulPartyJoin()
 
                 return@launch
             } catch (e: InvalidInvitation) {

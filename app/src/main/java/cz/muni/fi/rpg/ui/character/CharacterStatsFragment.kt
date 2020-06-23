@@ -10,6 +10,7 @@ import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.model.domain.character.CharacterId
 import cz.muni.fi.rpg.model.domain.character.Points
 import cz.muni.fi.rpg.model.right
+import cz.muni.fi.rpg.ui.common.parcelableArgument
 import cz.muni.fi.rpg.ui.views.CharacterPoint
 import cz.muni.fi.rpg.viewModels.CharacterStatsViewModel
 import kotlinx.android.synthetic.main.fragment_character_stats.*
@@ -28,9 +29,8 @@ class CharacterStatsFragment : Fragment(R.layout.fragment_character_stats),
         }
     }
 
-    private val viewModel: CharacterStatsViewModel by viewModel {
-        parametersOf(arguments?.getParcelable(ARGUMENT_CHARACTER_ID))
-    }
+    private val characterId: CharacterId by parcelableArgument(ARGUMENT_CHARACTER_ID)
+    private val viewModel: CharacterStatsViewModel by viewModel { parametersOf(characterId) }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

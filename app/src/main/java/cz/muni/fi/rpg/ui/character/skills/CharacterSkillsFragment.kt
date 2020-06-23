@@ -14,6 +14,7 @@ import cz.muni.fi.rpg.model.right
 import cz.muni.fi.rpg.ui.character.skills.adapter.SkillAdapter
 import cz.muni.fi.rpg.ui.character.skills.talents.TalentsFragment
 import cz.muni.fi.rpg.ui.common.CombinedLiveData
+import cz.muni.fi.rpg.ui.common.parcelableArgument
 import cz.muni.fi.rpg.viewModels.CharacterViewModel
 import cz.muni.fi.rpg.viewModels.SkillsViewModel
 import kotlinx.android.synthetic.main.fragment_character_skills.*
@@ -21,7 +22,6 @@ import org.koin.android.viewmodel.ext.android.viewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import org.koin.core.parameter.parametersOf
 
 class CharacterSkillsFragment : Fragment(R.layout.fragment_character_skills),
@@ -34,9 +34,7 @@ class CharacterSkillsFragment : Fragment(R.layout.fragment_character_skills),
         }
     }
 
-    private val characterId: CharacterId by lazy {
-        requireNotNull(arguments?.getParcelable<CharacterId>(ARGUMENT_CHARACTER_ID))
-    }
+    private val characterId: CharacterId by parcelableArgument(ARGUMENT_CHARACTER_ID)
 
     private val characterVm: CharacterViewModel by viewModel { parametersOf(characterId) }
     private val viewModel: SkillsViewModel by viewModel { parametersOf(characterId) }
@@ -84,13 +82,6 @@ class CharacterSkillsFragment : Fragment(R.layout.fragment_character_skills),
     }
 
     private fun openSkillDialog(existingSkill: Skill?) {
-        val dialog = SkillDialog.newInstance(existingSkill)
-        dialog.setOnSuccessListener { skill ->
-            launch {
-                viewModel.saveSkill(skill)
-
-                withContext(Dispatchers.Main) { dialog.dismiss() }
-            }
-        }.show(childFragmentManager, "SkillDialog")
+        SkillDialog.newInstance(characterId, existingSkill).show(childFragmentManager, null)
     }
 }

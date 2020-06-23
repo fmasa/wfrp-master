@@ -9,6 +9,7 @@ import androidx.lifecycle.observe
 import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.model.domain.character.CharacterId
 import cz.muni.fi.rpg.ui.common.ChangeAmbitionsDialog
+import cz.muni.fi.rpg.ui.common.parcelableArgument
 import cz.muni.fi.rpg.viewModels.CharacterMiscViewModel
 import kotlinx.android.synthetic.main.dialog_xp.view.*
 import kotlinx.android.synthetic.main.fragment_character_misc.*
@@ -30,9 +31,8 @@ internal class CharacterMiscFragment : Fragment(R.layout.fragment_character_misc
         }
     }
 
-    private val viewModel: CharacterMiscViewModel by viewModel {
-        parametersOf(requireArguments().getParcelable<CharacterId>(ARGUMENT_CHARACTER_ID))
-    }
+    private val characterId: CharacterId by parcelableArgument(ARGUMENT_CHARACTER_ID)
+    private val viewModel: CharacterMiscViewModel by viewModel { parametersOf(characterId) }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

@@ -12,6 +12,8 @@ import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.model.domain.common.CouldNotConnectToBackend
 import cz.muni.fi.rpg.model.domain.party.Party
 import cz.muni.fi.rpg.ui.common.forms.Form
+import cz.muni.fi.rpg.ui.common.serializableArgument
+import cz.muni.fi.rpg.ui.common.stringArgument
 import cz.muni.fi.rpg.viewModels.GameMasterViewModel
 import kotlinx.android.synthetic.main.dialog_party_rename.view.*
 import kotlinx.coroutines.*
@@ -30,11 +32,10 @@ class RenamePartyDialog : DialogFragment(), CoroutineScope by CoroutineScope(Dis
         }
     }
 
-    private val viewModel: GameMasterViewModel by viewModel {
-        parametersOf(requireArguments().getSerializable("partyId"))
-    }
+    private val partyId: UUID by serializableArgument("partyId")
+    private val currentName: String by stringArgument("currentName", "")
 
-    private val currentName: String by lazy { requireArguments().getString("currentName") ?: "" }
+    private val viewModel: GameMasterViewModel by viewModel { parametersOf(partyId) }
 
     private var pendingJob: Job? = null
 
