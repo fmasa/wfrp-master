@@ -54,7 +54,7 @@ class InventoryFragment : Fragment(R.layout.fragment_inventory),
         viewModel.money.observe(viewLifecycleOwner, characterMoney::setValue)
 
         characterMoney.setOnClickListener {
-            TransactionDialog(viewModel).show(parentFragmentManager, "TransactionDialog")
+            TransactionDialog.newInstance(characterId).show(parentFragmentManager, null)
         }
 
         view.addNewInventoryItemButton.setOnClickListener { showDialog(null) }
