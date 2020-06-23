@@ -16,18 +16,10 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
 class QrCode(context: Context, attrs: AttributeSet) : FrameLayout(context, attrs) {
-    private var currentWidth: Int = 0
-
     private val writer = QRCodeWriter()
 
     init {
         inflate(getContext(), R.layout.view_qr_code, this)
-    }
-
-    public override fun onSizeChanged(width: Int, height: Int, oldWidth: Int, oldHeight: Int) {
-        super.onSizeChanged(width, height, oldWidth, oldHeight)
-
-        currentWidth = width
     }
 
     suspend fun drawCode(contents: String) {

@@ -5,12 +5,10 @@ import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
-import android.widget.Toast
 import androidx.lifecycle.observe
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.fasterxml.jackson.databind.json.JsonMapper
 import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.model.domain.character.CharacterId
 import cz.muni.fi.rpg.model.domain.party.Invitation
@@ -24,9 +22,7 @@ import org.koin.core.parameter.parametersOf
 import org.koin.android.viewmodel.ext.android.viewModel
 import timber.log.Timber
 
-class GameMasterFragment(
-    private val jsonMapper: JsonMapper
-) : BaseFragment(R.layout.fragment_game_master) {
+class GameMasterFragment() : BaseFragment(R.layout.fragment_game_master) {
 
     private val args: GameMasterFragmentArgs by navArgs()
 
@@ -110,7 +106,7 @@ class GameMasterFragment(
     }
 
     private fun showQrCode() {
-        InvitationDialog(invitation, jsonMapper)
+        InvitationDialog.newInstance(invitation)
             .show(requireActivity().supportFragmentManager, InvitationDialog::class.simpleName)
     }
 }
