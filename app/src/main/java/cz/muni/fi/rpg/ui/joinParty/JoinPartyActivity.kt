@@ -11,7 +11,6 @@ import com.fasterxml.jackson.core.JsonProcessingException
 import com.fasterxml.jackson.databind.json.JsonMapper
 import com.google.zxing.Result
 import cz.muni.fi.rpg.R
-import cz.muni.fi.rpg.model.domain.invitation.InvitationProcessor
 import cz.muni.fi.rpg.model.domain.party.Invitation
 import cz.muni.fi.rpg.ui.AuthenticatedActivity
 import kotlinx.android.synthetic.main.activity_join_party.*
@@ -20,7 +19,7 @@ import org.koin.android.ext.android.inject
 import timber.log.Timber
 
 class JoinPartyActivity : AuthenticatedActivity(R.layout.activity_join_party),
-    ZXingScannerView.ResultHandler {
+    ZXingScannerView.ResultHandler, JoinPartyDialog.Listener {
     companion object {
         private const val CAMERA_PERMISSION_CODE = 1
 
@@ -30,7 +29,6 @@ class JoinPartyActivity : AuthenticatedActivity(R.layout.activity_join_party),
     }
 
     private val jsonMapper: JsonMapper by inject()
-    private val invitationProcessor: InvitationProcessor by inject()
 
     override fun onRequestPermissionsResult(
         requestCode: Int,
@@ -70,6 +68,14 @@ class JoinPartyActivity : AuthenticatedActivity(R.layout.activity_join_party),
         scanner.stopCamera()
     }
 
+    override fun onSuccessfulPartyJoin() {
+        finish()
+    }
+
+    override fun onDialogDismiss() {
+        resumeScanning()
+    }
+
     private fun requestCameraPermissionIfNecessary() {
         if (ContextCompat.checkSelfPermission(
                 this,
@@ -91,11 +97,7 @@ class JoinPartyActivity : AuthenticatedActivity(R.layout.activity_join_party),
             Timber.d("Scanned QR code with content ${result.text}")
             val invitation = deserializeInvitation(result.text)
 
-            JoinPartyDialog(getUserId(), invitation, invitationProcessor)
-                .setOnErrorListener { resumeScanning() }
-                .setOnSuccessListener { finish() }
-                .setOnDismissListener { resumeScanning() }
-                .show(supportFragmentManager, "JoinPartyDialog")
+            JoinPartyDialog.newInstance(getUserId(), invitation).show(supportFragmentManager, null)
         } catch (e: JsonProcessingException) {
             val error = "QR code is not valid party invitation"
 

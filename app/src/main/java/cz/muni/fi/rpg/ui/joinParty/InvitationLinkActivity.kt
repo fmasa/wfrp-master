@@ -20,7 +20,7 @@ import org.koin.android.ext.android.inject
 import timber.log.Timber
 
 class InvitationLinkActivity : AppCompatActivity(R.layout.activity_invitation_link),
-    CoroutineScope by CoroutineScope(Dispatchers.Default) {
+    CoroutineScope by CoroutineScope(Dispatchers.Default), JoinPartyDialog.Listener {
 
     private val auth: AuthenticationViewModel by inject()
     private val jsonMapper: JsonMapper by inject()
@@ -33,6 +33,14 @@ class InvitationLinkActivity : AppCompatActivity(R.layout.activity_invitation_li
             authenticate()
             acceptDynamicLinks()
         }
+    }
+
+    override fun onSuccessfulPartyJoin() {
+        openPartyList()
+    }
+
+    override fun onDialogDismiss() {
+        openPartyList()
     }
 
     private suspend fun authenticate(): Boolean {
@@ -55,11 +63,8 @@ class InvitationLinkActivity : AppCompatActivity(R.layout.activity_invitation_li
             val invitation = jsonMapper.readValue(invitationJson, Invitation::class.java)
 
             withContext(Dispatchers.Main) {
-                JoinPartyDialog(auth.getUserId(), invitation, invitationProcessor)
-                    .setOnErrorListener { openPartyList() }
-                    .setOnSuccessListener { openPartyList() }
-                    .setOnDismissListener { openPartyList() }
-                    .show(supportFragmentManager, "JoinPartyDialog")
+                JoinPartyDialog.newInstance(auth.getUserId(), invitation)
+                    .show(supportFragmentManager, null)
             }
         } catch (e: Throwable) {
             Timber.w(e, "Could not process Dynamic Link data")
