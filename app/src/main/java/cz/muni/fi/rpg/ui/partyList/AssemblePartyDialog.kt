@@ -12,20 +12,38 @@ import cz.muni.fi.rpg.model.domain.common.CouldNotConnectToBackend
 import cz.muni.fi.rpg.model.domain.party.Party
 import cz.muni.fi.rpg.model.domain.party.PartyRepository
 import cz.muni.fi.rpg.ui.common.forms.Form
+import cz.muni.fi.rpg.viewModels.AuthenticationViewModel
 import kotlinx.android.synthetic.main.dialog_asssemble_party.view.*
 import kotlinx.android.synthetic.main.dialog_asssemble_party.view.singlePlayerWarning
 import kotlinx.coroutines.*
+import org.koin.android.ext.android.inject
+import org.koin.android.viewmodel.ext.android.viewModel
 import timber.log.Timber
 import java.util.*
 
-class AssemblePartyDialog(
-    private val userId: String,
-    private val onSuccessListener: (Party) -> Unit,
-    private val parties: PartyRepository
-) : DialogFragment(), CoroutineScope by CoroutineScope(Dispatchers.Main) {
+class AssemblePartyDialog : DialogFragment(), CoroutineScope by CoroutineScope(Dispatchers.Main) {
+    interface PartyCreationListener {
+        fun onSuccessfulCreation(party: Party)
+    }
+
+    private val parties: PartyRepository by inject()
+    private val auth: AuthenticationViewModel by viewModel()
     private var pendingJob: Job? = null
 
+    private lateinit var listener: PartyCreationListener
+
     private lateinit var form: Form
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        val parentFragment = parentFragment
+        check(parentFragment is PartyCreationListener) {
+            "$parentFragment must implement PartyCreationListener"
+        }
+
+        listener = parentFragment
+    }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val activity = requireActivity()
@@ -70,6 +88,7 @@ class AssemblePartyDialog(
         val partyId = UUID.randomUUID()
         val partyName = view.partyNameInput.getValue()
 
+        val userId = auth.getUserId()
         val party = if (view.singlePlayerCheckbox.isChecked)
             Party.singlePlayerParty(partyId, partyName, userId)
         else Party.multiPlayerParty(partyId, partyName, userId)
@@ -85,7 +104,7 @@ class AssemblePartyDialog(
                 parties.save(party)
                 toast("Party $partyName was created")
                 Timber.d(tag, "Party $partyName was successfully created")
-                withContext(Dispatchers.Main) { onSuccessListener(party) }
+                withContext(Dispatchers.Main) { listener.onSuccessfulCreation(party) }
             } catch (e: CouldNotConnectToBackend) {
                 Timber.i(e, "User could not assemble party, because (s)he is offline")
                 toast(getString(R.string.error_party_creation_no_connection))

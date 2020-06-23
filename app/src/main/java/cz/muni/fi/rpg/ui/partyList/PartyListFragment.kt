@@ -7,6 +7,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.model.domain.character.CharacterId
+import cz.muni.fi.rpg.model.domain.party.Party
 import cz.muni.fi.rpg.model.domain.party.PartyRepository
 import cz.muni.fi.rpg.ui.common.BaseFragment
 import cz.muni.fi.rpg.ui.joinParty.JoinPartyActivity
@@ -18,8 +19,7 @@ import java.util.*
 
 class PartyListFragment(
     private val parties: PartyRepository
-) : BaseFragment(R.layout.fragment_party_list) {
-
+) : BaseFragment(R.layout.fragment_party_list), AssemblePartyDialog.PartyCreationListener {
     private val authViewModel: AuthenticationViewModel by sharedViewModel()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -53,15 +53,7 @@ class PartyListFragment(
         }
 
         assembleNewParty.setOnClickListener {
-            AssemblePartyDialog(
-                userId,
-                { party ->
-                    if (party.isSinglePlayer())
-                        openCharacter(party.id, userId)
-                    else openGameMasterFragment(party.id)
-                },
-                parties
-            ).show(childFragmentManager, "AssemblePartyDialog")
+            AssemblePartyDialog().show(childFragmentManager, "AssemblePartyDialog")
             fabMenu.collapse()
         }
 
@@ -69,6 +61,12 @@ class PartyListFragment(
             JoinPartyActivity.start(requireContext())
             fabMenu.collapse()
         }
+    }
+
+    override fun onSuccessfulCreation(party: Party) {
+        if (party.isSinglePlayer())
+            openCharacter(party.id, authViewModel.getUserId())
+        else openGameMasterFragment(party.id)
     }
 
     private fun openGameMasterFragment(partyId: UUID) = findNavController()
