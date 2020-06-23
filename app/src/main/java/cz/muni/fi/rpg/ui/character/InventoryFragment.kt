@@ -13,6 +13,7 @@ import cz.muni.fi.rpg.model.domain.inventory.InventoryItem
 import cz.muni.fi.rpg.ui.character.adapter.InventoryAdapter
 import cz.muni.fi.rpg.ui.character.inventory.InventoryItemDialog
 import cz.muni.fi.rpg.ui.character.inventory.TransactionDialog
+import cz.muni.fi.rpg.ui.common.parcelableArgument
 import cz.muni.fi.rpg.viewModels.InventoryViewModel
 import kotlinx.android.synthetic.main.fragment_inventory.*
 import kotlinx.coroutines.*
@@ -29,13 +30,8 @@ class InventoryFragment : Fragment(R.layout.fragment_inventory),
         }
     }
 
-    private val characterId: CharacterId by lazy {
-        requireNotNull(requireArguments().getParcelable<CharacterId>(ARGUMENT_CHARACTER_ID))
-    }
-
-    private val viewModel: InventoryViewModel by viewModel {
-        parametersOf(arguments?.getParcelable(ARGUMENT_CHARACTER_ID))
-    }
+    private val characterId: CharacterId by parcelableArgument(ARGUMENT_CHARACTER_ID)
+    private val viewModel: InventoryViewModel by viewModel { parametersOf(characterId) }
 
     private fun setViewVisibility(view: View, visible: Boolean) {
         view.visibility = if (visible) View.VISIBLE else View.GONE

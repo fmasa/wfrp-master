@@ -33,13 +33,8 @@ class ChangeAmbitionsDialog : DialogFragment(),
             }
     }
 
-    private val title: String by lazy {
-        requireArguments().getString(ARGUMENT_TITLE) ?: error("Title not set")
-    }
-
-    private val defaults: Ambitions by lazy {
-        requireArguments().getParcelable<Ambitions>(ARGUMENT_DEFAULTS) ?: error("Defaults not set")
-    }
+    private val title: String by stringArgument(ARGUMENT_TITLE)
+    private val defaults: Ambitions by parcelableArgument(ARGUMENT_DEFAULTS)
 
     private var onSaveListener: SuspendableEntityListener<Ambitions>? = null
 

@@ -10,6 +10,7 @@ import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.common.EntityListener
 import cz.muni.fi.rpg.model.domain.talents.Talent
 import cz.muni.fi.rpg.ui.common.forms.Form
+import cz.muni.fi.rpg.ui.common.parcelableArgument
 import kotlinx.android.synthetic.main.dialog_talent.view.*
 import java.util.*
 
@@ -26,7 +27,7 @@ class TalentDialog : DialogFragment() {
         }
     }
 
-    val talent: Talent? by lazy { arguments?.getParcelable<Talent>("talent") }
+    val talent: Talent? by parcelableArgument("talent")
 
     fun setOnSuccessListener(listener: EntityListener<Talent>): TalentDialog {
         onSuccessListener = listener

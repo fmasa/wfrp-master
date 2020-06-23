@@ -14,6 +14,7 @@ import cz.muni.fi.rpg.model.right
 import cz.muni.fi.rpg.ui.character.skills.adapter.SkillAdapter
 import cz.muni.fi.rpg.ui.character.skills.talents.TalentsFragment
 import cz.muni.fi.rpg.ui.common.CombinedLiveData
+import cz.muni.fi.rpg.ui.common.parcelableArgument
 import cz.muni.fi.rpg.viewModels.CharacterViewModel
 import cz.muni.fi.rpg.viewModels.SkillsViewModel
 import kotlinx.android.synthetic.main.fragment_character_skills.*
@@ -34,9 +35,7 @@ class CharacterSkillsFragment : Fragment(R.layout.fragment_character_skills),
         }
     }
 
-    private val characterId: CharacterId by lazy {
-        requireNotNull(arguments?.getParcelable<CharacterId>(ARGUMENT_CHARACTER_ID))
-    }
+    private val characterId: CharacterId by parcelableArgument(ARGUMENT_CHARACTER_ID)
 
     private val characterVm: CharacterViewModel by viewModel { parametersOf(characterId) }
     private val viewModel: SkillsViewModel by viewModel { parametersOf(characterId) }

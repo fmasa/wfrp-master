@@ -12,6 +12,8 @@ import cz.muni.fi.rpg.model.domain.character.CharacterId
 import cz.muni.fi.rpg.model.domain.inventory.InventoryItem
 import cz.muni.fi.rpg.model.domain.inventory.InventoryItemId
 import cz.muni.fi.rpg.ui.common.forms.Form
+import cz.muni.fi.rpg.ui.common.optionalParcelableArgument
+import cz.muni.fi.rpg.ui.common.parcelableArgument
 import cz.muni.fi.rpg.viewModels.InventoryViewModel
 import kotlinx.android.synthetic.main.inventory_item_edit_dialog.view.*
 import kotlinx.coroutines.CoroutineScope
@@ -24,15 +26,6 @@ import timber.log.Timber
 
 class InventoryItemDialog : DialogFragment(),
     CoroutineScope by CoroutineScope(Dispatchers.Default) {
-    private val existingItem: InventoryItem? by lazy {
-        requireArguments().getParcelable<InventoryItem>(ARGUMENT_ITEM)
-    }
-    private val characterId: CharacterId by lazy {
-        requireNotNull(requireArguments().getParcelable<CharacterId>(ARGUMENT_CHARACTER_ID))
-    }
-
-    private val viewModel: InventoryViewModel by viewModel { parametersOf(characterId) }
-
     companion object {
         private const val ARGUMENT_ITEM = "item"
         private const val ARGUMENT_CHARACTER_ID = "characterId"
@@ -47,6 +40,11 @@ class InventoryItemDialog : DialogFragment(),
             )
         }
     }
+
+    private val existingItem: InventoryItem? by optionalParcelableArgument(ARGUMENT_ITEM)
+    private val characterId: CharacterId by parcelableArgument(ARGUMENT_CHARACTER_ID)
+
+    private val viewModel: InventoryViewModel by viewModel { parametersOf(characterId) }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val activity = requireActivity()

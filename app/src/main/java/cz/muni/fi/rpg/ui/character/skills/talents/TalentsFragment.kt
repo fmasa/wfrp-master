@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.model.domain.character.CharacterId
 import cz.muni.fi.rpg.model.domain.talents.Talent
+import cz.muni.fi.rpg.ui.common.parcelableArgument
 import cz.muni.fi.rpg.viewModels.TalentsViewModel
 import kotlinx.android.synthetic.main.fragment_talents.*
 import kotlinx.coroutines.CoroutineScope
@@ -29,9 +30,8 @@ class TalentsFragment : Fragment(R.layout.fragment_talents),
             }
     }
 
-    private val viewModel: TalentsViewModel by viewModel {
-        parametersOf(arguments?.getParcelable(ARGUMENT_CHARACTER_ID))
-    }
+    private val characterId: CharacterId by parcelableArgument(ARGUMENT_CHARACTER_ID)
+    private val viewModel: TalentsViewModel by viewModel { parametersOf(characterId) }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
