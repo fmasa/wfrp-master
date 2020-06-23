@@ -10,36 +10,39 @@ import androidx.appcompat.app.AlertDialog
 import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
 import cz.muni.fi.rpg.R
+import cz.muni.fi.rpg.model.domain.character.CharacterId
 import cz.muni.fi.rpg.model.domain.skills.Skill
 import cz.muni.fi.rpg.model.domain.skills.SkillCharacteristic
 import cz.muni.fi.rpg.ui.common.forms.Form
 import cz.muni.fi.rpg.ui.common.optionalParcelableArgument
+import cz.muni.fi.rpg.ui.common.parcelableArgument
+import cz.muni.fi.rpg.viewModels.SkillsViewModel
 import kotlinx.android.synthetic.main.dialog_skill.view.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import org.koin.android.viewmodel.ext.android.viewModel
+import org.koin.core.parameter.parametersOf
 import java.util.UUID
 
-class SkillDialog : DialogFragment() {
-    interface Listener {
-        fun onSkillSave(skill: Skill, dialog: SkillDialog)
-    }
-
+class SkillDialog : DialogFragment(), CoroutineScope by CoroutineScope(Dispatchers.Default) {
     companion object {
-        fun newInstance(existingSkill: Skill?): SkillDialog = SkillDialog().apply {
-            arguments = bundleOf("skill" to existingSkill)
+        const val ARGUMENT_CHARACTER_ID = "characterId"
+        const val ARGUMENT_SKILL = "skill"
+
+        fun newInstance(characterId: CharacterId, existingSkill: Skill?) = SkillDialog().apply {
+            arguments = bundleOf(
+                ARGUMENT_CHARACTER_ID to characterId,
+                ARGUMENT_SKILL to existingSkill
+            )
         }
     }
 
-    private lateinit var listener: Listener
+    private val characterId: CharacterId by parcelableArgument(ARGUMENT_CHARACTER_ID)
+    val skill: Skill? by optionalParcelableArgument(ARGUMENT_SKILL)
 
-    val skill: Skill? by optionalParcelableArgument("skill")
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        val parentFragment = requireParentFragment()
-        check(parentFragment is Listener) { "$parentFragment must implement SkillDialog.Listener"}
-
-        listener = parentFragment
-    }
+    private val viewModel: SkillsViewModel by viewModel { parametersOf(characterId)}
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val activity = requireActivity()
@@ -88,7 +91,7 @@ class SkillDialog : DialogFragment() {
             .setView(view)
             .setTitle(if (skill != null) null else getString(R.string.title_addSkill))
             .setPositiveButton(R.string.button_save) { _, _ -> }
-            .setNegativeButton(R.string.button_cancel) { _, _ ->}
+            .setNegativeButton(R.string.button_cancel) { _, _ -> }
             .create()
 
         dialog.setOnShowListener {
@@ -121,17 +124,19 @@ class SkillDialog : DialogFragment() {
         dialog.getButton(AlertDialog.BUTTON_POSITIVE).isEnabled = false
         dialog.getButton(AlertDialog.BUTTON_NEGATIVE).isEnabled = false
 
-        listener.onSkillSave(
-            Skill(
-                this.skill?.id ?: UUID.randomUUID(),
-                view.skillAdvanced.isChecked,
-                selectedCharacteristic(view),
-                name,
-                description,
-                view.advancesInput.getValue().toInt()
-            ),
-            this
+        val skill = Skill(
+            this.skill?.id ?: UUID.randomUUID(),
+            view.skillAdvanced.isChecked,
+            selectedCharacteristic(view),
+            name,
+            description,
+            view.advancesInput.getValue().toInt()
         )
+
+        launch {
+            viewModel.saveSkill(skill)
+            withContext(Dispatchers.Main) { dismiss() }
+        }
     }
 
     private fun selectedCharacteristic(view: View): SkillCharacteristic {
