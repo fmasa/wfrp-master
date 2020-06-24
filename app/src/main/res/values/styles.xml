@@ -52,6 +52,7 @@
 
     <style name="OutlinedInputWithCounter" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
         <item name="android:layout_marginBottom">0dp</item>
+        <item name="boxBackgroundColor">@color/colorCardBackground</item>
     </style>
 
     <style name="AppTheme.NoActionBar">

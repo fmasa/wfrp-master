@@ -49,25 +49,25 @@ class CharacterInfoFormFragment :
         form = Form(requireContext()).apply {
             addTextInput(nameInput).apply {
                 setNotBlank(getString(R.string.error_cannot_be_empty))
-                setMaxLength(Character.NAME_MAX_LENGTH)
+                setMaxLength(Character.NAME_MAX_LENGTH, showCounter = false)
             }
 
             addTextInput(careerInput).apply {
                 setNotBlank(getString(R.string.error_cannot_be_empty))
-                setMaxLength(Character.CAREER_MAX_LENGTH)
+                setMaxLength(Character.CAREER_MAX_LENGTH, showCounter = false)
             }
 
             addTextInput(socialClassInput).apply {
                 setNotBlank(getString(R.string.error_cannot_be_empty))
-                setMaxLength(Character.SOCIAL_CLASS_MAX_LENGTH)
+                setMaxLength(Character.SOCIAL_CLASS_MAX_LENGTH, showCounter = false)
             }
 
             addTextInput(psychologyInput).apply {
-                setMaxLength(Character.PSYCHOLOGY_MAX_LENGTH)
+                setMaxLength(Character.PSYCHOLOGY_MAX_LENGTH, showCounter = false)
             }
 
             addTextInput(motivationInput).apply {
-                setMaxLength(Character.MOTIVATION_MAX_LENGTH)
+                setMaxLength(Character.MOTIVATION_MAX_LENGTH, showCounter = false)
             }
         }
 
