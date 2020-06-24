@@ -17,4 +17,5 @@
     <color name="colorSplashScreenText">#eaeaea</color>
     <color name="colorCardBackground">#FFFFFF</color>
     <color name="colorBackgroundUnderCard">#fafafa</color>
+    <color name="formBackground">#F5F5F5</color>
 </resources>
