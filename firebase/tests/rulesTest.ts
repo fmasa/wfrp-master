@@ -125,7 +125,7 @@ async function setUserInvitation(userId: string, partyId: string, accessCode: st
 }
 
 function withoutField(object: object, field: string) : object {
-    return Object.fromEntries(Object.entries(object).filter(([fieldName]) => fieldName === field));
+    return Object.fromEntries(Object.entries(object).filter(([fieldName]) => fieldName !== field));
 }
 
 /**
@@ -434,9 +434,6 @@ class Parties extends Suite {
 
         // Character name too long
         await firebase.assertFails(character.set({...data, name: "a".repeat(51)}));
-
-        // Character description too long
-        await firebase.assertFails(character.set({...data, description: "a".repeat(201)}));
 
         // Whitespaces only name+
         await firebase.assertFails(character.set({...data, name: "\t \r"}));
