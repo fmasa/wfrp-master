@@ -2,6 +2,7 @@ package cz.muni.fi.rpg.ui.character
 
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import cz.muni.fi.rpg.R
@@ -19,6 +20,7 @@ import kotlinx.android.synthetic.main.fragment_inventory.*
 import kotlinx.coroutines.*
 import org.koin.android.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
+import timber.log.Timber
 
 class InventoryFragment : Fragment(R.layout.fragment_inventory),
     CoroutineScope by CoroutineScope(Dispatchers.Default) {
@@ -70,6 +72,28 @@ class InventoryFragment : Fragment(R.layout.fragment_inventory),
         viewModel.inventory.observe(viewLifecycleOwner) { items ->
             adapter.submitList(items)
             setEmptyCollectionView(items.isEmpty())
+        }
+
+        viewModel.armor.observe(viewLifecycleOwner) { errorOrArmor ->
+            errorOrArmor.fold(
+                {
+                    Toast.makeText(
+                        context,
+                        "An error occurred during armor loading",
+                        Toast.LENGTH_LONG
+                    ).show()
+                    Timber.w(it)
+                },
+                {
+                    headArmorValue.text = it.head.toString()
+                    bodyArmorValue.text = it.body.toString()
+                    leftArmArmorValue.text = it.leftArm.toString()
+                    rightArmArmorValue.text = it.rightArm.toString()
+                    leftLegArmorValue.text = it.leftLeg.toString()
+                    rightLegArmorValue.text = it.rightLeg.toString()
+                    shieldArmorValue.text = it.shield.toString()
+                }
+            )
         }
     }
 }

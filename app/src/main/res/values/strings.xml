@@ -197,4 +197,13 @@
     <string name="share_link">Share link</string>
     <string name="waiting_for_character">Waiting for player to create character</string>
     <string name="message_party_updated">Party was updated</string>
+    <string name="armor_shield">Shield</string>
+    <string name="armor_left_leg">Left Leg</string>
+    <string name="armor_right_leg">Right Leg</string>
+    <string name="armor_left_arm">Left Arm</string>
+    <string name="armor_right_arm">Right Arm</string>
+    <string name="armor_body">Body</string>
+    <string name="armor_head">Head</string>
+    <string name="title_character_armor">Armor</string>
+    <string name="title_inventory_add_item">Add Item</string>
 </resources>

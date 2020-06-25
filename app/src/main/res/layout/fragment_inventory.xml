@@ -1,65 +1,373 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.character.InventoryFragment"
-    android:layout_marginBottom="50dp">
+    android:background="@color/colorBackgroundUnderCard"
+    tools:context=".ui.character.InventoryFragment">
 
-    <cz.muni.fi.rpg.ui.views.MoneyView
-        android:id="@+id/characterMoney"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:clickable="true"
-        android:focusable="true"
-        android:foreground="?attr/selectableItemBackground"
-        />
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/inventoryRecycler"
+    <LinearLayout
+        android:orientation="vertical"
+        android:paddingBottom="@dimen/long_ui_bottom_padding"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/characterMoney"
-        app:layout_constraintStart_toStartOf="parent"
-        android:visibility="gone"
-        />
+        android:layout_height="wrap_content">
 
-    <ImageView
-        android:id="@+id/noInventoryItemIcon"
-        android:src="@drawable/ic_inventory"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.4"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        android:visibility="gone"
-        style="@style/EmptyStateIcon" />
+        <cz.muni.fi.rpg.ui.views.MoneyView
+            android:id="@+id/characterMoney"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:focusable="true"
+            android:layout_gravity="end"
+            android:foreground="?attr/selectableItemBackground" />
 
-    <TextView
-        android:id="@+id/noInventoryItemText"
-        android:visibility="gone"
-        app:layout_constraintTop_toBottomOf="@id/noInventoryItemIcon"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        style="@style/EmptyStateText"
-        android:text="@string/no_inventory_item_prompt"
-        />
+        <androidx.cardview.widget.CardView
+            android:id="@+id/armorCard"
+            style="@style/CardContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
-    <com.getbase.floatingactionbutton.FloatingActionButton
-        android:id="@+id/addNewInventoryItemButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:fab_colorNormal="@color/colorPrimary"
-        app:fab_colorPressed="@color/colorPrimaryDark"
-        app:fab_icon="@drawable/ic_add"
-        android:layout_margin="@dimen/fabMargin"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        />
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_marginVertical="16dp"
+                android:orientation="horizontal"
+                android:layout_gravity="top"
+                android:layout_height="match_parent"
+                tools:ignore="MissingConstraints">
+
+                <TextView
+                    android:id="@+id/armorTitle"
+                    style="@style/TextAppearance.AppCompat.Title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/title_character_armor"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <androidx.constraintlayout.helper.widget.Flow
+                    android:layout_marginTop="16dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:constraint_referenced_ids="
+                    headArmor,
+                    leftArmArmor,
+                    rightArmArmor,
+                    chestArmor,
+                    shieldArmor,
+                    leftLegArmor,
+                    rightLegArmor"
+                    app:flow_horizontalAlign="start"
+                    app:flow_maxElementsWrap="4"
+                    app:flow_verticalGap="8dp"
+                    app:flow_wrapMode="aligned"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/armorTitle" />
 
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+                <LinearLayout
+                    android:id="@+id/headArmor"
+                    android:layout_width="wrap_content"
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    android:layout_height="match_parent">
+
+                    <ImageView
+                        android:src="@drawable/ic_armor_head"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:ignore="ContentDescription" />
+
+                    <TextView
+                        android:id="@+id/headArmorValue"
+                        style="@style/TextAppearance.AppCompat.Title"
+                        android:text="-"
+                        android:layout_gravity="center"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        tools:ignore="HardcodedText" />
+
+                    <TextView
+                        android:textAlignment="center"
+                        android:text="@string/armor_head"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+
+                    <TextView
+                        android:text="01-09"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        tools:ignore="HardcodedText" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/chestArmor"
+                    android:layout_width="wrap_content"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:layout_height="match_parent">
+
+                    <ImageView
+                        android:src="@drawable/ic_armor_chest"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+
+                    <TextView
+                        android:id="@+id/bodyArmorValue"
+                        style="@style/TextAppearance.AppCompat.Title"
+                        android:text="-"
+                        android:layout_gravity="center"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        tools:ignore="HardcodedText" />
+
+                    <TextView
+                        android:textAlignment="center"
+                        android:text="@string/armor_body"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="45-79"
+                        tools:ignore="HardcodedText" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/rightArmArmor"
+                    android:layout_width="wrap_content"
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    android:layout_height="match_parent">
+
+                    <ImageView
+                        android:id="@+id/rightArmArmorIcon"
+                        android:src="@drawable/ic_armor_arm_right"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+
+                    <TextView
+                        android:id="@+id/rightArmArmorValue"
+                        style="@style/TextAppearance.AppCompat.Title"
+                        android:text="-"
+                        android:layout_gravity="center"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        tools:ignore="HardcodedText" />
+
+                    <TextView
+                        android:textAlignment="center"
+                        android:text="@string/armor_right_arm"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+
+                    <TextView
+                        android:text="25-44"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        tools:ignore="HardcodedText" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/leftArmArmor"
+                    android:layout_width="wrap_content"
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    android:layout_height="match_parent">
+
+                    <ImageView
+                        android:id="@+id/leftArmArmorIcon"
+                        android:src="@drawable/ic_armor_arm_left"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        tools:ignore="ContentDescription" />
+
+                    <TextView
+                        android:id="@+id/leftArmArmorValue"
+                        style="@style/TextAppearance.AppCompat.Title"
+                        android:text="-"
+                        android:layout_gravity="center"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        tools:ignore="HardcodedText" />
+
+                    <TextView
+                        android:textAlignment="center"
+                        android:text="@string/armor_left_arm"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+
+                    <TextView
+                        android:text="10-24"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        tools:ignore="HardcodedText" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/rightLegArmor"
+                    android:gravity="center"
+                    android:layout_width="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_height="match_parent">
+
+                    <ImageView
+                        android:id="@+id/rightLegArmorIcon"
+                        android:src="@drawable/ic_armor_legs"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        tools:ignore="ContentDescription" />
+
+                    <TextView
+                        android:id="@+id/rightLegArmorValue"
+                        style="@style/TextAppearance.AppCompat.Title"
+                        android:text="-"
+                        android:layout_gravity="center"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        tools:ignore="HardcodedText" />
+
+                    <TextView
+                        android:textAlignment="center"
+                        android:text="@string/armor_right_leg"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+
+                    <TextView
+                        android:text="90-00"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        tools:ignore="HardcodedText" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/leftLegArmor"
+                    android:gravity="center"
+                    android:layout_width="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_height="match_parent">
+
+                    <ImageView
+                        android:id="@+id/lightLegArmorIcon"
+                        android:src="@drawable/ic_armor_legs"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        tools:ignore="ContentDescription" />
+
+                    <TextView
+                        android:id="@+id/leftLegArmorValue"
+                        style="@style/TextAppearance.AppCompat.Title"
+                        android:text="-"
+                        android:layout_gravity="center"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        tools:ignore="HardcodedText" />
+
+                    <TextView
+                        android:textAlignment="center"
+                        android:text="@string/armor_left_leg"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+
+                    <TextView
+                        android:text="80-89"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        tools:ignore="HardcodedText" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/shieldArmor"
+                    android:gravity="center"
+                    android:layout_width="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_height="match_parent">
+
+                    <ImageView
+                        android:id="@+id/shieldArmorIcon"
+                        android:src="@drawable/ic_armor_shield"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:ignore="ContentDescription" />
+
+                    <TextView
+                        android:id="@+id/shieldArmorValue"
+                        style="@style/TextAppearance.AppCompat.Title"
+                        android:text="-"
+                        android:layout_gravity="center"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        tools:ignore="HardcodedText" />
+
+                    <TextView
+                        android:textAlignment="center"
+                        android:text="@string/armor_shield"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+                </LinearLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView style="@style/CardContainer">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:orientation="vertical"
+                android:layout_marginVertical="16dp"
+                android:gravity="center"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    style="@style/TextAppearance.AppCompat.Title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/title_character_trappings" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/inventoryRecycler"
+                    android:visibility="gone"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+
+                <ImageView
+                    android:id="@+id/noInventoryItemIcon"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="16dp"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:visibility="gone"
+                    android:src="@drawable/ic_inventory"
+                    android:tint="@color/colorEmptyState" />
+
+                <TextView
+                    android:id="@+id/noInventoryItemText"
+                    style="@style/TextAppearance.AppCompat.Body1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone"
+                    android:textColor="@color/colorEmptyState"
+                    android:text="@string/no_inventory_item_prompt" />
+
+                <Button
+                    android:id="@+id/addNewInventoryItemButton"
+                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                    android:layout_gravity="center"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:text="@string/title_inventory_add_item" />
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+    </LinearLayout>
+</ScrollView>
 
