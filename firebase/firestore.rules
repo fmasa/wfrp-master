@@ -86,6 +86,17 @@ service cloud.firestore {
                     }
                 }
 
+                match /features/{featureName} {
+                    allow read: if hasAccessToParty();
+                    allow create: if canEditCharacter() && isValidFeature(request.resource.data);
+                    allow update: if canEditCharacter() && isValidFeature(request.resource.data);
+
+
+                    function isValidFeature(data) {
+                        return featureName == "armor" && isArmorValid(data);
+                    }
+                }
+
                 function areMoneyValid(money) {
                     return money is map
                         && money.keys().toSet() == ["pennies"].toSet()
@@ -177,6 +188,18 @@ service cloud.firestore {
                     && stats.toughness is int
                     && stats.weaponSkill is int
                     && stats.willPower is int;
+            }
+
+            function isArmorValid(armor) {
+                return armor is map
+                    && armor.keys().toSet() == ["head", "body", "leftArm", "rightArm", "leftLeg", "rightLeg", "shield"].toSet()
+                    && armor.head is int && armor.head >= 0 && armor.head <= 99
+                    && armor.body is int && armor.body >= 0 && armor.body <= 99
+                    && armor.leftArm is int && armor.leftArm >= 0 && armor.leftArm <= 99
+                    && armor.rightArm is int && armor.rightArm >= 0 && armor.rightArm <= 99
+                    && armor.leftLeg is int && armor.leftLeg >= 0 && armor.leftLeg <= 99
+                    && armor.rightLeg is int && armor.rightLeg >= 0 && armor.rightLeg <= 99
+                    && armor.shield is int && armor.shield >= 0 && armor.shield <= 99;
             }
 
             function isValidUuid(maybeUuid) {

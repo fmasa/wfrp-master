@@ -192,6 +192,85 @@ abstract class Suite
     }
 }
 
+abstract class CharacterSubCollectionSuite extends Suite {
+    private _partyId: string
+    private _gameMasterId: string;
+    protected readonly userId1 = 'user123';
+    protected readonly userId2 = 'user345';
+
+    protected get partyId(): string {
+        return this._partyId;
+    }
+
+    protected get gameMasterId(): string {
+        return this._gameMasterId;
+    }
+
+    async before() {
+        await super.before();
+
+        const party = await createValidParty();
+        this._partyId = party.id;
+        this._gameMasterId = party.gameMasterId;
+
+        await joinParty(party, this.userId1);
+        await joinParty(party, this.userId2);
+
+        await createCharacter(party.id, this.userId1);
+        await createCharacter(party.id, this.userId2);
+    }
+}
+
+abstract class CharacterFeatureSuite extends CharacterSubCollectionSuite {
+    abstract getFeatureName(): string
+    abstract getValue(): object
+
+    private getDocument(app: Firestore, userId: string) {
+        return app.collection("parties")
+            .doc(this.partyId)
+            .collection("characters")
+            .doc(userId)
+            .collection("features")
+            .doc(this.getFeatureName());
+    }
+
+    @test
+    async "Can be edited by user"() {
+        await firebase.assertSucceeds(
+            this.getDocument(authedApp(this.userId1), this.userId1)
+                .set(this.getValue())
+        );
+    }
+
+    @test
+    async "Can be edited by GM"() {
+        await firebase.assertSucceeds(
+            this.getDocument(authedApp(this.gameMasterId), this.userId1)
+                .set(this.getValue())
+        );
+    }
+
+    @test
+    async "Cannot be edited by other users"() {
+        for (const userId of [this.userId2, 'user-not-in-party']) {
+            await firebase.assertFails(
+                this.getDocument(authedApp(userId), this.userId1)
+                    .set(this.getValue())
+            );
+        }
+    }
+
+    @test
+    async "Cannot miss a field"() {
+        for (const field of Object.keys(this.getValue())) {
+            await firebase.assertFails(
+                this.getDocument(authedApp(this.userId1), this.userId1)
+                    .set(withoutField(this.getValue(), field))
+            );
+        }
+    }
+}
+
 @suite
 class Parties extends Suite {
     @test
@@ -621,36 +700,6 @@ class Parties extends Suite {
     }
 }
 
-
-abstract class CharacterSubCollectionSuite extends Suite {
-    private _partyId: string
-    private _gameMasterId: string;
-    protected readonly userId1 = 'user123';
-    protected readonly userId2 = 'user345';
-
-    protected get partyId(): string {
-        return this._partyId;
-    }
-
-    protected get gameMasterId(): string {
-        return this._gameMasterId;
-    }
-
-    async before() {
-        await super.before();
-
-        const party = await createValidParty();
-        this._partyId = party.id;
-        this._gameMasterId = party.gameMasterId;
-
-        await joinParty(party, this.userId1);
-        await joinParty(party, this.userId2);
-
-        await createCharacter(party.id, this.userId1);
-        await createCharacter(party.id, this.userId2);
-    }
-}
-
 @suite
 class Inventory extends CharacterSubCollectionSuite {
     private inventoryItem = {
@@ -931,7 +980,6 @@ class Skills extends CharacterSubCollectionSuite {
     }
 }
 
-
 @suite
 class Talents extends CharacterSubCollectionSuite {
     private talent = {
@@ -1068,7 +1116,6 @@ class Talents extends CharacterSubCollectionSuite {
         }));
     }
 }
-
 
 @suite
 class Spells extends CharacterSubCollectionSuite {
@@ -1222,5 +1269,24 @@ class Spells extends CharacterSubCollectionSuite {
                 })
             );
         }));
+    }
+}
+
+@suite
+class ArmorSuite extends CharacterFeatureSuite {
+    getFeatureName(): string {
+        return "armor";
+    }
+
+    getValue(): object {
+        return {
+            head: 1,
+            body: 1,
+            leftArm: 1,
+            rightArm: 1,
+            leftLeg: 1,
+            rightLeg: 1,
+            shield: 1,
+        }
     }
 }
