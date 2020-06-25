@@ -206,4 +206,5 @@
     <string name="armor_head">Head</string>
     <string name="title_character_armor">Armor</string>
     <string name="title_inventory_add_item">Add Item</string>
+    <string name="title_change_armor">Change Armor</string>
 </resources>

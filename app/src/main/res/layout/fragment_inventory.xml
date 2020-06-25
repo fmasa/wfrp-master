@@ -24,6 +24,9 @@
 
         <androidx.cardview.widget.CardView
             android:id="@+id/armorCard"
+            android:clickable="true"
+            android:focusable="true"
+            android:foreground="?attr/selectableItemBackground"
             style="@style/CardContainer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">

@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import cz.muni.fi.rpg.model.domain.character.CharacterId
 import cz.muni.fi.rpg.model.domain.inventory.InventoryItem
 import cz.muni.fi.rpg.ui.character.adapter.InventoryAdapter
+import cz.muni.fi.rpg.ui.character.inventory.ChangeArmorDialog
 import cz.muni.fi.rpg.ui.character.inventory.InventoryItemDialog
 import cz.muni.fi.rpg.ui.character.inventory.TransactionDialog
 import cz.muni.fi.rpg.ui.common.parcelableArgument
@@ -84,14 +85,19 @@ class InventoryFragment : Fragment(R.layout.fragment_inventory),
                     ).show()
                     Timber.w(it)
                 },
-                {
-                    headArmorValue.text = it.head.toString()
-                    bodyArmorValue.text = it.body.toString()
-                    leftArmArmorValue.text = it.leftArm.toString()
-                    rightArmArmorValue.text = it.rightArm.toString()
-                    leftLegArmorValue.text = it.leftLeg.toString()
-                    rightLegArmorValue.text = it.rightLeg.toString()
-                    shieldArmorValue.text = it.shield.toString()
+                { armor ->
+                    headArmorValue.text = armor.head.toString()
+                    bodyArmorValue.text = armor.body.toString()
+                    leftArmArmorValue.text = armor.leftArm.toString()
+                    rightArmArmorValue.text = armor.rightArm.toString()
+                    leftLegArmorValue.text = armor.leftLeg.toString()
+                    rightLegArmorValue.text = armor.rightLeg.toString()
+                    shieldArmorValue.text = armor.shield.toString()
+
+                    armorCard.setOnClickListener {
+                        ChangeArmorDialog.newInstance(characterId, armor)
+                            .show(childFragmentManager, null)
+                    }
                 }
             )
         }

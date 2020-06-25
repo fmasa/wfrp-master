@@ -55,4 +55,8 @@ class InventoryViewModel(
     suspend fun removeInventoryItem(inventoryItem: InventoryItem) {
         inventoryItems.remove(characterId, inventoryItem.id)
     }
+
+    suspend fun updateArmor(armor: Armor) {
+        armorRepository.save(characterId, armor)
+    }
 }
