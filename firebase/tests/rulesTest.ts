@@ -500,19 +500,14 @@ class Parties extends Suite {
 
         const data = validCharacter(userId);
 
-        for (const stat in Object.keys(data.stats)) {
+        for (const stat of Object.keys(data.stats)) {
             const newData = {...data, stats: withoutField(data.stats, stat)};
 
             // Missing stat
             await firebase.assertFails(character.set(newData));
 
-
-            // Negative stat
-            newData.stats[stat] = -1;
-            await firebase.assertFails(character.set(newData));
-
-            // Current stat larger than max value
-            newData.stats[stat] = newData.maxStats[stat] + 1
+            // Wrong stat type
+            newData.stats[stat] = "foo";
             await firebase.assertFails(character.set(newData));
         }
     }
@@ -532,28 +527,12 @@ class Parties extends Suite {
 
         await firebase.assertFails(character.set({...data, stats: {...data.stats, extraStat: 10}}));
 
-        const withPoints = (point: string, value: number) => ({...data, points: {...data.points, [point]: value}});
+        const withPoints = (point: string, value: any) => ({...data, points: {...data.points, [point]: value}});
 
         for (const point in data.points) {
             // Negative point
-            await firebase.assertFails(character.set(withPoints(point, -1)));
+            await firebase.assertFails(character.set(withPoints(point, "foo")));
         }
-
-        await firebase.assertSucceeds(character.set(withPoints('fortune', data.points.fate - 1)));
-        await firebase.assertSucceeds(character.set(withPoints('fortune', data.points.fate)));
-        await firebase.assertFails(character.set(withPoints('fortune', data.points.fate + 1)));
-
-        await firebase.assertSucceeds(character.set(withPoints('resolve', data.points.resilience - 1)));
-        await firebase.assertSucceeds(character.set(withPoints('resolve', data.points.resilience)));
-        await firebase.assertFails(character.set(withPoints('resolve', data.points.resilience + 1)));
-
-        await firebase.assertSucceeds(character.set(withPoints('wounds', data.points.maxWounds - 1)));
-        await firebase.assertSucceeds(character.set(withPoints('wounds', data.points.maxWounds)));
-        await firebase.assertFails(character.set(withPoints('wounds', data.points.maxWounds + 1)));
-
-        await firebase.assertSucceeds(character.set(withPoints('experience', 1)));
-        await firebase.assertSucceeds(character.set(withPoints('experience', 0)));
-        await firebase.assertFails(character.set(withPoints('experience', -1)));
     }
 
     @test

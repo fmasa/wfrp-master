@@ -124,7 +124,6 @@ service cloud.firestore {
                         && arePointsValid(character.points)
                         && areStatsValid(character.stats)
                         && areStatsValid(character.maxStats)
-                        && areMaxStatsValid(character.stats, character.maxStats)
                         && areMoneyValid(character.money)
                         && areAmbitionsValid(character.ambitions);
                 }
@@ -143,15 +142,15 @@ service cloud.firestore {
                         "sin",
                         "wounds"
                     ].toSet()
-                    && points.corruption is int && points.corruption >= 0
-                    && points.fate is int && points.fate >= 0
-                    && points.fortune is int && points.fortune >= 0 && points.fortune <= points.fate
-                    && points.maxWounds is int && points.maxWounds >= 0
-                    && points.resilience is int && points.resilience >= 0
-                    && points.resolve is int && points.resolve >= 0 && points.resolve <= points.resilience
-                    && points.sin is int && points.sin >= 0
-                    && points.wounds is int && points.wounds >= 0 && points.wounds <= points.maxWounds
-                    && points.experience is int && points.experience >= 0;
+                    && points.corruption is int
+                    && points.fate is int
+                    && points.fortune is int
+                    && points.maxWounds is int
+                    && points.resilience is int
+                    && points.resolve is int
+                    && points.sin is int
+                    && points.wounds is int
+                    && points.experience is int;
             }
 
             function areStatsValid(stats) {
@@ -168,29 +167,16 @@ service cloud.firestore {
                         "weaponSkill",
                         "willPower"
                     ].toSet()
-                    && stats.agility >= 0 && stats.agility <= 100
-                    && stats.ballisticSkill >= 0 && stats.ballisticSkill <= 100
-                    && stats.dexterity >= 0 && stats.dexterity <= 100
-                    && stats.fellowship >= 0 && stats.fellowship <= 100
-                    && stats.initiative >= 0 && stats.initiative <= 100
-                    && stats.intelligence >= 0 && stats.intelligence <= 100
-                    && stats.strength >= 0 && stats.strength <= 100
-                    && stats.toughness >= 0 && stats.toughness <= 100
-                    && stats.weaponSkill >= 0 && stats.weaponSkill <= 100
-                    && stats.willPower >= 0 && stats.willPower <= 100;
-            }
-
-            function areMaxStatsValid(stats, maxStats) {
-                return stats.agility <= maxStats.agility
-                    && stats.ballisticSkill <= maxStats.ballisticSkill
-                    && stats.dexterity <= maxStats.dexterity
-                    && stats.fellowship <= maxStats.fellowship
-                    && stats.initiative <= maxStats.initiative
-                    && stats.intelligence <= maxStats.intelligence
-                    && stats.strength <= maxStats.strength
-                    && stats.toughness <= maxStats.toughness
-                    && stats.weaponSkill <= maxStats.weaponSkill
-                    && stats.willPower <= maxStats.willPower;
+                    && stats.agility is int
+                    && stats.ballisticSkill is int
+                    && stats.dexterity is int
+                    && stats.fellowship is int
+                    && stats.initiative is int
+                    && stats.intelligence is int
+                    && stats.strength is int
+                    && stats.toughness is int
+                    && stats.weaponSkill is int
+                    && stats.willPower is int;
             }
 
             function isValidUuid(maybeUuid) {
