@@ -66,6 +66,7 @@ internal class CharacterMiscFragment : Fragment(R.layout.fragment_character_misc
             socialClassValue.text = character.getSocialClass()
             psychologyValue.text = character.getPsychology()
             motivationValue.text = character.getMotivation()
+            noteValue.text = character.getNote()
 
             xpPoints.text = getString(R.string.xp_points, character.getPoints().experience)
             xpPoints.setOnClickListener {

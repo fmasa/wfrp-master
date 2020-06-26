@@ -147,7 +147,8 @@ class CharacterCreationFragment(
                     maxStats = statsData.maxStats,
                     points = points,
                     psychology = info.psychology,
-                    motivation = info.motivation
+                    motivation = info.motivation,
+                    note = info.note
                 )
             )
             toast("Your character has been created")

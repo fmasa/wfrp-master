@@ -43,7 +43,9 @@
                     psychologyLabel,
                     psychologyValue,
                     motivationLabel,
-                    motivationValue"
+                    motivationValue,
+                    noteLabel,
+                    noteValue"
                     app:flow_horizontalBias="0"
                     app:flow_horizontalGap="14dp"
                     app:flow_horizontalStyle="spread"
@@ -154,6 +156,20 @@
 
                 <TextView
                     android:id="@+id/motivationValue"
+                    style="@style/TextAppearance.AppCompat.Medium"
+                    android:textColor="@color/colorText"
+                    android:paddingBottom="6dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+                <TextView
+                    android:id="@+id/noteLabel"
+                    android:text="@string/label_character_note"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+                <TextView
+                    android:id="@+id/noteValue"
                     style="@style/TextAppearance.AppCompat.Medium"
                     android:textColor="@color/colorText"
                     android:paddingBottom="6dp"
