@@ -51,6 +51,10 @@ class TextInput(context: Context, attrs: AttributeSet) : LinearLayout(context, a
                 editText.inputType = attributes.getIntegerOrThrow(R.styleable.TextInput_android_inputType)
             }
 
+            if (attributes.hasValue(R.styleable.TextInput_android_maxLines)) {
+                editText.maxLines = attributes.getIntegerOrThrow(R.styleable.TextInput_android_maxLines)
+            }
+
             editText.filters = filters.toTypedArray()
             editText.setText(value)
             editText.addTextChangedListener { value = it.toString().trim() }
