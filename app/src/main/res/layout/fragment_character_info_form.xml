@@ -15,6 +15,30 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:orientation="horizontal"
+        android:layout_marginTop="8dp"
+        android:layout_height="wrap_content">
+        <cz.muni.fi.rpg.ui.views.TextInput
+            android:id="@+id/socialClassInput"
+            android:layout_marginEnd="8dp"
+            app:inputLabel="@string/label_social_class"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:maxLines="1"
+            android:layout_height="wrap_content"/>
+
+        <cz.muni.fi.rpg.ui.views.TextInput
+            android:id="@+id/careerInput"
+            app:inputLabel="@string/label_career"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:maxLines="1"
+            android:layout_height="wrap_content"/>
+    </LinearLayout>
+
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -58,21 +82,6 @@
             android:layout_height="wrap_content"
             android:text="@string/race_wood_elf" />
     </RadioGroup>
-
-
-    <cz.muni.fi.rpg.ui.views.TextInput
-        android:id="@+id/socialClassInput"
-        android:layout_marginTop="8dp"
-        app:inputLabel="@string/label_social_class"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
-
-    <cz.muni.fi.rpg.ui.views.TextInput
-        android:id="@+id/careerInput"
-        android:layout_marginTop="8dp"
-        app:inputLabel="@string/label_career"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
 
     <cz.muni.fi.rpg.ui.views.TextInput
         android:id="@+id/psychologyInput"

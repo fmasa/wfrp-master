@@ -5,30 +5,37 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/stepTitle"
-        style="@style/TextAppearance.AppCompat.Subhead"
-        android:padding="16dp"
-        android:textAlignment="center"
-        android:layout_weight="0"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
-
-    <View
-        android:background="?android:attr/dividerHorizontal"
-        android:layout_height="1dp"
-        android:layout_width="match_parent" />
-
     <ScrollView
         android:fillViewport="true"
         android:layout_weight="1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-        <androidx.viewpager2.widget.ViewPager2
-            android:id="@+id/wizardPager"
-            android:fillViewport="true"
+
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/stepTitle"
+                style="@style/TextAppearance.AppCompat.Subhead"
+                android:padding="16dp"
+                android:textAlignment="center"
+                android:layout_weight="0"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <View
+                android:background="?android:attr/dividerHorizontal"
+                android:layout_height="1dp"
+                android:layout_width="match_parent" />
+
+            <androidx.viewpager2.widget.ViewPager2
+                android:id="@+id/wizardPager"
+                android:fillViewport="true"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
     </ScrollView>
 
     <View
@@ -45,8 +52,8 @@
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/buttonPrevious"
-            android:textColor="@color/colorText"
             style="@style/Widget.MaterialComponents.Button.TextButton"
+            android:textColor="@color/colorText"
             android:drawableStart="@drawable/ic_caret_left"
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"
