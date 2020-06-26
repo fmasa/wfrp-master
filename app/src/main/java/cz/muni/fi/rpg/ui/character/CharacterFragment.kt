@@ -63,23 +63,18 @@ class CharacterFragment(
             when (position) {
                 0 -> {
                     tab.setText(R.string.title_misc)
-                    tab.setIcon(R.drawable.ic_info)
                 }
                 1 -> {
                     tab.setText(R.string.title_character_stats)
-                    tab.setIcon(R.drawable.ic_character)
                 }
                 2 -> {
                     tab.setText(R.string.title_character_skills)
-                    tab.setIcon(R.drawable.ic_skills)
                 }
                 3 -> {
                     tab.setText(R.string.title_character_spells)
-                    tab.setIcon(R.drawable.ic_spells)
                 }
                 4 -> {
                     tab.setText(R.string.title_character_trappings)
-                    tab.setIcon(R.drawable.ic_inventory)
                 }
             }
         }.attach()
