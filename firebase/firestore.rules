@@ -109,7 +109,7 @@ service cloud.firestore {
                 }
 
                 function isValidCharacter(character) {
-                    return character.keys().toSet() == [
+                    return [
                             "name",
                             "career",
                             "socialClass",
@@ -122,8 +122,9 @@ service cloud.firestore {
                             "motivation",
                             "psychology",
                             "mutation",
-                            "ambitions"
-                        ].toSet()
+                            "ambitions",
+                            "note"
+                        ].hasAll(character.keys())
                         && character.userId == userId
                         && character.name is string && isNotBlank(character.name) && character.name.size() <= 50
                         && character.career is string && isNotBlank(character.career) && character.career.size() <= 50
@@ -136,7 +137,8 @@ service cloud.firestore {
                         && areStatsValid(character.stats)
                         && areStatsValid(character.maxStats)
                         && areMoneyValid(character.money)
-                        && areAmbitionsValid(character.ambitions);
+                        && areAmbitionsValid(character.ambitions)
+                        && (! ("note" in character) || (character.note is string && character.note.size() <= 400));
                 }
             }
 

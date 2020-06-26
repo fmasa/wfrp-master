@@ -562,6 +562,9 @@ class Parties extends Suite {
         // Invalid ambition object type
         await firebase.assertFails(character.set({...data, ambitions: "foo"}));
 
+        // Additional notes too long
+        await firebase.assertFails(character.set({...data, note: "a".repeat(401)}));
+
         // Invalid ambition field type
         await firebase.assertFails(character.set({...data, ambitions: {shortTerm: "foo", longTerm: 1}}));
     }
