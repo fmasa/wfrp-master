@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_marginBottom="@dimen/long_ui_bottom_padding"
     style="@style/CardContainer">
 
     <LinearLayout

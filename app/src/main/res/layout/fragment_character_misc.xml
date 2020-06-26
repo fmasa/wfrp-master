@@ -165,7 +165,6 @@
         <cz.muni.fi.rpg.ui.views.AmbitionsCard
             android:id="@+id/characterAmbitionsCard"
             style="@style/CardContainer"
-            android:layout_marginTop="20dp"
             android:clickable="true"
             android:focusable="true"
             android:foreground="?attr/selectableItemBackground"
@@ -176,7 +175,6 @@
         <cz.muni.fi.rpg.ui.views.AmbitionsCard
             android:id="@+id/partyAmbitionsCard"
             style="@style/CardContainer"
-            android:layout_marginTop="20dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:title="@string/title_party_ambitions"
