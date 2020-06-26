@@ -28,7 +28,7 @@
                 app:constraint_referenced_ids="woundsCard,pointsContainer,statsCard"
                 app:flow_maxElementsWrap="1"
                 app:flow_verticalBias="0"
-                app:flow_verticalGap="48dp"
+                app:flow_verticalGap="40dp"
                 app:flow_wrapMode="aligned"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -81,7 +81,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:constraint_referenced_ids="fateCard,pointsCard"
-                app:flow_horizontalGap="16dp" />
+                app:flow_horizontalGap="10dp" />
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/fateCard"

@@ -11,6 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
+        android:clipToPadding="false"
         android:paddingBottom="@dimen/long_ui_bottom_padding">
 
         <androidx.cardview.widget.CardView
@@ -74,7 +75,6 @@
             android:clickable="true"
             android:focusable="true"
             android:foreground="?attr/selectableItemBackground"
-            android:layout_marginTop="20dp"
             app:title="@string/title_party_ambitions" />
     </LinearLayout>
 </ScrollView>

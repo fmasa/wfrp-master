@@ -207,4 +207,6 @@
     <string name="title_character_armor">Armor</string>
     <string name="title_inventory_add_item">Add Item</string>
     <string name="title_change_armor">Change Armor</string>
+    <string name="label_character_note">Additional notes</string>
+    <string name="label_character_note_input">Additional notes (Optional)</string>
 </resources>

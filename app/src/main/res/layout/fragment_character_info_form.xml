@@ -96,4 +96,11 @@
         app:inputLabel="@string/label_motivation_input"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
+
+    <cz.muni.fi.rpg.ui.views.TextInput
+        android:id="@+id/noteInput"
+        android:layout_marginTop="12dp"
+        app:inputLabel="@string/label_character_note_input"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
 </LinearLayout>

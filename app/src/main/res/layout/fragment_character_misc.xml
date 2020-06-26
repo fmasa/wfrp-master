@@ -43,7 +43,9 @@
                     psychologyLabel,
                     psychologyValue,
                     motivationLabel,
-                    motivationValue"
+                    motivationValue,
+                    noteLabel,
+                    noteValue"
                     app:flow_horizontalBias="0"
                     app:flow_horizontalGap="14dp"
                     app:flow_horizontalStyle="spread"
@@ -159,13 +161,26 @@
                     android:paddingBottom="6dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
+
+                <TextView
+                    android:id="@+id/noteLabel"
+                    android:text="@string/label_character_note"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+                <TextView
+                    android:id="@+id/noteValue"
+                    style="@style/TextAppearance.AppCompat.Medium"
+                    android:textColor="@color/colorText"
+                    android:paddingBottom="6dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.cardview.widget.CardView>
 
         <cz.muni.fi.rpg.ui.views.AmbitionsCard
             android:id="@+id/characterAmbitionsCard"
             style="@style/CardContainer"
-            android:layout_marginTop="20dp"
             android:clickable="true"
             android:focusable="true"
             android:foreground="?attr/selectableItemBackground"
@@ -176,7 +191,6 @@
         <cz.muni.fi.rpg.ui.views.AmbitionsCard
             android:id="@+id/partyAmbitionsCard"
             style="@style/CardContainer"
-            android:layout_marginTop="20dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:title="@string/title_party_ambitions"

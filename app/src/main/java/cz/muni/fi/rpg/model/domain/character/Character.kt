@@ -16,7 +16,8 @@ data class Character(
     private var maxStats: Stats,
     private var points: Points,
     private var ambitions: Ambitions = Ambitions("", ""),
-    private var mutation: String = ""
+    private var mutation: String = "",
+    private var note: String = ""
 ) {
     companion object {
         const val NAME_MAX_LENGTH = 50
@@ -25,6 +26,7 @@ data class Character(
         const val PSYCHOLOGY_MAX_LENGTH = 200
         const val MOTIVATION_MAX_LENGTH = 200
         const val MUTATION_MAX_LENGTH = 200
+        const val NOTE_MAX_LENGTH = 400
     }
 
     private var money: Money = Money.zero()
@@ -37,6 +39,7 @@ data class Character(
         require(psychology.length <= PSYCHOLOGY_MAX_LENGTH) { "Psychology is too long" }
         require(motivation.length <= MOTIVATION_MAX_LENGTH) { "Motivation is too long" }
         require(mutation.length <= MUTATION_MAX_LENGTH) { "Mutation is too long" }
+        require(note.length <= NOTE_MAX_LENGTH) { "Note is too long" }
     }
 
     fun update(
@@ -48,7 +51,8 @@ data class Character(
         maxStats: Stats,
         points: Points,
         psychology: String,
-        motivation: String
+        motivation: String,
+        note: String
     ) {
         require(listOf(name, career).all { it.isNotBlank() })
         require(name.length <= NAME_MAX_LENGTH) { "Character name is too long" }
@@ -57,6 +61,7 @@ data class Character(
         require(stats.allLowerOrEqualTo(maxStats)) { "Stats cannot be larger than max stats" }
         require(psychology.length <= PSYCHOLOGY_MAX_LENGTH) { "Psychology is too long" }
         require(motivation.length <= MOTIVATION_MAX_LENGTH) { "Motivation is too long" }
+        require(note.length <= NOTE_MAX_LENGTH) { "Note is too long" }
 
         this.name = name
         this.career = career
@@ -67,6 +72,7 @@ data class Character(
         this.points = points
         this.psychology = psychology
         this.motivation = motivation
+        this.note = note
     }
 
     fun addMoney(amount: Money) {
@@ -112,6 +118,8 @@ data class Character(
     fun getPsychology() = psychology
 
     fun getMotivation() = motivation
+
+    fun getNote() = note
 
     fun getMutation() = mutation
 }
