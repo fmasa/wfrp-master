@@ -122,8 +122,8 @@ class CharacterStatsFormFragment :
             val currentInput = entry.key.first
             val maxInput = entry.key.second
 
-            currentInput.setDefaultValue(entry.value(character.getStats()).toString())
-            maxInput.setDefaultValue(entry.value(character.getMaxStats()).toString())
+            currentInput.setDefaultValue(entry.value(character.getStats()).toString(), force = true)
+            maxInput.setDefaultValue(entry.value(character.getMaxStats()).toString(), force = true)
         }
     }
 }
