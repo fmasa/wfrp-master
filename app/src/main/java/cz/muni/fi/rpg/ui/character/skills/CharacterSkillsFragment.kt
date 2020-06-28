@@ -6,7 +6,6 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
 import androidx.lifecycle.observe
-import androidx.recyclerview.widget.LinearLayoutManager
 import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.model.domain.character.CharacterId
 import cz.muni.fi.rpg.model.domain.skills.Skill
@@ -14,6 +13,7 @@ import cz.muni.fi.rpg.model.right
 import cz.muni.fi.rpg.ui.character.skills.adapter.SkillAdapter
 import cz.muni.fi.rpg.ui.character.skills.talents.TalentsFragment
 import cz.muni.fi.rpg.ui.common.CombinedLiveData
+import cz.muni.fi.rpg.ui.common.NonScrollableLayoutManager
 import cz.muni.fi.rpg.ui.common.parcelableArgument
 import cz.muni.fi.rpg.viewModels.CharacterViewModel
 import cz.muni.fi.rpg.viewModels.SkillsViewModel
@@ -42,7 +42,7 @@ class CharacterSkillsFragment : Fragment(R.layout.fragment_character_skills),
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        skillList.layoutManager = LinearLayoutManager(context)
+        skillList.layoutManager = NonScrollableLayoutManager(requireContext())
         val adapter = SkillAdapter(
             layoutInflater,
             { openSkillDialog(it) },

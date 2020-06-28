@@ -5,10 +5,10 @@ import android.view.View
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.observe
-import androidx.recyclerview.widget.LinearLayoutManager
 import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.model.domain.character.CharacterId
 import cz.muni.fi.rpg.model.domain.talents.Talent
+import cz.muni.fi.rpg.ui.common.NonScrollableLayoutManager
 import cz.muni.fi.rpg.ui.common.parcelableArgument
 import cz.muni.fi.rpg.viewModels.TalentsViewModel
 import kotlinx.android.synthetic.main.fragment_talents.*
@@ -36,7 +36,7 @@ class TalentsFragment : Fragment(R.layout.fragment_talents),
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        talentList.layoutManager = LinearLayoutManager(context)
+        talentList.layoutManager = NonScrollableLayoutManager(requireContext())
         val adapter = TalentAdapter(
             layoutInflater,
             { openTalentDialog(it) },
