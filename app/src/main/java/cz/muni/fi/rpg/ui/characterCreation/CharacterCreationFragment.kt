@@ -1,5 +1,6 @@
 package cz.muni.fi.rpg.ui.characterCreation
 
+import android.content.Context
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
@@ -93,6 +94,9 @@ class CharacterCreationFragment(
                     if (info == null || statsData == null || points == null) {
                         return@setOnClickListener
                     }
+
+                    buttonNext.isEnabled = false
+                    buttonNextProgress.visibility = View.VISIBLE
 
                     saveCharacter(
                         info,
