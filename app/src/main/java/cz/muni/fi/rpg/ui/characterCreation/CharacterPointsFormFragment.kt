@@ -56,9 +56,9 @@ class CharacterPointsFormFragment :
         }
 
         savedInstanceState?.let {
-            it.getString(STATE_MAX_WOUNDS)?.let(maxWoundsInput::setDefaultValue)
-            it.getString(STATE_FATE_POINTS)?.let(fatePointsInput::setDefaultValue)
-            it.getString(STATE_RESILIENCE_POINTS)?.let(resiliencePointsInput::setDefaultValue)
+            it.getString(STATE_MAX_WOUNDS)?.let { value -> maxWoundsInput.setDefaultValue(value) }
+            it.getString(STATE_FATE_POINTS)?.let { value -> fatePointsInput.setDefaultValue(value) }
+            it.getString(STATE_RESILIENCE_POINTS)?.let { value -> resiliencePointsInput.setDefaultValue(value) }
         }
     }
 

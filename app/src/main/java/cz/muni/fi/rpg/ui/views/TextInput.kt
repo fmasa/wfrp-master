@@ -65,8 +65,8 @@ class TextInput(context: Context, attrs: AttributeSet) : LinearLayout(context, a
 
     fun getTextInputLayout(): TextInputLayout = textInputLayout
 
-    fun setDefaultValue(value: String) {
-        if (textInputLayout.editText?.text.toString() == "") {
+    fun setDefaultValue(value: String, force: Boolean = false) {
+        if (force || textInputLayout.editText?.text.toString() == "") {
             textInputLayout.editText?.setText(value)
         }
     }

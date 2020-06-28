@@ -81,11 +81,11 @@ class CharacterInfoFormFragment :
         setDefaultValues()
 
         savedInstanceState?.let {
-            it.getString(STATE_NAME)?.let(nameInput::setDefaultValue)
+            it.getString(STATE_NAME)?.let { value -> nameInput.setDefaultValue(value) }
             it.getInt(STATE_RACE).let(radioGroup::check)
-            it.getString(STATE_CAREER)?.let(careerInput::setDefaultValue)
-            it.getString(STATE_SOCIAL_CLASS)?.let(socialClassInput::setDefaultValue)
-            it.getString(STATE_NOTE)?.let(noteInput::setDefaultValue)
+            it.getString(STATE_CAREER)?.let { value -> careerInput.setDefaultValue(value)}
+            it.getString(STATE_SOCIAL_CLASS)?.let { value -> socialClassInput.setDefaultValue(value) }
+            it.getString(STATE_NOTE)?.let { value -> noteInput.setDefaultValue(value) }
         }
     }
 

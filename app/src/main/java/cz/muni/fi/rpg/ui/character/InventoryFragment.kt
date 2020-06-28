@@ -8,13 +8,13 @@ import androidx.fragment.app.Fragment
 import cz.muni.fi.rpg.R
 import kotlinx.android.synthetic.main.fragment_inventory.view.*
 import androidx.lifecycle.observe
-import androidx.recyclerview.widget.LinearLayoutManager
 import cz.muni.fi.rpg.model.domain.character.CharacterId
 import cz.muni.fi.rpg.model.domain.inventory.InventoryItem
 import cz.muni.fi.rpg.ui.character.adapter.InventoryAdapter
 import cz.muni.fi.rpg.ui.character.inventory.ChangeArmorDialog
 import cz.muni.fi.rpg.ui.character.inventory.InventoryItemDialog
 import cz.muni.fi.rpg.ui.character.inventory.TransactionDialog
+import cz.muni.fi.rpg.ui.common.NonScrollableLayoutManager
 import cz.muni.fi.rpg.ui.common.parcelableArgument
 import cz.muni.fi.rpg.viewModels.InventoryViewModel
 import kotlinx.android.synthetic.main.fragment_inventory.*
@@ -67,7 +67,7 @@ class InventoryFragment : Fragment(R.layout.fragment_inventory),
             onClickListener = this::showDialog,
             onRemoveListener = { launch { viewModel.removeInventoryItem(it) } }
         )
-        inventoryRecycler.layoutManager = LinearLayoutManager(context)
+        inventoryRecycler.layoutManager = NonScrollableLayoutManager(requireContext())
         inventoryRecycler.adapter = adapter
 
         viewModel.inventory.observe(viewLifecycleOwner) { items ->
