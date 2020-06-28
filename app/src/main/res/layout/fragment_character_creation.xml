@@ -60,6 +60,14 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
+        <ProgressBar
+            android:id="@+id/buttonNextProgress"
+            android:visibility="gone"
+            app:layout_constraintEnd_toStartOf="@id/buttonNext"
+            app:layout_constraintTop_toTopOf="@id/buttonNext"
+            app:layout_constraintBottom_toBottomOf="@id/buttonNext"
+            android:layout_width="20dp"
+            android:layout_height="20dp"/>
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/buttonNext"
             style="@style/Widget.MaterialComponents.Button.TextButton"
