@@ -138,12 +138,13 @@ class CharacterCreationFragment(
         points: Points
     ) {
         launch {
+            val characterId = CharacterId(args.partyId, authentication.getUserId())
             Timber.d("Creating character")
             characters.save(
-                args.partyId,
+                characterId.partyId,
                 Character(
                     name = info.name,
-                    userId = authentication.getUserId(),
+                    userId = characterId.userId,
                     career = info.career,
                     socialClass = info.socialClass,
                     race = info.race,
@@ -157,7 +158,11 @@ class CharacterCreationFragment(
             )
             toast("Your character has been created")
 
-            withContext(Dispatchers.Main) { findNavController().popBackStack() }
+            withContext(Dispatchers.Main) {
+                findNavController().navigate(
+                    CharacterCreationFragmentDirections.openCharacter(characterId)
+                )
+            }
         }
 
     }

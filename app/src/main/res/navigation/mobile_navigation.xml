@@ -61,6 +61,11 @@
         <argument
             android:name="partyId"
             app:argType="java.util.UUID" />
+
+        <action
+            android:id="@+id/openCharacter"
+            app:destination="@id/nav_character"
+            app:popUpTo="@id/nav_party_list" />
     </fragment>
 
     <fragment
