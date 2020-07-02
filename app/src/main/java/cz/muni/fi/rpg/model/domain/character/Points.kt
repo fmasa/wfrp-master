@@ -24,17 +24,17 @@ data class Points(
         require(experience >= 0)
     }
 
-    fun updateMaxWounds(newMaxWounds: Int) = copy(
+    fun withMaxWounds(newMaxWounds: Int) = copy(
         maxWounds = newMaxWounds,
         wounds = min(newMaxWounds, wounds)
     )
 
-    fun updateFate(newFate: Int) = copy(
+    fun withFate(newFate: Int) = copy(
         fate = newFate,
         fortune = min(fortune, newFate)
     )
 
-    fun updateResilience(newResilience: Int) = copy(
+    fun withResilience(newResilience: Int) = copy(
         resilience = newResilience,
         resolve = min(resolve, newResilience)
     )
