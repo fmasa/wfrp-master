@@ -630,6 +630,11 @@ class Parties extends Suite {
             .doc(userId);
 
         await firebase.assertSucceeds(document.set({points: {resilience: 10}}, {merge: true}));
+        await firebase.assertSucceeds(document.update("note", "a".repeat(400)));
+        await firebase.assertSucceeds(document.update("hardyTalent", true));
+        await firebase.assertSucceeds(
+            document.update("points", {...validCharacter(userId).points, hardyWoundsBonus: 3})
+        );
     }
 
     @test
