@@ -59,6 +59,7 @@ class CharacterEditFragment(
                 characterStats.setCharacterData(character)
                 characterInfo.setCharacterData(character)
                 maxWoundsInput.setDefaultValue(character.getPoints().maxWounds.toString())
+                hardyTalentCheckbox.isChecked = character.hasHardyTalent()
             }
 
             withContext(Dispatchers.Main) {
@@ -85,7 +86,12 @@ class CharacterEditFragment(
         if (info != null && statsData != null && form.validate()) {
             item.isEnabled = false
             launch {
-                updateCharacter(info, statsData, maxWoundsInput.getValue().toInt())
+                updateCharacter(
+                    info,
+                    statsData,
+                    maxWoundsInput.getValue().toInt(),
+                    hardyTalentCheckbox.isChecked
+                )
                 withContext(Dispatchers.Main) {
                     findNavController().popBackStack()
                 }
@@ -98,22 +104,23 @@ class CharacterEditFragment(
     private suspend fun updateCharacter(
         info: CharacterInfoFormFragment.Data,
         statsData: CharacterStatsFormFragment.Data,
-        maxWounds: Int
+        maxWounds: Int,
+        hardyTalent: Boolean
     ) {
         val character = characters.get(args.characterId)
-        val points = character.getPoints()
 
         character.update(
-            info.name,
-            info.career,
-            info.socialClass,
-            info.race,
-            statsData.stats,
-            statsData.maxStats,
-            points.withMaxWounds(maxWounds),
-            info.psychology,
-            info.motivation,
-            info.note
+            name = info.name,
+            career = info.career,
+            socialClass = info.socialClass,
+            race = info.race,
+            stats = statsData.stats,
+            maxStats = statsData.maxStats,
+            maxWounds = maxWounds,
+            psychology = info.psychology,
+            motivation = info.motivation,
+            note = info.note,
+            hardyTalent = hardyTalent
         )
 
         characters.save(args.characterId.partyId, character)

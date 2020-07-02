@@ -41,4 +41,6 @@ data class Stats(
                 && willPower <= other.willPower
                 && fellowship <= other.fellowship
     }
+
+    fun getToughnessBonus() = toughness / 10
 }

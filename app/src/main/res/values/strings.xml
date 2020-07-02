@@ -209,4 +209,5 @@
     <string name="title_change_armor">Change Armor</string>
     <string name="label_character_note">Additional notes</string>
     <string name="label_character_note_input">Additional notes (Optional)</string>
+    <string name="title_checkbox_hardy">Hardy (Increase maximum wounds by TB)</string>
 </resources>
