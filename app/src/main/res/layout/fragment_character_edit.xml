@@ -45,7 +45,7 @@
                 app:inputLabel="@string/label_max_wounds"
                 android:inputType="number"
                 android:maxLength="3"
-                android:layout_width="match_parent"
+                android:layout_width="120dp"
                 android:layout_marginHorizontal="24dp"
                 android:layout_height="wrap_content"/>
 
