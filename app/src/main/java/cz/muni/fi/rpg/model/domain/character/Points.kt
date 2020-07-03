@@ -11,7 +11,8 @@ data class Points(
     val resilience: Int,
     val resolve: Int,
     val sin: Int,
-    val experience: Int
+    val experience: Int,
+    val hardyWoundsBonus: Int = 0
 ) {
     init {
         require(corruption >= 0)
@@ -19,22 +20,24 @@ data class Points(
         require(fortune in 0..fate)
         require(resilience >= 0)
         require(resolve in 0..resilience)
-        require(wounds in 0..maxWounds)
+        require(wounds in 0..(maxWounds + hardyWoundsBonus))
         require(maxWounds > 0)
         require(experience >= 0)
+        require(hardyWoundsBonus >= 0)
     }
 
-    fun updateMaxWounds(newMaxWounds: Int) = copy(
+    fun withMaxWounds(newMaxWounds: Int, hardyWoundsBonus: Int) = copy(
         maxWounds = newMaxWounds,
-        wounds = min(newMaxWounds, wounds)
+        hardyWoundsBonus = hardyWoundsBonus,
+        wounds = min(hardyWoundsBonus + newMaxWounds, wounds)
     )
 
-    fun updateFate(newFate: Int) = copy(
+    fun withFate(newFate: Int) = copy(
         fate = newFate,
         fortune = min(fortune, newFate)
     )
 
-    fun updateResilience(newResilience: Int) = copy(
+    fun withResilience(newResilience: Int) = copy(
         resilience = newResilience,
         resolve = min(resolve, newResilience)
     )

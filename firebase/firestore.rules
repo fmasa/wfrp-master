@@ -123,7 +123,8 @@ service cloud.firestore {
                             "psychology",
                             "mutation",
                             "ambitions",
-                            "note"
+                            "note",
+                            "hardyTalent"
                         ].hasAll(character.keys())
                         && character.userId == userId
                         && character.name is string && isNotBlank(character.name) && character.name.size() <= 50
@@ -138,13 +139,14 @@ service cloud.firestore {
                         && areStatsValid(character.maxStats)
                         && areMoneyValid(character.money)
                         && areAmbitionsValid(character.ambitions)
-                        && (! ("note" in character) || (character.note is string && character.note.size() <= 400));
+                        && (! ("note" in character) || (character.note is string && character.note.size() <= 400))
+                        && (! ("hardyTalent" in character) || (character.hardyTalent is bool));
                 }
             }
 
             function arePointsValid(points) {
                 return points is map
-                    && points.keys().toSet() == [
+                    && [
                         "corruption",
                         "experience",
                         "fate",
@@ -153,8 +155,9 @@ service cloud.firestore {
                         "resilience",
                         "resolve",
                         "sin",
-                        "wounds"
-                    ].toSet()
+                        "wounds",
+                        "hardyWoundsBonus"
+                    ].hasAll(points.keys())
                     && points.corruption is int
                     && points.fate is int
                     && points.fortune is int
@@ -163,7 +166,8 @@ service cloud.firestore {
                     && points.resolve is int
                     && points.sin is int
                     && points.wounds is int
-                    && points.experience is int;
+                    && points.experience is int
+                    && (! ("hardyWoundsBonus" in points) || (points.hardyWoundsBonus is int && points.hardyWoundsBonus >= 0));
             }
 
             function areStatsValid(stats) {

@@ -75,9 +75,9 @@ class CharacterStatsFragment : Fragment(R.layout.fragment_character_stats),
             corruptionPoints to {p, addition -> p.copy(corruption = p.corruption + addition)},
             sinPoints to {p, addition -> p.copy(sin = p.sin + addition)},
             fortunePoints to { p, addition -> p.copy(fortune = p.fortune + addition)},
-            fatePoints to { p, addition -> p.updateFate(p.fate + addition)},
+            fatePoints to { p, addition -> p.withFate(p.fate + addition)},
             resolvePoints to {p, addition -> p.copy(resolve = p.resolve + addition)},
-            resiliencePoints to {p, addition -> p.updateResilience(p.resilience + addition)}
+            resiliencePoints to {p, addition -> p.withResilience(p.resilience + addition)}
         )
 
         points.forEach {

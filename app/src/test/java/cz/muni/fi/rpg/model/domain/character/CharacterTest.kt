@@ -3,6 +3,7 @@ package cz.muni.fi.rpg.model.domain.character
 import org.junit.Assert.*
 import cz.muni.fi.rpg.model.domain.common.Money
 import org.junit.Test
+import java.lang.IllegalArgumentException
 
 class CharacterTest {
     private fun character() = Character(
@@ -13,10 +14,26 @@ class CharacterTest {
         "Does not like orcs",
         "Food",
         Race.HALFLING,
-        Stats(20, 40, 2, 4, 8, 5, 5, 4, 0, 10),
-        Stats(20, 40, 2, 4, 8, 5, 5, 4, 0, 10),
+        Stats(20, 40, 2, 4, 80, 5, 5, 4, 0, 10),
+        Stats(20, 40, 2, 4, 80, 5, 5, 4, 0, 10),
         Points(0, 4, 4, 5, 5, 0, 0, 0, 0)
     )
+
+    private fun characterWithHardy() = character().apply {
+        update(
+            getName(),
+            getCareer(),
+            getSocialClass(),
+            Race.DWARF,
+            getStats(),
+            getMaxStats(),
+            getPoints().maxWounds,
+            getPsychology(),
+            getMotivation(),
+            getNote(),
+            true
+        )
+    }
 
     @Test
     fun testThrowsExceptionWhenTryingToSubtractMoreMoneyThanCharacterHas() {
@@ -43,5 +60,36 @@ class CharacterTest {
             startingMoney + Money.crowns(1) + Money.shillings(10),
             character.getMoney()
         )
+    }
+
+    @Test
+    fun testCannotUpdatePointsWithWoundsBonusNotMatchingToughnessBonusWhenHardyTalentIsEnabled() {
+        val character = characterWithHardy()
+
+        try {
+            character.updatePoints(character.getPoints().copy(hardyWoundsBonus = 5))
+            fail("Expected ${IllegalArgumentException::class.simpleName} exception, but none was thrown")
+        } catch (e: IllegalArgumentException) {
+        }
+    }
+
+    @Test
+    fun testCannotUpdatePointsWithNonZeroWoundsBonusWhenHardyTalentIsNotEnabled() {
+        val character =  character()
+
+        try {
+            character.updatePoints(character.getPoints().copy(hardyWoundsBonus = 5))
+            fail("Expected ${IllegalArgumentException::class.simpleName} exception, but none was thrown")
+        } catch (e: IllegalArgumentException) {
+        }
+    }
+
+    @Test
+    fun testWoundsAreReducedToMaxWoundsWhenReducingWounds() {
+        val points = Points(0, 1, 1, 14, 12, 1, 1, 1, 1, 2)
+
+        val updatedPoints = points.withMaxWounds(4, 2)
+
+        assertSame(6, updatedPoints.wounds)
     }
 }

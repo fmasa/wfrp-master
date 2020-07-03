@@ -17,7 +17,8 @@ data class Character(
     private var points: Points,
     private var ambitions: Ambitions = Ambitions("", ""),
     private var mutation: String = "",
-    private var note: String = ""
+    private var note: String = "",
+    private var hardyTalent: Boolean = false
 ) {
     companion object {
         const val NAME_MAX_LENGTH = 50
@@ -49,10 +50,11 @@ data class Character(
         race: Race,
         stats: Stats,
         maxStats: Stats,
-        points: Points,
+        maxWounds: Int,
         psychology: String,
         motivation: String,
-        note: String
+        note: String,
+        hardyTalent: Boolean
     ) {
         require(listOf(name, career).all { it.isNotBlank() })
         require(name.length <= NAME_MAX_LENGTH) { "Character name is too long" }
@@ -62,6 +64,7 @@ data class Character(
         require(psychology.length <= PSYCHOLOGY_MAX_LENGTH) { "Psychology is too long" }
         require(motivation.length <= MOTIVATION_MAX_LENGTH) { "Motivation is too long" }
         require(note.length <= NOTE_MAX_LENGTH) { "Note is too long" }
+        require(maxWounds > 0) { "Max wounds cannot be less than 1" }
 
         this.name = name
         this.career = career
@@ -69,10 +72,11 @@ data class Character(
         this.race = race
         this.stats = stats
         this.maxStats = maxStats
-        this.points = points
+        points = points.withMaxWounds(maxWounds, if (hardyTalent) stats.getToughnessBonus() else 0)
         this.psychology = psychology
         this.motivation = motivation
         this.note = note
+        this.hardyTalent = hardyTalent
     }
 
     fun addMoney(amount: Money) {
@@ -101,6 +105,10 @@ data class Character(
     fun getMoney() = money
 
     fun updatePoints(newPoints: Points) {
+        require(
+            (!hardyTalent && newPoints.hardyWoundsBonus == 0) ||
+            (hardyTalent && newPoints.hardyWoundsBonus == stats.getToughnessBonus())
+        ) { "Hardy talent and wounds bonus are wrong" }
         points = newPoints
     }
 
@@ -122,4 +130,6 @@ data class Character(
     fun getNote() = note
 
     fun getMutation() = mutation
+
+    fun hasHardyTalent() = hardyTalent
 }
