@@ -13,6 +13,7 @@ import cz.muni.fi.rpg.model.cache.CharacterRepositoryIdentityMap
 import cz.muni.fi.rpg.model.cache.PartyRepositoryIdentityMap
 import cz.muni.fi.rpg.model.domain.armour.Armor
 import cz.muni.fi.rpg.model.domain.character.*
+import cz.muni.fi.rpg.model.domain.encounter.EncounterRepository
 import cz.muni.fi.rpg.model.domain.inventory.InventoryItemRepository
 import cz.muni.fi.rpg.model.domain.invitation.InvitationProcessor
 import cz.muni.fi.rpg.model.domain.party.PartyRepository
@@ -21,13 +22,7 @@ import cz.muni.fi.rpg.model.domain.spells.SpellRepository
 import cz.muni.fi.rpg.model.domain.talents.TalentRepository
 import cz.muni.fi.rpg.model.firestore.*
 import cz.muni.fi.rpg.model.firestore.jackson.JacksonAggregateMapper
-import cz.muni.fi.rpg.model.firestore.repositories.FirestoreCharacterFeatureRepository
-import cz.muni.fi.rpg.model.firestore.repositories.FirestoreCharacterRepository
-import cz.muni.fi.rpg.model.firestore.repositories.FirestoreInventoryItemRepository
-import cz.muni.fi.rpg.model.firestore.repositories.FirestorePartyRepository
-import cz.muni.fi.rpg.model.firestore.repositories.FirestoreSkillRepository
-import cz.muni.fi.rpg.model.firestore.repositories.FirestoreSpellRepository
-import cz.muni.fi.rpg.model.firestore.repositories.FirestoreTalentRepository
+import cz.muni.fi.rpg.model.firestore.repositories.*
 import cz.muni.fi.rpg.ui.character.*
 import cz.muni.fi.rpg.ui.character.CharacterMiscFragment
 import cz.muni.fi.rpg.ui.character.edit.CharacterEditFragment
@@ -92,6 +87,7 @@ val appModule = module {
     single<CharacterFeatureRepository<Armor>> {
         FirestoreCharacterFeatureRepository(Feature.ARMOR, get(), Armor(), aggregateMapper())
     }
+    single<EncounterRepository> { FirestoreEncounterRepository(get(), aggregateMapper()) }
 
     single { AdManager(get()) }
 
