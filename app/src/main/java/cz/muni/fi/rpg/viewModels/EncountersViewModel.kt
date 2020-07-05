@@ -27,6 +27,14 @@ class EncountersViewModel(
         )
     }
 
+    suspend fun updateEncounter(id: UUID, name: String, description: String) {
+        val encounter = encounterRepository.get(EncounterId(partyId = partyId, encounterId = id))
+
+        encounter.update(name, description)
+
+        encounterRepository.save(partyId, encounter)
+    }
+
     suspend fun reorderEncounters(positions: Map<UUID, Int>) {
         val changedEncounters = mutableListOf<Encounter>()
 

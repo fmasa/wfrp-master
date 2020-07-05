@@ -29,6 +29,17 @@ class Encounter(
     }
 
     init {
+        validate(name, description)
+    }
+
+    fun update(name: String, description: String) {
+        validate(name, description)
+
+        this.name = name
+        this.description = description
+    }
+
+    private fun validate(name: String, description: String) {
         require(name.isNotBlank() && name.length <= NAME_MAX_LENGTH)
         require(description.length <= DESCRIPTION_MAX_LENGTH)
     }
