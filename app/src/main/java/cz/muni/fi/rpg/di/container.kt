@@ -110,7 +110,7 @@ val appModule = module {
      * Fragments
      */
     fragment { CharacterFragment(get()) }
-    fragment { GameMasterFragment() }
+    fragment { GameMasterFragment(get()) }
     fragment { NavHostFragment() }
     fragment { PartyListFragment(get()) }
     fragment { CharacterEditFragment(get()) }

@@ -113,8 +113,11 @@
     <string name="not_enough_money">Character does not have enough money</string>
     <string name="money_subtract">Subtract</string>
     <string name="money_add">Add</string>
+
+    <!-- Game Master -->
     <string name="button_invite">Invite players</string>
     <string name="title_characters">Characters</string>
+    <string name="title_encounters">Encounters</string>
 
     <string name="inventory_item_icon_description">Inventory item icon</string>
     <string name="no_inventory_item_prompt">There is no item in your inventory.</string>
