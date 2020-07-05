@@ -5,6 +5,7 @@ import arrow.core.Either
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.FirebaseFirestoreException
 import com.google.firebase.firestore.Query
+import com.google.firebase.firestore.SetOptions
 import cz.muni.fi.rpg.model.domain.encounter.Encounter
 import cz.muni.fi.rpg.model.domain.encounter.EncounterNotFound
 import cz.muni.fi.rpg.model.domain.encounter.EncounterRepository
@@ -17,7 +18,7 @@ import kotlinx.coroutines.tasks.await
 import java.util.*
 
 internal class FirestoreEncounterRepository(
-    firestore: FirebaseFirestore,
+    private val firestore: FirebaseFirestore,
     private val mapper: AggregateMapper<Encounter>
 ) : EncounterRepository {
     private val parties = firestore.collection(COLLECTION_PARTIES)
@@ -44,9 +45,16 @@ internal class FirestoreEncounterRepository(
         }
     }
 
-    override suspend fun save(partyId: UUID, encounter: Encounter) {
-        encounters(partyId).document(encounter.id.toString())
-            .set(mapper.toDocumentData(encounter))
+    override suspend fun save(partyId: UUID, vararg encounters: Encounter) {
+        firestore.runTransaction { transaction ->
+            encounters.forEach { encounter ->
+                transaction.set(
+                    encounters(partyId).document(encounter.id.toString()),
+                    mapper.toDocumentData(encounter),
+                    SetOptions.merge()
+                )
+            }
+        }.await()
     }
 
     override fun findByParty(partyId: UUID): LiveData<List<Encounter>> {

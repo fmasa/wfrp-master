@@ -21,7 +21,7 @@ interface EncounterRepository {
     /**
      * Creates or updates encounter
      */
-    suspend fun save(partyId: UUID, encounter: Encounter)
+    suspend fun save(partyId: UUID, vararg encounters: Encounter)
 
     /**
      * Returns LiveData representation of all encounters in party sorted by their position

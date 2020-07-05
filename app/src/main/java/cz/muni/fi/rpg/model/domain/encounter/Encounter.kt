@@ -15,7 +15,10 @@ class Encounter(
         private set
 
     var position: Int = position
-        private set
+        set(value) {
+            require(value >= 0)
+            field = value
+        }
 
     var completed: Boolean = false
         private set

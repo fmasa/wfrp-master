@@ -4,14 +4,17 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import cz.muni.fi.rpg.model.domain.encounter.Encounter
 import cz.muni.fi.rpg.model.domain.encounter.EncounterRepository
+import cz.muni.fi.rpg.ui.gameMaster.encounters.EncounterId
+import kotlinx.coroutines.*
+import timber.log.Timber
 import java.util.*
 
 class EncountersViewModel(
     private val partyId: UUID,
     private val encounterRepository: EncounterRepository
-) : ViewModel() {
+) : ViewModel(), CoroutineScope by CoroutineScope(Dispatchers.Default) {
 
-    val encounters: LiveData<List<Encounter>> = encounterRepository.findByParty(partyId)
+    val encounters: LiveData<List<Encounter>> by lazy { encounterRepository.findByParty(partyId) }
 
     suspend fun createEncounter(name: String, description: String) {
         encounterRepository.save(
@@ -23,5 +26,32 @@ class EncountersViewModel(
                 encounterRepository.getNextPosition(partyId)
             )
         )
+    }
+
+    suspend fun reorderEncounters(positions: Map<UUID, Int>) {
+        val changedEncounters = mutableListOf<Encounter>()
+
+        val encounters = mapOf(
+            *awaitAll(
+                *positions.keys.map(this::encounterAsync).toTypedArray()
+            ).toTypedArray()
+        )
+
+        positions.forEach { (encounterId, newPosition) ->
+            encounters[encounterId]?.let { encounter ->
+                if (encounter.position != newPosition) {
+                    encounter.position = newPosition
+                    changedEncounters.add(encounter)
+                }
+            }
+        }
+
+        encounterRepository.save(partyId, *changedEncounters.toTypedArray())
+    }
+
+    private fun encounterAsync(id: UUID): Deferred<Pair<UUID, Encounter>> {
+        return async {
+            id to encounterRepository.get(EncounterId(partyId = partyId, encounterId = id))
+        }
     }
 }
