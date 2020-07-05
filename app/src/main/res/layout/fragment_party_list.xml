@@ -39,7 +39,7 @@
         android:id="@+id/fabMenu"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_margin="@dimen/fabMargin"
+        android:layout_margin="@dimen/fabMenuMargin"
         app:fab_addButtonColorNormal="@color/colorPrimary"
         app:fab_addButtonColorPressed="@color/colorPrimaryDark"
         app:fab_addButtonPlusIconColor="@color/colorFabText"

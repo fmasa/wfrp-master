@@ -33,6 +33,7 @@ import cz.muni.fi.rpg.ui.characterCreation.CharacterInfoFormFragment
 import cz.muni.fi.rpg.ui.characterCreation.CharacterStatsFormFragment
 import cz.muni.fi.rpg.ui.common.AdManager
 import cz.muni.fi.rpg.ui.gameMaster.GameMasterFragment
+import cz.muni.fi.rpg.ui.gameMaster.encounters.EncountersFragment
 import cz.muni.fi.rpg.ui.partyList.PartyListFragment
 import cz.muni.fi.rpg.viewModels.*
 import org.koin.android.viewmodel.dsl.viewModel
@@ -99,6 +100,7 @@ val appModule = module {
     viewModel { (characterId: CharacterId) -> CharacterMiscViewModel(characterId, get(), get()) }
     viewModel { (characterId: CharacterId) -> CharacterViewModel(characterId, get(), get())}
     viewModel { (partyId: UUID) -> GameMasterViewModel(partyId, get(), get()) }
+    viewModel { (partyId: UUID) -> EncountersViewModel(partyId, get()) }
     viewModel { (characterId: CharacterId) -> InventoryViewModel(characterId, get(), get(), get()) }
     viewModel { (characterId: CharacterId) -> SkillsViewModel(characterId, get()) }
     viewModel { (characterId: CharacterId) -> SpellsViewModel(characterId, get()) }
@@ -123,4 +125,5 @@ val appModule = module {
     fragment { CharacterCreationFragment(get()) }
     fragment { TalentsFragment() }
     fragment { CharacterArmorFragment() }
+    fragment { EncountersFragment() }
 }

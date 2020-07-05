@@ -119,6 +119,8 @@
     <string name="title_characters">Characters</string>
     <string name="title_encounters">Encounters</string>
 
+    <string name="no_encounters_prompt">Add first encounter for your party.</string>
+
     <string name="inventory_item_icon_description">Inventory item icon</string>
     <string name="no_inventory_item_prompt">There is no item in your inventory.</string>
     <string name="createInventoryItemTitle">Create new inventory item</string>

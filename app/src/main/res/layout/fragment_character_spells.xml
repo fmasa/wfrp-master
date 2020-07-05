@@ -44,7 +44,7 @@
         app:fab_colorNormal="@color/colorPrimary"
         app:fab_colorPressed="@color/colorPrimaryDark"
         app:fab_icon="@drawable/ic_add"
-        android:layout_margin="@dimen/fabMargin"
+        android:layout_margin="@dimen/fabMenuMargin"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         />
