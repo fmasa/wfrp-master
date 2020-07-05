@@ -19,4 +19,8 @@ class EncounterDetailViewModel(
 
     val party: LiveData<Either<PartyNotFound, Party>> = parties.getLive(encounterId.partyId)
     val encounter: LiveData<Either<EncounterNotFound, Encounter>> = encounters.getLive(encounterId)
+
+    suspend fun remove() {
+        encounters.remove(encounterId)
+    }
 }

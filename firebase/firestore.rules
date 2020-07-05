@@ -16,9 +16,14 @@ service cloud.firestore {
 
             match /encounters/{encounterId} {
                 allow read: if hasAccessToParty();
-                allow write: if isValidEncounter(request.resource.data)
+                allow create: if isValidEncounter(request.resource.data)
                             && hasAccessToParty()
                             && isGameMaster();
+                allow update: if isValidEncounter(request.resource.data)
+                              && hasAccessToParty()
+                              && isGameMaster();
+                allow delete: if hasAccessToParty() && isGameMaster();
+
 
                 function isValidEncounter(encounter) {
                     return encounter is map
