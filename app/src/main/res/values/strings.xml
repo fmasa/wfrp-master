@@ -11,7 +11,7 @@
     <string name="assembleParty_title">Assemble New Party</string>
 
     <!-- Party rename Dialog -->
-    <string name="title_party_rename">Assemble New Party</string>
+    <string name="title_party_rename">Rename Party</string>
 
     <string name="label_party_name">Party Name</string>
     <string name="assembleParty_button_positive">create</string>
