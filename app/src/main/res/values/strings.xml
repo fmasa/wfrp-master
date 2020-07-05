@@ -15,7 +15,7 @@
 
     <string name="label_party_name">Party Name</string>
     <string name="assembleParty_button_positive">create</string>
-    <string name="assemblyParty_submit">create</string>
+    <string name="button_create">create</string>
     <string name="error_party_name_blank">Party name cannot be empty</string>
     <string name="scanCode_title">Join using QR code</string>
     <string name="group_icon_description">Group icon</string>
@@ -215,4 +215,7 @@
     <string name="label_character_note">Additional notes</string>
     <string name="label_character_note_input">Additional notes (Optional)</string>
     <string name="title_checkbox_hardy">Hardy (Increase maximum wounds by TB)</string>
+    <string name="title_encounter_create">Create Encounter</string>
+    <string name="message_encounter_saved">Encounter was saved</string>
+    <string name="encounter_icon">Encounter icon</string>
 </resources>

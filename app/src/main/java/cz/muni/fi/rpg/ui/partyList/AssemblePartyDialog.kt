@@ -68,7 +68,7 @@ class AssemblePartyDialog : DialogFragment(), CoroutineScope by CoroutineScope(D
         val dialog = AlertDialog.Builder(activity)
             .setTitle(R.string.assembleParty_title)
             .setView(view)
-            .setPositiveButton(R.string.assemblyParty_submit) { _, _ -> }
+            .setPositiveButton(R.string.button_create) { _, _ -> }
             .create()
 
         dialog.setOnShowListener {

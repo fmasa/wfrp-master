@@ -2,6 +2,7 @@ package cz.muni.fi.rpg.ui.common
 
 import android.os.Parcelable
 import android.view.View
+import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import java.io.Serializable
 

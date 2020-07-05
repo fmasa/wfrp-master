@@ -10,5 +10,18 @@ class EncountersViewModel(
     private val partyId: UUID,
     private val encounterRepository: EncounterRepository
 ) : ViewModel() {
+
     val encounters: LiveData<List<Encounter>> = encounterRepository.findByParty(partyId)
+
+    suspend fun createEncounter(name: String, description: String) {
+        encounterRepository.save(
+            partyId,
+            Encounter(
+                UUID.randomUUID(),
+                name,
+                description,
+                encounterRepository.getNextPosition(partyId)
+            )
+        )
+    }
 }

@@ -14,6 +14,7 @@ import cz.muni.fi.rpg.viewModels.EncountersViewModel
 import kotlinx.android.synthetic.main.fragment_encounters.*
 import org.koin.android.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
+import timber.log.Timber
 import java.util.*
 
 class EncountersFragment : Fragment(R.layout.fragment_encounters) {
@@ -45,6 +46,10 @@ class EncountersFragment : Fragment(R.layout.fragment_encounters) {
             noEncountersText.toggleVisibility(encounters.isEmpty())
             noEncountersIcon.toggleVisibility(encounters.isEmpty())
             encounterListRecycler.toggleVisibility(encounters.isNotEmpty())
+        }
+
+        addEncounter.setOnClickListener {
+            EncounterDialog.newInstance(partyId, null).show(childFragmentManager, null)
         }
     }
 }
