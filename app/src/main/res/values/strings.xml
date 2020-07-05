@@ -15,7 +15,7 @@
 
     <string name="label_party_name">Party Name</string>
     <string name="assembleParty_button_positive">create</string>
-    <string name="assemblyParty_submit">create</string>
+    <string name="button_create">create</string>
     <string name="error_party_name_blank">Party name cannot be empty</string>
     <string name="scanCode_title">Join using QR code</string>
     <string name="group_icon_description">Group icon</string>
@@ -65,6 +65,8 @@
     <string name="title_character_trappings">Trappings</string>
     <string name="title_notifications">Notifications</string>
 
+    <string name="title_description">Description</string>
+
     <string name="label_name">Name</string>
     <string name="label_race">Race</string>
     <string name="label_career">Career</string>
@@ -113,8 +115,16 @@
     <string name="not_enough_money">Character does not have enough money</string>
     <string name="money_subtract">Subtract</string>
     <string name="money_add">Add</string>
+
+    <!-- Game Master -->
     <string name="button_invite">Invite players</string>
     <string name="title_characters">Characters</string>
+    <string name="title_encounters">Encounters</string>
+
+    <string name="title_encounter_create">Create Encounter</string>
+    <string name="message_encounter_saved">Encounter was saved</string>
+    <string name="no_encounters_prompt">Add first encounter for your party.</string>
+    <string name="encounter_icon">Encounter icon</string>
 
     <string name="inventory_item_icon_description">Inventory item icon</string>
     <string name="no_inventory_item_prompt">There is no item in your inventory.</string>
@@ -210,4 +220,5 @@
     <string name="label_character_note">Additional notes</string>
     <string name="label_character_note_input">Additional notes (Optional)</string>
     <string name="title_checkbox_hardy">Hardy (Increase maximum wounds by TB)</string>
+    <string name="question_remove_encounter">Do you really want to remove this encounter?</string>
 </resources>

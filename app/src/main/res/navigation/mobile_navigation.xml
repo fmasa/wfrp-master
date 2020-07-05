@@ -29,6 +29,20 @@
         <action
             android:id="@+id/openCharacter"
             app:destination="@id/nav_character" />
+
+        <action
+            android:id="@+id/openEncounter"
+            app:destination="@id/nav_encounter_detail" />
+
+    </fragment>
+
+
+    <fragment
+        android:id="@+id/nav_encounter_detail"
+        android:name="cz.muni.fi.rpg.ui.gameMaster.encounters.EncounterDetailFragment">
+        <argument
+            android:name="encounterId"
+            app:argType="cz.muni.fi.rpg.model.domain.encounters.EncounterId" />
     </fragment>
 
     <fragment

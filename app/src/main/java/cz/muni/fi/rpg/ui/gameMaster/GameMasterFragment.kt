@@ -6,23 +6,28 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import androidx.lifecycle.observe
-import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.tabs.TabLayoutMediator
 import cz.muni.fi.rpg.R
-import cz.muni.fi.rpg.model.domain.character.CharacterId
-import cz.muni.fi.rpg.model.domain.party.Invitation
 import cz.muni.fi.rpg.model.right
+import cz.muni.fi.rpg.ui.common.AdManager
 import cz.muni.fi.rpg.ui.common.BaseFragment
-import cz.muni.fi.rpg.ui.common.ChangeAmbitionsDialog
-import cz.muni.fi.rpg.ui.gameMaster.adapter.CharacterAdapter
+import cz.muni.fi.rpg.ui.common.StaticFragmentsViewPagerAdapter
+import cz.muni.fi.rpg.ui.gameMaster.encounters.EncountersFragment
 import cz.muni.fi.rpg.viewModels.GameMasterViewModel
+import kotlinx.android.synthetic.main.fragment_character.*
+import kotlinx.android.synthetic.main.fragment_character.pager
+import kotlinx.android.synthetic.main.fragment_character.tabLayout
 import kotlinx.android.synthetic.main.fragment_game_master.*
+import kotlinx.android.synthetic.main.fragment_game_master.mainView
+import kotlinx.android.synthetic.main.fragment_game_master.progress
 import org.koin.core.parameter.parametersOf
 import org.koin.android.viewmodel.ext.android.viewModel
 import timber.log.Timber
 
-class GameMasterFragment() : BaseFragment(R.layout.fragment_game_master) {
+class GameMasterFragment(
+    private val adManager: AdManager
+) : BaseFragment(R.layout.fragment_game_master) {
 
     private val args: GameMasterFragmentArgs by navArgs()
 
@@ -30,65 +35,41 @@ class GameMasterFragment() : BaseFragment(R.layout.fragment_game_master) {
 
     private lateinit var partyName: String
 
-    private lateinit var invitation: Invitation
-
-    private fun setViewVisibility(view: View, visible: Boolean) {
-        view.visibility = if (visible) View.VISIBLE else View.GONE
-    }
-
-    private fun setEmptyCollectionView(isEmpty: Boolean) {
-        setViewVisibility(noCharactersIcon, isEmpty)
-        setViewVisibility(noCharactersText, isEmpty)
-        setViewVisibility(characterListRecycler, !isEmpty)
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         Timber.d("Created view for GameMasterFragment (partyId = ${args.partyId}")
 
-
         viewModel.party.right().observe(viewLifecycleOwner) { party ->
+            mainView.visibility = View.VISIBLE
+            progress.visibility = View.GONE
             setTitle(party.getName())
-            invitation = party.getInvitation()
-
-            inviteButton.isEnabled = true
-
-            ambitionsCard.setValue(party.getAmbitions())
-            ambitionsCard.setOnClickListener {
-                ChangeAmbitionsDialog
-                    .newInstance(getString(R.string.title_party_ambitions), party.getAmbitions())
-                    .setOnSaveListener {
-                        viewModel.updatePartyAmbitions(it)
-                    }.show(childFragmentManager, "ChangeAmbitionsDialog")
-            }
-
 
             partyName = party.getName()
             setHasOptionsMenu(true)
+
+            mainView.visibility = View.VISIBLE
+            progress.visibility = View.GONE
         }
 
-        inviteButton.setOnClickListener { showQrCode() }
+        pager.adapter = StaticFragmentsViewPagerAdapter(
+            this,
+            arrayOf(
+                { PartySummaryFragment.newInstance(args.partyId) },
+                { EncountersFragment.newInstance(args.partyId) }
+            )
+        )
 
-        viewModel.getPlayers().observe(viewLifecycleOwner) { players ->
-            if (players.isNotEmpty()) {
-                val adapter = CharacterAdapter(layoutInflater)
-                {
-                    findNavController()
-                        .navigate(
-                            GameMasterFragmentDirections
-                                .openCharacter((CharacterId(args.partyId, it.userId)))
-                        )
+        TabLayoutMediator(tabLayout, pager) { tab, position ->
+            tab.setText(
+                when(position) {
+                    0 -> R.string.title_characters
+                    1 -> R.string.title_encounters
+                    else -> error("Unknown tab on position: $position")
                 }
-                characterListRecycler.adapter = adapter
-                characterListRecycler.layoutManager = LinearLayoutManager(context)
+            )
+        }.attach()
 
-                adapter.submitList(players)
-
-                setEmptyCollectionView(false)
-            } else {
-                setEmptyCollectionView(true)
-            }
-        }
+        adManager.initializeUnit(gameMasterAdView)
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -103,10 +84,5 @@ class GameMasterFragment() : BaseFragment(R.layout.fragment_game_master) {
         }
 
         return super.onOptionsItemSelected(item)
-    }
-
-    private fun showQrCode() {
-        InvitationDialog.newInstance(invitation)
-            .show(requireActivity().supportFragmentManager, InvitationDialog::class.simpleName)
     }
 }

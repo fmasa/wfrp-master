@@ -13,6 +13,29 @@ service cloud.firestore {
             allow write: if request.auth != null
                          && ((isGameMaster() && isValidPartyEdit()) || onlyUserAdded());
 
+
+            match /encounters/{encounterId} {
+                allow read: if hasAccessToParty();
+                allow create: if isValidEncounter(request.resource.data)
+                            && hasAccessToParty()
+                            && isGameMaster();
+                allow update: if isValidEncounter(request.resource.data)
+                              && hasAccessToParty()
+                              && isGameMaster();
+                allow delete: if hasAccessToParty() && isGameMaster();
+
+
+                function isValidEncounter(encounter) {
+                    return encounter is map
+                        && encounter.keys().toSet() == ["id", "name", "description", "position", "completed"].toSet()
+                        && encounter.id is string && encounter.id == encounterId
+                        && encounter.name is string && isNotBlank(encounter.name) && encounter.name.size() <= 100
+                        && encounter.description is string && encounter.description.size() <= 1000
+                        && encounter.position is int && encounter.position >= 0
+                        && encounter.completed is bool;
+                }
+            }
+
             match /characters/{userId} {
                 allow create: if hasAccessToParty()
                                 && userId == request.auth.uid
@@ -208,6 +231,7 @@ service cloud.firestore {
                     && armor.shield is int && armor.shield >= 0 && armor.shield <= 99;
             }
 
+
             function isValidUuid(maybeUuid) {
                 return maybeUuid.matches("^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$")
             }
@@ -253,7 +277,7 @@ service cloud.firestore {
                 return request.auth != null
                     && request.auth.uid == get(/databases/$(database)/documents/parties/$(partyId)).data.gameMasterId
             }
-
+        
             function hasAccessToParty() {
                 return request.auth != null
                     && request.auth.uid in get(/databases/$(database)/documents/parties/$(partyId)).data.users

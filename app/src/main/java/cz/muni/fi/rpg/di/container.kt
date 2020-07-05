@@ -13,27 +13,17 @@ import cz.muni.fi.rpg.model.cache.CharacterRepositoryIdentityMap
 import cz.muni.fi.rpg.model.cache.PartyRepositoryIdentityMap
 import cz.muni.fi.rpg.model.domain.armour.Armor
 import cz.muni.fi.rpg.model.domain.character.*
-import cz.muni.fi.rpg.model.domain.inventory.InventoryItem
+import cz.muni.fi.rpg.model.domain.encounter.EncounterRepository
+import cz.muni.fi.rpg.model.domain.encounters.EncounterId
 import cz.muni.fi.rpg.model.domain.inventory.InventoryItemRepository
 import cz.muni.fi.rpg.model.domain.invitation.InvitationProcessor
-import cz.muni.fi.rpg.model.domain.party.Party
 import cz.muni.fi.rpg.model.domain.party.PartyRepository
-import cz.muni.fi.rpg.model.domain.skills.Skill
 import cz.muni.fi.rpg.model.domain.skills.SkillRepository
-import cz.muni.fi.rpg.model.domain.spells.Spell
 import cz.muni.fi.rpg.model.domain.spells.SpellRepository
-import cz.muni.fi.rpg.model.domain.talents.Talent
 import cz.muni.fi.rpg.model.domain.talents.TalentRepository
 import cz.muni.fi.rpg.model.firestore.*
 import cz.muni.fi.rpg.model.firestore.jackson.JacksonAggregateMapper
 import cz.muni.fi.rpg.model.firestore.repositories.*
-import cz.muni.fi.rpg.model.firestore.repositories.FirestoreCharacterFeatureRepository
-import cz.muni.fi.rpg.model.firestore.repositories.FirestoreCharacterRepository
-import cz.muni.fi.rpg.model.firestore.repositories.FirestoreInventoryItemRepository
-import cz.muni.fi.rpg.model.firestore.repositories.FirestorePartyRepository
-import cz.muni.fi.rpg.model.firestore.repositories.FirestoreSkillRepository
-import cz.muni.fi.rpg.model.firestore.repositories.FirestoreSpellRepository
-import cz.muni.fi.rpg.model.firestore.repositories.FirestoreTalentRepository
 import cz.muni.fi.rpg.ui.character.*
 import cz.muni.fi.rpg.ui.character.CharacterMiscFragment
 import cz.muni.fi.rpg.ui.character.edit.CharacterEditFragment
@@ -44,16 +34,17 @@ import cz.muni.fi.rpg.ui.characterCreation.CharacterInfoFormFragment
 import cz.muni.fi.rpg.ui.characterCreation.CharacterStatsFormFragment
 import cz.muni.fi.rpg.ui.common.AdManager
 import cz.muni.fi.rpg.ui.gameMaster.GameMasterFragment
+import cz.muni.fi.rpg.ui.gameMaster.encounters.EncounterDetailFragment
+import cz.muni.fi.rpg.ui.gameMaster.encounters.EncountersFragment
 import cz.muni.fi.rpg.ui.partyList.PartyListFragment
 import cz.muni.fi.rpg.viewModels.*
 import org.koin.android.viewmodel.dsl.viewModel
 import org.koin.androidx.fragment.dsl.fragment
 import org.koin.dsl.module
 import java.util.*
-import kotlin.reflect.KClass
 
-private fun <T : Any> aggregateMapper(kclass: KClass<T>) =
-    JacksonAggregateMapper(kclass, jacksonTypeRef())
+private inline fun <reified T : Any> aggregateMapper() =
+    JacksonAggregateMapper(T::class, jacksonTypeRef())
 
 val appModule = module {
 
@@ -86,57 +77,20 @@ val appModule = module {
     /**
      * Repositories
      */
-    single<InventoryItemRepository> {
-        FirestoreInventoryItemRepository(
-            get(),
-            aggregateMapper(InventoryItem::class)
-        )
-    }
+    single<InventoryItemRepository> {FirestoreInventoryItemRepository(get(), aggregateMapper()) }
     single<CharacterRepository> {
-        CharacterRepositoryIdentityMap(
-            10,
-            FirestoreCharacterRepository(
-                get(),
-                aggregateMapper(Character::class)
-            )
-        )
+        CharacterRepositoryIdentityMap(10, FirestoreCharacterRepository(get(), aggregateMapper()))
     }
     single<PartyRepository> {
-        PartyRepositoryIdentityMap(
-            10,
-            FirestorePartyRepository(
-                get(),
-                aggregateMapper(Party::class)
-            )
-        )
+        PartyRepositoryIdentityMap(10, FirestorePartyRepository(get(), aggregateMapper()))
     }
-    single<SkillRepository> {
-        FirestoreSkillRepository(
-            get(),
-            aggregateMapper(Skill::class)
-        )
-    }
-    single<TalentRepository> {
-        FirestoreTalentRepository(
-            get(),
-            aggregateMapper(Talent::class)
-        )
-    }
-    single<SpellRepository> {
-        FirestoreSpellRepository(
-            get(),
-            aggregateMapper(Spell::class)
-        )
-    }
-
+    single<SkillRepository> { FirestoreSkillRepository(get(), aggregateMapper()) }
+    single<TalentRepository> { FirestoreTalentRepository(get(), aggregateMapper()) }
+    single<SpellRepository> { FirestoreSpellRepository(get(), aggregateMapper()) }
     single<CharacterFeatureRepository<Armor>> {
-        FirestoreCharacterFeatureRepository(
-            Feature.ARMOR,
-            get(),
-            Armor(),
-            aggregateMapper(Armor::class)
-        )
+        FirestoreCharacterFeatureRepository(Feature.ARMOR, get(), Armor(), aggregateMapper())
     }
+    single<EncounterRepository> { FirestoreEncounterRepository(get(), aggregateMapper()) }
 
     single { AdManager(get()) }
 
@@ -148,6 +102,8 @@ val appModule = module {
     viewModel { (characterId: CharacterId) -> CharacterMiscViewModel(characterId, get(), get()) }
     viewModel { (characterId: CharacterId) -> CharacterViewModel(characterId, get(), get())}
     viewModel { (partyId: UUID) -> GameMasterViewModel(partyId, get(), get()) }
+    viewModel { (partyId: UUID) -> EncountersViewModel(partyId, get()) }
+    viewModel { (encounterId: EncounterId) -> EncounterDetailViewModel(encounterId, get(), get()) }
     viewModel { (characterId: CharacterId) -> InventoryViewModel(characterId, get(), get(), get()) }
     viewModel { (characterId: CharacterId) -> SkillsViewModel(characterId, get()) }
     viewModel { (characterId: CharacterId) -> SpellsViewModel(characterId, get()) }
@@ -159,7 +115,7 @@ val appModule = module {
      * Fragments
      */
     fragment { CharacterFragment(get()) }
-    fragment { GameMasterFragment() }
+    fragment { GameMasterFragment(get()) }
     fragment { NavHostFragment() }
     fragment { PartyListFragment(get()) }
     fragment { CharacterEditFragment(get()) }
@@ -172,4 +128,6 @@ val appModule = module {
     fragment { CharacterCreationFragment(get()) }
     fragment { TalentsFragment() }
     fragment { CharacterArmorFragment() }
+    fragment { EncountersFragment() }
+    fragment { EncounterDetailFragment() }
 }
