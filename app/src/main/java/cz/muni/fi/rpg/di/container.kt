@@ -13,20 +13,14 @@ import cz.muni.fi.rpg.model.cache.CharacterRepositoryIdentityMap
 import cz.muni.fi.rpg.model.cache.PartyRepositoryIdentityMap
 import cz.muni.fi.rpg.model.domain.armour.Armor
 import cz.muni.fi.rpg.model.domain.character.*
-import cz.muni.fi.rpg.model.domain.inventory.InventoryItem
 import cz.muni.fi.rpg.model.domain.inventory.InventoryItemRepository
 import cz.muni.fi.rpg.model.domain.invitation.InvitationProcessor
-import cz.muni.fi.rpg.model.domain.party.Party
 import cz.muni.fi.rpg.model.domain.party.PartyRepository
-import cz.muni.fi.rpg.model.domain.skills.Skill
 import cz.muni.fi.rpg.model.domain.skills.SkillRepository
-import cz.muni.fi.rpg.model.domain.spells.Spell
 import cz.muni.fi.rpg.model.domain.spells.SpellRepository
-import cz.muni.fi.rpg.model.domain.talents.Talent
 import cz.muni.fi.rpg.model.domain.talents.TalentRepository
 import cz.muni.fi.rpg.model.firestore.*
 import cz.muni.fi.rpg.model.firestore.jackson.JacksonAggregateMapper
-import cz.muni.fi.rpg.model.firestore.repositories.*
 import cz.muni.fi.rpg.model.firestore.repositories.FirestoreCharacterFeatureRepository
 import cz.muni.fi.rpg.model.firestore.repositories.FirestoreCharacterRepository
 import cz.muni.fi.rpg.model.firestore.repositories.FirestoreInventoryItemRepository
@@ -50,10 +44,9 @@ import org.koin.android.viewmodel.dsl.viewModel
 import org.koin.androidx.fragment.dsl.fragment
 import org.koin.dsl.module
 import java.util.*
-import kotlin.reflect.KClass
 
-private fun <T : Any> aggregateMapper(kclass: KClass<T>) =
-    JacksonAggregateMapper(kclass, jacksonTypeRef())
+private inline fun <reified T : Any> aggregateMapper() =
+    JacksonAggregateMapper(T::class, jacksonTypeRef())
 
 val appModule = module {
 
@@ -86,56 +79,18 @@ val appModule = module {
     /**
      * Repositories
      */
-    single<InventoryItemRepository> {
-        FirestoreInventoryItemRepository(
-            get(),
-            aggregateMapper(InventoryItem::class)
-        )
-    }
+    single<InventoryItemRepository> {FirestoreInventoryItemRepository(get(), aggregateMapper()) }
     single<CharacterRepository> {
-        CharacterRepositoryIdentityMap(
-            10,
-            FirestoreCharacterRepository(
-                get(),
-                aggregateMapper(Character::class)
-            )
-        )
+        CharacterRepositoryIdentityMap(10, FirestoreCharacterRepository(get(), aggregateMapper()))
     }
     single<PartyRepository> {
-        PartyRepositoryIdentityMap(
-            10,
-            FirestorePartyRepository(
-                get(),
-                aggregateMapper(Party::class)
-            )
-        )
+        PartyRepositoryIdentityMap(10, FirestorePartyRepository(get(), aggregateMapper()))
     }
-    single<SkillRepository> {
-        FirestoreSkillRepository(
-            get(),
-            aggregateMapper(Skill::class)
-        )
-    }
-    single<TalentRepository> {
-        FirestoreTalentRepository(
-            get(),
-            aggregateMapper(Talent::class)
-        )
-    }
-    single<SpellRepository> {
-        FirestoreSpellRepository(
-            get(),
-            aggregateMapper(Spell::class)
-        )
-    }
-
+    single<SkillRepository> { FirestoreSkillRepository(get(), aggregateMapper()) }
+    single<TalentRepository> { FirestoreTalentRepository(get(), aggregateMapper()) }
+    single<SpellRepository> { FirestoreSpellRepository(get(), aggregateMapper()) }
     single<CharacterFeatureRepository<Armor>> {
-        FirestoreCharacterFeatureRepository(
-            Feature.ARMOR,
-            get(),
-            Armor(),
-            aggregateMapper(Armor::class)
-        )
+        FirestoreCharacterFeatureRepository(Feature.ARMOR, get(), Armor(), aggregateMapper())
     }
 
     single { AdManager(get()) }
