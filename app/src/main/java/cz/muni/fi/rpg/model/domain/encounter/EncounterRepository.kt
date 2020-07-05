@@ -2,7 +2,7 @@ package cz.muni.fi.rpg.model.domain.encounter
 
 import androidx.lifecycle.LiveData
 import arrow.core.Either
-import cz.muni.fi.rpg.ui.gameMaster.encounters.EncounterId
+import cz.muni.fi.rpg.model.domain.encounters.EncounterId
 import java.util.*
 
 interface EncounterRepository {

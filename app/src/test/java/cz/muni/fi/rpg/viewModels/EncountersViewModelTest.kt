@@ -5,7 +5,7 @@ import arrow.core.Either
 import cz.muni.fi.rpg.model.domain.encounter.Encounter
 import cz.muni.fi.rpg.model.domain.encounter.EncounterNotFound
 import cz.muni.fi.rpg.model.domain.encounter.EncounterRepository
-import cz.muni.fi.rpg.ui.gameMaster.encounters.EncounterId
+import cz.muni.fi.rpg.model.domain.encounters.EncounterId
 import org.junit.Assert.assertEquals
 import kotlinx.coroutines.runBlocking
 import org.junit.Test

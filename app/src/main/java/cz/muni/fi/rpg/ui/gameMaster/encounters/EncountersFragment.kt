@@ -5,13 +5,16 @@ import android.view.View
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.observe
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.model.domain.encounter.Encounter
+import cz.muni.fi.rpg.model.domain.encounters.EncounterId
 import cz.muni.fi.rpg.ui.common.serializableArgument
 import cz.muni.fi.rpg.ui.common.toggleVisibility
+import cz.muni.fi.rpg.ui.gameMaster.GameMasterFragmentDirections
 import cz.muni.fi.rpg.ui.gameMaster.encounters.adapter.EncounterAdapter
 import cz.muni.fi.rpg.viewModels.EncountersViewModel
 import kotlinx.android.synthetic.main.fragment_encounters.*
@@ -44,7 +47,13 @@ class EncountersFragment : Fragment(R.layout.fragment_encounters),
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val adapter = EncounterAdapter(layoutInflater) {}
+        val adapter = EncounterAdapter(layoutInflater) {encounter ->
+            findNavController().navigate(
+                GameMasterFragmentDirections.openEncounter(
+                    EncounterId(partyId = partyId, encounterId = encounter.id)
+                )
+            )
+        }
         encounterListRecycler.adapter = adapter
         encounterListRecycler.layoutManager = LinearLayoutManager(context)
 

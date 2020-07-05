@@ -13,6 +13,6 @@ class EncounterHolder(
 
     fun bind(item: Encounter) {
         view.title.text = item.name
-        view.setOnClickListener { onClickListener(item) }
+        view.encounterCard.setOnClickListener { onClickListener(item) }
     }
 }

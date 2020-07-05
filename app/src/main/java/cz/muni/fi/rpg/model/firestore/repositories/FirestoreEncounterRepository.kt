@@ -13,7 +13,7 @@ import cz.muni.fi.rpg.model.firestore.*
 import cz.muni.fi.rpg.model.firestore.AggregateMapper
 import cz.muni.fi.rpg.model.firestore.DocumentLiveData
 import cz.muni.fi.rpg.model.firestore.QueryLiveData
-import cz.muni.fi.rpg.ui.gameMaster.encounters.EncounterId
+import cz.muni.fi.rpg.model.domain.encounters.EncounterId
 import kotlinx.coroutines.tasks.await
 import java.util.*
 

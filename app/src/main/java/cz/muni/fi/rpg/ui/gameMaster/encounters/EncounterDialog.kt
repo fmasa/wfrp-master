@@ -9,6 +9,7 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
 import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.model.domain.encounter.Encounter
+import cz.muni.fi.rpg.model.domain.encounters.EncounterId
 import cz.muni.fi.rpg.ui.common.forms.Form
 import cz.muni.fi.rpg.ui.common.optionalParcelableArgument
 import cz.muni.fi.rpg.ui.common.serializableArgument

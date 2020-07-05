@@ -4,9 +4,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import cz.muni.fi.rpg.model.domain.encounter.Encounter
 import cz.muni.fi.rpg.model.domain.encounter.EncounterRepository
-import cz.muni.fi.rpg.ui.gameMaster.encounters.EncounterId
+import cz.muni.fi.rpg.model.domain.encounters.EncounterId
 import kotlinx.coroutines.*
-import timber.log.Timber
 import java.util.*
 
 class EncountersViewModel(
@@ -51,7 +50,12 @@ class EncountersViewModel(
 
     private fun encounterAsync(id: UUID): Deferred<Pair<UUID, Encounter>> {
         return async {
-            id to encounterRepository.get(EncounterId(partyId = partyId, encounterId = id))
+            id to encounterRepository.get(
+                EncounterId(
+                    partyId = partyId,
+                    encounterId = id
+                )
+            )
         }
     }
 }
