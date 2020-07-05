@@ -46,6 +46,7 @@ class EncountersFragment : Fragment(R.layout.fragment_encounters) {
             noEncountersText.toggleVisibility(encounters.isEmpty())
             noEncountersIcon.toggleVisibility(encounters.isEmpty())
             encounterListRecycler.toggleVisibility(encounters.isNotEmpty())
+            timeline.toggleVisibility(encounters.isNotEmpty())
         }
 
         addEncounter.setOnClickListener {

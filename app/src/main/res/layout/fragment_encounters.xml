@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/colorBackgroundUnderCard"
     tools:context=".ui.gameMaster.encounters.EncountersFragment">
 
     <ProgressBar
@@ -16,6 +17,16 @@
         android:id="@+id/mainView"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+        <View
+            android:id="@+id/timeline"
+            android:visibility="gone"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_width="1dp"
+            android:background="@color/colorPrimaryDark"
+            android:layout_height="match_parent"/>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/encounterListRecycler"
