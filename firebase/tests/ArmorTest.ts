@@ -1,13 +1,14 @@
 import {suite} from "mocha-typescript";
 import {CharacterFeatureSuite} from "./CharacterFeatureSuite";
+import {Armor} from "./api";
 
 @suite
-class Armor extends CharacterFeatureSuite {
+class ArmorTest extends CharacterFeatureSuite {
     getFeatureName(): string {
         return "armor";
     }
 
-    getValue(): object {
+    getValue(): Armor {
         return {
             head: 1,
             body: 1,

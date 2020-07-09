@@ -24,6 +24,39 @@ service cloud.firestore {
                               && isGameMaster();
                 allow delete: if hasAccessToParty() && isGameMaster();
 
+                match /combatants/{combatantId} {
+                    allow read: if hasAccessToParty();
+
+                    allow create: if isValidCombatant(request.resource.data)
+                                && hasAccessToParty()
+                                && isGameMaster();
+                    allow update: if isValidCombatant(request.resource.data)
+                                && hasAccessToParty()
+                                && isGameMaster();
+                    allow delete: if hasAccessToParty() && isGameMaster();
+
+                    function isValidCombatant(combatant) {
+                        return combatant is map
+                            && combatant.keys().toSet() == ["id", "name", "note", "wounds", "stats", "armor", "enemy", "traits", "trappings", "position"].toSet()
+                            && combatant.id is string && isValidUuid(combatant.id) && combatant.id == combatantId
+                            && combatant.name is string && isNotBlank(combatant.name) && combatant.name.size() <= 100
+                            && combatant.note is string && combatant.note.size() <= 400
+                            && areValidWounds(combatant.wounds)
+                            && areStatsValid(combatant.stats)
+                            && isArmorValid(combatant.armor)
+                            && combatant.enemy is bool
+                            && combatant.traits is list
+                            && combatant.trappings is list
+                            && combatant.position is number && combatant.position >= 0;
+                    }
+
+                    function areValidWounds(wounds) {
+                        return wounds is map
+                           && wounds.keys().toSet() == ["max", "current"].toSet()
+                           && wounds.max is int && wounds.max > 0
+                           && wounds.current is int && wounds.current >= 0 && wounds.current <= wounds.max;
+                    }
+                }
 
                 function isValidEncounter(encounter) {
                     return encounter is map

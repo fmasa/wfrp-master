@@ -3,6 +3,8 @@ import {Suite} from "./Suite";
 import {uuid} from "uuidv4";
 import {assertFails, assertSucceeds} from "@firebase/testing";
 import {withoutField} from "./utils";
+import {Armor, Party, Stats} from "./api";
+import {CollectionReference} from "./firebase";
 
 interface Encounter {
     id: string;
@@ -10,6 +12,22 @@ interface Encounter {
     description: string;
     position: number;
     completed: boolean;
+}
+
+interface Combatant {
+    id: string;
+    name: string;
+    note: string;
+    enemy: boolean;
+    trappings: string[];
+    traits: string[];
+    stats: Stats;
+    wounds: {
+        max: number;
+        current: number;
+    },
+    armor: Armor;
+    position: number;
 }
 
 @suite
@@ -78,6 +96,70 @@ class Encounters extends Suite {
         )
     }
 
+    @test
+    async "GM can add combatant"() {
+        const combatantsCollection = await this.combatantCollection();
+        const combatant = this.validCombatant();
+
+        await assertSucceeds(combatantsCollection.doc(combatant.id).set(combatant));
+    }
+
+    @test
+    async "GM can remove combatant"() {
+        const combatantsCollection = await this.combatantCollection();
+        const combatant = this.validCombatant();
+        const document = combatantsCollection.doc(combatant.id);
+
+        await document.set(combatant);
+
+        await assertSucceeds(document.delete());
+    }
+
+    @test
+    async "Player CANNOT add combatant"() {
+        const party = await this.createUserAccessibleParty("user123");
+        const encounter = await this.createValidEncounter(party);
+
+        const combatantsCollection = this.authedApp("user123")
+            .collection("parties")
+            .doc(party.id)
+            .collection("encounters")
+            .doc(encounter.id)
+            .collection("combatants");
+
+        const combatant = this.validCombatant();
+
+        await assertFails(combatantsCollection.doc(combatant.id).set(combatant));
+    }
+
+    private async combatantCollection(): Promise<CollectionReference> {
+        const party = await this.createValidParty();
+        const encounter = this.validEncounter();
+
+        const document = this.authedApp(this.validPartyGameMasterId)
+            .collection("parties")
+            .doc(party.id)
+            .collection("encounters")
+            .doc(encounter.id);
+
+        await document.set(encounter)
+
+        return document.collection("combatants");
+    }
+
+    private async createValidEncounter(party: Party): Promise<Encounter> {
+        const encounter = this.validEncounter();
+        const document = this.authedApp(this.validPartyGameMasterId)
+            .collection("parties")
+            .doc(party.id)
+            .collection("encounters")
+            .doc(encounter.id);
+
+        await document.set(encounter);
+
+        return encounter;
+    }
+
     private validEncounter(): Encounter {
         return {
             id: uuid(),
@@ -85,6 +167,43 @@ class Encounters extends Suite {
             description: "This takes place in sewers. Visibility is low.",
             position: 0,
             completed: false,
+        }
+    }
+
+    private validCombatant(): Combatant {
+        return {
+            id: uuid(),
+            name: "Toby",
+            note: "",
+            enemy: true,
+            trappings: ["short sword"],
+            traits: ["Fear 1", "Luck 1"],
+            stats: {
+                agility: 20,
+                ballisticSkill: 12,
+                dexterity: 15,
+                fellowship: 10,
+                initiative: 40,
+                intelligence: 64,
+                strength: 32,
+                toughness: 15,
+                weaponSkill: 13,
+                willPower: 10,
+            },
+            armor: {
+                head: 1,
+                body: 1,
+                leftArm: 1,
+                rightArm: 1,
+                leftLeg: 1,
+                rightLeg: 1,
+                shield: 1,
+            },
+            wounds: {
+                current: 2,
+                max: 5,
+            },
+            position: 0
         }
     }
 }

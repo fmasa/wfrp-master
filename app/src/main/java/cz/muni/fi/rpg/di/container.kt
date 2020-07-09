@@ -13,6 +13,7 @@ import cz.muni.fi.rpg.model.cache.CharacterRepositoryIdentityMap
 import cz.muni.fi.rpg.model.cache.PartyRepositoryIdentityMap
 import cz.muni.fi.rpg.model.domain.armour.Armor
 import cz.muni.fi.rpg.model.domain.character.*
+import cz.muni.fi.rpg.model.domain.encounter.CombatantRepository
 import cz.muni.fi.rpg.model.domain.encounter.EncounterRepository
 import cz.muni.fi.rpg.model.domain.encounters.EncounterId
 import cz.muni.fi.rpg.model.domain.inventory.InventoryItemRepository
@@ -91,6 +92,7 @@ val appModule = module {
         FirestoreCharacterFeatureRepository(Feature.ARMOR, get(), Armor(), aggregateMapper())
     }
     single<EncounterRepository> { FirestoreEncounterRepository(get(), aggregateMapper()) }
+    single<CombatantRepository> {  FirestoreCombatantRepository(get(), aggregateMapper()) }
 
     single { AdManager(get()) }
 
