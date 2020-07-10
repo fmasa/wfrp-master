@@ -125,6 +125,9 @@
     <string name="message_encounter_saved">Encounter was saved</string>
     <string name="no_encounters_prompt">Add first encounter for your party.</string>
     <string name="encounter_icon">Encounter icon</string>
+    <string name="title_combatants">Combatants</string>
+    <string name="no_combatants_prompt">There are no combatants yet. Add first one.</string>
+    <string name="button_combatant_add">Add Combatant</string>
 
     <string name="inventory_item_icon_description">Inventory item icon</string>
     <string name="no_inventory_item_prompt">There is no item in your inventory.</string>
