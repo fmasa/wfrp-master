@@ -51,7 +51,7 @@ class TransactionDialog : DialogFragment(), CoroutineScope by CoroutineScope(Dis
             layoutInflater
         )
 
-        val dialog = AlertDialog.Builder(activity)
+        val dialog = AlertDialog.Builder(activity, R.style.FormDialog)
             .setView(view)
             .setPositiveButton(R.string.button_submit, null).create()
 

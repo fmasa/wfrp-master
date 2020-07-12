@@ -66,7 +66,7 @@ class ChangeAmbitionsDialog : DialogFragment(),
             }
         }
 
-        val dialog = AlertDialog.Builder(activity)
+        val dialog = AlertDialog.Builder(activity, R.style.FormDialog)
             .setView(view)
             .setTitle(title)
             .setPositiveButton(R.string.button_save) { _, _ -> }

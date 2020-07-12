@@ -56,7 +56,7 @@ class RenamePartyDialog : DialogFragment(), CoroutineScope by CoroutineScope(Dis
             }
         }
 
-        val dialog = AlertDialog.Builder(activity)
+        val dialog = AlertDialog.Builder(activity, R.style.FormDialog)
             .setTitle(R.string.title_party_rename)
             .setView(view)
             .setPositiveButton(R.string.button_save) { _, _ -> }

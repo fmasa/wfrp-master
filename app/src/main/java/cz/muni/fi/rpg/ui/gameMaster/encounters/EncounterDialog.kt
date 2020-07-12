@@ -69,7 +69,7 @@ class EncounterDialog : DialogFragment(), CoroutineScope by CoroutineScope(Dispa
             }
         }
 
-        val dialog = AlertDialog.Builder(activity)
+        val dialog = AlertDialog.Builder(activity, R.style.FormDialog)
             .setTitle(
                 if (defaults == null)
                     getString(R.string.title_encounter_create)

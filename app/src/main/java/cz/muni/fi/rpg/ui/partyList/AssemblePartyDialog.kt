@@ -65,7 +65,7 @@ class AssemblePartyDialog : DialogFragment(), CoroutineScope by CoroutineScope(D
             view.singlePlayerWarning.visibility = if (isChecked) View.VISIBLE else View.GONE
         }
 
-        val dialog = AlertDialog.Builder(activity)
+        val dialog = AlertDialog.Builder(activity, R.style.FormDialog)
             .setTitle(R.string.assembleParty_title)
             .setView(view)
             .setPositiveButton(R.string.button_create) { _, _ -> }

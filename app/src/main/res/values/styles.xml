@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.MaterialComponents.Light.DarkActionBar">
@@ -52,6 +52,9 @@
 
     <style name="OutlinedInputWithCounter" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
         <item name="android:layout_marginBottom">0dp</item>
+        <item name="boxStrokeWidth">1sp</item>
+        <item name="boxStrokeWidthFocused">1sp</item>
+        <item name="boxStrokeColor" tools:override="true">@color/textInputOutlineColor</item>
         <item name="boxBackgroundColor">@color/colorCardBackground</item>
     </style>
 
@@ -117,5 +120,9 @@
         <item name="iconGravity">textStart</item>
         <item name="iconPadding">0dp</item>
         <item name="rippleColor">?colorOnPrimary</item>
+    </style>
+
+    <style name="FormDialog" parent="ThemeOverlay.MaterialComponents.Dialog.Alert">
+        <item name="android:colorBackground">@color/colorBackgroundUnderCard</item>
     </style>
 </resources>
