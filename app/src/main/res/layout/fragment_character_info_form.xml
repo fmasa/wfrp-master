@@ -100,6 +100,8 @@
     <cz.muni.fi.rpg.ui.views.TextInput
         android:id="@+id/noteInput"
         android:layout_marginTop="12dp"
+        android:minLines="3"
+        android:inputType="textMultiLine"
         app:inputLabel="@string/label_character_note_input"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>

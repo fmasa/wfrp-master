@@ -23,13 +23,17 @@
             app:inputLabel="@string/label_ambition_short_term"
             android:id="@+id/shortTermAmbitionInput"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:minLines="2"
+            android:inputType="textMultiLine"/>
 
         <cz.muni.fi.rpg.ui.views.TextInput
             app:inputLabel="@string/label_ambition_long_term"
             android:id="@+id/longTermAmbitionInput"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:minLines="2"
+            android:inputType="textMultiLine"/>
 
     </LinearLayout>
 </FrameLayout>
