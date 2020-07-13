@@ -1,7 +1,8 @@
 package cz.muni.fi.rpg.ui.gameMaster.encounters.adapter
 
+import android.content.res.ColorStateList
 import android.view.View
-import androidx.constraintlayout.widget.ConstraintSet
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.common.EntityListener
@@ -16,22 +17,12 @@ class CombatantHolder(
 
     fun bind(item: Combatant) {
         view.combatantName.text = item.name
-        view.combatantNote.text = item.note
 
-
-        if (item.note.isBlank()) {
-            view.combatantNote.visibility = View.GONE
-
-            ConstraintSet().apply {
-                clone(view.combatantLayout)
-                connect(
-                    R.id.inventoryItemName,
-                    ConstraintSet.BOTTOM,
-                    ConstraintSet.PARENT_ID,
-                    ConstraintSet.BOTTOM
-                )
-                applyTo(view.combatantLayout)
-            }
+        if (! item.alive) {
+            view.combatantIcon.setImageResource(R.drawable.ic_dead)
+            view.combatantIcon.backgroundTintList = ColorStateList.valueOf(
+                ContextCompat.getColor(view.context, R.color.colorGray)
+            )
         }
 
         view.setOnClickListener { onClickListener(item) }

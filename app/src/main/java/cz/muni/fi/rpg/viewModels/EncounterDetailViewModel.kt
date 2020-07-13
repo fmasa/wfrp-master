@@ -35,6 +35,7 @@ class EncounterDetailViewModel(
         stats: Stats,
         armor: Armor,
         enemy: Boolean,
+        alive: Boolean,
         traits: List<String>,
         trappings: List<String>
     ) {
@@ -48,6 +49,7 @@ class EncounterDetailViewModel(
                 stats = stats,
                 armor = armor,
                 enemy = enemy,
+                alive = alive,
                 traits = traits,
                 trappings = trappings,
                 position = combatantRepository.getNextPosition(encounterId)
@@ -63,6 +65,7 @@ class EncounterDetailViewModel(
         stats: Stats,
         armor: Armor,
         enemy: Boolean,
+        alive: Boolean,
         traits: List<String>,
         trappings: List<String>
     ) {
@@ -75,6 +78,7 @@ class EncounterDetailViewModel(
             stats,
             armor,
             enemy,
+            alive,
             traits,
             trappings
         )

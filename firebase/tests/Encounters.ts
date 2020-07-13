@@ -19,6 +19,7 @@ interface Combatant {
     name: string;
     note: string;
     enemy: boolean;
+    alive: boolean;
     trappings: string[];
     traits: string[];
     stats: Stats;
@@ -176,6 +177,7 @@ class Encounters extends Suite {
             name: "Toby",
             note: "",
             enemy: true,
+            alive: true,
             trappings: ["short sword"],
             traits: ["Fear 1", "Luck 1"],
             stats: {

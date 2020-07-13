@@ -12,6 +12,7 @@ class Combatant(
     stats: Stats,
     armor: Armor,
     enemy: Boolean,
+    alive: Boolean,
     traits: List<String>,
     trappings: List<String>,
     val position: Int
@@ -28,6 +29,8 @@ class Combatant(
     var armor: Armor = armor
         private set
     var enemy: Boolean = enemy
+        private set
+    var alive: Boolean = alive
         private set
     var traits: List<String> = traits
         private set
@@ -51,6 +54,7 @@ class Combatant(
         stats: Stats,
         armor: Armor,
         enemy: Boolean,
+        alive: Boolean,
         traits: List<String>,
         trappings: List<String>
     ) {
@@ -62,6 +66,7 @@ class Combatant(
         this.stats = stats
         this.armor = armor
         this.enemy = enemy
+        this.alive = alive
         this.traits = traits
         this.trappings = trappings
     }

@@ -91,6 +91,7 @@ class CombatantFragment : BaseFragment(R.layout.fragment_combatant),
         val stats = buildStats()
         val armor = buildArmor()
         val enemy = enemyCheckbox.isChecked
+        val alive = aliveCheckbox.isChecked
 
         val combatantId = args.combatantId
 
@@ -103,6 +104,7 @@ class CombatantFragment : BaseFragment(R.layout.fragment_combatant),
                     stats,
                     armor,
                     enemy,
+                    alive,
                     listOf(), // TODO: Add trappings and traits editation
                     listOf()
                 )
@@ -115,6 +117,7 @@ class CombatantFragment : BaseFragment(R.layout.fragment_combatant),
                     stats,
                     armor,
                     enemy,
+                    alive,
                     listOf(), // TODO: Add trappings and traits editation
                     listOf()
                 )
@@ -185,6 +188,7 @@ class CombatantFragment : BaseFragment(R.layout.fragment_combatant),
         }
 
         enemyCheckbox.isChecked = combatant?.enemy ?: true
+        aliveCheckbox.isChecked = combatant?.alive ?: true
     }
 
     private fun initializeStats(form: Form, stats: Stats?) {

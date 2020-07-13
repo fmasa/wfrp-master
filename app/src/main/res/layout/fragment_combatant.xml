@@ -60,11 +60,24 @@
                 android:layout_marginBottom="16dp"
                 app:inputLabel="@string/label_description" />
 
-            <CheckBox
-                android:id="@+id/enemyCheckbox"
-                android:text="@string/label_enemy"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <CheckBox
+                    android:id="@+id/enemyCheckbox"
+                    android:text="@string/label_enemy"
+                    android:layout_width="wrap_content"
+                    android:layout_marginEnd="16dp"
+                    android:layout_height="wrap_content" />
+
+                <CheckBox
+                    android:id="@+id/aliveCheckbox"
+                    android:text="@string/label_alive"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+            </LinearLayout>
 
             <View
                 android:layout_marginTop="20dp"

@@ -239,4 +239,5 @@
     <string name="label_shortcut_fellowship">FEL</string>
     <string name="message_combatant_not_found">Combatant does not exist</string>
     <string name="message_combatant_saved">Combatant was saved</string>
+    <string name="label_alive">Alive</string>
 </resources>
