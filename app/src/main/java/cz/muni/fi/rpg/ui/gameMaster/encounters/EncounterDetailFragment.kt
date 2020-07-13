@@ -13,6 +13,9 @@ import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.model.domain.encounter.Encounter
 import cz.muni.fi.rpg.model.right
 import cz.muni.fi.rpg.ui.common.BaseFragment
+import cz.muni.fi.rpg.ui.common.NonScrollableLayoutManager
+import cz.muni.fi.rpg.ui.common.toggleVisibility
+import cz.muni.fi.rpg.ui.gameMaster.encounters.adapter.CombatantAdapter
 import cz.muni.fi.rpg.viewModels.EncounterDetailViewModel
 import kotlinx.android.synthetic.main.fragment_encounter_detail.*
 import kotlinx.coroutines.CoroutineScope
@@ -44,6 +47,40 @@ class EncounterDetailFragment : BaseFragment(R.layout.fragment_encounter_detail)
             setHasOptionsMenu(true)
 
             this.encounter = encounter
+        }
+
+        viewModel.combatants.observe(viewLifecycleOwner) { combatants ->
+            if (combatants.isNotEmpty()) {
+                val adapter = CombatantAdapter(
+                    layoutInflater,
+                    { combatant ->
+                        findNavController().navigate(
+                            EncounterDetailFragmentDirections
+                                .openCombatantForm(
+                                    encounterId = args.encounterId,
+                                    combatantId = combatant.id
+                                )
+                        )
+                    },
+                    { combatant -> launch { viewModel.removeCombatant(combatant.id) } }
+                )
+                combatantListRecycler.adapter = adapter
+                combatantListRecycler.layoutManager = NonScrollableLayoutManager(requireContext())
+                adapter.submitList(combatants)
+            }
+
+            noCombatantsIcon.toggleVisibility(combatants.isEmpty())
+            noCombatantsText.toggleVisibility(combatants.isEmpty())
+            combatantListRecycler.toggleVisibility(combatants.isNotEmpty())
+
+            addCombatantButton.setOnClickListener {
+                findNavController().navigate(
+                    EncounterDetailFragmentDirections.openCombatantForm(
+                        encounterId = args.encounterId,
+                        combatantId = null
+                    )
+                )
+            }
         }
     }
 

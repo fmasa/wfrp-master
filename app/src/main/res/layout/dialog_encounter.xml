@@ -32,6 +32,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:layout_width="match_parent"
+                android:minLines="3"
+                android:inputType="textMultiLine"
                 app:inputLabel="@string/label_description" />
         </LinearLayout>
     </ScrollView>

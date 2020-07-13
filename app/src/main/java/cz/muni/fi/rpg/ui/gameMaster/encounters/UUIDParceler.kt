@@ -4,7 +4,7 @@ import android.os.Parcel
 import kotlinx.android.parcel.Parceler
 import java.util.*
 
-class UUIDParceler : Parceler<UUID> {
+object UUIDParceler : Parceler<UUID> {
     override fun create(parcel: Parcel): UUID {
         val mostSigBits = parcel.readLong()
         val leastSigBits = parcel.readLong()

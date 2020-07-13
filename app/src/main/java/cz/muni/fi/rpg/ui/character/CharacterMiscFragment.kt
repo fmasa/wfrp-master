@@ -80,7 +80,7 @@ internal class CharacterMiscFragment : Fragment(R.layout.fragment_character_misc
 
         view.xpPointsInput.setText(currentXpPoints.toString())
 
-        AlertDialog.Builder(requireContext())
+        AlertDialog.Builder(requireContext(), R.style.FormDialog)
             .setTitle("Change amount of XP")
             .setView(view)
             .setPositiveButton(R.string.button_save) { _, _ ->

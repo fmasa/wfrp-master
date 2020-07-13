@@ -11,6 +11,7 @@
         <attr name="inputLabel" format="string"/>
         <attr name="android:maxLength" format="integer" min="0"/>
         <attr name="android:inputType"/>
+        <attr name="android:minLines" format="integer" min="0"/>
         <attr name="android:maxLines" format="integer" min="0"/>
     </declare-styleable>
     <declare-styleable name="AmbitionsCard">

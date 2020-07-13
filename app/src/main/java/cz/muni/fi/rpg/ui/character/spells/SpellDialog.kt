@@ -78,7 +78,7 @@ class SpellDialog : DialogFragment(),
 
         setDefaults(view)
 
-        val dialog = AlertDialog.Builder(activity)
+        val dialog = AlertDialog.Builder(activity, R.style.FormDialog)
             .setView(view)
             .setTitle(if (existingSpell != null) null else getString(R.string.title_spell_add))
             .setPositiveButton(R.string.button_save) { _, _ -> }

@@ -87,7 +87,7 @@ class SkillDialog : DialogFragment(), CoroutineScope by CoroutineScope(Dispatche
 
         setDefaults(view)
 
-        val dialog = AlertDialog.Builder(activity)
+        val dialog = AlertDialog.Builder(activity, R.style.FormDialog)
             .setView(view)
             .setTitle(if (skill != null) null else getString(R.string.title_addSkill))
             .setPositiveButton(R.string.button_save) { _, _ -> }

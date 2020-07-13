@@ -1,64 +1,9 @@
 import * as firebase from "@firebase/testing";
 import {readFileSync} from "fs";
 import {uuid} from "uuidv4";
+import {Character, Party} from "./api";
 
-type CollectionReference = firebase.firestore.CollectionReference;
 type Firestore = firebase.firestore.Firestore;
-
-interface Party {
-    id: string;
-    name: string;
-    accessCode: string;
-    gameMasterId: string;
-    ambitions: {
-        shortTerm: string;
-        longTerm: string;
-    };
-    users: string[];
-}
-
-interface Stats {
-    weaponSkill: number;
-    dexterity: number;
-    initiative: number;
-    ballisticSkill: number;
-    strength: number;
-    toughness: number;
-    agility: number;
-    intelligence: number;
-    willPower: number;
-    fellowship: number;
-}
-interface Character {
-    name: string,
-    userId: string,
-    career: string,
-    socialClass: string,
-    race: string,
-    stats: Stats,
-    maxStats: Stats,
-    points: {
-        corruption: number,
-        experience: number,
-        fate: number,
-        fortune: number,
-        wounds: number,
-        maxWounds: number,
-        resilience: number,
-        resolve: number,
-        sin: number,
-    },
-    ambitions: {
-        shortTerm: string,
-        longTerm: string,
-    },
-    psychology: string,
-    motivation: string,
-    mutation: string,
-    money: {
-        pennies: number,
-    }
-}
 
 export abstract class Suite {
     protected readonly validPartyGameMasterId = "user"

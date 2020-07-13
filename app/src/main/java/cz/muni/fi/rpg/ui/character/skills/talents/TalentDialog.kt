@@ -63,7 +63,7 @@ class TalentDialog : DialogFragment() {
 
         setDefaults(view)
 
-        val dialog = AlertDialog.Builder(activity)
+        val dialog = AlertDialog.Builder(activity, R.style.FormDialog)
             .setView(view)
             .setTitle(if (talent != null) null else getString(R.string.title_talent_add))
             .setPositiveButton(R.string.button_save) { _, _ -> }

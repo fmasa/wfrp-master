@@ -56,7 +56,7 @@ class InventoryItemDialog : DialogFragment(),
             view.itemQuantity.setText(it.quantity.toString())
         }
 
-        val dialog = AlertDialog.Builder(requireContext())
+        val dialog = AlertDialog.Builder(requireContext(), R.style.FormDialog)
             .setTitle(if (existingItem != null) null else getString(R.string.createInventoryItemTitle))
             .setView(view)
             .setPositiveButton(R.string.button_save, null)
