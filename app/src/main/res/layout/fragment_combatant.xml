@@ -1,0 +1,286 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent">
+
+    <ProgressBar
+        android:id="@+id/progress"
+        android:layout_gravity="center"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content" />
+
+    <ScrollView
+        android:id="@+id/mainView"
+        android:visibility="gone"
+        android:background="@color/colorBackgroundUnderCard"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:fitsSystemWindows="true"
+            android:padding="24dp"
+            android:layout_height="wrap_content">
+
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_marginBottom="16dp"
+                android:layout_height="wrap_content">
+
+                <cz.muni.fi.rpg.ui.views.TextInput
+                    android:id="@+id/nameInput"
+                    android:layout_width="0dp"
+                    android:maxLines="1"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    app:inputLabel="@string/label_name" />
+
+                <cz.muni.fi.rpg.ui.views.TextInput
+                    android:id="@+id/maxWoundsInput"
+                    android:layout_marginStart="16dp"
+                    android:inputType="number"
+                    android:layout_width="120dp"
+                    android:layout_height="wrap_content"
+                    app:inputLabel="@string/label_wounds" />
+            </LinearLayout>
+
+
+            <cz.muni.fi.rpg.ui.views.TextInput
+                android:id="@+id/noteInput"
+                android:minLines="3"
+                android:inputType="textMultiLine"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                app:inputLabel="@string/label_description" />
+
+            <CheckBox
+                android:id="@+id/enemyCheckbox"
+                android:text="@string/label_enemy"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <View
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="20dp"
+                android:background="?android:attr/dividerHorizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="1dp" />
+
+            <TextView
+                style="@style/TextAppearance.AppCompat.Title"
+                android:text="@string/title_combatant_attributes"
+                android:layout_width="match_parent"
+                android:layout_marginBottom="16dp"
+                android:layout_height="wrap_content" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_marginBottom="16dp"
+                android:layout_height="wrap_content">
+
+                <cz.muni.fi.rpg.ui.views.TextInput
+                    android:id="@+id/weaponSkillInput"
+                    android:inputType="number"
+                    android:layout_width="0dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    app:inputLabel="@string/label_shortcut_weapon_skill" />
+
+                <cz.muni.fi.rpg.ui.views.TextInput
+                    android:id="@+id/ballisticSkillInput"
+                    android:inputType="number"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_marginHorizontal="8dp"
+                    android:layout_height="wrap_content"
+                    app:inputLabel="@string/label_shortcut_ballistic_skill" />
+
+                <cz.muni.fi.rpg.ui.views.TextInput
+                    android:id="@+id/strengthInput"
+                    android:inputType="number"
+                    android:layout_width="0dp"
+                    android:layout_marginHorizontal="8dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    app:inputLabel="@string/label_shortcut_strength" />
+
+                <cz.muni.fi.rpg.ui.views.TextInput
+                    android:id="@+id/toughnessInput"
+                    android:inputType="number"
+                    android:layout_width="0dp"
+                    android:layout_marginHorizontal="8dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    app:inputLabel="@string/label_shortcut_toughness" />
+
+                <cz.muni.fi.rpg.ui.views.TextInput
+                    android:id="@+id/initiativeInput"
+                    android:inputType="number"
+                    android:layout_width="0dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    app:inputLabel="@string/label_shortcut_initiative" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <cz.muni.fi.rpg.ui.views.TextInput
+                    android:id="@+id/agilityInput"
+                    android:inputType="number"
+                    android:layout_width="0dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    app:inputLabel="@string/label_shortcut_agility" />
+
+                <cz.muni.fi.rpg.ui.views.TextInput
+                    android:id="@+id/dexterityInput"
+                    android:inputType="number"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_marginHorizontal="8dp"
+                    android:layout_height="wrap_content"
+                    app:inputLabel="@string/label_shortcut_dexterity" />
+
+                <cz.muni.fi.rpg.ui.views.TextInput
+                    android:id="@+id/intelligenceInput"
+                    android:inputType="number"
+                    android:layout_width="0dp"
+                    android:layout_marginHorizontal="8dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    app:inputLabel="@string/label_shortcut_intelligence" />
+
+                <cz.muni.fi.rpg.ui.views.TextInput
+                    android:id="@+id/willPowerInput"
+                    android:inputType="number"
+                    android:layout_width="0dp"
+                    android:layout_marginHorizontal="8dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    app:inputLabel="@string/label_shortcut_will_power" />
+
+                <cz.muni.fi.rpg.ui.views.TextInput
+                    android:id="@+id/fellowshipInput"
+                    android:inputType="number"
+                    android:layout_width="0dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    app:inputLabel="@string/label_shortcut_fellowship" />
+            </LinearLayout>
+
+            <View
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="20dp"
+                android:background="?android:attr/dividerHorizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="1dp" />
+
+            <TextView
+                style="@style/TextAppearance.AppCompat.Title"
+                android:text="@string/title_armor"
+                android:layout_width="match_parent"
+                android:layout_marginBottom="16dp"
+                android:layout_height="wrap_content" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                tools:ignore="MissingConstraints">
+
+                <androidx.constraintlayout.helper.widget.Flow
+                    android:layout_marginTop="16dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:constraint_referenced_ids="
+                    armorLeftArm,
+                    armorRightArm,
+                    armorLeftLeg,
+                    armorRightLeg,
+                    "
+                    app:flow_horizontalGap="16dp"
+                    app:flow_verticalAlign="bottom"
+                    app:flow_lastHorizontalStyle="spread_inside"
+                    app:flow_maxElementsWrap="5"
+                    app:flow_wrapMode="chain"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/armorHead" />
+
+                <cz.muni.fi.rpg.ui.views.TextInput
+                    android:id="@+id/armorLeftArm"
+                    android:layout_width="0dp"
+                    android:inputType="number"
+                    android:layout_height="wrap_content"
+                    app:inputLabel="@string/armor_left_arm"
+                    app:layout_constraintHorizontal_weight="1" />
+
+                <cz.muni.fi.rpg.ui.views.TextInput
+                    android:id="@+id/armorRightArm"
+                    android:layout_width="0dp"
+                    android:inputType="number"
+                    android:layout_height="wrap_content"
+                    app:inputLabel="@string/armor_right_arm"
+                    app:layout_constraintHorizontal_weight="1" />
+
+                <cz.muni.fi.rpg.ui.views.TextInput
+                    android:id="@+id/armorLeftLeg"
+                    android:layout_width="0dp"
+                    android:inputType="number"
+                    android:layout_height="wrap_content"
+                    app:inputLabel="@string/armor_left_leg"
+                    app:layout_constraintHorizontal_weight="1" />
+
+                <cz.muni.fi.rpg.ui.views.TextInput
+                    android:id="@+id/armorRightLeg"
+                    android:layout_width="0dp"
+                    android:inputType="number"
+                    android:layout_height="wrap_content"
+                    app:inputLabel="@string/armor_right_leg"
+                    app:layout_constraintHorizontal_weight="1" />
+
+                <cz.muni.fi.rpg.ui.views.TextInput
+                    android:id="@+id/armorHead"
+                    android:layout_width="0dp"
+                    android:inputType="number"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    app:inputLabel="@string/armor_head"
+                    app:layout_constraintEnd_toEndOf="@id/armorLeftArm"
+                    app:layout_constraintStart_toStartOf="@id/armorLeftArm"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <cz.muni.fi.rpg.ui.views.TextInput
+                    android:id="@+id/armorBody"
+                    android:layout_width="0dp"
+                    android:inputType="number"
+                    android:layout_height="wrap_content"
+                    app:inputLabel="@string/armor_body"
+                    app:layout_constraintEnd_toEndOf="@id/armorRightArm"
+                    app:layout_constraintStart_toStartOf="@id/armorRightArm"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <cz.muni.fi.rpg.ui.views.TextInput
+                    android:id="@+id/armorShield"
+                    android:inputType="number"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    app:inputLabel="@string/armor_shield"
+                    app:layout_constraintEnd_toEndOf="@id/armorLeftLeg"
+                    app:layout_constraintStart_toStartOf="@id/armorLeftLeg"
+                    app:layout_constraintTop_toTopOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </LinearLayout>
+    </ScrollView>
+</FrameLayout>

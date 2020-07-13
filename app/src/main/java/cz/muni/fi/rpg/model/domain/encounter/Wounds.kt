@@ -4,6 +4,9 @@ data class Wounds(
     val current: Int,
     val max: Int
 ) {
+    companion object {
+        fun fromMax(max: Int) = Wounds(max, max)
+    }
 
     init {
         require(current >= 0)

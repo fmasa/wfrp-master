@@ -35,6 +35,7 @@ import cz.muni.fi.rpg.ui.characterCreation.CharacterInfoFormFragment
 import cz.muni.fi.rpg.ui.characterCreation.CharacterStatsFormFragment
 import cz.muni.fi.rpg.ui.common.AdManager
 import cz.muni.fi.rpg.ui.gameMaster.GameMasterFragment
+import cz.muni.fi.rpg.ui.gameMaster.encounters.CombatantFragment
 import cz.muni.fi.rpg.ui.gameMaster.encounters.EncounterDetailFragment
 import cz.muni.fi.rpg.ui.gameMaster.encounters.EncountersFragment
 import cz.muni.fi.rpg.ui.partyList.PartyListFragment
@@ -132,4 +133,5 @@ val appModule = module {
     fragment { CharacterArmorFragment() }
     fragment { EncountersFragment() }
     fragment { EncounterDetailFragment() }
+    fragment { CombatantFragment() }
 }

@@ -10,10 +10,7 @@ import androidx.lifecycle.observe
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import cz.muni.fi.rpg.R
-import cz.muni.fi.rpg.model.domain.armour.Armor
-import cz.muni.fi.rpg.model.domain.character.Stats
 import cz.muni.fi.rpg.model.domain.encounter.Encounter
-import cz.muni.fi.rpg.model.domain.encounter.Wounds
 import cz.muni.fi.rpg.model.right
 import cz.muni.fi.rpg.ui.common.BaseFragment
 import cz.muni.fi.rpg.ui.common.NonScrollableLayoutManager
@@ -27,7 +24,6 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.koin.android.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
-import java.time.LocalDate
 
 class EncounterDetailFragment : BaseFragment(R.layout.fragment_encounter_detail),
     CoroutineScope by CoroutineScope(Dispatchers.Default) {
@@ -57,7 +53,15 @@ class EncounterDetailFragment : BaseFragment(R.layout.fragment_encounter_detail)
             if (combatants.isNotEmpty()) {
                 val adapter = CombatantAdapter(
                     layoutInflater,
-                    {},
+                    { combatant ->
+                        findNavController().navigate(
+                            EncounterDetailFragmentDirections
+                                .openCombatantForm(
+                                    encounterId = args.encounterId,
+                                    combatantId = combatant.id
+                                )
+                        )
+                    },
                     { combatant -> launch { viewModel.removeCombatant(combatant.id) } }
                 )
                 combatantListRecycler.adapter = adapter
@@ -65,24 +69,17 @@ class EncounterDetailFragment : BaseFragment(R.layout.fragment_encounter_detail)
                 adapter.submitList(combatants)
             }
 
-            //
             noCombatantsIcon.toggleVisibility(combatants.isEmpty())
             noCombatantsText.toggleVisibility(combatants.isEmpty())
             combatantListRecycler.toggleVisibility(combatants.isNotEmpty())
 
             addCombatantButton.setOnClickListener {
-                launch {
-                    viewModel.addCombatant(
-                        "Foo" + LocalDate.now().toString(),
-                        "...",
-                        Wounds(12, 12),
-                        Stats(10, 15, 32, 42, 32, 12, 10, 14, 15, 33),
-                        Armor(2, 3, 3,3 ,3, 3, 0),
-                        true,
-                        listOf(),
-                        listOf()
+                findNavController().navigate(
+                    EncounterDetailFragmentDirections.openCombatantForm(
+                        encounterId = args.encounterId,
+                        combatantId = null
                     )
-                }
+                )
             }
         }
     }

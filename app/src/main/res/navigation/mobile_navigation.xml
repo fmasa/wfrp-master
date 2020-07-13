@@ -33,9 +33,17 @@
         <action
             android:id="@+id/openEncounter"
             app:destination="@id/nav_encounter_detail" />
-
     </fragment>
 
+    <fragment
+        android:id="@+id/nav_combatant"
+        android:name="cz.muni.fi.rpg.ui.gameMaster.encounters.CombatantFragment">
+        <argument android:name="combatantId"
+            app:argType="java.util.UUID"
+            app:nullable="true"/>
+        <argument android:name="encounterId"
+            app:argType="cz.muni.fi.rpg.model.domain.encounters.EncounterId"/>
+    </fragment>
 
     <fragment
         android:id="@+id/nav_encounter_detail"
@@ -43,6 +51,10 @@
         <argument
             android:name="encounterId"
             app:argType="cz.muni.fi.rpg.model.domain.encounters.EncounterId" />
+
+        <action android:id="@+id/openCombatantForm"
+            app:destination="@id/nav_combatant">
+        </action>
     </fragment>
 
     <fragment

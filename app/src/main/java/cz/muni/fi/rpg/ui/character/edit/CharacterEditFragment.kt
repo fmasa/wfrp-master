@@ -72,7 +72,7 @@ class CharacterEditFragment(
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
 
-        inflater.inflate(R.menu.character_edit_menu, menu)
+        inflater.inflate(R.menu.form_fragment_menu, menu)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

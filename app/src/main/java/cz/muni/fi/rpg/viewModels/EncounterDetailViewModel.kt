@@ -11,6 +11,7 @@ import cz.muni.fi.rpg.model.domain.party.Party
 import cz.muni.fi.rpg.model.domain.party.PartyNotFound
 import cz.muni.fi.rpg.model.domain.party.PartyRepository
 import java.util.*
+import kotlin.math.min
 
 class EncounterDetailViewModel(
     private val encounterId: EncounterId,
@@ -52,6 +53,40 @@ class EncounterDetailViewModel(
                 position = combatantRepository.getNextPosition(encounterId)
             )
         )
+    }
+
+    suspend fun updateCombatant(
+        id: UUID,
+        name: String,
+        note: String,
+        maxWounds: Int,
+        stats: Stats,
+        armor: Armor,
+        enemy: Boolean,
+        traits: List<String>,
+        trappings: List<String>
+    ) {
+        val combatant = combatantRepository.get(CombatantId(encounterId, id))
+
+        combatant.update(
+            name,
+            note,
+            Wounds(min(combatant.wounds.current, maxWounds), maxWounds),
+            stats,
+            armor,
+            enemy,
+            traits,
+            trappings
+        )
+
+        combatantRepository.save(encounterId, combatant)
+    }
+
+    /**
+     * @throws CombatantNotFound
+     */
+    suspend fun getCombatant(combatantId: UUID): Combatant {
+        return combatantRepository.get(CombatantId(encounterId, combatantId))
     }
 
     suspend fun removeCombatant(combatantId: UUID) {

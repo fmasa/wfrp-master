@@ -20,7 +20,7 @@ class CombatantAdapter(
         }
 
         override fun areContentsTheSame(oldItem: Combatant, newItem: Combatant): Boolean {
-            return oldItem == newItem
+            return oldItem.name == newItem.name && oldItem.note == newItem.note
         }
     }
 
