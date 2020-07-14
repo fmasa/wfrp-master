@@ -11,6 +11,10 @@ import androidx.appcompat.app.AlertDialog
 import androidx.core.os.bundleOf
 import androidx.core.text.bold
 import androidx.fragment.app.DialogFragment
+import com.google.firebase.analytics.FirebaseAnalytics
+import com.google.firebase.analytics.ktx.analytics
+import com.google.firebase.analytics.ktx.logEvent
+import com.google.firebase.ktx.Firebase
 import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.model.domain.invitation.AlreadyInParty
 import cz.muni.fi.rpg.model.domain.invitation.InvalidInvitation
@@ -105,6 +109,11 @@ class JoinPartyDialog : DialogFragment(), CoroutineScope by CoroutineScope(Dispa
         joining = launch {
             try {
                 viewModel.acceptInvitation(userId, invitation)
+
+                Firebase.analytics.logEvent(FirebaseAnalytics.Event.JOIN_GROUP) {
+                    param(FirebaseAnalytics.Param.GROUP_ID, invitation.partyId.toString())
+                }
+
                 listener.onSuccessfulPartyJoin()
 
                 return@launch

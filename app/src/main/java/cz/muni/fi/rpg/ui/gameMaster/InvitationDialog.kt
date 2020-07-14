@@ -9,6 +9,9 @@ import androidx.appcompat.app.AlertDialog
 import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
 import com.fasterxml.jackson.databind.json.JsonMapper
+import com.google.firebase.analytics.FirebaseAnalytics
+import com.google.firebase.analytics.ktx.analytics
+import com.google.firebase.analytics.ktx.logEvent
 import com.google.firebase.dynamiclinks.ktx.androidParameters
 import com.google.firebase.dynamiclinks.ktx.dynamicLinks
 import com.google.firebase.dynamiclinks.ktx.shortLinkAsync
@@ -84,6 +87,12 @@ class InvitationDialog : DialogFragment(), CoroutineScope by CoroutineScope(Disp
                 }
 
                 startActivity(Intent.createChooser(sendIntent, "Send link to your friends"))
+
+                Firebase.analytics.logEvent(FirebaseAnalytics.Event.SHARE) {
+                    param(FirebaseAnalytics.Param.CONTENT_TYPE, "party_invitation")
+                    param(FirebaseAnalytics.Param.ITEM_ID, invitation.partyId.toString())
+                    param(FirebaseAnalytics.Param.METHOD, "link")
+                }
             }
             view.shareButton.isEnabled = true
         }
