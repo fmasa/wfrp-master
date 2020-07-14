@@ -150,7 +150,7 @@
     <string name="title_addSkill">Add Skill</string>
     <string name="label_skill_characteristic">Characteristic</string>
     <string name="label_skill_advances">Advances</string>
-    <string name="skill_level_shortcut">lvl</string>
+    <string name="skill_test_number_shortcut">TN</string>
 
     <string name="remove">Remove</string>
     <string name="inventory_toast_item_saved">Item was saved.</string>

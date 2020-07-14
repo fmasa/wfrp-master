@@ -46,7 +46,7 @@ class SkillHolder(
             }
         )
 
-        view.skillLevelValue.text =
+        view.skillTestNumberValue.text =
             (calculateBaseLevel(skill.characteristic, stats) + skill.advances).toString()
 
         view.setOnCreateContextMenuListener { menu, v, _ ->

@@ -27,7 +27,7 @@
             android:id="@+id/skillItemTitle"
             android:layout_marginStart="16dp"
             android:layout_marginEnd="4dp"
-            app:layout_constraintEnd_toStartOf="@id/level"
+            app:layout_constraintEnd_toStartOf="@id/testNumber"
             app:layout_constraintStart_toEndOf="@id/skillIcon"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -37,23 +37,23 @@
             android:layout_marginStart="16dp"
             android:layout_marginEnd="4dp"
             android:layout_marginTop="2dp"
-            app:layout_constraintEnd_toStartOf="@id/level"
+            app:layout_constraintEnd_toStartOf="@id/testNumber"
             app:layout_constraintStart_toEndOf="@id/skillIcon"
             app:layout_constraintTop_toBottomOf="@+id/skillItemTitle" />
 
         <TextView
-            android:id="@+id/level"
+            android:id="@+id/testNumber"
             style="@style/TextAppearance.AppCompat.Medium"
             android:layout_width="wrap_content"
-            android:text="@string/skill_level_shortcut"
+            android:text="@string/skill_test_number_shortcut"
             android:layout_height="wrap_content"
             android:layout_marginEnd="4dp"
-            app:layout_constraintBottom_toBottomOf="@id/skillLevelValue"
-            app:layout_constraintEnd_toStartOf="@id/skillLevelValue"
-            app:layout_constraintTop_toTopOf="@id/skillLevelValue" />
+            app:layout_constraintBottom_toBottomOf="@id/skillTestNumberValue"
+            app:layout_constraintEnd_toStartOf="@id/skillTestNumberValue"
+            app:layout_constraintTop_toTopOf="@id/skillTestNumberValue" />
 
         <TextView
-            android:id="@+id/skillLevelValue"
+            android:id="@+id/skillTestNumberValue"
             style="@style/TextAppearance.AppCompat.Medium"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
