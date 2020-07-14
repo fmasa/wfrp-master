@@ -85,6 +85,8 @@ class CombatantFragment : BaseFragment(R.layout.fragment_combatant),
             return false
         }
 
+        item.isEnabled = false
+
         val name = nameInput.getValue()
         val note = noteInput.getValue()
         val maxWounds = maxWoundsInput.getValue().toInt()
