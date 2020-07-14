@@ -7,6 +7,9 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import com.google.firebase.analytics.ktx.analytics
+import com.google.firebase.analytics.ktx.logEvent
+import com.google.firebase.ktx.Firebase
 import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.model.domain.character.*
 import cz.muni.fi.rpg.ui.common.BaseFragment
@@ -156,6 +159,12 @@ class CharacterCreationFragment(
                     note = info.note
                 )
             )
+
+            Firebase.analytics.logEvent("create_character") {
+                param("party_id", characterId.partyId.toString())
+                param("character_id", characterId.userId)
+            }
+
             toast("Your character has been created")
 
             withContext(Dispatchers.Main) {

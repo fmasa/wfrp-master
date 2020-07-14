@@ -7,6 +7,9 @@ import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
+import com.google.firebase.analytics.ktx.analytics
+import com.google.firebase.analytics.ktx.logEvent
+import com.google.firebase.ktx.Firebase
 import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.model.domain.common.CouldNotConnectToBackend
 import cz.muni.fi.rpg.model.domain.party.Party
@@ -104,6 +107,11 @@ class AssemblePartyDialog : DialogFragment(), CoroutineScope by CoroutineScope(D
                 parties.save(party)
                 toast("Party $partyName was created")
                 Timber.d(tag, "Party $partyName was successfully created")
+
+                Firebase.analytics.logEvent("create_party") {
+                    param("id", party.id.toString())
+                }
+
                 withContext(Dispatchers.Main) { listener.onSuccessfulCreation(party) }
             } catch (e: CouldNotConnectToBackend) {
                 Timber.i(e, "User could not assemble party, because (s)he is offline")
