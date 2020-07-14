@@ -44,12 +44,12 @@ class TalentDialog : DialogFragment() {
 
         val form = Form(requireContext()).apply {
             addTextInput(view.talentNameInput).apply {
-                setMaxLength(Talent.NAME_MAX_LENGTH)
+                setMaxLength(Talent.NAME_MAX_LENGTH, false)
                 setNotBlank(getString(R.string.error_talent_name_empty))
             }
 
             addTextInput(view.talentDescriptionInput).apply {
-                setMaxLength(Talent.DESCRIPTION_MAX_LENGTH)
+                setMaxLength(Talent.DESCRIPTION_MAX_LENGTH, false)
             }
 
             addTextInput(view.talentTakenInput).apply {

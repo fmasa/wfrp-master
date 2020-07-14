@@ -12,12 +12,14 @@
 
         <cz.muni.fi.rpg.ui.views.TextInput
             android:id="@+id/spellNameInput"
+            android:maxLines="1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:inputLabel="@string/label_name" />
 
         <cz.muni.fi.rpg.ui.views.TextInput
             android:id="@+id/spellRangeInput"
+            android:maxLines="1"
             android:layout_marginTop="16dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -25,6 +27,7 @@
 
         <cz.muni.fi.rpg.ui.views.TextInput
             android:id="@+id/spellTargetInput"
+            android:maxLines="1"
             android:layout_marginTop="16dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -32,6 +35,7 @@
 
         <cz.muni.fi.rpg.ui.views.TextInput
             android:id="@+id/spellDurationInput"
+            android:maxLines="1"
             android:layout_marginTop="16dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -39,6 +43,7 @@
 
         <cz.muni.fi.rpg.ui.views.TextInput
             android:id="@+id/spellCastingNumberInput"
+            android:maxLines="1"
             android:layout_marginTop="16dp"
             android:layout_width="match_parent"
             android:inputType="number"
@@ -48,6 +53,8 @@
 
         <cz.muni.fi.rpg.ui.views.TextInput
             android:id="@+id/spellEffectInput"
+            android:minLines="3"
+            android:inputType="textMultiLine"
             android:layout_marginTop="16dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

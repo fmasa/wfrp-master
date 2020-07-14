@@ -56,14 +56,25 @@ class SkillDialog : DialogFragment(), CoroutineScope by CoroutineScope(Dispatche
             .map { getString(it.getReadableNameId()) }
             .sorted()
 
+        characteristicSpinner.setAdapter(
+            ArrayAdapter(requireContext(), R.layout.dropdown_menu_popup_item, characteristics)
+        )
+        characteristicSpinner.setText(characteristics[0], false)
+        characteristicSpinner.setOnClickListener {
+            (requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager)
+                .hideSoftInputFromWindow(it.windowToken, 0)
+        }
+
+        setDefaults(view)
+
         val form = Form(requireContext()).apply {
-            addTextInput(view.skillNameLayout).apply {
-                setMaxLength(Skill.NAME_MAX_LENGTH)
+            addTextInput(view.nameInput).apply {
+                setMaxLength(Skill.NAME_MAX_LENGTH, false)
                 setNotBlank(getString(R.string.error_skill_name_empty))
             }
 
-            addTextInput(view.skillDescriptionLayout).apply {
-                setMaxLength(Skill.DESCRIPTION_MAX_LENGTH)
+            addTextInput(view.descriptionInput).apply {
+                setMaxLength(Skill.DESCRIPTION_MAX_LENGTH, false)
             }
 
             view.advancesInput.setDefaultValue("1")
@@ -75,17 +86,6 @@ class SkillDialog : DialogFragment(), CoroutineScope by CoroutineScope(Dispatche
                 }
             }
         }
-
-        characteristicSpinner.setAdapter(
-            ArrayAdapter(requireContext(), R.layout.dropdown_menu_popup_item, characteristics)
-        )
-        characteristicSpinner.setText(characteristics[0], false)
-        characteristicSpinner.setOnClickListener {
-            (requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager)
-                .hideSoftInputFromWindow(it.windowToken, 0)
-        }
-
-        setDefaults(view)
 
         val dialog = AlertDialog.Builder(activity, R.style.FormDialog)
             .setView(view)
@@ -106,16 +106,16 @@ class SkillDialog : DialogFragment(), CoroutineScope by CoroutineScope(Dispatche
     private fun setDefaults(view: View) {
         val skill = this.skill ?: return
 
-        view.skillName.setText(skill.name)
-        view.skillDescription.setText(skill.description)
+        view.nameInput.setDefaultValue(skill.name)
+        view.descriptionInput.setDefaultValue(skill.description)
         view.skillCharacteristic.setText(getString(skill.characteristic.getReadableNameId()), false)
         view.skillAdvanced.isChecked = skill.advanced
         view.advancesInput.setDefaultValue(skill.advances.toString())
     }
 
     private fun dialogSubmitted(dialog: AlertDialog, view: View, form: Form) {
-        val name = view.skillName.text.toString()
-        val description = view.skillDescription.text.toString()
+        val name = view.nameInput.getValue()
+        val description = view.descriptionInput.getValue()
 
         if (!form.validate()) {
             return

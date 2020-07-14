@@ -58,6 +58,13 @@
         <item name="boxBackgroundColor">@color/colorCardBackground</item>
     </style>
 
+    <style name="ExposedDropdownMenu" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu">
+        <item name="boxStrokeWidth">1sp</item>
+        <item name="boxStrokeWidthFocused">1sp</item>
+        <item name="boxStrokeColor" tools:override="true">@color/textInputOutlineColor</item>
+        <item name="boxBackgroundColor">@color/colorCardBackground</item>
+    </style>
+
     <style name="AppTheme.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>

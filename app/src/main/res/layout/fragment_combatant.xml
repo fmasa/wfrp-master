@@ -221,7 +221,7 @@
                     armorLeftArm,
                     armorRightArm,
                     armorLeftLeg,
-                    armorRightLeg,
+                    armorRightLeg
                     "
                     app:flow_horizontalGap="16dp"
                     app:flow_verticalAlign="bottom"

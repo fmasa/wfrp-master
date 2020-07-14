@@ -50,12 +50,6 @@ class InventoryItemDialog : DialogFragment(),
         val activity = requireActivity()
         val view = activity.layoutInflater.inflate(R.layout.inventory_item_edit_dialog, null)
 
-        existingItem?.let {
-            view.itemName.setText(it.name)
-            view.itemDescription.setText(it.description)
-            view.itemQuantity.setText(it.quantity.toString())
-        }
-
         val dialog = AlertDialog.Builder(requireContext(), R.style.FormDialog)
             .setTitle(if (existingItem != null) null else getString(R.string.createInventoryItemTitle))
             .setView(view)
@@ -65,16 +59,19 @@ class InventoryItemDialog : DialogFragment(),
 
 
         val form = Form(requireContext()).apply {
-            addTextInput(view.itemNameLayout).apply {
-                setMaxLength(InventoryItem.NAME_MAX_LENGTH)
+            addTextInput(view.nameInput).apply {
+                setMaxLength(InventoryItem.NAME_MAX_LENGTH, false)
                 setNotBlank(getString(R.string.error_name_blank))
+                existingItem?.let { setDefaultValue(it.name) }
             }
 
-            addTextInput(view.itemDescriptionLayout).apply {
-                setMaxLength(InventoryItem.DESCRIPTION_MAX_LENGTH)
+            addTextInput(view.descriptionInput).apply {
+                setMaxLength(InventoryItem.DESCRIPTION_MAX_LENGTH, false)
+                existingItem?.let { setDefaultValue(it.description) }
             }
 
-            addTextInput(view.itemQuantityLayout).apply {
+            addTextInput(view.quantityInput).apply {
+                setDefaultValue(existingItem?.quantity?.toString() ?: "1")
                 addLiveRule(getString(R.string.error_invalid_quantity)) {
                     val value = it.toString().toIntOrNull()
 
@@ -114,9 +111,9 @@ class InventoryItemDialog : DialogFragment(),
 
     private fun createInventoryItem(view: View) = InventoryItem(
         id = this.existingItem?.id ?: InventoryItemId.randomUUID(),
-        name = view.itemName.text.toString().trim(),
-        description = view.itemDescription.text.toString().trim(),
-        quantity = view.itemQuantity.text.toString().toInt()
+        name = view.nameInput.getValue(),
+        description = view.descriptionInput.getValue(),
+        quantity = view.quantityInput.getValue().toInt()
     )
 
     private suspend fun toast(message: String) {

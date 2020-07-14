@@ -78,13 +78,13 @@ internal class CharacterMiscFragment : Fragment(R.layout.fragment_character_misc
     private fun openExperiencePointsDialog(currentXpPoints: Int) {
         val view = layoutInflater.inflate(R.layout.dialog_xp, null, false)
 
-        view.xpPointsInput.setText(currentXpPoints.toString())
+        view.xpPointsInput.setDefaultValue(currentXpPoints.toString())
 
         AlertDialog.Builder(requireContext(), R.style.FormDialog)
             .setTitle("Change amount of XP")
             .setView(view)
             .setPositiveButton(R.string.button_save) { _, _ ->
-                val xpPoints = view.xpPointsInput.text.toString().toIntOrNull() ?: 0
+                val xpPoints = view.xpPointsInput.getValue().toIntOrNull() ?: 0
                 launch { viewModel.updateExperiencePoints(xpPoints) }
             }.create()
             .show()
