@@ -8,6 +8,7 @@
 
     <cz.muni.fi.rpg.ui.views.TextInput
         android:id="@+id/talentNameInput"
+        android:maxLines="1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:inputLabel="@string/label_name" />
@@ -15,6 +16,8 @@
     <cz.muni.fi.rpg.ui.views.TextInput
         android:layout_marginTop="16dp"
         android:id="@+id/talentDescriptionInput"
+        android:minLines="3"
+        android:inputType="textMultiLine"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:inputLabel="@string/label_description" />
@@ -25,6 +28,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:inputType="number"
+        android:maxLines="1"
         android:maxLength="3"
         app:inputLabel="@string/label_talent_taken" />
 </LinearLayout>

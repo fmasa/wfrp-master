@@ -40,7 +40,6 @@
                 android:layout_height="wrap_content" />
 
             <cz.muni.fi.rpg.ui.views.TextInput
-                android:layout_marginTop="8dp"
                 android:id="@+id/maxWoundsInput"
                 app:inputLabel="@string/label_max_wounds"
                 android:inputType="number"

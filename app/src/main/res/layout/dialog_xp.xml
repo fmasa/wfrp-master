@@ -2,17 +2,13 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:padding="@dimen/dialogPadding">
-    <com.google.android.material.textfield.TextInputLayout
+    <cz.muni.fi.rpg.ui.views.TextInput
+        android:id="@+id/xpPointsInput"
+        app:inputLabel="@string/xp_long"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        android:hint="@string/xp_long">
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/xpPointsInput"
-            android:layout_width="match_parent"
-            android:maxLength="6"
-            android:inputType="number"
-            android:layout_height="wrap_content"/>
-    </com.google.android.material.textfield.TextInputLayout>
+        android:layout_height="match_parent"
+        android:inputType="number"
+        android:maxLength="6"/>
 </LinearLayout>

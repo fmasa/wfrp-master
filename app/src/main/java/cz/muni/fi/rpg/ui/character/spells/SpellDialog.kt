@@ -51,20 +51,20 @@ class SpellDialog : DialogFragment(),
 
         val form = Form(requireContext()).apply {
             addTextInput(view.spellNameInput).apply {
-                setMaxLength(Spell.NAME_MAX_LENGTH)
+                setMaxLength(Spell.NAME_MAX_LENGTH, false)
                 setNotBlank(getString(R.string.error_cannot_be_empty))
             }
 
             addTextInput(view.spellDurationInput).apply {
-                setMaxLength(Spell.DURATION_MAX_LENGTH)
+                setMaxLength(Spell.DURATION_MAX_LENGTH, false)
             }
 
             addTextInput(view.spellRangeInput).apply {
-                setMaxLength(Spell.RANGE_MAX_LENGTH)
+                setMaxLength(Spell.RANGE_MAX_LENGTH, false)
             }
 
             addTextInput(view.spellTargetInput).apply {
-                setMaxLength(Spell.TARGET_MAX_LENGTH)
+                setMaxLength(Spell.TARGET_MAX_LENGTH, false)
             }
 
             addTextInput(view.spellCastingNumberInput).apply {
@@ -72,7 +72,7 @@ class SpellDialog : DialogFragment(),
             }
 
             addTextInput(view.spellEffectInput).apply {
-                setMaxLength(Spell.EFFECT_MAX_LENGTH)
+                setMaxLength(Spell.EFFECT_MAX_LENGTH, false)
             }
         }
 
