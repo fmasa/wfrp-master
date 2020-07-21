@@ -41,6 +41,7 @@ export abstract class Suite {
     protected validParty(): Party {
         return {
             id: uuid(),
+            archived: false,
             name: "Emperor's Fury",
             accessCode: "123456",
             gameMasterId: this.validPartyGameMasterId,

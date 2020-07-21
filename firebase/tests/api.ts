@@ -4,6 +4,7 @@ export interface Party {
     name: string;
     accessCode: string;
     gameMasterId: string;
+    archived: boolean;
     ambitions: {
         shortTerm: string;
         longTerm: string;

@@ -281,10 +281,11 @@ service cloud.firestore {
             }
 
             function isValidNewParty(party, uid) {
-                return party.keys().toSet() == ["id", "name", "users", "gameMasterId", "accessCode", "ambitions"].toSet()
+                return ["id", "name", "users", "gameMasterId", "accessCode", "ambitions", "archived"].hasAll(party.keys())
                     && party.id is string && party.id == partyId && isValidUuid(party.id)
                     && isValidPartyName(party.name)
                     && party.users == [uid]
+                    && (! ("archived" in party) || party.archived is bool)
                     && (party.gameMasterId == uid || party.gameMasterId == null)
                     && party.accessCode is string && party.accessCode != ""
                     && areAmbitionsValid(party.ambitions);
@@ -294,9 +295,10 @@ service cloud.firestore {
                 let party = request.resource.data;
                 let diff = resource.data.diff(request.resource.data);
 
-                return ["ambitions", "name"].toSet().hasAll(diff.affectedKeys())
+                return ["ambitions", "name", "archived"].toSet().hasAll(diff.affectedKeys())
                     && areAmbitionsValid(party.ambitions)
-                    && isValidPartyName(party.name);
+                    && isValidPartyName(party.name)
+                    && (! ("archived" in party) || party.archived is bool)
             }
 
             function invitation(party) {
@@ -308,8 +310,10 @@ service cloud.firestore {
             }
 
             function isGameMaster() {
+                let party = get(/databases/$(database)/documents/parties/$(partyId)).data;
+
                 return request.auth != null
-                    && request.auth.uid == get(/databases/$(database)/documents/parties/$(partyId)).data.gameMasterId
+                    && (request.auth.uid == party.gameMasterId || (request.auth.uid in party.users && party.gameMasterId == null));
             }
         
             function hasAccessToParty() {
