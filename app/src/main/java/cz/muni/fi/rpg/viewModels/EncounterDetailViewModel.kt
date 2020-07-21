@@ -16,11 +16,8 @@ import kotlin.math.min
 class EncounterDetailViewModel(
     private val encounterId: EncounterId,
     private val encounters: EncounterRepository,
-    private val combatantRepository: CombatantRepository,
-    parties: PartyRepository
+    private val combatantRepository: CombatantRepository
 ) : ViewModel() {
-
-    val party: LiveData<Either<PartyNotFound, Party>> = parties.getLive(encounterId.partyId)
     val encounter: LiveData<Either<EncounterNotFound, Encounter>> = encounters.getLive(encounterId)
     val combatants: LiveData<List<Combatant>> = combatantRepository.findByEncounter(encounterId)
 

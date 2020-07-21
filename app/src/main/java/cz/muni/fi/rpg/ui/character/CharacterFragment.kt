@@ -11,21 +11,21 @@ import androidx.navigation.fragment.navArgs
 import com.google.android.material.tabs.TabLayoutMediator
 import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.model.domain.character.CharacterNotFound
-import cz.muni.fi.rpg.model.right
 import cz.muni.fi.rpg.ui.character.skills.CharacterSkillsFragment
 import cz.muni.fi.rpg.ui.common.AdManager
-import cz.muni.fi.rpg.ui.common.BaseFragment
+import cz.muni.fi.rpg.ui.common.PartyScopedFragment
 import cz.muni.fi.rpg.ui.common.StaticFragmentsViewPagerAdapter
 import cz.muni.fi.rpg.viewModels.CharacterViewModel
 import kotlinx.android.synthetic.main.fragment_character.*
 import org.koin.android.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 import timber.log.Timber
+import java.util.*
 
 
 class CharacterFragment(
     private val adManager: AdManager
-) : BaseFragment(R.layout.fragment_character) {
+) : PartyScopedFragment(R.layout.fragment_character) {
 
     private val args: CharacterFragmentArgs by navArgs()
     private val viewModel: CharacterViewModel by viewModel { parametersOf(args.characterId) }
@@ -45,8 +45,7 @@ class CharacterFragment(
             }
         }
 
-        viewModel.party.right()
-            .observe(viewLifecycleOwner) { setSubtitle(it.getName()) }
+        party.observe(viewLifecycleOwner) { setSubtitle(it.getName()) }
 
         pager.adapter = StaticFragmentsViewPagerAdapter(
             this,
@@ -81,6 +80,8 @@ class CharacterFragment(
 
         adManager.initializeUnit(characterAdView)
     }
+
+    override fun getPartyId(): UUID = args.characterId.partyId
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)

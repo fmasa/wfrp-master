@@ -11,7 +11,7 @@ import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.model.domain.character.CharacterRepository
 import cz.muni.fi.rpg.ui.characterCreation.CharacterInfoFormFragment
 import cz.muni.fi.rpg.ui.characterCreation.CharacterStatsFormFragment
-import cz.muni.fi.rpg.ui.common.BaseFragment
+import cz.muni.fi.rpg.ui.common.PartyScopedFragment
 import cz.muni.fi.rpg.ui.common.forms.Form
 import kotlinx.android.synthetic.main.fragment_character_edit.*
 import kotlinx.android.synthetic.main.fragment_character_edit.maxWoundsInput
@@ -19,10 +19,11 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.util.*
 
 class CharacterEditFragment(
     private val characters: CharacterRepository
-) : BaseFragment(R.layout.fragment_character_edit),
+) : PartyScopedFragment(R.layout.fragment_character_edit),
     CoroutineScope by CoroutineScope(Dispatchers.Default) {
 
     private val args: CharacterEditFragmentArgs by navArgs()
@@ -68,6 +69,8 @@ class CharacterEditFragment(
             }
         }
     }
+
+    override fun getPartyId(): UUID = args.characterId.partyId
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)

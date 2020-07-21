@@ -9,37 +9,33 @@ import androidx.lifecycle.observe
 import androidx.navigation.fragment.navArgs
 import com.google.android.material.tabs.TabLayoutMediator
 import cz.muni.fi.rpg.R
-import cz.muni.fi.rpg.model.right
 import cz.muni.fi.rpg.ui.common.AdManager
-import cz.muni.fi.rpg.ui.common.BaseFragment
+import cz.muni.fi.rpg.ui.common.PartyScopedFragment
 import cz.muni.fi.rpg.ui.common.StaticFragmentsViewPagerAdapter
 import cz.muni.fi.rpg.ui.gameMaster.encounters.EncountersFragment
-import cz.muni.fi.rpg.viewModels.GameMasterViewModel
-import kotlinx.android.synthetic.main.fragment_character.*
 import kotlinx.android.synthetic.main.fragment_character.pager
 import kotlinx.android.synthetic.main.fragment_character.tabLayout
 import kotlinx.android.synthetic.main.fragment_game_master.*
 import kotlinx.android.synthetic.main.fragment_game_master.mainView
 import kotlinx.android.synthetic.main.fragment_game_master.progress
-import org.koin.core.parameter.parametersOf
-import org.koin.android.viewmodel.ext.android.viewModel
 import timber.log.Timber
+import java.util.*
 
 class GameMasterFragment(
     private val adManager: AdManager
-) : BaseFragment(R.layout.fragment_game_master) {
+) : PartyScopedFragment(R.layout.fragment_game_master) {
 
     private val args: GameMasterFragmentArgs by navArgs()
 
-    private val viewModel: GameMasterViewModel by viewModel { parametersOf(args.partyId) }
-
     private lateinit var partyName: String
+
+    override fun getPartyId(): UUID = args.partyId
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         Timber.d("Created view for GameMasterFragment (partyId = ${args.partyId}")
 
-        viewModel.party.right().observe(viewLifecycleOwner) { party ->
+        party.observe(viewLifecycleOwner) { party ->
             mainView.visibility = View.VISIBLE
             progress.visibility = View.GONE
             setTitle(party.getName())

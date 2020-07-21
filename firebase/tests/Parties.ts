@@ -33,6 +33,25 @@ class Parties extends Suite {
     }
 
     @test
+    async "users can create party without `archived` field (BC)"() {
+        const data = this.validParty();
+
+        delete data['archived'];
+
+        const party = this.authedApp(data.gameMasterId)
+            .collection("parties")
+            .doc(data.id);
+
+        // Empty name
+        await firebase.assertFails(party.set({...data, name: ""}));
+
+        // Whitespaces only name
+        await firebase.assertFails(party.set({...data, name: "\t \r"}));
+
+        await firebase.assertSucceeds(party.set(data))
+    }
+
+    @test
     async "should NOT let users create party with incorrect field values"() {
         const data = this.validParty();
         const parties = this.authedApp(data.gameMasterId).collection("parties");
@@ -110,6 +129,10 @@ class Parties extends Suite {
             .collection("parties");
 
         await Promise.all(Object.keys(this.validParty()).map(field => {
+            if (field === 'archived') {
+                return; // This field is optional for now (BC)
+            }
+
             const party = this.validParty();
             const partyId = party.id;
 
@@ -427,7 +450,6 @@ class Parties extends Suite {
         await firebase.assertSucceeds(document.update("name", "New cool name"))
     }
 
-
     @test
     async "should NOT let player rename party"() {
         const userId = "user123";
@@ -438,5 +460,40 @@ class Parties extends Suite {
             .doc(party.id);
 
         await firebase.assertFails(document.update("name", "New cool name"))
+    }
+
+    @test
+    async "should let GM archive party"() {
+        const party = await this.createValidParty();
+
+        const document = this.authedApp(party.gameMasterId)
+            .collection("parties")
+            .doc(party.id);
+
+        await firebase.assertSucceeds(document.update("archived", true))
+    }
+
+    @test
+    async "should let user archive single-player party"() {
+        const data = this.validParty();
+        const party = this.authedApp(data.gameMasterId)
+            .collection("parties")
+            .doc(data.id);
+
+        await firebase.assertSucceeds(party.set({...data, gameMasterId: null}));
+
+        await firebase.assertSucceeds(party.update("archived", true))
+    }
+
+    @test
+    async "should NOT let player archive party"() {
+        const userId = "user123";
+        const party = await this.createUserAccessibleParty(userId);
+
+        const document = this.authedApp(userId)
+            .collection("parties")
+            .doc(party.id);
+
+        await firebase.assertFails(document.update("archived", true))
     }
 }

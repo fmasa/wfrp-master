@@ -10,7 +10,9 @@ import cz.muni.fi.rpg.model.domain.party.Party
 
 class PartyAdapter(
     private val layoutInflater: LayoutInflater,
-    private val onClickListener: EntityListener<Party>
+    private val userId: String,
+    private val onClickListener: EntityListener<Party>,
+    private val onRemoveListener: EntityListener<Party>
 ) : ListAdapter<Party, PartyHolder>(
     object : DiffUtil.ItemCallback<Party>() {
         override fun areItemsTheSame(oldItem: Party, newItem: Party) = oldItem.id == newItem.id
@@ -19,7 +21,12 @@ class PartyAdapter(
 ) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PartyHolder {
-        return PartyHolder(layoutInflater.inflate(R.layout.party_item, parent, false), onClickListener)
+        return PartyHolder(
+            layoutInflater.inflate(R.layout.party_item, parent, false),
+            userId,
+            onClickListener = onClickListener,
+            onRemoveListener = onRemoveListener
+        )
     }
 
     override fun onBindViewHolder(holder: PartyHolder, position: Int) {

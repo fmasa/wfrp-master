@@ -103,16 +103,18 @@ val appModule = module {
     viewModel { (characterId: CharacterId) -> ArmorViewModel(characterId, get()) }
     viewModel { (characterId: CharacterId) -> CharacterStatsViewModel(characterId, get()) }
     viewModel { (characterId: CharacterId) -> CharacterMiscViewModel(characterId, get(), get()) }
-    viewModel { (characterId: CharacterId) -> CharacterViewModel(characterId, get(), get())}
+    viewModel { (characterId: CharacterId) -> CharacterViewModel(characterId, get())}
     viewModel { (partyId: UUID) -> GameMasterViewModel(partyId, get(), get()) }
     viewModel { (partyId: UUID) -> EncountersViewModel(partyId, get()) }
-    viewModel { (encounterId: EncounterId) -> EncounterDetailViewModel(encounterId, get(), get(), get()) }
+    viewModel { (partyId: UUID) -> PartyViewModel(partyId, get()) }
+    viewModel { (encounterId: EncounterId) -> EncounterDetailViewModel(encounterId, get(), get()) }
     viewModel { (characterId: CharacterId) -> InventoryViewModel(characterId, get(), get(), get()) }
     viewModel { (characterId: CharacterId) -> SkillsViewModel(characterId, get()) }
     viewModel { (characterId: CharacterId) -> SpellsViewModel(characterId, get()) }
     viewModel { (characterId: CharacterId) -> TalentsViewModel(characterId, get()) }
     viewModel { AuthenticationViewModel(get()) }
     viewModel { JoinPartyViewModel(get()) }
+    viewModel { PartyListViewModel(get()) }
 
     /**
      * Fragments
@@ -120,7 +122,7 @@ val appModule = module {
     fragment { CharacterFragment(get()) }
     fragment { GameMasterFragment(get()) }
     fragment { NavHostFragment() }
-    fragment { PartyListFragment(get()) }
+    fragment { PartyListFragment() }
     fragment { CharacterEditFragment(get()) }
     fragment { CharacterMiscFragment() }
     fragment { CharacterStatsFragment() }

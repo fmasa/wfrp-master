@@ -1,6 +1,5 @@
 package cz.muni.fi.rpg.ui.characterCreation
 
-import android.content.Context
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
@@ -12,7 +11,7 @@ import com.google.firebase.analytics.ktx.logEvent
 import com.google.firebase.ktx.Firebase
 import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.model.domain.character.*
-import cz.muni.fi.rpg.ui.common.BaseFragment
+import cz.muni.fi.rpg.ui.common.PartyScopedFragment
 import cz.muni.fi.rpg.ui.common.StaticFragmentsViewPagerAdapter
 import cz.muni.fi.rpg.viewModels.AuthenticationViewModel
 import kotlinx.android.synthetic.main.fragment_character_creation.*
@@ -22,10 +21,11 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.koin.android.viewmodel.ext.android.sharedViewModel
 import timber.log.Timber
+import java.util.*
 
 class CharacterCreationFragment(
     private val characters: CharacterRepository
-) : BaseFragment(R.layout.fragment_character_creation),
+) : PartyScopedFragment(R.layout.fragment_character_creation),
     CoroutineScope by CoroutineScope(Dispatchers.Default) {
 
     private val args: CharacterCreationFragmentArgs by navArgs()
@@ -130,6 +130,8 @@ class CharacterCreationFragment(
             }
         }
     }
+
+    override fun getPartyId(): UUID = args.partyId
 
     private fun currentStep(): Fragment? {
         return childFragmentManager.findFragmentByTag("f$currentFragmentIndex")

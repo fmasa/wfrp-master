@@ -11,6 +11,7 @@ data class Party(
     private var name: String,
     val gameMasterId: String?,
     val users: Set<String>,
+    private var archived: Boolean = false,
     private var ambitions: Ambitions = Ambitions("", "")
 ) : Parcelable {
     companion object {
@@ -54,6 +55,12 @@ data class Party(
     fun getName(): String {
         return name;
     }
+
+    fun archive() {
+        archived = true
+    }
+
+    fun isArchived() = archived
 
     fun getAmbitions() = ambitions
 

@@ -14,7 +14,7 @@ import cz.muni.fi.rpg.model.domain.character.Stats
 import cz.muni.fi.rpg.model.domain.encounter.Combatant
 import cz.muni.fi.rpg.model.domain.encounter.CombatantNotFound
 import cz.muni.fi.rpg.model.domain.encounter.Wounds
-import cz.muni.fi.rpg.ui.common.BaseFragment
+import cz.muni.fi.rpg.ui.common.PartyScopedFragment
 import cz.muni.fi.rpg.ui.common.forms.Form
 import cz.muni.fi.rpg.ui.common.toggleVisibility
 import cz.muni.fi.rpg.viewModels.EncounterDetailViewModel
@@ -25,8 +25,9 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.koin.android.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
+import java.util.*
 
-class CombatantFragment : BaseFragment(R.layout.fragment_combatant),
+class CombatantFragment : PartyScopedFragment(R.layout.fragment_combatant),
     CoroutineScope by CoroutineScope(Dispatchers.Default) {
 
     private val args: CombatantFragmentArgs by navArgs()
@@ -34,6 +35,8 @@ class CombatantFragment : BaseFragment(R.layout.fragment_combatant),
     private val viewModel: EncounterDetailViewModel by viewModel { parametersOf(args.encounterId) }
 
     private lateinit var form: Form
+
+    override fun getPartyId(): UUID = args.encounterId.partyId
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
