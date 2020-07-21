@@ -114,6 +114,7 @@ val appModule = module {
     viewModel { (characterId: CharacterId) -> TalentsViewModel(characterId, get()) }
     viewModel { AuthenticationViewModel(get()) }
     viewModel { JoinPartyViewModel(get()) }
+    viewModel { PartyListViewModel(get()) }
 
     /**
      * Fragments
@@ -121,7 +122,7 @@ val appModule = module {
     fragment { CharacterFragment(get()) }
     fragment { GameMasterFragment(get()) }
     fragment { NavHostFragment() }
-    fragment { PartyListFragment(get()) }
+    fragment { PartyListFragment() }
     fragment { CharacterEditFragment(get()) }
     fragment { CharacterMiscFragment() }
     fragment { CharacterStatsFragment() }
