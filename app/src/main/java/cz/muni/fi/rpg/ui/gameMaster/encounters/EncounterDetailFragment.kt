@@ -12,8 +12,8 @@ import androidx.navigation.fragment.navArgs
 import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.model.domain.encounter.Encounter
 import cz.muni.fi.rpg.model.right
-import cz.muni.fi.rpg.ui.common.BaseFragment
 import cz.muni.fi.rpg.ui.common.NonScrollableLayoutManager
+import cz.muni.fi.rpg.ui.common.PartyScopedFragment
 import cz.muni.fi.rpg.ui.common.toggleVisibility
 import cz.muni.fi.rpg.ui.gameMaster.encounters.adapter.CombatantAdapter
 import cz.muni.fi.rpg.viewModels.EncounterDetailViewModel
@@ -24,8 +24,9 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.koin.android.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
+import java.util.*
 
-class EncounterDetailFragment : BaseFragment(R.layout.fragment_encounter_detail),
+class EncounterDetailFragment : PartyScopedFragment(R.layout.fragment_encounter_detail),
     CoroutineScope by CoroutineScope(Dispatchers.Default) {
 
     private val args: EncounterDetailFragmentArgs by navArgs()
@@ -34,10 +35,12 @@ class EncounterDetailFragment : BaseFragment(R.layout.fragment_encounter_detail)
 
     private lateinit var encounter: Encounter
 
+    override fun getPartyId(): UUID = args.encounterId.partyId
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel.party.right().observe(viewLifecycleOwner) { party ->
+        party.observe(viewLifecycleOwner) { party ->
             setSubtitle(party.getName())
         }
 
