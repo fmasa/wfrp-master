@@ -10,7 +10,8 @@ import kotlinx.coroutines.withContext
 
 internal class QueryLiveData<T: Any>(
     private val query: Query,
-    private val snapshotParser: AggregateMapper<T>
+    private val snapshotParser: AggregateMapper<T>,
+    private val filter: (item: T) -> Boolean = { true }
 ) : MutableLiveData<List<T>>(), CoroutineScope by CoroutineScope(Dispatchers.IO) {
     private var listener: ListenerRegistration? = null
 
@@ -24,6 +25,7 @@ internal class QueryLiveData<T: Any>(
                     val items = snapshot
                         .asIterable()
                         .map(snapshotParser::fromDocumentSnapshot)
+                        .filter(filter)
 
                     withContext(Dispatchers.Main) { value = items }
                 }

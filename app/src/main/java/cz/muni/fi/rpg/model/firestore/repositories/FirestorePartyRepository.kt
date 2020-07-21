@@ -63,9 +63,7 @@ internal class FirestorePartyRepository(
 
     override fun forUser(userId: String): LiveData<List<Party>> =
         QueryLiveData(
-            parties.whereArrayContains(
-                "users",
-                userId
-            ), mapper
-        )
+            parties.whereArrayContains("users", userId),
+            mapper
+        ) { ! it.isArchived() }
 }
