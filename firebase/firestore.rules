@@ -196,7 +196,7 @@ service cloud.firestore {
                         && areStatsValid(character.maxStats)
                         && areMoneyValid(character.money)
                         && areAmbitionsValid(character.ambitions)
-                        && (! ("note" in character) || (character.note is string && character.note.size() <= 400))
+                        && character.note is string && character.note.size() <= 400
                         && (! ("hardyTalent" in character) || (character.hardyTalent is bool));
                 }
             }

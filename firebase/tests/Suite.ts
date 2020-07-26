@@ -104,7 +104,8 @@ export abstract class Suite {
             mutation: "Three legs!",
             money: {
                 pennies: 1000,
-            }
+            },
+            note: "",
         }
     }
 
