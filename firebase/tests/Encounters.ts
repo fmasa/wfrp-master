@@ -3,7 +3,7 @@ import {Suite} from "./Suite";
 import {uuid} from "uuidv4";
 import {assertFails, assertSucceeds} from "@firebase/testing";
 import {withoutField} from "./utils";
-import {Armor, Party, Stats} from "./api";
+import {Armor, Party, Stats} from "../api";
 import {CollectionReference} from "./firebase";
 
 interface Encounter {

@@ -1,7 +1,7 @@
 import * as firebase from "@firebase/testing";
 import {readFileSync} from "fs";
 import {uuid} from "uuidv4";
-import {Character, Party} from "./api";
+import {Character, Party} from "../api";
 
 type Firestore = firebase.firestore.Firestore;
 
@@ -104,7 +104,8 @@ export abstract class Suite {
             mutation: "Three legs!",
             money: {
                 pennies: 1000,
-            }
+            },
+            note: "",
         }
     }
 

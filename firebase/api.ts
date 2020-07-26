@@ -57,7 +57,8 @@ export interface Character {
     mutation: string,
     money: {
         pennies: number,
-    }
+    },
+    note: string,
 }
 
 export interface Armor {
