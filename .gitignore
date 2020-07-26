@@ -15,5 +15,6 @@
 /node_modules
 firestore-debug.log
 firebase-debug.log
+firebase-build
 ui-debug.log
 play-store.json
