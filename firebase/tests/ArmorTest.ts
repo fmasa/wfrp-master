@@ -1,6 +1,6 @@
 import {suite} from "mocha-typescript";
 import {CharacterFeatureSuite} from "./CharacterFeatureSuite";
-import {Armor} from "./api";
+import {Armor} from "../api";
 
 @suite
 class ArmorTest extends CharacterFeatureSuite {
