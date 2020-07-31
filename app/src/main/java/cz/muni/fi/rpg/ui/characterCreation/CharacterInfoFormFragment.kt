@@ -115,9 +115,10 @@ class CharacterInfoFormFragment :
         when (character.getRace()) {
             Race.HUMAN -> radioButtonRaceHuman.isChecked = true
             Race.DWARF -> radioButtonRaceDwarf.isChecked = true
-            Race.HIGH_ELF -> radioButtonRaceElf.isChecked = true
-            Race.WOOD_ELF -> radioButtonRaceGnome.isChecked = true
+            Race.HIGH_ELF -> radioButtonRaceHighElf.isChecked = true
+            Race.WOOD_ELF -> radioButtonRaceWoodElf.isChecked = true
             Race.HALFLING -> radioButtonRaceHalfling.isChecked = true
+            Race.GNOME -> radioButtonRaceGnome.isChecked = true
         }
     }
 
@@ -129,9 +130,10 @@ class CharacterInfoFormFragment :
         val race: Race = when (radioGroup.checkedRadioButtonId) {
             R.id.radioButtonRaceHuman -> Race.HUMAN
             R.id.radioButtonRaceDwarf -> Race.DWARF
-            R.id.radioButtonRaceElf -> Race.HIGH_ELF
-            R.id.radioButtonRaceGnome -> Race.WOOD_ELF
+            R.id.radioButtonRaceHighElf -> Race.HIGH_ELF
+            R.id.radioButtonRaceWoodElf -> Race.WOOD_ELF
             R.id.radioButtonRaceHalfling -> Race.HALFLING
+            R.id.radioButtonRaceGnome -> Race.GNOME
             else -> error("No race selected")
         }
 

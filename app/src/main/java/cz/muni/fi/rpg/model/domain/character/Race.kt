@@ -7,7 +7,8 @@ enum class Race {
     HIGH_ELF,
     DWARF,
     WOOD_ELF,
-    HALFLING;
+    HALFLING,
+    GNOME;
 
     fun getReadableNameId(): Int {
         return when (this) {
@@ -16,6 +17,7 @@ enum class Race {
             DWARF -> R.string.race_dwarf
             HALFLING -> R.string.race_halfling
             WOOD_ELF -> R.string.race_wood_elf
+            GNOME -> R.string.race_gnome
         }
     }
 }

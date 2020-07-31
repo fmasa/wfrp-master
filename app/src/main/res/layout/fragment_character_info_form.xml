@@ -64,7 +64,7 @@
             android:text="@string/race_halfling" />
 
         <RadioButton
-            android:id="@+id/radioButtonRaceElf"
+            android:id="@+id/radioButtonRaceHighElf"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/race_high_elf" />
@@ -76,10 +76,16 @@
             android:text="@string/race_dwarf" />
 
         <RadioButton
-            android:id="@+id/radioButtonRaceGnome"
+            android:id="@+id/radioButtonRaceWoodElf"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/race_wood_elf" />
+
+        <RadioButton
+            android:id="@+id/radioButtonRaceGnome"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/race_gnome" />
     </RadioGroup>
 
     <cz.muni.fi.rpg.ui.views.TextInput
