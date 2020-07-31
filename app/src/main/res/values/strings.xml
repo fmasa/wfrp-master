@@ -94,6 +94,7 @@
     <string name="race_wood_elf">Wood Elf</string>
     <string name="race_halfling">Halfling</string>
     <string name="race_human">Human</string>
+    <string name="race_gnome">Gnome</string>
     <string name="button_edit">Edit</string>
     <string name="subtitle_edit_character">Edit character</string>
     <string name="no_parties_prompt">Assemble your first party\n or join the existing one.</string>
