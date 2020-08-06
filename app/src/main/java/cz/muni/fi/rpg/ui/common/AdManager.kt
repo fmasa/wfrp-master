@@ -1,12 +1,14 @@
 package cz.muni.fi.rpg.ui.common
 
 import android.content.Context
+import android.widget.LinearLayout
 import androidx.core.os.bundleOf
 import com.google.ads.consent.ConsentInfoUpdateListener
 import com.google.ads.consent.ConsentInformation
 import com.google.ads.consent.ConsentStatus
 import com.google.ads.mediation.admob.AdMobAdapter
 import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.AdSize
 import com.google.android.gms.ads.AdView
 import com.google.android.gms.ads.MobileAds
 
@@ -37,6 +39,11 @@ class AdManager(private val context: Context) {
     }
 
     fun initializeUnit(view: AdView) {
+        view.layoutParams = LinearLayout.LayoutParams(
+            LinearLayout.LayoutParams.MATCH_PARENT,
+            AdSize.SMART_BANNER.getHeightInPixels(context)
+        )
+
         view.loadAd(
             AdRequest.Builder()
                 .addNetworkExtrasBundle(
