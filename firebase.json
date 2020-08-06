@@ -15,6 +15,12 @@
       "firebase.json",
       "**/.*",
       "**/node_modules/**"
+    ],
+    "rewrites": [
+      {
+        "source": "/app/invitation",
+        "destination": "app/invitation.html"
+      }
     ]
   }
 }
