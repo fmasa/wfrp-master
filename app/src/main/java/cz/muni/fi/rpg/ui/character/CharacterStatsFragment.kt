@@ -41,18 +41,7 @@ class CharacterStatsFragment : Fragment(R.layout.fragment_character_stats),
 
     private fun bindStats() {
         Transformations.map(viewModel.character.right()) { character -> character.getStats() }
-            .observe(viewLifecycleOwner) { stats ->
-                weaponSkill.value = stats.weaponSkill
-                ballisticSkill.value = stats.ballisticSkill
-                strength.value = stats.strength
-                toughness.value = stats.toughness
-                agility.value = stats.agility
-                intelligence.value = stats.intelligence
-                willPower.value = stats.willPower
-                fellowship.value = stats.fellowship
-                initiative.value = stats.initiative
-                dexterity.value = stats.dexterity
-            }
+            .observe(viewLifecycleOwner) { statsTable.setValue(it) }
     }
 
     private fun bindPoints() {
