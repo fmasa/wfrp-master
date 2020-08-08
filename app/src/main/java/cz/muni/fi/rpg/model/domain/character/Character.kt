@@ -1,5 +1,6 @@
 package cz.muni.fi.rpg.model.domain.character
 
+import com.fasterxml.jackson.annotation.JsonAlias
 import cz.muni.fi.rpg.model.domain.common.Ambitions
 import cz.muni.fi.rpg.model.domain.common.Money
 import java.lang.IllegalArgumentException
@@ -12,8 +13,9 @@ data class Character(
     private var psychology: String,
     private var motivation: String,
     private var race: Race,
-    private var stats: Stats,
-    private var maxStats: Stats,
+    @JsonAlias("stats") // TODO: Remove alias in 1.10
+    private var characteristicsBase: Stats,
+    private var characteristicsAdvances: Stats = Stats(0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
     private var points: Points,
     private var ambitions: Ambitions = Ambitions("", ""),
     private var mutation: String = "",
@@ -48,8 +50,8 @@ data class Character(
         career: String,
         socialClass: String,
         race: Race,
-        stats: Stats,
-        maxStats: Stats,
+        characteristicsBase: Stats,
+        characteristicsAdvances: Stats,
         maxWounds: Int,
         psychology: String,
         motivation: String,
@@ -60,7 +62,6 @@ data class Character(
         require(name.length <= NAME_MAX_LENGTH) { "Character name is too long" }
         require(career.length <= CAREER_MAX_LENGTH) { "Career is too long" }
         require(socialClass.length <= SOCIAL_CLASS_MAX_LENGTH) { "Social class is too long" }
-        require(stats.allLowerOrEqualTo(maxStats)) { "Stats cannot be larger than max stats" }
         require(psychology.length <= PSYCHOLOGY_MAX_LENGTH) { "Psychology is too long" }
         require(motivation.length <= MOTIVATION_MAX_LENGTH) { "Motivation is too long" }
         require(note.length <= NOTE_MAX_LENGTH) { "Note is too long" }
@@ -70,9 +71,9 @@ data class Character(
         this.career = career
         this.socialClass = socialClass
         this.race = race
-        this.stats = stats
-        this.maxStats = maxStats
-        points = points.withMaxWounds(maxWounds, if (hardyTalent) stats.getToughnessBonus() else 0)
+        this.characteristicsBase = characteristicsBase
+        this.characteristicsAdvances = characteristicsAdvances
+        points = points.withMaxWounds(maxWounds, if (hardyTalent) getCharacteristics().getToughnessBonus() else 0)
         this.psychology = psychology
         this.motivation = motivation
         this.note = note
@@ -107,15 +108,16 @@ data class Character(
     fun updatePoints(newPoints: Points) {
         require(
             (!hardyTalent && newPoints.hardyWoundsBonus == 0) ||
-            (hardyTalent && newPoints.hardyWoundsBonus == stats.getToughnessBonus())
+            (hardyTalent && newPoints.hardyWoundsBonus == getCharacteristics().getToughnessBonus())
         ) { "Hardy talent and wounds bonus are wrong" }
         points = newPoints
     }
 
     fun getPoints(): Points = points
 
-    fun getStats(): Stats = stats
-    fun getMaxStats(): Stats = maxStats
+    fun getCharacteristics(): Stats = characteristicsBase + characteristicsAdvances
+    fun getCharacteristicsBase() = characteristicsBase
+    fun getCharacteristicsAdvances() = characteristicsAdvances
 
     fun updateAmbitions(ambitions: Ambitions) {
         this.ambitions = ambitions

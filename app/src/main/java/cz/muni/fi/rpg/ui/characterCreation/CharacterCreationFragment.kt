@@ -46,7 +46,7 @@ class CharacterCreationFragment(
     private var currentFragmentIndex = 0
 
     private var characterInfo: CharacterInfoFormFragment.Data? = null
-    private var characterStatsData: CharacterStatsFormFragment.Data? = null
+    private var characterStatsData: CharacterStatsFormFragment.CharacteristicsData? = null
 
     override fun onStart() {
         super.onStart()
@@ -139,7 +139,7 @@ class CharacterCreationFragment(
 
     private fun saveCharacter(
         info: CharacterInfoFormFragment.Data,
-        statsData: CharacterStatsFormFragment.Data,
+        statsData: CharacterStatsFormFragment.CharacteristicsData,
         points: Points
     ) {
         launch {
@@ -153,8 +153,8 @@ class CharacterCreationFragment(
                     career = info.career,
                     socialClass = info.socialClass,
                     race = info.race,
-                    stats = statsData.stats,
-                    maxStats = statsData.maxStats,
+                    characteristicsBase = statsData.base,
+                    characteristicsAdvances = statsData.advances,
                     points = points,
                     psychology = info.psychology,
                     motivation = info.motivation,

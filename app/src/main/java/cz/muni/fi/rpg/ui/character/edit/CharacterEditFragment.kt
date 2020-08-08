@@ -106,7 +106,7 @@ class CharacterEditFragment(
 
     private suspend fun updateCharacter(
         info: CharacterInfoFormFragment.Data,
-        statsData: CharacterStatsFormFragment.Data,
+        statsData: CharacterStatsFormFragment.CharacteristicsData,
         maxWounds: Int,
         hardyTalent: Boolean
     ) {
@@ -117,8 +117,8 @@ class CharacterEditFragment(
             career = info.career,
             socialClass = info.socialClass,
             race = info.race,
-            stats = statsData.stats,
-            maxStats = statsData.maxStats,
+            characteristicsBase = statsData.base,
+            characteristicsAdvances = statsData.advances,
             maxWounds = maxWounds,
             psychology = info.psychology,
             motivation = info.motivation,

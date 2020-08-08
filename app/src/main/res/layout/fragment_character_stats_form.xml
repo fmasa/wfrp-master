@@ -10,19 +10,17 @@
 
     <TextView
         android:id="@+id/currentLabel"
-        style="@style/InputLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/label_current"
+        android:text="@string/label_base"
         app:layout_constraintEnd_toEndOf="@id/weaponSkillInput"
         app:layout_constraintStart_toStartOf="@id/weaponSkillInput"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        style="@style/InputLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/label_max"
+        android:text="@string/label_advances"
         app:layout_constraintEnd_toEndOf="@id/maxWeaponSkillInput"
         app:layout_constraintStart_toStartOf="@id/maxWeaponSkillInput"
         app:layout_constraintTop_toTopOf="parent" />

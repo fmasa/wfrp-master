@@ -25,22 +25,22 @@ data class Stats(
                 intelligence,
                 willPower,
                 fellowship
-            ).all { it in 0..100 }
+            ).all { it >= 0 }
         )
     }
 
-    fun allLowerOrEqualTo(other: Stats): Boolean {
-        return weaponSkill <= other.weaponSkill
-                && dexterity <= other.dexterity
-                && ballisticSkill <= other.ballisticSkill
-                && strength <= other.strength
-                && toughness <= other.toughness
-                && agility <= other.agility
-                && intelligence <= other.intelligence
-                && initiative <= other.initiative
-                && willPower <= other.willPower
-                && fellowship <= other.fellowship
-    }
+    operator fun plus(other: Stats) = Stats(
+        weaponSkill = weaponSkill + other.weaponSkill,
+        dexterity = dexterity + other.dexterity,
+        ballisticSkill = ballisticSkill + other.ballisticSkill,
+        strength = strength + other.strength,
+        toughness = toughness + other.toughness,
+        agility = agility + other.agility,
+        intelligence = intelligence + other.intelligence,
+        initiative = initiative + other.initiative,
+        willPower = willPower + other.willPower,
+        fellowship = fellowship + other.fellowship
+    )
 
     fun getToughnessBonus() = toughness / 10
 }
