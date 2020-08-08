@@ -24,7 +24,7 @@ internal class FirestoreCharacterRepository(
         val data = mapper.toDocumentData(character)
 
         Timber.d("Saving character $data in party $partyId to firestore")
-        characters(partyId).document(character.userId).set(data, SetOptions.merge()).await()
+        characters(partyId).document(character.userId).set(data).await()
     }
 
     override suspend fun get(characterId: CharacterId): Character {
