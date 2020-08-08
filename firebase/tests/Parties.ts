@@ -3,6 +3,7 @@ import {Suite} from "./Suite";
 import * as firebase from "@firebase/testing";
 import {uuid} from "uuidv4";
 import {withoutField} from "./utils";
+import {Character} from "../api";
 
 @suite
 class Parties extends Suite {
@@ -242,6 +243,10 @@ class Parties extends Suite {
         const data = this.validCharacter(userId);
 
         for (const field of Object.keys(data)) {
+            if (field == "maxStats") {
+                continue;  // maxStats are not used anymore and are there only for BC (TODO: Remove in 1.10)
+            }
+
             const newData = {...data};
 
             delete newData[field];
@@ -391,6 +396,14 @@ class Parties extends Suite {
         await firebase.assertSucceeds(
             document.update("points", {...this.validCharacter(userId).points, hardyWoundsBonus: 3})
         );
+
+        const character = (await document.get()).data() as Character;
+
+        await firebase.assertSucceeds(document.update({
+            characteristicsBase: character.stats,
+            characteristicsAdvances: character.stats,
+            ...withoutField(character, "stats")
+        }));
     }
 
     @test

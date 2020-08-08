@@ -9,11 +9,11 @@ import cz.muni.fi.rpg.ui.common.forms.Form
 import kotlinx.android.synthetic.main.fragment_character_stats_form.*
 
 class CharacterStatsFormFragment :
-    CharacterFormStep<CharacterStatsFormFragment.Data>(R.layout.fragment_character_stats_form) {
+    CharacterFormStep<CharacterStatsFormFragment.CharacteristicsData>(R.layout.fragment_character_stats_form) {
 
-    data class Data(
-        val stats: Stats,
-        val maxStats: Stats
+    data class CharacteristicsData(
+        val base: Stats,
+        val advances: Stats
     )
 
     var character: Character? = null
@@ -53,24 +53,19 @@ class CharacterStatsFormFragment :
                 setShowErrorInEditText()
                 addLiveRule(R.string.error_required) { !it.isNullOrBlank() }
                 addLiveRule(R.string.error_value_over_100) { it.toString().toInt() <= 100 }
-                addLiveRule(R.string.error_value_over_max) {
-                    val maxValue = entry.value.getValue().toIntOrNull()
-
-                    maxValue == null || it.toString().toInt() <= maxValue
-                }
             }
         }
 
         setDefaultValues()
     }
 
-    override fun submit(): Data? {
+    override fun submit(): CharacteristicsData? {
         if (!form.validate()) {
             return null
         }
 
-        return Data(
-            stats = Stats(
+        return CharacteristicsData(
+            base = Stats(
                 agility = agilityInput.getValue().toInt(),
                 ballisticSkill = ballisticSkillInput.getValue().toInt(),
                 dexterity = dexterityInput.getValue().toInt(),
@@ -82,7 +77,7 @@ class CharacterStatsFormFragment :
                 weaponSkill = weaponSkillInput.getValue().toInt(),
                 willPower = willPowerInput.getValue().toInt()
             ),
-            maxStats = Stats(
+            advances = Stats(
                 agility = maxAgilityInput.getValue().toInt(),
                 ballisticSkill = maxBallisticSkillInput.getValue().toInt(),
                 dexterity = maxDexterityInput.getValue().toInt(),
@@ -122,8 +117,8 @@ class CharacterStatsFormFragment :
             val currentInput = entry.key.first
             val maxInput = entry.key.second
 
-            currentInput.setDefaultValue(entry.value(character.getStats()).toString(), force = true)
-            maxInput.setDefaultValue(entry.value(character.getMaxStats()).toString(), force = true)
+            currentInput.setDefaultValue(entry.value(character.getCharacteristicsBase()).toString(), force = true)
+            maxInput.setDefaultValue(entry.value(character.getCharacteristicsAdvances()).toString(), force = true)
         }
     }
 }

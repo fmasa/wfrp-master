@@ -173,6 +173,8 @@ service cloud.firestore {
                             "points",
                             "race",
                             "stats",
+                            "characteristicsBase",
+                            "characteristicsAdvances",
                             "maxStats",
                             "userId",
                             "money",
@@ -192,8 +194,10 @@ service cloud.firestore {
                         && character.socialClass is string && isNotBlank(character.socialClass) && character.socialClass.size() <= 50
                         && character.race is string && character.race in ["HUMAN", "HIGH_ELF", "DWARF", "HALFLING", "WOOD_ELF", "GNOME"]
                         && arePointsValid(character.points)
-                        && areStatsValid(character.stats)
-                        && areStatsValid(character.maxStats)
+                        && ("stats" in character || "characteristicsBase" in character)
+                        && (! ("stats" in character) || areStatsValid(character.stats))
+                        && (! ("characteristicsBase" in character) || areStatsValid(character.characteristicsBase))
+                        && (! ("characteristicsAdvances" in character) || areStatsValid(character.characteristicsAdvances))
                         && areMoneyValid(character.money)
                         && areAmbitionsValid(character.ambitions)
                         && character.note is string && character.note.size() <= 400

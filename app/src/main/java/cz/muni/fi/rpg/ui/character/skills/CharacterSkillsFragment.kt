@@ -53,7 +53,7 @@ class CharacterSkillsFragment : Fragment(R.layout.fragment_character_skills),
         CombinedLiveData(viewModel.skills, characterVm.character.right())
             .observe(viewLifecycleOwner) { pair ->
                 val skills = pair.first
-                val stats = pair.second.getStats()
+                val stats = pair.second.getCharacteristics()
 
                 adapter.submitList(
                     skills

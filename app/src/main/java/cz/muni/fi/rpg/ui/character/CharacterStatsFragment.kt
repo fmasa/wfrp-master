@@ -9,6 +9,7 @@ import androidx.lifecycle.observe
 import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.model.domain.character.CharacterId
 import cz.muni.fi.rpg.model.domain.character.Points
+import cz.muni.fi.rpg.model.map
 import cz.muni.fi.rpg.model.right
 import cz.muni.fi.rpg.ui.common.parcelableArgument
 import cz.muni.fi.rpg.ui.views.CharacterPoint
@@ -40,7 +41,9 @@ class CharacterStatsFragment : Fragment(R.layout.fragment_character_stats),
     }
 
     private fun bindStats() {
-        Transformations.map(viewModel.character.right()) { character -> character.getStats() }
+        viewModel.character
+            .right()
+            .map { character -> character.getCharacteristics() }
             .observe(viewLifecycleOwner) { statsTable.setValue(it) }
     }
 
