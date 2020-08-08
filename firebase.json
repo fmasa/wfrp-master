@@ -19,7 +19,7 @@
     "rewrites": [
       {
         "source": "/app/invitation",
-        "destination": "app/invitation.html"
+        "destination": "/app/invitation.html"
       }
     ]
   }
