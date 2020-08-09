@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "723151893906-pfdm5dpma51shnspibm03e8ieatrv5ot.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "cz.frantisekmasa.dnd",
+            "certificate_hash": "da8dfdf764a392eaf6c9e491bafe74e0fe9cfb08"
+          }
+        },
+        {
           "client_id": "723151893906-jcpa54h9uvdk614pj82ap53m4d4jmcd4.apps.googleusercontent.com",
           "client_type": 3
         }
@@ -38,12 +46,20 @@
     },
     {
       "client_info": {
-        "mobilesdk_app_id": "1:723151893906:android:4849d9ce070afc3ac53d4b",
+        "mobilesdk_app_id": "1:723151893906:android:1b904cfb349b7e26c53d4b",
         "android_client_info": {
           "package_name": "cz.frantisekmasa.dnd.debug"
         }
       },
       "oauth_client": [
+        {
+          "client_id": "723151893906-m5gbj2f8pci3spgev89sqkv2fh7kki7h.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "cz.frantisekmasa.dnd.debug",
+            "certificate_hash": "42ba4bfb460c9d53acea86e48f3c96f0c1c415ae"
+          }
+        },
         {
           "client_id": "723151893906-jcpa54h9uvdk614pj82ap53m4d4jmcd4.apps.googleusercontent.com",
           "client_type": 3

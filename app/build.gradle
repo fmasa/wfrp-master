@@ -121,6 +121,7 @@ dependencies {
 
     implementation 'com.google.android.gms:play-services-ads:19.3.0'
     implementation 'com.google.android.ads.consent:consent-library:1.0.8'
+    implementation 'com.google.android.gms:play-services-auth:18.1.0'
 
     implementation "com.google.zxing:core:3.4.0"
     implementation 'me.dm7.barcodescanner:zxing:1.9.13'
