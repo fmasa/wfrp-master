@@ -1,11 +1,11 @@
 package cz.muni.fi.rpg.viewModels
 
 import android.content.Context
-import android.content.Intent
 import androidx.lifecycle.ViewModel
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseAuthUserCollisionException
 import com.google.firebase.auth.GoogleAuthProvider
 import cz.muni.fi.rpg.R
 import kotlinx.coroutines.tasks.await
@@ -15,7 +15,13 @@ class AuthenticationViewModel(private val auth: FirebaseAuth) : ViewModel() {
 
     fun isAuthenticated() = auth.currentUser != null
 
-    suspend fun connectGoogleToFirebaseAuth(idToken: String): Boolean {
+    fun getEmail(): String? {
+        val email = auth.currentUser?.email
+
+        return if (email == "") null else email
+    }
+
+    suspend fun signInWithGoogleToken(idToken: String): Boolean {
         val credential = GoogleAuthProvider.getCredential(idToken, null)
 
         return try {
@@ -23,10 +29,22 @@ class AuthenticationViewModel(private val auth: FirebaseAuth) : ViewModel() {
 
             true
         } catch (e: Throwable) {
-            Timber.e(e, "Connection Google credentials to Firebase Auth failed")
+            Timber.e(e, "Connection of Google credentials to Firebase Auth failed")
 
             false
         }
+    }
+
+    /**
+     * @throws FirebaseAuthUserCollisionException when Google account is already used for another account
+     * @throws IllegalStateException when user is even anonymously authenticated.
+     */
+    suspend fun linkAccountToGoogle(idToken: String) {
+        val user = auth.currentUser
+
+        check(user != null)
+
+        user.linkWithCredential(GoogleAuthProvider.getCredential(idToken, null)).await()
     }
 
     fun getGoogleSignInIntent(context: Context) = googleClient(context).signInIntent
@@ -51,6 +69,8 @@ class AuthenticationViewModel(private val auth: FirebaseAuth) : ViewModel() {
      * @return true if user was successfully authenticated and false otherwise
      */
     suspend fun authenticateAnonymously(): Boolean {
+        check(auth.currentUser == null) { "User is already authenticated" }
+
         return try {
             Timber.d("Starting Firebase anonymous sign in")
             auth.signInAnonymously().await()

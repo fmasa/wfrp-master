@@ -48,7 +48,7 @@ class AuthenticationFragment : Fragment(), CoroutineScope by CoroutineScope(Disp
     }
 
     private suspend fun authenticateWithGoogle(idToken: String) {
-        if (viewModel.connectGoogleToFirebaseAuth(idToken)) {
+        if (viewModel.signInWithGoogleToken(idToken)) {
             notifyDependentsThatUserIsAuthenticated()
             return
         }
