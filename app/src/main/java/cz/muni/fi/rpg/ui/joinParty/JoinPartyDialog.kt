@@ -6,7 +6,6 @@ import android.content.DialogInterface
 import android.os.Bundle
 import android.text.SpannableStringBuilder
 import android.view.View
-import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.core.os.bundleOf
 import androidx.core.text.bold
@@ -21,6 +20,7 @@ import cz.muni.fi.rpg.model.domain.invitation.InvalidInvitation
 import cz.muni.fi.rpg.model.domain.party.Invitation
 import cz.muni.fi.rpg.ui.common.parcelableArgument
 import cz.muni.fi.rpg.ui.common.stringArgument
+import cz.muni.fi.rpg.ui.common.toast
 import cz.muni.fi.rpg.viewModels.JoinPartyViewModel
 import kotlinx.android.synthetic.main.dialog_join_party.view.*
 import kotlinx.coroutines.*
@@ -132,6 +132,7 @@ class JoinPartyDialog : DialogFragment(), CoroutineScope by CoroutineScope(Dispa
     }
 
     private fun invitationError(message: String, e: Throwable) {
-        Toast.makeText(requireActivity(), message, Toast.LENGTH_SHORT).show()
+        toast(message)
+        Timber.i(e)
     }
 }

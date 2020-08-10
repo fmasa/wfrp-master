@@ -2,13 +2,11 @@ package cz.muni.fi.rpg.ui
 
 import android.content.Intent
 import android.os.Bundle
-import android.widget.Toast
 import androidx.annotation.LayoutRes
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
-import cz.muni.fi.rpg.viewModels.AuthenticationViewModel
+import cz.muni.fi.rpg.ui.common.toast
 import org.koin.android.ext.android.inject
-import org.koin.android.viewmodel.ext.android.viewModel
 
 abstract class AuthenticatedActivity(@LayoutRes contentLayoutId: Int) :
     AppCompatActivity(contentLayoutId) {
@@ -30,10 +28,6 @@ abstract class AuthenticatedActivity(@LayoutRes contentLayoutId: Int) :
 
         if (user == null) {
             goToStartup()
-
-            Toast.makeText(applicationContext, "You have been logged out", Toast.LENGTH_SHORT)
-                .show()
-            finish()
             return
         }
 
@@ -57,8 +51,7 @@ abstract class AuthenticatedActivity(@LayoutRes contentLayoutId: Int) :
     private fun goToStartup() {
         startActivity(Intent(this, StartupActivity::class.java))
 
-        Toast.makeText(applicationContext, "You have been logged out", Toast.LENGTH_SHORT)
-            .show()
+        toast("You have been logged out")
         finish()
     }
 }

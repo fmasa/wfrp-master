@@ -16,6 +16,7 @@ import cz.muni.fi.rpg.ui.character.inventory.InventoryItemDialog
 import cz.muni.fi.rpg.ui.character.inventory.TransactionDialog
 import cz.muni.fi.rpg.ui.common.NonScrollableLayoutManager
 import cz.muni.fi.rpg.ui.common.parcelableArgument
+import cz.muni.fi.rpg.ui.common.toast
 import cz.muni.fi.rpg.viewModels.InventoryViewModel
 import kotlinx.android.synthetic.main.fragment_inventory.*
 import kotlinx.coroutines.*
@@ -78,11 +79,7 @@ class InventoryFragment : Fragment(R.layout.fragment_inventory),
         viewModel.armor.observe(viewLifecycleOwner) { errorOrArmor ->
             errorOrArmor.fold(
                 {
-                    Toast.makeText(
-                        context,
-                        "An error occurred during armor loading",
-                        Toast.LENGTH_LONG
-                    ).show()
+                    toast("An error occurred during armor loading", Toast.LENGTH_LONG)
                     Timber.w(it)
                 },
                 { armor ->

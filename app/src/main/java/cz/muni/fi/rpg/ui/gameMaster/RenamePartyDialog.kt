@@ -14,6 +14,7 @@ import cz.muni.fi.rpg.model.domain.party.Party
 import cz.muni.fi.rpg.ui.common.forms.Form
 import cz.muni.fi.rpg.ui.common.serializableArgument
 import cz.muni.fi.rpg.ui.common.stringArgument
+import cz.muni.fi.rpg.ui.common.toast
 import cz.muni.fi.rpg.viewModels.GameMasterViewModel
 import kotlinx.android.synthetic.main.dialog_party_rename.view.*
 import kotlinx.coroutines.*
@@ -87,13 +88,13 @@ class RenamePartyDialog : DialogFragment(), CoroutineScope by CoroutineScope(Dis
         pendingJob = launch {
             try {
                 viewModel.renameParty(partyName)
-                toast(getString(R.string.message_party_updated))
+                longToast(getString(R.string.message_party_updated))
                 Timber.d(tag, "Party was renamed")
             } catch (e: CouldNotConnectToBackend) {
                 Timber.i(e, "User could not rename party, because (s)he is offline")
-                toast(getString(R.string.error_party_update_no_connection))
+                longToast(getString(R.string.error_party_update_no_connection))
             } catch (e: Throwable) {
-                toast(getString(R.string.error_unkown))
+                longToast(getString(R.string.error_unkown))
                 Timber.e(e)
             } finally {
                 withContext(Dispatchers.Main) { dismiss() }
@@ -107,7 +108,6 @@ class RenamePartyDialog : DialogFragment(), CoroutineScope by CoroutineScope(Dis
         pendingJob?.cancel()
     }
 
-    private suspend fun toast(message: String) = withContext(Dispatchers.Main) {
-        Toast.makeText(requireContext(), message, Toast.LENGTH_LONG).show()
-    }
+    private suspend fun longToast(message: String)
+            = withContext(Dispatchers.Main) { toast(message, Toast.LENGTH_LONG) }
 }

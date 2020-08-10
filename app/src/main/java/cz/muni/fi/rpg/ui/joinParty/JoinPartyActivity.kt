@@ -13,6 +13,7 @@ import com.google.zxing.Result
 import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.model.domain.party.Invitation
 import cz.muni.fi.rpg.ui.AuthenticatedActivity
+import cz.muni.fi.rpg.ui.common.toast
 import kotlinx.android.synthetic.main.activity_join_party.*
 import me.dm7.barcodescanner.zxing.ZXingScannerView
 import org.koin.android.ext.android.inject
@@ -45,11 +46,7 @@ class JoinPartyActivity : AuthenticatedActivity(R.layout.activity_join_party),
             return
         }
 
-        Toast.makeText(
-            applicationContext,
-            "Camera permission is required for QR code scanning",
-            Toast.LENGTH_LONG
-        ).show()
+        toast("Camera permission is required for QR code scanning", Toast.LENGTH_LONG)
         finish()
     }
 
@@ -100,9 +97,8 @@ class JoinPartyActivity : AuthenticatedActivity(R.layout.activity_join_party),
             JoinPartyDialog.newInstance(getUserId(), invitation).show(supportFragmentManager, null)
         } catch (e: JsonProcessingException) {
             val error = "QR code is not valid party invitation"
-
             Timber.d(e, error)
-            Toast.makeText(this, error, Toast.LENGTH_SHORT).show()
+            toast(error)
             resumeScanning()
         }
     }

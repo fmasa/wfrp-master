@@ -115,6 +115,7 @@ val appModule = module {
     viewModel { AuthenticationViewModel(get()) }
     viewModel { JoinPartyViewModel(get()) }
     viewModel { PartyListViewModel(get()) }
+    viewModel { SettingsViewModel(get()) }
 
     /**
      * Fragments

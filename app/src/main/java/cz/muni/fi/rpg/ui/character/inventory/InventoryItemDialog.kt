@@ -14,6 +14,7 @@ import cz.muni.fi.rpg.model.domain.inventory.InventoryItemId
 import cz.muni.fi.rpg.ui.common.forms.Form
 import cz.muni.fi.rpg.ui.common.optionalParcelableArgument
 import cz.muni.fi.rpg.ui.common.parcelableArgument
+import cz.muni.fi.rpg.ui.common.toast
 import cz.muni.fi.rpg.viewModels.InventoryViewModel
 import kotlinx.android.synthetic.main.inventory_item_edit_dialog.view.*
 import kotlinx.coroutines.CoroutineScope
@@ -100,10 +101,10 @@ class InventoryItemDialog : DialogFragment(),
             try {
                 viewModel.saveInventoryItem(inventoryItem)
 
-                toast(getString(R.string.inventory_toast_item_saved))
+                longToast(getString(R.string.inventory_toast_item_saved))
                 dismiss()
             } catch (e: Throwable) {
-                toast("Item couldn't be added to your inventory.")
+                longToast("Item couldn't be added to your inventory.")
                 Timber.e(e)
             }
         }
@@ -116,7 +117,7 @@ class InventoryItemDialog : DialogFragment(),
         quantity = view.quantityInput.getValue().toInt()
     )
 
-    private suspend fun toast(message: String) {
-        withContext(Dispatchers.Main) { Toast.makeText(context, message, Toast.LENGTH_LONG).show() }
+    private suspend fun longToast(message: String) {
+        withContext(Dispatchers.Main) { toast(message, Toast.LENGTH_LONG) }
     }
 }

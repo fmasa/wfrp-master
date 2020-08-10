@@ -22,5 +22,7 @@ interface PartyRepository {
     /**
      * Creates RecyclerView Adapter with parties that user has access to
      */
-    fun forUser(userId: String): LiveData<List<Party>>
+    fun forUserLive(userId: String): LiveData<List<Party>>
+
+    suspend fun forUser(userId: String): List<Party>
 }

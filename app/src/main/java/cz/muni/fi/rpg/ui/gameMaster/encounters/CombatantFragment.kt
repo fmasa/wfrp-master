@@ -16,6 +16,7 @@ import cz.muni.fi.rpg.model.domain.encounter.CombatantNotFound
 import cz.muni.fi.rpg.model.domain.encounter.Wounds
 import cz.muni.fi.rpg.ui.common.PartyScopedFragment
 import cz.muni.fi.rpg.ui.common.forms.Form
+import cz.muni.fi.rpg.ui.common.toast
 import cz.muni.fi.rpg.ui.common.toggleVisibility
 import cz.muni.fi.rpg.viewModels.EncounterDetailViewModel
 import kotlinx.android.synthetic.main.fragment_combatant.*
@@ -61,11 +62,7 @@ class CombatantFragment : PartyScopedFragment(R.layout.fragment_combatant),
                     withContext(Dispatchers.Main) { form = initializeForm(combatant) }
                 } catch (e: CombatantNotFound) {
                     withContext(Dispatchers.Main) {
-                        Toast.makeText(
-                            context,
-                            R.string.message_combatant_not_found,
-                            Toast.LENGTH_LONG
-                        ).show()
+                        toast(R.string.message_combatant_not_found, Toast.LENGTH_LONG)
                         findNavController().popBackStack()
                     }
                 }
@@ -129,7 +126,7 @@ class CombatantFragment : PartyScopedFragment(R.layout.fragment_combatant),
             }
 
             withContext(Dispatchers.Main) {
-                Toast.makeText(context, R.string.message_combatant_saved, Toast.LENGTH_SHORT).show()
+                toast(R.string.message_combatant_saved)
                 findNavController().popBackStack()
             }
         }
