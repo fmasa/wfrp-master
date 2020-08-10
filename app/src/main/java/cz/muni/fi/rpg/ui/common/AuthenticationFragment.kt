@@ -83,6 +83,12 @@ class AuthenticationFragment : Fragment(), CoroutineScope by CoroutineScope(Disp
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
+        if (resultCode == 0) {
+            Timber.d("Google Sign-In dialog was dismissed")
+            fallbackToAnonymousAuthentication(null)
+            return
+        }
+
         if (requestCode == CODE_SIGN_IN) {
             launch {
                 try {
