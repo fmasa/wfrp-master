@@ -33,7 +33,7 @@ class AuthenticationFragment : Fragment(), CoroutineScope by CoroutineScope(Disp
     }
 
     interface Listener {
-        fun onAuthenticated()
+        fun onAuthenticated(userId: String)
     }
 
     private val viewModel: AuthenticationViewModel by viewModel()
@@ -121,8 +121,9 @@ class AuthenticationFragment : Fragment(), CoroutineScope by CoroutineScope(Disp
     }
 
     private suspend fun notifyDependentsThatUserIsAuthenticated() {
-        Reporter.setUserId(viewModel.getUserId())
+        val userId = viewModel.getUserId()
 
-        withContext(Dispatchers.Main) { listener.onAuthenticated() }
+        Reporter.setUserId(userId)
+        withContext(Dispatchers.Main) { listener.onAuthenticated(userId) }
     }
 }

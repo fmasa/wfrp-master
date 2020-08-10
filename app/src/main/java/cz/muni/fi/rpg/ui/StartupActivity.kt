@@ -15,7 +15,7 @@ class StartupActivity : AppCompatActivity(R.layout.activity_startup),
         supportFragmentManager.commit { add(AuthenticationFragment(), "Authentication") }
     }
 
-    override fun onAuthenticated() {
+    override fun onAuthenticated(userId: String) {
         startActivity(Intent(this@StartupActivity, MainActivity::class.java))
         finish()
     }
