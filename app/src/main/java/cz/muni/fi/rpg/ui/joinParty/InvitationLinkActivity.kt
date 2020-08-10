@@ -4,6 +4,7 @@ import android.content.Intent
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.fasterxml.jackson.databind.json.JsonMapper
+import com.fasterxml.jackson.module.kotlin.readValue
 import com.google.firebase.dynamiclinks.ktx.dynamicLinks
 import com.google.firebase.ktx.Firebase
 import cz.muni.fi.rpg.R
@@ -57,8 +58,7 @@ class InvitationLinkActivity : AppCompatActivity(R.layout.activity_invitation_li
                 return
             }
 
-            @Suppress("BlockingMethodInNonBlockingContext")
-            val invitation = jsonMapper.readValue(invitationJson, Invitation::class.java)
+            val invitation = jsonMapper.readValue<Invitation>(invitationJson)
 
             withContext(Dispatchers.Main) {
                 JoinPartyDialog.newInstance(auth.getUserId(), invitation)
