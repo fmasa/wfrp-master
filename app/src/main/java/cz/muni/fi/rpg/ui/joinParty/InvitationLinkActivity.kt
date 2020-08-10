@@ -7,7 +7,6 @@ import com.fasterxml.jackson.databind.json.JsonMapper
 import com.google.firebase.dynamiclinks.ktx.dynamicLinks
 import com.google.firebase.ktx.Firebase
 import cz.muni.fi.rpg.R
-import cz.muni.fi.rpg.model.domain.invitation.InvitationProcessor
 import cz.muni.fi.rpg.model.domain.party.Invitation
 import cz.muni.fi.rpg.ui.MainActivity
 import cz.muni.fi.rpg.viewModels.AuthenticationViewModel
@@ -24,7 +23,6 @@ class InvitationLinkActivity : AppCompatActivity(R.layout.activity_invitation_li
 
     private val auth: AuthenticationViewModel by inject()
     private val jsonMapper: JsonMapper by inject()
-    private val invitationProcessor: InvitationProcessor by inject()
 
     override fun onStart() {
         super.onStart()
