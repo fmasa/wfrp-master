@@ -245,4 +245,5 @@
     <string name="message_party_removed">Party was removed</string>
     <string name="google_sign_in_error">We could not sign you in via Google.\nBut you can always sign in later.</string>
     <string name="already_has_character">You already have active character in this party</string>
+    <string name="preference_dismissed_google_sign_in">dismissed_google_sign_in</string>
 </resources>

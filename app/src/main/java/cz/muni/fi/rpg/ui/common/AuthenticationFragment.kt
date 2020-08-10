@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AlertDialog
+import androidx.core.content.edit
 import androidx.fragment.app.Fragment
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.common.api.ApiException
@@ -113,6 +114,14 @@ class AuthenticationFragment : Fragment(), CoroutineScope by CoroutineScope(Disp
                 launch {
                     if (viewModel.authenticateAnonymously()) {
                         notifyDependentsThatUserIsAuthenticated()
+                        activity?.getPreferences(Context.MODE_PRIVATE)?.let {
+                            it.edit {
+                                putBoolean(
+                                    getString(R.string.preference_dismissed_google_sign_in),
+                                    true
+                                )
+                            }
+                        }
                     } else {
                         withContext(Dispatchers.Main) { toast("Authentication failed.") }
                     }
