@@ -246,9 +246,9 @@
     <string name="already_has_character">You already have active character in this party</string>
     <string name="preference_dismissed_google_sign_in">dismissed_google_sign_in</string>
     <string name="settings">Settings</string>
-    <string name="not_logged_in_description">You are not logged in.\nLogging in lets you keep access to parties between devices.</string>
+    <string name="not_signed_in_description">You are not signed-in.\nSigning-in lets you keep access to parties between devices.</string>
     <string name="title_account">Account</string>
-    <string name="logged_in_as">You are logged in as</string>
+    <string name="signed_in_as">You are signed-in as</string>
     <string name="google_account_collision">There is already different WFRP Master account associated with given Google account.\nDo you want to sign in to that account instead?</string>
     <string name="title_duplicate_account">Existing account found</string>
     <string name="button_sign_in">Sign in</string>
