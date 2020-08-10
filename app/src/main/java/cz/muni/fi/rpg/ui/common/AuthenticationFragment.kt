@@ -20,7 +20,7 @@ import timber.log.Timber
 
 /**
  * This fragment takes care of all authentication methods available to user
- * 
+ *
  * Every entrypoint to application should implement AuthenticationFragment.Listener and add instance
  * of this fragment to FragmentManager
  *
@@ -108,7 +108,8 @@ class AuthenticationFragment : Fragment(), CoroutineScope by CoroutineScope(Disp
     private fun fallbackToAnonymousAuthentication(message: String?) {
         AlertDialog.Builder(requireContext())
             .setMessage(message ?: getString(R.string.google_sign_in_error))
-            .setNeutralButton(android.R.string.ok) { _, _ ->
+            .setNeutralButton(android.R.string.ok, null)
+            .setOnDismissListener {
                 launch {
                     if (viewModel.authenticateAnonymously()) {
                         notifyDependentsThatUserIsAuthenticated()
