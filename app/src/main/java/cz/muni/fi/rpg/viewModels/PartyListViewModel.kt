@@ -11,7 +11,7 @@ class PartyListViewModel(
 ): ViewModel() {
 
     fun liveForUser(userId: String): LiveData<List<Party>> {
-        return parties.forUser(userId)
+        return parties.forUserLive(userId)
     }
 
     suspend fun archive(partyId: UUID) {

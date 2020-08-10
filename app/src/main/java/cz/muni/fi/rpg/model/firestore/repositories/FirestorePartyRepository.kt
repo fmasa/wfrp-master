@@ -50,20 +50,24 @@ internal class FirestorePartyRepository(
     }
 
     override fun getLive(id: UUID): LiveData<Either<PartyNotFound, Party>> {
-        return DocumentLiveData(
-            parties.document(
-                id.toString()
-            )
-        ) {
+        return DocumentLiveData(parties.document(id.toString())) {
             it.bimap(
                 { e -> PartyNotFound(id, e) },
-                { snapshot -> mapper.fromDocumentSnapshot(snapshot) })
+                { snapshot -> mapper.fromDocumentSnapshot(snapshot) }
+            )
         }
     }
 
-    override fun forUser(userId: String): LiveData<List<Party>> =
-        QueryLiveData(
-            parties.whereArrayContains("users", userId),
-            mapper
-        ) { ! it.isArchived() }
+    override fun forUserLive(userId: String): LiveData<List<Party>> =
+        QueryLiveData(queryForUser(userId), mapper) { !it.isArchived() }
+
+    override suspend fun forUser(userId: String) =
+        queryForUser(userId)
+            .get()
+            .await()
+            .documents
+            .map { mapper.fromDocumentSnapshot(it) }
+            .filter { !it.isArchived() }
+
+    private fun queryForUser(userId: String) = parties.whereArrayContains("users", userId)
 }
