@@ -1,14 +1,13 @@
 package cz.muni.fi.rpg.ui
 
 import android.content.Intent
-import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import com.google.android.gms.auth.api.Auth
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.common.api.ApiException
 import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.common.log.Reporter
+import cz.muni.fi.rpg.ui.common.toast
 import cz.muni.fi.rpg.viewModels.AuthenticationViewModel
 import kotlinx.coroutines.*
 import kotlinx.coroutines.tasks.await
@@ -87,13 +86,7 @@ class StartupActivity : AppCompatActivity(R.layout.activity_startup),
                     if (viewModel.authenticateAnonymously()) {
                         showPartyList()
                     } else {
-                        withContext(Dispatchers.Main) {
-                            Toast.makeText(
-                                this@StartupActivity,
-                                "Authentication failed.",
-                                Toast.LENGTH_SHORT
-                            )
-                        }
+                        withContext(Dispatchers.Main) { toast("Authentication failed.") }
                     }
                 }
             }.show()

@@ -2,7 +2,6 @@ package cz.muni.fi.rpg.ui.characterCreation
 
 import android.os.Bundle
 import android.view.View
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -13,6 +12,7 @@ import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.model.domain.character.*
 import cz.muni.fi.rpg.ui.common.PartyScopedFragment
 import cz.muni.fi.rpg.ui.common.StaticFragmentsViewPagerAdapter
+import cz.muni.fi.rpg.ui.common.toast
 import cz.muni.fi.rpg.viewModels.AuthenticationViewModel
 import kotlinx.android.synthetic.main.fragment_character_creation.*
 import kotlinx.coroutines.CoroutineScope
@@ -53,7 +53,7 @@ class CharacterCreationFragment(
 
         launch {
             if (characters.hasCharacterInParty(authentication.getUserId(), args.partyId)) {
-                toast("You already have active character in this party")
+                withContext(Dispatchers.Main) { toast(R.string.already_has_character) }
                 return@launch
             }
 
@@ -190,12 +190,6 @@ class CharacterCreationFragment(
         } else {
             buttonPrevious.visibility = View.VISIBLE
             buttonPrevious.setText(labels[index - 1])
-        }
-    }
-
-    private suspend fun toast(message: String) {
-        withContext(Dispatchers.Main) {
-            Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
         }
     }
 }

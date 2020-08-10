@@ -31,8 +31,7 @@ abstract class PartyScopedFragment(@LayoutRes contentLayoutId: Int) :
         viewModel.party.observe(viewLifecycleOwner) {
             if (!isAvailable(it)) {
                 Timber.d("Party does not exist or is archived: $it")
-                Toast.makeText(requireContext(), R.string.error_party_not_found, Toast.LENGTH_LONG)
-                    .show()
+                toast(R.string.error_party_not_found, Toast.LENGTH_LONG)
                 findNavController().popBackStack(R.id.nav_party_list, false)
             }
         }

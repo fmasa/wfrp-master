@@ -10,6 +10,7 @@ import com.google.firebase.ktx.Firebase
 import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.model.domain.party.Invitation
 import cz.muni.fi.rpg.ui.MainActivity
+import cz.muni.fi.rpg.ui.common.toast
 import cz.muni.fi.rpg.viewModels.AuthenticationViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -67,7 +68,7 @@ class InvitationLinkActivity : AppCompatActivity(R.layout.activity_invitation_li
         } catch (e: Throwable) {
             Timber.w(e, "Could not process Dynamic Link data")
             withContext(Dispatchers.Main) {
-                Toast.makeText(applicationContext, "Invalid link", Toast.LENGTH_SHORT).show()
+                toast("Invalid link")
                 openPartyList()
             }
         }

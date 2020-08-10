@@ -3,7 +3,6 @@ package cz.muni.fi.rpg.ui.character.spells
 import android.app.Dialog
 import android.os.Bundle
 import android.view.View
-import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
@@ -13,6 +12,7 @@ import cz.muni.fi.rpg.model.domain.spells.Spell
 import cz.muni.fi.rpg.ui.common.forms.Form
 import cz.muni.fi.rpg.ui.common.optionalParcelableArgument
 import cz.muni.fi.rpg.ui.common.parcelableArgument
+import cz.muni.fi.rpg.ui.common.toast
 import cz.muni.fi.rpg.viewModels.SpellsViewModel
 import kotlinx.android.synthetic.main.dialog_spell.view.*
 import kotlinx.coroutines.CoroutineScope
@@ -126,10 +126,7 @@ class SpellDialog : DialogFragment(),
         launch {
             viewModel.saveSpell(spell)
 
-            withContext(Dispatchers.Main) {
-                Toast.makeText(context, R.string.message_spell_saved, Toast.LENGTH_SHORT).show()
-            }
-
+            withContext(Dispatchers.Main) { toast(R.string.message_spell_saved) }
             dismiss()
         }
 

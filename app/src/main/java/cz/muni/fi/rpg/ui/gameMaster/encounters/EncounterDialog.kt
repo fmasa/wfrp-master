@@ -13,6 +13,7 @@ import cz.muni.fi.rpg.model.domain.encounter.Encounter
 import cz.muni.fi.rpg.ui.common.forms.Form
 import cz.muni.fi.rpg.ui.common.optionalParcelableArgument
 import cz.muni.fi.rpg.ui.common.serializableArgument
+import cz.muni.fi.rpg.ui.common.toast
 import cz.muni.fi.rpg.ui.common.toggleVisibility
 import cz.muni.fi.rpg.viewModels.EncountersViewModel
 import kotlinx.android.parcel.Parcelize
@@ -112,11 +113,7 @@ class EncounterDialog : DialogFragment(), CoroutineScope by CoroutineScope(Dispa
                 )
             }
             withContext(Dispatchers.Main) {
-                Toast.makeText(
-                    requireContext(),
-                    R.string.message_encounter_saved,
-                    Toast.LENGTH_SHORT
-                ).show()
+                toast(R.string.message_encounter_saved)
                 dismiss()
             }
         }

@@ -11,6 +11,7 @@ import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.model.domain.character.CharacterId
 import cz.muni.fi.rpg.model.domain.party.Party
 import cz.muni.fi.rpg.ui.common.BaseFragment
+import cz.muni.fi.rpg.ui.common.toast
 import cz.muni.fi.rpg.ui.joinParty.JoinPartyActivity
 import cz.muni.fi.rpg.ui.partyList.adapter.PartyAdapter
 import cz.muni.fi.rpg.viewModels.AuthenticationViewModel
@@ -56,11 +57,7 @@ class PartyListFragment : BaseFragment(R.layout.fragment_party_list),
                         launch {
                             viewModel.archive(it.id)
                             withContext(Dispatchers.Main) {
-                                Toast.makeText(
-                                    context,
-                                    R.string.message_party_removed,
-                                    Toast.LENGTH_LONG
-                                ).show()
+                                toast(R.string.message_party_removed, Toast.LENGTH_LONG)
                             }
                         }
                     }

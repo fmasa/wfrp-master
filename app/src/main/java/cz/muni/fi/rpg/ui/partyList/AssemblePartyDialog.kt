@@ -15,6 +15,7 @@ import cz.muni.fi.rpg.model.domain.common.CouldNotConnectToBackend
 import cz.muni.fi.rpg.model.domain.party.Party
 import cz.muni.fi.rpg.model.domain.party.PartyRepository
 import cz.muni.fi.rpg.ui.common.forms.Form
+import cz.muni.fi.rpg.ui.common.toast
 import cz.muni.fi.rpg.viewModels.AuthenticationViewModel
 import kotlinx.android.synthetic.main.dialog_asssemble_party.view.*
 import kotlinx.android.synthetic.main.dialog_asssemble_party.view.singlePlayerWarning
@@ -105,7 +106,7 @@ class AssemblePartyDialog : DialogFragment(), CoroutineScope by CoroutineScope(D
         pendingJob = launch {
             try {
                 parties.save(party)
-                toast("Party $partyName was created")
+                longToast("Party $partyName was created")
                 Timber.d(tag, "Party $partyName was successfully created")
 
                 Firebase.analytics.logEvent("create_party") {
@@ -115,9 +116,9 @@ class AssemblePartyDialog : DialogFragment(), CoroutineScope by CoroutineScope(D
                 withContext(Dispatchers.Main) { listener.onSuccessfulCreation(party) }
             } catch (e: CouldNotConnectToBackend) {
                 Timber.i(e, "User could not assemble party, because (s)he is offline")
-                toast(getString(R.string.error_party_creation_no_connection))
+                longToast(getString(R.string.error_party_creation_no_connection))
             } catch (e: Throwable) {
-                toast(getString(R.string.error_unkown))
+                longToast(getString(R.string.error_unkown))
                 Timber.e(e)
             } finally {
                 withContext(Dispatchers.Main) { dismiss() }
@@ -131,7 +132,7 @@ class AssemblePartyDialog : DialogFragment(), CoroutineScope by CoroutineScope(D
         pendingJob?.cancel()
     }
 
-    private suspend fun toast(message: String) = withContext(Dispatchers.Main) {
-        Toast.makeText(requireContext(), message, Toast.LENGTH_LONG).show()
+    private suspend fun longToast(message: String) = withContext(Dispatchers.Main) {
+        toast(message, Toast.LENGTH_LONG)
     }
 }
