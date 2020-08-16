@@ -40,18 +40,18 @@
             maxStrengthInput,
             toughnessInput,
             maxToughnessInput,
+            initiativeInput,
+            maxInitiativeInput,
             agilityInput,
             maxAgilityInput,
+            dexterityInput,
+            maxDexterityInput,
             intelligenceInput,
             maxIntelligenceInput,
             willPowerInput,
             maxWillPowerInput,
             fellowshipInput,
-            maxFellowshipInput,
-            initiativeInput,
-            maxInitiativeInput,
-            dexterityInput,
-            maxDexterityInput
+            maxFellowshipInput
         "
         app:flow_horizontalAlign="start"
         app:flow_maxElementsWrap="2"
