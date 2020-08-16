@@ -106,7 +106,18 @@ service cloud.firestore {
                             && skill.description is string && skill.description.size() <= 200
                             && skill.advanced is bool
                             && skill.advances is int && skill.advances >= 0
-                            && skill.characteristic in ["AGILITY", "DEXTERITY", "INTELLIGENCE", "FELLOWSHIP", "STRENGTH", "TOUGHNESS", "WILL_POWER"]
+                            && skill.characteristic in [
+                                "AGILITY",
+                                "BALLISTIC_SKILL",
+                                "DEXTERITY",
+                                "INITIATIVE",
+                                "INTELLIGENCE",
+                                "FELLOWSHIP",
+                                "STRENGTH",
+                                "TOUGHNESS",
+                                "WILL_POWER",
+                                "WEAPON_SKILL"
+                            ]
                     }
                 }
 

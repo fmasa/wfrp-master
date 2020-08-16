@@ -1,14 +1,13 @@
 package cz.muni.fi.rpg.ui.character.skills
 
 import android.app.Dialog
-import android.content.Context
 import android.os.Bundle
 import android.view.View
-import android.view.inputmethod.InputMethodManager
-import android.widget.ArrayAdapter
 import androidx.appcompat.app.AlertDialog
 import androidx.core.os.bundleOf
+import androidx.core.view.children
 import androidx.fragment.app.DialogFragment
+import com.google.android.material.chip.Chip
 import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.model.domain.character.CharacterId
 import cz.muni.fi.rpg.model.domain.skills.Skill
@@ -51,20 +50,7 @@ class SkillDialog : DialogFragment(), CoroutineScope by CoroutineScope(Dispatche
 
         val view = inflater.inflate(R.layout.dialog_skill, null)
 
-        val characteristicSpinner = view.skillCharacteristic
-        val characteristics = SkillCharacteristic.values()
-            .map { getString(it.getReadableNameId()) }
-            .sorted()
-
-        characteristicSpinner.setAdapter(
-            ArrayAdapter(requireContext(), R.layout.dropdown_menu_popup_item, characteristics)
-        )
-        characteristicSpinner.setText(characteristics[0], false)
-        characteristicSpinner.setOnClickListener {
-            (requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager)
-                .hideSoftInputFromWindow(it.windowToken, 0)
-        }
-
+        addCharacteristicChips(view)
         setDefaults(view)
 
         val form = Form(requireContext()).apply {
@@ -108,7 +94,7 @@ class SkillDialog : DialogFragment(), CoroutineScope by CoroutineScope(Dispatche
 
         view.nameInput.setDefaultValue(skill.name)
         view.descriptionInput.setDefaultValue(skill.description)
-        view.skillCharacteristic.setText(getString(skill.characteristic.getReadableNameId()), false)
+        view.skillCharacteristic.findViewWithTag<Chip>(skill.characteristic).isChecked = true
         view.skillAdvanced.isChecked = skill.advanced
         view.advancesInput.setDefaultValue(skill.advances.toString())
     }
@@ -139,15 +125,23 @@ class SkillDialog : DialogFragment(), CoroutineScope by CoroutineScope(Dispatche
         }
     }
 
-    private fun selectedCharacteristic(view: View): SkillCharacteristic {
-        val menuValue = view.skillCharacteristic.text.toString()
+    private fun addCharacteristicChips(view: View) {
+        SkillCharacteristic.values().forEach {
+            val chip = layoutInflater.inflate(R.layout.item_chip_choice, null, false) as Chip
 
-        for (item in SkillCharacteristic.values()) {
-            if (getString(item.getReadableNameId()) == menuValue) {
-                return item
-            }
+            chip.setText(it.getShortcutNameId())
+            chip.tag = it
+            view.skillCharacteristic.addView(chip)
         }
 
-        error("User somehow managed to select something he was not supposed to")
+        view.skillCharacteristic
+            .findViewWithTag<Chip>(SkillCharacteristic.values().first())
+            .isChecked = true
+    }
+
+    private fun selectedCharacteristic(view: View): SkillCharacteristic {
+        return view.skillCharacteristic.children
+            .first { it is Chip && it.isChecked }
+            .tag as SkillCharacteristic
     }
 }

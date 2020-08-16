@@ -37,11 +37,14 @@ class SkillHolder(
         view.skillIcon.setImageResource(
             when (skill.characteristic) {
                 SkillCharacteristic.AGILITY -> R.drawable.ic_agility
+                SkillCharacteristic.BALLISTIC_SKILL -> R.drawable.ic_ballistic_skill
                 SkillCharacteristic.DEXTERITY -> R.drawable.ic_dexterity
+                SkillCharacteristic.INITIATIVE -> R.drawable.ic_initiative
                 SkillCharacteristic.INTELLIGENCE -> R.drawable.ic_intelligence
                 SkillCharacteristic.FELLOWSHIP -> R.drawable.ic_fellowship
                 SkillCharacteristic.STRENGTH -> R.drawable.ic_strength
                 SkillCharacteristic.TOUGHNESS -> R.drawable.ic_toughness
+                SkillCharacteristic.WEAPON_SKILL -> R.drawable.ic_weapon_skill
                 SkillCharacteristic.WILL_POWER -> R.drawable.ic_will_power
             }
         )
@@ -63,11 +66,14 @@ class SkillHolder(
     private fun calculateBaseLevel(characteristic: SkillCharacteristic, stats: Stats): Int {
         return when (characteristic) {
             SkillCharacteristic.AGILITY -> stats.agility
+            SkillCharacteristic.BALLISTIC_SKILL -> stats.ballisticSkill
             SkillCharacteristic.DEXTERITY -> stats.dexterity
             SkillCharacteristic.FELLOWSHIP -> stats.fellowship
+            SkillCharacteristic.INITIATIVE -> stats.initiative
             SkillCharacteristic.INTELLIGENCE -> stats.intelligence
             SkillCharacteristic.STRENGTH -> stats.strength
             SkillCharacteristic.TOUGHNESS -> stats.toughness
+            SkillCharacteristic.WEAPON_SKILL -> stats.weaponSkill
             SkillCharacteristic.WILL_POWER -> stats.willPower
         }
     }
