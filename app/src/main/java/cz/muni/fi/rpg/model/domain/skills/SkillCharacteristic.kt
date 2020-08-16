@@ -16,18 +16,18 @@ enum class SkillCharacteristic {
     WILL_POWER;
 
     @StringRes
-    fun getReadableNameId(): Int {
+    fun getShortcutNameId(): Int {
         return when (this) {
-            AGILITY -> R.string.label_agility
-            BALLISTIC_SKILL -> R.string.label_ballistic_skill
-            DEXTERITY -> R.string.label_dexterity
-            INITIATIVE -> R.string.label_initiative
-            INTELLIGENCE -> R.string.label_intelligence
-            FELLOWSHIP -> R.string.label_fellowship
-            STRENGTH -> R.string.label_strength
-            TOUGHNESS -> R.string.label_toughness
-            WEAPON_SKILL -> R.string.label_weapon_skill
-            WILL_POWER -> R.string.label_will_power
+            AGILITY -> R.string.label_shortcut_agility
+            BALLISTIC_SKILL -> R.string.label_shortcut_ballistic_skill
+            DEXTERITY -> R.string.label_shortcut_dexterity
+            INITIATIVE -> R.string.label_shortcut_initiative
+            INTELLIGENCE -> R.string.label_shortcut_intelligence
+            FELLOWSHIP -> R.string.label_shortcut_fellowship
+            STRENGTH -> R.string.label_shortcut_strength
+            TOUGHNESS -> R.string.label_shortcut_toughness
+            WEAPON_SKILL -> R.string.label_shortcut_weapon_skill
+            WILL_POWER -> R.string.label_shortcut_will_power
         }
     }
 }
