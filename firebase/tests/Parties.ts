@@ -345,6 +345,10 @@ class Parties extends Suite {
         const data = this.validCharacter(userId);
 
         for (const field of Object.keys(data)) {
+            if (field == "conditions") {
+                continue; // conditions are introduced in 1.X and should be optional for BC (TODO: Remove later)
+            }
+
             const newData = {...data};
 
             delete newData[field];

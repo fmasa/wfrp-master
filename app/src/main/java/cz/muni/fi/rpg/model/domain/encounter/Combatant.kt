@@ -1,6 +1,7 @@
 package cz.muni.fi.rpg.model.domain.encounter
 
 import cz.muni.fi.rpg.model.domain.armour.Armor
+import cz.muni.fi.rpg.model.domain.character.CurrentConditions
 import cz.muni.fi.rpg.model.domain.character.Stats
 import java.util.*
 
@@ -35,6 +36,8 @@ class Combatant(
     var traits: List<String> = traits
         private set
     var trappings: List<String> = trappings
+        private set
+    var conditions: CurrentConditions = CurrentConditions.none()
         private set
 
     companion object {

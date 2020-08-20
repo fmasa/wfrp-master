@@ -3,7 +3,7 @@ import {Suite} from "./Suite";
 import {uuid} from "uuidv4";
 import {assertFails, assertSucceeds} from "@firebase/testing";
 import {withoutField} from "./utils";
-import {Armor, Party, Stats} from "../api";
+import {Armor, Conditions, Party, Stats} from "../api";
 import {CollectionReference} from "./firebase";
 
 interface Encounter {
@@ -29,6 +29,7 @@ interface Combatant {
     },
     armor: Armor;
     position: number;
+    conditions: Conditions;
 }
 
 @suite
@@ -100,9 +101,13 @@ class Encounters extends Suite {
     @test
     async "GM can add combatant"() {
         const combatantsCollection = await this.combatantCollection();
-        const combatant = this.validCombatant();
 
+        const combatant = this.validCombatant();
         await assertSucceeds(combatantsCollection.doc(combatant.id).set(combatant));
+
+        // conditions are introduced in 1.X and should be optional for BC (TODO: Remove later)
+        const combatant2 = withoutField(this.validCombatant(), "conditions");
+        await assertSucceeds(combatantsCollection.doc(combatant2.id).set(combatant2));
     }
 
     @test
@@ -205,7 +210,10 @@ class Encounters extends Suite {
                 current: 2,
                 max: 5,
             },
-            position: 0
+            position: 0,
+            conditions: {
+                conditions: {}
+            }
         }
     }
 }
