@@ -167,9 +167,9 @@ class CharacterCreationFragment(
                 param("character_id", characterId.userId)
             }
 
-            toast("Your character has been created")
-
             withContext(Dispatchers.Main) {
+                toast("Your character has been created")
+
                 findNavController().navigate(
                     CharacterCreationFragmentDirections.openCharacter(characterId)
                 )
