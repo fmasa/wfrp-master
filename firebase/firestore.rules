@@ -296,13 +296,14 @@ service cloud.firestore {
             }
 
             function isValidNewParty(party, uid) {
-                return ["id", "name", "users", "gameMasterId", "accessCode", "ambitions", "archived"].hasAll(party.keys())
+                return ["id", "name", "users", "gameMasterId", "accessCode", "ambitions", "archived", "time"].hasAll(party.keys())
                     && party.id is string && party.id == partyId && isValidUuid(party.id)
                     && isValidPartyName(party.name)
                     && party.users == [uid]
                     && (! ("archived" in party) || party.archived is bool)
                     && (party.gameMasterId == uid || party.gameMasterId == null)
                     && party.accessCode is string && party.accessCode != ""
+                    && (! ("time" in party) || isValidImperialTime(party.time))
                     && areAmbitionsValid(party.ambitions);
             }
 
@@ -310,10 +311,18 @@ service cloud.firestore {
                 let party = request.resource.data;
                 let diff = resource.data.diff(request.resource.data);
 
-                return ["ambitions", "name", "archived"].toSet().hasAll(diff.affectedKeys())
+                return ["ambitions", "name", "archived", "time"].toSet().hasAll(diff.affectedKeys())
                     && areAmbitionsValid(party.ambitions)
                     && isValidPartyName(party.name)
+                    && (! ("time" in party) || isValidImperialTime(party.time))
                     && (! ("archived" in party) || party.archived is bool)
+            }
+
+            function isValidImperialTime(time) {
+                return time is map
+                    && time.keys().toSet() == ["imperialDay", "minutes"].toSet()
+                    && time.minutes is int && time.minutes >= 0 && time.minutes < 60 * 24
+                    && time.imperialDay is int;
             }
 
             function invitation(party) {

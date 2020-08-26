@@ -1,6 +1,8 @@
 package cz.muni.fi.rpg.model.domain.party
 import android.os.Parcelable
 import cz.muni.fi.rpg.model.domain.common.Ambitions
+import cz.muni.fi.rpg.model.domain.party.time.DateTime
+import cz.muni.fi.rpg.model.domain.party.time.ImperialDate
 import cz.muni.fi.rpg.model.generateAccessCode
 import kotlinx.android.parcel.Parcelize
 import java.util.*
@@ -12,7 +14,11 @@ data class Party(
     val gameMasterId: String?,
     val users: Set<String>,
     private var archived: Boolean = false,
-    private var ambitions: Ambitions = Ambitions("", "")
+    private var ambitions: Ambitions = Ambitions("", ""),
+    private var time: DateTime = DateTime(
+        ImperialDate.of(ImperialDate.StandaloneDay.HEXENSTAG, 2512),
+        DateTime.TimeOfDay(12, 0)
+    )
 ) : Parcelable {
     companion object {
         const val NAME_MAX_LENGTH = 50
@@ -64,5 +70,11 @@ data class Party(
 
     fun getAmbitions() = ambitions
 
+    fun getTime() = time
+
     fun getInvitation() = Invitation(id, name, accessCode)
+
+    fun changeTime(time: DateTime) {
+        this.time = time
+    }
 }
