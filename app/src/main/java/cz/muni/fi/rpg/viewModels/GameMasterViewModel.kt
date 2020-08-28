@@ -12,6 +12,7 @@ import cz.muni.fi.rpg.model.domain.common.Ambitions
 import cz.muni.fi.rpg.model.domain.party.Party
 import cz.muni.fi.rpg.model.domain.party.PartyNotFound
 import cz.muni.fi.rpg.model.domain.party.PartyRepository
+import cz.muni.fi.rpg.model.domain.party.time.DateTime
 import cz.muni.fi.rpg.model.right
 import cz.muni.fi.rpg.ui.common.CombinedLiveData
 import cz.muni.fi.rpg.ui.gameMaster.adapter.Player
@@ -56,6 +57,14 @@ class GameMasterViewModel(
         val party = parties.get(partyId)
 
         party.rename(newName)
+
+        parties.save(party)
+    }
+
+    suspend fun changeTime(change: (DateTime) -> DateTime) {
+        val party = parties.get(partyId)
+
+        party.changeTime(change(party.getTime()))
 
         parties.save(party)
     }

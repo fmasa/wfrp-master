@@ -119,6 +119,7 @@
 
     <!-- Game Master -->
     <string name="button_invite">Invite players</string>
+    <string name="title_calendar">Calendar</string>
     <string name="title_characters">Characters</string>
     <string name="title_encounters">Encounters</string>
 
