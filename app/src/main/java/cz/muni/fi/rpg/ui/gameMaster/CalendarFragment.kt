@@ -6,6 +6,7 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.observe
 import cz.muni.fi.rpg.R
+import cz.muni.fi.rpg.model.domain.party.time.MannsliebPhase
 import cz.muni.fi.rpg.model.right
 import cz.muni.fi.rpg.ui.common.serializableArgument
 import cz.muni.fi.rpg.ui.gameMaster.calendar.ChangeDateDialog
@@ -33,6 +34,7 @@ class CalendarFragment : Fragment(R.layout.fragment_calendar) {
         viewModel.party.right().observe(viewLifecycleOwner) { party ->
             party.getTime().let {
                 date.text = it.date.format()
+                moonPhase.text = getString(R.string.mannslieb_phase, MannsliebPhase.at(it.date).readableName)
             }
 
             date.setOnClickListener {
