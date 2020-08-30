@@ -104,6 +104,10 @@ dependencies {
     implementation "org.koin:koin-android:2.1.5"
     implementation "org.koin:koin-android-viewmodel:2.1.5"
     implementation "org.koin:koin-androidx-fragment:2.1.5"
+    implementation ('com.wdullaer:materialdatetimepicker:4.2.3') {
+        exclude group: 'androidx.appcompat'
+        exclude group: 'androidx.recyclerview'
+    }
 
     // Firebase-related dependencies
     implementation 'com.google.firebase:firebase-analytics:17.4.4'

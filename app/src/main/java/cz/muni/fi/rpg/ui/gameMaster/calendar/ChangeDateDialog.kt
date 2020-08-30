@@ -51,6 +51,5 @@ class ChangeDateDialog : DialogFragment(), CoroutineScope by CoroutineScope(Disp
                 }
             }
             .create()
-
     }
 }
