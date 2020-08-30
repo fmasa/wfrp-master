@@ -11,7 +11,7 @@ import kotlinx.android.parcel.Parcelize
 data class ImperialDate(
     @IntRange(from = 0)
     private val imperialDay: Int
-) : Parcelable {
+) : Comparable<ImperialDate>, Parcelable {
 
     init {
         require(imperialDay >= 0)
@@ -96,6 +96,8 @@ data class ImperialDate(
 
             return ImperialDate(imperialDay)
         }
+
+        fun of(day: Int, month: Month, year: Int): ImperialDate = of(day, month.ordinal + 1, year)
     }
 
     val dayOfWeek: DayOfWeek?
@@ -122,6 +124,8 @@ data class ImperialDate(
     fun addDay() = addDays(1)
     fun removeDay() = addDays(-1)
     fun addWeek() = addDays(DAYS_IN_WEEK)
+
+    override fun compareTo(other: ImperialDate) = imperialDay.compareTo(other.imperialDay)
 
     private fun addDays(days: Int) = ImperialDate(imperialDay + days)
 
