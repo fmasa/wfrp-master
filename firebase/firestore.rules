@@ -311,9 +311,10 @@ service cloud.firestore {
                 let party = request.resource.data;
                 let diff = resource.data.diff(request.resource.data);
 
-                return ["ambitions", "name", "archived", "time"].toSet().hasAll(diff.affectedKeys())
+                return ["ambitions", "name", "archived", "time", "users"].toSet().hasAll(diff.affectedKeys())
                     && areAmbitionsValid(party.ambitions)
                     && isValidPartyName(party.name)
+                    && party.users.toSet() == resource.data.users.toSet()
                     && (! ("time" in party) || isValidImperialTime(party.time))
                     && (! ("archived" in party) || party.archived is bool)
             }
