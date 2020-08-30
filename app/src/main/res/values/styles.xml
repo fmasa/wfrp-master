@@ -74,7 +74,7 @@
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
-    <style name="ActionBarIcon" parent="@style/Widget.AppCompat.ActionButton.Overflow" >
+    <style name="ActionBarIcon" parent="@style/Widget.AppCompat.ActionButton.Overflow">
         <item name="android:tint">@color/colorSplashScreenText</item>
     </style>
 
@@ -131,5 +131,22 @@
 
     <style name="FormDialog" parent="ThemeOverlay.MaterialComponents.Dialog.Alert">
         <item name="android:colorBackground">@color/colorBackgroundUnderCard</item>
+    </style>
+
+    <style name="CalendarDay" parent="Widget.MaterialComponents.Button.TextButton">
+        <item name="android:paddingLeft">0dp</item>
+        <item name="android:paddingRight">0dp</item>
+    </style>
+
+    <style name="CalendarDay.Inactive" parent="CalendarDay">
+        <item name="android:textColor">@color/colorText</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:foreground">?attr/selectableItemBackgroundBorderless</item>
+        <item name="android:foregroundTint">@color/colorPrimary</item>
+    </style>
+
+    <style name="CalendarDay.Active" parent="CalendarDay">
+        <item name="android:textColor">@color/colorCardBackground</item>
+        <item name="android:background">@color/colorPrimaryDark</item>
     </style>
 </resources>

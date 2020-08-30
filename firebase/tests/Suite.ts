@@ -50,6 +50,10 @@ export abstract class Suite {
                 longTerm: 'Buy a farm',
             },
             users: ["user"],
+            time: {
+                imperialDay: 10,
+                minutes: 10,
+            }
         }
     }
 

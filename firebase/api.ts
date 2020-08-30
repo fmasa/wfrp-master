@@ -9,6 +9,10 @@ export interface Party {
         shortTerm: string;
         longTerm: string;
     };
+    time: {
+        imperialDay: number;
+        minutes: number;
+    }
     users: string[];
 }
 

@@ -51,6 +51,7 @@ class GameMasterFragment(
             this,
             arrayOf(
                 { PartySummaryFragment.newInstance(args.partyId) },
+                { CalendarFragment.newInstance(args.partyId) },
                 { EncountersFragment.newInstance(args.partyId) }
             )
         )
@@ -59,7 +60,8 @@ class GameMasterFragment(
             tab.setText(
                 when(position) {
                     0 -> R.string.title_characters
-                    1 -> R.string.title_encounters
+                    1 -> R.string.title_calendar
+                    2 -> R.string.title_encounters
                     else -> error("Unknown tab on position: $position")
                 }
             )
