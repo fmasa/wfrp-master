@@ -4,6 +4,7 @@ import android.app.Dialog
 import android.content.DialogInterface
 import android.os.Bundle
 import android.view.View
+import android.widget.CheckBox
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
@@ -16,8 +17,8 @@ import cz.muni.fi.rpg.model.domain.party.Party
 import cz.muni.fi.rpg.model.domain.party.PartyRepository
 import cz.muni.fi.rpg.ui.common.forms.Form
 import cz.muni.fi.rpg.ui.common.toast
+import cz.muni.fi.rpg.ui.views.TextInput
 import cz.muni.fi.rpg.viewModels.AuthenticationViewModel
-import kotlinx.android.synthetic.main.dialog_asssemble_party.view.*
 import kotlinx.coroutines.*
 import org.koin.android.ext.android.inject
 import org.koin.android.viewmodel.ext.android.viewModel
@@ -56,7 +57,7 @@ class AssemblePartyDialog : DialogFragment(), CoroutineScope by CoroutineScope(D
         val view = inflater.inflate(R.layout.dialog_asssemble_party, null)
 
         form = Form(requireContext()).apply {
-            addTextInput(view.partyNameInput).apply {
+            addTextInput(view.findViewById<TextInput>(R.id.partyNameInput)).apply {
                 setMaxLength(Party.NAME_MAX_LENGTH)
                 addLiveRule(R.string.error_party_name_blank) {
                     !it.isNullOrBlank()
@@ -85,7 +86,7 @@ class AssemblePartyDialog : DialogFragment(), CoroutineScope by CoroutineScope(D
         }
 
         val partyId = UUID.randomUUID()
-        val partyName = view.partyNameInput.getValue()
+        val partyName = view.findViewById<TextInput>(R.id.partyNameInput).getValue()
 
         val userId = auth.getUserId()
         val party = Party(
@@ -96,8 +97,8 @@ class AssemblePartyDialog : DialogFragment(), CoroutineScope by CoroutineScope(D
         )
 
         dialog.getButton(AlertDialog.BUTTON_POSITIVE).isEnabled = false
-        view.progress.visibility = View.VISIBLE
-        view.mainView.visibility = View.GONE
+        view.findViewById<View>(R.id.progress).visibility = View.VISIBLE
+        view.findViewById<View>(R.id.mainView).visibility = View.GONE
 
         Timber.d("Dialog submitted, trying to assemble new party")
 

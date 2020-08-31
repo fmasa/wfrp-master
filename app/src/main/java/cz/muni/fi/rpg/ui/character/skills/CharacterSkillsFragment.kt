@@ -6,6 +6,7 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
 import androidx.lifecycle.observe
+import androidx.recyclerview.widget.RecyclerView
 import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.model.domain.character.CharacterId
 import cz.muni.fi.rpg.model.domain.skills.Skill
@@ -17,7 +18,6 @@ import cz.muni.fi.rpg.ui.common.NonScrollableLayoutManager
 import cz.muni.fi.rpg.ui.common.parcelableArgument
 import cz.muni.fi.rpg.viewModels.CharacterViewModel
 import cz.muni.fi.rpg.viewModels.SkillsViewModel
-import kotlinx.android.synthetic.main.fragment_character_skills.*
 import org.koin.android.viewmodel.ext.android.viewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -42,6 +42,7 @@ class CharacterSkillsFragment : Fragment(R.layout.fragment_character_skills),
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        val skillList = view.findViewById<RecyclerView>(R.id.skillList)
         skillList.layoutManager = NonScrollableLayoutManager(requireContext())
         val adapter = SkillAdapter(
             layoutInflater,
@@ -63,16 +64,16 @@ class CharacterSkillsFragment : Fragment(R.layout.fragment_character_skills),
 
                 if (skills.isNotEmpty()) {
                     skillList.visibility = View.VISIBLE
-                    noSkillsIcon.visibility = View.GONE
-                    noSkillsText.visibility = View.GONE
+                    view.findViewById<View>(R.id.noSkillsIcon).visibility = View.GONE
+                    view.findViewById<View>(R.id.noSkillsText).visibility = View.GONE
                 } else {
                     skillList.visibility = View.GONE
-                    noSkillsIcon.visibility = View.VISIBLE
-                    noSkillsText.visibility = View.VISIBLE
+                    view.findViewById<View>(R.id.noSkillsIcon).visibility = View.VISIBLE
+                    view.findViewById<View>(R.id.noSkillsText).visibility = View.VISIBLE
                 }
             }
 
-        addSkillButton.setOnClickListener {
+        view.findViewById<View>(R.id.addSkillButton).setOnClickListener {
             openSkillDialog(null)
         }
 

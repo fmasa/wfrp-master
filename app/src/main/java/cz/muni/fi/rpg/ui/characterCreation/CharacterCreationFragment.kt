@@ -2,9 +2,12 @@ package cz.muni.fi.rpg.ui.characterCreation
 
 import android.os.Bundle
 import android.view.View
+import android.widget.Button
+import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import androidx.viewpager2.widget.ViewPager2
 import androidx.navigation.navOptions
 import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.model.domain.character.*
@@ -13,7 +16,6 @@ import cz.muni.fi.rpg.ui.common.StaticFragmentsViewPagerAdapter
 import cz.muni.fi.rpg.ui.common.toast
 import cz.muni.fi.rpg.viewModels.AuthenticationViewModel
 import cz.muni.fi.rpg.viewModels.CharacterCreationViewModel
-import kotlinx.android.synthetic.main.fragment_character_creation.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -69,6 +71,11 @@ class CharacterCreationFragment(
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        val wizardPager = view.findViewById<ViewPager2>(R.id.wizardPager)
+        val buttonNext = view.findViewById<Button>(R.id.buttonNext)
+        val buttonPrevious = view.findViewById<Button>(R.id.buttonPrevious)
+        val buttonNextProgress = view.findViewById<View>(R.id.buttonNextProgress)
 
         wizardPager.isUserInputEnabled = false
         wizardPager.adapter = StaticFragmentsViewPagerAdapter(
@@ -176,10 +183,14 @@ class CharacterCreationFragment(
     }
 
     private fun showStep(index: Int) {
-        wizardPager.setCurrentItem(index, false)
+        val view = requireView()
+        val buttonNext = view.findViewById<Button>(R.id.buttonNext)
+        val buttonPrevious = view.findViewById<Button>(R.id.buttonPrevious)
+
+        view.findViewById<ViewPager2>(R.id.wizardPager).setCurrentItem(index, false)
 
         buttonNext.setText(if (index == (fragmentFactories.size - 1)) R.string.button_finish else labels[index + 1])
-        stepTitle.setText(labels[index])
+        view.findViewById<TextView>(R.id.stepTitle).setText(labels[index])
         currentFragmentIndex = index
 
         if (index == 0) {

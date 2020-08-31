@@ -4,15 +4,17 @@ import android.content.Context
 import android.content.res.ColorStateList
 import android.util.AttributeSet
 import android.view.View
+import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.core.widget.TextViewCompat
 import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.model.domain.common.Ambitions
-import kotlinx.android.synthetic.main.view_ambitions_card.view.*
 
 class AmbitionsCard(context: Context, attrs: AttributeSet) : CardView(context, attrs) {
     init {
         inflate(context, R.layout.view_ambitions_card, this)
+
+        val cardTitle = findViewById<TextView>(R.id.cardTitle)
         context.obtainStyledAttributes(attrs, R.styleable.AmbitionsCard).apply {
             getString(R.styleable.AmbitionsCard_title)?.let { name -> cardTitle.text = name }
 
@@ -38,16 +40,18 @@ class AmbitionsCard(context: Context, attrs: AttributeSet) : CardView(context, a
     }
 
     fun setValue(ambitions: Ambitions) {
+        val shortTermAmbition = findViewById<TextView>(R.id.shortTermAmbition)
         shortTermAmbition.text = ambitions.shortTerm
         val isShortTermBlank = ambitions.shortTerm.isBlank()
 
-        setViewVisibility(shortTermAmbitionNone, isShortTermBlank)
+        setViewVisibility(findViewById<TextView>(R.id.shortTermAmbitionNone), isShortTermBlank)
         setViewVisibility(shortTermAmbition, !isShortTermBlank)
 
+        val longTermAmbition = findViewById<TextView>(R.id.longTermAmbition)
         longTermAmbition.text = ambitions.longTerm
         val isLongTermBlank = ambitions.longTerm.isBlank()
 
-        setViewVisibility(longTermAmbitionNone, isLongTermBlank)
+        setViewVisibility(findViewById<TextView>(R.id.longTermAmbitionNone), isLongTermBlank)
         setViewVisibility(longTermAmbition, !isLongTermBlank)
     }
 

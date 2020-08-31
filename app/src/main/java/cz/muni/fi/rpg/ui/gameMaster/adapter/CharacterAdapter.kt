@@ -2,11 +2,11 @@ package cz.muni.fi.rpg.ui.gameMaster.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.common.EntityListener
 import cz.muni.fi.rpg.model.domain.character.Character
+import cz.muni.fi.rpg.ui.common.DiffCallback
 
 sealed class Player {
     data class UserWithoutCharacter(val userId: String) : Player()
@@ -18,9 +18,9 @@ class CharacterAdapter(
     private val onClickListener: EntityListener<Player>,
     private val onRemoveListener: EntityListener<Character>
 ) : ListAdapter<Player, CharacterHolder>(
-    object : DiffUtil.ItemCallback<Player>() {
-        override fun areItemsTheSame(oldItem: Player, newItem: Player): Boolean {
-            return when (oldItem) {
+    DiffCallback(
+        { oldItem, newItem ->
+            when (oldItem) {
                 is Player.UserWithoutCharacter -> when (newItem) {
                     is Player.UserWithoutCharacter -> oldItem.userId == newItem.userId
                     is Player.ExistingCharacter -> oldItem.userId == newItem.character.userId
@@ -30,12 +30,9 @@ class CharacterAdapter(
                     is Player.ExistingCharacter -> oldItem.character.id == newItem.character.id
                 }
             }
-        }
-
-        override fun areContentsTheSame(oldItem: Player, newItem: Player): Boolean {
-            return oldItem == newItem
-        }
-    }
+        },
+        { a, b -> a == b }
+    )
 ) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CharacterHolder {
         val view = layoutInflater.inflate(R.layout.character_item, parent, false)

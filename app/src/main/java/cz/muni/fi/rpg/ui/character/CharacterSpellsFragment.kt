@@ -6,6 +6,8 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.observe
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.getbase.floatingactionbutton.FloatingActionButton
 import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.model.domain.character.CharacterId
 import cz.muni.fi.rpg.model.domain.spells.Spell
@@ -14,8 +16,6 @@ import cz.muni.fi.rpg.ui.character.spells.adapter.SpellAdapter
 import cz.muni.fi.rpg.ui.common.parcelableArgument
 import cz.muni.fi.rpg.ui.common.toggleVisibility
 import cz.muni.fi.rpg.viewModels.SpellsViewModel
-import kotlinx.android.synthetic.main.fragment_character_spells.*
-import kotlinx.android.synthetic.main.fragment_character_spells.view.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -38,25 +38,26 @@ class CharacterSpellsFragment : Fragment(R.layout.fragment_character_spells),
     private val viewModel: SpellsViewModel by viewModel { parametersOf(characterId) }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        addNewSpellButton.setOnClickListener { openSpellDialog(null) }
+        view.findViewById<FloatingActionButton>(R.id.addNewSpellButton).setOnClickListener { openSpellDialog(null) }
 
-        spellsRecycler.layoutManager = LinearLayoutManager(context)
+        val recycler = view.findViewById<RecyclerView>(R.id.spellsRecycler)
+        recycler.layoutManager = LinearLayoutManager(context)
         val adapter = SpellAdapter(
             layoutInflater,
             { openSpellDialog(it) },
             { launch { viewModel.removeSpell(it) } }
         )
 
-        spellsRecycler.adapter = adapter
+        recycler.adapter = adapter
 
         viewModel.spells.observe(viewLifecycleOwner) {
             val noSpells = it.isEmpty()
 
             adapter.submitList(it)
 
-            view.noSpellsIcon.toggleVisibility(noSpells)
-            view.noSpellsText.toggleVisibility(noSpells)
-            view.spellsRecycler.toggleVisibility(!noSpells)
+            view.findViewById<View>(R.id.noSpellsIcon).toggleVisibility(noSpells)
+            view.findViewById<View>(R.id.noSpellsText).toggleVisibility(noSpells)
+            recycler.toggleVisibility(!noSpells)
         }
     }
 

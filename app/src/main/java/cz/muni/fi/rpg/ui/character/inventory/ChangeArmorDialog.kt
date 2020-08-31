@@ -11,8 +11,8 @@ import cz.muni.fi.rpg.model.domain.armour.Armor
 import cz.muni.fi.rpg.model.domain.character.CharacterId
 import cz.muni.fi.rpg.ui.common.forms.Form
 import cz.muni.fi.rpg.ui.common.parcelableArgument
+import cz.muni.fi.rpg.ui.views.TextInput
 import cz.muni.fi.rpg.viewModels.InventoryViewModel
-import kotlinx.android.synthetic.main.dialog_change_armor.view.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -44,13 +44,13 @@ class ChangeArmorDialog : DialogFragment(), CoroutineScope by CoroutineScope(Dis
 
         Form(activity).apply {
             mapOf(
-                view.headInput to defaults.head,
-                view.bodyInput to defaults.body,
-                view.leftArmInput to defaults.leftArm,
-                view.rightArmInput to defaults.rightArm,
-                view.shieldInput to defaults.shield,
-                view.leftLegInput to defaults.leftLeg,
-                view.rightLegInput to defaults.rightLeg
+                view.findViewById<TextInput>(R.id.headInput) to defaults.head,
+                view.findViewById<TextInput>(R.id.bodyInput) to defaults.body,
+                view.findViewById<TextInput>(R.id.leftArmInput) to defaults.leftArm,
+                view.findViewById<TextInput>(R.id.rightArmInput) to defaults.rightArm,
+                view.findViewById<TextInput>(R.id.shieldInput) to defaults.shield,
+                view.findViewById<TextInput>(R.id.leftLegInput) to defaults.leftLeg,
+                view.findViewById<TextInput>(R.id.rightLegInput) to defaults.rightLeg
             ).forEach {
                 addTextInput(it.key)
                     .setDefaultValue(it.value.toString())
@@ -76,13 +76,13 @@ class ChangeArmorDialog : DialogFragment(), CoroutineScope by CoroutineScope(Dis
         launch {
             viewModel.updateArmor(
                 Armor(
-                    head = view.headInput.getValue().toIntOrNull() ?: 0,
-                    body = view.bodyInput.getValue().toIntOrNull() ?: 0,
-                    leftArm = view.leftArmInput.getValue().toIntOrNull() ?: 0,
-                    rightArm = view.rightArmInput.getValue().toIntOrNull() ?: 0,
-                    shield = view.shieldInput.getValue().toIntOrNull() ?: 0,
-                    leftLeg = view.leftLegInput.getValue().toIntOrNull() ?: 0,
-                    rightLeg = view.rightLegInput.getValue().toIntOrNull() ?: 0
+                    head = view.findViewById<TextInput>(R.id.headInput).getValue().toIntOrNull() ?: 0,
+                    body = view.findViewById<TextInput>(R.id.bodyInput).getValue().toIntOrNull() ?: 0,
+                    leftArm = view.findViewById<TextInput>(R.id.leftArmInput).getValue().toIntOrNull() ?: 0,
+                    rightArm = view.findViewById<TextInput>(R.id.rightArmInput).getValue().toIntOrNull() ?: 0,
+                    shield = view.findViewById<TextInput>(R.id.shieldInput).getValue().toIntOrNull() ?: 0,
+                    leftLeg = view.findViewById<TextInput>(R.id.leftLegInput).getValue().toIntOrNull() ?: 0,
+                    rightLeg = view.findViewById<TextInput>(R.id.rightLegInput).getValue().toIntOrNull() ?: 0
                 )
             )
 

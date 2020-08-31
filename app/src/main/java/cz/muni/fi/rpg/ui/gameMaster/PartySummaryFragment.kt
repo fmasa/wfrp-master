@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.observe
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.model.domain.character.CharacterId
 import cz.muni.fi.rpg.model.domain.party.Invitation
@@ -16,8 +17,8 @@ import cz.muni.fi.rpg.ui.common.serializableArgument
 import cz.muni.fi.rpg.ui.common.toggleVisibility
 import cz.muni.fi.rpg.ui.gameMaster.adapter.CharacterAdapter
 import cz.muni.fi.rpg.ui.gameMaster.adapter.Player
+import cz.muni.fi.rpg.ui.views.AmbitionsCard
 import cz.muni.fi.rpg.viewModels.GameMasterViewModel
-import kotlinx.android.synthetic.main.fragment_party_summary.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -42,13 +43,16 @@ class PartySummaryFragment : Fragment(R.layout.fragment_party_summary),
     private lateinit var invitation: Invitation
 
     private fun setEmptyCollectionView(isEmpty: Boolean) {
-        noCharactersIcon.toggleVisibility(isEmpty)
-        noCharactersText.toggleVisibility(isEmpty)
-        characterListRecycler.toggleVisibility(!isEmpty)
+        requireView().findViewById<View>(R.id.noCharactersIcon).toggleVisibility(isEmpty)
+        requireView().findViewById<View>(R.id.noCharactersText).toggleVisibility(isEmpty)
+        requireView().findViewById<View>(R.id.characterListRecycler).toggleVisibility(!isEmpty)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        val inviteButton = view.findViewById<View>(R.id.inviteButton)
+        val ambitionsCard = view.findViewById<AmbitionsCard>(R.id.ambitionsCard)
+        val characterListRecycler = view.findViewById<RecyclerView>(R.id.characterListRecycler)
 
         viewModel.party.right().observe(viewLifecycleOwner) { party ->
             invitation = party.getInvitation()
@@ -65,7 +69,7 @@ class PartySummaryFragment : Fragment(R.layout.fragment_party_summary),
             }
         }
 
-        createCharacterButton.setOnClickListener {
+        view.findViewById<View>(R.id.createCharacterButton).setOnClickListener {
             findNavController().navigate(
                 GameMasterFragmentDirections.createCharacter(partyId, null)
             )

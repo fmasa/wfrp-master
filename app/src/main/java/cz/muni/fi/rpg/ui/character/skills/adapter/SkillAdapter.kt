@@ -8,27 +8,14 @@ import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.common.EntityListener
 import cz.muni.fi.rpg.model.domain.character.Stats
 import cz.muni.fi.rpg.model.domain.skills.Skill
+import cz.muni.fi.rpg.ui.common.DiffCallback
 
 class SkillAdapter(
     private val layoutInflater: LayoutInflater,
     private val onClickListener: EntityListener<Skill>,
     private val onRemoveListener: EntityListener<Skill>
 ) : ListAdapter<Pair<Skill, Stats>, SkillHolder>(
-    object : DiffUtil.ItemCallback<Pair<Skill, Stats>>() {
-        override fun areItemsTheSame(
-            oldItem: Pair<Skill, Stats>,
-            newItem: Pair<Skill, Stats>
-        ): Boolean {
-            return oldItem.first.id == newItem.first.id
-        }
-
-        override fun areContentsTheSame(
-            oldItem: Pair<Skill, Stats>,
-            newItem: Pair<Skill, Stats>
-        ): Boolean {
-            return oldItem == newItem
-        }
-    }
+    DiffCallback({a, b -> a.first.id == b.first.id}, {a, b -> a == b})
 ) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SkillHolder {

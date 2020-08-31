@@ -5,10 +5,12 @@ import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
+import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.observe
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import androidx.recyclerview.widget.RecyclerView
 import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.model.domain.encounter.Encounter
 import cz.muni.fi.rpg.model.right
@@ -17,7 +19,6 @@ import cz.muni.fi.rpg.ui.common.PartyScopedFragment
 import cz.muni.fi.rpg.ui.common.toggleVisibility
 import cz.muni.fi.rpg.ui.gameMaster.encounters.adapter.CombatantAdapter
 import cz.muni.fi.rpg.viewModels.EncounterDetailViewModel
-import kotlinx.android.synthetic.main.fragment_encounter_detail.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -46,11 +47,13 @@ class EncounterDetailFragment : PartyScopedFragment(R.layout.fragment_encounter_
 
         viewModel.encounter.right().observe(viewLifecycleOwner) { encounter ->
             setTitle(encounter.name)
-            encounterDescription.text = encounter.description
+            view.findViewById<TextView>(R.id.encounterDescription).text = encounter.description
             setHasOptionsMenu(true)
 
             this.encounter = encounter
         }
+
+        val combatantListRecycler = view.findViewById<RecyclerView>(R.id.combatantListRecycler)
 
         viewModel.combatants.observe(viewLifecycleOwner) { combatants ->
             if (combatants.isNotEmpty()) {
@@ -72,11 +75,11 @@ class EncounterDetailFragment : PartyScopedFragment(R.layout.fragment_encounter_
                 adapter.submitList(combatants)
             }
 
-            noCombatantsIcon.toggleVisibility(combatants.isEmpty())
-            noCombatantsText.toggleVisibility(combatants.isEmpty())
+            view.findViewById<View>(R.id.noCombatantsIcon).toggleVisibility(combatants.isEmpty())
+            view.findViewById<View>(R.id.noCombatantsText).toggleVisibility(combatants.isEmpty())
             combatantListRecycler.toggleVisibility(combatants.isNotEmpty())
 
-            addCombatantButton.setOnClickListener {
+            view.findViewById<View>(R.id.addCombatantButton).setOnClickListener {
                 findNavController().navigate(
                     EncounterDetailFragmentDirections.openCombatantForm(
                         encounterId = args.encounterId,

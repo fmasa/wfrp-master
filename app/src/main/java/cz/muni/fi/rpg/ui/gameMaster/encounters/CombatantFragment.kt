@@ -5,6 +5,7 @@ import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
+import android.widget.CheckBox
 import android.widget.Toast
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -18,8 +19,8 @@ import cz.muni.fi.rpg.ui.common.PartyScopedFragment
 import cz.muni.fi.rpg.ui.common.forms.Form
 import cz.muni.fi.rpg.ui.common.toast
 import cz.muni.fi.rpg.ui.common.toggleVisibility
+import cz.muni.fi.rpg.ui.views.TextInput
 import cz.muni.fi.rpg.viewModels.EncounterDetailViewModel
-import kotlinx.android.synthetic.main.fragment_combatant.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -87,13 +88,13 @@ class CombatantFragment : PartyScopedFragment(R.layout.fragment_combatant),
 
         item.isEnabled = false
 
-        val name = nameInput.getValue()
-        val note = noteInput.getValue()
-        val maxWounds = maxWoundsInput.getValue().toInt()
+        val name = requireView().findViewById<TextInput>(R.id.nameInput).getValue()
+        val note = requireView().findViewById<TextInput>(R.id.noteInput).getValue()
+        val maxWounds = requireView().findViewById<TextInput>(R.id.maxWoundsInput).getValue().toInt()
         val stats = buildStats()
         val armor = buildArmor()
-        val enemy = enemyCheckbox.isChecked
-        val alive = aliveCheckbox.isChecked
+        val enemy = requireView().findViewById<CheckBox>(R.id.enemyCheckbox).isChecked
+        val alive = requireView().findViewById<CheckBox>(R.id.aliveCheckbox).isChecked
 
         val combatantId = args.combatantId
 
@@ -136,28 +137,28 @@ class CombatantFragment : PartyScopedFragment(R.layout.fragment_combatant),
 
     private fun buildStats(): Stats {
         return Stats(
-            weaponSkill = weaponSkillInput.getValue().toInt(),
-            ballisticSkill = ballisticSkillInput.getValue().toInt(),
-            strength = strengthInput.getValue().toInt(),
-            agility = agilityInput.getValue().toInt(),
-            intelligence = intelligenceInput.getValue().toInt(),
-            initiative = initiativeInput.getValue().toInt(),
-            dexterity = dexterityInput.getValue().toInt(),
-            willPower = willPowerInput.getValue().toInt(),
-            fellowship = fellowshipInput.getValue().toInt(),
-            toughness = toughnessInput.getValue().toInt()
+            weaponSkill = requireView().findViewById<TextInput>(R.id.weaponSkillInput).getValue().toInt(),
+            ballisticSkill = requireView().findViewById<TextInput>(R.id.ballisticSkillInput).getValue().toInt(),
+            strength = requireView().findViewById<TextInput>(R.id.strengthInput).getValue().toInt(),
+            agility = requireView().findViewById<TextInput>(R.id.agilityInput).getValue().toInt(),
+            intelligence = requireView().findViewById<TextInput>(R.id.intelligenceInput).getValue().toInt(),
+            initiative = requireView().findViewById<TextInput>(R.id.initiativeInput).getValue().toInt(),
+            dexterity = requireView().findViewById<TextInput>(R.id.dexterityInput).getValue().toInt(),
+            willPower = requireView().findViewById<TextInput>(R.id.willPowerInput).getValue().toInt(),
+            fellowship = requireView().findViewById<TextInput>(R.id.fellowshipInput).getValue().toInt(),
+            toughness = requireView().findViewById<TextInput>(R.id.toughnessInput).getValue().toInt()
         )
     }
 
     private fun buildArmor(): Armor {
         return Armor(
-            head = armorHead.getValue().toInt(),
-            body = armorBody.getValue().toInt(),
-            shield = armorShield.getValue().toInt(),
-            leftArm = armorLeftArm.getValue().toInt(),
-            rightArm = armorRightArm.getValue().toInt(),
-            leftLeg =  armorLeftLeg.getValue().toInt(),
-            rightLeg = armorRightLeg.getValue().toInt()
+            head = requireView().findViewById<TextInput>(R.id.armorHead).getValue().toInt(),
+            body = requireView().findViewById<TextInput>(R.id.armorBody).getValue().toInt(),
+            shield = requireView().findViewById<TextInput>(R.id.armorShield).getValue().toInt(),
+            leftArm = requireView().findViewById<TextInput>(R.id.armorLeftArm).getValue().toInt(),
+            rightArm = requireView().findViewById<TextInput>(R.id.armorRightArm).getValue().toInt(),
+            leftLeg = requireView().findViewById<TextInput>(R.id. armorLeftLeg).getValue().toInt(),
+            rightLeg = requireView().findViewById<TextInput>(R.id.armorRightLeg).getValue().toInt()
         )
     }
 
@@ -166,45 +167,45 @@ class CombatantFragment : PartyScopedFragment(R.layout.fragment_combatant),
         initializeStats(this, combatant?.stats)
         initializeArmor(this, combatant?.armor)
 
-        progress.toggleVisibility(false)
-        mainView.toggleVisibility(true)
+        requireView().findViewById<View>(R.id.progress).toggleVisibility(false)
+        requireView().findViewById<View>(R.id.mainView).toggleVisibility(true)
     }
 
     private fun initializeBasics(form: Form, combatant: Combatant?) {
-        form.addTextInput(nameInput).apply {
+        form.addTextInput(requireView().findViewById<TextInput>(R.id.nameInput)).apply {
             setMaxLength(Combatant.NAME_MAX_LENGTH, false)
             setNotBlank(getString(R.string.error_name_blank))
             setDefaultValue(combatant?.name ?: "")
         }
 
-        form.addTextInput(noteInput).apply {
+        form.addTextInput(requireView().findViewById<TextInput>(R.id.noteInput)).apply {
             setMaxLength(Combatant.NOTE_MAX_LENGTH, false)
             setDefaultValue(combatant?.note ?: "")
         }
 
-        form.addTextInput(maxWoundsInput).apply {
+        form.addTextInput(requireView().findViewById<TextInput>(R.id.maxWoundsInput)).apply {
             setMaxLength(2, false)
             setNotBlank(getString(R.string.error_required))
             addLiveRule(R.string.error_value_is_0) { it.toString().toInt() > 0 }
             setDefaultValue(combatant?.wounds?.max?.toString() ?: "")
         }
 
-        enemyCheckbox.isChecked = combatant?.enemy ?: true
-        aliveCheckbox.isChecked = combatant?.alive ?: true
+        requireView().findViewById<CheckBox>(R.id.enemyCheckbox).isChecked = combatant?.enemy ?: true
+        requireView().findViewById<CheckBox>(R.id.aliveCheckbox).isChecked = combatant?.alive ?: true
     }
 
     private fun initializeStats(form: Form, stats: Stats?) {
         mapOf(
-            weaponSkillInput to stats?.weaponSkill,
-            ballisticSkillInput to stats?.ballisticSkill,
-            strengthInput to stats?.strength,
-            toughnessInput to stats?.toughness,
-            agilityInput to stats?.agility,
-            intelligenceInput to stats?.intelligence,
-            willPowerInput to stats?.willPower,
-            fellowshipInput to stats?.fellowship,
-            initiativeInput to stats?.initiative,
-            dexterityInput to stats?.dexterity
+            requireView().findViewById<TextInput>(R.id.weaponSkillInput) to stats?.weaponSkill,
+            requireView().findViewById<TextInput>(R.id.ballisticSkillInput) to stats?.ballisticSkill,
+            requireView().findViewById<TextInput>(R.id.strengthInput) to stats?.strength,
+            requireView().findViewById<TextInput>(R.id.toughnessInput) to stats?.toughness,
+            requireView().findViewById<TextInput>(R.id.agilityInput) to stats?.agility,
+            requireView().findViewById<TextInput>(R.id.intelligenceInput) to stats?.intelligence,
+            requireView().findViewById<TextInput>(R.id.willPowerInput) to stats?.willPower,
+            requireView().findViewById<TextInput>(R.id.fellowshipInput) to stats?.fellowship,
+            requireView().findViewById<TextInput>(R.id.initiativeInput) to stats?.initiative,
+            requireView().findViewById<TextInput>(R.id.dexterityInput) to stats?.dexterity
         ).forEach { (statInput, currentValue) ->
             form.addTextInput(statInput).apply {
                 setShowErrorInEditText()
@@ -218,13 +219,13 @@ class CombatantFragment : PartyScopedFragment(R.layout.fragment_combatant),
 
     private fun initializeArmor(form: Form, armor: Armor?) {
         mapOf(
-            armorHead to armor?.head,
-            armorShield to armor?.shield,
-            armorBody to armor?.body,
-            armorLeftArm to armor?.leftArm,
-            armorRightArm to armor?.rightArm,
-            armorLeftLeg to armor?.leftLeg,
-            armorRightLeg to armor?.rightLeg
+            requireView().findViewById<TextInput>(R.id.armorHead) to armor?.head,
+            requireView().findViewById<TextInput>(R.id.armorShield) to armor?.shield,
+            requireView().findViewById<TextInput>(R.id.armorBody) to armor?.body,
+            requireView().findViewById<TextInput>(R.id.armorLeftArm) to armor?.leftArm,
+            requireView().findViewById<TextInput>(R.id.armorRightArm) to armor?.rightArm,
+            requireView().findViewById<TextInput>(R.id.armorLeftLeg) to armor?.leftLeg,
+            requireView().findViewById<TextInput>(R.id.armorRightLeg) to armor?.rightLeg
         ).forEach { (armorInput, currentValue) ->
             form.addTextInput(armorInput).apply {
                 setShowErrorInEditText()

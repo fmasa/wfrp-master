@@ -7,17 +7,13 @@ import android.view.MenuItem
 import android.view.View
 import androidx.lifecycle.observe
 import androidx.navigation.fragment.navArgs
+import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayoutMediator
 import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.ui.common.AdManager
 import cz.muni.fi.rpg.ui.common.PartyScopedFragment
 import cz.muni.fi.rpg.ui.common.StaticFragmentsViewPagerAdapter
 import cz.muni.fi.rpg.ui.gameMaster.encounters.EncountersFragment
-import kotlinx.android.synthetic.main.fragment_character.pager
-import kotlinx.android.synthetic.main.fragment_character.tabLayout
-import kotlinx.android.synthetic.main.fragment_game_master.*
-import kotlinx.android.synthetic.main.fragment_game_master.mainView
-import kotlinx.android.synthetic.main.fragment_game_master.progress
 import timber.log.Timber
 import java.util.*
 
@@ -35,6 +31,9 @@ class GameMasterFragment(
         super.onViewCreated(view, savedInstanceState)
         Timber.d("Created view for GameMasterFragment (partyId = ${args.partyId}")
 
+        val mainView = view.findViewById<View>(R.id.mainView)
+        val progress = view.findViewById<View>(R.id.progress)
+
         party.observe(viewLifecycleOwner) { party ->
             mainView.visibility = View.VISIBLE
             progress.visibility = View.GONE
@@ -47,6 +46,7 @@ class GameMasterFragment(
             progress.visibility = View.GONE
         }
 
+        val pager = view.findViewById<ViewPager2>(R.id.pager)
         pager.adapter = StaticFragmentsViewPagerAdapter(
             this,
             arrayOf(
@@ -56,7 +56,7 @@ class GameMasterFragment(
             )
         )
 
-        TabLayoutMediator(tabLayout, pager) { tab, position ->
+        TabLayoutMediator(view.findViewById(R.id.tabLayout), pager) { tab, position ->
             tab.setText(
                 when(position) {
                     0 -> R.string.title_characters
@@ -67,7 +67,7 @@ class GameMasterFragment(
             )
         }.attach()
 
-        adManager.initializeUnit(gameMasterAdView)
+        adManager.initializeUnit(view.findViewById(R.id.gameMasterAdView))
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {

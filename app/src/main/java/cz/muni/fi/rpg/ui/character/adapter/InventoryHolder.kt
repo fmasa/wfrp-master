@@ -1,12 +1,13 @@
 package cz.muni.fi.rpg.ui.character.adapter
 
 import android.view.View
+import android.widget.TextView
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
 import androidx.recyclerview.widget.RecyclerView
 import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.common.EntityListener
 import cz.muni.fi.rpg.model.domain.inventory.InventoryItem
-import kotlinx.android.synthetic.main.inventory_item.view.*
 
 class InventoryHolder(
     private val view: View,
@@ -14,27 +15,30 @@ class InventoryHolder(
     private val onRemoveListener: EntityListener<InventoryItem>
 ) : RecyclerView.ViewHolder(view) {
     fun bind(item: InventoryItem) {
-        view.inventoryItemName.text = item.name
-        view.inventoryItemDescription.text = item.description
+        val description = view.findViewById<TextView>(R.id.inventoryItemDescription)
+        view.findViewById<TextView>(R.id.inventoryItemName).text = item.name
+        description.text = item.description
 
         if (item.quantity > 1) {
-            view.quantity.text = item.quantity.toString()
-            view.quantity.visibility = View.VISIBLE
-            view.timesSymbol.visibility = View.VISIBLE
+            val quantity = view.findViewById<TextView>(R.id.quantity)
+            quantity.text = item.quantity.toString()
+            quantity.visibility = View.VISIBLE
+            view.findViewById<TextView>(R.id.timesSymbol).visibility = View.VISIBLE
         }
 
         if (item.description.isBlank()) {
-            view.inventoryItemDescription.visibility = View.GONE
+            description.visibility = View.GONE
 
+            val inventoryItemLayout = view.findViewById<ConstraintLayout>(R.id.inventoryItemLayout)
             ConstraintSet().apply {
-                clone(view.inventoryItemLayout)
+                clone(inventoryItemLayout)
                 connect(
                     R.id.inventoryItemName,
                     ConstraintSet.BOTTOM,
                     ConstraintSet.PARENT_ID,
                     ConstraintSet.BOTTOM
                 )
-                applyTo(view.inventoryItemLayout)
+                applyTo(inventoryItemLayout)
             }
         }
 

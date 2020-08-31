@@ -1,6 +1,9 @@
 package cz.muni.fi.rpg.ui.character.skills.adapter
 
 import android.view.View
+import android.widget.ImageView
+import android.widget.TextView
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
 import androidx.recyclerview.widget.RecyclerView
 import cz.muni.fi.rpg.R
@@ -8,7 +11,6 @@ import cz.muni.fi.rpg.common.EntityListener
 import cz.muni.fi.rpg.model.domain.character.Stats
 import cz.muni.fi.rpg.model.domain.skills.Skill
 import cz.muni.fi.rpg.model.domain.skills.SkillCharacteristic
-import kotlinx.android.synthetic.main.skill_item.view.*
 
 class SkillHolder(
     private val view: View,
@@ -16,25 +18,27 @@ class SkillHolder(
     private val onRemoveListener: EntityListener<Skill>
 ) : RecyclerView.ViewHolder(view) {
     fun bind(skill: Skill, stats: Stats) {
-        view.skillItemTitle.text = skill.name
-        view.skillItemDescription.text = skill.description
+        val description = view.findViewById<TextView>(R.id.skillItemDescription)
+        view.findViewById<TextView>(R.id.skillItemTitle).text = skill.name
+        description.text = skill.description
 
         if (skill.description.isBlank()) {
-            view.skillItemDescription.visibility = View.GONE
+            description.visibility = View.GONE
 
+            val skillItemLayout = view.findViewById<ConstraintLayout>(R.id.skillItemLayout)
             ConstraintSet().apply {
-                clone(view.skillItemLayout)
+                clone(skillItemLayout)
                 connect(
                     R.id.skillItemTitle,
                     ConstraintSet.BOTTOM,
                     ConstraintSet.PARENT_ID,
                     ConstraintSet.BOTTOM
                 )
-                applyTo(view.skillItemLayout)
+                applyTo(skillItemLayout)
             }
         }
 
-        view.skillIcon.setImageResource(
+        view.findViewById<ImageView>(R.id.skillIcon).setImageResource(
             when (skill.characteristic) {
                 SkillCharacteristic.AGILITY -> R.drawable.ic_agility
                 SkillCharacteristic.BALLISTIC_SKILL -> R.drawable.ic_ballistic_skill
@@ -49,7 +53,7 @@ class SkillHolder(
             }
         )
 
-        view.skillTestNumberValue.text =
+        view.findViewById<TextView>(R.id.skillTestNumberValue).text =
             (calculateBaseLevel(skill.characteristic, stats) + skill.advances).toString()
 
         view.setOnCreateContextMenuListener { menu, v, _ ->

@@ -2,22 +2,17 @@ package cz.muni.fi.rpg.ui.character.spells.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.common.EntityListener
 import cz.muni.fi.rpg.model.domain.spells.Spell
+import cz.muni.fi.rpg.ui.common.DiffCallback
 
 class SpellAdapter(
     private val layoutInflater: LayoutInflater,
     private val onClickListener: EntityListener<Spell>,
     private val onRemoveListener: EntityListener<Spell>
-) : ListAdapter<Spell, SpellHolder>(
-    object : DiffUtil.ItemCallback<Spell>() {
-        override fun areItemsTheSame(oldItem: Spell, newItem: Spell) = oldItem.id == newItem.id
-        override fun areContentsTheSame(oldItem: Spell, newItem: Spell) = oldItem == newItem
-    }
-) {
+) : ListAdapter<Spell, SpellHolder>(DiffCallback({ a, b -> a.id == b.id }, { a, b -> a == b })) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SpellHolder {
         return SpellHolder(

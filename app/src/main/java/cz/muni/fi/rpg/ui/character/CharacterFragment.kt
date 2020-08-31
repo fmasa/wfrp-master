@@ -8,6 +8,7 @@ import android.view.View
 import androidx.lifecycle.observe
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayoutMediator
 import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.model.domain.character.CharacterId
@@ -18,7 +19,6 @@ import cz.muni.fi.rpg.ui.common.PartyScopedFragment
 import cz.muni.fi.rpg.ui.common.StaticFragmentsViewPagerAdapter
 import cz.muni.fi.rpg.viewModels.AuthenticationViewModel
 import cz.muni.fi.rpg.viewModels.CharacterViewModel
-import kotlinx.android.synthetic.main.fragment_character.*
 import org.koin.android.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 import timber.log.Timber
@@ -51,13 +51,15 @@ class CharacterFragment(
             }
             it.map {
                 character -> setTitle(character.getName())
-                mainView.visibility = View.VISIBLE
-                progress.visibility = View.GONE
+                view.findViewById<View>(R.id.mainView).visibility = View.VISIBLE
+                view.findViewById<View>(R.id.progress).visibility = View.GONE
             }
         }
 
         party.observe(viewLifecycleOwner) { setSubtitle(it.getName()) }
 
+
+        val pager = view.findViewById<ViewPager2>(R.id.pager)
         pager.adapter = StaticFragmentsViewPagerAdapter(
             this,
             arrayOf(
@@ -69,7 +71,7 @@ class CharacterFragment(
             )
         )
 
-        TabLayoutMediator(tabLayout, pager) { tab, position ->
+        TabLayoutMediator(view.findViewById(R.id.tabLayout), pager) { tab, position ->
             when (position) {
                 0 -> {
                     tab.setText(R.string.title_misc)
@@ -89,7 +91,7 @@ class CharacterFragment(
             }
         }.attach()
 
-        adManager.initializeUnit(characterAdView)
+        adManager.initializeUnit(view.findViewById(R.id.characterAdView))
     }
 
     override fun getPartyId(): UUID = args.characterId.partyId

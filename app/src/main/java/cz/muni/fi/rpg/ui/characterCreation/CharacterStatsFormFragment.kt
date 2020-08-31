@@ -6,7 +6,7 @@ import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.model.domain.character.Character
 import cz.muni.fi.rpg.model.domain.character.Stats
 import cz.muni.fi.rpg.ui.common.forms.Form
-import kotlinx.android.synthetic.main.fragment_character_stats_form.*
+import cz.muni.fi.rpg.ui.views.TextInput
 
 class CharacterStatsFormFragment :
     CharacterFormStep<CharacterStatsFormFragment.CharacteristicsData>(R.layout.fragment_character_stats_form) {
@@ -24,16 +24,16 @@ class CharacterStatsFormFragment :
         super.onViewCreated(view, savedInstanceState)
 
         val fields = mapOf(
-            weaponSkillInput to maxWeaponSkillInput,
-            ballisticSkillInput to maxBallisticSkillInput,
-            strengthInput to maxStrengthInput,
-            toughnessInput to maxToughnessInput,
-            agilityInput to maxAgilityInput,
-            intelligenceInput to maxIntelligenceInput,
-            willPowerInput to maxWillPowerInput,
-            fellowshipInput to maxFellowshipInput,
-            initiativeInput to maxInitiativeInput,
-            dexterityInput to maxDexterityInput
+            view.findViewById<TextInput>(R.id.weaponSkillInput) to view.findViewById<TextInput>(R.id.maxWeaponSkillInput),
+            view.findViewById<TextInput>(R.id.ballisticSkillInput) to view.findViewById<TextInput>(R.id.maxBallisticSkillInput),
+            view.findViewById<TextInput>(R.id.strengthInput) to view.findViewById<TextInput>(R.id.maxStrengthInput),
+            view.findViewById<TextInput>(R.id.toughnessInput) to view.findViewById<TextInput>(R.id.maxToughnessInput),
+            view.findViewById<TextInput>(R.id.agilityInput) to view.findViewById<TextInput>(R.id.maxAgilityInput),
+            view.findViewById<TextInput>(R.id.intelligenceInput) to view.findViewById<TextInput>(R.id.maxIntelligenceInput),
+            view.findViewById<TextInput>(R.id.willPowerInput) to view.findViewById<TextInput>(R.id.maxWillPowerInput),
+            view.findViewById<TextInput>(R.id.fellowshipInput) to view.findViewById<TextInput>(R.id.maxFellowshipInput),
+            view.findViewById<TextInput>(R.id.initiativeInput) to view.findViewById<TextInput>(R.id.maxInitiativeInput),
+            view.findViewById<TextInput>(R.id.dexterityInput) to view.findViewById<TextInput>(R.id.maxDexterityInput)
         )
 
         form = Form(requireContext())
@@ -64,30 +64,32 @@ class CharacterStatsFormFragment :
             return null
         }
 
+        val view = requireView()
+
         return CharacteristicsData(
             base = Stats(
-                agility = agilityInput.getValue().toInt(),
-                ballisticSkill = ballisticSkillInput.getValue().toInt(),
-                dexterity = dexterityInput.getValue().toInt(),
-                fellowship = fellowshipInput.getValue().toInt(),
-                initiative = initiativeInput.getValue().toInt(),
-                intelligence = intelligenceInput.getValue().toInt(),
-                strength = strengthInput.getValue().toInt(),
-                toughness = toughnessInput.getValue().toInt(),
-                weaponSkill = weaponSkillInput.getValue().toInt(),
-                willPower = willPowerInput.getValue().toInt()
+                agility = view.findViewById<TextInput>(R.id.agilityInput).getValue().toInt(),
+                ballisticSkill = view.findViewById<TextInput>(R.id.ballisticSkillInput).getValue().toInt(),
+                dexterity = view.findViewById<TextInput>(R.id.dexterityInput).getValue().toInt(),
+                fellowship = view.findViewById<TextInput>(R.id.fellowshipInput).getValue().toInt(),
+                initiative = view.findViewById<TextInput>(R.id.initiativeInput).getValue().toInt(),
+                intelligence = view.findViewById<TextInput>(R.id.intelligenceInput).getValue().toInt(),
+                strength = view.findViewById<TextInput>(R.id.strengthInput).getValue().toInt(),
+                toughness = view.findViewById<TextInput>(R.id.toughnessInput).getValue().toInt(),
+                weaponSkill = view.findViewById<TextInput>(R.id.weaponSkillInput).getValue().toInt(),
+                willPower = view.findViewById<TextInput>(R.id.willPowerInput).getValue().toInt()
             ),
             advances = Stats(
-                agility = maxAgilityInput.getValue().toInt(),
-                ballisticSkill = maxBallisticSkillInput.getValue().toInt(),
-                dexterity = maxDexterityInput.getValue().toInt(),
-                fellowship = maxFellowshipInput.getValue().toInt(),
-                initiative = maxInitiativeInput.getValue().toInt(),
-                intelligence = maxIntelligenceInput.getValue().toInt(),
-                strength = maxStrengthInput.getValue().toInt(),
-                toughness = maxToughnessInput.getValue().toInt(),
-                weaponSkill = maxWeaponSkillInput.getValue().toInt(),
-                willPower = maxWillPowerInput.getValue().toInt()
+                agility = view.findViewById<TextInput>(R.id.maxAgilityInput).getValue().toInt(),
+                ballisticSkill = view.findViewById<TextInput>(R.id.maxBallisticSkillInput).getValue().toInt(),
+                dexterity = view.findViewById<TextInput>(R.id.maxDexterityInput).getValue().toInt(),
+                fellowship = view.findViewById<TextInput>(R.id.maxFellowshipInput).getValue().toInt(),
+                initiative = view.findViewById<TextInput>(R.id.maxInitiativeInput).getValue().toInt(),
+                intelligence = view.findViewById<TextInput>(R.id.maxIntelligenceInput).getValue().toInt(),
+                strength = view.findViewById<TextInput>(R.id.maxStrengthInput).getValue().toInt(),
+                toughness = view.findViewById<TextInput>(R.id.maxToughnessInput).getValue().toInt(),
+                weaponSkill = view.findViewById<TextInput>(R.id.maxWeaponSkillInput).getValue().toInt(),
+                willPower = view.findViewById<TextInput>(R.id.maxWillPowerInput).getValue().toInt()
             )
         )
     }
@@ -100,17 +102,19 @@ class CharacterStatsFormFragment :
     private fun setDefaultValues() {
         val character = this.character ?: return
 
+        val view = requireView()
+
         val fields = mapOf(
-            (weaponSkillInput to maxWeaponSkillInput) to { stats: Stats -> stats.weaponSkill },
-            (ballisticSkillInput to maxBallisticSkillInput) to { stats: Stats -> stats.ballisticSkill },
-            (strengthInput to maxStrengthInput) to { stats: Stats -> stats.strength },
-            (toughnessInput to maxToughnessInput) to { stats: Stats -> stats.toughness },
-            (agilityInput to maxAgilityInput) to { stats: Stats -> stats.agility},
-            (intelligenceInput to maxIntelligenceInput) to { stats: Stats -> stats.intelligence},
-            (willPowerInput to maxWillPowerInput) to { stats: Stats -> stats.willPower},
-            (fellowshipInput to maxFellowshipInput) to { stats: Stats -> stats.fellowship},
-            (initiativeInput to maxInitiativeInput) to { stats: Stats -> stats.initiative},
-            (dexterityInput to maxDexterityInput) to { stats: Stats -> stats.dexterity}
+            (view.findViewById<TextInput>(R.id.weaponSkillInput) to view.findViewById<TextInput>(R.id.maxWeaponSkillInput)) to { stats: Stats -> stats.weaponSkill },
+            (view.findViewById<TextInput>(R.id.ballisticSkillInput) to view.findViewById<TextInput>(R.id.maxBallisticSkillInput)) to { stats: Stats -> stats.ballisticSkill },
+            (view.findViewById<TextInput>(R.id.strengthInput) to view.findViewById<TextInput>(R.id.maxStrengthInput)) to { stats: Stats -> stats.strength },
+            (view.findViewById<TextInput>(R.id.toughnessInput) to view.findViewById<TextInput>(R.id.maxToughnessInput)) to { stats: Stats -> stats.toughness },
+            (view.findViewById<TextInput>(R.id.agilityInput) to view.findViewById<TextInput>(R.id.maxAgilityInput)) to { stats: Stats -> stats.agility},
+            (view.findViewById<TextInput>(R.id.intelligenceInput) to view.findViewById<TextInput>(R.id.maxIntelligenceInput)) to { stats: Stats -> stats.intelligence},
+            (view.findViewById<TextInput>(R.id.willPowerInput) to view.findViewById<TextInput>(R.id.maxWillPowerInput)) to { stats: Stats -> stats.willPower},
+            (view.findViewById<TextInput>(R.id.fellowshipInput) to view.findViewById<TextInput>(R.id.maxFellowshipInput)) to { stats: Stats -> stats.fellowship},
+            (view.findViewById<TextInput>(R.id.initiativeInput) to view.findViewById<TextInput>(R.id.maxInitiativeInput)) to { stats: Stats -> stats.initiative},
+            (view.findViewById<TextInput>(R.id.dexterityInput) to view.findViewById<TextInput>(R.id.maxDexterityInput)) to { stats: Stats -> stats.dexterity}
         )
 
         fields.forEach { entry ->

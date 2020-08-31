@@ -1,10 +1,11 @@
 package cz.muni.fi.rpg.ui.gameMaster.encounters.adapter
 
 import android.view.View
+import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.common.EntityListener
 import cz.muni.fi.rpg.model.domain.encounter.Encounter
-import kotlinx.android.synthetic.main.encounter_item.view.*
 
 class EncounterHolder(
     private val view: View,
@@ -12,7 +13,7 @@ class EncounterHolder(
 ) : RecyclerView.ViewHolder(view) {
 
     fun bind(item: Encounter) {
-        view.title.text = item.name
-        view.encounterCard.setOnClickListener { onClickListener(item) }
+        view.findViewById<TextView>(R.id.title).text = item.name
+        view.findViewById<View>(R.id.encounterCard).setOnClickListener { onClickListener(item) }
     }
 }

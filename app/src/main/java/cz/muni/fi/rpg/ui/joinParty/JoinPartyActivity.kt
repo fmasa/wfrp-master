@@ -14,7 +14,6 @@ import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.model.domain.party.Invitation
 import cz.muni.fi.rpg.ui.AuthenticatedActivity
 import cz.muni.fi.rpg.ui.common.toast
-import kotlinx.android.synthetic.main.activity_join_party.*
 import me.dm7.barcodescanner.zxing.ZXingScannerView
 import org.koin.android.ext.android.inject
 import timber.log.Timber
@@ -55,14 +54,17 @@ class JoinPartyActivity : AuthenticatedActivity(R.layout.activity_join_party),
 
         requestCameraPermissionIfNecessary()
 
-        scanner.setResultHandler(this)
-        scanner.startCamera()
+
+        findViewById<ZXingScannerView>(R.id.scanner).let { scanner ->
+            scanner.setResultHandler(this)
+            scanner.startCamera()
+        }
     }
 
     override fun onPause() {
         super.onPause()
 
-        scanner.stopCamera()
+        findViewById<ZXingScannerView>(R.id.scanner).stopCamera()
     }
 
     override fun onSuccessfulPartyJoin() {
@@ -108,5 +110,5 @@ class JoinPartyActivity : AuthenticatedActivity(R.layout.activity_join_party),
      */
     private fun deserializeInvitation(json: String) = jsonMapper.readValue(json, Invitation::class.java)
 
-    private fun resumeScanning() = scanner.resumeCameraPreview(this)
+    private fun resumeScanning() = findViewById<ZXingScannerView>(R.id.scanner).resumeCameraPreview(this)
 }

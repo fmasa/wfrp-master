@@ -15,10 +15,10 @@ import cz.muni.fi.rpg.ui.common.optionalParcelableArgument
 import cz.muni.fi.rpg.ui.common.serializableArgument
 import cz.muni.fi.rpg.ui.common.toast
 import cz.muni.fi.rpg.ui.common.toggleVisibility
+import cz.muni.fi.rpg.ui.views.TextInput
 import cz.muni.fi.rpg.viewModels.EncountersViewModel
 import kotlinx.android.parcel.Parcelize
 import kotlinx.android.parcel.TypeParceler
-import kotlinx.android.synthetic.main.dialog_encounter.view.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -58,13 +58,13 @@ class EncounterDialog : DialogFragment(), CoroutineScope by CoroutineScope(Dispa
         val view = activity.layoutInflater.inflate(R.layout.dialog_encounter, null)
 
         val form = Form(activity).apply {
-            addTextInput(view.encounterName).apply {
+            addTextInput(view.findViewById<TextInput>(R.id.encounterName)).apply {
                 addLiveRule(R.string.error_cannot_be_empty) { ! it.isNullOrBlank() }
                 setMaxLength(Encounter.NAME_MAX_LENGTH, false)
                 defaults?.let { setDefaultValue(it.name) }
             }
 
-            addTextInput(view.encounterDescription).apply {
+            addTextInput(view.findViewById<TextInput>(R.id.encounterDescription)).apply {
                 setMaxLength(Encounter.DESCRIPTION_MAX_LENGTH, false)
                 defaults?.let { setDefaultValue(it.description) }
             }
@@ -87,8 +87,8 @@ class EncounterDialog : DialogFragment(), CoroutineScope by CoroutineScope(Dispa
                 }
 
                 it.isEnabled = false
-                view.mainView.toggleVisibility(false)
-                view.progress.toggleVisibility(true)
+                view.findViewById<View>(R.id.mainView).toggleVisibility(false)
+                view.findViewById<View>(R.id.progress).toggleVisibility(true)
 
                 dialogSubmitted(view)
             }
@@ -103,13 +103,13 @@ class EncounterDialog : DialogFragment(), CoroutineScope by CoroutineScope(Dispa
             if (defaults != null) {
                 viewModel.updateEncounter(
                     defaults.id,
-                    view.encounterName.getValue(),
-                    view.encounterDescription.getValue()
+                    view.findViewById<TextInput>(R.id.encounterName).getValue(),
+                    view.findViewById<TextInput>(R.id.encounterDescription).getValue()
                 )
             } else {
                 viewModel.createEncounter(
-                    view.encounterName.getValue(),
-                    view.encounterDescription.getValue()
+                    view.findViewById<TextInput>(R.id.encounterName).getValue(),
+                    view.findViewById<TextInput>(R.id.encounterDescription).getValue()
                 )
             }
             withContext(Dispatchers.Main) {

@@ -7,18 +7,14 @@ import androidx.recyclerview.widget.ListAdapter
 import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.common.EntityListener
 import cz.muni.fi.rpg.model.domain.party.Party
+import cz.muni.fi.rpg.ui.common.DiffCallback
 
 class PartyAdapter(
     private val layoutInflater: LayoutInflater,
     private val userId: String,
     private val onClickListener: EntityListener<Party>,
     private val onRemoveListener: EntityListener<Party>
-) : ListAdapter<Party, PartyHolder>(
-    object : DiffUtil.ItemCallback<Party>() {
-        override fun areItemsTheSame(oldItem: Party, newItem: Party) = oldItem.id == newItem.id
-        override fun areContentsTheSame(oldItem: Party, newItem: Party) = oldItem == newItem
-    }
-) {
+) : ListAdapter<Party, PartyHolder>(DiffCallback({ a, b -> a.id == b.id}, {a, b -> a == b})) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PartyHolder {
         return PartyHolder(

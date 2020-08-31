@@ -7,17 +7,13 @@ import androidx.recyclerview.widget.DiffUtil
 import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.common.EntityListener
 import cz.muni.fi.rpg.model.domain.inventory.InventoryItem
+import cz.muni.fi.rpg.ui.common.DiffCallback
 
 class InventoryAdapter(
     private val layoutInflater: LayoutInflater,
     private val onClickListener: EntityListener<InventoryItem>,
     private val onRemoveListener: EntityListener<InventoryItem>
-) : ListAdapter<InventoryItem, InventoryHolder>(
-    object : DiffUtil.ItemCallback<InventoryItem>() {
-        override fun areItemsTheSame(oldItem: InventoryItem, newItem: InventoryItem) = oldItem.id == newItem.id
-        override fun areContentsTheSame(oldItem: InventoryItem, newItem: InventoryItem) = oldItem == newItem
-    }
-) {
+) : ListAdapter<InventoryItem, InventoryHolder>(DiffCallback({a, b -> a.id == b.id}, {a, b -> a == b})) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): InventoryHolder {
         return InventoryHolder(

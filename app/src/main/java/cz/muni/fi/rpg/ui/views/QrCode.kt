@@ -6,11 +6,11 @@ import android.graphics.Color
 import android.util.AttributeSet
 import android.view.View
 import android.widget.FrameLayout
+import android.widget.ImageView
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.EncodeHintType
 import com.google.zxing.common.BitMatrix
 import com.google.zxing.qrcode.QRCodeWriter
-import kotlinx.android.synthetic.main.view_qr_code.view.*
 import cz.muni.fi.rpg.R
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -24,11 +24,14 @@ class QrCode(context: Context, attrs: AttributeSet) : FrameLayout(context, attrs
 
     suspend fun drawCode(contents: String) {
         withContext(Dispatchers.Main) {
+            val progress = findViewById<View>(R.id.progress)
+            val qrCodeImage = findViewById<View>(R.id.qrCodeImage)
+
             progress.visibility = View.VISIBLE
             qrCodeImage.visibility = View.INVISIBLE
 
             val hints = mapOf(EncodeHintType.CHARACTER_SET to "UTF-8")
-            qrCodeImage.setImageBitmap(
+            findViewById<ImageView>(R.id.qrCodeImage).setImageBitmap(
                 withContext(Dispatchers.Default) {
                     bitMatrixToBitmap(
                         writer.encode(contents, BarcodeFormat.QR_CODE, width, width, hints)

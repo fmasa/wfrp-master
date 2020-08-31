@@ -1,12 +1,13 @@
 package cz.muni.fi.rpg.ui.character.skills.talents
 
 import android.view.View
+import android.widget.TextView
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
 import androidx.recyclerview.widget.RecyclerView
 import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.common.EntityListener
 import cz.muni.fi.rpg.model.domain.talents.Talent
-import kotlinx.android.synthetic.main.talent_item.view.*
 
 class TalentHolder(
     private val view: View,
@@ -14,22 +15,25 @@ class TalentHolder(
     private val onRemoveListener: EntityListener<Talent>
 ) : RecyclerView.ViewHolder(view) {
     fun bind(talent: Talent) {
-        view.talentItemTitle.text = talent.name
-        view.talentItemDescription.text = talent.description
-        view.takenValue.text = talent.taken.toString()
+        val description = view.findViewById<TextView>(R.id.talentItemDescription)
+
+        view.findViewById<TextView>(R.id.talentItemTitle).text = talent.name
+        description.text = talent.description
+        view.findViewById<TextView>(R.id.takenValue).text = talent.taken.toString()
 
         if (talent.description.isBlank()) {
-            view.talentItemDescription.visibility = View.GONE
+            description.visibility = View.GONE
 
+            val talentItemLayout = view.findViewById<ConstraintLayout>(R.id.talentItemLayout)
             ConstraintSet().apply {
-                clone(view.talentItemLayout)
+                clone(talentItemLayout)
                 connect(
                     R.id.talentItemTitle,
                     ConstraintSet.BOTTOM,
                     ConstraintSet.PARENT_ID,
                     ConstraintSet.BOTTOM
                 )
-                applyTo(view.talentItemLayout)
+                applyTo(talentItemLayout)
             }
         }
 

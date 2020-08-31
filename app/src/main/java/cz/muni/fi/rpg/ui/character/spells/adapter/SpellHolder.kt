@@ -1,12 +1,13 @@
 package cz.muni.fi.rpg.ui.character.spells.adapter
 
 import android.view.View
+import android.widget.TextView
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
 import androidx.recyclerview.widget.RecyclerView
 import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.common.EntityListener
 import cz.muni.fi.rpg.model.domain.spells.Spell
-import kotlinx.android.synthetic.main.spell_item.view.*
 
 class SpellHolder(
     private val view: View,
@@ -14,23 +15,25 @@ class SpellHolder(
     private val onRemoveListener: EntityListener<Spell>
 ) : RecyclerView.ViewHolder(view) {
     fun bind(item: Spell) {
-        view.spellName.text = item.name
-        view.spellEffect.text = item.effect
+        val spellEffect = view.findViewById<TextView>(R.id.spellEffect)
+        view.findViewById<TextView>(R.id.spellName).text = item.name
+        spellEffect.text = item.effect
 
-        view.castingNumber.text = item.castingNumber.toString()
+        view.findViewById<TextView>(R.id.castingNumber).text = item.castingNumber.toString()
 
         if (item.effect.isBlank()) {
-            view.spellEffect.visibility = View.GONE
+            spellEffect.visibility = View.GONE
 
+            val spellLayout = view.findViewById<ConstraintLayout>(R.id.spellLayout)
             ConstraintSet().apply {
-                clone(view.spellLayout)
+                clone(spellLayout)
                 connect(
                     R.id.spellName,
                     ConstraintSet.BOTTOM,
                     ConstraintSet.PARENT_ID,
                     ConstraintSet.BOTTOM
                 )
-                applyTo(view.spellLayout)
+                applyTo(spellLayout)
             }
         }
 

@@ -1,11 +1,11 @@
 package cz.muni.fi.rpg.ui.gameMaster.adapter
 
 import android.view.View
+import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.common.EntityListener
 import cz.muni.fi.rpg.model.domain.character.Character
-import kotlinx.android.synthetic.main.character_item.view.*
 
 class CharacterHolder(
     itemView: View,
@@ -15,18 +15,18 @@ class CharacterHolder(
     fun bind(item: Player) {
         when (item) {
             is Player.UserWithoutCharacter -> {
-                listOf(itemView.character_name, itemView.character_job, itemView.character_race)
-                    .forEach { it.visibility = View.GONE }
+                listOf(R.id.character_name, R.id.character_job, R.id.character_race)
+                    .forEach { itemView.findViewById<View>(it).visibility = View.GONE }
 
-                itemView.waitingForCharacter.visibility = View.VISIBLE
+                itemView.findViewById<View>(R.id.waitingForCharacter).visibility = View.VISIBLE
                 itemView.setOnClickListener {  }
                 itemView.isClickable = false
                 itemView.isFocusable = false
             }
             is Player.ExistingCharacter -> {
-                itemView.character_name.text = item.character.getName()
-                itemView.character_race.setText(item.character.getRace().getReadableNameId())
-                itemView.character_job.text = item.character.getCareer()
+                itemView.findViewById<TextView>(R.id.character_name).text = item.character.getName()
+                itemView.findViewById<TextView>(R.id.character_race).setText(item.character.getRace().getReadableNameId())
+                itemView.findViewById<TextView>(R.id.character_job).text = item.character.getCareer()
                 itemView.isClickable = true
                 itemView.isFocusable = true
 

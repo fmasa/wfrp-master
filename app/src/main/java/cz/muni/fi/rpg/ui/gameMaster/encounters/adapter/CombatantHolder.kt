@@ -2,12 +2,13 @@ package cz.muni.fi.rpg.ui.gameMaster.encounters.adapter
 
 import android.content.res.ColorStateList
 import android.view.View
+import android.widget.ImageView
+import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.common.EntityListener
 import cz.muni.fi.rpg.model.domain.encounter.Combatant
-import kotlinx.android.synthetic.main.combatant_item.view.*
 
 class CombatantHolder(
     private val view: View,
@@ -16,11 +17,11 @@ class CombatantHolder(
 ) : RecyclerView.ViewHolder(view) {
 
     fun bind(item: Combatant) {
-        view.combatantName.text = item.name
+        view.findViewById<TextView>(R.id.combatantName).text = item.name
 
         if (! item.alive) {
-            view.combatantIcon.setImageResource(R.drawable.ic_dead)
-            view.combatantIcon.backgroundTintList = ColorStateList.valueOf(
+            view.findViewById<ImageView>(R.id.combatantIcon).setImageResource(R.drawable.ic_dead)
+            view.findViewById<ImageView>(R.id.combatantIcon).backgroundTintList = ColorStateList.valueOf(
                 ContextCompat.getColor(view.context, R.color.colorGray)
             )
         }

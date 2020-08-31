@@ -17,7 +17,6 @@ import cz.muni.fi.rpg.ui.common.toggleVisibility
 import cz.muni.fi.rpg.ui.gameMaster.GameMasterFragmentDirections
 import cz.muni.fi.rpg.ui.gameMaster.encounters.adapter.EncounterAdapter
 import cz.muni.fi.rpg.viewModels.EncountersViewModel
-import kotlinx.android.synthetic.main.fragment_encounters.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -26,8 +25,7 @@ import org.koin.android.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 import java.util.*
 
-class EncountersFragment : Fragment(R.layout.fragment_encounters),
-    CoroutineScope by CoroutineScope(Dispatchers.Default) {
+class EncountersFragment : Fragment(R.layout.fragment_encounters) {
     companion object {
         private const val ARGUMENT_PARTY_ID = "partyId"
 
@@ -40,74 +38,83 @@ class EncountersFragment : Fragment(R.layout.fragment_encounters),
     private val partyId: UUID by serializableArgument(ARGUMENT_PARTY_ID)
     private val viewModel: EncountersViewModel by viewModel { parametersOf(partyId) }
 
-    private lateinit var encounters: MutableList<Encounter>
-
-    private lateinit var swapping: Job
+    private val encounters: MutableList<Encounter> = mutableListOf()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val adapter = EncounterAdapter(layoutInflater) {encounter ->
+        val adapter = EncounterAdapter(layoutInflater) { encounter ->
             findNavController().navigate(
                 GameMasterFragmentDirections.openEncounter(
                     EncounterId(partyId = partyId, encounterId = encounter.id)
                 )
             )
         }
+
+        val encounterListRecycler = view.findViewById<RecyclerView>(R.id.encounterListRecycler)
         encounterListRecycler.adapter = adapter
         encounterListRecycler.layoutManager = LinearLayoutManager(context)
 
         viewModel.encounters.observe(viewLifecycleOwner) { encounters ->
-            progress.toggleVisibility(false)
-            mainView.toggleVisibility(true)
+            view.findViewById<View>(R.id.progress).toggleVisibility(false)
+            view.findViewById<View>(R.id.mainView).toggleVisibility(true)
 
-            this.encounters = mutableListOf()
+            this.encounters.clear()
             this.encounters.addAll(encounters)
 
             adapter.submitList(this.encounters)
 
-            noEncountersText.toggleVisibility(encounters.isEmpty())
-            noEncountersIcon.toggleVisibility(encounters.isEmpty())
+            view.findViewById<View>(R.id.noEncountersText).toggleVisibility(encounters.isEmpty())
+            view.findViewById<View>(R.id.noEncountersIcon).toggleVisibility(encounters.isEmpty())
             encounterListRecycler.toggleVisibility(encounters.isNotEmpty())
-            timeline.toggleVisibility(encounters.isNotEmpty())
+            view.findViewById<View>(R.id.timeline).toggleVisibility(encounters.isNotEmpty())
         }
 
-        ItemTouchHelper(
-            object : ItemTouchHelper.SimpleCallback(ItemTouchHelper.UP or ItemTouchHelper.DOWN, 0) {
+        ItemTouchHelper(ItemTouchHelperCallback(encounters, viewModel, adapter))
+            .attachToRecyclerView(encounterListRecycler)
 
-                override fun onMove(
-                    recyclerView: RecyclerView,
-                    viewHolder: RecyclerView.ViewHolder,
-                    target: RecyclerView.ViewHolder
-                ): Boolean {
-                    val fromPosition = viewHolder.adapterPosition
-                    val toPosition = target.adapterPosition
-
-                    Collections.swap(encounters, fromPosition, toPosition)
-                    adapter.notifyItemMoved(fromPosition, toPosition)
-
-                    return false
-                }
-
-                override fun clearView(
-                    recyclerView: RecyclerView,
-                    viewHolder: RecyclerView.ViewHolder
-                ) {
-                    super.clearView(recyclerView, viewHolder)
-
-                    swapping = launch {
-                        viewModel.reorderEncounters(
-                            (0 until encounters.size).map { encounters[it].id to it }.toMap()
-                        )
-                    }
-                }
-                override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-                }
-            }
-        ).attachToRecyclerView(encounterListRecycler)
-
-        addEncounter.setOnClickListener {
+        view.findViewById<View>(R.id.addEncounter).setOnClickListener {
             EncounterDialog.newInstance(partyId, null).show(childFragmentManager, null)
+        }
+    }
+
+    private class ItemTouchHelperCallback(
+        private val encounters: MutableList<Encounter>,
+        private val viewModel: EncountersViewModel,
+        private val adapter: EncounterAdapter
+    ) : ItemTouchHelper.SimpleCallback(ItemTouchHelper.UP or ItemTouchHelper.DOWN, 0),
+        CoroutineScope by CoroutineScope(Dispatchers.Default) {
+
+        private lateinit var swapping: Job
+
+        override fun onMove(
+            recyclerView: RecyclerView,
+            viewHolder: RecyclerView.ViewHolder,
+            target: RecyclerView.ViewHolder
+        ): Boolean {
+            val fromPosition = viewHolder.adapterPosition
+            val toPosition = target.adapterPosition
+
+            Collections.swap(encounters, fromPosition, toPosition)
+            adapter.notifyItemMoved(fromPosition, toPosition)
+
+            return false
+        }
+
+        override fun clearView(
+            recyclerView: RecyclerView,
+            viewHolder: RecyclerView.ViewHolder
+        ) {
+            super.clearView(recyclerView, viewHolder)
+
+            swapping = launch {
+                viewModel.reorderEncounters(
+                    (0 until encounters.size).map { encounters[it].id to it }.toMap()
+                )
+            }
+        }
+
+        override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
         }
     }
 }

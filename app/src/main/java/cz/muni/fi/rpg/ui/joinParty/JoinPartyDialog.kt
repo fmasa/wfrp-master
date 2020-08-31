@@ -6,6 +6,7 @@ import android.content.DialogInterface
 import android.os.Bundle
 import android.text.SpannableStringBuilder
 import android.view.View
+import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.core.os.bundleOf
 import androidx.core.text.bold
@@ -22,7 +23,6 @@ import cz.muni.fi.rpg.ui.common.parcelableArgument
 import cz.muni.fi.rpg.ui.common.stringArgument
 import cz.muni.fi.rpg.ui.common.toast
 import cz.muni.fi.rpg.viewModels.JoinPartyViewModel
-import kotlinx.android.synthetic.main.dialog_join_party.view.*
 import kotlinx.coroutines.*
 import org.koin.android.viewmodel.ext.android.viewModel
 import timber.log.Timber
@@ -76,7 +76,7 @@ class JoinPartyDialog : DialogFragment(), CoroutineScope by CoroutineScope(Dispa
         val activity = requireActivity()
         val view = activity.layoutInflater.inflate(R.layout.dialog_join_party, null)
 
-        view.partyNamePrompt.text = SpannableStringBuilder()
+        view.findViewById<TextView>(R.id.partyNamePrompt).text = SpannableStringBuilder()
             .append(getString(R.string.join_party_dialog_party_name))
             .append(" ")
             .bold { append(invitation.partyName) }
@@ -99,9 +99,9 @@ class JoinPartyDialog : DialogFragment(), CoroutineScope by CoroutineScope(Dispa
     }
 
     private fun onConfirm(dialog: AlertDialog, view: View) {
-        view.partyNamePrompt.visibility = View.GONE
-        view.prompt.visibility = View.GONE
-        view.progress.visibility = View.VISIBLE
+        view.findViewById<View>(R.id.partyNamePrompt).visibility = View.GONE
+        view.findViewById<View>(R.id.prompt).visibility = View.GONE
+        view.findViewById<View>(R.id.progress).visibility = View.VISIBLE
 
         dialog.getButton(AlertDialog.BUTTON_POSITIVE).isEnabled = false
         dialog.getButton(AlertDialog.BUTTON_NEGATIVE).isEnabled = false

@@ -7,16 +7,14 @@ import android.os.Parcelable
 import android.util.AttributeSet
 import android.util.TypedValue
 import android.view.Gravity
-import android.widget.FrameLayout
-import android.widget.TableRow
-import android.widget.TextView
+import android.view.View
+import android.widget.*
 import androidx.appcompat.view.ContextThemeWrapper
 import androidx.appcompat.widget.AppCompatButton
 import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.model.domain.party.time.ImperialDate
 import cz.muni.fi.rpg.ui.common.ColorCircleDrawable
 import cz.muni.fi.rpg.ui.common.toggleVisibility
-import kotlinx.android.synthetic.main.view_calendar.view.*
 import timber.log.Timber
 
 class ImperialCalendar(date: ImperialDate, context: Context, attrs: AttributeSet?) :
@@ -40,13 +38,14 @@ class ImperialCalendar(date: ImperialDate, context: Context, attrs: AttributeSet
     }
 
     private class SavedState : BaseSavedState {
-
         companion object {
             @JvmField
-            val CREATOR: Parcelable.Creator<SavedState> = object : Parcelable.Creator<SavedState> {
-                override fun createFromParcel(`in`: Parcel): SavedState? = SavedState(`in`)
-                override fun newArray(size: Int): Array<SavedState?> = arrayOfNulls(size)
-            }
+            val CREATOR: Parcelable.Creator<SavedState> = Creator()
+        }
+
+        private class Creator: Parcelable.Creator<SavedState> {
+            override fun createFromParcel(`in`: Parcel): SavedState? = SavedState(`in`)
+            override fun newArray(size: Int): Array<SavedState?> = arrayOfNulls(size)
         }
 
         val date: ImperialDate
@@ -93,10 +92,10 @@ class ImperialCalendar(date: ImperialDate, context: Context, attrs: AttributeSet
             field = value
 
             @SuppressLint("SetTextI18n")
-            currentMonthName.text = value.month.readableName + ", " + value.year
+            findViewById<TextView>(R.id.currentMonthName).text = value.month.readableName + ", " + value.year
             redrawDays(activeMonth)
 
-            previousMonth.toggleVisibility(value.year > 1 || value.month.ordinal > 0)
+            findViewById<View>(R.id.previousMonth).toggleVisibility(value.year > 1 || value.month.ordinal > 0)
 
             val size = YEAR_COLUMNS * YEAR_ROWS
             val firstYear = (value.year - 1) / size * size + 1
@@ -112,27 +111,27 @@ class ImperialCalendar(date: ImperialDate, context: Context, attrs: AttributeSet
 
         activeMonth = ActiveMonth(calculateVisibleMonth(date), date.year)
 
-        previousMonth.setOnClickListener {
+        findViewById<View>(R.id.previousMonth).setOnClickListener {
             activeMonth = activeMonth.previousMonth()
         }
 
-        nextMonth.setOnClickListener {
+        findViewById<View>(R.id.nextMonth).setOnClickListener {
             activeMonth = activeMonth.nextMonth()
         }
 
-        previousYearRange.setOnClickListener {
+        findViewById<View>(R.id.previousYearRange).setOnClickListener {
             val size = YEAR_COLUMNS * YEAR_ROWS
             activeYearRange = activeYearRange.first - size..activeYearRange.last - size
             redrawYears()
         }
 
-        nextYearRange.setOnClickListener {
+        findViewById<View>(R.id.nextYearRange).setOnClickListener {
             val size = YEAR_COLUMNS * YEAR_ROWS
             activeYearRange = activeYearRange.first + size..activeYearRange.last + size
             redrawYears()
         }
 
-        currentMonthName.setOnClickListener {
+        findViewById<View>(R.id.currentMonthName).setOnClickListener {
             redrawYears()
         }
     }
@@ -152,19 +151,21 @@ class ImperialCalendar(date: ImperialDate, context: Context, attrs: AttributeSet
     }
 
     private fun redrawYears() {
-        dayLayout.toggleVisibility(false)
-        yearLayout.toggleVisibility(true)
+        findViewById<View>(R.id.dayLayout).toggleVisibility(false)
+        findViewById<View>(R.id.yearLayout).toggleVisibility(true)
 
         val rows = (0 until YEAR_ROWS).map { TableRow(context) }
 
         @SuppressLint("SetTextI18n")
-        currentYearRange.text = "${activeYearRange.first} - ${activeYearRange.last}"
+        findViewById<TextView>(R.id.currentYearRange).text = "${activeYearRange.first} - ${activeYearRange.last}"
 
-        previousYearRange.toggleVisibility(activeYearRange.first != 1)
+        findViewById<View>(R.id.previousYearRange).toggleVisibility(activeYearRange.first != 1)
 
         activeYearRange.forEach {
             rows[(it - 1) % YEAR_ROWS].addView(yearButton(it, it == activeMonth.year))
         }
+
+        val yearTable = findViewById<TableLayout>(R.id.yearTable)
 
         yearTable.removeAllViews()
         rows.forEach(yearTable::addView)
@@ -190,8 +191,8 @@ class ImperialCalendar(date: ImperialDate, context: Context, attrs: AttributeSet
     }
 
     private fun redrawDays(month: ActiveMonth) {
-        yearLayout.toggleVisibility(false)
-        dayLayout.toggleVisibility(true)
+        findViewById<View>(R.id.yearLayout).toggleVisibility(false)
+        findViewById<View>(R.id.dayLayout).toggleVisibility(true)
 
         val standaloneDay = month.month.standaloneDayAtTheBeginning
 
@@ -216,6 +217,7 @@ class ImperialCalendar(date: ImperialDate, context: Context, attrs: AttributeSet
             date.takeIf { it.year == month.year && calculateVisibleMonth(it) == month.month }
                 ?.let { date -> date.day.fold({ 0 }, { it.first }) }
 
+        val standaloneDayButton = findViewById<Button>(R.id.standaloneDayButton)
         standaloneDayButton.toggleVisibility(standaloneDay != null)
 
         if (standaloneDay != null) {
@@ -242,6 +244,7 @@ class ImperialCalendar(date: ImperialDate, context: Context, attrs: AttributeSet
             )
         }
 
+        val dayTable = findViewById<TableLayout>(R.id.dayTable)
         dayTable.removeAllViews()
         if (rows.first().childCount < 6) {
             rows.last().addView(fakeButton())

@@ -11,7 +11,7 @@ import cz.muni.fi.rpg.common.EntityListener
 import cz.muni.fi.rpg.model.domain.talents.Talent
 import cz.muni.fi.rpg.ui.common.forms.Form
 import cz.muni.fi.rpg.ui.common.optionalParcelableArgument
-import kotlinx.android.synthetic.main.dialog_talent.view.*
+import cz.muni.fi.rpg.ui.views.TextInput
 import java.util.*
 
 class TalentDialog : DialogFragment() {
@@ -43,16 +43,16 @@ class TalentDialog : DialogFragment() {
         val view = inflater.inflate(R.layout.dialog_talent, null)
 
         val form = Form(requireContext()).apply {
-            addTextInput(view.talentNameInput).apply {
+            addTextInput(view.findViewById<TextInput>(R.id.talentNameInput)).apply {
                 setMaxLength(Talent.NAME_MAX_LENGTH, false)
                 setNotBlank(getString(R.string.error_talent_name_empty))
             }
 
-            addTextInput(view.talentDescriptionInput).apply {
+            addTextInput(view.findViewById<TextInput>(R.id.talentDescriptionInput)).apply {
                 setMaxLength(Talent.DESCRIPTION_MAX_LENGTH, false)
             }
 
-            addTextInput(view.talentTakenInput).apply {
+            addTextInput(view.findViewById<TextInput>(R.id.talentTakenInput)).apply {
                 setNotBlank("Taken must be number greater than 0")
                 addLiveRule("Taken must be number greater than 0") {
                     val value = it.toString().toIntOrNull()
@@ -80,19 +80,20 @@ class TalentDialog : DialogFragment() {
     }
 
     private fun setDefaults(view: View) {
-        view.talentTakenInput.setDefaultValue("1")
+        val talentTakenInput = view.findViewById<TextInput>(R.id.talentTakenInput)
+        talentTakenInput.setDefaultValue("1")
 
         val talent = this.talent ?: return
 
-        view.talentNameInput.setDefaultValue(talent.name)
-        view.talentDescriptionInput.setDefaultValue(talent.description)
-        view.talentTakenInput.setDefaultValue(talent.taken.toString())
+        view.findViewById<TextInput>(R.id.talentNameInput).setDefaultValue(talent.name)
+        view.findViewById<TextInput>(R.id.talentDescriptionInput).setDefaultValue(talent.description)
+        talentTakenInput.setDefaultValue(talent.taken.toString())
     }
 
     private fun dialogSubmitted(dialog: AlertDialog, view: View, form: Form) {
-        val name = view.talentNameInput.getValue()
-        val description = view.talentDescriptionInput.getValue()
-        val taken = view.talentTakenInput.getValue().toInt()
+        val name = view.findViewById<TextInput>(R.id.talentNameInput).getValue()
+        val description = view.findViewById<TextInput>(R.id.talentDescriptionInput).getValue()
+        val taken = view.findViewById<TextInput>(R.id.talentTakenInput).getValue().toInt()
 
         if (!form.validate()) {
             return

@@ -7,6 +7,8 @@ import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.observe
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.getbase.floatingactionbutton.FloatingActionsMenu
 import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.model.domain.character.CharacterId
 import cz.muni.fi.rpg.model.domain.party.Party
@@ -16,7 +18,6 @@ import cz.muni.fi.rpg.ui.joinParty.JoinPartyActivity
 import cz.muni.fi.rpg.ui.partyList.adapter.PartyAdapter
 import cz.muni.fi.rpg.viewModels.AuthenticationViewModel
 import cz.muni.fi.rpg.viewModels.PartyListViewModel
-import kotlinx.android.synthetic.main.fragment_party_list.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -35,6 +36,7 @@ class PartyListFragment : BaseFragment(R.layout.fragment_party_list),
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        val partyListRecycler = view.findViewById<RecyclerView>(R.id.partyListRecycler)
         partyListRecycler.layoutManager = LinearLayoutManager(context)
 
         val userId = authViewModel.getUserId()
@@ -75,6 +77,9 @@ class PartyListFragment : BaseFragment(R.layout.fragment_party_list),
         viewModel.liveForUser(userId).observe(viewLifecycleOwner) {
             adapter.submitList(it)
 
+            val noPartiesIcon = view.findViewById<View>(R.id.noPartiesIcon)
+            val noPartiesText = view.findViewById<View>(R.id.noPartiesText)
+
             if (it.isNotEmpty()) {
                 noPartiesIcon.visibility = View.GONE
                 noPartiesText.visibility = View.GONE
@@ -86,12 +91,13 @@ class PartyListFragment : BaseFragment(R.layout.fragment_party_list),
             }
         }
 
-        assembleNewParty.setOnClickListener {
+        val fabMenu = view.findViewById<FloatingActionsMenu>(R.id.fabMenu)
+        view.findViewById<View>(R.id.assembleNewParty).setOnClickListener {
             AssemblePartyDialog().show(childFragmentManager, "AssemblePartyDialog")
             fabMenu.collapse()
         }
 
-        scanQrCode.setOnClickListener {
+        view.findViewById<View>(R.id.scanQrCode).setOnClickListener {
             JoinPartyActivity.start(requireContext())
             fabMenu.collapse()
         }

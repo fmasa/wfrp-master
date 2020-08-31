@@ -5,7 +5,6 @@ import android.util.AttributeSet
 import androidx.constraintlayout.widget.ConstraintLayout
 import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.model.domain.character.Stats
-import kotlinx.android.synthetic.main.view_stats_table.view.*
 
 class StatsTable : ConstraintLayout {
     constructor(context: Context) : super(context)
@@ -18,15 +17,15 @@ class StatsTable : ConstraintLayout {
     }
 
     fun setValue(stats: Stats) {
-        weaponSkill.value = stats.weaponSkill
-        ballisticSkill.value = stats.ballisticSkill
-        strength.value = stats.strength
-        toughness.value = stats.toughness
-        agility.value = stats.agility
-        intelligence.value = stats.intelligence
-        willPower.value = stats.willPower
-        fellowship.value = stats.fellowship
-        initiative.value = stats.initiative
-        dexterity.value = stats.dexterity
+        findViewById<CharacterStat>(R.id.weaponSkill).value = stats.weaponSkill
+        findViewById<CharacterStat>(R.id.ballisticSkill).value = stats.ballisticSkill
+        findViewById<CharacterStat>(R.id.strength).value = stats.strength
+        findViewById<CharacterStat>(R.id.toughness).value = stats.toughness
+        findViewById<CharacterStat>(R.id.agility).value = stats.agility
+        findViewById<CharacterStat>(R.id.intelligence).value = stats.intelligence
+        findViewById<CharacterStat>(R.id.willPower).value = stats.willPower
+        findViewById<CharacterStat>(R.id.fellowship).value = stats.fellowship
+        findViewById<CharacterStat>(R.id.initiative).value = stats.initiative
+        findViewById<CharacterStat>(R.id.dexterity).value = stats.dexterity
     }
 }

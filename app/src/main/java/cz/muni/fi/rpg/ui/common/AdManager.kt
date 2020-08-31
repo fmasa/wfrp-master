@@ -24,18 +24,8 @@ class AdManager(private val context: Context) {
 
         consentInformation.requestConsentInfoUpdate(
             publisherIds,
-            object : ConsentInfoUpdateListener {
-                override fun onConsentInfoUpdated(consentStatus: ConsentStatus) {
-                    // We do not ask EEA users for consent for data processing related to personalized
-                    // ads. We always show non-personalized ads to them!
-                    showNonPersonalizedAdsOnly = consentInformation.isRequestLocationInEeaOrUnknown
-                }
-
-                override fun onFailedToUpdateConsentInfo(errorDescription: String) {
-                    showNonPersonalizedAdsOnly = true
-                }
-            })
-
+            ConsentListener(context) { showNonPersonalizedAdsOnly = it }
+        )
     }
 
     fun initializeUnit(view: AdView) {
@@ -52,5 +42,18 @@ class AdManager(private val context: Context) {
                 )
                 .build()
         )
+    }
+
+    private class ConsentListener(private val context: Context, private val onConsentListener: (Boolean) -> Unit) :
+        ConsentInfoUpdateListener {
+        override fun onConsentInfoUpdated(consentStatus: ConsentStatus) {
+            // We do not ask EEA users for consent for data processing related to personalized
+            // ads. We always show non-personalized ads to them!
+            onConsentListener(ConsentInformation.getInstance(context).isRequestLocationInEeaOrUnknown)
+        }
+
+        override fun onFailedToUpdateConsentInfo(errorDescription: String) {
+            onConsentListener(true)
+        }
     }
 }

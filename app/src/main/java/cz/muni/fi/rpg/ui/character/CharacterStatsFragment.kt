@@ -13,8 +13,8 @@ import cz.muni.fi.rpg.model.map
 import cz.muni.fi.rpg.model.right
 import cz.muni.fi.rpg.ui.common.parcelableArgument
 import cz.muni.fi.rpg.ui.views.CharacterPoint
+import cz.muni.fi.rpg.ui.views.StatsTable
 import cz.muni.fi.rpg.viewModels.CharacterStatsViewModel
-import kotlinx.android.synthetic.main.fragment_character_stats.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import org.koin.android.viewmodel.ext.android.viewModel
@@ -36,18 +36,26 @@ class CharacterStatsFragment : Fragment(R.layout.fragment_character_stats),
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        bindStats()
-        bindPoints()
+        bindStats(view)
+        bindPoints(view)
     }
 
-    private fun bindStats() {
+    private fun bindStats(view: View) {
         viewModel.character
             .right()
             .map { character -> character.getCharacteristics() }
-            .observe(viewLifecycleOwner) { statsTable.setValue(it) }
+            .observe(viewLifecycleOwner) { view.findViewById<StatsTable>(R.id.statsTable).setValue(it) }
     }
 
-    private fun bindPoints() {
+    private fun bindPoints(view: View) {
+        val wounds = view.findViewById<CharacterPoint>(R.id.wounds)
+        val corruptionPoints = view.findViewById<CharacterPoint>(R.id.corruptionPoints)
+        val sinPoints = view.findViewById<CharacterPoint>(R.id.sinPoints)
+        val fortunePoints = view.findViewById<CharacterPoint>(R.id.fortunePoints)
+        val fatePoints = view.findViewById<CharacterPoint>(R.id.fatePoints)
+        val resolvePoints = view.findViewById<CharacterPoint>(R.id.resolvePoints)
+        val resiliencePoints = view.findViewById<CharacterPoint>(R.id.resiliencePoints)
+
         Transformations
             .map(viewModel.character.right()) { character -> character.getPoints() }
             .observe(viewLifecycleOwner) { points ->

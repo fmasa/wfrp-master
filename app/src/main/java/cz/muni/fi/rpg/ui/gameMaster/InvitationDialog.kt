@@ -19,7 +19,7 @@ import com.google.firebase.ktx.Firebase
 import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.model.domain.party.Invitation
 import cz.muni.fi.rpg.ui.common.parcelableArgument
-import kotlinx.android.synthetic.main.dialog_invitation.view.*
+import cz.muni.fi.rpg.ui.views.QrCode
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -52,7 +52,7 @@ class InvitationDialog : DialogFragment(), CoroutineScope by CoroutineScope(Disp
                 jsonMapper.writeValueAsString(invitation)
             }
 
-            launch(Dispatchers.Main) { view.partyInviteQrCode.drawCode(jsonInvitation) }
+            launch(Dispatchers.Main) { view.findViewById<QrCode>(R.id.partyInviteQrCode).drawCode(jsonInvitation) }
 
             initializeButton(view, invitation, jsonInvitation)
         }
@@ -76,7 +76,8 @@ class InvitationDialog : DialogFragment(), CoroutineScope by CoroutineScope(Disp
         Timber.d("Invitation link was generated: ${link.shortLink}")
 
         withContext(Dispatchers.Main) {
-            view.shareButton.setOnClickListener {
+            val shareButton = view.findViewById<View>(R.id.shareButton)
+            shareButton.setOnClickListener {
                 val sendIntent = Intent().apply {
                     action = Intent.ACTION_SEND
                     putExtra(
@@ -94,7 +95,7 @@ class InvitationDialog : DialogFragment(), CoroutineScope by CoroutineScope(Disp
                     param(FirebaseAnalytics.Param.METHOD, "link")
                 }
             }
-            view.shareButton.isEnabled = true
+            shareButton.isEnabled = true
         }
     }
 }

@@ -15,8 +15,8 @@ import cz.muni.fi.rpg.ui.common.forms.Form
 import cz.muni.fi.rpg.ui.common.serializableArgument
 import cz.muni.fi.rpg.ui.common.stringArgument
 import cz.muni.fi.rpg.ui.common.toast
+import cz.muni.fi.rpg.ui.views.TextInput
 import cz.muni.fi.rpg.viewModels.GameMasterViewModel
-import kotlinx.android.synthetic.main.dialog_party_rename.view.*
 import kotlinx.coroutines.*
 import org.koin.android.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
@@ -50,7 +50,7 @@ class RenamePartyDialog : DialogFragment(), CoroutineScope by CoroutineScope(Dis
         val view = inflater.inflate(R.layout.dialog_party_rename, null)
 
         form = Form(requireContext()).apply {
-            addTextInput(view.partyNameInput).apply {
+            addTextInput(view.findViewById<TextInput>(R.id.partyNameInput)).apply {
                 setMaxLength(Party.NAME_MAX_LENGTH)
                 setDefaultValue(currentName)
                 addLiveRule(R.string.error_party_name_blank) { !it.isNullOrBlank() }
@@ -77,11 +77,12 @@ class RenamePartyDialog : DialogFragment(), CoroutineScope by CoroutineScope(Dis
             return
         }
 
-        val partyName = view.partyNameInput.getValue()
+        val partyNameInput = view.findViewById<TextInput>(R.id.partyNameInput)
+        val partyName = partyNameInput.getValue()
 
         dialog.getButton(AlertDialog.BUTTON_POSITIVE).isEnabled = false
-        view.progress.visibility = View.VISIBLE
-        view.partyNameInput.visibility = View.GONE
+        view.findViewById<View>(R.id.progress).visibility = View.VISIBLE
+        partyNameInput.visibility = View.GONE
 
         Timber.d("Dialog submitted, trying to update party name")
 

@@ -5,6 +5,7 @@ import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
+import android.widget.CheckBox
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import cz.muni.fi.rpg.R
@@ -13,8 +14,7 @@ import cz.muni.fi.rpg.ui.characterCreation.CharacterInfoFormFragment
 import cz.muni.fi.rpg.ui.characterCreation.CharacterStatsFormFragment
 import cz.muni.fi.rpg.ui.common.PartyScopedFragment
 import cz.muni.fi.rpg.ui.common.forms.Form
-import kotlinx.android.synthetic.main.fragment_character_edit.*
-import kotlinx.android.synthetic.main.fragment_character_edit.maxWoundsInput
+import cz.muni.fi.rpg.ui.views.TextInput
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -45,7 +45,7 @@ class CharacterEditFragment(
         setSubtitle(getString(R.string.subtitle_edit_character))
 
         form = Form(requireContext()).apply {
-            addTextInput(maxWoundsInput).apply {
+            addTextInput(view.findViewById<TextInput>(R.id.maxWoundsInput)).apply {
                 addLiveRule(R.string.error_required) { !it.isNullOrBlank() }
                 addLiveRule(R.string.error_value_over_100) { it.toString().toInt() <= 100 }
                 addLiveRule(R.string.error_value_is_0) { it.toString().toInt() > 0 }
@@ -59,13 +59,13 @@ class CharacterEditFragment(
                 setTitle(character.getName())
                 characterStats.setCharacterData(character)
                 characterInfo.setCharacterData(character)
-                maxWoundsInput.setDefaultValue(character.getPoints().maxWounds.toString())
-                hardyTalentCheckbox.isChecked = character.hasHardyTalent()
+                view.findViewById<TextInput>(R.id.maxWoundsInput).setDefaultValue(character.getPoints().maxWounds.toString())
+                view.findViewById<CheckBox>(R.id.hardyTalentCheckbox).isChecked = character.hasHardyTalent()
             }
 
             withContext(Dispatchers.Main) {
-                progressBar.visibility = View.GONE
-                mainView.visibility = View.VISIBLE
+                view.findViewById<View>(R.id.progressBar).visibility = View.GONE
+                view.findViewById<View>(R.id.mainView).visibility = View.VISIBLE
             }
         }
     }
@@ -83,6 +83,7 @@ class CharacterEditFragment(
             return super.onOptionsItemSelected(item)
         }
 
+        val view = requireView()
         val info = characterInfo.submit()
         val statsData = characterStats.submit()
 
@@ -92,8 +93,8 @@ class CharacterEditFragment(
                 updateCharacter(
                     info,
                     statsData,
-                    maxWoundsInput.getValue().toInt(),
-                    hardyTalentCheckbox.isChecked
+                    view.findViewById<TextInput>(R.id.maxWoundsInput).getValue().toInt(),
+                    view.findViewById<CheckBox>(R.id.hardyTalentCheckbox).isChecked
                 )
                 withContext(Dispatchers.Main) {
                     findNavController().popBackStack()

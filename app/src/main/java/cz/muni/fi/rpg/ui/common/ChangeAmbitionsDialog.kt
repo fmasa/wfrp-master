@@ -10,10 +10,7 @@ import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.common.SuspendableEntityListener
 import cz.muni.fi.rpg.model.domain.common.Ambitions
 import cz.muni.fi.rpg.ui.common.forms.Form
-import kotlinx.android.synthetic.main.dialog_change_ambitions.view.*
-import kotlinx.android.synthetic.main.dialog_change_ambitions.view.mainView
-import kotlinx.android.synthetic.main.dialog_change_ambitions.view.progress
-import kotlinx.android.synthetic.main.dialog_change_ambitions.view.shortTermAmbitionInput
+import cz.muni.fi.rpg.ui.views.TextInput
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -53,15 +50,18 @@ class ChangeAmbitionsDialog : DialogFragment(),
 
         val view = inflater.inflate(R.layout.dialog_change_ambitions, null)
 
-        view.shortTermAmbitionInput.setDefaultValue(defaults.shortTerm)
-        view.longTermAmbitionInput.setDefaultValue(defaults.longTerm)
+        val shortTermAmbitionInput = view.findViewById<TextInput>(R.id.shortTermAmbitionInput)
+        val longTermAmbitionInput = view.findViewById<TextInput>(R.id.longTermAmbitionInput)
+
+        shortTermAmbitionInput.setDefaultValue(defaults.shortTerm)
+        longTermAmbitionInput.setDefaultValue(defaults.longTerm)
 
         form = Form(requireContext()).apply {
-            addTextInput(view.shortTermAmbitionInput).apply {
+            addTextInput(shortTermAmbitionInput).apply {
                 setMaxLength(Ambitions.MAX_LENGTH)
             }
 
-            addTextInput(view.longTermAmbitionInput).apply {
+            addTextInput(longTermAmbitionInput).apply {
                 setMaxLength(Ambitions.MAX_LENGTH)
             }
         }
@@ -71,7 +71,6 @@ class ChangeAmbitionsDialog : DialogFragment(),
             .setTitle(title)
             .setPositiveButton(R.string.button_save) { _, _ -> }
             .create()
-
 
         dialog.setOnShowListener {
             dialog.getButton(AlertDialog.BUTTON_POSITIVE)
@@ -87,12 +86,12 @@ class ChangeAmbitionsDialog : DialogFragment(),
             return
         }
 
-        view.progress.visibility = View.VISIBLE
-        view.mainView.visibility = View.GONE
+        view.findViewById<View>(R.id.progress).visibility = View.VISIBLE
+        view.findViewById<View>(R.id.mainView).visibility = View.GONE
 
         val ambitions = Ambitions(
-            view.shortTermAmbitionInput.getValue(),
-            view.longTermAmbitionInput.getValue()
+            view.findViewById<TextInput>(R.id.shortTermAmbitionInput).getValue(),
+            view.findViewById<TextInput>(R.id.longTermAmbitionInput).getValue()
         )
 
         launch {
