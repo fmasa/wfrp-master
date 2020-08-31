@@ -6,34 +6,17 @@
     android:layout_height="match_parent"
     tools:context=".ui.partyList.PartyListFragment">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/partyListRecycler"
+    <FrameLayout
+        android:id="@+id/composeLayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         app:layout_constraintTop_toTopOf="parent"
-        android:visibility="gone"
-        />
-
-    <ImageView
-        android:id="@+id/noPartiesIcon"
-        style="@style/EmptyStateIcon"
-        android:src="@drawable/ic_rally_the_troops"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintVertical_bias="0.4"
-        android:visibility="gone"
-        />
-    <TextView
-        android:id="@+id/noPartiesText"
-        android:visibility="gone"
-        app:layout_constraintTop_toBottomOf="@id/noPartiesIcon"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        style="@style/EmptyStateText"
-        android:text="@string/no_parties_prompt"
-        />
+        app:layout_constraintStart_toStartOf="parent">
+        <androidx.compose.ui.platform.ComposeView
+            android:id="@+id/compose"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+    </FrameLayout>
 
     <com.getbase.floatingactionbutton.FloatingActionsMenu
         android:id="@+id/fabMenu"

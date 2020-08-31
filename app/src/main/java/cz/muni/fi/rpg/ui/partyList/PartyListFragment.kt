@@ -4,10 +4,12 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
-import androidx.lifecycle.observe
+import androidx.compose.foundation.*
+import androidx.compose.foundation.layout.*
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Surface
+import androidx.compose.runtime.Composable
 import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.getbase.floatingactionbutton.FloatingActionsMenu
 import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.model.domain.character.CharacterId
@@ -15,7 +17,6 @@ import cz.muni.fi.rpg.model.domain.party.Party
 import cz.muni.fi.rpg.ui.common.BaseFragment
 import cz.muni.fi.rpg.ui.common.toast
 import cz.muni.fi.rpg.ui.joinParty.JoinPartyActivity
-import cz.muni.fi.rpg.ui.partyList.adapter.PartyAdapter
 import cz.muni.fi.rpg.viewModels.AuthenticationViewModel
 import cz.muni.fi.rpg.viewModels.PartyListViewModel
 import kotlinx.coroutines.CoroutineScope
@@ -25,6 +26,22 @@ import kotlinx.coroutines.withContext
 import org.koin.android.viewmodel.ext.android.sharedViewModel
 import org.koin.android.viewmodel.ext.android.viewModel
 import java.util.*
+import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.gesture.longPressGestureFilter
+import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.TextUnit
+import androidx.compose.ui.unit.dp
+import cz.muni.fi.rpg.ui.common.composables.ContextMenu
+import cz.muni.fi.rpg.ui.common.composables.EmptyUI
+import cz.muni.fi.rpg.ui.common.composables.Item
+import cz.muni.fi.rpg.ui.common.composables.ItemIcon
 
 class PartyListFragment : BaseFragment(R.layout.fragment_party_list),
     AssemblePartyDialog.PartyCreationListener,
@@ -36,58 +53,22 @@ class PartyListFragment : BaseFragment(R.layout.fragment_party_list),
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val partyListRecycler = view.findViewById<RecyclerView>(R.id.partyListRecycler)
-        partyListRecycler.layoutManager = LinearLayoutManager(context)
-
         val userId = authViewModel.getUserId()
 
-        val adapter = PartyAdapter(
-            layoutInflater,
-            userId,
-            onClickListener = {
-                if (it.gameMasterId == authViewModel.getUserId()) {
-                    openGameMasterFragment(it.id)
-                } else {
-                    openCharacter(it.id, userId)
-                }
-            },
-            onRemoveListener = {
-                val message = getString(R.string.party_remove_confirmation)
-
-                AlertDialog.Builder(requireContext())
-                    .setPositiveButton(R.string.remove) { _, _ ->
-                        launch {
-                            viewModel.archive(it.id)
-                            withContext(Dispatchers.Main) {
-                                toast(R.string.message_party_removed, Toast.LENGTH_LONG)
-                            }
+        view.findViewById<ComposeView>(R.id.compose).setContent {
+            MaterialTheme {
+                MainContainer(
+                    userId,
+                    viewModel,
+                    onClick = {
+                        if (it.gameMasterId == authViewModel.getUserId()) {
+                            openGameMasterFragment(it.id)
+                        } else {
+                            openCharacter(it.id, userId)
                         }
-                    }
-                    .setNegativeButton(R.string.button_cancel, null)
-                    .setMessage(getString(R.string.party_remove_confirmation))
-                    .setMessage(
-                        if (it.users.size > 1)
-                            "$message\n\n${getString(R.string.party_remove_multiple_members)}"
-                        else message
-                    ).show()
-            }
-        )
-        partyListRecycler.adapter = adapter
-
-        viewModel.liveForUser(userId).observe(viewLifecycleOwner) {
-            adapter.submitList(it)
-
-            val noPartiesIcon = view.findViewById<View>(R.id.noPartiesIcon)
-            val noPartiesText = view.findViewById<View>(R.id.noPartiesText)
-
-            if (it.isNotEmpty()) {
-                noPartiesIcon.visibility = View.GONE
-                noPartiesText.visibility = View.GONE
-                partyListRecycler.visibility = View.VISIBLE
-            } else {
-                noPartiesIcon.visibility = View.VISIBLE
-                noPartiesText.visibility = View.VISIBLE
-                partyListRecycler.visibility = View.GONE
+                    },
+                    onRemove = ::removeParty,
+                )
             }
         }
 
@@ -109,6 +90,27 @@ class PartyListFragment : BaseFragment(R.layout.fragment_party_list),
         else openGameMasterFragment(party.id)
     }
 
+    private fun removeParty(party: Party) {
+        val message = getString(R.string.party_remove_confirmation)
+
+        AlertDialog.Builder(requireContext())
+            .setPositiveButton(R.string.remove) { _, _ ->
+                launch {
+                    viewModel.archive(party.id)
+                    withContext(Dispatchers.Main) {
+                        toast(R.string.message_party_removed, Toast.LENGTH_LONG)
+                    }
+                }
+            }
+            .setNegativeButton(R.string.button_cancel, null)
+            .setMessage(getString(R.string.party_remove_confirmation))
+            .setMessage(
+                if (party.users.size > 1)
+                    "$message\n\n${getString(R.string.party_remove_multiple_members)}"
+                else message
+            ).show()
+    }
+
     private fun openGameMasterFragment(partyId: UUID) = findNavController()
         .navigate(PartyListFragmentDirections.startGameMasterFragment(partyId))
 
@@ -116,5 +118,90 @@ class PartyListFragment : BaseFragment(R.layout.fragment_party_list),
         findNavController().navigate(
             PartyListFragmentDirections.openCharacter(CharacterId.forUser(partyId, userId))
         )
+    }
+}
+
+
+@Composable
+fun PartyItem(party: Party, onClick: () -> Unit, onLongPress: () -> Unit) {
+    Box(paddingBottom = 1.dp) {
+        Surface(elevation = 2.dp) {
+            Row(
+                Modifier
+                    .clickable(onClick = onClick)
+                    .longPressGestureFilter { onLongPress() }
+                    .padding(horizontal = 20.dp, vertical = 16.dp)
+                    .wrapContentHeight()
+                    .fillMaxWidth(),
+                verticalGravity = Alignment.CenterVertically
+            ) {
+                ItemIcon(R.drawable.ic_group)
+                Text(
+                    party.getName(),
+                    modifier = Modifier.padding(start = 16.dp),
+                    fontSize = TextUnit.Sp(18),
+                    overflow = TextOverflow.Ellipsis
+                )
+
+                val playersCount = party.getPlayerCounts()
+
+                if (playersCount > 0) {
+                    Row(
+                        Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.End,
+                        verticalGravity = Alignment.CenterVertically
+                    ) {
+                        Image(
+                            vectorResource(R.drawable.ic_character),
+                            modifier = Modifier
+                                .width(20.dp)
+                        )
+                        Text(playersCount.toString(), Modifier.padding(start = 4.dp))
+                    }
+                }
+            }
+        }
+    }
+
+}
+
+@Composable
+private fun MainContainer(
+    userId: String,
+    viewModel: PartyListViewModel,
+    onClick: (Party) -> Unit,
+    onRemove: (Party) -> Unit,
+) {
+    val parties = viewModel.liveForUser(userId).observeAsState()
+
+    parties.value?.let {
+        if (it.isEmpty()) {
+            EmptyUI(R.string.no_parties_prompt, R.drawable.ic_rally_the_troops)
+            return
+        }
+
+        PartyList(parties = it, onClick = onClick, onRemove = onRemove)
+    }
+}
+
+@Composable
+fun PartyList(parties: List<Party>, onClick: (Party) -> Unit, onRemove: (Party) -> Unit) {
+    ScrollableColumn {
+        val contextMenuOpened = remember { mutableStateOf<UUID?>(null) }
+
+        for (party in parties) {
+            PartyItem(party,
+                onClick = { onClick(party) },
+                onLongPress = { contextMenuOpened.value = party.id }
+            )
+
+            ContextMenu(
+                items = listOf(
+                    Item(stringResource(R.string.remove), onClick = { onRemove(party) })
+                ),
+                onDismissRequest = { contextMenuOpened.value = null },
+                expanded = contextMenuOpened.value == party.id
+            )
+        }
     }
 }
