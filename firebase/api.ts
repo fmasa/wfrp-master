@@ -40,8 +40,8 @@ export interface Character {
     career: string,
     socialClass: string,
     race: string,
-    stats: Stats,
-    maxStats: Stats,
+    characteristicsAdvances: Stats,
+    characteristicsBase: Stats,
     points: {
         corruption: number,
         experience: number,

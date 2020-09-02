@@ -345,10 +345,6 @@ class Parties extends Suite {
         const data = this.validCharacter(userId);
 
         for (const field of Object.keys(data)) {
-            if (field == "maxStats") {
-                continue;  // maxStats are not used anymore and are there only for BC (TODO: Remove in 1.10)
-            }
-
             const newData = {...data};
 
             delete newData[field];
@@ -433,7 +429,7 @@ class Parties extends Suite {
     }
 
     @test
-    async "should not let users create character with invalid stats"() {
+    async "should not let users create character with invalid characteristics"() {
         const userId = "user123";
         const partyId = (await this.createUserAccessibleParty(userId)).id;
 
@@ -445,14 +441,14 @@ class Parties extends Suite {
 
         const data = this.validCharacter(userId);
 
-        for (const stat of Object.keys(data.stats)) {
-            const newData = {...data, stats: withoutField(data.stats, stat)};
+        for (const stat of Object.keys(data.characteristicsBase)) {
+            const newData = {...data, characteristicsBase: withoutField(data.characteristicsBase, stat)};
 
             // Missing stat
             await firebase.assertFails(character.set(newData));
 
             // Wrong stat type
-            newData.stats[stat] = "foo";
+            newData.characteristicsBase[stat] = "foo";
             await firebase.assertFails(character.set(newData));
         }
     }
@@ -470,7 +466,7 @@ class Parties extends Suite {
 
         const data = this.validCharacter(userId);
 
-        await firebase.assertFails(character.set({...data, stats: {...data.stats, extraStat: 10}}));
+        await firebase.assertFails(character.set({...data, characteristicsBase: {...data.characteristicsBase, extraStat: 10}}));
 
         const withPoints = (point: string, value: any) => ({...data, points: {...data.points, [point]: value}});
 
@@ -498,14 +494,6 @@ class Parties extends Suite {
         await firebase.assertSucceeds(
             document.update("points", {...this.validCharacter(userId).points, hardyWoundsBonus: 3})
         );
-
-        const character = (await document.get()).data() as Character;
-
-        await firebase.assertSucceeds(document.update({
-            characteristicsBase: character.stats,
-            characteristicsAdvances: character.stats,
-            ...withoutField(character, "stats")
-        }));
     }
 
     @test
