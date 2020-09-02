@@ -14,6 +14,8 @@ class Input(private val layout: TextInputLayout, private val context: Context) {
 
     private var showErrorInEditText = false
 
+    private var defaultValue: String = ""
+
     /**
      * Limits maximum number of characters allowed in EditText
      */

@@ -42,16 +42,14 @@ class CharacterPointsFormFragment :
                 addLiveRule(R.string.error_value_is_0) { it.toString().toInt() > 0 }
             }
 
+            fatePointsInput.setEmptyValue("0")
             addTextInput(fatePointsInput).apply {
-                setDefaultValue("0")
-                addLiveRule(R.string.error_required) { !it.isNullOrBlank() }
-                addLiveRule(R.string.error_value_over_100) { it.toString().toInt() <= 100 }
+                addLiveRule(R.string.error_value_over_100) { fatePointsInput.getValue().toInt() <= 100 }
             }
 
+            resiliencePointsInput.setEmptyValue("0")
             addTextInput(resiliencePointsInput).apply {
-                setDefaultValue("0")
-                addLiveRule(R.string.error_required) { !it.isNullOrBlank() }
-                addLiveRule(R.string.error_value_over_100) { it.toString().toInt() <= 100 }
+                addLiveRule(R.string.error_value_over_100) { resiliencePointsInput.getValue().toInt() <= 100 }
             }
         }
 
