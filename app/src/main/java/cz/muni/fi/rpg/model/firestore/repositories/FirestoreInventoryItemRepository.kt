@@ -55,7 +55,7 @@ internal class FirestoreInventoryItemRepository(
     private fun inventoryItems(characterId: CharacterId): CollectionReference {
         return parties.document(characterId.partyId.toString())
             .collection(COLLECTION_CHARACTERS)
-            .document(characterId.userId)
+            .document(characterId.id)
             .collection(COLLECTION_INVENTORY_ITEMS)
     }
 }

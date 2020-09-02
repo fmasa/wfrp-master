@@ -4,7 +4,6 @@ import androidx.lifecycle.LiveData
 import arrow.core.Either
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.FirebaseFirestoreException
-import com.google.firebase.firestore.SetOptions
 import cz.muni.fi.rpg.model.domain.character.Character
 import cz.muni.fi.rpg.model.domain.character.CharacterId
 import cz.muni.fi.rpg.model.domain.character.CharacterNotFound
@@ -24,14 +23,14 @@ internal class FirestoreCharacterRepository(
         val data = mapper.toDocumentData(character)
 
         Timber.d("Saving character $data in party $partyId to firestore")
-        characters(partyId).document(character.userId).set(data).await()
+        characters(partyId).document(character.id).set(data).await()
     }
 
     override suspend fun get(characterId: CharacterId): Character {
         try {
             return mapper.fromDocumentSnapshot(
                 characters(characterId.partyId)
-                    .document(characterId.userId)
+                    .document(characterId.id)
                     .get()
                     .await()
             )
@@ -44,7 +43,7 @@ internal class FirestoreCharacterRepository(
         return DocumentLiveData(
             characters(
                 characterId.partyId
-            ).document(characterId.userId)
+            ).document(characterId.id)
         ) {
             it.bimap({ e -> CharacterNotFound(characterId, e) }, mapper::fromDocumentSnapshot)
         }

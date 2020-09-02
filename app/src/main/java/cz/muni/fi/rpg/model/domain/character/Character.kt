@@ -7,7 +7,7 @@ import java.lang.IllegalArgumentException
 
 data class Character(
     private var name: String,
-    val userId: String,
+    val userId: String?,
     private var career: String,
     private var socialClass: String,
     private var psychology: String,
@@ -21,7 +21,7 @@ data class Character(
     private var mutation: String = "",
     private var note: String = "",
     private var hardyTalent: Boolean = false,
-    private val id: String = userId
+    val id: String = userId ?: error("Either ID or UserId must be present") // TODO: Remove this fallback in 1.14
 ) {
     companion object {
         const val NAME_MAX_LENGTH = 50
@@ -36,7 +36,7 @@ data class Character(
     private var money: Money = Money.zero()
 
     init {
-        require(listOf(name, userId, career).all { it.isNotBlank() })
+        require(listOf(name, userId, career).all { it?.isNotBlank() ?: true })
         require(name.length <= NAME_MAX_LENGTH) { "Character name is too long" }
         require(career.length <= CAREER_MAX_LENGTH) { "Career is too long" }
         require(socialClass.length <= SOCIAL_CLASS_MAX_LENGTH) { "Social class is too long" }

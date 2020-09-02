@@ -23,13 +23,12 @@ class CharacterCreationViewModel(
 ) : ViewModel() {
 
     suspend fun createCharacter(
+        userId: String?,
         info: CharacterInfoFormFragment.Data,
         statsData: CharacterStatsFormFragment.CharacteristicsData,
         points: Points
     ): CharacterId {
-        val userId = auth.currentUser?.uid ?: error("User not logged in")
-
-        val characterId = CharacterId(partyId, userId)
+        val characterId = CharacterId(partyId, userId ?: UUID.randomUUID().toString())
 
         withContext(Dispatchers.IO) {
 
@@ -38,8 +37,9 @@ class CharacterCreationViewModel(
             characters.save(
                 characterId.partyId,
                 Character(
+                    id = characterId.id,
                     name = info.name,
-                    userId = characterId.userId,
+                    userId = userId,
                     career = info.career,
                     socialClass = info.socialClass,
                     race = info.race,
@@ -54,7 +54,7 @@ class CharacterCreationViewModel(
 
             Firebase.analytics.logEvent("create_character") {
                 param("party_id", characterId.partyId.toString())
-                param("character_id", characterId.userId)
+                param("character_id", characterId.id)
             }
         }
 

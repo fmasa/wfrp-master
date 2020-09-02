@@ -87,7 +87,10 @@
         <argument
             android:name="partyId"
             app:argType="java.util.UUID" />
-
+        <argument
+            android:name="userId"
+            app:nullable="true"
+            app:argType="string" />
         <action
             android:id="@+id/openCharacter"
             app:destination="@id/nav_character"
