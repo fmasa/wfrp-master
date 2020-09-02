@@ -15,7 +15,8 @@ sealed class Player {
 
 class CharacterAdapter(
     private val layoutInflater: LayoutInflater,
-    private val onClickListener: EntityListener<Player>
+    private val onClickListener: EntityListener<Player>,
+    private val onRemoveListener: EntityListener<Character>
 ) : ListAdapter<Player, CharacterHolder>(
     object : DiffUtil.ItemCallback<Player>() {
         override fun areItemsTheSame(oldItem: Player, newItem: Player): Boolean {
@@ -38,7 +39,11 @@ class CharacterAdapter(
 ) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CharacterHolder {
         val view = layoutInflater.inflate(R.layout.character_item, parent, false)
-        return CharacterHolder(view, onClickListener)
+        return CharacterHolder(
+            view,
+            onClickListener = onClickListener,
+            onRemoveListener = onRemoveListener
+        )
     }
 
     override fun onBindViewHolder(holder: CharacterHolder, position: Int) {

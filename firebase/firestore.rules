@@ -195,7 +195,8 @@ service cloud.firestore {
                             "mutation",
                             "ambitions",
                             "note",
-                            "hardyTalent"
+                            "hardyTalent",
+                            "archived"
                         ].hasAll(character.keys())
                         && (character.userId == userId || character.id == userId)
                         && (! ("id" in character) || (character.id == character.userId || (character.userId == null && isValidUuid(character.id))))
@@ -215,7 +216,8 @@ service cloud.firestore {
                         && areMoneyValid(character.money)
                         && areAmbitionsValid(character.ambitions)
                         && character.note is string && character.note.size() <= 400
-                        && (! ("hardyTalent" in character) || (character.hardyTalent is bool));
+                        && (! ("hardyTalent" in character) || (character.hardyTalent is bool))
+                        && (! ("archived" in character) || (character.archived is bool && (!character.archived || character.userId == null)));
                 }
             }
 

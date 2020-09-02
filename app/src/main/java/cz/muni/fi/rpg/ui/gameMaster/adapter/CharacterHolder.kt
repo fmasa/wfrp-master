@@ -2,12 +2,15 @@ package cz.muni.fi.rpg.ui.gameMaster.adapter
 
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
+import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.common.EntityListener
+import cz.muni.fi.rpg.model.domain.character.Character
 import kotlinx.android.synthetic.main.character_item.view.*
 
 class CharacterHolder(
     itemView: View,
-    private val onClickListener: EntityListener<Player>
+    private val onClickListener: EntityListener<Player>,
+    private val onRemoveListener: EntityListener<Character>
 ) : RecyclerView.ViewHolder(itemView) {
     fun bind(item: Player) {
         when (item) {
@@ -26,6 +29,17 @@ class CharacterHolder(
                 itemView.character_job.text = item.character.getCareer()
                 itemView.isClickable = true
                 itemView.isFocusable = true
+
+                if (item.character.userId == null) {
+                    itemView.setOnCreateContextMenuListener { menu, v, _ ->
+                        menu.add(0, v.id, 0, R.string.remove)
+                            .setOnMenuItemClickListener {
+                                onRemoveListener(item.character)
+
+                                false
+                            }
+                    }
+                }
             }
         }
 

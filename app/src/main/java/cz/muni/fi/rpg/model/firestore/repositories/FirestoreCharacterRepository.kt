@@ -54,7 +54,9 @@ internal class FirestoreCharacterRepository(
     }
 
     override fun inParty(partyId: UUID): LiveData<List<Character>> =
-        QueryLiveData(characters(partyId), mapper)
+        // TODO: Filter archived characters via whereEqualTo() once all historic characters have `archived` field set
+        // These should be migrated in 1.14
+        QueryLiveData(characters(partyId), mapper) { !it.isArchived() }
 
     private fun characters(partyId: UUID) =
         parties.document(partyId.toString()).collection(COLLECTION_CHARACTERS)
