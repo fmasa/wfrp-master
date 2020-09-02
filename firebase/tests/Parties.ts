@@ -35,25 +35,6 @@ class Parties extends Suite {
     }
 
     @test
-    async "users can create party without `archived` field (BC)"() {
-        const data = this.validParty();
-
-        delete data['archived'];
-
-        const party = this.authedApp(data.gameMasterId)
-            .collection("parties")
-            .doc(data.id);
-
-        // Empty name
-        await firebase.assertFails(party.set({...data, name: ""}));
-
-        // Whitespaces only name
-        await firebase.assertFails(party.set({...data, name: "\t \r"}));
-
-        await firebase.assertSucceeds(party.set(data))
-    }
-
-    @test
     async "should NOT let users create party with incorrect field values"() {
         const data = this.validParty();
         const parties = this.authedApp(data.gameMasterId).collection("parties");
@@ -131,10 +112,6 @@ class Parties extends Suite {
             .collection("parties");
 
         await Promise.all(Object.keys(this.validParty()).map(field => {
-            if (field === 'archived') {
-                return; // This field is optional for now (BC)
-            }
-
             if (field === 'time') {
                 return; // This field is optional for now (BC), TODO: Remove in 1.14
             }

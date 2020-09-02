@@ -305,7 +305,7 @@ service cloud.firestore {
                     && party.id is string && party.id == partyId && isValidUuid(party.id)
                     && isValidPartyName(party.name)
                     && party.users == [uid]
-                    && (! ("archived" in party) || party.archived is bool)
+                    && party.archived is bool
                     && (party.gameMasterId == uid || party.gameMasterId == null)
                     && party.accessCode is string && party.accessCode != ""
                     && (! ("time" in party) || isValidImperialTime(party.time))
@@ -321,7 +321,7 @@ service cloud.firestore {
                     && isValidPartyName(party.name)
                     && party.users.toSet() == resource.data.users.toSet()
                     && (! ("time" in party) || isValidImperialTime(party.time))
-                    && (! ("archived" in party) || party.archived is bool)
+                    && party.archived is bool;
             }
 
             function isValidImperialTime(time) {
