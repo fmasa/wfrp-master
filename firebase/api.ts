@@ -52,6 +52,7 @@ export interface Character {
         resilience: number,
         resolve: number,
         sin: number,
+        hardyWoundsBonus: number
     },
     ambitions: {
         shortTerm: string,
@@ -63,6 +64,7 @@ export interface Character {
     money: {
         pennies: number,
     },
+    hardyTalent: boolean,
     note: string,
 }
 

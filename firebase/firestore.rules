@@ -212,7 +212,7 @@ service cloud.firestore {
                         && areMoneyValid(character.money)
                         && areAmbitionsValid(character.ambitions)
                         && character.note is string && character.note.size() <= 400
-                        && (! ("hardyTalent" in character) || (character.hardyTalent is bool))
+                        && character.hardyTalent is bool
                         && (! ("archived" in character) || (character.archived is bool && (!character.archived || character.userId == null)));
                 }
             }
@@ -240,7 +240,7 @@ service cloud.firestore {
                     && points.sin is int
                     && points.wounds is int
                     && points.experience is int
-                    && (! ("hardyWoundsBonus" in points) || (points.hardyWoundsBonus is int && points.hardyWoundsBonus >= 0));
+                    && points.hardyWoundsBonus is int;
             }
 
             function areStatsValid(stats) {

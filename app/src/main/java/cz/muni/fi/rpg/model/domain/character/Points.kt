@@ -12,7 +12,7 @@ data class Points(
     val resolve: Int,
     val sin: Int,
     val experience: Int,
-    val hardyWoundsBonus: Int = 0
+    val hardyWoundsBonus: Int
 ) {
     init {
         require(corruption >= 0)
