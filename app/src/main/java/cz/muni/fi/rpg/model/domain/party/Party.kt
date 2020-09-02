@@ -11,7 +11,7 @@ import java.util.*
 data class Party(
     val id: UUID,
     private var name: String,
-    val gameMasterId: String?,
+    val gameMasterId: String?, // Remove support for single-player parties in 1.14
     val users: Set<String>,
     private var archived: Boolean = false,
     private var ambitions: Ambitions = Ambitions("", ""),
@@ -22,25 +22,12 @@ data class Party(
 ) : Parcelable {
     companion object {
         const val NAME_MAX_LENGTH = 50
-
-        fun multiPlayerParty(id: UUID, name: String, gameMasterId: String) = Party(
-            id = id,
-            name = name,
-            gameMasterId = gameMasterId,
-            users = setOf(gameMasterId)
-        )
-
-        fun singlePlayerParty(id: UUID, name: String, playingUserId: String) = Party(
-            id = id,
-            name = name,
-            gameMasterId = null,
-            users = setOf(playingUserId)
-        )
     }
 
     private val accessCode = generateAccessCode()
 
     init {
+        require(gameMasterId == null || gameMasterId in users)
         require(id.version() == 4) {"Party identifier must be UUIDv4"}
         require(name.isNotBlank()) {"Party name must not be empty"}
         require(name.length <= NAME_MAX_LENGTH) {"Party name is too long"}

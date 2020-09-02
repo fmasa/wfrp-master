@@ -18,7 +18,6 @@ import cz.muni.fi.rpg.ui.common.forms.Form
 import cz.muni.fi.rpg.ui.common.toast
 import cz.muni.fi.rpg.viewModels.AuthenticationViewModel
 import kotlinx.android.synthetic.main.dialog_asssemble_party.view.*
-import kotlinx.android.synthetic.main.dialog_asssemble_party.view.singlePlayerWarning
 import kotlinx.coroutines.*
 import org.koin.android.ext.android.inject
 import org.koin.android.viewmodel.ext.android.viewModel
@@ -65,10 +64,6 @@ class AssemblePartyDialog : DialogFragment(), CoroutineScope by CoroutineScope(D
             }
         }
 
-        view.singlePlayerCheckbox.setOnCheckedChangeListener { _, isChecked ->
-            view.singlePlayerWarning.visibility = if (isChecked) View.VISIBLE else View.GONE
-        }
-
         val dialog = AlertDialog.Builder(activity, R.style.FormDialog)
             .setTitle(R.string.assembleParty_title)
             .setView(view)
@@ -93,9 +88,12 @@ class AssemblePartyDialog : DialogFragment(), CoroutineScope by CoroutineScope(D
         val partyName = view.partyNameInput.getValue()
 
         val userId = auth.getUserId()
-        val party = if (view.singlePlayerCheckbox.isChecked)
-            Party.singlePlayerParty(partyId, partyName, userId)
-        else Party.multiPlayerParty(partyId, partyName, userId)
+        val party = Party(
+            id = partyId,
+            name = partyName,
+            gameMasterId = userId,
+            users = setOf(userId)
+        )
 
         dialog.getButton(AlertDialog.BUTTON_POSITIVE).isEnabled = false
         view.progress.visibility = View.VISIBLE
