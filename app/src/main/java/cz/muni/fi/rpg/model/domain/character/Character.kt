@@ -20,7 +20,8 @@ data class Character(
     private var ambitions: Ambitions = Ambitions("", ""),
     private var mutation: String = "",
     private var note: String = "",
-    private var hardyTalent: Boolean = false
+    private var hardyTalent: Boolean = false,
+    private val id: String = userId
 ) {
     companion object {
         const val NAME_MAX_LENGTH = 50

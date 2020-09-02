@@ -34,8 +34,9 @@ export interface Stats {
 }
 
 export interface Character {
+    id?: string,
     name: string,
-    userId: string,
+    userId: string | null,
     career: string,
     socialClass: string,
     race: string,
