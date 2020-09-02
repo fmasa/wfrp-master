@@ -5,6 +5,7 @@ import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import androidx.navigation.navOptions
 import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.model.domain.character.*
 import cz.muni.fi.rpg.ui.common.PartyScopedFragment
@@ -20,6 +21,7 @@ import kotlinx.coroutines.withContext
 import org.koin.android.viewmodel.ext.android.sharedViewModel
 import org.koin.android.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
+import java.lang.IllegalArgumentException
 import java.util.*
 
 class CharacterCreationFragment(
@@ -42,7 +44,9 @@ class CharacterCreationFragment(
         { CharacterPointsFormFragment() }
     )
 
-    private val viewModel: CharacterCreationViewModel by viewModel { parametersOf(args.partyId) }
+    private val viewModel: CharacterCreationViewModel by viewModel {
+        parametersOf(args.partyId)
+    }
 
     private var currentFragmentIndex = 0
 
@@ -53,7 +57,8 @@ class CharacterCreationFragment(
         super.onStart()
 
         launch {
-            if (characters.hasCharacterInParty(authentication.getUserId(), args.partyId)) {
+            val userId = args.userId
+            if (userId != null && characters.hasCharacterInParty(userId, args.partyId)) {
                 withContext(Dispatchers.Main) { toast(R.string.already_has_character) }
                 return@launch
             }
@@ -144,13 +149,26 @@ class CharacterCreationFragment(
         points: Points
     ) {
         launch {
-            val characterId = viewModel.createCharacter(info, statsData, points)
+            val characterId = viewModel.createCharacter(args.userId, info, statsData, points)
 
             withContext(Dispatchers.Main) {
                 toast("Your character has been created")
 
+                val navController = findNavController()
                 findNavController()
-                    .navigate(CharacterCreationFragmentDirections.openCharacter(characterId))
+                    .navigate(
+                        CharacterCreationFragmentDirections.openCharacter(characterId),
+                        navOptions {
+                            popUpTo(
+                                try {
+                                    navController.getBackStackEntry(R.id.nav_game_master)
+                                    R.id.nav_game_master
+                                } catch (e: IllegalArgumentException) {
+                                    R.id.nav_party_list
+                                }
+                            ) { inclusive = false }
+                        }
+                    )
             }
         }
 

@@ -10,6 +10,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.google.android.material.tabs.TabLayoutMediator
 import cz.muni.fi.rpg.R
+import cz.muni.fi.rpg.model.domain.character.CharacterId
 import cz.muni.fi.rpg.model.domain.character.CharacterNotFound
 import cz.muni.fi.rpg.ui.character.skills.CharacterSkillsFragment
 import cz.muni.fi.rpg.ui.common.AdManager

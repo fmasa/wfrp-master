@@ -55,14 +55,25 @@
                     android:textColor="@color/colorEmptyState"
                     android:visibility="gone" />
 
-                <Button
-                    android:id="@+id/inviteButton"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
+                <LinearLayout
+                    android:gravity="center"
                     android:layout_marginTop="8dp"
-                    android:enabled="false"
-                    android:text="@string/button_invite" />
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <Button
+                        android:layout_marginEnd="4dp"
+                        android:id="@+id/createCharacterButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/button_create" />
+                    <Button
+                        android:layout_marginStart="4dp"
+                        android:id="@+id/inviteButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:enabled="false"
+                        android:text="@string/button_invite" />
+                </LinearLayout>
 
             </LinearLayout>
         </androidx.cardview.widget.CardView>

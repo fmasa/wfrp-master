@@ -3,7 +3,6 @@ package cz.muni.fi.rpg.viewModels
 import androidx.lifecycle.ViewModel
 import com.google.firebase.analytics.ktx.analytics
 import com.google.firebase.analytics.ktx.logEvent
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.ktx.Firebase
 import cz.muni.fi.rpg.model.domain.character.Character
 import cz.muni.fi.rpg.model.domain.character.CharacterId
@@ -18,8 +17,7 @@ import java.util.*
 
 class CharacterCreationViewModel(
     private val partyId: UUID,
-    private val characters: CharacterRepository,
-    private val auth: FirebaseAuth
+    private val characters: CharacterRepository
 ) : ViewModel() {
 
     suspend fun createCharacter(

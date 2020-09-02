@@ -29,7 +29,9 @@
         <action
             android:id="@+id/openCharacter"
             app:destination="@id/nav_character" />
-
+        <action
+            android:id="@+id/createCharacter"
+            app:destination="@id/nav_character_create" />
         <action
             android:id="@+id/openEncounter"
             app:destination="@id/nav_encounter_detail" />
@@ -93,8 +95,7 @@
             app:argType="string" />
         <action
             android:id="@+id/openCharacter"
-            app:destination="@id/nav_character"
-            app:popUpTo="@id/nav_party_list" />
+            app:destination="@id/nav_character" />
     </fragment>
 
     <fragment

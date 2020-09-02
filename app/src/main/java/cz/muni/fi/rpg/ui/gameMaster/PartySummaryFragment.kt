@@ -15,6 +15,7 @@ import cz.muni.fi.rpg.ui.common.ChangeAmbitionsDialog
 import cz.muni.fi.rpg.ui.common.serializableArgument
 import cz.muni.fi.rpg.ui.common.toggleVisibility
 import cz.muni.fi.rpg.ui.gameMaster.adapter.CharacterAdapter
+import cz.muni.fi.rpg.ui.gameMaster.adapter.Player
 import cz.muni.fi.rpg.viewModels.GameMasterViewModel
 import kotlinx.android.synthetic.main.fragment_party_summary.*
 import org.koin.android.viewmodel.ext.android.viewModel
@@ -59,17 +60,30 @@ class PartySummaryFragment : Fragment(R.layout.fragment_party_summary) {
             }
         }
 
+        createCharacterButton.setOnClickListener {
+            findNavController().navigate(
+                GameMasterFragmentDirections.createCharacter(partyId, null)
+            )
+        }
+
         inviteButton.setOnClickListener { showQrCode() }
 
         viewModel.getPlayers().observe(viewLifecycleOwner) { players ->
+            val directions = GameMasterFragmentDirections
             if (players.isNotEmpty()) {
                 val adapter = CharacterAdapter(layoutInflater)
                 {
-                    findNavController()
-                        .navigate(
-                            GameMasterFragmentDirections
-                                .openCharacter((CharacterId(partyId, it.userId)))
-                        )
+                    findNavController().navigate(
+                        when (it) {
+                            is Player.UserWithoutCharacter -> directions.createCharacter(
+                                partyId,
+                                it.userId
+                            )
+                            is Player.ExistingCharacter -> directions.openCharacter(
+                                CharacterId(partyId, it.character.id)
+                            )
+                        }
+                    )
                 }
                 characterListRecycler.adapter = adapter
                 characterListRecycler.layoutManager = LinearLayoutManager(context)

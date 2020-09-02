@@ -116,7 +116,7 @@ val appModule = module {
     viewModel { JoinPartyViewModel(get()) }
     viewModel { PartyListViewModel(get()) }
     viewModel { SettingsViewModel(get()) }
-    viewModel { (partyId: UUID) -> CharacterCreationViewModel(partyId, get(), get())}
+    viewModel { (partyId: UUID) -> CharacterCreationViewModel(partyId, get())}
 
     /**
      * Fragments
