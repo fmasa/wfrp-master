@@ -118,7 +118,7 @@
     <string name="money_add">Add</string>
 
     <!-- Game Master -->
-    <string name="button_invite">Invite players</string>
+    <string name="button_invite">Invite</string>
     <string name="title_calendar">Calendar</string>
     <string name="title_characters">Characters</string>
     <string name="title_encounters">Encounters</string>
@@ -185,7 +185,6 @@
     <string name="title_character_creation_points">Point pools</string>
     <string name="label_base">Base</string>
     <string name="label_advances">Advances</string>
-    <string name="label_checkbox_single_player">Create Single-Player Party</string>
 
     <string name="description_character_point_down">Decrease points amount by 1</string>
     <string name="description_character_point_up">Increase points amount by 1</string>

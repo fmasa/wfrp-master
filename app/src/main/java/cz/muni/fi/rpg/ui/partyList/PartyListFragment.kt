@@ -108,8 +108,7 @@ class PartyListFragment : BaseFragment(R.layout.fragment_party_list),
 
     private fun openCharacter(partyId: UUID, userId: String) {
         findNavController().navigate(
-            PartyListFragmentDirections
-                .openCharacter(CharacterId(partyId = partyId, userId = userId))
+            PartyListFragmentDirections.openCharacter(CharacterId.forUser(partyId, userId))
         )
     }
 }

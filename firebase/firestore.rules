@@ -72,7 +72,7 @@ service cloud.firestore {
 
             match /characters/{userId} {
                 allow create: if hasAccessToParty()
-                                && userId == request.auth.uid
+                                && (userId == request.auth.uid || isGameMaster())
                                 && isValidCharacter(request.resource.data);
                 allow update: if canEditCharacter()
                               && isValidCharacter(request.resource.data);
@@ -178,6 +178,7 @@ service cloud.firestore {
 
                 function isValidCharacter(character) {
                     return [
+                            "id",
                             "name",
                             "career",
                             "socialClass",
@@ -194,9 +195,12 @@ service cloud.firestore {
                             "mutation",
                             "ambitions",
                             "note",
-                            "hardyTalent"
+                            "hardyTalent",
+                            "archived"
                         ].hasAll(character.keys())
-                        && character.userId == userId
+                        && (character.userId == userId || character.id == userId)
+                        && (! ("id" in character) || (character.id == character.userId || (character.userId == null && isValidUuid(character.id))))
+                        && ((character.userId == null && isGameMaster()) || character.userId in get(/databases/$(database)/documents/parties/$(partyId)).data.users)
                         && character.name is string && isNotBlank(character.name) && character.name.size() <= 50
                         && character.career is string && isNotBlank(character.career) && character.career.size() <= 50
                         && character.psychology is string && character.psychology.size() <= 200
@@ -212,7 +216,8 @@ service cloud.firestore {
                         && areMoneyValid(character.money)
                         && areAmbitionsValid(character.ambitions)
                         && character.note is string && character.note.size() <= 400
-                        && (! ("hardyTalent" in character) || (character.hardyTalent is bool));
+                        && (! ("hardyTalent" in character) || (character.hardyTalent is bool))
+                        && (! ("archived" in character) || (character.archived is bool && (!character.archived || character.userId == null)));
                 }
             }
 

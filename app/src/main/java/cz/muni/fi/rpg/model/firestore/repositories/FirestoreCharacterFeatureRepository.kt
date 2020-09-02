@@ -47,7 +47,7 @@ internal class FirestoreCharacterFeatureRepository<T : Any>(
     private fun document(characterId: CharacterId): DocumentReference {
         return parties.document(characterId.partyId.toString())
             .collection(COLLECTION_CHARACTERS)
-            .document(characterId.userId)
+            .document(characterId.id)
             .collection(COLLECTION_FEATURES)
             .document(documentId)
     }

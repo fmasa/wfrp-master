@@ -4,6 +4,7 @@ import * as firebase from "@firebase/testing";
 import {uuid} from "uuidv4";
 import {withoutField} from "./utils";
 import {Character} from "../api";
+import {assertFails, assertSucceeds} from "@firebase/testing";
 
 @suite
 class Parties extends Suite {
@@ -217,6 +218,126 @@ class Parties extends Suite {
             .doc(userId);
 
         await firebase.assertSucceeds(character.set(this.validCharacter(userId)));
+    }
+
+    @test
+    async "should NOT let users create character that is not theirs if they are not GMs"() {
+        const userId = "user123";
+        const partyId = (await this.createUserAccessibleParty(userId)).id;
+
+        const character = this.authedApp(userId)
+            .collection("parties")
+            .doc(partyId)
+            .collection("characters")
+            .doc(userId);
+
+        await firebase.assertFails(
+            character.set({
+                ...this.validCharacter(userId),
+                id: userId,
+                userId: null,
+            })
+        );
+
+        const characterUuid = uuid()
+
+        await firebase.assertFails(
+            this.authedApp(userId)
+                .collection("parties")
+                .doc(partyId)
+                .collection("characters")
+                .doc(characterUuid)
+                .set({
+                    ...this.validCharacter(userId),
+                    id: characterUuid,
+                    userId: null,
+                })
+        );
+    }
+
+    @test
+    async "should let GMs create character associated to user"() {
+        const userId = "user123";
+        const party = await this.createUserAccessibleParty(userId);
+
+        const character = this.authedApp(party.gameMasterId)
+            .collection("parties")
+            .doc(party.id)
+            .collection("characters")
+            .doc(userId);
+
+        await firebase.assertSucceeds(character.set(this.validCharacter(userId)));
+    }
+
+    @test
+    async "should let GMs create character not associated to user"() {
+        const party = await this.createValidParty();
+        const characterId = uuid();
+
+        const character = this.authedApp(party.gameMasterId)
+            .collection("parties")
+            .doc(party.id)
+            .collection("characters")
+            .doc(characterId);
+
+        await firebase.assertSucceeds(
+            character.set({
+                ...this.validCharacter("user123"),
+                id: characterId,
+                userId: null,
+            })
+        );
+    }
+
+    @test
+    async "should NOT let GMs create character associated to user that does not exist"() {
+        const userId = "user123";
+        const party = await this.createValidParty();
+
+        const character = this.authedApp(party.gameMasterId)
+            .collection("parties")
+            .doc(party.id)
+            .collection("characters")
+            .doc(userId);
+
+        await firebase.assertFails(character.set(this.validCharacter(userId)));
+    }
+
+
+    @test
+    async "should let GMs archive character NOT associated to user"() {
+        const party = await this.createValidParty();
+        const characterId = uuid();
+
+        const character = this.authedApp(party.gameMasterId)
+            .collection("parties")
+            .doc(party.id)
+            .collection("characters")
+            .doc(characterId);
+
+        await character.set({
+            ...this.validCharacter("user123"),
+            id: characterId,
+            userId: null,
+        });
+
+        await assertSucceeds(character.update("archived", true))
+    }
+
+    @test
+    async "should NOT let GMs archive character associated to user"() {
+        const userId = "user123";
+        const party = await this.createUserAccessibleParty(userId);
+
+        const character = this.authedApp(party.gameMasterId)
+            .collection("parties")
+            .doc(party.id)
+            .collection("characters")
+            .doc(userId);
+
+        await firebase.assertSucceeds(character.set(this.validCharacter(userId)));
+
+        await assertFails(character.update("archived", true))
     }
 
     @test

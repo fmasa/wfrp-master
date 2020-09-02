@@ -8,33 +8,19 @@
     <ProgressBar
         android:id="@+id/progress"
         android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:layout_gravity="center"
-        android:visibility="gone"
-        android:layout_height="match_parent" />
+        android:visibility="gone" />
 
-    <LinearLayout
+    <FrameLayout
         android:id="@+id/mainView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:layout_height="wrap_content">
 
         <cz.muni.fi.rpg.ui.views.TextInput
             android:id="@+id/partyNameInput"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:inputLabel="@string/label_party_name" />
-
-        <com.google.android.material.checkbox.MaterialCheckBox
-            android:id="@+id/singlePlayerCheckbox"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/label_checkbox_single_player" />
-
-        <TextView
-            android:id="@+id/singlePlayerWarning"
-            android:visibility="gone"
-            android:text="You won't have access to GM tools!"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
-    </LinearLayout>
+    </FrameLayout>
 </FrameLayout>

@@ -33,6 +33,6 @@ internal class FirestoreSpellRepository(
         firestore.collection(COLLECTION_PARTIES)
             .document(characterId.partyId.toString())
             .collection(COLLECTION_CHARACTERS)
-            .document(characterId.userId)
+            .document(characterId.id)
             .collection(COLLECTION_SPELLS)
 }

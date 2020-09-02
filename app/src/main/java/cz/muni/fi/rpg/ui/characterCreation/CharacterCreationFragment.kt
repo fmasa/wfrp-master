@@ -5,22 +5,23 @@ import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import com.google.firebase.analytics.ktx.analytics
-import com.google.firebase.analytics.ktx.logEvent
-import com.google.firebase.ktx.Firebase
+import androidx.navigation.navOptions
 import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.model.domain.character.*
 import cz.muni.fi.rpg.ui.common.PartyScopedFragment
 import cz.muni.fi.rpg.ui.common.StaticFragmentsViewPagerAdapter
 import cz.muni.fi.rpg.ui.common.toast
 import cz.muni.fi.rpg.viewModels.AuthenticationViewModel
+import cz.muni.fi.rpg.viewModels.CharacterCreationViewModel
 import kotlinx.android.synthetic.main.fragment_character_creation.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.koin.android.viewmodel.ext.android.sharedViewModel
-import timber.log.Timber
+import org.koin.android.viewmodel.ext.android.viewModel
+import org.koin.core.parameter.parametersOf
+import java.lang.IllegalArgumentException
 import java.util.*
 
 class CharacterCreationFragment(
@@ -43,6 +44,10 @@ class CharacterCreationFragment(
         { CharacterPointsFormFragment() }
     )
 
+    private val viewModel: CharacterCreationViewModel by viewModel {
+        parametersOf(args.partyId)
+    }
+
     private var currentFragmentIndex = 0
 
     private var characterInfo: CharacterInfoFormFragment.Data? = null
@@ -52,7 +57,8 @@ class CharacterCreationFragment(
         super.onStart()
 
         launch {
-            if (characters.hasCharacterInParty(authentication.getUserId(), args.partyId)) {
+            val userId = args.userId
+            if (userId != null && characters.hasCharacterInParty(userId, args.partyId)) {
                 withContext(Dispatchers.Main) { toast(R.string.already_has_character) }
                 return@launch
             }
@@ -143,36 +149,26 @@ class CharacterCreationFragment(
         points: Points
     ) {
         launch {
-            val characterId = CharacterId(args.partyId, authentication.getUserId())
-            Timber.d("Creating character")
-            characters.save(
-                characterId.partyId,
-                Character(
-                    name = info.name,
-                    userId = characterId.userId,
-                    career = info.career,
-                    socialClass = info.socialClass,
-                    race = info.race,
-                    characteristicsBase = statsData.base,
-                    characteristicsAdvances = statsData.advances,
-                    points = points,
-                    psychology = info.psychology,
-                    motivation = info.motivation,
-                    note = info.note
-                )
-            )
-
-            Firebase.analytics.logEvent("create_character") {
-                param("party_id", characterId.partyId.toString())
-                param("character_id", characterId.userId)
-            }
+            val characterId = viewModel.createCharacter(args.userId, info, statsData, points)
 
             withContext(Dispatchers.Main) {
                 toast("Your character has been created")
 
-                findNavController().navigate(
-                    CharacterCreationFragmentDirections.openCharacter(characterId)
-                )
+                val navController = findNavController()
+                findNavController()
+                    .navigate(
+                        CharacterCreationFragmentDirections.openCharacter(characterId),
+                        navOptions {
+                            popUpTo(
+                                try {
+                                    navController.getBackStackEntry(R.id.nav_game_master)
+                                    R.id.nav_game_master
+                                } catch (e: IllegalArgumentException) {
+                                    R.id.nav_party_list
+                                }
+                            ) { inclusive = false }
+                        }
+                    )
             }
         }
 

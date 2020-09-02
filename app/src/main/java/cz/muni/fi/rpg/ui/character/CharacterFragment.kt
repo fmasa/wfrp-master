@@ -10,11 +10,13 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.google.android.material.tabs.TabLayoutMediator
 import cz.muni.fi.rpg.R
+import cz.muni.fi.rpg.model.domain.character.CharacterId
 import cz.muni.fi.rpg.model.domain.character.CharacterNotFound
 import cz.muni.fi.rpg.ui.character.skills.CharacterSkillsFragment
 import cz.muni.fi.rpg.ui.common.AdManager
 import cz.muni.fi.rpg.ui.common.PartyScopedFragment
 import cz.muni.fi.rpg.ui.common.StaticFragmentsViewPagerAdapter
+import cz.muni.fi.rpg.viewModels.AuthenticationViewModel
 import cz.muni.fi.rpg.viewModels.CharacterViewModel
 import kotlinx.android.synthetic.main.fragment_character.*
 import org.koin.android.viewmodel.ext.android.viewModel
@@ -29,6 +31,7 @@ class CharacterFragment(
 
     private val args: CharacterFragmentArgs by navArgs()
     private val viewModel: CharacterViewModel by viewModel { parametersOf(args.characterId) }
+    private val auth: AuthenticationViewModel by viewModel { parametersOf(args.characterId) }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -37,7 +40,15 @@ class CharacterFragment(
         setHasOptionsMenu(true)
 
         viewModel.character.observe(viewLifecycleOwner) {
-            it.mapLeft { e -> openCharacterCreation(e) }
+            it.mapLeft { e ->
+                Timber.e(e, "Character not found")
+
+                if (args.characterId.isDerivedFromUserId(auth.getUserId())) {
+                    openCharacterCreation(auth.getUserId())
+                } else {
+                    findNavController().popBackStack(R.id.nav_party_list, false)
+                }
+            }
             it.map {
                 character -> setTitle(character.getName())
                 mainView.visibility = View.VISIBLE
@@ -100,10 +111,8 @@ class CharacterFragment(
         return super.onOptionsItemSelected(item)
     }
 
-    private fun openCharacterCreation(e: CharacterNotFound) {
-        Timber.e(e, "Character not found")
-
+    private fun openCharacterCreation(userId: String) {
         findNavController()
-            .navigate(CharacterFragmentDirections.createCharacter(args.characterId.partyId))
+            .navigate(CharacterFragmentDirections.createCharacter(args.characterId.partyId, userId))
     }
 }
