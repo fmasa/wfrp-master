@@ -119,7 +119,8 @@ class CharacterCreationFragment(
                             resilience = points.resilience,
                             resolve = points.resilience,
                             corruption = 0,
-                            sin = 0
+                            sin = 0,
+                            hardyWoundsBonus = 0
                         )
                     )
                 }

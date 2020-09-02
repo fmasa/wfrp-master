@@ -59,7 +59,7 @@ internal class FirestorePartyRepository(
     }
 
     override fun forUserLive(userId: String): LiveData<List<Party>> =
-        QueryLiveData(queryForUser(userId), mapper) { !it.isArchived() }
+        QueryLiveData(queryForUser(userId), mapper)
 
     override suspend fun forUser(userId: String) =
         queryForUser(userId)
@@ -67,7 +67,8 @@ internal class FirestorePartyRepository(
             .await()
             .documents
             .map { mapper.fromDocumentSnapshot(it) }
-            .filter { !it.isArchived() }
 
-    private fun queryForUser(userId: String) = parties.whereArrayContains("users", userId)
+    private fun queryForUser(userId: String) = parties
+        .whereArrayContains("users", userId)
+        .whereEqualTo("archived", false)
 }

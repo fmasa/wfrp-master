@@ -64,7 +64,7 @@ export abstract class Suite {
             career: "God",
             socialClass: "Warrior",
             race: "HUMAN",
-            stats: {
+            characteristicsAdvances: {
                 weaponSkill: 35,
                 dexterity: 20,
                 initiative: 10,
@@ -76,7 +76,7 @@ export abstract class Suite {
                 willPower: 10,
                 fellowship: 10,
             },
-            maxStats: {
+            characteristicsBase: {
                 weaponSkill: 35,
                 dexterity: 20,
                 initiative: 10,
@@ -98,6 +98,7 @@ export abstract class Suite {
                 resilience: 10,
                 resolve: 5,
                 sin: 4,
+                hardyWoundsBonus: 0,
             },
             ambitions: {
                 shortTerm: 'Kill monsters!',
@@ -110,6 +111,7 @@ export abstract class Suite {
                 pennies: 1000,
             },
             note: "",
+            hardyTalent: false,
         }
     }
 

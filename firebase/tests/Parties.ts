@@ -35,25 +35,6 @@ class Parties extends Suite {
     }
 
     @test
-    async "users can create party without `archived` field (BC)"() {
-        const data = this.validParty();
-
-        delete data['archived'];
-
-        const party = this.authedApp(data.gameMasterId)
-            .collection("parties")
-            .doc(data.id);
-
-        // Empty name
-        await firebase.assertFails(party.set({...data, name: ""}));
-
-        // Whitespaces only name
-        await firebase.assertFails(party.set({...data, name: "\t \r"}));
-
-        await firebase.assertSucceeds(party.set(data))
-    }
-
-    @test
     async "should NOT let users create party with incorrect field values"() {
         const data = this.validParty();
         const parties = this.authedApp(data.gameMasterId).collection("parties");
@@ -131,10 +112,6 @@ class Parties extends Suite {
             .collection("parties");
 
         await Promise.all(Object.keys(this.validParty()).map(field => {
-            if (field === 'archived') {
-                return; // This field is optional for now (BC)
-            }
-
             if (field === 'time') {
                 return; // This field is optional for now (BC), TODO: Remove in 1.14
             }
@@ -368,10 +345,6 @@ class Parties extends Suite {
         const data = this.validCharacter(userId);
 
         for (const field of Object.keys(data)) {
-            if (field == "maxStats") {
-                continue;  // maxStats are not used anymore and are there only for BC (TODO: Remove in 1.10)
-            }
-
             const newData = {...data};
 
             delete newData[field];
@@ -456,7 +429,7 @@ class Parties extends Suite {
     }
 
     @test
-    async "should not let users create character with invalid stats"() {
+    async "should not let users create character with invalid characteristics"() {
         const userId = "user123";
         const partyId = (await this.createUserAccessibleParty(userId)).id;
 
@@ -468,14 +441,14 @@ class Parties extends Suite {
 
         const data = this.validCharacter(userId);
 
-        for (const stat of Object.keys(data.stats)) {
-            const newData = {...data, stats: withoutField(data.stats, stat)};
+        for (const stat of Object.keys(data.characteristicsBase)) {
+            const newData = {...data, characteristicsBase: withoutField(data.characteristicsBase, stat)};
 
             // Missing stat
             await firebase.assertFails(character.set(newData));
 
             // Wrong stat type
-            newData.stats[stat] = "foo";
+            newData.characteristicsBase[stat] = "foo";
             await firebase.assertFails(character.set(newData));
         }
     }
@@ -493,7 +466,7 @@ class Parties extends Suite {
 
         const data = this.validCharacter(userId);
 
-        await firebase.assertFails(character.set({...data, stats: {...data.stats, extraStat: 10}}));
+        await firebase.assertFails(character.set({...data, characteristicsBase: {...data.characteristicsBase, extraStat: 10}}));
 
         const withPoints = (point: string, value: any) => ({...data, points: {...data.points, [point]: value}});
 
@@ -521,14 +494,6 @@ class Parties extends Suite {
         await firebase.assertSucceeds(
             document.update("points", {...this.validCharacter(userId).points, hardyWoundsBonus: 3})
         );
-
-        const character = (await document.get()).data() as Character;
-
-        await firebase.assertSucceeds(document.update({
-            characteristicsBase: character.stats,
-            characteristicsAdvances: character.stats,
-            ...withoutField(character, "stats")
-        }));
     }
 
     @test

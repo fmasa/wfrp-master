@@ -184,10 +184,8 @@ service cloud.firestore {
                             "socialClass",
                             "points",
                             "race",
-                            "stats",
                             "characteristicsBase",
                             "characteristicsAdvances",
-                            "maxStats",
                             "userId",
                             "money",
                             "motivation",
@@ -209,14 +207,12 @@ service cloud.firestore {
                         && character.socialClass is string && isNotBlank(character.socialClass) && character.socialClass.size() <= 50
                         && character.race is string && character.race in ["HUMAN", "HIGH_ELF", "DWARF", "HALFLING", "WOOD_ELF", "GNOME"]
                         && arePointsValid(character.points)
-                        && ("stats" in character || "characteristicsBase" in character)
-                        && (! ("stats" in character) || areStatsValid(character.stats))
-                        && (! ("characteristicsBase" in character) || areStatsValid(character.characteristicsBase))
-                        && (! ("characteristicsAdvances" in character) || areStatsValid(character.characteristicsAdvances))
+                        && areStatsValid(character.characteristicsBase)
+                        && areStatsValid(character.characteristicsAdvances)
                         && areMoneyValid(character.money)
                         && areAmbitionsValid(character.ambitions)
                         && character.note is string && character.note.size() <= 400
-                        && (! ("hardyTalent" in character) || (character.hardyTalent is bool))
+                        && character.hardyTalent is bool
                         && (! ("archived" in character) || (character.archived is bool && (!character.archived || character.userId == null)));
                 }
             }
@@ -244,7 +240,7 @@ service cloud.firestore {
                     && points.sin is int
                     && points.wounds is int
                     && points.experience is int
-                    && (! ("hardyWoundsBonus" in points) || (points.hardyWoundsBonus is int && points.hardyWoundsBonus >= 0));
+                    && points.hardyWoundsBonus is int;
             }
 
             function areStatsValid(stats) {
@@ -305,7 +301,7 @@ service cloud.firestore {
                     && party.id is string && party.id == partyId && isValidUuid(party.id)
                     && isValidPartyName(party.name)
                     && party.users == [uid]
-                    && (! ("archived" in party) || party.archived is bool)
+                    && party.archived is bool
                     && (party.gameMasterId == uid || party.gameMasterId == null)
                     && party.accessCode is string && party.accessCode != ""
                     && (! ("time" in party) || isValidImperialTime(party.time))
@@ -321,7 +317,7 @@ service cloud.firestore {
                     && isValidPartyName(party.name)
                     && party.users.toSet() == resource.data.users.toSet()
                     && (! ("time" in party) || isValidImperialTime(party.time))
-                    && (! ("archived" in party) || party.archived is bool)
+                    && party.archived is bool;
             }
 
             function isValidImperialTime(time) {

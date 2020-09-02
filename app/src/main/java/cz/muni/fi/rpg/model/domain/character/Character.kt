@@ -1,6 +1,5 @@
 package cz.muni.fi.rpg.model.domain.character
 
-import com.fasterxml.jackson.annotation.JsonAlias
 import cz.muni.fi.rpg.model.domain.common.Ambitions
 import cz.muni.fi.rpg.model.domain.common.Money
 import java.lang.IllegalArgumentException
@@ -13,9 +12,8 @@ data class Character(
     private var psychology: String,
     private var motivation: String,
     private var race: Race,
-    @JsonAlias("stats") // TODO: Remove alias in 1.10
     private var characteristicsBase: Stats,
-    private var characteristicsAdvances: Stats = Stats(0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
+    private var characteristicsAdvances: Stats,
     private var points: Points,
     private var ambitions: Ambitions = Ambitions("", ""),
     private var mutation: String = "",
