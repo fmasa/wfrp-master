@@ -8,6 +8,7 @@ import android.view.View
 import android.widget.LinearLayout
 import androidx.core.content.res.getIntegerOrThrow
 import androidx.core.widget.addTextChangedListener
+import arrow.core.extensions.list.align.empty
 import com.google.android.material.textfield.TextInputLayout
 import cz.muni.fi.rpg.R
 import kotlinx.android.parcel.Parcelize
@@ -15,9 +16,14 @@ import kotlinx.android.synthetic.main.view_text_input.view.*
 
 class TextInput(context: Context, attrs: AttributeSet) : LinearLayout(context, attrs) {
     @Parcelize
-    private data class SavedState(val value: String, val superState: Parcelable?) : Parcelable
+    private data class SavedState(
+        val value: String,
+        val emptyValue: String,
+        val superState: Parcelable?
+    ) : Parcelable
 
     private var value: String = ""
+    private var emptyValue: String = ""
 
     private val textInputLayout: TextInputLayout
 
@@ -72,22 +78,28 @@ class TextInput(context: Context, attrs: AttributeSet) : LinearLayout(context, a
 
     fun setDefaultValue(value: String, force: Boolean = false) {
         if (force || textInputLayout.editText?.text.toString() == "") {
-            textInputLayout.editText?.setText(value)
+            textInputLayout.editText?.setText(if (value == emptyValue) "" else value)
         }
     }
 
-    fun getValue(): String = value
+    fun getValue(): String = if (value == "") emptyValue else value
 
     override fun onSaveInstanceState(): Parcelable? {
-        return SavedState(value, super.onSaveInstanceState())
+        return SavedState(value, emptyValue, super.onSaveInstanceState())
     }
 
     override fun onRestoreInstanceState(state: Parcelable?) {
         check(state is SavedState)
 
         value = state.value
+        emptyValue = state.emptyValue
         textInputLayout.editText?.setText(value)
 
         super.onRestoreInstanceState(state.superState)
+    }
+
+    fun setEmptyValue(value: String) {
+        emptyValue = value
+        textInputLayout.editText?.hint = value
     }
 }

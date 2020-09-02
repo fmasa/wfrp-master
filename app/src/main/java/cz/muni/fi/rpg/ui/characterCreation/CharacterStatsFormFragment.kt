@@ -39,20 +39,20 @@ class CharacterStatsFormFragment :
         form = Form(requireContext())
 
         fields.values.forEach { input ->
+            input.setEmptyValue("0")
+
             form.addTextInput(input).apply {
-                setDefaultValue("0")
                 setShowErrorInEditText()
-                addLiveRule(R.string.error_required) { !it.isNullOrBlank() }
-                addLiveRule(R.string.error_value_over_100) { it.toString().toInt() <= 100 }
+                addLiveRule(R.string.error_value_over_100) { input.getValue().toInt() <= 100 }
             }
         }
 
         fields.entries.forEach { entry ->
+            entry.key.setEmptyValue("0")
+
             form.addTextInput(entry.key).apply {
-                setDefaultValue("0")
                 setShowErrorInEditText()
-                addLiveRule(R.string.error_required) { !it.isNullOrBlank() }
-                addLiveRule(R.string.error_value_over_100) { it.toString().toInt() <= 100 }
+                addLiveRule(R.string.error_value_over_100) { entry.key.getValue().toInt() <= 100 }
             }
         }
 
