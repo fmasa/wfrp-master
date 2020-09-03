@@ -83,20 +83,30 @@ private fun PointsSection(points: Points, onUpdate: (Points) -> Unit) {
 
     Column {
         CardContainer(Modifier.fillMaxWidth()) {
-            Row(horizontalArrangement = Arrangement.SpaceBetween) {
+            Row(
+                horizontalArrangement = Arrangement.SpaceEvenly,
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                val modifier = Modifier.weight(1f)
+
                 PointItem(
                     R.string.label_wounds,
                     points.wounds,
+                    modifier = modifier,
                     color = if (points.isHeavilyWounded()) R.color.colorDanger else R.color.colorText
                 ) { newValue ->
                     updateIfChanged { it.copy(wounds = newValue) }
                 }
 
-                PointItem(R.string.label_corruption, points.corruption) { newValue ->
+                PointItem(
+                    R.string.label_corruption,
+                    points.corruption,
+                    modifier = modifier,
+                ) { newValue ->
                     updateIfChanged { it.copy(corruption = newValue) }
                 }
 
-                PointItem(R.string.label_sin, points.sin) { newValue ->
+                PointItem(R.string.label_sin, points.sin, modifier = modifier) { newValue ->
                     updateIfChanged { it.copy(sin = newValue) }
                 }
             }
@@ -169,14 +179,16 @@ private fun PointItem(
     @StringRes labelRes: Int,
     value: Int,
     @ColorRes color: Int = R.color.colorText,
-    onUpdate: (Int) -> Unit
+    modifier: Modifier = Modifier,
+    onUpdate: (Int) -> Unit,
 ) {
     NumberPicker(
         label = stringResource(labelRes),
         value = value,
         color = color,
         onIncrement = { onUpdate(value + 1) },
-        onDecrement = { onUpdate(value - 1) }
+        onDecrement = { onUpdate(value - 1) },
+        modifier = modifier,
     )
 }
 
