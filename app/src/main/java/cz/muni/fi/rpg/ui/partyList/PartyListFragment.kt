@@ -131,7 +131,7 @@ fun PartyItem(party: Party, onClick: () -> Unit, onLongPress: () -> Unit) {
                     .fillMaxWidth(),
                 verticalGravity = Alignment.CenterVertically
             ) {
-                ItemIcon(R.drawable.ic_group)
+                ItemIcon(R.drawable.ic_group, ItemIcon.Size.Large)
                 Text(
                     party.getName(),
                     modifier = Modifier.padding(start = 16.dp),
