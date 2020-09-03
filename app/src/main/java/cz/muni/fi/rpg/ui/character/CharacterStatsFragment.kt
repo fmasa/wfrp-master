@@ -1,7 +1,9 @@
 package cz.muni.fi.rpg.ui.character
 
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import androidx.annotation.ColorRes
 import androidx.annotation.StringRes
 import androidx.compose.foundation.Box
@@ -19,15 +21,13 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.observe
 import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.model.domain.character.CharacterId
 import cz.muni.fi.rpg.model.domain.character.Points
-import cz.muni.fi.rpg.model.map
+import cz.muni.fi.rpg.model.domain.character.Stats
 import cz.muni.fi.rpg.model.right
 import cz.muni.fi.rpg.ui.common.NumberPicker
 import cz.muni.fi.rpg.ui.common.parcelableArgument
-import cz.muni.fi.rpg.ui.views.StatsTable
 import cz.muni.fi.rpg.viewModels.CharacterStatsViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -36,7 +36,7 @@ import org.koin.core.parameter.parametersOf
 import timber.log.Timber
 import java.lang.IllegalArgumentException
 
-class CharacterStatsFragment : Fragment(R.layout.fragment_character_stats),
+class CharacterStatsFragment : Fragment(),
     CoroutineScope by CoroutineScope(Dispatchers.Default) {
     companion object {
         private const val ARGUMENT_CHARACTER_ID = "CHARACTER_ID"
@@ -49,34 +49,25 @@ class CharacterStatsFragment : Fragment(R.layout.fragment_character_stats),
     private val characterId: CharacterId by parcelableArgument(ARGUMENT_CHARACTER_ID)
     private val viewModel: CharacterStatsViewModel by viewModel { parametersOf(characterId) }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        return ComposeView(requireContext()).apply {
+            setContent {
+                MaterialTheme {
+                    val character = viewModel.character.right().observeAsState()
 
-        bindCompose(view)
-        bindStats(view)
-    }
-
-    private fun bindCompose(view: View) {
-        view.findViewById<ComposeView>(R.id.compose).setContent {
-            MaterialTheme {
-                val character = viewModel.character.right().observeAsState()
-
-                character.value?.let {
-                    Box(Modifier.padding(horizontal = 8.dp)) {
-                        PointsSection(it.getPoints()) { points -> viewModel.updatePoints { points } }
+                    character.value?.let {
+                        Box(Modifier.padding(horizontal = 8.dp)) {
+                            PointsSection(it.getPoints()) { points -> viewModel.updatePoints { points } }
+                            CharacteristicsSection(it.getCharacteristics())
+                        }
                     }
                 }
             }
         }
-    }
-
-    private fun bindStats(view: View) {
-        viewModel.character
-            .right()
-            .map { character -> character.getCharacteristics() }
-            .observe(viewLifecycleOwner) {
-                view.findViewById<StatsTable>(R.id.statsTable).setValue(it)
-            }
     }
 }
 
@@ -187,4 +178,48 @@ private fun PointItem(
         onIncrement = { onUpdate(value + 1) },
         onDecrement = { onUpdate(value - 1) }
     )
+}
+
+@Composable
+private fun CharacteristicsSection(stats: Stats) {
+    CardContainer {
+        Row(horizontalArrangement = Arrangement.SpaceEvenly, modifier = Modifier.fillMaxWidth()) {
+            Column(horizontalGravity = Alignment.CenterHorizontally) {
+                Characteristic(R.string.label_shortcut_weapon_skill, stats.weaponSkill)
+                Characteristic(R.string.label_shortcut_agility, stats.agility)
+            }
+
+            Column(horizontalGravity = Alignment.CenterHorizontally) {
+                Characteristic(R.string.label_shortcut_ballistic_skill, stats.ballisticSkill)
+                Characteristic(R.string.label_shortcut_dexterity, stats.dexterity)
+            }
+
+            Column(horizontalGravity = Alignment.CenterHorizontally) {
+                Characteristic(R.string.label_shortcut_strength, stats.strength)
+                Characteristic(R.string.label_shortcut_intelligence, stats.intelligence)
+            }
+
+            Column(horizontalGravity = Alignment.CenterHorizontally) {
+                Characteristic(R.string.label_shortcut_toughness, stats.toughness)
+                Characteristic(R.string.label_shortcut_will_power, stats.willPower)
+            }
+
+            Column(horizontalGravity = Alignment.CenterHorizontally) {
+                Characteristic(R.string.label_shortcut_initiative, stats.initiative)
+                Characteristic(R.string.label_shortcut_fellowship, stats.fellowship)
+            }
+        }
+    }
+}
+
+@Composable
+private fun Characteristic(@StringRes labelRes: Int, value: Int) {
+    Column(horizontalGravity = Alignment.CenterHorizontally) {
+        Text(stringResource(labelRes), style = MaterialTheme.typography.subtitle1)
+        Text(
+            value.toString(),
+            Modifier.padding(vertical = 12.dp),
+            style = MaterialTheme.typography.h5
+        )
+    }
 }
