@@ -29,7 +29,6 @@ import cz.muni.fi.rpg.ui.character.*
 import cz.muni.fi.rpg.ui.character.CharacterMiscFragment
 import cz.muni.fi.rpg.ui.character.edit.CharacterEditFragment
 import cz.muni.fi.rpg.ui.character.skills.CharacterSkillsFragment
-import cz.muni.fi.rpg.ui.character.skills.talents.TalentsFragment
 import cz.muni.fi.rpg.ui.characterCreation.CharacterCreationFragment
 import cz.muni.fi.rpg.ui.characterCreation.CharacterInfoFormFragment
 import cz.muni.fi.rpg.ui.characterCreation.CharacterStatsFormFragment
@@ -133,7 +132,6 @@ val appModule = module {
     fragment { CharacterInfoFormFragment() }
     fragment { CharacterStatsFormFragment() }
     fragment { CharacterCreationFragment(get()) }
-    fragment { TalentsFragment() }
     fragment { CharacterArmorFragment() }
     fragment { EncountersFragment() }
     fragment { EncounterDetailFragment() }

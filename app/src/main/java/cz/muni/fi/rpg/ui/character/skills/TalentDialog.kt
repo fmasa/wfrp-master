@@ -1,4 +1,4 @@
-package cz.muni.fi.rpg.ui.character.skills.talents
+package cz.muni.fi.rpg.ui.character.skills
 
 import android.app.Dialog
 import android.os.Bundle

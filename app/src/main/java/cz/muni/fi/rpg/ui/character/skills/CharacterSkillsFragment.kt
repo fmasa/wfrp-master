@@ -1,39 +1,32 @@
 package cz.muni.fi.rpg.ui.character.skills
 
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
-import androidx.annotation.DrawableRes
-import androidx.compose.foundation.Text
-import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumnFor
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.ui.Alignment
+import android.view.ViewGroup
+import androidx.compose.foundation.ScrollableColumn
+import androidx.compose.foundation.background
+import androidx.compose.material.MaterialTheme
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
-import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.commit
-import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.model.domain.character.CharacterId
-import cz.muni.fi.rpg.model.domain.character.Stats
 import cz.muni.fi.rpg.model.domain.skills.Skill
-import cz.muni.fi.rpg.model.domain.skills.SkillCharacteristic
-import cz.muni.fi.rpg.model.right
-import cz.muni.fi.rpg.ui.character.skills.talents.TalentsFragment
+import cz.muni.fi.rpg.model.domain.talents.Talent
 import cz.muni.fi.rpg.ui.common.composables.*
 import cz.muni.fi.rpg.ui.common.parcelableArgument
 import cz.muni.fi.rpg.viewModels.CharacterViewModel
 import cz.muni.fi.rpg.viewModels.SkillsViewModel
+import cz.muni.fi.rpg.viewModels.TalentsViewModel
 import org.koin.android.viewmodel.ext.android.viewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.koin.core.parameter.parametersOf
 
-class CharacterSkillsFragment : Fragment(R.layout.fragment_character_skills),
+class CharacterSkillsFragment : Fragment(),
     CoroutineScope by CoroutineScope(Dispatchers.Default) {
     companion object {
         private const val ARGUMENT_CHARACTER_ID = "CHARACTER_ID"
@@ -46,137 +39,50 @@ class CharacterSkillsFragment : Fragment(R.layout.fragment_character_skills),
     private val characterId: CharacterId by parcelableArgument(ARGUMENT_CHARACTER_ID)
 
     private val characterVm: CharacterViewModel by viewModel { parametersOf(characterId) }
-    private val viewModel: SkillsViewModel by viewModel { parametersOf(characterId) }
+    private val skillsVm: SkillsViewModel by viewModel { parametersOf(characterId) }
+    private val talentsVm: TalentsViewModel by viewModel { parametersOf(characterId) }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        return ComposeView(requireContext()).apply {
+            setContent {
+                Theme {
+                    ScrollableColumn(Modifier.background(MaterialTheme.colors.background)) {
+                        SkillsCard(
+                            characterVm,
+                            skillsVm,
+                            onClick = { openSkillDialog(it) },
+                            onRemove = { launch { skillsVm.removeSkill(it) } },
+                            onNewSkillButtonClicked = { openSkillDialog(null) },
+                        )
 
-        view.findViewById<ComposeView>(R.id.compose).setContent {
-            Theme {
-                MainContainer(
-                    characterVm = characterVm,
-                    skillsVm = viewModel,
-                    onClick = { openSkillDialog(it) },
-                    onRemove = { launch { viewModel.removeSkill(it) } },
-                    onNewSkillButtonClicked = { openSkillDialog(null) },
-                )
+                        TalentsCard(
+                            talentsVm,
+                            onClick = { openTalentDialog(it) },
+                            onRemove = { launch { talentsVm.removeTalent(it) } },
+                            onAddButtonClicked = { openTalentDialog(null) }
+                        )
+                    }
+                }
             }
-        }
-
-        childFragmentManager.commit {
-            replace(R.id.talentsFragment, TalentsFragment.newInstance(characterId))
         }
     }
 
     private fun openSkillDialog(existingSkill: Skill?) {
         SkillDialog.newInstance(characterId, existingSkill).show(childFragmentManager, null)
     }
-}
 
-@Composable
-private fun MainContainer(
-    characterVm: CharacterViewModel,
-    skillsVm: SkillsViewModel,
-    onClick: (Skill) -> Unit,
-    onRemove: (Skill) -> Unit,
-    onNewSkillButtonClicked: () -> Unit,
-) {
-    SkillsCard(
-        characterVm,
-        skillsVm,
-        onClick = onClick,
-        onRemove = onRemove,
-        onNewSkillButtonClicked = onNewSkillButtonClicked,
-    )
-}
+    private fun openTalentDialog(existingTalent: Talent?) {
+        val dialog = TalentDialog.newInstance(existingTalent)
+        dialog.setOnSuccessListener { talent ->
+            launch {
+                talentsVm.saveTalent(talent)
 
-@Composable
-private fun SkillsCard(
-    characterVm: CharacterViewModel,
-    skillsVm: SkillsViewModel,
-    onClick: (Skill) -> Unit,
-    onRemove: (Skill) -> Unit,
-    onNewSkillButtonClicked: () -> Unit,
-) {
-    val skills = skillsVm.skills.observeAsState().value ?: return
-    val characteristics = characterVm.character.right()
-        .observeAsState().value?.getCharacteristics() ?: return
-
-
-    CardContainer(Modifier.padding(horizontal = 8.dp).padding(bottom = 8.dp)) {
-        Column {
-            CardTitle(R.string.title_character_skills)
-
-            if (skills.isEmpty()) {
-                EmptyUI(R.string.no_skills, R.drawable.ic_skills, EmptyUI.Size.Small)
-            } else {
-                LazyColumnFor(skills) { skill ->
-                    SkillItem(
-                        skill,
-                        characteristics,
-                        onClick = { onClick(skill) },
-                        onRemove = { onRemove(skill) }
-                    )
-                }
+                withContext(Dispatchers.Main) { dialog.dismiss() }
             }
-
-            CardButton(R.string.title_addSkill, onClick = onNewSkillButtonClicked)
-        }
+        }.show(childFragmentManager, "TalentDialog")
     }
-}
-
-@Composable
-private fun SkillItem(
-    skill: Skill,
-    characteristics: Stats,
-    onClick: () -> Unit,
-    onRemove: () -> Unit
-) {
-    CardItem(
-        skill.name,
-        skill.description,
-        resolveSkillIcon(skill),
-        onClick = onClick,
-        listOf(ContextMenu.Item(stringResource(R.string.remove), onClick = { onRemove() })),
-        badgeContent = { TestNumber(skill, characteristics) }
-    )
-}
-
-@Composable
-private fun TestNumber(skill: Skill, characteristics: Stats) {
-
-    val testNumber = skill.advances + when (skill.characteristic) {
-        SkillCharacteristic.AGILITY -> characteristics.agility
-        SkillCharacteristic.BALLISTIC_SKILL -> characteristics.ballisticSkill
-        SkillCharacteristic.DEXTERITY -> characteristics.dexterity
-        SkillCharacteristic.FELLOWSHIP -> characteristics.fellowship
-        SkillCharacteristic.INITIATIVE -> characteristics.initiative
-        SkillCharacteristic.INTELLIGENCE -> characteristics.intelligence
-        SkillCharacteristic.STRENGTH -> characteristics.strength
-        SkillCharacteristic.TOUGHNESS -> characteristics.toughness
-        SkillCharacteristic.WEAPON_SKILL -> characteristics.weaponSkill
-        SkillCharacteristic.WILL_POWER -> characteristics.willPower
-    }
-
-    Row(
-        horizontalArrangement = Arrangement.End,
-        verticalGravity = Alignment.CenterVertically
-    ) {
-        Text(stringResource(R.string.skill_test_number_shortcut))
-        Text(testNumber.toString(), Modifier.padding(start = 4.dp))
-    }
-}
-
-@DrawableRes
-private fun resolveSkillIcon(skill: Skill) = when (skill.characteristic) {
-    SkillCharacteristic.AGILITY -> R.drawable.ic_agility
-    SkillCharacteristic.BALLISTIC_SKILL -> R.drawable.ic_ballistic_skill
-    SkillCharacteristic.DEXTERITY -> R.drawable.ic_dexterity
-    SkillCharacteristic.INITIATIVE -> R.drawable.ic_initiative
-    SkillCharacteristic.INTELLIGENCE -> R.drawable.ic_intelligence
-    SkillCharacteristic.FELLOWSHIP -> R.drawable.ic_fellowship
-    SkillCharacteristic.STRENGTH -> R.drawable.ic_strength
-    SkillCharacteristic.TOUGHNESS -> R.drawable.ic_toughness
-    SkillCharacteristic.WEAPON_SKILL -> R.drawable.ic_weapon_skill
-    SkillCharacteristic.WILL_POWER -> R.drawable.ic_will_power
 }
