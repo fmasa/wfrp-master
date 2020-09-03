@@ -8,14 +8,11 @@ import androidx.annotation.ColorRes
 import androidx.annotation.StringRes
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Card
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
@@ -27,6 +24,7 @@ import cz.muni.fi.rpg.model.domain.character.CharacterId
 import cz.muni.fi.rpg.model.domain.character.Points
 import cz.muni.fi.rpg.model.domain.character.Stats
 import cz.muni.fi.rpg.model.right
+import cz.muni.fi.rpg.ui.common.composables.CardContainer
 import cz.muni.fi.rpg.ui.common.composables.NumberPicker
 import cz.muni.fi.rpg.ui.common.parcelableArgument
 import cz.muni.fi.rpg.viewModels.CharacterStatsViewModel
@@ -160,22 +158,6 @@ private fun PointsSection(points: Points, onUpdate: (Points) -> Unit) {
                     }
                 }
             }
-        }
-    }
-}
-
-// TODO: Move to common Composables
-@Composable
-private fun CardContainer(modifier: Modifier? = null, content: @Composable () -> Unit) {
-    val baseModifier = Modifier.padding(top = 12.dp)
-
-    Box(modifier?.let { baseModifier.then(it) } ?: baseModifier) {
-        Card(
-            modifier = Modifier.fillMaxWidth(),
-            elevation = 2.dp,
-            shape = RoundedCornerShape(4.dp)
-        ) {
-            Box(Modifier.padding(vertical = 16.dp, horizontal = 8.dp), children = content)
         }
     }
 }
