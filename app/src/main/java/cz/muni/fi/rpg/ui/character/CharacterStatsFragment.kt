@@ -6,8 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.ColorRes
 import androidx.annotation.StringRes
-import androidx.compose.foundation.Box
-import androidx.compose.foundation.Text
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
@@ -16,7 +15,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.core.os.bundleOf
@@ -57,13 +58,15 @@ class CharacterStatsFragment : Fragment(),
         return ComposeView(requireContext()).apply {
             setContent {
                 MaterialTheme {
-                    val character = viewModel.character.right().observeAsState()
+                    val character = viewModel.character.right().observeAsState().value
+                        ?: return@MaterialTheme
 
-                    character.value?.let {
-                        Box(Modifier.padding(horizontal = 8.dp)) {
-                            PointsSection(it.getPoints()) { points -> viewModel.updatePoints { points } }
-                            CharacteristicsSection(it.getCharacteristics())
-                        }
+                    ScrollableColumn(
+                        Modifier.background(colorResource(R.color.colorBackgroundUnderCard))
+                    ) {
+                        PointsSection(character.getPoints()) { points -> viewModel.updatePoints { points } }
+                        CharacteristicsSection(character.getCharacteristics())
+                        Spacer(Modifier.padding(bottom = 8.dp))
                     }
                 }
             }
@@ -82,7 +85,7 @@ private fun PointsSection(points: Points, onUpdate: (Points) -> Unit) {
     }
 
     Column {
-        CardContainer(Modifier.fillMaxWidth()) {
+        CardContainer(Modifier.fillMaxWidth().padding(horizontal = 8.dp)) {
             Row(
                 horizontalArrangement = Arrangement.SpaceEvenly,
                 modifier = Modifier.fillMaxWidth()
@@ -112,7 +115,10 @@ private fun PointsSection(points: Points, onUpdate: (Points) -> Unit) {
             }
         }
 
-        Row(horizontalArrangement = Arrangement.spacedBy(12.dp, Alignment.CenterHorizontally)) {
+        Row(
+            modifier = Modifier.padding(horizontal = 8.dp),
+            horizontalArrangement = Arrangement.spacedBy(12.dp, Alignment.CenterHorizontally)
+        ) {
             CardContainer(Modifier.weight(1f)) {
                 Column(
                     horizontalGravity = Alignment.CenterHorizontally,
@@ -194,7 +200,7 @@ private fun PointItem(
 
 @Composable
 private fun CharacteristicsSection(stats: Stats) {
-    CardContainer {
+    CardContainer(modifier = Modifier.padding(horizontal = 8.dp)) {
         Row(horizontalArrangement = Arrangement.SpaceEvenly, modifier = Modifier.fillMaxWidth()) {
             Column(horizontalGravity = Alignment.CenterHorizontally) {
                 Characteristic(R.string.label_shortcut_weapon_skill, stats.weaponSkill)
