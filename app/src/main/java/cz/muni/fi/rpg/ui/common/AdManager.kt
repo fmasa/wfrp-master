@@ -41,7 +41,7 @@ class AdManager(private val context: Context) {
     fun initializeUnit(view: AdView) {
         view.layoutParams = LinearLayout.LayoutParams(
             LinearLayout.LayoutParams.MATCH_PARENT,
-            0
+            AdSize.SMART_BANNER.getHeightInPixels(context)
         )
 
         view.loadAd(
