@@ -20,7 +20,7 @@
             style="@style/RecyclerViewItemIcon"
             android:background="@drawable/circle_background"
             android:src="@drawable/ic_combatant"
-            android:tint="@color/colorFabText"
+            app:tint="@color/colorFabText"
             android:padding="0dp"
             android:contentDescription="@string/inventory_item_icon_description"
             app:layout_constraintBottom_toBottomOf="parent"

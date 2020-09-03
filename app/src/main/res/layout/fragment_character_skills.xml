@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/colorBackgroundUnderCard"
     tools:context=".ui.character.skills.CharacterSkillsFragment">
 
@@ -41,7 +42,7 @@
                     android:layout_height="60dp"
                     android:visibility="gone"
                     android:src="@drawable/ic_skills"
-                    android:tint="@color/colorEmptyState" />
+                    app:tint="@color/colorEmptyState" />
 
                 <TextView
                     android:id="@+id/noSkillsText"

@@ -43,7 +43,7 @@
                     android:layout_height="60dp"
                     android:layout_gravity="center"
                     android:src="@drawable/ic_group"
-                    android:tint="@color/colorEmptyState"
+                    app:tint="@color/colorEmptyState"
                     android:visibility="gone" />
 
                 <TextView
