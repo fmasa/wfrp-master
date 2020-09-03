@@ -2,22 +2,16 @@ package cz.muni.fi.rpg.ui.character.skills
 
 import android.os.Bundle
 import android.view.View
-import androidx.compose.foundation.Box
+import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Text
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumnFor
-import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.gesture.longPressGestureFilter
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
@@ -138,54 +132,14 @@ private fun SkillItem(
     onClick: () -> Unit,
     onRemove: () -> Unit
 ) {
-    val menuOpened = mutableStateOf(false)
-
-    Box(paddingBottom = 1.dp) {
-        Surface(elevation = 2.dp) {
-            Row(
-                Modifier
-                    .clickable(onClick = onClick)
-                    .longPressGestureFilter(onLongPress = { menuOpened.value = true })
-                    .padding(horizontal = 20.dp, vertical = 16.dp)
-                    .fillMaxWidth()
-                    .wrapContentHeight(),
-                verticalGravity = Alignment.CenterVertically,
-            ) {
-                SkillIcon(skill)
-
-                Column(Modifier.weight(1f, fill = true)) {
-                    val modifier = Modifier.padding(start = 16.dp)
-                    Text(
-                        skill.name,
-                        modifier = modifier,
-                        fontSize = TextUnit.Sp(18),
-                        overflow = TextOverflow.Ellipsis
-                    )
-
-                    if (skill.description.isNotBlank()) {
-                        ItemDescription(
-                            skill.description,
-                            overflow = TextOverflow.Ellipsis,
-                            modifier = modifier,
-                        )
-                    }
-                }
-
-                TestNumber(skill, characteristics)
-            }
-        }
-
-        ContextMenu(
-            items = listOf(
-                Item(stringResource(R.string.remove), onClick = {
-                    menuOpened.value = false
-                    onRemove()
-                })
-            ),
-            onDismissRequest = { menuOpened.value = false },
-            expanded = menuOpened.value
-        )
-    }
+    CardItem(
+        skill.name,
+        skill.description,
+        resolveSkillIcon(skill),
+        onClick = onClick,
+        listOf(ContextMenu.Item(stringResource(R.string.remove), onClick = { onRemove() })),
+        badgeContent = { TestNumber(skill, characteristics) }
+    )
 }
 
 @Composable
@@ -213,20 +167,16 @@ private fun TestNumber(skill: Skill, characteristics: Stats) {
     }
 }
 
-@Composable
-private fun SkillIcon(skill: Skill) {
-    ItemIcon(
-        when (skill.characteristic) {
-            SkillCharacteristic.AGILITY -> R.drawable.ic_agility
-            SkillCharacteristic.BALLISTIC_SKILL -> R.drawable.ic_ballistic_skill
-            SkillCharacteristic.DEXTERITY -> R.drawable.ic_dexterity
-            SkillCharacteristic.INITIATIVE -> R.drawable.ic_initiative
-            SkillCharacteristic.INTELLIGENCE -> R.drawable.ic_intelligence
-            SkillCharacteristic.FELLOWSHIP -> R.drawable.ic_fellowship
-            SkillCharacteristic.STRENGTH -> R.drawable.ic_strength
-            SkillCharacteristic.TOUGHNESS -> R.drawable.ic_toughness
-            SkillCharacteristic.WEAPON_SKILL -> R.drawable.ic_weapon_skill
-            SkillCharacteristic.WILL_POWER -> R.drawable.ic_will_power
-        }
-    )
+@DrawableRes
+private fun resolveSkillIcon(skill: Skill) = when (skill.characteristic) {
+    SkillCharacteristic.AGILITY -> R.drawable.ic_agility
+    SkillCharacteristic.BALLISTIC_SKILL -> R.drawable.ic_ballistic_skill
+    SkillCharacteristic.DEXTERITY -> R.drawable.ic_dexterity
+    SkillCharacteristic.INITIATIVE -> R.drawable.ic_initiative
+    SkillCharacteristic.INTELLIGENCE -> R.drawable.ic_intelligence
+    SkillCharacteristic.FELLOWSHIP -> R.drawable.ic_fellowship
+    SkillCharacteristic.STRENGTH -> R.drawable.ic_strength
+    SkillCharacteristic.TOUGHNESS -> R.drawable.ic_toughness
+    SkillCharacteristic.WEAPON_SKILL -> R.drawable.ic_weapon_skill
+    SkillCharacteristic.WILL_POWER -> R.drawable.ic_will_power
 }

@@ -193,7 +193,7 @@ fun PartyList(parties: List<Party>, onClick: (Party) -> Unit, onRemove: (Party) 
 
             ContextMenu(
                 items = listOf(
-                    Item(stringResource(R.string.remove), onClick = { onRemove(party) })
+                    ContextMenu.Item(stringResource(R.string.remove), onClick = { onRemove(party) })
                 ),
                 onDismissRequest = { contextMenuOpened.value = null },
                 expanded = contextMenuOpened.value == party.id
