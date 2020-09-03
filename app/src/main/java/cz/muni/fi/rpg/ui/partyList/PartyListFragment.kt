@@ -6,7 +6,6 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
 import androidx.navigation.fragment.findNavController
@@ -38,10 +37,7 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
-import cz.muni.fi.rpg.ui.common.composables.ContextMenu
-import cz.muni.fi.rpg.ui.common.composables.EmptyUI
-import cz.muni.fi.rpg.ui.common.composables.Item
-import cz.muni.fi.rpg.ui.common.composables.ItemIcon
+import cz.muni.fi.rpg.ui.common.composables.*
 
 class PartyListFragment : BaseFragment(R.layout.fragment_party_list),
     AssemblePartyDialog.PartyCreationListener,
@@ -56,7 +52,7 @@ class PartyListFragment : BaseFragment(R.layout.fragment_party_list),
         val userId = authViewModel.getUserId()
 
         view.findViewById<ComposeView>(R.id.compose).setContent {
-            MaterialTheme {
+            Theme {
                 MainContainer(
                     userId,
                     viewModel,

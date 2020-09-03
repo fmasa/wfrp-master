@@ -14,7 +14,6 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.core.os.bundleOf
@@ -26,6 +25,7 @@ import cz.muni.fi.rpg.model.domain.character.Stats
 import cz.muni.fi.rpg.model.right
 import cz.muni.fi.rpg.ui.common.composables.CardContainer
 import cz.muni.fi.rpg.ui.common.composables.NumberPicker
+import cz.muni.fi.rpg.ui.common.composables.Theme
 import cz.muni.fi.rpg.ui.common.parcelableArgument
 import cz.muni.fi.rpg.viewModels.CharacterStatsViewModel
 import kotlinx.coroutines.CoroutineScope
@@ -55,12 +55,12 @@ class CharacterStatsFragment : Fragment(),
     ): View? {
         return ComposeView(requireContext()).apply {
             setContent {
-                MaterialTheme {
+                Theme {
                     val character = viewModel.character.right().observeAsState().value
-                        ?: return@MaterialTheme
+                        ?: return@Theme
 
                     ScrollableColumn(
-                        Modifier.background(colorResource(R.color.colorBackgroundUnderCard))
+                        Modifier.background(MaterialTheme.colors.background)
                     ) {
                         PointsSection(character.getPoints()) { points -> viewModel.updatePoints { points } }
                         CharacteristicsSection(character.getCharacteristics())
