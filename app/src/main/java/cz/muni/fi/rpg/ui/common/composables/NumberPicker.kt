@@ -1,4 +1,4 @@
-package cz.muni.fi.rpg.ui.common
+package cz.muni.fi.rpg.ui.common.composables
 
 import androidx.annotation.ColorRes
 import androidx.compose.foundation.Image

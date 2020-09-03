@@ -26,7 +26,7 @@ import cz.muni.fi.rpg.model.domain.character.CharacterId
 import cz.muni.fi.rpg.model.domain.character.Points
 import cz.muni.fi.rpg.model.domain.character.Stats
 import cz.muni.fi.rpg.model.right
-import cz.muni.fi.rpg.ui.common.NumberPicker
+import cz.muni.fi.rpg.ui.common.composables.NumberPicker
 import cz.muni.fi.rpg.ui.common.parcelableArgument
 import cz.muni.fi.rpg.viewModels.CharacterStatsViewModel
 import kotlinx.coroutines.CoroutineScope
