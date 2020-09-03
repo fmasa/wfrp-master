@@ -7,184 +7,23 @@
     android:background="@color/colorBackgroundUnderCard"
     android:orientation="vertical"
     tools:context=".ui.character.CharacterStatsFragment">
+    <androidx.compose.ui.platform.ComposeView
+        android:clipToPadding="false"
+        android:id="@+id/compose"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
 
     <ScrollView
         android:layout_width="match_parent"
         android:clipToPadding="false"
         android:layout_height="wrap_content">
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:clipToPadding="false"
-            android:paddingHorizontal="8dp"
-            android:paddingBottom="@dimen/long_ui_bottom_padding"
-            tools:ignore="MissingConstraints">
-
-            <androidx.constraintlayout.helper.widget.Flow
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
-                app:constraint_referenced_ids="woundsCard,pointsContainer,statsCard"
-                app:flow_maxElementsWrap="1"
-                app:flow_verticalBias="0"
-                app:flow_verticalGap="40dp"
-                app:flow_wrapMode="aligned"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <androidx.cardview.widget.CardView
-                android:id="@+id/woundsCard"
-                style="@style/CardContainer"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginVertical="16dp">
-
-                    <androidx.constraintlayout.helper.widget.Flow
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        app:constraint_referenced_ids="wounds,corruptionPoints,sinPoints"
-                        app:flow_horizontalAlign="end"
-                        app:flow_wrapMode="aligned"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                    <cz.muni.fi.rpg.ui.views.CharacterPoint
-                        android:id="@+id/wounds"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        app:name="@string/label_wounds" />
-
-                    <cz.muni.fi.rpg.ui.views.CharacterPoint
-                        android:id="@+id/corruptionPoints"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        app:name="Corruption" />
-
-                    <cz.muni.fi.rpg.ui.views.CharacterPoint
-                        android:id="@+id/sinPoints"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        app:name="Sin" />
-
-                </androidx.constraintlayout.widget.ConstraintLayout>
-            </androidx.cardview.widget.CardView>
-
-            <androidx.constraintlayout.helper.widget.Flow
-                android:id="@+id/pointsContainer"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:constraint_referenced_ids="fateCard,pointsCard"
-                app:flow_horizontalGap="10dp" />
-
-            <androidx.cardview.widget.CardView
-                android:id="@+id/fateCard"
-                style="@style/CardContainer"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content">
-
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:layout_margin="16dp"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:id="@+id/fateCardTitle"
-                        style="@style/TextAppearance.AppCompat.Title"
-                        android:text="@string/label_fate_points"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        app:layout_constraintLeft_toLeftOf="parent"
-                        app:layout_constraintRight_toRightOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                    <androidx.constraintlayout.helper.widget.Flow
-                        android:layout_marginTop="10dp"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        app:constraint_referenced_ids="fatePoints,fortunePoints"
-                        app:flow_wrapMode="aligned"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/fateCardTitle" />
-
-                    <cz.muni.fi.rpg.ui.views.CharacterPoint
-                        android:id="@+id/fatePoints"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:gravity="center"
-                        app:name="@string/label_fate_points" />
-
-                    <cz.muni.fi.rpg.ui.views.CharacterPoint
-                        android:id="@+id/fortunePoints"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:gravity="center"
-                        app:name="@string/label_fortune_points" />
-
-                </androidx.constraintlayout.widget.ConstraintLayout>
-            </androidx.cardview.widget.CardView>
-
-            <androidx.cardview.widget.CardView
-                android:id="@+id/pointsCard"
-                style="@style/CardContainer"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content">
-
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:layout_margin="16dp"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:id="@+id/resilienceCardTitle"
-                        style="@style/TextAppearance.AppCompat.Title"
-                        android:text="@string/label_resilience"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        app:layout_constraintLeft_toLeftOf="parent"
-                        app:layout_constraintRight_toRightOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                    <androidx.constraintlayout.helper.widget.Flow
-                        android:layout_marginTop="10dp"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        app:constraint_referenced_ids="resiliencePoints, resolvePoints"
-                        app:flow_wrapMode="aligned"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/resilienceCardTitle" />
-
-                    <cz.muni.fi.rpg.ui.views.CharacterPoint
-                        android:id="@+id/resolvePoints"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        app:name="@string/label_resolve" />
-
-                    <cz.muni.fi.rpg.ui.views.CharacterPoint
-                        android:id="@+id/resiliencePoints"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        app:name="@string/label_resilience" />
-                </androidx.constraintlayout.widget.ConstraintLayout>
-            </androidx.cardview.widget.CardView>
-
             <androidx.cardview.widget.CardView
                 android:id="@+id/statsCard"
                 style="@style/CardContainer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginHorizontal="8dp"
+                android:layout_marginBottom="@dimen/long_ui_bottom_padding"
                 android:layout_marginTop="16dp">
                 <cz.muni.fi.rpg.ui.views.StatsTable
                     android:layout_marginTop="16dp"
@@ -193,6 +32,5 @@
                     android:layout_height="wrap_content"/>
             </androidx.cardview.widget.CardView>
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
 </LinearLayout>

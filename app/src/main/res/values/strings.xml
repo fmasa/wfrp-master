@@ -73,6 +73,8 @@
     <string name="label_social_class">Class</string>
 
     <string name="label_wounds">Wounds</string>
+    <string name="label_corruption">Corruption</string>
+    <string name="label_sin">Sin</string>
     <string name="label_max_wounds">Max. Wounds</string>
     <string name="label_fortune_points">Fortune</string>
     <string name="label_fate_points">Fate</string>
