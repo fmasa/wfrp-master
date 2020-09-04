@@ -5,6 +5,7 @@ import androidx.compose.material.lightColors
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.unit.sp
 import cz.muni.fi.rpg.R
 
 @Composable
@@ -23,6 +24,9 @@ fun Theme(content: @Composable () -> Unit) {
             onBackground = Color.Black,
             onSurface = Color.Black,
             onError = Color.White,
+        ),
+        typography = MaterialTheme.typography.copy(
+            caption = MaterialTheme.typography.caption.copy(fontSize = 14.sp),
         ),
         content = content
     )

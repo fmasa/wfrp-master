@@ -5,8 +5,9 @@ import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.compose.foundation.*
-import androidx.compose.foundation.layout.*
-import androidx.compose.material.Surface
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material.Divider
+import androidx.compose.material.ListItem
 import androidx.compose.runtime.Composable
 import androidx.navigation.fragment.findNavController
 import com.getbase.floatingactionbutton.FloatingActionsMenu
@@ -28,14 +29,10 @@ import java.util.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.gesture.longPressGestureFilter
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.res.vectorResource
-import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import cz.muni.fi.rpg.ui.common.composables.*
 
@@ -120,45 +117,19 @@ class PartyListFragment : BaseFragment(R.layout.fragment_party_list),
 
 @Composable
 fun PartyItem(party: Party, onClick: () -> Unit, onLongPress: () -> Unit) {
-    Box(paddingBottom = 1.dp) {
-        Surface(elevation = 2.dp) {
-            Row(
-                Modifier
-                    .clickable(onClick = onClick)
-                    .longPressGestureFilter { onLongPress() }
-                    .padding(horizontal = 20.dp, vertical = 16.dp)
-                    .wrapContentHeight()
-                    .fillMaxWidth(),
-                verticalGravity = Alignment.CenterVertically
-            ) {
-                ItemIcon(R.drawable.ic_group, ItemIcon.Size.Large)
-                Text(
-                    party.getName(),
-                    modifier = Modifier.padding(start = 16.dp),
-                    fontSize = TextUnit.Sp(18),
-                    overflow = TextOverflow.Ellipsis
-                )
+    val playersCount = party.getPlayerCounts()
 
-                val playersCount = party.getPlayerCounts()
-
-                if (playersCount > 0) {
-                    Row(
-                        Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.End,
-                        verticalGravity = Alignment.CenterVertically
-                    ) {
-                        Image(
-                            vectorResource(R.drawable.ic_character),
-                            modifier = Modifier
-                                .width(20.dp)
-                        )
-                        Text(playersCount.toString(), Modifier.padding(start = 4.dp))
-                    }
-                }
-            }
-        }
-    }
-
+    ListItem(
+        icon = { ItemIcon(R.drawable.ic_group, ItemIcon.Size.Large) },
+        text = { Text(party.getName()) },
+        trailing = if (playersCount > 0)
+            ({ Text(stringResource(R.string.players_number, playersCount)) })
+        else null,
+        modifier = Modifier
+            .clickable(onClick = onClick)
+            .longPressGestureFilter { onLongPress() },
+    )
+    Divider()
 }
 
 @Composable
@@ -182,7 +153,7 @@ private fun MainContainer(
 
 @Composable
 fun PartyList(parties: List<Party>, onClick: (Party) -> Unit, onRemove: (Party) -> Unit) {
-    ScrollableColumn {
+    ScrollableColumn(Modifier.padding(top = 12.dp)) {
         val contextMenuOpened = remember { mutableStateOf<UUID?>(null) }
 
         for (party in parties) {

@@ -256,4 +256,5 @@
     <string name="button_sign_in">Sign in</string>
     <string name="lose_access_to_parties">You will lose access to these parties:</string>
     <string name="mannslieb_phase">Mannslieb phase: %1$s</string>
+    <string name="players_number">%1$d players</string>
 </resources>

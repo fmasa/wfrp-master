@@ -23,15 +23,20 @@ internal fun TalentsCard(
     val talents = viewModel.talents.observeAsState().value ?: return
 
     CardContainer(Modifier.padding(horizontal = 8.dp).padding(bottom = 8.dp)) {
-        CardTitle(R.string.title_character_talents)
+        Column(Modifier.padding(horizontal = 6.dp)) {
+            CardTitle(R.string.title_character_talents)
 
-        if (talents.isNotEmpty()) {
-            LazyColumnFor(talents) { talent ->
-                TalentItem(talent, onClick = { onClick(talent) }, onRemove = { onRemove(talent) })
+            if (talents.isNotEmpty()) {
+                LazyColumnFor(talents) { talent ->
+                    TalentItem(
+                        talent,
+                        onClick = { onClick(talent) },
+                        onRemove = { onRemove(talent) })
+                }
             }
-        }
 
-        CardButton(R.string.title_talent_add, onClick = onAddButtonClicked)
+            CardButton(R.string.title_talent_add, onClick = onAddButtonClicked)
+        }
     }
 }
 

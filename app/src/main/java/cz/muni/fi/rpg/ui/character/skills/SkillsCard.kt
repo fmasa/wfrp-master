@@ -2,10 +2,7 @@ package cz.muni.fi.rpg.ui.character.skills
 
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Text
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumnFor
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.livedata.observeAsState
@@ -37,7 +34,7 @@ internal fun SkillsCard(
 
 
     CardContainer(Modifier.padding(horizontal = 8.dp).padding(bottom = 8.dp)) {
-        Column {
+        Column(Modifier.padding(horizontal = 6.dp)) {
             CardTitle(R.string.title_character_skills)
 
             if (skills.isEmpty()) {
@@ -91,10 +88,7 @@ private fun TestNumber(skill: Skill, characteristics: Stats) {
         SkillCharacteristic.WILL_POWER -> characteristics.willPower
     }
 
-    Row(
-        horizontalArrangement = Arrangement.End,
-        verticalGravity = Alignment.CenterVertically
-    ) {
+    Row {
         Text(stringResource(R.string.skill_test_number_shortcut))
         Text(testNumber.toString(), Modifier.padding(start = 4.dp))
     }
