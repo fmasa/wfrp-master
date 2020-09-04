@@ -132,7 +132,6 @@ val appModule = module {
     fragment { CharacterInfoFormFragment() }
     fragment { CharacterStatsFormFragment() }
     fragment { CharacterCreationFragment(get()) }
-    fragment { CharacterArmorFragment() }
     fragment { EncountersFragment() }
     fragment { EncounterDetailFragment() }
     fragment { CombatantFragment() }
