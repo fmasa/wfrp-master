@@ -14,7 +14,7 @@ import com.google.android.material.textfield.TextInputLayout
 import cz.muni.fi.rpg.R
 import kotlinx.android.parcel.Parcelize
 
-class TextInput(context: Context, attrs: AttributeSet) : LinearLayout(context, attrs) {
+class TextInput(context: Context, attrs: AttributeSet?) : LinearLayout(context, attrs) {
     @Parcelize
     private data class SavedState(
         val value: String,

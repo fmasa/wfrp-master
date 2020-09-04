@@ -10,7 +10,7 @@ import androidx.core.widget.TextViewCompat
 import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.model.domain.common.Ambitions
 
-class AmbitionsCard(context: Context, attrs: AttributeSet) : CardView(context, attrs) {
+class AmbitionsCard(context: Context, attrs: AttributeSet?) : CardView(context, attrs) {
     init {
         inflate(context, R.layout.view_ambitions_card, this)
 

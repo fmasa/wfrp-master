@@ -169,7 +169,7 @@
     <string name="menu_gallery">Gallery</string>
     <string name="menu_slideshow">Slideshow</string>
     <string name="about">About</string>
-    <string name="xp_points">%1$d XP</string>
+    <string name="xp_points">Experience points (XP)</string>
     <string name="xp_long">Experience points</string>
     <string name="error_required">Required</string>
     <string name="label_resilience">Resilience</string>
