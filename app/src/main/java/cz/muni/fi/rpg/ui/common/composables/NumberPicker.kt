@@ -20,18 +20,20 @@ import cz.muni.fi.rpg.R
 
 @Composable
 fun NumberPicker(
-    label: String,
     value: Int,
+    label: String? = null,
     @ColorRes color: Int = R.color.colorText,
     onIncrement: () -> Unit,
     onDecrement: () -> Unit,
-    modifier: Modifier
+    modifier: Modifier = Modifier
 ) {
     Column(
         horizontalGravity = Alignment.CenterHorizontally,
         modifier = modifier.padding(vertical = 4.dp).then(modifier)
     ) {
-        Text(label, style = MaterialTheme.typography.subtitle1)
+        if (label != null) {
+            Text(label, style = MaterialTheme.typography.subtitle1)
+        }
 
         Row(
             horizontalArrangement = Arrangement.Center,
