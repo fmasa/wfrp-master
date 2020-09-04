@@ -14,15 +14,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <cz.muni.fi.rpg.ui.views.MoneyView
-            android:id="@+id/characterMoney"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:clickable="true"
-            android:focusable="true"
-            android:layout_gravity="end"
-            android:foreground="?attr/selectableItemBackground" />
-
         <androidx.compose.ui.platform.ComposeView
             android:id="@+id/compose"
             android:layout_width="match_parent"
