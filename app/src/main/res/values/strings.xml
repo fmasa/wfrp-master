@@ -159,6 +159,7 @@
     <string name="remove">Remove</string>
     <string name="inventory_toast_item_saved">Item was saved.</string>
     <string name="multiplication_symbol">×</string>
+    <string name="quantity">× %1$d</string>
     <string name="error_name_blank">Name cannot be blank.</string>
     <string name="error_invalid_quantity">Quantity must be number greater than 0</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>

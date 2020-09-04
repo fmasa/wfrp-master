@@ -1,14 +1,13 @@
 package cz.muni.fi.rpg.ui.character
 
 import android.os.Bundle
-import android.view.View
+import android.view.LayoutInflater
+import android.view.ViewGroup
 import androidx.annotation.ColorRes
-import androidx.compose.foundation.Icon
-import androidx.compose.foundation.ProvideTextStyle
-import androidx.compose.foundation.Text
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.layout.ColumnScope.gravity
+import androidx.compose.foundation.lazy.LazyColumnFor
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.livedata.observeAsState
@@ -22,25 +21,21 @@ import androidx.compose.ui.unit.dp
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import cz.muni.fi.rpg.R
-import androidx.lifecycle.observe
-import androidx.recyclerview.widget.RecyclerView
 import cz.muni.fi.rpg.model.domain.character.CharacterId
 import cz.muni.fi.rpg.model.domain.common.Money
 import cz.muni.fi.rpg.model.domain.inventory.InventoryItem
 import cz.muni.fi.rpg.model.right
-import cz.muni.fi.rpg.ui.character.adapter.InventoryAdapter
 import cz.muni.fi.rpg.ui.character.inventory.ArmorCard
 import cz.muni.fi.rpg.ui.character.inventory.InventoryItemDialog
 import cz.muni.fi.rpg.ui.character.inventory.TransactionDialog
-import cz.muni.fi.rpg.ui.common.NonScrollableLayoutManager
+import cz.muni.fi.rpg.ui.common.composables.*
 import cz.muni.fi.rpg.ui.common.parcelableArgument
-import cz.muni.fi.rpg.ui.common.toggleVisibility
 import cz.muni.fi.rpg.viewModels.InventoryViewModel
 import kotlinx.coroutines.*
 import org.koin.android.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 
-class InventoryFragment : Fragment(R.layout.fragment_inventory),
+class InventoryFragment : Fragment(),
     CoroutineScope by CoroutineScope(Dispatchers.Default) {
     companion object {
         private const val ARGUMENT_CHARACTER_ID = "CHARACTER_ID"
@@ -53,47 +48,29 @@ class InventoryFragment : Fragment(R.layout.fragment_inventory),
     private val characterId: CharacterId by parcelableArgument(ARGUMENT_CHARACTER_ID)
     private val viewModel: InventoryViewModel by viewModel { parametersOf(characterId) }
 
-    private fun setEmptyCollectionView(view: View, isEmpty: Boolean) {
-        view.findViewById<View>(R.id.noInventoryItemIcon).toggleVisibility(isEmpty)
-        view.findViewById<View>(R.id.noInventoryItemText).toggleVisibility(isEmpty)
-        view.findViewById<View>(R.id.inventoryRecycler).toggleVisibility(!isEmpty)
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ) = ComposeView(requireContext()).apply {
+        setContent {
+            Theme {
+                MainContainer(
+                    viewModel = viewModel,
+                    coroutineScope = this@InventoryFragment,
+                    onMoneyChangeRequest = {
+                        TransactionDialog.newInstance(characterId).show(parentFragmentManager, null)
+                    },
+                    onItemClicked = ::showDialog,
+                    onNewItemButtonClicked = { showDialog(null) }
+                )
+            }
+        }
     }
 
     private fun showDialog(existingItem: InventoryItem?) {
         InventoryItemDialog.newInstance(characterId, existingItem)
             .show(childFragmentManager, "InventoryItemDialog")
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        view.findViewById<ComposeView>(R.id.compose).setContent {
-            MainContainer(
-                viewModel = viewModel,
-                coroutineScope = this,
-                onMoneyChangeRequest = {
-                    TransactionDialog.newInstance(characterId).show(parentFragmentManager, null)
-                },
-            )
-        }
-
-        view.findViewById<View>(R.id.addNewInventoryItemButton)
-            .setOnClickListener { showDialog(null) }
-
-        val adapter = InventoryAdapter(
-            layoutInflater,
-            onClickListener = this::showDialog,
-            onRemoveListener = { launch { viewModel.removeInventoryItem(it) } }
-        )
-
-        val inventoryRecycler = view.findViewById<RecyclerView>(R.id.inventoryRecycler)
-        inventoryRecycler.layoutManager = NonScrollableLayoutManager(requireContext())
-        inventoryRecycler.adapter = adapter
-
-        viewModel.inventory.observe(viewLifecycleOwner) { items ->
-            adapter.submitList(items)
-            setEmptyCollectionView(view, items.isEmpty())
-        }
     }
 }
 
@@ -101,16 +78,27 @@ class InventoryFragment : Fragment(R.layout.fragment_inventory),
 private fun MainContainer(
     viewModel: InventoryViewModel,
     coroutineScope: CoroutineScope,
-    onMoneyChangeRequest: () -> Unit
+    onMoneyChangeRequest: () -> Unit,
+    onItemClicked: (InventoryItem) -> Unit,
+    onNewItemButtonClicked: () -> Unit,
 ) {
-    Column {
+    ScrollableColumn {
         viewModel.money.observeAsState().value?.let {
             CurrentMoney(value = it, onClick = onMoneyChangeRequest)
         }
 
-        viewModel.armor.right().observeAsState().value ?.let {
+        viewModel.armor.right().observeAsState().value?.let {
             ArmorCard(it, onChange = { coroutineScope.launch { viewModel.updateArmor(it) } })
         }
+
+        InventoryItemsCard(
+            viewModel,
+            onClick = onItemClicked,
+            onRemove = { coroutineScope.launch { viewModel.removeInventoryItem(it) } },
+            onNewItemButtonClicked = onNewItemButtonClicked,
+        )
+
+        Spacer(Modifier.padding(bottom = 20.dp))
     }
 }
 
@@ -152,4 +140,55 @@ private fun MoneyIcon(@ColorRes tint: Int) {
         tint = colorResource(tint),
         modifier = Modifier.size(18.dp)
     )
+}
+
+@Composable
+private fun InventoryItemsCard(
+    viewModel: InventoryViewModel,
+    onClick: (InventoryItem) -> Unit,
+    onRemove: (InventoryItem) -> Unit,
+    onNewItemButtonClicked: () -> Unit,
+) {
+    val items = viewModel.inventory.observeAsState().value ?: return
+
+    CardContainer(Modifier.padding(horizontal = 8.dp)) {
+        Column(Modifier.padding(horizontal = 8.dp)) {
+            CardTitle(R.string.title_character_trappings)
+            if (items.isEmpty()) {
+                EmptyUI(
+                    R.string.no_inventory_item_prompt,
+                    R.drawable.ic_inventory,
+                    EmptyUI.Size.Small
+                )
+            } else {
+                InventoryItemList(items, onClick = onClick, onRemove = onRemove)
+            }
+
+            CardButton(R.string.title_inventory_add_item, onClick = onNewItemButtonClicked)
+        }
+    }
+}
+
+@Composable
+private fun InventoryItemList(
+    items: List<InventoryItem>,
+    onClick: (InventoryItem) -> Unit,
+    onRemove: (InventoryItem) -> Unit,
+) {
+    LazyColumnFor(items) { item ->
+        CardItem(
+            name = item.name,
+            description = item.description,
+            iconRes = R.drawable.ic_inventory,
+            onClick = { onClick(item) },
+            contextMenuItems = listOf(
+                ContextMenu.Item(stringResource(R.string.remove), onClick = { onRemove(item) })
+            ),
+            badgeContent = {
+                if (item.quantity > 1) {
+                    Text(stringResource(R.string.quantity, item.quantity))
+                }
+            }
+        )
+    }
 }
