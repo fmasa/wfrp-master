@@ -20,11 +20,11 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun CardItem(
     name: String,
-    description: String,
+    description: String = "",
     @DrawableRes iconRes: Int,
     onClick: () -> Unit,
     contextMenuItems: List<ContextMenu.Item>,
-    badgeContent: @Composable () -> Unit
+    badgeContent: @Composable () -> Unit = {}
 ) {
     val menuOpened = mutableStateOf(false)
 

@@ -1,24 +1,19 @@
 package cz.muni.fi.rpg.ui.character
 
-import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.EmphasisAmbient
 import androidx.compose.material.MaterialTheme
-import androidx.compose.material.ProvideEmphasis
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.res.vectorResource
-import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.model.domain.character.Character
 import cz.muni.fi.rpg.model.domain.common.Ambitions
+import cz.muni.fi.rpg.ui.common.composables.AmbitionsCard
 import cz.muni.fi.rpg.ui.common.composables.CardContainer
 import cz.muni.fi.rpg.ui.common.composables.CardTitle
 import cz.muni.fi.rpg.viewModels.CharacterMiscViewModel
@@ -38,55 +33,21 @@ fun CharacterMiscScreen(
         AmbitionsCard(
             R.string.title_character_ambitions,
             character.getAmbitions(),
-            modifier = Modifier.clickable(
-                onClick = { onCharacterAmbitionsClick(character.getAmbitions()) }
-            )
+            modifier = Modifier
+                .padding(horizontal = 8.dp)
+                .clickable(onClick = { onCharacterAmbitionsClick(character.getAmbitions()) })
         )
 
         viewModel.party.observeAsState().value?.let {
-            AmbitionsCard(R.string.title_party_ambitions, it.getAmbitions(), R.drawable.ic_group)
+            AmbitionsCard(
+                R.string.title_party_ambitions,
+                it.getAmbitions(),
+                R.drawable.ic_group,
+                modifier = Modifier.padding(horizontal = 8.dp)
+            )
         }
 
         Spacer(Modifier.padding(bottom = 20.dp))
-    }
-}
-
-@Composable
-private fun AmbitionsCard(
-    @StringRes titleRes: Int,
-    ambitions: Ambitions,
-    @DrawableRes titleIconRes: Int? = null,
-    modifier: Modifier = Modifier,
-) {
-    Card(modifier) {
-        CardTitle(titleRes, titleIconRes)
-
-        for ((label, value) in listOf(
-            R.string.label_ambition_short_term to ambitions.shortTerm,
-            R.string.label_ambition_long_term to ambitions.longTerm
-        )) {
-            Column(Modifier.padding(top = 4.dp)) {
-                Text(
-                    stringResource(label),
-                    fontWeight = FontWeight.Bold
-                )
-
-                if (value.isBlank()) {
-                    ProvideEmphasis(emphasis = EmphasisAmbient.current.medium) {
-                        Row(verticalGravity = Alignment.CenterVertically) {
-                            Icon(vectorResource(R.drawable.ic_none))
-                            Text(
-                                stringResource(R.string.note_ambition_not_filled),
-                                style = MaterialTheme.typography.body2,
-                                fontStyle = FontStyle.Italic,
-                            )
-                        }
-                    }
-                } else {
-                    Text(ambitions.shortTerm)
-                }
-            }
-        }
     }
 }
 

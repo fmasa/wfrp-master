@@ -5,6 +5,7 @@ import androidx.annotation.StringRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.Text
 import androidx.compose.foundation.layout.*
+import androidx.compose.material.EmphasisAmbient
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -51,7 +52,7 @@ fun EmptyUI(
     size: EmptyUI.Size = EmptyUI.Size.Large
 ) {
     val image = vectorResource(drawableResourceId)
-    val color = MaterialTheme.colors.onSurface.copy(alpha = 0.6f)
+    val color = EmphasisAmbient.current.medium.applyEmphasis(MaterialTheme.colors.onSurface)
     val text = stringResource(textId)
 
     Column(horizontalGravity = Alignment.CenterHorizontally, modifier = Modifier.fillMaxWidth()) {

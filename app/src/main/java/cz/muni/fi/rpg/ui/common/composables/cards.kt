@@ -6,6 +6,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.Text
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.layout.ColumnScope.gravity
+import androidx.compose.material.Button
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.OutlinedButton
 import androidx.compose.runtime.Composable
@@ -50,6 +51,21 @@ fun CardButton(@StringRes textRes: Int, onClick: () -> Unit) {
     OutlinedButton(
         onClick = onClick,
         Modifier.padding(top = 16.dp).gravity(Alignment.CenterHorizontally)
+    ) {
+        Text(stringResource(textRes).toUpperCase(Locale.current))
+    }
+}
+
+@Composable
+fun PrimaryButton(
+    @StringRes textRes: Int,
+    enabled: Boolean = true,
+    onClick: () -> Unit
+) {
+    Button(
+        onClick = onClick,
+        enabled = enabled,
+        modifier = Modifier.padding(top = 16.dp).gravity(Alignment.CenterHorizontally)
     ) {
         Text(stringResource(textRes).toUpperCase(Locale.current))
     }
