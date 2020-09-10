@@ -10,10 +10,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun CardContainer(modifier: Modifier? = null, content: @Composable () -> Unit) {
-    val baseModifier = Modifier.padding(top = 12.dp)
-
-    Box(modifier?.let { baseModifier.then(it) } ?: baseModifier) {
+fun CardContainer(modifier: Modifier = Modifier, content: @Composable () -> Unit) {
+    Box(Modifier.padding(vertical = 6.dp).then(modifier)) {
         Card(
             modifier = Modifier.fillMaxWidth(),
             elevation = 2.dp,

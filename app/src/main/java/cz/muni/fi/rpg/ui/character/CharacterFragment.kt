@@ -78,7 +78,7 @@ class CharacterFragment(
             Theme {
                 WithConstraints(Modifier.fillMaxSize()) {
                     val screenWidth = constraints.maxWidth.toFloat()
-                    val screens = screens(Modifier.width(maxWidth))
+                    val screens = screens(Modifier.width(maxWidth).padding(top = 6.dp))
 
                     Column(Modifier.fillMaxHeight()) {
                         val scrollState = rememberScrollState()
