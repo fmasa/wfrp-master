@@ -1,74 +1,38 @@
 package cz.muni.fi.rpg.ui.character
 
-import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import androidx.annotation.ColorRes
 import androidx.annotation.StringRes
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.core.os.bundleOf
-import androidx.fragment.app.Fragment
 import cz.muni.fi.rpg.R
-import cz.muni.fi.rpg.model.domain.character.CharacterId
+import cz.muni.fi.rpg.model.domain.character.Character
 import cz.muni.fi.rpg.model.domain.character.Points
 import cz.muni.fi.rpg.model.domain.character.Stats
-import cz.muni.fi.rpg.model.right
 import cz.muni.fi.rpg.ui.common.composables.CardContainer
 import cz.muni.fi.rpg.ui.common.composables.NumberPicker
-import cz.muni.fi.rpg.ui.common.composables.Theme
-import cz.muni.fi.rpg.ui.common.parcelableArgument
 import cz.muni.fi.rpg.viewModels.CharacterStatsViewModel
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import org.koin.android.viewmodel.ext.android.viewModel
-import org.koin.core.parameter.parametersOf
 import timber.log.Timber
 import java.lang.IllegalArgumentException
 
-class CharacterStatsFragment : Fragment(),
-    CoroutineScope by CoroutineScope(Dispatchers.Default) {
-    companion object {
-        private const val ARGUMENT_CHARACTER_ID = "CHARACTER_ID"
+@Composable
+fun CharacterCharacteristicsScreen(
+    character: Character,
+    viewModel: CharacterStatsViewModel,
+    modifier: Modifier = Modifier,
+) {
 
-        fun newInstance(characterId: CharacterId) = CharacterStatsFragment().apply {
-            arguments = bundleOf(ARGUMENT_CHARACTER_ID to characterId)
-        }
-    }
-
-    private val characterId: CharacterId by parcelableArgument(ARGUMENT_CHARACTER_ID)
-    private val viewModel: CharacterStatsViewModel by viewModel { parametersOf(characterId) }
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        return ComposeView(requireContext()).apply {
-            setContent {
-                Theme {
-                    val character = viewModel.character.right().observeAsState().value
-                        ?: return@Theme
-
-                    ScrollableColumn(
-                        Modifier.background(MaterialTheme.colors.background)
-                    ) {
-                        PointsSection(character.getPoints()) { points -> viewModel.updatePoints { points } }
-                        CharacteristicsSection(character.getCharacteristics())
-                        Spacer(Modifier.padding(bottom = 8.dp))
-                    }
-                }
-            }
-        }
+    ScrollableColumn(
+        modifier.background(MaterialTheme.colors.background)
+    ) {
+        PointsSection(character.getPoints()) { points -> viewModel.updatePoints { points } }
+        CharacteristicsSection(character.getCharacteristics())
+        Spacer(Modifier.padding(bottom = 8.dp))
     }
 }
 
@@ -82,7 +46,7 @@ private fun PointsSection(points: Points, onUpdate: (Points) -> Unit) {
         }
     }
 
-    Column {
+    ScrollableColumn {
         CardContainer(Modifier.fillMaxWidth().padding(horizontal = 8.dp)) {
             Row(
                 horizontalArrangement = Arrangement.SpaceEvenly,

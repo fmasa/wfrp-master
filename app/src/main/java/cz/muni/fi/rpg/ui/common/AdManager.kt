@@ -2,6 +2,7 @@ package cz.muni.fi.rpg.ui.common
 
 import android.content.Context
 import android.widget.LinearLayout
+import androidx.compose.runtime.Stable
 import androidx.core.os.bundleOf
 import com.google.ads.consent.ConsentInfoUpdateListener
 import com.google.ads.consent.ConsentInformation
@@ -12,6 +13,7 @@ import com.google.android.gms.ads.AdSize
 import com.google.android.gms.ads.AdView
 import com.google.android.gms.ads.MobileAds
 
+@Stable
 class AdManager(private val context: Context) {
     private var showNonPersonalizedAdsOnly: Boolean = true
 

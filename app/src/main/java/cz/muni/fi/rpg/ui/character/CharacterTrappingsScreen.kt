@@ -1,8 +1,5 @@
 package cz.muni.fi.rpg.ui.character
 
-import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.ViewGroup
 import androidx.annotation.ColorRes
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
@@ -13,89 +10,39 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
-import androidx.core.os.bundleOf
-import androidx.fragment.app.Fragment
 import cz.muni.fi.rpg.R
-import cz.muni.fi.rpg.model.domain.character.CharacterId
 import cz.muni.fi.rpg.model.domain.common.Money
 import cz.muni.fi.rpg.model.domain.inventory.InventoryItem
 import cz.muni.fi.rpg.model.right
 import cz.muni.fi.rpg.ui.character.inventory.ArmorCard
-import cz.muni.fi.rpg.ui.character.inventory.InventoryItemDialog
-import cz.muni.fi.rpg.ui.character.inventory.TransactionDialog
 import cz.muni.fi.rpg.ui.common.composables.*
-import cz.muni.fi.rpg.ui.common.parcelableArgument
 import cz.muni.fi.rpg.viewModels.InventoryViewModel
-import kotlinx.coroutines.*
-import org.koin.android.viewmodel.ext.android.viewModel
-import org.koin.core.parameter.parametersOf
-
-class InventoryFragment : Fragment(),
-    CoroutineScope by CoroutineScope(Dispatchers.Default) {
-    companion object {
-        private const val ARGUMENT_CHARACTER_ID = "CHARACTER_ID"
-
-        fun newInstance(characterId: CharacterId) = InventoryFragment().apply {
-            arguments = bundleOf(ARGUMENT_CHARACTER_ID to characterId)
-        }
-    }
-
-    private val characterId: CharacterId by parcelableArgument(ARGUMENT_CHARACTER_ID)
-    private val viewModel: InventoryViewModel by viewModel { parametersOf(characterId) }
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ) = ComposeView(requireContext()).apply {
-        setContent {
-            Theme {
-                MainContainer(
-                    viewModel = viewModel,
-                    coroutineScope = this@InventoryFragment,
-                    onMoneyChangeRequest = {
-                        TransactionDialog.newInstance(characterId).show(parentFragmentManager, null)
-                    },
-                    onItemClicked = ::showDialog,
-                    onNewItemButtonClicked = { showDialog(null) }
-                )
-            }
-        }
-    }
-
-    private fun showDialog(existingItem: InventoryItem?) {
-        InventoryItemDialog.newInstance(characterId, existingItem)
-            .show(childFragmentManager, "InventoryItemDialog")
-    }
-}
 
 @Composable
-private fun MainContainer(
+fun CharacterTrappingsScreen(
+    modifier: Modifier,
     viewModel: InventoryViewModel,
-    coroutineScope: CoroutineScope,
-    onMoneyChangeRequest: () -> Unit,
-    onItemClicked: (InventoryItem) -> Unit,
-    onNewItemButtonClicked: () -> Unit,
+    onMoneyDialogRequest: () -> Unit,
+    onItemDialogRequest: (InventoryItem?) -> Unit,
 ) {
-    ScrollableColumn {
+    ScrollableColumn(modifier) {
         viewModel.money.observeAsState().value?.let {
-            CurrentMoney(value = it, onClick = onMoneyChangeRequest)
+            CurrentMoney(value = it, onClick = onMoneyDialogRequest)
         }
 
-        viewModel.armor.right().observeAsState().value?.let {
-            ArmorCard(it, onChange = { coroutineScope.launch { viewModel.updateArmor(it) } })
+        viewModel.armor.right().observeAsState().value?.let { armor ->
+            ArmorCard(armor, onChange = { viewModel.updateArmor(it) })
         }
 
         InventoryItemsCard(
             viewModel,
-            onClick = onItemClicked,
-            onRemove = { coroutineScope.launch { viewModel.removeInventoryItem(it) } },
-            onNewItemButtonClicked = onNewItemButtonClicked,
+            onClick = onItemDialogRequest,
+            onRemove = { viewModel.removeInventoryItem(it) },
+            onNewItemButtonClicked = { onItemDialogRequest(null) },
         )
 
         Spacer(Modifier.padding(bottom = 20.dp))
@@ -113,22 +60,13 @@ private fun CurrentMoney(value: Money, onClick: () -> Unit) {
     ) {
         ProvideTextStyle(MaterialTheme.typography.body1) {
             MoneyIcon(R.color.colorGold)
-            Text(
-                value.getCrowns()
-                    .toString() + " " + stringResource(R.string.gold_coins_shortcut)
-            )
+            Text(value.getCrowns().toString() + " " + stringResource(R.string.gold_coins_shortcut))
 
             MoneyIcon(R.color.colorSilver)
-            Text(
-                value.getShillings()
-                    .toString() + " " + stringResource(R.string.silver_shillings_shortcut)
-            )
+            Text(value.getShillings().toString() + " " + stringResource(R.string.silver_shillings_shortcut))
 
             MoneyIcon(R.color.colorBrass)
-            Text(
-                value.getPennies()
-                    .toString() + " " + stringResource(R.string.brass_pennies_shortcut)
-            )
+            Text(value.getPennies().toString() + " " + stringResource(R.string.brass_pennies_shortcut))
         }
     }
 }

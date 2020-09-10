@@ -26,9 +26,7 @@ import cz.muni.fi.rpg.model.firestore.*
 import cz.muni.fi.rpg.model.firestore.jackson.JacksonAggregateMapper
 import cz.muni.fi.rpg.model.firestore.repositories.*
 import cz.muni.fi.rpg.ui.character.*
-import cz.muni.fi.rpg.ui.character.CharacterMiscFragment
 import cz.muni.fi.rpg.ui.character.edit.CharacterEditFragment
-import cz.muni.fi.rpg.ui.character.skills.CharacterSkillsFragment
 import cz.muni.fi.rpg.ui.characterCreation.CharacterCreationFragment
 import cz.muni.fi.rpg.ui.characterCreation.CharacterInfoFormFragment
 import cz.muni.fi.rpg.ui.characterCreation.CharacterStatsFormFragment
@@ -125,10 +123,6 @@ val appModule = module {
     fragment { NavHostFragment() }
     fragment { PartyListFragment() }
     fragment { CharacterEditFragment(get()) }
-    fragment { CharacterMiscFragment() }
-    fragment { CharacterStatsFragment() }
-    fragment { CharacterSkillsFragment() }
-    fragment { InventoryFragment() }
     fragment { CharacterInfoFormFragment() }
     fragment { CharacterStatsFormFragment() }
     fragment { CharacterCreationFragment(get()) }

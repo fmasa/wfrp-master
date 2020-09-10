@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumnFor
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -74,19 +73,7 @@ private fun SkillItem(
 
 @Composable
 private fun TestNumber(skill: Skill, characteristics: Stats) {
-
-    val testNumber = skill.advances + when (skill.characteristic) {
-        SkillCharacteristic.AGILITY -> characteristics.agility
-        SkillCharacteristic.BALLISTIC_SKILL -> characteristics.ballisticSkill
-        SkillCharacteristic.DEXTERITY -> characteristics.dexterity
-        SkillCharacteristic.FELLOWSHIP -> characteristics.fellowship
-        SkillCharacteristic.INITIATIVE -> characteristics.initiative
-        SkillCharacteristic.INTELLIGENCE -> characteristics.intelligence
-        SkillCharacteristic.STRENGTH -> characteristics.strength
-        SkillCharacteristic.TOUGHNESS -> characteristics.toughness
-        SkillCharacteristic.WEAPON_SKILL -> characteristics.weaponSkill
-        SkillCharacteristic.WILL_POWER -> characteristics.willPower
-    }
+    val testNumber = skill.advances + skill.characteristic.characteristicValue(characteristics)
 
     Row {
         Text(stringResource(R.string.skill_test_number_shortcut))

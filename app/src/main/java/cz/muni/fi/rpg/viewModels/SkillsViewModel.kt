@@ -5,14 +5,19 @@ import androidx.lifecycle.ViewModel
 import cz.muni.fi.rpg.model.domain.character.CharacterId
 import cz.muni.fi.rpg.model.domain.skills.Skill
 import cz.muni.fi.rpg.model.domain.skills.SkillRepository
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class SkillsViewModel(
     private val characterId: CharacterId,
     private val skillRepository: SkillRepository
-) : ViewModel() {
+) : ViewModel(), CoroutineScope by CoroutineScope(Dispatchers.IO) {
     val skills: LiveData<List<Skill>> = skillRepository.forCharacter(characterId)
 
     suspend fun saveSkill(skill: Skill) = skillRepository.save(characterId, skill)
 
-    suspend fun removeSkill(skill: Skill) = skillRepository.remove(characterId, skill.id)
+    fun removeSkill(skill: Skill) = launch {
+        skillRepository.remove(characterId, skill.id)
+    }
 }

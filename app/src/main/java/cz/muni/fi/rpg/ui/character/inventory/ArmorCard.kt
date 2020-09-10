@@ -20,7 +20,6 @@ import cz.muni.fi.rpg.ui.common.composables.CardContainer
 import cz.muni.fi.rpg.ui.common.composables.CardTitle
 import cz.muni.fi.rpg.ui.common.composables.NumberPicker
 
-
 @Composable
 internal fun ArmorCard(armor: Armor, onChange: (Armor) -> Unit) {
     val change = { mutation: Armor.() -> Armor -> onChange(with(armor, mutation)) }

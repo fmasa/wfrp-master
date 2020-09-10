@@ -14,13 +14,16 @@ import cz.muni.fi.rpg.model.domain.common.Money
 import cz.muni.fi.rpg.model.domain.inventory.InventoryItem
 import cz.muni.fi.rpg.model.domain.inventory.InventoryItemRepository
 import cz.muni.fi.rpg.model.right
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class InventoryViewModel(
     private val characterId: CharacterId,
     private val inventoryItems: InventoryItemRepository,
     private val armorRepository: CharacterFeatureRepository<Armor>,
     private val characters: CharacterRepository
-) : ViewModel() {
+) : ViewModel(), CoroutineScope by CoroutineScope(Dispatchers.IO) {
     val inventory: LiveData<List<InventoryItem>> = inventoryItems.findAllForCharacter(characterId)
 
     val armor: LiveData<Either<CouldNotConnectToBackend, Armor>> =
@@ -52,11 +55,11 @@ class InventoryViewModel(
         inventoryItems.save(characterId, inventoryItem)
     }
 
-    suspend fun removeInventoryItem(inventoryItem: InventoryItem) {
+    fun removeInventoryItem(inventoryItem: InventoryItem) = launch {
         inventoryItems.remove(characterId, inventoryItem.id)
     }
 
-    suspend fun updateArmor(armor: Armor) {
+    fun updateArmor(armor: Armor) = launch {
         armorRepository.save(characterId, armor)
     }
 }
