@@ -14,7 +14,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.intl.Locale
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.toUpperCase
 import androidx.compose.ui.unit.dp
 
 @Composable
@@ -48,6 +51,6 @@ fun CardButton(@StringRes textRes: Int, onClick: () -> Unit) {
         onClick = onClick,
         Modifier.padding(top = 16.dp).gravity(Alignment.CenterHorizontally)
     ) {
-        Text(stringResource(textRes))
+        Text(stringResource(textRes).toUpperCase(Locale.current))
     }
 }
