@@ -51,10 +51,10 @@ fun Activity.toast(@StringRes message: Int, duration: Int = Toast.LENGTH_SHORT) 
 
 @UiThread
 fun Fragment.toast(message: String, duration: Int = Toast.LENGTH_SHORT) {
-    Toast.makeText(requireContext(), message, duration).show()
+    context?.let { Toast.makeText(it, message, duration).show() }
 }
 
 @UiThread
 fun Fragment.toast(@StringRes message: Int, duration: Int = Toast.LENGTH_SHORT) {
-    Toast.makeText(requireContext(), message, duration).show()
+    context?.let { Toast.makeText(it, message, duration).show() }
 }
