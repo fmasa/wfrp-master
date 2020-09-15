@@ -64,7 +64,7 @@ class GameMasterViewModel(
         parties.save(party)
     }
 
-    suspend fun changeTime(change: (DateTime) -> DateTime) {
+    fun changeTime(change: (DateTime) -> DateTime) = launch {
         val party = parties.get(partyId)
 
         party.changeTime(change(party.getTime()))

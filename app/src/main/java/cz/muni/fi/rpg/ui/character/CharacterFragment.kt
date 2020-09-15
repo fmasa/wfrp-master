@@ -2,20 +2,14 @@ package cz.muni.fi.rpg.ui.character
 
 import android.os.Bundle
 import android.view.*
-import androidx.annotation.StringRes
 import androidx.appcompat.app.AlertDialog
 import androidx.compose.foundation.*
-import androidx.compose.foundation.gestures.draggable
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.*
+import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.WithConstraints
-import androidx.compose.ui.draw.clipToBounds
-import androidx.compose.ui.gesture.scrollorientationlocking.Orientation
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -36,9 +30,7 @@ import cz.muni.fi.rpg.ui.character.spells.SpellDialog
 import cz.muni.fi.rpg.ui.common.AdManager
 import cz.muni.fi.rpg.ui.common.ChangeAmbitionsDialog
 import cz.muni.fi.rpg.ui.common.PartyScopedFragment
-import cz.muni.fi.rpg.ui.common.composables.BannerAd
-import cz.muni.fi.rpg.ui.common.composables.Theme
-import cz.muni.fi.rpg.ui.common.composables.animatedTabIndicatorOffset
+import cz.muni.fi.rpg.ui.common.composables.*
 import cz.muni.fi.rpg.ui.views.TextInput
 import cz.muni.fi.rpg.viewModels.*
 import kotlinx.coroutines.CoroutineScope
@@ -49,9 +41,6 @@ import org.koin.android.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 import timber.log.Timber
 import java.util.*
-import kotlin.math.abs
-import kotlin.math.roundToInt
-
 
 class CharacterFragment(
     private val adManager: AdManager
@@ -83,7 +72,7 @@ class CharacterFragment(
                     Column(Modifier.fillMaxHeight()) {
                         val scrollState = rememberScrollState()
 
-                        Tabs(screens, scrollState, screenWidth)
+                        TabRow(screens, scrollState, screenWidth)
 
                         val character = viewModel.character.right().observeAsState().value
 
@@ -94,39 +83,13 @@ class CharacterFragment(
                             return@Column
                         }
 
-                        val canDrag = mutableStateOf(true)
-
-                        Row(
-                            modifier = Modifier
-                                .clipToBounds()
-                                .padding(0.dp)
-                                .horizontalScroll(scrollState, false)
-                                .weight(1f)
-                                .background(MaterialTheme.colors.background)
-                                .draggable(
-                                    Orientation.Horizontal,
-                                    reverseDirection = true,
-                                    onDrag = { scrollState.scrollBy(it) },
-                                    onDragStopped = {
-                                        val offset = scrollState.value
-                                        val startOffset = offset - offset % screenWidth
-                                        val endOffset =
-                                            screenWidth * (offset / screenWidth).roundToInt()
-                                        canDrag.value = false
-                                        scrollState.smoothScrollTo(
-                                            if (abs(startOffset - offset) < abs(endOffset - offset))
-                                                startOffset
-                                            else endOffset,
-                                            onEnd = { _, _ -> canDrag.value = true },
-                                        )
-                                    }
-                                ),
-
-                            horizontalArrangement = Arrangement.Start,
-                            verticalGravity = Alignment.Top
-                        ) {
-                            screens.forEach { it.content(character) }
-                        }
+                        TabContent(
+                            item = character,
+                            screens = screens,
+                            scrollState = scrollState,
+                            screenWidth = screenWidth,
+                            Modifier.weight(1f)
+                        )
 
                         BannerAd(stringResource(R.string.character_ad_unit_id), adManager)
                     }
@@ -215,12 +178,12 @@ class CharacterFragment(
     }
 
     @Composable
-    private fun screens(modifier: Modifier): Array<CharacterScreen> {
+    private fun screens(modifier: Modifier): Array<TabScreen<Character>> {
         val fragmentManager = childFragmentManager
         val characterId = args.characterId
 
         return arrayOf(
-            CharacterScreen(
+            TabScreen(
                 R.string.title_misc
             ) { character ->
                 CharacterMiscScreen(
@@ -236,14 +199,14 @@ class CharacterFragment(
                     },
                 )
             },
-            CharacterScreen(R.string.title_character_stats) { character ->
+            TabScreen(R.string.title_character_stats) { character ->
                 CharacterCharacteristicsScreen(
                     character = character,
                     viewModel = characteristicsVm,
                     modifier = modifier,
                 )
             },
-            CharacterScreen(R.string.title_character_skills) {
+            TabScreen(R.string.title_character_skills) {
                 CharacterSkillsScreen(
                     talentsVm = talentsVm,
                     skillsVm = skillsVm,
@@ -253,7 +216,7 @@ class CharacterFragment(
                     onSkillDialogRequest = ::openSkillDialog
                 )
             },
-            CharacterScreen(R.string.title_character_spells) {
+            TabScreen(R.string.title_character_spells) {
                 CharacterSpellsScreen(
                     viewModel = spellsVm,
                     modifier = modifier,
@@ -262,7 +225,7 @@ class CharacterFragment(
                     }
                 )
             },
-            CharacterScreen(R.string.title_character_trappings) {
+            TabScreen(R.string.title_character_trappings) {
                 CharacterTrappingsScreen(
                     viewModel = inventoryVm,
                     modifier = modifier,
@@ -277,43 +240,3 @@ class CharacterFragment(
         )
     }
 }
-
-@Composable
-private fun Tabs(screens: Array<CharacterScreen>, scrollState: ScrollState, screenWidth: Float) {
-    val selectedTabIndex = (scrollState.value / screenWidth).toInt()
-    val scrolledPercentage = ((scrollState.value % screenWidth) / screenWidth)
-
-    ScrollableTabRow(
-        edgePadding = 0.dp,
-        modifier = Modifier.fillMaxWidth(),
-        selectedTabIndex = if (scrolledPercentage > 0.5f) selectedTabIndex + 1 else selectedTabIndex,
-        backgroundColor = MaterialTheme.colors.surface,
-        indicator = { tabPositions ->
-            TabConstants.DefaultIndicator(
-                Modifier.animatedTabIndicatorOffset(
-                    tabPositions,
-                    selectedTabIndex,
-                    scrolledPercentage
-                ),
-                color = MaterialTheme.colors.primary
-            )
-        }
-    ) {
-        screens.forEachIndexed { index, screen ->
-            Tab(
-                selectedContentColor = MaterialTheme.colors.primary,
-                unselectedContentColor = EmphasisAmbient.current.medium.applyEmphasis(
-                    MaterialTheme.colors.onSurface
-                ),
-                selected = index == (if (scrolledPercentage > 0.5f) selectedTabIndex + 1 else selectedTabIndex),
-                onClick = { scrollState.smoothScrollTo(index * screenWidth) },
-                text = { Text(stringResource(screen.tabName).toUpperCase(Locale.getDefault())) },
-            )
-        }
-    }
-}
-
-data class CharacterScreen(
-    @StringRes internal val tabName: Int,
-    internal val content: @Composable (Character) -> Unit
-)

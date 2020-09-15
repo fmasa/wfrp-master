@@ -34,7 +34,6 @@ import cz.muni.fi.rpg.ui.common.AdManager
 import cz.muni.fi.rpg.ui.gameMaster.GameMasterFragment
 import cz.muni.fi.rpg.ui.gameMaster.encounters.CombatantFragment
 import cz.muni.fi.rpg.ui.gameMaster.encounters.EncounterDetailFragment
-import cz.muni.fi.rpg.ui.gameMaster.encounters.EncountersFragment
 import cz.muni.fi.rpg.ui.partyList.PartyListFragment
 import cz.muni.fi.rpg.viewModels.*
 import org.koin.android.viewmodel.dsl.viewModel
@@ -126,7 +125,6 @@ val appModule = module {
     fragment { CharacterInfoFormFragment() }
     fragment { CharacterStatsFormFragment() }
     fragment { CharacterCreationFragment(get()) }
-    fragment { EncountersFragment() }
     fragment { EncounterDetailFragment() }
     fragment { CombatantFragment() }
 }
