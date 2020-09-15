@@ -8,7 +8,7 @@
     <string name="button_submit">Submit</string>
     <!-- end of Common UI elements -->
 
-    <string name="assembleParty_title">Assemble New Party</string>
+    <string name="assembleParty_title">Create new Party</string>
 
     <!-- Party rename Dialog -->
     <string name="title_party_rename">Rename Party</string>
@@ -17,7 +17,7 @@
     <string name="assembleParty_button_positive">create</string>
     <string name="button_create">create</string>
     <string name="error_party_name_blank">Party name cannot be empty</string>
-    <string name="scanCode_title">Join using QR code</string>
+    <string name="scanCode_title">Join via QR code</string>
     <string name="group_icon_description">Group icon</string>
     <string name="skill_icon_description">Icon with characteristic related to this skill</string>
     <string name="talent_icon_description">Generic talent icon</string>
