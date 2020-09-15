@@ -54,7 +54,7 @@ class EncountersViewModelTest {
                     UUID.fromString("6fef50a9-3087-44cd-b965-7c786ec02986") to 3,
                     UUID.fromString("593661a4-f479-4841-842a-288a50d5d6db") to 1
                 )
-            )
+            ).join()
         }
 
         assertEquals(

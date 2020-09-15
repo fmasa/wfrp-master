@@ -1,31 +1,36 @@
 package cz.muni.fi.rpg.ui.gameMaster.encounters
 
 import android.os.Bundle
-import android.view.View
+import android.view.LayoutInflater
+import android.view.ViewGroup
+import androidx.compose.foundation.*
+import androidx.compose.foundation.layout.*
+import androidx.compose.material.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.dp
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.observe
 import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.ItemTouchHelper
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.model.domain.encounter.Encounter
 import cz.muni.fi.rpg.model.domain.encounters.EncounterId
+import cz.muni.fi.rpg.ui.common.composables.DraggableListFor
+import cz.muni.fi.rpg.ui.common.composables.Theme
 import cz.muni.fi.rpg.ui.common.serializableArgument
-import cz.muni.fi.rpg.ui.common.toggleVisibility
 import cz.muni.fi.rpg.ui.gameMaster.GameMasterFragmentDirections
-import cz.muni.fi.rpg.ui.gameMaster.encounters.adapter.EncounterAdapter
 import cz.muni.fi.rpg.viewModels.EncountersViewModel
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.launch
 import org.koin.android.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 import java.util.*
 
-class EncountersFragment : Fragment(R.layout.fragment_encounters) {
+class EncountersFragment : Fragment() {
     companion object {
         private const val ARGUMENT_PARTY_ID = "partyId"
 
@@ -38,83 +43,98 @@ class EncountersFragment : Fragment(R.layout.fragment_encounters) {
     private val partyId: UUID by serializableArgument(ARGUMENT_PARTY_ID)
     private val viewModel: EncountersViewModel by viewModel { parametersOf(partyId) }
 
-    private val encounters: MutableList<Encounter> = mutableListOf()
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        val adapter = EncounterAdapter(layoutInflater) { encounter ->
-            findNavController().navigate(
-                GameMasterFragmentDirections.openEncounter(
-                    EncounterId(partyId = partyId, encounterId = encounter.id)
-                )
-            )
-        }
-
-        val encounterListRecycler = view.findViewById<RecyclerView>(R.id.encounterListRecycler)
-        encounterListRecycler.adapter = adapter
-        encounterListRecycler.layoutManager = LinearLayoutManager(context)
-
-        viewModel.encounters.observe(viewLifecycleOwner) { encounters ->
-            view.findViewById<View>(R.id.progress).toggleVisibility(false)
-            view.findViewById<View>(R.id.mainView).toggleVisibility(true)
-
-            this.encounters.clear()
-            this.encounters.addAll(encounters)
-
-            adapter.submitList(this.encounters)
-
-            view.findViewById<View>(R.id.noEncountersText).toggleVisibility(encounters.isEmpty())
-            view.findViewById<View>(R.id.noEncountersIcon).toggleVisibility(encounters.isEmpty())
-            encounterListRecycler.toggleVisibility(encounters.isNotEmpty())
-            view.findViewById<View>(R.id.timeline).toggleVisibility(encounters.isNotEmpty())
-        }
-
-        ItemTouchHelper(ItemTouchHelperCallback(encounters, viewModel, adapter))
-            .attachToRecyclerView(encounterListRecycler)
-
-        view.findViewById<View>(R.id.addEncounter).setOnClickListener {
-            EncounterDialog.newInstance(partyId, null).show(childFragmentManager, null)
-        }
-    }
-
-    private class ItemTouchHelperCallback(
-        private val encounters: MutableList<Encounter>,
-        private val viewModel: EncountersViewModel,
-        private val adapter: EncounterAdapter
-    ) : ItemTouchHelper.SimpleCallback(ItemTouchHelper.UP or ItemTouchHelper.DOWN, 0),
-        CoroutineScope by CoroutineScope(Dispatchers.Default) {
-
-        private lateinit var swapping: Job
-
-        override fun onMove(
-            recyclerView: RecyclerView,
-            viewHolder: RecyclerView.ViewHolder,
-            target: RecyclerView.ViewHolder
-        ): Boolean {
-            val fromPosition = viewHolder.adapterPosition
-            val toPosition = target.adapterPosition
-
-            Collections.swap(encounters, fromPosition, toPosition)
-            adapter.notifyItemMoved(fromPosition, toPosition)
-
-            return false
-        }
-
-        override fun clearView(
-            recyclerView: RecyclerView,
-            viewHolder: RecyclerView.ViewHolder
-        ) {
-            super.clearView(recyclerView, viewHolder)
-
-            swapping = launch {
-                viewModel.reorderEncounters(
-                    (0 until encounters.size).map { encounters[it].id to it }.toMap()
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ) = ComposeView(requireContext()).apply {
+        setContent {
+            Theme {
+                EncountersScreen(
+                    viewModel,
+                    onEncounterClick = {
+                        findNavController().navigate(
+                            GameMasterFragmentDirections.openEncounter(
+                                EncounterId(partyId = partyId, encounterId = it.id)
+                            )
+                        )
+                    },
+                    onNewEncounterDialogRequest = {
+                        EncounterDialog.newInstance(partyId, null).show(childFragmentManager, null)
+                    }
                 )
             }
         }
+    }
+}
 
-        override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+@Composable
+private fun EncountersScreen(
+    viewModel: EncountersViewModel,
+    onEncounterClick: (Encounter) -> Unit,
+    onNewEncounterDialogRequest: () -> Unit,
+) {
+    Scaffold(
+        floatingActionButton = {
+            FloatingActionButton(onClick = onNewEncounterDialogRequest) {
+                Icon(vectorResource(R.drawable.ic_add))
+            }
+        }
+    ) {
+        ScrollableColumn(
+            Modifier
+                .background(MaterialTheme.colors.background)
+                .fillMaxWidth(),
+            horizontalGravity = Alignment.CenterHorizontally,
+        ) { EncounterList(viewModel, onEncounterClick) }
+    }
+}
+
+@Composable
+private fun EncounterList(viewModel: EncountersViewModel, onClick: (Encounter) -> Unit) {
+    val encounters = viewModel.encounters.observeAsState().value ?: return
+
+    val icon = vectorResource(R.drawable.ic_encounter)
+
+    val itemMargin = 4.dp
+    val iconSize = 40.dp
+    val itemHeight = iconSize + 12.dp * 2
+
+    DraggableListFor(
+        encounters,
+        modifier = Modifier
+            .fillMaxWidth(0.7f)
+            .padding(top = 6.dp),
+        itemHeight = itemHeight + itemMargin * 2,
+        onReorder = {
+            viewModel.reorderEncounters(
+                it.mapIndexed { index, encounter -> encounter.id to index }.toMap()
+            )
+        },
+    ) { encounter, isDragged ->
+        Card(
+            elevation = if (isDragged) 6.dp else 2.dp,
+            modifier = Modifier
+                .padding(itemMargin)
+                .fillMaxWidth()
+                .padding(horizontal = 12.dp)
+                .clickable(onClick = { onClick(encounter) })
+        ) {
+            Row(
+                Modifier.height(itemHeight).padding(12.dp),
+                verticalGravity = Alignment.CenterVertically
+            ) {
+                Image(
+                    icon,
+                    Modifier.size(iconSize),
+                    colorFilter = ColorFilter.tint(MaterialTheme.colors.onSurface)
+                )
+                Text(
+                    encounter.name,
+                    textAlign = TextAlign.Center,
+                    style = MaterialTheme.typography.body1
+                )
+            }
         }
     }
 }
