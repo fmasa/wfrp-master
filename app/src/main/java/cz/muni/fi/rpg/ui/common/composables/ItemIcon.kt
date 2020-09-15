@@ -7,14 +7,14 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.EmphasisAmbient
+import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import cz.muni.fi.rpg.R
 
 object ItemIcon {
     enum class Size {
@@ -37,11 +37,11 @@ object ItemIcon {
 
 @Composable
 fun ItemIcon(@DrawableRes drawableResource: Int, size: ItemIcon.Size = ItemIcon.Size.Small) {
-    val backgroundColor = colorResource(R.color.colorPrimaryDark)
+    val backgroundColor = EmphasisAmbient.current.medium.applyEmphasis(MaterialTheme.colors.onSurface)
 
     Image(
         vectorResource(drawableResource),
-        colorFilter = ColorFilter.tint(colorResource(R.color.colorFabText)),
+        colorFilter = ColorFilter.tint(MaterialTheme.colors.surface),
         modifier = Modifier
             .background(backgroundColor, CircleShape)
             .padding(size.padding)

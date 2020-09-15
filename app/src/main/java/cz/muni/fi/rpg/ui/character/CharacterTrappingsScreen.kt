@@ -1,6 +1,5 @@
 package cz.muni.fi.rpg.ui.character
 
-import androidx.annotation.ColorRes
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.layout.ColumnScope.gravity
@@ -10,7 +9,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
@@ -59,23 +58,23 @@ private fun CurrentMoney(value: Money, onClick: () -> Unit) {
         horizontalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         ProvideTextStyle(MaterialTheme.typography.body1) {
-            MoneyIcon(R.color.colorGold)
+            MoneyIcon(Theme.fixedColors.currencyGold)
             Text(value.getCrowns().toString() + " " + stringResource(R.string.gold_coins_shortcut))
 
-            MoneyIcon(R.color.colorSilver)
+            MoneyIcon(Theme.fixedColors.currencySilver)
             Text(value.getShillings().toString() + " " + stringResource(R.string.silver_shillings_shortcut))
 
-            MoneyIcon(R.color.colorBrass)
+            MoneyIcon(Theme.fixedColors.currencyBrass)
             Text(value.getPennies().toString() + " " + stringResource(R.string.brass_pennies_shortcut))
         }
     }
 }
 
 @Composable
-private fun MoneyIcon(@ColorRes tint: Int) {
+private fun MoneyIcon(tint: Color) {
     Icon(
         vectorResource(R.drawable.ic_coins),
-        tint = colorResource(tint),
+        tint = tint,
         modifier = Modifier.size(18.dp)
     )
 }

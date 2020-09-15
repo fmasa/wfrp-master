@@ -1,6 +1,5 @@
 package cz.muni.fi.rpg.ui.character
 
-import androidx.annotation.ColorRes
 import androidx.annotation.StringRes
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
@@ -8,6 +7,7 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import cz.muni.fi.rpg.R
@@ -16,6 +16,7 @@ import cz.muni.fi.rpg.model.domain.character.Points
 import cz.muni.fi.rpg.model.domain.character.Stats
 import cz.muni.fi.rpg.ui.common.composables.CardContainer
 import cz.muni.fi.rpg.ui.common.composables.NumberPicker
+import cz.muni.fi.rpg.ui.common.composables.Theme
 import cz.muni.fi.rpg.viewModels.CharacterStatsViewModel
 import timber.log.Timber
 import java.lang.IllegalArgumentException
@@ -58,7 +59,7 @@ private fun PointsSection(points: Points, onUpdate: (Points) -> Unit) {
                     R.string.label_wounds,
                     points.wounds,
                     modifier = modifier,
-                    color = if (points.isHeavilyWounded()) R.color.colorDanger else R.color.colorText
+                    color = if (points.isHeavilyWounded()) Theme.fixedColors.danger else MaterialTheme.colors.onSurface
                 ) { newValue ->
                     updateIfChanged { it.copy(wounds = newValue) }
                 }
@@ -130,7 +131,7 @@ private fun PointsSection(points: Points, onUpdate: (Points) -> Unit) {
 private fun PointItem(
     @StringRes labelRes: Int,
     value: Int,
-    @ColorRes color: Int = R.color.colorText,
+    color: Color = MaterialTheme.colors.onSurface,
     modifier: Modifier = Modifier,
     onUpdate: (Int) -> Unit,
 ) {

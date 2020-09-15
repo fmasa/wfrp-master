@@ -11,7 +11,20 @@ import androidx.compose.ui.unit.sp
 import cz.muni.fi.rpg.R
 
 class Theme {
+    class FixedColors(
+        val danger: Color,
+        val currencyGold: Color,
+        val currencySilver: Color,
+        val currencyBrass: Color,
+    )
+
     companion object {
+        val fixedColors = FixedColors(
+            danger = Color(183, 28, 28),
+            currencyGold = Color(255, 183, 77),
+            currencySilver = Color(158, 158, 158),
+            currencyBrass = Color(141, 110, 99),
+        )
 
         @Composable
         internal fun LightColors() = lightColors(
