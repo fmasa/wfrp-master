@@ -9,11 +9,7 @@ abstract class BaseFragment(@LayoutRes contentLayoutId: Int) : Fragment(contentL
      * Set title of parent activity's action bar
      */
     protected fun setTitle(title: String) {
-        val activity = requireActivity()
-
-        if (activity is AppCompatActivity) {
-            activity.supportActionBar?.title = title
-        }
+        activity?.let { (activity as AppCompatActivity).supportActionBar?.title = title }
     }
 
     /**
@@ -21,10 +17,6 @@ abstract class BaseFragment(@LayoutRes contentLayoutId: Int) : Fragment(contentL
      * Note: This is not really optimal way to do this, but I did not found another one
      */
     protected fun setSubtitle(subtitle: String) {
-        val activity = requireActivity()
-
-        if (activity is AppCompatActivity) {
-            activity.supportActionBar?.subtitle = subtitle
-        }
+        activity?.let { (activity as AppCompatActivity).supportActionBar?.subtitle = subtitle }
     }
 }
