@@ -70,7 +70,7 @@ class CharacterFragment(
                     val screens = screens(Modifier.width(maxWidth).padding(top = 6.dp))
 
                     Column(Modifier.fillMaxHeight()) {
-                        val scrollState = rememberScrollState()
+                        val scrollState = rememberScrollState(0f, screenWidth)
 
                         TabRow(screens, scrollState, screenWidth)
 
