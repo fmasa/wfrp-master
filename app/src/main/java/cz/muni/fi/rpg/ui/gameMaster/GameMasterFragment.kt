@@ -66,7 +66,7 @@ class GameMasterFragment(
                     val screenWidth = constraints.maxWidth.toFloat()
 
                     Column(Modifier.fillMaxHeight()) {
-                        val scrollState = rememberScrollState(0f, screenWidth)
+                        val scrollState = rememberScrollState(0f, screenWidth, screens.size)
 
                         TabRow(
                             screens,

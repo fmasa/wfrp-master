@@ -21,7 +21,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import java.util.*
 import kotlin.math.abs
-import kotlin.math.roundToInt
 
 
 fun Modifier.animatedTabIndicatorOffset(
@@ -116,8 +115,8 @@ fun <T> TabContent(
     screenWidth: Float,
     modifier: Modifier = Modifier,
 ) {
-
     val canDrag = mutableStateOf(true)
+    val anchors = screens.indices.map { it * screenWidth }
 
     Row(
         modifier = modifier
@@ -129,21 +128,15 @@ fun <T> TabContent(
                 Orientation.Horizontal,
                 reverseDirection = true,
                 onDrag = { scrollState.scrollBy(it) },
-                onDragStopped = {
+                onDragStopped = { _ ->
                     val offset = scrollState.value
-                    val startOffset = offset - offset % screenWidth
-                    val endOffset =
-                        screenWidth * (offset / screenWidth).roundToInt()
                     canDrag.value = false
                     scrollState.smoothScrollTo(
-                        if (abs(startOffset - offset) < abs(endOffset - offset))
-                            startOffset
-                        else endOffset,
+                        anchors.minByOrNull { abs(it - offset) } ?: 0f,
                         onEnd = { _, _ -> canDrag.value = true },
                     )
                 }
             ),
-
         horizontalArrangement = Arrangement.Start,
         verticalGravity = Alignment.Top
     ) {
