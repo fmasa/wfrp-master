@@ -53,7 +53,7 @@ private fun EncounterList(viewModel: EncountersViewModel, onClick: (Encounter) -
     DraggableListFor(
         encounters,
         modifier = Modifier
-            .fillMaxWidth(0.7f)
+            .padding(horizontal = 12.dp)
             .padding(top = 6.dp),
         itemHeight = itemHeight + itemMargin * 2,
         onReorder = {
@@ -61,7 +61,7 @@ private fun EncounterList(viewModel: EncountersViewModel, onClick: (Encounter) -
                 it.mapIndexed { index, encounter -> encounter.id to index }.toMap()
             )
         },
-    ) { encounter, isDragged ->
+    ) { encounter, isDragged, modifier ->
         Card(
             elevation = if (isDragged) 6.dp else 2.dp,
             modifier = Modifier
@@ -69,6 +69,7 @@ private fun EncounterList(viewModel: EncountersViewModel, onClick: (Encounter) -
                 .fillMaxWidth()
                 .padding(horizontal = 12.dp)
                 .clickable(onClick = { onClick(encounter) })
+                .then(modifier)
         ) {
             Row(
                 Modifier.height(itemHeight).padding(12.dp),

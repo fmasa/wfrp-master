@@ -6,11 +6,16 @@ import androidx.compose.foundation.gestures.draggable
 import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.composed
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.gesture.*
 import androidx.compose.ui.gesture.scrollorientationlocking.Orientation
 import androidx.compose.ui.platform.DensityAmbient
+import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
+import timber.log.Timber
 import java.util.*
 import kotlin.math.roundToInt
 
@@ -25,16 +30,13 @@ private fun <T> List<T>.moveItem(sourceIndex: Int, targetIndex: Int): List<T> {
         }
 }
 
-/**
- * TODO: Fix support for both draggable and scroll in list
- */
 @Composable
 fun <T> DraggableListFor(
     items: List<T>,
     itemHeight: Dp,
     onReorder: (List<T>) -> Unit,
     modifier: Modifier = Modifier,
-    itemContent: @Composable (item: T, isDragged: Boolean) -> Unit
+    itemContent: @Composable (item: T, isDragged: Boolean, modifier: Modifier) -> Unit
 ) {
     val dragY = animatedFloat(0f)
     val draggedIndex = remember { mutableStateOf<Int?>(null) }
@@ -57,15 +59,18 @@ fun <T> DraggableListFor(
                 else -> 0.dp
             }
 
-            Box(
+            itemContent(
+                items[index],
+                isDragged,
                 Modifier
                     .height(itemHeight)
                     .offset(y = offsetY)
                     .zIndex(if (isDragged) 2f else 1f)
                     .fillMaxWidth()
-                    .draggable(
-                        orientation = Orientation.Vertical,
-                        onDrag = { delta -> dragY.snapTo(dragY.value + delta) },
+                    .scrollFriendlyDraggable(
+                        onDrag = { delta ->
+                            dragY.snapTo(dragY.value + delta)
+                        },
                         onDragStarted = {
                             dragY.snapTo(0f)
                             draggedIndex.value = index
@@ -77,7 +82,51 @@ fun <T> DraggableListFor(
                             draggedIndex.value = null
                         },
                     )
-            ) { itemContent(items[index], isDragged) }
+            )
         }
+    }
+}
+
+private fun Modifier.scrollFriendlyDraggable(
+    onDragStarted: () -> Unit = {},
+    onDragStopped: () -> Unit = {},
+    onDrag: Density.(Float) -> Unit
+) = composed {
+    val density = DensityAmbient.current
+
+    longPressDragGestureFilter(
+        DragCallback(
+            onDragStarted = onDragStarted,
+            onDragStopped = onDragStopped,
+            onDrag = onDrag,
+            density = density,
+        )
+    )
+}
+
+
+private class DragCallback(
+    private val onDragStarted: () -> Unit = {},
+    private val onDragStopped: () -> Unit = {},
+    private val onDrag: Density.(Float) -> Unit,
+    private val density: Density,
+) : LongPressDragObserver {
+
+    override fun onLongPress(pxPosition: Offset) {
+        onDragStarted()
+    }
+
+    override fun onDrag(dragDistance: Offset): Offset {
+        with(density) { onDrag(dragDistance.y) }
+
+        return dragDistance
+    }
+
+    override fun onCancel() {
+        onDragStopped()
+    }
+
+    override fun onStop(velocity: Offset) {
+        onDragStopped()
     }
 }
