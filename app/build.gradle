@@ -85,7 +85,7 @@ android {
     }
 
     composeOptions {
-        kotlinCompilerExtensionVersion "1.0.0-alpha01"
+        kotlinCompilerExtensionVersion compose_version
     }
 }
 
@@ -117,10 +117,10 @@ dependencies {
     implementation "org.koin:koin-androidx-fragment:2.1.5"
 
     // Jetpack Compose
-    implementation 'androidx.compose.ui:ui:1.0.0-alpha01'
-    implementation "androidx.compose.runtime:runtime-livedata:1.0.0-alpha01"
-    implementation 'androidx.compose.material:material:1.0.0-alpha01'
-    implementation 'androidx.ui:ui-tooling:1.0.0-alpha01'
+    implementation "androidx.compose.ui:ui:$compose_version"
+    implementation "androidx.compose.runtime:runtime-livedata:$compose_version"
+    implementation "androidx.compose.material:material:$compose_version"
+    implementation "androidx.ui:ui-tooling:$compose_version"
 
     // Firebase-related dependencies
     implementation 'com.google.firebase:firebase-analytics:17.4.4'

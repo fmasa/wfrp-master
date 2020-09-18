@@ -28,7 +28,7 @@ fun NumberPicker(
     modifier: Modifier = Modifier
 ) {
     Column(
-        horizontalGravity = Alignment.CenterHorizontally,
+        horizontalAlignment = Alignment.CenterHorizontally,
         modifier = modifier.padding(vertical = 4.dp).then(modifier)
     ) {
         if (label != null) {
@@ -37,7 +37,7 @@ fun NumberPicker(
 
         Row(
             horizontalArrangement = Arrangement.Center,
-            verticalGravity = Alignment.CenterVertically
+            verticalAlignment = Alignment.CenterVertically
         ) {
             val iconColorFilter = ColorFilter.tint(EmphasisAmbient.current.medium.applyEmphasis(MaterialTheme.colors.onSurface))
 

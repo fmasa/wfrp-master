@@ -35,7 +35,7 @@ fun EncountersScreen(
             Modifier
                 .background(MaterialTheme.colors.background)
                 .fillMaxWidth(),
-            horizontalGravity = Alignment.CenterHorizontally,
+            horizontalAlignment = Alignment.CenterHorizontally,
         ) { EncounterList(viewModel, onEncounterClick) }
     }
 }
@@ -73,7 +73,7 @@ private fun EncounterList(viewModel: EncountersViewModel, onClick: (Encounter) -
         ) {
             Row(
                 Modifier.height(itemHeight).padding(12.dp),
-                verticalGravity = Alignment.CenterVertically
+                verticalAlignment = Alignment.CenterVertically
             ) {
                 Image(
                     icon,

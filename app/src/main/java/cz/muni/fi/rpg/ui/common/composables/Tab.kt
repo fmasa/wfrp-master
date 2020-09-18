@@ -138,7 +138,7 @@ fun <T> TabContent(
                 }
             ),
         horizontalArrangement = Arrangement.Start,
-        verticalGravity = Alignment.Top
+        verticalAlignment = Alignment.Top
     ) {
         screens.forEach { it.content(item) }
     }

@@ -55,7 +55,7 @@ fun EmptyUI(
     val color = EmphasisAmbient.current.medium.applyEmphasis(MaterialTheme.colors.onSurface)
     val text = stringResource(textId)
 
-    Column(horizontalGravity = Alignment.CenterHorizontally, modifier = Modifier.fillMaxWidth()) {
+    Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.fillMaxWidth()) {
         Spacer(Modifier.fillMaxHeight(0.35f))
         Image(image, modifier = size.modifier, colorFilter = ColorFilter.tint(color))
 

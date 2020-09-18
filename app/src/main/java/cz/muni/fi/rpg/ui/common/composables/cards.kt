@@ -30,7 +30,7 @@ fun CardTitle(@StringRes textRes: Int, @DrawableRes iconRes: Int? = null) {
 fun CardTitle(text: String, @DrawableRes iconRes: Int? = null) {
     Row(
         horizontalArrangement = Arrangement.Center,
-        verticalGravity = Alignment.CenterVertically,
+        verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier.fillMaxWidth()
     ) {
         if (iconRes != null) {

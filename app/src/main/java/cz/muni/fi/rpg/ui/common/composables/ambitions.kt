@@ -47,7 +47,7 @@ fun AmbitionsCard(
 
                     if (value.isBlank()) {
                         ProvideEmphasis(emphasis = EmphasisAmbient.current.medium) {
-                            Row(verticalGravity = Alignment.CenterVertically) {
+                            Row(verticalAlignment = Alignment.CenterVertically) {
                                 Icon(vectorResource(R.drawable.ic_none))
                                 Text(
                                     stringResource(R.string.note_ambition_not_filled),

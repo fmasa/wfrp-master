@@ -31,7 +31,7 @@ fun CalendarScreen(
 
     ScrollableColumn(modifier.background(MaterialTheme.colors.background).padding(top = 6.dp)) {
         CardContainer(Modifier.padding(horizontal = 8.dp)) {
-            Column(Modifier.fillMaxWidth(), horizontalGravity = Alignment.CenterHorizontally) {
+            Column(Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
                 Time(time = dateTime.time, onChangeRequest = onChangeTimeRequest)
                 Date(date = dateTime.date, onChangeRequest = onChangeDateRequest)
             }
@@ -57,7 +57,7 @@ private fun Date(date: ImperialDate, onChangeRequest: () -> Unit) {
     )
     Text(YearSeason.at(date).readableName, modifier = Modifier.padding(top = 8.dp))
 
-    Row(verticalGravity = Alignment.CenterVertically) {
+    Row(verticalAlignment = Alignment.CenterVertically) {
         Icon(vectorResource(R.drawable.ic_moon), modifier = Modifier.padding(end = 4.dp))
         Text(
             stringResource(

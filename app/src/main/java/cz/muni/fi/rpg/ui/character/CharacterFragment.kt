@@ -65,6 +65,16 @@ class CharacterFragment(
     ) = ComposeView(requireContext()).apply {
         setContent {
             Theme {
+                val character = viewModel.character.right().observeAsState().value
+
+                if (character == null) {
+                    Box(Modifier.fillMaxSize(), gravity = ContentGravity.Center) {
+                        CircularProgressIndicator()
+                    }
+
+                    return@Theme
+                }
+
                 WithConstraints(Modifier.fillMaxSize()) {
                     val screenWidth = constraints.maxWidth.toFloat()
                     val screens = screens(Modifier.width(maxWidth).padding(top = 6.dp))
@@ -73,15 +83,6 @@ class CharacterFragment(
                         val scrollState = rememberScrollState(0f, screenWidth)
 
                         TabRow(screens, scrollState, screenWidth)
-
-                        val character = viewModel.character.right().observeAsState().value
-
-                        if (character == null) {
-                            Box(Modifier.fillMaxSize(), gravity = ContentGravity.Center) {
-                                CircularProgressIndicator()
-                            }
-                            return@Column
-                        }
 
                         TabContent(
                             item = character,

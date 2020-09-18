@@ -106,7 +106,7 @@ private fun ArmorPart(
     onChange: (Int) -> Unit,
     modifier: Modifier = Modifier.weight(1f)
 ) {
-    Column(horizontalGravity = Alignment.CenterHorizontally, modifier = modifier) {
+    Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = modifier) {
         Icon(vectorResource(iconRes))
         NumberPicker(
             value = points,

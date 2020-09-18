@@ -68,9 +68,9 @@ fun FloatingActionsMenu(
 ) {
     val transition = transition(definition = transitionDefinition, toState = state.value)
 
-    Column(horizontalGravity = Alignment.End) {
+    Column(horizontalAlignment = Alignment.End) {
         Column(
-            horizontalGravity = Alignment.End,
+            horizontalAlignment = Alignment.End,
             verticalArrangement = Arrangement.spacedBy(transition[yOffset]),
             modifier = Modifier
                 .drawOpacity(transition[opacity])

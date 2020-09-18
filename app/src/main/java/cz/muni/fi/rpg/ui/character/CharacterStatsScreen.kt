@@ -84,7 +84,7 @@ private fun PointsSection(points: Points, onUpdate: (Points) -> Unit) {
         ) {
             CardContainer(Modifier.weight(1f)) {
                 Column(
-                    horizontalGravity = Alignment.CenterHorizontally,
+                    horizontalAlignment = Alignment.CenterHorizontally,
                     modifier = Modifier.fillMaxWidth()
                 ) {
                     Text(
@@ -105,7 +105,7 @@ private fun PointsSection(points: Points, onUpdate: (Points) -> Unit) {
 
             CardContainer(Modifier.weight(1f)) {
                 Column(
-                    horizontalGravity = Alignment.CenterHorizontally,
+                    horizontalAlignment = Alignment.CenterHorizontally,
                     modifier = Modifier.fillMaxWidth()
                 ) {
                     Text(
@@ -149,27 +149,27 @@ private fun PointItem(
 private fun CharacteristicsSection(stats: Stats) {
     CardContainer(modifier = Modifier.padding(horizontal = 8.dp)) {
         Row(horizontalArrangement = Arrangement.SpaceEvenly, modifier = Modifier.fillMaxWidth()) {
-            Column(horizontalGravity = Alignment.CenterHorizontally) {
+            Column(horizontalAlignment = Alignment.CenterHorizontally) {
                 Characteristic(R.string.label_shortcut_weapon_skill, stats.weaponSkill)
                 Characteristic(R.string.label_shortcut_agility, stats.agility)
             }
 
-            Column(horizontalGravity = Alignment.CenterHorizontally) {
+            Column(horizontalAlignment = Alignment.CenterHorizontally) {
                 Characteristic(R.string.label_shortcut_ballistic_skill, stats.ballisticSkill)
                 Characteristic(R.string.label_shortcut_dexterity, stats.dexterity)
             }
 
-            Column(horizontalGravity = Alignment.CenterHorizontally) {
+            Column(horizontalAlignment = Alignment.CenterHorizontally) {
                 Characteristic(R.string.label_shortcut_strength, stats.strength)
                 Characteristic(R.string.label_shortcut_intelligence, stats.intelligence)
             }
 
-            Column(horizontalGravity = Alignment.CenterHorizontally) {
+            Column(horizontalAlignment = Alignment.CenterHorizontally) {
                 Characteristic(R.string.label_shortcut_toughness, stats.toughness)
                 Characteristic(R.string.label_shortcut_will_power, stats.willPower)
             }
 
-            Column(horizontalGravity = Alignment.CenterHorizontally) {
+            Column(horizontalAlignment = Alignment.CenterHorizontally) {
                 Characteristic(R.string.label_shortcut_initiative, stats.initiative)
                 Characteristic(R.string.label_shortcut_fellowship, stats.fellowship)
             }
@@ -179,7 +179,7 @@ private fun CharacteristicsSection(stats: Stats) {
 
 @Composable
 private fun Characteristic(@StringRes labelRes: Int, value: Int) {
-    Column(horizontalGravity = Alignment.CenterHorizontally) {
+    Column(horizontalAlignment = Alignment.CenterHorizontally) {
         Text(stringResource(labelRes), style = MaterialTheme.typography.subtitle1)
         Text(
             value.toString(),

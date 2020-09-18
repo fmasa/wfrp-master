@@ -61,6 +61,15 @@ class GameMasterFragment(
         setContent {
             Theme {
                 val party = viewModel.party.right().observeAsState().value
+
+                if (party == null) {
+                    Box(Modifier.fillMaxSize(), gravity = ContentGravity.Center) {
+                        CircularProgressIndicator()
+                    }
+
+                    return@Theme
+                }
+
                 WithConstraints(Modifier.fillMaxSize()) {
                     val screens = screens(Modifier.width(maxWidth).padding(top = 6.dp))
                     val screenWidth = constraints.maxWidth.toFloat()
@@ -74,13 +83,6 @@ class GameMasterFragment(
                             screenWidth = screenWidth,
                             fullWidthTabs = true,
                         )
-
-                        if (party == null) {
-                            Box(Modifier.fillMaxSize(), gravity = ContentGravity.Center) {
-                                CircularProgressIndicator()
-                            }
-                            return@Column
-                        }
 
                         TabContent(
                             item = party,
