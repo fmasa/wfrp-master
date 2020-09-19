@@ -14,6 +14,7 @@ import androidx.compose.ui.unit.dp
 import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.model.domain.encounter.Encounter
 import cz.muni.fi.rpg.ui.common.composables.DraggableListFor
+import cz.muni.fi.rpg.ui.common.composables.EmptyUI
 import cz.muni.fi.rpg.viewModels.EncountersViewModel
 
 @Composable
@@ -23,6 +24,15 @@ fun EncountersScreen(
     onEncounterClick: (Encounter) -> Unit,
     onNewEncounterDialogRequest: () -> Unit,
 ) {
+    val encounters = viewModel.encounters.observeAsState().value
+
+    if (encounters == null) {
+        Box(modifier.fillMaxSize(), gravity = ContentGravity.Center) {
+            CircularProgressIndicator()
+        }
+        return
+    }
+
     Scaffold(
         modifier = modifier,
         floatingActionButton = {
@@ -31,60 +41,72 @@ fun EncountersScreen(
             }
         }
     ) {
-        ScrollableColumn(
-            Modifier
-                .background(MaterialTheme.colors.background)
-                .fillMaxWidth(),
-            horizontalAlignment = Alignment.CenterHorizontally,
-        ) { EncounterList(viewModel, onEncounterClick) }
+        EncounterList(encounters, viewModel, onEncounterClick)
     }
 }
 
 @Composable
-private fun EncounterList(viewModel: EncountersViewModel, onClick: (Encounter) -> Unit) {
-    val encounters = viewModel.encounters.observeAsState().value ?: return
+private fun EncounterList(
+    encounters: List<Encounter>,
+    viewModel: EncountersViewModel,
+    onClick: (Encounter) -> Unit
+) {
+    if (encounters.isEmpty()) {
+        EmptyUI(
+            textId = R.string.no_encounters_prompt,
+            drawableResourceId = R.drawable.ic_encounter
+        )
+
+        return
+    }
 
     val icon = vectorResource(R.drawable.ic_encounter)
-
-    val itemMargin = 4.dp
     val iconSize = 40.dp
+    val itemMargin = 4.dp
     val itemHeight = iconSize + 12.dp * 2
 
-    DraggableListFor(
-        encounters,
-        modifier = Modifier
-            .padding(horizontal = 12.dp)
-            .padding(top = 6.dp),
-        itemHeight = itemHeight + itemMargin * 2,
-        onReorder = {
-            viewModel.reorderEncounters(
-                it.mapIndexed { index, encounter -> encounter.id to index }.toMap()
-            )
-        },
-    ) { encounter, isDragged, modifier ->
-        Card(
-            elevation = if (isDragged) 6.dp else 2.dp,
+    ScrollableColumn(
+        Modifier
+            .background(MaterialTheme.colors.background)
+            .fillMaxWidth(),
+        horizontalAlignment = Alignment.CenterHorizontally,
+    ) {
+        DraggableListFor(
+            encounters,
             modifier = Modifier
-                .padding(itemMargin)
-                .fillMaxWidth()
                 .padding(horizontal = 12.dp)
-                .clickable(onClick = { onClick(encounter) })
-                .then(modifier)
-        ) {
-            Row(
-                Modifier.height(itemHeight).padding(12.dp),
-                verticalAlignment = Alignment.CenterVertically
+                .padding(top = 6.dp),
+            itemHeight = itemHeight + itemMargin * 2,
+            onReorder = {
+                viewModel.reorderEncounters(
+                    it.mapIndexed { index, encounter -> encounter.id to index }.toMap()
+                )
+            },
+        ) { encounter, isDragged, modifier ->
+            Card(
+                elevation = if (isDragged) 6.dp else 2.dp,
+                modifier = Modifier
+                    .padding(itemMargin)
+                    .fillMaxWidth()
+                    .padding(horizontal = 12.dp)
+                    .clickable(onClick = { onClick(encounter) })
+                    .then(modifier)
             ) {
-                Image(
-                    icon,
-                    Modifier.size(iconSize),
-                    colorFilter = ColorFilter.tint(MaterialTheme.colors.onSurface)
-                )
-                Text(
-                    encounter.name,
-                    textAlign = TextAlign.Center,
-                    style = MaterialTheme.typography.body1
-                )
+                Row(
+                    Modifier.height(itemHeight).padding(12.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Image(
+                        icon,
+                        Modifier.size(iconSize),
+                        colorFilter = ColorFilter.tint(MaterialTheme.colors.onSurface)
+                    )
+                    Text(
+                        encounter.name,
+                        textAlign = TextAlign.Center,
+                        style = MaterialTheme.typography.body1
+                    )
+                }
             }
         }
     }
