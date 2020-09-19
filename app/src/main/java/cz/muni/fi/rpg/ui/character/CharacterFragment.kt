@@ -7,6 +7,7 @@ import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.key
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.WithConstraints
@@ -80,7 +81,7 @@ class CharacterFragment(
                     val screens = screens(Modifier.width(maxWidth).padding(top = 6.dp))
 
                     Column(Modifier.fillMaxHeight()) {
-                        val scrollState = rememberScrollState(0f, screenWidth)
+                        val scrollState = key(screenWidth, screens.size) { rememberScrollState(0f) }
 
                         TabRow(screens, scrollState, screenWidth)
 

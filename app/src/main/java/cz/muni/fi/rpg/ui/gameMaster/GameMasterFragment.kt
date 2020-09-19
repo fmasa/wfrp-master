@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.key
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.WithConstraints
@@ -75,7 +76,7 @@ class GameMasterFragment(
                     val screenWidth = constraints.maxWidth.toFloat()
 
                     Column(Modifier.fillMaxHeight()) {
-                        val scrollState = rememberScrollState(0f, screenWidth, screens.size)
+                        val scrollState = key(screenWidth, screens.size) { rememberScrollState(0f) }
 
                         TabRow(
                             screens,
