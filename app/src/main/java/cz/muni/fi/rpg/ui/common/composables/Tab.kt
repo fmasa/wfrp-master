@@ -21,6 +21,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import java.util.*
 import kotlin.math.abs
+import kotlin.math.max
+import kotlin.math.min
 
 
 fun Modifier.animatedTabIndicatorOffset(
@@ -116,7 +118,8 @@ fun <T> TabContent(
     modifier: Modifier = Modifier,
 ) {
     val canDrag = mutableStateOf(true)
-    val anchors = screens.indices.map { it * screenWidth }
+    val dragStart = mutableStateOf(0f)
+    val previousScroll = mutableStateOf(0f)
 
     Row(
         modifier = modifier
@@ -127,12 +130,45 @@ fun <T> TabContent(
             .draggable(
                 Orientation.Horizontal,
                 reverseDirection = true,
-                onDrag = { scrollState.scrollBy(it) },
-                onDragStopped = { _ ->
-                    val offset = scrollState.value
+                onDragStarted = { dragStart.value = scrollState.value },
+                onDrag = {
+                    previousScroll.value = scrollState.value
+                    scrollState.scrollBy(it)
+
+                    val previousScreenOffset = max(dragStart.value - screenWidth, 0f)
+                    val nextScreenOffset =
+                        min(dragStart.value + screenWidth, screenWidth * screens.size)
+
+                    if (scrollState.value >= nextScreenOffset) {
+                        dragStart.value = nextScreenOffset
+                    } else if (scrollState.value <= previousScreenOffset) {
+                        dragStart.value = previousScreenOffset
+                    }
+                },
+                onDragStopped = { velocity ->
                     canDrag.value = false
+
+                    // If scrollState didn't change, do nothing
+                    if (scrollState.value % screenWidth == 0f) {
+                        return@draggable
+                    }
+
+                    val direction = direction(previousScroll.value, scrollState.value)
+
+                    val relativeVelocity = if (direction == Direction.END)
+                        abs(velocity) else
+                        abs(velocity) * -1
+
+                    val anchors = listOf(
+                        if (scrollState.value < dragStart.value)
+                            max(dragStart.value - screenWidth, 0f) else
+                            min(dragStart.value + screenWidth, screenWidth * screens.size),
+                        dragStart.value,
+                    )
+
                     scrollState.smoothScrollTo(
-                        anchors.minByOrNull { abs(it - offset) } ?: 0f,
+                        anchors.minByOrNull { abs(it - (scrollState.value + relativeVelocity)) }
+                            ?: 0f,
                         onEnd = { _, _ -> canDrag.value = true },
                     )
                 }
@@ -142,4 +178,11 @@ fun <T> TabContent(
     ) {
         screens.forEach { it.content(item) }
     }
+}
+
+private fun direction(from: Float, to: Float) = if (from < to) Direction.END else Direction.START
+
+private enum class Direction {
+    START,
+    END,
 }
