@@ -10,6 +10,9 @@ import cz.muni.fi.rpg.model.domain.encounters.EncounterId
 import cz.muni.fi.rpg.model.domain.party.Party
 import cz.muni.fi.rpg.model.domain.party.PartyNotFound
 import cz.muni.fi.rpg.model.domain.party.PartyRepository
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.util.*
 import kotlin.math.min
 
@@ -17,7 +20,7 @@ class EncounterDetailViewModel(
     private val encounterId: EncounterId,
     private val encounters: EncounterRepository,
     private val combatantRepository: CombatantRepository
-) : ViewModel() {
+) : ViewModel(), CoroutineScope by CoroutineScope(Dispatchers.IO) {
     val encounter: LiveData<Either<EncounterNotFound, Encounter>> = encounters.getLive(encounterId)
     val combatants: LiveData<List<Combatant>> = combatantRepository.findByEncounter(encounterId)
 
@@ -90,7 +93,7 @@ class EncounterDetailViewModel(
         return combatantRepository.get(CombatantId(encounterId, combatantId))
     }
 
-    suspend fun removeCombatant(combatantId: UUID) {
+    fun removeCombatant(combatantId: UUID) = launch {
         combatantRepository.remove(CombatantId(encounterId, combatantId))
     }
 }
