@@ -1,5 +1,6 @@
 package cz.muni.fi.rpg.ui.common.composables
 
+import androidx.annotation.StringRes
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -219,6 +220,32 @@ fun <T> RadioList(
                 }
             }
         }
+    }
+}
+
+@Composable
+fun CheckboxWithText(
+    text: String,
+    modifier: Modifier = Modifier,
+    checked: Boolean,
+    onCheckedChange: (Boolean) -> Unit
+) {
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = modifier.clickable(
+            onClick = { onCheckedChange(!checked) },
+            indication = null
+        )
+    ) {
+        Checkbox(
+            checked = checked,
+            onCheckedChange = onCheckedChange,
+        )
+        Text(
+            text,
+            modifier = Modifier.padding(start = 4.dp),
+            style = MaterialTheme.typography.body2
+        )
     }
 }
 

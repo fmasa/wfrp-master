@@ -1,5 +1,6 @@
 package cz.muni.fi.rpg.viewModels
 
+import androidx.compose.runtime.emit
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import arrow.core.Either
@@ -7,12 +8,9 @@ import cz.muni.fi.rpg.model.domain.armour.Armor
 import cz.muni.fi.rpg.model.domain.character.Stats
 import cz.muni.fi.rpg.model.domain.encounter.*
 import cz.muni.fi.rpg.model.domain.encounters.EncounterId
-import cz.muni.fi.rpg.model.domain.party.Party
-import cz.muni.fi.rpg.model.domain.party.PartyNotFound
-import cz.muni.fi.rpg.model.domain.party.PartyRepository
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.*
+import timber.log.Timber
 import java.util.*
 import kotlin.math.min
 
@@ -91,6 +89,23 @@ class EncounterDetailViewModel(
      */
     suspend fun getCombatant(combatantId: UUID): Combatant {
         return combatantRepository.get(CombatantId(encounterId, combatantId))
+    }
+
+    @ExperimentalCoroutinesApi
+    fun combatantFlow(combatantId: CombatantId): StateFlow<Combatant?> {
+        val flow = MutableStateFlow<Combatant?>(null)
+
+        launch {
+            try {
+                val combatant = combatantRepository.get(combatantId)
+                withContext(Dispatchers.Main) { flow.value = combatant }
+            } catch (e: Throwable) {
+                Timber.e(e)
+                throw e
+            }
+        }
+
+        return flow
     }
 
     fun removeCombatant(combatantId: UUID) = launch {

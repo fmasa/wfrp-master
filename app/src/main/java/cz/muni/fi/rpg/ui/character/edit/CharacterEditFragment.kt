@@ -13,7 +13,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.DensityAmbient
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.intl.Locale
 import androidx.compose.ui.text.style.TextAlign
@@ -27,9 +26,7 @@ import cz.muni.fi.rpg.model.right
 import cz.muni.fi.rpg.ui.characterCreation.CharacterBasicInfoForm
 import cz.muni.fi.rpg.ui.characterCreation.CharacterCharacteristicsForm
 import cz.muni.fi.rpg.ui.common.PartyScopedFragment
-import cz.muni.fi.rpg.ui.common.composables.Rules
-import cz.muni.fi.rpg.ui.common.composables.TextInput
-import cz.muni.fi.rpg.ui.common.composables.Theme
+import cz.muni.fi.rpg.ui.common.composables.*
 import cz.muni.fi.rpg.viewModels.CharacterViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -88,7 +85,7 @@ private object CharacterEditScreen {
     }
 
     @Stable
-    class WoundsData (
+    class WoundsData(
         val maxWounds: MutableState<String>,
         val hardyTalent: MutableState<Boolean>,
     ) {
@@ -169,15 +166,6 @@ private fun CharacterEditMainUI(formData: CharacterEditScreen.FormData, validate
 }
 
 @Composable
-private fun HorizontalLine() {
-    Divider(
-        color = EmphasisAmbient.current.disabled.applyEmphasis(MaterialTheme.colors.onBackground),
-        thickness = (2f / DensityAmbient.current.density).dp,
-        modifier = Modifier.padding(top = 20.dp)
-    )
-}
-
-@Composable
 private fun MaxWoundsSegment(data: CharacterEditScreen.WoundsData, validate: Boolean) {
     Column(Modifier.padding(top = 20.dp)) {
         TextInput(
@@ -194,23 +182,11 @@ private fun MaxWoundsSegment(data: CharacterEditScreen.WoundsData, validate: Boo
             )
         )
 
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.clickable(
-                onClick = { data.hardyTalent.value = !data.hardyTalent.value },
-                indication = null
-            )
-        ) {
-            Checkbox(
-                checked = data.hardyTalent.value,
-                onCheckedChange = { data.hardyTalent.value = it },
-            )
-            Text(
-                stringResource(R.string.title_checkbox_hardy),
-                modifier = Modifier.padding(start = 4.dp),
-                style = MaterialTheme.typography.body2
-            )
-        }
+        CheckboxWithText(
+            text = stringResource(R.string.title_checkbox_hardy),
+            checked = data . hardyTalent . value,
+            onCheckedChange = { data.hardyTalent.value = it }
+        )
     }
 }
 
@@ -223,9 +199,7 @@ private fun CharacterEditTopBar(
 ) {
     val emphasis = EmphasisAmbient.current
     TopAppBar(
-        navigationIcon = {
-            IconButton(onClick = onBack) { Icon(vectorResource(R.drawable.ic_navigate_back)) }
-        },
+        navigationIcon = { BackButton(onBack) },
         title = {
             Column {
                 Text(title)
@@ -237,12 +211,7 @@ private fun CharacterEditTopBar(
             }
         },
         actions = {
-            val color = contentColorFor(MaterialTheme.colors.primarySurface)
-            TextButton(
-                onClick = onSave,
-                enabled = actionsEnabled,
-                contentColor = if (actionsEnabled) color else emphasis.disabled.applyEmphasis(color)
-            ) {
+            TopBarAction(onClick = onSave, enabled = actionsEnabled) {
                 Text(stringResource(R.string.button_save).toUpperCase(Locale.current))
             }
         }

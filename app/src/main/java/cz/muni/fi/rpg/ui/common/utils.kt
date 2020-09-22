@@ -58,3 +58,13 @@ fun Fragment.toast(message: String, duration: Int = Toast.LENGTH_SHORT) {
 fun Fragment.toast(@StringRes message: Int, duration: Int = Toast.LENGTH_SHORT) {
     context?.let { Toast.makeText(it, message, duration).show() }
 }
+
+fun <T> List<T>.chunk(itemsInChunk: Int): List<List<T>> {
+    val chunks = (0..(size / itemsInChunk)).map { ArrayList<T>(itemsInChunk) }
+
+    for (index in indices) {
+        chunks[index / itemsInChunk].add(this[index])
+    }
+
+    return chunks
+}

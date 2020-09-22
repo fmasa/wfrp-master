@@ -15,6 +15,7 @@ import androidx.compose.ui.unit.dp
 import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.model.domain.character.Character
 import cz.muni.fi.rpg.model.domain.character.Stats
+import cz.muni.fi.rpg.ui.common.chunk
 import cz.muni.fi.rpg.ui.common.composables.FormData
 import cz.muni.fi.rpg.ui.common.composables.TextInput
 
@@ -189,14 +190,4 @@ private fun CharacteristicInputs(
             )
         }
     }
-}
-
-private fun <T> List<T>.chunk(itemsInChunk: Int): List<List<T>> {
-    val chunks = (0..(size / itemsInChunk)).map { ArrayList<T>(itemsInChunk) }
-
-    for (index in indices) {
-        chunks[index / itemsInChunk].add(this[index])
-    }
-
-    return chunks
 }
