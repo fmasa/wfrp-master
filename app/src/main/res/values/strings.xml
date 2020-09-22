@@ -149,6 +149,7 @@
     <string name="title_character_skills">Skills</string>
     <string name="title_character_talents">Talents</string>
     <string name="title_character_spells">Spells</string>
+    <string name="title_character_characteristics">Characteristics</string>
 
     <!-- Skills -->
     <string name="title_addSkill">Add Skill</string>

@@ -6,6 +6,8 @@ import androidx.compose.runtime.savedinstancestate.savedInstanceState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.util.nativeClass
+import arrow.core.some
 import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.model.domain.character.Character
 import cz.muni.fi.rpg.model.domain.character.Race
@@ -35,6 +37,17 @@ object CharacterBasicInfoForm {
                 psychology = savedInstanceState { "" },
                 motivation = savedInstanceState { "" },
                 note = savedInstanceState { "" },
+            )
+
+            @Composable
+            fun fromCharacter(character: Character) = Data(
+                name = savedInstanceState { character.getName() },
+                socialClass = savedInstanceState { character.getSocialClass() },
+                career = savedInstanceState { character.getCareer() },
+                race = savedInstanceState { character.getRace() },
+                psychology = savedInstanceState { character.getPsychology() },
+                motivation = savedInstanceState { character.getMotivation() },
+                note = savedInstanceState { character.getNote() },
             )
         }
 

@@ -13,6 +13,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import cz.muni.fi.rpg.R
+import cz.muni.fi.rpg.model.domain.character.Character
 import cz.muni.fi.rpg.model.domain.character.Stats
 import cz.muni.fi.rpg.ui.common.composables.FormData
 import cz.muni.fi.rpg.ui.common.composables.TextInput
@@ -45,6 +46,33 @@ object CharacterCharacteristicsForm {
                 willPower = savedInstanceState { "" to "" },
                 fellowship = savedInstanceState { "" to "" },
             )
+
+            @Composable
+            fun fromCharacter(character: Character): Data {
+                val base = character.getCharacteristicsBase()
+                val advances = character.getCharacteristicsAdvances()
+
+                return Data(
+                    weaponSkill = toPair(base, advances) { it.weaponSkill },
+                    ballisticSkill = toPair(base, advances) { it.ballisticSkill },
+                    strength = toPair(base, advances) { it.strength },
+                    toughness = toPair(base, advances) { it.toughness },
+                    initiative = toPair(base, advances) { it.initiative },
+                    agility = toPair(base, advances) { it.agility },
+                    dexterity = toPair(base, advances) { it.dexterity },
+                    intelligence = toPair(base, advances) { it.intelligence },
+                    willPower = toPair(base, advances) { it.willPower },
+                    fellowship = toPair(base, advances) { it.fellowship },
+                )
+            }
+
+            @Composable
+            private fun toPair(base: Stats, advances: Stats, getValue: (Stats) -> Int) =
+                savedInstanceState {
+                    toTextValue(getValue(base)) to toTextValue(getValue(advances))
+                }
+
+            private fun toTextValue(value: Int) = if (value == 0) "" else value.toString()
         }
 
         // There is no need for validation as it's ensured by keyboard

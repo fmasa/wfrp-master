@@ -28,8 +28,6 @@ import cz.muni.fi.rpg.model.firestore.repositories.*
 import cz.muni.fi.rpg.ui.character.*
 import cz.muni.fi.rpg.ui.character.edit.CharacterEditFragment
 import cz.muni.fi.rpg.ui.characterCreation.CharacterCreationFragment
-import cz.muni.fi.rpg.ui.characterCreation.CharacterInfoFormFragment
-import cz.muni.fi.rpg.ui.characterCreation.CharacterStatsFormFragment
 import cz.muni.fi.rpg.ui.common.AdManager
 import cz.muni.fi.rpg.ui.gameMaster.GameMasterFragment
 import cz.muni.fi.rpg.ui.gameMaster.encounters.CombatantFragment
@@ -121,9 +119,7 @@ val appModule = module {
     fragment { GameMasterFragment(get()) }
     fragment { NavHostFragment() }
     fragment { PartyListFragment() }
-    fragment { CharacterEditFragment(get()) }
-    fragment { CharacterInfoFormFragment() }
-    fragment { CharacterStatsFormFragment() }
+    fragment { CharacterEditFragment() }
     fragment { CharacterCreationFragment(get()) }
     fragment { EncounterDetailFragment() }
     fragment { CombatantFragment() }
