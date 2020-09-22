@@ -4,9 +4,25 @@ import android.os.Bundle
 import android.view.View
 import android.widget.RadioButton
 import android.widget.RadioGroup
+import android.widget.Toast
+import androidx.annotation.StringRes
+import androidx.compose.foundation.Box
+import androidx.compose.foundation.ScrollableColumn
+import androidx.compose.foundation.ScrollableRow
+import androidx.compose.foundation.Text
+import androidx.compose.foundation.layout.*
+import androidx.compose.material.Button
+import androidx.compose.material.TextButton
+import androidx.compose.runtime.*
+import androidx.compose.runtime.savedinstancestate.savedInstanceState
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.platform.ContextAmbient
+import androidx.compose.ui.res.stringResource
 import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.model.domain.character.Character
 import cz.muni.fi.rpg.model.domain.character.Race
+import cz.muni.fi.rpg.ui.common.composables.*
 import cz.muni.fi.rpg.ui.common.forms.Form
 import cz.muni.fi.rpg.ui.views.TextInput
 
@@ -39,17 +55,39 @@ class CharacterInfoFormFragment :
     override fun onSaveInstanceState(outState: Bundle) {
         view?.let { view ->
             outState.putString(STATE_NAME, view.findViewById<TextInput>(R.id.nameInput).getValue())
-            outState.putInt(STATE_RACE, view.findViewById<RadioGroup>(R.id.radioGroup).checkedRadioButtonId)
-            outState.putString(STATE_CAREER, view.findViewById<TextInput>(R.id.careerInput).getValue())
-            outState.putString(STATE_SOCIAL_CLASS, view.findViewById<TextInput>(R.id.socialClassInput).getValue())
-            outState.putString(STATE_PSYCHOLOGY, view.findViewById<TextInput>(R.id.psychologyInput).getValue())
-            outState.putString(STATE_MOTIVATION, view.findViewById<TextInput>(R.id.motivationInput).getValue())
+            outState.putInt(
+                STATE_RACE,
+                view.findViewById<RadioGroup>(R.id.radioGroup).checkedRadioButtonId
+            )
+            outState.putString(
+                STATE_CAREER,
+                view.findViewById<TextInput>(R.id.careerInput).getValue()
+            )
+            outState.putString(
+                STATE_SOCIAL_CLASS,
+                view.findViewById<TextInput>(R.id.socialClassInput).getValue()
+            )
+            outState.putString(
+                STATE_PSYCHOLOGY,
+                view.findViewById<TextInput>(R.id.psychologyInput).getValue()
+            )
+            outState.putString(
+                STATE_MOTIVATION,
+                view.findViewById<TextInput>(R.id.motivationInput).getValue()
+            )
             outState.putString(STATE_NOTE, view.findViewById<TextInput>(R.id.noteInput).getValue())
         }
 
         super.onSaveInstanceState(outState)
     }
 
+    private data class WizardStep<T : FormData>(
+        @StringRes val labelRes: Int,
+        val data: T,
+        val form: @Composable (T) -> Unit,
+    )
+
+    @ExperimentalLayout
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -85,11 +123,19 @@ class CharacterInfoFormFragment :
         setDefaultValues()
 
         savedInstanceState?.let {
-            it.getString(STATE_NAME)?.let { value -> view.findViewById<TextInput>(R.id.nameInput).setDefaultValue(value) }
+            it.getString(STATE_NAME)?.let { value ->
+                view.findViewById<TextInput>(R.id.nameInput).setDefaultValue(value)
+            }
             it.getInt(STATE_RACE).let(view.findViewById<RadioGroup>(R.id.radioGroup)::check)
-            it.getString(STATE_CAREER)?.let { value -> view.findViewById<TextInput>(R.id.careerInput).setDefaultValue(value)}
-            it.getString(STATE_SOCIAL_CLASS)?.let { value -> view.findViewById<TextInput>(R.id.socialClassInput).setDefaultValue(value) }
-            it.getString(STATE_NOTE)?.let { value -> view.findViewById<TextInput>(R.id.noteInput).setDefaultValue(value) }
+            it.getString(STATE_CAREER)?.let { value ->
+                view.findViewById<TextInput>(R.id.careerInput).setDefaultValue(value)
+            }
+            it.getString(STATE_SOCIAL_CLASS)?.let { value ->
+                view.findViewById<TextInput>(R.id.socialClassInput).setDefaultValue(value)
+            }
+            it.getString(STATE_NOTE)?.let { value ->
+                view.findViewById<TextInput>(R.id.noteInput).setDefaultValue(value)
+            }
         }
     }
 
@@ -113,17 +159,23 @@ class CharacterInfoFormFragment :
 
         view.findViewById<TextInput>(R.id.nameInput).setDefaultValue(character.getName())
         view.findViewById<TextInput>(R.id.careerInput).setDefaultValue(character.getCareer())
-        view.findViewById<TextInput>(R.id.socialClassInput).setDefaultValue(character.getSocialClass())
-        view.findViewById<TextInput>(R.id.psychologyInput).setDefaultValue(character.getPsychology())
-        view.findViewById<TextInput>(R.id.motivationInput).setDefaultValue(character.getMotivation())
+        view.findViewById<TextInput>(R.id.socialClassInput)
+            .setDefaultValue(character.getSocialClass())
+        view.findViewById<TextInput>(R.id.psychologyInput)
+            .setDefaultValue(character.getPsychology())
+        view.findViewById<TextInput>(R.id.motivationInput)
+            .setDefaultValue(character.getMotivation())
         view.findViewById<TextInput>(R.id.noteInput).setDefaultValue(character.getNote())
 
         when (character.getRace()) {
             Race.HUMAN -> view.findViewById<RadioButton>(R.id.radioButtonRaceHuman).isChecked = true
             Race.DWARF -> view.findViewById<RadioButton>(R.id.radioButtonRaceDwarf).isChecked = true
-            Race.HIGH_ELF -> view.findViewById<RadioButton>(R.id.radioButtonRaceHighElf).isChecked = true
-            Race.WOOD_ELF -> view.findViewById<RadioButton>(R.id.radioButtonRaceWoodElf).isChecked = true
-            Race.HALFLING -> view.findViewById<RadioButton>(R.id.radioButtonRaceHalfling).isChecked = true
+            Race.HIGH_ELF -> view.findViewById<RadioButton>(R.id.radioButtonRaceHighElf).isChecked =
+                true
+            Race.WOOD_ELF -> view.findViewById<RadioButton>(R.id.radioButtonRaceWoodElf).isChecked =
+                true
+            Race.HALFLING -> view.findViewById<RadioButton>(R.id.radioButtonRaceHalfling).isChecked =
+                true
             Race.GNOME -> view.findViewById<RadioButton>(R.id.radioButtonRaceGnome).isChecked = true
         }
     }
@@ -135,15 +187,16 @@ class CharacterInfoFormFragment :
         val career = view.findViewById<TextInput>(R.id.careerInput).getValue()
         val socialClass = view.findViewById<TextInput>(R.id.socialClassInput).getValue()
 
-        val race: Race = when (view.findViewById<RadioGroup>(R.id.radioGroup).checkedRadioButtonId) {
-            R.id.radioButtonRaceHuman -> Race.HUMAN
-            R.id.radioButtonRaceDwarf -> Race.DWARF
-            R.id.radioButtonRaceHighElf -> Race.HIGH_ELF
-            R.id.radioButtonRaceWoodElf -> Race.WOOD_ELF
-            R.id.radioButtonRaceHalfling -> Race.HALFLING
-            R.id.radioButtonRaceGnome -> Race.GNOME
-            else -> error("No race selected")
-        }
+        val race: Race =
+            when (view.findViewById<RadioGroup>(R.id.radioGroup).checkedRadioButtonId) {
+                R.id.radioButtonRaceHuman -> Race.HUMAN
+                R.id.radioButtonRaceDwarf -> Race.DWARF
+                R.id.radioButtonRaceHighElf -> Race.HIGH_ELF
+                R.id.radioButtonRaceWoodElf -> Race.WOOD_ELF
+                R.id.radioButtonRaceHalfling -> Race.HALFLING
+                R.id.radioButtonRaceGnome -> Race.GNOME
+                else -> error("No race selected")
+            }
 
         return Data(
             name = name,

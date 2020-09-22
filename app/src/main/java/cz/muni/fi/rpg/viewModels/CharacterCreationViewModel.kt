@@ -8,8 +8,9 @@ import cz.muni.fi.rpg.model.domain.character.Character
 import cz.muni.fi.rpg.model.domain.character.CharacterId
 import cz.muni.fi.rpg.model.domain.character.CharacterRepository
 import cz.muni.fi.rpg.model.domain.character.Points
-import cz.muni.fi.rpg.ui.characterCreation.CharacterInfoFormFragment
-import cz.muni.fi.rpg.ui.characterCreation.CharacterStatsFormFragment
+import cz.muni.fi.rpg.ui.characterCreation.CharacterBasicInfoForm
+import cz.muni.fi.rpg.ui.characterCreation.CharacterCharacteristicsForm
+import cz.muni.fi.rpg.ui.characterCreation.PointsPoolForm
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import timber.log.Timber
@@ -22,40 +23,44 @@ class CharacterCreationViewModel(
 
     suspend fun createCharacter(
         userId: String?,
-        info: CharacterInfoFormFragment.Data,
-        statsData: CharacterStatsFormFragment.CharacteristicsData,
-        points: Points
+        info: CharacterBasicInfoForm.Data,
+        characteristicsData: CharacterCharacteristicsForm.Data,
+        points: PointsPoolForm.Data,
     ): CharacterId {
         val characterId = CharacterId(partyId, userId ?: UUID.randomUUID().toString())
 
-        withContext(Dispatchers.IO) {
+        return withContext(Dispatchers.IO) {
+            try {
+                Timber.d("Creating character")
 
-            Timber.d("Creating character")
-
-            characters.save(
-                characterId.partyId,
-                Character(
-                    id = characterId.id,
-                    name = info.name,
-                    userId = userId,
-                    career = info.career,
-                    socialClass = info.socialClass,
-                    race = info.race,
-                    characteristicsBase = statsData.base,
-                    characteristicsAdvances = statsData.advances,
-                    points = points,
-                    psychology = info.psychology,
-                    motivation = info.motivation,
-                    note = info.note
+                characters.save(
+                    characterId.partyId,
+                    Character(
+                        id = characterId.id,
+                        name = info.name.value,
+                        userId = userId,
+                        career = info.career.value,
+                        socialClass = info.socialClass.value,
+                        race = info.race.value,
+                        characteristicsBase = characteristicsData.toBaseCharacteristics(),
+                        characteristicsAdvances = characteristicsData.toCharacteristicAdvances(),
+                        points = points.toPoints(),
+                        psychology = info.psychology.value,
+                        motivation = info.motivation.value,
+                        note = info.note.value,
+                    )
                 )
-            )
 
-            Firebase.analytics.logEvent("create_character") {
-                param("party_id", characterId.partyId.toString())
-                param("character_id", characterId.id)
+                Firebase.analytics.logEvent("create_character") {
+                    param("party_id", characterId.partyId.toString())
+                    param("character_id", characterId.id)
+                }
+
+                characterId
+            } catch (e: Throwable) {
+                Timber.e(e)
+                throw e
             }
         }
-
-        return characterId
     }
 }
