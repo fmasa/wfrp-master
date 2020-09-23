@@ -9,6 +9,8 @@ import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -20,12 +22,15 @@ import cz.muni.fi.rpg.model.domain.character.Character
 import cz.muni.fi.rpg.model.domain.character.CharacterId
 import cz.muni.fi.rpg.model.domain.common.Ambitions
 import cz.muni.fi.rpg.model.domain.party.Invitation
+import cz.muni.fi.rpg.model.domain.party.Party
 import cz.muni.fi.rpg.model.right
 import cz.muni.fi.rpg.ui.common.composables.*
 import cz.muni.fi.rpg.ui.gameMaster.adapter.Player
 import cz.muni.fi.rpg.viewModels.GameMasterViewModel
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import java.util.*
 
+@ExperimentalCoroutinesApi
 @Composable
 fun PartySummaryScreen(
     partyId: UUID,
@@ -33,10 +38,21 @@ fun PartySummaryScreen(
     viewModel: GameMasterViewModel,
     onCharacterOpenRequest: (Character) -> Unit,
     onCharacterCreateRequest: (userId: String?) -> Unit,
-    onInvitationDialogRequest: (Invitation) -> Unit,
     onEditAmbitionsRequest: (Ambitions) -> Unit,
 ) {
     ScrollableColumn(modifier.background(MaterialTheme.colors.background)) {
+        val party = viewModel.party.right().observeAsState().value
+            ?: return@ScrollableColumn
+
+        val invitationDialogVisible = remember { mutableStateOf(false) }
+
+        if (invitationDialogVisible.value) {
+            InvitationDialog2(
+                invitation = party.getInvitation(),
+                onDismissRequest = { invitationDialogVisible.value = false },
+            )
+        }
+
         PlayersCard(
             viewModel,
             onCharacterOpenRequest = onCharacterOpenRequest,
@@ -44,11 +60,9 @@ fun PartySummaryScreen(
             onRemoveCharacter = {
                 viewModel.archiveCharacter(CharacterId(partyId, it.id))
             },
-            onInvitationDialogRequest = onInvitationDialogRequest,
+            onInvitationDialogRequest = { invitationDialogVisible.value = true },
         )
 
-        val party = viewModel.party.right().observeAsState().value
-            ?: return@ScrollableColumn
 
         AmbitionsCard(
             modifier = Modifier

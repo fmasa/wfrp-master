@@ -33,7 +33,7 @@ import kotlinx.coroutines.*
 import org.koin.core.parameter.parametersOf
 import java.util.*
 
-class CombatantFragment : PartyScopedFragment(R.layout.fragment_combatant),
+class CombatantFragment : PartyScopedFragment(0),
     CoroutineScope by CoroutineScope(Dispatchers.Default) {
 
     private val args: CombatantFragmentArgs by navArgs()

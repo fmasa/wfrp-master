@@ -18,8 +18,6 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.observe
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import androidx.viewpager2.widget.ViewPager2
-import com.google.android.material.tabs.TabLayoutMediator
 import com.wdullaer.materialdatetimepicker.time.TimePickerDialog
 import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.model.domain.character.CharacterId
@@ -36,6 +34,7 @@ import cz.muni.fi.rpg.ui.gameMaster.encounters.EncounterDialog
 import cz.muni.fi.rpg.ui.gameMaster.encounters.EncountersScreen
 import cz.muni.fi.rpg.viewModels.EncountersViewModel
 import cz.muni.fi.rpg.viewModels.GameMasterViewModel
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.koin.android.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 import timber.log.Timber
@@ -54,6 +53,7 @@ class GameMasterFragment(
 
     override fun getPartyId(): UUID = args.partyId
 
+    @ExperimentalCoroutinesApi
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -128,6 +128,7 @@ class GameMasterFragment(
         return super.onOptionsItemSelected(item)
     }
 
+    @ExperimentalCoroutinesApi
     @Composable
     private fun screens(modifier: Modifier): Array<TabScreen<Party>> = arrayOf(
         TabScreen(R.string.title_characters) { party ->
@@ -144,9 +145,6 @@ class GameMasterFragment(
                     findNavController().navigate(
                         GameMasterFragmentDirections.createCharacter(getPartyId(), it)
                     )
-                },
-                onInvitationDialogRequest = {
-                    InvitationDialog.newInstance(it).show(childFragmentManager, null)
                 },
                 onEditAmbitionsRequest = { ambitions ->
                     ChangeAmbitionsDialog
