@@ -1,23 +1,26 @@
 package cz.muni.fi.rpg.ui.common.composables
 
 import androidx.annotation.StringRes
-import androidx.compose.foundation.ScrollState
-import androidx.compose.foundation.Text
-import androidx.compose.foundation.background
+import androidx.compose.foundation.*
 import androidx.compose.foundation.gestures.draggable
-import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.layout.RowScope.weight
 import androidx.compose.material.*
 import androidx.compose.material.TabRow as MaterialTabRow
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.onDispose
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
 import androidx.compose.ui.draw.clipToBounds
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.gesture.ScrollCallback
+import androidx.compose.ui.gesture.scrollGestureFilter
 import androidx.compose.ui.gesture.scrollorientationlocking.Orientation
+import androidx.compose.ui.platform.DensityAmbient
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.dp
 import java.util.*
 import kotlin.math.abs
@@ -127,13 +130,13 @@ fun <T> TabContent(
             .padding(0.dp)
             .horizontalScroll(scrollState, false)
             .background(MaterialTheme.colors.background)
-            .draggable(
+            .nestedDraggable(
                 Orientation.Horizontal,
                 reverseDirection = true,
                 onDragStarted = { dragStart.value = scrollState.value },
-                onDrag = {
+                onDrag = { delta ->
                     previousScroll.value = scrollState.value
-                    scrollState.scrollBy(it)
+                    scrollState.scrollBy(delta)
 
                     val previousScreenOffset = max(dragStart.value - screenWidth, 0f)
                     val nextScreenOffset =
@@ -144,13 +147,16 @@ fun <T> TabContent(
                     } else if (scrollState.value <= previousScreenOffset) {
                         dragStart.value = previousScreenOffset
                     }
+
+                    scrollState.value - previousScroll.value
                 },
                 onDragStopped = { velocity ->
                     canDrag.value = false
 
                     // If scrollState didn't change, do nothing
                     if (scrollState.value % screenWidth == 0f) {
-                        return@draggable
+                        canDrag.value = true
+                        return@nestedDraggable
                     }
 
                     val direction = direction(previousScroll.value, scrollState.value)
@@ -185,4 +191,57 @@ private fun direction(from: Float, to: Float) = if (from < to) Direction.END els
 private enum class Direction {
     START,
     END,
+}
+
+
+fun Modifier.nestedDraggable(
+    orientation: Orientation,
+    enabled: Boolean = true,
+    reverseDirection: Boolean = false,
+    interactionState: InteractionState? = null,
+    startDragImmediately: Boolean = false,
+    canDrag: (androidx.compose.ui.gesture.Direction) -> Boolean = { enabled },
+    onDragStarted: (startedPosition: Offset) -> Unit = {},
+    onDragStopped: (velocity: Float) -> Unit = {},
+    onDrag: Density.(Float) -> Float
+): Modifier = composed {
+    val density = DensityAmbient.current
+    onDispose {
+        interactionState?.removeInteraction(Interaction.Dragged)
+    }
+
+    scrollGestureFilter(
+        scrollCallback = object : ScrollCallback {
+
+            override fun onStart(downPosition: Offset) {
+                if (enabled) {
+                    interactionState?.addInteraction(Interaction.Dragged)
+                    onDragStarted(downPosition)
+                }
+            }
+
+            override fun onScroll(scrollDistance: Float): Float {
+                if (!enabled) return 0f
+                val toConsume = if (reverseDirection) scrollDistance * -1 else scrollDistance
+                return with(density) { abs(onDrag(toConsume)) }
+            }
+
+            override fun onCancel() {
+                if (enabled) {
+                    interactionState?.removeInteraction(Interaction.Dragged)
+                    onDragStopped(0f)
+                }
+            }
+
+            override fun onStop(velocity: Float) {
+                if (enabled) {
+                    interactionState?.removeInteraction(Interaction.Dragged)
+                    onDragStopped(if (reverseDirection) velocity * -1 else velocity)
+                }
+            }
+        },
+        orientation = orientation,
+        canDrag = canDrag,
+        startDragImmediately = startDragImmediately
+    )
 }
