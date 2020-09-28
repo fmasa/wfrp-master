@@ -2,7 +2,7 @@
   "name": "@fmasa/dnd",
   "version": "1.0.0",
   "scripts": {
-    "test": "firebase emulators:exec --only firestore 'mocha --timeout=10000 firebase/tests/**/*.ts'"
+    "test": "yarn firebase emulators:exec --only firestore 'mocha --timeout=10000 firebase/tests/**/*.ts'"
   },
   "devDependencies": {
     "@firebase/testing": "^0.15.1",
@@ -20,5 +20,7 @@
     "ui": "mocha-typescript",
     "require": "ts-node/register"
   },
-  "dependencies": {}
+  "dependencies": {
+    "firebase-tools": "8.10.0"
+  }
 }
