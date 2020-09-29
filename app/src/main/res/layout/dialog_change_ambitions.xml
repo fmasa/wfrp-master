@@ -1,39 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:padding="@dimen/dialogPadding">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
-    <ProgressBar
-        android:layout_width="match_parent"
-        android:layout_gravity="center"
-        android:visibility="gone"
-        android:layout_height="match_parent"
-        android:id="@+id/progress" />
-
-    <LinearLayout
-        android:id="@+id/mainView"
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:padding="@dimen/dialogPadding">
 
-        <cz.muni.fi.rpg.ui.views.TextInput
-            app:inputLabel="@string/label_ambition_short_term"
-            android:id="@+id/shortTermAmbitionInput"
+        <ProgressBar
+            android:id="@+id/progress"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:visibility="gone" />
+
+        <LinearLayout
+            android:id="@+id/mainView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:minLines="2"
-            android:inputType="textMultiLine"/>
+            android:orientation="vertical">
 
-        <cz.muni.fi.rpg.ui.views.TextInput
-            app:inputLabel="@string/label_ambition_long_term"
-            android:id="@+id/longTermAmbitionInput"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:minLines="2"
-            android:inputType="textMultiLine"/>
+            <cz.muni.fi.rpg.ui.views.TextInput
+                android:id="@+id/shortTermAmbitionInput"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textMultiLine"
+                android:minLines="2"
+                app:inputLabel="@string/label_ambition_short_term" />
 
-    </LinearLayout>
-</FrameLayout>
+            <cz.muni.fi.rpg.ui.views.TextInput
+                android:id="@+id/longTermAmbitionInput"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textMultiLine"
+                android:minLines="2"
+                app:inputLabel="@string/label_ambition_long_term" />
+
+        </LinearLayout>
+    </FrameLayout>
+
+</ScrollView>

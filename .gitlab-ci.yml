@@ -1,4 +1,4 @@
-image: circleci/android:api-29-node
+image: circleci/android@sha256:03f7f2463126fb0cd7055b1c87b94307fd11c3cf8c60b5d8d18d59ad32bbb3d7
 
 stages:
     - check
@@ -29,7 +29,6 @@ Test Firestore rules:
         paths:
             - node_modules
     script:
-        - curl -sL firebase.tools | bash
         - yarn install
         - yarn test
 
@@ -50,8 +49,8 @@ Deploy Firebase changes:
     only:
         - master
     script:
-        - curl -sL firebase.tools | bash
-        - firebase deploy
+        - yarn install
+        - yarn firebase deploy
 
 Run Firestore migrations:
     stage: build

@@ -1,58 +1,60 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="@dimen/dialogPadding">
+    android:layout_height="match_parent">
 
-    <cz.muni.fi.rpg.ui.views.TextInput
-        android:id="@+id/nameInput"
-        android:layout_marginBottom="16dp"
-        android:maxLines="1"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:inputLabel="@string/label_skill_name" />
+        android:orientation="vertical"
+        android:padding="@dimen/dialogPadding">
 
+        <cz.muni.fi.rpg.ui.views.TextInput
+            android:id="@+id/nameInput"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:maxLines="1"
+            app:inputLabel="@string/label_skill_name" />
 
-    <cz.muni.fi.rpg.ui.views.TextInput
-        android:id="@+id/descriptionInput"
-        android:layout_marginBottom="16dp"
-        android:minLines="3"
-        android:inputType="textMultiLine"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:inputLabel="@string/label_skill_description" />
+        <cz.muni.fi.rpg.ui.views.TextInput
+            android:id="@+id/descriptionInput"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:inputType="textMultiLine"
+            android:minLines="3"
+            app:inputLabel="@string/label_skill_description" />
 
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/label_skill_characteristic"
+            android:textSize="14sp" />
 
-    <TextView
-        android:hint="@string/label_skill_characteristic"
-        android:textSize="14sp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        <com.google.android.material.chip.ChipGroup
+            android:id="@+id/skillCharacteristic"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:selectionRequired="true"
+            app:singleSelection="true" />
 
-    <com.google.android.material.chip.ChipGroup
-        android:id="@+id/skillCharacteristic"
-        app:selectionRequired="true"
-        app:singleSelection="true"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        <com.google.android.material.checkbox.MaterialCheckBox
+            android:id="@+id/skillAdvanced"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checked="true"
+            android:text="@string/label_skill_advanced"
+            app:switchPadding="4dp" />
 
-    <com.google.android.material.checkbox.MaterialCheckBox
-        android:id="@+id/skillAdvanced"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:checked="true"
-        android:text="@string/label_skill_advanced"
-        app:switchPadding="4dp" />
-
-    <cz.muni.fi.rpg.ui.views.TextInput
-        android:id="@+id/advancesInput"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:inputType="number"
-        android:maxLength="3"
-        app:inputLabel="@string/label_skill_advances" />
-</LinearLayout>
+        <cz.muni.fi.rpg.ui.views.TextInput
+            android:id="@+id/advancesInput"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:inputType="number"
+            android:maxLength="3"
+            app:inputLabel="@string/label_skill_advances" />
+    </LinearLayout>
+</ScrollView>
