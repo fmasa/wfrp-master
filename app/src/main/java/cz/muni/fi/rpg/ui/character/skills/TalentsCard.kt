@@ -2,6 +2,8 @@ package cz.muni.fi.rpg.ui.character.skills
 
 import androidx.compose.foundation.Text
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.ExperimentalLazyDsl
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyColumnFor
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.livedata.observeAsState
@@ -27,11 +29,14 @@ internal fun TalentsCard(
             CardTitle(R.string.title_character_talents)
 
             if (talents.isNotEmpty()) {
-                LazyColumnFor(talents) { talent ->
-                    TalentItem(
-                        talent,
-                        onClick = { onClick(talent) },
-                        onRemove = { onRemove(talent) })
+                Column {
+                    for (talent in talents) {
+                        TalentItem(
+                            talent,
+                            onClick = { onClick(talent) },
+                            onRemove = { onRemove(talent) }
+                        )
+                    }
                 }
             }
 

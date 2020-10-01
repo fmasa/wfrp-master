@@ -5,7 +5,6 @@ import androidx.annotation.StringRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.Text
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.layout.ColumnScope.gravity
 import androidx.compose.material.Button
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.OutlinedButton
@@ -15,7 +14,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.intl.Locale
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.toUpperCase
@@ -48,11 +46,10 @@ fun CardTitle(text: String, @DrawableRes iconRes: Int? = null) {
 
 @Composable
 fun CardButton(@StringRes textRes: Int, onClick: () -> Unit) {
-    OutlinedButton(
-        onClick = onClick,
-        Modifier.padding(top = 16.dp).gravity(Alignment.CenterHorizontally)
-    ) {
-        Text(stringResource(textRes).toUpperCase(Locale.current))
+    Box(alignment = Alignment.TopCenter, modifier = Modifier.fillMaxWidth().padding(top = 16.dp)) {
+        OutlinedButton(onClick = onClick) {
+            Text(stringResource(textRes).toUpperCase(Locale.current))
+        }
     }
 }
 
@@ -65,7 +62,7 @@ fun PrimaryButton(
     Button(
         onClick = onClick,
         enabled = enabled,
-        modifier = Modifier.padding(top = 16.dp).gravity(Alignment.CenterHorizontally)
+        modifier = Modifier.padding(top = 16.dp)
     ) {
         Text(stringResource(textRes).toUpperCase(Locale.current))
     }

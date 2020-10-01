@@ -11,6 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.res.loadVectorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.TextStyle
@@ -51,7 +52,8 @@ fun EmptyUI(
     @DrawableRes drawableResourceId: Int,
     size: EmptyUI.Size = EmptyUI.Size.Large
 ) {
-    val image = vectorResource(drawableResourceId)
+    val image = loadVectorResource(drawableResourceId).resource.resource ?: return
+
     val color = EmphasisAmbient.current.medium.applyEmphasis(MaterialTheme.colors.onSurface)
     val text = stringResource(textId)
 

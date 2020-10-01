@@ -39,13 +39,15 @@ internal fun SkillsCard(
             if (skills.isEmpty()) {
                 EmptyUI(R.string.no_skills, R.drawable.ic_skills, EmptyUI.Size.Small)
             } else {
-                LazyColumnFor(skills) { skill ->
-                    SkillItem(
-                        skill,
-                        characteristics,
-                        onClick = { onClick(skill) },
-                        onRemove = { onRemove(skill) }
-                    )
+                Column {
+                    for (skill in skills) {
+                        SkillItem(
+                            skill,
+                            characteristics,
+                            onClick = { onClick(skill) },
+                            onRemove = { onRemove(skill) },
+                        )
+                    }
                 }
             }
 

@@ -35,6 +35,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.gesture.longPressGestureFilter
 import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.res.loadVectorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
@@ -72,7 +73,11 @@ class PartyListFragment : BaseFragment(0),
                                 }
                             )
                             ExtendedFloatingActionButton(
-                                icon = { Icon(vectorResource(R.drawable.ic_group_add)) },
+                                icon = {
+                                    loadVectorResource(R.drawable.ic_group_add).resource.resource?.let {
+                                        Icon(it)
+                                    }
+                                },
                                 text = { Text(stringResource(R.string.assembleParty_title)) },
                                 onClick = {
                                     AssemblePartyDialog().show(childFragmentManager, null)

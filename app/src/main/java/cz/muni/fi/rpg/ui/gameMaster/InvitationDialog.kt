@@ -12,8 +12,8 @@ import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ContextAmbient
+import androidx.compose.ui.res.loadVectorResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.intl.Locale
 import androidx.compose.ui.text.toUpperCase
 import androidx.compose.ui.unit.dp
@@ -63,7 +63,7 @@ fun InvitationDialog2(invitation: Invitation, onDismissRequest: () -> Unit) {
                             startInvitationSendingIntent(context, invitation, sharingOptions.link)
                         },
                     ) {
-                        Icon(vectorResource(R.drawable.ic_share))
+                        loadVectorResource(R.drawable.ic_share).resource.resource?.let { Icon(it) }
                         Text(stringResource(R.string.share_link).toUpperCase(Locale.current))
                     }
                 }
