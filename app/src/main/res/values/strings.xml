@@ -100,8 +100,10 @@
     <string name="race_gnome">Gnome</string>
     <string name="button_edit">Edit</string>
     <string name="subtitle_edit_character">Edit character</string>
-    <string name="no_parties_prompt">Assemble your first party\n or join the existing one.</string>
-    <string name="no_spells">You don\'t know any spells.</string>
+    <string name="no_parties_prompt">No parties</string>
+    <string name="no_parties_sub_prompt">Create your first party\n or join the existing one.</string>
+    <string name="no_spells">No spells</string>
+    <string name="no_spells_sub_text">You don\'t know any spells.</string>
     <string name="no_skills">Character doesn\'t have any skills.</string>
     <string name="iconsAttribution">Icons made by Delapouite and Lorc.\nAvailable on https://game-icons.net</string>
 
@@ -128,7 +130,8 @@
 
     <string name="title_encounter_create">Create Encounter</string>
     <string name="message_encounter_saved">Encounter was saved</string>
-    <string name="no_encounters_prompt">Add first encounter for your party.</string>
+    <string name="no_encounters_prompt">No encounters</string>
+    <string name="no_encounters_sub_prompt">Add first encounter for your party.</string>
     <string name="encounter_icon">Encounter icon</string>
     <string name="title_combatants">Combatants</string>
     <string name="no_combatants_prompt">There are no combatants yet. Add first one.</string>

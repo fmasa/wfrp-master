@@ -41,7 +41,10 @@ private fun MainContainer(viewModel: SpellsViewModel, onSpellClick: (Spell) -> U
     val spells = viewModel.spells.observeAsState().value ?: return
 
     if (spells.isEmpty()) {
-        EmptyUI(R.string.no_spells, R.drawable.ic_spells)
+        EmptyUI(
+            textId = R.string.no_spells,
+            subTextId = R.string.no_spells_sub_text,
+            drawableResourceId = R.drawable.ic_spells)
         return
     }
 
