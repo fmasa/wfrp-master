@@ -5,7 +5,6 @@ import androidx.annotation.StringRes
 import androidx.compose.foundation.Icon
 import androidx.compose.foundation.Text
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.layout.RowScope.weight
 import androidx.compose.material.EmphasisAmbient
 import androidx.compose.material.ProvideEmphasis
 import androidx.compose.runtime.Composable
@@ -98,7 +97,7 @@ internal fun ArmorCard(armor: Armor, onChange: (Armor) -> Unit) {
 }
 
 @Composable
-private fun ArmorPart(
+private fun RowScope.ArmorPart(
     @DrawableRes iconRes: Int,
     @StringRes nameRes: Int,
     points: Int,

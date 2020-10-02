@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.State
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -22,13 +23,14 @@ import cz.muni.fi.rpg.model.domain.character.Character
 import cz.muni.fi.rpg.model.domain.character.CharacterId
 import cz.muni.fi.rpg.model.domain.common.Ambitions
 import cz.muni.fi.rpg.model.domain.party.Invitation
-import cz.muni.fi.rpg.model.domain.party.Party
 import cz.muni.fi.rpg.model.right
 import cz.muni.fi.rpg.ui.common.composables.*
 import cz.muni.fi.rpg.ui.gameMaster.adapter.Player
 import cz.muni.fi.rpg.viewModels.GameMasterViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import java.util.*
+
+private fun <T> State<T>.getValue() = this.value
 
 @ExperimentalCoroutinesApi
 @Composable

@@ -2,12 +2,14 @@ package cz.muni.fi.rpg.ui.gameMaster.encounters
 
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Box
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.res.loadVectorResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -27,8 +29,8 @@ fun EncountersScreen(
     val encounters = viewModel.encounters.observeAsState().value
 
     if (encounters == null) {
-        Box(modifier.fillMaxSize(), gravity = ContentGravity.Center) {
-            CircularProgressIndicator()
+        Box(modifier.fillMaxSize()) {
+            CircularProgressIndicator(Modifier.align(Alignment.Center))
         }
         return
     }
@@ -37,7 +39,7 @@ fun EncountersScreen(
         modifier = modifier,
         floatingActionButton = {
             FloatingActionButton(onClick = onNewEncounterDialogRequest) {
-                Icon(vectorResource(R.drawable.ic_add))
+                loadVectorResource(R.drawable.ic_add).resource.resource?.let { Icon(it) }
             }
         }
     ) {
@@ -60,7 +62,7 @@ private fun EncounterList(
         return
     }
 
-    val icon = vectorResource(R.drawable.ic_encounter)
+    val icon = loadVectorResource(R.drawable.ic_encounter).resource.resource
     val iconSize = 40.dp
     val itemMargin = 4.dp
     val itemHeight = iconSize + 12.dp * 2
@@ -96,11 +98,13 @@ private fun EncounterList(
                     Modifier.height(itemHeight).padding(12.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Image(
-                        icon,
-                        Modifier.size(iconSize),
-                        colorFilter = ColorFilter.tint(MaterialTheme.colors.onSurface)
-                    )
+                    icon?.let {
+                        Image(
+                            icon,
+                            Modifier.size(iconSize),
+                            colorFilter = ColorFilter.tint(MaterialTheme.colors.onSurface)
+                        )
+                    }
                     Text(
                         encounter.name,
                         textAlign = TextAlign.Center,

@@ -2,9 +2,9 @@ package cz.muni.fi.rpg.ui.common.composables
 
 import androidx.annotation.StringRes
 import androidx.compose.foundation.*
-import androidx.compose.foundation.gestures.draggable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.layout.RowScope.weight
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.LazyRowFor
 import androidx.compose.material.*
 import androidx.compose.material.TabRow as MaterialTabRow
 import androidx.compose.runtime.Composable
@@ -51,7 +51,7 @@ data class TabScreen<T>(
 )
 
 @Composable
-fun <T> TabRow(
+fun <T> ColumnScope.TabRow(
     screens: Array<TabScreen<T>>,
     scrollState: ScrollState,
     screenWidth: Float,

@@ -2,7 +2,6 @@ package cz.muni.fi.rpg.ui.character
 
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.layout.ColumnScope.gravity
 import androidx.compose.foundation.lazy.LazyColumnFor
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
@@ -51,11 +50,12 @@ fun CharacterTrappingsScreen(
 @Composable
 private fun CurrentMoney(value: Money, onClick: () -> Unit) {
     Row(
-        Modifier.gravity(Alignment.End)
+        Modifier
             .padding(end = 8.dp)
             .clickable(onClick = onClick)
+            .fillMaxWidth()
             .padding(12.dp),
-        horizontalArrangement = Arrangement.spacedBy(8.dp)
+        horizontalArrangement = Arrangement.spacedBy(8.dp, Alignment.End)
     ) {
         ProvideTextStyle(MaterialTheme.typography.body1) {
             MoneyIcon(Theme.fixedColors.currencyGold)
@@ -112,20 +112,23 @@ private fun InventoryItemList(
     onClick: (InventoryItem) -> Unit,
     onRemove: (InventoryItem) -> Unit,
 ) {
-    LazyColumnFor(items) { item ->
-        CardItem(
-            name = item.name,
-            description = item.description,
-            iconRes = R.drawable.ic_inventory,
-            onClick = { onClick(item) },
-            contextMenuItems = listOf(
-                ContextMenu.Item(stringResource(R.string.remove), onClick = { onRemove(item) })
-            ),
-            badgeContent = {
-                if (item.quantity > 1) {
-                    Text(stringResource(R.string.quantity, item.quantity))
+    Column {
+
+        for (item in items) {
+            CardItem(
+                name = item.name,
+                description = item.description,
+                iconRes = R.drawable.ic_inventory,
+                onClick = { onClick(item) },
+                contextMenuItems = listOf(
+                    ContextMenu.Item(stringResource(R.string.remove), onClick = { onRemove(item) })
+                ),
+                badgeContent = {
+                    if (item.quantity > 1) {
+                        Text(stringResource(R.string.quantity, item.quantity))
+                    }
                 }
-            }
-        )
+            )
+        }
     }
 }

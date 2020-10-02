@@ -47,7 +47,7 @@ private fun PointsSection(points: Points, onUpdate: (Points) -> Unit) {
         }
     }
 
-    ScrollableColumn {
+    Column {
         CardContainer(Modifier.fillMaxWidth().padding(horizontal = 8.dp)) {
             Row(
                 horizontalArrangement = Arrangement.SpaceEvenly,
