@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.*
 import androidx.appcompat.app.AlertDialog
 import androidx.compose.foundation.*
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -14,6 +15,7 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.ProvideEmphasis
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.res.stringResource
@@ -189,7 +191,12 @@ private fun CombatantsCard(
                 )
             }
 
-            PrimaryButton(R.string.title_combatant_add, onClick = onCreateRequest)
+            Box(
+                Modifier.fillMaxWidth(),
+                alignment = Alignment.TopCenter
+            ) {
+                PrimaryButton(R.string.title_combatant_add, onClick = onCreateRequest)
+            }
         }
     }
 }
