@@ -1,41 +1,124 @@
 package cz.muni.fi.rpg.ui.character
 
 import android.os.Bundle
-import android.view.Menu
-import android.view.MenuInflater
-import android.view.MenuItem
-import android.view.View
+import android.view.*
+import androidx.appcompat.app.AlertDialog
+import androidx.compose.foundation.*
+import androidx.compose.foundation.layout.*
+import androidx.compose.material.CircularProgressIndicator
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.key
+import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.WithConstraints
+import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.observe
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import com.google.android.material.tabs.TabLayoutMediator
 import cz.muni.fi.rpg.R
-import cz.muni.fi.rpg.model.domain.character.CharacterId
-import cz.muni.fi.rpg.model.domain.character.CharacterNotFound
-import cz.muni.fi.rpg.ui.character.skills.CharacterSkillsFragment
+import cz.muni.fi.rpg.model.domain.character.Character
+import cz.muni.fi.rpg.model.domain.skills.Skill
+import cz.muni.fi.rpg.model.domain.talents.Talent
+import cz.muni.fi.rpg.model.right
+import cz.muni.fi.rpg.ui.character.inventory.InventoryItemDialog
+import cz.muni.fi.rpg.ui.character.inventory.TransactionDialog
+import cz.muni.fi.rpg.ui.character.skills.CharacterSkillsScreen
+import cz.muni.fi.rpg.ui.character.skills.SkillDialog
+import cz.muni.fi.rpg.ui.character.skills.TalentDialog
+import cz.muni.fi.rpg.ui.character.spells.SpellDialog
 import cz.muni.fi.rpg.ui.common.AdManager
+import cz.muni.fi.rpg.ui.common.ChangeAmbitionsDialog
 import cz.muni.fi.rpg.ui.common.PartyScopedFragment
-import cz.muni.fi.rpg.ui.common.StaticFragmentsViewPagerAdapter
-import cz.muni.fi.rpg.viewModels.AuthenticationViewModel
-import cz.muni.fi.rpg.viewModels.CharacterViewModel
-import kotlinx.android.synthetic.main.fragment_character.*
+import cz.muni.fi.rpg.ui.common.composables.*
+import cz.muni.fi.rpg.ui.views.TextInput
+import cz.muni.fi.rpg.viewModels.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.koin.android.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 import timber.log.Timber
 import java.util.*
 
-
 class CharacterFragment(
     private val adManager: AdManager
-) : PartyScopedFragment(R.layout.fragment_character) {
+) : PartyScopedFragment(0),
+    CoroutineScope by CoroutineScope(Dispatchers.IO) {
 
     private val args: CharacterFragmentArgs by navArgs()
     private val viewModel: CharacterViewModel by viewModel { parametersOf(args.characterId) }
     private val auth: AuthenticationViewModel by viewModel { parametersOf(args.characterId) }
 
+    private val characteristicsVm: CharacterStatsViewModel by viewModel { parametersOf(args.characterId) }
+    private val miscVm: CharacterMiscViewModel by viewModel { parametersOf(args.characterId) }
+    private val skillsVm: SkillsViewModel by viewModel { parametersOf(args.characterId) }
+    private val talentsVm: TalentsViewModel by viewModel { parametersOf(args.characterId) }
+    private val spellsVm: SpellsViewModel by viewModel { parametersOf(args.characterId) }
+    private val inventoryVm: InventoryViewModel by viewModel { parametersOf(args.characterId) }
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ) = ComposeView(requireContext()).apply {
+        setContent {
+            Theme {
+                val character = viewModel.character.right().observeAsState().value
+
+                if (character == null) {
+                    Box(Modifier.fillMaxSize(), gravity = ContentGravity.Center) {
+                        CircularProgressIndicator()
+                    }
+
+                    return@Theme
+                }
+
+                WithConstraints(Modifier.fillMaxSize()) {
+                    val screenWidth = constraints.maxWidth.toFloat()
+                    val screens = screens(Modifier.width(maxWidth).padding(top = 6.dp))
+
+                    Column(Modifier.fillMaxHeight()) {
+                        val scrollState = key(screenWidth, screens.size) { rememberScrollState(0f) }
+
+                        TabRow(screens, scrollState, screenWidth)
+
+                        TabContent(
+                            item = character,
+                            screens = screens,
+                            scrollState = scrollState,
+                            screenWidth = screenWidth,
+                            Modifier.weight(1f)
+                        )
+
+                        BannerAd(stringResource(R.string.character_ad_unit_id), adManager)
+                    }
+                }
+
+            }
+        }
+    }
+
+    private fun openExperiencePointsDialog(currentXpPoints: Int) {
+        val view = layoutInflater.inflate(R.layout.dialog_xp, null, false)
+
+        val xpPointsInput = view.findViewById<TextInput>(R.id.xpPointsInput)
+        xpPointsInput.setDefaultValue(currentXpPoints.toString())
+
+        AlertDialog.Builder(requireContext(), R.style.FormDialog)
+            .setTitle("Change amount of XP")
+            .setView(view)
+            .setPositiveButton(R.string.button_save) { _, _ ->
+                val xpPoints = xpPointsInput.getValue().toIntOrNull() ?: 0
+                launch { miscVm.updateExperiencePoints(xpPoints) }
+            }.create()
+            .show()
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        Timber.d("Created view for CharacterFragment (characterId = ${args.characterId})")
 
         setHasOptionsMenu(true)
 
@@ -49,47 +132,10 @@ class CharacterFragment(
                     findNavController().popBackStack(R.id.nav_party_list, false)
                 }
             }
-            it.map {
-                character -> setTitle(character.getName())
-                mainView.visibility = View.VISIBLE
-                progress.visibility = View.GONE
-            }
+            it.map { character -> setTitle(character.getName()) }
         }
 
         party.observe(viewLifecycleOwner) { setSubtitle(it.getName()) }
-
-        pager.adapter = StaticFragmentsViewPagerAdapter(
-            this,
-            arrayOf(
-                { CharacterMiscFragment.newInstance(args.characterId) },
-                { CharacterStatsFragment.newInstance(args.characterId) },
-                { CharacterSkillsFragment.newInstance(args.characterId) },
-                { CharacterSpellsFragment.newInstance(args.characterId) },
-                { InventoryFragment.newInstance(args.characterId) }
-            )
-        )
-
-        TabLayoutMediator(tabLayout, pager) { tab, position ->
-            when (position) {
-                0 -> {
-                    tab.setText(R.string.title_misc)
-                }
-                1 -> {
-                    tab.setText(R.string.title_character_stats)
-                }
-                2 -> {
-                    tab.setText(R.string.title_character_skills)
-                }
-                3 -> {
-                    tab.setText(R.string.title_character_spells)
-                }
-                4 -> {
-                    tab.setText(R.string.title_character_trappings)
-                }
-            }
-        }.attach()
-
-        adManager.initializeUnit(characterAdView)
     }
 
     override fun getPartyId(): UUID = args.characterId.partyId
@@ -114,5 +160,92 @@ class CharacterFragment(
     private fun openCharacterCreation(userId: String) {
         findNavController()
             .navigate(CharacterFragmentDirections.createCharacter(args.characterId.partyId, userId))
+    }
+
+    private fun openTalentDialog(existingTalent: Talent?) {
+        val dialog = TalentDialog.newInstance(existingTalent)
+        dialog.setOnSuccessListener { talent ->
+            launch {
+                talentsVm.saveTalent(talent)
+
+                withContext(Dispatchers.Main) { dialog.dismiss() }
+            }
+        }
+
+        dialog.show(childFragmentManager, "TalentDialog")
+    }
+
+    private fun openSkillDialog(existingSkill: Skill?) {
+        SkillDialog.newInstance(args.characterId, existingSkill).show(childFragmentManager, null)
+    }
+
+    @Composable
+    private fun screens(modifier: Modifier): Array<TabScreen<Character>> {
+        val fragmentManager = childFragmentManager
+        val characterId = args.characterId
+
+        return arrayOf(
+            TabScreen(
+                R.string.title_misc
+            ) { character ->
+                CharacterMiscScreen(
+                    modifier = modifier,
+                    character = character,
+                    viewModel = miscVm,
+                    onXpButtonClick = ::openExperiencePointsDialog,
+                    onCharacterAmbitionsClick = { defaults ->
+                        ChangeAmbitionsDialog
+                            .newInstance(getString(R.string.title_character_ambitions), defaults)
+                            .setOnSaveListener { miscVm.updateCharacterAmbitions(it) }
+                            .show(fragmentManager, "ChangeAmbitionsDialog")
+                    },
+                )
+            },
+            TabScreen(R.string.title_character_stats) { character ->
+                CharacterCharacteristicsScreen(
+                    character = character,
+                    viewModel = characteristicsVm,
+                    modifier = modifier,
+                )
+            },
+            TabScreen(R.string.title_character_conditions) { character ->
+                CharacterConditionsScreen(
+                    character = character,
+                    viewModel = viewModel,
+                    modifier = modifier,
+                )
+            },
+            TabScreen(R.string.title_character_skills) {
+                CharacterSkillsScreen(
+                    talentsVm = talentsVm,
+                    skillsVm = skillsVm,
+                    characterVm = viewModel,
+                    modifier = modifier,
+                    onTalentDialogRequest = ::openTalentDialog,
+                    onSkillDialogRequest = ::openSkillDialog
+                )
+            },
+            TabScreen(R.string.title_character_spells) {
+                CharacterSpellsScreen(
+                    viewModel = spellsVm,
+                    modifier = modifier,
+                    onSpellDialogRequest = {
+                        SpellDialog.newInstance(characterId, it).show(fragmentManager, null)
+                    }
+                )
+            },
+            TabScreen(R.string.title_character_trappings) {
+                CharacterTrappingsScreen(
+                    viewModel = inventoryVm,
+                    modifier = modifier,
+                    onItemDialogRequest = {
+                        InventoryItemDialog.newInstance(characterId, it).show(fragmentManager, null)
+                    },
+                    onMoneyDialogRequest = {
+                        TransactionDialog.newInstance(characterId).show(fragmentManager, null)
+                    }
+                )
+            },
+        )
     }
 }

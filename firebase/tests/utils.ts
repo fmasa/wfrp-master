@@ -1,8 +1,8 @@
 import {uuid} from "uuidv4";
 import * as firebase from "@firebase/testing";
 
-export function withoutField(object: object, field: string) : object {
-    return Object.fromEntries(Object.entries(object).filter(([fieldName]) => fieldName !== field));
+export function withoutField<T>(object: T, field: string) : Partial<T> {
+    return Object.fromEntries(Object.entries(object).filter(([fieldName]) => fieldName !== field)) as Partial<T>;
 }
 
 const validPartyGameMasterId = "user";

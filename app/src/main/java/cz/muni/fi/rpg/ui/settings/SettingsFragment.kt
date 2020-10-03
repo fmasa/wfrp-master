@@ -3,11 +3,11 @@ package cz.muni.fi.rpg.ui.settings
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.observe
-import arrow.core.extensions.list.functor.mapConst
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.firebase.auth.FirebaseAuthUserCollisionException
 import cz.muni.fi.rpg.R
@@ -16,8 +16,6 @@ import cz.muni.fi.rpg.ui.common.toast
 import cz.muni.fi.rpg.ui.common.toggleVisibility
 import cz.muni.fi.rpg.viewModels.AuthenticationViewModel
 import cz.muni.fi.rpg.viewModels.SettingsViewModel
-import kotlinx.android.synthetic.main.fragment_settings.*
-import kotlinx.android.synthetic.main.sign_in_confirmation_dialog.view.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -42,20 +40,19 @@ class SettingsFragment : BaseFragment(R.layout.fragment_settings),
         googleEmail.observe(viewLifecycleOwner) { email ->
             if (email != null) {
                 Timber.d("EMAIL: $email")
-                userEmail.text = email
+                view.findViewById<TextView>(R.id.userEmail).text = email
             }
 
             val loggedIn = email != null
 
-            userLoggedIn.toggleVisibility(loggedIn)
-            userEmail.toggleVisibility(loggedIn)
-            userNotLoggedIn.toggleVisibility(!loggedIn)
-            signInButton.toggleVisibility(!loggedIn)
-
-            accountCard.toggleVisibility(true)
+            view.findViewById<View>(R.id.userLoggedIn).toggleVisibility(loggedIn)
+            view.findViewById<View>(R.id.userEmail).toggleVisibility(loggedIn)
+            view.findViewById<View>(R.id.userNotLoggedIn).toggleVisibility(!loggedIn)
+            view.findViewById<View>(R.id.signInButton).toggleVisibility(!loggedIn)
+            view.findViewById<View>(R.id.accountCard).toggleVisibility(true)
         }
 
-        signInButton.setOnClickListener {
+        view.findViewById<View>(R.id.signInButton).setOnClickListener {
             startActivityForResult(
                 authViewModel.getGoogleSignInIntent(requireContext()),
                 CODE_GOOGLE_SIGN_IN
@@ -111,8 +108,8 @@ class SettingsFragment : BaseFragment(R.layout.fragment_settings),
             dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener {
                 it.isEnabled = false
                 dialog.getButton(AlertDialog.BUTTON_NEGATIVE).isEnabled = false
-                view.mainView.toggleVisibility(false)
-                view.progress.toggleVisibility(true)
+                view.findViewById<View>(R.id.mainView).toggleVisibility(false)
+                view.findViewById<View>(R.id.progress).toggleVisibility(true)
 
                 launch {
                     try {
@@ -142,14 +139,16 @@ class SettingsFragment : BaseFragment(R.layout.fragment_settings),
             val partyNames = viewModel.getPartyNames(authViewModel.getUserId())
 
             withContext(Dispatchers.Main) {
+                val parties: TextView = view.findViewById(R.id.parties)
                 if (partyNames.isEmpty()) {
-                    view.loseAccessToParties.toggleVisibility(false)
-                    view.parties.toggleVisibility(false)
+                    view.findViewById<View>(R.id.loseAccessToParties).toggleVisibility(false)
+                    parties.toggleVisibility(false)
                 }
-                view.parties.text = partyNames.joinToString("\n")
 
-                view.mainView.toggleVisibility(true)
-                view.progress.toggleVisibility(false)
+                parties.text = partyNames.joinToString("\n")
+
+                view.findViewById<View>(R.id.mainView).toggleVisibility(true)
+                view.findViewById<View>(R.id.progress).toggleVisibility(false)
             }
         }
     }

@@ -66,6 +66,11 @@ export interface Character {
     },
     hardyTalent: boolean,
     note: string,
+    conditions: Conditions,
+}
+
+export interface Conditions {
+    conditions: { [condition: string]: number},
 }
 
 export interface Armor {

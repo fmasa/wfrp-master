@@ -1,23 +1,36 @@
 package cz.muni.fi.rpg.ui.gameMaster.encounters
 
 import android.os.Bundle
-import android.view.Menu
-import android.view.MenuInflater
-import android.view.MenuItem
-import android.view.View
+import android.view.*
 import androidx.appcompat.app.AlertDialog
+import androidx.compose.foundation.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material.CircularProgressIndicator
+import androidx.compose.material.EmphasisAmbient
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.ProvideEmphasis
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.observe
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import cz.muni.fi.rpg.R
+import cz.muni.fi.rpg.model.domain.encounter.Combatant
 import cz.muni.fi.rpg.model.domain.encounter.Encounter
 import cz.muni.fi.rpg.model.right
-import cz.muni.fi.rpg.ui.common.NonScrollableLayoutManager
 import cz.muni.fi.rpg.ui.common.PartyScopedFragment
-import cz.muni.fi.rpg.ui.common.toggleVisibility
-import cz.muni.fi.rpg.ui.gameMaster.encounters.adapter.CombatantAdapter
+import cz.muni.fi.rpg.ui.common.composables.*
+import cz.muni.fi.rpg.ui.common.composables.ContextMenu
 import cz.muni.fi.rpg.viewModels.EncounterDetailViewModel
-import kotlinx.android.synthetic.main.fragment_encounter_detail.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -26,7 +39,7 @@ import org.koin.android.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 import java.util.*
 
-class EncounterDetailFragment : PartyScopedFragment(R.layout.fragment_encounter_detail),
+class EncounterDetailFragment : PartyScopedFragment(0),
     CoroutineScope by CoroutineScope(Dispatchers.Default) {
 
     private val args: EncounterDetailFragmentArgs by navArgs()
@@ -37,6 +50,28 @@ class EncounterDetailFragment : PartyScopedFragment(R.layout.fragment_encounter_
 
     override fun getPartyId(): UUID = args.encounterId.partyId
 
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ) = ComposeView(requireContext()).apply {
+        setContent {
+            Theme {
+                EncounterDetailScreen(
+                    viewModel,
+                    openCombatantDetail = {
+                        findNavController().navigate(
+                            EncounterDetailFragmentDirections.openCombatantForm(
+                                encounterId = args.encounterId,
+                                combatantId = it?.id
+                            )
+                        )
+                    },
+                )
+            }
+        }
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -46,44 +81,9 @@ class EncounterDetailFragment : PartyScopedFragment(R.layout.fragment_encounter_
 
         viewModel.encounter.right().observe(viewLifecycleOwner) { encounter ->
             setTitle(encounter.name)
-            encounterDescription.text = encounter.description
             setHasOptionsMenu(true)
 
             this.encounter = encounter
-        }
-
-        viewModel.combatants.observe(viewLifecycleOwner) { combatants ->
-            if (combatants.isNotEmpty()) {
-                val adapter = CombatantAdapter(
-                    layoutInflater,
-                    { combatant ->
-                        findNavController().navigate(
-                            EncounterDetailFragmentDirections
-                                .openCombatantForm(
-                                    encounterId = args.encounterId,
-                                    combatantId = combatant.id
-                                )
-                        )
-                    },
-                    { combatant -> launch { viewModel.removeCombatant(combatant.id) } }
-                )
-                combatantListRecycler.adapter = adapter
-                combatantListRecycler.layoutManager = NonScrollableLayoutManager(requireContext())
-                adapter.submitList(combatants)
-            }
-
-            noCombatantsIcon.toggleVisibility(combatants.isEmpty())
-            noCombatantsText.toggleVisibility(combatants.isEmpty())
-            combatantListRecycler.toggleVisibility(combatants.isNotEmpty())
-
-            addCombatantButton.setOnClickListener {
-                findNavController().navigate(
-                    EncounterDetailFragmentDirections.openCombatantForm(
-                        encounterId = args.encounterId,
-                        combatantId = null
-                    )
-                )
-            }
         }
     }
 
@@ -116,5 +116,109 @@ class EncounterDetailFragment : PartyScopedFragment(R.layout.fragment_encounter_
         }
 
         return super.onOptionsItemSelected(item)
+    }
+}
+
+@Composable
+private fun EncounterDetailScreen(
+    viewModel: EncounterDetailViewModel,
+    openCombatantDetail: (Combatant?) -> Unit,
+) {
+    Box(Modifier.fillMaxSize().background(MaterialTheme.colors.background).padding(top = 6.dp)) {
+        ScrollableColumn(Modifier.fillMaxWidth()) {
+            DescriptionCard(viewModel)
+            CombatantsCard(
+                viewModel,
+                onCreateRequest = { openCombatantDetail(null) },
+                onEditRequest = openCombatantDetail,
+                onRemoveRequest = { viewModel.removeCombatant(it.id) },
+            )
+        }
+    }
+}
+
+@Composable
+private fun DescriptionCard(viewModel: EncounterDetailViewModel) {
+    CardContainer(Modifier.fillMaxWidth().padding(horizontal = 8.dp)) {
+        CardTitle(R.string.title_description)
+
+        val encounter = viewModel.encounter.right().observeAsState().value
+
+        if (encounter == null) {
+            Box(Modifier.fillMaxWidth(), gravity = ContentGravity.Center) {
+                CircularProgressIndicator()
+            }
+            return@CardContainer
+        }
+
+        Text(encounter.description, Modifier.padding(horizontal = 8.dp))
+    }
+}
+
+@Composable
+private fun CombatantsCard(
+    viewModel: EncounterDetailViewModel,
+    onCreateRequest: () -> Unit,
+    onEditRequest: (Combatant) -> Unit,
+    onRemoveRequest: (Combatant) -> Unit,
+) {
+    CardContainer(Modifier.fillMaxWidth().padding(8.dp)) {
+        CardTitle(R.string.title_combatants)
+
+        val combatants = viewModel.combatants.observeAsState().value
+
+        if (combatants == null) {
+            Box(Modifier.fillMaxWidth(), gravity = ContentGravity.Center) {
+                CircularProgressIndicator()
+            }
+
+            return@CardContainer
+        }
+
+        Column(Modifier.fillMaxWidth()) {
+
+            if (combatants.isEmpty()) {
+                EmptyUI(
+                    textId = R.string.no_combatants_prompt,
+                    drawableResourceId = R.drawable.ic_combatant,
+                    size = EmptyUI.Size.Small,
+                )
+            } else {
+                CombatantsList(
+                    combatants,
+                    onEditRequest = onEditRequest,
+                    onRemoveRequest = onRemoveRequest,
+                )
+            }
+
+            Box(
+                Modifier.fillMaxWidth(),
+                alignment = Alignment.TopCenter
+            ) {
+                PrimaryButton(R.string.title_combatant_add, onClick = onCreateRequest)
+            }
+        }
+    }
+}
+
+@Composable
+private fun CombatantsList(
+    combatants: List<Combatant>,
+    onEditRequest: (Combatant) -> Unit,
+    onRemoveRequest: (Combatant) -> Unit,
+) {
+    for (combatant in combatants) {
+        val emphasis = EmphasisAmbient.current
+
+        ProvideEmphasis(if (combatant.alive) emphasis.high else emphasis.disabled) {
+            CardItem(
+                name = combatant.name,
+                iconRes = if (combatant.alive) R.drawable.ic_combatant else R.drawable.ic_dead,
+                onClick = { onEditRequest(combatant) },
+                contextMenuItems = listOf(
+                    ContextMenu.Item(stringResource(R.string.remove)) { onRemoveRequest(combatant) }
+                ),
+            )
+        }
     }
 }

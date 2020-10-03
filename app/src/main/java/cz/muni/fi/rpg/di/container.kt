@@ -26,18 +26,12 @@ import cz.muni.fi.rpg.model.firestore.*
 import cz.muni.fi.rpg.model.firestore.jackson.JacksonAggregateMapper
 import cz.muni.fi.rpg.model.firestore.repositories.*
 import cz.muni.fi.rpg.ui.character.*
-import cz.muni.fi.rpg.ui.character.CharacterMiscFragment
 import cz.muni.fi.rpg.ui.character.edit.CharacterEditFragment
-import cz.muni.fi.rpg.ui.character.skills.CharacterSkillsFragment
-import cz.muni.fi.rpg.ui.character.skills.talents.TalentsFragment
 import cz.muni.fi.rpg.ui.characterCreation.CharacterCreationFragment
-import cz.muni.fi.rpg.ui.characterCreation.CharacterInfoFormFragment
-import cz.muni.fi.rpg.ui.characterCreation.CharacterStatsFormFragment
 import cz.muni.fi.rpg.ui.common.AdManager
 import cz.muni.fi.rpg.ui.gameMaster.GameMasterFragment
 import cz.muni.fi.rpg.ui.gameMaster.encounters.CombatantFragment
 import cz.muni.fi.rpg.ui.gameMaster.encounters.EncounterDetailFragment
-import cz.muni.fi.rpg.ui.gameMaster.encounters.EncountersFragment
 import cz.muni.fi.rpg.ui.partyList.PartyListFragment
 import cz.muni.fi.rpg.viewModels.*
 import org.koin.android.viewmodel.dsl.viewModel
@@ -125,17 +119,8 @@ val appModule = module {
     fragment { GameMasterFragment(get()) }
     fragment { NavHostFragment() }
     fragment { PartyListFragment() }
-    fragment { CharacterEditFragment(get()) }
-    fragment { CharacterMiscFragment() }
-    fragment { CharacterStatsFragment() }
-    fragment { CharacterSkillsFragment() }
-    fragment { InventoryFragment() }
-    fragment { CharacterInfoFormFragment() }
-    fragment { CharacterStatsFormFragment() }
+    fragment { CharacterEditFragment() }
     fragment { CharacterCreationFragment(get()) }
-    fragment { TalentsFragment() }
-    fragment { CharacterArmorFragment() }
-    fragment { EncountersFragment() }
     fragment { EncounterDetailFragment() }
     fragment { CombatantFragment() }
 }

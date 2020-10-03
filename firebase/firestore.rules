@@ -37,7 +37,7 @@ service cloud.firestore {
 
                     function isValidCombatant(combatant) {
                         return combatant is map
-                            && combatant.keys().toSet() == ["id", "name", "note", "wounds", "stats", "armor", "enemy", "alive", "traits", "trappings", "position"].toSet()
+                            && ["id", "name", "note", "wounds", "stats", "armor", "enemy", "alive", "traits", "trappings", "position", "conditions"].hasAll(combatant.keys())
                             && combatant.id is string && isValidUuid(combatant.id) && combatant.id == combatantId
                             && combatant.name is string && isNotBlank(combatant.name) && combatant.name.size() <= 100
                             && combatant.note is string && combatant.note.size() <= 400
@@ -48,6 +48,7 @@ service cloud.firestore {
                             && combatant.alive is bool
                             && combatant.traits is list
                             && combatant.trappings is list
+                            && (! ("conditions" in combatant) || areValidConditions(combatant.conditions))
                             && combatant.position is number && combatant.position >= 0;
                     }
 
@@ -194,6 +195,8 @@ service cloud.firestore {
                             "ambitions",
                             "note",
                             "hardyTalent",
+                            "conditions",
+                            "hardyTalent",
                             "archived"
                         ].hasAll(character.keys())
                         && (character.userId == userId || character.id == userId)
@@ -213,7 +216,8 @@ service cloud.firestore {
                         && areAmbitionsValid(character.ambitions)
                         && character.note is string && character.note.size() <= 400
                         && character.hardyTalent is bool
-                        && (! ("archived" in character) || (character.archived is bool && (!character.archived || character.userId == null)));
+                        && (! ("archived" in character) || (character.archived is bool && (!character.archived || character.userId == null)))
+                        && (! ("conditions" in character) || areValidConditions(character.conditions));
                 }
             }
 
@@ -267,6 +271,25 @@ service cloud.firestore {
                     && stats.toughness is int
                     && stats.weaponSkill is int
                     && stats.willPower is int;
+            }
+
+            function areValidConditions(conditions) {
+                return conditions is map && conditions.keys().toSet() == ["conditions"].toSet()
+                    && conditions.conditions is map
+                    && [
+                        "ABLAZE",
+                        "BLEEDING",
+                        "BLINDED",
+                        "BROKEN",
+                        "DEAFENED",
+                        "ENTANGLED",
+                        "FATIGUED",
+                        "POISONED",
+                        "PRONE",
+                        "STUNNED",
+                        "SURPRISED",
+                        "UNCONSCIOUS"
+                    ].hasAll(conditions.conditions.keys());
             }
 
             function isArmorValid(armor) {

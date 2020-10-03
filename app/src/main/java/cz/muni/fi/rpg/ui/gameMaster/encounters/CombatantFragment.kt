@@ -1,237 +1,558 @@
 package cz.muni.fi.rpg.ui.gameMaster.encounters
 
 import android.os.Bundle
-import android.view.Menu
-import android.view.MenuInflater
-import android.view.MenuItem
-import android.view.View
-import android.widget.Toast
+import android.view.*
+import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.foundation.*
+import androidx.compose.foundation.layout.*
+import androidx.compose.material.*
+import androidx.compose.runtime.*
+import androidx.compose.runtime.savedinstancestate.savedInstanceState
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.intl.Locale
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.toUpperCase
+import androidx.compose.ui.unit.dp
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import androidx.ui.tooling.preview.Preview
 import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.model.domain.armour.Armor
 import cz.muni.fi.rpg.model.domain.character.Stats
 import cz.muni.fi.rpg.model.domain.encounter.Combatant
-import cz.muni.fi.rpg.model.domain.encounter.CombatantNotFound
+import cz.muni.fi.rpg.model.domain.encounter.CombatantId
 import cz.muni.fi.rpg.model.domain.encounter.Wounds
+import cz.muni.fi.rpg.model.domain.encounters.EncounterId
 import cz.muni.fi.rpg.ui.common.PartyScopedFragment
-import cz.muni.fi.rpg.ui.common.forms.Form
-import cz.muni.fi.rpg.ui.common.toast
-import cz.muni.fi.rpg.ui.common.toggleVisibility
+import cz.muni.fi.rpg.ui.common.chunk
+import cz.muni.fi.rpg.ui.common.composables.*
 import cz.muni.fi.rpg.viewModels.EncounterDetailViewModel
-import kotlinx.android.synthetic.main.fragment_combatant.*
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-import org.koin.android.viewmodel.ext.android.viewModel
+import kotlinx.coroutines.*
 import org.koin.core.parameter.parametersOf
 import java.util.*
 
-class CombatantFragment : PartyScopedFragment(R.layout.fragment_combatant),
+class CombatantFragment : PartyScopedFragment(0),
     CoroutineScope by CoroutineScope(Dispatchers.Default) {
 
     private val args: CombatantFragmentArgs by navArgs()
 
-    private val viewModel: EncounterDetailViewModel by viewModel { parametersOf(args.encounterId) }
-
-    private lateinit var form: Form
-
     override fun getPartyId(): UUID = args.encounterId.partyId
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        setHasOptionsMenu(true)
-        setTitle(
-            getString(
-                if (args.combatantId == null)
-                    R.string.title_combatant_add
-                else R.string.title_combatant_edit
-            )
-        )
-
-        val combatantId = args.combatantId
-
-        if (combatantId == null) {
-            form = initializeForm(null)
-        } else {
-            launch {
-                try {
-                    val combatant = viewModel.getCombatant(combatantId)
-                    withContext(Dispatchers.Main) { form = initializeForm(combatant) }
-                } catch (e: CombatantNotFound) {
-                    withContext(Dispatchers.Main) {
-                        toast(R.string.message_combatant_not_found, Toast.LENGTH_LONG)
-                        findNavController().popBackStack()
-                    }
-                }
-            }
-        }
+    init {
+        hideActionBar()
     }
 
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        super.onCreateOptionsMenu(menu, inflater)
-
-        inflater.inflate(R.menu.form_fragment_menu, menu)
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (item.itemId != R.id.actionSave) {
-            return super.onOptionsItemSelected(item)
-        }
-
-        if (!form.validate()) {
-            return false
-        }
-
-        item.isEnabled = false
-
-        val name = nameInput.getValue()
-        val note = noteInput.getValue()
-        val maxWounds = maxWoundsInput.getValue().toInt()
-        val stats = buildStats()
-        val armor = buildArmor()
-        val enemy = enemyCheckbox.isChecked
-        val alive = aliveCheckbox.isChecked
-
-        val combatantId = args.combatantId
-
-        launch {
-            if (combatantId == null) {
-                viewModel.addCombatant(
-                    name,
-                    note,
-                    Wounds.fromMax(maxWounds),
-                    stats,
-                    armor,
-                    enemy,
-                    alive,
-                    listOf(), // TODO: Add trappings and traits editation
-                    listOf()
+    @ExperimentalCoroutinesApi
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ) = ComposeView(requireContext()).apply {
+        setContent {
+            Theme {
+                CombatantDetailScreen(
+                    encounterId = args.encounterId,
+                    existingCombatantId = args.combatantId?.let {
+                        CombatantId(args.encounterId, it)
+                    },
+                    coroutineScope = this@CombatantFragment,
+                    onBack = { findNavController().popBackStack() }
                 )
-            } else {
-                viewModel.updateCombatant(
-                    combatantId,
-                    name,
-                    note,
-                    maxWounds,
-                    stats,
-                    armor,
-                    enemy,
-                    alive,
-                    listOf(), // TODO: Add trappings and traits editation
-                    listOf()
-                )
-            }
-
-            withContext(Dispatchers.Main) {
-                toast(R.string.message_combatant_saved)
-                findNavController().popBackStack()
-            }
-        }
-
-        return false
-    }
-
-    private fun buildStats(): Stats {
-        return Stats(
-            weaponSkill = weaponSkillInput.getValue().toInt(),
-            ballisticSkill = ballisticSkillInput.getValue().toInt(),
-            strength = strengthInput.getValue().toInt(),
-            agility = agilityInput.getValue().toInt(),
-            intelligence = intelligenceInput.getValue().toInt(),
-            initiative = initiativeInput.getValue().toInt(),
-            dexterity = dexterityInput.getValue().toInt(),
-            willPower = willPowerInput.getValue().toInt(),
-            fellowship = fellowshipInput.getValue().toInt(),
-            toughness = toughnessInput.getValue().toInt()
-        )
-    }
-
-    private fun buildArmor(): Armor {
-        return Armor(
-            head = armorHead.getValue().toInt(),
-            body = armorBody.getValue().toInt(),
-            shield = armorShield.getValue().toInt(),
-            leftArm = armorLeftArm.getValue().toInt(),
-            rightArm = armorRightArm.getValue().toInt(),
-            leftLeg =  armorLeftLeg.getValue().toInt(),
-            rightLeg = armorRightLeg.getValue().toInt()
-        )
-    }
-
-    private fun initializeForm(combatant: Combatant?) = Form(requireContext()).apply {
-        initializeBasics(this, combatant)
-        initializeStats(this, combatant?.stats)
-        initializeArmor(this, combatant?.armor)
-
-        progress.toggleVisibility(false)
-        mainView.toggleVisibility(true)
-    }
-
-    private fun initializeBasics(form: Form, combatant: Combatant?) {
-        form.addTextInput(nameInput).apply {
-            setMaxLength(Combatant.NAME_MAX_LENGTH, false)
-            setNotBlank(getString(R.string.error_name_blank))
-            setDefaultValue(combatant?.name ?: "")
-        }
-
-        form.addTextInput(noteInput).apply {
-            setMaxLength(Combatant.NOTE_MAX_LENGTH, false)
-            setDefaultValue(combatant?.note ?: "")
-        }
-
-        form.addTextInput(maxWoundsInput).apply {
-            setMaxLength(2, false)
-            setNotBlank(getString(R.string.error_required))
-            addLiveRule(R.string.error_value_is_0) { it.toString().toInt() > 0 }
-            setDefaultValue(combatant?.wounds?.max?.toString() ?: "")
-        }
-
-        enemyCheckbox.isChecked = combatant?.enemy ?: true
-        aliveCheckbox.isChecked = combatant?.alive ?: true
-    }
-
-    private fun initializeStats(form: Form, stats: Stats?) {
-        mapOf(
-            weaponSkillInput to stats?.weaponSkill,
-            ballisticSkillInput to stats?.ballisticSkill,
-            strengthInput to stats?.strength,
-            toughnessInput to stats?.toughness,
-            agilityInput to stats?.agility,
-            intelligenceInput to stats?.intelligence,
-            willPowerInput to stats?.willPower,
-            fellowshipInput to stats?.fellowship,
-            initiativeInput to stats?.initiative,
-            dexterityInput to stats?.dexterity
-        ).forEach { (statInput, currentValue) ->
-            form.addTextInput(statInput).apply {
-                setShowErrorInEditText()
-                setMaxLength(3, false)
-                addLiveRule(R.string.error_required) { !it.isNullOrBlank() }
-                addLiveRule(R.string.error_value_over_100) { it.toString().toInt() <= 100 }
-                setDefaultValue((currentValue ?: 0).toString())
-            }
-        }
-    }
-
-    private fun initializeArmor(form: Form, armor: Armor?) {
-        mapOf(
-            armorHead to armor?.head,
-            armorShield to armor?.shield,
-            armorBody to armor?.body,
-            armorLeftArm to armor?.leftArm,
-            armorRightArm to armor?.rightArm,
-            armorLeftLeg to armor?.leftLeg,
-            armorRightLeg to armor?.rightLeg
-        ).forEach { (armorInput, currentValue) ->
-            form.addTextInput(armorInput).apply {
-                setShowErrorInEditText()
-                setMaxLength(2, false)
-                addLiveRule(R.string.error_required) { !it.isNullOrBlank() }
-                setDefaultValue((currentValue ?: 0).toString())
             }
         }
     }
 }
+
+@Stable
+private class CharacteristicsFormData(
+    val weaponSkill: MutableState<String>,
+    val ballisticSkill: MutableState<String>,
+    val strength: MutableState<String>,
+    val toughness: MutableState<String>,
+    val initiative: MutableState<String>,
+    val agility: MutableState<String>,
+    val dexterity: MutableState<String>,
+    val intelligence: MutableState<String>,
+    val willPower: MutableState<String>,
+    val fellowship: MutableState<String>,
+) {
+    companion object {
+        @Composable
+        fun fromCharacteristics(characteristics: Stats) = CharacteristicsFormData(
+            weaponSkill = savedInstanceState { toNumericTextValue(characteristics.weaponSkill) },
+            ballisticSkill = savedInstanceState { toNumericTextValue(characteristics.ballisticSkill) },
+            strength = savedInstanceState { toNumericTextValue(characteristics.strength) },
+            toughness = savedInstanceState { toNumericTextValue(characteristics.toughness) },
+            initiative = savedInstanceState { toNumericTextValue(characteristics.initiative) },
+            agility = savedInstanceState { toNumericTextValue(characteristics.agility) },
+            dexterity = savedInstanceState { toNumericTextValue(characteristics.dexterity) },
+            intelligence = savedInstanceState { toNumericTextValue(characteristics.intelligence) },
+            willPower = savedInstanceState { toNumericTextValue(characteristics.willPower) },
+            fellowship = savedInstanceState { toNumericTextValue(characteristics.fellowship) },
+        )
+
+        @Composable
+        fun empty() = CharacteristicsFormData(
+            weaponSkill = savedInstanceState { "" },
+            ballisticSkill = savedInstanceState { "" },
+            strength = savedInstanceState { "" },
+            toughness = savedInstanceState { "" },
+            initiative = savedInstanceState { "" },
+            agility = savedInstanceState { "" },
+            dexterity = savedInstanceState { "" },
+            intelligence = savedInstanceState { "" },
+            willPower = savedInstanceState { "" },
+            fellowship = savedInstanceState { "" },
+        )
+    }
+
+    fun toCharacteristics() = Stats(
+        weaponSkill = weaponSkill.value.toIntOrNull() ?: 0,
+        ballisticSkill = ballisticSkill.value.toIntOrNull() ?: 0,
+        strength = strength.value.toIntOrNull() ?: 0,
+        toughness = toughness.value.toIntOrNull() ?: 0,
+        initiative = initiative.value.toIntOrNull() ?: 0,
+        agility = agility.value.toIntOrNull() ?: 0,
+        dexterity = dexterity.value.toIntOrNull() ?: 0,
+        intelligence = intelligence.value.toIntOrNull() ?: 0,
+        willPower = willPower.value.toIntOrNull() ?: 0,
+        fellowship = fellowship.value.toIntOrNull() ?: 0,
+    )
+
+    fun isValid() =
+        toIntValue(weaponSkill.value) <= 100 &&
+                toIntValue(ballisticSkill.value) <= 100 &&
+                toIntValue(strength.value) <= 100 &&
+                toIntValue(toughness.value) <= 100 &&
+                toIntValue(initiative.value) <= 100 &&
+                toIntValue(agility.value) <= 100 &&
+                toIntValue(dexterity.value) <= 100 &&
+                toIntValue(intelligence.value) <= 100 &&
+                toIntValue(willPower.value) <= 100 &&
+                toIntValue(fellowship.value) <= 100
+}
+
+@Stable
+private class ArmorFormData(
+    val head: MutableState<String>,
+    val body: MutableState<String>,
+    val shield: MutableState<String>,
+    val leftArm: MutableState<String>,
+    val rightArm: MutableState<String>,
+    val leftLeg: MutableState<String>,
+    val rightLeg: MutableState<String>,
+) {
+    companion object {
+        @Composable
+        fun fromArmor(armor: Armor) = ArmorFormData(
+            head = savedInstanceState { toNumericTextValue(armor.head) },
+            body = savedInstanceState { toNumericTextValue(armor.body) },
+            shield = savedInstanceState { toNumericTextValue(armor.shield) },
+            leftArm = savedInstanceState { toNumericTextValue(armor.leftArm) },
+            rightArm = savedInstanceState { toNumericTextValue(armor.rightArm) },
+            leftLeg = savedInstanceState { toNumericTextValue(armor.leftLeg) },
+            rightLeg = savedInstanceState { toNumericTextValue(armor.rightLeg) },
+        )
+
+        @Composable
+        fun empty() = ArmorFormData(
+            head = savedInstanceState { "" },
+            body = savedInstanceState { "" },
+            shield = savedInstanceState { "" },
+            leftArm = savedInstanceState { "" },
+            rightArm = savedInstanceState { "" },
+            leftLeg = savedInstanceState { "" },
+            rightLeg = savedInstanceState { "" },
+        )
+    }
+
+    fun toArmor() = Armor(
+        head = toIntValue(head.value),
+        body = toIntValue(body.value),
+        shield = toIntValue(shield.value),
+        leftArm = toIntValue(leftArm.value),
+        rightArm = toIntValue(rightArm.value),
+        leftLeg = toIntValue(leftLeg.value),
+        rightLeg = toIntValue(rightLeg.value),
+    )
+}
+
+@Stable
+private class FormData(
+    val name: MutableState<String>,
+    val note: MutableState<String>,
+    val wounds: MutableState<String>,
+    val enemy: MutableState<Boolean>,
+    val alive: MutableState<Boolean>,
+    val characteristics: CharacteristicsFormData,
+    val armor: ArmorFormData,
+) {
+    companion object {
+        @Composable
+        fun empty() = FormData(
+            name = savedInstanceState { "" },
+            note = savedInstanceState { "" },
+            wounds = savedInstanceState { "" },
+            enemy = savedInstanceState { true },
+            alive = savedInstanceState { true },
+            characteristics = CharacteristicsFormData.empty(),
+            armor = ArmorFormData.empty(),
+        )
+
+        @Composable
+        fun fromExistingCombatant(combatant: Combatant) = FormData(
+            name = savedInstanceState { combatant.name },
+            note = savedInstanceState { combatant.note },
+            wounds = savedInstanceState { combatant.wounds.max.toString() },
+            enemy = savedInstanceState { combatant.enemy },
+            alive = savedInstanceState { combatant.alive },
+            characteristics = CharacteristicsFormData.fromCharacteristics(combatant.stats),
+            armor = ArmorFormData.fromArmor(combatant.armor),
+        )
+    }
+
+    fun isValid() =
+        characteristics.isValid() &&
+                name.value.isNotBlank() &&
+                toIntValue(wounds.value) > 0
+}
+
+@ExperimentalCoroutinesApi
+@Composable
+fun CombatantDetailScreen(
+    encounterId: EncounterId,
+    existingCombatantId: CombatantId?,
+    coroutineScope: CoroutineScope,
+    onBack: () -> Unit,
+) {
+    val viewModel: EncounterDetailViewModel by viewModel { parametersOf(encounterId) }
+
+    if (existingCombatantId == null) {
+        val data = FormData.empty()
+
+        CombatantCreateScreen(
+            data,
+            onBack = onBack,
+            onSave = {
+                coroutineScope.launch {
+                    viewModel.addCombatant(
+                        name = data.name.value,
+                        note = data.note.value,
+                        wounds = Wounds.fromMax(data.wounds.value.toInt()),
+                        stats = data.characteristics.toCharacteristics(),
+                        armor = data.armor.toArmor(),
+                        enemy = data.enemy.value,
+                        alive = data.alive.value,
+                        traits = emptyList(),
+                        trappings = emptyList(),
+                    )
+
+                    withContext(Dispatchers.Main) { onBack() }
+                }
+            }
+        )
+    } else {
+        val combatant = remember { viewModel.combatantFlow(existingCombatantId) }.collectAsState().value
+        val data = combatant?.let { FormData.fromExistingCombatant(it) }
+        CombatantEditScreen(
+            data,
+            onSave = {
+                if (combatant == null || data == null) {
+                    return@CombatantEditScreen
+                }
+
+                coroutineScope.launch {
+                    viewModel.updateCombatant(
+                        id = combatant.id,
+                        name = data.name.value,
+                        note = data.note.value,
+                        maxWounds = data.wounds.value.toInt(),
+                        stats = data.characteristics.toCharacteristics(),
+                        armor = data.armor.toArmor(),
+                        enemy = data.enemy.value,
+                        alive = data.alive.value,
+                        traits = emptyList(),
+                        trappings = emptyList(),
+                    )
+
+                    withContext(Dispatchers.Main) { onBack() }
+                }
+            },
+            onBack = onBack,
+        )
+    }
+}
+
+@Composable
+private fun CombatantEditScreen(
+    data: FormData?,
+    onSave: () -> Unit,
+    onBack: () -> Unit,
+) {
+    val validate = savedInstanceState { false }
+    val submitEnabled = remember { mutableStateOf(true) }
+
+    Scaffold(
+        topBar = {
+            CombatantDetailTopBar(
+                title = stringResource(R.string.title_combatant_add),
+                onSave = {
+                    if (data == null) {
+                        return@CombatantDetailTopBar
+                    }
+
+                    if (!data.isValid()) {
+                        validate.value = true
+                    } else {
+                        submitEnabled.value = false
+                        onSave()
+                    }
+                },
+                onBack = onBack,
+                actionsEnabled = submitEnabled.value && data != null,
+            )
+        }
+    ) {
+        if (data == null) {
+            Box(Modifier.fillMaxSize(), gravity = ContentGravity.Center) {
+                CircularProgressIndicator()
+            }
+        } else {
+            CombatantDetailMainUI(data, validate = validate.value)
+        }
+    }
+}
+
+@Composable
+private fun CombatantCreateScreen(
+    data: FormData,
+    onSave: () -> Unit,
+    onBack: () -> Unit,
+) {
+    val validate = savedInstanceState { false }
+    val submitEnabled = remember { mutableStateOf(true) }
+
+    Scaffold(
+        topBar = {
+            CombatantDetailTopBar(
+                title = stringResource(R.string.title_combatant_add),
+                onSave = {
+                    if (!data.isValid()) {
+                        validate.value = true
+                    } else {
+                        submitEnabled.value = false
+                        onSave()
+                    }
+                },
+                onBack = onBack,
+                actionsEnabled = submitEnabled.value,
+            )
+        }
+    ) {
+        CombatantDetailMainUI(data, validate = validate.value)
+    }
+}
+
+@Composable
+private fun CombatantDetailMainUI(data: FormData, validate: Boolean) {
+    ScrollableColumn {
+        Column(Modifier.padding(24.dp).padding(bottom = 30.dp)) {
+            Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(16.dp)) {
+                    TextInput(
+                        modifier = Modifier.weight(0.7f),
+                        label = stringResource(R.string.label_name),
+                        value = data.name.value,
+                        onValueChange = { data.name.value = it },
+                        maxLength = Combatant.NAME_MAX_LENGTH,
+                        validate = validate,
+                        rules = Rules(Rules.NotBlank()),
+                    )
+
+                    TextInput(
+                        modifier = Modifier.weight(0.3f),
+                        label = stringResource(R.string.label_wounds),
+                        value = data.wounds.value,
+                        onValueChange = { data.wounds.value = it },
+                        keyboardType = KeyboardType.Number,
+                        maxLength = 3,
+                        validate = validate,
+                        rules = Rules(
+                            Rules.NotBlank(),
+                            { v: String -> v.toInt() > 0 } to stringResource(R.string.error_value_is_0)
+                        ),
+                    )
+                }
+
+                TextInput(
+                    label = stringResource(R.string.label_description),
+                    value = data.note.value,
+                    onValueChange = { data.note.value = it },
+                    validate = validate,
+                    multiLine = true,
+                )
+
+                Row(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
+                    CheckboxWithText(
+                        text = stringResource(R.string.label_enemy),
+                        checked = data.enemy.value,
+                        onCheckedChange = { data.enemy.value = it }
+                    )
+                    CheckboxWithText(
+                        text = stringResource(R.string.label_alive),
+                        checked = data.alive.value,
+                        onCheckedChange = { data.alive.value = it }
+                    )
+                }
+            }
+
+            HorizontalLine()
+
+            Text(
+                stringResource(R.string.title_character_characteristics),
+                style = MaterialTheme.typography.h6,
+                textAlign = TextAlign.Center,
+                modifier = Modifier.padding(top = 20.dp, bottom = 16.dp).fillMaxWidth()
+            )
+
+            CharacteristicsSegment(data.characteristics, validate)
+
+            HorizontalLine()
+
+            Text(
+                stringResource(R.string.title_armor),
+                style = MaterialTheme.typography.h6,
+                textAlign = TextAlign.Center,
+                modifier = Modifier.padding(top = 20.dp, bottom = 16.dp).fillMaxWidth()
+            )
+
+            ArmorSegment(data.armor, validate)
+        }
+    }
+}
+
+@Composable
+private fun CharacteristicsSegment(data: CharacteristicsFormData, validate: Boolean) {
+    val characteristics = listOf(
+        R.string.label_shortcut_weapon_skill to data.weaponSkill,
+        R.string.label_shortcut_ballistic_skill to data.ballisticSkill,
+        R.string.label_shortcut_strength to data.strength,
+        R.string.label_shortcut_toughness to data.toughness,
+        R.string.label_shortcut_initiative to data.initiative,
+        R.string.label_shortcut_agility to data.agility,
+        R.string.label_shortcut_dexterity to data.dexterity,
+        R.string.label_shortcut_intelligence to data.intelligence,
+        R.string.label_shortcut_will_power to data.willPower,
+        R.string.label_shortcut_fellowship to data.fellowship,
+    )
+
+    Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+        for (rowCharacteristics in characteristics.chunk(characteristics.size / 2)) {
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                modifier = Modifier.fillMaxWidth(),
+            ) {
+                for ((label, value) in rowCharacteristics) {
+                    TextInput(
+                        label = stringResource(label),
+                        value = value.value,
+                        placeholder = "0",
+                        keyboardType = KeyboardType.Number,
+                        onValueChange = { value.value = it },
+                        validate = validate,
+                        maxLength = 3,
+                        modifier = Modifier.weight(1f),
+                        rules = Rules(
+                            { v: String -> toIntValue(v) <= 100 } to stringResource(R.string.error_value_over_100)
+                        )
+                    )
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun ArmorSegment(data: ArmorFormData, validate: Boolean) {
+    val rows = listOf(
+        listOf(
+            R.string.armor_head to data.head,
+            R.string.armor_body to data.body,
+            R.string.armor_shield to data.shield,
+            0 to null // Empty container
+        ),
+
+        listOf(
+            R.string.armor_left_arm to data.leftArm,
+            R.string.armor_right_arm to data.rightArm,
+            R.string.armor_left_leg to data.leftLeg,
+            R.string.armor_right_leg to data.rightLeg,
+        )
+    )
+
+    Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+        for (rowParts in rows) {
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(16.dp),
+                modifier = Modifier.fillMaxWidth(),
+            ) {
+                for ((label, value) in rowParts) {
+                    if (value == null) {
+                        Spacer(Modifier.weight(1f))
+                        continue
+                    }
+
+                    TextInput(
+                        label = stringResource(label),
+                        value = value.value,
+                        placeholder = "0",
+                        keyboardType = KeyboardType.Number,
+                        onValueChange = { value.value = it },
+                        validate = validate,
+                        maxLength = 3,
+                        modifier = Modifier.weight(1f),
+                        rules = Rules(
+                            { v: String -> toIntValue(v) <= 100 } to stringResource(R.string.error_value_over_100)
+                        )
+                    )
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun CombatantDetailTopBar(
+    title: String,
+    onSave: () -> Unit,
+    onBack: () -> Unit,
+    actionsEnabled: Boolean,
+) {
+    TopAppBar(
+        navigationIcon = { BackButton(onBack) },
+        title = { Text(title) },
+        actions = {
+            TopBarAction(onClick = onSave, enabled = actionsEnabled) {
+                Text(stringResource(R.string.button_save).toUpperCase(Locale.current))
+            }
+        }
+    )
+}
+
+@Composable
+@Preview
+private fun Preview() {
+    Theme {
+        CombatantCreateScreen(
+            data = FormData.empty(),
+            onSave = {},
+            onBack = {},
+        )
+    }
+}
+
+private fun toNumericTextValue(value: Int) = if (value == 0) "" else value.toString()
+private fun toIntValue(value: String) = value.toIntOrNull() ?: 0

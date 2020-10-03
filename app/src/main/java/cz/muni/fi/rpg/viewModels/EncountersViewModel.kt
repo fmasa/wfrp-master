@@ -11,7 +11,7 @@ import java.util.*
 class EncountersViewModel(
     private val partyId: UUID,
     private val encounterRepository: EncounterRepository
-) : ViewModel(), CoroutineScope by CoroutineScope(Dispatchers.Default) {
+) : ViewModel(), CoroutineScope by CoroutineScope(Dispatchers.IO) {
 
     val encounters: LiveData<List<Encounter>> by lazy { encounterRepository.findByParty(partyId) }
 
@@ -35,12 +35,12 @@ class EncountersViewModel(
         encounterRepository.save(partyId, encounter)
     }
 
-    suspend fun reorderEncounters(positions: Map<UUID, Int>) {
+    fun reorderEncounters(positions: Map<UUID, Int>) = launch {
         val changedEncounters = mutableListOf<Encounter>()
 
         val encounters = mapOf(
             *awaitAll(
-                *positions.keys.map(this::encounterAsync).toTypedArray()
+                *positions.keys.map(this@EncountersViewModel::encounterAsync).toTypedArray()
             ).toTypedArray()
         )
 

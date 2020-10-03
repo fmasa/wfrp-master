@@ -16,6 +16,7 @@ data class Character(
     private var characteristicsAdvances: Stats,
     private var points: Points,
     private var ambitions: Ambitions = Ambitions("", ""),
+    private var conditions: CurrentConditions = CurrentConditions.none(),
     private var mutation: String = "",
     private var note: String = "",
     private var hardyTalent: Boolean = false,
@@ -106,6 +107,8 @@ data class Character(
 
     fun getMoney() = money
 
+    fun getConditions() = conditions
+
     fun updatePoints(newPoints: Points) {
         require(
             (!hardyTalent && newPoints.hardyWoundsBonus == 0) ||
@@ -122,6 +125,10 @@ data class Character(
 
     fun updateAmbitions(ambitions: Ambitions) {
         this.ambitions = ambitions
+    }
+
+    fun updateConditions(newConditions: CurrentConditions) {
+        conditions = newConditions
     }
 
     fun archive() {

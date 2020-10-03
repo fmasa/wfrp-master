@@ -5,6 +5,26 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 
 abstract class BaseFragment(@LayoutRes contentLayoutId: Int) : Fragment(contentLayoutId) {
+
+    private var actionBarVisibility: Boolean = true
+
+    override fun onResume() {
+        super.onResume()
+
+        activity?.let { activity ->
+            if (activity !is AppCompatActivity) {
+                return
+            }
+
+            activity.supportActionBar?.let {
+                when (actionBarVisibility) {
+                    true -> it.show()
+                    false -> it.hide()
+                }
+            }
+        }
+    }
+
     /**
      * Set title of parent activity's action bar
      */
@@ -18,5 +38,12 @@ abstract class BaseFragment(@LayoutRes contentLayoutId: Int) : Fragment(contentL
      */
     protected fun setSubtitle(subtitle: String) {
         activity?.let { (activity as AppCompatActivity).supportActionBar?.subtitle = subtitle }
+    }
+
+    /**
+     * This has to be called before onCreate to take effect
+     */
+    protected fun hideActionBar() {
+        actionBarVisibility = false
     }
 }

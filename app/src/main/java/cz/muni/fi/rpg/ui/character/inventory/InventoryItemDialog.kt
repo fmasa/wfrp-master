@@ -15,8 +15,8 @@ import cz.muni.fi.rpg.ui.common.forms.Form
 import cz.muni.fi.rpg.ui.common.optionalParcelableArgument
 import cz.muni.fi.rpg.ui.common.parcelableArgument
 import cz.muni.fi.rpg.ui.common.toast
+import cz.muni.fi.rpg.ui.views.TextInput
 import cz.muni.fi.rpg.viewModels.InventoryViewModel
-import kotlinx.android.synthetic.main.inventory_item_edit_dialog.view.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -60,18 +60,18 @@ class InventoryItemDialog : DialogFragment(),
 
 
         val form = Form(requireContext()).apply {
-            addTextInput(view.nameInput).apply {
+            addTextInput(view.findViewById<TextInput>(R.id.nameInput)).apply {
                 setMaxLength(InventoryItem.NAME_MAX_LENGTH, false)
                 setNotBlank(getString(R.string.error_name_blank))
                 existingItem?.let { setDefaultValue(it.name) }
             }
 
-            addTextInput(view.descriptionInput).apply {
+            addTextInput(view.findViewById<TextInput>(R.id.descriptionInput)).apply {
                 setMaxLength(InventoryItem.DESCRIPTION_MAX_LENGTH, false)
                 existingItem?.let { setDefaultValue(it.description) }
             }
 
-            addTextInput(view.quantityInput).apply {
+            addTextInput(view.findViewById<TextInput>(R.id.quantityInput)).apply {
                 setDefaultValue(existingItem?.quantity?.toString() ?: "1")
                 addLiveRule(getString(R.string.error_invalid_quantity)) {
                     val value = it.toString().toIntOrNull()
@@ -112,9 +112,9 @@ class InventoryItemDialog : DialogFragment(),
 
     private fun createInventoryItem(view: View) = InventoryItem(
         id = this.existingItem?.id ?: InventoryItemId.randomUUID(),
-        name = view.nameInput.getValue(),
-        description = view.descriptionInput.getValue(),
-        quantity = view.quantityInput.getValue().toInt()
+        name = view.findViewById<TextInput>(R.id.nameInput).getValue(),
+        description = view.findViewById<TextInput>(R.id.descriptionInput).getValue(),
+        quantity = view.findViewById<TextInput>(R.id.quantityInput).getValue().toInt()
     )
 
     private suspend fun longToast(message: String) {

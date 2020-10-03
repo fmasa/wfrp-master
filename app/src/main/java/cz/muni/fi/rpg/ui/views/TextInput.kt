@@ -6,15 +6,15 @@ import android.text.InputFilter
 import android.util.AttributeSet
 import android.view.View
 import android.widget.LinearLayout
+import android.widget.TextView
 import androidx.core.content.res.getIntegerOrThrow
 import androidx.core.widget.addTextChangedListener
 import arrow.core.extensions.list.align.empty
 import com.google.android.material.textfield.TextInputLayout
 import cz.muni.fi.rpg.R
 import kotlinx.android.parcel.Parcelize
-import kotlinx.android.synthetic.main.view_text_input.view.*
 
-class TextInput(context: Context, attrs: AttributeSet) : LinearLayout(context, attrs) {
+class TextInput(context: Context, attrs: AttributeSet?) : LinearLayout(context, attrs) {
     @Parcelize
     private data class SavedState(
         val value: String,
@@ -31,15 +31,18 @@ class TextInput(context: Context, attrs: AttributeSet) : LinearLayout(context, a
         isSaveEnabled = true
 
         val view = inflate(context, R.layout.view_text_input, this)
-        textInputLayout = view.textInputLayout
+        textInputLayout = view.findViewById(R.id.textInputLayout)
 
         val attributes = context.obtainStyledAttributes(attrs, R.styleable.TextInput)
 
+        val labelView = view.findViewById<TextView>(R.id.label)
         val label = attributes.getString(R.styleable.TextInput_inputLabel)
+
+
         if (label != null) {
-            view.label.text = label
+            labelView.text = label
         } else {
-            view.label.visibility = View.GONE
+            labelView.visibility = View.GONE
         }
 
         val filters = mutableListOf<InputFilter>()

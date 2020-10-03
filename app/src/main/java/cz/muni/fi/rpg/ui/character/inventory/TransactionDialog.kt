@@ -4,6 +4,7 @@ import android.app.Dialog
 import android.os.Bundle
 import android.view.View
 import android.widget.ArrayAdapter
+import android.widget.Spinner
 import androidx.appcompat.app.AlertDialog
 import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
@@ -15,7 +16,6 @@ import cz.muni.fi.rpg.ui.common.adapters.SpinnerAdapterWithWidthMatchingSelected
 import cz.muni.fi.rpg.ui.common.parcelableArgument
 import cz.muni.fi.rpg.ui.views.TextInput
 import cz.muni.fi.rpg.viewModels.InventoryViewModel
-import kotlinx.android.synthetic.main.dialog_transaction.view.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -41,7 +41,7 @@ class TransactionDialog : DialogFragment(), CoroutineScope by CoroutineScope(Dis
 
         val view = layoutInflater.inflate(R.layout.dialog_transaction, null)
 
-        view.directionSpinner.adapter = SpinnerAdapterWithWidthMatchingSelectedItem(
+        view.findViewById<Spinner>(R.id.directionSpinner).adapter = SpinnerAdapterWithWidthMatchingSelectedItem(
             ArrayAdapter(
                 requireContext(),
                 R.layout.title_spinner_dropdown_item,
@@ -65,15 +65,16 @@ class TransactionDialog : DialogFragment(), CoroutineScope by CoroutineScope(Dis
     }
 
     private fun onConfirm(view: View) {
-        view.notEnoughMoneyError.visibility = View.GONE
+        val notEnoughMoneyError = view.findViewById<View>(R.id.notEnoughMoneyError)
+        notEnoughMoneyError.visibility = View.GONE
 
-        val amount = Money.crowns(getIntValue(view.crownsInput)) +
-                Money.shillings(getIntValue(view.shillingsInput)) +
-                Money.pennies(getIntValue(view.penniesInput))
+        val amount = Money.crowns(getIntValue(view.findViewById(R.id.crownsInput))) +
+                Money.shillings(getIntValue(view.findViewById(R.id.shillingsInput))) +
+                Money.pennies(getIntValue(view.findViewById(R.id.penniesInput)))
 
         launch {
             try {
-                if (view.directionSpinner.selectedItemId == 0L) {
+                if (view.findViewById<Spinner>(R.id.directionSpinner).selectedItemId == 0L) {
                     viewModel.subtractMoney(amount)
                 } else {
                     viewModel.addMoney(amount)
@@ -81,7 +82,7 @@ class TransactionDialog : DialogFragment(), CoroutineScope by CoroutineScope(Dis
 
                 dismiss()
             } catch (e: NotEnoughMoney) {
-                withContext(Dispatchers.Main) { view.notEnoughMoneyError.visibility = View.VISIBLE }
+                withContext(Dispatchers.Main) { notEnoughMoneyError.visibility = View.VISIBLE }
             }
         }
     }

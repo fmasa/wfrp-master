@@ -7,6 +7,7 @@ import cz.muni.fi.rpg.di.appModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.androidx.fragment.koin.fragmentFactory
 import org.koin.core.context.startKoin
+import org.koin.core.logger.Level
 import timber.log.Timber
 import android.app.Application as BaseApplication
 
@@ -19,7 +20,7 @@ class Application : BaseApplication() {
 
             // declare used Android context
             androidContext(this@Application)
-            logger(KoinTimberLogger())
+            logger(KoinTimberLogger(Level.ERROR))
             // declare modules
             modules(appModule)
         }

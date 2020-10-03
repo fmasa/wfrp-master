@@ -16,13 +16,16 @@ import cz.muni.fi.rpg.model.domain.party.time.DateTime
 import cz.muni.fi.rpg.model.right
 import cz.muni.fi.rpg.ui.common.CombinedLiveData
 import cz.muni.fi.rpg.ui.gameMaster.adapter.Player
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.util.*
 
 class GameMasterViewModel(
     private val partyId: UUID,
     private val parties: PartyRepository,
     private val characterRepository: CharacterRepository
-) : ViewModel() {
+) : ViewModel(), CoroutineScope by CoroutineScope(Dispatchers.IO) {
 
     val party: LiveData<Either<PartyNotFound, Party>> = parties.getLive(partyId)
     val characters: LiveData<List<Character>> = characterRepository.inParty(partyId)
@@ -45,7 +48,7 @@ class GameMasterViewModel(
         }
     }
 
-    suspend fun archiveCharacter(id: CharacterId) {
+    fun archiveCharacter(id: CharacterId) = launch {
         val character = characterRepository.get(id)
 
         character.archive()
@@ -61,7 +64,7 @@ class GameMasterViewModel(
         parties.save(party)
     }
 
-    suspend fun changeTime(change: (DateTime) -> DateTime) {
+    fun changeTime(change: (DateTime) -> DateTime) = launch {
         val party = parties.get(partyId)
 
         party.changeTime(change(party.getTime()))

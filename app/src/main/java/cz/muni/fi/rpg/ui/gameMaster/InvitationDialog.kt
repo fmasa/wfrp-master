@@ -1,13 +1,23 @@
 package cz.muni.fi.rpg.ui.gameMaster
 
-import android.app.Dialog
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
-import android.os.Bundle
-import android.view.View
-import androidx.appcompat.app.AlertDialog
-import androidx.core.os.bundleOf
-import androidx.fragment.app.DialogFragment
+import androidx.compose.foundation.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material.*
+import androidx.compose.runtime.*
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.ContextAmbient
+import androidx.compose.ui.res.loadVectorResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.intl.Locale
+import androidx.compose.ui.text.toUpperCase
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.Dialog
 import com.fasterxml.jackson.databind.json.JsonMapper
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.ktx.analytics
@@ -18,83 +28,99 @@ import com.google.firebase.dynamiclinks.ktx.shortLinkAsync
 import com.google.firebase.ktx.Firebase
 import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.model.domain.party.Invitation
-import cz.muni.fi.rpg.ui.common.parcelableArgument
-import kotlinx.android.synthetic.main.dialog_invitation.view.*
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.tasks.await
-import kotlinx.coroutines.withContext
-import org.koin.android.ext.android.inject
-import timber.log.Timber
+import org.koin.core.context.KoinContextHandler
 
-class InvitationDialog : DialogFragment(), CoroutineScope by CoroutineScope(Dispatchers.Default) {
-    companion object {
-        const val ARGUMENT_INVITATION = "invitation"
+@ExperimentalCoroutinesApi
+@Composable
+fun InvitationDialog2(invitation: Invitation, onDismissRequest: () -> Unit) {
+    Dialog(onDismissRequest = onDismissRequest) {
+        Surface(shape = MaterialTheme.shapes.medium) {
+            Column(Modifier.padding(20.dp)) {
+                Text(
+                    stringResource(R.string.invitation_code_description),
+                    Modifier.fillMaxWidth().padding(top = 16.dp),
+                    style = MaterialTheme.typography.h6,
+                )
 
-        fun newInstance(invitation: Invitation) = InvitationDialog().apply {
-            arguments = bundleOf(ARGUMENT_INVITATION to invitation)
+                val sharingOptions = sharingOptions(invitation).collectAsState().value
+
+                if (sharingOptions == null) {
+                    Box(Modifier.fillMaxWidth().aspectRatio(1f), gravity = ContentGravity.Center) {
+                        CircularProgressIndicator()
+                    }
+                } else {
+                    val context = ContextAmbient.current
+
+                    QrCode(sharingOptions.json)
+
+                    Button(
+                        modifier = Modifier.fillMaxWidth(),
+                        onClick = {
+                            startInvitationSendingIntent(context, invitation, sharingOptions.link)
+                        },
+                    ) {
+                        loadVectorResource(R.drawable.ic_share).resource.resource?.let { Icon(it) }
+                        Text(stringResource(R.string.share_link).toUpperCase(Locale.current))
+                    }
+                }
+            }
+        }
+    }
+}
+
+@ExperimentalCoroutinesApi
+@Composable
+private fun sharingOptions(invitation: Invitation): StateFlow<SharingOptions?> {
+    val jsonMapper: JsonMapper = KoinContextHandler.get().get()
+    val flow = remember { MutableStateFlow<SharingOptions?>(null) }
+
+    launchInComposition {
+        withContext(Dispatchers.IO) {
+            val json = jsonMapper.writeValueAsString(invitation)
+            val link = Firebase.dynamicLinks.shortLinkAsync {
+                link = Uri.parse("https://dnd-master-58fca.web.app/app/invitation?invitation=$json")
+                androidParameters { }
+                domainUriPrefix = "https://wfrp.page.link"
+            }
+
+            flow.value = SharingOptions(
+                link = link.await().shortLink.toString(),
+                json = json,
+            )
         }
     }
 
-    private val invitation: Invitation by parcelableArgument(ARGUMENT_INVITATION)
-    private val jsonMapper: JsonMapper by inject()
+    return flow
+}
 
-    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        val view = requireActivity().layoutInflater.inflate(R.layout.dialog_invitation, null)
+private data class SharingOptions(
+    val link: String,
+    val json: String,
+)
 
-        val dialog = AlertDialog.Builder(requireContext())
-            .setView(view)
-            .create()
+private fun startInvitationSendingIntent(
+    context: Context,
+    invitation: Invitation,
+    link: String
+) {
+    context.startActivity(
+        Intent.createChooser(
+            Intent().apply {
+                action = Intent.ACTION_SEND
+                putExtra(Intent.EXTRA_TEXT, "Join ${invitation.partyName} using this link: $link")
+                type = "text/plain"
+            },
+            "Send link to your friends"
+        )
+    )
 
-        val codeGenerating = launch {
-            val jsonInvitation = withContext(Dispatchers.IO) {
-                jsonMapper.writeValueAsString(invitation)
-            }
-
-            launch(Dispatchers.Main) { view.partyInviteQrCode.drawCode(jsonInvitation) }
-
-            initializeButton(view, invitation, jsonInvitation)
-        }
-
-        dialog.setOnDismissListener { codeGenerating.cancel() }
-
-        return dialog
-    }
-
-    private suspend fun initializeButton(
-        view: View,
-        invitation: Invitation,
-        jsonInvitation: String
-    ) {
-        val link = Firebase.dynamicLinks.shortLinkAsync {
-            link = Uri.parse("https://dnd-master-58fca.web.app/app/invitation?invitation=$jsonInvitation")
-            androidParameters {  }
-            domainUriPrefix = "https://wfrp.page.link"
-        }.await()
-
-        Timber.d("Invitation link was generated: ${link.shortLink}")
-
-        withContext(Dispatchers.Main) {
-            view.shareButton.setOnClickListener {
-                val sendIntent = Intent().apply {
-                    action = Intent.ACTION_SEND
-                    putExtra(
-                        Intent.EXTRA_TEXT,
-                        "Join ${invitation.partyName} using this link: ${link.shortLink}"
-                    )
-                    type = "text/plain"
-                }
-
-                startActivity(Intent.createChooser(sendIntent, "Send link to your friends"))
-
-                Firebase.analytics.logEvent(FirebaseAnalytics.Event.SHARE) {
-                    param(FirebaseAnalytics.Param.CONTENT_TYPE, "party_invitation")
-                    param(FirebaseAnalytics.Param.ITEM_ID, invitation.partyId.toString())
-                    param(FirebaseAnalytics.Param.METHOD, "link")
-                }
-            }
-            view.shareButton.isEnabled = true
-        }
+    Firebase.analytics.logEvent(FirebaseAnalytics.Event.SHARE) {
+        param(FirebaseAnalytics.Param.CONTENT_TYPE, "party_invitation")
+        param(FirebaseAnalytics.Param.ITEM_ID, invitation.partyId.toString())
+        param(FirebaseAnalytics.Param.METHOD, "link")
     }
 }
