@@ -2,6 +2,7 @@ package cz.muni.fi.rpg.ui.gameMaster.encounters
 
 import android.os.Bundle
 import android.view.*
+import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
@@ -39,6 +40,10 @@ class CombatantFragment : PartyScopedFragment(0),
     private val args: CombatantFragmentArgs by navArgs()
 
     override fun getPartyId(): UUID = args.encounterId.partyId
+
+    init {
+        hideActionBar()
+    }
 
     @ExperimentalCoroutinesApi
     override fun onCreateView(

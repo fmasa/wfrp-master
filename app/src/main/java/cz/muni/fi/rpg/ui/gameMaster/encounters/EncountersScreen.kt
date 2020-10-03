@@ -64,7 +64,7 @@ private fun EncounterList(
     }
 
     val icon = loadVectorResource(R.drawable.ic_encounter).resource.resource
-    val iconSize = 40.dp
+    val iconSize = 28.dp
     val itemMargin = 4.dp
     val itemHeight = iconSize + 12.dp * 2
 
@@ -108,6 +108,7 @@ private fun EncounterList(
                     }
                     Text(
                         encounter.name,
+                        modifier = Modifier.padding(start = 8.dp),
                         textAlign = TextAlign.Center,
                         style = MaterialTheme.typography.body1
                     )

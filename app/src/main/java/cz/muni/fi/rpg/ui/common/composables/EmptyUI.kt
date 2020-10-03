@@ -53,14 +53,19 @@ fun EmptyUI(
     @StringRes subTextId: Int? = null,
     size: EmptyUI.Size = EmptyUI.Size.Large
 ) {
-    val image = loadVectorResource(drawableResourceId).resource.resource ?: return
+    val image = loadVectorResource(drawableResourceId).resource.resource
 
     val disabledColor = EmphasisAmbient.current.disabled.applyEmphasis(MaterialTheme.colors.onSurface)
     val text = stringResource(textId)
 
     Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.fillMaxWidth()) {
         Spacer(Modifier.fillMaxHeight(0.35f))
-        Image(image, modifier = size.modifier, colorFilter = ColorFilter.tint(disabledColor))
+
+        if (image == null) {
+            Spacer(size.modifier.aspectRatio(1f))
+        } else {
+            Image(image, modifier = size.modifier, colorFilter = ColorFilter.tint(disabledColor))
+        }
 
         Text(text, style = size.textStyle)
 
