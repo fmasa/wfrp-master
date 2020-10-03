@@ -208,6 +208,13 @@ class CharacterFragment(
                     modifier = modifier,
                 )
             },
+            TabScreen(R.string.title_character_conditions) { character ->
+                CharacterConditionsScreen(
+                    character = character,
+                    viewModel = viewModel,
+                    modifier = modifier,
+                )
+            },
             TabScreen(R.string.title_character_skills) {
                 CharacterSkillsScreen(
                     talentsVm = talentsVm,

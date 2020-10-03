@@ -3,8 +3,7 @@ package cz.muni.fi.rpg.ui.common.composables
 import androidx.annotation.StringRes
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.LazyRowFor
+import androidx.compose.foundation.layout.Box
 import androidx.compose.material.*
 import androidx.compose.material.TabRow as MaterialTabRow
 import androidx.compose.runtime.Composable
@@ -91,25 +90,28 @@ fun <T> ColumnScope.TabRow(
         )
     }
 
-    if (fullWidthTabs) {
-        MaterialTabRow(
-            modifier = Modifier.fillMaxWidth(),
-            selectedTabIndex = animatedSelectedTabIndex,
-            backgroundColor = MaterialTheme.colors.surface,
-            indicator = indicator,
-            tabs = tabs,
-        )
-    } else {
-        ScrollableTabRow(
-            edgePadding = 0.dp,
-            modifier = Modifier.fillMaxWidth(),
-            selectedTabIndex = animatedSelectedTabIndex,
-            backgroundColor = MaterialTheme.colors.surface,
-            indicator = indicator,
-            tabs = tabs,
-        )
-    }
+    Surface(elevation = 6.dp) {
+        val modifier = Modifier.fillMaxWidth()
 
+        if (fullWidthTabs) {
+            MaterialTabRow(
+                modifier = modifier,
+                selectedTabIndex = animatedSelectedTabIndex,
+                backgroundColor = MaterialTheme.colors.surface,
+                indicator = indicator,
+                tabs = tabs,
+            )
+        } else {
+            ScrollableTabRow(
+                edgePadding = 0.dp,
+                modifier = modifier,
+                selectedTabIndex = animatedSelectedTabIndex,
+                backgroundColor = MaterialTheme.colors.surface,
+                indicator = indicator,
+                tabs = tabs,
+            )
+        }
+    }
 }
 
 @Composable

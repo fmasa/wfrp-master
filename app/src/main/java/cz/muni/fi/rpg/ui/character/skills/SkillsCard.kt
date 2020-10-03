@@ -37,7 +37,11 @@ internal fun SkillsCard(
             CardTitle(R.string.title_character_skills)
 
             if (skills.isEmpty()) {
-                EmptyUI(R.string.no_skills, R.drawable.ic_skills, EmptyUI.Size.Small)
+                EmptyUI(
+                    R.string.no_skills,
+                    R.drawable.ic_skills,
+                    size = EmptyUI.Size.Small
+                )
             } else {
                 Column {
                     for (skill in skills) {

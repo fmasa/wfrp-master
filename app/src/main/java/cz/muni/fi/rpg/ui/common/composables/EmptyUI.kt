@@ -35,7 +35,7 @@ object EmptyUI {
         val modifier: Modifier
             get() = when (this) {
                 Small -> Modifier.width(60.dp).padding(top = 16.dp)
-                Large -> Modifier.fillMaxHeight(0.35f)
+                Large -> Modifier.width(64.dp)
             }
 
         @Composable
@@ -50,21 +50,25 @@ object EmptyUI {
 fun EmptyUI(
     @StringRes textId: Int,
     @DrawableRes drawableResourceId: Int,
+    @StringRes subTextId: Int? = null,
     size: EmptyUI.Size = EmptyUI.Size.Large
 ) {
     val image = loadVectorResource(drawableResourceId).resource.resource ?: return
 
-    val color = EmphasisAmbient.current.medium.applyEmphasis(MaterialTheme.colors.onSurface)
+    val disabledColor = EmphasisAmbient.current.disabled.applyEmphasis(MaterialTheme.colors.onSurface)
     val text = stringResource(textId)
 
     Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.fillMaxWidth()) {
         Spacer(Modifier.fillMaxHeight(0.35f))
-        Image(image, modifier = size.modifier, colorFilter = ColorFilter.tint(color))
+        Image(image, modifier = size.modifier, colorFilter = ColorFilter.tint(disabledColor))
 
-        Text(
-            text,
-            style = size.textStyle,
-            color = color,
-        )
+        Text(text, style = size.textStyle)
+
+        subTextId?.let {
+            Text(
+                stringResource(subTextId),
+                color = disabledColor,
+            )
+        }
     }
 }

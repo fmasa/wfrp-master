@@ -95,7 +95,7 @@ private fun InventoryItemsCard(
                 EmptyUI(
                     R.string.no_inventory_item_prompt,
                     R.drawable.ic_inventory,
-                    EmptyUI.Size.Small
+                    size = EmptyUI.Size.Small
                 )
             } else {
                 InventoryItemList(items, onClick = onClick, onRemove = onRemove)

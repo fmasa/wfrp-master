@@ -112,6 +112,9 @@ export abstract class Suite {
             },
             note: "",
             hardyTalent: false,
+            conditions: {
+                conditions: {}
+            }
         }
     }
 

@@ -176,7 +176,11 @@ private fun MainContainer(
     Box(modifier) {
         parties.value?.let {
             if (it.isEmpty()) {
-                EmptyUI(R.string.no_parties_prompt, R.drawable.ic_rally_the_troops)
+                EmptyUI(
+                    textId = R.string.no_parties_prompt,
+                    subTextId = R.string.no_parties_sub_prompt,
+                    drawableResourceId = R.drawable.ic_rally_the_troops,
+                )
                 return@Box
             }
 

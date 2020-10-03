@@ -56,6 +56,7 @@ private fun EncounterList(
     if (encounters.isEmpty()) {
         EmptyUI(
             textId = R.string.no_encounters_prompt,
+            subTextId = R.string.no_encounters_sub_prompt,
             drawableResourceId = R.drawable.ic_encounter
         )
 
