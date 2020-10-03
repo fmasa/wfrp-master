@@ -43,6 +43,10 @@ class CharacterEditFragment : PartyScopedFragment(0),
 
     private val viewModel: CharacterViewModel by viewModel { parametersOf(args.characterId) }
 
+    init {
+        hideActionBar()
+    }
+
     @ExperimentalLayout
     override fun onCreateView(
         inflater: LayoutInflater,
