@@ -138,6 +138,95 @@ class Encounters extends Suite {
         await assertFails(npcsCollection.doc(npc.id).set(npc));
     }
 
+    @test
+    async "GM can initiate combat"() {
+        const party = await this.createValidParty();
+        const encounter = this.validEncounter();
+
+        const partyDocument = this.authedApp(this.validPartyGameMasterId)
+            .collection("parties")
+            .doc(party.id);
+
+        await partyDocument
+            .collection("encounters")
+            .doc(encounter.id)
+            .set(encounter);
+
+        await assertSucceeds(partyDocument.update("activeCombat", {
+            turn: 1,
+            round: 1,
+            encounterId: encounter.id,
+            combatants: [
+                {
+                    characterId: "123",
+                    advantage: 0,
+                    initiative: 1,
+                },
+                {
+                    npcId: uuid(),
+                    advantage: 0,
+                    initiative: 1,
+                }
+            ]}
+        ));
+        await assertSucceeds(partyDocument.update("activeCombat", null));
+    }
+
+    @test
+    async "GM CANNOT initiate combat for encounter that does not exist"() {
+        const party = await this.createValidParty();
+
+        const partyDocument = this.authedApp(this.validPartyGameMasterId)
+            .collection("parties")
+            .doc(party.id);
+
+        await assertFails(partyDocument.update("activeCombat", {
+            turn: 1,
+            round: 1,
+            encounterId: uuid(),
+            combatants: [],
+        }));
+    }
+
+    /**
+     * This is used so that players can change their advantage
+     */
+    @test
+    async "Player can update combatants"() {
+        const playerId = "user123";
+
+        const party = await this.createUserAccessibleParty(playerId);
+        const encounter = this.validEncounter();
+
+        const partyDocument = this.authedApp(this.validPartyGameMasterId)
+            .collection("parties")
+            .doc(party.id);
+
+        await partyDocument
+            .collection("encounters")
+            .doc(encounter.id)
+            .set(encounter);
+
+        await partyDocument.update("activeCombat", {
+            turn: 1,
+            round: 1,
+            encounterId: encounter.id,
+            combatants: [{userId: "123"}, {npcId: uuid()}]
+        });
+
+        await assertSucceeds(
+            this.authedApp(playerId)
+                .collection("parties")
+                .doc(party.id)
+                .update("activeCombat", {
+                    turn: 1,
+                    round: 1,
+                    encounterId: encounter.id,
+                    combatants: [{userId: "123"}, {npcId: uuid()}, {npcId: uuid()}]
+                })
+        );
+    }
+
     private async combatantCollection(): Promise<CollectionReference> {
         const party = await this.createValidParty();
         const encounter = this.validEncounter();

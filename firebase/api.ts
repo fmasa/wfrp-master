@@ -14,6 +14,27 @@ export interface Party {
         minutes: number;
     }
     users: string[];
+    activeCombat: Combat | null;
+}
+
+export interface Combat {
+    encounterId: string;
+    turn: number;
+    round: number;
+    combatants: (CharacterCombatant | NpcCombatant)[]
+}
+
+interface Combatant {
+    advantage: number;
+    initiative: number;
+}
+
+export interface CharacterCombatant extends Combatant {
+    characterId: string;
+}
+
+export interface NpcCombatant extends Combatant {
+    npcId: string;
 }
 
 export interface Stats {

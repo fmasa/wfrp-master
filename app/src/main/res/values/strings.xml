@@ -335,4 +335,7 @@
     <string name="error_import_failed">PDF import failed. Check that chose valid rulebook PDF.</string>
 
     <string name="error_camera_permission_required">Camera permission is required for QR code scanning</string>
+    <string name="n_round">Round %1$d</string>
+    <string name="n_turn">Turn %1$d</string>
+    <string name="next_turn">Next turn</string>
 </resources>

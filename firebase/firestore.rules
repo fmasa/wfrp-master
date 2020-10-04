@@ -11,7 +11,7 @@ service cloud.firestore {
         match /parties/{partyId} {
             allow create: if request.auth != null && isValidNewParty(request.resource.data, request.auth.uid);
             allow write: if request.auth != null
-                         && ((isGameMaster() && isValidPartyEdit()) || onlyUserAdded());
+                         && ((isGameMaster() && isValidPartyEdit()) || onlyUserAdded() || combatantsChange());
 
             //
             // Compendium
@@ -404,11 +404,12 @@ service cloud.firestore {
             }
 
             function isValidNewParty(party, uid) {
-                return ["id", "name", "users", "gameMasterId", "accessCode", "ambitions", "archived", "time"].hasAll(party.keys())
+                return ["id", "name", "users", "gameMasterId", "accessCode", "ambitions", "archived", "time", "activeCombat"].hasAll(party.keys())
                     && party.id is string && party.id == partyId && isValidUuid(party.id)
                     && isValidPartyName(party.name)
                     && party.users == [uid]
                     && party.archived is bool
+                    && (! ("activeCombat" in party) || party.activeCombat == null)
                     && (party.gameMasterId == uid || party.gameMasterId == null)
                     && party.accessCode is string && party.accessCode != ""
                     && (! ("time" in party) || isValidImperialTime(party.time))
@@ -419,11 +420,15 @@ service cloud.firestore {
                 let party = request.resource.data;
                 let diff = resource.data.diff(request.resource.data);
 
-                return ["ambitions", "name", "archived", "time", "users"].toSet().hasAll(diff.affectedKeys())
+                return ["ambitions", "name", "archived", "time", "users", "activeCombat"].toSet().hasAll(diff.affectedKeys())
                     && areAmbitionsValid(party.ambitions)
                     && isValidPartyName(party.name)
                     && party.users.toSet() == resource.data.users.toSet()
                     && (! ("time" in party) || isValidImperialTime(party.time))
+                    && (! ("activeCombat" in party)
+                        || party.activeCombat == null
+                        || isValidCombat(party.activeCombat)
+                    )
                     && party.archived is bool;
             }
 
@@ -432,6 +437,16 @@ service cloud.firestore {
                     && time.keys().toSet() == ["imperialDay", "minutes"].toSet()
                     && time.minutes is int && time.minutes >= 0 && time.minutes < 60 * 24
                     && time.imperialDay is int;
+            }
+
+            function isValidCombat(combat) {
+                return combat is map
+                    && combat.keys().toSet() == ["encounterId", "combatants", "turn", "round"].toSet()
+                    && isValidUuid(combat.encounterId)
+                    && combat.combatants is list
+                    && combat.turn is int && combat.turn > 0 && combat.turn <= combat.combatants.size()
+                    && combat.round is int && combat.round > 0
+                    && exists(/databases/$(database)/documents/parties/$(partyId)/encounters/$(combat.encounterId))
             }
 
             function invitation(party) {
@@ -464,6 +479,19 @@ service cloud.firestore {
                 return diff.affectedKeys() == ["users"].toSet()
                     && hasInvitation(userId, invitation)
                     && originalUsers.toSet().union([userId].toSet()) == newUsers.toSet();
+            }
+
+            function combatantsChange() {
+                let userId = request.auth.uid;
+                let diff = resource.data.diff(request.resource.data);
+                let oldCombat = resource.data.activeCombat;
+                let combat = request.resource.data.activeCombat;
+
+                return ["activeCombat", "users"].toSet().hasAll(diff.affectedKeys())
+                    && request.resource.data.users.toSet() == resource.data.users.toSet()
+                    && userId in request.resource.data.users
+                    && isValidCombat(combat)
+                    && combat.diff(oldCombat).affectedKeys() == ["combatants"].toSet();
             }
         }
 
