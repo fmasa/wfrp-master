@@ -2,7 +2,6 @@ package cz.muni.fi.rpg.ui.gameMaster.encounters
 
 import android.os.Bundle
 import android.view.*
-import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
@@ -22,8 +21,8 @@ import androidx.ui.tooling.preview.Preview
 import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.model.domain.armour.Armor
 import cz.muni.fi.rpg.model.domain.character.Stats
-import cz.muni.fi.rpg.model.domain.encounter.Combatant
-import cz.muni.fi.rpg.model.domain.encounter.CombatantId
+import cz.muni.fi.rpg.model.domain.encounter.Npc
+import cz.muni.fi.rpg.model.domain.encounter.NpcId
 import cz.muni.fi.rpg.model.domain.encounter.Wounds
 import cz.muni.fi.rpg.model.domain.encounters.EncounterId
 import cz.muni.fi.rpg.ui.common.PartyScopedFragment
@@ -34,10 +33,10 @@ import kotlinx.coroutines.*
 import org.koin.core.parameter.parametersOf
 import java.util.*
 
-class CombatantFragment : PartyScopedFragment(0),
+class NpcFragment : PartyScopedFragment(0),
     CoroutineScope by CoroutineScope(Dispatchers.Default) {
 
-    private val args: CombatantFragmentArgs by navArgs()
+    private val args: NpcFragmentArgs by navArgs()
 
     override fun getPartyId(): UUID = args.encounterId.partyId
 
@@ -55,10 +54,10 @@ class CombatantFragment : PartyScopedFragment(0),
             Theme {
                 CombatantDetailScreen(
                     encounterId = args.encounterId,
-                    existingCombatantId = args.combatantId?.let {
-                        CombatantId(args.encounterId, it)
+                    existingNpcId = args.npcId?.let {
+                        NpcId(args.encounterId, it)
                     },
-                    coroutineScope = this@CombatantFragment,
+                    coroutineScope = this@NpcFragment,
                     onBack = { findNavController().popBackStack() }
                 )
             }
@@ -203,14 +202,14 @@ private class FormData(
         )
 
         @Composable
-        fun fromExistingCombatant(combatant: Combatant) = FormData(
-            name = savedInstanceState { combatant.name },
-            note = savedInstanceState { combatant.note },
-            wounds = savedInstanceState { combatant.wounds.max.toString() },
-            enemy = savedInstanceState { combatant.enemy },
-            alive = savedInstanceState { combatant.alive },
-            characteristics = CharacteristicsFormData.fromCharacteristics(combatant.stats),
-            armor = ArmorFormData.fromArmor(combatant.armor),
+        fun fromExistingNpc(npc: Npc) = FormData(
+            name = savedInstanceState { npc.name },
+            note = savedInstanceState { npc.note },
+            wounds = savedInstanceState { npc.wounds.max.toString() },
+            enemy = savedInstanceState { npc.enemy },
+            alive = savedInstanceState { npc.alive },
+            characteristics = CharacteristicsFormData.fromCharacteristics(npc.stats),
+            armor = ArmorFormData.fromArmor(npc.armor),
         )
     }
 
@@ -224,13 +223,13 @@ private class FormData(
 @Composable
 fun CombatantDetailScreen(
     encounterId: EncounterId,
-    existingCombatantId: CombatantId?,
+    existingNpcId: NpcId?,
     coroutineScope: CoroutineScope,
     onBack: () -> Unit,
 ) {
     val viewModel: EncounterDetailViewModel by viewModel { parametersOf(encounterId) }
 
-    if (existingCombatantId == null) {
+    if (existingNpcId == null) {
         val data = FormData.empty()
 
         CombatantCreateScreen(
@@ -238,7 +237,7 @@ fun CombatantDetailScreen(
             onBack = onBack,
             onSave = {
                 coroutineScope.launch {
-                    viewModel.addCombatant(
+                    viewModel.addNpc(
                         name = data.name.value,
                         note = data.note.value,
                         wounds = Wounds.fromMax(data.wounds.value.toInt()),
@@ -255,18 +254,18 @@ fun CombatantDetailScreen(
             }
         )
     } else {
-        val combatant = remember { viewModel.combatantFlow(existingCombatantId) }.collectAsState().value
-        val data = combatant?.let { FormData.fromExistingCombatant(it) }
+        val npc = remember { viewModel.npcFlow(existingNpcId) }.collectAsState().value
+        val data = npc?.let { FormData.fromExistingNpc(it) }
         CombatantEditScreen(
             data,
             onSave = {
-                if (combatant == null || data == null) {
+                if (npc == null || data == null) {
                     return@CombatantEditScreen
                 }
 
                 coroutineScope.launch {
-                    viewModel.updateCombatant(
-                        id = combatant.id,
+                    viewModel.addNpc(
+                        id = npc.id,
                         name = data.name.value,
                         note = data.note.value,
                         maxWounds = data.wounds.value.toInt(),
@@ -298,7 +297,7 @@ private fun CombatantEditScreen(
     Scaffold(
         topBar = {
             CombatantDetailTopBar(
-                title = stringResource(R.string.title_combatant_add),
+                title = stringResource(R.string.title_npc_add),
                 onSave = {
                     if (data == null) {
                         return@CombatantDetailTopBar
@@ -338,7 +337,7 @@ private fun CombatantCreateScreen(
     Scaffold(
         topBar = {
             CombatantDetailTopBar(
-                title = stringResource(R.string.title_combatant_add),
+                title = stringResource(R.string.title_npc_add),
                 onSave = {
                     if (!data.isValid()) {
                         validate.value = true
@@ -367,7 +366,7 @@ private fun CombatantDetailMainUI(data: FormData, validate: Boolean) {
                         label = stringResource(R.string.label_name),
                         value = data.name.value,
                         onValueChange = { data.name.value = it },
-                        maxLength = Combatant.NAME_MAX_LENGTH,
+                        maxLength = Npc.NAME_MAX_LENGTH,
                         validate = validate,
                         rules = Rules(Rules.NotBlank()),
                     )

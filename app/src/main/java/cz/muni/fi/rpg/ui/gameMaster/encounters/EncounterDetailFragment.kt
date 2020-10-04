@@ -24,7 +24,7 @@ import androidx.lifecycle.observe
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import cz.muni.fi.rpg.R
-import cz.muni.fi.rpg.model.domain.encounter.Combatant
+import cz.muni.fi.rpg.model.domain.encounter.Npc
 import cz.muni.fi.rpg.model.domain.encounter.Encounter
 import cz.muni.fi.rpg.model.right
 import cz.muni.fi.rpg.ui.common.PartyScopedFragment
@@ -63,7 +63,7 @@ class EncounterDetailFragment : PartyScopedFragment(0),
                         findNavController().navigate(
                             EncounterDetailFragmentDirections.openCombatantForm(
                                 encounterId = args.encounterId,
-                                combatantId = it?.id
+                                npcId = it?.id
                             )
                         )
                     },
@@ -122,7 +122,7 @@ class EncounterDetailFragment : PartyScopedFragment(0),
 @Composable
 private fun EncounterDetailScreen(
     viewModel: EncounterDetailViewModel,
-    openCombatantDetail: (Combatant?) -> Unit,
+    openCombatantDetail: (Npc?) -> Unit,
 ) {
     Box(Modifier.fillMaxSize().background(MaterialTheme.colors.background).padding(top = 6.dp)) {
         ScrollableColumn(Modifier.fillMaxWidth()) {
@@ -159,15 +159,15 @@ private fun DescriptionCard(viewModel: EncounterDetailViewModel) {
 private fun CombatantsCard(
     viewModel: EncounterDetailViewModel,
     onCreateRequest: () -> Unit,
-    onEditRequest: (Combatant) -> Unit,
-    onRemoveRequest: (Combatant) -> Unit,
+    onEditRequest: (Npc) -> Unit,
+    onRemoveRequest: (Npc) -> Unit,
 ) {
     CardContainer(Modifier.fillMaxWidth().padding(8.dp)) {
-        CardTitle(R.string.title_combatants)
+        CardTitle(R.string.title_npcs)
 
-        val combatants = viewModel.combatants.observeAsState().value
+        val npcs = viewModel.npcs.observeAsState().value
 
-        if (combatants == null) {
+        if (npcs == null) {
             Box(Modifier.fillMaxWidth(), gravity = ContentGravity.Center) {
                 CircularProgressIndicator()
             }
@@ -177,15 +177,15 @@ private fun CombatantsCard(
 
         Column(Modifier.fillMaxWidth()) {
 
-            if (combatants.isEmpty()) {
+            if (npcs.isEmpty()) {
                 EmptyUI(
-                    textId = R.string.no_combatants_prompt,
-                    drawableResourceId = R.drawable.ic_combatant,
+                    textId = R.string.no_npcs_prompt,
+                    drawableResourceId = R.drawable.ic_npc,
                     size = EmptyUI.Size.Small,
                 )
             } else {
-                CombatantsList(
-                    combatants,
+                NpcList(
+                    npcs,
                     onEditRequest = onEditRequest,
                     onRemoveRequest = onRemoveRequest,
                 )
@@ -195,28 +195,28 @@ private fun CombatantsCard(
                 Modifier.fillMaxWidth(),
                 alignment = Alignment.TopCenter
             ) {
-                PrimaryButton(R.string.title_combatant_add, onClick = onCreateRequest)
+                PrimaryButton(R.string.title_npc_add, onClick = onCreateRequest)
             }
         }
     }
 }
 
 @Composable
-private fun CombatantsList(
-    combatants: List<Combatant>,
-    onEditRequest: (Combatant) -> Unit,
-    onRemoveRequest: (Combatant) -> Unit,
+private fun NpcList(
+    npcs: List<Npc>,
+    onEditRequest: (Npc) -> Unit,
+    onRemoveRequest: (Npc) -> Unit,
 ) {
-    for (combatant in combatants) {
+    for (npc in npcs) {
         val emphasis = EmphasisAmbient.current
 
-        ProvideEmphasis(if (combatant.alive) emphasis.high else emphasis.disabled) {
+        ProvideEmphasis(if (npc.alive) emphasis.high else emphasis.disabled) {
             CardItem(
-                name = combatant.name,
-                iconRes = if (combatant.alive) R.drawable.ic_combatant else R.drawable.ic_dead,
-                onClick = { onEditRequest(combatant) },
+                name = npc.name,
+                iconRes = if (npc.alive) R.drawable.ic_npc else R.drawable.ic_dead,
+                onClick = { onEditRequest(npc) },
                 contextMenuItems = listOf(
-                    ContextMenu.Item(stringResource(R.string.remove)) { onRemoveRequest(combatant) }
+                    ContextMenu.Item(stringResource(R.string.remove)) { onRemoveRequest(npc) }
                 ),
             )
         }

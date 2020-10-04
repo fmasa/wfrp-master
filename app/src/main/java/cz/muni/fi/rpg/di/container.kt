@@ -13,7 +13,7 @@ import cz.muni.fi.rpg.model.cache.CharacterRepositoryIdentityMap
 import cz.muni.fi.rpg.model.cache.PartyRepositoryIdentityMap
 import cz.muni.fi.rpg.model.domain.armour.Armor
 import cz.muni.fi.rpg.model.domain.character.*
-import cz.muni.fi.rpg.model.domain.encounter.CombatantRepository
+import cz.muni.fi.rpg.model.domain.encounter.NpcRepository
 import cz.muni.fi.rpg.model.domain.encounter.EncounterRepository
 import cz.muni.fi.rpg.model.domain.encounters.EncounterId
 import cz.muni.fi.rpg.model.domain.inventory.InventoryItemRepository
@@ -30,7 +30,7 @@ import cz.muni.fi.rpg.ui.character.edit.CharacterEditFragment
 import cz.muni.fi.rpg.ui.characterCreation.CharacterCreationFragment
 import cz.muni.fi.rpg.ui.common.AdManager
 import cz.muni.fi.rpg.ui.gameMaster.GameMasterFragment
-import cz.muni.fi.rpg.ui.gameMaster.encounters.CombatantFragment
+import cz.muni.fi.rpg.ui.gameMaster.encounters.NpcFragment
 import cz.muni.fi.rpg.ui.gameMaster.encounters.EncounterDetailFragment
 import cz.muni.fi.rpg.ui.partyList.PartyListFragment
 import cz.muni.fi.rpg.viewModels.*
@@ -87,7 +87,7 @@ val appModule = module {
         FirestoreCharacterFeatureRepository(Feature.ARMOR, get(), Armor(), aggregateMapper())
     }
     single<EncounterRepository> { FirestoreEncounterRepository(get(), aggregateMapper()) }
-    single<CombatantRepository> {  FirestoreCombatantRepository(get(), aggregateMapper()) }
+    single<NpcRepository> {  FirestoreNpcRepository(get(), aggregateMapper()) }
 
     single { AdManager(get()) }
 
@@ -122,5 +122,5 @@ val appModule = module {
     fragment { CharacterEditFragment() }
     fragment { CharacterCreationFragment(get()) }
     fragment { EncounterDetailFragment() }
-    fragment { CombatantFragment() }
+    fragment { NpcFragment() }
 }

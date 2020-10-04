@@ -133,10 +133,10 @@
     <string name="no_encounters_prompt">No encounters</string>
     <string name="no_encounters_sub_prompt">Add first encounter for your party.</string>
     <string name="encounter_icon">Encounter icon</string>
-    <string name="title_combatants">Combatants</string>
-    <string name="no_combatants_prompt">There are no combatants yet. Add first one.</string>
-    <string name="title_combatant_add">New combatant</string>
-    <string name="title_combatant_edit">Edit combatant</string>
+    <string name="title_npcs">NPCs</string>
+    <string name="no_npcs_prompt">There are no NPCs yet. Add first one.</string>
+    <string name="title_npc_add">New NPC</string>
+    <string name="title_npc_edit">Edit NPC</string>
 
     <string name="inventory_item_icon_description">Inventory item icon</string>
     <string name="no_inventory_item_prompt">There is no item in your inventory.</string>
@@ -232,7 +232,7 @@
     <string name="title_checkbox_hardy">Hardy (Increase maximum wounds by TB)</string>
     <string name="question_remove_encounter">Do you really want to remove this encounter?</string>
     <string name="label_enemy">Enemy</string>
-    <string name="title_combatant_attributes">Attributes</string>
+    <string name="title_npc_attributes">Attributes</string>
     <string name="label_shortcut_weapon_skill">WS</string>
     <string name="label_shortcut_ballistic_skill">BS</string>
     <string name="label_shortcut_strength">STR</string>
@@ -243,8 +243,8 @@
     <string name="label_shortcut_intelligence">INT</string>
     <string name="label_shortcut_will_power">WLP</string>
     <string name="label_shortcut_fellowship">FEL</string>
-    <string name="message_combatant_not_found">Combatant does not exist</string>
-    <string name="message_combatant_saved">Combatant was saved</string>
+    <string name="message_npc_not_found">NPC does not exist</string>
+    <string name="message_npc_saved">NPC was saved</string>
     <string name="label_alive">Alive</string>
     <string name="error_party_not_found">Party does not exist</string>
     <string name="party_remove_confirmation">Do you really want to remove this party?</string>

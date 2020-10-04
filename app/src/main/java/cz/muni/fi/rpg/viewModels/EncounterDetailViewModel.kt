@@ -1,6 +1,5 @@
 package cz.muni.fi.rpg.viewModels
 
-import androidx.compose.runtime.emit
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import arrow.core.Either
@@ -17,16 +16,16 @@ import kotlin.math.min
 class EncounterDetailViewModel(
     private val encounterId: EncounterId,
     private val encounters: EncounterRepository,
-    private val combatantRepository: CombatantRepository
+    private val npcRepository: NpcRepository
 ) : ViewModel(), CoroutineScope by CoroutineScope(Dispatchers.IO) {
     val encounter: LiveData<Either<EncounterNotFound, Encounter>> = encounters.getLive(encounterId)
-    val combatants: LiveData<List<Combatant>> = combatantRepository.findByEncounter(encounterId)
+    val npcs: LiveData<List<Npc>> = npcRepository.findByEncounter(encounterId)
 
     suspend fun remove() {
         encounters.remove(encounterId)
     }
 
-    suspend fun addCombatant(
+    suspend fun addNpc(
         name: String,
         note: String,
         wounds: Wounds,
@@ -37,9 +36,9 @@ class EncounterDetailViewModel(
         traits: List<String>,
         trappings: List<String>
     ) {
-        combatantRepository.save(
+        npcRepository.save(
             encounterId,
-            Combatant(
+            Npc(
                 UUID.randomUUID(),
                 name = name,
                 note = note,
@@ -50,12 +49,12 @@ class EncounterDetailViewModel(
                 alive = alive,
                 traits = traits,
                 trappings = trappings,
-                position = combatantRepository.getNextPosition(encounterId)
+                position = npcRepository.getNextPosition(encounterId)
             )
         )
     }
 
-    suspend fun updateCombatant(
+    suspend fun addNpc(
         id: UUID,
         name: String,
         note: String,
@@ -67,12 +66,12 @@ class EncounterDetailViewModel(
         traits: List<String>,
         trappings: List<String>
     ) {
-        val combatant = combatantRepository.get(CombatantId(encounterId, id))
+        val npc = npcRepository.get(NpcId(encounterId, id))
 
-        combatant.update(
+        npc.update(
             name,
             note,
-            Wounds(min(combatant.wounds.current, maxWounds), maxWounds),
+            Wounds(min(npc.wounds.current, maxWounds), maxWounds),
             stats,
             armor,
             enemy,
@@ -81,24 +80,17 @@ class EncounterDetailViewModel(
             trappings
         )
 
-        combatantRepository.save(encounterId, combatant)
-    }
-
-    /**
-     * @throws CombatantNotFound
-     */
-    suspend fun getCombatant(combatantId: UUID): Combatant {
-        return combatantRepository.get(CombatantId(encounterId, combatantId))
+        npcRepository.save(encounterId, npc)
     }
 
     @ExperimentalCoroutinesApi
-    fun combatantFlow(combatantId: CombatantId): StateFlow<Combatant?> {
-        val flow = MutableStateFlow<Combatant?>(null)
+    fun npcFlow(npcId: NpcId): StateFlow<Npc?> {
+        val flow = MutableStateFlow<Npc?>(null)
 
         launch {
             try {
-                val combatant = combatantRepository.get(combatantId)
-                withContext(Dispatchers.Main) { flow.value = combatant }
+                val npc = npcRepository.get(npcId)
+                withContext(Dispatchers.Main) { flow.value = npc }
             } catch (e: Throwable) {
                 Timber.e(e)
                 throw e
@@ -108,7 +100,7 @@ class EncounterDetailViewModel(
         return flow
     }
 
-    fun removeCombatant(combatantId: UUID) = launch {
-        combatantRepository.remove(CombatantId(encounterId, combatantId))
+    fun removeCombatant(npcId: UUID) = launch {
+        npcRepository.remove(NpcId(encounterId, npcId))
     }
 }

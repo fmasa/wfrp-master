@@ -5,7 +5,7 @@ import cz.muni.fi.rpg.model.domain.character.CurrentConditions
 import cz.muni.fi.rpg.model.domain.character.Stats
 import java.util.*
 
-class Combatant(
+class Npc(
     val id: UUID,
     name: String,
     note: String,

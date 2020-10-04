@@ -6,4 +6,4 @@ import kotlinx.android.parcel.Parcelize
 import java.util.*
 
 @Parcelize
-data class CombatantId(val encounterId: EncounterId, val combatantId: UUID) : Parcelable
+data class NpcId(val encounterId: EncounterId, val npcId: UUID) : Parcelable

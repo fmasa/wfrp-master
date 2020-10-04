@@ -11,24 +11,23 @@ import cz.muni.fi.rpg.model.firestore.*
 import cz.muni.fi.rpg.model.firestore.AggregateMapper
 import cz.muni.fi.rpg.model.firestore.QueryLiveData
 import kotlinx.coroutines.tasks.await
-import java.util.*
 
-internal class FirestoreCombatantRepository(
+internal class FirestoreNpcRepository(
     private val firestore: FirebaseFirestore,
-    private val mapper: AggregateMapper<Combatant>
-) : CombatantRepository {
-    override fun findByEncounter(encounterId: EncounterId): LiveData<List<Combatant>> {
+    private val mapper: AggregateMapper<Npc>
+) : NpcRepository {
+    override fun findByEncounter(encounterId: EncounterId): LiveData<List<Npc>> {
         return QueryLiveData(
-            combatants(encounterId).orderBy("position", Query.Direction.ASCENDING),
+            npcs(encounterId).orderBy("position", Query.Direction.ASCENDING),
             mapper
         )
     }
 
-    override suspend fun get(id: CombatantId): Combatant {
+    override suspend fun get(id: NpcId): Npc {
         try {
             return mapper.fromDocumentSnapshot(
-                combatants(id.encounterId)
-                    .document(id.combatantId.toString())
+                npcs(id.encounterId)
+                    .document(id.npcId.toString())
                     .get()
                     .await()
             )
@@ -37,26 +36,26 @@ internal class FirestoreCombatantRepository(
         }
     }
 
-    override suspend fun save(encounterId: EncounterId, vararg combatants: Combatant) {
-        val collection = combatants(encounterId)
+    override suspend fun save(encounterId: EncounterId, vararg npcs: Npc) {
+        val collection = npcs(encounterId)
 
         firestore.runTransaction { transaction ->
-            combatants.forEach { combatant ->
+            npcs.forEach { npc ->
                 transaction.set(
-                    collection.document(combatant.id.toString()),
-                    mapper.toDocumentData(combatant),
+                    collection.document(npc.id.toString()),
+                    mapper.toDocumentData(npc),
                     SetOptions.merge()
                 )
             }
         }.await()
     }
 
-    override suspend fun remove(id: CombatantId) {
-        combatants(id.encounterId).document(id.combatantId.toString()).delete().await()
+    override suspend fun remove(id: NpcId) {
+        npcs(id.encounterId).document(id.npcId.toString()).delete().await()
     }
 
     override suspend fun getNextPosition(encounterId: EncounterId): Int {
-        val snapshot = combatants(encounterId)
+        val snapshot = npcs(encounterId)
             .orderBy("position", Query.Direction.DESCENDING)
             .get()
             .await()
@@ -67,10 +66,10 @@ internal class FirestoreCombatantRepository(
         return lastPosition + 1
     }
 
-    private fun combatants(encounterId: EncounterId) =
+    private fun npcs(encounterId: EncounterId) =
         firestore.collection(COLLECTION_PARTIES)
             .document(encounterId.partyId.toString())
             .collection(COLLECTION_ENCOUNTERS)
             .document(encounterId.encounterId.toString())
-            .collection(COLLECTION_COMBATANTS)
+            .collection(COLLECTION_NPCS)
 }
