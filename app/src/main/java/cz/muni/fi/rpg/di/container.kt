@@ -12,6 +12,9 @@ import cz.muni.fi.rpg.model.cache.CharacterRepositoryIdentityMap
 import cz.muni.fi.rpg.model.cache.PartyRepositoryIdentityMap
 import cz.muni.fi.rpg.model.domain.armour.Armor
 import cz.muni.fi.rpg.model.domain.character.*
+import cz.muni.fi.rpg.model.domain.compendium.Skill
+import cz.muni.fi.rpg.model.domain.compendium.Spell
+import cz.muni.fi.rpg.model.domain.compendium.Talent
 import cz.muni.fi.rpg.model.domain.encounter.NpcRepository
 import cz.muni.fi.rpg.model.domain.encounter.EncounterRepository
 import cz.muni.fi.rpg.model.domain.encounters.EncounterId
@@ -24,6 +27,7 @@ import cz.muni.fi.rpg.model.domain.talents.TalentRepository
 import cz.muni.fi.rpg.model.firestore.*
 import cz.muni.fi.rpg.model.firestore.jackson.JacksonAggregateMapper
 import cz.muni.fi.rpg.model.firestore.repositories.*
+import cz.muni.fi.rpg.model.firestore.repositories.compendium.FirestoreCompendium
 import cz.muni.fi.rpg.ui.common.AdManager
 import cz.muni.fi.rpg.viewModels.*
 import org.koin.android.viewmodel.dsl.viewModel
@@ -64,7 +68,7 @@ val appModule = module {
     /**
      * Repositories
      */
-    single<InventoryItemRepository> {FirestoreInventoryItemRepository(get(), aggregateMapper()) }
+    single<InventoryItemRepository> { FirestoreInventoryItemRepository(get(), aggregateMapper()) }
     single<CharacterRepository> {
         CharacterRepositoryIdentityMap(10, FirestoreCharacterRepository(get(), aggregateMapper()))
     }
@@ -78,7 +82,7 @@ val appModule = module {
         FirestoreCharacterFeatureRepository(Feature.ARMOR, get(), Armor(), aggregateMapper())
     }
     single<EncounterRepository> { FirestoreEncounterRepository(get(), aggregateMapper()) }
-    single<NpcRepository> {  FirestoreNpcRepository(get(), aggregateMapper()) }
+    single<NpcRepository> { FirestoreNpcRepository(get(), aggregateMapper()) }
 
     single { AdManager(get()) }
 
@@ -88,7 +92,7 @@ val appModule = module {
     viewModel { (characterId: CharacterId) -> ArmorViewModel(characterId, get()) }
     viewModel { (characterId: CharacterId) -> CharacterStatsViewModel(characterId, get()) }
     viewModel { (characterId: CharacterId) -> CharacterMiscViewModel(characterId, get(), get()) }
-    viewModel { (characterId: CharacterId) -> CharacterViewModel(characterId, get())}
+    viewModel { (characterId: CharacterId) -> CharacterViewModel(characterId, get()) }
     viewModel { (partyId: UUID) -> GameMasterViewModel(partyId, get(), get()) }
     viewModel { (partyId: UUID) -> EncountersViewModel(partyId, get()) }
     viewModel { (partyId: UUID) -> PartyViewModel(partyId, get()) }
@@ -101,6 +105,12 @@ val appModule = module {
     viewModel { JoinPartyViewModel(get()) }
     viewModel { PartyListViewModel(get()) }
     viewModel { SettingsViewModel(get()) }
-    viewModel { (partyId: UUID) -> CharacterCreationViewModel(partyId, get())}
-    viewModel { (partyId: UUID) -> CompendiumViewModel(partyId)}
+    viewModel { (partyId: UUID) -> CharacterCreationViewModel(partyId, get()) }
+    viewModel { (partyId: UUID) -> CompendiumViewModel(
+        partyId,
+        FirestoreCompendium<Skill>(COLLECTION_COMPENDIUM_SKILLS, get(), aggregateMapper()),
+        FirestoreCompendium<Talent>(COLLECTION_COMPENDIUM_TALENTS, get(), aggregateMapper()),
+        FirestoreCompendium<Spell>(COLLECTION_SPELLS, get(), aggregateMapper()),
+    )
+    }
 }
