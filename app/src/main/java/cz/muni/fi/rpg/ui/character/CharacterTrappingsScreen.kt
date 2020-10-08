@@ -13,23 +13,33 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import cz.muni.fi.rpg.R
+import cz.muni.fi.rpg.model.domain.character.CharacterId
 import cz.muni.fi.rpg.model.domain.common.Money
 import cz.muni.fi.rpg.model.domain.inventory.InventoryItem
 import cz.muni.fi.rpg.model.right
 import cz.muni.fi.rpg.ui.character.inventory.ArmorCard
+import cz.muni.fi.rpg.ui.character.inventory.InventoryItemDialog
+import cz.muni.fi.rpg.ui.character.inventory.TransactionDialog
 import cz.muni.fi.rpg.ui.common.composables.*
 import cz.muni.fi.rpg.viewModels.InventoryViewModel
+import org.koin.core.parameter.parametersOf
 
 @Composable
-fun CharacterTrappingsScreen(
+internal fun CharacterTrappingsScreen(
+    characterId: CharacterId,
     modifier: Modifier,
-    viewModel: InventoryViewModel,
-    onMoneyDialogRequest: () -> Unit,
-    onItemDialogRequest: (InventoryItem?) -> Unit,
 ) {
+    val fragmentManager = fragmentManager()
+    val viewModel: InventoryViewModel by viewModel { parametersOf(characterId) }
+
     ScrollableColumn(modifier) {
         viewModel.money.observeAsState().value?.let {
-            CurrentMoney(value = it, onClick = onMoneyDialogRequest)
+            CurrentMoney(
+                value = it,
+                onClick = {
+                    TransactionDialog.newInstance(characterId).show(fragmentManager, null)
+                }
+            )
         }
 
         viewModel.armor.right().observeAsState().value?.let { armor ->
@@ -38,9 +48,13 @@ fun CharacterTrappingsScreen(
 
         InventoryItemsCard(
             viewModel,
-            onClick = onItemDialogRequest,
+            onClick = {
+                InventoryItemDialog.newInstance(characterId, it).show(fragmentManager, null)
+            },
             onRemove = { viewModel.removeInventoryItem(it) },
-            onNewItemButtonClicked = { onItemDialogRequest(null) },
+            onNewItemButtonClicked = {
+                InventoryItemDialog.newInstance(characterId, null).show(fragmentManager, null)
+            },
         )
 
         Spacer(Modifier.padding(bottom = 20.dp))

@@ -7,6 +7,6 @@ import org.koin.android.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.ParametersDefinition
 
 @Composable
-inline fun <reified T : ViewModel> viewModel(noinline parameters: ParametersDefinition): Lazy<T> {
+inline fun <reified T : ViewModel> viewModel(noinline parameters: ParametersDefinition? = null): Lazy<T> {
     return ViewModelStoreOwnerAmbient.current.viewModel<T>(parameters = parameters)
 }

@@ -1,73 +1,32 @@
 package cz.muni.fi.rpg.ui.character.edit
 
-import android.os.Bundle
-import android.view.*
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.savedinstancestate.savedInstanceState
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.ComposeView
-import androidx.compose.ui.platform.DensityAmbient
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.intl.Locale
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.toUpperCase
 import androidx.compose.ui.unit.dp
-import androidx.navigation.fragment.findNavController
-import androidx.navigation.fragment.navArgs
 import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.model.domain.character.Character
 import cz.muni.fi.rpg.model.right
 import cz.muni.fi.rpg.ui.characterCreation.CharacterBasicInfoForm
 import cz.muni.fi.rpg.ui.characterCreation.CharacterCharacteristicsForm
-import cz.muni.fi.rpg.ui.common.PartyScopedFragment
 import cz.muni.fi.rpg.ui.common.composables.*
+import cz.muni.fi.rpg.ui.router.Route
+import cz.muni.fi.rpg.ui.router.Routing
 import cz.muni.fi.rpg.viewModels.CharacterViewModel
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import org.koin.android.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 import java.util.*
-
-class CharacterEditFragment : PartyScopedFragment(0),
-    CoroutineScope by CoroutineScope(Dispatchers.Default) {
-
-    private val args: CharacterEditFragmentArgs by navArgs()
-
-    private val viewModel: CharacterViewModel by viewModel { parametersOf(args.characterId) }
-
-    init {
-        hideActionBar()
-    }
-
-    @ExperimentalLayout
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ) = ComposeView(requireContext()).apply {
-        setContent {
-            Theme {
-                CharacterEditScreen(
-                    coroutineScope = this@CharacterEditFragment,
-                    viewModel = viewModel,
-                    onBack = {
-                        findNavController().popBackStack()
-                    }
-                )
-            }
-        }
-    }
-
-    override fun getPartyId(): UUID = args.characterId.partyId
-}
 
 private object CharacterEditScreen {
     @Stable
@@ -108,11 +67,10 @@ private object CharacterEditScreen {
 
 @ExperimentalLayout
 @Composable
-fun CharacterEditScreen(
-    coroutineScope: CoroutineScope,
-    viewModel: CharacterViewModel,
-    onBack: () -> Unit
-) {
+fun CharacterEditScreen(routing: Routing<Route.CharacterEdit>) {
+    val viewModel: CharacterViewModel by viewModel { parametersOf(routing.route.characterId) }
+    val coroutineScope = rememberCoroutineScope()
+
     val character = viewModel.character.right().observeAsState().value
 
     val submitEnabled = remember { mutableStateOf(true) }
@@ -127,15 +85,15 @@ fun CharacterEditScreen(
                     if (formData?.isValid() == true) {
                         submitEnabled.value = false
 
-                        coroutineScope.launch {
+                        coroutineScope.launch(Dispatchers.IO) {
                             updateCharacter(viewModel, formData)
-                            withContext(Dispatchers.Main) { onBack() }
+                            withContext(Dispatchers.Main) { routing.backStack.pop() }
                         }
                     } else {
                         validate.value = true
                     }
                 },
-                onBack = onBack,
+                onBack = { routing.backStack.pop() },
                 actionsEnabled = submitEnabled.value && character != null
             )
         }
@@ -207,11 +165,7 @@ private fun CharacterEditTopBar(
         title = {
             Column {
                 Text(title)
-                Text(
-                    stringResource(R.string.subtitle_edit_character),
-                    style = MaterialTheme.typography.caption,
-                    color = emphasis.medium.applyEmphasis(contentColor()),
-                )
+                Subtitle(stringResource(R.string.subtitle_edit_character))
             }
         },
         actions = {

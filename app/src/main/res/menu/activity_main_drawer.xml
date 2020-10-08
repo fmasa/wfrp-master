@@ -5,15 +5,17 @@
 
     <group android:checkableBehavior="single">
         <item
-            android:id="@+id/nav_settings"
+            android:checkable="false"
+            android:onClick="openSettings"
             android:icon="@drawable/ic_settings"
             android:title="@string/settings"/>
 
     </group>
     <group android:checkableBehavior="single">
         <item
+            android:checkable="false"
             android:icon="@drawable/ic_info"
-            android:id="@+id/nav_about"
+            android:onClick="openAbout"
             android:orderInCategory="100"
             android:title="@string/about" />
 

@@ -1,6 +1,9 @@
 package cz.muni.fi.rpg.ui.character
 
+import android.content.Context
+import android.view.LayoutInflater
 import androidx.annotation.StringRes
+import androidx.appcompat.app.AlertDialog
 import androidx.compose.foundation.ScrollableColumn
 import androidx.compose.foundation.Text
 import androidx.compose.foundation.background
@@ -9,36 +12,58 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.ContextAmbient
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.model.domain.character.Character
+import cz.muni.fi.rpg.model.domain.character.CharacterId
 import cz.muni.fi.rpg.model.domain.common.Ambitions
-import cz.muni.fi.rpg.ui.common.composables.AmbitionsCard
-import cz.muni.fi.rpg.ui.common.composables.CardContainer
-import cz.muni.fi.rpg.ui.common.composables.CardTitle
+import cz.muni.fi.rpg.ui.common.ChangeAmbitionsDialog
+import cz.muni.fi.rpg.ui.common.composables.*
+import cz.muni.fi.rpg.ui.views.TextInput
 import cz.muni.fi.rpg.viewModels.CharacterMiscViewModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import org.koin.core.parameter.parametersOf
 
 @Composable
-fun CharacterMiscScreen(
+internal fun CharacterMiscScreen(
+    characterId: CharacterId,
     character: Character,
     modifier: Modifier = Modifier,
-    viewModel: CharacterMiscViewModel,
-    onXpButtonClick: (Int) -> Unit,
-    onCharacterAmbitionsClick: (Ambitions) -> Unit
 ) {
+    val context = ContextAmbient.current
+    val viewModel: CharacterMiscViewModel by viewModel { parametersOf(characterId) }
+    val coroutineScope = rememberCoroutineScope()
+
     ScrollableColumn(modifier.background(MaterialTheme.colors.background)) {
         MainCard(character)
-        XpPointsCard(character.getPoints().experience, onChangeButtonClicked = onXpButtonClick)
+        XpPointsCard(
+            character.getPoints().experience,
+            onChangeButtonClicked = { xpPoints ->
+                with(coroutineScope) { openExperiencePointsDialog(context, viewModel, xpPoints) }
+            }
+        )
+
+        val fragmentManager = fragmentManager()
+        val ambitionsDialogTitle = stringResource(R.string.title_character_ambitions)
 
         AmbitionsCard(
             R.string.title_character_ambitions,
             character.getAmbitions(),
             modifier = Modifier
                 .padding(horizontal = 8.dp)
-                .clickable(onClick = { onCharacterAmbitionsClick(character.getAmbitions()) })
+                .clickable(onClick = {
+                    ChangeAmbitionsDialog
+                        .newInstance(ambitionsDialogTitle, character.getAmbitions())
+                        .setOnSaveListener { viewModel.updateCharacterAmbitions(it) }
+                        .show(fragmentManager, "ChangeAmbitionsDialog")
+                })
         )
 
         viewModel.party.observeAsState().value?.let {
@@ -114,5 +139,27 @@ private fun Card(modifier: Modifier = Modifier, content: @Composable () -> Unit)
         Box(modifier = Modifier.fillMaxWidth().padding(horizontal = 8.dp)) {
             content()
         }
+        R.drawable.common_google_signin_btn_icon_dark
     }
+}
+
+
+private fun CoroutineScope.openExperiencePointsDialog(
+    context: Context,
+    viewModel: CharacterMiscViewModel,
+    currentXpPoints: Int
+) {
+    val view = LayoutInflater.from(context).inflate(R.layout.dialog_xp, null, false)
+
+    val xpPointsInput = view.findViewById<TextInput>(R.id.xpPointsInput)
+    xpPointsInput.setDefaultValue(currentXpPoints.toString())
+
+    AlertDialog.Builder(context, R.style.FormDialog)
+        .setTitle("Change amount of XP")
+        .setView(view)
+        .setPositiveButton(R.string.button_save) { _, _ ->
+            val xpPoints = xpPointsInput.getValue().toIntOrNull() ?: 0
+            launch(Dispatchers.IO) { viewModel.updateExperiencePoints(xpPoints) }
+        }.create()
+        .show()
 }

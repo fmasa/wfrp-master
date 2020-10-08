@@ -4,55 +4,99 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.view.MenuItem
-import androidx.appcompat.widget.Toolbar
+import androidx.compose.foundation.layout.ExperimentalLayout
+import androidx.compose.runtime.Providers
+import androidx.compose.ui.platform.ComposeView
 import androidx.drawerlayout.widget.DrawerLayout
-import androidx.navigation.findNavController
-import androidx.navigation.ui.AppBarConfiguration
-import androidx.navigation.ui.navigateUp
-import androidx.navigation.ui.setupActionBarWithNavController
-import androidx.navigation.ui.setupWithNavController
-import com.google.android.gms.ads.MobileAds
-import com.google.android.material.navigation.NavigationView
+import com.github.zsoltk.compose.backpress.AmbientBackPressHandler
+import com.github.zsoltk.compose.backpress.BackPressHandler
+import com.github.zsoltk.compose.router.BackStack
+import com.github.zsoltk.compose.router.Router
 import cz.muni.fi.rpg.R
+import cz.muni.fi.rpg.ui.character.CharacterDetailScreen
+import cz.muni.fi.rpg.ui.character.edit.CharacterEditScreen
+import cz.muni.fi.rpg.ui.characterCreation.CharacterCreationScreen
+import cz.muni.fi.rpg.ui.common.AboutScreen
 import cz.muni.fi.rpg.ui.common.AdManager
+import cz.muni.fi.rpg.ui.common.composables.Theme
+import cz.muni.fi.rpg.ui.gameMaster.GameMasterScreen
+import cz.muni.fi.rpg.ui.gameMaster.encounters.EncounterDetailScreen
+import cz.muni.fi.rpg.ui.gameMaster.encounters.NpcCreationScreen
+import cz.muni.fi.rpg.ui.gameMaster.encounters.NpcDetailScreen
+import cz.muni.fi.rpg.ui.partyList.PartyListScreen
+import cz.muni.fi.rpg.ui.router.Route
+import cz.muni.fi.rpg.ui.router.Routing
+import cz.muni.fi.rpg.ui.settings.SettingsScreen
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.koin.android.ext.android.inject
 import org.koin.androidx.fragment.android.setupKoinFragmentFactory
-
 
 class MainActivity : AuthenticatedActivity(R.layout.activity_main) {
 
     private val adManager: AdManager by inject()
 
-    private lateinit var appBarConfiguration: AppBarConfiguration
+    private val backPressHandler = BackPressHandler()
 
+    private lateinit var backStack: BackStack<Route>
+
+    @ExperimentalLayout
+    @ExperimentalCoroutinesApi
     override fun onCreate(savedInstanceState: Bundle?) {
         setupKoinFragmentFactory()
 
         super.onCreate(savedInstanceState)
 
-        val toolbar: Toolbar = findViewById(R.id.toolbar)
-        setSupportActionBar(toolbar)
-
-        val drawerLayout: DrawerLayout = findViewById(R.id.drawer_layout)
-        val navView: NavigationView = findViewById(R.id.nav_view)
-        val navController = findNavController(R.id.nav_host_fragment)
-        navController.addOnDestinationChangedListener { _, _, _ ->
-            supportActionBar?.subtitle = null
-        }
-
-        appBarConfiguration = AppBarConfiguration(
-            setOf(R.id.nav_party_list, R.id.nav_character, R.id.nav_game_master),
-            drawerLayout
-        )
-
-        setupActionBarWithNavController(navController, appBarConfiguration)
-        navView.setupWithNavController(navController)
         adManager.initialize()
+
+        findViewById<ComposeView>(R.id.compose).setContent {
+            Providers(AmbientBackPressHandler provides backPressHandler) {
+                Theme {
+                    Router<Route>(defaultRouting = Route.PartyList) { backStack ->
+                        this.backStack = backStack
+
+                        // This val is there just to force `when` to be exhaustive
+                        val nothing = when (val route = backStack.last()) {
+                            is Route.PartyList -> {
+                                PartyListScreen(Routing(route, backStack), getUserId())
+                            }
+                            is Route.GameMaster -> {
+                                GameMasterScreen(Routing(route, backStack), adManager)
+                            }
+                            is Route.About -> {
+                                AboutScreen(Routing(route, backStack))
+                            }
+                            is Route.CharacterCreation -> {
+                                CharacterCreationScreen(Routing(route, backStack))
+                            }
+                            is Route.CharacterDetail -> {
+                                CharacterDetailScreen(Routing(route, backStack), adManager)
+                            }
+                            is Route.CharacterEdit -> {
+                                CharacterEditScreen(Routing(route, backStack))
+                            }
+                            is Route.EncounterDetail -> {
+                                EncounterDetailScreen(Routing(route, backStack))
+                            }
+                            is Route.NpcDetail -> {
+                                NpcDetailScreen(Routing(route, backStack))
+                            }
+                            is Route.NpcCreation -> {
+                                NpcCreationScreen(Routing(route, backStack))
+                            }
+                            is Route.Settings -> {
+                                SettingsScreen(Routing(route, backStack))
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 
-    override fun onSupportNavigateUp(): Boolean {
-        val navController = findNavController(R.id.nav_host_fragment)
-        return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
+    override fun onBackPressed() {
+        if (!backPressHandler.handle()) {
+            super.onBackPressed()
+        }
     }
 
     @Suppress("UNUSED_PARAMETER")
@@ -83,5 +127,23 @@ class MainActivity : AuthenticatedActivity(R.layout.activity_main) {
         }
 
         startActivity(intent)
+    }
+
+    @Suppress("UNUSED_PARAMETER")
+    fun openAbout(item: MenuItem) {
+        if (backStack.last() != Route.About) {
+            backStack.push(Route.About)
+        }
+
+        findViewById<DrawerLayout>(R.id.drawer_layout).close()
+    }
+
+    @Suppress("UNUSED_PARAMETER")
+    fun openSettings(item: MenuItem) {
+        if (backStack.last() != Route.Settings) {
+            backStack.push(Route.Settings)
+        }
+
+        findViewById<DrawerLayout>(R.id.drawer_layout).close()
     }
 }

@@ -2,7 +2,6 @@ package cz.muni.fi.rpg.ui.joinParty
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.commit
 import com.fasterxml.jackson.databind.json.JsonMapper
 import com.fasterxml.jackson.module.kotlin.readValue
 import com.google.firebase.dynamiclinks.ktx.dynamicLinks
@@ -29,7 +28,10 @@ class InvitationLinkActivity : AppCompatActivity(R.layout.activity_invitation_li
     override fun onStart() {
         super.onStart()
 
-        supportFragmentManager.commit { add(AuthenticationFragment(), "Authentication") }
+        supportFragmentManager.beginTransaction().apply {
+            add(AuthenticationFragment(), "Authentication")
+            commit()
+        }
     }
 
     override fun onAuthenticated(userId: String) {

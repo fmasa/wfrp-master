@@ -23,7 +23,7 @@ import org.koin.core.parameter.parametersOf
 import timber.log.Timber
 import java.util.*
 
-class RenamePartyDialog : DialogFragment(), CoroutineScope by CoroutineScope(Dispatchers.Main) {
+internal class RenamePartyDialog : DialogFragment(), CoroutineScope by CoroutineScope(Dispatchers.Main) {
     companion object {
         fun newInstance(partyId: UUID, currentName: String) = RenamePartyDialog().apply {
             arguments = bundleOf(

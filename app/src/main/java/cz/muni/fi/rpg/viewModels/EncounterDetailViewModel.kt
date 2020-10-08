@@ -54,7 +54,7 @@ class EncounterDetailViewModel(
         )
     }
 
-    suspend fun addNpc(
+    suspend fun updateNpc(
         id: UUID,
         name: String,
         note: String,

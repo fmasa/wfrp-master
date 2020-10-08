@@ -1,6 +1,5 @@
 package cz.muni.fi.rpg.di
 
-import androidx.navigation.fragment.NavHostFragment
 import com.fasterxml.jackson.databind.json.JsonMapper
 import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
 import com.fasterxml.jackson.module.kotlin.registerKotlinModule
@@ -25,17 +24,9 @@ import cz.muni.fi.rpg.model.domain.talents.TalentRepository
 import cz.muni.fi.rpg.model.firestore.*
 import cz.muni.fi.rpg.model.firestore.jackson.JacksonAggregateMapper
 import cz.muni.fi.rpg.model.firestore.repositories.*
-import cz.muni.fi.rpg.ui.character.*
-import cz.muni.fi.rpg.ui.character.edit.CharacterEditFragment
-import cz.muni.fi.rpg.ui.characterCreation.CharacterCreationFragment
 import cz.muni.fi.rpg.ui.common.AdManager
-import cz.muni.fi.rpg.ui.gameMaster.GameMasterFragment
-import cz.muni.fi.rpg.ui.gameMaster.encounters.NpcFragment
-import cz.muni.fi.rpg.ui.gameMaster.encounters.EncounterDetailFragment
-import cz.muni.fi.rpg.ui.partyList.PartyListFragment
 import cz.muni.fi.rpg.viewModels.*
 import org.koin.android.viewmodel.dsl.viewModel
-import org.koin.androidx.fragment.dsl.fragment
 import org.koin.dsl.module
 import java.util.*
 
@@ -111,16 +102,4 @@ val appModule = module {
     viewModel { PartyListViewModel(get()) }
     viewModel { SettingsViewModel(get()) }
     viewModel { (partyId: UUID) -> CharacterCreationViewModel(partyId, get())}
-
-    /**
-     * Fragments
-     */
-    fragment { CharacterFragment(get()) }
-    fragment { GameMasterFragment(get()) }
-    fragment { NavHostFragment() }
-    fragment { PartyListFragment() }
-    fragment { CharacterEditFragment() }
-    fragment { CharacterCreationFragment(get()) }
-    fragment { EncounterDetailFragment() }
-    fragment { NpcFragment() }
 }

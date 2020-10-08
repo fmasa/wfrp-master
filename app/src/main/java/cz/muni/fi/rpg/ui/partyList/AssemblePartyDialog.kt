@@ -34,19 +34,14 @@ class AssemblePartyDialog : DialogFragment(), CoroutineScope by CoroutineScope(D
     private val auth: AuthenticationViewModel by viewModel()
     private var pendingJob: Job? = null
 
-    private lateinit var listener: PartyCreationListener
+    private var listener: (Party) -> Unit = {}
 
     private lateinit var form: Form
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    fun setOnSuccessListener(listener: (Party) -> Unit): AssemblePartyDialog {
+        this.listener = listener;
 
-        val parentFragment = parentFragment
-        check(parentFragment is PartyCreationListener) {
-            "$parentFragment must implement PartyCreationListener"
-        }
-
-        listener = parentFragment
+        return this
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
@@ -112,7 +107,7 @@ class AssemblePartyDialog : DialogFragment(), CoroutineScope by CoroutineScope(D
                     param("id", party.id.toString())
                 }
 
-                withContext(Dispatchers.Main) { listener.onSuccessfulCreation(party) }
+                withContext(Dispatchers.Main) { listener(party) }
             } catch (e: CouldNotConnectToBackend) {
                 Timber.i(e, "User could not assemble party, because (s)he is offline")
                 longToast(getString(R.string.error_party_creation_no_connection))

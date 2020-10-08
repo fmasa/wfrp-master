@@ -4,7 +4,6 @@ apply plugin: 'kotlin-android-extensions'
 apply plugin: 'com.google.gms.google-services'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'com.google.firebase.crashlytics'
-apply plugin: "androidx.navigation.safeargs.kotlin"
 
 def playStoreJsonFile = file('./play_store_credentials.json')
 
@@ -122,6 +121,9 @@ dependencies {
     implementation "androidx.compose.material:material:$compose_version"
     implementation "androidx.ui:ui-tooling:$compose_version"
 
+    // Jetpack Compose router
+    implementation 'com.github.zsoltk:compose-router:0.19.0'
+
     // Firebase-related dependencies
     implementation 'com.google.firebase:firebase-analytics:17.4.4'
     implementation 'com.firebaseui:firebase-ui-auth:6.2.0'
@@ -145,10 +147,8 @@ dependencies {
     implementation 'androidx.annotation:annotation:1.1.0'
     implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
-    implementation 'androidx.navigation:navigation-fragment:2.3.0'
-    implementation 'androidx.navigation:navigation-ui:2.3.0'
-    implementation 'androidx.navigation:navigation-fragment-ktx:2.3.0'
-    implementation 'androidx.navigation:navigation-ui-ktx:2.3.0'
+    implementation 'androidx.drawerlayout:drawerlayout:1.1.1'
+
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'

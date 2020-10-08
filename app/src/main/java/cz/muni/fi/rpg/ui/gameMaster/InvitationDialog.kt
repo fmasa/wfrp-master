@@ -36,7 +36,7 @@ import org.koin.core.context.KoinContextHandler
 
 @ExperimentalCoroutinesApi
 @Composable
-fun InvitationDialog2(invitation: Invitation, onDismissRequest: () -> Unit) {
+internal fun InvitationDialog2(invitation: Invitation, onDismissRequest: () -> Unit) {
     Dialog(onDismissRequest = onDismissRequest) {
         Surface(shape = MaterialTheme.shapes.medium) {
             Column(Modifier.padding(20.dp)) {

@@ -28,7 +28,7 @@ import kotlinx.coroutines.withContext
 typealias ConditionTransformation = (CurrentConditions) -> CurrentConditions
 
 @Composable
-fun CharacterConditionsScreen(
+internal fun CharacterConditionsScreen(
     character: Character,
     viewModel: CharacterViewModel,
     modifier: Modifier = Modifier

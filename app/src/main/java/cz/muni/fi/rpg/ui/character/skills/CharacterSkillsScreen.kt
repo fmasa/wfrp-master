@@ -5,35 +5,36 @@ import androidx.compose.foundation.background
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import cz.muni.fi.rpg.model.domain.character.CharacterId
 import cz.muni.fi.rpg.model.domain.skills.Skill
 import cz.muni.fi.rpg.model.domain.talents.Talent
+import cz.muni.fi.rpg.ui.common.composables.viewModel
 import cz.muni.fi.rpg.viewModels.CharacterViewModel
 import cz.muni.fi.rpg.viewModels.SkillsViewModel
 import cz.muni.fi.rpg.viewModels.TalentsViewModel
+import org.koin.core.parameter.parametersOf
 
 @Composable
 fun CharacterSkillsScreen(
     modifier: Modifier = Modifier,
-    skillsVm: SkillsViewModel,
-    talentsVm: TalentsViewModel,
+    characterId: CharacterId,
     characterVm: CharacterViewModel,
-    onSkillDialogRequest: (Skill?) -> Unit,
-    onTalentDialogRequest: (Talent?) -> Unit,
 ) {
     ScrollableColumn(modifier.background(MaterialTheme.colors.background)) {
+
+        val talentsViewModel: TalentsViewModel by viewModel { parametersOf(characterId) }
+        val skillsViewModel: SkillsViewModel by viewModel { parametersOf(characterId) }
+
         SkillsCard(
+            characterId,
             characterVm,
-            skillsVm,
-            onClick = { onSkillDialogRequest(it) },
-            onRemove = { skillsVm.removeSkill(it) },
-            onNewSkillButtonClicked = { onSkillDialogRequest(null) },
+            skillsViewModel,
+            onRemove = { skillsViewModel.removeSkill(it) },
         )
 
         TalentsCard(
-            talentsVm,
-            onClick = { onTalentDialogRequest(it) },
-            onRemove = { talentsVm.removeTalent(it) },
-            onAddButtonClicked = { onTalentDialogRequest(null) }
+            talentsViewModel,
+            onRemove = { talentsViewModel.removeTalent(it) },
         )
     }
 }
