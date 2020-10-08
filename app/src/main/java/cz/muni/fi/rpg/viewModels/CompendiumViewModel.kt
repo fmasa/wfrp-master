@@ -14,6 +14,15 @@ class CompendiumViewModel(
     private val talentsCompendium: Compendium<Talent>,
     private val spellCompendium: Compendium<Spell>,
 ) : ViewModel() {
+
+    suspend fun save(skill: Skill) {
+        skillCompendium.saveItem(partyId, skill)
+    }
+
+    suspend fun remove(skill: Skill) {
+        skillCompendium.remove(partyId, skill)
+    }
+
     val skills: LiveData<List<Skill>> by lazy { skillCompendium.liveForParty(partyId) }
     val talents: LiveData<List<Talent>> by lazy { talentsCompendium.liveForParty(partyId) }
     val spells: LiveData<List<Spell>> by lazy { spellCompendium.liveForParty(partyId) }
