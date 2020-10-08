@@ -28,12 +28,16 @@ internal class FirestoreCharacterRepository(
 
     override suspend fun get(characterId: CharacterId): Character {
         try {
-            return mapper.fromDocumentSnapshot(
-                characters(characterId.partyId)
-                    .document(characterId.id)
-                    .get()
-                    .await()
-            )
+            val snapshot = characters(characterId.partyId)
+                .document(characterId.id)
+                .get()
+                .await();
+
+            if (snapshot.data == null) {
+                throw CharacterNotFound(characterId)
+            }
+
+            return mapper.fromDocumentSnapshot(snapshot)
         } catch (e: FirebaseFirestoreException) {
             throw CharacterNotFound(characterId, e)
         }

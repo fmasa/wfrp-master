@@ -1,70 +1,29 @@
 package cz.muni.fi.rpg.ui.gameMaster.encounters
 
-import android.os.Bundle
-import android.view.*
-import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.savedinstancestate.savedInstanceState
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.intl.Locale
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.toUpperCase
 import androidx.compose.ui.unit.dp
-import androidx.navigation.fragment.findNavController
-import androidx.navigation.fragment.navArgs
-import androidx.ui.tooling.preview.Preview
 import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.model.domain.armour.Armor
 import cz.muni.fi.rpg.model.domain.character.Stats
-import cz.muni.fi.rpg.model.domain.encounter.Combatant
-import cz.muni.fi.rpg.model.domain.encounter.CombatantId
+import cz.muni.fi.rpg.model.domain.encounter.Npc
 import cz.muni.fi.rpg.model.domain.encounter.Wounds
-import cz.muni.fi.rpg.model.domain.encounters.EncounterId
-import cz.muni.fi.rpg.ui.common.PartyScopedFragment
 import cz.muni.fi.rpg.ui.common.chunk
 import cz.muni.fi.rpg.ui.common.composables.*
+import cz.muni.fi.rpg.ui.router.Route
+import cz.muni.fi.rpg.ui.router.Routing
 import cz.muni.fi.rpg.viewModels.EncounterDetailViewModel
 import kotlinx.coroutines.*
 import org.koin.core.parameter.parametersOf
-import java.util.*
-
-class CombatantFragment : PartyScopedFragment(0),
-    CoroutineScope by CoroutineScope(Dispatchers.Default) {
-
-    private val args: CombatantFragmentArgs by navArgs()
-
-    override fun getPartyId(): UUID = args.encounterId.partyId
-
-    init {
-        hideActionBar()
-    }
-
-    @ExperimentalCoroutinesApi
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ) = ComposeView(requireContext()).apply {
-        setContent {
-            Theme {
-                CombatantDetailScreen(
-                    encounterId = args.encounterId,
-                    existingCombatantId = args.combatantId?.let {
-                        CombatantId(args.encounterId, it)
-                    },
-                    coroutineScope = this@CombatantFragment,
-                    onBack = { findNavController().popBackStack() }
-                )
-            }
-        }
-    }
-}
 
 @Stable
 private class CharacteristicsFormData(
@@ -203,14 +162,14 @@ private class FormData(
         )
 
         @Composable
-        fun fromExistingCombatant(combatant: Combatant) = FormData(
-            name = savedInstanceState { combatant.name },
-            note = savedInstanceState { combatant.note },
-            wounds = savedInstanceState { combatant.wounds.max.toString() },
-            enemy = savedInstanceState { combatant.enemy },
-            alive = savedInstanceState { combatant.alive },
-            characteristics = CharacteristicsFormData.fromCharacteristics(combatant.stats),
-            armor = ArmorFormData.fromArmor(combatant.armor),
+        fun fromExistingNpc(npc: Npc) = FormData(
+            name = savedInstanceState { npc.name },
+            note = savedInstanceState { npc.note },
+            wounds = savedInstanceState { npc.wounds.max.toString() },
+            enemy = savedInstanceState { npc.enemy },
+            alive = savedInstanceState { npc.alive },
+            characteristics = CharacteristicsFormData.fromCharacteristics(npc.stats),
+            armor = ArmorFormData.fromArmor(npc.armor),
         )
     }
 
@@ -222,96 +181,53 @@ private class FormData(
 
 @ExperimentalCoroutinesApi
 @Composable
-fun CombatantDetailScreen(
-    encounterId: EncounterId,
-    existingCombatantId: CombatantId?,
-    coroutineScope: CoroutineScope,
-    onBack: () -> Unit,
+fun NpcDetailScreen(
+    routing: Routing<Route.NpcDetail>,
 ) {
-    val viewModel: EncounterDetailViewModel by viewModel { parametersOf(encounterId) }
+    val npcId = routing.route.npcId
 
-    if (existingCombatantId == null) {
-        val data = FormData.empty()
+    val coroutineScope = rememberCoroutineScope()
+    val viewModel: EncounterDetailViewModel by viewModel { parametersOf(npcId.encounterId) }
 
-        CombatantCreateScreen(
-            data,
-            onBack = onBack,
-            onSave = {
-                coroutineScope.launch {
-                    viewModel.addCombatant(
-                        name = data.name.value,
-                        note = data.note.value,
-                        wounds = Wounds.fromMax(data.wounds.value.toInt()),
-                        stats = data.characteristics.toCharacteristics(),
-                        armor = data.armor.toArmor(),
-                        enemy = data.enemy.value,
-                        alive = data.alive.value,
-                        traits = emptyList(),
-                        trappings = emptyList(),
-                    )
+    val npc = remember { viewModel.npcFlow(npcId) }.collectAsState().value
+    val data = npc?.let { FormData.fromExistingNpc(it) }
 
-                    withContext(Dispatchers.Main) { onBack() }
-                }
-            }
-        )
-    } else {
-        val combatant = remember { viewModel.combatantFlow(existingCombatantId) }.collectAsState().value
-        val data = combatant?.let { FormData.fromExistingCombatant(it) }
-        CombatantEditScreen(
-            data,
-            onSave = {
-                if (combatant == null || data == null) {
-                    return@CombatantEditScreen
-                }
-
-                coroutineScope.launch {
-                    viewModel.updateCombatant(
-                        id = combatant.id,
-                        name = data.name.value,
-                        note = data.note.value,
-                        maxWounds = data.wounds.value.toInt(),
-                        stats = data.characteristics.toCharacteristics(),
-                        armor = data.armor.toArmor(),
-                        enemy = data.enemy.value,
-                        alive = data.alive.value,
-                        traits = emptyList(),
-                        trappings = emptyList(),
-                    )
-
-                    withContext(Dispatchers.Main) { onBack() }
-                }
-            },
-            onBack = onBack,
-        )
-    }
-}
-
-@Composable
-private fun CombatantEditScreen(
-    data: FormData?,
-    onSave: () -> Unit,
-    onBack: () -> Unit,
-) {
     val validate = savedInstanceState { false }
     val submitEnabled = remember { mutableStateOf(true) }
 
     Scaffold(
         topBar = {
-            CombatantDetailTopBar(
-                title = stringResource(R.string.title_combatant_add),
+            NpcDetailTopBar(
+                title = stringResource(R.string.title_npc_add),
                 onSave = {
                     if (data == null) {
-                        return@CombatantDetailTopBar
+                        return@NpcDetailTopBar
                     }
 
                     if (!data.isValid()) {
                         validate.value = true
                     } else {
                         submitEnabled.value = false
-                        onSave()
+                    }
+
+                    coroutineScope.launch(Dispatchers.IO) {
+                        viewModel.updateNpc(
+                            id = npc.id,
+                            name = data.name.value,
+                            note = data.note.value,
+                            maxWounds = data.wounds.value.toInt(),
+                            stats = data.characteristics.toCharacteristics(),
+                            armor = data.armor.toArmor(),
+                            enemy = data.enemy.value,
+                            alive = data.alive.value,
+                            traits = emptyList(),
+                            trappings = emptyList(),
+                        )
+
+                        withContext(Dispatchers.Main) { routing.backStack.pop() }
                     }
                 },
-                onBack = onBack,
+                onBack = { routing.backStack.pop() },
                 actionsEnabled = submitEnabled.value && data != null,
             )
         }
@@ -321,43 +237,59 @@ private fun CombatantEditScreen(
                 CircularProgressIndicator()
             }
         } else {
-            CombatantDetailMainUI(data, validate = validate.value)
+            MainContainer(data, validate = validate.value)
         }
     }
 }
 
 @Composable
-private fun CombatantCreateScreen(
-    data: FormData,
-    onSave: () -> Unit,
-    onBack: () -> Unit,
-) {
+fun NpcCreationScreen(routing: Routing<Route.NpcCreation>) {
+    val coroutineScope = rememberCoroutineScope()
+    val viewModel: EncounterDetailViewModel by viewModel { parametersOf(routing.route.encounterId) }
+
+    val data = FormData.empty()
     val validate = savedInstanceState { false }
     val submitEnabled = remember { mutableStateOf(true) }
 
     Scaffold(
         topBar = {
-            CombatantDetailTopBar(
-                title = stringResource(R.string.title_combatant_add),
+            NpcDetailTopBar(
+                title = stringResource(R.string.title_npc_add),
                 onSave = {
                     if (!data.isValid()) {
                         validate.value = true
                     } else {
                         submitEnabled.value = false
-                        onSave()
+                        coroutineScope.launch(Dispatchers.IO) {
+                            coroutineScope.launch {
+                                viewModel.addNpc(
+                                    name = data.name.value,
+                                    note = data.note.value,
+                                    wounds = Wounds.fromMax(data.wounds.value.toInt()),
+                                    stats = data.characteristics.toCharacteristics(),
+                                    armor = data.armor.toArmor(),
+                                    enemy = data.enemy.value,
+                                    alive = data.alive.value,
+                                    traits = emptyList(),
+                                    trappings = emptyList(),
+                                )
+
+                                withContext(Dispatchers.Main) { routing.backStack.pop() }
+                            }
+                        }
                     }
                 },
-                onBack = onBack,
+                onBack = { routing.backStack.pop() },
                 actionsEnabled = submitEnabled.value,
             )
         }
     ) {
-        CombatantDetailMainUI(data, validate = validate.value)
+        MainContainer(data, validate = validate.value)
     }
 }
 
 @Composable
-private fun CombatantDetailMainUI(data: FormData, validate: Boolean) {
+private fun MainContainer(data: FormData, validate: Boolean) {
     ScrollableColumn {
         Column(Modifier.padding(24.dp).padding(bottom = 30.dp)) {
             Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
@@ -367,7 +299,7 @@ private fun CombatantDetailMainUI(data: FormData, validate: Boolean) {
                         label = stringResource(R.string.label_name),
                         value = data.name.value,
                         onValueChange = { data.name.value = it },
-                        maxLength = Combatant.NAME_MAX_LENGTH,
+                        maxLength = Npc.NAME_MAX_LENGTH,
                         validate = validate,
                         rules = Rules(Rules.NotBlank()),
                     )
@@ -525,7 +457,7 @@ private fun ArmorSegment(data: ArmorFormData, validate: Boolean) {
 }
 
 @Composable
-private fun CombatantDetailTopBar(
+private fun NpcDetailTopBar(
     title: String,
     onSave: () -> Unit,
     onBack: () -> Unit,
@@ -540,18 +472,6 @@ private fun CombatantDetailTopBar(
             }
         }
     )
-}
-
-@Composable
-@Preview
-private fun Preview() {
-    Theme {
-        CombatantCreateScreen(
-            data = FormData.empty(),
-            onSave = {},
-            onBack = {},
-        )
-    }
 }
 
 private fun toNumericTextValue(value: Int) = if (value == 0) "" else value.toString()

@@ -14,7 +14,7 @@ interface Encounter {
     completed: boolean;
 }
 
-interface Combatant {
+interface Npc {
     id: string;
     name: string;
     note: string;
@@ -102,18 +102,18 @@ class Encounters extends Suite {
     async "GM can add combatant"() {
         const combatantsCollection = await this.combatantCollection();
 
-        const combatant = this.validCombatant();
-        await assertSucceeds(combatantsCollection.doc(combatant.id).set(combatant));
+        const npc = this.validNpc();
+        await assertSucceeds(combatantsCollection.doc(npc.id).set(npc));
 
         // conditions are introduced in 1.X and should be optional for BC (TODO: Remove later)
-        const combatant2 = withoutField(this.validCombatant(), "conditions");
-        await assertSucceeds(combatantsCollection.doc(combatant2.id).set(combatant2));
+        const npc2 = withoutField(this.validNpc(), "conditions");
+        await assertSucceeds(combatantsCollection.doc(npc2.id).set(npc2));
     }
 
     @test
     async "GM can remove combatant"() {
         const combatantsCollection = await this.combatantCollection();
-        const combatant = this.validCombatant();
+        const combatant = this.validNpc();
         const document = combatantsCollection.doc(combatant.id);
 
         await document.set(combatant);
@@ -126,16 +126,16 @@ class Encounters extends Suite {
         const party = await this.createUserAccessibleParty("user123");
         const encounter = await this.createValidEncounter(party);
 
-        const combatantsCollection = this.authedApp("user123")
+        const npcsCollection = this.authedApp("user123")
             .collection("parties")
             .doc(party.id)
             .collection("encounters")
             .doc(encounter.id)
             .collection("combatants");
 
-        const combatant = this.validCombatant();
+        const npc = this.validNpc();
 
-        await assertFails(combatantsCollection.doc(combatant.id).set(combatant));
+        await assertFails(npcsCollection.doc(npc.id).set(npc));
     }
 
     private async combatantCollection(): Promise<CollectionReference> {
@@ -176,7 +176,7 @@ class Encounters extends Suite {
         }
     }
 
-    private validCombatant(): Combatant {
+    private validNpc(): Npc {
         return {
             id: uuid(),
             name: "Toby",

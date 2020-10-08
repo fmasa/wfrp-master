@@ -1,8 +1,5 @@
 package cz.muni.fi.rpg.ui.characterCreation
 
-import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.ViewGroup
 import androidx.annotation.StringRes
 import androidx.compose.foundation.Icon
 import androidx.compose.foundation.ScrollableColumn
@@ -14,119 +11,22 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.savedinstancestate.savedInstanceState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.intl.Locale
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.toUpperCase
 import androidx.compose.ui.unit.dp
-import androidx.navigation.fragment.findNavController
-import androidx.navigation.fragment.navArgs
-import androidx.navigation.navOptions
 import cz.muni.fi.rpg.R
-import cz.muni.fi.rpg.model.domain.character.*
-import cz.muni.fi.rpg.ui.common.PartyScopedFragment
+import cz.muni.fi.rpg.ui.common.composables.BackButton
 import cz.muni.fi.rpg.ui.common.composables.FormData
-import cz.muni.fi.rpg.ui.common.composables.Theme
-import cz.muni.fi.rpg.ui.common.toast
+import cz.muni.fi.rpg.ui.common.composables.viewModel
+import cz.muni.fi.rpg.ui.router.Route
+import cz.muni.fi.rpg.ui.router.Routing
 import cz.muni.fi.rpg.viewModels.CharacterCreationViewModel
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-import org.koin.android.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
-import java.lang.IllegalArgumentException
-import java.util.*
-
-class CharacterCreationFragment(
-    private val characters: CharacterRepository
-) : PartyScopedFragment(0),
-    CoroutineScope by CoroutineScope(Dispatchers.Default) {
-
-    private val args: CharacterCreationFragmentArgs by navArgs()
-
-    private val viewModel: CharacterCreationViewModel by viewModel { parametersOf(args.partyId) }
-
-    override fun onStart() {
-        super.onStart()
-
-        launch {
-            val userId = args.userId
-            if (userId != null && characters.hasCharacterInParty(userId, args.partyId)) {
-                withContext(Dispatchers.Main) { toast(R.string.already_has_character) }
-                return@launch
-            }
-        }
-    }
-
-    @ExperimentalLayout
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ) = ComposeView(requireContext()).apply {
-        setContent {
-            Theme {
-                CharacterCreationScreen(
-                    this@CharacterCreationFragment,
-                    viewModel,
-                    args.userId,
-                    onCharacterCreated = {
-                        val navController = findNavController()
-                        navController.navigate(
-                            CharacterCreationFragmentDirections.openCharacter(it),
-                            navOptions {
-                                popUpTo(
-                                    try {
-                                        navController.getBackStackEntry(R.id.nav_game_master)
-                                        R.id.nav_game_master
-                                    } catch (e: IllegalArgumentException) {
-                                        R.id.nav_party_list
-                                    }
-                                ) { inclusive = false }
-                            }
-                        )
-                    }
-                )
-            }
-        }
-    }
-
-    override fun getPartyId(): UUID = args.partyId
-    private fun saveCharacter(
-        basicInfo: CharacterBasicInfoForm.Data,
-        characteristics: CharacterCharacteristicsForm.Data,
-        points: PointsPoolForm.Data,
-    ) {
-        launch {
-            val characterId =
-                viewModel.createCharacter(args.userId, basicInfo, characteristics, points)
-
-            withContext(Dispatchers.Main) {
-                toast("Your character has been created")
-
-                val navController = findNavController()
-                findNavController()
-                    .navigate(
-                        CharacterCreationFragmentDirections.openCharacter(characterId),
-                        navOptions {
-                            popUpTo(
-                                try {
-                                    navController.getBackStackEntry(R.id.nav_game_master)
-                                    R.id.nav_game_master
-                                } catch (e: IllegalArgumentException) {
-                                    R.id.nav_party_list
-                                }
-                            ) { inclusive = false }
-                        }
-                    )
-            }
-        }
-
-    }
-}
 
 private enum class FormState {
     EDITED_BY_USER,
@@ -135,12 +35,27 @@ private enum class FormState {
 
 @ExperimentalLayout
 @Composable
-fun CharacterCreationScreen(
-    coroutineScope: CoroutineScope,
-    viewModel: CharacterCreationViewModel,
-    userId: String?,
-    onCharacterCreated: (CharacterId) -> Unit,
-) {
+fun CharacterCreationScreen(routing: Routing<Route.CharacterCreation>) {
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                title = {
+                    Text(stringResource(R.string.title_characterCreation))
+                },
+                navigationIcon = { BackButton(onClick = { routing.backStack.pop() }) }
+            )
+        }
+    ) {
+        MainContainer(routing)
+    }
+}
+
+@ExperimentalLayout
+@Composable
+private fun MainContainer(routing: Routing<Route.CharacterCreation>) {
+    val viewModel: CharacterCreationViewModel by viewModel { parametersOf(routing.route.partyId) }
+    val coroutineScope = rememberCoroutineScope()
+
     val validate = remember { mutableStateOf(false) }
     val currentStepIndex = savedInstanceState { 0 }
     val formState = savedInstanceState { FormState.EDITED_BY_USER }
@@ -152,10 +67,15 @@ fun CharacterCreationScreen(
 
     val saveCharacter = {
         formState.value = FormState.CREATING_CHARACTER
-        coroutineScope.launch {
-            val characterId = viewModel.createCharacter(userId, basicInfo, characteristics, points)
+        coroutineScope.launch(Dispatchers.IO) {
+            val characterId = viewModel.createCharacter(
+                routing.route.userId,
+                basicInfo,
+                characteristics,
+                points
+            )
 
-            withContext(Dispatchers.Main) { onCharacterCreated(characterId) }
+            routing.backStack.replace(Route.CharacterDetail(characterId))
         }
     }
 

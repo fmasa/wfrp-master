@@ -19,6 +19,13 @@ fun <L, R> LiveData<Either<L, R>>.right(): LiveData<R> {
     return mediator
 }
 
+fun <L, R> LiveData<Either<L, R>>.left(): LiveData<L> {
+    val mediator = MediatorLiveData<L>()
+
+    mediator.addSource(this) { it.mapLeft(mediator::setValue) }
+
+    return mediator
+}
 
 fun <T> LiveData<T?>.notNull(): LiveData<T> {
     val mediator = MediatorLiveData<T>()

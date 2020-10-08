@@ -3,13 +3,13 @@ package cz.muni.fi.rpg.ui.character.skills
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Text
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumnFor
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import cz.muni.fi.rpg.R
+import cz.muni.fi.rpg.model.domain.character.CharacterId
 import cz.muni.fi.rpg.model.domain.character.Stats
 import cz.muni.fi.rpg.model.domain.skills.Skill
 import cz.muni.fi.rpg.model.domain.skills.SkillCharacteristic
@@ -21,16 +21,16 @@ import cz.muni.fi.rpg.viewModels.SkillsViewModel
 
 @Composable
 internal fun SkillsCard(
+    characterId: CharacterId,
     characterVm: CharacterViewModel,
     skillsVm: SkillsViewModel,
-    onClick: (Skill) -> Unit,
     onRemove: (Skill) -> Unit,
-    onNewSkillButtonClicked: () -> Unit,
 ) {
     val skills = skillsVm.skills.observeAsState().value ?: return
     val characteristics = characterVm.character.right()
         .observeAsState().value?.getCharacteristics() ?: return
 
+    val fragmentManager = fragmentManager()
 
     CardContainer(Modifier.padding(horizontal = 8.dp).padding(bottom = 8.dp)) {
         Column(Modifier.padding(horizontal = 6.dp)) {
@@ -48,14 +48,22 @@ internal fun SkillsCard(
                         SkillItem(
                             skill,
                             characteristics,
-                            onClick = { onClick(skill) },
+                            onClick = {
+                                SkillDialog.newInstance(characterId, skill)
+                                    .show(fragmentManager, null)
+                            },
                             onRemove = { onRemove(skill) },
                         )
                     }
                 }
             }
 
-            CardButton(R.string.title_addSkill, onClick = onNewSkillButtonClicked)
+            CardButton(
+                R.string.title_addSkill,
+                onClick = {
+                    SkillDialog.newInstance(characterId, null).show(fragmentManager, null)
+                },
+            )
         }
     }
 }

@@ -18,7 +18,7 @@ import cz.muni.fi.rpg.model.domain.party.time.YearSeason
 import cz.muni.fi.rpg.ui.common.composables.CardContainer
 
 @Composable
-fun CalendarScreen(
+internal fun CalendarScreen(
     party: Party,
     modifier: Modifier,
     onChangeTimeRequest: () -> Unit,

@@ -26,7 +26,7 @@ import kotlinx.coroutines.withContext
 
 @ExperimentalCoroutinesApi
 @Composable
-fun QrCode(data: String) {
+internal fun QrCode(data: String) {
     WithConstraints(Modifier.fillMaxWidth()) {
         val qrCode = remember { mutableStateOf<ImageAsset?>(null) }
         val width = constraints.maxWidth

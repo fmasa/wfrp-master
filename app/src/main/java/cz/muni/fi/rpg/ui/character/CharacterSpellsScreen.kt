@@ -14,25 +14,35 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import cz.muni.fi.rpg.R
+import cz.muni.fi.rpg.model.domain.character.CharacterId
 import cz.muni.fi.rpg.model.domain.spells.Spell
+import cz.muni.fi.rpg.ui.character.spells.SpellDialog
 import cz.muni.fi.rpg.ui.common.composables.*
 import cz.muni.fi.rpg.viewModels.SpellsViewModel
+import org.koin.core.parameter.parametersOf
 
 @Composable
-fun CharacterSpellsScreen(
-    viewModel: SpellsViewModel,
+internal fun CharacterSpellsScreen(
+    characterId: CharacterId,
     modifier: Modifier,
-    onSpellDialogRequest: (Spell?) -> Unit
 ) {
+    val viewModel: SpellsViewModel by viewModel { parametersOf(characterId) }
+    val fragmentManager = fragmentManager()
+
     Scaffold(
         modifier = modifier,
         floatingActionButton = {
-            FloatingActionButton(onClick = { onSpellDialogRequest(null) }) {
+            FloatingActionButton(
+                onClick = { SpellDialog.newInstance(characterId, null).show(fragmentManager, null) }
+            ) {
                 Icon(vectorResource(R.drawable.ic_add))
             }
         }
     ) {
-        MainContainer(viewModel, onSpellClick = onSpellDialogRequest)
+        MainContainer(
+            viewModel,
+            onSpellClick = { SpellDialog.newInstance(characterId, it).show(fragmentManager, null) }
+        )
     }
 }
 

@@ -8,10 +8,10 @@
     android:fitsSystemWindows="true"
     tools:openDrawer="start">
 
-    <include
-        layout="@layout/app_bar_main"
+    <androidx.compose.ui.platform.ComposeView
+        android:id="@+id/compose"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="wrap_content"/>
 
     <com.google.android.material.navigation.NavigationView
         android:id="@+id/nav_view"

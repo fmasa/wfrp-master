@@ -12,22 +12,25 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.model.domain.character.Character
+import cz.muni.fi.rpg.model.domain.character.CharacterId
 import cz.muni.fi.rpg.model.domain.character.Points
 import cz.muni.fi.rpg.model.domain.character.Stats
 import cz.muni.fi.rpg.ui.common.composables.CardContainer
 import cz.muni.fi.rpg.ui.common.composables.NumberPicker
 import cz.muni.fi.rpg.ui.common.composables.Theme
+import cz.muni.fi.rpg.ui.common.composables.viewModel
 import cz.muni.fi.rpg.viewModels.CharacterStatsViewModel
+import org.koin.core.parameter.parametersOf
 import timber.log.Timber
 import java.lang.IllegalArgumentException
 
 @Composable
-fun CharacterCharacteristicsScreen(
+internal fun CharacterCharacteristicsScreen(
+    characterId: CharacterId,
     character: Character,
-    viewModel: CharacterStatsViewModel,
     modifier: Modifier = Modifier,
 ) {
-
+    val viewModel: CharacterStatsViewModel by viewModel { parametersOf(characterId) }
     ScrollableColumn(
         modifier.background(MaterialTheme.colors.background)
     ) {

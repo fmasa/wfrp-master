@@ -24,32 +24,32 @@ service cloud.firestore {
                               && isGameMaster();
                 allow delete: if hasAccessToParty() && isGameMaster();
 
-                match /combatants/{combatantId} {
+                match /combatants/{npcId} {
                     allow read: if hasAccessToParty();
 
-                    allow create: if isValidCombatant(request.resource.data)
+                    allow create: if isValidNpc(request.resource.data)
                                 && hasAccessToParty()
                                 && isGameMaster();
-                    allow update: if isValidCombatant(request.resource.data)
+                    allow update: if isValidNpc(request.resource.data)
                                 && hasAccessToParty()
                                 && isGameMaster();
                     allow delete: if hasAccessToParty() && isGameMaster();
 
-                    function isValidCombatant(combatant) {
-                        return combatant is map
-                            && ["id", "name", "note", "wounds", "stats", "armor", "enemy", "alive", "traits", "trappings", "position", "conditions"].hasAll(combatant.keys())
-                            && combatant.id is string && isValidUuid(combatant.id) && combatant.id == combatantId
-                            && combatant.name is string && isNotBlank(combatant.name) && combatant.name.size() <= 100
-                            && combatant.note is string && combatant.note.size() <= 400
-                            && areValidWounds(combatant.wounds)
-                            && areStatsValid(combatant.stats)
-                            && isArmorValid(combatant.armor)
-                            && combatant.enemy is bool
-                            && combatant.alive is bool
-                            && combatant.traits is list
-                            && combatant.trappings is list
-                            && (! ("conditions" in combatant) || areValidConditions(combatant.conditions))
-                            && combatant.position is number && combatant.position >= 0;
+                    function isValidNpc(npc) {
+                        return npc is map
+                            && ["id", "name", "note", "wounds", "stats", "armor", "enemy", "alive", "traits", "trappings", "position", "conditions"].hasAll(npc.keys())
+                            && npc.id is string && isValidUuid(npc.id) && npc.id == npcId
+                            && npc.name is string && isNotBlank(npc.name) && npc.name.size() <= 100
+                            && npc.note is string && npc.note.size() <= 400
+                            && areValidWounds(npc.wounds)
+                            && areStatsValid(npc.stats)
+                            && isArmorValid(npc.armor)
+                            && npc.enemy is bool
+                            && npc.alive is bool
+                            && npc.traits is list
+                            && npc.trappings is list
+                            && (! ("conditions" in npc) || areValidConditions(npc.conditions))
+                            && npc.position is number && npc.position >= 0;
                     }
 
                     function areValidWounds(wounds) {

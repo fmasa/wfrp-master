@@ -30,11 +30,9 @@ import cz.muni.fi.rpg.viewModels.GameMasterViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import java.util.*
 
-private fun <T> State<T>.getValue() = this.value
-
 @ExperimentalCoroutinesApi
 @Composable
-fun PartySummaryScreen(
+internal fun PartySummaryScreen(
     partyId: UUID,
     modifier: Modifier,
     viewModel: GameMasterViewModel,
