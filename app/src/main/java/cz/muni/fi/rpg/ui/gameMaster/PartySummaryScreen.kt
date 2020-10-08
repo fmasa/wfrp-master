@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.State
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -18,6 +17,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.unit.dp
+import com.github.zsoltk.compose.router.BackStack
 import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.model.domain.character.Character
 import cz.muni.fi.rpg.model.domain.character.CharacterId
@@ -26,6 +26,7 @@ import cz.muni.fi.rpg.model.domain.party.Invitation
 import cz.muni.fi.rpg.model.right
 import cz.muni.fi.rpg.ui.common.composables.*
 import cz.muni.fi.rpg.ui.gameMaster.adapter.Player
+import cz.muni.fi.rpg.ui.router.Route
 import cz.muni.fi.rpg.viewModels.GameMasterViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import java.util.*
@@ -34,6 +35,7 @@ import java.util.*
 @Composable
 internal fun PartySummaryScreen(
     partyId: UUID,
+    backStack: BackStack<Route>,
     modifier: Modifier,
     viewModel: GameMasterViewModel,
     onCharacterOpenRequest: (Character) -> Unit,
@@ -71,6 +73,18 @@ internal fun PartySummaryScreen(
             titleRes = R.string.title_party_ambitions,
             ambitions = party.getAmbitions()
         )
+
+
+        CardContainer(
+            Modifier
+                .fillMaxWidth()
+                .padding(8.dp)
+                .clickable(onClick = { backStack.push(Route.Compendium(partyId)) })
+        ) {
+            Column(Modifier.fillMaxWidth()) {
+                CardTitle(R.string.title_compendium)
+            }
+        }
     }
 }
 

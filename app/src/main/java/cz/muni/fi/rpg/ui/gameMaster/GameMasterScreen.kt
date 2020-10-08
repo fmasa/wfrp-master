@@ -120,6 +120,7 @@ private fun screens(
                 modifier = modifier,
                 partyId = party.id,
                 viewModel = viewModel,
+                backStack = backStack,
                 onCharacterOpenRequest = {
                     backStack.push(Route.CharacterDetail(CharacterId(party.id, it.id)))
                 },

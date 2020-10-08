@@ -102,4 +102,5 @@ val appModule = module {
     viewModel { PartyListViewModel(get()) }
     viewModel { SettingsViewModel(get()) }
     viewModel { (partyId: UUID) -> CharacterCreationViewModel(partyId, get())}
+    viewModel { (partyId: UUID) -> CompendiumViewModel(partyId)}
 }
