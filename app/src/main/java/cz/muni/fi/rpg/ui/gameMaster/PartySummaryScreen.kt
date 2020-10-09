@@ -1,9 +1,7 @@
 package cz.muni.fi.rpg.ui.gameMaster
 
-import androidx.compose.foundation.ProvideTextStyle
-import androidx.compose.foundation.ScrollableColumn
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
+import androidx.annotation.StringRes
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.MaterialTheme
@@ -17,6 +15,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.LiveData
 import com.github.zsoltk.compose.router.BackStack
 import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.model.domain.character.Character
@@ -27,8 +26,10 @@ import cz.muni.fi.rpg.model.right
 import cz.muni.fi.rpg.ui.common.composables.*
 import cz.muni.fi.rpg.ui.gameMaster.adapter.Player
 import cz.muni.fi.rpg.ui.router.Route
+import cz.muni.fi.rpg.viewModels.CompendiumViewModel
 import cz.muni.fi.rpg.viewModels.GameMasterViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import org.koin.core.parameter.parametersOf
 import java.util.*
 
 @ExperimentalCoroutinesApi
@@ -81,10 +82,32 @@ internal fun PartySummaryScreen(
                 .padding(8.dp)
                 .clickable(onClick = { backStack.push(Route.Compendium(partyId)) })
         ) {
-            Column(Modifier.fillMaxWidth()) {
+            Column(Modifier.fillMaxWidth().padding(horizontal = 8.dp)) {
                 CardTitle(R.string.title_compendium)
+
+                val compendium: CompendiumViewModel by viewModel { parametersOf(partyId) }
+
+                Row {
+                    CompendiumSummary(R.string.title_character_skills, compendium.skills)
+                    CompendiumSummary(R.string.title_character_talents, compendium.talents)
+                    CompendiumSummary(R.string.title_character_spells, compendium.spells)
+                }
             }
         }
+    }
+}
+
+@Composable
+private fun <T> RowScope.CompendiumSummary(
+    @StringRes text: Int,
+    itemsCount: LiveData<List<T>>,
+) {
+    Column(Modifier.weight(1f), horizontalAlignment = Alignment.CenterHorizontally) {
+        Text(
+            itemsCount.observeAsState().value?.size?.toString() ?: "?",
+            style = MaterialTheme.typography.h6
+        )
+        Text(stringResource(text))
     }
 }
 
