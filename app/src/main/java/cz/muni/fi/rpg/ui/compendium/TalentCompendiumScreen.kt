@@ -8,14 +8,12 @@ import androidx.compose.material.Divider
 import androidx.compose.material.ListItem
 import androidx.compose.runtime.*
 import androidx.compose.runtime.savedinstancestate.savedInstanceState
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.WithConstraintsScope
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import cz.muni.fi.rpg.R
-import cz.muni.fi.rpg.model.domain.compendium.Skill
-import cz.muni.fi.rpg.model.domain.skills.SkillCharacteristic
+import cz.muni.fi.rpg.model.domain.compendium.Talent
 import cz.muni.fi.rpg.ui.common.composables.*
 import cz.muni.fi.rpg.ui.common.composables.dialog.DialogState
 import cz.muni.fi.rpg.ui.common.composables.dialog.CancelButton
@@ -29,75 +27,65 @@ import java.util.*
 
 @ExperimentalLayout
 @Composable
-fun WithConstraintsScope.SkillCompendiumTab(viewModel: CompendiumViewModel) {
+fun WithConstraintsScope.TalentCompendiumTab(viewModel: CompendiumViewModel) {
     val coroutineScope = rememberCoroutineScope()
 
     CompendiumTab(
-        liveItems = viewModel.skills,
+        liveItems = viewModel.talents,
         emptyUI = {
             EmptyUI(
-                textId = R.string.no_skills_in_compendium,
-                subTextId = R.string.no_skills_in_compendium_sub_text,
+                textId = R.string.no_talents_in_compendium,
+                subTextId = R.string.no_talents_in_compendium_sub_text,
                 drawableResourceId = R.drawable.ic_skills
             )
         },
         onRemove = { coroutineScope.launch(Dispatchers.IO) { viewModel.remove(it) } },
-        dialog = { SkillDialog(it, viewModel) },
+        dialog = { TalentDialog(it, viewModel) },
         width = maxWidth,
-    ) { skill ->
+    ) { talent ->
         ListItem(
-            icon = { ItemIcon(skill.characteristic.getIconId()) },
-            text = { Text(skill.name) }
+            icon = { ItemIcon(R.drawable.ic_skills) },
+            text = { Text(talent.name) }
         )
         Divider()
     }
 }
 
-private data class SkillFormData(
+private data class TalentFormData(
     val id: UUID,
     val name: MutableState<String>,
     val description: MutableState<String>,
-    val characteristic: MutableState<SkillCharacteristic>,
-    val advanced: MutableState<Boolean>,
 ) : FormData {
     companion object {
         @Composable
-        fun fromState(state: DialogState.Opened<Skill?>) = SkillFormData(
+        fun fromState(state: DialogState.Opened<Talent?>) = TalentFormData(
             id = remember(state) { state.item?.id ?: UUID.randomUUID() },
             name = savedInstanceState(state) { state.item?.name ?: "" },
             description = savedInstanceState(state) { state.item?.description ?: "" },
-            characteristic = savedInstanceState(state) {
-                state.item?.characteristic ?: SkillCharacteristic.AGILITY
-            },
-            advanced = savedInstanceState(state) { state.item?.advanced ?: false },
         )
     }
 
-    fun toSkill() = Skill(
+    fun toTalent() = Talent(
         id = id,
         name = name.value,
         description = description.value,
-        characteristic = characteristic.value,
-        advanced = advanced.value
     )
 
     override fun isValid() =
         name.value.isNotBlank() &&
-                name.value.length <= Skill.NAME_MAX_LENGTH &&
-                description.value.length <= Skill.DESCRIPTION_MAX_LENGTH
+                name.value.length <= Talent.NAME_MAX_LENGTH &&
+                description.value.length <= Talent.DESCRIPTION_MAX_LENGTH
 }
 
-
-private enum class SkillFormState {
+private enum class TalentFormState {
     EDITED_BY_USER,
-    SAVING_SKILL,
+    SAVING_TALENT,
 }
-
 
 @ExperimentalLayout
 @Composable
-private fun SkillDialog(
-    dialogState: MutableState<DialogState<Skill?>>,
+private fun TalentDialog(
+    dialogState: MutableState<DialogState<Talent?>>,
     viewModel: CompendiumViewModel
 ) {
     val dialogStateValue = dialogState.value
@@ -106,14 +94,14 @@ private fun SkillDialog(
         return
     }
 
-    val formData = SkillFormData.fromState(dialogStateValue)
+    val formData = TalentFormData.fromState(dialogStateValue)
     val validate = remember { mutableStateOf(false) }
-    val formState = remember { mutableStateOf(SkillFormState.EDITED_BY_USER) }
+    val formState = remember { mutableStateOf(TalentFormState.EDITED_BY_USER) }
 
     AlertDialog(
         onDismissRequest = { dialogState.value = DialogState.Closed() },
         text = {
-            if (formState.value == SkillFormState.SAVING_SKILL) {
+            if (formState.value == TalentFormState.SAVING_TALENT) {
                 Progress()
                 return@AlertDialog
             }
@@ -125,7 +113,7 @@ private fun SkillDialog(
                         value = formData.name.value,
                         onValueChange = { formData.name.value = it },
                         validate = validate.value,
-                        maxLength = Skill.NAME_MAX_LENGTH
+                        maxLength = Talent.NAME_MAX_LENGTH
                     )
 
                     TextInput(
@@ -133,28 +121,9 @@ private fun SkillDialog(
                         value = formData.description.value,
                         onValueChange = { formData.description.value = it },
                         validate = validate.value,
-                        maxLength = Skill.DESCRIPTION_MAX_LENGTH,
+                        maxLength = Talent.DESCRIPTION_MAX_LENGTH,
                         multiLine = true,
                     )
-
-                    ChipList(
-                        label = stringResource(R.string.label_skill_characteristic),
-                        items = SkillCharacteristic.values()
-                            .map { it to stringResource(it.getShortcutNameId()) },
-                        value = formData.characteristic.value,
-                        onValueChange = { formData.characteristic.value = it }
-                    )
-
-                    Box(
-                        modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp),
-                        alignment = Alignment.TopCenter,
-                    ) {
-                        CheckboxWithText(
-                            text = stringResource(R.string.label_skill_advanced),
-                            checked = formData.advanced.value,
-                            onCheckedChange = { formData.advanced.value = it }
-                        )
-                    }
                 }
             }
         },
@@ -172,9 +141,9 @@ private fun SkillDialog(
 
                     SaveButton(onClick = {
                         if (formData.isValid()) {
-                            formState.value = SkillFormState.SAVING_SKILL
+                            formState.value = TalentFormState.SAVING_TALENT
                             coroutineScope.launch(Dispatchers.IO) {
-                                viewModel.save(formData.toSkill())
+                                viewModel.save(formData.toTalent())
                                 withContext(Dispatchers.Main) {
                                     dialogState.value = DialogState.Closed()
                                 }

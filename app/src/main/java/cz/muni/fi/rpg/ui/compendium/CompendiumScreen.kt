@@ -98,11 +98,7 @@ private fun WithConstraintsScope.tabs(partyId: UUID, width: Dp): Array<TabScreen
 
     return arrayOf(
         TabScreen(R.string.title_character_skills) { SkillCompendiumTab(viewModel) },
-        TabScreen(R.string.title_character_talents) {
-            Box(Modifier.width(width).fillMaxHeight().background(Color.Blue)) {
-
-            }
-        },
+        TabScreen(R.string.title_character_talents) { TalentCompendiumTab(viewModel) },
         TabScreen(R.string.title_character_spells) {
             Box(Modifier.width(width).fillMaxHeight().background(Color.Red)) {
 
