@@ -1,6 +1,7 @@
 package cz.muni.fi.rpg.model.domain.skills
 
 import android.os.Parcelable
+import cz.muni.fi.rpg.model.domain.compendium.common.Characteristic
 import kotlinx.android.parcel.Parcelize
 import java.util.UUID
 
@@ -8,7 +9,7 @@ import java.util.UUID
 data class Skill(
     val id: UUID,
     val advanced: Boolean,
-    val characteristic: SkillCharacteristic,
+    val characteristic: Characteristic,
     val name: String,
     val description: String,
     val advances: Int = 0

@@ -1,13 +1,13 @@
 package cz.muni.fi.rpg.model.domain.compendium
 
-import cz.muni.fi.rpg.model.domain.skills.SkillCharacteristic
+import cz.muni.fi.rpg.model.domain.compendium.common.Characteristic
 import java.util.*
 
 data class Skill(
     override val id: UUID,
     val name: String,
     val description: String,
-    val characteristic: SkillCharacteristic,
+    val characteristic: Characteristic,
     val advanced: Boolean,
 ) : CompendiumItem {
     companion object {

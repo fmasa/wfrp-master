@@ -13,7 +13,7 @@ import com.google.android.material.chip.ChipGroup
 import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.model.domain.character.CharacterId
 import cz.muni.fi.rpg.model.domain.skills.Skill
-import cz.muni.fi.rpg.model.domain.skills.SkillCharacteristic
+import cz.muni.fi.rpg.model.domain.compendium.common.Characteristic
 import cz.muni.fi.rpg.ui.common.forms.Form
 import cz.muni.fi.rpg.ui.common.optionalParcelableArgument
 import cz.muni.fi.rpg.ui.common.parcelableArgument
@@ -130,7 +130,7 @@ class SkillDialog : DialogFragment(), CoroutineScope by CoroutineScope(Dispatche
 
     private fun addCharacteristicChips(view: View) {
         val group = view.findViewById<ChipGroup>(R.id.skillCharacteristic)
-        SkillCharacteristic.values().forEach {
+        Characteristic.values().forEach {
             val chip = layoutInflater.inflate(R.layout.item_chip_choice, null, false) as Chip
 
             chip.setText(it.getShortcutNameId())
@@ -139,13 +139,13 @@ class SkillDialog : DialogFragment(), CoroutineScope by CoroutineScope(Dispatche
         }
 
         group
-            .findViewWithTag<Chip>(SkillCharacteristic.values().first())
+            .findViewWithTag<Chip>(Characteristic.values().first())
             .isChecked = true
     }
 
-    private fun selectedCharacteristic(view: View): SkillCharacteristic {
+    private fun selectedCharacteristic(view: View): Characteristic {
         return view.findViewById<ChipGroup>(R.id.skillCharacteristic).children
             .first { it is Chip && it.isChecked }
-            .tag as SkillCharacteristic
+            .tag as Characteristic
     }
 }

@@ -1,11 +1,11 @@
-package cz.muni.fi.rpg.model.domain.skills
+package cz.muni.fi.rpg.model.domain.compendium.common
 
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.model.domain.character.Stats
 
-enum class SkillCharacteristic {
+enum class Characteristic {
     AGILITY,
     BALLISTIC_SKILL,
     DEXTERITY,

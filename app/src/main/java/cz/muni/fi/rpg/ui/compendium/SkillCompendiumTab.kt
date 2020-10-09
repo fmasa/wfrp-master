@@ -15,7 +15,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.model.domain.compendium.Skill
-import cz.muni.fi.rpg.model.domain.skills.SkillCharacteristic
+import cz.muni.fi.rpg.model.domain.compendium.common.Characteristic
 import cz.muni.fi.rpg.ui.common.composables.*
 import cz.muni.fi.rpg.ui.common.composables.dialog.DialogState
 import cz.muni.fi.rpg.ui.common.composables.dialog.CancelButton
@@ -57,7 +57,7 @@ private data class SkillFormData(
     val id: UUID,
     val name: MutableState<String>,
     val description: MutableState<String>,
-    val characteristic: MutableState<SkillCharacteristic>,
+    val characteristic: MutableState<Characteristic>,
     val advanced: MutableState<Boolean>,
 ) : FormData {
     companion object {
@@ -67,7 +67,7 @@ private data class SkillFormData(
             name = savedInstanceState(state) { state.item?.name ?: "" },
             description = savedInstanceState(state) { state.item?.description ?: "" },
             characteristic = savedInstanceState(state) {
-                state.item?.characteristic ?: SkillCharacteristic.AGILITY
+                state.item?.characteristic ?: Characteristic.AGILITY
             },
             advanced = savedInstanceState(state) { state.item?.advanced ?: false },
         )
@@ -139,7 +139,7 @@ private fun SkillDialog(
 
                     ChipList(
                         label = stringResource(R.string.label_skill_characteristic),
-                        items = SkillCharacteristic.values()
+                        items = Characteristic.values()
                             .map { it to stringResource(it.getShortcutNameId()) },
                         value = formData.characteristic.value,
                         onValueChange = { formData.characteristic.value = it }
