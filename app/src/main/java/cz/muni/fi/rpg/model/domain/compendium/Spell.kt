@@ -1,6 +1,5 @@
 package cz.muni.fi.rpg.model.domain.compendium
 
-import android.os.Parcelable
 import java.util.UUID
 
 data class Spell(

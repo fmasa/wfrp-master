@@ -11,20 +11,16 @@ import androidx.compose.material.Scaffold
 import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.runtime.savedinstancestate.savedInstanceState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.WithConstraints
 import androidx.compose.ui.WithConstraintsScope
 import androidx.compose.ui.gesture.longPressGestureFilter
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.window.Dialog
 import androidx.lifecycle.LiveData
 import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.model.domain.compendium.CompendiumItem
-import cz.muni.fi.rpg.model.domain.compendium.Skill
 import cz.muni.fi.rpg.model.right
 import cz.muni.fi.rpg.ui.common.composables.*
 import cz.muni.fi.rpg.ui.common.composables.dialog.DialogState
@@ -71,7 +67,7 @@ private fun WithConstraintsScope.MainContent(routing: Routing<Route.Compendium>)
 
         val viewModel: CompendiumViewModel by viewModel { parametersOf(routing.route.partyId) }
 
-        val tabs = tabs(routing.route.partyId, maxWidth)
+        val tabs = tabs(routing.route.partyId)
         val scrollState = key(screenWidth, tabs.size) { rememberScrollState(0f) }
 
         TabRow(
@@ -93,17 +89,13 @@ private fun WithConstraintsScope.MainContent(routing: Routing<Route.Compendium>)
 
 @ExperimentalLayout
 @Composable
-private fun WithConstraintsScope.tabs(partyId: UUID, width: Dp): Array<TabScreen<CompendiumViewModel>> {
+private fun WithConstraintsScope.tabs(partyId: UUID): Array<TabScreen<CompendiumViewModel>> {
     val viewModel: CompendiumViewModel by viewModel { parametersOf(partyId) }
 
     return arrayOf(
         TabScreen(R.string.title_character_skills) { SkillCompendiumTab(viewModel) },
         TabScreen(R.string.title_character_talents) { TalentCompendiumTab(viewModel) },
-        TabScreen(R.string.title_character_spells) {
-            Box(Modifier.width(width).fillMaxHeight().background(Color.Red)) {
-
-            }
-        }
+        TabScreen(R.string.title_character_spells) { SpellCompendiumTab(viewModel) }
     )
 }
 
