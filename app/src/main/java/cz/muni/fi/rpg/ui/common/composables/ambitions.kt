@@ -9,8 +9,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.Card
-import androidx.compose.material.EmphasisAmbient
+import androidx.compose.material.AmbientEmphasisLevels
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.ProvideEmphasis
 import androidx.compose.runtime.Composable
@@ -46,7 +45,7 @@ fun AmbitionsCard(
                     )
 
                     if (value.isBlank()) {
-                        ProvideEmphasis(emphasis = EmphasisAmbient.current.medium) {
+                        ProvideEmphasis(emphasis = AmbientEmphasisLevels.current.medium) {
                             Row(verticalAlignment = Alignment.CenterVertically) {
                                 Icon(vectorResource(R.drawable.ic_none))
                                 Text(

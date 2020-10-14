@@ -7,7 +7,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.EmphasisAmbient
+import androidx.compose.material.AmbientEmphasisLevels
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -39,7 +39,7 @@ fun NumberPicker(
             horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            val iconColorFilter = ColorFilter.tint(EmphasisAmbient.current.medium.applyEmphasis(MaterialTheme.colors.onSurface))
+            val iconColorFilter = ColorFilter.tint(AmbientEmphasisLevels.current.medium.applyEmphasis(MaterialTheme.colors.onSurface))
 
             Image(
                 modifier = Modifier.clickable(onClick = onDecrement),

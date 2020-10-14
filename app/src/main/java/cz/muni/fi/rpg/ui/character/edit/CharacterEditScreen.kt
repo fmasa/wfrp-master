@@ -159,7 +159,6 @@ private fun CharacterEditTopBar(
     onBack: () -> Unit,
     actionsEnabled: Boolean,
 ) {
-    val emphasis = EmphasisAmbient.current
     TopAppBar(
         navigationIcon = { BackButton(onBack) },
         title = {

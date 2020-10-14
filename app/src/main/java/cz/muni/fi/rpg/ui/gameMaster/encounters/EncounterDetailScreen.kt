@@ -230,7 +230,7 @@ private fun NpcList(
     onRemoveRequest: (Npc) -> Unit,
 ) {
     for (npc in npcs) {
-        val emphasis = EmphasisAmbient.current
+        val emphasis = AmbientEmphasisLevels.current
 
         ProvideEmphasis(if (npc.alive) emphasis.high else emphasis.disabled) {
             CardItem(
