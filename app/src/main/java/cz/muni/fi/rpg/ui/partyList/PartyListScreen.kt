@@ -37,8 +37,8 @@ import cz.muni.fi.rpg.ui.router.Routing
 @Composable
 fun PartyListScreen(routing: Routing<Route.PartyList>, userId: String) {
     val menuState = remember { mutableStateOf(MenuState.COLLAPSED) }
+    val fragmentManager = fragmentManager()
     val context = ContextAmbient.current
-    check(context is AppCompatActivity)
 
     Scaffold(
         topBar = {
@@ -70,7 +70,7 @@ fun PartyListScreen(routing: Routing<Route.PartyList>, userId: String) {
                             .setOnSuccessListener { party ->
                                 routing.backStack.push(Route.GameMaster(party.id))
                             }
-                            .show(context.supportFragmentManager, null)
+                            .show(fragmentManager, null)
                         menuState.value = MenuState.COLLAPSED
                     }
                 )

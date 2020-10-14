@@ -1,6 +1,5 @@
 package cz.muni.fi.rpg.ui.character.skills
 
-import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Text
 import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.Composable
@@ -12,7 +11,6 @@ import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.model.domain.character.CharacterId
 import cz.muni.fi.rpg.model.domain.character.Stats
 import cz.muni.fi.rpg.model.domain.skills.Skill
-import cz.muni.fi.rpg.model.domain.skills.SkillCharacteristic
 import cz.muni.fi.rpg.model.right
 import cz.muni.fi.rpg.ui.common.composables.*
 import cz.muni.fi.rpg.viewModels.CharacterViewModel
@@ -78,7 +76,7 @@ private fun SkillItem(
     CardItem(
         skill.name,
         skill.description,
-        resolveSkillIcon(skill),
+        skill.characteristic.getIconId(),
         onClick = onClick,
         listOf(ContextMenu.Item(stringResource(R.string.remove), onClick = { onRemove() })),
         badgeContent = { TestNumber(skill, characteristics) }
@@ -93,18 +91,4 @@ private fun TestNumber(skill: Skill, characteristics: Stats) {
         Text(stringResource(R.string.skill_test_number_shortcut))
         Text(testNumber.toString(), Modifier.padding(start = 4.dp))
     }
-}
-
-@DrawableRes
-private fun resolveSkillIcon(skill: Skill) = when (skill.characteristic) {
-    SkillCharacteristic.AGILITY -> R.drawable.ic_agility
-    SkillCharacteristic.BALLISTIC_SKILL -> R.drawable.ic_ballistic_skill
-    SkillCharacteristic.DEXTERITY -> R.drawable.ic_dexterity
-    SkillCharacteristic.INITIATIVE -> R.drawable.ic_initiative
-    SkillCharacteristic.INTELLIGENCE -> R.drawable.ic_intelligence
-    SkillCharacteristic.FELLOWSHIP -> R.drawable.ic_fellowship
-    SkillCharacteristic.STRENGTH -> R.drawable.ic_strength
-    SkillCharacteristic.TOUGHNESS -> R.drawable.ic_toughness
-    SkillCharacteristic.WEAPON_SKILL -> R.drawable.ic_weapon_skill
-    SkillCharacteristic.WILL_POWER -> R.drawable.ic_will_power
 }

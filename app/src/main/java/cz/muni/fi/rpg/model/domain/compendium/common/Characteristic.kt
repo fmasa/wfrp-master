@@ -1,10 +1,11 @@
-package cz.muni.fi.rpg.model.domain.skills
+package cz.muni.fi.rpg.model.domain.compendium.common
 
+import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.model.domain.character.Stats
 
-enum class SkillCharacteristic {
+enum class Characteristic {
     AGILITY,
     BALLISTIC_SKILL,
     DEXTERITY,
@@ -43,5 +44,19 @@ enum class SkillCharacteristic {
         TOUGHNESS -> characteristics.toughness
         WEAPON_SKILL -> characteristics.weaponSkill
         WILL_POWER -> characteristics.willPower
+    }
+
+    @DrawableRes
+    fun getIconId(): Int = when (this) {
+        AGILITY -> R.drawable.ic_agility
+        BALLISTIC_SKILL -> R.drawable.ic_ballistic_skill
+        DEXTERITY -> R.drawable.ic_dexterity
+        INITIATIVE -> R.drawable.ic_initiative
+        INTELLIGENCE -> R.drawable.ic_intelligence
+        FELLOWSHIP -> R.drawable.ic_fellowship
+        STRENGTH -> R.drawable.ic_strength
+        TOUGHNESS -> R.drawable.ic_toughness
+        WEAPON_SKILL -> R.drawable.ic_weapon_skill
+        WILL_POWER -> R.drawable.ic_will_power
     }
 }

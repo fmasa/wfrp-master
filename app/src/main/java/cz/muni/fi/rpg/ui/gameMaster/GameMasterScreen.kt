@@ -1,6 +1,5 @@
 package cz.muni.fi.rpg.ui.gameMaster
 
-import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.CircularProgressIndicator
@@ -11,7 +10,6 @@ import androidx.compose.runtime.key
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.WithConstraints
-import androidx.compose.ui.platform.ContextAmbient
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
@@ -39,8 +37,7 @@ import org.koin.core.parameter.parametersOf
 fun GameMasterScreen(routing: Routing<Route.GameMaster>, adManager: AdManager) {
     val viewModel: GameMasterViewModel by viewModel { parametersOf(routing.route.partyId) }
     val party = viewModel.party.right().observeAsState().value
-    val context = ContextAmbient.current
-    check(context is AppCompatActivity)
+    val fragmentManager = fragmentManager()
 
     Scaffold(
         topBar = {
@@ -55,7 +52,7 @@ fun GameMasterScreen(routing: Routing<Route.GameMaster>, adManager: AdManager) {
                             }
 
                             RenamePartyDialog.newInstance(party.id, party.getName())
-                                .show(context.supportFragmentManager, null)
+                                .show(fragmentManager, null)
                         },
                     ) {
                         Icon(vectorResource(R.drawable.ic_edit))
@@ -114,16 +111,16 @@ private fun screens(
     backStack: BackStack<Route>,
     modifier: Modifier
 ): Array<TabScreen<Party>> {
-    val context = ContextAmbient.current
-    check(context is AppCompatActivity)
+    val fragmentManager = fragmentManager()
 
     return arrayOf(
         TabScreen(R.string.title_characters) { party ->
-
+            val dialogTitle = stringResource(R.string.title_party_ambitions)
             PartySummaryScreen(
                 modifier = modifier,
                 partyId = party.id,
                 viewModel = viewModel,
+                backStack = backStack,
                 onCharacterOpenRequest = {
                     backStack.push(Route.CharacterDetail(CharacterId(party.id, it.id)))
                 },
@@ -132,9 +129,9 @@ private fun screens(
                 },
                 onEditAmbitionsRequest = { ambitions ->
                     ChangeAmbitionsDialog
-                        .newInstance(context.getString(R.string.title_party_ambitions), ambitions)
+                        .newInstance(dialogTitle, ambitions)
                         .setOnSaveListener { viewModel.updatePartyAmbitions(it) }
-                        .show(context.supportFragmentManager, null)
+                        .show(fragmentManager, null)
                 }
             )
         },
@@ -154,7 +151,7 @@ private fun screens(
                 },
                 onChangeDateRequest = {
                     ChangeDateDialog.newInstance(party.id, party.getTime().date)
-                        .show(context.supportFragmentManager, null)
+                        .show(fragmentManager, null)
                 },
             )
         },
@@ -168,7 +165,7 @@ private fun screens(
                 },
                 onNewEncounterDialogRequest = {
                     EncounterDialog.newInstance(party.id, null)
-                        .show(context.supportFragmentManager, null)
+                        .show(fragmentManager, null)
                 }
             )
         },

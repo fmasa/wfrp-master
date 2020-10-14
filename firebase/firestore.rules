@@ -13,6 +13,68 @@ service cloud.firestore {
             allow write: if request.auth != null
                          && ((isGameMaster() && isValidPartyEdit()) || onlyUserAdded());
 
+            //
+            // Compendium
+            //
+            match /skills/{skillId} {
+                allow read: if hasAccessToParty();
+                allow create: if isGameMaster() && isValidSkill(request.resource.data);
+                allow update: if isGameMaster() && isValidSkill(request.resource.data);
+                allow delete: if isGameMaster();
+
+                function isValidSkill(skill) {
+                    return skill.keys().toSet() == ["id", "name", "description", "advanced", "characteristic"].toSet()
+                        && skill.id is string && skill.id == skillId && isValidUuid(skill.id)
+                        && skill.name is string && isNotBlank(skill.name) && skill.name.size() <= 50
+                        && skill.description is string && skill.description.size() <= 200
+                        && skill.advanced is bool
+                        && skill.characteristic in [
+                            "AGILITY",
+                            "BALLISTIC_SKILL",
+                            "DEXTERITY",
+                            "INITIATIVE",
+                            "INTELLIGENCE",
+                            "FELLOWSHIP",
+                            "STRENGTH",
+                            "TOUGHNESS",
+                            "WILL_POWER",
+                            "WEAPON_SKILL"
+                        ]
+                }
+            }
+
+            match /talents/{talentId} {
+                allow read: if hasAccessToParty();
+                allow create: if isGameMaster() && isValidTalent(request.resource.data);
+                allow update: if isGameMaster() && isValidTalent(request.resource.data);
+                allow delete: if isGameMaster();
+
+                function isValidTalent(talent) {
+                    return talent.keys().toSet() == ["id", "name", "description"].toSet()
+                        && talent.id is string && talent.id == talentId && isValidUuid(talent.id)
+                        && talent.name is string && isNotBlank(talent.name) && talent.name.size() <= 50
+                        && talent.description is string && talent.description.size() <= 200;
+                }
+            }
+
+            match /spells/{spellId} {
+                allow read: if hasAccessToParty();
+                allow create: if isGameMaster() && isValidSpell(request.resource.data);
+                allow update: if isGameMaster() && isValidSpell(request.resource.data);
+                allow delete: if isGameMaster();
+
+                function isValidSpell(spell) {
+                    return spell.keys().toSet() == ["id", "name", "range", "target", "duration", "castingNumber", "effect"].toSet()
+                        && spell.id is string && spell.id == spellId && isValidUuid(spell.id)
+                        && spell.name is string && isNotBlank(spell.name) && spell.name.size() <= 50
+                        && spell.range is string && spell.range.size() <= 50
+                        && spell.target is string && spell.target.size() <= 50
+                        && spell.duration is string && spell.duration.size() <= 50
+                        && spell.effect is string && spell.effect.size() <= 400
+                        && spell.castingNumber is int && spell.castingNumber >= 0 && spell.castingNumber <= 99;
+                }
+            }
+            // End of Compendium
 
             match /encounters/{encounterId} {
                 allow read: if hasAccessToParty();

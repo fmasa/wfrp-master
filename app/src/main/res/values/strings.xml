@@ -263,4 +263,16 @@
     <string name="lose_access_to_parties">You will lose access to these parties:</string>
     <string name="mannslieb_phase">Mannslieb phase: %1$s</string>
     <string name="players_number">%1$d players</string>
+
+    <!-- Compendium -->
+    <string name="title_compendium">Compendium</string>
+
+    <string name="no_skills_in_compendium">No skills</string>
+    <string name="no_skills_in_compendium_sub_text">There are no skill in your compendium yet.</string>
+
+    <string name="no_talents_in_compendium">No talents</string>
+    <string name="no_talents_in_compendium_sub_text">There are no talents in your compendium yet.</string>
+
+    <string name="no_spells_in_compendium">No spells</string>
+    <string name="no_spells_in_compendium_sub_text">There are no spells in your compendium yet.</string>
 </resources>

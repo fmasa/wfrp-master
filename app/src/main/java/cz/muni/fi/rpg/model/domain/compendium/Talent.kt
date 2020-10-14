@@ -1,19 +1,12 @@
-package cz.muni.fi.rpg.model.domain.skills
+package cz.muni.fi.rpg.model.domain.compendium
 
-import android.os.Parcelable
-import cz.muni.fi.rpg.model.domain.compendium.common.Characteristic
-import kotlinx.android.parcel.Parcelize
-import java.util.UUID
+import java.util.*
 
-@Parcelize
-data class Skill(
-    val id: UUID,
-    val advanced: Boolean,
-    val characteristic: Characteristic,
+data class Talent(
+    override val id: UUID,
     val name: String,
     val description: String,
-    val advances: Int = 0
-) : Parcelable {
+): CompendiumItem {
     companion object {
         const val NAME_MAX_LENGTH = 50
         const val DESCRIPTION_MAX_LENGTH = 200
@@ -21,7 +14,6 @@ data class Skill(
 
     init {
         require(name.isNotEmpty())
-        require(advances >= 0)
         require(name.length <= NAME_MAX_LENGTH) { "Maximum allowed name length is $NAME_MAX_LENGTH" }
         require(description.length <= DESCRIPTION_MAX_LENGTH) { "Maximum allowed description length is $DESCRIPTION_MAX_LENGTH" }
     }

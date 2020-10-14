@@ -19,6 +19,7 @@ import cz.muni.fi.rpg.ui.characterCreation.CharacterCreationScreen
 import cz.muni.fi.rpg.ui.common.AboutScreen
 import cz.muni.fi.rpg.ui.common.AdManager
 import cz.muni.fi.rpg.ui.common.composables.Theme
+import cz.muni.fi.rpg.ui.compendium.CompendiumScreen
 import cz.muni.fi.rpg.ui.gameMaster.GameMasterScreen
 import cz.muni.fi.rpg.ui.gameMaster.encounters.EncounterDetailScreen
 import cz.muni.fi.rpg.ui.gameMaster.encounters.NpcCreationScreen
@@ -85,6 +86,9 @@ class MainActivity : AuthenticatedActivity(R.layout.activity_main) {
                             }
                             is Route.Settings -> {
                                 SettingsScreen(Routing(route, backStack))
+                            }
+                            is Route.Compendium -> {
+                                CompendiumScreen(Routing(route, backStack))
                             }
                         }
                     }
