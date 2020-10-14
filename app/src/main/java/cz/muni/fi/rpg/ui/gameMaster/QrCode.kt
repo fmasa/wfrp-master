@@ -2,16 +2,13 @@ package cz.muni.fi.rpg.ui.gameMaster
 
 import android.graphics.Bitmap
 import android.graphics.Color
-import androidx.compose.foundation.Box
-import androidx.compose.foundation.ContentGravity
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.CircularProgressIndicator
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.launchInComposition
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.WithConstraints
 import androidx.compose.ui.graphics.ImageAsset
@@ -31,13 +28,13 @@ internal fun QrCode(data: String) {
         val qrCode = remember { mutableStateOf<ImageAsset?>(null) }
         val width = constraints.maxWidth
 
-        launchInComposition(data, width) {
+        LaunchedTask(data, width) {
             qrCode.value = createQrCode(data, width)
         }
 
         when (val asset = qrCode.value) {
             null -> {
-                Box(Modifier.fillMaxWidth().aspectRatio(1f), gravity = ContentGravity.Center) {
+                Box(Modifier.fillMaxWidth().aspectRatio(1f), alignment = Alignment.Center) {
                     CircularProgressIndicator()
                 }
             }

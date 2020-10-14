@@ -8,6 +8,7 @@ import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.key
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.WithConstraints
 import androidx.compose.ui.res.stringResource
@@ -62,7 +63,7 @@ fun GameMasterScreen(routing: Routing<Route.GameMaster>, adManager: AdManager) {
         }
     ) {
         if (party == null) {
-            Box(Modifier.fillMaxSize(), gravity = ContentGravity.Center) {
+            Box(Modifier.fillMaxSize(), gravity = Alignment.Center) {
                 CircularProgressIndicator()
             }
 

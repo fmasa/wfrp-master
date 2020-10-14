@@ -5,7 +5,7 @@ import androidx.annotation.StringRes
 import androidx.compose.foundation.Icon
 import androidx.compose.foundation.Text
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.EmphasisAmbient
+import androidx.compose.material.AmbientEmphasisLevels
 import androidx.compose.material.ProvideEmphasis
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -121,7 +121,7 @@ private fun RowScope.ArmorPart(
             },
         )
 
-        ProvideEmphasis(EmphasisAmbient.current.medium) {
+        ProvideEmphasis(AmbientEmphasisLevels.current.medium) {
             Text(stringResource(nameRes))
             if (rollRange != null) {
                 Text("${formatRoll(rollRange.first)} - ${formatRoll(rollRange.last)}")

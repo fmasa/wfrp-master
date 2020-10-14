@@ -66,7 +66,7 @@ fun <T> ColumnScope.TabRow(
             Tab(
                 modifier = tabModifier,
                 selectedContentColor = MaterialTheme.colors.primary,
-                unselectedContentColor = EmphasisAmbient.current.medium.applyEmphasis(
+                unselectedContentColor = AmbientEmphasisLevels.current.medium.applyEmphasis(
                     MaterialTheme.colors.onSurface
                 ),
                 selected = index == (if (scrolledPercentage > 0.5f) selectedTabIndex + 1 else selectedTabIndex),

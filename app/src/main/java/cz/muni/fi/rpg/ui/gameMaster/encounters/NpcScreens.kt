@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.savedinstancestate.savedInstanceState
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
@@ -233,7 +234,7 @@ fun NpcDetailScreen(
         }
     ) {
         if (data == null) {
-            Box(Modifier.fillMaxSize(), gravity = ContentGravity.Center) {
+            Box(Modifier.fillMaxSize(), gravity = Alignment.Center) {
                 CircularProgressIndicator()
             }
         } else {

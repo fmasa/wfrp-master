@@ -1,10 +1,9 @@
 package cz.muni.fi.rpg.ui.common.composables
 
 import androidx.appcompat.app.AppCompatActivity
-import androidx.compose.foundation.ContentColorAmbient
+import androidx.compose.foundation.AmbientContentColor
 import androidx.compose.foundation.Icon
 import androidx.compose.foundation.Text
-import androidx.compose.foundation.contentColor
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Providers
@@ -24,10 +23,10 @@ fun TopBarAction(
     val colorBase = contentColorFor(MaterialTheme.colors.primarySurface)
     val contentColor = if (enabled)
         colorBase else
-        EmphasisAmbient.current.disabled.applyEmphasis(colorBase)
+        AmbientEmphasisLevels.current.disabled.applyEmphasis(colorBase)
 
     TextButton(onClick = onClick, enabled = enabled, modifier = modifier) {
-        Providers(ContentColorAmbient provides contentColor) { content() }
+        Providers(AmbientContentColor provides contentColor) { content() }
     }
 }
 
@@ -51,6 +50,6 @@ fun Subtitle(text: String) {
     Text(
         text,
         style = MaterialTheme.typography.caption,
-        color = EmphasisAmbient.current.medium.applyEmphasis(contentColor()),
+        color = AmbientEmphasisLevels.current.medium.applyEmphasis(AmbientContentColor.current),
     )
 }

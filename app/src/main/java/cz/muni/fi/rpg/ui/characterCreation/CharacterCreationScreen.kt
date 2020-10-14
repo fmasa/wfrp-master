@@ -132,7 +132,7 @@ private fun BottomBar(
 
     Surface(
         elevation = 4.dp,
-        color = EmphasisAmbient.current.medium.applyEmphasis(MaterialTheme.colors.onSurface),
+        color = AmbientEmphasisLevels.current.medium.applyEmphasis(MaterialTheme.colors.onSurface),
         modifier = Modifier.fillMaxWidth(),
     ) {
         Stack(Modifier.fillMaxWidth().background(MaterialTheme.colors.surface)) {

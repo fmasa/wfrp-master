@@ -5,7 +5,7 @@ import androidx.annotation.StringRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.Text
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.EmphasisAmbient
+import androidx.compose.material.AmbientEmphasisLevels
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -55,7 +55,7 @@ fun EmptyUI(
 ) {
     val image = loadVectorResource(drawableResourceId).resource.resource
 
-    val disabledColor = EmphasisAmbient.current.disabled.applyEmphasis(MaterialTheme.colors.onSurface)
+    val disabledColor = AmbientEmphasisLevels.current.disabled.applyEmphasis(MaterialTheme.colors.onSurface)
     val text = stringResource(textId)
 
     Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.fillMaxWidth()) {
