@@ -167,7 +167,7 @@ private fun DescriptionCard(viewModel: EncounterDetailViewModel) {
         val encounter = viewModel.encounter.right().observeAsState().value
 
         if (encounter == null) {
-            Box(Modifier.fillMaxWidth(), gravity = ContentGravity.Center) {
+            Box(Modifier.fillMaxWidth(), gravity = Alignment.Center) {
                 CircularProgressIndicator()
             }
             return@CardContainer
@@ -190,7 +190,7 @@ private fun CombatantsCard(
         val npcs = viewModel.npcs.observeAsState().value
 
         if (npcs == null) {
-            Box(Modifier.fillMaxWidth(), gravity = ContentGravity.Center) {
+            Box(Modifier.fillMaxWidth(), gravity = Alignment.Center) {
                 CircularProgressIndicator()
             }
 

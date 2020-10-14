@@ -4,9 +4,10 @@ import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedTask
 import androidx.compose.runtime.key
-import androidx.compose.runtime.launchInComposition
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.WithConstraints
 import androidx.compose.ui.res.stringResource
@@ -15,7 +16,6 @@ import androidx.compose.ui.unit.dp
 import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.model.domain.character.Character
 import cz.muni.fi.rpg.model.domain.character.CharacterId
-import cz.muni.fi.rpg.model.left
 import cz.muni.fi.rpg.model.right
 import cz.muni.fi.rpg.ui.character.skills.CharacterSkillsScreen
 import cz.muni.fi.rpg.ui.common.AdManager
@@ -37,7 +37,7 @@ fun CharacterDetailScreen(routing: Routing<Route.CharacterDetail>, adManager: Ad
     val character = viewModel.character.right().observeAsState().value
     val party = partyViewModel.party.right().observeAsState().value
 
-    launchInComposition(routing.route.characterId) {
+    LaunchedTask(routing.route.characterId) {
         withContext(Dispatchers.IO) {
             if (!viewModel.characterExists()) {
                 routing.backStack.replace(
@@ -84,7 +84,7 @@ private fun MainContainer(
     adManager: AdManager,
 ) {
     if (character == null) {
-        Box(Modifier.fillMaxSize(), gravity = ContentGravity.Center) {
+        Box(Modifier.fillMaxSize(), gravity = Alignment.Center) {
             CircularProgressIndicator()
         }
 

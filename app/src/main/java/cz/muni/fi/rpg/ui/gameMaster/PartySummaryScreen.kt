@@ -129,8 +129,7 @@ private fun PlayersCard(
             when {
                 players == null -> {
                     CircularProgressIndicator(
-                        Modifier.gravity(Alignment.CenterHorizontally)
-                            .gravity(Alignment.CenterHorizontally)
+                        Modifier.align(Alignment.CenterHorizontally)
                             .padding(vertical = 16.dp)
                     )
                 }

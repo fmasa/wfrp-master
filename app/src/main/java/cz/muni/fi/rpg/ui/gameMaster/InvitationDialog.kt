@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.*
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ContextAmbient
 import androidx.compose.ui.res.loadVectorResource
@@ -49,7 +50,7 @@ internal fun InvitationDialog2(invitation: Invitation, onDismissRequest: () -> U
                 val sharingOptions = sharingOptions(invitation).collectAsState().value
 
                 if (sharingOptions == null) {
-                    Box(Modifier.fillMaxWidth().aspectRatio(1f), gravity = ContentGravity.Center) {
+                    Box(Modifier.fillMaxWidth().aspectRatio(1f), gravity = Alignment.Center) {
                         CircularProgressIndicator()
                     }
                 } else {
@@ -78,7 +79,7 @@ private fun sharingOptions(invitation: Invitation): StateFlow<SharingOptions?> {
     val jsonMapper: JsonMapper = KoinContextHandler.get().get()
     val flow = remember { MutableStateFlow<SharingOptions?>(null) }
 
-    launchInComposition {
+    LaunchedTask {
         withContext(Dispatchers.IO) {
             val json = jsonMapper.writeValueAsString(invitation)
             val link = Firebase.dynamicLinks.shortLinkAsync {

@@ -1,6 +1,5 @@
 package cz.muni.fi.rpg.ui.common.composables
 
-import androidx.annotation.StringRes
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -101,7 +100,7 @@ fun TextInput(
                             onValueChange(filteredValue)
                         }
                     },
-                    textStyle = currentTextStyle().copy(color = MaterialTheme.colors.onSurface),
+                    textStyle = AmbientTextStyle.current.copy(color = MaterialTheme.colors.onSurface),
                     modifier = Modifier.fillMaxWidth(),
                     inactiveColor = borderColor,
                     isErrorValue = errorMessage != null,
@@ -172,7 +171,7 @@ fun Chip(
     val textStyle = MaterialTheme.typography.body2
     val padding = 8.dp
     val borderRadius = with(DensityAmbient.current) { textStyle.fontSize.toDp() / 2 + padding }
-    val color = if (selected) MaterialTheme.colors.primary else contentColor()
+    val color = if (selected) MaterialTheme.colors.primary else AmbientContentColor.current
 
     Surface(
         shape = RoundedCornerShape(size = borderRadius),
