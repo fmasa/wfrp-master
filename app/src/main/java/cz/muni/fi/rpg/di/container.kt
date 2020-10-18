@@ -30,6 +30,7 @@ import cz.muni.fi.rpg.model.firestore.repositories.*
 import cz.muni.fi.rpg.model.firestore.repositories.compendium.FirestoreCompendium
 import cz.muni.fi.rpg.ui.common.AdManager
 import cz.muni.fi.rpg.viewModels.*
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.koin.android.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 import java.util.*
@@ -37,6 +38,7 @@ import java.util.*
 private inline fun <reified T : Any> aggregateMapper() =
     JacksonAggregateMapper(T::class, jacksonTypeRef())
 
+@ExperimentalCoroutinesApi
 val appModule = module {
 
     /**

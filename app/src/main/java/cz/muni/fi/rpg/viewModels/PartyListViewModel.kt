@@ -1,16 +1,16 @@
 package cz.muni.fi.rpg.viewModels
 
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import cz.muni.fi.rpg.model.domain.party.Party
 import cz.muni.fi.rpg.model.domain.party.PartyRepository
+import kotlinx.coroutines.flow.Flow
 import java.util.*
 
 class PartyListViewModel(
     private val parties: PartyRepository
 ): ViewModel() {
 
-    fun liveForUser(userId: String): LiveData<List<Party>> {
+    fun liveForUser(userId: String): Flow<List<Party>> {
         return parties.forUserLive(userId)
     }
 

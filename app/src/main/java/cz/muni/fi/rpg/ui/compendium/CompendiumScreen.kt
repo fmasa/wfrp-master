@@ -10,7 +10,6 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.*
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.WithConstraints
 import androidx.compose.ui.WithConstraintsScope
@@ -18,7 +17,6 @@ import androidx.compose.ui.gesture.longPressGestureFilter
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.Dp
-import androidx.lifecycle.LiveData
 import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.model.domain.compendium.CompendiumItem
 import cz.muni.fi.rpg.model.right
@@ -28,6 +26,7 @@ import cz.muni.fi.rpg.ui.router.Route
 import cz.muni.fi.rpg.ui.router.Routing
 import cz.muni.fi.rpg.viewModels.CompendiumViewModel
 import cz.muni.fi.rpg.viewModels.PartyViewModel
+import kotlinx.coroutines.flow.Flow
 import org.koin.core.parameter.parametersOf
 import java.util.*
 
@@ -49,7 +48,7 @@ private fun TopBar(routing: Routing<Route.Compendium>) {
         title = {
             Column {
                 Text(stringResource(R.string.title_compendium))
-                viewModel.party.right().observeAsState().value?.let {
+                viewModel.party.right().collectAsState(null).value?.let {
                     Subtitle(it.getName())
                 }
             }
@@ -101,7 +100,7 @@ private fun WithConstraintsScope.tabs(partyId: UUID): Array<TabScreen<Compendium
 
 @Composable
 fun <T : CompendiumItem> CompendiumTab(
-    liveItems: LiveData<List<T>>,
+    liveItems: Flow<List<T>>,
     width: Dp,
     emptyUI: @Composable () -> Unit,
     dialog: @Composable (MutableState<DialogState<T?>>) -> Unit,
@@ -121,7 +120,7 @@ fun <T : CompendiumItem> CompendiumTab(
         }
     ) {
         Column(Modifier.fillMaxSize().background(MaterialTheme.colors.background)) {
-            val items = liveItems.observeAsState().value
+            val items = liveItems.collectAsState(null).value
 
             when {
                 items == null -> FullScreenProgress()

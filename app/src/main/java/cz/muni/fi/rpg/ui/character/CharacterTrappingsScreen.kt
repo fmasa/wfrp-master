@@ -2,10 +2,9 @@ package cz.muni.fi.rpg.ui.character
 
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumnFor
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -33,7 +32,7 @@ internal fun CharacterTrappingsScreen(
     val viewModel: InventoryViewModel by viewModel { parametersOf(characterId) }
 
     ScrollableColumn(modifier) {
-        viewModel.money.observeAsState().value?.let {
+        viewModel.money.collectAsState(null).value?.let {
             CurrentMoney(
                 value = it,
                 onClick = {
@@ -42,7 +41,7 @@ internal fun CharacterTrappingsScreen(
             )
         }
 
-        viewModel.armor.right().observeAsState().value?.let { armor ->
+        viewModel.armor.right().collectAsState(null).value?.let { armor ->
             ArmorCard(armor, onChange = { viewModel.updateArmor(it) })
         }
 
@@ -100,7 +99,7 @@ private fun InventoryItemsCard(
     onRemove: (InventoryItem) -> Unit,
     onNewItemButtonClicked: () -> Unit,
 ) {
-    val items = viewModel.inventory.observeAsState().value ?: return
+    val items = viewModel.inventory.collectAsState(null).value ?: return
 
     CardContainer(Modifier.padding(horizontal = 8.dp)) {
         Column(Modifier.padding(horizontal = 8.dp)) {

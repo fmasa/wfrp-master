@@ -1,10 +1,10 @@
 package cz.muni.fi.rpg.model.domain.encounter
 
-import androidx.lifecycle.LiveData
 import cz.muni.fi.rpg.model.domain.encounters.EncounterId
+import kotlinx.coroutines.flow.Flow
 
 interface NpcRepository {
-    fun findByEncounter(encounterId: EncounterId): LiveData<List<Npc>>
+    fun findByEncounter(encounterId: EncounterId): Flow<List<Npc>>
 
     /**
      * @throws CombatantNotFound

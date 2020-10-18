@@ -1,7 +1,5 @@
 package cz.muni.fi.rpg.viewModels
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import arrow.core.Either
 import cz.muni.fi.rpg.model.domain.armour.Armor
@@ -16,6 +14,8 @@ import cz.muni.fi.rpg.model.domain.inventory.InventoryItemRepository
 import cz.muni.fi.rpg.model.right
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 
 class InventoryViewModel(
@@ -24,14 +24,11 @@ class InventoryViewModel(
     private val armorRepository: CharacterFeatureRepository<Armor>,
     private val characters: CharacterRepository
 ) : ViewModel(), CoroutineScope by CoroutineScope(Dispatchers.IO) {
-    val inventory: LiveData<List<InventoryItem>> = inventoryItems.findAllForCharacter(characterId)
+    val inventory: Flow<List<InventoryItem>> = inventoryItems.findAllForCharacter(characterId)
 
-    val armor: LiveData<Either<CouldNotConnectToBackend, Armor>> =
-        armorRepository.getLive(characterId)
+    val armor: Flow<Either<CouldNotConnectToBackend, Armor>> = armorRepository.getLive(characterId)
 
-    val money: LiveData<Money> = Transformations.map(characters.getLive(characterId).right()) {
-        it.getMoney()
-    }
+    val money: Flow<Money> = characters.getLive(characterId).right().map { it.getMoney() }
 
     suspend fun addMoney(amount: Money) {
         val character = characters.get(characterId)

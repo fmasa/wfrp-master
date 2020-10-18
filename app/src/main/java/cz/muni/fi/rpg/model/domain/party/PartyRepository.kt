@@ -1,8 +1,8 @@
 package cz.muni.fi.rpg.model.domain.party
 
-import androidx.lifecycle.LiveData
 import arrow.core.Either
 import cz.muni.fi.rpg.model.domain.common.CouldNotConnectToBackend
+import kotlinx.coroutines.flow.Flow
 import java.util.*
 
 interface PartyRepository {
@@ -17,12 +17,12 @@ interface PartyRepository {
      */
     suspend fun get(id: UUID): Party
 
-    fun getLive(id: UUID): LiveData<Either<PartyNotFound, Party>>
+    fun getLive(id: UUID): Flow<Either<PartyNotFound, Party>>
 
     /**
      * Creates RecyclerView Adapter with parties that user has access to
      */
-    fun forUserLive(userId: String): LiveData<List<Party>>
+    fun forUserLive(userId: String): Flow<List<Party>>
 
     suspend fun forUser(userId: String): List<Party>
 }

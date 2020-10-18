@@ -1,13 +1,13 @@
 package cz.muni.fi.rpg.model.domain.inventory
 
-import androidx.lifecycle.LiveData
 import cz.muni.fi.rpg.model.domain.character.CharacterId
+import kotlinx.coroutines.flow.Flow
 
 interface InventoryItemRepository {
     /**
      * Returns observable list of character's inventory items
      */
-    fun findAllForCharacter(characterId: CharacterId): LiveData<List<InventoryItem>>
+    fun findAllForCharacter(characterId: CharacterId): Flow<List<InventoryItem>>
 
     /**
      * Inserts inventory item to character's inventory,

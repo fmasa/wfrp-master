@@ -1,7 +1,5 @@
 package cz.muni.fi.rpg.model.firestore.repositories
 
-import androidx.lifecycle.LiveData
-import arrow.core.Either
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.FirebaseFirestoreException
 import cz.muni.fi.rpg.model.domain.character.Character
@@ -9,10 +7,14 @@ import cz.muni.fi.rpg.model.domain.character.CharacterId
 import cz.muni.fi.rpg.model.domain.character.CharacterNotFound
 import cz.muni.fi.rpg.model.domain.character.CharacterRepository
 import cz.muni.fi.rpg.model.firestore.*
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.tasks.await
 import timber.log.Timber
 import java.util.*
 
+@ExperimentalCoroutinesApi
 internal class FirestoreCharacterRepository(
     firestore: FirebaseFirestore,
     private val mapper: AggregateMapper<Character>
@@ -43,24 +45,23 @@ internal class FirestoreCharacterRepository(
         }
     }
 
-    override fun getLive(characterId: CharacterId): LiveData<Either<CharacterNotFound, Character>> {
-        return DocumentLiveData(
-            characters(
-                characterId.partyId
-            ).document(characterId.id)
-        ) {
-            it.bimap({ e -> CharacterNotFound(characterId, e) }, mapper::fromDocumentSnapshot)
-        }
+    override fun getLive(characterId: CharacterId) = documentFlow(
+        characters(characterId.partyId).document(characterId.id)
+    ) {
+        it.bimap({ e -> CharacterNotFound(characterId, e) }, mapper::fromDocumentSnapshot)
     }
 
     override suspend fun hasCharacterInParty(userId: String, partyId: UUID): Boolean {
         return characters(partyId).whereEqualTo("userId", userId).get().await().size() != 0
     }
 
-    override fun inParty(partyId: UUID): LiveData<List<Character>> =
-        // TODO: Filter archived characters via whereEqualTo() once all historic characters have `archived` field set
+    override fun inParty(partyId: UUID): Flow<List<Character>> =
+    // TODO: Filter archived characters via whereEqualTo() once all historic characters have `archived` field set
         // These should be migrated in 1.14
-        QueryLiveData(characters(partyId), mapper) { !it.isArchived() }
+        queryFlow(
+            characters(partyId),
+            mapper
+        ).map { parties -> parties.filter { !it.isArchived() } }
 
     private fun characters(partyId: UUID) =
         parties.document(partyId.toString()).collection(COLLECTION_CHARACTERS)

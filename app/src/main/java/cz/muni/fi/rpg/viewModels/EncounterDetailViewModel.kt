@@ -1,6 +1,5 @@
 package cz.muni.fi.rpg.viewModels
 
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import arrow.core.Either
 import cz.muni.fi.rpg.model.domain.armour.Armor
@@ -18,8 +17,8 @@ class EncounterDetailViewModel(
     private val encounters: EncounterRepository,
     private val npcRepository: NpcRepository
 ) : ViewModel(), CoroutineScope by CoroutineScope(Dispatchers.IO) {
-    val encounter: LiveData<Either<EncounterNotFound, Encounter>> = encounters.getLive(encounterId)
-    val npcs: LiveData<List<Npc>> = npcRepository.findByEncounter(encounterId)
+    val encounter: Flow<Either<EncounterNotFound, Encounter>> = encounters.getLive(encounterId)
+    val npcs: Flow<List<Npc>> = npcRepository.findByEncounter(encounterId)
 
     suspend fun remove() {
         encounters.remove(encounterId)

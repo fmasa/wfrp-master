@@ -1,6 +1,5 @@
 package cz.muni.fi.rpg.model.firestore.repositories
 
-import androidx.lifecycle.LiveData
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.FirebaseFirestoreException
 import com.google.firebase.firestore.Query
@@ -9,19 +8,19 @@ import cz.muni.fi.rpg.model.domain.encounter.*
 import cz.muni.fi.rpg.model.domain.encounters.EncounterId
 import cz.muni.fi.rpg.model.firestore.*
 import cz.muni.fi.rpg.model.firestore.AggregateMapper
-import cz.muni.fi.rpg.model.firestore.QueryLiveData
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.tasks.await
 
+@ExperimentalCoroutinesApi
 internal class FirestoreNpcRepository(
     private val firestore: FirebaseFirestore,
     private val mapper: AggregateMapper<Npc>
 ) : NpcRepository {
-    override fun findByEncounter(encounterId: EncounterId): LiveData<List<Npc>> {
-        return QueryLiveData(
-            npcs(encounterId).orderBy("position", Query.Direction.ASCENDING),
-            mapper
-        )
-    }
+    override fun findByEncounter(encounterId: EncounterId): Flow<List<Npc>> = queryFlow(
+        npcs(encounterId).orderBy("position", Query.Direction.ASCENDING),
+        mapper
+    )
 
     override suspend fun get(id: NpcId): Npc {
         try {

@@ -6,8 +6,8 @@ import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Scaffold
 import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.key
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.WithConstraints
@@ -37,7 +37,7 @@ import org.koin.core.parameter.parametersOf
 @Composable
 fun GameMasterScreen(routing: Routing<Route.GameMaster>, adManager: AdManager) {
     val viewModel: GameMasterViewModel by viewModel { parametersOf(routing.route.partyId) }
-    val party = viewModel.party.right().observeAsState().value
+    val party = viewModel.party.right().collectAsState(null).value
     val fragmentManager = fragmentManager()
 
     Scaffold(

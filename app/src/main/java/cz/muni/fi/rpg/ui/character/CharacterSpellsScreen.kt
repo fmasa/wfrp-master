@@ -8,7 +8,7 @@ import androidx.compose.foundation.lazy.LazyColumnFor
 import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
@@ -48,7 +48,7 @@ internal fun CharacterSpellsScreen(
 
 @Composable
 private fun MainContainer(viewModel: SpellsViewModel, onSpellClick: (Spell) -> Unit) {
-    val spells = viewModel.spells.observeAsState().value ?: return
+    val spells = viewModel.spells.collectAsState(null).value ?: return
 
     if (spells.isEmpty()) {
         EmptyUI(

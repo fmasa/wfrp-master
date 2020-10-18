@@ -3,7 +3,7 @@ package cz.muni.fi.rpg.ui.character.skills
 import androidx.compose.foundation.Text
 import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -24,9 +24,9 @@ internal fun SkillsCard(
     skillsVm: SkillsViewModel,
     onRemove: (Skill) -> Unit,
 ) {
-    val skills = skillsVm.skills.observeAsState().value ?: return
+    val skills = skillsVm.skills.collectAsState(null).value ?: return
     val characteristics = characterVm.character.right()
-        .observeAsState().value?.getCharacteristics() ?: return
+        .collectAsState(null).value?.getCharacteristics() ?: return
 
     val fragmentManager = fragmentManager()
 

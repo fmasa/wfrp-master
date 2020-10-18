@@ -1,7 +1,7 @@
 package cz.muni.fi.rpg.model.domain.character
 
-import androidx.lifecycle.LiveData
 import arrow.core.Either
+import kotlinx.coroutines.flow.Flow
 import java.util.UUID
 
 interface CharacterRepository {
@@ -12,9 +12,9 @@ interface CharacterRepository {
      */
     suspend fun get(characterId: CharacterId): Character
 
-    fun getLive(characterId: CharacterId): LiveData<Either<CharacterNotFound, Character>>
+    fun getLive(characterId: CharacterId): Flow<Either<CharacterNotFound, Character>>
 
     suspend fun hasCharacterInParty(userId: String, partyId: UUID) : Boolean
 
-    fun inParty(partyId: UUID): LiveData<List<Character>>
+    fun inParty(partyId: UUID): Flow<List<Character>>
 }

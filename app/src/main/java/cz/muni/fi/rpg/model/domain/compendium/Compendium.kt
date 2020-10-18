@@ -1,11 +1,11 @@
 package cz.muni.fi.rpg.model.domain.compendium
 
-import androidx.lifecycle.LiveData
+import kotlinx.coroutines.flow.Flow
 import java.util.*
 
 interface Compendium<T : CompendiumItem> {
 
-    fun liveForParty(partyId: UUID): LiveData<List<T>>
+    fun liveForParty(partyId: UUID): Flow<List<T>>
 
     /**
      * Updates item if it exists and creates it if it doesn't

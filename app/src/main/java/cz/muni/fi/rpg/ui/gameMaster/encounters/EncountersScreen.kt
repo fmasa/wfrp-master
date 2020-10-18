@@ -5,12 +5,11 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.layout.Box
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.loadVectorResource
-import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import cz.muni.fi.rpg.R
@@ -26,7 +25,7 @@ fun EncountersScreen(
     onEncounterClick: (Encounter) -> Unit,
     onNewEncounterDialogRequest: () -> Unit,
 ) {
-    val encounters = viewModel.encounters.observeAsState().value
+    val encounters = viewModel.encounters.collectAsState(null).value
 
     if (encounters == null) {
         Box(modifier.fillMaxSize()) {

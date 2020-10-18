@@ -1,7 +1,5 @@
 package cz.muni.fi.rpg.model.firestore.repositories
 
-import androidx.lifecycle.LiveData
-import arrow.core.Either
 import arrow.core.Left
 import arrow.core.Right
 import com.google.firebase.firestore.DocumentReference
@@ -13,11 +11,12 @@ import cz.muni.fi.rpg.model.domain.character.Feature
 import cz.muni.fi.rpg.model.domain.common.CouldNotConnectToBackend
 import cz.muni.fi.rpg.model.firestore.*
 import cz.muni.fi.rpg.model.firestore.AggregateMapper
-import cz.muni.fi.rpg.model.firestore.DocumentLiveData
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.tasks.await
 import timber.log.Timber
 import java.util.*
 
+@ExperimentalCoroutinesApi
 internal class FirestoreCharacterFeatureRepository<T : Any>(
     feature: Feature,
     firestore: FirebaseFirestore,
@@ -35,13 +34,11 @@ internal class FirestoreCharacterFeatureRepository<T : Any>(
         document(characterId).set(data, SetOptions.merge()).await()
     }
 
-    override fun getLive(characterId: CharacterId): LiveData<Either<CouldNotConnectToBackend, T>> {
-        return DocumentLiveData(document(characterId)) { errorOrSnapshot ->
-            errorOrSnapshot.fold(
-                { e -> if (e == null) Right(defaultValue) else Left(CouldNotConnectToBackend(e)) },
-                { snapshot -> Right(mapper.fromDocumentSnapshot(snapshot)) }
-            )
-        }
+    override fun getLive(characterId: CharacterId) = documentFlow(document(characterId)) {
+        it.fold(
+            { e -> if (e == null) Right(defaultValue) else Left(CouldNotConnectToBackend(e)) },
+            { snapshot -> Right(mapper.fromDocumentSnapshot(snapshot)) }
+        )
     }
 
     private fun document(characterId: CharacterId): DocumentReference {

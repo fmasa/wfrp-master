@@ -1,23 +1,24 @@
 package cz.muni.fi.rpg.model.firestore.repositories
 
-import androidx.lifecycle.LiveData
 import com.google.firebase.firestore.FirebaseFirestore
 import cz.muni.fi.rpg.model.domain.character.CharacterId
 import cz.muni.fi.rpg.model.domain.spells.Spell
 import cz.muni.fi.rpg.model.domain.spells.SpellRepository
 import cz.muni.fi.rpg.model.firestore.*
 import cz.muni.fi.rpg.model.firestore.AggregateMapper
-import cz.muni.fi.rpg.model.firestore.QueryLiveData
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.tasks.await
 import java.util.*
 
+@ExperimentalCoroutinesApi
 internal class FirestoreSpellRepository(
     private val firestore: FirebaseFirestore,
     private val mapper: AggregateMapper<Spell>
 ) : SpellRepository {
-    override fun findAllForCharacter(characterId: CharacterId): LiveData<List<Spell>> {
-        return QueryLiveData(spellsCollection(characterId), mapper)
-    }
+    override fun findAllForCharacter(characterId: CharacterId) = queryFlow(
+        spellsCollection(characterId),
+        mapper,
+    )
 
     override suspend fun remove(characterId: CharacterId, spellId: UUID) {
         spellsCollection(characterId).document(spellId.toString()).delete().await()
