@@ -50,9 +50,10 @@ service cloud.firestore {
                 allow delete: if isGameMaster();
 
                 function isValidTalent(talent) {
-                    return talent.keys().toSet() == ["id", "name", "description"].toSet()
+                    return talent.keys().toSet() == ["id", "name", "maxTimesTaken", "description"].toSet()
                         && talent.id is string && talent.id == talentId && isValidUuid(talent.id)
                         && talent.name is string && isNotBlank(talent.name) && talent.name.size() <= 50
+                        && talent.maxTimesTaken is string && talent.name.size() <= 50
                         && talent.description is string && talent.description.size() <= 200;
                 }
             }

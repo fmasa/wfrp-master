@@ -15,6 +15,7 @@ interface Skill {
 interface Talent {
     id: string;
     name: string;
+    maxTimesTaken: string;
     description: string;
 }
 
@@ -205,6 +206,7 @@ class TalentCompendiumTest extends CompendiumTest<Talent> {
             {
                 id: uuid(),
                 name: "Sneaky brieky",
+                maxTimesTaken: "Fellowship Bonus",
                 description: "+ 1O to sneak rolls",
             }
         ]

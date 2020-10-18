@@ -54,6 +54,7 @@ fun WithConstraintsScope.TalentCompendiumTab(viewModel: CompendiumViewModel) {
 private data class TalentFormData(
     val id: UUID,
     val name: MutableState<String>,
+    val maxTimesTaken: MutableState<String>,
     val description: MutableState<String>,
 ) : FormData {
     companion object {
@@ -61,6 +62,7 @@ private data class TalentFormData(
         fun fromState(state: DialogState.Opened<Talent?>) = TalentFormData(
             id = remember(state) { state.item?.id ?: UUID.randomUUID() },
             name = savedInstanceState(state) { state.item?.name ?: "" },
+            maxTimesTaken = savedInstanceState(state) { state.item?.maxTimesTaken ?: "" },
             description = savedInstanceState(state) { state.item?.description ?: "" },
         )
     }
@@ -68,12 +70,14 @@ private data class TalentFormData(
     fun toTalent() = Talent(
         id = id,
         name = name.value,
+        maxTimesTaken = maxTimesTaken.value,
         description = description.value,
     )
 
     override fun isValid() =
         name.value.isNotBlank() &&
                 name.value.length <= Talent.NAME_MAX_LENGTH &&
+                maxTimesTaken.value.length <= Talent.MAX_TIMES_TAKEN_MAX_LENGTH &&
                 description.value.length <= Talent.DESCRIPTION_MAX_LENGTH
 }
 
@@ -114,6 +118,14 @@ private fun TalentDialog(
                         onValueChange = { formData.name.value = it },
                         validate = validate.value,
                         maxLength = Talent.NAME_MAX_LENGTH
+                    )
+
+                    TextInput(
+                        label = stringResource(R.string.label_talent_max_times_taken),
+                        value = formData.maxTimesTaken.value,
+                        onValueChange = { formData.maxTimesTaken.value = it },
+                        validate = validate.value,
+                        maxLength = Talent.MAX_TIMES_TAKEN_MAX_LENGTH,
                     )
 
                     TextInput(
