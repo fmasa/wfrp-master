@@ -74,6 +74,9 @@ android {
     }
 
     compileOptions {
+        // Allow use of Java 8 APIs on older Android versions
+        coreLibraryDesugaringEnabled true
+
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
@@ -109,6 +112,12 @@ dependencies {
         exclude group: 'androidx.appcompat'
         exclude group: 'androidx.recyclerview'
     }
+
+    // Allow use of Java 8 APIs on older Android versions
+    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.0.10'
+
+    // Time picker dialog
+    implementation "com.vanpra.compose-material-dialogs:datetime:0.2.4"
 
     // Koin
     implementation "org.koin:koin-android:2.1.5"
