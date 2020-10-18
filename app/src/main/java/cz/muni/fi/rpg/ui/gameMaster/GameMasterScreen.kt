@@ -140,16 +140,7 @@ private fun screens(
             CalendarScreen(
                 party,
                 modifier = modifier,
-                onChangeTimeRequest = {
-                    val time = party.getTime().time
-                    // TODO: Implement this
-//                TimePickerDialog.newInstance(
-//                    this@GameMasterFragment,
-//                    time.hour,
-//                    time.minute,
-//                    true
-//                ).show(childFragmentManager, "TimePickerDialog")
-                },
+                viewModel = viewModel,
                 onChangeDateRequest = {
                     ChangeDateDialog.newInstance(party.id, party.getTime().date)
                         .show(fragmentManager, null)
