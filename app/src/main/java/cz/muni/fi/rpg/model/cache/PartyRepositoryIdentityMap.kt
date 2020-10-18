@@ -1,10 +1,10 @@
 package cz.muni.fi.rpg.model.cache
 
-import androidx.lifecycle.LiveData
 import arrow.core.Either
 import cz.muni.fi.rpg.model.domain.party.Party
 import cz.muni.fi.rpg.model.domain.party.PartyNotFound
 import cz.muni.fi.rpg.model.domain.party.PartyRepository
+import kotlinx.coroutines.flow.Flow
 import java.util.UUID
 
 internal class PartyRepositoryIdentityMap(
@@ -12,10 +12,8 @@ internal class PartyRepositoryIdentityMap(
     private val inner: PartyRepository
 ) : PartyRepository by inner {
 
-    private val identityMap = IdentityMap<UUID, LiveData<Either<PartyNotFound, Party>>>(maxEntries)
+    private val identityMap = IdentityMap<UUID, Flow<Either<PartyNotFound, Party>>>(maxEntries)
 
     @Synchronized
-    override fun getLive(id: UUID): LiveData<Either<PartyNotFound, Party>> {
-        return identityMap.getOrPut(id, { inner.getLive(id) })
-    }
+    override fun getLive(id: UUID) = identityMap.getOrPut(id, { inner.getLive(id) })
 }

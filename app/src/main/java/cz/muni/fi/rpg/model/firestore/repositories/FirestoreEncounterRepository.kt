@@ -1,7 +1,5 @@
 package cz.muni.fi.rpg.model.firestore.repositories
 
-import androidx.lifecycle.LiveData
-import arrow.core.Either
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.FirebaseFirestoreException
 import com.google.firebase.firestore.Query
@@ -11,12 +9,12 @@ import cz.muni.fi.rpg.model.domain.encounter.EncounterNotFound
 import cz.muni.fi.rpg.model.domain.encounter.EncounterRepository
 import cz.muni.fi.rpg.model.firestore.*
 import cz.muni.fi.rpg.model.firestore.AggregateMapper
-import cz.muni.fi.rpg.model.firestore.DocumentLiveData
-import cz.muni.fi.rpg.model.firestore.QueryLiveData
 import cz.muni.fi.rpg.model.domain.encounters.EncounterId
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.tasks.await
 import java.util.*
 
+@ExperimentalCoroutinesApi
 internal class FirestoreEncounterRepository(
     private val firestore: FirebaseFirestore,
     private val mapper: AggregateMapper<Encounter>
@@ -36,13 +34,13 @@ internal class FirestoreEncounterRepository(
         }
     }
 
-    override fun getLive(id: EncounterId): LiveData<Either<EncounterNotFound, Encounter>> {
-        return DocumentLiveData(encounters(id.partyId).document(id.encounterId.toString())) {
-            it.bimap(
-                { e -> EncounterNotFound(id, e) },
-                mapper::fromDocumentSnapshot
-            )
-        }
+    override fun getLive(id: EncounterId) = documentFlow(
+        encounters(id.partyId).document(id.encounterId.toString())
+    ) {
+        it.bimap(
+            { e -> EncounterNotFound(id, e) },
+            mapper::fromDocumentSnapshot
+        )
     }
 
     override suspend fun save(partyId: UUID, vararg encounters: Encounter) {
@@ -57,12 +55,10 @@ internal class FirestoreEncounterRepository(
         }.await()
     }
 
-    override fun findByParty(partyId: UUID): LiveData<List<Encounter>> {
-        return QueryLiveData(
-            encounters(partyId).orderBy("position", Query.Direction.ASCENDING),
-            mapper
-        )
-    }
+    override fun findByParty(partyId: UUID) = queryFlow(
+        encounters(partyId).orderBy("position", Query.Direction.ASCENDING),
+        mapper
+    )
 
     override suspend fun remove(id: EncounterId) {
         encounters(id.partyId).document(id.encounterId.toString()).delete().await()

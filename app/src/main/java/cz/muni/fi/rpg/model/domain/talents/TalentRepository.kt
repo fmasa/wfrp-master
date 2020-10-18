@@ -1,17 +1,15 @@
 package cz.muni.fi.rpg.model.domain.talents
 
-import androidx.lifecycle.LiveData
 import cz.muni.fi.rpg.model.domain.character.CharacterId
+import kotlinx.coroutines.flow.Flow
 import java.util.*
 
 interface TalentRepository {
 
     /**
-     * Returns observable list of talent for given character
-     *
-     * Note: Current value MAY NOT be set immediately as LiveData value
+     * Returns flow which emits current list of talent for given character
      */
-    fun findAllForCharacter(characterId: CharacterId): LiveData<List<Talent>>
+    fun findAllForCharacter(characterId: CharacterId): Flow<List<Talent>>
 
     /**
      * Removes given talent from character's talent list

@@ -9,7 +9,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
@@ -43,7 +43,7 @@ fun EncounterDetailScreen(routing: Routing<Route.EncounterDetail>) {
     Scaffold(
         topBar = {
             val partyId = encounterId.partyId
-            val encounter = viewModel.encounter.right().observeAsState().value
+            val encounter = viewModel.encounter.right().collectAsState(null).value
 
             TopAppBar(
                 title = {
@@ -51,7 +51,7 @@ fun EncounterDetailScreen(routing: Routing<Route.EncounterDetail>) {
                         encounter?.let { Text(it.name) }
 
                         val partyViewModel: PartyViewModel by viewModel { parametersOf(partyId) }
-                        partyViewModel.party.right().observeAsState().value?.let {
+                        partyViewModel.party.right().collectAsState(null).value?.let {
                             Subtitle(it.getName())
                         }
                     }
@@ -164,7 +164,7 @@ private fun DescriptionCard(viewModel: EncounterDetailViewModel) {
     CardContainer(Modifier.fillMaxWidth().padding(horizontal = 8.dp)) {
         CardTitle(R.string.title_description)
 
-        val encounter = viewModel.encounter.right().observeAsState().value
+        val encounter = viewModel.encounter.right().collectAsState(null).value
 
         if (encounter == null) {
             Box(Modifier.fillMaxWidth(), gravity = Alignment.Center) {
@@ -187,7 +187,7 @@ private fun CombatantsCard(
     CardContainer(Modifier.fillMaxWidth().padding(8.dp)) {
         CardTitle(R.string.title_npcs)
 
-        val npcs = viewModel.npcs.observeAsState().value
+        val npcs = viewModel.npcs.collectAsState(null).value
 
         if (npcs == null) {
             Box(Modifier.fillMaxWidth(), gravity = Alignment.Center) {

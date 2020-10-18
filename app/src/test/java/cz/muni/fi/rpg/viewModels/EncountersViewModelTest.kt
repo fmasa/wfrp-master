@@ -1,11 +1,11 @@
 package cz.muni.fi.rpg.viewModels
 
-import androidx.lifecycle.LiveData
 import arrow.core.Either
 import cz.muni.fi.rpg.model.domain.encounter.Encounter
 import cz.muni.fi.rpg.model.domain.encounter.EncounterNotFound
 import cz.muni.fi.rpg.model.domain.encounter.EncounterRepository
 import cz.muni.fi.rpg.model.domain.encounters.EncounterId
+import kotlinx.coroutines.flow.Flow
 import org.junit.Assert.assertEquals
 import kotlinx.coroutines.runBlocking
 import org.junit.Test
@@ -19,7 +19,7 @@ class EncountersViewModelTest {
             } ?: throw EncounterNotFound(id, null)
         }
 
-        override fun getLive(id: EncounterId): LiveData<Either<EncounterNotFound, Encounter>> {
+        override fun getLive(id: EncounterId): Flow<Either<EncounterNotFound, Encounter>> {
             error("Not necessary")
         }
 
@@ -29,7 +29,7 @@ class EncountersViewModelTest {
             }
         }
 
-        override fun findByParty(partyId: UUID): LiveData<List<Encounter>> = error("Not necessary")
+        override fun findByParty(partyId: UUID): Flow<List<Encounter>> = error("Not necessary")
         override suspend fun remove(id: EncounterId) = error("Not necessary")
         override suspend fun getNextPosition(partyId: UUID): Int = error("Not necessary")
     }

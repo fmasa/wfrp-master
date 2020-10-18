@@ -1,6 +1,5 @@
 package cz.muni.fi.rpg.viewModels
 
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import arrow.core.Either
 import cz.muni.fi.rpg.model.domain.character.Character
@@ -10,6 +9,7 @@ import cz.muni.fi.rpg.model.domain.character.CharacterRepository
 import cz.muni.fi.rpg.model.domain.character.Points
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 
 class CharacterStatsViewModel(
@@ -17,7 +17,7 @@ class CharacterStatsViewModel(
     private val characters: CharacterRepository
 ) : ViewModel(), CoroutineScope by CoroutineScope(Dispatchers.Default) {
 
-    val character: LiveData<Either<CharacterNotFound, Character>> = characters.getLive(characterId)
+    val character: Flow<Either<CharacterNotFound, Character>> = characters.getLive(characterId)
 
     fun updatePoints(mutation: (points: Points) -> Points) {
         launch {

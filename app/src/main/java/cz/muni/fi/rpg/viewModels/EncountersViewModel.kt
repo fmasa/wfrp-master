@@ -1,11 +1,11 @@
 package cz.muni.fi.rpg.viewModels
 
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import cz.muni.fi.rpg.model.domain.encounter.Encounter
 import cz.muni.fi.rpg.model.domain.encounter.EncounterRepository
 import cz.muni.fi.rpg.model.domain.encounters.EncounterId
 import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.Flow
 import java.util.*
 
 class EncountersViewModel(
@@ -13,7 +13,7 @@ class EncountersViewModel(
     private val encounterRepository: EncounterRepository
 ) : ViewModel(), CoroutineScope by CoroutineScope(Dispatchers.IO) {
 
-    val encounters: LiveData<List<Encounter>> by lazy { encounterRepository.findByParty(partyId) }
+    val encounters: Flow<List<Encounter>> by lazy { encounterRepository.findByParty(partyId) }
 
     suspend fun createEncounter(name: String, description: String) {
         encounterRepository.save(

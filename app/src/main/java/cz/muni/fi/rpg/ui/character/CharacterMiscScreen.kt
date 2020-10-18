@@ -11,7 +11,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ContextAmbient
@@ -21,7 +21,6 @@ import androidx.compose.ui.unit.dp
 import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.model.domain.character.Character
 import cz.muni.fi.rpg.model.domain.character.CharacterId
-import cz.muni.fi.rpg.model.domain.common.Ambitions
 import cz.muni.fi.rpg.ui.common.ChangeAmbitionsDialog
 import cz.muni.fi.rpg.ui.common.composables.*
 import cz.muni.fi.rpg.ui.views.TextInput
@@ -66,7 +65,7 @@ internal fun CharacterMiscScreen(
                 })
         )
 
-        viewModel.party.observeAsState().value?.let {
+        viewModel.party.collectAsState(null).value?.let {
             AmbitionsCard(
                 R.string.title_party_ambitions,
                 it.getAmbitions(),

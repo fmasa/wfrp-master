@@ -10,20 +10,21 @@ import cz.muni.fi.rpg.model.domain.inventory.InventoryItemId
 import cz.muni.fi.rpg.model.domain.inventory.InventoryItemNotFound
 import cz.muni.fi.rpg.model.domain.inventory.InventoryItemRepository
 import cz.muni.fi.rpg.model.firestore.*
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.tasks.await
 import timber.log.Timber
 
+@ExperimentalCoroutinesApi
 internal class FirestoreInventoryItemRepository(
     firestore: FirebaseFirestore,
     private val mapper: AggregateMapper<InventoryItem>
 ) : InventoryItemRepository {
     private val parties = firestore.collection(COLLECTION_PARTIES)
 
-    override fun findAllForCharacter(characterId: CharacterId) =
-        QueryLiveData(
-            inventoryItems(characterId),
-            mapper
-        )
+    override fun findAllForCharacter(characterId: CharacterId) = queryFlow(
+        inventoryItems(characterId),
+        mapper,
+    )
 
     override suspend fun save(characterId: CharacterId, item: InventoryItem) {
         val data = mapper.toDocumentData(item)

@@ -3,12 +3,11 @@ package cz.muni.fi.rpg.ui.partyList
 import android.content.Context
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
-import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.*
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.model.domain.party.Party
 import cz.muni.fi.rpg.viewModels.PartyListViewModel
@@ -17,10 +16,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.util.*
-import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.gesture.longPressGestureFilter
 import androidx.compose.ui.platform.ContextAmbient
@@ -124,7 +119,7 @@ private fun MainContainer(
     onClick: (Party) -> Unit,
     onRemove: (Party) -> Unit,
 ) {
-    val parties = viewModel.liveForUser(userId).observeAsState()
+    val parties = viewModel.liveForUser(userId).collectAsState(null)
 
     Box(modifier) {
         parties.value?.let {

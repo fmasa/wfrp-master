@@ -1,17 +1,15 @@
 package cz.muni.fi.rpg.model.domain.skills
 
-import androidx.lifecycle.LiveData
 import cz.muni.fi.rpg.model.domain.character.CharacterId
+import kotlinx.coroutines.flow.Flow
 import java.util.UUID
 
 interface SkillRepository {
 
     /**
-     * Returns observable list of skills for given character
-     *
-     * Note: Current value MAY NOT be set immediately as LiveData value
+     * Returns flow which emits current list of skills for given character
      */
-    fun forCharacter(characterId: CharacterId): LiveData<List<Skill>>
+    fun forCharacter(characterId: CharacterId): Flow<List<Skill>>
 
     /**
      * Removes given skill from character's skill list

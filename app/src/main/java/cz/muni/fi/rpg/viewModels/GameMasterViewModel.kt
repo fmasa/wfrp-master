@@ -1,7 +1,5 @@
 package cz.muni.fi.rpg.viewModels
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import arrow.core.Either
 import arrow.core.extensions.list.foldable.exists
@@ -14,10 +12,11 @@ import cz.muni.fi.rpg.model.domain.party.PartyNotFound
 import cz.muni.fi.rpg.model.domain.party.PartyRepository
 import cz.muni.fi.rpg.model.domain.party.time.DateTime
 import cz.muni.fi.rpg.model.right
-import cz.muni.fi.rpg.ui.common.CombinedLiveData
 import cz.muni.fi.rpg.ui.gameMaster.adapter.Player
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.zip
 import kotlinx.coroutines.launch
 import java.util.*
 
@@ -27,24 +26,22 @@ class GameMasterViewModel(
     private val characterRepository: CharacterRepository
 ) : ViewModel(), CoroutineScope by CoroutineScope(Dispatchers.IO) {
 
-    val party: LiveData<Either<PartyNotFound, Party>> = parties.getLive(partyId)
-    val characters: LiveData<List<Character>> = characterRepository.inParty(partyId)
+    val party: Flow<Either<PartyNotFound, Party>> = parties.getLive(partyId)
+    val characters: Flow<List<Character>> = characterRepository.inParty(partyId)
 
     /**
-     * Returns LiveData with either CharacterId of players current character or NULL if user
+     * Returns flow which emits either CharacterId of players current character or NULL if user
      * didn't create character yet
      */
-    fun getPlayers(): LiveData<List<Player>> {
-        return Transformations
-            .map(CombinedLiveData(party.right(), characters)) { (party, characters) ->
-
+    fun getPlayers(): Flow<List<Player>> {
+        return party.right().zip(characters) { party, characters ->
             val players = characters.map { Player.ExistingCharacter(it) }
+            val usersWithoutCharacter = party.users
+                .filter { it != party.gameMasterId }
+                .filter { userId -> !players.exists { it.character.userId == userId } }
+                .map { Player.UserWithoutCharacter(it) }
 
-            players +
-                party.users
-                    .filter { it != party.gameMasterId }
-                    .filter { userId -> ! players.exists { it.character.userId == userId}}
-                    .map { Player.UserWithoutCharacter(it) }
+            players + usersWithoutCharacter
         }
     }
 

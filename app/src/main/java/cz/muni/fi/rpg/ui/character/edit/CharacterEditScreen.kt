@@ -4,7 +4,6 @@ import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.runtime.*
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.savedinstancestate.savedInstanceState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -71,7 +70,7 @@ fun CharacterEditScreen(routing: Routing<Route.CharacterEdit>) {
     val viewModel: CharacterViewModel by viewModel { parametersOf(routing.route.characterId) }
     val coroutineScope = rememberCoroutineScope()
 
-    val character = viewModel.character.right().observeAsState().value
+    val character = viewModel.character.right().collectAsState(null).value
 
     val submitEnabled = remember { mutableStateOf(true) }
     val formData = character?.let { CharacterEditScreen.FormData.fromCharacter(it) }

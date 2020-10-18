@@ -2,11 +2,8 @@ package cz.muni.fi.rpg.ui.character.skills
 
 import androidx.compose.foundation.Text
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.ExperimentalLazyDsl
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyColumnFor
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -26,7 +23,7 @@ internal fun TalentsCard(
     viewModel: TalentsViewModel,
     onRemove: (Talent) -> Unit,
 ) {
-    val talents = viewModel.talents.observeAsState().value ?: return
+    val talents = viewModel.talents.collectAsState(null).value ?: return
     val coroutineScope = rememberCoroutineScope()
     val fragmentManager = fragmentManager()
 

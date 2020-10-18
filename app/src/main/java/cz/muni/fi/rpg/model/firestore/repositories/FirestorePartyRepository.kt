@@ -1,7 +1,5 @@
 package cz.muni.fi.rpg.model.firestore.repositories
 
-import androidx.lifecycle.LiveData
-import arrow.core.Either
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.FirebaseFirestoreException
 import com.google.firebase.firestore.SetOptions
@@ -10,12 +8,14 @@ import cz.muni.fi.rpg.model.domain.party.Party
 import cz.muni.fi.rpg.model.domain.party.PartyNotFound
 import cz.muni.fi.rpg.model.domain.party.PartyRepository
 import cz.muni.fi.rpg.model.firestore.AggregateMapper
-import cz.muni.fi.rpg.model.firestore.DocumentLiveData
-import cz.muni.fi.rpg.model.firestore.QueryLiveData
+import cz.muni.fi.rpg.model.firestore.documentFlow
+import cz.muni.fi.rpg.model.firestore.queryFlow
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.tasks.await
 import timber.log.Timber
 import java.util.*
 
+@ExperimentalCoroutinesApi
 internal class FirestorePartyRepository(
     private val firestore: FirebaseFirestore,
     private val mapper: AggregateMapper<Party>
@@ -49,17 +49,14 @@ internal class FirestorePartyRepository(
         }
     }
 
-    override fun getLive(id: UUID): LiveData<Either<PartyNotFound, Party>> {
-        return DocumentLiveData(parties.document(id.toString())) {
-            it.bimap(
-                { e -> PartyNotFound(id, e) },
-                { snapshot -> mapper.fromDocumentSnapshot(snapshot) }
-            )
-        }
+    override fun getLive(id: UUID) = documentFlow(parties.document(id.toString())) {
+        it.bimap(
+            { e -> PartyNotFound(id, e) },
+            { snapshot -> mapper.fromDocumentSnapshot(snapshot) }
+        )
     }
 
-    override fun forUserLive(userId: String): LiveData<List<Party>> =
-        QueryLiveData(queryForUser(userId), mapper)
+    override fun forUserLive(userId: String) = queryFlow(queryForUser(userId), mapper)
 
     override suspend fun forUser(userId: String) =
         queryForUser(userId)

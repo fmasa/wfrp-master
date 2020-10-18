@@ -6,7 +6,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -15,7 +15,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.LiveData
 import com.github.zsoltk.compose.router.BackStack
 import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.model.domain.character.Character
@@ -29,6 +28,7 @@ import cz.muni.fi.rpg.ui.router.Route
 import cz.muni.fi.rpg.viewModels.CompendiumViewModel
 import cz.muni.fi.rpg.viewModels.GameMasterViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.Flow
 import org.koin.core.parameter.parametersOf
 import java.util.*
 
@@ -44,7 +44,7 @@ internal fun PartySummaryScreen(
     onEditAmbitionsRequest: (Ambitions) -> Unit,
 ) {
     ScrollableColumn(modifier.background(MaterialTheme.colors.background)) {
-        val party = viewModel.party.right().observeAsState().value
+        val party = viewModel.party.right().collectAsState(null).value
             ?: return@ScrollableColumn
 
         val invitationDialogVisible = remember { mutableStateOf(false) }
@@ -100,11 +100,11 @@ internal fun PartySummaryScreen(
 @Composable
 private fun <T> RowScope.CompendiumSummary(
     @StringRes text: Int,
-    itemsCount: LiveData<List<T>>,
+    itemsCount: Flow<List<T>>,
 ) {
     Column(Modifier.weight(1f), horizontalAlignment = Alignment.CenterHorizontally) {
         Text(
-            itemsCount.observeAsState().value?.size?.toString() ?: "?",
+            itemsCount.collectAsState(null).value?.size?.toString() ?: "?",
             style = MaterialTheme.typography.h6
         )
         Text(stringResource(text))
@@ -124,7 +124,7 @@ private fun PlayersCard(
 
             CardTitle(R.string.title_characters)
 
-            val players = viewModel.getPlayers().observeAsState().value
+            val players = viewModel.getPlayers().collectAsState(null).value
 
             when {
                 players == null -> {
@@ -160,7 +160,7 @@ private fun PlayersCard(
             ) {
                 PrimaryButton(R.string.button_create, onClick = { onCharacterCreateRequest(null) })
 
-                val party = viewModel.party.right().observeAsState().value
+                val party = viewModel.party.right().collectAsState(null).value
 
                 PrimaryButton(
                     R.string.button_invite,
