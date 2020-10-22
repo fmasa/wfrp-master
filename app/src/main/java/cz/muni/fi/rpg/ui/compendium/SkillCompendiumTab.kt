@@ -13,6 +13,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.WithConstraintsScope
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.AndroidDialogProperties
+import androidx.compose.ui.window.DialogProperties
 import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.model.domain.compendium.Skill
 import cz.muni.fi.rpg.model.domain.compendium.common.Characteristic
@@ -111,6 +113,7 @@ private fun SkillDialog(
     val formState = remember { mutableStateOf(SkillFormState.EDITED_BY_USER) }
 
     AlertDialog(
+        properties = AndroidDialogProperties(),
         onDismissRequest = { dialogState.value = DialogState.Closed() },
         text = {
             if (formState.value == SkillFormState.SAVING_SKILL) {
