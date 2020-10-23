@@ -23,7 +23,6 @@ import cz.muni.fi.rpg.model.right
 import cz.muni.fi.rpg.ui.common.AdManager
 import cz.muni.fi.rpg.ui.common.ChangeAmbitionsDialog
 import cz.muni.fi.rpg.ui.common.composables.*
-import cz.muni.fi.rpg.ui.gameMaster.calendar.ChangeDateDialog
 import cz.muni.fi.rpg.ui.gameMaster.encounters.EncounterDialog
 import cz.muni.fi.rpg.ui.gameMaster.encounters.EncountersScreen
 import cz.muni.fi.rpg.ui.router.Route
@@ -141,10 +140,6 @@ private fun screens(
                 party,
                 modifier = modifier,
                 viewModel = viewModel,
-                onChangeDateRequest = {
-                    ChangeDateDialog.newInstance(party.id, party.getTime().date)
-                        .show(fragmentManager, null)
-                },
             )
         },
         TabScreen(R.string.title_encounters) { party ->
