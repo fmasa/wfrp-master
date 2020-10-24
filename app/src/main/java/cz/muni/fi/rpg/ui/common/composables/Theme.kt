@@ -1,8 +1,6 @@
 package cz.muni.fi.rpg.ui.common.composables
 
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.darkColors
-import androidx.compose.material.lightColors
+import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.graphics.Color
@@ -45,13 +43,13 @@ class Theme {
 
         @Composable
         internal fun DarkColors() = darkColors(
-            primary = Color(183, 28, 28),
-            primaryVariant = Color(183, 28, 28),
-            secondary = colorResource(R.color.colorPrimary),
-            background = Color.DarkGray,
-            surface = Color.Black,
+            primary = Color(239, 154, 154),
+            primaryVariant = Color(239, 154, 154),
+            secondary = Color(183, 28, 28),
+            background = Color(18, 18, 18),
+            surface = Color(18, 18, 18),
             error = colorResource(R.color.colorDanger),
-            onPrimary = Color.White,
+            onPrimary = Color.Black,
             onSecondary = Color.White,
             onBackground = Color.White,
             onSurface = Color.White,
