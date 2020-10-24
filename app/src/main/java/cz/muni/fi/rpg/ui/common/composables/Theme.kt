@@ -3,12 +3,13 @@ package cz.muni.fi.rpg.ui.common.composables
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.darkColors
 import androidx.compose.material.lightColors
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.Stable
+import androidx.compose.runtime.*
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.unit.sp
 import cz.muni.fi.rpg.R
+import cz.muni.fi.rpg.viewModels.SettingsViewModel
 
 class Theme {
     class FixedColors(
@@ -61,8 +62,11 @@ class Theme {
 
 @Composable
 fun Theme(content: @Composable () -> Unit) {
+    val viewModel: SettingsViewModel by viewModel()
+    val darkMode by viewModel.darkMode.collectAsState(false)
+
     MaterialTheme(
-        colors = Theme.LightColors(),
+        colors = if (darkMode) Theme.DarkColors() else Theme.LightColors(),
         typography = MaterialTheme.typography.copy(
             caption = MaterialTheme.typography.caption.copy(fontSize = 14.sp),
         ),

@@ -253,7 +253,11 @@
     <string name="google_sign_in_error">We could not sign you in via Google.\nBut you can always sign in later.</string>
     <string name="already_has_character">You already have active character in this party</string>
     <string name="preference_dismissed_google_sign_in">dismissed_google_sign_in</string>
+
+    <!-- Settings -->
     <string name="settings">Settings</string>
+    <string name="settings_dark_mode">Dark Mode</string>
+
     <string name="not_signed_in_description">You are not signed-in.\nSigning-in lets you keep access to parties between devices.</string>
     <string name="title_account">Account</string>
     <string name="signed_in_as">You are signed-in as</string>

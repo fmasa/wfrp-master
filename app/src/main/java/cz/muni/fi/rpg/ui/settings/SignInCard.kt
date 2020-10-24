@@ -40,10 +40,9 @@ import kotlinx.coroutines.withContext
 import timber.log.Timber
 
 @Composable
-fun SignInCard() {
+fun SignInCard(viewModel: SettingsViewModel) {
 
     val authViewModel: AuthenticationViewModel by viewModel()
-    val viewModel: SettingsViewModel by viewModel()
     val email = savedInstanceState { authViewModel.getEmail() }
 
     val activity = activity()
