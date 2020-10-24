@@ -12,6 +12,8 @@ import com.github.zsoltk.compose.backpress.AmbientBackPressHandler
 import com.github.zsoltk.compose.backpress.BackPressHandler
 import com.github.zsoltk.compose.router.BackStack
 import com.github.zsoltk.compose.router.Router
+import com.zachklipp.compose.backstack.Backstack
+import com.zachklipp.compose.backstack.BackstackTransition
 import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.ui.character.CharacterDetailScreen
 import cz.muni.fi.rpg.ui.character.edit.CharacterEditScreen
@@ -54,42 +56,47 @@ class MainActivity : AuthenticatedActivity(R.layout.activity_main) {
                 Theme {
                     Router<Route>(defaultRouting = Route.PartyList) { backStack ->
                         this.backStack = backStack
+                        Backstack(
+                            backstack = backStack.elements.takeLast(3),
+                            transition = BackstackTransition.Slide,
+                        ) {
+                            @Suppress("UNUSED_VARIABLE") // This val is there just to force `when` to be exhaustive
+                            val nothing = when (val route = it) {
+                                is Route.PartyList -> {
+                                    PartyListScreen(Routing(route, backStack), getUserId())
+                                }
+                                is Route.GameMaster -> {
+                                    GameMasterScreen(Routing(route, backStack), adManager)
+                                }
+                                is Route.About -> {
+                                    AboutScreen(Routing(route, backStack))
+                                }
+                                is Route.CharacterCreation -> {
+                                    CharacterCreationScreen(Routing(route, backStack))
+                                }
+                                is Route.CharacterDetail -> {
+                                    CharacterDetailScreen(Routing(route, backStack), adManager)
+                                }
+                                is Route.CharacterEdit -> {
+                                    CharacterEditScreen(Routing(route, backStack))
+                                }
+                                is Route.EncounterDetail -> {
+                                    EncounterDetailScreen(Routing(route, backStack))
+                                }
+                                is Route.NpcDetail -> {
+                                    NpcDetailScreen(Routing(route, backStack))
+                                }
+                                is Route.NpcCreation -> {
+                                    NpcCreationScreen(Routing(route, backStack))
+                                }
+                                is Route.Settings -> {
+                                    SettingsScreen(Routing(route, backStack))
+                                }
+                                is Route.Compendium -> {
+                                    CompendiumScreen(Routing(route, backStack))
+                                }
+                            }
 
-                        // This val is there just to force `when` to be exhaustive
-                        val nothing = when (val route = backStack.last()) {
-                            is Route.PartyList -> {
-                                PartyListScreen(Routing(route, backStack), getUserId())
-                            }
-                            is Route.GameMaster -> {
-                                GameMasterScreen(Routing(route, backStack), adManager)
-                            }
-                            is Route.About -> {
-                                AboutScreen(Routing(route, backStack))
-                            }
-                            is Route.CharacterCreation -> {
-                                CharacterCreationScreen(Routing(route, backStack))
-                            }
-                            is Route.CharacterDetail -> {
-                                CharacterDetailScreen(Routing(route, backStack), adManager)
-                            }
-                            is Route.CharacterEdit -> {
-                                CharacterEditScreen(Routing(route, backStack))
-                            }
-                            is Route.EncounterDetail -> {
-                                EncounterDetailScreen(Routing(route, backStack))
-                            }
-                            is Route.NpcDetail -> {
-                                NpcDetailScreen(Routing(route, backStack))
-                            }
-                            is Route.NpcCreation -> {
-                                NpcCreationScreen(Routing(route, backStack))
-                            }
-                            is Route.Settings -> {
-                                SettingsScreen(Routing(route, backStack))
-                            }
-                            is Route.Compendium -> {
-                                CompendiumScreen(Routing(route, backStack))
-                            }
                         }
                     }
                 }
