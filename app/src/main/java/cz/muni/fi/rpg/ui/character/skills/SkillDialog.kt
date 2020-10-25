@@ -115,6 +115,7 @@ class SkillDialog : DialogFragment(), CoroutineScope by CoroutineScope(Dispatche
 
         val skill = Skill(
             this.skill?.id ?: UUID.randomUUID(),
+            null,
             view.findViewById<CheckBox>(R.id.skillAdvanced).isChecked,
             selectedCharacteristic(view),
             name,
