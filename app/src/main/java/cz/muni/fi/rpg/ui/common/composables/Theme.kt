@@ -1,14 +1,13 @@
 package cz.muni.fi.rpg.ui.common.composables
 
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.darkColors
-import androidx.compose.material.lightColors
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.Stable
+import androidx.compose.material.*
+import androidx.compose.runtime.*
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.unit.sp
 import cz.muni.fi.rpg.R
+import cz.muni.fi.rpg.viewModels.SettingsViewModel
 
 class Theme {
     class FixedColors(
@@ -44,13 +43,13 @@ class Theme {
 
         @Composable
         internal fun DarkColors() = darkColors(
-            primary = Color(183, 28, 28),
-            primaryVariant = Color(183, 28, 28),
-            secondary = colorResource(R.color.colorPrimary),
-            background = Color.DarkGray,
-            surface = Color.Black,
+            primary = Color(239, 154, 154),
+            primaryVariant = Color(239, 154, 154),
+            secondary = Color(183, 28, 28),
+            background = Color(18, 18, 18),
+            surface = Color(18, 18, 18),
             error = colorResource(R.color.colorDanger),
-            onPrimary = Color.White,
+            onPrimary = Color.Black,
             onSecondary = Color.White,
             onBackground = Color.White,
             onSurface = Color.White,
@@ -61,8 +60,11 @@ class Theme {
 
 @Composable
 fun Theme(content: @Composable () -> Unit) {
+    val viewModel: SettingsViewModel by viewModel()
+    val darkMode by viewModel.darkMode.collectAsState(false)
+
     MaterialTheme(
-        colors = Theme.LightColors(),
+        colors = if (darkMode) Theme.DarkColors() else Theme.LightColors(),
         typography = MaterialTheme.typography.copy(
             caption = MaterialTheme.typography.caption.copy(fontSize = 14.sp),
         ),

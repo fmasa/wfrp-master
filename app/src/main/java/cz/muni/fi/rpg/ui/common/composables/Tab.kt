@@ -17,6 +17,7 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.gesture.ScrollCallback
 import androidx.compose.ui.gesture.scrollGestureFilter
 import androidx.compose.ui.gesture.scrollorientationlocking.Orientation
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.DensityAmbient
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Density
@@ -86,18 +87,18 @@ fun <T> ColumnScope.TabRow(
                 selectedTabIndex,
                 scrolledPercentage
             ),
-            color = MaterialTheme.colors.primary
+            color = MaterialTheme.colors.primary,
         )
     }
 
-    Surface(elevation = 6.dp) {
+    Surface(elevation = 4.dp) {
         val modifier = Modifier.fillMaxWidth()
 
         if (fullWidthTabs) {
             MaterialTabRow(
                 modifier = modifier,
                 selectedTabIndex = animatedSelectedTabIndex,
-                backgroundColor = MaterialTheme.colors.surface,
+                backgroundColor = Color.Unspecified,
                 indicator = indicator,
                 tabs = tabs,
             )
@@ -106,7 +107,7 @@ fun <T> ColumnScope.TabRow(
                 edgePadding = 0.dp,
                 modifier = modifier,
                 selectedTabIndex = animatedSelectedTabIndex,
-                backgroundColor = MaterialTheme.colors.surface,
+                backgroundColor = Color.Unspecified,
                 indicator = indicator,
                 tabs = tabs,
             )
