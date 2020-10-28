@@ -14,7 +14,6 @@ import androidx.compose.foundation.Text
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.OutlinedButton
 import androidx.compose.runtime.*
-import androidx.compose.runtime.savedinstancestate.savedInstanceState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ContextAmbient
@@ -25,31 +24,25 @@ import androidx.compose.ui.unit.dp
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.firebase.auth.FirebaseAuthUserCollisionException
 import cz.muni.fi.rpg.R
-import cz.muni.fi.rpg.ui.common.composables.CardContainer
-import cz.muni.fi.rpg.ui.common.composables.CardTitle
-import cz.muni.fi.rpg.ui.common.composables.activity
-import cz.muni.fi.rpg.ui.common.composables.viewModel
+import cz.muni.fi.rpg.model.authentication.User
+import cz.muni.fi.rpg.ui.common.composables.*
 import cz.muni.fi.rpg.ui.common.toggleVisibility
 import cz.muni.fi.rpg.viewModels.AuthenticationViewModel
 import cz.muni.fi.rpg.viewModels.SettingsViewModel
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 import kotlinx.coroutines.tasks.await
-import kotlinx.coroutines.withContext
 import timber.log.Timber
 
+@ExperimentalCoroutinesApi
 @Composable
 fun SignInCard(viewModel: SettingsViewModel) {
-
     val authViewModel: AuthenticationViewModel by viewModel()
-    val email = savedInstanceState { authViewModel.getEmail() }
-
     val activity = activity()
 
     val contract = GoogleSignInContract(authViewModel)
     val context = ContextAmbient.current
     val coroutineScope = rememberCoroutineScope()
+    val user = AmbientUser.current
 
     lateinit var launcher: ActivityResultLauncher<Int?>
     onCommit {
@@ -69,8 +62,8 @@ fun SignInCard(viewModel: SettingsViewModel) {
                                 withContext(Dispatchers.Main) {
                                     coroutineScope.showSignInConfirmationDialog(
                                         context,
-                                        email,
                                         authViewModel,
+                                        user,
                                         viewModel,
                                         idToken
                                     )
@@ -102,10 +95,10 @@ fun SignInCard(viewModel: SettingsViewModel) {
         ) {
             CardTitle(R.string.title_account)
 
-            val emailValue = email.value
-            if (emailValue != null) {
+            val email = AmbientUser.current.email
+            if (email != null) {
                 Text(stringResource(R.string.signed_in_as))
-                Text(emailValue)
+                Text(email)
             } else {
                 Text(
                     stringResource(R.string.not_signed_in_description),
@@ -127,10 +120,11 @@ fun SignInCard(viewModel: SettingsViewModel) {
     }
 }
 
+@ExperimentalCoroutinesApi
 private fun CoroutineScope.showSignInConfirmationDialog(
     context: Context,
-    googleEmail: MutableState<String?>,
     authViewModel: AuthenticationViewModel,
+    user: User,
     viewModel: SettingsViewModel,
     idToken: String
 ) {
@@ -154,9 +148,7 @@ private fun CoroutineScope.showSignInConfirmationDialog(
                 try {
                     authViewModel.signInWithGoogleToken(idToken).let { success ->
                         withContext(Dispatchers.Main) {
-                            if (success) {
-                                googleEmail.value = authViewModel.getEmail()
-                            } else {
+                            if (!success) {
                                 Toast.makeText(context, "Google sign-in failed", Toast.LENGTH_SHORT)
                                     .show()
                             }
@@ -176,7 +168,7 @@ private fun CoroutineScope.showSignInConfirmationDialog(
     dialog.show()
 
     launch {
-        val partyNames = viewModel.getPartyNames(authViewModel.getUserId())
+        val partyNames = viewModel.getPartyNames(user.id)
 
         withContext(Dispatchers.Main) {
             val parties: TextView = view.findViewById(R.id.parties)
@@ -198,6 +190,7 @@ private data class Result(
     val intent: Intent?,
 )
 
+@ExperimentalCoroutinesApi
 private class GoogleSignInContract(
     private val authViewModel: AuthenticationViewModel
 ) : ActivityResultContract<Int?, Result>() {

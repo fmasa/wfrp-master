@@ -11,11 +11,8 @@ import com.google.android.gms.common.api.ApiException
 import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.common.log.Reporter
 import cz.muni.fi.rpg.viewModels.AuthenticationViewModel
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 import kotlinx.coroutines.tasks.await
-import kotlinx.coroutines.withContext
 import org.koin.android.viewmodel.ext.android.viewModel
 import timber.log.Timber
 
@@ -27,6 +24,7 @@ import timber.log.Timber
  *
  * @see AuthenticationFragment.Listener
  */
+@ExperimentalCoroutinesApi
 class AuthenticationFragment : Fragment(), CoroutineScope by CoroutineScope(Dispatchers.Default) {
 
     companion object {

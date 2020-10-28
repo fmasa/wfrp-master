@@ -23,8 +23,10 @@ import cz.muni.fi.rpg.ui.common.composables.viewModel
 import cz.muni.fi.rpg.ui.router.Route
 import cz.muni.fi.rpg.ui.router.Routing
 import cz.muni.fi.rpg.viewModels.SettingsViewModel
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.launch
 
+@ExperimentalCoroutinesApi
 @Composable
 fun SettingsScreen(routing: Routing<Route.Settings>) {
     Scaffold(
