@@ -30,7 +30,7 @@ import cz.muni.fi.rpg.ui.router.Route
 import cz.muni.fi.rpg.ui.router.Routing
 
 @Composable
-fun PartyListScreen(routing: Routing<Route.PartyList>, userId: String) {
+fun PartyListScreen(routing: Routing<Route.PartyList>) {
     val menuState = remember { mutableStateOf(MenuState.COLLAPSED) }
     val fragmentManager = fragmentManager()
     val context = ContextAmbient.current
@@ -74,6 +74,7 @@ fun PartyListScreen(routing: Routing<Route.PartyList>, userId: String) {
     ) {
         val viewModel: PartyListViewModel by viewModel()
         val coroutineScope = rememberCoroutineScope()
+        val userId = AmbientUser.current.id
 
         MainContainer(
             Modifier.clickable(

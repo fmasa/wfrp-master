@@ -5,7 +5,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.view.MenuItem
 import androidx.compose.foundation.layout.ExperimentalLayout
-import androidx.compose.runtime.Providers
+import androidx.compose.runtime.*
 import androidx.compose.ui.platform.ComposeView
 import androidx.drawerlayout.widget.DrawerLayout
 import com.github.zsoltk.compose.backpress.AmbientBackPressHandler
@@ -20,7 +20,9 @@ import cz.muni.fi.rpg.ui.character.edit.CharacterEditScreen
 import cz.muni.fi.rpg.ui.characterCreation.CharacterCreationScreen
 import cz.muni.fi.rpg.ui.common.AboutScreen
 import cz.muni.fi.rpg.ui.common.AdManager
+import cz.muni.fi.rpg.ui.common.composables.AmbientUser
 import cz.muni.fi.rpg.ui.common.composables.Theme
+import cz.muni.fi.rpg.ui.common.composables.viewModel
 import cz.muni.fi.rpg.ui.compendium.CompendiumScreen
 import cz.muni.fi.rpg.ui.gameMaster.GameMasterScreen
 import cz.muni.fi.rpg.ui.gameMaster.encounters.EncounterDetailScreen
@@ -30,6 +32,7 @@ import cz.muni.fi.rpg.ui.partyList.PartyListScreen
 import cz.muni.fi.rpg.ui.router.Route
 import cz.muni.fi.rpg.ui.router.Routing
 import cz.muni.fi.rpg.ui.settings.SettingsScreen
+import cz.muni.fi.rpg.viewModels.AuthenticationViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.koin.android.ext.android.inject
 import org.koin.androidx.fragment.android.setupKoinFragmentFactory
@@ -52,7 +55,13 @@ class MainActivity : AuthenticatedActivity(R.layout.activity_main) {
         adManager.initialize()
 
         findViewById<ComposeView>(R.id.compose).setContent {
-            Providers(AmbientBackPressHandler provides backPressHandler) {
+            val auth: AuthenticationViewModel by viewModel()
+            val user = auth.user.collectAsState(null).value ?: return@setContent
+
+            Providers(
+                AmbientBackPressHandler provides backPressHandler,
+                AmbientUser provides user
+            ) {
                 Theme {
                     Router<Route>(defaultRouting = Route.PartyList) { backStack ->
                         this.backStack = backStack
@@ -63,7 +72,7 @@ class MainActivity : AuthenticatedActivity(R.layout.activity_main) {
                             @Suppress("UNUSED_VARIABLE") // This val is there just to force `when` to be exhaustive
                             val nothing = when (val route = it) {
                                 is Route.PartyList -> {
-                                    PartyListScreen(Routing(route, backStack), getUserId())
+                                    PartyListScreen(Routing(route, backStack))
                                 }
                                 is Route.GameMaster -> {
                                     GameMasterScreen(Routing(route, backStack), adManager)
