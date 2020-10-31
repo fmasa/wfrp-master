@@ -3,7 +3,8 @@ buildscript {
         google()
         jcenter()
         mavenCentral()
-        maven(url = "https://plugins.gradle.org/m2/")
+        maven("https://plugins.gradle.org/m2/")
+        maven("https://oss.sonatype.org/content/repositories/snapshots")
     }
 
     dependencies {
@@ -14,7 +15,7 @@ buildscript {
         // Firebase-related dependencies
         classpath("com.google.gms:google-services:4.3.3")
         classpath("com.google.firebase:firebase-crashlytics-gradle:2.2.0")
-        classpath("com.github.triplet.gradle:play-publisher:3.0.0")
+        classpath("com.github.triplet.gradle:play-publisher:3.2.0-SNAPSHOT")
     }
 }
 

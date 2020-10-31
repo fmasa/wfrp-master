@@ -1,7 +1,6 @@
 import java.io.File
 import java.io.FileInputStream
 import java.util.*
-import org.jetbrains.kotlin.config.KotlinCompilerVersion
 import com.github.triplet.gradle.androidpublisher.ResolutionStrategy
 import com.github.triplet.gradle.play.PlayPublisherExtension
 
@@ -16,7 +15,7 @@ plugins {
     id("com.github.triplet.play") apply false
 }
 
-val playStoreJsonFile = File("./play_store_credentials.json")
+val playStoreJsonFile = File(System.getProperty("user.dir") + "/app/play_store_credentials.json")
 
 if (playStoreJsonFile.exists()) {
     apply(plugin = "com.github.triplet.play")
@@ -70,7 +69,7 @@ android {
 
     signingConfigs {
         create("release") {
-            storeFile = file(".keystore")
+            storeFile = File(System.getProperty("user.dir") + "/app/.keystore")
             storePassword = System.getenv("KEYSTORE_PASSWORD")
             keyAlias = "uploadKey"
             keyPassword = System.getenv("KEY_PASSWORD")
@@ -159,10 +158,10 @@ dependencies {
     implementation("androidx.datastore:datastore-preferences:1.0.0-alpha02")
 
     // Firebase-related dependencies
-    implementation("com.google.firebase:firebase-analytics:17.4.4")
+    implementation("com.google.firebase:firebase-analytics:17.6.0")
     implementation("com.firebaseui:firebase-ui-auth:6.2.0")
     implementation("com.google.firebase:firebase-firestore-ktx:21.5.0")
-    implementation("com.google.firebase:firebase-analytics-ktx:17.4.4")
+    implementation("com.google.firebase:firebase-analytics-ktx:17.6.0")
     implementation("com.google.firebase:firebase-crashlytics:17.1.1")
     implementation("com.google.firebase:firebase-dynamic-links-ktx:19.1.0")
 
