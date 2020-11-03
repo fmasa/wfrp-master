@@ -59,7 +59,7 @@ data class AndroidDialogProperties(
 @Composable
 fun FullScreenDialog(
     onDismissRequest: () -> Unit,
-    properties: DialogProperties?,
+    properties: DialogProperties? = null,
     content: @Composable () -> Unit
 ) {
     val view = ViewAmbient.current
@@ -125,7 +125,7 @@ private class DialogWrapper(
     init {
         window!!.requestFeature(Window.FEATURE_NO_TITLE)
         window!!.setBackgroundDrawableResource(android.R.color.transparent)
-        window!!.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
+        window!!.setWindowAnimations(R.style.AppTheme_Slide)
         dialogLayout = DialogLayout(context, window!!)
         setContentView(dialogLayout)
         ViewTreeLifecycleOwner.set(dialogLayout, ViewTreeLifecycleOwner.get(composeView))

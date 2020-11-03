@@ -149,4 +149,19 @@
         <item name="android:textColor">@color/colorCardBackground</item>
         <item name="android:background">@color/colorPrimaryDark</item>
     </style>
+
+    <style name="AppTheme.Light.FullScreenDialog" parent="Theme.MaterialComponents.Light.Dialog">
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="android:windowIsFloating">false</item>
+    </style>
+
+    <style name="AppTheme.Dark.FullScreenDialog" parent="Theme.MaterialComponents.Light.Dialog">
+        <item name="colorPrimaryDark">@color/colorTitleBarDark</item>
+        <item name="android:windowIsFloating">false</item>
+    </style>
+
+    <style name="AppTheme.Slide">
+        <item name="android:windowEnterAnimation">@anim/slide_up</item>
+        <item name="android:windowExitAnimation">@anim/slide_down</item>
+    </style>
 </resources>

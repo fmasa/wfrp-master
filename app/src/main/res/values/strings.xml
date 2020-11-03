@@ -157,6 +157,7 @@
 
     <!-- Skills -->
     <string name="title_addSkill">Add Skill</string>
+    <string name="title_skill_edit">Edit Skill</string>
     <string name="label_skill_characteristic">Characteristic</string>
     <string name="label_skill_advances">Advances</string>
     <string name="skill_test_number_shortcut">TN</string>
