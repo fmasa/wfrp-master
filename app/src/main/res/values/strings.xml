@@ -157,7 +157,6 @@
 
     <!-- Skills -->
     <string name="title_addSkill">Add Skill</string>
-    <string name="title_skill_edit">Edit Skill</string>
     <string name="label_skill_characteristic">Characteristic</string>
     <string name="label_skill_advances">Advances</string>
     <string name="skill_test_number_shortcut">TN</string>
@@ -272,12 +271,18 @@
     <!-- Compendium -->
     <string name="title_compendium">Compendium</string>
 
+    <string name="title_skill_new">New Skill</string>
+    <string name="title_skill_edit">Edit Skill</string>
     <string name="no_skills_in_compendium">No skills</string>
     <string name="no_skills_in_compendium_sub_text">There are no skill in your compendium yet.</string>
 
+    <string name="title_talent_new">New Talent</string>
+    <string name="title_talent_edit">Edit Talent</string>
     <string name="no_talents_in_compendium">No talents</string>
     <string name="no_talents_in_compendium_sub_text">There are no talents in your compendium yet.</string>
 
+    <string name="title_spell_new">New Spell</string>
+    <string name="title_spell_edit">Edit Spell</string>
     <string name="no_spells_in_compendium">No spells</string>
     <string name="no_spells_in_compendium_sub_text">There are no spells in your compendium yet.</string>
 

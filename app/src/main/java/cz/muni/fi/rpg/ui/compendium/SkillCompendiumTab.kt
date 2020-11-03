@@ -1,6 +1,5 @@
 package cz.muni.fi.rpg.ui.compendium
 
-import androidx.compose.foundation.ScrollableColumn
 import androidx.compose.foundation.Text
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
@@ -103,7 +102,7 @@ private fun SkillDialog(
     CompendiumItemDialog(
         title = stringResource(
             if (dialogStateValue.item == null)
-                R.string.title_addSkill
+                R.string.title_skill_new
             else R.string.title_skill_edit
         ),
         formData = formData,
@@ -112,7 +111,7 @@ private fun SkillDialog(
     ) { validate ->
         Column(
             verticalArrangement = Arrangement.spacedBy(12.dp),
-            modifier = Modifier.padding(24.dp),
+            modifier = Modifier.padding(BodyPadding),
         ) {
             TextInput(
                 label = stringResource(R.string.label_name),
