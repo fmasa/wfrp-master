@@ -149,10 +149,6 @@ dependencies {
 
     // Navigation
     implementation("com.github.zsoltk:compose-router:0.20.0")
-    implementation("com.zachklipp:compose-backstack:0.7.0+alpha04") {
-        exclude(group = "androidx.compose")
-        exclude(group = "androidx.ui")
-    }
 
     // Shared Preferences DataStore
     implementation("androidx.datastore:datastore-preferences:1.0.0-alpha02")
