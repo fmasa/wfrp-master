@@ -3,11 +3,8 @@ package cz.muni.fi.rpg.ui.gameMaster
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
-import androidx.compose.foundation.*
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.aspectRatio
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.Text
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -50,7 +47,7 @@ internal fun InvitationDialog2(invitation: Invitation, onDismissRequest: () -> U
                 val sharingOptions = sharingOptions(invitation).collectAsState().value
 
                 if (sharingOptions == null) {
-                    Box(Modifier.fillMaxWidth().aspectRatio(1f), gravity = Alignment.Center) {
+                    Box(Modifier.fillMaxWidth().aspectRatio(1f), alignment = Alignment.Center) {
                         CircularProgressIndicator()
                     }
                 } else {

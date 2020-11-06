@@ -1,7 +1,9 @@
 package cz.muni.fi.rpg.ui.gameMaster.encounters
 
 import androidx.appcompat.app.AlertDialog
-import androidx.compose.foundation.*
+import androidx.compose.foundation.ScrollableColumn
+import androidx.compose.foundation.Text
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -167,7 +169,7 @@ private fun DescriptionCard(viewModel: EncounterDetailViewModel) {
         val encounter = viewModel.encounter.right().collectAsState(null).value
 
         if (encounter == null) {
-            Box(Modifier.fillMaxWidth(), gravity = Alignment.Center) {
+            Box(Modifier.fillMaxWidth(), alignment = Alignment.Center) {
                 CircularProgressIndicator()
             }
             return@CardContainer
@@ -190,7 +192,7 @@ private fun CombatantsCard(
         val npcs = viewModel.npcs.collectAsState(null).value
 
         if (npcs == null) {
-            Box(Modifier.fillMaxWidth(), gravity = Alignment.Center) {
+            Box(Modifier.fillMaxWidth(), alignment = Alignment.Center) {
                 CircularProgressIndicator()
             }
 

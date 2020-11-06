@@ -27,7 +27,7 @@ if (playStoreJsonFile.exists()) {
     }
 }
 
-val composeVersion = "1.0.0-alpha05"
+val composeVersion = "1.0.0-alpha06"
 
 android {
 
@@ -113,6 +113,9 @@ android {
     kotlinOptions {
         jvmTarget = "1.8"
         useIR = true
+        freeCompilerArgs = freeCompilerArgs +
+                "-Xallow-jvm-ir-dependencies" +
+                "-Xskip-prerelease-check"
     }
 
     composeOptions {
@@ -135,7 +138,7 @@ dependencies {
     coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:1.0.10")
 
     // Time picker dialog
-    implementation("com.vanpra.compose-material-dialogs:datetime:0.2.4")
+    implementation("com.vanpra.compose-material-dialogs:datetime:0.2.5")
 
     // Koin
     implementation("org.koin:koin-android:2.1.5")
@@ -149,10 +152,6 @@ dependencies {
 
     // Navigation
     implementation("com.github.zsoltk:compose-router:0.20.0")
-    implementation("com.zachklipp:compose-backstack:0.7.0+alpha04") {
-        exclude(group = "androidx.compose")
-        exclude(group = "androidx.ui")
-    }
 
     // Shared Preferences DataStore
     implementation("androidx.datastore:datastore-preferences:1.0.0-alpha02")

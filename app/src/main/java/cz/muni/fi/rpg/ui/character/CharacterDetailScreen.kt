@@ -1,7 +1,8 @@
 package cz.muni.fi.rpg.ui.character
 
-import androidx.compose.foundation.*
+import androidx.compose.foundation.Text
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedTask
@@ -84,7 +85,7 @@ private fun MainContainer(
     adManager: AdManager,
 ) {
     if (character == null) {
-        Box(Modifier.fillMaxSize(), gravity = Alignment.Center) {
+        Box(Modifier.fillMaxSize(), alignment = Alignment.Center) {
             CircularProgressIndicator()
         }
 
