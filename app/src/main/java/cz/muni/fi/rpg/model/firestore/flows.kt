@@ -11,7 +11,6 @@ import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.*
 
-@ExperimentalCoroutinesApi
 internal fun <T : Any> queryFlow(
     query: Query,
     snapshotParser: AggregateMapper<T>,
@@ -32,7 +31,6 @@ internal fun <T : Any> queryFlow(
     awaitClose { listener.remove() }
 }
 
-@ExperimentalCoroutinesApi
 internal fun <T : Any> documentFlow(
     document: DocumentReference,
     snapshotProcessor: (result: Either<FirebaseFirestoreException?, DocumentSnapshot>) -> T,

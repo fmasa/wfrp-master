@@ -20,7 +20,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.util.*
 
-@ExperimentalLayout
 @Composable
 fun WithConstraintsScope.SpellCompendiumTab(viewModel: CompendiumViewModel) {
     val coroutineScope = rememberCoroutineScope()
@@ -90,7 +89,6 @@ private data class SpellFormData(
                 effect.value.length <= Spell.EFFECT_MAX_LENGTH
 }
 
-@ExperimentalLayout
 @Composable
 private fun SpellDialog(
     dialogState: MutableState<DialogState<Spell?>>,

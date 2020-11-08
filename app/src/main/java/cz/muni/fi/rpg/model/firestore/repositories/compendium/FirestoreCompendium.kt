@@ -7,13 +7,11 @@ import cz.muni.fi.rpg.model.domain.compendium.CompendiumItem
 import cz.muni.fi.rpg.model.firestore.AggregateMapper
 import cz.muni.fi.rpg.model.firestore.COLLECTION_PARTIES
 import cz.muni.fi.rpg.model.firestore.queryFlow
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.tasks.await
 import timber.log.Timber
 import java.util.*
 
-@ExperimentalCoroutinesApi
 internal class FirestoreCompendium<T : CompendiumItem>(
     private val collectionName: String,
     private val firestore: FirebaseFirestore,

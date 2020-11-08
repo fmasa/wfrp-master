@@ -24,7 +24,6 @@ import timber.log.Timber
  *
  * @see AuthenticationFragment.Listener
  */
-@ExperimentalCoroutinesApi
 class AuthenticationFragment : Fragment(), CoroutineScope by CoroutineScope(Dispatchers.Default) {
 
     companion object {

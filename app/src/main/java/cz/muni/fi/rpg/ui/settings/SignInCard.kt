@@ -33,7 +33,6 @@ import kotlinx.coroutines.*
 import kotlinx.coroutines.tasks.await
 import timber.log.Timber
 
-@ExperimentalCoroutinesApi
 @Composable
 fun SignInCard(viewModel: SettingsViewModel) {
     val authViewModel: AuthenticationViewModel by viewModel()
@@ -120,7 +119,6 @@ fun SignInCard(viewModel: SettingsViewModel) {
     }
 }
 
-@ExperimentalCoroutinesApi
 private fun CoroutineScope.showSignInConfirmationDialog(
     context: Context,
     authViewModel: AuthenticationViewModel,
@@ -190,7 +188,6 @@ private data class Result(
     val intent: Intent?,
 )
 
-@ExperimentalCoroutinesApi
 private class GoogleSignInContract(
     private val authViewModel: AuthenticationViewModel
 ) : ActivityResultContract<Int?, Result>() {

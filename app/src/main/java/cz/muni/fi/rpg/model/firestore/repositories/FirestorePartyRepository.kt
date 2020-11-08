@@ -10,12 +10,10 @@ import cz.muni.fi.rpg.model.domain.party.PartyRepository
 import cz.muni.fi.rpg.model.firestore.AggregateMapper
 import cz.muni.fi.rpg.model.firestore.documentFlow
 import cz.muni.fi.rpg.model.firestore.queryFlow
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.tasks.await
 import timber.log.Timber
 import java.util.*
 
-@ExperimentalCoroutinesApi
 internal class FirestorePartyRepository(
     private val firestore: FirebaseFirestore,
     private val mapper: AggregateMapper<Party>

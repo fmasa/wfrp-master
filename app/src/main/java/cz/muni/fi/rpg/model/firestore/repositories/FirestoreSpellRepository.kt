@@ -6,11 +6,9 @@ import cz.muni.fi.rpg.model.domain.spells.Spell
 import cz.muni.fi.rpg.model.domain.spells.SpellRepository
 import cz.muni.fi.rpg.model.firestore.*
 import cz.muni.fi.rpg.model.firestore.AggregateMapper
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.tasks.await
 import java.util.*
 
-@ExperimentalCoroutinesApi
 internal class FirestoreSpellRepository(
     private val firestore: FirebaseFirestore,
     private val mapper: AggregateMapper<Spell>

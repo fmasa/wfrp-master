@@ -33,7 +33,6 @@ private enum class FormState {
     CREATING_CHARACTER,
 }
 
-@ExperimentalLayout
 @Composable
 fun CharacterCreationScreen(routing: Routing<Route.CharacterCreation>) {
     Scaffold(
@@ -50,7 +49,6 @@ fun CharacterCreationScreen(routing: Routing<Route.CharacterCreation>) {
     }
 }
 
-@ExperimentalLayout
 @Composable
 private fun MainContainer(routing: Routing<Route.CharacterCreation>) {
     val viewModel: CharacterCreationViewModel by viewModel { parametersOf(routing.route.partyId) }

@@ -132,7 +132,6 @@ fun TextInput(
     }
 }
 
-@ExperimentalLayout
 @Composable
 fun <T> ChipList(
     label: String? = null,

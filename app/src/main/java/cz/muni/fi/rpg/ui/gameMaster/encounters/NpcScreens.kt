@@ -180,7 +180,6 @@ private class FormData(
                 toIntValue(wounds.value) > 0
 }
 
-@ExperimentalCoroutinesApi
 @Composable
 fun NpcDetailScreen(
     routing: Routing<Route.NpcDetail>,

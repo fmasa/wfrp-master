@@ -19,7 +19,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.util.*
 
-@ExperimentalLayout
 @Composable
 fun WithConstraintsScope.TalentCompendiumTab(viewModel: CompendiumViewModel) {
     val coroutineScope = rememberCoroutineScope()
@@ -75,7 +74,6 @@ private data class TalentFormData(
                 description.value.length <= Talent.DESCRIPTION_MAX_LENGTH
 }
 
-@ExperimentalLayout
 @Composable
 private fun TalentDialog(
     dialogState: MutableState<DialogState<Talent?>>,

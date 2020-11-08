@@ -32,7 +32,6 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.tasks.await
 import org.koin.core.context.KoinContextHandler
 
-@ExperimentalCoroutinesApi
 @Composable
 internal fun InvitationDialog2(invitation: Invitation, onDismissRequest: () -> Unit) {
     Dialog(onDismissRequest = onDismissRequest) {
@@ -70,7 +69,6 @@ internal fun InvitationDialog2(invitation: Invitation, onDismissRequest: () -> U
     }
 }
 
-@ExperimentalCoroutinesApi
 @Composable
 private fun sharingOptions(invitation: Invitation): StateFlow<SharingOptions?> {
     val jsonMapper: JsonMapper = KoinContextHandler.get().get()

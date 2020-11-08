@@ -82,7 +82,6 @@ class EncounterDetailViewModel(
         npcRepository.save(encounterId, npc)
     }
 
-    @ExperimentalCoroutinesApi
     fun npcFlow(npcId: NpcId): StateFlow<Npc?> {
         val flow = MutableStateFlow<Npc?>(null)
 

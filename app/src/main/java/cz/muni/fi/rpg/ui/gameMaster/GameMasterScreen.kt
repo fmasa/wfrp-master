@@ -29,10 +29,8 @@ import cz.muni.fi.rpg.ui.router.Route
 import cz.muni.fi.rpg.ui.router.Routing
 import cz.muni.fi.rpg.viewModels.EncountersViewModel
 import cz.muni.fi.rpg.viewModels.GameMasterViewModel
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.koin.core.parameter.parametersOf
 
-@ExperimentalCoroutinesApi
 @Composable
 fun GameMasterScreen(routing: Routing<Route.GameMaster>, adManager: AdManager) {
     val viewModel: GameMasterViewModel by viewModel { parametersOf(routing.route.partyId) }
@@ -104,7 +102,6 @@ fun GameMasterScreen(routing: Routing<Route.GameMaster>, adManager: AdManager) {
     }
 }
 
-@ExperimentalCoroutinesApi
 @Composable
 private fun screens(
     viewModel: GameMasterViewModel,
