@@ -30,15 +30,14 @@ import cz.muni.fi.rpg.model.firestore.repositories.*
 import cz.muni.fi.rpg.model.firestore.repositories.compendium.FirestoreCompendium
 import cz.muni.fi.rpg.ui.common.AdManager
 import cz.muni.fi.rpg.viewModels.*
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.koin.android.viewmodel.dsl.viewModel
+import org.koin.core.qualifier.named
 import org.koin.dsl.module
 import java.util.*
 
 private inline fun <reified T : Any> aggregateMapper() =
     JacksonAggregateMapper(T::class, jacksonTypeRef())
 
-@ExperimentalCoroutinesApi
 val appModule = module {
 
     /**
@@ -100,7 +99,7 @@ val appModule = module {
     viewModel { (partyId: UUID) -> PartyViewModel(partyId, get()) }
     viewModel { (encounterId: EncounterId) -> EncounterDetailViewModel(encounterId, get(), get()) }
     viewModel { (characterId: CharacterId) -> InventoryViewModel(characterId, get(), get(), get()) }
-    viewModel { (characterId: CharacterId) -> SkillsViewModel(characterId, get()) }
+    viewModel { (characterId: CharacterId) -> SkillsViewModel(characterId, get(), FirestoreCompendium<Skill>(COLLECTION_COMPENDIUM_SKILLS, get(), aggregateMapper())) }
     viewModel { (characterId: CharacterId) -> SpellsViewModel(characterId, get()) }
     viewModel { (characterId: CharacterId) -> TalentsViewModel(characterId, get()) }
     viewModel { AuthenticationViewModel(get()) }

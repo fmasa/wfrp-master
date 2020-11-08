@@ -39,6 +39,12 @@ class Rules(private vararg val rules: ValidationRule) {
         @Composable
         fun NotBlank(): ValidationRule =
             { v: String -> v.isNotBlank() } to stringResource(R.string.error_cannot_be_empty)
+
+        @Composable
+        fun Min(minimum: Int): ValidationRule = Pair(
+            { value: String -> (value.toIntOrNull() ?: 0) >= minimum },
+            stringResource(R.string.error_value_not_greater_or_equal_to, minimum),
+        )
     }
 
     /**
