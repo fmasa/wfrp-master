@@ -40,6 +40,9 @@
     <string name="label_description">Description (Optional)</string>
     <string name="error_talent_name_empty">Talent name cannot be empty</string>
     <string name="label_talent_taken">Times taken</string>
+    <string name="error_compendium_talent_removed">Compendium talent was removed in the meantime</string>
+    <string name="title_choose_compendium_talent">Choose Compendium talent…</string>
+    <string name="button_add_non_compendium_talent">…or add non-Compendium talent</string>
 
     <!-- Spell Dialog -->
     <string name="title_spell_add">Add Spell</string>
@@ -285,6 +288,7 @@
     <string name="title_talent_edit">Edit Talent</string>
     <string name="no_talents_in_compendium">No talents</string>
     <string name="no_talents_in_compendium_sub_text">There are no talents in your compendium yet.</string>
+    <string name="no_talents_in_compendium_sub_text_player">Your GM has to add them first.</string>
 
     <string name="title_spell_new">New Spell</string>
     <string name="title_spell_edit">Edit Spell</string>

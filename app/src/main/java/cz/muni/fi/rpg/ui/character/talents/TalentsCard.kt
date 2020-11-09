@@ -2,22 +2,17 @@ package cz.muni.fi.rpg.ui.character.talents
 
 import androidx.compose.foundation.Text
 import androidx.compose.foundation.layout.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.*
+import androidx.compose.runtime.savedinstancestate.savedInstanceState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.fragment.app.FragmentManager
 import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.model.domain.talents.Talent
-import cz.muni.fi.rpg.ui.character.skills.TalentDialog
+import cz.muni.fi.rpg.ui.character.talents.dialog.AddTalentDialog
+import cz.muni.fi.rpg.ui.character.talents.dialog.EditTalentDialog
 import cz.muni.fi.rpg.ui.common.composables.*
 import cz.muni.fi.rpg.viewModels.TalentsViewModel
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 @Composable
 internal fun TalentsCard(
@@ -34,30 +29,39 @@ internal fun TalentsCard(
 
             if (talents.isNotEmpty()) {
                 Column {
+                    var editedTalent: Talent? by savedInstanceState { null }
+
                     for (talent in talents) {
                         TalentItem(
                             talent,
-                            onClick = {
-                                with(coroutineScope) {
-                                    openTalentDialog(
-                                        talent,
-                                        viewModel,
-                                        fragmentManager,
-                                    )
-                                }
-                            },
+                            onClick = { editedTalent = talent },
                             onRemove = { onRemove(talent) }
+                        )
+                    }
+                    
+                    editedTalent?.let { 
+                        EditTalentDialog(
+                            viewModel = viewModel,
+                            talent = it,
+                            onDismissRequest = { editedTalent = null },
                         )
                     }
                 }
             }
 
+            var showAddTalentDialog by savedInstanceState { false }
+            
             CardButton(
                 R.string.title_talent_add,
-                onClick = {
-                    with(coroutineScope) { openTalentDialog(null, viewModel, fragmentManager) }
-                }
+                onClick = { showAddTalentDialog = true }
             )
+            
+            if (showAddTalentDialog) {
+                AddTalentDialog(
+                    viewModel = viewModel,
+                    onDismissRequest = { showAddTalentDialog = false },
+                )
+            }
         }
     }
 }
@@ -74,21 +78,4 @@ private fun TalentItem(talent: Talent, onClick: () -> Unit, onRemove: () -> Unit
         ),
         badgeContent = { Text("+ ${talent.taken}") }
     )
-}
-
-private fun CoroutineScope.openTalentDialog(
-    existingTalent: Talent?,
-    viewModel: TalentsViewModel,
-    fragmentManager: FragmentManager
-) {
-    val dialog = TalentDialog.newInstance(existingTalent)
-    dialog.setOnSuccessListener { talent ->
-        launch(Dispatchers.IO) {
-            viewModel.saveTalent(talent)
-
-            withContext(Dispatchers.Main) { dialog.dismiss() }
-        }
-    }
-
-    dialog.show(fragmentManager, "TalentDialog")
 }

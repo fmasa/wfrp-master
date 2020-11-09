@@ -32,13 +32,23 @@ import cz.muni.fi.rpg.ui.common.AdManager
 import cz.muni.fi.rpg.viewModels.*
 import org.koin.android.viewmodel.dsl.viewModel
 import org.koin.core.qualifier.named
+import org.koin.core.scope.Scope
 import org.koin.dsl.module
 import java.util.*
 
 private inline fun <reified T : Any> aggregateMapper() =
     JacksonAggregateMapper(T::class, jacksonTypeRef())
 
+
 val appModule = module {
+    fun Scope.skillCompendium() =
+        FirestoreCompendium<Skill>(COLLECTION_COMPENDIUM_SKILLS, get(), aggregateMapper())
+
+    fun Scope.talentCompendium() =
+        FirestoreCompendium<Talent>(COLLECTION_COMPENDIUM_TALENTS, get(), aggregateMapper())
+
+    fun Scope.spellCompendium() =
+        FirestoreCompendium<Spell>(COLLECTION_SPELLS, get(), aggregateMapper())
 
     /**
      * Common database stuff
@@ -99,19 +109,20 @@ val appModule = module {
     viewModel { (partyId: UUID) -> PartyViewModel(partyId, get()) }
     viewModel { (encounterId: EncounterId) -> EncounterDetailViewModel(encounterId, get(), get()) }
     viewModel { (characterId: CharacterId) -> InventoryViewModel(characterId, get(), get(), get()) }
-    viewModel { (characterId: CharacterId) -> SkillsViewModel(characterId, get(), FirestoreCompendium<Skill>(COLLECTION_COMPENDIUM_SKILLS, get(), aggregateMapper())) }
+    viewModel { (characterId: CharacterId) -> SkillsViewModel(characterId, get(), skillCompendium()) }
     viewModel { (characterId: CharacterId) -> SpellsViewModel(characterId, get()) }
-    viewModel { (characterId: CharacterId) -> TalentsViewModel(characterId, get()) }
+    viewModel { (characterId: CharacterId) -> TalentsViewModel(characterId, get(), talentCompendium()) }
     viewModel { AuthenticationViewModel(get()) }
     viewModel { JoinPartyViewModel(get()) }
     viewModel { PartyListViewModel(get()) }
     viewModel { SettingsViewModel(get(), get()) }
     viewModel { (partyId: UUID) -> CharacterCreationViewModel(partyId, get()) }
-    viewModel { (partyId: UUID) -> CompendiumViewModel(
-        partyId,
-        FirestoreCompendium<Skill>(COLLECTION_COMPENDIUM_SKILLS, get(), aggregateMapper()),
-        FirestoreCompendium<Talent>(COLLECTION_COMPENDIUM_TALENTS, get(), aggregateMapper()),
-        FirestoreCompendium<Spell>(COLLECTION_SPELLS, get(), aggregateMapper()),
-    )
+    viewModel { (partyId: UUID) ->
+        CompendiumViewModel(
+            partyId,
+            skillCompendium(),
+            talentCompendium(),
+            spellCompendium(),
+        )
     }
 }
