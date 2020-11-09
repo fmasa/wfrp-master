@@ -7,6 +7,7 @@ import java.util.*
 @Parcelize
 data class Talent(
     val id: UUID,
+    val compendiumId: UUID? = null,
     val name: String,
     val description: String,
     val taken: Int

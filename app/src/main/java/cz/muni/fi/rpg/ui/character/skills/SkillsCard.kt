@@ -67,7 +67,10 @@ internal fun SkillsCard(
             CardButton(R.string.title_addSkill, onClick = { showAddSkillDialog = true })
 
             if (showAddSkillDialog) {
-                AddSkillDialog(characterId, onDismissRequest = { showAddSkillDialog = false })
+                AddSkillDialog(
+                    viewModel = skillsVm,
+                    onDismissRequest = { showAddSkillDialog = false }
+                )
             }
         }
     }

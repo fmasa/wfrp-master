@@ -1,4 +1,4 @@
-package cz.muni.fi.rpg.ui.character.skills.dialog
+package cz.muni.fi.rpg.ui.character.talents.dialog
 
 import androidx.compose.foundation.ScrollableColumn
 import androidx.compose.foundation.Text
@@ -13,22 +13,21 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.intl.Locale
 import androidx.compose.ui.text.toUpperCase
 import cz.muni.fi.rpg.R
-import cz.muni.fi.rpg.model.domain.compendium.common.Characteristic
-import cz.muni.fi.rpg.model.domain.skills.Skill
+import cz.muni.fi.rpg.model.domain.talents.Talent
 import cz.muni.fi.rpg.ui.common.composables.*
-import cz.muni.fi.rpg.viewModels.SkillsViewModel
+import cz.muni.fi.rpg.viewModels.TalentsViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.util.*
 
 @Composable
-internal fun NonCompendiumSkillForm(
-    viewModel: SkillsViewModel,
-    existingSkill: Skill?,
+internal fun NonCompendiumTalentForm(
+    viewModel: TalentsViewModel,
+    existingTalent: Talent?,
     onComplete: () -> Unit,
 ) {
-    val formData = NonCompendiumSkillFormData.fromSkill(existingSkill)
+    val formData = NonCompendiumTalentFormData.fromTalent(existingTalent)
     var saving by remember { mutableStateOf(false) }
     var validate by remember { mutableStateOf(false) }
 
@@ -38,9 +37,9 @@ internal fun NonCompendiumSkillForm(
                 title = {
                     Text(
                         stringResource(
-                            if (existingSkill != null)
-                                R.string.title_skill_edit else
-                                R.string.title_skill_new
+                            if (existingTalent != null)
+                                R.string.title_talent_edit else
+                                R.string.title_talent_new
                         )
                     )
                 },
@@ -57,7 +56,7 @@ internal fun NonCompendiumSkillForm(
 
                             coroutineScope.launch(Dispatchers.IO) {
                                 saving = true
-                                viewModel.saveSkill(formData.toSkill())
+                                viewModel.saveTalent(formData.toTalent())
                                 withContext(Dispatchers.Main) { onComplete() }
                             }
                         }
@@ -85,90 +84,64 @@ internal fun NonCompendiumSkillForm(
             ) {
                 TextInput(
                     modifier = Modifier.weight(1f),
-                    label = stringResource(R.string.label_skill_name),
+                    label = stringResource(R.string.label_name),
                     value = formData.name.value,
                     onValueChange = { formData.name.value = it },
                     validate = validate,
-                    maxLength = Skill.NAME_MAX_LENGTH,
+                    maxLength = Talent.NAME_MAX_LENGTH,
                     rules = Rules(Rules.NotBlank())
                 )
 
                 NumberPicker(
-                    label = stringResource(R.string.label_advances),
-                    value = formData.advances.value,
-                    onIncrement = { formData.advances.value++ },
+                    label = stringResource(R.string.label_talent_taken),
+                    value = formData.taken.value,
+                    onIncrement = { formData.taken.value++ },
                     onDecrement = {
-                        if (formData.advances.value > 1) {
-                            formData.advances.value--
+                        if (formData.taken.value > 1) {
+                            formData.taken.value--
                         }
                     }
                 )
             }
 
             TextInput(
-                label = stringResource(R.string.label_skill_description),
+                label = stringResource(R.string.label_description),
                 value = formData.description.value,
                 onValueChange = { formData.description.value = it },
                 validate = validate,
                 multiLine = true,
-                maxLength = Skill.DESCRIPTION_MAX_LENGTH,
+                maxLength = Talent.DESCRIPTION_MAX_LENGTH,
             )
-
-            ChipList(
-                label = stringResource(R.string.label_skill_characteristic),
-                items = Characteristic.values().map { it to stringResource(it.getShortcutNameId()) },
-                value = formData.characteristic.value,
-                onValueChange = { formData.characteristic.value = it }
-            )
-
-            Box(
-                modifier = Modifier.fillMaxWidth(),
-                alignment = Alignment.TopCenter
-            ) {
-                CheckboxWithText(
-                    text = stringResource(R.string.label_skill_advanced),
-                    checked = formData.advanced.value,
-                    onCheckedChange = { formData.advanced.value = it },
-                )
-            }
         }
     }
 }
 
-private class NonCompendiumSkillFormData(
+private class NonCompendiumTalentFormData(
     val id: UUID,
     val name: MutableState<String>,
     val description: MutableState<String>,
-    val characteristic: MutableState<Characteristic>,
-    val advanced: MutableState<Boolean>,
-    val advances: MutableState<Int>,
+    val taken: MutableState<Int>,
 ) : FormData {
     companion object {
         @Composable
-        fun fromSkill(skill: Skill?): NonCompendiumSkillFormData = NonCompendiumSkillFormData(
-            id = skill?.id ?: UUID.randomUUID(),
-            name = savedInstanceState { skill?.name ?: "" },
-            description = savedInstanceState { skill?.description ?: "" },
-            characteristic = savedInstanceState {
-                skill?.characteristic ?: Characteristic.values().first()
-            },
-            advanced = savedInstanceState { skill?.advanced ?: false },
-            advances = savedInstanceState { skill?.advances ?: 1 }
+        fun fromTalent(talent: Talent?): NonCompendiumTalentFormData = NonCompendiumTalentFormData(
+            id = talent?.id ?: UUID.randomUUID(),
+            name = savedInstanceState { talent?.name ?: "" },
+            description = savedInstanceState { talent?.description ?: "" },
+            taken = savedInstanceState { talent?.taken ?: 1 },
         )
     }
 
-    fun toSkill(): Skill = Skill(
+    fun toTalent(): Talent = Talent(
         id = id,
         compendiumId = null,
-        advanced = advanced.value,
-        characteristic = characteristic.value,
         name = name.value,
         description = description.value,
-        advances = advances.value
+        taken = taken.value,
     )
 
     override fun isValid() =
-        name.value.isNotBlank() && name.value.length <= Skill.NAME_MAX_LENGTH &&
-            description.value.length <= Skill.DESCRIPTION_MAX_LENGTH &&
-            advances.value >= 0
+        name.value.isNotBlank() && name.value.length <= Talent.NAME_MAX_LENGTH &&
+                description.value.length <= Talent.DESCRIPTION_MAX_LENGTH &&
+                taken.value >= 0
 }

@@ -1,4 +1,4 @@
-package cz.muni.fi.rpg.ui.character.skills.dialog
+package cz.muni.fi.rpg.ui.character.talents.dialog
 
 import androidx.compose.foundation.Text
 import androidx.compose.foundation.clickable
@@ -13,51 +13,51 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import cz.muni.fi.rpg.R
-import cz.muni.fi.rpg.model.domain.compendium.Skill
+import cz.muni.fi.rpg.model.domain.compendium.Talent
 import cz.muni.fi.rpg.ui.common.composables.BodyPadding
 import cz.muni.fi.rpg.ui.common.composables.EmptyUI
 import cz.muni.fi.rpg.ui.common.composables.FullScreenProgress
 import cz.muni.fi.rpg.ui.common.composables.ItemIcon
-import cz.muni.fi.rpg.viewModels.SkillsViewModel
+import cz.muni.fi.rpg.viewModels.TalentsViewModel
 
 @Composable
-internal fun CompendiumSkillChooser(
-    viewModel: SkillsViewModel,
-    onSkillSelected: (Skill) -> Unit,
-    onCustomSkillRequest: () -> Unit,
+internal fun CompendiumTalentChooser(
+    viewModel: TalentsViewModel,
+    onTalentSelected: (Talent) -> Unit,
+    onCustomTalentRequest: () -> Unit,
 ) {
     Scaffold(
         topBar = {
-            TopAppBar(title = { Text(stringResource(R.string.title_choose_compendium_skill)) })
+            TopAppBar(title = { Text(stringResource(R.string.title_choose_compendium_talent)) })
         }
     ) {
-        val compendiumSkills = viewModel.notUsedSkillsFromCompendium.collectAsState(null).value
-        val totalCompendiumSkillCount = viewModel.compendiumSkillsCount.collectAsState(null).value
+        val compendiumTalents = viewModel.notUsedTalentsFromCompendium.collectAsState(null).value
+        val totalCompendiumTalentCount = viewModel.compendiumTalentsCount.collectAsState(null).value
 
-        if (compendiumSkills == null || totalCompendiumSkillCount == null) {
+        if (compendiumTalents == null || totalCompendiumTalentCount == null) {
             FullScreenProgress()
             return@Scaffold
         }
 
         Column(Modifier.fillMaxSize()) {
             Box(Modifier.weight(1f)) {
-                if (compendiumSkills.isEmpty()) {
+                if (compendiumTalents.isEmpty()) {
                     EmptyUI(
                         drawableResourceId = R.drawable.ic_skills,
-                        textId = R.string.no_skills_in_compendium,
-                        subTextId = if (totalCompendiumSkillCount == 0)
-                            R.string.no_skills_in_compendium_sub_text_player
+                        textId = R.string.no_talents_in_compendium,
+                        subTextId = if (totalCompendiumTalentCount == 0)
+                            R.string.no_talents_in_compendium_sub_text_player
                         else null,
                     )
                 } else {
                     LazyColumnFor(
-                        items = compendiumSkills,
+                        items = compendiumTalents,
                         contentPadding = PaddingValues(BodyPadding),
-                    ) { skill ->
+                    ) { talent ->
                         ListItem(
-                            modifier = Modifier.clickable(onClick = { onSkillSelected(skill) }),
-                            icon = { ItemIcon(skill.characteristic.getIconId(), ItemIcon.Size.Small) },
-                            text = { Text(skill.name) }
+                            modifier = Modifier.clickable(onClick = { onTalentSelected(talent) }),
+                            icon = { ItemIcon(R.drawable.ic_skills, ItemIcon.Size.Small) },
+                            text = { Text(talent.name) }
                         )
                     }
                 }
@@ -65,9 +65,9 @@ internal fun CompendiumSkillChooser(
 
             OutlinedButton(
                 modifier = Modifier.fillMaxWidth().padding(BodyPadding),
-                onClick = onCustomSkillRequest,
+                onClick = onCustomTalentRequest,
             ) {
-                Text(stringResource(R.string.button_add_non_compendium_skill))
+                Text(stringResource(R.string.button_add_non_compendium_talent))
             }
         }
     }
