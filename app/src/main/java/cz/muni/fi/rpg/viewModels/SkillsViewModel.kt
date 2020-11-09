@@ -17,8 +17,15 @@ class SkillsViewModel(
     private val skillRepository: SkillRepository,
     private val compendium: Compendium<CompendiumSkill>
 ) : ViewModel(), CoroutineScope by CoroutineScope(Dispatchers.IO) {
+
     val skills: Flow<List<Skill>> = skillRepository.forCharacter(characterId)
     val compendiumSkillsCount: Flow<Int> by lazy { compendiumSkills.map { it.size } }
+    val notUsedSkillsFromCompendium: Flow<List<CompendiumSkill>> by lazy {
+        compendiumSkills.zip(skills) { compendiumSkills, characterSkills ->
+            val skillsUsedByCharacter = characterSkills.mapNotNull { it.compendiumId }.toSet()
+            compendiumSkills.filter { !skillsUsedByCharacter.contains(it.id) }
+        }
+    }
 
     private val compendiumSkills by lazy { compendium.liveForParty(characterId.partyId) }
 
@@ -44,11 +51,6 @@ class SkillsViewModel(
         )
     }
 
-    fun notUsedSkillsFromCompendium(): Flow<List<CompendiumSkill>> =
-        compendiumSkills.zip(skills) { compendiumSkills, characterSkills ->
-            val skillsUsedByCharacter = characterSkills.mapNotNull { it.compendiumId }.toSet()
-            compendiumSkills.filter { !skillsUsedByCharacter.contains(it.id) }
-        }
 
     fun removeSkill(skill: Skill) = launch {
         skillRepository.remove(characterId, skill.id)

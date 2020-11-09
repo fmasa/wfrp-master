@@ -31,7 +31,7 @@ internal fun CompendiumSkillChooser(
             TopAppBar(title = { Text(stringResource(R.string.title_choose_compendium_skill)) })
         }
     ) {
-        val compendiumSkills = viewModel.notUsedSkillsFromCompendium().collectAsState(null).value
+        val compendiumSkills = viewModel.notUsedSkillsFromCompendium.collectAsState(null).value
         val totalCompendiumSkillCount = viewModel.compendiumSkillsCount.collectAsState(null).value
 
         if (compendiumSkills == null || totalCompendiumSkillCount == null) {
