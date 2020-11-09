@@ -102,6 +102,13 @@ class TalentDialog : DialogFragment() {
         dialog.getButton(AlertDialog.BUTTON_POSITIVE).isEnabled = false
         dialog.getButton(AlertDialog.BUTTON_NEGATIVE).isEnabled = false
 
-        onSuccessListener(Talent(this.talent?.id ?: UUID.randomUUID(), name, description, taken))
+        onSuccessListener(
+            Talent(
+                id = this.talent?.id ?: UUID.randomUUID(),
+                name = name,
+                description = description,
+                taken = taken,
+            )
+        )
     }
 }

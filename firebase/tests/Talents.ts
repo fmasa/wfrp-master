@@ -11,6 +11,7 @@ class Talents extends CharacterSubCollectionSuite {
         name: "Sneaky brieky",
         description: "+ 1O to sneak rolls",
         taken: 5,
+        compendiumId: null,
     };
 
     private talents(app: Firestore, userId: string): CollectionReference
@@ -88,17 +89,46 @@ class Talents extends CharacterSubCollectionSuite {
     }
 
     @test
-    async "skill with field missing CANNOT be saved"() {
-        const skills = this.talents(this.authedApp(this.userId1), this.userId1);
+    async "talent with field missing CANNOT be saved"() {
+        const talents = this.talents(this.authedApp(this.userId1), this.userId1);
 
-        await Promise.all(Object.keys(this.talent).map(field => {
+        for (const field of Object.keys(this.talent)) {
+            if (field === "compendiumId") {
+                continue; // (BC) Compendium ID was introduced in 2.0 (TODO: remove in 2.3)
+            }
+
             const talent = {...this.talent};
             const talentId = talent.id;
 
             delete talent[field];
 
-            return firebase.assertFails(skills.doc(talentId).set(talent));
-        }));
+            await firebase.assertFails(talents.doc(talentId).set(talent));
+        }
+    }
+
+    @test
+    async "talent with ID of existing compendium talent can be created"() {
+        const compendiumTalent = {
+            id: uuid(),
+            maxTimesTaken: "1",
+            name: "Lucky",
+            description: "You got extra fortune points",
+        };
+
+        await this.authedApp(this.validPartyGameMasterId)
+            .collection("parties")
+            .doc(this.partyId)
+            .collection("talents")
+            .doc(compendiumTalent.id)
+            .set(compendiumTalent);
+
+        const talent = {...this.talent, compendiumId: compendiumTalent.id}
+
+        await firebase.assertSucceeds(
+            this.talents(this.authedApp(this.userId1), this.userId1)
+                .doc(talent.id)
+                .set(talent)
+        );
     }
 
     @test
@@ -127,6 +157,12 @@ class Talents extends CharacterSubCollectionSuite {
 
                 // Taken too few times
                 {taken: 0},
+
+                // Invalid compendium ID
+                {compendiumId: "foo"},
+
+                // Nonexistent compendium talent
+                {compendiumId: uuid()},
             ].map(doc => firebase.assertFails(talentDoc.set({...this.talent, ...doc})))
         );
 
