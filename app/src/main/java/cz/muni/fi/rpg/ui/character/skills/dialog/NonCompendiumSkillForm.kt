@@ -81,9 +81,10 @@ internal fun NonCompendiumSkillForm(
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.spacedBy(FormInputHorizontalPadding),
+                verticalAlignment = Alignment.Bottom,
             ) {
                 TextInput(
-                    modifier = Modifier.weight(0.75f),
+                    modifier = Modifier.weight(1f),
                     label = stringResource(R.string.label_skill_name),
                     value = formData.name.value,
                     onValueChange = { formData.name.value = it },
@@ -92,16 +93,16 @@ internal fun NonCompendiumSkillForm(
                     rules = Rules(Rules.NotBlank())
                 )
 
-                TextInput(
-                    modifier = Modifier.weight(0.25f),
+                NumberPicker(
                     label = stringResource(R.string.label_advances),
                     value = formData.advances.value,
-                    onValueChange = { formData.advances.value = it },
-                    validate = validate,
-                    maxLength = 3,
-                    rules = Rules(Rules.NotBlank(), Rules.Min(1))
+                    onIncrement = { formData.advances.value++ },
+                    onDecrement = {
+                        if (formData.advances.value > 1) {
+                            formData.advances.value--
+                        }
+                    }
                 )
-
             }
 
             TextInput(
@@ -140,7 +141,7 @@ private class NonCompendiumSkillFormData(
     val description: MutableState<String>,
     val characteristic: MutableState<Characteristic>,
     val advanced: MutableState<Boolean>,
-    val advances: MutableState<String>,
+    val advances: MutableState<Int>,
 ) : FormData {
     companion object {
         @Composable
@@ -152,7 +153,7 @@ private class NonCompendiumSkillFormData(
                 skill?.characteristic ?: Characteristic.values().first()
             },
             advanced = savedInstanceState { skill?.advanced ?: false },
-            advances = savedInstanceState { skill?.advances?.toString() ?: "1" }
+            advances = savedInstanceState { skill?.advances ?: 1 }
         )
     }
 
@@ -163,11 +164,11 @@ private class NonCompendiumSkillFormData(
         characteristic = characteristic.value,
         name = name.value,
         description = description.value,
-        advances = advances.value.toInt(),
+        advances = advances.value
     )
 
     override fun isValid() =
         name.value.isNotBlank() && name.value.length <= Skill.NAME_MAX_LENGTH &&
             description.value.length <= Skill.DESCRIPTION_MAX_LENGTH &&
-            (advances.value.toIntOrNull() ?: -1) >= 0
+            advances.value >= 0
 }
