@@ -12,7 +12,7 @@ import org.koin.core.parameter.parametersOf
 import java.util.*
 
 @Composable
-fun AddSkillDialog(characterId: CharacterId, onDismissRequest: () -> Unit) {
+fun AddSkillDialog(viewModel: SkillsViewModel, onDismissRequest: () -> Unit) {
     var state: AddSkillDialogState by savedInstanceState { ChoosingCompendiumSkill }
 
     FullScreenDialog(onDismissRequest = {
@@ -22,8 +22,6 @@ fun AddSkillDialog(characterId: CharacterId, onDismissRequest: () -> Unit) {
             onDismissRequest()
         }
     }) {
-        val viewModel: SkillsViewModel by viewModel { parametersOf(characterId) }
-
         when (val currentState = state) {
             ChoosingCompendiumSkill ->
                 CompendiumSkillChooser(
