@@ -15,6 +15,7 @@ import androidx.compose.ui.res.loadVectorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 
@@ -72,6 +73,7 @@ fun EmptyUI(
         subTextId?.let {
             Text(
                 stringResource(subTextId),
+                textAlign = TextAlign.Center,
                 color = disabledColor,
             )
         }

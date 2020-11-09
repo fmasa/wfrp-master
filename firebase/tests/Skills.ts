@@ -13,6 +13,7 @@ class Skills extends CharacterSubCollectionSuite {
         name: "Haggle",
         description: "Lower the price of goods",
         advances: 1,
+        compendiumId: null,
     };
 
     private skills(app: Firestore, userId: string): CollectionReference
@@ -93,14 +94,44 @@ class Skills extends CharacterSubCollectionSuite {
     async "skill with field missing CANNOT be saved"() {
         const skills = this.skills(this.authedApp(this.userId1), this.userId1);
 
-        await Promise.all(Object.keys(this.skill).map(field => {
+        for (const field of Object.keys(this.skill)) {
+            if (field === "compendiumId") {
+                continue; // (BC) Compendium ID was introduced in 2.0 (TODO: remove in 2.3)
+            }
+
             const skill = {...this.skill};
             const skillId = skill.id;
 
             delete skill[field];
 
-            return firebase.assertFails(skills.doc(skillId).set(skill));
-        }));
+            await firebase.assertFails(skills.doc(skillId).set(skill));
+        }
+    }
+
+    @test
+    async "skill with ID of existing compendium skill can be created"() {
+        const compendiumSkill = {
+            id: uuid(),
+            advanced: false,
+            characteristic: "FELLOWSHIP",
+            name: "Haggle",
+            description: "Lower the price of goods",
+        };
+
+        await this.authedApp(this.validPartyGameMasterId)
+            .collection("parties")
+            .doc(this.partyId)
+            .collection("skills")
+            .doc(compendiumSkill.id)
+            .set(compendiumSkill);
+
+        const skill = {...this.skill, compendiumId: compendiumSkill.id}
+
+        await firebase.assertSucceeds(
+            this.skills(this.authedApp(this.userId1), this.userId1)
+                .doc(skill.id)
+                .set(skill)
+        );
     }
 
     @test
@@ -129,6 +160,12 @@ class Skills extends CharacterSubCollectionSuite {
 
                 // Description too long
                 {description: "a".repeat(201)},
+
+                // Invalid compendium ID
+                {compendiumId: "foo"},
+
+                // Nonexistent compendium skill
+                {compendiumId: uuid()},
 
             ].map(doc => firebase.assertFails(skillDoc.set({...this.skill, ...doc})))
         );

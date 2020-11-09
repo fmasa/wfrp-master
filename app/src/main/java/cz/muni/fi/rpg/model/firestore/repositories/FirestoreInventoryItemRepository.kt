@@ -10,11 +10,9 @@ import cz.muni.fi.rpg.model.domain.inventory.InventoryItemId
 import cz.muni.fi.rpg.model.domain.inventory.InventoryItemNotFound
 import cz.muni.fi.rpg.model.domain.inventory.InventoryItemRepository
 import cz.muni.fi.rpg.model.firestore.*
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.tasks.await
 import timber.log.Timber
 
-@ExperimentalCoroutinesApi
 internal class FirestoreInventoryItemRepository(
     firestore: FirebaseFirestore,
     private val mapper: AggregateMapper<InventoryItem>

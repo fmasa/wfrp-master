@@ -11,12 +11,10 @@ import cz.muni.fi.rpg.model.domain.character.Feature
 import cz.muni.fi.rpg.model.domain.common.CouldNotConnectToBackend
 import cz.muni.fi.rpg.model.firestore.*
 import cz.muni.fi.rpg.model.firestore.AggregateMapper
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.tasks.await
 import timber.log.Timber
 import java.util.*
 
-@ExperimentalCoroutinesApi
 internal class FirestoreCharacterFeatureRepository<T : Any>(
     feature: Feature,
     firestore: FirebaseFirestore,

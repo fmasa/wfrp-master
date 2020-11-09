@@ -1,0 +1,173 @@
+package cz.muni.fi.rpg.ui.character.skills.dialog
+
+import androidx.compose.foundation.ScrollableColumn
+import androidx.compose.foundation.Text
+import androidx.compose.foundation.layout.*
+import androidx.compose.material.Scaffold
+import androidx.compose.material.TopAppBar
+import androidx.compose.runtime.*
+import androidx.compose.runtime.savedinstancestate.savedInstanceState
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.intl.Locale
+import androidx.compose.ui.text.toUpperCase
+import cz.muni.fi.rpg.R
+import cz.muni.fi.rpg.model.domain.compendium.common.Characteristic
+import cz.muni.fi.rpg.model.domain.skills.Skill
+import cz.muni.fi.rpg.ui.common.composables.*
+import cz.muni.fi.rpg.viewModels.SkillsViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import java.util.*
+
+@Composable
+internal fun NonCompendiumSkillForm(
+    viewModel: SkillsViewModel,
+    existingSkill: Skill?,
+    onComplete: () -> Unit,
+) {
+    val formData = NonCompendiumSkillFormData.fromSkill(existingSkill)
+    var saving by remember { mutableStateOf(false) }
+    var validate by remember { mutableStateOf(false) }
+
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                title = {
+                    Text(
+                        stringResource(
+                            if (existingSkill != null)
+                                R.string.title_skill_edit else
+                                R.string.title_skill_new
+                        )
+                    )
+                },
+                actions = {
+                    val coroutineScope = rememberCoroutineScope()
+
+                    TopBarAction(
+                        enabled = !saving,
+                        onClick = {
+                            if (!formData.isValid()) {
+                                validate = true
+                                return@TopBarAction
+                            }
+
+                            coroutineScope.launch(Dispatchers.IO) {
+                                saving = true
+                                viewModel.saveSkill(formData.toSkill())
+                                withContext(Dispatchers.Main) { onComplete() }
+                            }
+                        }
+                    ) {
+                        Text(stringResource(R.string.button_save).toUpperCase(Locale.current))
+                    }
+
+                }
+            )
+        }
+    ) {
+        if (saving) {
+            FullScreenProgress()
+            return@Scaffold
+        }
+
+        ScrollableColumn(
+            contentPadding = PaddingValues(BodyPadding),
+            verticalArrangement = Arrangement.spacedBy(FormInputVerticalPadding)
+        ) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(FormInputHorizontalPadding),
+            ) {
+                TextInput(
+                    modifier = Modifier.weight(0.75f),
+                    label = stringResource(R.string.label_skill_name),
+                    value = formData.name.value,
+                    onValueChange = { formData.name.value = it },
+                    validate = validate,
+                    maxLength = Skill.NAME_MAX_LENGTH,
+                    rules = Rules(Rules.NotBlank())
+                )
+
+                TextInput(
+                    modifier = Modifier.weight(0.25f),
+                    label = stringResource(R.string.label_advances),
+                    value = formData.advances.value,
+                    onValueChange = { formData.advances.value = it },
+                    validate = validate,
+                    maxLength = 3,
+                    rules = Rules(Rules.NotBlank(), Rules.Min(1))
+                )
+
+            }
+
+            TextInput(
+                label = stringResource(R.string.label_skill_description),
+                value = formData.description.value,
+                onValueChange = { formData.description.value = it },
+                validate = validate,
+                multiLine = true,
+                maxLength = Skill.DESCRIPTION_MAX_LENGTH,
+            )
+
+            ChipList(
+                label = stringResource(R.string.label_skill_characteristic),
+                items = Characteristic.values().map { it to stringResource(it.getShortcutNameId()) },
+                value = formData.characteristic.value,
+                onValueChange = { formData.characteristic.value = it }
+            )
+
+            Box(
+                modifier = Modifier.fillMaxWidth(),
+                alignment = Alignment.TopCenter
+            ) {
+                CheckboxWithText(
+                    text = stringResource(R.string.label_skill_advanced),
+                    checked = formData.advanced.value,
+                    onCheckedChange = { formData.advanced.value = it },
+                )
+            }
+        }
+    }
+}
+
+private class NonCompendiumSkillFormData(
+    val id: UUID,
+    val name: MutableState<String>,
+    val description: MutableState<String>,
+    val characteristic: MutableState<Characteristic>,
+    val advanced: MutableState<Boolean>,
+    val advances: MutableState<String>,
+) : FormData {
+    companion object {
+        @Composable
+        fun fromSkill(skill: Skill?): NonCompendiumSkillFormData = NonCompendiumSkillFormData(
+            id = skill?.id ?: UUID.randomUUID(),
+            name = savedInstanceState { skill?.name ?: "" },
+            description = savedInstanceState { skill?.description ?: "" },
+            characteristic = savedInstanceState {
+                skill?.characteristic ?: Characteristic.values().first()
+            },
+            advanced = savedInstanceState { skill?.advanced ?: false },
+            advances = savedInstanceState { skill?.advances?.toString() ?: "1" }
+        )
+    }
+
+    fun toSkill(): Skill = Skill(
+        id = id,
+        compendiumId = null,
+        advanced = advanced.value,
+        characteristic = characteristic.value,
+        name = name.value,
+        description = description.value,
+        advances = advances.value.toInt(),
+    )
+
+    override fun isValid() =
+        name.value.isNotBlank() && name.value.length <= Skill.NAME_MAX_LENGTH &&
+            description.value.length <= Skill.DESCRIPTION_MAX_LENGTH &&
+            (advances.value.toIntOrNull() ?: -1) >= 0
+}

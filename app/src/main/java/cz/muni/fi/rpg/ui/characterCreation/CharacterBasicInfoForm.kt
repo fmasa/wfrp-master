@@ -58,7 +58,6 @@ object CharacterBasicInfoForm {
     }
 }
 
-@ExperimentalLayout
 @Composable
 fun CharacterBasicInfoForm(
     data: CharacterBasicInfoForm.Data,

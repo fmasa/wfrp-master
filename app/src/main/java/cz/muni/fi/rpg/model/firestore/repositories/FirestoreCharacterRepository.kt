@@ -7,14 +7,13 @@ import cz.muni.fi.rpg.model.domain.character.CharacterId
 import cz.muni.fi.rpg.model.domain.character.CharacterNotFound
 import cz.muni.fi.rpg.model.domain.character.CharacterRepository
 import cz.muni.fi.rpg.model.firestore.*
-import kotlinx.coroutines.ExperimentalCoroutinesApi
+
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.tasks.await
 import timber.log.Timber
 import java.util.*
 
-@ExperimentalCoroutinesApi
 internal class FirestoreCharacterRepository(
     firestore: FirebaseFirestore,
     private val mapper: AggregateMapper<Character>

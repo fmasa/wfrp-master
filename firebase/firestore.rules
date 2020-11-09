@@ -164,7 +164,7 @@ service cloud.firestore {
                     allow delete: if canEditCharacter();
 
                     function isValidSkill(skill) {
-                        return skill.keys().toSet() == ["id", "name", "description", "advanced", "characteristic", "advances"].toSet()
+                        return ["id", "name", "description", "advanced", "characteristic", "advances", "compendiumId"].hasAll(skill.keys())
                             && skill.id is string && skill.id == skillId && isValidUuid(skill.id)
                             && skill.name is string && isNotBlank(skill.name) && skill.name.size() <= 50
                             && skill.description is string && skill.description.size() <= 200
@@ -182,6 +182,12 @@ service cloud.firestore {
                                 "WILL_POWER",
                                 "WEAPON_SKILL"
                             ]
+                            && (! ("compendiumId" in skill)
+                                || (
+                                    skill.compendiumId == null
+                                    || (skill.compendiumId is string && exists(/databases/$(database)/documents/parties/$(partyId)/skills/$(skill.compendiumId)))
+                                )
+                            )
                     }
                 }
 

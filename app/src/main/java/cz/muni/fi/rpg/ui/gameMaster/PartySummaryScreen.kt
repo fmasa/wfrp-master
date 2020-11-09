@@ -27,12 +27,10 @@ import cz.muni.fi.rpg.ui.gameMaster.adapter.Player
 import cz.muni.fi.rpg.ui.router.Route
 import cz.muni.fi.rpg.viewModels.CompendiumViewModel
 import cz.muni.fi.rpg.viewModels.GameMasterViewModel
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import org.koin.core.parameter.parametersOf
 import java.util.*
 
-@ExperimentalCoroutinesApi
 @Composable
 internal fun PartySummaryScreen(
     partyId: UUID,

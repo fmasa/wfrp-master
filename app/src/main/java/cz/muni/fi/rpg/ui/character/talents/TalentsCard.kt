@@ -1,4 +1,4 @@
-package cz.muni.fi.rpg.ui.character.skills
+package cz.muni.fi.rpg.ui.character.talents
 
 import androidx.compose.foundation.Text
 import androidx.compose.foundation.layout.*
@@ -11,6 +11,7 @@ import androidx.compose.ui.unit.dp
 import androidx.fragment.app.FragmentManager
 import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.model.domain.talents.Talent
+import cz.muni.fi.rpg.ui.character.skills.TalentDialog
 import cz.muni.fi.rpg.ui.common.composables.*
 import cz.muni.fi.rpg.viewModels.TalentsViewModel
 import kotlinx.coroutines.CoroutineScope

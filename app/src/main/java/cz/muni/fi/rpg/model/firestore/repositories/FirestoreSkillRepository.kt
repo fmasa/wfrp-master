@@ -5,12 +5,10 @@ import cz.muni.fi.rpg.model.domain.character.CharacterId
 import cz.muni.fi.rpg.model.domain.skills.Skill
 import cz.muni.fi.rpg.model.domain.skills.SkillRepository
 import cz.muni.fi.rpg.model.firestore.*
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.tasks.await
 import java.util.*
 
-@ExperimentalCoroutinesApi
 internal class FirestoreSkillRepository(
     private val firestore: FirebaseFirestore,
     private val mapper: AggregateMapper<Skill>

@@ -1,9 +1,7 @@
 package cz.muni.fi.rpg.ui.compendium
 
-import androidx.compose.foundation.ScrollableColumn
 import androidx.compose.foundation.Text
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.AlertDialog
 import androidx.compose.material.Divider
 import androidx.compose.material.ListItem
 import androidx.compose.runtime.*
@@ -17,16 +15,11 @@ import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.model.domain.compendium.Spell
 import cz.muni.fi.rpg.ui.common.composables.*
 import cz.muni.fi.rpg.ui.common.composables.dialog.DialogState
-import cz.muni.fi.rpg.ui.common.composables.dialog.CancelButton
-import cz.muni.fi.rpg.ui.common.composables.dialog.Progress
-import cz.muni.fi.rpg.ui.common.composables.dialog.SaveButton
 import cz.muni.fi.rpg.viewModels.CompendiumViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import java.util.*
 
-@ExperimentalLayout
 @Composable
 fun WithConstraintsScope.SpellCompendiumTab(viewModel: CompendiumViewModel) {
     val coroutineScope = rememberCoroutineScope()
@@ -60,21 +53,23 @@ private data class SpellFormData(
     val duration: MutableState<String>,
     val castingNumber: MutableState<String>,
     val effect: MutableState<String>,
-) : FormData {
+) : CompendiumItemFormData<Spell> {
     companion object {
         @Composable
         fun fromState(state: DialogState.Opened<Spell?>) = SpellFormData(
             id = remember(state) { state.item?.id ?: UUID.randomUUID() },
             name = savedInstanceState(state) { state.item?.name ?: "" },
-            range = savedInstanceState(state) { state.item?.range ?: ""} ,
-            target = savedInstanceState(state) { state.item?.target ?: ""},
-            duration = savedInstanceState(state) { state.item?.duration ?: ""}  ,
-            castingNumber = savedInstanceState(state) { state.item?.castingNumber?.toString() ?: ""} ,
-            effect = savedInstanceState(state) { state.item?.effect ?: ""},
+            range = savedInstanceState(state) { state.item?.range ?: "" },
+            target = savedInstanceState(state) { state.item?.target ?: "" },
+            duration = savedInstanceState(state) { state.item?.duration ?: "" },
+            castingNumber = savedInstanceState(state) {
+                state.item?.castingNumber?.toString() ?: ""
+            },
+            effect = savedInstanceState(state) { state.item?.effect ?: "" },
         )
     }
 
-    fun toSpell() = Spell(
+    override fun toItem() = Spell(
         id = id,
         name = name.value,
         range = range.value,
@@ -94,12 +89,6 @@ private data class SpellFormData(
                 effect.value.length <= Spell.EFFECT_MAX_LENGTH
 }
 
-private enum class SpellFormState {
-    EDITED_BY_USER,
-    SAVING_TALENT,
-}
-
-@ExperimentalLayout
 @Composable
 private fun SpellDialog(
     dialogState: MutableState<DialogState<Spell?>>,
@@ -112,98 +101,68 @@ private fun SpellDialog(
     }
 
     val formData = SpellFormData.fromState(dialogStateValue)
-    val validate = remember { mutableStateOf(false) }
-    val formState = remember { mutableStateOf(SpellFormState.EDITED_BY_USER) }
 
-    AlertDialog(
-        onDismissRequest = { dialogState.value = DialogState.Closed() },
-        text = {
-            if (formState.value == SpellFormState.SAVING_TALENT) {
-                Progress()
-                return@AlertDialog
-            }
+    CompendiumItemDialog(
+        title = stringResource(
+            if (dialogStateValue.item == null) R.string.title_spell_add else R.string.title_spell_edit
+        ),
+        formData = formData,
+        saver = viewModel::save,
+        onDismissRequest = { dialogState.value = DialogState.Closed() }
+    ) { validate ->
+        Column(
+            verticalArrangement = Arrangement.spacedBy(12.dp),
+            modifier = Modifier.padding(BodyPadding),
+        ) {
+            TextInput(
+                label = stringResource(R.string.label_name),
+                value = formData.name.value,
+                onValueChange = { formData.name.value = it },
+                validate = validate,
+                maxLength = Spell.NAME_MAX_LENGTH
+            )
 
-            ScrollableColumn {
-                Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
-                    TextInput(
-                        label = stringResource(R.string.label_name),
-                        value = formData.name.value,
-                        onValueChange = { formData.name.value = it },
-                        validate = validate.value,
-                        maxLength = Spell.NAME_MAX_LENGTH
-                    )
+            TextInput(
+                label = stringResource(R.string.label_spell_range),
+                value = formData.range.value,
+                onValueChange = { formData.range.value = it },
+                validate = validate,
+                maxLength = Spell.RANGE_MAX_LENGTH,
+            )
 
-                    TextInput(
-                        label = stringResource(R.string.label_spell_range),
-                        value = formData.range.value,
-                        onValueChange = { formData.range.value = it },
-                        validate = validate.value,
-                        maxLength = Spell.RANGE_MAX_LENGTH,
-                    )
+            TextInput(
+                label = stringResource(R.string.label_spell_target),
+                value = formData.target.value,
+                onValueChange = { formData.target.value = it },
+                validate = validate,
+                maxLength = Spell.TARGET_MAX_LENGTH,
+            )
 
-                    TextInput(
-                        label = stringResource(R.string.label_spell_target),
-                        value = formData.target.value,
-                        onValueChange = { formData.target.value = it },
-                        validate = validate.value,
-                        maxLength = Spell.TARGET_MAX_LENGTH,
-                    )
+            TextInput(
+                label = stringResource(R.string.label_spell_duration),
+                value = formData.duration.value,
+                onValueChange = { formData.duration.value = it },
+                validate = validate,
+                maxLength = Spell.DURATION_MAX_LENGTH,
+            )
 
-                    TextInput(
-                        label = stringResource(R.string.label_spell_duration),
-                        value = formData.duration.value,
-                        onValueChange = { formData.duration.value = it },
-                        validate = validate.value,
-                        maxLength = Spell.DURATION_MAX_LENGTH,
-                    )
+            TextInput(
+                label = stringResource(R.string.label_spell_casting_number),
+                value = formData.castingNumber.value,
+                keyboardType = KeyboardType.Number,
+                onValueChange = { formData.castingNumber.value = it },
+                validate = validate,
+                maxLength = 2,
+            )
 
-                    TextInput(
-                        label = stringResource(R.string.label_spell_casting_number),
-                        value = formData.castingNumber.value,
-                        keyboardType = KeyboardType.Number,
-                        onValueChange = { formData.castingNumber.value = it },
-                        validate = validate.value,
-                        maxLength = 2,
-                    )
-
-                    TextInput(
-                        label = stringResource(R.string.label_spell_effect),
-                        value = formData.effect.value,
-                        onValueChange = { formData.effect.value = it },
-                        validate = validate.value,
-                        maxLength = Spell.EFFECT_MAX_LENGTH,
-                        multiLine = true,
-                    )
-                }
-            }
-        },
-        buttons = {
-            Box(Modifier.fillMaxWidth().padding(bottom = 8.dp, end = 8.dp)) {
-                FlowRow(
-                    mainAxisSize = SizeMode.Expand,
-                    mainAxisAlignment = MainAxisAlignment.End,
-                    mainAxisSpacing = 8.dp,
-                    crossAxisSpacing = 12.dp
-                ) {
-                    CancelButton(onClick = { dialogState.value = DialogState.Closed() })
-
-                    val coroutineScope = rememberCoroutineScope()
-
-                    SaveButton(onClick = {
-                        if (formData.isValid()) {
-                            formState.value = SpellFormState.SAVING_TALENT
-                            coroutineScope.launch(Dispatchers.IO) {
-                                viewModel.save(formData.toSpell())
-                                withContext(Dispatchers.Main) {
-                                    dialogState.value = DialogState.Closed()
-                                }
-                            }
-                        } else {
-                            validate.value = true
-                        }
-                    })
-                }
-            }
+            TextInput(
+                label = stringResource(R.string.label_spell_effect),
+                value = formData.effect.value,
+                onValueChange = { formData.effect.value = it },
+                validate = validate,
+                maxLength = Spell.EFFECT_MAX_LENGTH,
+                multiLine = true,
+            )
         }
-    )
+    }
 }

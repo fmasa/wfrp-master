@@ -1,9 +1,7 @@
 package cz.muni.fi.rpg.ui.compendium
 
-import androidx.compose.foundation.ScrollableColumn
 import androidx.compose.foundation.Text
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.AlertDialog
 import androidx.compose.material.Divider
 import androidx.compose.material.ListItem
 import androidx.compose.runtime.*
@@ -16,16 +14,11 @@ import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.model.domain.compendium.Talent
 import cz.muni.fi.rpg.ui.common.composables.*
 import cz.muni.fi.rpg.ui.common.composables.dialog.DialogState
-import cz.muni.fi.rpg.ui.common.composables.dialog.CancelButton
-import cz.muni.fi.rpg.ui.common.composables.dialog.Progress
-import cz.muni.fi.rpg.ui.common.composables.dialog.SaveButton
 import cz.muni.fi.rpg.viewModels.CompendiumViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import java.util.*
 
-@ExperimentalLayout
 @Composable
 fun WithConstraintsScope.TalentCompendiumTab(viewModel: CompendiumViewModel) {
     val coroutineScope = rememberCoroutineScope()
@@ -56,7 +49,7 @@ private data class TalentFormData(
     val name: MutableState<String>,
     val maxTimesTaken: MutableState<String>,
     val description: MutableState<String>,
-) : FormData {
+) : CompendiumItemFormData<Talent> {
     companion object {
         @Composable
         fun fromState(state: DialogState.Opened<Talent?>) = TalentFormData(
@@ -67,7 +60,7 @@ private data class TalentFormData(
         )
     }
 
-    fun toTalent() = Talent(
+    override fun toItem() = Talent(
         id = id,
         name = name.value,
         maxTimesTaken = maxTimesTaken.value,
@@ -81,12 +74,6 @@ private data class TalentFormData(
                 description.value.length <= Talent.DESCRIPTION_MAX_LENGTH
 }
 
-private enum class TalentFormState {
-    EDITED_BY_USER,
-    SAVING_TALENT,
-}
-
-@ExperimentalLayout
 @Composable
 private fun TalentDialog(
     dialogState: MutableState<DialogState<Talent?>>,
@@ -99,73 +86,43 @@ private fun TalentDialog(
     }
 
     val formData = TalentFormData.fromState(dialogStateValue)
-    val validate = remember { mutableStateOf(false) }
-    val formState = remember { mutableStateOf(TalentFormState.EDITED_BY_USER) }
 
-    AlertDialog(
+    CompendiumItemDialog(
         onDismissRequest = { dialogState.value = DialogState.Closed() },
-        text = {
-            if (formState.value == TalentFormState.SAVING_TALENT) {
-                Progress()
-                return@AlertDialog
-            }
+        title = stringResource(
+            if (dialogStateValue.item == null) R.string.title_talent_add else R.string.title_talent_edit
+        ),
+        formData = formData,
+        saver = viewModel::save,
+    ) { validate ->
+        Column(
+            verticalArrangement = Arrangement.spacedBy(12.dp),
+            modifier = Modifier.padding(BodyPadding),
+        ) {
+            TextInput(
+                label = stringResource(R.string.label_name),
+                value = formData.name.value,
+                onValueChange = { formData.name.value = it },
+                validate = validate,
+                maxLength = Talent.NAME_MAX_LENGTH
+            )
 
-            ScrollableColumn {
-                Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
-                    TextInput(
-                        label = stringResource(R.string.label_name),
-                        value = formData.name.value,
-                        onValueChange = { formData.name.value = it },
-                        validate = validate.value,
-                        maxLength = Talent.NAME_MAX_LENGTH
-                    )
+            TextInput(
+                label = stringResource(R.string.label_talent_max_times_taken),
+                value = formData.maxTimesTaken.value,
+                onValueChange = { formData.maxTimesTaken.value = it },
+                validate = validate,
+                maxLength = Talent.MAX_TIMES_TAKEN_MAX_LENGTH,
+            )
 
-                    TextInput(
-                        label = stringResource(R.string.label_talent_max_times_taken),
-                        value = formData.maxTimesTaken.value,
-                        onValueChange = { formData.maxTimesTaken.value = it },
-                        validate = validate.value,
-                        maxLength = Talent.MAX_TIMES_TAKEN_MAX_LENGTH,
-                    )
-
-                    TextInput(
-                        label = stringResource(R.string.label_description),
-                        value = formData.description.value,
-                        onValueChange = { formData.description.value = it },
-                        validate = validate.value,
-                        maxLength = Talent.DESCRIPTION_MAX_LENGTH,
-                        multiLine = true,
-                    )
-                }
-            }
-        },
-        buttons = {
-            Box(Modifier.fillMaxWidth().padding(bottom = 8.dp, end = 8.dp)) {
-                FlowRow(
-                    mainAxisSize = SizeMode.Expand,
-                    mainAxisAlignment = MainAxisAlignment.End,
-                    mainAxisSpacing = 8.dp,
-                    crossAxisSpacing = 12.dp
-                ) {
-                    CancelButton(onClick = { dialogState.value = DialogState.Closed() })
-
-                    val coroutineScope = rememberCoroutineScope()
-
-                    SaveButton(onClick = {
-                        if (formData.isValid()) {
-                            formState.value = TalentFormState.SAVING_TALENT
-                            coroutineScope.launch(Dispatchers.IO) {
-                                viewModel.save(formData.toTalent())
-                                withContext(Dispatchers.Main) {
-                                    dialogState.value = DialogState.Closed()
-                                }
-                            }
-                        } else {
-                            validate.value = true
-                        }
-                    })
-                }
-            }
+            TextInput(
+                label = stringResource(R.string.label_description),
+                value = formData.description.value,
+                onValueChange = { formData.description.value = it },
+                validate = validate,
+                maxLength = Talent.DESCRIPTION_MAX_LENGTH,
+                multiLine = true,
+            )
         }
-    )
+    }
 }

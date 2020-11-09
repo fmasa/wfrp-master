@@ -18,10 +18,8 @@ import com.google.zxing.EncodeHintType
 import com.google.zxing.common.BitMatrix
 import com.google.zxing.qrcode.QRCodeWriter
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.withContext
 
-@ExperimentalCoroutinesApi
 @Composable
 internal fun QrCode(data: String) {
     WithConstraints(Modifier.fillMaxWidth()) {

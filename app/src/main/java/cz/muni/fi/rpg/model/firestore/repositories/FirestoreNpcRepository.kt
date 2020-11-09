@@ -8,11 +8,9 @@ import cz.muni.fi.rpg.model.domain.encounter.*
 import cz.muni.fi.rpg.model.domain.encounters.EncounterId
 import cz.muni.fi.rpg.model.firestore.*
 import cz.muni.fi.rpg.model.firestore.AggregateMapper
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.tasks.await
 
-@ExperimentalCoroutinesApi
 internal class FirestoreNpcRepository(
     private val firestore: FirebaseFirestore,
     private val mapper: AggregateMapper<Npc>

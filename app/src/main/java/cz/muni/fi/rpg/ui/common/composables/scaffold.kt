@@ -46,6 +46,11 @@ fun HamburgerButton() {
 }
 
 @Composable
+fun CloseButton(onClick: () -> Unit) {
+    IconButton(onClick = onClick) { Icon(vectorResource(R.drawable.ic_close)) }
+}
+
+@Composable
 fun Subtitle(text: String) {
     Text(
         text,

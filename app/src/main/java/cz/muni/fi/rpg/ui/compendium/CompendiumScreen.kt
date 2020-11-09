@@ -30,7 +30,6 @@ import kotlinx.coroutines.flow.Flow
 import org.koin.core.parameter.parametersOf
 import java.util.*
 
-@ExperimentalLayout
 @Composable
 fun CompendiumScreen(routing: Routing<Route.Compendium>) {
     Scaffold(topBar = { TopBar(routing) }) {
@@ -57,7 +56,6 @@ private fun TopBar(routing: Routing<Route.Compendium>) {
     )
 }
 
-@ExperimentalLayout
 @Composable
 private fun WithConstraintsScope.MainContent(routing: Routing<Route.Compendium>) {
     val screenWidth = constraints.maxWidth.toFloat()
@@ -86,7 +84,6 @@ private fun WithConstraintsScope.MainContent(routing: Routing<Route.Compendium>)
     }
 }
 
-@ExperimentalLayout
 @Composable
 private fun WithConstraintsScope.tabs(partyId: UUID): Array<TabScreen<CompendiumViewModel>> {
     val viewModel: CompendiumViewModel by viewModel { parametersOf(partyId) }

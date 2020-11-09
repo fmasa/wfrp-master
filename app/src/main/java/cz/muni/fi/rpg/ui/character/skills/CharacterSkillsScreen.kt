@@ -8,6 +8,7 @@ import androidx.compose.ui.Modifier
 import cz.muni.fi.rpg.model.domain.character.CharacterId
 import cz.muni.fi.rpg.model.domain.skills.Skill
 import cz.muni.fi.rpg.model.domain.talents.Talent
+import cz.muni.fi.rpg.ui.character.talents.TalentsCard
 import cz.muni.fi.rpg.ui.common.composables.viewModel
 import cz.muni.fi.rpg.viewModels.CharacterViewModel
 import cz.muni.fi.rpg.viewModels.SkillsViewModel

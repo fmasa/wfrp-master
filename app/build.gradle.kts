@@ -115,7 +115,9 @@ android {
         useIR = true
         freeCompilerArgs = freeCompilerArgs +
                 "-Xallow-jvm-ir-dependencies" +
-                "-Xskip-prerelease-check"
+                "-Xskip-prerelease-check" +
+                "-Xopt-in=androidx.compose.foundation.layout.ExperimentalLayout" +
+                "-Xopt-in=kotlinx.coroutines.ExperimentalCoroutinesApi"
     }
 
     composeOptions {

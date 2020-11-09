@@ -30,8 +30,10 @@
     <string name="label_skill_name">Skill Name</string>
     <string name="label_skill_description">Skill Description (Optional)</string>
     <string name="label_skill_advanced">Advanced</string>
+    <string name="title_choose_compendium_skill">Choose Compendium skill…</string>
+    <string name="button_add_non_compendium_skill">…or add non-Compendium skill</string>
     <string name="error_skill_name_empty">Skill name cannot be empty</string>
-
+    <string name="error_compendium_skill_removed">Compendium skill was removed in the meantime</string>
 
     <!-- Talent Dialog -->
     <string name="title_talent_add">Add Talent</string>
@@ -145,6 +147,8 @@
 
     <string name="button_edit_info">Edit info</string>
     <string name="error_value_is_0">Value cannot be 0</string>
+    <string name="error_value_not_greater_or_equal_to">Value must be greater or equal to %1$d</string>
+    <string name="error_value_not_greater_than_0">Value must be greater than 0</string>
     <string name="error_cannot_be_empty">Cannot be empty!</string>
     <string name="error_value_over_100">Cannot be higher than 100</string>
     <string name="error_value_over_max">Cannot be higher than maximum value</string>
@@ -156,7 +160,7 @@
     <string name="title_character_characteristics">Characteristics</string>
 
     <!-- Skills -->
-    <string name="title_addSkill">Add Skill</string>
+    <string name="title_addSkill">Add skill</string>
     <string name="label_skill_characteristic">Characteristic</string>
     <string name="label_skill_advances">Advances</string>
     <string name="skill_test_number_shortcut">TN</string>
@@ -271,12 +275,19 @@
     <!-- Compendium -->
     <string name="title_compendium">Compendium</string>
 
+    <string name="title_skill_new">New Skill</string>
+    <string name="title_skill_edit">Edit Skill</string>
     <string name="no_skills_in_compendium">No skills</string>
     <string name="no_skills_in_compendium_sub_text">There are no skill in your compendium yet.</string>
+    <string name="no_skills_in_compendium_sub_text_player">Your GM has to add them first.</string>
 
+    <string name="title_talent_new">New Talent</string>
+    <string name="title_talent_edit">Edit Talent</string>
     <string name="no_talents_in_compendium">No talents</string>
     <string name="no_talents_in_compendium_sub_text">There are no talents in your compendium yet.</string>
 
+    <string name="title_spell_new">New Spell</string>
+    <string name="title_spell_edit">Edit Spell</string>
     <string name="no_spells_in_compendium">No spells</string>
     <string name="no_spells_in_compendium_sub_text">There are no spells in your compendium yet.</string>
 

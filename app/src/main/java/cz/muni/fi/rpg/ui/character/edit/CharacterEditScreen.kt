@@ -64,7 +64,6 @@ private object CharacterEditScreen {
     }
 }
 
-@ExperimentalLayout
 @Composable
 fun CharacterEditScreen(routing: Routing<Route.CharacterEdit>) {
     val viewModel: CharacterViewModel by viewModel { parametersOf(routing.route.characterId) }
@@ -101,7 +100,6 @@ fun CharacterEditScreen(routing: Routing<Route.CharacterEdit>) {
     }
 }
 
-@ExperimentalLayout
 @Composable
 private fun CharacterEditMainUI(formData: CharacterEditScreen.FormData, validate: Boolean) {
     ScrollableColumn(Modifier.fillMaxSize()) {

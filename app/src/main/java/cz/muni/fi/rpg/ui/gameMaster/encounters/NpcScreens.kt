@@ -180,7 +180,6 @@ private class FormData(
                 toIntValue(wounds.value) > 0
 }
 
-@ExperimentalCoroutinesApi
 @Composable
 fun NpcDetailScreen(
     routing: Routing<Route.NpcDetail>,
@@ -293,8 +292,11 @@ fun NpcCreationScreen(routing: Routing<Route.NpcCreation>) {
 private fun MainContainer(data: FormData, validate: Boolean) {
     ScrollableColumn {
         Column(Modifier.padding(24.dp).padding(bottom = 30.dp)) {
-            Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(16.dp)) {
+            Column(verticalArrangement = Arrangement.spacedBy(FormInputVerticalPadding)) {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(FormInputHorizontalPadding)
+                ) {
                     TextInput(
                         modifier = Modifier.weight(0.7f),
                         label = stringResource(R.string.label_name),

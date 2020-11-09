@@ -4,7 +4,6 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.view.MenuItem
-import androidx.compose.foundation.layout.ExperimentalLayout
 import androidx.compose.runtime.*
 import androidx.compose.ui.platform.ComposeView
 import androidx.drawerlayout.widget.DrawerLayout
@@ -31,7 +30,6 @@ import cz.muni.fi.rpg.ui.router.Route
 import cz.muni.fi.rpg.ui.router.Routing
 import cz.muni.fi.rpg.ui.settings.SettingsScreen
 import cz.muni.fi.rpg.viewModels.AuthenticationViewModel
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.koin.android.ext.android.inject
 import org.koin.androidx.fragment.android.setupKoinFragmentFactory
 
@@ -43,8 +41,6 @@ class MainActivity : AuthenticatedActivity(R.layout.activity_main) {
 
     private lateinit var backStack: BackStack<Route>
 
-    @ExperimentalLayout
-    @ExperimentalCoroutinesApi
     override fun onCreate(savedInstanceState: Bundle?) {
         setupKoinFragmentFactory()
 

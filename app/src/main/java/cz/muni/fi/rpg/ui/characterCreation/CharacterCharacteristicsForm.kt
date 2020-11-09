@@ -109,7 +109,6 @@ object CharacterCharacteristicsForm {
     }
 }
 
-@ExperimentalLayout
 @Composable
 fun CharacterCharacteristicsForm(
     data: CharacterCharacteristicsForm.Data,
