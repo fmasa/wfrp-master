@@ -52,6 +52,8 @@
     <string name="label_spell_duration">Duration</string>
     <string name="label_spell_target">Target</string>
     <string name="label_spell_range">Range</string>
+    <string name="title_choose_compendium_spell">Choose Compendium spell…</string>
+    <string name="button_add_non_compendium_spell">…or add non-Compendium spell</string>
 
 
     <string name="title_character_creation_info">Basic info</string>
@@ -296,4 +298,5 @@
     <string name="no_spells_in_compendium_sub_text">There are no spells in your compendium yet.</string>
 
     <string name="label_talent_max_times_taken">Max</string>
+    <string name="no_spells_in_compendium_sub_text_player" />
 </resources>

@@ -7,8 +7,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumnFor
 import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Scaffold
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.*
+import androidx.compose.runtime.savedinstancestate.savedInstanceState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
@@ -16,7 +16,8 @@ import androidx.compose.ui.unit.dp
 import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.model.domain.character.CharacterId
 import cz.muni.fi.rpg.model.domain.spells.Spell
-import cz.muni.fi.rpg.ui.character.spells.SpellDialog
+import cz.muni.fi.rpg.ui.character.spells.dialog.AddSpellDialog
+import cz.muni.fi.rpg.ui.character.spells.dialog.EditSpellDialog
 import cz.muni.fi.rpg.ui.common.composables.*
 import cz.muni.fi.rpg.viewModels.SpellsViewModel
 import org.koin.core.parameter.parametersOf
@@ -27,27 +28,31 @@ internal fun CharacterSpellsScreen(
     modifier: Modifier,
 ) {
     val viewModel: SpellsViewModel by viewModel { parametersOf(characterId) }
-    val fragmentManager = fragmentManager()
+    var showAddSpellDialog by savedInstanceState { false }
 
     Scaffold(
         modifier = modifier,
         floatingActionButton = {
             FloatingActionButton(
-                onClick = { SpellDialog.newInstance(characterId, null).show(fragmentManager, null) }
+                onClick = { showAddSpellDialog = true }
             ) {
                 Icon(vectorResource(R.drawable.ic_add))
             }
         }
     ) {
-        MainContainer(
-            viewModel,
-            onSpellClick = { SpellDialog.newInstance(characterId, it).show(fragmentManager, null) }
-        )
+        MainContainer(viewModel)
+
+        if (showAddSpellDialog) {
+            AddSpellDialog(
+                viewModel = viewModel,
+                onDismissRequest = { showAddSpellDialog = false },
+            )
+        }
     }
 }
 
 @Composable
-private fun MainContainer(viewModel: SpellsViewModel, onSpellClick: (Spell) -> Unit) {
+private fun MainContainer(viewModel: SpellsViewModel) {
     val spells = viewModel.spells.collectAsState(null).value ?: return
 
     if (spells.isEmpty()) {
@@ -58,11 +63,21 @@ private fun MainContainer(viewModel: SpellsViewModel, onSpellClick: (Spell) -> U
         return
     }
 
+    var editedSpell: Spell? by savedInstanceState { null }
+
     LazyColumnFor(spells, Modifier.padding(top = 12.dp)) { spell ->
         SpellItem(
             spell,
-            onClick = { onSpellClick(spell) },
+            onClick = { editedSpell = spell },
             onRemove = { viewModel.removeSpell(spell) }
+        )
+    }
+
+    editedSpell?.let {
+        EditSpellDialog(
+            viewModel = viewModel,
+            spell = it,
+            onDismissRequest = { editedSpell = null },
         )
     }
 }
