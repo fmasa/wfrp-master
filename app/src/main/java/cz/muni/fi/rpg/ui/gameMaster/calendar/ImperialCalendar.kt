@@ -49,7 +49,7 @@ fun ImperialCalendar(date: ImperialDate, onDateChange: (ImperialDate) -> Unit) {
                     IconButton(
                         onClick = {
                             if (activeYearRange.first != 1) {
-                                activeYearRange = activeYearRange.move(-4)
+                                activeYearRange = activeYearRange.move(-YEAR_ROWS * YEAR_COLUMNS)
                             }
                         }) {
                         Icon(vectorResource(R.drawable.ic_caret_left))
@@ -61,7 +61,7 @@ fun ImperialCalendar(date: ImperialDate, onDateChange: (ImperialDate) -> Unit) {
                     )
 
                     IconButton(onClick = {
-                        activeYearRange = activeYearRange.move(+4)
+                        activeYearRange = activeYearRange.move(+YEAR_ROWS * YEAR_COLUMNS)
                     }) {
                         Icon(vectorResource(R.drawable.ic_caret_right))
                     }
@@ -86,7 +86,8 @@ fun ImperialCalendar(date: ImperialDate, onDateChange: (ImperialDate) -> Unit) {
 
         when (activeScreen) {
             ActiveScreen.YEARS -> YearPicker(
-                activeMonth.year,
+                selectedYear = activeMonth.year,
+                firstYear = activeYearRange.first,
                 onYearChange = {
                     activeMonth = activeMonth.copy(year = it)
                     activeScreen = ActiveScreen.DAYS_OF_MONTH
@@ -101,13 +102,12 @@ fun ImperialCalendar(date: ImperialDate, onDateChange: (ImperialDate) -> Unit) {
 }
 
 @Composable
-private fun YearPicker(selectedYear: Int, onYearChange: (Int) -> Unit) {
-    val activeYearRange = remember(selectedYear) {
-        val size = YEAR_COLUMNS * YEAR_ROWS
-        val firstYear = (selectedYear - 1) / size * size + 1
-
-        firstYear until firstYear + size
-    }
+private fun YearPicker(
+    selectedYear: Int,
+    firstYear: Int,
+    onYearChange: (Int) -> Unit
+) {
+    val activeYearRange = firstYear until firstYear + YEAR_COLUMNS * YEAR_ROWS
 
     Row {
         repeat(YEAR_COLUMNS) { column ->
