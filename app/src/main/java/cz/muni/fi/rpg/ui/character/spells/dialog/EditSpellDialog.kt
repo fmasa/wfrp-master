@@ -14,9 +14,8 @@ fun EditSpellDialog(
     FullScreenDialog(onDismissRequest = onDismissRequest) {
         if (spell.compendiumId != null) {
             SpellDetail(
-                existingSpell = spell,
-                compendiumSpellId = spell.compendiumId,
-                viewModel = viewModel,
+                spell = spell,
+                onDismissRequest = onDismissRequest,
             )
         } else {
             NonCompendiumSpellForm(
