@@ -146,7 +146,7 @@ private class NonCompendiumSkillFormData(
     companion object {
         @Composable
         fun fromSkill(skill: Skill?): NonCompendiumSkillFormData = NonCompendiumSkillFormData(
-            id = skill?.id ?: UUID.randomUUID(),
+            id = remember { skill?.id ?: UUID.randomUUID() },
             name = savedInstanceState { skill?.name ?: "" },
             description = savedInstanceState { skill?.description ?: "" },
             characteristic = savedInstanceState {

@@ -7,6 +7,7 @@ import java.util.UUID
 @Parcelize
 data class Spell(
     val id: UUID,
+    val compendiumId: UUID? = null,
     val name: String,
     val range: String,
     val target: String,

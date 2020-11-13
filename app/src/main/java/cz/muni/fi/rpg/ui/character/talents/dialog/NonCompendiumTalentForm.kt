@@ -125,7 +125,7 @@ private class NonCompendiumTalentFormData(
     companion object {
         @Composable
         fun fromTalent(talent: Talent?): NonCompendiumTalentFormData = NonCompendiumTalentFormData(
-            id = talent?.id ?: UUID.randomUUID(),
+            id = remember { talent?.id ?: UUID.randomUUID() },
             name = savedInstanceState { talent?.name ?: "" },
             description = savedInstanceState { talent?.description ?: "" },
             taken = savedInstanceState { talent?.taken ?: 1 },

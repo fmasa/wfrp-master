@@ -13,7 +13,8 @@ class Spells extends CharacterSubCollectionSuite {
         target: "1",
         duration: "3 seconds",
         castingNumber: 0,
-        effect: "Your staff blinks with bright white light which blinds target for 1d10 minutes"
+        effect: "Your staff blinks with bright white light which blinds target for 1d10 minutes",
+        compendiumId: null,
     };
 
     private spells(app: Firestore, userId: string): CollectionReference
@@ -57,9 +58,9 @@ class Spells extends CharacterSubCollectionSuite {
     async "other users CANNOT update spell of character"() {
         for (const userId of [this.userId2, 'user-not-in-party']) {
             await this.spells(this.authedApp(this.userId1), this.userId1).doc(this.spell.id).set(this.spell);
-            const talents = this.spells(this.authedApp(userId), this.userId1);
+            const spells = this.spells(this.authedApp(userId), this.userId1);
 
-            await firebase.assertFails(talents.doc(this.spell.id).set({effect: "Improved effect."}, {merge: true}));
+            await firebase.assertFails(spells.doc(this.spell.id).set({effect: "Improved effect."}, {merge: true}));
         }
     }
 
@@ -94,14 +95,46 @@ class Spells extends CharacterSubCollectionSuite {
     async "spell with field missing CANNOT be saved"() {
         const spells = this.spells(this.authedApp(this.userId1), this.userId1);
 
-        await Promise.all(Object.keys(this.spell).map(field => {
+        for (const field of Object.keys(this.spell)) {
+            if (field === "compendiumId") {
+                continue; // (BC) Compendium ID was introduced in 2.0 (TODO: remove in 2.3)
+            }
+
             const spell = {...this.spell};
             const spellId = spell.id;
 
             delete spell[field];
 
-            return firebase.assertFails(spells.doc(spellId).set(spell));
-        }));
+            await firebase.assertFails(spells.doc(spellId).set(spell));
+        }
+    }
+
+    @test
+    async "spell with ID of existing compendium spell can be created"() {
+        const compendiumSpell = {
+            id: uuid(),
+            name: "Blink",
+            range: "1 yard",
+            target: "1",
+            duration: "3 seconds",
+            castingNumber: 0,
+            effect: "Your staff blinks with bright white light which blinds target for 1d10 minutes"
+        };
+
+        await this.authedApp(this.validPartyGameMasterId)
+            .collection("parties")
+            .doc(this.partyId)
+            .collection("spells")
+            .doc(compendiumSpell.id)
+            .set(compendiumSpell);
+
+        const spell = {...this.spell, compendiumId: compendiumSpell.id}
+
+        await firebase.assertSucceeds(
+            this.spells(this.authedApp(this.userId1), this.userId1)
+                .doc(spell.id)
+                .set(spell)
+        );
     }
 
     @test
@@ -145,6 +178,13 @@ class Spells extends CharacterSubCollectionSuite {
 
                 // target too long
                 {target: "a".repeat(51)},
+
+                // Invalid compendium ID
+                {compendiumId: "foo"},
+
+                // Nonexistent compendium spell
+                {compendiumId: uuid()},
+
             ].map(doc => firebase.assertFails(spellDoc.set({...this.spell, ...doc})))
         );
 
