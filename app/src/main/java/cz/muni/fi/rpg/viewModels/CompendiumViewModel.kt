@@ -16,7 +16,7 @@ class CompendiumViewModel(
 ) : ViewModel() {
 
     suspend fun save(skill: Skill) {
-        skillCompendium.saveItem(partyId, skill)
+        skillCompendium.saveItems(partyId, skill)
     }
 
     suspend fun remove(skill: Skill) {
@@ -24,7 +24,7 @@ class CompendiumViewModel(
     }
 
     suspend fun save(talent: Talent) {
-        talentsCompendium.saveItem(partyId, talent)
+        talentsCompendium.saveItems(partyId, talent)
     }
 
     suspend fun remove(talent: Talent) {
@@ -32,7 +32,7 @@ class CompendiumViewModel(
     }
 
     suspend fun save(spell: Spell) {
-        spellCompendium.saveItem(partyId, spell)
+        spellCompendium.saveItems(partyId, spell)
     }
 
     suspend fun remove(spell: Spell) {
