@@ -24,7 +24,10 @@ internal class FirestoreCompendium<T : CompendiumItem>(
     private val mapper: AggregateMapper<T>,
 ) : Compendium<T>, CoroutineScope by CoroutineScope(Dispatchers.IO) {
 
-    override fun liveForParty(partyId: UUID): Flow<List<T>> = queryFlow(collection(partyId), mapper)
+    override fun liveForParty(partyId: UUID): Flow<List<T>> = queryFlow(
+        collection(partyId).orderBy("name"),
+        mapper,
+    )
 
     override suspend fun getItem(partyId: UUID, itemId: UUID): T {
         try {
