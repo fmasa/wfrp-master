@@ -11,7 +11,7 @@ data class Talent(
     companion object {
         const val NAME_MAX_LENGTH = 50
         const val MAX_TIMES_TAKEN_MAX_LENGTH = 50
-        const val DESCRIPTION_MAX_LENGTH = 200
+        const val DESCRIPTION_MAX_LENGTH = 1500
     }
 
     init {

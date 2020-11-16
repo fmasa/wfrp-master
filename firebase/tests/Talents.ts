@@ -150,7 +150,7 @@ class Talents extends CharacterSubCollectionSuite {
                 {name: "a".repeat(51)},
 
                 // Description too long
-                {description: "a".repeat(201)},
+                {description: "a".repeat(1501)},
 
                 // Taken too many times
                 {taken: 1000},

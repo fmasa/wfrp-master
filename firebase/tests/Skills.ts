@@ -159,7 +159,7 @@ class Skills extends CharacterSubCollectionSuite {
                 {mastery: 0},
 
                 // Description too long
-                {description: "a".repeat(201)},
+                {description: "a".repeat(1501)},
 
                 // Invalid compendium ID
                 {compendiumId: "foo"},
