@@ -11,6 +11,7 @@ import androidx.compose.runtime.key
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.WithConstraints
+import androidx.compose.ui.platform.ViewModelStoreOwnerAmbient
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
@@ -29,11 +30,12 @@ import cz.muni.fi.rpg.ui.router.Route
 import cz.muni.fi.rpg.ui.router.Routing
 import cz.muni.fi.rpg.viewModels.EncountersViewModel
 import cz.muni.fi.rpg.viewModels.GameMasterViewModel
+import org.koin.android.viewmodel.compat.ViewModelCompat.getViewModel
 import org.koin.core.parameter.parametersOf
 
 @Composable
 fun GameMasterScreen(routing: Routing<Route.GameMaster>, adManager: AdManager) {
-    val viewModel: GameMasterViewModel by viewModel { parametersOf(routing.route.partyId) }
+    val viewModel = ViewModel.GameMaster(routing.route.partyId)
     val party = viewModel.party.right().collectAsState(null).value
     val fragmentManager = fragmentManager()
 

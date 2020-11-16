@@ -1,6 +1,5 @@
 package cz.muni.fi.rpg.viewModels
 
-import androidx.lifecycle.ViewModel
 import arrow.core.Either
 import arrow.core.extensions.list.foldable.exists
 import cz.muni.fi.rpg.model.domain.character.Character
@@ -13,18 +12,15 @@ import cz.muni.fi.rpg.model.domain.party.PartyRepository
 import cz.muni.fi.rpg.model.domain.party.time.DateTime
 import cz.muni.fi.rpg.model.right
 import cz.muni.fi.rpg.ui.gameMaster.adapter.Player
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.zip
-import kotlinx.coroutines.launch
 import java.util.*
 
 class GameMasterViewModel(
     private val partyId: UUID,
     private val parties: PartyRepository,
     private val characterRepository: CharacterRepository
-) : ViewModel(), CoroutineScope by CoroutineScope(Dispatchers.IO) {
+) {
 
     val party: Flow<Either<PartyNotFound, Party>> = parties.getLive(partyId)
     val characters: Flow<List<Character>> = characterRepository.inParty(partyId)
@@ -45,7 +41,7 @@ class GameMasterViewModel(
         }
     }
 
-    fun archiveCharacter(id: CharacterId) = launch {
+    suspend fun archiveCharacter(id: CharacterId) {
         val character = characterRepository.get(id)
 
         character.archive()
@@ -61,7 +57,7 @@ class GameMasterViewModel(
         parties.save(party)
     }
 
-    fun changeTime(change: (DateTime) -> DateTime) = launch {
+    suspend fun changeTime(change: (DateTime) -> DateTime) {
         val party = parties.get(partyId)
 
         party.changeTime(change(party.getTime()))

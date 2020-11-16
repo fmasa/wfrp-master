@@ -9,6 +9,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -27,7 +28,9 @@ import cz.muni.fi.rpg.ui.gameMaster.adapter.Player
 import cz.muni.fi.rpg.ui.router.Route
 import cz.muni.fi.rpg.viewModels.CompendiumViewModel
 import cz.muni.fi.rpg.viewModels.GameMasterViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.launch
 import org.koin.core.parameter.parametersOf
 import java.util.*
 
@@ -54,12 +57,16 @@ internal fun PartySummaryScreen(
             )
         }
 
+        val coroutineScope = rememberCoroutineScope()
+
         PlayersCard(
             viewModel,
             onCharacterOpenRequest = onCharacterOpenRequest,
             onCharacterCreateRequest = onCharacterCreateRequest,
             onRemoveCharacter = {
-                viewModel.archiveCharacter(CharacterId(partyId, it.id))
+                coroutineScope.launch(Dispatchers.IO) {
+                    viewModel.archiveCharacter(CharacterId(partyId, it.id))
+                }
             },
             onInvitationDialogRequest = { invitationDialogVisible.value = true },
         )

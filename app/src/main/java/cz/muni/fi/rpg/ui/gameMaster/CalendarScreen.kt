@@ -8,6 +8,7 @@ import androidx.compose.material.Surface
 import androidx.compose.material.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.savedinstancestate.savedInstanceState
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -29,6 +30,9 @@ import cz.muni.fi.rpg.model.domain.party.time.YearSeason
 import cz.muni.fi.rpg.ui.common.composables.CardContainer
 import cz.muni.fi.rpg.ui.gameMaster.calendar.ImperialCalendar
 import cz.muni.fi.rpg.viewModels.GameMasterViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.time.LocalTime
 
 @Composable
@@ -58,16 +62,20 @@ internal fun CalendarScreen(
 @Composable
 private fun Time(viewModel: GameMasterViewModel, time: DateTime.TimeOfDay) {
     val dialog = MaterialDialog()
+    val coroutineScope = rememberCoroutineScope()
 
     dialog.build {
         timepicker(
             initialTime = LocalTime.of(time.hour, time.minute),
             onCancel = { dialog.hide() },
             onComplete = { newTime ->
-                viewModel.changeTime {
-                    it.withTime(DateTime.TimeOfDay(newTime.hour, newTime.minute))
+                coroutineScope.launch(Dispatchers.IO) {
+                    viewModel.changeTime {
+                        it.withTime(DateTime.TimeOfDay(newTime.hour, newTime.minute))
+                    }
+
+                    withContext(Dispatchers.Main) { dialog.hide() }
                 }
-                dialog.hide()
             }
         )
     }
@@ -102,9 +110,12 @@ private fun Date(viewModel: GameMasterViewModel, date: ImperialDate) {
                         Modifier.fillMaxWidth().padding(bottom = 10.dp, end = 10.dp),
                         horizontalArrangement = Arrangement.End
                     ) {
+                        val coroutineScope = rememberCoroutineScope()
                         TextButton(onClick = {
-                            viewModel.changeTime { it.copy(date = selectedDate) }
-                            dialogVisible = false
+                            coroutineScope.launch(Dispatchers.IO) {
+                                viewModel.changeTime { it.copy(date = selectedDate) }
+                                dialogVisible = false
+                            }
                         }) {
                             Text(stringResource(R.string.button_save).toUpperCase(Locale.current))
                         }

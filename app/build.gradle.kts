@@ -147,9 +147,9 @@ dependencies {
     implementation("com.github.andob:android-awt:1.0.0")
 
     // Koin
-    implementation("org.koin:koin-android:2.1.5")
-    implementation("org.koin:koin-android-viewmodel:2.1.5")
-    implementation("org.koin:koin-androidx-fragment:2.1.5")
+    implementation("org.koin:koin-android:2.2.0")
+    implementation("org.koin:koin-android-viewmodel:2.2.0")
+    implementation("org.koin:koin-androidx-fragment:2.2.0")
 
     // Jetpack Compose
     implementation("androidx.compose.ui:ui:$composeVersion")
