@@ -280,6 +280,8 @@
     <!-- Compendium -->
     <string name="title_compendium">Compendium</string>
 
+    <string name="label_lore">Lore</string>
+
     <string name="title_skill_new">New Skill</string>
     <string name="title_skill_edit">Edit Skill</string>
     <string name="no_skills_in_compendium">No skills</string>

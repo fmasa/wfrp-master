@@ -118,7 +118,8 @@ class Spells extends CharacterSubCollectionSuite {
             target: "1",
             duration: "3 seconds",
             castingNumber: 0,
-            effect: "Your staff blinks with bright white light which blinds target for 1d10 minutes"
+            effect: "Your staff blinks with bright white light which blinds target for 1d10 minutes",
+            lore: "petty spells",
         };
 
         await this.authedApp(this.validPartyGameMasterId)

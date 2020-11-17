@@ -65,14 +65,15 @@ service cloud.firestore {
                 allow delete: if isGameMaster();
 
                 function isValidSpell(spell) {
-                    return spell.keys().toSet() == ["id", "name", "range", "target", "duration", "castingNumber", "effect"].toSet()
+                    return spell.keys().toSet() == ["id", "name", "range", "target", "duration", "castingNumber", "effect", "lore"].toSet()
                         && spell.id is string && spell.id == spellId && isValidUuid(spell.id)
                         && spell.name is string && isNotBlank(spell.name) && spell.name.size() <= 50
                         && spell.range is string && spell.range.size() <= 50
                         && spell.target is string && spell.target.size() <= 50
                         && spell.duration is string && spell.duration.size() <= 50
                         && spell.effect is string && spell.effect.size() <= 400
-                        && spell.castingNumber is int && spell.castingNumber >= 0 && spell.castingNumber <= 99;
+                        && spell.castingNumber is int && spell.castingNumber >= 0 && spell.castingNumber <= 99
+                        && spell.lore is string && spell.lore.size() <= 50;
                 }
             }
             // End of Compendium

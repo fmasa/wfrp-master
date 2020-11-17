@@ -9,7 +9,8 @@ data class Spell(
     val target: String,
     val duration: String,
     val castingNumber: Int,
-    val effect: String
+    val effect: String,
+    val lore: String,
 ): CompendiumItem {
     companion object {
         const val NAME_MAX_LENGTH = 50
@@ -17,6 +18,7 @@ data class Spell(
         const val TARGET_MAX_LENGTH = 50
         const val DURATION_MAX_LENGTH = 50
         const val EFFECT_MAX_LENGTH = 400
+        const val LORE_MAX_LENGTH = 50
     }
 
     init {
@@ -26,5 +28,6 @@ data class Spell(
         require(target.length <= TARGET_MAX_LENGTH) { "Target must be shorter than $TARGET_MAX_LENGTH" }
         require(duration.length <= DURATION_MAX_LENGTH) { "Duration must be shorter than $DURATION_MAX_LENGTH" }
         require(effect.length <= EFFECT_MAX_LENGTH) { "Effect must be shorter than $EFFECT_MAX_LENGTH" }
+        require(lore.length <= LORE_MAX_LENGTH) { "LORE must be shorter than $LORE_MAX_LENGTH" }
     }
 }
