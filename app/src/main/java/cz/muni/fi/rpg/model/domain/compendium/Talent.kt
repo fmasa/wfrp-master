@@ -10,7 +10,7 @@ data class Talent(
 ): CompendiumItem {
     companion object {
         const val NAME_MAX_LENGTH = 50
-        const val MAX_TIMES_TAKEN_MAX_LENGTH = 50
+        const val MAX_TIMES_TAKEN_MAX_LENGTH = 100
         const val DESCRIPTION_MAX_LENGTH = 1500
     }
 
