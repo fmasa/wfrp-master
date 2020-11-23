@@ -17,7 +17,7 @@ data class Skill(
 ) : Parcelable {
     companion object {
         const val NAME_MAX_LENGTH = 50
-        const val DESCRIPTION_MAX_LENGTH = 1500
+        const val DESCRIPTION_MAX_LENGTH = 2000
     }
 
     init {

@@ -26,7 +26,7 @@ service cloud.firestore {
                     return skill.keys().toSet() == ["id", "name", "description", "advanced", "characteristic"].toSet()
                         && skill.id is string && skill.id == skillId && isValidUuid(skill.id)
                         && skill.name is string && isNotBlank(skill.name) && skill.name.size() <= 50
-                        && skill.description is string && skill.description.size() <= 1500
+                        && skill.description is string && skill.description.size() <= 2000
                         && skill.advanced is bool
                         && skill.characteristic in [
                             "AGILITY",
@@ -168,7 +168,7 @@ service cloud.firestore {
                         return ["id", "name", "description", "advanced", "characteristic", "advances", "compendiumId"].hasAll(skill.keys())
                             && skill.id is string && skill.id == skillId && isValidUuid(skill.id)
                             && skill.name is string && isNotBlank(skill.name) && skill.name.size() <= 50
-                            && skill.description is string && skill.description.size() <= 1500
+                            && skill.description is string && skill.description.size() <= 2000
                             && skill.advanced is bool
                             && skill.advances is int && skill.advances >= 0
                             && skill.characteristic in [
