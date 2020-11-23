@@ -31,7 +31,6 @@ import cz.muni.fi.rpg.model.firestore.repositories.compendium.FirestoreCompendiu
 import cz.muni.fi.rpg.ui.common.AdManager
 import cz.muni.fi.rpg.viewModels.*
 import org.koin.android.viewmodel.dsl.viewModel
-import org.koin.core.qualifier.named
 import org.koin.core.scope.Scope
 import org.koin.dsl.module
 import java.util.*
