@@ -15,6 +15,7 @@ import cz.muni.fi.rpg.model.domain.character.Character
 import cz.muni.fi.rpg.model.domain.character.CharacterId
 import cz.muni.fi.rpg.model.domain.character.Points
 import cz.muni.fi.rpg.model.domain.character.Stats
+import cz.muni.fi.rpg.model.domain.compendium.common.Characteristic
 import cz.muni.fi.rpg.ui.common.composables.CardContainer
 import cz.muni.fi.rpg.ui.common.composables.NumberPicker
 import cz.muni.fi.rpg.ui.common.composables.Theme
@@ -153,37 +154,37 @@ private fun CharacteristicsSection(stats: Stats) {
     CardContainer(modifier = Modifier.padding(horizontal = 8.dp)) {
         Row(horizontalArrangement = Arrangement.SpaceEvenly, modifier = Modifier.fillMaxWidth()) {
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                Characteristic(R.string.label_shortcut_weapon_skill, stats.weaponSkill)
-                Characteristic(R.string.label_shortcut_agility, stats.agility)
+                CharacteristicItem(Characteristic.WEAPON_SKILL, stats.weaponSkill)
+                CharacteristicItem(Characteristic.AGILITY, stats.agility)
             }
 
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                Characteristic(R.string.label_shortcut_ballistic_skill, stats.ballisticSkill)
-                Characteristic(R.string.label_shortcut_dexterity, stats.dexterity)
+                CharacteristicItem(Characteristic.BALLISTIC_SKILL, stats.ballisticSkill)
+                CharacteristicItem(Characteristic.DEXTERITY, stats.dexterity)
             }
 
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                Characteristic(R.string.label_shortcut_strength, stats.strength)
-                Characteristic(R.string.label_shortcut_intelligence, stats.intelligence)
+                CharacteristicItem(Characteristic.STRENGTH, stats.strength)
+                CharacteristicItem(Characteristic.INTELLIGENCE, stats.intelligence)
             }
 
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                Characteristic(R.string.label_shortcut_toughness, stats.toughness)
-                Characteristic(R.string.label_shortcut_will_power, stats.willPower)
+                CharacteristicItem(Characteristic.TOUGHNESS, stats.toughness)
+                CharacteristicItem(Characteristic.WILL_POWER, stats.willPower)
             }
 
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                Characteristic(R.string.label_shortcut_initiative, stats.initiative)
-                Characteristic(R.string.label_shortcut_fellowship, stats.fellowship)
+                CharacteristicItem(Characteristic.INITIATIVE, stats.initiative)
+                CharacteristicItem(Characteristic.FELLOWSHIP, stats.fellowship)
             }
         }
     }
 }
 
 @Composable
-private fun Characteristic(@StringRes labelRes: Int, value: Int) {
+private fun CharacteristicItem(characteristic: Characteristic, value: Int) {
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
-        Text(stringResource(labelRes), style = MaterialTheme.typography.subtitle1)
+        Text(characteristic.getShortcutName(), style = MaterialTheme.typography.subtitle1)
         Text(
             value.toString(),
             Modifier.padding(vertical = 12.dp),

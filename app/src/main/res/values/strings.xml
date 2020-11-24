@@ -242,16 +242,6 @@
     <string name="question_remove_encounter">Do you really want to remove this encounter?</string>
     <string name="label_enemy">Enemy</string>
     <string name="title_npc_attributes">Attributes</string>
-    <string name="label_shortcut_weapon_skill">WS</string>
-    <string name="label_shortcut_ballistic_skill">BS</string>
-    <string name="label_shortcut_strength">S</string>
-    <string name="label_shortcut_toughness">T</string>
-    <string name="label_shortcut_initiative">I</string>
-    <string name="label_shortcut_agility">Agi</string>
-    <string name="label_shortcut_dexterity">Dex</string>
-    <string name="label_shortcut_intelligence">Int</string>
-    <string name="label_shortcut_will_power">WP</string>
-    <string name="label_shortcut_fellowship">Fel</string>
     <string name="message_npc_not_found">NPC does not exist</string>
     <string name="message_npc_saved">NPC was saved</string>
     <string name="label_alive">Alive</string>
@@ -301,4 +291,16 @@
 
     <string name="label_talent_max_times_taken">Max</string>
     <string name="no_spells_in_compendium_sub_text_player" />
+
+    <string name="title_compendium_import">Import Compendium</string>
+    <string name="title_importing_rulebook">Importing rulebook…</string>
+
+    <string name="rulebook_store_url">https://www.drivethrurpg.com/product/248284/Warhammer-Fantasy-Roleplay-Fourth-Edition-Rulebook?affiliate_id=2708720</string>
+    <string name="button_import">Import</string>
+    <string name="import_rulebook">Import rulebook PDF</string>
+    <string name="button_buy">buy</string>
+    <string name="rulebook_import_pick_skills">Select which skills you want to import.</string>
+    <string name="rulebook_import_pick_talents">Select which talents you want to import.</string>
+    <string name="rulebook_import_pick_spells">Select which spells you want to import.</string>
+    <string name="error_import_failed">PDF import failed. Check that chose valid rulebook PDF.</string>
 </resources>
