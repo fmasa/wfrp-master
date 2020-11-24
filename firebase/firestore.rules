@@ -26,7 +26,7 @@ service cloud.firestore {
                     return skill.keys().toSet() == ["id", "name", "description", "advanced", "characteristic"].toSet()
                         && skill.id is string && skill.id == skillId && isValidUuid(skill.id)
                         && skill.name is string && isNotBlank(skill.name) && skill.name.size() <= 50
-                        && skill.description is string && skill.description.size() <= 200
+                        && skill.description is string && skill.description.size() <= 2000
                         && skill.advanced is bool
                         && skill.characteristic in [
                             "AGILITY",
@@ -53,8 +53,8 @@ service cloud.firestore {
                     return talent.keys().toSet() == ["id", "name", "maxTimesTaken", "description"].toSet()
                         && talent.id is string && talent.id == talentId && isValidUuid(talent.id)
                         && talent.name is string && isNotBlank(talent.name) && talent.name.size() <= 50
-                        && talent.maxTimesTaken is string && talent.name.size() <= 50
-                        && talent.description is string && talent.description.size() <= 200;
+                        && talent.maxTimesTaken is string && talent.name.size() <= 100
+                        && talent.description is string && talent.description.size() <= 1500;
                 }
             }
 
@@ -65,14 +65,15 @@ service cloud.firestore {
                 allow delete: if isGameMaster();
 
                 function isValidSpell(spell) {
-                    return spell.keys().toSet() == ["id", "name", "range", "target", "duration", "castingNumber", "effect"].toSet()
+                    return spell.keys().toSet() == ["id", "name", "range", "target", "duration", "castingNumber", "effect", "lore"].toSet()
                         && spell.id is string && spell.id == spellId && isValidUuid(spell.id)
                         && spell.name is string && isNotBlank(spell.name) && spell.name.size() <= 50
                         && spell.range is string && spell.range.size() <= 50
                         && spell.target is string && spell.target.size() <= 50
                         && spell.duration is string && spell.duration.size() <= 50
-                        && spell.effect is string && spell.effect.size() <= 400
-                        && spell.castingNumber is int && spell.castingNumber >= 0 && spell.castingNumber <= 99;
+                        && spell.effect is string && spell.effect.size() <= 1000
+                        && spell.castingNumber is int && spell.castingNumber >= 0 && spell.castingNumber <= 99
+                        && spell.lore is string && spell.lore.size() <= 50;
                 }
             }
             // End of Compendium
@@ -167,7 +168,7 @@ service cloud.firestore {
                         return ["id", "name", "description", "advanced", "characteristic", "advances", "compendiumId"].hasAll(skill.keys())
                             && skill.id is string && skill.id == skillId && isValidUuid(skill.id)
                             && skill.name is string && isNotBlank(skill.name) && skill.name.size() <= 50
-                            && skill.description is string && skill.description.size() <= 200
+                            && skill.description is string && skill.description.size() <= 2000
                             && skill.advanced is bool
                             && skill.advances is int && skill.advances >= 0
                             && skill.characteristic in [
@@ -201,7 +202,7 @@ service cloud.firestore {
                         return ["id", "name", "description", "taken", "compendiumId"].hasAll(talent.keys())
                             && talent.id is string && talent.id == talentId && isValidUuid(talent.id)
                             && talent.name is string && isNotBlank(talent.name) && talent.name.size() <= 50
-                            && talent.description is string && talent.description.size() <= 200
+                            && talent.description is string && talent.description.size() <= 1500
                             && talent.taken is int && talent.taken >= 1 && talent.taken <= 999
                             && (! ("compendiumId" in talent)
                                 || (
@@ -225,7 +226,7 @@ service cloud.firestore {
                             && spell.range is string && spell.range.size() <= 50
                             && spell.target is string && spell.target.size() <= 50
                             && spell.duration is string && spell.duration.size() <= 50
-                            && spell.effect is string && spell.effect.size() <= 400
+                            && spell.effect is string && spell.effect.size() <= 1000
                             && spell.castingNumber is int && spell.castingNumber >= 0 && spell.castingNumber <= 99
                             && (! ("compendiumId" in spell)
                                 || (

@@ -142,10 +142,15 @@ dependencies {
     // Time picker dialog
     implementation("com.vanpra.compose-material-dialogs:datetime:0.2.5")
 
+    // OpenPDF
+    implementation("com.github.librepdf:openpdf:1.3.23")
+    implementation("com.github.andob:android-awt:1.0.0")
+    implementation("com.github.h0tk3y.betterParse:better-parse:0.4.0")
+
     // Koin
-    implementation("org.koin:koin-android:2.1.5")
-    implementation("org.koin:koin-android-viewmodel:2.1.5")
-    implementation("org.koin:koin-androidx-fragment:2.1.5")
+    implementation("org.koin:koin-android:2.2.0")
+    implementation("org.koin:koin-android-viewmodel:2.2.0")
+    implementation("org.koin:koin-androidx-fragment:2.2.0")
 
     // Jetpack Compose
     implementation("androidx.compose.ui:ui:$composeVersion")

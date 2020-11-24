@@ -26,6 +26,7 @@ allprojects {
         mavenCentral()
         maven(url = "https://dl.bintray.com/arrow-kt/arrow-kt/")
         maven(url = "https://jitpack.io")
+        maven(url = "https://dl.bintray.com/hotkeytlt/maven")
     }
 }
 

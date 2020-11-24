@@ -20,6 +20,7 @@ import cz.muni.fi.rpg.ui.common.AdManager
 import cz.muni.fi.rpg.ui.common.composables.AmbientUser
 import cz.muni.fi.rpg.ui.common.composables.Theme
 import cz.muni.fi.rpg.ui.common.composables.viewModel
+import cz.muni.fi.rpg.ui.compendium.CompendiumImportScreen
 import cz.muni.fi.rpg.ui.compendium.CompendiumScreen
 import cz.muni.fi.rpg.ui.gameMaster.GameMasterScreen
 import cz.muni.fi.rpg.ui.gameMaster.encounters.EncounterDetailScreen
@@ -93,6 +94,9 @@ class MainActivity : AuthenticatedActivity(R.layout.activity_main) {
                             }
                             is Route.Compendium -> {
                                 CompendiumScreen(Routing(route, backStack))
+                            }
+                            is Route.CompendiumImport -> {
+                                CompendiumImportScreen(Routing(route, backStack))
                             }
                         }
                     }

@@ -27,6 +27,7 @@ interface Spell {
     duration: string;
     castingNumber: number;
     effect: string;
+    lore: string;
 }
 
 abstract class CompendiumTest<TItem extends { id: string }> extends Suite {
@@ -226,7 +227,8 @@ class SpellCompendiumTest extends CompendiumTest<Spell> {
                 target: "1",
                 duration: "3 seconds",
                 castingNumber: 0,
-                effect: "Your staff blinks with bright white light which blinds target for 1d10 minutes"
+                effect: "Your staff blinks with bright white light which blinds target for 1d10 minutes",
+                lore: "Petty spells",
             }
         ]
     }

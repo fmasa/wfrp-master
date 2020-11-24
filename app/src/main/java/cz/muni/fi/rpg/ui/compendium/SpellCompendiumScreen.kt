@@ -48,6 +48,7 @@ fun WithConstraintsScope.SpellCompendiumTab(viewModel: CompendiumViewModel) {
 private data class SpellFormData(
     val id: UUID,
     val name: MutableState<String>,
+    val lore: MutableState<String>,
     val range: MutableState<String>,
     val target: MutableState<String>,
     val duration: MutableState<String>,
@@ -59,6 +60,7 @@ private data class SpellFormData(
         fun fromState(state: DialogState.Opened<Spell?>) = SpellFormData(
             id = remember(state) { state.item?.id ?: UUID.randomUUID() },
             name = savedInstanceState(state) { state.item?.name ?: "" },
+            lore = savedInstanceState(state) { state.item?.lore ?: "" },
             range = savedInstanceState(state) { state.item?.range ?: "" },
             target = savedInstanceState(state) { state.item?.target ?: "" },
             duration = savedInstanceState(state) { state.item?.duration ?: "" },
@@ -72,6 +74,7 @@ private data class SpellFormData(
     override fun toItem() = Spell(
         id = id,
         name = name.value,
+        lore = lore.value,
         range = range.value,
         target = target.value,
         duration = duration.value,
@@ -82,6 +85,7 @@ private data class SpellFormData(
     override fun isValid() =
         name.value.isNotBlank() &&
                 name.value.length <= Spell.NAME_MAX_LENGTH &&
+                lore.value.length <= Spell.LORE_MAX_LENGTH &&
                 range.value.length <= Spell.RANGE_MAX_LENGTH &&
                 target.value.length <= Spell.TARGET_MAX_LENGTH &&
                 duration.value.length <= Spell.DURATION_MAX_LENGTH &&
@@ -120,6 +124,14 @@ private fun SpellDialog(
                 onValueChange = { formData.name.value = it },
                 validate = validate,
                 maxLength = Spell.NAME_MAX_LENGTH
+            )
+
+            TextInput(
+                label = stringResource(R.string.label_lore),
+                value = formData.lore.value,
+                onValueChange = { formData.lore.value = it },
+                validate = validate,
+                maxLength = Spell.LORE_MAX_LENGTH
             )
 
             TextInput(

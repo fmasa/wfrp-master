@@ -16,6 +16,8 @@ import androidx.compose.ui.WithConstraintsScope
 import androidx.compose.ui.gesture.longPressGestureFilter
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.text.intl.Locale
+import androidx.compose.ui.text.toUpperCase
 import androidx.compose.ui.unit.Dp
 import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.model.domain.compendium.CompendiumItem
@@ -41,7 +43,8 @@ fun CompendiumScreen(routing: Routing<Route.Compendium>) {
 
 @Composable
 private fun TopBar(routing: Routing<Route.Compendium>) {
-    val viewModel: PartyViewModel by viewModel { parametersOf(routing.route.partyId) }
+    val partyId = routing.route.partyId
+    val viewModel: PartyViewModel by viewModel { parametersOf(partyId) }
 
     TopAppBar(
         title = {
@@ -53,6 +56,11 @@ private fun TopBar(routing: Routing<Route.Compendium>) {
             }
         },
         navigationIcon = { BackButton(onClick = { routing.backStack.pop() }) },
+        actions = {
+            TopBarAction(onClick = { routing.backStack.push(Route.CompendiumImport(partyId)) }) {
+                Text(stringResource(R.string.button_import).toUpperCase(Locale.current))
+            }
+        }
     )
 }
 
@@ -61,7 +69,6 @@ private fun WithConstraintsScope.MainContent(routing: Routing<Route.Compendium>)
     val screenWidth = constraints.maxWidth.toFloat()
 
     Column {
-
         val viewModel: CompendiumViewModel by viewModel { parametersOf(routing.route.partyId) }
 
         val tabs = tabs(routing.route.partyId)
@@ -139,7 +146,9 @@ fun <T : CompendiumItem> CompendiumTab(
 
                             ContextMenu(
                                 items = listOf(
-                                    ContextMenu.Item(stringResource(R.string.remove), onClick = { onRemove(item) })
+                                    ContextMenu.Item(
+                                        stringResource(R.string.remove),
+                                        onClick = { onRemove(item) })
                                 ),
                                 onDismissRequest = { contextMenuOpened.value = null },
                                 expanded = contextMenuOpened.value == item.id

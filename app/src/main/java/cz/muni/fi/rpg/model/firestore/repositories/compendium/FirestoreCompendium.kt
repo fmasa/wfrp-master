@@ -9,6 +9,10 @@ import cz.muni.fi.rpg.model.domain.compendium.exceptions.CompendiumItemNotFound
 import cz.muni.fi.rpg.model.firestore.AggregateMapper
 import cz.muni.fi.rpg.model.firestore.COLLECTION_PARTIES
 import cz.muni.fi.rpg.model.firestore.queryFlow
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.tasks.await
 import timber.log.Timber
@@ -18,9 +22,12 @@ internal class FirestoreCompendium<T : CompendiumItem>(
     private val collectionName: String,
     private val firestore: FirebaseFirestore,
     private val mapper: AggregateMapper<T>,
-) : Compendium<T> {
+) : Compendium<T>, CoroutineScope by CoroutineScope(Dispatchers.IO) {
 
-    override fun liveForParty(partyId: UUID): Flow<List<T>> = queryFlow(collection(partyId), mapper)
+    override fun liveForParty(partyId: UUID): Flow<List<T>> = queryFlow(
+        collection(partyId).orderBy("name"),
+        mapper,
+    )
 
     override suspend fun getItem(partyId: UUID, itemId: UUID): T {
         try {
@@ -41,14 +48,23 @@ internal class FirestoreCompendium<T : CompendiumItem>(
         }
     }
 
-    override suspend fun saveItem(partyId: UUID, item: T) {
-        val data = mapper.toDocumentData(item)
-        Timber.d("Saving Compendium item $data to $collectionName compendium of party $partyId")
+    override suspend fun saveItems(partyId: UUID, vararg items: T) {
+        val itemsData = coroutineScope {
+            items.map { it.id to async { mapper.toDocumentData(it) } }
+                .map { (id, data) -> id to data.await() }
+        }
 
-        collection(partyId)
-            .document(item.id.toString())
-            .set(data, SetOptions.merge())
-            .await()
+        firestore.runTransaction { transaction ->
+            itemsData.forEach { (id, data) ->
+                Timber.d("Saving Compendium item $data to $collectionName compendium of party $partyId")
+
+                transaction.set(
+                    collection(partyId).document(id.toString()),
+                    data,
+                    SetOptions.merge()
+                )
+            }
+        }.await()
     }
 
     override suspend fun remove(partyId: UUID, item: T) {

@@ -16,7 +16,11 @@ class CompendiumViewModel(
 ) : ViewModel() {
 
     suspend fun save(skill: Skill) {
-        skillCompendium.saveItem(partyId, skill)
+        skillCompendium.saveItems(partyId, skill)
+    }
+
+    suspend fun saveMultipleSkills(skills: List<Skill>) {
+        skillCompendium.saveItems(partyId, *skills.toTypedArray())
     }
 
     suspend fun remove(skill: Skill) {
@@ -24,19 +28,27 @@ class CompendiumViewModel(
     }
 
     suspend fun save(talent: Talent) {
-        talentsCompendium.saveItem(partyId, talent)
+        talentsCompendium.saveItems(partyId, talent)
     }
 
     suspend fun remove(talent: Talent) {
         talentsCompendium.remove(partyId, talent)
     }
 
+    suspend fun saveMultipleTalents(talents: List<Talent>) {
+        talentsCompendium.saveItems(partyId, *talents.toTypedArray())
+    }
+
     suspend fun save(spell: Spell) {
-        spellCompendium.saveItem(partyId, spell)
+        spellCompendium.saveItems(partyId, spell)
     }
 
     suspend fun remove(spell: Spell) {
         spellCompendium.remove(partyId, spell)
+    }
+
+    suspend fun saveMultipleSpells(spells: List<Spell>) {
+        spellCompendium.saveItems(partyId, *spells.toTypedArray())
     }
 
     val skills: Flow<List<Skill>> by lazy { skillCompendium.liveForParty(partyId) }

@@ -116,7 +116,7 @@ internal fun NonCompendiumSkillForm(
 
             ChipList(
                 label = stringResource(R.string.label_skill_characteristic),
-                items = Characteristic.values().map { it to stringResource(it.getShortcutNameId()) },
+                items = Characteristic.values().map { it to it.getShortcutName() },
                 value = formData.characteristic.value,
                 onValueChange = { formData.characteristic.value = it }
             )

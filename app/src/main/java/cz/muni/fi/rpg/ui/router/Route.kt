@@ -37,5 +37,9 @@ sealed class Route {
     @Immutable
     class NpcCreation(val encounterId: EncounterId) : Route()
 
+    @Immutable
     class Compendium(val partyId: UUID) : Route()
+
+    @Immutable
+    class CompendiumImport(val partyId: UUID) : Route()
 }

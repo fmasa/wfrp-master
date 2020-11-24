@@ -31,7 +31,6 @@ import cz.muni.fi.rpg.model.firestore.repositories.compendium.FirestoreCompendiu
 import cz.muni.fi.rpg.ui.common.AdManager
 import cz.muni.fi.rpg.viewModels.*
 import org.koin.android.viewmodel.dsl.viewModel
-import org.koin.core.qualifier.named
 import org.koin.core.scope.Scope
 import org.koin.dsl.module
 import java.util.*
@@ -104,7 +103,6 @@ val appModule = module {
     viewModel { (characterId: CharacterId) -> CharacterStatsViewModel(characterId, get()) }
     viewModel { (characterId: CharacterId) -> CharacterMiscViewModel(characterId, get(), get()) }
     viewModel { (characterId: CharacterId) -> CharacterViewModel(characterId, get()) }
-    viewModel { (partyId: UUID) -> GameMasterViewModel(partyId, get(), get()) }
     viewModel { (partyId: UUID) -> EncountersViewModel(partyId, get()) }
     viewModel { (partyId: UUID) -> PartyViewModel(partyId, get()) }
     viewModel { (encounterId: EncounterId) -> EncounterDetailViewModel(encounterId, get(), get()) }

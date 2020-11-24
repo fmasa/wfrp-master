@@ -16,6 +16,7 @@ import androidx.compose.ui.unit.dp
 import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.model.domain.armour.Armor
 import cz.muni.fi.rpg.model.domain.character.Stats
+import cz.muni.fi.rpg.model.domain.compendium.common.Characteristic
 import cz.muni.fi.rpg.model.domain.encounter.Npc
 import cz.muni.fi.rpg.model.domain.encounter.Wounds
 import cz.muni.fi.rpg.ui.common.chunk
@@ -372,16 +373,16 @@ private fun MainContainer(data: FormData, validate: Boolean) {
 @Composable
 private fun CharacteristicsSegment(data: CharacteristicsFormData, validate: Boolean) {
     val characteristics = listOf(
-        R.string.label_shortcut_weapon_skill to data.weaponSkill,
-        R.string.label_shortcut_ballistic_skill to data.ballisticSkill,
-        R.string.label_shortcut_strength to data.strength,
-        R.string.label_shortcut_toughness to data.toughness,
-        R.string.label_shortcut_initiative to data.initiative,
-        R.string.label_shortcut_agility to data.agility,
-        R.string.label_shortcut_dexterity to data.dexterity,
-        R.string.label_shortcut_intelligence to data.intelligence,
-        R.string.label_shortcut_will_power to data.willPower,
-        R.string.label_shortcut_fellowship to data.fellowship,
+        Characteristic.WEAPON_SKILL to data.weaponSkill,
+        Characteristic.BALLISTIC_SKILL to data.ballisticSkill,
+        Characteristic.STRENGTH to data.strength,
+        Characteristic.TOUGHNESS to data.toughness,
+        Characteristic.INITIATIVE to data.initiative,
+        Characteristic.AGILITY to data.agility,
+        Characteristic.DEXTERITY to data.dexterity,
+        Characteristic.INTELLIGENCE to data.intelligence,
+        Characteristic.WILL_POWER to data.willPower,
+        Characteristic.FELLOWSHIP to data.fellowship,
     )
 
     Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
@@ -390,9 +391,9 @@ private fun CharacteristicsSegment(data: CharacteristicsFormData, validate: Bool
                 horizontalArrangement = Arrangement.spacedBy(8.dp),
                 modifier = Modifier.fillMaxWidth(),
             ) {
-                for ((label, value) in rowCharacteristics) {
+                for ((characteristic, value) in rowCharacteristics) {
                     TextInput(
-                        label = stringResource(label),
+                        label = characteristic.getShortcutName(),
                         value = value.value,
                         placeholder = "0",
                         keyboardType = KeyboardType.Number,

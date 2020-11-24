@@ -16,7 +16,7 @@ interface Compendium<T : CompendiumItem> {
     /**
      * Updates item if it exists and creates it if it doesn't
      */
-    suspend fun saveItem(partyId: UUID, item: T)
+    suspend fun saveItems(partyId: UUID, vararg items: T)
 
     /**
      * Removes item if it's persisted,
