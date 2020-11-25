@@ -1,6 +1,7 @@
 package cz.muni.fi.rpg.ui.common.composables
 
-import androidx.compose.foundation.Box
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -10,7 +11,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun CardContainer(modifier: Modifier = Modifier, content: @Composable () -> Unit) {
+fun CardContainer(modifier: Modifier = Modifier, content: @Composable BoxScope.() -> Unit) {
     Box(Modifier.padding(vertical = 6.dp).then(modifier)) {
         Card(
             modifier = Modifier.fillMaxWidth(),

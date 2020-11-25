@@ -27,7 +27,7 @@ if (playStoreJsonFile.exists()) {
     }
 }
 
-val composeVersion = "1.0.0-alpha06"
+val composeVersion = "1.0.0-alpha07"
 
 android {
 
@@ -140,7 +140,7 @@ dependencies {
     coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:1.0.10")
 
     // Time picker dialog
-    implementation("com.vanpra.compose-material-dialogs:datetime:0.2.5")
+    implementation("com.vanpra.compose-material-dialogs:datetime:0.2.6")
 
     // OpenPDF
     implementation("com.github.librepdf:openpdf:1.3.23")
@@ -158,7 +158,7 @@ dependencies {
     implementation("androidx.ui:ui-tooling:$composeVersion")
 
     // Navigation
-    implementation("com.github.zsoltk:compose-router:0.20.0")
+    implementation("com.github.zsoltk:compose-router:0.22.0")
 
     // Shared Preferences DataStore
     implementation("androidx.datastore:datastore-preferences:1.0.0-alpha02")

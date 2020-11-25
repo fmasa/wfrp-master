@@ -2,7 +2,6 @@ package cz.muni.fi.rpg.ui.gameMaster.encounters
 
 import androidx.appcompat.app.AlertDialog
 import androidx.compose.foundation.ScrollableColumn
-import androidx.compose.foundation.Text
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -11,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Providers
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.rememberCoroutineScope
@@ -232,9 +232,9 @@ private fun NpcList(
     onRemoveRequest: (Npc) -> Unit,
 ) {
     for (npc in npcs) {
-        val emphasis = AmbientEmphasisLevels.current
+        val alpha = if (npc.alive) ContentAlpha.high else ContentAlpha.disabled
 
-        ProvideEmphasis(if (npc.alive) emphasis.high else emphasis.disabled) {
+        Providers(AmbientContentAlpha provides alpha) {
             CardItem(
                 name = npc.name,
                 iconRes = if (npc.alive) R.drawable.ic_npc else R.drawable.ic_dead,

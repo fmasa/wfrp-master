@@ -6,13 +6,15 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.lazy.LazyColumnFor
 import androidx.compose.foundation.lazy.LazyItemScope
 import androidx.compose.material.FloatingActionButton
+import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
+import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.WithConstraints
-import androidx.compose.ui.WithConstraintsScope
+import androidx.compose.ui.layout.WithConstraints
+import androidx.compose.ui.layout.WithConstraintsScope
 import androidx.compose.ui.gesture.longPressGestureFilter
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource

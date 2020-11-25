@@ -1,8 +1,8 @@
 package cz.muni.fi.rpg.ui.characterCreation
 
 import androidx.annotation.StringRes
-import androidx.compose.foundation.Text
 import androidx.compose.foundation.layout.*
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.Stable

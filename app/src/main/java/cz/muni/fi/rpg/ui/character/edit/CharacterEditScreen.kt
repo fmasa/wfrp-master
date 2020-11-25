@@ -1,6 +1,6 @@
 package cz.muni.fi.rpg.ui.character.edit
 
-import androidx.compose.foundation.*
+import androidx.compose.foundation.ScrollableColumn
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.runtime.*

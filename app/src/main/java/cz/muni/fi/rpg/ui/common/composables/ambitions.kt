@@ -2,17 +2,18 @@ package cz.muni.fi.rpg.ui.common.composables
 
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
-import androidx.compose.foundation.Box
-import androidx.compose.foundation.Icon
-import androidx.compose.foundation.Text
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.AmbientEmphasisLevels
+import androidx.compose.material.AmbientContentAlpha
+import androidx.compose.material.ContentAlpha
+import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
-import androidx.compose.material.ProvideEmphasis
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Providers
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -45,7 +46,7 @@ fun AmbitionsCard(
                     )
 
                     if (value.isBlank()) {
-                        ProvideEmphasis(emphasis = AmbientEmphasisLevels.current.medium) {
+                        Providers(AmbientContentAlpha provides ContentAlpha.medium, children = {
                             Row(verticalAlignment = Alignment.CenterVertically) {
                                 Icon(vectorResource(R.drawable.ic_none))
                                 Text(
@@ -54,7 +55,7 @@ fun AmbitionsCard(
                                     fontStyle = FontStyle.Italic,
                                 )
                             }
-                        }
+                        })
                     } else {
                         Text(ambitions.shortTerm)
                     }

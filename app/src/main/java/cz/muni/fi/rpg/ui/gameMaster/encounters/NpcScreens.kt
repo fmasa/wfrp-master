@@ -1,6 +1,6 @@
 package cz.muni.fi.rpg.ui.gameMaster.encounters
 
-import androidx.compose.foundation.*
+import androidx.compose.foundation.ScrollableColumn
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.runtime.*
@@ -234,7 +234,7 @@ fun NpcDetailScreen(
         }
     ) {
         if (data == null) {
-            Box(Modifier.fillMaxSize(), gravity = Alignment.Center) {
+            Box(Modifier.fillMaxSize(), alignment = Alignment.Center) {
                 CircularProgressIndicator()
             }
         } else {

@@ -1,16 +1,15 @@
 package cz.muni.fi.rpg.ui.character
 
-import androidx.compose.foundation.Text
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedTask
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.key
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.WithConstraints
+import androidx.compose.ui.layout.WithConstraints
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
@@ -38,7 +37,7 @@ fun CharacterDetailScreen(routing: Routing<Route.CharacterDetail>, adManager: Ad
     val character = viewModel.character.right().collectAsState(null).value
     val party = partyViewModel.party.right().collectAsState(null).value
 
-    LaunchedTask(routing.route.characterId) {
+    LaunchedEffect(routing.route.characterId) {
         withContext(Dispatchers.IO) {
             if (!viewModel.characterExists()) {
                 routing.backStack.replace(

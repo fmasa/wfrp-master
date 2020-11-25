@@ -1,12 +1,13 @@
 package cz.muni.fi.rpg.ui.common.composables
 
-import androidx.compose.foundation.*
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.Layout
+import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.DensityAmbient
 import androidx.compose.ui.res.stringResource
@@ -97,7 +98,7 @@ fun TextInput(
                 ) { }
                 OutlinedTextField(
                     value = value,
-                    keyboardType = keyboardType,
+                    keyboardOptions = KeyboardOptions.Default.copy(keyboardType = keyboardType),
                     onValueChange = {
                         val filteredValue =
                             filters.fold(it) { value, filter -> filter.process(value) }

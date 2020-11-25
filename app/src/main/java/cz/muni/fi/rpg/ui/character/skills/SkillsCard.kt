@@ -1,7 +1,7 @@
 package cz.muni.fi.rpg.ui.character.skills
 
-import androidx.compose.foundation.Text
 import androidx.compose.foundation.layout.*
+import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.runtime.savedinstancestate.savedInstanceState
 import androidx.compose.ui.Modifier
@@ -20,7 +20,6 @@ import cz.muni.fi.rpg.viewModels.SkillsViewModel
 
 @Composable
 internal fun SkillsCard(
-    characterId: CharacterId,
     characterVm: CharacterViewModel,
     skillsVm: SkillsViewModel,
     onRemove: (Skill) -> Unit,
