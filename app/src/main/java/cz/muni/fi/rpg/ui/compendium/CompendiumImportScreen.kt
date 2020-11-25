@@ -6,7 +6,6 @@ import android.net.Uri
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContract
-import androidx.compose.foundation.Text
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -135,9 +134,9 @@ private fun MainContainer(routing: Routing<Route.CompendiumImport>) {
 
         Text(
             "The file is not saved anywhere and never leaves your device.",
-            style = MaterialTheme.typography.body2,
-            color = AmbientEmphasisLevels.current.medium.applyEmphasis(MaterialTheme.colors.onSurface),
+            color = MaterialTheme.colors.onSurface.copy(alpha = ContentAlpha.medium),
             textAlign = TextAlign.Center,
+            style = MaterialTheme.typography.body2
         )
     }
 }

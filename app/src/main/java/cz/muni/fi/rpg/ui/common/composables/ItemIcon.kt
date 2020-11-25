@@ -7,7 +7,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.AmbientEmphasisLevels
+import androidx.compose.material.ContentAlpha
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -37,7 +37,7 @@ object ItemIcon {
 
 @Composable
 fun ItemIcon(@DrawableRes drawableResource: Int, size: ItemIcon.Size = ItemIcon.Size.Small) {
-    val backgroundColor = AmbientEmphasisLevels.current.medium.applyEmphasis(MaterialTheme.colors.onSurface)
+    val backgroundColor = MaterialTheme.colors.onSurface.copy(alpha = ContentAlpha.medium)
 
     Image(
         vectorResource(drawableResource),

@@ -1,6 +1,6 @@
 package cz.muni.fi.rpg.ui.gameMaster.encounters
 
-import androidx.compose.foundation.*
+import androidx.compose.foundation.ScrollableColumn
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.runtime.*
@@ -9,9 +9,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.intl.Locale
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.toUpperCase
 import androidx.compose.ui.unit.dp
 import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.model.domain.armour.Armor
@@ -234,7 +232,7 @@ fun NpcDetailScreen(
         }
     ) {
         if (data == null) {
-            Box(Modifier.fillMaxSize(), gravity = Alignment.Center) {
+            Box(Modifier.fillMaxSize(), alignment = Alignment.Center) {
                 CircularProgressIndicator()
             }
         } else {
@@ -470,11 +468,7 @@ private fun NpcDetailTopBar(
     TopAppBar(
         navigationIcon = { BackButton(onBack) },
         title = { Text(title) },
-        actions = {
-            TopBarAction(onClick = onSave, enabled = actionsEnabled) {
-                Text(stringResource(R.string.button_save).toUpperCase(Locale.current))
-            }
-        }
+        actions = { SaveAction(onClick = onSave, enabled = actionsEnabled) }
     )
 }
 

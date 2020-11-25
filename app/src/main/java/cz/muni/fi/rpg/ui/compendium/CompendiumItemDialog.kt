@@ -1,17 +1,14 @@
 package cz.muni.fi.rpg.ui.compendium
 
 import androidx.compose.foundation.ScrollableColumn
-import androidx.compose.foundation.Text
 import androidx.compose.material.Scaffold
+import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.*
-import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.intl.Locale
-import androidx.compose.ui.text.toUpperCase
 import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.model.domain.compendium.CompendiumItem
 import cz.muni.fi.rpg.ui.common.composables.CloseButton
-import cz.muni.fi.rpg.ui.common.composables.TopBarAction
+import cz.muni.fi.rpg.ui.common.composables.SaveAction
 import cz.muni.fi.rpg.ui.common.composables.dialog.FullScreenDialog
 import cz.muni.fi.rpg.ui.common.composables.dialog.Progress
 import kotlinx.coroutines.Dispatchers
@@ -77,7 +74,7 @@ private fun <T : CompendiumItem> CompendiumItemDialogTopBar(
         actions = {
             val coroutineScope = rememberCoroutineScope()
 
-            TopBarAction(
+            SaveAction(
                 enabled = formState.value == FormState.EDITED_BY_USER,
                 onClick = {
                     Timber.d("Save action clicked")
@@ -96,9 +93,7 @@ private fun <T : CompendiumItem> CompendiumItemDialogTopBar(
                         validate.value = true
                     }
                 }
-            ) {
-                Text(stringResource(R.string.button_save).toUpperCase(Locale.current))
-            }
+            )
         }
     )
 }

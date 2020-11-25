@@ -8,8 +8,8 @@ import cz.muni.fi.rpg.model.right
 import kotlinx.coroutines.flow.Flow
 
 class ArmorViewModel(
-    private val characterId: CharacterId,
-    private val repository: CharacterFeatureRepository<Armor>
+    characterId: CharacterId,
+    repository: CharacterFeatureRepository<Armor>
 ) : ViewModel() {
     val armor: Flow<Armor> = repository.getLive(characterId).right()
 }

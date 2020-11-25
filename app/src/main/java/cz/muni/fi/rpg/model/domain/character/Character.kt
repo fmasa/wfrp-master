@@ -144,8 +144,6 @@ data class Character(
 
     fun getNote() = note
 
-    fun getMutation() = mutation
-
     fun hasHardyTalent() = hardyTalent
 
     fun isArchived() = archived

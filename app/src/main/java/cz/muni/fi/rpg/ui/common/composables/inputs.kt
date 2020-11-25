@@ -1,12 +1,13 @@
 package cz.muni.fi.rpg.ui.common.composables
 
-import androidx.compose.foundation.*
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.Layout
+import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.DensityAmbient
 import androidx.compose.ui.res.stringResource
@@ -39,12 +40,6 @@ class Rules(private vararg val rules: ValidationRule) {
         @Composable
         fun NotBlank(): ValidationRule =
             { v: String -> v.isNotBlank() } to stringResource(R.string.error_cannot_be_empty)
-
-        @Composable
-        fun Min(minimum: Int): ValidationRule = Pair(
-            { value: String -> (value.toIntOrNull() ?: 0) >= minimum },
-            stringResource(R.string.error_value_not_greater_or_equal_to, minimum),
-        )
     }
 
     /**
@@ -97,7 +92,7 @@ fun TextInput(
                 ) { }
                 OutlinedTextField(
                     value = value,
-                    keyboardType = keyboardType,
+                    keyboardOptions = KeyboardOptions.Default.copy(keyboardType = keyboardType),
                     onValueChange = {
                         val filteredValue =
                             filters.fold(it) { value, filter -> filter.process(value) }
@@ -187,43 +182,6 @@ fun Chip(
             style = MaterialTheme.typography.body2.copy(color = color),
             modifier = Modifier.clickable(onClick = onClick).padding(padding),
         )
-    }
-}
-
-@Composable
-fun <T> RadioList(
-    label: String,
-    items: Iterable<Pair<T, String>>,
-    value: T,
-    onValueChange: (T) -> Unit,
-    modifier: Modifier = Modifier,
-) {
-
-    Column(modifier) {
-        InputLabel(label)
-        Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
-            for ((itemValue, itemLabel) in items) {
-                val onClick = {
-                    if (value != itemValue) {
-                        onValueChange(itemValue)
-                    }
-                }
-
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    RadioButton(
-                        modifier = Modifier.padding(start = 12.dp, end = 4.dp),
-                        selected = value == itemValue,
-                        onClick = onClick,
-                    )
-
-                    Text(
-                        itemLabel,
-                        modifier = Modifier.clickable(onClick = onClick, indication = null),
-                        style = MaterialTheme.typography.body2,
-                    )
-                }
-            }
-        }
     }
 }
 

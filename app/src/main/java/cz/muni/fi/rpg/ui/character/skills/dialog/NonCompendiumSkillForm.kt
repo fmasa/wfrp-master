@@ -1,17 +1,15 @@
 package cz.muni.fi.rpg.ui.character.skills.dialog
 
 import androidx.compose.foundation.ScrollableColumn
-import androidx.compose.foundation.Text
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Scaffold
+import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.*
 import androidx.compose.runtime.savedinstancestate.savedInstanceState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.intl.Locale
-import androidx.compose.ui.text.toUpperCase
 import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.model.domain.compendium.common.Characteristic
 import cz.muni.fi.rpg.model.domain.skills.Skill
@@ -47,12 +45,12 @@ internal fun NonCompendiumSkillForm(
                 actions = {
                     val coroutineScope = rememberCoroutineScope()
 
-                    TopBarAction(
+                    SaveAction(
                         enabled = !saving,
                         onClick = {
                             if (!formData.isValid()) {
                                 validate = true
-                                return@TopBarAction
+                                return@SaveAction
                             }
 
                             coroutineScope.launch(Dispatchers.IO) {
@@ -61,10 +59,7 @@ internal fun NonCompendiumSkillForm(
                                 withContext(Dispatchers.Main) { onComplete() }
                             }
                         }
-                    ) {
-                        Text(stringResource(R.string.button_save).toUpperCase(Locale.current))
-                    }
-
+                    )
                 }
             )
         }

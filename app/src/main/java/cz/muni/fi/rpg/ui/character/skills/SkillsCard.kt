@@ -1,14 +1,13 @@
 package cz.muni.fi.rpg.ui.character.skills
 
-import androidx.compose.foundation.Text
 import androidx.compose.foundation.layout.*
+import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.runtime.savedinstancestate.savedInstanceState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import cz.muni.fi.rpg.R
-import cz.muni.fi.rpg.model.domain.character.CharacterId
 import cz.muni.fi.rpg.model.domain.character.Stats
 import cz.muni.fi.rpg.model.domain.skills.Skill
 import cz.muni.fi.rpg.model.right
@@ -20,7 +19,6 @@ import cz.muni.fi.rpg.viewModels.SkillsViewModel
 
 @Composable
 internal fun SkillsCard(
-    characterId: CharacterId,
     characterVm: CharacterViewModel,
     skillsVm: SkillsViewModel,
     onRemove: (Skill) -> Unit,

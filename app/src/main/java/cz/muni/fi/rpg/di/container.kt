@@ -47,7 +47,7 @@ val appModule = module {
         FirestoreCompendium<Talent>(COLLECTION_COMPENDIUM_TALENTS, get(), aggregateMapper())
 
     fun Scope.spellCompendium() =
-        FirestoreCompendium<Spell>(COLLECTION_SPELLS, get(), aggregateMapper())
+        FirestoreCompendium<Spell>(COLLECTION_COMPENDIUM_SPELLS, get(), aggregateMapper())
 
     /**
      * Common database stuff

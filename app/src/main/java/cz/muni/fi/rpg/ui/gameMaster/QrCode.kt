@@ -10,7 +10,7 @@ import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.WithConstraints
+import androidx.compose.ui.layout.WithConstraints
 import androidx.compose.ui.graphics.ImageAsset
 import androidx.compose.ui.graphics.asImageAsset
 import com.google.zxing.BarcodeFormat
@@ -26,7 +26,7 @@ internal fun QrCode(data: String) {
         val qrCode = remember { mutableStateOf<ImageAsset?>(null) }
         val width = constraints.maxWidth
 
-        LaunchedTask(data, width) {
+        LaunchedEffect(data, width) {
             qrCode.value = createQrCode(data, width)
         }
 

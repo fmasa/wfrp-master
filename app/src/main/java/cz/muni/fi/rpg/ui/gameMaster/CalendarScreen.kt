@@ -1,11 +1,14 @@
 package cz.muni.fi.rpg.ui.gameMaster
 
-import androidx.compose.foundation.*
+import androidx.compose.foundation.ScrollableColumn
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.layout.Box
+import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
-import androidx.compose.material.TextButton
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
@@ -15,8 +18,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
-import androidx.compose.ui.text.intl.Locale
-import androidx.compose.ui.text.toUpperCase
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import com.vanpra.composematerialdialogs.MaterialDialog
@@ -28,6 +29,7 @@ import cz.muni.fi.rpg.model.domain.party.time.ImperialDate
 import cz.muni.fi.rpg.model.domain.party.time.MannsliebPhase
 import cz.muni.fi.rpg.model.domain.party.time.YearSeason
 import cz.muni.fi.rpg.ui.common.composables.CardContainer
+import cz.muni.fi.rpg.ui.common.composables.dialog.SaveTextButton
 import cz.muni.fi.rpg.ui.gameMaster.calendar.ImperialCalendar
 import cz.muni.fi.rpg.viewModels.GameMasterViewModel
 import kotlinx.coroutines.Dispatchers
@@ -111,14 +113,12 @@ private fun Date(viewModel: GameMasterViewModel, date: ImperialDate) {
                         horizontalArrangement = Arrangement.End
                     ) {
                         val coroutineScope = rememberCoroutineScope()
-                        TextButton(onClick = {
+                        SaveTextButton(onClick = {
                             coroutineScope.launch(Dispatchers.IO) {
                                 viewModel.changeTime { it.copy(date = selectedDate) }
                                 dialogVisible = false
                             }
-                        }) {
-                            Text(stringResource(R.string.button_save).toUpperCase(Locale.current))
-                        }
+                        })
                     }
                 }
             }
@@ -127,8 +127,8 @@ private fun Date(viewModel: GameMasterViewModel, date: ImperialDate) {
 
     Text(
         date.format(),
-        style = MaterialTheme.typography.h6,
         modifier = Modifier.clickable(onClick = { dialogVisible = true }),
+        style = MaterialTheme.typography.h6
     )
     Text(YearSeason.at(date).readableName, modifier = Modifier.padding(top = 8.dp))
 

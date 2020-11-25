@@ -1,6 +1,5 @@
 package cz.muni.fi.rpg.ui.compendium
 
-import androidx.compose.foundation.Text
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -11,6 +10,7 @@ import androidx.compose.material.Checkbox
 import androidx.compose.material.ListItem
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Surface
+import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
@@ -23,9 +23,7 @@ import androidx.compose.runtime.toMutableStateMap
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.intl.Locale
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.toUpperCase
 import androidx.compose.ui.unit.dp
 import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.model.domain.compendium.CompendiumItem
@@ -34,7 +32,7 @@ import cz.muni.fi.rpg.model.domain.compendium.Spell
 import cz.muni.fi.rpg.model.domain.compendium.Talent
 import cz.muni.fi.rpg.ui.common.composables.CloseButton
 import cz.muni.fi.rpg.ui.common.composables.FullScreenProgress
-import cz.muni.fi.rpg.ui.common.composables.TopBarAction
+import cz.muni.fi.rpg.ui.common.composables.SaveAction
 import cz.muni.fi.rpg.ui.common.composables.dialog.FullScreenDialog
 import cz.muni.fi.rpg.ui.common.composables.viewModel
 import cz.muni.fi.rpg.viewModels.CompendiumViewModel
@@ -211,11 +209,7 @@ private fun <T : CompendiumItem> ItemPicker(
             TopAppBar(
                 navigationIcon = { CloseButton(onClick = onClose) },
                 title = { Text(stringResource(R.string.title_importing_rulebook)) },
-                actions = {
-                    TopBarAction(enabled = !isLoading, onClick = onSave) {
-                        Text(stringResource(R.string.button_save).toUpperCase(Locale.current))
-                    }
-                }
+                actions = { SaveAction(enabled = !isLoading, onClick = onSave) }
             )
         },
     ) {

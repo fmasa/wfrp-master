@@ -3,7 +3,6 @@ package cz.muni.fi.rpg.ui.gameMaster
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
-import androidx.compose.foundation.Text
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.runtime.*
@@ -74,7 +73,7 @@ private fun sharingOptions(invitation: Invitation): StateFlow<SharingOptions?> {
     val jsonMapper: JsonMapper = KoinContextHandler.get().get()
     val flow = remember { MutableStateFlow<SharingOptions?>(null) }
 
-    LaunchedTask {
+    LaunchedEffect(invitation) {
         withContext(Dispatchers.IO) {
             val json = jsonMapper.writeValueAsString(invitation)
             val link = Firebase.dynamicLinks.shortLinkAsync {

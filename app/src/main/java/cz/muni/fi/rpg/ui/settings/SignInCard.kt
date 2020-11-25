@@ -10,9 +10,9 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContract
 import androidx.appcompat.app.AlertDialog
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.Text
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.OutlinedButton
+import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -162,7 +162,7 @@ private fun CoroutineScope.showSignInConfirmationDialog(
         }
     }
 
-    dialog.setCanceledOnTouchOutside(false);
+    dialog.setCanceledOnTouchOutside(false)
     dialog.show()
 
     launch {

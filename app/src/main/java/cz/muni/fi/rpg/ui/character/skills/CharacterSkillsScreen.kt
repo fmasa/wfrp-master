@@ -25,7 +25,6 @@ fun CharacterSkillsScreen(
         val skillsViewModel: SkillsViewModel by viewModel { parametersOf(characterId) }
 
         SkillsCard(
-            characterId,
             characterVm,
             skillsViewModel,
             onRemove = { skillsViewModel.removeSkill(it) },

@@ -1,7 +1,7 @@
 package cz.muni.fi.rpg.ui.character.talents
 
-import androidx.compose.foundation.Text
 import androidx.compose.foundation.layout.*
+import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.runtime.savedinstancestate.savedInstanceState
 import androidx.compose.ui.Modifier
@@ -20,8 +20,6 @@ internal fun TalentsCard(
     onRemove: (Talent) -> Unit,
 ) {
     val talents = viewModel.talents.collectAsState(null).value ?: return
-    val coroutineScope = rememberCoroutineScope()
-    val fragmentManager = fragmentManager()
 
     CardContainer(Modifier.padding(horizontal = 8.dp).padding(bottom = 8.dp)) {
         Column(Modifier.padding(horizontal = 6.dp)) {

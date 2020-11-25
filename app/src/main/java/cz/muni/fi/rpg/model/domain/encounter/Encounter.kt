@@ -20,6 +20,7 @@ class Encounter(
             field = value
         }
 
+    @Suppress("unused") // This will be introduced in UI in future
     var completed: Boolean = false
         private set
 

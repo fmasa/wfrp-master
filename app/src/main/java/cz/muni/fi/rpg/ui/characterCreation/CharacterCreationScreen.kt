@@ -1,9 +1,7 @@
 package cz.muni.fi.rpg.ui.characterCreation
 
 import androidx.annotation.StringRes
-import androidx.compose.foundation.Icon
 import androidx.compose.foundation.ScrollableColumn
-import androidx.compose.foundation.Text
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
@@ -130,10 +128,10 @@ private fun BottomBar(
 
     Surface(
         elevation = 4.dp,
-        color = AmbientEmphasisLevels.current.medium.applyEmphasis(MaterialTheme.colors.onSurface),
+        color = MaterialTheme.colors.onSurface.copy(alpha = ContentAlpha.medium),
         modifier = Modifier.fillMaxWidth(),
     ) {
-        Stack(Modifier.fillMaxWidth().background(MaterialTheme.colors.surface)) {
+        Box(Modifier.fillMaxWidth().background(MaterialTheme.colors.surface)) {
             val buttonModifier = Modifier.padding(8.dp)
 
             if (currentStepIndex > 0) {

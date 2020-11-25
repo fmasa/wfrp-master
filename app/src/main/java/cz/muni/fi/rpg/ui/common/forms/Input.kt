@@ -14,8 +14,6 @@ class Input(private val layout: TextInputLayout, private val context: Context) {
 
     private var showErrorInEditText = false
 
-    private var defaultValue: String = ""
-
     /**
      * Limits maximum number of characters allowed in EditText
      */
@@ -27,15 +25,6 @@ class Input(private val layout: TextInputLayout, private val context: Context) {
                 counterMaxLength = maxLength
             }
         }
-    }
-
-    /**
-     * Disables errors below edit text and replaces those with native "popup" errors
-     *
-     * This is useful mainly for inputs with small width
-     */
-    fun setShowErrorInEditText() {
-        showErrorInEditText = true
     }
 
     /**

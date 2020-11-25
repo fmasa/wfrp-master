@@ -9,7 +9,6 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.core.content.res.getIntegerOrThrow
 import androidx.core.widget.addTextChangedListener
-import arrow.core.extensions.list.align.empty
 import com.google.android.material.textfield.TextInputLayout
 import cz.muni.fi.rpg.R
 import kotlinx.android.parcel.Parcelize
@@ -99,10 +98,5 @@ class TextInput(context: Context, attrs: AttributeSet?) : LinearLayout(context, 
         textInputLayout.editText?.setText(value)
 
         super.onRestoreInstanceState(state.superState)
-    }
-
-    fun setEmptyValue(value: String) {
-        emptyValue = value
-        textInputLayout.editText?.hint = value
     }
 }

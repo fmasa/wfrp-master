@@ -14,7 +14,7 @@ import java.util.*
 @Deprecated("Using ViewModelStoreOwner seems broken. Use explicit factory in ViewModel object")
 @Composable
 inline fun <reified T : ViewModel> viewModel(noinline parameters: ParametersDefinition? = null): Lazy<T> {
-    return ViewModelStoreOwnerAmbient.current.viewModel<T>(parameters = parameters)
+    return ViewModelStoreOwnerAmbient.current.viewModel(parameters = parameters)
 }
 
 object ViewModel {

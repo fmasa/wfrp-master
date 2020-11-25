@@ -3,15 +3,16 @@ package cz.muni.fi.rpg.ui.gameMaster
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.CircularProgressIndicator
+import androidx.compose.material.Icon
 import androidx.compose.material.Scaffold
+import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.key
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.WithConstraints
-import androidx.compose.ui.platform.ViewModelStoreOwnerAmbient
+import androidx.compose.ui.layout.WithConstraints
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
@@ -30,7 +31,6 @@ import cz.muni.fi.rpg.ui.router.Route
 import cz.muni.fi.rpg.ui.router.Routing
 import cz.muni.fi.rpg.viewModels.EncountersViewModel
 import cz.muni.fi.rpg.viewModels.GameMasterViewModel
-import org.koin.android.viewmodel.compat.ViewModelCompat.getViewModel
 import org.koin.core.parameter.parametersOf
 
 @Composable
@@ -62,7 +62,7 @@ fun GameMasterScreen(routing: Routing<Route.GameMaster>, adManager: AdManager) {
         }
     ) {
         if (party == null) {
-            Box(Modifier.fillMaxSize(), gravity = Alignment.Center) {
+            Box(Modifier.fillMaxSize(), alignment = Alignment.Center) {
                 CircularProgressIndicator()
             }
 

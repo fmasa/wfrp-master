@@ -2,11 +2,11 @@ package cz.muni.fi.rpg.ui.character.skills.dialog
 
 import android.widget.Toast
 import androidx.compose.foundation.ScrollableColumn
-import androidx.compose.foundation.Text
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.Scaffold
+import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.*
 import androidx.compose.runtime.savedinstancestate.savedInstanceState
@@ -14,8 +14,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ContextAmbient
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.intl.Locale
-import androidx.compose.ui.text.toUpperCase
 import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.model.domain.compendium.exceptions.CompendiumItemNotFound
 import cz.muni.fi.rpg.model.domain.skills.Skill
@@ -53,7 +51,7 @@ internal fun AdvancesForm(
                     val coroutineScope = rememberCoroutineScope()
                     val context = ContextAmbient.current
 
-                    TopBarAction(
+                    SaveAction(
                         enabled = !saving,
                         onClick = {
                             coroutineScope.launch(Dispatchers.IO) {
@@ -65,7 +63,7 @@ internal fun AdvancesForm(
                                         compendiumSkillId = compendiumSkillId,
                                         advances = advances,
                                     )
-                                } catch(e: CompendiumItemNotFound) {
+                                } catch (e: CompendiumItemNotFound) {
                                     Timber.d(e)
 
                                     withContext(Dispatchers.Main) {
@@ -80,10 +78,7 @@ internal fun AdvancesForm(
                                 }
                             }
                         }
-                    ) {
-                        Text(stringResource(R.string.button_save).toUpperCase(Locale.current))
-                    }
-
+                    )
                 }
             )
         }

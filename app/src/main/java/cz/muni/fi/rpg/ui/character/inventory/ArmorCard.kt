@@ -2,12 +2,13 @@ package cz.muni.fi.rpg.ui.character.inventory
 
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
-import androidx.compose.foundation.Icon
-import androidx.compose.foundation.Text
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.AmbientEmphasisLevels
-import androidx.compose.material.ProvideEmphasis
+import androidx.compose.material.AmbientContentAlpha
+import androidx.compose.material.ContentAlpha
+import androidx.compose.material.Icon
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Providers
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -121,7 +122,7 @@ private fun RowScope.ArmorPart(
             },
         )
 
-        ProvideEmphasis(AmbientEmphasisLevels.current.medium) {
+        Providers(AmbientContentAlpha provides ContentAlpha.medium) {
             Text(stringResource(nameRes))
             if (rollRange != null) {
                 Text("${formatRoll(rollRange.first)} - ${formatRoll(rollRange.last)}")

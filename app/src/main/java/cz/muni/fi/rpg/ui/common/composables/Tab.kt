@@ -1,9 +1,12 @@
 package cz.muni.fi.rpg.ui.common.composables
 
 import androidx.annotation.StringRes
-import androidx.compose.foundation.*
+import androidx.compose.foundation.Interaction
+import androidx.compose.foundation.InteractionState
+import androidx.compose.foundation.ScrollState
+import androidx.compose.foundation.background
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.layout.Box
 import androidx.compose.material.*
 import androidx.compose.material.TabRow as MaterialTabRow
 import androidx.compose.runtime.Composable
@@ -67,9 +70,7 @@ fun <T> ColumnScope.TabRow(
             Tab(
                 modifier = tabModifier,
                 selectedContentColor = MaterialTheme.colors.primary,
-                unselectedContentColor = AmbientEmphasisLevels.current.medium.applyEmphasis(
-                    MaterialTheme.colors.onSurface
-                ),
+                unselectedContentColor = MaterialTheme.colors.onSurface.copy(alpha = ContentAlpha.medium),
                 selected = index == (if (scrolledPercentage > 0.5f) selectedTabIndex + 1 else selectedTabIndex),
                 onClick = { scrollState.smoothScrollTo(index * screenWidth) },
                 text = { Text(stringResource(screen.tabName).toUpperCase(Locale.getDefault())) },

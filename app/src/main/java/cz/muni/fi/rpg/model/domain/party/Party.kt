@@ -35,8 +35,6 @@ data class Party(
 
     fun getPlayerCounts(): Int = users.size - 1
 
-    fun isSinglePlayer() = gameMasterId == null
-
     fun updateAmbitions(ambitions: Ambitions) {
         this.ambitions = ambitions
     }
@@ -46,14 +44,12 @@ data class Party(
     }
 
     fun getName(): String {
-        return name;
+        return name
     }
 
     fun archive() {
         archived = true
     }
-
-    fun isArchived() = archived
 
     fun getAmbitions() = ambitions
 

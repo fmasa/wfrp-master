@@ -1,9 +1,9 @@
 package cz.muni.fi.rpg.ui.common.composables
 
-import androidx.compose.foundation.Text
 import androidx.compose.material.DropdownMenu
 import androidx.compose.material.DropdownMenuItem
 import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 
 object ContextMenu {

@@ -1,9 +1,6 @@
 package cz.muni.fi.rpg.ui.common.composables
 
 import androidx.appcompat.app.AppCompatActivity
-import androidx.compose.foundation.AmbientContentColor
-import androidx.compose.foundation.Icon
-import androidx.compose.foundation.Text
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Providers
@@ -12,6 +9,7 @@ import androidx.compose.ui.platform.ContextAmbient
 import androidx.compose.ui.res.vectorResource
 import androidx.drawerlayout.widget.DrawerLayout
 import cz.muni.fi.rpg.R
+import cz.muni.fi.rpg.ui.common.composables.dialog.SaveButtonText
 
 @Composable
 fun TopBarAction(
@@ -21,12 +19,17 @@ fun TopBarAction(
     content: @Composable () -> Unit,
 ) {
     val colorBase = contentColorFor(MaterialTheme.colors.primarySurface)
-    val contentColor = if (enabled)
-        colorBase else
-        AmbientEmphasisLevels.current.disabled.applyEmphasis(colorBase)
+    val contentColor = colorBase.copy(alpha = if (enabled) ContentAlpha.high else ContentAlpha.medium)
 
     TextButton(onClick = onClick, enabled = enabled, modifier = modifier) {
         Providers(AmbientContentColor provides contentColor) { content() }
+    }
+}
+
+@Composable
+fun SaveAction(onClick: () -> Unit, enabled: Boolean = true) {
+    TopBarAction(enabled = enabled, onClick = onClick) {
+        SaveButtonText()
     }
 }
 
@@ -55,6 +58,6 @@ fun Subtitle(text: String) {
     Text(
         text,
         style = MaterialTheme.typography.caption,
-        color = AmbientEmphasisLevels.current.medium.applyEmphasis(AmbientContentColor.current),
+        color = AmbientContentColor.current.copy(alpha = ContentAlpha.medium),
     )
 }
