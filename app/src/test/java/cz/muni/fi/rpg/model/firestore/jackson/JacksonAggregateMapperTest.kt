@@ -12,9 +12,11 @@ class JacksonAggregateMapperTest : TestCase("JacksonAggregateMapperTest") {
     private class AggregateWithGetter {
         val field = "foo"
 
+        @Suppress("unused")
         fun getGetter() = field
     }
 
+    @Suppress("unused")
     private class AggregateWithIsGetter {
         private val field = "foo"
 

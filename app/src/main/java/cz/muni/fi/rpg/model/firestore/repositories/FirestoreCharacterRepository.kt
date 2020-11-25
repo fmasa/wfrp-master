@@ -32,7 +32,7 @@ internal class FirestoreCharacterRepository(
             val snapshot = characters(characterId.partyId)
                 .document(characterId.id)
                 .get()
-                .await();
+                .await()
 
             if (snapshot.data == null) {
                 throw CharacterNotFound(characterId)

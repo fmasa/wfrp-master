@@ -51,7 +51,7 @@ android {
         // Firestore emulator setup
         //
         val properties = Properties()
-        val propertiesFile = File("local.properties");
+        val propertiesFile = File("local.properties")
 
         if (propertiesFile.exists()) {
             properties.load(FileInputStream("local.properties"))

@@ -8,9 +8,7 @@ import androidx.compose.runtime.savedinstancestate.savedInstanceState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.intl.Locale
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.toUpperCase
 import androidx.compose.ui.unit.dp
 import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.model.domain.character.Character
@@ -18,6 +16,7 @@ import cz.muni.fi.rpg.model.right
 import cz.muni.fi.rpg.ui.characterCreation.CharacterBasicInfoForm
 import cz.muni.fi.rpg.ui.characterCreation.CharacterCharacteristicsForm
 import cz.muni.fi.rpg.ui.common.composables.*
+import cz.muni.fi.rpg.ui.common.composables.dialog.SaveButtonText
 import cz.muni.fi.rpg.ui.router.Route
 import cz.muni.fi.rpg.ui.router.Routing
 import cz.muni.fi.rpg.viewModels.CharacterViewModel
@@ -25,7 +24,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.koin.core.parameter.parametersOf
-import java.util.*
 
 private object CharacterEditScreen {
     @Stable
@@ -165,9 +163,7 @@ private fun CharacterEditTopBar(
             }
         },
         actions = {
-            TopBarAction(onClick = onSave, enabled = actionsEnabled) {
-                Text(stringResource(R.string.button_save).toUpperCase(Locale.current))
-            }
+            TopBarAction(onClick = onSave, enabled = actionsEnabled) { SaveButtonText() }
         }
     )
 }

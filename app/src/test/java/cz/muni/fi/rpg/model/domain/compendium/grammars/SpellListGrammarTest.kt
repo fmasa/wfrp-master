@@ -4,7 +4,6 @@ import com.github.h0tk3y.betterParse.grammar.parseToEnd
 import cz.muni.fi.rpg.model.domain.compendium.Spell
 import cz.muni.fi.rpg.model.domain.compendium.importer.grammars.SpellListGrammar
 import junit.framework.TestCase
-import org.junit.Test
 
 class SpellListGrammarTest : TestCase() {
     fun test() {

@@ -121,7 +121,6 @@ data class ImperialDate(
     val dayOfYear: Int get() = imperialDay % DAYS_IN_YEAR + 1
     val year: Int get() = imperialDay / DAYS_IN_YEAR + if (imperialDay < 0) -1 else 1
 
-    fun addDay() = addDays(1)
     fun removeDay() = addDays(-1)
     fun addWeek() = addDays(DAYS_IN_WEEK)
 

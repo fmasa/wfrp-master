@@ -162,7 +162,7 @@ private fun CoroutineScope.showSignInConfirmationDialog(
         }
     }
 
-    dialog.setCanceledOnTouchOutside(false);
+    dialog.setCanceledOnTouchOutside(false)
     dialog.show()
 
     launch {

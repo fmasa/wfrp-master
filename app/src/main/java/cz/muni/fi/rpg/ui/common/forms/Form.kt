@@ -28,11 +28,6 @@ class Form(private val context: Context) {
         return input
     }
 
-    fun getInput(@IdRes viewId: Int): Input {
-        return inputs[viewId]
-            ?: throw IndexOutOfBoundsException("Input with id $viewId was not found")
-    }
-
     /**
      * Validate all inputs
      * Returns true if all inputs are valid, false otherwise

@@ -1,21 +1,17 @@
 package cz.muni.fi.rpg.ui.common.composables
 
 import androidx.compose.animation.animatedFloat
-import androidx.compose.foundation.*
-import androidx.compose.foundation.gestures.draggable
 import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.gesture.*
-import androidx.compose.ui.gesture.scrollorientationlocking.Orientation
 import androidx.compose.ui.platform.DensityAmbient
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
-import timber.log.Timber
 import java.util.*
 import kotlin.math.roundToInt
 
@@ -23,9 +19,9 @@ private fun <T> List<T>.moveItem(sourceIndex: Int, targetIndex: Int): List<T> {
     return toMutableList()
         .apply {
             if (sourceIndex <= targetIndex) {
-                Collections.rotate(subList(sourceIndex, targetIndex + 1), -1);
+                Collections.rotate(subList(sourceIndex, targetIndex + 1), -1)
             } else {
-                Collections.rotate(subList(targetIndex, sourceIndex + 1), 1);
+                Collections.rotate(subList(targetIndex, sourceIndex + 1), 1)
             }
         }
 }

@@ -6,7 +6,6 @@ import android.view.View
 import android.widget.Toast
 import androidx.annotation.StringRes
 import androidx.annotation.UiThread
-import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import java.io.Serializable
 

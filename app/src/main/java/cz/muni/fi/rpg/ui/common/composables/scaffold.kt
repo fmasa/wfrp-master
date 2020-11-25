@@ -9,6 +9,7 @@ import androidx.compose.ui.platform.ContextAmbient
 import androidx.compose.ui.res.vectorResource
 import androidx.drawerlayout.widget.DrawerLayout
 import cz.muni.fi.rpg.R
+import cz.muni.fi.rpg.ui.common.composables.dialog.SaveButtonText
 
 @Composable
 fun TopBarAction(
@@ -22,6 +23,13 @@ fun TopBarAction(
 
     TextButton(onClick = onClick, enabled = enabled, modifier = modifier) {
         Providers(AmbientContentColor provides contentColor) { content() }
+    }
+}
+
+@Composable
+fun SaveAction(onClick: () -> Unit, enabled: Boolean = true) {
+    TopBarAction(enabled = enabled, onClick = onClick) {
+        SaveButtonText()
     }
 }
 

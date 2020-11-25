@@ -4,7 +4,6 @@ import android.app.Dialog
 import android.content.DialogInterface
 import android.os.Bundle
 import android.view.View
-import android.widget.CheckBox
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
@@ -26,10 +25,6 @@ import timber.log.Timber
 import java.util.*
 
 class AssemblePartyDialog : DialogFragment(), CoroutineScope by CoroutineScope(Dispatchers.Main) {
-    interface PartyCreationListener {
-        fun onSuccessfulCreation(party: Party)
-    }
-
     private val parties: PartyRepository by inject()
     private val auth: AuthenticationViewModel by viewModel()
     private var pendingJob: Job? = null
@@ -39,7 +34,7 @@ class AssemblePartyDialog : DialogFragment(), CoroutineScope by CoroutineScope(D
     private lateinit var form: Form
 
     fun setOnSuccessListener(listener: (Party) -> Unit): AssemblePartyDialog {
-        this.listener = listener;
+        this.listener = listener
 
         return this
     }

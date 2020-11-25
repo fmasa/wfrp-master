@@ -14,8 +14,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ContextAmbient
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.intl.Locale
-import androidx.compose.ui.text.toUpperCase
 import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.model.domain.compendium.exceptions.CompendiumItemNotFound
 import cz.muni.fi.rpg.model.domain.talents.Talent
@@ -53,7 +51,7 @@ internal fun TimesTakenForm(
                     val coroutineScope = rememberCoroutineScope()
                     val context = ContextAmbient.current
 
-                    TopBarAction(
+                    SaveAction(
                         enabled = !saving,
                         onClick = {
                             coroutineScope.launch(Dispatchers.IO) {
@@ -80,10 +78,7 @@ internal fun TimesTakenForm(
                                 }
                             }
                         }
-                    ) {
-                        Text(stringResource(R.string.button_save).toUpperCase(Locale.current))
-                    }
-
+                    )
                 }
             )
         }

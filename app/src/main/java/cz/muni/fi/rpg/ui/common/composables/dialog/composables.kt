@@ -15,17 +15,11 @@ import androidx.compose.ui.text.toUpperCase
 import cz.muni.fi.rpg.R
 
 @Composable
-fun CancelButton(onClick: () -> Unit) {
-    TextButton(onClick = onClick) {
-        Text(stringResource(R.string.button_cancel).toUpperCase(Locale.current))
-    }
-}
+fun SaveButtonText() = Text(stringResource(R.string.button_save).toUpperCase(Locale.current))
 
 @Composable
-fun SaveButton(onClick: () -> Unit) {
-    TextButton(onClick = onClick) {
-        Text(stringResource(R.string.button_save).toUpperCase(Locale.current))
-    }
+fun SaveTextButton(onClick: () -> Unit, enabled: Boolean = true) {
+    TextButton(onClick = onClick, enabled = enabled) { SaveButtonText() }
 }
 
 @Composable

@@ -10,8 +10,6 @@ import androidx.compose.runtime.savedinstancestate.savedInstanceState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.intl.Locale
-import androidx.compose.ui.text.toUpperCase
 import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.model.domain.talents.Talent
 import cz.muni.fi.rpg.ui.common.composables.*
@@ -46,12 +44,12 @@ internal fun NonCompendiumTalentForm(
                 actions = {
                     val coroutineScope = rememberCoroutineScope()
 
-                    TopBarAction(
+                    SaveAction(
                         enabled = !saving,
                         onClick = {
                             if (!formData.isValid()) {
                                 validate = true
-                                return@TopBarAction
+                                return@SaveAction
                             }
 
                             coroutineScope.launch(Dispatchers.IO) {
@@ -60,10 +58,7 @@ internal fun NonCompendiumTalentForm(
                                 withContext(Dispatchers.Main) { onComplete() }
                             }
                         }
-                    ) {
-                        Text(stringResource(R.string.button_save).toUpperCase(Locale.current))
-                    }
-
+                    )
                 }
             )
         }
