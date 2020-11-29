@@ -54,7 +54,6 @@ dependencies {
     // Tools for Rulebook PDF parsing
     implementation("com.github.librepdf:openpdf:1.3.23")
     implementation("com.github.andob:android-awt:1.0.0")
-    implementation("com.github.h0tk3y.betterParse:better-parse:0.4.0")
 
     // Testing utilities
     testImplementation("junit:junit:4.13.1")
