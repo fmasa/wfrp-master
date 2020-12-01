@@ -12,7 +12,6 @@ import cz.frantisekmasa.wfrp_master.core.domain.Stats
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.ContextMenu
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.EmptyUI
 import cz.muni.fi.rpg.model.domain.skills.Skill
-import cz.muni.fi.rpg.model.right
 import cz.muni.fi.rpg.ui.character.skills.dialog.AddSkillDialog
 import cz.muni.fi.rpg.ui.character.skills.dialog.EditSkillDialog
 import cz.muni.fi.rpg.ui.common.composables.*
@@ -26,7 +25,7 @@ internal fun SkillsCard(
     onRemove: (Skill) -> Unit,
 ) {
     val skills = skillsVm.skills.collectAsState(null).value ?: return
-    val characteristics = characterVm.character.right()
+    val characteristics = characterVm.character
         .collectAsState(null).value?.getCharacteristics() ?: return
 
     CardContainer(Modifier.padding(horizontal = 8.dp).padding(bottom = 8.dp)) {

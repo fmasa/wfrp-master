@@ -10,7 +10,7 @@ fun generateAccessCode(): String {
     return UUID.randomUUID().toString()
 }
 
-fun <L, R> Flow<Either<L, R>>.right(): Flow<R> = transform {
+internal fun <L, R> Flow<Either<L, R>>.right(): Flow<R> = transform {
     if (it is Either.Right) {
         emit(it.b)
     }

@@ -28,7 +28,6 @@ import cz.frantisekmasa.wfrp_master.core.ui.scaffolding.tabs.TabScreen
 import cz.frantisekmasa.wfrp_master.core.ui.viewinterop.fragmentManager
 import cz.frantisekmasa.wfrp_master.core.viewModel.viewModel
 import cz.frantisekmasa.wfrp_master.core.domain.party.Party
-import cz.muni.fi.rpg.model.right
 import cz.muni.fi.rpg.ui.common.AdManager
 import cz.muni.fi.rpg.ui.common.ChangeAmbitionsDialog
 import cz.muni.fi.rpg.ui.common.composables.*
@@ -43,7 +42,7 @@ import org.koin.core.parameter.parametersOf
 @Composable
 fun GameMasterScreen(routing: Routing<Route.GameMaster>, adManager: AdManager) {
     val viewModel = ViewModel.GameMaster(routing.route.partyId)
-    val party = viewModel.party.right().collectAsState(null).value
+    val party = viewModel.party.collectAsState(null).value
     val fragmentManager = fragmentManager()
 
     Scaffold(

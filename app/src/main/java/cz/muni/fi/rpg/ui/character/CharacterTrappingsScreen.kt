@@ -23,7 +23,6 @@ import cz.frantisekmasa.wfrp_master.core.ui.primitives.EmptyUI
 import cz.frantisekmasa.wfrp_master.core.ui.viewinterop.fragmentManager
 import cz.frantisekmasa.wfrp_master.core.viewModel.viewModel
 import cz.muni.fi.rpg.model.domain.inventory.InventoryItem
-import cz.muni.fi.rpg.model.right
 import cz.muni.fi.rpg.ui.character.inventory.ArmorCard
 import cz.muni.fi.rpg.ui.character.inventory.InventoryItemDialog
 import cz.muni.fi.rpg.ui.character.inventory.TransactionDialog
@@ -49,7 +48,7 @@ internal fun CharacterTrappingsScreen(
             )
         }
 
-        viewModel.armor.right().collectAsState(null).value?.let { armor ->
+        viewModel.armor.collectAsState(null).value?.let { armor ->
             ArmorCard(armor, onChange = { viewModel.updateArmor(it) })
         }
 

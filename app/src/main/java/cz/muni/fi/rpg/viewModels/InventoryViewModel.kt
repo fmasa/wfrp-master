@@ -26,7 +26,7 @@ class InventoryViewModel(
 ) : ViewModel(), CoroutineScope by CoroutineScope(Dispatchers.IO) {
     val inventory: Flow<List<InventoryItem>> = inventoryItems.findAllForCharacter(characterId)
 
-    val armor: Flow<Either<CouldNotConnectToBackend, Armor>> = armorRepository.getLive(characterId)
+    val armor: Flow<Armor> = armorRepository.getLive(characterId).right()
 
     val money: Flow<Money> = characters.getLive(characterId).right().map { it.getMoney() }
 

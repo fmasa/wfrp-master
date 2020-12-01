@@ -30,7 +30,6 @@ import cz.frantisekmasa.wfrp_master.core.ui.primitives.ContextMenu
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.EmptyUI
 import cz.frantisekmasa.wfrp_master.core.viewModel.viewModel
 import cz.frantisekmasa.wfrp_master.core.domain.party.Invitation
-import cz.muni.fi.rpg.model.right
 import cz.muni.fi.rpg.ui.common.composables.*
 import cz.muni.fi.rpg.ui.gameMaster.adapter.Player
 import cz.frantisekmasa.wfrp_master.navigation.Route
@@ -52,7 +51,7 @@ internal fun PartySummaryScreen(
     onEditAmbitionsRequest: (Ambitions) -> Unit,
 ) {
     ScrollableColumn(modifier.background(MaterialTheme.colors.background)) {
-        val party = viewModel.party.right().collectAsState(null).value
+        val party = viewModel.party.collectAsState(null).value
             ?: return@ScrollableColumn
 
         val invitationDialogVisible = remember { mutableStateOf(false) }
@@ -172,7 +171,7 @@ private fun PlayersCard(
             ) {
                 PrimaryButton(R.string.button_create, onClick = { onCharacterCreateRequest(null) })
 
-                val party = viewModel.party.right().collectAsState(null).value
+                val party = viewModel.party.collectAsState(null).value
 
                 PrimaryButton(
                     R.string.button_invite,

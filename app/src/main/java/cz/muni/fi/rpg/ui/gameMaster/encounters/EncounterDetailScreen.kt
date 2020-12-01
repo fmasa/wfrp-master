@@ -31,7 +31,6 @@ import cz.frantisekmasa.wfrp_master.core.viewModel.viewModel
 import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.model.domain.encounter.Npc
 import cz.muni.fi.rpg.model.domain.encounter.Encounter
-import cz.muni.fi.rpg.model.right
 import cz.muni.fi.rpg.ui.common.composables.*
 import cz.frantisekmasa.wfrp_master.navigation.Route
 import cz.frantisekmasa.wfrp_master.navigation.Routing
@@ -51,7 +50,7 @@ fun EncounterDetailScreen(routing: Routing<Route.EncounterDetail>) {
     Scaffold(
         topBar = {
             val partyId = encounterId.partyId
-            val encounter = viewModel.encounter.right().collectAsState(null).value
+            val encounter = viewModel.encounter.collectAsState(null).value
 
             TopAppBar(
                 title = {
@@ -59,7 +58,7 @@ fun EncounterDetailScreen(routing: Routing<Route.EncounterDetail>) {
                         encounter?.let { Text(it.name) }
 
                         val partyViewModel: PartyViewModel by viewModel { parametersOf(partyId) }
-                        partyViewModel.party.right().collectAsState(null).value?.let {
+                        partyViewModel.party.collectAsState(null).value?.let {
                             Subtitle(it.getName())
                         }
                     }
@@ -172,7 +171,7 @@ private fun DescriptionCard(viewModel: EncounterDetailViewModel) {
     CardContainer(Modifier.fillMaxWidth().padding(horizontal = 8.dp)) {
         CardTitle(R.string.title_description)
 
-        val encounter = viewModel.encounter.right().collectAsState(null).value
+        val encounter = viewModel.encounter.collectAsState(null).value
 
         if (encounter == null) {
             Box(Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
