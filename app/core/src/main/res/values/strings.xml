@@ -12,10 +12,12 @@
 
     <!-- End of Domain -->
 
+    <!-- Common UI elements -->
     <string name="button_finish">Finish</string>
     <string name="button_save">Save</string>
     <string name="button_cancel">Cancel</string>
     <string name="button_submit">Submit</string>
+    <string name="button_open">Open</string>
     <string name="button_remove">Remove</string>
 
     <!-- Form errors -->

@@ -45,6 +45,7 @@ import cz.frantisekmasa.wfrp_master.core.firestore.aggregateMapper
 import cz.frantisekmasa.wfrp_master.core.firestore.repositories.FirestoreCharacterFeatureRepository
 import cz.frantisekmasa.wfrp_master.core.firestore.repositories.FirestoreCharacterRepository
 import cz.frantisekmasa.wfrp_master.core.firestore.repositories.FirestorePartyRepository
+import cz.frantisekmasa.wfrp_master.core.viewModel.PartyViewModel
 import cz.muni.fi.rpg.model.domain.inventory.InventoryItem
 import cz.muni.fi.rpg.model.domain.skills.Skill
 import cz.muni.fi.rpg.model.domain.spells.Spell

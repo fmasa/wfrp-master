@@ -5,6 +5,7 @@
     <string name="n_round">Round %1$d</string>
     <string name="n_turn">Turn %1$d</string>
     <string name="next_turn">Next turn</string>
+    <string name="combat_in_progress">Combat is in progress</string>
 
     <string name="title_characters">Characters</string>
     <string name="title_npcs">NPCs</string>

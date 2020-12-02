@@ -35,7 +35,7 @@ import cz.muni.fi.rpg.ui.common.composables.*
 import cz.frantisekmasa.wfrp_master.navigation.Route
 import cz.frantisekmasa.wfrp_master.navigation.Routing
 import cz.muni.fi.rpg.viewModels.EncounterDetailViewModel
-import cz.muni.fi.rpg.viewModels.PartyViewModel
+import cz.frantisekmasa.wfrp_master.core.viewModel.PartyViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext

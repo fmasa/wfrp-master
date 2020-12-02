@@ -1,4 +1,4 @@
-package cz.muni.fi.rpg.viewModels
+package cz.frantisekmasa.wfrp_master.core.viewModel
 
 import androidx.lifecycle.ViewModel
 import cz.frantisekmasa.wfrp_master.core.domain.party.Party
