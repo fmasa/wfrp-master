@@ -62,7 +62,7 @@ data class Party(
     fun updateCombat(combat: Combat) {
         val activeCombat = activeCombat
 
-        require(activeCombat != null && combat.getEncounterId() == activeCombat.getEncounterId())
+        require(activeCombat != null && combat.encounterId == activeCombat.encounterId)
 
         this.activeCombat = combat
     }

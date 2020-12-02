@@ -1,12 +1,13 @@
 package cz.frantisekmasa.wfrp_master.core.domain.party.combat
 
 import android.os.Parcelable
+import cz.frantisekmasa.wfrp_master.core.domain.identifiers.NpcId
 import kotlinx.parcelize.Parcelize
 import java.util.*
 
 @Parcelize
 data class Combat(
-    private val encounterId: UUID,
+    val encounterId: UUID,
     private var combatants: List<Combatant>,
     private val turn: Int = 1,
     private val round: Int = 1
@@ -19,7 +20,9 @@ data class Combat(
         combatants = combatants.toList()
     }
 
-    fun getEncounterId() = encounterId
+    val npcIds: List<NpcId>
+        get() = combatants.mapNotNull { if (it is Combatant.Npc) it.npcId else null  }
+
     fun getCombatants() = combatants
     fun getTurn() = turn
     fun getRound() = round

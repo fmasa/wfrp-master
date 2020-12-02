@@ -110,7 +110,7 @@ class MainActivity : AuthenticatedActivity(R.layout.activity_main) {
                                     InvitationScannerScreen(Routing(route, backStack))
                                 }
                                 is Route.ActiveCombat -> {
-                                    ActiveCombatScreen()
+                                    ActiveCombatScreen(Routing(route, backStack))
                                 }
                             }
                         }
