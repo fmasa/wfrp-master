@@ -26,7 +26,7 @@ fun HorizontalLine(modifier: Modifier = Modifier) {
 fun FullScreenProgress() {
     Box(
         modifier = Modifier.fillMaxSize(),
-        alignment = Alignment.Center,
+        contentAlignment = Alignment.Center,
     ) {
         CircularProgressIndicator()
     }

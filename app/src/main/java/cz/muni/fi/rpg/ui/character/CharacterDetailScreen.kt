@@ -84,7 +84,7 @@ private fun MainContainer(
     adManager: AdManager,
 ) {
     if (character == null) {
-        Box(Modifier.fillMaxSize(), alignment = Alignment.Center) {
+        Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
             CircularProgressIndicator()
         }
 

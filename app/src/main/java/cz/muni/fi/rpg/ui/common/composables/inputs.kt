@@ -84,7 +84,7 @@ fun TextInput(
         val density = DensityAmbient.current
 
         Layout(
-            children = {
+            content = {
                 Surface(
                     shape = RoundedCornerShape(4.dp),
                     color = MaterialTheme.colors.surface,

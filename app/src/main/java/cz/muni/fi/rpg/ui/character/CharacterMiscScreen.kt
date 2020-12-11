@@ -53,8 +53,8 @@ internal fun CharacterMiscScreen(
         val ambitionsDialogTitle = stringResource(R.string.title_character_ambitions)
 
         AmbitionsCard(
-            R.string.title_character_ambitions,
-            character.getAmbitions(),
+            titleRes = R.string.title_character_ambitions,
+            ambitions = character.getAmbitions(),
             modifier = Modifier
                 .padding(horizontal = 8.dp)
                 .clickable(onClick = {
@@ -67,9 +67,9 @@ internal fun CharacterMiscScreen(
 
         viewModel.party.collectAsState(null).value?.let {
             AmbitionsCard(
-                R.string.title_party_ambitions,
-                it.getAmbitions(),
-                R.drawable.ic_group,
+                titleRes = R.string.title_party_ambitions,
+                ambitions = it.getAmbitions(),
+                titleIconRes = R.drawable.ic_group,
                 modifier = Modifier.padding(horizontal = 8.dp)
             )
         }

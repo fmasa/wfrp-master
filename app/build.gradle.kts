@@ -27,7 +27,7 @@ if (playStoreJsonFile.exists()) {
     }
 }
 
-val composeVersion = "1.0.0-alpha07"
+val composeVersion = "1.0.0-alpha08"
 
 android {
 
@@ -127,9 +127,9 @@ android {
 
 dependencies {
     implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar"))))
-    implementation("androidx.appcompat:appcompat:1.1.0")
-    implementation("androidx.core:core-ktx:1.3.1")
-    implementation("androidx.constraintlayout:constraintlayout:2.0.0-rc1")
+    implementation("androidx.appcompat:appcompat:1.2.0")
+    implementation("androidx.core:core-ktx:1.3.2")
+    implementation("androidx.constraintlayout:constraintlayout:2.1.0-alpha1")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.11.0")
     implementation("com.wdullaer:materialdatetimepicker:4.2.3") {
         exclude(group = "androidx.appcompat")
@@ -137,10 +137,10 @@ dependencies {
     }
 
     // Allow use of Java 8 APIs on older Android versions
-    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:1.0.10")
+    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:1.1.1")
 
     // Time picker dialog
-    implementation("com.vanpra.compose-material-dialogs:datetime:0.2.6")
+    implementation("com.vanpra.compose-material-dialogs:datetime:0.2.7")
 
     // OpenPDF
     implementation("com.github.librepdf:openpdf:1.3.23")
@@ -155,42 +155,42 @@ dependencies {
     // Jetpack Compose
     implementation("androidx.compose.ui:ui:$composeVersion")
     implementation("androidx.compose.material:material:$composeVersion")
-    implementation("androidx.ui:ui-tooling:$composeVersion")
+    implementation("androidx.compose.ui:ui-tooling:$composeVersion")
 
     // Navigation
-    implementation("com.github.zsoltk:compose-router:0.22.0")
+    implementation("com.github.zsoltk:compose-router:0.23.0")
 
     // Shared Preferences DataStore
-    implementation("androidx.datastore:datastore-preferences:1.0.0-alpha02")
+    implementation("androidx.datastore:datastore-preferences:1.0.0-alpha05")
 
     // Firebase-related dependencies
-    implementation("com.google.firebase:firebase-analytics:17.6.0")
+    implementation("com.google.firebase:firebase-analytics:18.0.0")
     implementation("com.firebaseui:firebase-ui-auth:6.2.0")
-    implementation("com.google.firebase:firebase-firestore-ktx:21.5.0")
-    implementation("com.google.firebase:firebase-analytics-ktx:17.6.0")
-    implementation("com.google.firebase:firebase-crashlytics:17.1.1")
-    implementation("com.google.firebase:firebase-dynamic-links-ktx:19.1.0")
+    implementation("com.google.firebase:firebase-firestore-ktx:22.0.0")
+    implementation("com.google.firebase:firebase-analytics-ktx:18.0.0")
+    implementation("com.google.firebase:firebase-crashlytics:17.3.0")
+    implementation("com.google.firebase:firebase-dynamic-links-ktx:19.1.1")
 
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.9")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.5")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.1")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.4.1")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.3.5")
 
-    implementation("com.google.android.gms:play-services-ads:19.3.0")
+    implementation("com.google.android.gms:play-services-ads:19.6.0")
     implementation("com.google.android.ads.consent:consent-library:1.0.8")
-    implementation("com.google.android.gms:play-services-auth:18.1.0")
+    implementation("com.google.android.gms:play-services-auth:19.0.0")
 
     implementation("com.google.zxing:core:3.4.0")
     implementation("me.dm7.barcodescanner:zxing:1.9.13")
 
-    implementation("com.google.android.material:material:1.2.0")
+    implementation("com.google.android.material:material:1.2.1")
     implementation("androidx.annotation:annotation:1.1.0")
     implementation("androidx.lifecycle:lifecycle-extensions:2.2.0")
     implementation("androidx.legacy:legacy-support-v4:1.0.0")
     implementation("androidx.drawerlayout:drawerlayout:1.1.1")
 
-    testImplementation("junit:junit:4.12")
-    androidTestImplementation("androidx.test.ext:junit:1.1.1")
-    androidTestImplementation("androidx.test.espresso:espresso-core:3.2.0")
+    testImplementation("junit:junit:4.13.1")
+    androidTestImplementation("androidx.test.ext:junit:1.1.2")
+    androidTestImplementation("androidx.test.espresso:espresso-core:3.3.0")
 
     implementation("io.arrow-kt:arrow-core:0.10.4")
 

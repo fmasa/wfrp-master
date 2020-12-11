@@ -19,9 +19,6 @@ import androidx.compose.ui.platform.ViewAmbient
 import androidx.compose.ui.platform.setContent
 import androidx.compose.ui.semantics.dialog
 import androidx.compose.ui.semantics.semantics
-import androidx.compose.ui.util.fastForEach
-import androidx.compose.ui.util.fastMap
-import androidx.compose.ui.util.fastMaxBy
 import androidx.compose.ui.window.DialogProperties
 import androidx.compose.ui.window.SecureFlagPolicy
 import androidx.lifecycle.ViewTreeLifecycleOwner
@@ -190,14 +187,14 @@ private fun DialogLayout(
     content: @Composable () -> Unit
 ) {
     Layout(
-        children = content,
+        content = content,
         modifier = modifier
     ) { measurables, constraints ->
-        val placeables = measurables.fastMap { it.measure(constraints) }
-        val width = placeables.fastMaxBy { it.width }?.width ?: constraints.minWidth
-        val height = placeables.fastMaxBy { it.height }?.height ?: constraints.minHeight
+        val placeables = measurables.map { it.measure(constraints) }
+        val width = placeables.maxByOrNull { it.width }?.width ?: constraints.minWidth
+        val height = placeables.maxByOrNull { it.height }?.height ?: constraints.minHeight
         layout(width, height) {
-            placeables.fastForEach { it.placeRelative(0, 0) }
+            placeables.forEach { it.placeRelative(0, 0) }
         }
     }
 }

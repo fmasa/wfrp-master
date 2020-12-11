@@ -118,7 +118,7 @@ internal fun NonCompendiumSkillForm(
 
             Box(
                 modifier = Modifier.fillMaxWidth(),
-                alignment = Alignment.TopCenter
+                contentAlignment = Alignment.TopCenter
             ) {
                 CheckboxWithText(
                     text = stringResource(R.string.label_skill_advanced),

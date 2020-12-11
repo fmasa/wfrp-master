@@ -62,7 +62,7 @@ fun GameMasterScreen(routing: Routing<Route.GameMaster>, adManager: AdManager) {
         }
     ) {
         if (party == null) {
-            Box(Modifier.fillMaxSize(), alignment = Alignment.Center) {
+            Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                 CircularProgressIndicator()
             }
 

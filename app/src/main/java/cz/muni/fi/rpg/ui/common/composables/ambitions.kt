@@ -2,7 +2,6 @@ package cz.muni.fi.rpg.ui.common.composables
 
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -26,13 +25,13 @@ import cz.muni.fi.rpg.model.domain.common.Ambitions
 
 @Composable
 fun AmbitionsCard(
+    modifier: Modifier = Modifier,
     @StringRes titleRes: Int,
     ambitions: Ambitions,
     @DrawableRes titleIconRes: Int? = null,
-    modifier: Modifier = Modifier,
 ) {
     CardContainer(Modifier.fillMaxWidth().then(modifier)) {
-        Box(modifier = Modifier.fillMaxWidth().padding(horizontal = 8.dp)) {
+        Column(modifier = Modifier.fillMaxWidth().padding(horizontal = 8.dp)) {
             CardTitle(titleRes, titleIconRes)
 
             for ((label, value) in listOf(
@@ -46,7 +45,7 @@ fun AmbitionsCard(
                     )
 
                     if (value.isBlank()) {
-                        Providers(AmbientContentAlpha provides ContentAlpha.medium, children = {
+                        Providers(AmbientContentAlpha provides ContentAlpha.medium) {
                             Row(verticalAlignment = Alignment.CenterVertically) {
                                 Icon(vectorResource(R.drawable.ic_none))
                                 Text(
@@ -55,7 +54,7 @@ fun AmbitionsCard(
                                     fontStyle = FontStyle.Italic,
                                 )
                             }
-                        })
+                        }
                     } else {
                         Text(ambitions.shortTerm)
                     }

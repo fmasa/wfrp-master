@@ -169,7 +169,7 @@ private fun DescriptionCard(viewModel: EncounterDetailViewModel) {
         val encounter = viewModel.encounter.right().collectAsState(null).value
 
         if (encounter == null) {
-            Box(Modifier.fillMaxWidth(), alignment = Alignment.Center) {
+            Box(Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
                 CircularProgressIndicator()
             }
             return@CardContainer
@@ -192,7 +192,7 @@ private fun CombatantsCard(
         val npcs = viewModel.npcs.collectAsState(null).value
 
         if (npcs == null) {
-            Box(Modifier.fillMaxWidth(), alignment = Alignment.Center) {
+            Box(Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
                 CircularProgressIndicator()
             }
 
@@ -217,7 +217,7 @@ private fun CombatantsCard(
 
             Box(
                 Modifier.fillMaxWidth(),
-                alignment = Alignment.TopCenter
+                contentAlignment = Alignment.TopCenter
             ) {
                 PrimaryButton(R.string.title_npc_add, onClick = onCreateRequest)
             }

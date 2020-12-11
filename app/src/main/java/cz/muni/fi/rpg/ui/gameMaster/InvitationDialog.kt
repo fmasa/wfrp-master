@@ -45,7 +45,7 @@ internal fun InvitationDialog2(invitation: Invitation, onDismissRequest: () -> U
                 val sharingOptions = sharingOptions(invitation).collectAsState().value
 
                 if (sharingOptions == null) {
-                    Box(Modifier.fillMaxWidth().aspectRatio(1f), alignment = Alignment.Center) {
+                    Box(Modifier.fillMaxWidth().aspectRatio(1f), contentAlignment = Alignment.Center) {
                         CircularProgressIndicator()
                     }
                 } else {

@@ -26,7 +26,7 @@ fun SaveTextButton(onClick: () -> Unit, enabled: Boolean = true) {
 fun Progress() {
     Box(
         modifier = Modifier.fillMaxWidth().aspectRatio(1f),
-        alignment = Alignment.Center,
+        contentAlignment = Alignment.Center,
     ) {
         CircularProgressIndicator()
     }

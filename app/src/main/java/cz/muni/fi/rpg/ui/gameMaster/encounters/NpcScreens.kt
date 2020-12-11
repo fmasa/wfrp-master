@@ -232,7 +232,7 @@ fun NpcDetailScreen(
         }
     ) {
         if (data == null) {
-            Box(Modifier.fillMaxSize(), alignment = Alignment.Center) {
+            Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                 CircularProgressIndicator()
             }
         } else {
