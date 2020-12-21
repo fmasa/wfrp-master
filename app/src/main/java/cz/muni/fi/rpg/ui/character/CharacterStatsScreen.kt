@@ -137,8 +137,8 @@ private fun PointsSection(points: Points, onUpdate: (Points) -> Unit) {
 private fun PointItem(
     @StringRes labelRes: Int,
     value: Int,
-    color: Color = MaterialTheme.colors.onSurface,
     modifier: Modifier = Modifier,
+    color: Color = MaterialTheme.colors.onSurface,
     onUpdate: (Int) -> Unit,
 ) {
     NumberPicker(
