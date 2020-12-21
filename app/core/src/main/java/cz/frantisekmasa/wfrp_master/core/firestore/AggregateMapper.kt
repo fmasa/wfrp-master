@@ -1,4 +1,4 @@
-package cz.muni.fi.rpg.model.firestore
+package cz.frantisekmasa.wfrp_master.core.firestore
 
 import com.google.firebase.firestore.DocumentSnapshot
 
@@ -7,7 +7,7 @@ internal typealias DocumentData = Map<String, Any>
 /**
  * Maps instances of aggregates to and from document data
  */
-internal interface AggregateMapper<T : Any> {
+interface AggregateMapper<T : Any> {
 
     /**
      * Hydrates instance of T from data returned by Firestore

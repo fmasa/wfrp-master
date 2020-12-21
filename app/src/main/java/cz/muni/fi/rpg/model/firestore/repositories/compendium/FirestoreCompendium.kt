@@ -3,12 +3,12 @@ package cz.muni.fi.rpg.model.firestore.repositories.compendium
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.FirebaseFirestoreException
 import com.google.firebase.firestore.SetOptions
+import cz.frantisekmasa.wfrp_master.core.firestore.AggregateMapper
 import cz.muni.fi.rpg.model.domain.compendium.Compendium
 import cz.muni.fi.rpg.model.domain.compendium.CompendiumItem
 import cz.muni.fi.rpg.model.domain.compendium.exceptions.CompendiumItemNotFound
-import cz.muni.fi.rpg.model.firestore.AggregateMapper
 import cz.muni.fi.rpg.model.firestore.COLLECTION_PARTIES
-import cz.muni.fi.rpg.model.firestore.queryFlow
+import cz.frantisekmasa.wfrp_master.core.firestore.queryFlow
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async

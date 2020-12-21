@@ -26,8 +26,6 @@ if (playStoreJsonFile.exists()) {
     }
 }
 
-val composeVersion = "1.0.0-alpha08"
-
 android {
 
     lintOptions {
@@ -101,6 +99,10 @@ android {
         compose = true
     }
 
+    composeOptions {
+        kotlinCompilerExtensionVersion = "1.0.0-alpha08"
+    }
+
     compileOptions {
         // Allow use of Java 8 APIs on older Android versions
         isCoreLibraryDesugaringEnabled = true
@@ -118,18 +120,14 @@ android {
                 "-Xopt-in=androidx.compose.foundation.layout.ExperimentalLayout" +
                 "-Xopt-in=kotlinx.coroutines.ExperimentalCoroutinesApi"
     }
-
-    composeOptions {
-        kotlinCompilerExtensionVersion = composeVersion
-    }
 }
 
 dependencies {
+    implementation(project(":app:core"))
     implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar"))))
     implementation("androidx.appcompat:appcompat:1.2.0")
     implementation("androidx.core:core-ktx:1.3.2")
     implementation("androidx.constraintlayout:constraintlayout:2.1.0-alpha1")
-    implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.11.0")
     implementation("com.wdullaer:materialdatetimepicker:4.2.3") {
         exclude(group = "androidx.appcompat")
         exclude(group = "androidx.recyclerview")
@@ -146,33 +144,11 @@ dependencies {
     implementation("com.github.andob:android-awt:1.0.0")
     implementation("com.github.h0tk3y.betterParse:better-parse:0.4.0")
 
-    // Koin
-    implementation("org.koin:koin-android:2.2.0")
-    implementation("org.koin:koin-android-viewmodel:2.2.0")
-    implementation("org.koin:koin-androidx-fragment:2.2.0")
-
-    // Jetpack Compose
-    implementation("androidx.compose.ui:ui:$composeVersion")
-    implementation("androidx.compose.material:material:$composeVersion")
-    implementation("androidx.compose.ui:ui-tooling:$composeVersion")
-
     // Navigation
     implementation("com.github.zsoltk:compose-router:0.23.0")
 
     // Shared Preferences DataStore
-    implementation("androidx.datastore:datastore-preferences:1.0.0-alpha05")
-
-    // Firebase-related dependencies
-    implementation("com.google.firebase:firebase-analytics:18.0.0")
-    implementation("com.firebaseui:firebase-ui-auth:6.2.0")
-    implementation("com.google.firebase:firebase-firestore-ktx:22.0.0")
-    implementation("com.google.firebase:firebase-analytics-ktx:18.0.0")
-    implementation("com.google.firebase:firebase-crashlytics:17.3.0")
-    implementation("com.google.firebase:firebase-dynamic-links-ktx:19.1.1")
-
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.1")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.4.1")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.3.5")
+    implementation("androidx.datastore:datastore-preferences:1.0.0-alpha05");
 
     implementation("com.google.android.gms:play-services-ads:19.6.0")
     implementation("com.google.android.ads.consent:consent-library:1.0.8")
@@ -187,13 +163,9 @@ dependencies {
     implementation("androidx.legacy:legacy-support-v4:1.0.0")
     implementation("androidx.drawerlayout:drawerlayout:1.1.1")
 
+    // Testing utilities
     testImplementation("junit:junit:4.13.1")
     androidTestImplementation("androidx.test.ext:junit:1.1.2")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.3.0")
-
-    implementation("io.arrow-kt:arrow-core:0.10.4")
-
-    implementation("com.jakewharton.timber:timber:4.7.1")
-
     testImplementation("org.mockito:mockito-core:2.7.22")
 }

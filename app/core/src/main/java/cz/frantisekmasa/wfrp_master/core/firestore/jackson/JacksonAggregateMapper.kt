@@ -1,4 +1,4 @@
-package cz.muni.fi.rpg.model.firestore.jackson
+package cz.frantisekmasa.wfrp_master.core.firestore.jackson
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility
 import com.fasterxml.jackson.annotation.PropertyAccessor
@@ -6,8 +6,8 @@ import com.fasterxml.jackson.core.type.TypeReference
 import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.google.firebase.firestore.DocumentSnapshot
-import cz.muni.fi.rpg.model.firestore.AggregateMapper
-import cz.muni.fi.rpg.model.firestore.DocumentData
+import cz.frantisekmasa.wfrp_master.core.firestore.AggregateMapper
+import cz.frantisekmasa.wfrp_master.core.firestore.DocumentData
 import timber.log.Timber
 import kotlin.reflect.KClass
 

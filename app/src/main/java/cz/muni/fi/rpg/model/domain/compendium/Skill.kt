@@ -1,6 +1,6 @@
 package cz.muni.fi.rpg.model.domain.compendium
 
-import cz.muni.fi.rpg.common.requireMaxLength
+import cz.frantisekmasa.wfrp_master.core.common.requireMaxLength
 import cz.muni.fi.rpg.model.domain.compendium.common.Characteristic
 import java.util.*
 

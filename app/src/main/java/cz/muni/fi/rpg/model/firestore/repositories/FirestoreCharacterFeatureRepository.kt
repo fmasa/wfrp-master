@@ -5,12 +5,13 @@ import arrow.core.Right
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.SetOptions
+import cz.frantisekmasa.wfrp_master.core.firestore.AggregateMapper
+import cz.frantisekmasa.wfrp_master.core.firestore.documentFlow
 import cz.muni.fi.rpg.model.domain.character.CharacterFeatureRepository
 import cz.muni.fi.rpg.model.domain.character.CharacterId
 import cz.muni.fi.rpg.model.domain.character.Feature
 import cz.muni.fi.rpg.model.domain.common.CouldNotConnectToBackend
 import cz.muni.fi.rpg.model.firestore.*
-import cz.muni.fi.rpg.model.firestore.AggregateMapper
 import kotlinx.coroutines.tasks.await
 import timber.log.Timber
 import java.util.*

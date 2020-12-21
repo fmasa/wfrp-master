@@ -9,7 +9,7 @@ import androidx.fragment.app.Fragment
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.common.api.ApiException
 import cz.muni.fi.rpg.R
-import cz.muni.fi.rpg.common.log.Reporter
+import cz.frantisekmasa.wfrp_master.core.logging.Reporter
 import cz.muni.fi.rpg.viewModels.AuthenticationViewModel
 import kotlinx.coroutines.*
 import kotlinx.coroutines.tasks.await

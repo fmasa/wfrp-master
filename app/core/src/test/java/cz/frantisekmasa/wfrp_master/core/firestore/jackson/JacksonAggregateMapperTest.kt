@@ -1,4 +1,4 @@
-package cz.muni.fi.rpg.model.firestore.jackson
+package cz.frantisekmasa.wfrp_master.core.firestore.jackson
 
 import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
 import com.google.firebase.firestore.DocumentSnapshot

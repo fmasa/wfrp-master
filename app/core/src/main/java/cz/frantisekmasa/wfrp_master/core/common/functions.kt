@@ -1,4 +1,4 @@
-package cz.muni.fi.rpg.common
+package cz.frantisekmasa.wfrp_master.core.common
 
 typealias SuspendableEntityListener<TEntity> = suspend (item: TEntity) -> Unit
 

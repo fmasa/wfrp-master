@@ -1,4 +1,4 @@
-package cz.muni.fi.rpg.model.firestore
+package cz.frantisekmasa.wfrp_master.core.firestore
 
 import arrow.core.Either
 import arrow.core.Left
@@ -11,7 +11,7 @@ import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.*
 
-internal fun <T : Any> queryFlow(
+fun <T : Any> queryFlow(
     query: Query,
     snapshotParser: AggregateMapper<T>,
 ): Flow<List<T>> = callbackFlow {
@@ -31,7 +31,7 @@ internal fun <T : Any> queryFlow(
     awaitClose { listener.remove() }
 }
 
-internal fun <T : Any> documentFlow(
+fun <T : Any> documentFlow(
     document: DocumentReference,
     snapshotProcessor: (result: Either<FirebaseFirestoreException?, DocumentSnapshot>) -> T,
 ): Flow<T> = callbackFlow {
