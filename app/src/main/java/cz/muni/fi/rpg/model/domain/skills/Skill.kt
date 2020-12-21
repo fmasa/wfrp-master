@@ -2,7 +2,7 @@ package cz.muni.fi.rpg.model.domain.skills
 
 import android.os.Parcelable
 import cz.muni.fi.rpg.model.domain.compendium.common.Characteristic
-import kotlinx.android.parcel.Parcelize
+import kotlinx.parcelize.Parcelize
 import java.util.UUID
 
 @Parcelize

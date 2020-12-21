@@ -4,7 +4,7 @@ import cz.muni.fi.rpg.model.domain.common.Ambitions
 import cz.muni.fi.rpg.model.domain.party.time.DateTime
 import cz.muni.fi.rpg.model.domain.party.time.ImperialDate
 import cz.muni.fi.rpg.model.generateAccessCode
-import kotlinx.android.parcel.Parcelize
+import kotlinx.parcelize.Parcelize
 import java.util.*
 
 @Parcelize

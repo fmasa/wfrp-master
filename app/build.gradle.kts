@@ -7,11 +7,10 @@ import com.github.triplet.gradle.play.PlayPublisherExtension
 plugins {
     id("com.android.application")
     id("kotlin-android")
-    id("kotlin-android-extensions")
+    id("kotlin-parcelize")
     id("com.google.gms.google-services")
     id("kotlin-kapt")
     id("com.google.firebase.crashlytics")
-
     id("com.github.triplet.play") apply false
 }
 

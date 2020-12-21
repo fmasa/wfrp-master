@@ -5,7 +5,7 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.savedinstancestate.savedInstanceState
 import cz.muni.fi.rpg.ui.common.composables.dialog.FullScreenDialog
 import cz.muni.fi.rpg.viewModels.SpellsViewModel
-import kotlinx.android.parcel.Parcelize
+import kotlinx.parcelize.Parcelize
 
 @Composable
 fun AddSpellDialog(viewModel: SpellsViewModel, onDismissRequest: () -> Unit) {

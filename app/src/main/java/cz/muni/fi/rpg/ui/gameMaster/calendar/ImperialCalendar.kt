@@ -29,7 +29,7 @@ import androidx.compose.ui.unit.dp
 import androidx.core.os.bundleOf
 import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.model.domain.party.time.ImperialDate
-import kotlinx.android.parcel.Parcelize
+import kotlinx.parcelize.Parcelize
 
 @Composable
 fun ImperialCalendar(date: ImperialDate, onDateChange: (ImperialDate) -> Unit) {

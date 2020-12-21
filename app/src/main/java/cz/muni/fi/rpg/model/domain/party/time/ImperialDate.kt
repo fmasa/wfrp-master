@@ -5,7 +5,7 @@ import androidx.annotation.IntRange
 import arrow.core.Either
 import arrow.core.Left
 import arrow.core.Right
-import kotlinx.android.parcel.Parcelize
+import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class ImperialDate(

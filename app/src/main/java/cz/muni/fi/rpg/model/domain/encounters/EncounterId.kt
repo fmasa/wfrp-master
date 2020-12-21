@@ -2,8 +2,8 @@ package cz.muni.fi.rpg.model.domain.encounters
 
 import android.os.Parcelable
 import cz.muni.fi.rpg.ui.gameMaster.encounters.UUIDParceler
-import kotlinx.android.parcel.Parcelize
-import kotlinx.android.parcel.TypeParceler
+import kotlinx.parcelize.Parcelize
+import kotlinx.parcelize.TypeParceler
 import java.util.*
 
 @Parcelize

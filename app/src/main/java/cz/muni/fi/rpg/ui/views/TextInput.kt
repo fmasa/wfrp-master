@@ -11,7 +11,7 @@ import androidx.core.content.res.getIntegerOrThrow
 import androidx.core.widget.addTextChangedListener
 import com.google.android.material.textfield.TextInputLayout
 import cz.muni.fi.rpg.R
-import kotlinx.android.parcel.Parcelize
+import kotlinx.parcelize.Parcelize
 
 class TextInput(context: Context, attrs: AttributeSet?) : LinearLayout(context, attrs) {
     @Parcelize
