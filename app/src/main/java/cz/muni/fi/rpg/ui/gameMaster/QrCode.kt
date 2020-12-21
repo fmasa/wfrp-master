@@ -10,9 +10,9 @@ import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.layout.WithConstraints
-import androidx.compose.ui.graphics.ImageAsset
-import androidx.compose.ui.graphics.asImageAsset
+import androidx.compose.ui.graphics.asImageBitmap
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.EncodeHintType
 import com.google.zxing.common.BitMatrix
@@ -23,32 +23,32 @@ import kotlinx.coroutines.withContext
 @Composable
 internal fun QrCode(data: String) {
     WithConstraints(Modifier.fillMaxWidth()) {
-        val qrCode = remember { mutableStateOf<ImageAsset?>(null) }
+        var qrCode: ImageBitmap? by remember { mutableStateOf(null) }
         val width = constraints.maxWidth
 
         LaunchedEffect(data, width) {
-            qrCode.value = createQrCode(data, width)
+            qrCode = createQrCode(data, width)
         }
 
-        when (val asset = qrCode.value) {
+        when (val bitmap = qrCode) {
             null -> {
-                Box(Modifier.fillMaxWidth().aspectRatio(1f), alignment = Alignment.Center) {
+                Box(Modifier.fillMaxWidth().aspectRatio(1f), contentAlignment = Alignment.Center) {
                     CircularProgressIndicator()
                 }
             }
             else -> {
-                Image(asset)
+                Image(bitmap)
             }
         }
     }
 }
 
-private suspend fun createQrCode(data: String, size: Int): ImageAsset {
+private suspend fun createQrCode(data: String, size: Int): ImageBitmap {
     return withContext(Dispatchers.Default) {
         val writer = QRCodeWriter()
         val hints = mapOf(EncodeHintType.CHARACTER_SET to "UTF-8")
         bitMatrixToBitmap(writer.encode(data, BarcodeFormat.QR_CODE, size, size, hints))
-            .asImageAsset()
+            .asImageBitmap()
     }
 }
 

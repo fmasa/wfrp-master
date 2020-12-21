@@ -51,13 +51,13 @@ class Rules(private vararg val rules: ValidationRule) {
 
 @Composable
 fun TextInput(
-    label: String? = null,
     value: String,
-    keyboardType: KeyboardType = KeyboardType.Text,
     onValueChange: (String) -> Unit,
     validate: Boolean,
-    maxLength: Int = Int.MAX_VALUE,
     modifier: Modifier = Modifier,
+    label: String? = null,
+    keyboardType: KeyboardType = KeyboardType.Text,
+    maxLength: Int = Int.MAX_VALUE,
     multiLine: Boolean = false,
     placeholder: String? = null,
     horizontalAlignment: Alignment.Horizontal = Alignment.Start,
@@ -84,7 +84,7 @@ fun TextInput(
         val density = DensityAmbient.current
 
         Layout(
-            children = {
+            content = {
                 Surface(
                     shape = RoundedCornerShape(4.dp),
                     color = MaterialTheme.colors.surface,
@@ -135,11 +135,11 @@ fun TextInput(
 
 @Composable
 fun <T> ChipList(
-    label: String? = null,
     items: Iterable<Pair<T, String>>,
     value: T,
     onValueChange: (T) -> Unit,
     modifier: Modifier = Modifier,
+    label: String? = null,
 ) {
     Column(modifier) {
         label?.let {

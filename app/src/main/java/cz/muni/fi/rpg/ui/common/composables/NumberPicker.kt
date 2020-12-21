@@ -20,12 +20,12 @@ import cz.muni.fi.rpg.R
 
 @Composable
 fun NumberPicker(
+    modifier: Modifier = Modifier,
     value: Int,
     label: String? = null,
     color: Color = MaterialTheme.colors.onSurface,
     onIncrement: () -> Unit,
     onDecrement: () -> Unit,
-    modifier: Modifier = Modifier
 ) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -43,7 +43,7 @@ fun NumberPicker(
 
             Image(
                 modifier = Modifier.clickable(onClick = onDecrement),
-                asset = vectorResource(R.drawable.ic_remove_circle),
+                imageVector = vectorResource(R.drawable.ic_remove_circle),
                 colorFilter = iconColorFilter,
             )
 
@@ -56,7 +56,7 @@ fun NumberPicker(
 
             Image(
                 modifier = Modifier.clickable(onClick = onIncrement),
-                asset = vectorResource(R.drawable.ic_add_circle),
+                imageVector = vectorResource(R.drawable.ic_add_circle),
                 colorFilter = iconColorFilter,
             )
         }

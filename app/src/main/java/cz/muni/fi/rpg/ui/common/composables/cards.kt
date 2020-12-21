@@ -46,7 +46,10 @@ fun CardTitle(text: String, @DrawableRes iconRes: Int? = null) {
 
 @Composable
 fun CardButton(@StringRes textRes: Int, onClick: () -> Unit) {
-    Box(alignment = Alignment.TopCenter, modifier = Modifier.fillMaxWidth().padding(top = 16.dp)) {
+    Box(
+        contentAlignment = Alignment.TopCenter,
+        modifier = Modifier.fillMaxWidth().padding(top = 16.dp),
+    ) {
         OutlinedButton(onClick = onClick) {
             Text(stringResource(textRes).toUpperCase(Locale.current))
         }

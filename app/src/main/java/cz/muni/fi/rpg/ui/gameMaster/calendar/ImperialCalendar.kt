@@ -117,7 +117,7 @@ private fun YearPicker(
         repeat(YEAR_COLUMNS) { column ->
             Column(Modifier.weight(1f), horizontalAlignment = Alignment.CenterHorizontally) {
                 repeat(YEAR_ROWS) { row ->
-                    Box(alignment = Alignment.Center) {
+                    Box(contentAlignment = Alignment.Center) {
                         val year = activeYearRange.first + column * YEAR_ROWS + row
 
                         val isSelected = selectedYear == year
@@ -197,7 +197,7 @@ private fun DayPicker(
                 for (day in daysOfWeek) {
                     Box(
                         modifier = Modifier.height(36.dp).padding(vertical = 8.dp),
-                        alignment = Alignment.Center,
+                        contentAlignment = Alignment.Center,
                     ) {
                         Text(day.readableName, style = MaterialTheme.typography.caption)
                     }
@@ -248,7 +248,7 @@ private fun RowScope.Week(days: List<Int?>, selectedDay: Int?, onDaySelect: (Int
                     )
                     .size(36.dp)
                     .padding(8.dp),
-                alignment = Alignment.Center
+                contentAlignment = Alignment.Center
             ) {
                 day?.let {
                     Text(

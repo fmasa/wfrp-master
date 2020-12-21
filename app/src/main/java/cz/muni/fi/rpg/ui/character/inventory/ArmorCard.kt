@@ -34,6 +34,7 @@ internal fun ArmorCard(armor: Armor, onChange: (Armor) -> Unit) {
                 nameRes = R.string.armor_shield,
                 points = armor.shield,
                 onChange = { change { copy(shield = it) } },
+                modifier = Modifier.weight(1f),
             )
             ArmorPart(
                 iconRes = R.drawable.ic_armor_head,
@@ -41,6 +42,7 @@ internal fun ArmorCard(armor: Armor, onChange: (Armor) -> Unit) {
                 points = armor.head,
                 rollRange = 1..9,
                 onChange = { change { copy(head = it) } },
+                modifier = Modifier.weight(1f),
             )
             Spacer(Modifier.weight(1f))
         }
@@ -53,6 +55,7 @@ internal fun ArmorCard(armor: Armor, onChange: (Armor) -> Unit) {
                 points = armor.rightArm,
                 rollRange = 25..44,
                 onChange = { change { copy(rightArm = it) } },
+                modifier = Modifier.weight(1f),
             )
 
             ArmorPart(
@@ -61,6 +64,7 @@ internal fun ArmorCard(armor: Armor, onChange: (Armor) -> Unit) {
                 points = armor.body,
                 rollRange = 45..79,
                 onChange = { change { copy(body = it) } },
+                modifier = Modifier.weight(1f),
             )
 
             ArmorPart(
@@ -69,6 +73,7 @@ internal fun ArmorCard(armor: Armor, onChange: (Armor) -> Unit) {
                 points = armor.leftArm,
                 rollRange = 10..24,
                 onChange = { change { copy(leftArm = it) } },
+                modifier = Modifier.weight(1f),
             )
         }
 
@@ -82,7 +87,6 @@ internal fun ArmorCard(armor: Armor, onChange: (Armor) -> Unit) {
                 points = armor.rightLeg,
                 rollRange = 90..100,
                 onChange = { change { copy(rightLeg = it) } },
-                modifier = Modifier,
             )
 
             ArmorPart(
@@ -91,7 +95,6 @@ internal fun ArmorCard(armor: Armor, onChange: (Armor) -> Unit) {
                 points = armor.leftLeg,
                 rollRange = 80..89,
                 onChange = { change { copy(leftLeg = it) } },
-                modifier = Modifier,
             )
         }
     }
@@ -102,9 +105,9 @@ private fun RowScope.ArmorPart(
     @DrawableRes iconRes: Int,
     @StringRes nameRes: Int,
     points: Int,
+    modifier: Modifier = Modifier,
     rollRange: IntRange? = null,
     onChange: (Int) -> Unit,
-    modifier: Modifier = Modifier.weight(1f)
 ) {
     Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = modifier) {
         Icon(vectorResource(iconRes))

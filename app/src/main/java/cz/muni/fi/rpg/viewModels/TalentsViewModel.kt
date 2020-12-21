@@ -30,7 +30,7 @@ class TalentsViewModel(
         }
     }
 
-    private val compendiumTalents by lazy { compendium.liveForParty(characterId.partyId) }
+    private val compendiumTalents = compendium.liveForParty(characterId.partyId)
 
     suspend fun saveTalent(talent: Talent) = talentRepository.save(characterId, talent)
 

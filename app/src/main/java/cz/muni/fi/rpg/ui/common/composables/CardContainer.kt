@@ -18,7 +18,7 @@ fun CardContainer(modifier: Modifier = Modifier, content: @Composable BoxScope.(
             elevation = 2.dp,
             shape = RoundedCornerShape(4.dp)
         ) {
-            Box(Modifier.padding(vertical = 16.dp, horizontal = 8.dp), children = content)
+            Box(Modifier.padding(vertical = 16.dp, horizontal = 8.dp), content = content)
         }
     }
 }

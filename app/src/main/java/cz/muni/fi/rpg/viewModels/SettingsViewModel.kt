@@ -1,9 +1,9 @@
 package cz.muni.fi.rpg.viewModels
 
 import android.content.Context
+import androidx.datastore.preferences.core.edit
+import androidx.datastore.preferences.core.preferencesKey
 import androidx.datastore.preferences.createDataStore
-import androidx.datastore.preferences.edit
-import androidx.datastore.preferences.preferencesKey
 import androidx.lifecycle.ViewModel
 import cz.muni.fi.rpg.model.domain.party.PartyRepository
 import kotlinx.coroutines.flow.Flow
