@@ -128,10 +128,6 @@ dependencies {
     implementation("androidx.appcompat:appcompat:1.2.0")
     implementation("androidx.core:core-ktx:1.3.2")
     implementation("androidx.constraintlayout:constraintlayout:2.1.0-alpha1")
-    implementation("com.wdullaer:materialdatetimepicker:4.2.3") {
-        exclude(group = "androidx.appcompat")
-        exclude(group = "androidx.recyclerview")
-    }
 
     // Allow use of Java 8 APIs on older Android versions
     coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:1.1.1")
