@@ -7,8 +7,8 @@ import androidx.appcompat.app.AlertDialog
 import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
 import cz.frantisekmasa.wfrp_master.core.common.SuspendableEntityListener
+import cz.frantisekmasa.wfrp_master.core.domain.Ambitions
 import cz.muni.fi.rpg.R
-import cz.muni.fi.rpg.model.domain.common.Ambitions
 import cz.muni.fi.rpg.ui.common.forms.Form
 import cz.muni.fi.rpg.ui.views.TextInput
 import kotlinx.coroutines.CoroutineScope

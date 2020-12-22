@@ -10,13 +10,6 @@ import org.koin.core.context.GlobalContext
 import org.koin.core.parameter.ParametersDefinition
 import java.util.*
 
-@Suppress("DeprecatedCallableAddReplaceWith")
-@Deprecated("Using ViewModelStoreOwner seems broken. Use explicit factory in ViewModel object")
-@Composable
-inline fun <reified T : ViewModel> viewModel(noinline parameters: ParametersDefinition? = null): Lazy<T> {
-    return ViewModelStoreOwnerAmbient.current.viewModel(parameters = parameters)
-}
-
 object ViewModel {
     @Composable
     fun GameMaster(partyId: UUID): GameMasterViewModel = remember(partyId) {

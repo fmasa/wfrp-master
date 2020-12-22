@@ -14,7 +14,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import cz.muni.fi.rpg.R
-import cz.muni.fi.rpg.model.domain.character.CharacterId
+import cz.frantisekmasa.wfrp_master.core.domain.identifiers.CharacterId
+import cz.frantisekmasa.wfrp_master.core.ui.primitives.ContextMenu
+import cz.frantisekmasa.wfrp_master.core.ui.primitives.EmptyUI
+import cz.frantisekmasa.wfrp_master.core.viewModel.viewModel
 import cz.muni.fi.rpg.model.domain.spells.Spell
 import cz.muni.fi.rpg.ui.character.spells.dialog.AddSpellDialog
 import cz.muni.fi.rpg.ui.character.spells.dialog.EditSpellDialog
@@ -90,7 +93,7 @@ private fun SpellItem(spell: Spell, onClick: () -> Unit, onRemove: () -> Unit) {
         iconRes = R.drawable.ic_spells,
         onClick = onClick,
         contextMenuItems = listOf(ContextMenu.Item(stringResource(R.string.remove), onRemove)),
-        badgeContent = {
+        badge = {
             Row {
                 Text(stringResource(R.string.spell_casting_number_shortcut))
                 Text(spell.castingNumber.toString(), Modifier.padding(start = 4.dp))

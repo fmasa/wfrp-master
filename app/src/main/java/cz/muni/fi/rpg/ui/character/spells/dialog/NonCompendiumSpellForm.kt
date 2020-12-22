@@ -9,6 +9,10 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.savedinstancestate.savedInstanceState
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
+import cz.frantisekmasa.wfrp_master.core.ui.forms.FormData
+import cz.frantisekmasa.wfrp_master.core.ui.forms.TextInput
+import cz.frantisekmasa.wfrp_master.core.ui.primitives.FullScreenProgress
+import cz.frantisekmasa.wfrp_master.core.ui.scaffolding.SaveAction
 import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.model.domain.spells.Spell
 import cz.muni.fi.rpg.ui.common.composables.*
@@ -76,7 +80,7 @@ internal fun NonCompendiumSpellForm(
                 value = formData.name.value,
                 onValueChange = { formData.name.value = it },
                 validate = validate,
-                maxLength = cz.muni.fi.rpg.model.domain.compendium.Spell.NAME_MAX_LENGTH
+                maxLength = Spell.NAME_MAX_LENGTH
             )
 
             TextInput(
@@ -84,7 +88,7 @@ internal fun NonCompendiumSpellForm(
                 value = formData.range.value,
                 onValueChange = { formData.range.value = it },
                 validate = validate,
-                maxLength = cz.muni.fi.rpg.model.domain.compendium.Spell.RANGE_MAX_LENGTH,
+                maxLength = Spell.RANGE_MAX_LENGTH,
             )
 
             TextInput(
@@ -92,7 +96,7 @@ internal fun NonCompendiumSpellForm(
                 value = formData.target.value,
                 onValueChange = { formData.target.value = it },
                 validate = validate,
-                maxLength = cz.muni.fi.rpg.model.domain.compendium.Spell.TARGET_MAX_LENGTH,
+                maxLength = Spell.TARGET_MAX_LENGTH,
             )
 
             TextInput(
@@ -100,7 +104,7 @@ internal fun NonCompendiumSpellForm(
                 value = formData.duration.value,
                 onValueChange = { formData.duration.value = it },
                 validate = validate,
-                maxLength = cz.muni.fi.rpg.model.domain.compendium.Spell.DURATION_MAX_LENGTH,
+                maxLength = Spell.DURATION_MAX_LENGTH,
             )
 
             TextInput(
@@ -117,7 +121,7 @@ internal fun NonCompendiumSpellForm(
                 value = formData.effect.value,
                 onValueChange = { formData.effect.value = it },
                 validate = validate,
-                maxLength = cz.muni.fi.rpg.model.domain.compendium.Spell.EFFECT_MAX_LENGTH,
+                maxLength = Spell.EFFECT_MAX_LENGTH,
                 multiLine = true,
             )
         }

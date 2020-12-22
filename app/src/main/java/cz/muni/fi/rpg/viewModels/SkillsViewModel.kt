@@ -1,9 +1,9 @@
 package cz.muni.fi.rpg.viewModels
 
 import androidx.lifecycle.ViewModel
-import cz.muni.fi.rpg.model.domain.character.CharacterId
-import cz.muni.fi.rpg.model.domain.compendium.Compendium
-import cz.muni.fi.rpg.model.domain.compendium.Skill as CompendiumSkill
+import cz.frantisekmasa.wfrp_master.compendium.domain.Compendium
+import cz.frantisekmasa.wfrp_master.core.domain.identifiers.CharacterId
+import cz.frantisekmasa.wfrp_master.compendium.domain.Skill as CompendiumSkill
 import cz.muni.fi.rpg.model.domain.skills.Skill
 import cz.muni.fi.rpg.model.domain.skills.SkillRepository
 import kotlinx.coroutines.CoroutineScope

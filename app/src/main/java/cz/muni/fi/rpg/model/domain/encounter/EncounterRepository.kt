@@ -1,7 +1,7 @@
 package cz.muni.fi.rpg.model.domain.encounter
 
 import arrow.core.Either
-import cz.muni.fi.rpg.model.domain.encounters.EncounterId
+import cz.frantisekmasa.wfrp_master.core.domain.identifiers.EncounterId
 import kotlinx.coroutines.flow.Flow
 import java.util.*
 

@@ -1,7 +1,7 @@
 package cz.muni.fi.rpg.model.domain.skills
 
 import android.os.Parcelable
-import cz.muni.fi.rpg.model.domain.compendium.common.Characteristic
+import cz.frantisekmasa.wfrp_master.core.domain.Characteristic
 import kotlinx.parcelize.Parcelize
 import java.util.UUID
 

@@ -3,7 +3,7 @@ package cz.muni.fi.rpg.model.firestore.repositories
 import com.google.firebase.firestore.FirebaseFirestore
 import cz.frantisekmasa.wfrp_master.core.firestore.AggregateMapper
 import cz.frantisekmasa.wfrp_master.core.firestore.queryFlow
-import cz.muni.fi.rpg.model.domain.character.CharacterId
+import cz.frantisekmasa.wfrp_master.core.domain.identifiers.CharacterId
 import cz.muni.fi.rpg.model.domain.spells.Spell
 import cz.muni.fi.rpg.model.domain.spells.SpellRepository
 import cz.muni.fi.rpg.model.firestore.*

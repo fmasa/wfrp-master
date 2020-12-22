@@ -8,7 +8,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import cz.muni.fi.rpg.R
-import cz.muni.fi.rpg.model.domain.character.Stats
+import cz.frantisekmasa.wfrp_master.core.domain.Stats
+import cz.frantisekmasa.wfrp_master.core.ui.primitives.ContextMenu
+import cz.frantisekmasa.wfrp_master.core.ui.primitives.EmptyUI
 import cz.muni.fi.rpg.model.domain.skills.Skill
 import cz.muni.fi.rpg.model.right
 import cz.muni.fi.rpg.ui.character.skills.dialog.AddSkillDialog
@@ -87,7 +89,7 @@ private fun SkillItem(
         skill.characteristic.getIconId(),
         onClick = onClick,
         listOf(ContextMenu.Item(stringResource(R.string.remove), onClick = { onRemove() })),
-        badgeContent = { TestNumber(skill, characteristics) }
+        badge = { TestNumber(skill, characteristics) }
     )
 }
 

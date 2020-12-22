@@ -12,12 +12,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import cz.frantisekmasa.wfrp_master.compendium.domain.Talent
+import cz.frantisekmasa.wfrp_master.core.ui.primitives.EmptyUI
+import cz.frantisekmasa.wfrp_master.core.ui.primitives.FullScreenProgress
+import cz.frantisekmasa.wfrp_master.core.ui.primitives.ItemIcon
 import cz.muni.fi.rpg.R
-import cz.muni.fi.rpg.model.domain.compendium.Talent
 import cz.muni.fi.rpg.ui.common.composables.BodyPadding
-import cz.muni.fi.rpg.ui.common.composables.EmptyUI
-import cz.muni.fi.rpg.ui.common.composables.FullScreenProgress
-import cz.muni.fi.rpg.ui.common.composables.ItemIcon
 import cz.muni.fi.rpg.viewModels.TalentsViewModel
 
 @Composable

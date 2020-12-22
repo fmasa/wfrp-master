@@ -6,7 +6,7 @@ import com.google.firebase.firestore.FirebaseFirestoreException
 import com.google.firebase.firestore.SetOptions
 import cz.frantisekmasa.wfrp_master.core.firestore.AggregateMapper
 import cz.frantisekmasa.wfrp_master.core.firestore.queryFlow
-import cz.muni.fi.rpg.model.domain.character.CharacterId
+import cz.frantisekmasa.wfrp_master.core.domain.identifiers.CharacterId
 import cz.muni.fi.rpg.model.domain.inventory.InventoryItem
 import cz.muni.fi.rpg.model.domain.inventory.InventoryItemId
 import cz.muni.fi.rpg.model.domain.inventory.InventoryItemNotFound

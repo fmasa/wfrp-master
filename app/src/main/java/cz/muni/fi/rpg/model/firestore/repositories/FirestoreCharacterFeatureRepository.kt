@@ -8,7 +8,7 @@ import com.google.firebase.firestore.SetOptions
 import cz.frantisekmasa.wfrp_master.core.firestore.AggregateMapper
 import cz.frantisekmasa.wfrp_master.core.firestore.documentFlow
 import cz.muni.fi.rpg.model.domain.character.CharacterFeatureRepository
-import cz.muni.fi.rpg.model.domain.character.CharacterId
+import cz.frantisekmasa.wfrp_master.core.domain.identifiers.CharacterId
 import cz.muni.fi.rpg.model.domain.character.Feature
 import cz.muni.fi.rpg.model.domain.common.CouldNotConnectToBackend
 import cz.muni.fi.rpg.model.firestore.*

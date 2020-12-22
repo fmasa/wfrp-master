@@ -16,13 +16,15 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.ContextAmbient
+import androidx.compose.ui.platform.AmbientContext
 import androidx.compose.ui.res.imageResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.firebase.auth.FirebaseAuthUserCollisionException
+import cz.frantisekmasa.wfrp_master.core.ui.viewinterop.activity
+import cz.frantisekmasa.wfrp_master.core.viewModel.viewModel
 import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.model.authentication.User
 import cz.muni.fi.rpg.ui.common.composables.*
@@ -39,7 +41,7 @@ fun SignInCard(viewModel: SettingsViewModel) {
     val activity = activity()
 
     val contract = GoogleSignInContract(authViewModel)
-    val context = ContextAmbient.current
+    val context = AmbientContext.current
     val coroutineScope = rememberCoroutineScope()
     val user = AmbientUser.current
 

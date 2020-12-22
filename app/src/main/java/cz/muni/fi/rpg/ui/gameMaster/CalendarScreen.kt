@@ -22,6 +22,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import com.vanpra.composematerialdialogs.MaterialDialog
 import com.vanpra.composematerialdialogs.datetime.timepicker
+import cz.frantisekmasa.wfrp_master.core.ui.buttons.SaveTextButton
 import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.model.domain.party.Party
 import cz.muni.fi.rpg.model.domain.party.time.DateTime
@@ -29,7 +30,6 @@ import cz.muni.fi.rpg.model.domain.party.time.ImperialDate
 import cz.muni.fi.rpg.model.domain.party.time.MannsliebPhase
 import cz.muni.fi.rpg.model.domain.party.time.YearSeason
 import cz.muni.fi.rpg.ui.common.composables.CardContainer
-import cz.muni.fi.rpg.ui.common.composables.dialog.SaveTextButton
 import cz.muni.fi.rpg.ui.gameMaster.calendar.ImperialCalendar
 import cz.muni.fi.rpg.viewModels.GameMasterViewModel
 import kotlinx.coroutines.Dispatchers

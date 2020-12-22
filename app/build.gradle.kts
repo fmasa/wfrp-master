@@ -124,9 +124,11 @@ android {
 
 dependencies {
     implementation(project(":app:core"))
+    implementation(project(":app:navigation"))
+    implementation(project(":app:compendium"))
+
     implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar"))))
     implementation("androidx.appcompat:appcompat:1.2.0")
-    implementation("androidx.core:core-ktx:1.3.2")
     implementation("androidx.constraintlayout:constraintlayout:2.1.0-alpha1")
 
     // Allow use of Java 8 APIs on older Android versions
@@ -134,11 +136,6 @@ dependencies {
 
     // Time picker dialog
     implementation("com.vanpra.compose-material-dialogs:datetime:0.2.7")
-
-    // OpenPDF
-    implementation("com.github.librepdf:openpdf:1.3.23")
-    implementation("com.github.andob:android-awt:1.0.0")
-    implementation("com.github.h0tk3y.betterParse:better-parse:0.4.0")
 
     // Navigation
     implementation("com.github.zsoltk:compose-router:0.23.0")
@@ -153,7 +150,6 @@ dependencies {
     implementation("com.google.zxing:core:3.4.0")
     implementation("me.dm7.barcodescanner:zxing:1.9.13")
 
-    implementation("com.google.android.material:material:1.2.1")
     implementation("androidx.annotation:annotation:1.1.0")
     implementation("androidx.lifecycle:lifecycle-extensions:2.2.0")
     implementation("androidx.legacy:legacy-support-v4:1.0.0")

@@ -11,12 +11,12 @@ import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import cz.frantisekmasa.wfrp_master.core.ui.primitives.EmptyUI
+import cz.frantisekmasa.wfrp_master.core.ui.primitives.FullScreenProgress
+import cz.frantisekmasa.wfrp_master.core.ui.primitives.ItemIcon
 import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.model.domain.spells.Spell
 import cz.muni.fi.rpg.ui.common.composables.BodyPadding
-import cz.muni.fi.rpg.ui.common.composables.EmptyUI
-import cz.muni.fi.rpg.ui.common.composables.FullScreenProgress
-import cz.muni.fi.rpg.ui.common.composables.ItemIcon
 import cz.muni.fi.rpg.viewModels.SpellsViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

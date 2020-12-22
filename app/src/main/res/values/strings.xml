@@ -29,7 +29,6 @@
     <!-- Skill Dialog -->
     <string name="label_skill_name">Skill Name</string>
     <string name="label_skill_description">Skill Description (Optional)</string>
-    <string name="label_skill_advanced">Advanced</string>
     <string name="title_choose_compendium_skill">Choose Compendium skill…</string>
     <string name="button_add_non_compendium_skill">…or add non-Compendium skill</string>
     <string name="error_skill_name_empty">Skill name cannot be empty</string>
@@ -168,6 +167,7 @@
     <string name="title_addSkill">Add skill</string>
     <string name="label_skill_characteristic">Characteristic</string>
     <string name="label_skill_advances">Advances</string>
+    <string name="label_skill_advanced">Advanced</string>
     <string name="skill_test_number_shortcut">TN</string>
 
     <string name="remove">Remove</string>

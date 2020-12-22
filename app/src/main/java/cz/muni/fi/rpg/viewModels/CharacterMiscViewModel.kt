@@ -2,9 +2,9 @@ package cz.muni.fi.rpg.viewModels
 
 import androidx.lifecycle.ViewModel
 import cz.muni.fi.rpg.model.domain.character.Character
-import cz.muni.fi.rpg.model.domain.character.CharacterId
+import cz.frantisekmasa.wfrp_master.core.domain.identifiers.CharacterId
 import cz.muni.fi.rpg.model.domain.character.CharacterRepository
-import cz.muni.fi.rpg.model.domain.common.Ambitions
+import cz.frantisekmasa.wfrp_master.core.domain.Ambitions
 import cz.muni.fi.rpg.model.domain.party.Party
 import cz.muni.fi.rpg.model.domain.party.PartyRepository
 import cz.muni.fi.rpg.model.right

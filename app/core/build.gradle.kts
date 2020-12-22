@@ -1,6 +1,7 @@
 plugins {
     id("com.android.library")
     id("kotlin-android")
+    id("kotlin-parcelize")
 }
 
 val composeVersion = "1.0.0-alpha08"
@@ -46,8 +47,11 @@ android {
 }
 
 dependencies {
+    // Basic Android stuff 
+    api("androidx.core:core-ktx:1.3.2")
 
-    implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar"))))
+    // Styles
+    api("com.google.android.material:material:1.2.1")
 
     // Jetpack Compose
     api("androidx.compose.ui:ui:$composeVersion")

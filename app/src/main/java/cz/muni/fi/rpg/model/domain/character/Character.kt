@@ -1,7 +1,8 @@
 package cz.muni.fi.rpg.model.domain.character
 
-import cz.muni.fi.rpg.model.domain.common.Ambitions
-import cz.muni.fi.rpg.model.domain.common.Money
+import cz.frantisekmasa.wfrp_master.core.domain.Ambitions
+import cz.frantisekmasa.wfrp_master.core.domain.Money
+import cz.frantisekmasa.wfrp_master.core.domain.Stats
 import java.lang.IllegalArgumentException
 
 data class Character(

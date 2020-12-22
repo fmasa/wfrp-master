@@ -16,19 +16,25 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.ContextAmbient
+import androidx.compose.ui.platform.AmbientContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
+import cz.frantisekmasa.wfrp_master.core.domain.identifiers.NpcId
+import cz.frantisekmasa.wfrp_master.core.ui.buttons.BackButton
+import cz.frantisekmasa.wfrp_master.core.ui.primitives.ContextMenu
+import cz.frantisekmasa.wfrp_master.core.ui.primitives.EmptyUI
+import cz.frantisekmasa.wfrp_master.core.ui.scaffolding.Subtitle
+import cz.frantisekmasa.wfrp_master.core.ui.scaffolding.TopBarAction
+import cz.frantisekmasa.wfrp_master.core.ui.viewinterop.fragmentManager
+import cz.frantisekmasa.wfrp_master.core.viewModel.viewModel
 import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.model.domain.encounter.Npc
 import cz.muni.fi.rpg.model.domain.encounter.Encounter
-import cz.muni.fi.rpg.model.domain.encounter.NpcId
 import cz.muni.fi.rpg.model.right
 import cz.muni.fi.rpg.ui.common.composables.*
-import cz.muni.fi.rpg.ui.common.composables.ContextMenu
-import cz.muni.fi.rpg.ui.router.Route
-import cz.muni.fi.rpg.ui.router.Routing
+import cz.frantisekmasa.wfrp_master.navigation.Route
+import cz.frantisekmasa.wfrp_master.navigation.Routing
 import cz.muni.fi.rpg.viewModels.EncounterDetailViewModel
 import cz.muni.fi.rpg.viewModels.PartyViewModel
 import kotlinx.coroutines.Dispatchers
@@ -85,7 +91,7 @@ private fun TopAppBarActions(
     partyId: UUID,
     viewModel: EncounterDetailViewModel
 ) {
-    val context = ContextAmbient.current
+    val context = AmbientContext.current
     val fragmentManager = fragmentManager()
     val coroutineScope = rememberCoroutineScope()
 

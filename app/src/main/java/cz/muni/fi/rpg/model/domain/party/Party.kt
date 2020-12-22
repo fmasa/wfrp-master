@@ -1,6 +1,6 @@
 package cz.muni.fi.rpg.model.domain.party
 import android.os.Parcelable
-import cz.muni.fi.rpg.model.domain.common.Ambitions
+import cz.frantisekmasa.wfrp_master.core.domain.Ambitions
 import cz.muni.fi.rpg.model.domain.party.time.DateTime
 import cz.muni.fi.rpg.model.domain.party.time.ImperialDate
 import cz.muni.fi.rpg.model.generateAccessCode

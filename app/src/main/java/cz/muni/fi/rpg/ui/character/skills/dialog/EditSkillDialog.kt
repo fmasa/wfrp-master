@@ -2,7 +2,7 @@ package cz.muni.fi.rpg.ui.character.skills.dialog
 
 import androidx.compose.runtime.Composable
 import cz.muni.fi.rpg.model.domain.skills.Skill
-import cz.muni.fi.rpg.ui.common.composables.dialog.FullScreenDialog
+import cz.frantisekmasa.wfrp_master.core.ui.dialogs.FullScreenDialog
 import cz.muni.fi.rpg.viewModels.SkillsViewModel
 
 @Composable
