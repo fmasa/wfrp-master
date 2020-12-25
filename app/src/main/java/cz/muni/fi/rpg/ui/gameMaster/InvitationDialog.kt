@@ -8,7 +8,7 @@ import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.ContextAmbient
+import androidx.compose.ui.platform.AmbientContext
 import androidx.compose.ui.res.loadVectorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.intl.Locale
@@ -49,7 +49,7 @@ internal fun InvitationDialog2(invitation: Invitation, onDismissRequest: () -> U
                         CircularProgressIndicator()
                     }
                 } else {
-                    val context = ContextAmbient.current
+                    val context = AmbientContext.current
 
                     QrCode(sharingOptions.json)
 

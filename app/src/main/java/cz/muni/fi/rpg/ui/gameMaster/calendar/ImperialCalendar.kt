@@ -14,7 +14,7 @@ import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.TextButton
-import androidx.compose.material.ripple.RippleIndication
+import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.runtime.*
 import androidx.compose.runtime.savedinstancestate.Saver
 import androidx.compose.runtime.savedinstancestate.SaverScope
@@ -244,7 +244,7 @@ private fun RowScope.Week(days: List<Int?>, selectedDay: Int?, onDaySelect: (Int
                 modifier
                     .clickable(
                         onClick = { day?.let(onDaySelect) },
-                        indication = RippleIndication(bounded = false, radius = 24.dp)
+                        indication = rememberRipple(bounded = false, radius = 24.dp)
                     )
                     .size(36.dp)
                     .padding(8.dp),

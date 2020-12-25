@@ -37,8 +37,8 @@ object EmptyUI {
                 Large -> Modifier.width(64.dp)
             }
 
-        @Composable
         val textStyle: TextStyle
+            @Composable
             get() = when (this) {
             Small -> MaterialTheme.typography.subtitle1
             Large -> MaterialTheme.typography.h6

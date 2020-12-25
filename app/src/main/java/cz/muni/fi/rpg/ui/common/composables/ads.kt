@@ -4,8 +4,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.ContextAmbient
-import androidx.compose.ui.platform.DensityAmbient
+import androidx.compose.ui.platform.AmbientContext
+import androidx.compose.ui.platform.AmbientDensity
 import androidx.compose.ui.viewinterop.AndroidView
 import com.google.android.gms.ads.AdSize
 import com.google.android.gms.ads.AdView
@@ -17,8 +17,8 @@ fun BannerAd(unitId: String, adManager: AdManager) {
     AndroidView(
         modifier = Modifier
             .fillMaxWidth()
-            .height(with(DensityAmbient.current) {
-                size.getHeightInPixels(ContextAmbient.current).toDp()
+            .height(with(AmbientDensity.current) {
+                size.getHeightInPixels(AmbientContext.current).toDp()
             }),
         viewBlock = {
             AdView(it).apply {

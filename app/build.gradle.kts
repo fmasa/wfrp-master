@@ -99,7 +99,7 @@ android {
     }
 
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.0.0-alpha08"
+        kotlinCompilerExtensionVersion = "1.0.0-alpha09"
     }
 
     compileOptions {
@@ -117,7 +117,9 @@ android {
                 "-Xallow-jvm-ir-dependencies" +
                 "-Xskip-prerelease-check" +
                 "-Xopt-in=androidx.compose.foundation.layout.ExperimentalLayout" +
-                "-Xopt-in=kotlinx.coroutines.ExperimentalCoroutinesApi"
+                "-Xopt-in=kotlinx.coroutines.ExperimentalCoroutinesApi" +
+                "-P" +
+                "plugin:androidx.compose.compiler.plugins.kotlin:suppressKotlinVersionCompatibilityCheck=true"
     }
 }
 
@@ -134,7 +136,7 @@ dependencies {
     coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:1.1.1")
 
     // Time picker dialog
-    implementation("com.vanpra.compose-material-dialogs:datetime:0.2.7")
+    implementation("com.vanpra.compose-material-dialogs:datetime:0.2.8")
 
     // Navigation
     implementation("com.github.zsoltk:compose-router:0.23.0")

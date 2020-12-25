@@ -1,6 +1,7 @@
 package cz.frantisekmasa.wfrp_master.core.ui.scaffolding.tabs
 
 import androidx.compose.foundation.ScrollState
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
@@ -42,13 +43,16 @@ fun <T> ColumnScope.TabRow(
         if (scrolledPercentage > 0.5f) selectedTabIndex + 1 else selectedTabIndex
 
     val indicator = @Composable { tabPositions: List<TabPosition> ->
-        TabConstants.DefaultIndicator(
-            Modifier.animatedTabIndicatorOffset(
-                tabPositions,
-                selectedTabIndex,
-                scrolledPercentage
-            ),
-            color = MaterialTheme.colors.primary,
+        Box(
+            Modifier
+                .animatedTabIndicatorOffset(
+                    tabPositions,
+                    selectedTabIndex,
+                    scrolledPercentage
+                )
+                .fillMaxWidth()
+                .preferredHeight(2.dp)
+                .background(color = MaterialTheme.colors.primary)
         )
     }
 

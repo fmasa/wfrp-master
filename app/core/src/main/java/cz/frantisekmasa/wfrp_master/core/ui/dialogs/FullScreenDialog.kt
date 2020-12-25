@@ -59,14 +59,13 @@ fun FullScreenDialog(
 
     val lightTheme = MaterialTheme.colors.isLight
 
-    val dialog = remember(view, lightTheme) {
-        DialogWrapper(
-            view,
-            lightTheme
-        )
+    val dialog = remember(view, lightTheme, properties) {
+        DialogWrapper(view, lightTheme,).apply {
+            setProperties(properties)
+        }
     }
+
     dialog.onCloseRequest = onDismissRequest
-    remember(properties) { dialog.setProperties(properties) }
 
     onActive {
         dialog.show()

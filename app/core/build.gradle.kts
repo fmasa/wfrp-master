@@ -4,7 +4,7 @@ plugins {
     id("kotlin-parcelize")
 }
 
-val composeVersion = "1.0.0-alpha08"
+val composeVersion = "1.0.0-alpha09"
 
 android {
     compileSdkVersion(29)
@@ -42,11 +42,17 @@ android {
         freeCompilerArgs = freeCompilerArgs +
                 "-Xallow-jvm-ir-dependencies" +
                 "-Xopt-in=androidx.compose.foundation.layout.ExperimentalLayout" +
-                "-Xopt-in=kotlinx.coroutines.ExperimentalCoroutinesApi"
+                "-Xopt-in=kotlinx.coroutines.ExperimentalCoroutinesApi" +
+                "-P" +
+                "plugin:androidx.compose.compiler.plugins.kotlin:suppressKotlinVersionCompatibilityCheck=true"
     }
 }
 
 dependencies {
+    // Basic Kotlin stuff
+    api("org.jetbrains.kotlin:kotlin-reflect:1.4.21")
+    api("org.jetbrains.kotlin:kotlin-stdlib:1.4.21")
+
     // Basic Android stuff 
     api("androidx.core:core-ktx:1.3.2")
 
