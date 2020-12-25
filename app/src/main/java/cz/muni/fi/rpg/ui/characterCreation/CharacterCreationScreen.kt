@@ -17,6 +17,7 @@ import androidx.compose.ui.text.toUpperCase
 import androidx.compose.ui.unit.dp
 import cz.frantisekmasa.wfrp_master.core.ui.buttons.BackButton
 import cz.frantisekmasa.wfrp_master.core.ui.forms.FormData
+import cz.frantisekmasa.wfrp_master.core.ui.scaffolding.SubheadBar
 import cz.muni.fi.rpg.R
 import cz.frantisekmasa.wfrp_master.core.viewModel.viewModel
 import cz.frantisekmasa.wfrp_master.navigation.Route
@@ -91,14 +92,7 @@ private fun MainContainer(routing: Routing<Route.CharacterCreation>) {
         ScrollableColumn(Modifier.weight(1f).background(MaterialTheme.colors.background)) {
             val currentStep = steps[currentStepIndex.value]
 
-            Surface(elevation = 2.dp, modifier = Modifier.fillMaxWidth()) {
-                Text(
-                    stringResource(currentStep.labelRes),
-                    textAlign = TextAlign.Center,
-                    modifier = Modifier.align(Alignment.CenterHorizontally)
-                        .padding(16.dp)
-                )
-            }
+            SubheadBar(stringResource(currentStep.labelRes))
 
             Box(Modifier.padding(24.dp)) { currentStep.render() }
         }
