@@ -32,8 +32,7 @@ android {
         disable("InvalidFragmentVersionForActivityResult") // This is temporary until we drop authentication fragment
     }
 
-    compileSdkVersion(29)
-    buildToolsVersion = "29.0.3"
+    compileSdkVersion(30)
 
     defaultConfig {
         applicationId = "cz.frantisekmasa.dnd"
