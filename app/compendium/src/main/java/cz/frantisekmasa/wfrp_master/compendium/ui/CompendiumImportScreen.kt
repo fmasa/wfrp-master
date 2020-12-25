@@ -25,6 +25,7 @@ import cz.frantisekmasa.wfrp_master.compendium.domain.importer.RulebookCompendiu
 import cz.frantisekmasa.wfrp_master.core.ui.buttons.BackButton
 import cz.frantisekmasa.wfrp_master.core.ui.scaffolding.Subtitle
 import cz.frantisekmasa.wfrp_master.core.ui.viewinterop.activity
+import cz.frantisekmasa.wfrp_master.core.ui.viewinterop.registerForActivityResult
 import cz.frantisekmasa.wfrp_master.core.viewModel.viewModel
 import cz.frantisekmasa.wfrp_master.navigation.Route
 import cz.frantisekmasa.wfrp_master.navigation.Routing
@@ -141,18 +142,9 @@ private fun MainContainer(routing: Routing<Route.CompendiumImport>) {
 
 @Composable
 private fun registerFileChooser(onFileChoose: (Uri) -> Unit): Lazy<ActivityResultLauncher<Int?>> {
-    val activity = activity()
-    lateinit var launcher: ActivityResultLauncher<Int?>
-
-    onCommit {
-        launcher = activity.registerForActivityResult(FileOpenContract()) { result ->
-            result.intent?.data?.let(onFileChoose)
-        }
+    return registerForActivityResult(FileOpenContract()) { result ->
+        result.intent?.data?.let(onFileChoose)
     }
-
-    onDispose { launcher.unregister() }
-
-    return lazy { launcher }
 }
 
 private data class Result(val intent: Intent?)
