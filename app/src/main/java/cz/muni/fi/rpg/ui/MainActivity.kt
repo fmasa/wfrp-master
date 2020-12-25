@@ -13,13 +13,13 @@ import com.github.zsoltk.compose.router.BackStack
 import com.github.zsoltk.compose.router.Router
 import cz.frantisekmasa.wfrp_master.compendium.ui.CompendiumImportScreen
 import cz.frantisekmasa.wfrp_master.compendium.ui.CompendiumScreen
+import cz.frantisekmasa.wfrp_master.core.ui.buttons.AmbientHamburgerButtonHandler
 import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.ui.character.CharacterDetailScreen
 import cz.muni.fi.rpg.ui.character.edit.CharacterEditScreen
 import cz.muni.fi.rpg.ui.characterCreation.CharacterCreationScreen
 import cz.muni.fi.rpg.ui.common.AboutScreen
 import cz.muni.fi.rpg.ui.common.AdManager
-import cz.muni.fi.rpg.ui.common.composables.AmbientUser
 import cz.muni.fi.rpg.ui.common.composables.Theme
 import cz.frantisekmasa.wfrp_master.core.viewModel.viewModel
 import cz.muni.fi.rpg.ui.gameMaster.GameMasterScreen
@@ -29,6 +29,7 @@ import cz.muni.fi.rpg.ui.gameMaster.encounters.NpcDetailScreen
 import cz.muni.fi.rpg.ui.partyList.PartyListScreen
 import cz.frantisekmasa.wfrp_master.navigation.Route
 import cz.frantisekmasa.wfrp_master.navigation.Routing
+import cz.muni.fi.rpg.ui.common.composables.AmbientUser
 import cz.muni.fi.rpg.ui.joinParty.InvitationScannerScreen
 import cz.muni.fi.rpg.ui.settings.SettingsScreen
 import cz.muni.fi.rpg.viewModels.AuthenticationViewModel
@@ -56,6 +57,7 @@ class MainActivity : AuthenticatedActivity(R.layout.activity_main) {
 
             Providers(
                 AmbientBackPressHandler provides backPressHandler,
+                AmbientHamburgerButtonHandler provides { openDrawer() },
                 AmbientUser provides user
             ) {
                 Theme {
@@ -113,6 +115,10 @@ class MainActivity : AuthenticatedActivity(R.layout.activity_main) {
         if (!backPressHandler.handle()) {
             super.onBackPressed()
         }
+    }
+
+    private fun openDrawer() {
+        findViewById<DrawerLayout>(R.id.drawer_layout)?.open()
     }
 
     @Suppress("UNUSED_PARAMETER")
