@@ -27,7 +27,7 @@ import cz.frantisekmasa.wfrp_master.core.ui.scaffolding.tabs.TabRow
 import cz.frantisekmasa.wfrp_master.core.ui.scaffolding.tabs.TabScreen
 import cz.frantisekmasa.wfrp_master.core.ui.viewinterop.fragmentManager
 import cz.frantisekmasa.wfrp_master.core.viewModel.viewModel
-import cz.muni.fi.rpg.model.domain.party.Party
+import cz.frantisekmasa.wfrp_master.core.domain.party.Party
 import cz.muni.fi.rpg.model.right
 import cz.muni.fi.rpg.ui.common.AdManager
 import cz.muni.fi.rpg.ui.common.ChangeAmbitionsDialog

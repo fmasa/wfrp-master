@@ -1,8 +1,8 @@
 package cz.muni.fi.rpg.viewModels
 
 import androidx.lifecycle.ViewModel
-import cz.muni.fi.rpg.model.domain.party.Party
-import cz.muni.fi.rpg.model.domain.party.PartyRepository
+import cz.frantisekmasa.wfrp_master.core.domain.party.Party
+import cz.frantisekmasa.wfrp_master.core.domain.party.PartyRepository
 import kotlinx.coroutines.flow.Flow
 import java.util.*
 

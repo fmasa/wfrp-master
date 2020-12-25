@@ -5,7 +5,7 @@ import com.fasterxml.jackson.databind.json.JsonMapper
 import cz.muni.fi.rpg.model.domain.invitation.AlreadyInParty
 import cz.muni.fi.rpg.model.domain.invitation.InvalidInvitation
 import cz.muni.fi.rpg.model.domain.invitation.InvitationProcessor
-import cz.muni.fi.rpg.model.domain.party.Invitation
+import cz.frantisekmasa.wfrp_master.core.domain.party.Invitation
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import timber.log.Timber

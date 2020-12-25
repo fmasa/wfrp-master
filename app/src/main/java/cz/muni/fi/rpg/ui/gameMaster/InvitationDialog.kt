@@ -24,7 +24,7 @@ import com.google.firebase.dynamiclinks.ktx.dynamicLinks
 import com.google.firebase.dynamiclinks.ktx.shortLinkAsync
 import com.google.firebase.ktx.Firebase
 import cz.muni.fi.rpg.R
-import cz.muni.fi.rpg.model.domain.party.Invitation
+import cz.frantisekmasa.wfrp_master.core.domain.party.Invitation
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow

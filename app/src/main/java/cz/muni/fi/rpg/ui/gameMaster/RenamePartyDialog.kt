@@ -10,7 +10,7 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
 import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.model.domain.common.CouldNotConnectToBackend
-import cz.muni.fi.rpg.model.domain.party.Party
+import cz.frantisekmasa.wfrp_master.core.domain.party.Party
 import cz.muni.fi.rpg.ui.common.forms.Form
 import cz.muni.fi.rpg.ui.common.serializableArgument
 import cz.muni.fi.rpg.ui.common.stringArgument

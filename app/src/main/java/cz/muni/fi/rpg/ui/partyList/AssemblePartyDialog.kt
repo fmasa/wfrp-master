@@ -12,8 +12,8 @@ import com.google.firebase.analytics.ktx.logEvent
 import com.google.firebase.ktx.Firebase
 import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.model.domain.common.CouldNotConnectToBackend
-import cz.muni.fi.rpg.model.domain.party.Party
-import cz.muni.fi.rpg.model.domain.party.PartyRepository
+import cz.frantisekmasa.wfrp_master.core.domain.party.Party
+import cz.frantisekmasa.wfrp_master.core.domain.party.PartyRepository
 import cz.muni.fi.rpg.ui.common.forms.Form
 import cz.muni.fi.rpg.ui.common.toast
 import cz.muni.fi.rpg.ui.views.TextInput

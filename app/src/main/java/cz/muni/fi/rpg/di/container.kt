@@ -10,6 +10,8 @@ import cz.frantisekmasa.wfrp_master.compendium.infrastructure.FirestoreCompendiu
 import cz.frantisekmasa.wfrp_master.compendium.ui.CompendiumViewModel
 import cz.frantisekmasa.wfrp_master.core.domain.identifiers.CharacterId
 import cz.frantisekmasa.wfrp_master.core.domain.identifiers.EncounterId
+import cz.frantisekmasa.wfrp_master.core.domain.party.Party
+import cz.frantisekmasa.wfrp_master.core.domain.party.PartyRepository
 import cz.muni.fi.rpg.BuildConfig
 import cz.muni.fi.rpg.model.cache.CharacterRepositoryIdentityMap
 import cz.muni.fi.rpg.model.cache.PartyRepositoryIdentityMap
@@ -19,7 +21,6 @@ import cz.muni.fi.rpg.model.domain.encounter.NpcRepository
 import cz.muni.fi.rpg.model.domain.encounter.EncounterRepository
 import cz.muni.fi.rpg.model.domain.inventory.InventoryItemRepository
 import cz.muni.fi.rpg.model.domain.invitation.InvitationProcessor
-import cz.muni.fi.rpg.model.domain.party.PartyRepository
 import cz.muni.fi.rpg.model.domain.skills.SkillRepository
 import cz.muni.fi.rpg.model.domain.spells.SpellRepository
 import cz.muni.fi.rpg.model.domain.talents.TalentRepository
@@ -32,10 +33,10 @@ import org.koin.core.scope.Scope
 import org.koin.dsl.module
 import java.util.*
 import cz.frantisekmasa.wfrp_master.core.firestore.aggregateMapper
+import cz.frantisekmasa.wfrp_master.core.firestore.repositories.FirestorePartyRepository
 import cz.muni.fi.rpg.model.domain.encounter.Encounter
 import cz.muni.fi.rpg.model.domain.encounter.Npc
 import cz.muni.fi.rpg.model.domain.inventory.InventoryItem
-import cz.muni.fi.rpg.model.domain.party.Party
 import cz.muni.fi.rpg.model.domain.skills.Skill
 import cz.muni.fi.rpg.model.domain.spells.Spell
 import cz.muni.fi.rpg.model.domain.talents.Talent
@@ -44,19 +45,19 @@ import cz.frantisekmasa.wfrp_master.compendium.domain.Spell as ComepndiumSpell
 import cz.frantisekmasa.wfrp_master.compendium.domain.Talent as CompendiumTalent
 
 val appModule = module {
-    fun Scope.skillCompendium() = FirestoreCompendium<CompendiumSkill>(
+    fun Scope.skillCompendium() = FirestoreCompendium(
         COLLECTION_COMPENDIUM_SKILLS,
         get(),
         aggregateMapper(CompendiumSkill::class),
     )
 
-    fun Scope.talentCompendium() = FirestoreCompendium<CompendiumTalent>(
+    fun Scope.talentCompendium() = FirestoreCompendium(
         COLLECTION_COMPENDIUM_TALENTS,
         get(),
         aggregateMapper(CompendiumTalent::class),
     )
 
-    fun Scope.spellCompendium() = FirestoreCompendium<ComepndiumSpell>(
+    fun Scope.spellCompendium() = FirestoreCompendium(
         COLLECTION_COMPENDIUM_SPELLS,
         get(),
         aggregateMapper(ComepndiumSpell::class),

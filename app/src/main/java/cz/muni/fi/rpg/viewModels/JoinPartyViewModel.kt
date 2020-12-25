@@ -2,7 +2,7 @@ package cz.muni.fi.rpg.viewModels
 
 import androidx.lifecycle.ViewModel
 import cz.muni.fi.rpg.model.domain.invitation.InvitationProcessor
-import cz.muni.fi.rpg.model.domain.party.Invitation
+import cz.frantisekmasa.wfrp_master.core.domain.party.Invitation
 
 class JoinPartyViewModel(private val invitationProcessor: InvitationProcessor) : ViewModel() {
 

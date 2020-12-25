@@ -29,7 +29,7 @@ import cz.frantisekmasa.wfrp_master.core.domain.identifiers.CharacterId
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.ContextMenu
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.EmptyUI
 import cz.frantisekmasa.wfrp_master.core.viewModel.viewModel
-import cz.muni.fi.rpg.model.domain.party.Invitation
+import cz.frantisekmasa.wfrp_master.core.domain.party.Invitation
 import cz.muni.fi.rpg.model.right
 import cz.muni.fi.rpg.ui.common.composables.*
 import cz.muni.fi.rpg.ui.gameMaster.adapter.Player

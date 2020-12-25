@@ -11,7 +11,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import cz.muni.fi.rpg.R
-import cz.muni.fi.rpg.model.domain.party.Party
+import cz.frantisekmasa.wfrp_master.core.domain.party.Party
 import cz.muni.fi.rpg.viewModels.PartyListViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers

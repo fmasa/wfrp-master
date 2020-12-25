@@ -1,20 +1,20 @@
-package cz.muni.fi.rpg.model.firestore.repositories
+package cz.frantisekmasa.wfrp_master.core.firestore.repositories
 
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.FirebaseFirestoreException
 import com.google.firebase.firestore.SetOptions
+import cz.frantisekmasa.wfrp_master.core.connectivity.CouldNotConnectToBackend
+import cz.frantisekmasa.wfrp_master.core.domain.party.Party
+import cz.frantisekmasa.wfrp_master.core.domain.party.PartyNotFound
+import cz.frantisekmasa.wfrp_master.core.domain.party.PartyRepository
 import cz.frantisekmasa.wfrp_master.core.firestore.AggregateMapper
-import cz.muni.fi.rpg.model.domain.common.CouldNotConnectToBackend
-import cz.muni.fi.rpg.model.domain.party.Party
-import cz.muni.fi.rpg.model.domain.party.PartyNotFound
-import cz.muni.fi.rpg.model.domain.party.PartyRepository
 import cz.frantisekmasa.wfrp_master.core.firestore.documentFlow
 import cz.frantisekmasa.wfrp_master.core.firestore.queryFlow
 import kotlinx.coroutines.tasks.await
 import timber.log.Timber
 import java.util.*
 
-internal class FirestorePartyRepository(
+/* internal */ class FirestorePartyRepository(
     private val firestore: FirebaseFirestore,
     private val mapper: AggregateMapper<Party>
 ) : PartyRepository {

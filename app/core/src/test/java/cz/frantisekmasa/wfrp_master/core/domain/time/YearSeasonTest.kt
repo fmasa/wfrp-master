@@ -1,4 +1,4 @@
-package cz.muni.fi.rpg.model.domain.party.time
+package cz.frantisekmasa.wfrp_master.core.domain.time
 
 import junit.framework.TestCase
 

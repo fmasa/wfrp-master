@@ -5,9 +5,9 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.SetOptions
 import cz.muni.fi.rpg.model.domain.invitation.AlreadyInParty
 import cz.muni.fi.rpg.model.domain.invitation.InvitationProcessor
-import cz.muni.fi.rpg.model.domain.party.Invitation
-import cz.muni.fi.rpg.model.domain.party.PartyNotFound
-import cz.muni.fi.rpg.model.domain.party.PartyRepository
+import cz.frantisekmasa.wfrp_master.core.domain.party.Invitation
+import cz.frantisekmasa.wfrp_master.core.domain.party.PartyNotFound
+import cz.frantisekmasa.wfrp_master.core.domain.party.PartyRepository
 import kotlinx.coroutines.tasks.await
 import java.util.*
 

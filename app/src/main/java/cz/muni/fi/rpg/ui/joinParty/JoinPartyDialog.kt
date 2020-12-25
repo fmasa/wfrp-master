@@ -18,7 +18,7 @@ import com.google.firebase.ktx.Firebase
 import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.model.domain.invitation.AlreadyInParty
 import cz.muni.fi.rpg.model.domain.invitation.InvalidInvitation
-import cz.muni.fi.rpg.model.domain.party.Invitation
+import cz.frantisekmasa.wfrp_master.core.domain.party.Invitation
 import cz.muni.fi.rpg.ui.common.parcelableArgument
 import cz.muni.fi.rpg.ui.common.stringArgument
 import cz.muni.fi.rpg.ui.common.toast
