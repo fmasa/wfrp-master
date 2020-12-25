@@ -18,7 +18,7 @@ import cz.muni.fi.rpg.ui.common.toast
 import cz.muni.fi.rpg.ui.views.TextInput
 import cz.muni.fi.rpg.viewModels.GameMasterViewModel
 import kotlinx.coroutines.*
-import org.koin.android.viewmodel.ext.android.viewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 import timber.log.Timber
 import java.util.*

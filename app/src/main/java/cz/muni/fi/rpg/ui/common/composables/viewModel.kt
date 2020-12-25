@@ -5,7 +5,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.ViewModelStoreOwnerAmbient
 import androidx.lifecycle.ViewModel
 import cz.muni.fi.rpg.viewModels.GameMasterViewModel
-import org.koin.android.viewmodel.ext.android.viewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.context.GlobalContext
 import org.koin.core.parameter.ParametersDefinition
 import java.util.*

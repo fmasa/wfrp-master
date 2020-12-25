@@ -3,7 +3,7 @@ package cz.frantisekmasa.wfrp_master.core.viewModel
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.AmbientViewModelStoreOwner
 import androidx.lifecycle.ViewModel
-import org.koin.android.viewmodel.ext.android.viewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.ParametersDefinition
 
 @Composable

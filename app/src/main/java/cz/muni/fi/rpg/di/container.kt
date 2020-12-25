@@ -27,7 +27,7 @@ import cz.muni.fi.rpg.model.firestore.*
 import cz.muni.fi.rpg.model.firestore.repositories.*
 import cz.muni.fi.rpg.ui.common.AdManager
 import cz.muni.fi.rpg.viewModels.*
-import org.koin.android.viewmodel.dsl.viewModel
+import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.core.scope.Scope
 import org.koin.dsl.module
 import java.util.*

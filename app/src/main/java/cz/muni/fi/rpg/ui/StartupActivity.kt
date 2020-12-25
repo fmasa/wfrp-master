@@ -4,6 +4,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.ui.common.AuthenticationFragment
+import timber.log.Timber
 
 class StartupActivity : AppCompatActivity(R.layout.activity_startup),
     AuthenticationFragment.Listener {

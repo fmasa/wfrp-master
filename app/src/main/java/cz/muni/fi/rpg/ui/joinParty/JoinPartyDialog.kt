@@ -24,7 +24,7 @@ import cz.muni.fi.rpg.ui.common.stringArgument
 import cz.muni.fi.rpg.ui.common.toast
 import cz.muni.fi.rpg.viewModels.JoinPartyViewModel
 import kotlinx.coroutines.*
-import org.koin.android.viewmodel.ext.android.viewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
 
 class JoinPartyDialog : DialogFragment(), CoroutineScope by CoroutineScope(Dispatchers.Main) {

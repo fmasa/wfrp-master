@@ -60,7 +60,7 @@ dependencies {
 
     // Koin
     api("org.koin:koin-android:2.2.0")
-    api("org.koin:koin-android-viewmodel:2.2.0")
+    api("org.koin:koin-androidx-viewmodel:2.2.0")
     api("org.koin:koin-androidx-fragment:2.2.0")
 
     // Firebase-related dependencies
