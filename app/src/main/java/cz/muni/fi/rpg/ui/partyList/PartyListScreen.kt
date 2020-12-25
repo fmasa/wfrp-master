@@ -57,7 +57,7 @@ fun PartyListScreen(routing: Routing<Route.PartyList>) {
                     icon = { Icon(vectorResource(R.drawable.ic_camera)) },
                     text = { Text(stringResource(R.string.scanCode_title)) },
                     onClick = {
-                        JoinPartyActivity.start(context)
+                        routing.backStack.push(Route.InvitationScanner)
                         menuState.value = MenuState.COLLAPSED
                     }
                 )
@@ -138,7 +138,7 @@ private fun MainContainer(
                     subTextId = R.string.no_parties_sub_prompt,
                     drawableResourceId = R.drawable.ic_rally_the_troops,
                 )
-                return@Box
+                return@let
             }
 
             PartyList(parties = it, onClick = onClick, onRemove = onRemove)
