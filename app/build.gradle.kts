@@ -143,7 +143,6 @@ dependencies {
     implementation("androidx.datastore:datastore-preferences:1.0.0-alpha05");
 
     implementation("com.google.android.gms:play-services-ads:19.6.0")
-    implementation("com.google.android.ads.consent:consent-library:1.0.8")
     implementation("com.google.android.gms:play-services-auth:19.0.0")
 
     // Permission management
