@@ -33,7 +33,6 @@ import cz.frantisekmasa.wfrp_master.core.ui.primitives.ItemIcon
 import cz.frantisekmasa.wfrp_master.core.ui.viewinterop.fragmentManager
 import cz.frantisekmasa.wfrp_master.core.viewModel.viewModel
 import cz.muni.fi.rpg.ui.common.composables.*
-import cz.muni.fi.rpg.ui.joinParty.JoinPartyActivity
 import cz.frantisekmasa.wfrp_master.navigation.Route
 import cz.frantisekmasa.wfrp_master.navigation.Routing
 

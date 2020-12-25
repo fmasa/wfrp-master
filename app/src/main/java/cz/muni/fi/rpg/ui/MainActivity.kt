@@ -29,6 +29,7 @@ import cz.muni.fi.rpg.ui.gameMaster.encounters.NpcDetailScreen
 import cz.muni.fi.rpg.ui.partyList.PartyListScreen
 import cz.frantisekmasa.wfrp_master.navigation.Route
 import cz.frantisekmasa.wfrp_master.navigation.Routing
+import cz.muni.fi.rpg.ui.joinParty.InvitationScannerScreen
 import cz.muni.fi.rpg.ui.settings.SettingsScreen
 import cz.muni.fi.rpg.viewModels.AuthenticationViewModel
 import org.koin.android.ext.android.inject
@@ -97,6 +98,9 @@ class MainActivity : AuthenticatedActivity(R.layout.activity_main) {
                             }
                             is Route.CompendiumImport -> {
                                 CompendiumImportScreen(Routing(route, backStack))
+                            }
+                            is Route.InvitationScanner -> {
+                                InvitationScannerScreen(Routing(route, backStack))
                             }
                         }
                     }

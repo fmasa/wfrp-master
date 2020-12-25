@@ -125,6 +125,7 @@ val appModule = module {
     viewModel { (characterId: CharacterId) -> TalentsViewModel(characterId, get(), talentCompendium()) }
     viewModel { AuthenticationViewModel(get()) }
     viewModel { JoinPartyViewModel(get()) }
+    viewModel { InvitationScannerViewModel(get(), get()) }
     viewModel { PartyListViewModel(get()) }
     viewModel { SettingsViewModel(get(), get()) }
     viewModel { (partyId: UUID) -> CharacterCreationViewModel(partyId, get()) }

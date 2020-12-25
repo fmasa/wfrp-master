@@ -147,8 +147,15 @@ dependencies {
     implementation("com.google.android.ads.consent:consent-library:1.0.8")
     implementation("com.google.android.gms:play-services-auth:19.0.0")
 
-    implementation("com.google.zxing:core:3.4.0")
-    implementation("me.dm7.barcodescanner:zxing:1.9.13")
+    // Permission management
+    implementation("com.sagar:coroutinespermission:2.0.3")
+
+    // QR code scanning
+    implementation("com.google.zxing:core:3.3.3")
+    implementation("androidx.camera:camera-camera2:1.0.0-rc01")
+    implementation("androidx.camera:camera-core:1.0.0-rc01")
+    implementation("androidx.camera:camera-lifecycle:1.0.0-rc01")
+    implementation("androidx.camera:camera-view:1.0.0-alpha20")
 
     implementation("androidx.annotation:annotation:1.1.0")
     implementation("androidx.lifecycle:lifecycle-extensions:2.2.0")

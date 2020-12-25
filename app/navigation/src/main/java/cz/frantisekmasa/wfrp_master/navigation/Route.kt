@@ -42,4 +42,6 @@ sealed class Route {
 
     @Immutable
     class CompendiumImport(val partyId: UUID) : Route()
+
+    object InvitationScanner : Route()
 }

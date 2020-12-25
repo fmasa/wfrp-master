@@ -59,7 +59,7 @@
 
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="qr_scan_prompt">Scan the code provided by your GM</string>
-    <string name="join_party_dialog_party_name">You are joining</string>
+    <string name="join_party_dialog_party_name">You have been invited to </string>
     <string name="join_party_dialog_prompt">Do you want to continue?</string>
     <string name="button_continue">Continue</string>
     <string name="error_already_party_member">You are already member of this party</string>
@@ -303,4 +303,6 @@
     <string name="rulebook_import_pick_talents">Select which talents you want to import.</string>
     <string name="rulebook_import_pick_spells">Select which spells you want to import.</string>
     <string name="error_import_failed">PDF import failed. Check that chose valid rulebook PDF.</string>
+
+    <string name="error_camera_permission_required">Camera permission is required for QR code scanning</string>
 </resources>

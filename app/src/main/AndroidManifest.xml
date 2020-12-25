@@ -32,9 +32,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".ui.joinParty.JoinPartyActivity"
-            android:label="@string/title_joinParty" />
         <activity android:name=".ui.joinParty.InvitationLinkActivity"
             android:label="@string/title_joinParty">
             <intent-filter>
