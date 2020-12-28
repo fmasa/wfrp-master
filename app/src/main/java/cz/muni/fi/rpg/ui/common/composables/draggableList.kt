@@ -7,7 +7,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.gesture.*
-import androidx.compose.ui.platform.DensityAmbient
+import androidx.compose.ui.platform.AmbientDensity
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -36,7 +36,7 @@ fun <T> DraggableListFor(
 ) {
     val dragY = animatedFloat(0f)
     val draggedIndex = remember { mutableStateOf<Int?>(null) }
-    val yOffset = with(DensityAmbient.current) { dragY.value.toDp() }
+    val yOffset = with(AmbientDensity.current) { dragY.value.toDp() }
 
     val draggedIndexValue = draggedIndex.value
     val currentlyAboveIndex = draggedIndexValue?.let {
@@ -88,7 +88,7 @@ private fun Modifier.scrollFriendlyDraggable(
     onDragStopped: () -> Unit = {},
     onDrag: Density.(Float) -> Unit
 ) = composed {
-    val density = DensityAmbient.current
+    val density = AmbientDensity.current
 
     longPressDragGestureFilter(
         DragCallback(

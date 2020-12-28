@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="button_finish">Finish</string>
+    <string name="button_save">Save</string>
+    <string name="button_cancel">Cancel</string>
+    <string name="button_submit">Submit</string>
+    <string name="button_remove">Remove</string>
+
+    <!-- Form errors -->
+    <string name="error_cannot_be_empty">Cannot be empty!</string>
+
+    <!-- Common input labels -->
+    <string name="label_name" translatable="false">Name</string>
+    <string name="label_description">Description (Optional)</string>
+</resources>

@@ -6,7 +6,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.widget.TextView
 import android.widget.Toast
-import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContract
 import androidx.appcompat.app.AlertDialog
 import androidx.compose.foundation.Image
@@ -16,13 +15,15 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.ContextAmbient
+import androidx.compose.ui.platform.AmbientContext
 import androidx.compose.ui.res.imageResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.firebase.auth.FirebaseAuthUserCollisionException
+import cz.frantisekmasa.wfrp_master.core.ui.viewinterop.registerForActivityResult
+import cz.frantisekmasa.wfrp_master.core.viewModel.viewModel
 import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.model.authentication.User
 import cz.muni.fi.rpg.ui.common.composables.*
@@ -36,55 +37,47 @@ import timber.log.Timber
 @Composable
 fun SignInCard(viewModel: SettingsViewModel) {
     val authViewModel: AuthenticationViewModel by viewModel()
-    val activity = activity()
 
     val contract = GoogleSignInContract(authViewModel)
-    val context = ContextAmbient.current
+    val context = AmbientContext.current
     val coroutineScope = rememberCoroutineScope()
     val user = AmbientUser.current
 
-    lateinit var launcher: ActivityResultLauncher<Int?>
-    onCommit {
-        launcher = activity.registerForActivityResult(contract) { result ->
-            coroutineScope.launch(Dispatchers.IO) {
-                try {
-                    GoogleSignIn.getSignedInAccountFromIntent(result.intent)
-                        .await()
-                        .idToken?.let { idToken ->
-                            try {
-                                authViewModel.linkAccountToGoogle(idToken)
-                            } catch (e: FirebaseAuthUserCollisionException) {
-                                Timber.d(
-                                    e,
-                                    "Account \"${e.email}\" is already associated with another account"
+    val launcher by registerForActivityResult(contract) { result ->
+        coroutineScope.launch(Dispatchers.IO) {
+            try {
+                GoogleSignIn.getSignedInAccountFromIntent(result.intent)
+                    .await()
+                    .idToken?.let { idToken ->
+                        try {
+                            authViewModel.linkAccountToGoogle(idToken)
+                        } catch (e: FirebaseAuthUserCollisionException) {
+                            Timber.d(
+                                e,
+                                "Account \"${e.email}\" is already associated with another account"
+                            )
+                            withContext(Dispatchers.Main) {
+                                coroutineScope.showSignInConfirmationDialog(
+                                    context,
+                                    authViewModel,
+                                    user,
+                                    viewModel,
+                                    idToken
                                 )
-                                withContext(Dispatchers.Main) {
-                                    coroutineScope.showSignInConfirmationDialog(
-                                        context,
-                                        authViewModel,
-                                        user,
-                                        viewModel,
-                                        idToken
-                                    )
-                                }
                             }
                         }
-                } catch (e: Throwable) {
-                    Timber.e(e, "Google sign-in failed")
-                    withContext(Dispatchers.Main) {
-                        Toast.makeText(
-                            context,
-                            "Google authentication failed",
-                            Toast.LENGTH_SHORT
-                        ).show()
                     }
+            } catch (e: Throwable) {
+                Timber.e(e, "Google sign-in failed")
+                withContext(Dispatchers.Main) {
+                    Toast.makeText(
+                        context,
+                        "Google authentication failed",
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
             }
         }
-    }
-
-    onDispose {
-        launcher.unregister()
     }
 
     CardContainer(Modifier.fillMaxWidth().padding(horizontal = 8.dp)) {

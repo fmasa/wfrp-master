@@ -1,6 +1,6 @@
 package cz.muni.fi.rpg.model.domain.character
 
-import cz.muni.fi.rpg.model.domain.common.Money
+import cz.frantisekmasa.wfrp_master.core.domain.Money
 import java.lang.Exception
 
 class NotEnoughMoney(requiredAmount: Money, cause: Throwable)

@@ -3,9 +3,10 @@ package cz.muni.fi.rpg.viewModels
 import androidx.lifecycle.ViewModel
 import arrow.core.Either
 import cz.muni.fi.rpg.model.domain.armour.Armor
-import cz.muni.fi.rpg.model.domain.character.Stats
+import cz.frantisekmasa.wfrp_master.core.domain.Stats
+import cz.frantisekmasa.wfrp_master.core.domain.identifiers.EncounterId
+import cz.frantisekmasa.wfrp_master.core.domain.identifiers.NpcId
 import cz.muni.fi.rpg.model.domain.encounter.*
-import cz.muni.fi.rpg.model.domain.encounters.EncounterId
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 import timber.log.Timber

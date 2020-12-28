@@ -4,10 +4,12 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.FirebaseFirestoreException
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.SetOptions
+import cz.frantisekmasa.wfrp_master.core.domain.identifiers.EncounterId
+import cz.frantisekmasa.wfrp_master.core.domain.identifiers.NpcId
+import cz.frantisekmasa.wfrp_master.core.firestore.AggregateMapper
+import cz.frantisekmasa.wfrp_master.core.firestore.queryFlow
 import cz.muni.fi.rpg.model.domain.encounter.*
-import cz.muni.fi.rpg.model.domain.encounters.EncounterId
 import cz.muni.fi.rpg.model.firestore.*
-import cz.muni.fi.rpg.model.firestore.AggregateMapper
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.tasks.await
 

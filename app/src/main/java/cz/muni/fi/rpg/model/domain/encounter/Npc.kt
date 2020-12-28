@@ -2,7 +2,7 @@ package cz.muni.fi.rpg.model.domain.encounter
 
 import cz.muni.fi.rpg.model.domain.armour.Armor
 import cz.muni.fi.rpg.model.domain.character.CurrentConditions
-import cz.muni.fi.rpg.model.domain.character.Stats
+import cz.frantisekmasa.wfrp_master.core.domain.Stats
 import java.util.*
 
 class Npc(

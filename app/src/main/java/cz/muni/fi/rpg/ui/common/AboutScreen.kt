@@ -13,11 +13,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import cz.frantisekmasa.wfrp_master.core.ui.buttons.BackButton
 import cz.muni.fi.rpg.BuildConfig
 import cz.muni.fi.rpg.R
-import cz.muni.fi.rpg.ui.common.composables.BackButton
-import cz.muni.fi.rpg.ui.router.Route
-import cz.muni.fi.rpg.ui.router.Routing
+import cz.frantisekmasa.wfrp_master.navigation.Route
+import cz.frantisekmasa.wfrp_master.navigation.Routing
 
 @Composable
 fun AboutScreen(routing: Routing<Route.About>) {

@@ -9,6 +9,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.gesture.longPressGestureFilter
+import cz.frantisekmasa.wfrp_master.core.ui.primitives.ContextMenu
+import cz.frantisekmasa.wfrp_master.core.ui.primitives.ItemIcon
 
 @Composable
 fun CardItem(
@@ -17,7 +19,7 @@ fun CardItem(
     @DrawableRes iconRes: Int,
     onClick: () -> Unit,
     contextMenuItems: List<ContextMenu.Item>,
-    badgeContent: @Composable () -> Unit = {}
+    badge: @Composable () -> Unit = {},
 ) {
     val menuOpened = mutableStateOf(false)
 
@@ -28,7 +30,7 @@ fun CardItem(
         icon = { ItemIcon(iconRes, ItemIcon.Size.Small) },
         text = { Text(name) },
         secondaryText = if (description.isNotBlank()) ({ Text(description) }) else null,
-        trailing = badgeContent,
+        trailing = badge,
     )
 
     Divider()

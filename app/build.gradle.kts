@@ -7,11 +7,10 @@ import com.github.triplet.gradle.play.PlayPublisherExtension
 plugins {
     id("com.android.application")
     id("kotlin-android")
-    id("kotlin-android-extensions")
+    id("kotlin-parcelize")
     id("com.google.gms.google-services")
     id("kotlin-kapt")
     id("com.google.firebase.crashlytics")
-
     id("com.github.triplet.play") apply false
 }
 
@@ -27,16 +26,13 @@ if (playStoreJsonFile.exists()) {
     }
 }
 
-val composeVersion = "1.0.0-alpha08"
-
 android {
 
     lintOptions {
         disable("InvalidFragmentVersionForActivityResult") // This is temporary until we drop authentication fragment
     }
 
-    compileSdkVersion(29)
-    buildToolsVersion = "29.0.3"
+    compileSdkVersion(30)
 
     defaultConfig {
         applicationId = "cz.frantisekmasa.dnd"
@@ -102,6 +98,10 @@ android {
         compose = true
     }
 
+    composeOptions {
+        kotlinCompilerExtensionVersion = "1.0.0-alpha09"
+    }
+
     compileOptions {
         // Allow use of Java 8 APIs on older Android versions
         isCoreLibraryDesugaringEnabled = true
@@ -117,84 +117,54 @@ android {
                 "-Xallow-jvm-ir-dependencies" +
                 "-Xskip-prerelease-check" +
                 "-Xopt-in=androidx.compose.foundation.layout.ExperimentalLayout" +
-                "-Xopt-in=kotlinx.coroutines.ExperimentalCoroutinesApi"
-    }
-
-    composeOptions {
-        kotlinCompilerExtensionVersion = composeVersion
+                "-Xopt-in=kotlinx.coroutines.ExperimentalCoroutinesApi" +
+                "-P" +
+                "plugin:androidx.compose.compiler.plugins.kotlin:suppressKotlinVersionCompatibilityCheck=true"
     }
 }
 
 dependencies {
+    implementation(project(":app:core"))
+    implementation(project(":app:navigation"))
+    implementation(project(":app:compendium"))
+
     implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar"))))
     implementation("androidx.appcompat:appcompat:1.2.0")
-    implementation("androidx.core:core-ktx:1.3.2")
     implementation("androidx.constraintlayout:constraintlayout:2.1.0-alpha1")
-    implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.11.0")
-    implementation("com.wdullaer:materialdatetimepicker:4.2.3") {
-        exclude(group = "androidx.appcompat")
-        exclude(group = "androidx.recyclerview")
-    }
 
     // Allow use of Java 8 APIs on older Android versions
     coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:1.1.1")
 
     // Time picker dialog
-    implementation("com.vanpra.compose-material-dialogs:datetime:0.2.7")
-
-    // OpenPDF
-    implementation("com.github.librepdf:openpdf:1.3.23")
-    implementation("com.github.andob:android-awt:1.0.0")
-    implementation("com.github.h0tk3y.betterParse:better-parse:0.4.0")
-
-    // Koin
-    implementation("org.koin:koin-android:2.2.0")
-    implementation("org.koin:koin-android-viewmodel:2.2.0")
-    implementation("org.koin:koin-androidx-fragment:2.2.0")
-
-    // Jetpack Compose
-    implementation("androidx.compose.ui:ui:$composeVersion")
-    implementation("androidx.compose.material:material:$composeVersion")
-    implementation("androidx.compose.ui:ui-tooling:$composeVersion")
+    implementation("com.vanpra.compose-material-dialogs:datetime:0.2.8")
 
     // Navigation
     implementation("com.github.zsoltk:compose-router:0.23.0")
 
     // Shared Preferences DataStore
-    implementation("androidx.datastore:datastore-preferences:1.0.0-alpha05")
-
-    // Firebase-related dependencies
-    implementation("com.google.firebase:firebase-analytics:18.0.0")
-    implementation("com.firebaseui:firebase-ui-auth:6.2.0")
-    implementation("com.google.firebase:firebase-firestore-ktx:22.0.0")
-    implementation("com.google.firebase:firebase-analytics-ktx:18.0.0")
-    implementation("com.google.firebase:firebase-crashlytics:17.3.0")
-    implementation("com.google.firebase:firebase-dynamic-links-ktx:19.1.1")
-
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.1")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.4.1")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.3.5")
+    implementation("androidx.datastore:datastore-preferences:1.0.0-alpha05");
 
     implementation("com.google.android.gms:play-services-ads:19.6.0")
-    implementation("com.google.android.ads.consent:consent-library:1.0.8")
     implementation("com.google.android.gms:play-services-auth:19.0.0")
 
-    implementation("com.google.zxing:core:3.4.0")
-    implementation("me.dm7.barcodescanner:zxing:1.9.13")
+    // Permission management
+    implementation("com.sagar:coroutinespermission:2.0.3")
 
-    implementation("com.google.android.material:material:1.2.1")
+    // QR code scanning
+    implementation("com.google.zxing:core:3.3.3")
+    implementation("androidx.camera:camera-camera2:1.0.0-rc01")
+    implementation("androidx.camera:camera-core:1.0.0-rc01")
+    implementation("androidx.camera:camera-lifecycle:1.0.0-rc01")
+    implementation("androidx.camera:camera-view:1.0.0-alpha20")
+
     implementation("androidx.annotation:annotation:1.1.0")
     implementation("androidx.lifecycle:lifecycle-extensions:2.2.0")
     implementation("androidx.legacy:legacy-support-v4:1.0.0")
     implementation("androidx.drawerlayout:drawerlayout:1.1.1")
 
+    // Testing utilities
     testImplementation("junit:junit:4.13.1")
     androidTestImplementation("androidx.test.ext:junit:1.1.2")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.3.0")
-
-    implementation("io.arrow-kt:arrow-core:0.10.4")
-
-    implementation("com.jakewharton.timber:timber:4.7.1")
-
     testImplementation("org.mockito:mockito-core:2.7.22")
 }

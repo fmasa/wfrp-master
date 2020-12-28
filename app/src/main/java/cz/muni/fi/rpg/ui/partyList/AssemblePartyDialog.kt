@@ -12,15 +12,15 @@ import com.google.firebase.analytics.ktx.logEvent
 import com.google.firebase.ktx.Firebase
 import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.model.domain.common.CouldNotConnectToBackend
-import cz.muni.fi.rpg.model.domain.party.Party
-import cz.muni.fi.rpg.model.domain.party.PartyRepository
+import cz.frantisekmasa.wfrp_master.core.domain.party.Party
+import cz.frantisekmasa.wfrp_master.core.domain.party.PartyRepository
 import cz.muni.fi.rpg.ui.common.forms.Form
 import cz.muni.fi.rpg.ui.common.toast
 import cz.muni.fi.rpg.ui.views.TextInput
 import cz.muni.fi.rpg.viewModels.AuthenticationViewModel
 import kotlinx.coroutines.*
 import org.koin.android.ext.android.inject
-import org.koin.android.viewmodel.ext.android.viewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
 import java.util.*
 

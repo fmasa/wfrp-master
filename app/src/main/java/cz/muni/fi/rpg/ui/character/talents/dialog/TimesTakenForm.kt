@@ -12,10 +12,12 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.savedinstancestate.savedInstanceState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.ContextAmbient
+import androidx.compose.ui.platform.AmbientContext
 import androidx.compose.ui.res.stringResource
+import cz.frantisekmasa.wfrp_master.compendium.domain.exceptions.CompendiumItemNotFound
+import cz.frantisekmasa.wfrp_master.core.ui.primitives.FullScreenProgress
+import cz.frantisekmasa.wfrp_master.core.ui.scaffolding.SaveAction
 import cz.muni.fi.rpg.R
-import cz.muni.fi.rpg.model.domain.compendium.exceptions.CompendiumItemNotFound
 import cz.muni.fi.rpg.model.domain.talents.Talent
 import cz.muni.fi.rpg.ui.common.composables.*
 import cz.muni.fi.rpg.viewModels.TalentsViewModel
@@ -49,7 +51,7 @@ internal fun TimesTakenForm(
                 },
                 actions = {
                     val coroutineScope = rememberCoroutineScope()
-                    val context = ContextAmbient.current
+                    val context = AmbientContext.current
 
                     SaveAction(
                         enabled = !saving,

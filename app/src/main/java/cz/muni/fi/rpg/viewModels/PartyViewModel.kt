@@ -1,7 +1,7 @@
 package cz.muni.fi.rpg.viewModels
 
 import androidx.lifecycle.ViewModel
-import cz.muni.fi.rpg.model.domain.party.PartyRepository
+import cz.frantisekmasa.wfrp_master.core.domain.party.PartyRepository
 import java.util.*
 
 class PartyViewModel(

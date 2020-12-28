@@ -1,9 +1,9 @@
 package cz.muni.fi.rpg.viewModels
 
 import androidx.lifecycle.ViewModel
-import cz.muni.fi.rpg.model.domain.character.CharacterId
-import cz.muni.fi.rpg.model.domain.compendium.Compendium
-import cz.muni.fi.rpg.model.domain.compendium.Spell as CompendiumSpell
+import cz.frantisekmasa.wfrp_master.compendium.domain.Compendium
+import cz.frantisekmasa.wfrp_master.compendium.domain.Spell as CompendiumSpell
+import cz.frantisekmasa.wfrp_master.core.domain.identifiers.CharacterId
 import cz.muni.fi.rpg.model.domain.spells.Spell
 import cz.muni.fi.rpg.model.domain.spells.SpellRepository
 import kotlinx.coroutines.CoroutineScope
@@ -21,7 +21,7 @@ class SpellsViewModel(
     val spells: Flow<List<Spell>> = spellRepository.findAllForCharacter(characterId)
     val compendiumSpellsCount: Flow<Int> by lazy { compendiumSpells.map { it.size } }
 
-    val notUsedSpellsFromCompendium: Flow<List<cz.muni.fi.rpg.model.domain.compendium.Spell>> by lazy {
+    val notUsedSpellsFromCompendium: Flow<List<CompendiumSpell>> by lazy {
         compendiumSpells.zip(spells) { compendiumSpells, characterSpells ->
             val spellsUsedByCharacter = characterSpells.mapNotNull { it.compendiumId }.toSet()
             compendiumSpells.filter { !spellsUsedByCharacter.contains(it.id) }

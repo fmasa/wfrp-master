@@ -11,11 +11,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import cz.frantisekmasa.wfrp_master.core.ui.forms.FormData
+import cz.frantisekmasa.wfrp_master.core.ui.forms.Rules
 import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.model.domain.character.Points
-import cz.muni.fi.rpg.ui.common.composables.FormData
-import cz.muni.fi.rpg.ui.common.composables.Rules
-import cz.muni.fi.rpg.ui.common.composables.TextInput
+import cz.frantisekmasa.wfrp_master.core.ui.forms.TextInput
 
 object PointsPoolForm {
 

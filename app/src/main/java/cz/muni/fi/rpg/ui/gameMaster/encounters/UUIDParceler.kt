@@ -1,7 +1,7 @@
 package cz.muni.fi.rpg.ui.gameMaster.encounters
 
 import android.os.Parcel
-import kotlinx.android.parcel.Parceler
+import kotlinx.parcelize.Parceler
 import java.util.*
 
 object UUIDParceler : Parceler<UUID> {

@@ -9,11 +9,11 @@ import androidx.fragment.app.Fragment
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.common.api.ApiException
 import cz.muni.fi.rpg.R
-import cz.muni.fi.rpg.common.log.Reporter
+import cz.frantisekmasa.wfrp_master.core.logging.Reporter
 import cz.muni.fi.rpg.viewModels.AuthenticationViewModel
 import kotlinx.coroutines.*
 import kotlinx.coroutines.tasks.await
-import org.koin.android.viewmodel.ext.android.viewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
 
 /**
@@ -24,7 +24,7 @@ import timber.log.Timber
  *
  * @see AuthenticationFragment.Listener
  */
-class AuthenticationFragment : Fragment(), CoroutineScope by CoroutineScope(Dispatchers.Default) {
+class AuthenticationFragment : Fragment(), CoroutineScope by CoroutineScope(Dispatchers.Main) {
 
     companion object {
         const val CODE_SIGN_IN = 1
@@ -39,6 +39,8 @@ class AuthenticationFragment : Fragment(), CoroutineScope by CoroutineScope(Disp
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
+
+        Timber.d("AuthenticationFragment was attached to $context")
 
         require(context is Listener)
         listener = context
@@ -66,14 +68,16 @@ class AuthenticationFragment : Fragment(), CoroutineScope by CoroutineScope(Disp
 
             val context = requireContext()
 
-            viewModel.obtainGoogleToken(context)?.let {
-                authenticateWithGoogle(it)
-                return@launch
-            }
+            withContext(Dispatchers.Default) {
+                viewModel.obtainGoogleToken(context)?.let {
+                    authenticateWithGoogle(it)
+                    return@withContext
+                }
 
-            Timber.d("Could not obtain Google account, starting Sign-In")
-            withContext(Dispatchers.Main) {
-                startActivityForResult(viewModel.getGoogleSignInIntent(context), CODE_SIGN_IN)
+                Timber.d("Could not obtain Google account, starting Sign-In")
+                withContext(Dispatchers.Main) {
+                    startActivityForResult(viewModel.getGoogleSignInIntent(context), CODE_SIGN_IN)
+                }
             }
         }
     }
@@ -130,6 +134,6 @@ class AuthenticationFragment : Fragment(), CoroutineScope by CoroutineScope(Disp
         val userId = viewModel.getUserId()
 
         Reporter.setUserId(userId)
-        withContext(Dispatchers.Main) { listener.onAuthenticated(userId) }
+        listener.onAuthenticated(userId)
     }
 }

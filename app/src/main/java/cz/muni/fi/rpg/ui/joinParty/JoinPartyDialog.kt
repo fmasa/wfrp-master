@@ -18,13 +18,13 @@ import com.google.firebase.ktx.Firebase
 import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.model.domain.invitation.AlreadyInParty
 import cz.muni.fi.rpg.model.domain.invitation.InvalidInvitation
-import cz.muni.fi.rpg.model.domain.party.Invitation
+import cz.frantisekmasa.wfrp_master.core.domain.party.Invitation
 import cz.muni.fi.rpg.ui.common.parcelableArgument
 import cz.muni.fi.rpg.ui.common.stringArgument
 import cz.muni.fi.rpg.ui.common.toast
 import cz.muni.fi.rpg.viewModels.JoinPartyViewModel
 import kotlinx.coroutines.*
-import org.koin.android.viewmodel.ext.android.viewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
 
 class JoinPartyDialog : DialogFragment(), CoroutineScope by CoroutineScope(Dispatchers.Main) {

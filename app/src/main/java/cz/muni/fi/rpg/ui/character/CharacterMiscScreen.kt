@@ -14,13 +14,15 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.ContextAmbient
+import androidx.compose.ui.platform.AmbientContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.model.domain.character.Character
-import cz.muni.fi.rpg.model.domain.character.CharacterId
+import cz.frantisekmasa.wfrp_master.core.domain.identifiers.CharacterId
+import cz.frantisekmasa.wfrp_master.core.ui.viewinterop.fragmentManager
+import cz.frantisekmasa.wfrp_master.core.viewModel.viewModel
 import cz.muni.fi.rpg.ui.common.ChangeAmbitionsDialog
 import cz.muni.fi.rpg.ui.common.composables.*
 import cz.muni.fi.rpg.ui.views.TextInput
@@ -36,7 +38,7 @@ internal fun CharacterMiscScreen(
     character: Character,
     modifier: Modifier = Modifier,
 ) {
-    val context = ContextAmbient.current
+    val context = AmbientContext.current
     val viewModel: CharacterMiscViewModel by viewModel { parametersOf(characterId) }
     val coroutineScope = rememberCoroutineScope()
 

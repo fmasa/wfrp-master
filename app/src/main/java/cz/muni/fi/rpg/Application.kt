@@ -1,8 +1,8 @@
 package cz.muni.fi.rpg
 
 import com.google.firebase.crashlytics.FirebaseCrashlytics
-import cz.muni.fi.rpg.common.log.CrashlyticsTree
-import cz.muni.fi.rpg.common.log.KoinTimberLogger
+import cz.frantisekmasa.wfrp_master.core.logging.CrashlyticsTree
+import cz.frantisekmasa.wfrp_master.core.logging.KoinTimberLogger
 import cz.muni.fi.rpg.di.appModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.androidx.fragment.koin.fragmentFactory

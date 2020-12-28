@@ -1,6 +1,6 @@
 package cz.muni.fi.rpg.model.domain.skills
 
-import cz.muni.fi.rpg.model.domain.character.CharacterId
+import cz.frantisekmasa.wfrp_master.core.domain.identifiers.CharacterId
 import kotlinx.coroutines.flow.Flow
 import java.util.UUID
 

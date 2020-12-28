@@ -3,9 +3,9 @@ package cz.muni.fi.rpg.ui.character.skills.dialog
 import android.os.Parcelable
 import androidx.compose.runtime.*
 import androidx.compose.runtime.savedinstancestate.savedInstanceState
-import cz.muni.fi.rpg.ui.common.composables.dialog.FullScreenDialog
+import cz.frantisekmasa.wfrp_master.core.ui.dialogs.FullScreenDialog
 import cz.muni.fi.rpg.viewModels.SkillsViewModel
-import kotlinx.android.parcel.Parcelize
+import kotlinx.parcelize.Parcelize
 import java.util.*
 
 @Composable

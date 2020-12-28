@@ -16,12 +16,12 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import cz.frantisekmasa.wfrp_master.core.ui.buttons.BackButton
 import cz.muni.fi.rpg.R
-import cz.muni.fi.rpg.ui.common.composables.BackButton
 import cz.muni.fi.rpg.ui.common.composables.CardContainer
-import cz.muni.fi.rpg.ui.common.composables.viewModel
-import cz.muni.fi.rpg.ui.router.Route
-import cz.muni.fi.rpg.ui.router.Routing
+import cz.frantisekmasa.wfrp_master.core.viewModel.viewModel
+import cz.frantisekmasa.wfrp_master.navigation.Route
+import cz.frantisekmasa.wfrp_master.navigation.Routing
 import cz.muni.fi.rpg.viewModels.SettingsViewModel
 import kotlinx.coroutines.launch
 

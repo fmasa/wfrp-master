@@ -1,7 +1,8 @@
 package cz.muni.fi.rpg.model.domain.character
 
+import cz.frantisekmasa.wfrp_master.core.domain.Money
+import cz.frantisekmasa.wfrp_master.core.domain.Stats
 import org.junit.Assert.*
-import cz.muni.fi.rpg.model.domain.common.Money
 import org.junit.Test
 import java.lang.IllegalArgumentException
 

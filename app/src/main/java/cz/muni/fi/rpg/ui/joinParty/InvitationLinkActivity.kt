@@ -7,7 +7,7 @@ import com.fasterxml.jackson.module.kotlin.readValue
 import com.google.firebase.dynamiclinks.ktx.dynamicLinks
 import com.google.firebase.ktx.Firebase
 import cz.muni.fi.rpg.R
-import cz.muni.fi.rpg.model.domain.party.Invitation
+import cz.frantisekmasa.wfrp_master.core.domain.party.Invitation
 import cz.muni.fi.rpg.ui.MainActivity
 import cz.muni.fi.rpg.ui.common.AuthenticationFragment
 import cz.muni.fi.rpg.ui.common.toast

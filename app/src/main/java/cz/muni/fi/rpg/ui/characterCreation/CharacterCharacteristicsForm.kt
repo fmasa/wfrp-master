@@ -14,10 +14,10 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.model.domain.character.Character
-import cz.muni.fi.rpg.model.domain.character.Stats
+import cz.frantisekmasa.wfrp_master.core.domain.Stats
+import cz.frantisekmasa.wfrp_master.core.ui.forms.FormData
 import cz.muni.fi.rpg.ui.common.chunk
-import cz.muni.fi.rpg.ui.common.composables.FormData
-import cz.muni.fi.rpg.ui.common.composables.TextInput
+import cz.frantisekmasa.wfrp_master.core.ui.forms.TextInput
 
 object CharacterCharacteristicsForm {
     @Stable

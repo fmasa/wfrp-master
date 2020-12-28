@@ -7,6 +7,7 @@ import androidx.compose.runtime.savedinstancestate.savedInstanceState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import cz.frantisekmasa.wfrp_master.core.ui.primitives.ContextMenu
 import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.model.domain.talents.Talent
 import cz.muni.fi.rpg.ui.character.talents.dialog.AddTalentDialog
@@ -74,6 +75,6 @@ private fun TalentItem(talent: Talent, onClick: () -> Unit, onRemove: () -> Unit
         contextMenuItems = listOf(
             ContextMenu.Item(stringResource(R.string.remove), onClick = { onRemove() })
         ),
-        badgeContent = { Text("+ ${talent.taken}") }
+        badge = { Text("+ ${talent.taken}") }
     )
 }

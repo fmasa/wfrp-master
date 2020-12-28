@@ -11,7 +11,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import cz.muni.fi.rpg.R
-import cz.muni.fi.rpg.model.domain.party.Party
+import cz.frantisekmasa.wfrp_master.core.domain.party.Party
 import cz.muni.fi.rpg.viewModels.PartyListViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -20,22 +20,27 @@ import kotlinx.coroutines.withContext
 import java.util.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.gesture.longPressGestureFilter
-import androidx.compose.ui.platform.ContextAmbient
+import androidx.compose.ui.platform.AmbientContext
 import androidx.compose.ui.res.loadVectorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
-import cz.muni.fi.rpg.model.domain.character.CharacterId
+import cz.frantisekmasa.wfrp_master.core.domain.identifiers.CharacterId
+import cz.frantisekmasa.wfrp_master.core.ui.buttons.HamburgerButton
+import cz.frantisekmasa.wfrp_master.core.ui.primitives.ContextMenu
+import cz.frantisekmasa.wfrp_master.core.ui.primitives.EmptyUI
+import cz.frantisekmasa.wfrp_master.core.ui.primitives.ItemIcon
+import cz.frantisekmasa.wfrp_master.core.ui.viewinterop.fragmentManager
+import cz.frantisekmasa.wfrp_master.core.viewModel.viewModel
 import cz.muni.fi.rpg.ui.common.composables.*
-import cz.muni.fi.rpg.ui.joinParty.JoinPartyActivity
-import cz.muni.fi.rpg.ui.router.Route
-import cz.muni.fi.rpg.ui.router.Routing
+import cz.frantisekmasa.wfrp_master.navigation.Route
+import cz.frantisekmasa.wfrp_master.navigation.Routing
 
 @Composable
 fun PartyListScreen(routing: Routing<Route.PartyList>) {
     val menuState = remember { mutableStateOf(MenuState.COLLAPSED) }
     val fragmentManager = fragmentManager()
-    val context = ContextAmbient.current
+    val context = AmbientContext.current
 
     Scaffold(
         topBar = {
@@ -51,7 +56,7 @@ fun PartyListScreen(routing: Routing<Route.PartyList>) {
                     icon = { Icon(vectorResource(R.drawable.ic_camera)) },
                     text = { Text(stringResource(R.string.scanCode_title)) },
                     onClick = {
-                        JoinPartyActivity.start(context)
+                        routing.backStack.push(Route.InvitationScanner)
                         menuState.value = MenuState.COLLAPSED
                     }
                 )
@@ -132,7 +137,7 @@ private fun MainContainer(
                     subTextId = R.string.no_parties_sub_prompt,
                     drawableResourceId = R.drawable.ic_rally_the_troops,
                 )
-                return@Box
+                return@let
             }
 
             PartyList(parties = it, onClick = onClick, onRemove = onRemove)

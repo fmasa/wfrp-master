@@ -1,10 +1,10 @@
 package cz.muni.fi.rpg.viewModels
 
 import androidx.lifecycle.ViewModel
-import cz.muni.fi.rpg.model.domain.character.CharacterId
-import cz.muni.fi.rpg.model.domain.compendium.Compendium
+import cz.frantisekmasa.wfrp_master.compendium.domain.Compendium
+import cz.frantisekmasa.wfrp_master.compendium.domain.Talent as CompendiumTalent
+import cz.frantisekmasa.wfrp_master.core.domain.identifiers.CharacterId
 import cz.muni.fi.rpg.model.domain.talents.Talent
-import cz.muni.fi.rpg.model.domain.compendium.Talent as CompendiumTalent
 import cz.muni.fi.rpg.model.domain.talents.TalentRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers

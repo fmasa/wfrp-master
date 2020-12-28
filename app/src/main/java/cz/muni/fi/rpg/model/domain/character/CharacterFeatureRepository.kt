@@ -1,6 +1,7 @@
 package cz.muni.fi.rpg.model.domain.character
 
 import arrow.core.Either
+import cz.frantisekmasa.wfrp_master.core.domain.identifiers.CharacterId
 import cz.muni.fi.rpg.model.domain.common.CouldNotConnectToBackend
 import kotlinx.coroutines.flow.Flow
 

@@ -4,11 +4,11 @@ import androidx.lifecycle.ViewModel
 import arrow.core.Either
 import cz.muni.fi.rpg.model.domain.armour.Armor
 import cz.muni.fi.rpg.model.domain.character.CharacterFeatureRepository
-import cz.muni.fi.rpg.model.domain.character.CharacterId
+import cz.frantisekmasa.wfrp_master.core.domain.identifiers.CharacterId
 import cz.muni.fi.rpg.model.domain.character.CharacterRepository
 import cz.muni.fi.rpg.model.domain.character.NotEnoughMoney
 import cz.muni.fi.rpg.model.domain.common.CouldNotConnectToBackend
-import cz.muni.fi.rpg.model.domain.common.Money
+import cz.frantisekmasa.wfrp_master.core.domain.Money
 import cz.muni.fi.rpg.model.domain.inventory.InventoryItem
 import cz.muni.fi.rpg.model.domain.inventory.InventoryItemRepository
 import cz.muni.fi.rpg.model.right

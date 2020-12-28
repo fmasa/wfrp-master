@@ -6,13 +6,13 @@ import androidx.compose.runtime.savedinstancestate.savedInstanceState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import cz.frantisekmasa.wfrp_master.core.ui.forms.ChipList
+import cz.frantisekmasa.wfrp_master.core.ui.forms.FormData
+import cz.frantisekmasa.wfrp_master.core.ui.forms.Rules
 import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.model.domain.character.Character
 import cz.muni.fi.rpg.model.domain.character.Race
-import cz.muni.fi.rpg.ui.common.composables.ChipList
-import cz.muni.fi.rpg.ui.common.composables.FormData
-import cz.muni.fi.rpg.ui.common.composables.Rules
-import cz.muni.fi.rpg.ui.common.composables.TextInput
+import cz.frantisekmasa.wfrp_master.core.ui.forms.TextInput
 
 object CharacterBasicInfoForm {
     @Stable

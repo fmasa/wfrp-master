@@ -15,12 +15,13 @@ import androidx.compose.ui.text.intl.Locale
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.toUpperCase
 import androidx.compose.ui.unit.dp
+import cz.frantisekmasa.wfrp_master.core.ui.buttons.BackButton
+import cz.frantisekmasa.wfrp_master.core.ui.forms.FormData
+import cz.frantisekmasa.wfrp_master.core.ui.scaffolding.SubheadBar
 import cz.muni.fi.rpg.R
-import cz.muni.fi.rpg.ui.common.composables.BackButton
-import cz.muni.fi.rpg.ui.common.composables.FormData
-import cz.muni.fi.rpg.ui.common.composables.viewModel
-import cz.muni.fi.rpg.ui.router.Route
-import cz.muni.fi.rpg.ui.router.Routing
+import cz.frantisekmasa.wfrp_master.core.viewModel.viewModel
+import cz.frantisekmasa.wfrp_master.navigation.Route
+import cz.frantisekmasa.wfrp_master.navigation.Routing
 import cz.muni.fi.rpg.viewModels.CharacterCreationViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -91,14 +92,7 @@ private fun MainContainer(routing: Routing<Route.CharacterCreation>) {
         ScrollableColumn(Modifier.weight(1f).background(MaterialTheme.colors.background)) {
             val currentStep = steps[currentStepIndex.value]
 
-            Surface(elevation = 2.dp, modifier = Modifier.fillMaxWidth()) {
-                Text(
-                    stringResource(currentStep.labelRes),
-                    textAlign = TextAlign.Center,
-                    modifier = Modifier.align(Alignment.CenterHorizontally)
-                        .padding(16.dp)
-                )
-            }
+            SubheadBar(stringResource(currentStep.labelRes))
 
             Box(Modifier.padding(24.dp)) { currentStep.render() }
         }

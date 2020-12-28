@@ -11,24 +11,26 @@ import com.github.zsoltk.compose.backpress.AmbientBackPressHandler
 import com.github.zsoltk.compose.backpress.BackPressHandler
 import com.github.zsoltk.compose.router.BackStack
 import com.github.zsoltk.compose.router.Router
+import cz.frantisekmasa.wfrp_master.compendium.ui.CompendiumImportScreen
+import cz.frantisekmasa.wfrp_master.compendium.ui.CompendiumScreen
+import cz.frantisekmasa.wfrp_master.core.ui.buttons.AmbientHamburgerButtonHandler
 import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.ui.character.CharacterDetailScreen
 import cz.muni.fi.rpg.ui.character.edit.CharacterEditScreen
 import cz.muni.fi.rpg.ui.characterCreation.CharacterCreationScreen
 import cz.muni.fi.rpg.ui.common.AboutScreen
 import cz.muni.fi.rpg.ui.common.AdManager
-import cz.muni.fi.rpg.ui.common.composables.AmbientUser
 import cz.muni.fi.rpg.ui.common.composables.Theme
-import cz.muni.fi.rpg.ui.common.composables.viewModel
-import cz.muni.fi.rpg.ui.compendium.CompendiumImportScreen
-import cz.muni.fi.rpg.ui.compendium.CompendiumScreen
+import cz.frantisekmasa.wfrp_master.core.viewModel.viewModel
 import cz.muni.fi.rpg.ui.gameMaster.GameMasterScreen
 import cz.muni.fi.rpg.ui.gameMaster.encounters.EncounterDetailScreen
 import cz.muni.fi.rpg.ui.gameMaster.encounters.NpcCreationScreen
 import cz.muni.fi.rpg.ui.gameMaster.encounters.NpcDetailScreen
 import cz.muni.fi.rpg.ui.partyList.PartyListScreen
-import cz.muni.fi.rpg.ui.router.Route
-import cz.muni.fi.rpg.ui.router.Routing
+import cz.frantisekmasa.wfrp_master.navigation.Route
+import cz.frantisekmasa.wfrp_master.navigation.Routing
+import cz.muni.fi.rpg.ui.common.composables.AmbientUser
+import cz.muni.fi.rpg.ui.joinParty.InvitationScannerScreen
 import cz.muni.fi.rpg.ui.settings.SettingsScreen
 import cz.muni.fi.rpg.viewModels.AuthenticationViewModel
 import org.koin.android.ext.android.inject
@@ -55,6 +57,7 @@ class MainActivity : AuthenticatedActivity(R.layout.activity_main) {
 
             Providers(
                 AmbientBackPressHandler provides backPressHandler,
+                AmbientHamburgerButtonHandler provides { openDrawer() },
                 AmbientUser provides user
             ) {
                 Theme {
@@ -98,6 +101,9 @@ class MainActivity : AuthenticatedActivity(R.layout.activity_main) {
                             is Route.CompendiumImport -> {
                                 CompendiumImportScreen(Routing(route, backStack))
                             }
+                            is Route.InvitationScanner -> {
+                                InvitationScannerScreen(Routing(route, backStack))
+                            }
                         }
                     }
                 }
@@ -109,6 +115,10 @@ class MainActivity : AuthenticatedActivity(R.layout.activity_main) {
         if (!backPressHandler.handle()) {
             super.onBackPressed()
         }
+    }
+
+    private fun openDrawer() {
+        findViewById<DrawerLayout>(R.id.drawer_layout)?.open()
     }
 
     @Suppress("UNUSED_PARAMETER")

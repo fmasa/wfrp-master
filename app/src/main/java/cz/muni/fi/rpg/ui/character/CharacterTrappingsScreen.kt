@@ -16,8 +16,12 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import cz.muni.fi.rpg.R
-import cz.muni.fi.rpg.model.domain.character.CharacterId
-import cz.muni.fi.rpg.model.domain.common.Money
+import cz.frantisekmasa.wfrp_master.core.domain.identifiers.CharacterId
+import cz.frantisekmasa.wfrp_master.core.domain.Money
+import cz.frantisekmasa.wfrp_master.core.ui.primitives.ContextMenu
+import cz.frantisekmasa.wfrp_master.core.ui.primitives.EmptyUI
+import cz.frantisekmasa.wfrp_master.core.ui.viewinterop.fragmentManager
+import cz.frantisekmasa.wfrp_master.core.viewModel.viewModel
 import cz.muni.fi.rpg.model.domain.inventory.InventoryItem
 import cz.muni.fi.rpg.model.right
 import cz.muni.fi.rpg.ui.character.inventory.ArmorCard
@@ -140,7 +144,7 @@ private fun InventoryItemList(
                 contextMenuItems = listOf(
                     ContextMenu.Item(stringResource(R.string.remove), onClick = { onRemove(item) })
                 ),
-                badgeContent = {
+                badge = {
                     if (item.quantity > 1) {
                         Text(stringResource(R.string.quantity, item.quantity))
                     }
