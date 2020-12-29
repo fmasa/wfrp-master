@@ -2,9 +2,9 @@ package cz.muni.fi.rpg.ui
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.commitNow
 import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.ui.common.AuthenticationFragment
-import timber.log.Timber
 
 class StartupActivity : AppCompatActivity(R.layout.activity_startup),
     AuthenticationFragment.Listener {
@@ -12,9 +12,8 @@ class StartupActivity : AppCompatActivity(R.layout.activity_startup),
     override fun onStart() {
         super.onStart()
 
-        supportFragmentManager.beginTransaction().apply {
+        supportFragmentManager.commitNow {
             add(AuthenticationFragment(), "Authentication")
-            commit()
         }
     }
 
