@@ -48,6 +48,7 @@ object PointsPoolForm {
             resolve = toValue(resiliencePoints.value),
             sin = 0,
             experience = 0,
+            spentExperience = 0,
             hardyWoundsBonus = 0,
         )
     }

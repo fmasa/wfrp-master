@@ -7,6 +7,7 @@ import cz.muni.fi.rpg.model.domain.character.CharacterRepository
 import cz.frantisekmasa.wfrp_master.core.domain.Ambitions
 import cz.frantisekmasa.wfrp_master.core.domain.party.Party
 import cz.frantisekmasa.wfrp_master.core.domain.party.PartyRepository
+import cz.muni.fi.rpg.model.domain.character.Points
 import cz.muni.fi.rpg.model.right
 import kotlinx.coroutines.flow.Flow
 
@@ -28,10 +29,10 @@ class CharacterMiscViewModel(
         characters.save(characterId.partyId, character)
     }
 
-    suspend fun updateExperiencePoints(xpPoints: Int) {
+    suspend fun updatePoints(points: Points) {
         val character = characters.get(characterId)
 
-        character.updatePoints(character.getPoints().copy(experience = xpPoints))
+        character.updatePoints(points)
 
         characters.save(characterId.partyId, character)
     }
