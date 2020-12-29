@@ -197,6 +197,25 @@ class Parties extends Suite {
         await firebase.assertSucceeds(character.set(this.validCharacter(userId)));
     }
 
+    // points.spentExperience are introduced in 2.0 and should be optional for BC (TODO: Remove in later 2.x)
+    @test
+    async "should let users create character without spent experience"() {
+        const userId = "user123";
+        const partyId = (await this.createUserAccessibleParty(userId)).id;
+
+        const character = this.authedApp(userId)
+            .collection("parties")
+            .doc(partyId)
+            .collection("characters")
+            .doc(userId);
+
+        const characterData = this.validCharacter(userId)
+
+        delete characterData.points["spentExperience"];
+
+        await firebase.assertSucceeds(character.set(characterData));
+    }
+
     @test
     async "should NOT let users create character that is not theirs if they are not GMs"() {
         const userId = "user123";

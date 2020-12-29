@@ -308,6 +308,7 @@ service cloud.firestore {
                     && [
                         "corruption",
                         "experience",
+                        "spentExperience",
                         "fate",
                         "fortune",
                         "maxWounds",
@@ -326,6 +327,7 @@ service cloud.firestore {
                     && points.sin is int
                     && points.wounds is int
                     && points.experience is int
+                    && (! ("spentExperience" in points) || points.experience is int)
                     && points.hardyWoundsBonus is int;
             }
 

@@ -17,7 +17,7 @@ class CharacterTest {
         Race.HALFLING,
         Stats(20, 40, 2, 4, 80, 5, 5, 4, 0, 10),
         Stats(20, 40, 2, 4, 80, 5, 5, 4, 0, 10),
-        Points(0, 4, 4, 5, 5, 0, 0, 0, 0, 0)
+        Points(0, 4, 4, 5, 5, 0, 0, 0, 0, 0, 0)
     )
 
     private fun characterWithHardy() = character().apply {
@@ -87,7 +87,7 @@ class CharacterTest {
 
     @Test
     fun testWoundsAreReducedToMaxWoundsWhenReducingWounds() {
-        val points = Points(0, 1, 1, 14, 12, 1, 1, 1, 1, 2)
+        val points = Points(0, 1, 1, 14, 12, 1, 1, 1, 1, 2, 2)
 
         val updatedPoints = points.withMaxWounds(4, 2)
 

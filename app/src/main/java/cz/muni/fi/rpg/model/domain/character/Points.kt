@@ -12,6 +12,7 @@ data class Points(
     val resolve: Int,
     val sin: Int,
     val experience: Int,
+    val spentExperience: Int = 0,
     val hardyWoundsBonus: Int
 ) {
     init {
@@ -23,6 +24,7 @@ data class Points(
         require(wounds in 0..(maxWounds + hardyWoundsBonus))
         require(maxWounds > 0)
         require(experience >= 0)
+        require(spentExperience >= 0)
         require(hardyWoundsBonus >= 0)
     }
 
