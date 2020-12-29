@@ -9,8 +9,11 @@ import androidx.compose.ui.platform.AmbientContext
 
 @Composable
 fun rememberSoundPlayer(@RawRes soundResource: Int): SoundPlayer {
-    val context = AmbientContext.current
+    if (!AmbientSoundEnabled.current) {
+        return {} as SoundPlayer
+    }
 
+    val context = AmbientContext.current
     val player = remember { MediaPlayer.create(context, soundResource) }
 
     onDispose {

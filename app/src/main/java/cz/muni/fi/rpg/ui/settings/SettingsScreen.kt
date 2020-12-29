@@ -1,5 +1,6 @@
 package cz.muni.fi.rpg.ui.settings
 
+import androidx.annotation.StringRes
 import androidx.compose.foundation.ScrollableColumn
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -23,6 +24,7 @@ import cz.frantisekmasa.wfrp_master.core.viewModel.viewModel
 import cz.frantisekmasa.wfrp_master.navigation.Route
 import cz.frantisekmasa.wfrp_master.navigation.Routing
 import cz.muni.fi.rpg.viewModels.SettingsViewModel
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 
 @Composable
@@ -42,29 +44,52 @@ fun SettingsScreen(routing: Routing<Route.Settings>) {
 
             SignInCard(viewModel)
             DarkModeCard(viewModel)
+            SoundCard(viewModel)
         }
     }
 }
 
 @Composable
 private fun DarkModeCard(viewModel: SettingsViewModel) {
+    SwitchCard(
+        name = R.string.settings_dark_mode,
+        value = viewModel.darkMode,
+        onChange = { viewModel.toggleDarkMode(it) }
+    )
+}
+
+@Composable
+private fun SoundCard(viewModel: SettingsViewModel) {
+    SwitchCard(
+        name = R.string.settings_sound,
+        value = viewModel.soundEnabled,
+        onChange = { viewModel.toggleSound(it) }
+    )
+}
+
+@Composable
+private fun SwitchCard(
+    @StringRes name: Int,
+    value: Flow<Boolean>,
+    onChange: suspend (newValue: Boolean) -> Unit
+) {
     CardContainer(Modifier.fillMaxWidth().padding(horizontal = 8.dp)) {
         Row(
             horizontalArrangement = Arrangement.SpaceBetween,
             modifier = Modifier.fillMaxWidth().padding(horizontal = 8.dp),
         ) {
-            Text(stringResource(R.string.settings_dark_mode))
+            Text(stringResource(name))
 
-            val darkModeEnabled by viewModel.darkMode.collectAsState(null)
+            val enabled by value.collectAsState(null)
             val coroutineScope = rememberCoroutineScope()
 
             Switch(
-                checked = darkModeEnabled == true,
-                enabled = darkModeEnabled != null,
+                checked = enabled == true,
+                enabled = enabled != null,
                 onCheckedChange = {
-                    darkModeEnabled?.let { currentState ->
+                    enabled?.let { currentState ->
                         coroutineScope.launch {
-                            viewModel.toggleDarkMode(!currentState)
+                            onChange(!currentState)
                         }
                     }
                 }

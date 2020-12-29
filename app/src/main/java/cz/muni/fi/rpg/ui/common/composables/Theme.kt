@@ -6,6 +6,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.unit.sp
+import cz.frantisekmasa.wfrp_master.core.media.AmbientSoundEnabled
 import cz.frantisekmasa.wfrp_master.core.viewModel.viewModel
 import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.viewModels.SettingsViewModel
@@ -63,12 +64,16 @@ class Theme {
 fun Theme(content: @Composable () -> Unit) {
     val viewModel: SettingsViewModel by viewModel()
     val darkMode by viewModel.darkMode.collectAsState(false)
+    val soundEnabled by viewModel.soundEnabled.collectAsState(false)
 
     MaterialTheme(
         colors = if (darkMode) Theme.DarkColors() else Theme.LightColors(),
         typography = MaterialTheme.typography.copy(
             caption = MaterialTheme.typography.caption.copy(fontSize = 14.sp),
         ),
-        content = content
-    )
+    ) {
+        Providers(AmbientSoundEnabled provides soundEnabled) {
+            content()
+        }
+    }
 }
