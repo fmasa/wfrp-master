@@ -8,7 +8,7 @@ import cz.frantisekmasa.wfrp_master.core.domain.Ambitions
 import cz.frantisekmasa.wfrp_master.core.domain.party.Party
 import cz.frantisekmasa.wfrp_master.core.domain.party.PartyRepository
 import cz.frantisekmasa.wfrp_master.core.domain.time.DateTime
-import cz.muni.fi.rpg.model.right
+import cz.frantisekmasa.wfrp_master.core.utils.right
 import cz.muni.fi.rpg.ui.gameMaster.adapter.Player
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.zip

@@ -11,7 +11,7 @@ import cz.muni.fi.rpg.model.domain.common.CouldNotConnectToBackend
 import cz.frantisekmasa.wfrp_master.core.domain.Money
 import cz.muni.fi.rpg.model.domain.inventory.InventoryItem
 import cz.muni.fi.rpg.model.domain.inventory.InventoryItemRepository
-import cz.muni.fi.rpg.model.right
+import cz.frantisekmasa.wfrp_master.core.utils.right
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow

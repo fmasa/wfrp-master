@@ -8,7 +8,7 @@ import cz.frantisekmasa.wfrp_master.core.domain.Ambitions
 import cz.frantisekmasa.wfrp_master.core.domain.party.Party
 import cz.frantisekmasa.wfrp_master.core.domain.party.PartyRepository
 import cz.muni.fi.rpg.model.domain.character.Points
-import cz.muni.fi.rpg.model.right
+import cz.frantisekmasa.wfrp_master.core.utils.right
 import kotlinx.coroutines.flow.Flow
 
 class CharacterMiscViewModel(

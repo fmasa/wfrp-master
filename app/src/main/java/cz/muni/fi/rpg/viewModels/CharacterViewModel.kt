@@ -5,7 +5,7 @@ import cz.muni.fi.rpg.model.domain.character.Character
 import cz.frantisekmasa.wfrp_master.core.domain.identifiers.CharacterId
 import cz.muni.fi.rpg.model.domain.character.CharacterNotFound
 import cz.muni.fi.rpg.model.domain.character.CharacterRepository
-import cz.muni.fi.rpg.model.right
+import cz.frantisekmasa.wfrp_master.core.utils.right
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.Flow
 
