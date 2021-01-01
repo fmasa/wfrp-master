@@ -14,6 +14,7 @@ import com.github.zsoltk.compose.router.Router
 import cz.frantisekmasa.wfrp_master.compendium.ui.CompendiumImportScreen
 import cz.frantisekmasa.wfrp_master.compendium.ui.CompendiumScreen
 import cz.frantisekmasa.wfrp_master.core.ui.buttons.AmbientHamburgerButtonHandler
+import cz.frantisekmasa.wfrp_master.core.ui.shell.KoinScope
 import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.ui.character.CharacterDetailScreen
 import cz.muni.fi.rpg.ui.character.edit.CharacterEditScreen
@@ -63,46 +64,50 @@ class MainActivity : AuthenticatedActivity(R.layout.activity_main) {
                 Theme {
                     Router<Route>(defaultRouting = Route.PartyList) { backStack ->
                         this.backStack = backStack
-                        @Suppress("UNUSED_VARIABLE") // This val is there just to force `when` to be exhaustive
-                        val nothing = when (val route = backStack.last()) {
-                            is Route.PartyList -> {
-                                PartyListScreen(Routing(route, backStack))
-                            }
-                            is Route.GameMaster -> {
-                                GameMasterScreen(Routing(route, backStack), adManager)
-                            }
-                            is Route.About -> {
-                                AboutScreen(Routing(route, backStack))
-                            }
-                            is Route.CharacterCreation -> {
-                                CharacterCreationScreen(Routing(route, backStack))
-                            }
-                            is Route.CharacterDetail -> {
-                                CharacterDetailScreen(Routing(route, backStack), adManager)
-                            }
-                            is Route.CharacterEdit -> {
-                                CharacterEditScreen(Routing(route, backStack))
-                            }
-                            is Route.EncounterDetail -> {
-                                EncounterDetailScreen(Routing(route, backStack))
-                            }
-                            is Route.NpcDetail -> {
-                                NpcDetailScreen(Routing(route, backStack))
-                            }
-                            is Route.NpcCreation -> {
-                                NpcCreationScreen(Routing(route, backStack))
-                            }
-                            is Route.Settings -> {
-                                SettingsScreen(Routing(route, backStack))
-                            }
-                            is Route.Compendium -> {
-                                CompendiumScreen(Routing(route, backStack))
-                            }
-                            is Route.CompendiumImport -> {
-                                CompendiumImportScreen(Routing(route, backStack))
-                            }
-                            is Route.InvitationScanner -> {
-                                InvitationScannerScreen(Routing(route, backStack))
+                        val route = backStack.last()
+
+                        KoinScope(route) {
+                            @Suppress("UNUSED_VARIABLE") // This val is there just to force `when` to be exhaustive
+                            val nothing = when (route) {
+                                is Route.PartyList -> {
+                                    PartyListScreen(Routing(route, backStack))
+                                }
+                                is Route.GameMaster -> {
+                                    GameMasterScreen(Routing(route, backStack), adManager)
+                                }
+                                is Route.About -> {
+                                    AboutScreen(Routing(route, backStack))
+                                }
+                                is Route.CharacterCreation -> {
+                                    CharacterCreationScreen(Routing(route, backStack))
+                                }
+                                is Route.CharacterDetail -> {
+                                    CharacterDetailScreen(Routing(route, backStack), adManager)
+                                }
+                                is Route.CharacterEdit -> {
+                                    CharacterEditScreen(Routing(route, backStack))
+                                }
+                                is Route.EncounterDetail -> {
+                                    EncounterDetailScreen(Routing(route, backStack))
+                                }
+                                is Route.NpcDetail -> {
+                                    NpcDetailScreen(Routing(route, backStack))
+                                }
+                                is Route.NpcCreation -> {
+                                    NpcCreationScreen(Routing(route, backStack))
+                                }
+                                is Route.Settings -> {
+                                    SettingsScreen(Routing(route, backStack))
+                                }
+                                is Route.Compendium -> {
+                                    CompendiumScreen(Routing(route, backStack))
+                                }
+                                is Route.CompendiumImport -> {
+                                    CompendiumImportScreen(Routing(route, backStack))
+                                }
+                                is Route.InvitationScanner -> {
+                                    InvitationScannerScreen(Routing(route, backStack))
+                                }
                             }
                         }
                     }

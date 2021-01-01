@@ -8,6 +8,7 @@ import com.google.firebase.firestore.ktx.firestoreSettings
 import com.google.firebase.ktx.Firebase
 import cz.frantisekmasa.wfrp_master.compendium.infrastructure.FirestoreCompendium
 import cz.frantisekmasa.wfrp_master.compendium.ui.CompendiumViewModel
+import cz.frantisekmasa.wfrp_master.core.di.KoinScopeType
 import cz.frantisekmasa.wfrp_master.core.domain.identifiers.CharacterId
 import cz.frantisekmasa.wfrp_master.core.domain.identifiers.EncounterId
 import cz.frantisekmasa.wfrp_master.core.domain.party.Party
@@ -40,6 +41,7 @@ import cz.muni.fi.rpg.model.domain.inventory.InventoryItem
 import cz.muni.fi.rpg.model.domain.skills.Skill
 import cz.muni.fi.rpg.model.domain.spells.Spell
 import cz.muni.fi.rpg.model.domain.talents.Talent
+import org.koin.core.qualifier.named
 import cz.frantisekmasa.wfrp_master.compendium.domain.Skill as CompendiumSkill
 import cz.frantisekmasa.wfrp_master.compendium.domain.Spell as ComepndiumSpell
 import cz.frantisekmasa.wfrp_master.compendium.domain.Talent as CompendiumTalent
@@ -138,5 +140,9 @@ val appModule = module {
             spellCompendium(),
             get(),
         )
+    }
+
+    scope(named(KoinScopeType.Screen)) {
+        scoped { (partyId: UUID) -> GameMasterViewModel(partyId, get(), get()) }
     }
 }
