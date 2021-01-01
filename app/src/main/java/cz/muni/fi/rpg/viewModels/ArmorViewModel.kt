@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import cz.muni.fi.rpg.model.domain.armour.Armor
 import cz.muni.fi.rpg.model.domain.character.CharacterFeatureRepository
 import cz.frantisekmasa.wfrp_master.core.domain.identifiers.CharacterId
-import cz.muni.fi.rpg.model.right
+import cz.frantisekmasa.wfrp_master.core.utils.right
 import kotlinx.coroutines.flow.Flow
 
 class ArmorViewModel(

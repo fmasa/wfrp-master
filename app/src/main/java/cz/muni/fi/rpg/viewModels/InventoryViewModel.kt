@@ -11,7 +11,7 @@ import cz.muni.fi.rpg.model.domain.common.CouldNotConnectToBackend
 import cz.frantisekmasa.wfrp_master.core.domain.Money
 import cz.muni.fi.rpg.model.domain.inventory.InventoryItem
 import cz.muni.fi.rpg.model.domain.inventory.InventoryItemRepository
-import cz.muni.fi.rpg.model.right
+import cz.frantisekmasa.wfrp_master.core.utils.right
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -26,7 +26,7 @@ class InventoryViewModel(
 ) : ViewModel(), CoroutineScope by CoroutineScope(Dispatchers.IO) {
     val inventory: Flow<List<InventoryItem>> = inventoryItems.findAllForCharacter(characterId)
 
-    val armor: Flow<Either<CouldNotConnectToBackend, Armor>> = armorRepository.getLive(characterId)
+    val armor: Flow<Armor> = armorRepository.getLive(characterId).right()
 
     val money: Flow<Money> = characters.getLive(characterId).right().map { it.getMoney() }
 

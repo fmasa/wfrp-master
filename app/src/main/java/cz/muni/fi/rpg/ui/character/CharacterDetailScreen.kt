@@ -23,7 +23,6 @@ import cz.frantisekmasa.wfrp_master.core.ui.scaffolding.tabs.TabScreen
 import cz.frantisekmasa.wfrp_master.core.viewModel.viewModel
 import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.model.domain.character.Character
-import cz.muni.fi.rpg.model.right
 import cz.muni.fi.rpg.ui.character.skills.CharacterSkillsScreen
 import cz.muni.fi.rpg.ui.common.AdManager
 import cz.muni.fi.rpg.ui.common.composables.*
@@ -41,8 +40,8 @@ fun CharacterDetailScreen(routing: Routing<Route.CharacterDetail>, adManager: Ad
     val viewModel: CharacterViewModel by viewModel { parametersOf(characterId) }
     val partyViewModel: PartyViewModel by viewModel { parametersOf(characterId.partyId) }
 
-    val character = viewModel.character.right().collectAsState(null).value
-    val party = partyViewModel.party.right().collectAsState(null).value
+    val character = viewModel.character.collectAsState(null).value
+    val party = partyViewModel.party.collectAsState(null).value
 
     LaunchedEffect(routing.route.characterId) {
         withContext(Dispatchers.IO) {

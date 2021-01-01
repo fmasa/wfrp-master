@@ -21,7 +21,6 @@ import cz.frantisekmasa.wfrp_master.core.ui.texts.SaveButtonText
 import cz.frantisekmasa.wfrp_master.core.viewModel.viewModel
 import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.model.domain.character.Character
-import cz.muni.fi.rpg.model.right
 import cz.muni.fi.rpg.ui.characterCreation.CharacterBasicInfoForm
 import cz.muni.fi.rpg.ui.characterCreation.CharacterCharacteristicsForm
 import cz.muni.fi.rpg.ui.common.composables.*
@@ -75,7 +74,7 @@ fun CharacterEditScreen(routing: Routing<Route.CharacterEdit>) {
     val viewModel: CharacterViewModel by viewModel { parametersOf(routing.route.characterId) }
     val coroutineScope = rememberCoroutineScope()
 
-    val character = viewModel.character.right().collectAsState(null).value
+    val character = viewModel.character.collectAsState(null).value
 
     val submitEnabled = remember { mutableStateOf(true) }
     val formData = character?.let { CharacterEditScreen.FormData.fromCharacter(it) }

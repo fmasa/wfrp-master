@@ -1,11 +1,11 @@
 package cz.muni.fi.rpg.viewModels
 
 import androidx.lifecycle.ViewModel
-import arrow.core.Either
 import cz.muni.fi.rpg.model.domain.armour.Armor
 import cz.frantisekmasa.wfrp_master.core.domain.Stats
 import cz.frantisekmasa.wfrp_master.core.domain.identifiers.EncounterId
 import cz.frantisekmasa.wfrp_master.core.domain.identifiers.NpcId
+import cz.frantisekmasa.wfrp_master.core.utils.right
 import cz.muni.fi.rpg.model.domain.encounter.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
@@ -18,7 +18,7 @@ class EncounterDetailViewModel(
     private val encounters: EncounterRepository,
     private val npcRepository: NpcRepository
 ) : ViewModel(), CoroutineScope by CoroutineScope(Dispatchers.IO) {
-    val encounter: Flow<Either<EncounterNotFound, Encounter>> = encounters.getLive(encounterId)
+    val encounter: Flow<Encounter> = encounters.getLive(encounterId).right()
     val npcs: Flow<List<Npc>> = npcRepository.findByEncounter(encounterId)
 
     suspend fun remove() {
