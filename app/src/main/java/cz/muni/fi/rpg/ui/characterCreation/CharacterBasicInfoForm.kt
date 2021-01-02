@@ -10,8 +10,8 @@ import cz.frantisekmasa.wfrp_master.core.ui.forms.ChipList
 import cz.frantisekmasa.wfrp_master.core.ui.forms.FormData
 import cz.frantisekmasa.wfrp_master.core.ui.forms.Rules
 import cz.muni.fi.rpg.R
-import cz.muni.fi.rpg.model.domain.character.Character
-import cz.muni.fi.rpg.model.domain.character.Race
+import cz.frantisekmasa.wfrp_master.core.domain.character.Character
+import cz.frantisekmasa.wfrp_master.core.domain.character.Race
 import cz.frantisekmasa.wfrp_master.core.ui.forms.TextInput
 
 object CharacterBasicInfoForm {

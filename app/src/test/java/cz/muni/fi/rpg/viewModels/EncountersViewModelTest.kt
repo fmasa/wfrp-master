@@ -1,10 +1,10 @@
 package cz.muni.fi.rpg.viewModels
 
 import arrow.core.Either
+import cz.frantisekmasa.wfrp_master.combat.domain.encounter.Encounter
+import cz.frantisekmasa.wfrp_master.combat.domain.encounter.EncounterNotFound
+import cz.frantisekmasa.wfrp_master.combat.domain.encounter.EncounterRepository
 import cz.frantisekmasa.wfrp_master.core.domain.identifiers.EncounterId
-import cz.muni.fi.rpg.model.domain.encounter.Encounter
-import cz.muni.fi.rpg.model.domain.encounter.EncounterNotFound
-import cz.muni.fi.rpg.model.domain.encounter.EncounterRepository
 import kotlinx.coroutines.flow.Flow
 import org.junit.Assert.assertEquals
 import kotlinx.coroutines.runBlocking

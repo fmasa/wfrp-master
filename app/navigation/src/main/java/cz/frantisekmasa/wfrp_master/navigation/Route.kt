@@ -44,4 +44,7 @@ sealed class Route {
     class CompendiumImport(val partyId: UUID) : Route()
 
     object InvitationScanner : Route()
+
+    @Immutable
+    class ActiveCombat(val partyId: UUID) : Route()
 }

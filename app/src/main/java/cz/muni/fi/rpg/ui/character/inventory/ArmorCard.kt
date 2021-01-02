@@ -15,8 +15,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import cz.muni.fi.rpg.R
-import cz.muni.fi.rpg.model.domain.armour.Armor
-import cz.muni.fi.rpg.ui.common.composables.CardContainer
+import cz.frantisekmasa.wfrp_master.core.domain.Armor
+import cz.frantisekmasa.wfrp_master.core.ui.primitives.CardContainer
 import cz.muni.fi.rpg.ui.common.composables.CardTitle
 import cz.muni.fi.rpg.ui.common.composables.NumberPicker
 

@@ -17,6 +17,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import com.github.zsoltk.compose.router.BackStack
+import cz.frantisekmasa.wfrp_master.combat.ui.ActiveCombatBanner
 import cz.muni.fi.rpg.R
 import cz.frantisekmasa.wfrp_master.core.domain.identifiers.CharacterId
 import cz.frantisekmasa.wfrp_master.core.domain.identifiers.EncounterId
@@ -84,6 +85,8 @@ fun GameMasterScreen(routing: Routing<Route.GameMaster>, adManager: AdManager) {
             val screenWidth = constraints.maxWidth.toFloat()
 
             Column(Modifier.fillMaxHeight()) {
+                ActiveCombatBanner(partyId = party.id, routing = routing)
+
                 val scrollState = key(screenWidth, screens.size) { rememberScrollState(0f) }
 
                 TabRow(

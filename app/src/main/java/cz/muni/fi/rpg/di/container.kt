@@ -6,6 +6,10 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.firestoreSettings
 import com.google.firebase.ktx.Firebase
+import cz.frantisekmasa.wfrp_master.combat.domain.encounter.Encounter
+import cz.frantisekmasa.wfrp_master.combat.domain.encounter.EncounterRepository
+import cz.frantisekmasa.wfrp_master.combat.domain.encounter.Npc
+import cz.frantisekmasa.wfrp_master.combat.ui.CombatViewModel
 import cz.frantisekmasa.wfrp_master.compendium.infrastructure.FirestoreCompendium
 import cz.frantisekmasa.wfrp_master.compendium.ui.CompendiumViewModel
 import cz.frantisekmasa.wfrp_master.core.di.KoinScopeType
@@ -16,10 +20,14 @@ import cz.frantisekmasa.wfrp_master.core.domain.party.PartyRepository
 import cz.muni.fi.rpg.BuildConfig
 import cz.muni.fi.rpg.model.cache.CharacterRepositoryIdentityMap
 import cz.muni.fi.rpg.model.cache.PartyRepositoryIdentityMap
-import cz.muni.fi.rpg.model.domain.armour.Armor
-import cz.muni.fi.rpg.model.domain.character.*
-import cz.muni.fi.rpg.model.domain.encounter.NpcRepository
-import cz.muni.fi.rpg.model.domain.encounter.EncounterRepository
+import cz.frantisekmasa.wfrp_master.core.domain.Armor
+import cz.frantisekmasa.wfrp_master.combat.domain.encounter.NpcRepository
+import cz.frantisekmasa.wfrp_master.combat.infrastructure.FirestoreEncounterRepository
+import cz.frantisekmasa.wfrp_master.combat.infrastructure.FirestoreNpcRepository
+import cz.frantisekmasa.wfrp_master.core.domain.character.Character
+import cz.frantisekmasa.wfrp_master.core.domain.character.CharacterFeatureRepository
+import cz.frantisekmasa.wfrp_master.core.domain.character.CharacterRepository
+import cz.frantisekmasa.wfrp_master.core.domain.character.Feature
 import cz.muni.fi.rpg.model.domain.inventory.InventoryItemRepository
 import cz.muni.fi.rpg.model.domain.invitation.InvitationProcessor
 import cz.muni.fi.rpg.model.domain.skills.SkillRepository
@@ -34,9 +42,10 @@ import org.koin.core.scope.Scope
 import org.koin.dsl.module
 import java.util.*
 import cz.frantisekmasa.wfrp_master.core.firestore.aggregateMapper
+import cz.frantisekmasa.wfrp_master.core.firestore.repositories.FirestoreCharacterFeatureRepository
+import cz.frantisekmasa.wfrp_master.core.firestore.repositories.FirestoreCharacterRepository
 import cz.frantisekmasa.wfrp_master.core.firestore.repositories.FirestorePartyRepository
-import cz.muni.fi.rpg.model.domain.encounter.Encounter
-import cz.muni.fi.rpg.model.domain.encounter.Npc
+import cz.frantisekmasa.wfrp_master.core.viewModel.PartyViewModel
 import cz.muni.fi.rpg.model.domain.inventory.InventoryItem
 import cz.muni.fi.rpg.model.domain.skills.Skill
 import cz.muni.fi.rpg.model.domain.spells.Spell
@@ -145,5 +154,6 @@ val appModule = module {
     scope(named(KoinScopeType.Screen)) {
         scoped { (partyId: UUID) -> GameMasterViewModel(partyId, get(), get()) }
         scoped { (partyId: UUID) -> SkillTestViewModel(partyId, skillCompendium(), get(), get()) }
+        scoped { (partyId: UUID) -> CombatViewModel(partyId, get(), get(), get()) }
     }
 }

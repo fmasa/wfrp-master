@@ -16,7 +16,7 @@ import cz.frantisekmasa.wfrp_master.core.ui.primitives.SingleLineTextValue
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.Spacing
 import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.ui.common.composables.CardButton
-import cz.muni.fi.rpg.ui.common.composables.CardContainer
+import cz.frantisekmasa.wfrp_master.core.ui.primitives.CardContainer
 import cz.muni.fi.rpg.ui.common.composables.CardTitle
 
 @Composable

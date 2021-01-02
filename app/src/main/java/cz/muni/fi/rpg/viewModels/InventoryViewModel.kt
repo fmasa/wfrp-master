@@ -1,13 +1,11 @@
 package cz.muni.fi.rpg.viewModels
 
 import androidx.lifecycle.ViewModel
-import arrow.core.Either
-import cz.muni.fi.rpg.model.domain.armour.Armor
-import cz.muni.fi.rpg.model.domain.character.CharacterFeatureRepository
+import cz.frantisekmasa.wfrp_master.core.domain.Armor
+import cz.frantisekmasa.wfrp_master.core.domain.character.CharacterFeatureRepository
 import cz.frantisekmasa.wfrp_master.core.domain.identifiers.CharacterId
-import cz.muni.fi.rpg.model.domain.character.CharacterRepository
-import cz.muni.fi.rpg.model.domain.character.NotEnoughMoney
-import cz.muni.fi.rpg.model.domain.common.CouldNotConnectToBackend
+import cz.frantisekmasa.wfrp_master.core.domain.character.CharacterRepository
+import cz.frantisekmasa.wfrp_master.core.domain.character.NotEnoughMoney
 import cz.frantisekmasa.wfrp_master.core.domain.Money
 import cz.muni.fi.rpg.model.domain.inventory.InventoryItem
 import cz.muni.fi.rpg.model.domain.inventory.InventoryItemRepository

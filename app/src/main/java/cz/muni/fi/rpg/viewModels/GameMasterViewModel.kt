@@ -1,9 +1,9 @@
 package cz.muni.fi.rpg.viewModels
 
 import arrow.core.extensions.list.foldable.exists
-import cz.muni.fi.rpg.model.domain.character.Character
+import cz.frantisekmasa.wfrp_master.core.domain.character.Character
 import cz.frantisekmasa.wfrp_master.core.domain.identifiers.CharacterId
-import cz.muni.fi.rpg.model.domain.character.CharacterRepository
+import cz.frantisekmasa.wfrp_master.core.domain.character.CharacterRepository
 import cz.frantisekmasa.wfrp_master.core.domain.Ambitions
 import cz.frantisekmasa.wfrp_master.core.domain.party.Party
 import cz.frantisekmasa.wfrp_master.core.domain.party.PartyRepository

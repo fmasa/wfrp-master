@@ -23,6 +23,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import cz.muni.fi.rpg.R
 import cz.frantisekmasa.wfrp_master.core.domain.Ambitions
+import cz.frantisekmasa.wfrp_master.core.ui.primitives.CardContainer
 
 @Composable
 fun AmbitionsCard(

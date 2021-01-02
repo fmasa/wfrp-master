@@ -5,8 +5,8 @@ import cz.frantisekmasa.wfrp_master.core.domain.Stats
 import cz.frantisekmasa.wfrp_master.core.domain.identifiers.CharacterId
 import cz.frantisekmasa.wfrp_master.core.domain.rolls.Dice
 import cz.frantisekmasa.wfrp_master.core.domain.rolls.TestResult
-import cz.muni.fi.rpg.model.domain.character.Character
-import cz.muni.fi.rpg.model.domain.character.CharacterRepository
+import cz.frantisekmasa.wfrp_master.core.domain.character.Character
+import cz.frantisekmasa.wfrp_master.core.domain.character.CharacterRepository
 import cz.muni.fi.rpg.model.domain.skills.Skill
 import cz.muni.fi.rpg.model.domain.skills.SkillRepository
 import kotlinx.coroutines.flow.Flow

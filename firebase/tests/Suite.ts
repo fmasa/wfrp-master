@@ -53,7 +53,8 @@ export abstract class Suite {
             time: {
                 imperialDay: 10,
                 minutes: 10,
-            }
+            },
+            activeCombat: null,
         }
     }
 

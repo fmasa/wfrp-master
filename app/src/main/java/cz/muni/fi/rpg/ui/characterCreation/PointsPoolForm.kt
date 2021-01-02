@@ -14,7 +14,7 @@ import androidx.compose.ui.unit.dp
 import cz.frantisekmasa.wfrp_master.core.ui.forms.FormData
 import cz.frantisekmasa.wfrp_master.core.ui.forms.Rules
 import cz.muni.fi.rpg.R
-import cz.muni.fi.rpg.model.domain.character.Points
+import cz.frantisekmasa.wfrp_master.core.domain.character.Points
 import cz.frantisekmasa.wfrp_master.core.ui.forms.TextInput
 
 object PointsPoolForm {

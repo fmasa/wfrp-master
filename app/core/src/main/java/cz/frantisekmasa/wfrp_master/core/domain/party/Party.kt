@@ -2,6 +2,9 @@ package cz.frantisekmasa.wfrp_master.core.domain.party
 
 import android.os.Parcelable
 import cz.frantisekmasa.wfrp_master.core.domain.Ambitions
+import cz.frantisekmasa.wfrp_master.core.domain.identifiers.EncounterId
+import cz.frantisekmasa.wfrp_master.core.domain.party.combat.Combat
+import cz.frantisekmasa.wfrp_master.core.domain.party.combat.Combatant
 import cz.frantisekmasa.wfrp_master.core.domain.time.DateTime
 import cz.frantisekmasa.wfrp_master.core.domain.time.ImperialDate
 import kotlinx.parcelize.Parcelize
@@ -18,7 +21,8 @@ data class Party(
     private var time: DateTime = DateTime(
         ImperialDate.of(ImperialDate.StandaloneDay.HEXENSTAG, 2512),
         DateTime.TimeOfDay(12, 0)
-    )
+    ),
+    private var activeCombat: Combat? = null,
 ) : Parcelable {
     companion object {
         const val NAME_MAX_LENGTH = 50
@@ -50,6 +54,28 @@ data class Party(
     fun archive() {
         archived = true
     }
+
+    fun startCombat(encounterId: EncounterId, combatants: List<Combatant>) {
+        activeCombat = Combat(encounterId.encounterId, combatants)
+    }
+
+    fun updateCombat(combat: Combat) {
+        val activeCombat = activeCombat
+
+        require(activeCombat != null && combat.encounterId == activeCombat.encounterId)
+
+        this.activeCombat = combat
+    }
+
+    fun endCombat() {
+        activeCombat = null
+    }
+
+    fun hasActiveCombat(): Boolean {
+        return activeCombat != null
+    }
+
+    fun getActiveCombat(): Combat? = activeCombat
 
     fun getAmbitions() = ambitions
 

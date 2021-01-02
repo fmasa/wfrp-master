@@ -1,13 +1,6 @@
 <resources>
     <string name="appIcon">20 sided dice</string>
 
-    <!-- Common UI elements -->
-    <string name="button_finish">Finish</string>
-    <string name="button_save">Save</string>
-    <string name="button_cancel">Cancel</string>
-    <string name="button_submit">Submit</string>
-    <!-- end of Common UI elements -->
-
     <string name="assembleParty_title">Create new Party</string>
 
     <!-- Party rename Dialog -->
@@ -123,12 +116,6 @@
     <string name="label_strength_bonus">SB</string>
     <string name="label_strength">Strength</string>
 
-    <string name="race_dwarf">Dwarf</string>
-    <string name="race_high_elf">High Elf</string>
-    <string name="race_wood_elf">Wood Elf</string>
-    <string name="race_halfling">Halfling</string>
-    <string name="race_human">Human</string>
-    <string name="race_gnome">Gnome</string>
     <string name="button_edit">Edit</string>
     <string name="subtitle_edit_character">Edit character</string>
     <string name="no_parties_prompt">No parties</string>

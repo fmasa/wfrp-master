@@ -22,8 +22,10 @@ import cz.frantisekmasa.wfrp_master.core.ui.scaffolding.tabs.TabRow
 import cz.frantisekmasa.wfrp_master.core.ui.scaffolding.tabs.TabScreen
 import cz.frantisekmasa.wfrp_master.core.viewModel.viewModel
 import cz.muni.fi.rpg.R
-import cz.muni.fi.rpg.model.domain.character.Character
+import cz.frantisekmasa.wfrp_master.core.domain.character.Character
 import cz.muni.fi.rpg.ui.character.skills.CharacterSkillsScreen
+import cz.frantisekmasa.wfrp_master.combat.ui.ActiveCombatBanner
+import cz.frantisekmasa.wfrp_master.core.viewModel.PartyViewModel
 import cz.muni.fi.rpg.ui.common.AdManager
 import cz.muni.fi.rpg.ui.common.composables.*
 import cz.frantisekmasa.wfrp_master.navigation.Route
@@ -74,7 +76,7 @@ fun CharacterDetailScreen(routing: Routing<Route.CharacterDetail>, adManager: Ad
         }
     ) {
         MainContainer(
-            characterId = routing.route.characterId,
+            routing = routing,
             character = character,
             viewModel = viewModel,
             adManager = adManager,
@@ -84,7 +86,7 @@ fun CharacterDetailScreen(routing: Routing<Route.CharacterDetail>, adManager: Ad
 
 @Composable
 private fun MainContainer(
-    characterId: CharacterId,
+    routing: Routing<Route.CharacterDetail>,
     character: Character?,
     viewModel: CharacterViewModel,
     adManager: AdManager,
@@ -97,11 +99,15 @@ private fun MainContainer(
         return
     }
 
+    val characterId = routing.route.characterId
+
     WithConstraints(Modifier.fillMaxSize()) {
         val screenWidth = constraints.maxWidth.toFloat()
         val screens = screens(characterId, viewModel, Modifier.width(maxWidth).padding(top = 6.dp))
 
         Column(Modifier.fillMaxHeight()) {
+            ActiveCombatBanner(partyId = characterId.partyId, routing = routing)
+
             val scrollState = key(screenWidth, screens.size) { rememberScrollState(0f) }
 
             TabRow(screens, scrollState, screenWidth)

@@ -16,9 +16,9 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.loadVectorResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import cz.frantisekmasa.wfrp_master.combat.domain.encounter.Encounter
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.EmptyUI
 import cz.muni.fi.rpg.R
-import cz.muni.fi.rpg.model.domain.encounter.Encounter
 import cz.muni.fi.rpg.ui.common.composables.DraggableListFor
 import cz.muni.fi.rpg.viewModels.EncountersViewModel
 
