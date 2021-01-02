@@ -1,6 +1,7 @@
 plugins {
     id("com.android.library")
     id("kotlin-android")
+    id("kotlin-parcelize")
 }
 
 val composeVersion = "1.0.0-alpha09"

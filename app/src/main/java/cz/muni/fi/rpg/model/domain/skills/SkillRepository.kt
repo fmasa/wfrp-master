@@ -11,6 +11,8 @@ interface SkillRepository {
      */
     fun forCharacter(characterId: CharacterId): Flow<List<Skill>>
 
+    suspend fun findByCompendiumId(characterId: CharacterId, compendiumSkillId: UUID): Skill?
+
     /**
      * Removes given skill from character's skill list
      * or does nothing if given skill is not associated to user

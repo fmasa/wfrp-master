@@ -1,14 +1,27 @@
 package cz.frantisekmasa.wfrp_master.core.domain.rolls
 
+import android.os.Parcelable
+import androidx.annotation.StringRes
+import cz.frantisekmasa.wfrp_master.core.R
+import kotlinx.parcelize.Parcelize
+
+@Parcelize
 data class TestResult(
     val rollValue: Int,
     val testedValue: Int,
-) {
+): Parcelable {
     init {
         require(rollValue in 1..100) { "Roll value must be larger than 0 and lower or equal than 100" }
     }
 
-    val isSuccess: Boolean = successLevelNumber() > 0 || rollValue <= testedValue
+    val isFumble: Boolean
+        get() = !isSuccess && rollsDouble()
+
+    val isCritical: Boolean
+        get() = isSuccess && rollsDouble()
+
+    val isSuccess: Boolean
+        get() = successLevelNumber() > 0 || rollValue <= testedValue
 
     val successLevel: String
         get() = (if (isSuccess) "+" else "") + successLevelNumber()
@@ -32,14 +45,16 @@ data class TestResult(
         else -> testedValue / 10 - rollValue / 10
     }
 
-    enum class DramaticResult(val successLevelRange: IntRange) {
-        ASTOUNDING_SUCCESS(6..Int.MAX_VALUE),
-        IMPRESSIVE_SUCCESS(4..5),
-        SUCCESS(2..3),
-        MARGINAL_SUCCESS(0..1),
-        MARGINAL_FAILURE(-1..0),
-        FAILURE(-3..-2),
-        IMPRESSIVE_FAILURE(-5..-4),
-        ASTOUNDING_FAILURE(Int.MIN_VALUE..-6),
+    private fun rollsDouble() = rollValue == 100 || rollValue % 11 == 0 // 100 is rolled as 00, thus special treatment
+
+    enum class DramaticResult(val successLevelRange: IntRange, @StringRes val labelResource: Int) {
+        ASTOUNDING_SUCCESS(6..Int.MAX_VALUE, R.string.test_dramatic_astounding_success),
+        IMPRESSIVE_SUCCESS(4..5, R.string.test_dramatic_impressive_success),
+        SUCCESS(2..3, R.string.test_dramatic_success),
+        MARGINAL_SUCCESS(0..1, R.string.test_dramatic_marginal_success),
+        MARGINAL_FAILURE(-1..0, R.string.test_dramatic_marginal_failure),
+        FAILURE(-3..-2, R.string.test_dramatic_failure),
+        IMPRESSIVE_FAILURE(-5..-4, R.string.test_dramatic_impressive_failure),
+        ASTOUNDING_FAILURE(Int.MIN_VALUE..-6, R.string.test_dramatic_astounding_failure),
     }
 }

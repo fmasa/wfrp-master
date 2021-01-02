@@ -144,5 +144,6 @@ val appModule = module {
 
     scope(named(KoinScopeType.Screen)) {
         scoped { (partyId: UUID) -> GameMasterViewModel(partyId, get(), get()) }
+        scoped { (partyId: UUID) -> SkillTestViewModel(partyId, skillCompendium(), get(), get()) }
     }
 }

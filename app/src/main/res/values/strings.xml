@@ -54,6 +54,31 @@
     <string name="title_choose_compendium_spell">Choose Compendium spell…</string>
     <string name="button_add_non_compendium_spell">…or add non-Compendium spell</string>
 
+    <!-- Skill Test Dialog -->
+    <string name="title_skill_select">Select skill</string>
+    <string name="title_skill_test">Perform skill test</string>
+    <string name="title_test">%1$s Test</string>
+    <string name="button_test_execute">Execute</string>
+    <string name="button_test_reroll">Reroll</string>
+
+    <string name="item_roll">Roll</string>
+    <string name="item_roll_value">%1$d vs %2$d</string>
+    <string name="error_needs_skill_advance">Character cannot test against advanced skill (s)he does not know.</string>
+    <string name="item_success_level">SL</string>
+    <string name="item_dramatic_result">Dramatic Result</string>
+    <string name="item_fumble">Fumble</string>
+    <string name="item_critical">Critical</string>
+
+    <string name="label_skill">Skill</string>
+    <string name="label_difficulty">Difficulty</string>
+
+    <string name="difficulty_very_easy">Very Easy</string>
+    <string name="difficulty_easy">Easy</string>
+    <string name="difficulty_average">Average</string>
+    <string name="difficulty_challenging">Challenging</string>
+    <string name="difficulty_difficult">Difficult</string>
+    <string name="difficulty_hard">Hard</string>
+    <string name="difficulty_very_hard">Very Hard</string>
 
     <string name="title_character_creation_info">Basic info</string>
 

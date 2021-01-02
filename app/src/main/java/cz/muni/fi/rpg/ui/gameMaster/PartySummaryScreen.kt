@@ -6,11 +6,8 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.*
+import androidx.compose.runtime.savedinstancestate.savedInstanceState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.loadVectorResource
@@ -31,6 +28,7 @@ import cz.frantisekmasa.wfrp_master.core.domain.party.Invitation
 import cz.muni.fi.rpg.ui.common.composables.*
 import cz.muni.fi.rpg.ui.gameMaster.adapter.Player
 import cz.frantisekmasa.wfrp_master.navigation.Route
+import cz.muni.fi.rpg.ui.gameMaster.rolls.SkillTestDialog
 import cz.muni.fi.rpg.viewModels.GameMasterViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -48,10 +46,19 @@ internal fun PartySummaryScreen(
     onCharacterCreateRequest: (userId: String?) -> Unit,
     onEditAmbitionsRequest: (Ambitions) -> Unit,
 ) {
+    var skillTestDialogVisible by savedInstanceState { false }
+
+    if (skillTestDialogVisible) {
+        SkillTestDialog(
+            partyId = partyId,
+            onDismissRequest = { skillTestDialogVisible = false }
+        )
+    }
+
     Scaffold(
         modifier,
         floatingActionButton = {
-            FloatingActionButton(onClick = {}) {
+            FloatingActionButton(onClick = { skillTestDialogVisible = true }) {
                 loadVectorResource(R.drawable.ic_dice_roll).resource.resource?.let { Icon(it) }
             }
         }
