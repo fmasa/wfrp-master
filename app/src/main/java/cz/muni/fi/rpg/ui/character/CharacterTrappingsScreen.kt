@@ -7,8 +7,8 @@ import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.ProvideTextStyle
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.*
+import androidx.compose.runtime.savedinstancestate.savedInstanceState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -18,6 +18,7 @@ import androidx.compose.ui.unit.dp
 import cz.muni.fi.rpg.R
 import cz.frantisekmasa.wfrp_master.core.domain.identifiers.CharacterId
 import cz.frantisekmasa.wfrp_master.core.domain.Money
+import cz.frantisekmasa.wfrp_master.core.ui.dialogs.DialogState
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.CardContainer
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.ContextMenu
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.EmptyUI
@@ -53,14 +54,28 @@ internal fun CharacterTrappingsScreen(
             ArmorCard(armor, onChange = { viewModel.updateArmor(it) })
         }
 
+        var inventoryItemDialogState: DialogState<InventoryItem?> by remember {
+            mutableStateOf(DialogState.Closed())
+        }
+
+        val dialogState = inventoryItemDialogState
+
+        if (dialogState is DialogState.Opened) {
+            InventoryItemDialog(
+                viewModel = viewModel,
+                existingItem = dialogState.item,
+                onDismissRequest = { inventoryItemDialogState = DialogState.Closed() }
+            )
+        }
+
         InventoryItemsCard(
             viewModel,
             onClick = {
-                InventoryItemDialog.newInstance(characterId, it).show(fragmentManager, null)
+                inventoryItemDialogState = DialogState.Opened(it)
             },
             onRemove = { viewModel.removeInventoryItem(it) },
             onNewItemButtonClicked = {
-                InventoryItemDialog.newInstance(characterId, null).show(fragmentManager, null)
+                inventoryItemDialogState = DialogState.Opened(null)
             },
         )
 

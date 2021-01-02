@@ -1,123 +1,117 @@
 package cz.muni.fi.rpg.ui.character.inventory
 
-import android.app.Dialog
-import android.os.Bundle
-import android.view.View
-import android.widget.Toast
-import androidx.appcompat.app.AlertDialog
-import androidx.core.os.bundleOf
-import androidx.fragment.app.DialogFragment
+import androidx.compose.foundation.ScrollableColumn
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.material.Scaffold
+import androidx.compose.material.Text
+import androidx.compose.material.TopAppBar
+import androidx.compose.runtime.*
+import androidx.compose.runtime.savedinstancestate.savedInstanceState
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.KeyboardType
+import cz.frantisekmasa.wfrp_master.core.ui.buttons.CloseButton
 import cz.muni.fi.rpg.R
-import cz.frantisekmasa.wfrp_master.core.domain.identifiers.CharacterId
+import cz.frantisekmasa.wfrp_master.core.ui.dialogs.FullScreenDialog
+import cz.frantisekmasa.wfrp_master.core.ui.forms.Rules
+import cz.frantisekmasa.wfrp_master.core.ui.forms.TextInput
+import cz.frantisekmasa.wfrp_master.core.ui.primitives.Spacing
+import cz.frantisekmasa.wfrp_master.core.ui.scaffolding.SaveAction
 import cz.muni.fi.rpg.model.domain.inventory.InventoryItem
-import cz.muni.fi.rpg.model.domain.inventory.InventoryItemId
-import cz.muni.fi.rpg.ui.common.forms.Form
-import cz.muni.fi.rpg.ui.common.optionalParcelableArgument
-import cz.muni.fi.rpg.ui.common.parcelableArgument
-import cz.muni.fi.rpg.ui.common.toast
-import cz.muni.fi.rpg.ui.views.TextInput
 import cz.muni.fi.rpg.viewModels.InventoryViewModel
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import org.koin.androidx.viewmodel.ext.android.viewModel
-import org.koin.core.parameter.parametersOf
-import timber.log.Timber
+import java.util.*
+import kotlin.math.max
 
-class InventoryItemDialog : DialogFragment(),
-    CoroutineScope by CoroutineScope(Dispatchers.Default) {
-    companion object {
-        private const val ARGUMENT_ITEM = "item"
-        private const val ARGUMENT_CHARACTER_ID = "characterId"
+@Composable
+fun InventoryItemDialog(
+    viewModel: InventoryViewModel,
+    existingItem: InventoryItem?,
+    onDismissRequest: () -> Unit,
+) {
+    FullScreenDialog(onDismissRequest = onDismissRequest) {
+        val coroutineScope = rememberCoroutineScope()
+        var validate by remember { mutableStateOf(false) }
 
-        fun newInstance(
-            characterId: CharacterId,
-            existingItem: InventoryItem?
-        ) = InventoryItemDialog().apply {
-            arguments = bundleOf(
-                ARGUMENT_CHARACTER_ID to characterId,
-                ARGUMENT_ITEM to existingItem
-            )
-        }
-    }
+        var name by savedInstanceState { existingItem?.name ?: "" }
+        var description by savedInstanceState { existingItem?.description ?: "" }
+        var quantity by savedInstanceState { existingItem?.quantity?.toString() ?: "1" }
 
-    private val existingItem: InventoryItem? by optionalParcelableArgument(ARGUMENT_ITEM)
-    private val characterId: CharacterId by parcelableArgument(ARGUMENT_CHARACTER_ID)
+        Scaffold(
+            topBar = {
+                TopAppBar(
+                    navigationIcon = { CloseButton(onClick = onDismissRequest) },
+                    title = {
+                        Text(
+                            stringResource(
+                                if (existingItem != null)
+                                    R.string.title_inventory_item_edit
+                                else R.string.title_inventory_item_add
+                            )
+                        )
+                    },
+                    actions = {
+                        var saving by remember { mutableStateOf(false) }
 
-    private val viewModel: InventoryViewModel by viewModel { parametersOf(characterId) }
+                        SaveAction(
+                            enabled = !saving && (!validate || name.isNotBlank()),
+                            onClick = {
+                                if (name.isBlank()) {
+                                    validate = true
+                                    return@SaveAction
+                                }
 
-    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        val activity = requireActivity()
-        val view = activity.layoutInflater.inflate(R.layout.inventory_item_edit_dialog, null)
+                                saving = true
 
-        val dialog = AlertDialog.Builder(requireContext(), R.style.FormDialog)
-            .setTitle(if (existingItem != null) null else getString(R.string.createInventoryItemTitle))
-            .setView(view)
-            .setPositiveButton(R.string.button_save, null)
-            .setNegativeButton(R.string.button_cancel, null)
-            .create()
+                                coroutineScope.launch(Dispatchers.IO) {
+                                    viewModel.saveInventoryItem(
+                                        InventoryItem(
+                                            id = existingItem?.id ?: UUID.randomUUID(),
+                                            name = name,
+                                            description = description,
+                                            quantity = max(1, quantity.toIntOrNull() ?: 1),
+                                        )
+                                    )
 
-
-        val form = Form(requireContext()).apply {
-            addTextInput(view.findViewById<TextInput>(R.id.nameInput)).apply {
-                setMaxLength(InventoryItem.NAME_MAX_LENGTH, false)
-                setNotBlank(getString(R.string.error_name_blank))
-                existingItem?.let { setDefaultValue(it.name) }
+                                    withContext(Dispatchers.Main) { onDismissRequest() }
+                                }
+                            }
+                        )
+                    }
+                )
             }
+        ) {
+            ScrollableColumn(
+                contentPadding = PaddingValues(Spacing.bodyPadding),
+                verticalArrangement = Arrangement.spacedBy(Spacing.small),
+            ) {
+                TextInput(
+                    label = stringResource(R.string.label_name),
+                    value = name,
+                    onValueChange = { name = it },
+                    validate = validate,
+                    maxLength = InventoryItem.NAME_MAX_LENGTH,
+                    rules = Rules(Rules.NotBlank()),
+                )
 
-            addTextInput(view.findViewById<TextInput>(R.id.descriptionInput)).apply {
-                setMaxLength(InventoryItem.DESCRIPTION_MAX_LENGTH, false)
-                existingItem?.let { setDefaultValue(it.description) }
-            }
+                TextInput(
+                    label = stringResource(R.string.inventory_item_quantity),
+                    value = quantity,
+                    onValueChange = { quantity = it },
+                    validate = validate,
+                    keyboardType = KeyboardType.Number,
+                )
 
-            addTextInput(view.findViewById<TextInput>(R.id.quantityInput)).apply {
-                setDefaultValue(existingItem?.quantity?.toString() ?: "1")
-                addLiveRule(getString(R.string.error_invalid_quantity)) {
-                    val value = it.toString().toIntOrNull()
-
-                    value != null && value > 0
-                }
-            }
-        }
-
-        dialog.setOnShowListener {
-            dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener {
-                onDialogSubmitted(form, view)
-            }
-        }
-
-        return dialog
-    }
-
-    private fun onDialogSubmitted(form: Form, view: View) {
-        if (!form.validate()) {
-            return
-        }
-
-        val inventoryItem = createInventoryItem(view)
-
-        launch {
-            try {
-                viewModel.saveInventoryItem(inventoryItem)
-
-                longToast(getString(R.string.inventory_toast_item_saved))
-                dismiss()
-            } catch (e: Throwable) {
-                longToast("Item couldn't be added to your inventory.")
-                Timber.e(e)
+                TextInput(
+                    label = stringResource(R.string.label_description),
+                    value = description,
+                    onValueChange = { description = it },
+                    validate = validate,
+                    maxLength = InventoryItem.DESCRIPTION_MAX_LENGTH,
+                )
             }
         }
-    }
-
-    private fun createInventoryItem(view: View) = InventoryItem(
-        id = this.existingItem?.id ?: InventoryItemId.randomUUID(),
-        name = view.findViewById<TextInput>(R.id.nameInput).getValue(),
-        description = view.findViewById<TextInput>(R.id.descriptionInput).getValue(),
-        quantity = view.findViewById<TextInput>(R.id.quantityInput).getValue().toInt()
-    )
-
-    private suspend fun longToast(message: String) {
-        withContext(Dispatchers.Main) { toast(message, Toast.LENGTH_LONG) }
     }
 }
