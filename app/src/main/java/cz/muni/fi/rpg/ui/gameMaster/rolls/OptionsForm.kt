@@ -18,7 +18,7 @@ import cz.frantisekmasa.wfrp_master.core.ui.primitives.FullScreenProgress
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.Spacing
 import cz.frantisekmasa.wfrp_master.core.ui.scaffolding.TopBarAction
 import cz.muni.fi.rpg.R
-import cz.muni.fi.rpg.model.domain.character.Character
+import cz.frantisekmasa.wfrp_master.core.domain.character.Character
 import cz.muni.fi.rpg.viewModels.SkillTestViewModel
 
 

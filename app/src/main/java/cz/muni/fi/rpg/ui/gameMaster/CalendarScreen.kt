@@ -29,7 +29,7 @@ import cz.frantisekmasa.wfrp_master.core.domain.time.DateTime
 import cz.frantisekmasa.wfrp_master.core.domain.time.ImperialDate
 import cz.frantisekmasa.wfrp_master.core.domain.time.MannsliebPhase
 import cz.frantisekmasa.wfrp_master.core.domain.time.YearSeason
-import cz.muni.fi.rpg.ui.common.composables.CardContainer
+import cz.frantisekmasa.wfrp_master.core.ui.primitives.CardContainer
 import cz.muni.fi.rpg.ui.gameMaster.calendar.ImperialCalendar
 import cz.muni.fi.rpg.viewModels.GameMasterViewModel
 import kotlinx.coroutines.Dispatchers

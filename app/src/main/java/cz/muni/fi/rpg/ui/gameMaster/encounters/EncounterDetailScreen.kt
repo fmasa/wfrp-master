@@ -8,20 +8,22 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.material.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.Providers
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.*
+import androidx.compose.runtime.savedinstancestate.savedInstanceState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.AmbientContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
+import cz.frantisekmasa.wfrp_master.combat.domain.encounter.Encounter
+import cz.frantisekmasa.wfrp_master.combat.domain.encounter.Npc
+import cz.frantisekmasa.wfrp_master.combat.ui.StartCombatDialog
 import cz.frantisekmasa.wfrp_master.core.domain.identifiers.NpcId
 import cz.frantisekmasa.wfrp_master.core.ui.buttons.BackButton
+import cz.frantisekmasa.wfrp_master.core.ui.primitives.CardContainer
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.ContextMenu
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.EmptyUI
 import cz.frantisekmasa.wfrp_master.core.ui.scaffolding.Subtitle
@@ -29,8 +31,6 @@ import cz.frantisekmasa.wfrp_master.core.ui.scaffolding.TopBarAction
 import cz.frantisekmasa.wfrp_master.core.ui.viewinterop.fragmentManager
 import cz.frantisekmasa.wfrp_master.core.viewModel.viewModel
 import cz.muni.fi.rpg.R
-import cz.muni.fi.rpg.model.domain.encounter.Npc
-import cz.muni.fi.rpg.model.domain.encounter.Encounter
 import cz.muni.fi.rpg.ui.common.composables.*
 import cz.frantisekmasa.wfrp_master.navigation.Route
 import cz.frantisekmasa.wfrp_master.navigation.Routing
@@ -46,6 +46,8 @@ import java.util.*
 fun EncounterDetailScreen(routing: Routing<Route.EncounterDetail>) {
     val encounterId = routing.route.encounterId
     val viewModel: EncounterDetailViewModel by viewModel { parametersOf(encounterId) }
+
+    var startCombatDialogVisible by savedInstanceState { false }
 
     Scaffold(
         topBar = {
@@ -78,9 +80,29 @@ fun EncounterDetailScreen(routing: Routing<Route.EncounterDetail>) {
                 }
             )
         },
-    ) {
-        MainContainer(routing, viewModel)
-    }
+        floatingActionButtonPosition = FabPosition.Center,
+        floatingActionButton = {
+            ExtendedFloatingActionButton(
+                icon = { Icon(vectorResource(R.drawable.ic_encounter), Modifier.width(24.dp)) },
+                text = { Text(stringResource(R.string.title_start_combat)) },
+                onClick = { startCombatDialogVisible = true },
+            )
+        },
+        bodyContent = {
+            MainContainer(routing, viewModel)
+
+            if (startCombatDialogVisible) {
+                StartCombatDialog(
+                    encounterId = encounterId,
+                    onDismissRequest = { startCombatDialogVisible = false },
+                    onComplete = {
+                        startCombatDialogVisible = false
+                        routing.backStack.push(Route.ActiveCombat(partyId = encounterId.partyId))
+                    },
+                )
+            }
+        }
+    )
 }
 
 @Composable

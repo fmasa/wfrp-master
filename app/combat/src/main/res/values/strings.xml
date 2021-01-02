@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Combat -->
+    <string name="title_start_combat">Start Combat</string>
+    <string name="n_round">Round %1$d</string>
+    <string name="n_turn">Turn %1$d</string>
+    <string name="next_turn">Next turn</string>
+
+    <string name="title_characters">Characters</string>
+    <string name="title_npcs">NPCs</string>
+</resources>

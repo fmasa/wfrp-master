@@ -127,6 +127,7 @@ dependencies {
     implementation(project(":app:core"))
     implementation(project(":app:navigation"))
     implementation(project(":app:compendium"))
+    implementation(project(":app:combat"))
 
     implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar"))))
     implementation("androidx.appcompat:appcompat:1.2.0")

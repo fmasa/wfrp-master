@@ -1,5 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- Domain -->
+
+    <!-- Species -->
+    <string name="race_dwarf">Dwarf</string>
+    <string name="race_high_elf">High Elf</string>
+    <string name="race_wood_elf">Wood Elf</string>
+    <string name="race_halfling">Halfling</string>
+    <string name="race_human">Human</string>
+    <string name="race_gnome">Gnome</string>
+
+    <!-- End of Domain -->
+
     <string name="button_finish">Finish</string>
     <string name="button_save">Save</string>
     <string name="button_cancel">Cancel</string>

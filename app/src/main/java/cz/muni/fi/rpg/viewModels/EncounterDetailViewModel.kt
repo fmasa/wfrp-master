@@ -1,12 +1,12 @@
 package cz.muni.fi.rpg.viewModels
 
 import androidx.lifecycle.ViewModel
-import cz.muni.fi.rpg.model.domain.armour.Armor
+import cz.frantisekmasa.wfrp_master.combat.domain.encounter.*
+import cz.frantisekmasa.wfrp_master.core.domain.Armor
 import cz.frantisekmasa.wfrp_master.core.domain.Stats
 import cz.frantisekmasa.wfrp_master.core.domain.identifiers.EncounterId
 import cz.frantisekmasa.wfrp_master.core.domain.identifiers.NpcId
 import cz.frantisekmasa.wfrp_master.core.utils.right
-import cz.muni.fi.rpg.model.domain.encounter.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 import timber.log.Timber

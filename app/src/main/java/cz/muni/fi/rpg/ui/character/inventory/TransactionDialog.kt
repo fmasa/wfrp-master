@@ -10,7 +10,7 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
 import cz.muni.fi.rpg.R
 import cz.frantisekmasa.wfrp_master.core.domain.identifiers.CharacterId
-import cz.muni.fi.rpg.model.domain.character.NotEnoughMoney
+import cz.frantisekmasa.wfrp_master.core.domain.character.NotEnoughMoney
 import cz.frantisekmasa.wfrp_master.core.domain.Money
 import cz.muni.fi.rpg.ui.common.adapters.SpinnerAdapterWithWidthMatchingSelectedItem
 import cz.muni.fi.rpg.ui.common.parcelableArgument

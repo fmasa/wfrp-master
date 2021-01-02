@@ -14,11 +14,11 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import cz.frantisekmasa.wfrp_master.core.domain.Characteristic
 import cz.muni.fi.rpg.R
-import cz.muni.fi.rpg.model.domain.character.Character
-import cz.muni.fi.rpg.model.domain.character.Points
+import cz.frantisekmasa.wfrp_master.core.domain.character.Character
+import cz.frantisekmasa.wfrp_master.core.domain.character.Points
 import cz.frantisekmasa.wfrp_master.core.domain.Stats
 import cz.frantisekmasa.wfrp_master.core.domain.identifiers.CharacterId
-import cz.muni.fi.rpg.ui.common.composables.CardContainer
+import cz.frantisekmasa.wfrp_master.core.ui.primitives.CardContainer
 import cz.muni.fi.rpg.ui.common.composables.NumberPicker
 import cz.muni.fi.rpg.ui.common.composables.Theme
 import cz.frantisekmasa.wfrp_master.core.viewModel.viewModel

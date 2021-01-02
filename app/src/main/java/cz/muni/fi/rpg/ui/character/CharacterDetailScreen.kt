@@ -22,7 +22,7 @@ import cz.frantisekmasa.wfrp_master.core.ui.scaffolding.tabs.TabRow
 import cz.frantisekmasa.wfrp_master.core.ui.scaffolding.tabs.TabScreen
 import cz.frantisekmasa.wfrp_master.core.viewModel.viewModel
 import cz.muni.fi.rpg.R
-import cz.muni.fi.rpg.model.domain.character.Character
+import cz.frantisekmasa.wfrp_master.core.domain.character.Character
 import cz.muni.fi.rpg.ui.character.skills.CharacterSkillsScreen
 import cz.muni.fi.rpg.ui.common.AdManager
 import cz.muni.fi.rpg.ui.common.composables.*

@@ -11,6 +11,7 @@ import com.github.zsoltk.compose.backpress.AmbientBackPressHandler
 import com.github.zsoltk.compose.backpress.BackPressHandler
 import com.github.zsoltk.compose.router.BackStack
 import com.github.zsoltk.compose.router.Router
+import cz.frantisekmasa.wfrp_master.combat.ui.ActiveCombatScreen
 import cz.frantisekmasa.wfrp_master.compendium.ui.CompendiumImportScreen
 import cz.frantisekmasa.wfrp_master.compendium.ui.CompendiumScreen
 import cz.frantisekmasa.wfrp_master.core.ui.buttons.AmbientHamburgerButtonHandler
@@ -107,6 +108,9 @@ class MainActivity : AuthenticatedActivity(R.layout.activity_main) {
                                 }
                                 is Route.InvitationScanner -> {
                                     InvitationScannerScreen(Routing(route, backStack))
+                                }
+                                is Route.ActiveCombat -> {
+                                    ActiveCombatScreen()
                                 }
                             }
                         }

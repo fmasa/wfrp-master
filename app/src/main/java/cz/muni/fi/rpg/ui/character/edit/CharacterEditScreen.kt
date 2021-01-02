@@ -20,10 +20,9 @@ import cz.frantisekmasa.wfrp_master.core.ui.scaffolding.TopBarAction
 import cz.frantisekmasa.wfrp_master.core.ui.texts.SaveButtonText
 import cz.frantisekmasa.wfrp_master.core.viewModel.viewModel
 import cz.muni.fi.rpg.R
-import cz.muni.fi.rpg.model.domain.character.Character
+import cz.frantisekmasa.wfrp_master.core.domain.character.Character
 import cz.muni.fi.rpg.ui.characterCreation.CharacterBasicInfoForm
 import cz.muni.fi.rpg.ui.characterCreation.CharacterCharacteristicsForm
-import cz.muni.fi.rpg.ui.common.composables.*
 import cz.frantisekmasa.wfrp_master.navigation.Route
 import cz.frantisekmasa.wfrp_master.navigation.Routing
 import cz.muni.fi.rpg.viewModels.CharacterViewModel

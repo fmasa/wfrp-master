@@ -123,12 +123,6 @@
     <string name="label_strength_bonus">SB</string>
     <string name="label_strength">Strength</string>
 
-    <string name="race_dwarf">Dwarf</string>
-    <string name="race_high_elf">High Elf</string>
-    <string name="race_wood_elf">Wood Elf</string>
-    <string name="race_halfling">Halfling</string>
-    <string name="race_human">Human</string>
-    <string name="race_gnome">Gnome</string>
     <string name="button_edit">Edit</string>
     <string name="subtitle_edit_character">Edit character</string>
     <string name="no_parties_prompt">No parties</string>
@@ -335,7 +329,4 @@
     <string name="error_import_failed">PDF import failed. Check that chose valid rulebook PDF.</string>
 
     <string name="error_camera_permission_required">Camera permission is required for QR code scanning</string>
-    <string name="n_round">Round %1$d</string>
-    <string name="n_turn">Turn %1$d</string>
-    <string name="next_turn">Next turn</string>
 </resources>

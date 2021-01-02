@@ -1,9 +1,9 @@
 package cz.muni.fi.rpg.viewModels
 
 import androidx.lifecycle.ViewModel
+import cz.frantisekmasa.wfrp_master.combat.domain.encounter.Encounter
+import cz.frantisekmasa.wfrp_master.combat.domain.encounter.EncounterRepository
 import cz.frantisekmasa.wfrp_master.core.domain.identifiers.EncounterId
-import cz.muni.fi.rpg.model.domain.encounter.Encounter
-import cz.muni.fi.rpg.model.domain.encounter.EncounterRepository
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.Flow
 import java.util.*

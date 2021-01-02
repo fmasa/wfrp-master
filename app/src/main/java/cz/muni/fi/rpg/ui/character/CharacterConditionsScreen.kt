@@ -17,10 +17,10 @@ import androidx.compose.ui.text.capitalize
 import androidx.compose.ui.text.intl.Locale
 import androidx.compose.ui.text.toLowerCase
 import androidx.compose.ui.unit.dp
+import cz.frantisekmasa.wfrp_master.core.domain.character.Condition
+import cz.frantisekmasa.wfrp_master.core.domain.character.Character
+import cz.frantisekmasa.wfrp_master.core.domain.character.CurrentConditions
 import cz.muni.fi.rpg.R
-import cz.muni.fi.rpg.model.domain.character.Character
-import cz.muni.fi.rpg.model.domain.character.Condition
-import cz.muni.fi.rpg.model.domain.character.CurrentConditions
 import cz.muni.fi.rpg.ui.common.composables.NumberPicker
 import cz.muni.fi.rpg.viewModels.CharacterViewModel
 import kotlinx.coroutines.Dispatchers
