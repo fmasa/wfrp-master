@@ -88,6 +88,9 @@ dependencies {
 
     api("io.arrow-kt:arrow-core:0.10.4")
 
+    // Parser combinator library (grammars etc.)
+    api("com.github.h0tk3y.betterParse:better-parse:0.4.0")
+
     // JSON encoding
     // TODO: Make is implementation only
     api("com.fasterxml.jackson.module:jackson-module-kotlin:2.11.0")

@@ -18,6 +18,19 @@ internal class FirestoreSkillRepository(
     override fun forCharacter(characterId: CharacterId): Flow<List<Skill>> =
         queryFlow(skillsCollection(characterId), mapper)
 
+    override suspend fun findByCompendiumId(
+        characterId: CharacterId,
+        compendiumSkillId: UUID
+    ): Skill? {
+        return skillsCollection(characterId)
+            .whereEqualTo("compendiumId", compendiumSkillId.toString())
+            .get()
+            .await()
+            .documents
+            .map { mapper.fromDocumentSnapshot(it) }
+            .firstOrNull()
+    }
+
     override suspend fun remove(characterId: CharacterId, skillId: UUID) {
         skillsCollection(characterId).document(skillId.toString()).delete().await()
     }

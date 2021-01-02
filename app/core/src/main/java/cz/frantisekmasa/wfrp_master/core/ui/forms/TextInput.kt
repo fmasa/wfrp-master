@@ -42,7 +42,7 @@ fun TextInput(
     horizontalAlignment: Alignment.Horizontal = Alignment.Start,
     rules: Rules = Rules.NoRules
 ) {
-    val borderColor = MaterialTheme.colors.onSurface.copy(alpha = 0.15f)
+    val borderColor = Colors.inputBorderColor()
 
     Column(modifier, horizontalAlignment = horizontalAlignment) {
         label?.let { InputLabel(label) }

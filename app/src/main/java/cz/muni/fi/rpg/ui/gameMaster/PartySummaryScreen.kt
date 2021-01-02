@@ -5,17 +5,12 @@ import androidx.compose.foundation.ScrollableColumn
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.CircularProgressIndicator
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.ProvideTextStyle
-import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.material.*
+import androidx.compose.runtime.*
+import androidx.compose.runtime.savedinstancestate.savedInstanceState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.loadVectorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontStyle
@@ -33,6 +28,7 @@ import cz.frantisekmasa.wfrp_master.core.domain.party.Invitation
 import cz.muni.fi.rpg.ui.common.composables.*
 import cz.muni.fi.rpg.ui.gameMaster.adapter.Player
 import cz.frantisekmasa.wfrp_master.navigation.Route
+import cz.muni.fi.rpg.ui.gameMaster.rolls.SkillTestDialog
 import cz.muni.fi.rpg.viewModels.GameMasterViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -50,58 +46,76 @@ internal fun PartySummaryScreen(
     onCharacterCreateRequest: (userId: String?) -> Unit,
     onEditAmbitionsRequest: (Ambitions) -> Unit,
 ) {
-    ScrollableColumn(modifier.background(MaterialTheme.colors.background)) {
-        val party = viewModel.party.collectAsState(null).value
-            ?: return@ScrollableColumn
+    var skillTestDialogVisible by savedInstanceState { false }
 
-        val invitationDialogVisible = remember { mutableStateOf(false) }
+    if (skillTestDialogVisible) {
+        SkillTestDialog(
+            partyId = partyId,
+            onDismissRequest = { skillTestDialogVisible = false }
+        )
+    }
 
-        if (invitationDialogVisible.value) {
-            InvitationDialog2(
-                invitation = party.getInvitation(),
-                onDismissRequest = { invitationDialogVisible.value = false },
-            )
+    Scaffold(
+        modifier,
+        floatingActionButton = {
+            FloatingActionButton(onClick = { skillTestDialogVisible = true }) {
+                loadVectorResource(R.drawable.ic_dice_roll).resource.resource?.let { Icon(it) }
+            }
         }
+    ) {
+        ScrollableColumn(Modifier.background(MaterialTheme.colors.background)) {
+            val party = viewModel.party.collectAsState(null).value
+                ?: return@ScrollableColumn
 
-        val coroutineScope = rememberCoroutineScope()
+            val invitationDialogVisible = remember { mutableStateOf(false) }
 
-        PlayersCard(
-            viewModel,
-            onCharacterOpenRequest = onCharacterOpenRequest,
-            onCharacterCreateRequest = onCharacterCreateRequest,
-            onRemoveCharacter = {
-                coroutineScope.launch(Dispatchers.IO) {
-                    viewModel.archiveCharacter(CharacterId(partyId, it.id))
-                }
-            },
-            onInvitationDialogRequest = { invitationDialogVisible.value = true },
-        )
+            if (invitationDialogVisible.value) {
+                InvitationDialog2(
+                    invitation = party.getInvitation(),
+                    onDismissRequest = { invitationDialogVisible.value = false },
+                )
+            }
+
+            val coroutineScope = rememberCoroutineScope()
+
+            PlayersCard(
+                viewModel,
+                onCharacterOpenRequest = onCharacterOpenRequest,
+                onCharacterCreateRequest = onCharacterCreateRequest,
+                onRemoveCharacter = {
+                    coroutineScope.launch(Dispatchers.IO) {
+                        viewModel.archiveCharacter(CharacterId(partyId, it.id))
+                    }
+                },
+                onInvitationDialogRequest = { invitationDialogVisible.value = true },
+            )
 
 
-        AmbitionsCard(
-            modifier = Modifier
-                .padding(horizontal = 8.dp)
-                .clickable(onClick = { onEditAmbitionsRequest(party.getAmbitions()) }),
-            titleRes = R.string.title_party_ambitions,
-            ambitions = party.getAmbitions()
-        )
+            AmbitionsCard(
+                modifier = Modifier
+                    .padding(horizontal = 8.dp)
+                    .clickable(onClick = { onEditAmbitionsRequest(party.getAmbitions()) }),
+                titleRes = R.string.title_party_ambitions,
+                ambitions = party.getAmbitions()
+            )
 
 
-        CardContainer(
-            Modifier
-                .fillMaxWidth()
-                .padding(8.dp)
-                .clickable(onClick = { backStack.push(Route.Compendium(partyId)) })
-        ) {
-            Column(Modifier.fillMaxWidth().padding(horizontal = 8.dp)) {
-                CardTitle(R.string.title_compendium)
+            CardContainer(
+                Modifier
+                    .fillMaxWidth()
+                    .padding(8.dp)
+                    .clickable(onClick = { backStack.push(Route.Compendium(partyId)) })
+            ) {
+                Column(Modifier.fillMaxWidth().padding(horizontal = 8.dp)) {
+                    CardTitle(R.string.title_compendium)
 
-                val compendium: CompendiumViewModel by viewModel { parametersOf(partyId) }
+                    val compendium: CompendiumViewModel by viewModel { parametersOf(partyId) }
 
-                Row {
-                    CompendiumSummary(R.string.title_character_skills, compendium.skills)
-                    CompendiumSummary(R.string.title_character_talents, compendium.talents)
-                    CompendiumSummary(R.string.title_character_spells, compendium.spells)
+                    Row {
+                        CompendiumSummary(R.string.title_character_skills, compendium.skills)
+                        CompendiumSummary(R.string.title_character_talents, compendium.talents)
+                        CompendiumSummary(R.string.title_character_spells, compendium.spells)
+                    }
                 }
             }
         }

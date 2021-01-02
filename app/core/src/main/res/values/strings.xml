@@ -12,4 +12,14 @@
     <!-- Common input labels -->
     <string name="label_name" translatable="false">Name</string>
     <string name="label_description">Description (Optional)</string>
+
+    <!-- Tests and Rolls -->
+    <string name="test_dramatic_astounding_success">Astounding Success</string>
+    <string name="test_dramatic_impressive_success">Impressive Success</string>
+    <string name="test_dramatic_success">Success</string>
+    <string name="test_dramatic_marginal_success">Marginal Success</string>
+    <string name="test_dramatic_marginal_failure">Marginal Failure</string>
+    <string name="test_dramatic_failure">Failure</string>
+    <string name="test_dramatic_impressive_failure">Impressive Failure</string>
+    <string name="test_dramatic_astounding_failure">Astounding Failure</string>
 </resources>

@@ -16,6 +16,8 @@ import androidx.compose.ui.unit.dp
 import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.model.domain.character.Character
 import cz.frantisekmasa.wfrp_master.core.domain.identifiers.CharacterId
+import cz.frantisekmasa.wfrp_master.core.ui.primitives.MultiLineTextValue
+import cz.frantisekmasa.wfrp_master.core.ui.primitives.SingleLineTextValue
 import cz.frantisekmasa.wfrp_master.core.ui.viewinterop.fragmentManager
 import cz.frantisekmasa.wfrp_master.core.viewModel.viewModel
 import cz.muni.fi.rpg.model.domain.character.Points
@@ -90,30 +92,6 @@ private fun MainCard(character: Character) {
                 MultiLineTextValue(R.string.label_character_note, character.getNote())
             }
         }
-    }
-}
-
-@Composable
-private fun MultiLineTextValue(@StringRes labelRes: Int, value: String) {
-    if (value.isBlank()) return
-
-    Column {
-        Text(stringResource(labelRes), fontWeight = FontWeight.Bold)
-        Text(value)
-    }
-}
-
-@Composable
-private fun SingleLineTextValue(@StringRes labelRes: Int, value: String) {
-    if (value.isBlank()) return
-
-    Row {
-        Text(
-            stringResource(labelRes) + ":",
-            fontWeight = FontWeight.Bold,
-            modifier = Modifier.padding(end = 4.dp)
-        )
-        Text(value)
     }
 }
 

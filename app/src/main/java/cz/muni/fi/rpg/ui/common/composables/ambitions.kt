@@ -3,6 +3,7 @@ package cz.muni.fi.rpg.ui.common.composables
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -30,34 +31,35 @@ fun AmbitionsCard(
     ambitions: Ambitions,
     @DrawableRes titleIconRes: Int? = null,
 ) {
-    CardContainer(Modifier.fillMaxWidth().then(modifier)) {
-        Column(modifier = Modifier.fillMaxWidth().padding(horizontal = 8.dp)) {
-            CardTitle(titleRes, titleIconRes)
+    CardContainer(
+        modifier = Modifier.fillMaxWidth().then(modifier),
+        bodyPadding = PaddingValues(start = 8.dp, end = 8.dp),
+    ) {
+        CardTitle(titleRes, titleIconRes)
 
-            for ((label, value) in listOf(
-                R.string.label_ambition_short_term to ambitions.shortTerm,
-                R.string.label_ambition_long_term to ambitions.longTerm
-            )) {
-                Column(Modifier.padding(top = 4.dp)) {
-                    Text(
-                        stringResource(label),
-                        fontWeight = FontWeight.Bold
-                    )
+        for ((label, value) in listOf(
+            R.string.label_ambition_short_term to ambitions.shortTerm,
+            R.string.label_ambition_long_term to ambitions.longTerm
+        )) {
+            Column(Modifier.padding(top = 4.dp)) {
+                Text(
+                    stringResource(label),
+                    fontWeight = FontWeight.Bold
+                )
 
-                    if (value.isBlank()) {
-                        Providers(AmbientContentAlpha provides ContentAlpha.medium) {
-                            Row(verticalAlignment = Alignment.CenterVertically) {
-                                Icon(vectorResource(R.drawable.ic_none))
-                                Text(
-                                    stringResource(R.string.note_ambition_not_filled),
-                                    style = MaterialTheme.typography.body2,
-                                    fontStyle = FontStyle.Italic,
-                                )
-                            }
+                if (value.isBlank()) {
+                    Providers(AmbientContentAlpha provides ContentAlpha.medium) {
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            Icon(vectorResource(R.drawable.ic_none))
+                            Text(
+                                stringResource(R.string.note_ambition_not_filled),
+                                style = MaterialTheme.typography.body2,
+                                fontStyle = FontStyle.Italic,
+                            )
                         }
-                    } else {
-                        Text(ambitions.shortTerm)
                     }
+                } else {
+                    Text(ambitions.shortTerm)
                 }
             }
         }

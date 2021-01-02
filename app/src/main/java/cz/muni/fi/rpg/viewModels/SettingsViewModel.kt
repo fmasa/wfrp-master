@@ -18,6 +18,9 @@ class SettingsViewModel(
         preferences[Preferences.DARK_MODE] ?: false
     }
 
+    val soundEnabled: Flow<Boolean>
+        get() = dataStore.data.map { preferences -> preferences[Preferences.SOUND_ENABLED] ?: true }
+
     private val dataStore = context.createDataStore("settings")
 
     suspend fun getPartyNames(userId: String): List<String> {
@@ -27,8 +30,13 @@ class SettingsViewModel(
     suspend fun toggleDarkMode(enabled: Boolean) {
         dataStore.edit { it[Preferences.DARK_MODE] = enabled }
     }
+
+    suspend fun toggleSound(enabled: Boolean) {
+        dataStore.edit { it[Preferences.SOUND_ENABLED] = enabled }
+    }
 }
 
 private object Preferences {
     val DARK_MODE = preferencesKey<Boolean>("dark_mode")
+    val SOUND_ENABLED = preferencesKey<Boolean>("sound_enabled")
 }
