@@ -45,7 +45,6 @@ internal fun PartySummaryScreen(
     viewModel: GameMasterViewModel,
     onCharacterOpenRequest: (Character) -> Unit,
     onCharacterCreateRequest: (userId: String?) -> Unit,
-    onEditAmbitionsRequest: (Ambitions) -> Unit,
 ) {
     var skillTestDialogVisible by savedInstanceState { false }
 
@@ -93,11 +92,10 @@ internal fun PartySummaryScreen(
 
 
             AmbitionsCard(
-                modifier = Modifier
-                    .padding(horizontal = 8.dp)
-                    .clickable(onClick = { onEditAmbitionsRequest(party.getAmbitions()) }),
+                modifier = Modifier.padding(horizontal = 8.dp),
                 titleRes = R.string.title_party_ambitions,
-                ambitions = party.getAmbitions()
+                ambitions = party.getAmbitions(),
+                onSave = { viewModel.updatePartyAmbitions(it) },
             )
 
 
