@@ -1,9 +1,10 @@
 package cz.frantisekmasa.wfrp_master.core.ui.forms
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
@@ -12,11 +13,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focusRequester
-import androidx.compose.ui.layout.Layout
-import androidx.compose.ui.platform.AmbientDensity
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
-import kotlin.math.max
+import cz.frantisekmasa.wfrp_master.core.ui.primitives.Spacing
 
 private interface Filter {
     fun process(value: String): String
@@ -46,13 +45,11 @@ fun TextInput(
     horizontalAlignment: Alignment.Horizontal = Alignment.Start,
     rules: Rules = Rules.NoRules
 ) {
-    val borderColor = Colors.inputBorderColor()
-
     val focusRequester = remember { FocusRequester() }
 
     Column(
-        modifier.clickable(indication = null) { focusRequester.requestFocus() },
         horizontalAlignment = horizontalAlignment,
+        modifier = modifier.clickable(indication = null) { focusRequester.requestFocus() },
     ) {
         label?.let { InputLabel(label) }
 
@@ -63,29 +60,21 @@ fun TextInput(
         }
 
         val errorMessage = if (validate) rules.errorMessage(value) else null
+        val borderColor = if (errorMessage != null)
+            MaterialTheme.colors.error
+        else Colors.inputBorderColor()
 
-        /**
-         * We cannot simply set background to OutlinedTextField, because it has 8 dp top padding
-         * space for label. So we have to get our hands dirty by calculating height of OutlinedTextField
-         * and positioning our background surface behind it.
-         */
-        /**
-         * We cannot simply set background to OutlinedTextField, because it has 8 dp top padding
-         * space for label. So we have to get our hands dirty by calculating height of OutlinedTextField
-         * and positioning our background surface behind it.
-         */
-        val density = AmbientDensity.current
+        Surface(
+            shape = RoundedCornerShape(Spacing.tiny),
+            border = BorderStroke(1.dp, borderColor),
+            color = MaterialTheme.colors.surface,
+        ) {
+            val textStyle = AmbientTextStyle.current
+            val textColor = MaterialTheme.colors.onSurface
 
-        Layout(
-            content = {
-                Surface(
-                    shape = RoundedCornerShape(4.dp),
-                    color = MaterialTheme.colors.surface,
-                    modifier = Modifier.fillMaxWidth()
-                ) { }
-                OutlinedTextField(
+            Box(contentAlignment = Alignment.CenterStart) {
+                BasicTextField(
                     value = value,
-                    keyboardOptions = KeyboardOptions.Default.copy(keyboardType = keyboardType),
                     onValueChange = {
                         val filteredValue =
                             filters.fold(it) { value, filter -> filter.process(value) }
@@ -94,25 +83,22 @@ fun TextInput(
                             onValueChange(filteredValue)
                         }
                     },
-                    textStyle = AmbientTextStyle.current.copy(color = MaterialTheme.colors.onSurface),
-                    modifier = Modifier.focusRequester(focusRequester).fillMaxWidth(),
-                    inactiveColor = borderColor,
-                    isErrorValue = errorMessage != null,
-                    placeholder = placeholder?.let { { Text(it) } },
+                    keyboardOptions = KeyboardOptions.Default.copy(keyboardType = keyboardType),
+                    textStyle = textStyle.copy(color = textColor),
+                    singleLine = !multiLine,
+                    modifier = Modifier
+                        .focusRequester(focusRequester)
+                        .fillMaxWidth()
+                        .padding(Spacing.medium)
                 )
-            }
-        ) { measurables, constraints ->
-            val background = measurables[0]
-            val textField = measurables[1]
 
-            val textFieldTopPadding = with(density) { 8.dp.toIntPx() }
-            val textFieldPlaceable = textField.measure(constraints)
-
-            val height = max(0, textFieldPlaceable.height - textFieldTopPadding)
-
-            layout(constraints.maxWidth, height) {
-                background.measure(constraints.copy(minHeight = height)).place(0, 0)
-                textFieldPlaceable.place(0, -textFieldTopPadding)
+                if (placeholder != null && value.isEmpty()) {
+                    Text(
+                        placeholder,
+                        Modifier.padding(Spacing.medium),
+                        color = textColor.copy(alpha = ContentAlpha.medium),
+                    )
+                }
             }
         }
 
