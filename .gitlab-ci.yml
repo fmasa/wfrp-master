@@ -1,4 +1,4 @@
-image: circleci/android@sha256:03f7f2463126fb0cd7055b1c87b94307fd11c3cf8c60b5d8d18d59ad32bbb3d7
+image: circleci/android:api-30-node
 
 stages:
     - check
