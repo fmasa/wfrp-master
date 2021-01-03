@@ -51,7 +51,7 @@ fun TextInput(
     val focusRequester = remember { FocusRequester() }
 
     Column(
-        modifier.clickable { focusRequester.requestFocus() },
+        modifier.clickable(indication = null) { focusRequester.requestFocus() },
         horizontalAlignment = horizontalAlignment,
     ) {
         label?.let { InputLabel(label) }
