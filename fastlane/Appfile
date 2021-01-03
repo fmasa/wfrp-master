@@ -1,0 +1,2 @@
+json_key_file("fastlane/play_store_credentials.json")
+package_name("cz.frantisekmasa.dnd")

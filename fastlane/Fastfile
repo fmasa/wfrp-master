@@ -1,0 +1,12 @@
+default_platform(:android)
+
+platform :android do
+  desc "Deploy a new version to the Google Play"
+  lane :deploy do
+    upload_to_play_store(
+        track: 'internal',
+        aab: 'app-release.aab',
+        skip_upload_apk: true, # We are uploading AAB
+    )
+  end
+end

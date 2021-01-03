@@ -13,6 +13,10 @@
 .externalNativeBuild
 .cxx
 /node_modules
+vendor
+fastlane/play_store_credentials.json
+fastlane/report.xml
+app-release.aab
 firestore-debug.log
 firebase-debug.log
 firebase-build

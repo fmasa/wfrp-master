@@ -1,8 +1,6 @@
 import java.io.File
 import java.io.FileInputStream
 import java.util.*
-import com.github.triplet.gradle.androidpublisher.ResolutionStrategy
-import com.github.triplet.gradle.play.PlayPublisherExtension
 
 plugins {
     id("com.android.application")
@@ -11,19 +9,6 @@ plugins {
     id("com.google.gms.google-services")
     id("kotlin-kapt")
     id("com.google.firebase.crashlytics")
-    id("com.github.triplet.play") apply false
-}
-
-val playStoreJsonFile = File(System.getProperty("user.dir") + "/app/play_store_credentials.json")
-
-if (playStoreJsonFile.exists()) {
-    apply(plugin = "com.github.triplet.play")
-    configure<PlayPublisherExtension> {
-        defaultToAppBundles.set(true)
-        track.set(System.getenv("PLAY_STORE_TRACK"))
-        serviceAccountCredentials.set(playStoreJsonFile)
-        resolutionStrategy.set(ResolutionStrategy.AUTO)
-    }
 }
 
 android {
@@ -38,8 +23,8 @@ android {
         applicationId = "cz.frantisekmasa.dnd"
         minSdkVersion(21)
         targetSdkVersion(29)
-        versionCode = 1
-        versionName = System.getenv("APP_VERSION_NAME") ?: "dev"
+        versionCode = System.getenv("SUPPLY_VERSION_CODE")?.toIntOrNull() ?: 1
+        versionName = System.getenv("SUPPLY_VERSION_NAME") ?: "dev"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
