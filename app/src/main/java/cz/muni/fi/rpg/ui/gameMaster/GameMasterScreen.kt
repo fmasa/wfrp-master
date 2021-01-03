@@ -30,7 +30,6 @@ import cz.frantisekmasa.wfrp_master.core.ui.viewinterop.fragmentManager
 import cz.frantisekmasa.wfrp_master.core.viewModel.viewModel
 import cz.frantisekmasa.wfrp_master.core.domain.party.Party
 import cz.muni.fi.rpg.ui.common.AdManager
-import cz.muni.fi.rpg.ui.common.ChangeAmbitionsDialog
 import cz.muni.fi.rpg.ui.common.composables.*
 import cz.muni.fi.rpg.ui.gameMaster.encounters.EncounterDialog
 import cz.muni.fi.rpg.ui.gameMaster.encounters.EncountersScreen
@@ -123,7 +122,6 @@ private fun screens(
 
     return arrayOf(
         TabScreen(R.string.title_characters) { party ->
-            val dialogTitle = stringResource(R.string.title_party_ambitions)
             PartySummaryScreen(
                 modifier = modifier,
                 partyId = party.id,
@@ -135,12 +133,6 @@ private fun screens(
                 onCharacterCreateRequest = {
                     backStack.push(Route.CharacterCreation(party.id, it))
                 },
-                onEditAmbitionsRequest = { ambitions ->
-                    ChangeAmbitionsDialog
-                        .newInstance(dialogTitle, ambitions)
-                        .setOnSaveListener { viewModel.updatePartyAmbitions(it) }
-                        .show(fragmentManager, null)
-                }
             )
         },
         TabScreen(R.string.title_calendar) { party ->

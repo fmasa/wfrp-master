@@ -1,105 +1,84 @@
 package cz.muni.fi.rpg.ui.common
 
-import android.app.Dialog
-import android.os.Bundle
-import android.view.View
-import androidx.appcompat.app.AlertDialog
-import androidx.core.os.bundleOf
-import androidx.fragment.app.DialogFragment
-import cz.frantisekmasa.wfrp_master.core.common.SuspendableEntityListener
+import androidx.compose.foundation.ScrollableColumn
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.material.Scaffold
+import androidx.compose.material.Text
+import androidx.compose.material.TopAppBar
+import androidx.compose.runtime.*
+import androidx.compose.runtime.savedinstancestate.savedInstanceState
+import androidx.compose.ui.res.stringResource
 import cz.frantisekmasa.wfrp_master.core.domain.Ambitions
+import cz.frantisekmasa.wfrp_master.core.ui.buttons.CloseButton
+import cz.frantisekmasa.wfrp_master.core.ui.dialogs.FullScreenDialog
+import cz.frantisekmasa.wfrp_master.core.ui.forms.TextInput
+import cz.frantisekmasa.wfrp_master.core.ui.primitives.Spacing
+import cz.frantisekmasa.wfrp_master.core.ui.scaffolding.SaveAction
 import cz.muni.fi.rpg.R
-import cz.muni.fi.rpg.ui.common.forms.Form
-import cz.muni.fi.rpg.ui.views.TextInput
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
-class ChangeAmbitionsDialog : DialogFragment(),
-    CoroutineScope by CoroutineScope(Dispatchers.Default) {
-    companion object {
-        private const val ARGUMENT_TITLE = "title"
-        private const val ARGUMENT_DEFAULTS = "defaults"
+@Composable
+fun ChangeAmbitionsDialog(
+    title: String,
+    defaults: Ambitions,
+    save: suspend (Ambitions) -> Unit,
+    onDismissRequest: () -> Unit,
+) {
+    FullScreenDialog(onDismissRequest = onDismissRequest) {
+        var shortTerm by savedInstanceState { defaults.shortTerm }
+        var longTerm by savedInstanceState { defaults.longTerm }
 
-        fun newInstance(title: String, defaults: Ambitions) =
-            ChangeAmbitionsDialog().apply {
-                arguments = bundleOf(
-                    ARGUMENT_TITLE to title,
-                    ARGUMENT_DEFAULTS to defaults
+        Scaffold(
+            topBar = {
+                TopAppBar(
+                    navigationIcon = { CloseButton(onClick = onDismissRequest) },
+                    title = { Text(title) },
+                    actions = {
+                        val coroutineScope = rememberCoroutineScope()
+                        var saving by remember { mutableStateOf(false) }
+
+                        SaveAction(
+                            enabled = !saving,
+                            onClick = {
+                                saving = true
+
+                                coroutineScope.launch(Dispatchers.IO) {
+                                    save(Ambitions(shortTerm = shortTerm, longTerm = longTerm))
+
+                                    withContext(Dispatchers.Main) { onDismissRequest() }
+                                }
+                            }
+                        )
+                    }
+                )
+            },
+        ) {
+            ScrollableColumn(
+                contentPadding = PaddingValues(Spacing.bodyPadding),
+                verticalArrangement = Arrangement.spacedBy(Spacing.small),
+            ) {
+                TextInput(
+                    label = stringResource(R.string.label_ambition_short_term),
+                    value = shortTerm,
+                    onValueChange = { shortTerm = it },
+                    validate = false,
+                    maxLength = Ambitions.MAX_LENGTH,
+                    multiLine = true,
+                )
+
+                TextInput(
+                    label = stringResource(R.string.label_ambition_long_term),
+                    value = longTerm,
+                    onValueChange = { longTerm = it },
+                    validate = false,
+                    maxLength = Ambitions.MAX_LENGTH,
+                    multiLine = true,
                 )
             }
-    }
 
-    private val title: String by stringArgument(ARGUMENT_TITLE)
-    private val defaults: Ambitions by parcelableArgument(ARGUMENT_DEFAULTS)
-
-    private var onSaveListener: SuspendableEntityListener<Ambitions>? = null
-
-    private lateinit var form: Form
-
-    fun setOnSaveListener(listener: SuspendableEntityListener<Ambitions>): ChangeAmbitionsDialog {
-        onSaveListener = listener
-
-        return this
-    }
-
-    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        val activity = requireActivity()
-
-        val inflater = activity.layoutInflater
-
-        val view = inflater.inflate(R.layout.dialog_change_ambitions, null)
-
-        val shortTermAmbitionInput = view.findViewById<TextInput>(R.id.shortTermAmbitionInput)
-        val longTermAmbitionInput = view.findViewById<TextInput>(R.id.longTermAmbitionInput)
-
-        shortTermAmbitionInput.setDefaultValue(defaults.shortTerm)
-        longTermAmbitionInput.setDefaultValue(defaults.longTerm)
-
-        form = Form(requireContext()).apply {
-            addTextInput(shortTermAmbitionInput).apply {
-                setMaxLength(Ambitions.MAX_LENGTH)
-            }
-
-            addTextInput(longTermAmbitionInput).apply {
-                setMaxLength(Ambitions.MAX_LENGTH)
-            }
-        }
-
-        val dialog = AlertDialog.Builder(activity, R.style.FormDialog)
-            .setView(view)
-            .setTitle(title)
-            .setPositiveButton(R.string.button_save) { _, _ -> }
-            .create()
-
-        dialog.setOnShowListener {
-            dialog.getButton(AlertDialog.BUTTON_POSITIVE)
-                .setOnClickListener { dialogSubmitted(view) }
-        }
-
-        return dialog
-    }
-
-    private fun dialogSubmitted(view: View) {
-
-        if (!form.validate()) {
-            return
-        }
-
-        view.findViewById<View>(R.id.progress).visibility = View.VISIBLE
-        view.findViewById<View>(R.id.mainView).visibility = View.GONE
-
-        val ambitions = Ambitions(
-            view.findViewById<TextInput>(R.id.shortTermAmbitionInput).getValue(),
-            view.findViewById<TextInput>(R.id.longTermAmbitionInput).getValue()
-        )
-
-        launch {
-            onSaveListener?.let {
-                it(ambitions)
-            }
-
-            dismiss()
         }
     }
 }

@@ -2,6 +2,7 @@ package cz.muni.fi.rpg.ui.common.composables
 
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -12,8 +13,8 @@ import androidx.compose.material.ContentAlpha
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.Providers
+import androidx.compose.runtime.*
+import androidx.compose.runtime.savedinstancestate.savedInstanceState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -24,19 +25,40 @@ import androidx.compose.ui.unit.dp
 import cz.muni.fi.rpg.R
 import cz.frantisekmasa.wfrp_master.core.domain.Ambitions
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.CardContainer
+import cz.muni.fi.rpg.ui.common.ChangeAmbitionsDialog
 
 @Composable
 fun AmbitionsCard(
     modifier: Modifier = Modifier,
     @StringRes titleRes: Int,
     ambitions: Ambitions,
+    onSave: (suspend (Ambitions) -> Unit)?,
     @DrawableRes titleIconRes: Int? = null,
 ) {
+    val title = stringResource(titleRes)
+
+    var dialogOpened by savedInstanceState { false }
+
+    if (dialogOpened && onSave != null) {
+        ChangeAmbitionsDialog(
+            title = title,
+            defaults = ambitions,
+            save = onSave,
+            onDismissRequest = { dialogOpened = false },
+        )
+    }
+
     CardContainer(
-        modifier = Modifier.fillMaxWidth().then(modifier),
+        modifier = Modifier
+            .fillMaxWidth()
+            .then(
+                if (onSave != null)
+                    modifier.clickable(onClick = { dialogOpened = true })
+                else modifier
+            ),
         bodyPadding = PaddingValues(start = 8.dp, end = 8.dp),
     ) {
-        CardTitle(titleRes, titleIconRes)
+        CardTitle(title, titleIconRes)
 
         for ((label, value) in listOf(
             R.string.label_ambition_short_term to ambitions.shortTerm,

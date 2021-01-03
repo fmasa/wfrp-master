@@ -15,12 +15,10 @@ import cz.frantisekmasa.wfrp_master.core.domain.character.Character
 import cz.frantisekmasa.wfrp_master.core.domain.identifiers.CharacterId
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.MultiLineTextValue
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.SingleLineTextValue
-import cz.frantisekmasa.wfrp_master.core.ui.viewinterop.fragmentManager
 import cz.frantisekmasa.wfrp_master.core.viewModel.viewModel
 import cz.frantisekmasa.wfrp_master.core.domain.character.Points
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.CardContainer
 import cz.muni.fi.rpg.ui.character.dialogs.ExperiencePointsDialog
-import cz.muni.fi.rpg.ui.common.ChangeAmbitionsDialog
 import cz.muni.fi.rpg.ui.common.composables.*
 import cz.muni.fi.rpg.viewModels.CharacterMiscViewModel
 import org.koin.core.parameter.parametersOf
@@ -41,20 +39,11 @@ internal fun CharacterMiscScreen(
             points = character.getPoints(),
         )
 
-        val fragmentManager = fragmentManager()
-        val ambitionsDialogTitle = stringResource(R.string.title_character_ambitions)
-
         AmbitionsCard(
             titleRes = R.string.title_character_ambitions,
             ambitions = character.getAmbitions(),
-            modifier = Modifier
-                .padding(horizontal = 8.dp)
-                .clickable(onClick = {
-                    ChangeAmbitionsDialog
-                        .newInstance(ambitionsDialogTitle, character.getAmbitions())
-                        .setOnSaveListener { viewModel.updateCharacterAmbitions(it) }
-                        .show(fragmentManager, "ChangeAmbitionsDialog")
-                })
+            onSave = { viewModel.updateCharacterAmbitions(it) },
+            modifier = Modifier.padding(horizontal = 8.dp),
         )
 
         viewModel.party.collectAsState(null).value?.let {
@@ -62,7 +51,8 @@ internal fun CharacterMiscScreen(
                 titleRes = R.string.title_party_ambitions,
                 ambitions = it.getAmbitions(),
                 titleIconRes = R.drawable.ic_group,
-                modifier = Modifier.padding(horizontal = 8.dp)
+                modifier = Modifier.padding(horizontal = 8.dp),
+                onSave = null,
             )
         }
 
