@@ -8,26 +8,33 @@ before_script:
     - export GRADLE_USER_HOME=$(pwd)/.gradle
 
 .gradle:
+    image: alvrme/alpine-android:android-30-jdk11
     cache:
         paths:
             - .gradle/wrapper
             - .gradle/caches
 
-Run Gradle checks:
-    extends: .gradle
-    stage: check
-    script:
-        - ./gradlew check
-    cache:
-        paths:
-            - .gradle/wrapper
-            - .gradle/caches
-
-Test Firestore rules:
-    stage: check
+.nodejs:
+    image: timbru31/java-node:11-jdk-erbium
     cache:
         paths:
             - node_modules
+
+Unit tests:
+    extends: .gradle
+    stage: check
+    script:
+        - ./gradlew --no-daemon --parallel testDebugUnitTest
+
+Lint:
+    extends: .gradle
+    stage: check
+    script:
+        - ./gradlew --no-daemon --parallel testDebugUnitTest
+
+Test Firestore rules:
+    extends: .nodejs
+    stage: check
     script:
         - yarn install
         - yarn test
@@ -45,6 +52,7 @@ Publish to Google Play:
         - ./gradlew publishRelease --no-daemon
 
 Deploy Firebase changes:
+    extends: .nodejs
     stage: build
     only:
         - master
@@ -53,10 +61,8 @@ Deploy Firebase changes:
         - yarn firebase deploy
 
 Run Firestore migrations:
+    extends: .nodejs
     stage: build
-    cache:
-        paths:
-            - node_modules
     only:
         - master
     script:
