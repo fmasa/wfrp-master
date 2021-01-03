@@ -82,7 +82,7 @@ fun AmbitionsCard(
                         }
                     }
                 } else {
-                    Text(ambitions.shortTerm)
+                    Text(value)
                 }
             }
         }
