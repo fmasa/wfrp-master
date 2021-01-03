@@ -1,0 +1,1 @@
+Make all dialogs scrollable (fixes visibility of certain input fields on smaller screens)

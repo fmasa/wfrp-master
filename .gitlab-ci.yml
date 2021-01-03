@@ -3,6 +3,7 @@ image: circleci/android:api-30-node
 stages:
     - check
     - build
+    - publish
 
 before_script:
     - export GRADLE_USER_HOME=$(pwd)/.gradle
@@ -39,21 +40,38 @@ Test Firestore rules:
         - yarn install
         - yarn test
 
-Publish to Google Play:
+Build release bundle:
     extends: .gradle
     stage: build
     only:
         - master
         - tags
     script:
-        - cp "$PLAY_STORE_JSON_FILE" app/play_store_credentials.json
         - echo "$KEYSTORE_FILE_BASE64" | base64 -d > app/.keystore
-        - export APP_VERSION_NAME="${CI_COMMIT_TAG:-dev-$CI_COMMIT_SHORT_SHA}"
-        - ./gradlew publishRelease --no-daemon
+        - "export SUPPLY_VERSION_CODE=$((100 + $CI_PIPELINE_IID)) && echo $SUPPLY_VERSION_CODE"
+        - export SUPPLY_VERSION_NAME="${CI_COMMIT_TAG:-dev-$CI_COMMIT_SHORT_SHA}"
+        - ./gradlew bundleRelease
+        - mv app/build/outputs/bundle/release/app-release.aab .
+    artifacts:
+        paths:
+            - app-release.aab
+
+
+Publish to Google Play:
+    image: ruby:2.7.2-alpine3.12
+    stage: publish
+    only:
+        - master
+        - tags
+    script:
+        - apk add build-base
+        - cp "$PLAY_STORE_JSON_FILE" fastlane/play_store_credentials.json
+        - bundle install -j $(nproc)
+        - bundle exec fastlane deploy
 
 Deploy Firebase changes:
     extends: .nodejs
-    stage: build
+    stage: publish
     only:
         - master
     script:
@@ -62,7 +80,7 @@ Deploy Firebase changes:
 
 Run Firestore migrations:
     extends: .nodejs
-    stage: build
+    stage: publish
     only:
         - master
     script:
