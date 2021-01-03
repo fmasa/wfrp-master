@@ -1,13 +1,17 @@
 package cz.frantisekmasa.wfrp_master.core.ui.forms
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focusRequester
 import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.platform.AmbientDensity
 import androidx.compose.ui.text.input.KeyboardType
@@ -44,7 +48,12 @@ fun TextInput(
 ) {
     val borderColor = Colors.inputBorderColor()
 
-    Column(modifier, horizontalAlignment = horizontalAlignment) {
+    val focusRequester = remember { FocusRequester() }
+
+    Column(
+        modifier.clickable { focusRequester.requestFocus() },
+        horizontalAlignment = horizontalAlignment,
+    ) {
         label?.let { InputLabel(label) }
 
         val filters = mutableListOf<Filter>(Filter.MaxLength(maxLength))
@@ -86,7 +95,7 @@ fun TextInput(
                         }
                     },
                     textStyle = AmbientTextStyle.current.copy(color = MaterialTheme.colors.onSurface),
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier.focusRequester(focusRequester).fillMaxWidth(),
                     inactiveColor = borderColor,
                     isErrorValue = errorMessage != null,
                     placeholder = placeholder?.let { { Text(it) } },
