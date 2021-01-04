@@ -26,6 +26,7 @@ import cz.frantisekmasa.wfrp_master.core.ui.buttons.BackButton
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.CardContainer
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.ContextMenu
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.EmptyUI
+import cz.frantisekmasa.wfrp_master.core.ui.scaffolding.OptionsAction
 import cz.frantisekmasa.wfrp_master.core.ui.scaffolding.Subtitle
 import cz.frantisekmasa.wfrp_master.core.ui.scaffolding.TopBarAction
 import cz.frantisekmasa.wfrp_master.core.ui.viewinterop.fragmentManager
@@ -132,32 +133,22 @@ private fun TopAppBarActions(
     }
 
 
-    val menuState = mutableStateOf(false)
-    TopBarAction(onClick = { menuState.value = true }) {
-        Icon(vectorResource(R.drawable.ic_more))
+    OptionsAction {
+        DropdownMenuItem(onClick = {
+            AlertDialog.Builder(context)
+                .setMessage(R.string.question_remove_encounter)
+                .setPositiveButton(R.string.remove) { _, _ ->
+                    coroutineScope.launch(Dispatchers.IO) {
+                        viewModel.remove()
+                        withContext(Dispatchers.Main) { routing.backStack.pop() }
+                    }
+                }.setNegativeButton(R.string.button_cancel, null)
+                .create()
+                .show()
+        }) {
+            Text(stringResource(R.string.remove))
+        }
     }
-
-    ContextMenu(
-        items = listOf(
-            ContextMenu.Item(
-                text = stringResource(R.string.remove),
-                onClick = {
-                    AlertDialog.Builder(context)
-                        .setMessage(R.string.question_remove_encounter)
-                        .setPositiveButton(R.string.remove) { _, _ ->
-                            coroutineScope.launch(Dispatchers.IO) {
-                                viewModel.remove()
-                                withContext(Dispatchers.Main) { routing.backStack.pop() }
-                            }
-                        }.setNegativeButton(R.string.button_cancel, null)
-                        .create()
-                        .show()
-                }
-            )
-        ),
-        onDismissRequest = { menuState.value = false },
-        expanded = menuState.value
-    )
 }
 
 
