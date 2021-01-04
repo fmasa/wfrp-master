@@ -6,6 +6,7 @@ import cz.frantisekmasa.wfrp_master.core.domain.Armor
 import cz.frantisekmasa.wfrp_master.core.domain.Stats
 import cz.frantisekmasa.wfrp_master.core.domain.identifiers.EncounterId
 import cz.frantisekmasa.wfrp_master.core.domain.identifiers.NpcId
+import cz.frantisekmasa.wfrp_master.core.domain.party.PartyRepository
 import cz.frantisekmasa.wfrp_master.core.utils.right
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
@@ -16,12 +17,20 @@ import kotlin.math.min
 class EncounterDetailViewModel(
     private val encounterId: EncounterId,
     private val encounters: EncounterRepository,
-    private val npcRepository: NpcRepository
+    private val npcRepository: NpcRepository,
+    private val parties: PartyRepository,
 ) : ViewModel(), CoroutineScope by CoroutineScope(Dispatchers.IO) {
     val encounter: Flow<Encounter> = encounters.getLive(encounterId).right()
     val npcs: Flow<List<Npc>> = npcRepository.findByEncounter(encounterId)
 
     suspend fun remove() {
+        val party = parties.get(encounterId.partyId)
+
+        if (party.getActiveCombat()?.encounterId == encounterId.encounterId) {
+            party.endCombat()
+            parties.save(party)
+        }
+
         encounters.remove(encounterId)
     }
 
