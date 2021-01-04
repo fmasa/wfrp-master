@@ -204,7 +204,7 @@ fun NpcDetailScreen(
     Scaffold(
         topBar = {
             NpcDetailTopBar(
-                title = stringResource(R.string.title_npc_add),
+                title = stringResource(R.string.title_npc),
                 onSave = {
                     if (data == null) {
                         return@NpcDetailTopBar

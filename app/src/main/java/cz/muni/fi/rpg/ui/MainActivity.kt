@@ -31,7 +31,7 @@ import cz.muni.fi.rpg.ui.gameMaster.encounters.NpcDetailScreen
 import cz.muni.fi.rpg.ui.partyList.PartyListScreen
 import cz.frantisekmasa.wfrp_master.navigation.Route
 import cz.frantisekmasa.wfrp_master.navigation.Routing
-import cz.muni.fi.rpg.ui.common.composables.AmbientUser
+import cz.frantisekmasa.wfrp_master.core.auth.AmbientUser
 import cz.muni.fi.rpg.ui.joinParty.InvitationScannerScreen
 import cz.muni.fi.rpg.ui.settings.SettingsScreen
 import cz.muni.fi.rpg.viewModels.AuthenticationViewModel

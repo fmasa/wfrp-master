@@ -130,7 +130,7 @@ val appModule = module {
     viewModel { (characterId: CharacterId) -> CharacterViewModel(characterId, get()) }
     viewModel { (partyId: UUID) -> EncountersViewModel(partyId, get()) }
     viewModel { (partyId: UUID) -> PartyViewModel(partyId, get()) }
-    viewModel { (encounterId: EncounterId) -> EncounterDetailViewModel(encounterId, get(), get()) }
+    viewModel { (encounterId: EncounterId) -> EncounterDetailViewModel(encounterId, get(), get(), get()) }
     viewModel { (characterId: CharacterId) -> InventoryViewModel(characterId, get(), get(), get()) }
     viewModel { (characterId: CharacterId) -> SkillsViewModel(characterId, get(), skillCompendium()) }
     viewModel { (characterId: CharacterId) -> SpellsViewModel(characterId, get(), spellCompendium()) }

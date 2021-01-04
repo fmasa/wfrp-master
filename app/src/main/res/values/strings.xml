@@ -154,6 +154,7 @@
     <string name="title_npcs">NPCs</string>
     <string name="no_npcs_prompt">There are no NPCs yet. Add first one.</string>
     <string name="title_npc_add">New NPC</string>
+    <string name="title_npc">NPC</string>
     <string name="title_npc_edit">Edit NPC</string>
 
     <string name="inventory_item_icon_description">Inventory item icon</string>

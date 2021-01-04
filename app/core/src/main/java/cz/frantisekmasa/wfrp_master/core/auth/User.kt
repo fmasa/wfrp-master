@@ -1,4 +1,4 @@
-package cz.muni.fi.rpg.model.authentication
+package cz.frantisekmasa.wfrp_master.core.auth
 
 data class User(
     val id: String,

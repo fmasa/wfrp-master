@@ -1,17 +1,24 @@
 package cz.frantisekmasa.wfrp_master.combat.ui
 
+import cz.frantisekmasa.wfrp_master.core.domain.identifiers.CharacterId
+import cz.frantisekmasa.wfrp_master.core.domain.identifiers.NpcId
 import cz.frantisekmasa.wfrp_master.core.domain.party.combat.Combatant
-import cz.frantisekmasa.wfrp_master.combat.domain.encounter.Npc as NpcEntity
-import cz.frantisekmasa.wfrp_master.core.domain.character.Character as CharacterEntity
 
 sealed class CombatantItem {
+    abstract val combatant: Combatant
+    abstract val name: String
+
     data class Character(
-        val character: CharacterEntity,
-        val combatant: Combatant.Character,
-    ) : CombatantItem()
+        val characterId: CharacterId,
+        val userId: String?,
+        override val name: String,
+        override val combatant: Combatant.Character,
+    ) : CombatantItem() {
+    }
 
     data class Npc(
-        val npc: NpcEntity,
-        val combatant: Combatant.Npc,
+        val npcId: NpcId,
+        override val name: String,
+        override val combatant: Combatant.Npc,
     ) : CombatantItem()
 }
