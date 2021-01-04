@@ -168,12 +168,8 @@ private fun MainContainer(
             CombatantsCard(
                 viewModel,
                 onCreateRequest = { routing.backStack.push(Route.NpcCreation(encounterId)) },
-                onEditRequest = {
-                    routing.backStack.push(
-                        Route.NpcDetail(NpcId(encounterId, it.id))
-                    )
-                },
-                onRemoveRequest = { viewModel.removeCombatant(it.id) },
+                onEditRequest = { routing.backStack.push(Route.NpcDetail(it)) },
+                onRemoveRequest = { viewModel.removeNpc(it) },
             )
         }
     }
@@ -201,8 +197,8 @@ private fun DescriptionCard(viewModel: EncounterDetailViewModel) {
 private fun CombatantsCard(
     viewModel: EncounterDetailViewModel,
     onCreateRequest: () -> Unit,
-    onEditRequest: (Npc) -> Unit,
-    onRemoveRequest: (Npc) -> Unit,
+    onEditRequest: (NpcId) -> Unit,
+    onRemoveRequest: (NpcId) -> Unit,
 ) {
     CardContainer(Modifier.fillMaxWidth().padding(8.dp)) {
         CardTitle(R.string.title_npcs)
@@ -245,9 +241,9 @@ private fun CombatantsCard(
 
 @Composable
 private fun NpcList(
-    npcs: List<Npc>,
-    onEditRequest: (Npc) -> Unit,
-    onRemoveRequest: (Npc) -> Unit,
+    npcs: List<NpcListItem>,
+    onEditRequest: (NpcId) -> Unit,
+    onRemoveRequest: (NpcId) -> Unit,
 ) {
     for (npc in npcs) {
         val alpha = if (npc.alive) ContentAlpha.high else ContentAlpha.disabled
@@ -256,9 +252,9 @@ private fun NpcList(
             CardItem(
                 name = npc.name,
                 iconRes = if (npc.alive) R.drawable.ic_npc else R.drawable.ic_dead,
-                onClick = { onEditRequest(npc) },
+                onClick = { onEditRequest(npc.id) },
                 contextMenuItems = listOf(
-                    ContextMenu.Item(stringResource(R.string.remove)) { onRemoveRequest(npc) }
+                    ContextMenu.Item(stringResource(R.string.remove)) { onRemoveRequest(npc.id) }
                 ),
             )
         }

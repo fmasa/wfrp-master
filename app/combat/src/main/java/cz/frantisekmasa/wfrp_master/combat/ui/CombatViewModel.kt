@@ -4,6 +4,7 @@ import cz.frantisekmasa.wfrp_master.combat.domain.encounter.Npc
 import cz.frantisekmasa.wfrp_master.combat.domain.encounter.NpcRepository
 import cz.frantisekmasa.wfrp_master.core.domain.character.Character
 import cz.frantisekmasa.wfrp_master.core.domain.character.CharacterRepository
+import cz.frantisekmasa.wfrp_master.core.domain.identifiers.CharacterId
 import cz.frantisekmasa.wfrp_master.core.domain.identifiers.EncounterId
 import cz.frantisekmasa.wfrp_master.core.domain.identifiers.NpcId
 import cz.frantisekmasa.wfrp_master.core.domain.party.Party
@@ -92,14 +93,25 @@ class CombatViewModel(
             combatants
                 .map { combatant ->
                     when (combatant) {
-                        is Combatant.Character -> CombatantItem.Character(
-                            charactersById.getValue(combatant.characterId),
-                            combatant,
-                        )
-                        is Combatant.Npc -> CombatantItem.Npc(
-                            npcsById.getValue(combatant.npcId.npcId),
-                            combatant,
-                        )
+                        is Combatant.Character -> {
+                            val character = charactersById.getValue(combatant.characterId)
+
+                            CombatantItem.Character(
+                                characterId = CharacterId(partyId, character.id),
+                                userId = character.userId,
+                                name = character.getName(),
+                                combatant = combatant,
+                            )
+                        }
+                        is Combatant.Npc -> {
+                            val npc = npcsById.getValue(combatant.npcId.npcId)
+
+                            CombatantItem.Npc(
+                                npcId = combatant.npcId,
+                                name = npc.name,
+                                combatant = combatant,
+                            )
+                        }
                     }
                 }
         }

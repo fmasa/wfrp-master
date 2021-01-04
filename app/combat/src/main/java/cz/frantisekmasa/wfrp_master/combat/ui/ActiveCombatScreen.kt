@@ -18,7 +18,6 @@ import cz.frantisekmasa.wfrp_master.combat.R
 import cz.frantisekmasa.wfrp_master.core.auth.AmbientUser
 import cz.frantisekmasa.wfrp_master.core.domain.identifiers.CharacterId
 import cz.frantisekmasa.wfrp_master.core.domain.identifiers.EncounterId
-import cz.frantisekmasa.wfrp_master.core.domain.identifiers.NpcId
 import cz.frantisekmasa.wfrp_master.core.ui.buttons.BackButton
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.DraggableListFor
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.FullScreenProgress
@@ -183,14 +182,10 @@ private fun Modifier.combatantClickableModifier(
 
         when {
             combatant is CombatantItem.Npc && isGameMaster -> tapGestureFilter {
-                routing.backStack.push(Route.NpcDetail(NpcId(encounterId, combatant.npc.id)))
+                routing.backStack.push(Route.NpcDetail(combatant.npcId))
             }
             combatant is CombatantItem.Character && (isGameMaster || userId == combatant.userId) -> tapGestureFilter {
-                routing.backStack.push(
-                    Route.CharacterDetail(
-                        CharacterId(encounterId.partyId, combatant.character.id)
-                    )
-                )
+                routing.backStack.push(Route.CharacterDetail(combatant.characterId))
             }
             else -> this
         }
@@ -230,14 +225,7 @@ private fun CombatantListItem(
                         modifier = Modifier.size(IconSize)
                     )
                 },
-                text = {
-                    Text(
-                        when (combatant) {
-                            is CombatantItem.Character -> combatant.character.getName()
-                            is CombatantItem.Npc -> combatant.npc.name
-                        }
-                    )
-                }
+                text = { Text(combatant.name) }
             )
         }
     }
