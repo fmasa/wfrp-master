@@ -1,6 +1,5 @@
-package cz.muni.fi.rpg.ui.common.composables
+package cz.frantisekmasa.wfrp_master.core.auth
 
 import androidx.compose.runtime.staticAmbientOf
-import cz.muni.fi.rpg.model.authentication.User
 
 val AmbientUser = staticAmbientOf<User> { error("Logged in user was not provided!") }

@@ -22,6 +22,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.core.text.bold
 import com.eazypermissions.common.model.PermissionResult
 import com.eazypermissions.coroutinespermission.PermissionManager
+import cz.frantisekmasa.wfrp_master.core.auth.AmbientUser
 import cz.frantisekmasa.wfrp_master.core.ui.buttons.BackButton
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.FullScreenProgress
 import cz.frantisekmasa.wfrp_master.core.ui.scaffolding.SubheadBar
@@ -33,7 +34,6 @@ import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.model.domain.invitation.AlreadyInParty
 import cz.muni.fi.rpg.model.domain.invitation.InvalidInvitation
 import cz.frantisekmasa.wfrp_master.core.domain.party.Invitation
-import cz.muni.fi.rpg.ui.common.composables.AmbientUser
 import cz.muni.fi.rpg.ui.common.composables.PrimaryButton
 import cz.muni.fi.rpg.ui.common.toast
 import cz.muni.fi.rpg.viewModels.InvitationScannerViewModel
