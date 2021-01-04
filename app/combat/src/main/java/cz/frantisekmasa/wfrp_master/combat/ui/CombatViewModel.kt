@@ -60,6 +60,8 @@ class CombatViewModel(
         return parties.get(partyId).hasActiveCombat()
     }
 
+    suspend fun nextTurn() = updateCombat { it.nextTurn() }
+
     suspend fun reorderCombatants(combatants: List<Combatant>) =
         updateCombat { it.reorderCombatants(combatants) }
 

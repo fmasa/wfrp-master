@@ -22,6 +22,7 @@ import cz.frantisekmasa.wfrp_master.core.ui.scaffolding.Subtitle
 import cz.frantisekmasa.wfrp_master.core.viewModel.newViewModel
 import cz.frantisekmasa.wfrp_master.navigation.Route
 import cz.frantisekmasa.wfrp_master.navigation.Routing
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -45,6 +46,8 @@ fun ActiveCombatScreen(routing: Routing<Route.ActiveCombat>) {
         }
     }
 
+    val coroutineScope = rememberCoroutineScope()
+
     Scaffold(
         topBar = {
             TopAppBar(
@@ -56,6 +59,13 @@ fun ActiveCombatScreen(routing: Routing<Route.ActiveCombat>) {
                     }
                 },
             )
+        },
+        floatingActionButton = {
+            FloatingActionButton(
+                onClick = { coroutineScope.launch(Dispatchers.IO) { viewModel.nextTurn() } }
+            ) {
+                Icon(vectorResource(R.drawable.ic_round_next))
+            }
         }
     ) {
         val combatants = remember { viewModel.combatants() }.collectAsState(null).value
@@ -71,7 +81,7 @@ fun ActiveCombatScreen(routing: Routing<Route.ActiveCombat>) {
             SubheadBar(stringResource(R.string.n_round, round))
 
             ScrollableColumn(Modifier.fillMaxHeight()) {
-                CombatantList(combatants, viewModel, turn)
+                CombatantList(coroutineScope, combatants, viewModel, turn)
             }
         }
     }
@@ -79,12 +89,11 @@ fun ActiveCombatScreen(routing: Routing<Route.ActiveCombat>) {
 
 @Composable
 private fun CombatantList(
+    coroutineScope: CoroutineScope,
     combatants: List<CombatantItem>,
     viewModel: CombatViewModel,
     turn: Int,
 ) {
-    val coroutineScope = rememberCoroutineScope()
-
     DraggableListFor(
         combatants,
         onReorder = { items ->
