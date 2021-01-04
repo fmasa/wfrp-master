@@ -22,7 +22,19 @@ class CombatViewModel(
     private val characters: CharacterRepository,
 ) {
 
-    val party: Flow<Party> by lazy { parties.getLive(partyId).right() }
+    val party: Flow<Party> = parties.getLive(partyId).right()
+
+    private val combat: Flow<Combat> = party
+        .mapLatest { it.getActiveCombat() }
+        .filterNotNull()
+
+    val turn: Flow<Int> = combat
+        .mapLatest { it.getTurn() }
+        .distinctUntilChanged()
+
+    val round: Flow<Int> = combat
+        .mapLatest { it.getRound() }
+        .distinctUntilChanged()
 
     suspend fun loadNpcsFromEncounter(encounterId: EncounterId): List<Npc> =
         npcs.findByEncounter(encounterId).first()

@@ -1,8 +1,9 @@
 package cz.frantisekmasa.wfrp_master.combat.ui
 
 import android.widget.Toast
+import androidx.compose.foundation.ScrollableColumn
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.*
 import androidx.compose.material.ButtonDefaults.IconSize
 import androidx.compose.runtime.*
@@ -16,6 +17,7 @@ import cz.frantisekmasa.wfrp_master.core.ui.buttons.BackButton
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.DraggableListFor
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.FullScreenProgress
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.Spacing
+import cz.frantisekmasa.wfrp_master.core.ui.scaffolding.SubheadBar
 import cz.frantisekmasa.wfrp_master.core.ui.scaffolding.Subtitle
 import cz.frantisekmasa.wfrp_master.core.viewModel.newViewModel
 import cz.frantisekmasa.wfrp_master.navigation.Route
@@ -24,7 +26,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.koin.core.parameter.parametersOf
-import timber.log.Timber
 
 @Composable
 fun ActiveCombatScreen(routing: Routing<Route.ActiveCombat>) {
@@ -58,13 +59,21 @@ fun ActiveCombatScreen(routing: Routing<Route.ActiveCombat>) {
         }
     ) {
         val combatants = remember { viewModel.combatants() }.collectAsState(null).value
+        val round = viewModel.round.collectAsState(null).value
+        val turn = viewModel.turn.collectAsState(null).value
 
-        if (combatants == null) {
+        if (combatants == null || round == null || turn == null) {
             FullScreenProgress()
             return@Scaffold
         }
 
-        CombatantList(combatants, viewModel)
+        Column {
+            SubheadBar(stringResource(R.string.n_round, round))
+
+            ScrollableColumn(Modifier.fillMaxHeight()) {
+                CombatantList(combatants, viewModel, turn)
+            }
+        }
     }
 }
 
@@ -72,10 +81,9 @@ fun ActiveCombatScreen(routing: Routing<Route.ActiveCombat>) {
 private fun CombatantList(
     combatants: List<CombatantItem>,
     viewModel: CombatViewModel,
+    turn: Int,
 ) {
     val coroutineScope = rememberCoroutineScope()
-
-    Timber.d("Combatants emitted")
 
     DraggableListFor(
         combatants,
@@ -86,30 +94,49 @@ private fun CombatantList(
         },
         modifier = Modifier.padding(Spacing.bodyPadding),
         itemSpacing = Spacing.small,
-    ) { combatant, isDragged -> CombatantListItem(combatant, isDragged) }
+    ) { index, combatant, isDragged ->
+        CombatantListItem(
+            onTurn = index == turn - 1,
+            combatant,
+            isDragged = isDragged,
+        )
+    }
 }
 
 @Composable
-private fun CombatantListItem(combatantItem: CombatantItem, isDragged: Boolean) {
+private fun CombatantListItem(onTurn: Boolean, combatant: CombatantItem, isDragged: Boolean) {
     Surface(elevation = if (isDragged) 6.dp else 2.dp, shape = MaterialTheme.shapes.medium) {
-        ListItem(
-            icon = {
-                Icon(
-                    when (combatantItem) {
-                        is CombatantItem.Character -> vectorResource(R.drawable.ic_character)
-                        is CombatantItem.Npc -> vectorResource(R.drawable.ic_npc)
-                    },
-                    modifier = Modifier.size(IconSize)
-                )
-            },
-            text = {
-                Text(
-                    when (combatantItem) {
-                        is CombatantItem.Character -> combatantItem.character.getName()
-                        is CombatantItem.Npc -> combatantItem.npc.name
-                    }
-                )
-            }
-        )
+        Row(Modifier.preferredHeight(IntrinsicSize.Max)) {
+            Box(
+                Modifier
+                    .fillMaxHeight()
+                    .background(
+                        if (onTurn)
+                            MaterialTheme.colors.primary
+                        else MaterialTheme.colors.onSurface.copy(alpha = ContentAlpha.disabled)
+                    )
+                    .width(Spacing.small)
+            )
+
+            ListItem(
+                icon = {
+                    Icon(
+                        when (combatant) {
+                            is CombatantItem.Character -> vectorResource(R.drawable.ic_character)
+                            is CombatantItem.Npc -> vectorResource(R.drawable.ic_npc)
+                        },
+                        modifier = Modifier.size(IconSize)
+                    )
+                },
+                text = {
+                    Text(
+                        when (combatant) {
+                            is CombatantItem.Character -> combatant.character.getName()
+                            is CombatantItem.Npc -> combatant.npc.name
+                        }
+                    )
+                }
+            )
+        }
     }
 }

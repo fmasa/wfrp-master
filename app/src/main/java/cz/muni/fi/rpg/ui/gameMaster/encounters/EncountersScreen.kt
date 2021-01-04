@@ -85,7 +85,7 @@ private fun EncounterList(
                     it.mapIndexed { index, encounter -> encounter.id to index }.toMap()
                 )
             },
-        ) { encounter, isDragged ->
+        ) { _, encounter, isDragged ->
             Card(
                 elevation = if (isDragged) 6.dp else 2.dp,
                 modifier = Modifier

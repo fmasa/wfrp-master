@@ -33,7 +33,7 @@ fun <T> DraggableListFor(
     onReorder: (List<T>) -> Unit,
     modifier: Modifier = Modifier,
     itemSpacing: Dp = 0.dp,
-    itemContent: @Composable (item: T, isDragged: Boolean) -> Unit
+    itemContent: @Composable (index: Int, item: T, isDragged: Boolean) -> Unit
 ) {
     val dragY = animatedFloat(0f)
     var draggedItemIndex by remember { mutableStateOf<Int?>(null) }
@@ -77,7 +77,7 @@ fun <T> DraggableListFor(
                         },
                     )
                 ) {
-                    itemContent(item, isDragged)
+                    itemContent(index, item, isDragged)
                 }
             }
         },
