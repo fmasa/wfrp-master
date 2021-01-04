@@ -23,6 +23,7 @@ import cz.frantisekmasa.wfrp_master.core.ui.buttons.BackButton
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.DraggableListFor
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.FullScreenProgress
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.Spacing
+import cz.frantisekmasa.wfrp_master.core.ui.scaffolding.OptionsAction
 import cz.frantisekmasa.wfrp_master.core.ui.scaffolding.SubheadBar
 import cz.frantisekmasa.wfrp_master.core.ui.scaffolding.Subtitle
 import cz.frantisekmasa.wfrp_master.core.viewModel.newViewModel
@@ -30,24 +31,35 @@ import cz.frantisekmasa.wfrp_master.navigation.Route
 import cz.frantisekmasa.wfrp_master.navigation.Routing
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.koin.core.parameter.parametersOf
+import timber.log.Timber
 
 @Composable
 fun ActiveCombatScreen(routing: Routing<Route.ActiveCombat>) {
     val viewModel: CombatViewModel = newViewModel { parametersOf(routing.route.partyId) }
     val context = AmbientContext.current
 
-    LaunchedEffect(routing.route.partyId) {
-        if (!withContext(Dispatchers.IO) { viewModel.hasActiveCombat() }) {
+    LaunchedEffect(routing.route) {
+        viewModel.isCombatActive.collect { active ->
+            Timber.d("Is combat active? $active")
+
+            if (active) {
+                return@collect
+            }
+
+            Timber.d("Closing combat screen")
+
             withContext(Dispatchers.Main) {
                 Toast.makeText(
                     context,
                     context.getString(R.string.no_active_combat),
                     Toast.LENGTH_SHORT
                 ).show()
-                routing.backStack.pop()
+
+                routing.popUpTo(routing.route, inclusive = true)
             }
         }
     }
@@ -67,10 +79,26 @@ fun ActiveCombatScreen(routing: Routing<Route.ActiveCombat>) {
                         party?.let { Subtitle(it.getName()) }
                     }
                 },
+                actions = {
+                    if (!isGameMaster) {
+                        return@TopAppBar
+                    }
+
+                    OptionsAction {
+                        DropdownMenuItem(
+                            content = { Text(stringResource(R.string.combat_end)) },
+                            onClick = {
+                                coroutineScope.launch(Dispatchers.IO) {
+                                    viewModel.endCombat()
+                                }
+                            }
+                        )
+                    }
+                }
             )
         },
         floatingActionButton = {
-            if (! isGameMaster) {
+            if (!isGameMaster) {
                 // Only GMs should manage turns and rounds
                 return@Scaffold
             }

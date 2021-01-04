@@ -29,6 +29,10 @@ class CombatViewModel(
         .mapLatest { it.getActiveCombat() }
         .filterNotNull()
 
+    val isCombatActive: Flow<Boolean> = party
+        .mapLatest { it.hasActiveCombat() }
+        .distinctUntilChanged()
+
     val activeEncounterId: Flow<EncounterId> = combat
         .mapLatest { EncounterId(partyId, it.encounterId) }
         .distinctUntilChanged()
@@ -59,10 +63,6 @@ class CombatViewModel(
         party.startCombat(encounterId, rollInitiativeForCombatants(combatants))
 
         parties.save(party)
-    }
-
-    suspend fun hasActiveCombat(): Boolean {
-        return parties.get(partyId).hasActiveCombat()
     }
 
     suspend fun nextTurn() = updateCombat { it.nextTurn() }
@@ -105,12 +105,14 @@ class CombatViewModel(
         }
     }
 
+    suspend fun endCombat() = updateParty { it.endCombat() }
+
     private fun rollInitiativeForCombatants(combatants: List<Combatant>): List<Combatant> {
         return combatants.map { it.withInitiative(1) }
             .sortedBy { it.initiative } // This is very naive approach, but for PoC it's enough
     }
 
-    private suspend fun updateCombat(update: (Combat) -> Combat) {
+    private suspend fun updateParty(update: (Party) -> Unit) {
         val party = parties.get(partyId)
         val combat = party.getActiveCombat()
 
@@ -119,9 +121,20 @@ class CombatViewModel(
             return
         }
 
-        party.updateCombat(update(combat))
+        update(party)
 
         parties.save(party)
+    }
+
+    private suspend fun updateCombat(update: (Combat) -> Combat) = updateParty { party ->
+        val combat = party.getActiveCombat()
+
+        if (combat == null) {
+            Timber.w("Trying to update non-existing combat")
+            return@updateParty
+        }
+
+        party.updateCombat(update(combat))
     }
 
     private fun <T1, T2, T3, R> combineFlows(
