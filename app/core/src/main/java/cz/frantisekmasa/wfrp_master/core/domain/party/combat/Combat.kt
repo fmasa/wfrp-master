@@ -32,4 +32,13 @@ data class Combat(
             copy (turn = 1, round = round + 1)
         else copy (turn = turn + 1)
     }
+
+    fun reorderCombatants(reorderedCombatants: List<Combatant>): Combat {
+        require(reorderedCombatants.containsSameItems(combatants)) { "Combatants must be same" }
+
+        return copy(combatants = reorderedCombatants)
+    }
+
+    private fun <T> List<T>.containsSameItems(other: List<T>) =
+        other.size != size || other.containsAll(this)
 }
