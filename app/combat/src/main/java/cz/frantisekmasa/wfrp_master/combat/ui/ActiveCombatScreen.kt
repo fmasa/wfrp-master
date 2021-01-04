@@ -55,6 +55,7 @@ fun ActiveCombatScreen(routing: Routing<Route.ActiveCombat>) {
     val coroutineScope = rememberCoroutineScope()
 
     val party = viewModel.party.collectAsState(null).value
+    val isGameMaster = AmbientUser.current.id == party?.gameMasterId
 
     Scaffold(
         topBar = {
@@ -69,6 +70,11 @@ fun ActiveCombatScreen(routing: Routing<Route.ActiveCombat>) {
             )
         },
         floatingActionButton = {
+            if (! isGameMaster) {
+                // Only GMs should manage turns and rounds
+                return@Scaffold
+            }
+
             FloatingActionButton(
                 onClick = { coroutineScope.launch(Dispatchers.IO) { viewModel.nextTurn() } }
             ) {
@@ -96,7 +102,7 @@ fun ActiveCombatScreen(routing: Routing<Route.ActiveCombat>) {
                     viewModel = viewModel,
                     turn = turn,
                     encounterId = encounterId,
-                    isGameMaster = AmbientUser.current.id == party.gameMasterId,
+                    isGameMaster = isGameMaster,
                     routing = routing,
                 )
             }
