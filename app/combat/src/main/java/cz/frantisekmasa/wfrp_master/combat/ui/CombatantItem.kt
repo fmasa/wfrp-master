@@ -10,7 +10,9 @@ sealed class CombatantItem {
     data class Character(
         val character: CharacterEntity,
         override val combatant: Combatant.Character,
-    ) : CombatantItem()
+    ) : CombatantItem() {
+        val userId: String? get() = character.userId
+    }
 
     data class Npc(
         val npc: NpcEntity,

@@ -8,11 +8,17 @@ import androidx.compose.material.*
 import androidx.compose.material.ButtonDefaults.IconSize
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.composed
+import androidx.compose.ui.gesture.tapGestureFilter
 import androidx.compose.ui.platform.AmbientContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import cz.frantisekmasa.wfrp_master.combat.R
+import cz.frantisekmasa.wfrp_master.core.auth.AmbientUser
+import cz.frantisekmasa.wfrp_master.core.domain.identifiers.CharacterId
+import cz.frantisekmasa.wfrp_master.core.domain.identifiers.EncounterId
+import cz.frantisekmasa.wfrp_master.core.domain.identifiers.NpcId
 import cz.frantisekmasa.wfrp_master.core.ui.buttons.BackButton
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.DraggableListFor
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.FullScreenProgress
@@ -48,6 +54,8 @@ fun ActiveCombatScreen(routing: Routing<Route.ActiveCombat>) {
 
     val coroutineScope = rememberCoroutineScope()
 
+    val party = viewModel.party.collectAsState(null).value
+
     Scaffold(
         topBar = {
             TopAppBar(
@@ -55,7 +63,7 @@ fun ActiveCombatScreen(routing: Routing<Route.ActiveCombat>) {
                 title = {
                     Column {
                         Text(stringResource(R.string.title_combat))
-                        viewModel.party.collectAsState(null).value?.let { Subtitle(it.getName()) }
+                        party?.let { Subtitle(it.getName()) }
                     }
                 },
             )
@@ -71,8 +79,9 @@ fun ActiveCombatScreen(routing: Routing<Route.ActiveCombat>) {
         val combatants = remember { viewModel.combatants() }.collectAsState(null).value
         val round = viewModel.round.collectAsState(null).value
         val turn = viewModel.turn.collectAsState(null).value
+        val encounterId = viewModel.activeEncounterId.collectAsState(null).value
 
-        if (combatants == null || round == null || turn == null) {
+        if (combatants == null || round == null || turn == null || party == null || encounterId == null) {
             FullScreenProgress()
             return@Scaffold
         }
@@ -81,7 +90,15 @@ fun ActiveCombatScreen(routing: Routing<Route.ActiveCombat>) {
             SubheadBar(stringResource(R.string.n_round, round))
 
             ScrollableColumn(Modifier.fillMaxHeight()) {
-                CombatantList(coroutineScope, combatants, viewModel, turn)
+                CombatantList(
+                    coroutineScope = coroutineScope,
+                    combatants = combatants,
+                    viewModel = viewModel,
+                    turn = turn,
+                    encounterId = encounterId,
+                    isGameMaster = AmbientUser.current.id == party.gameMasterId,
+                    routing = routing,
+                )
             }
         }
     }
@@ -93,6 +110,9 @@ private fun CombatantList(
     combatants: List<CombatantItem>,
     viewModel: CombatViewModel,
     turn: Int,
+    routing: Routing<*>,
+    encounterId: EncounterId,
+    isGameMaster: Boolean,
 ) {
     DraggableListFor(
         combatants,
@@ -108,13 +128,52 @@ private fun CombatantList(
             onTurn = index == turn - 1,
             combatant,
             isDragged = isDragged,
+            modifier = Modifier.combatantClickableModifier(
+                isGameMaster,
+                encounterId,
+                combatant,
+                routing
+            )
         )
     }
 }
 
+private fun Modifier.combatantClickableModifier(
+    isGameMaster: Boolean,
+    encounterId: EncounterId,
+    combatant: CombatantItem,
+    routing: Routing<*>
+): Modifier =
+    composed {
+        val userId = AmbientUser.current.id
+
+        when {
+            combatant is CombatantItem.Npc && isGameMaster -> tapGestureFilter {
+                routing.backStack.push(Route.NpcDetail(NpcId(encounterId, combatant.npc.id)))
+            }
+            combatant is CombatantItem.Character && (isGameMaster || userId == combatant.userId) -> tapGestureFilter {
+                routing.backStack.push(
+                    Route.CharacterDetail(
+                        CharacterId(encounterId.partyId, combatant.character.id)
+                    )
+                )
+            }
+            else -> this
+        }
+    }
+
 @Composable
-private fun CombatantListItem(onTurn: Boolean, combatant: CombatantItem, isDragged: Boolean) {
-    Surface(elevation = if (isDragged) 6.dp else 2.dp, shape = MaterialTheme.shapes.medium) {
+private fun CombatantListItem(
+    onTurn: Boolean,
+    combatant: CombatantItem,
+    isDragged: Boolean,
+    modifier: Modifier
+) {
+    Surface(
+        modifier = modifier,
+        elevation = if (isDragged) 6.dp else 2.dp,
+        shape = MaterialTheme.shapes.medium,
+    ) {
         Row(Modifier.preferredHeight(IntrinsicSize.Max)) {
             Box(
                 Modifier

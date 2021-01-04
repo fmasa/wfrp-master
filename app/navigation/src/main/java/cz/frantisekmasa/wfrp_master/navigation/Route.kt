@@ -17,34 +17,34 @@ sealed class Route {
     object Settings : Route()
 
     @Immutable
-    class GameMaster(val partyId: UUID) : Route()
+    data class GameMaster(val partyId: UUID) : Route()
 
     @Immutable
-    class CharacterCreation(val partyId: UUID, val userId: String?) : Route()
+    data class CharacterCreation(val partyId: UUID, val userId: String?) : Route()
 
     @Immutable
-    class CharacterDetail(val characterId: CharacterId) : Route()
+    data class CharacterDetail(val characterId: CharacterId) : Route()
 
     @Immutable
-    class CharacterEdit(val characterId: CharacterId) : Route()
+    data class CharacterEdit(val characterId: CharacterId) : Route()
 
     @Immutable
-    class EncounterDetail(val encounterId: EncounterId) : Route()
+    data class EncounterDetail(val encounterId: EncounterId) : Route()
 
     @Immutable
-    class NpcDetail(val npcId: NpcId) : Route()
+    data class NpcDetail(val npcId: NpcId) : Route()
 
     @Immutable
-    class NpcCreation(val encounterId: EncounterId) : Route()
+    data class NpcCreation(val encounterId: EncounterId) : Route()
 
     @Immutable
-    class Compendium(val partyId: UUID) : Route()
+    data class Compendium(val partyId: UUID) : Route()
 
     @Immutable
-    class CompendiumImport(val partyId: UUID) : Route()
+    data class CompendiumImport(val partyId: UUID) : Route()
 
     object InvitationScanner : Route()
 
     @Immutable
-    class ActiveCombat(val partyId: UUID) : Route()
+    data class ActiveCombat(val partyId: UUID) : Route()
 }

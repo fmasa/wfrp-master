@@ -24,9 +24,14 @@ class CombatViewModel(
 
     val party: Flow<Party> = parties.getLive(partyId).right()
 
+
     private val combat: Flow<Combat> = party
         .mapLatest { it.getActiveCombat() }
         .filterNotNull()
+
+    val activeEncounterId: Flow<EncounterId> = combat
+        .mapLatest { EncounterId(partyId, it.encounterId) }
+        .distinctUntilChanged()
 
     val turn: Flow<Int> = combat
         .mapLatest { it.getTurn() }
@@ -66,10 +71,7 @@ class CombatViewModel(
         updateCombat { it.reorderCombatants(combatants) }
 
     fun combatants(): Flow<List<CombatantItem>> {
-        val npcsFlow = party
-            .mapNotNull { it.getActiveCombat()?.encounterId }
-            .distinctUntilChanged()
-            .transform { emitAll(npcs.findByEncounter(EncounterId(partyId, it))) }
+        val npcsFlow = activeEncounterId.transform { emitAll(npcs.findByEncounter(it)) }
 
         val charactersFlow = characters
             .inParty(partyId)
