@@ -29,7 +29,7 @@ fun CardItem(
             .longPressGestureFilter { menuOpened.value = true },
         icon = { ItemIcon(iconRes, ItemIcon.Size.Small) },
         text = { Text(name) },
-        secondaryText = if (description.isNotBlank()) ({ Text(description) }) else null,
+        secondaryText = if (description.isNotBlank()) ({ Text(description, maxLines = 1) }) else null,
         trailing = badge,
     )
 
