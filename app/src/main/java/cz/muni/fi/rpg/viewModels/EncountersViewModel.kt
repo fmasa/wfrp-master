@@ -30,27 +30,19 @@ class EncountersViewModel(
     suspend fun updateEncounter(id: UUID, name: String, description: String) {
         val encounter = encounterRepository.get(EncounterId(partyId = partyId, encounterId = id))
 
-        encounter.update(name, description)
-
-        encounterRepository.save(partyId, encounter)
+        encounterRepository.save(partyId, encounter.update(name, description))
     }
 
     fun reorderEncounters(positions: Map<UUID, Int>) = launch {
-        val changedEncounters = mutableListOf<Encounter>()
+        val encounters = positions.keys
+            .map(::encounterAsync)
+            .awaitAll()
+            .toMap()
 
-        val encounters = mapOf(
-            *awaitAll(
-                *positions.keys.map(this@EncountersViewModel::encounterAsync).toTypedArray()
-            ).toTypedArray()
-        )
+        val changedEncounters = positions.mapNotNull { (encounterId, newPosition) ->
+            val encounter = encounters.getValue(encounterId)
 
-        positions.forEach { (encounterId, newPosition) ->
-            encounters[encounterId]?.let { encounter ->
-                if (encounter.position != newPosition) {
-                    encounter.position = newPosition
-                    changedEncounters.add(encounter)
-                }
-            }
+            if (encounter.position != newPosition) encounter.changePosition(newPosition) else null
         }
 
         encounterRepository.save(partyId, *changedEncounters.toTypedArray())

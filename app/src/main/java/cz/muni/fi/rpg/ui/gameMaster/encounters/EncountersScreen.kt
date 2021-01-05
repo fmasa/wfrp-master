@@ -7,8 +7,8 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.layout.Box
 import androidx.compose.material.*
 import androidx.compose.material.Icon
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.*
+import androidx.compose.runtime.savedinstancestate.savedInstanceState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.gesture.tapGestureFilter
@@ -22,13 +22,14 @@ import cz.frantisekmasa.wfrp_master.core.ui.primitives.EmptyUI
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.Spacing
 import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.viewModels.EncountersViewModel
+import java.util.*
 
 @Composable
 fun EncountersScreen(
+    partyId: UUID,
     viewModel: EncountersViewModel,
     modifier: Modifier,
     onEncounterClick: (Encounter) -> Unit,
-    onNewEncounterDialogRequest: () -> Unit,
 ) {
     val encounters = viewModel.encounters.collectAsState(null).value
 
@@ -39,14 +40,25 @@ fun EncountersScreen(
         return
     }
 
+    var createDialogOpened by savedInstanceState { false }
+
     Scaffold(
         modifier = modifier,
         floatingActionButton = {
-            FloatingActionButton(onClick = onNewEncounterDialogRequest) {
+            FloatingActionButton(onClick = { createDialogOpened = true }) {
                 loadVectorResource(R.drawable.ic_add).resource.resource?.let { Icon(it) }
             }
         }
     ) {
+
+        if (createDialogOpened) {
+            EncounterDialog(
+                existingEncounter = null,
+                partyId = partyId,
+                onDismissRequest = { createDialogOpened = false }
+            )
+        }
+
         EncounterList(encounters, viewModel, onEncounterClick)
     }
 }
