@@ -1,7 +1,9 @@
 package cz.frantisekmasa.wfrp_master.compendium.domain
 
+import kotlinx.parcelize.Parcelize
 import java.util.UUID
 
+@Parcelize
 data class Spell(
     override val id: UUID,
     val name: String,
