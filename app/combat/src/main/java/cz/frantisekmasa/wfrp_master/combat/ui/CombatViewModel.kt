@@ -30,12 +30,12 @@ class CombatViewModel(
         .mapLatest { it.getActiveCombat() }
         .filterNotNull()
 
-    val isCombatActive: Flow<Boolean> = party
-        .mapLatest { it.hasActiveCombat() }
+    private val activeEncounterId: Flow<EncounterId> = combat
+        .mapLatest { EncounterId(partyId, it.encounterId) }
         .distinctUntilChanged()
 
-    val activeEncounterId: Flow<EncounterId> = combat
-        .mapLatest { EncounterId(partyId, it.encounterId) }
+    val isCombatActive: Flow<Boolean> = party
+        .mapLatest { it.hasActiveCombat() }
         .distinctUntilChanged()
 
     val turn: Flow<Int> = combat

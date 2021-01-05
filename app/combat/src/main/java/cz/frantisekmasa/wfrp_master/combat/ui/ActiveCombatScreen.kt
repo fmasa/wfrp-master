@@ -16,7 +16,6 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import cz.frantisekmasa.wfrp_master.combat.R
 import cz.frantisekmasa.wfrp_master.core.auth.AmbientUser
-import cz.frantisekmasa.wfrp_master.core.domain.identifiers.EncounterId
 import cz.frantisekmasa.wfrp_master.core.ui.buttons.BackButton
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.DraggableListFor
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.FullScreenProgress
@@ -90,9 +89,8 @@ fun ActiveCombatScreen(routing: Routing<Route.ActiveCombat>) {
         val combatants = remember { viewModel.combatants() }.collectAsState(null).value
         val round = viewModel.round.collectAsState(null).value
         val turn = viewModel.turn.collectAsState(null).value
-        val encounterId = viewModel.activeEncounterId.collectAsState(null).value
 
-        if (combatants == null || round == null || turn == null || party == null || encounterId == null) {
+        if (combatants == null || round == null || turn == null || party == null) {
             FullScreenProgress()
             return@Scaffold
         }
@@ -106,7 +104,6 @@ fun ActiveCombatScreen(routing: Routing<Route.ActiveCombat>) {
                     combatants = combatants,
                     viewModel = viewModel,
                     turn = turn,
-                    encounterId = encounterId,
                     isGameMaster = isGameMaster,
                     routing = routing,
                 )
@@ -152,7 +149,6 @@ private fun CombatantList(
     viewModel: CombatViewModel,
     turn: Int,
     routing: Routing<*>,
-    encounterId: EncounterId,
     isGameMaster: Boolean,
 ) {
     DraggableListFor(
@@ -169,19 +165,13 @@ private fun CombatantList(
             onTurn = index == turn - 1,
             combatant,
             isDragged = isDragged,
-            modifier = Modifier.combatantClickableModifier(
-                isGameMaster,
-                encounterId,
-                combatant,
-                routing
-            )
+            modifier = Modifier.combatantClickableModifier(isGameMaster, combatant, routing),
         )
     }
 }
 
 private fun Modifier.combatantClickableModifier(
     isGameMaster: Boolean,
-    encounterId: EncounterId,
     combatant: CombatantItem,
     routing: Routing<*>
 ): Modifier =
