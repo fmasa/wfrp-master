@@ -1,122 +1,99 @@
 package cz.muni.fi.rpg.ui.gameMaster.encounters
 
-import android.app.Dialog
-import android.os.Bundle
-import android.os.Parcelable
-import android.view.View
-import androidx.appcompat.app.AlertDialog
-import androidx.core.os.bundleOf
-import androidx.fragment.app.DialogFragment
+import androidx.compose.foundation.ScrollableColumn
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.material.Scaffold
+import androidx.compose.material.TopAppBar
+import androidx.compose.runtime.*
+import androidx.compose.runtime.savedinstancestate.savedInstanceState
+import androidx.compose.ui.res.stringResource
 import cz.frantisekmasa.wfrp_master.combat.domain.encounter.Encounter
-import cz.muni.fi.rpg.R
-import cz.muni.fi.rpg.ui.common.forms.Form
-import cz.muni.fi.rpg.ui.common.optionalParcelableArgument
-import cz.muni.fi.rpg.ui.common.serializableArgument
-import cz.muni.fi.rpg.ui.common.toast
-import cz.muni.fi.rpg.ui.common.toggleVisibility
-import cz.muni.fi.rpg.ui.views.TextInput
+import cz.frantisekmasa.wfrp_master.core.ui.buttons.CloseButton
+import cz.frantisekmasa.wfrp_master.core.ui.dialogs.FullScreenDialog
+import cz.frantisekmasa.wfrp_master.core.ui.forms.Rules
+import cz.frantisekmasa.wfrp_master.core.ui.forms.TextInput
+import cz.frantisekmasa.wfrp_master.core.ui.primitives.Spacing
+import cz.frantisekmasa.wfrp_master.core.ui.scaffolding.SaveAction
+import cz.frantisekmasa.wfrp_master.core.viewModel.viewModel
 import cz.muni.fi.rpg.viewModels.EncountersViewModel
-import kotlinx.parcelize.Parcelize
-import kotlinx.parcelize.TypeParceler
-import kotlinx.coroutines.CoroutineScope
+import cz.muni.fi.rpg.R
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 import java.util.*
 
-class EncounterDialog : DialogFragment(), CoroutineScope by CoroutineScope(Dispatchers.Default) {
-    companion object {
-        private const val ARGUMENT_PARTY_ID = "partyId"
-        private const val ARGUMENT_DEFAULTS = "existingEncounterId"
+@Composable
+fun EncounterDialog(
+    existingEncounter: Encounter?,
+    partyId: UUID,
+    onDismissRequest: () -> Unit,
+) {
+    val viewModel: EncountersViewModel by viewModel { parametersOf(partyId) }
+    var validate by remember { mutableStateOf(false) }
 
-        internal fun newInstance(partyId: UUID, defaults: Defaults?) = EncounterDialog()
-            .apply {
-                arguments = bundleOf(
-                    ARGUMENT_PARTY_ID to partyId,
-                    ARGUMENT_DEFAULTS to defaults
+    var name by savedInstanceState { existingEncounter?.name ?: "" }
+    var description by savedInstanceState { existingEncounter?.description ?: "" }
+
+    FullScreenDialog(onDismissRequest = onDismissRequest) {
+        Scaffold(
+            topBar = {
+                TopAppBar(
+                    navigationIcon = { CloseButton(onClick = onDismissRequest) },
+                    title = {},
+                    actions = {
+                        val coroutineScope = rememberCoroutineScope()
+                        var saving by remember { mutableStateOf(false) }
+
+                        SaveAction(
+                            enabled = !saving,
+                            onClick = {
+                                if (name.isBlank()) {
+                                    validate = true
+                                    return@SaveAction
+                                }
+
+                                saving = true
+
+                                coroutineScope.launch(Dispatchers.IO) {
+                                    val encounterId = existingEncounter?.id
+
+                                    if (encounterId == null) {
+                                        viewModel.createEncounter(name, description)
+                                    } else {
+                                        viewModel.updateEncounter(encounterId, name, description)
+                                    }
+
+                                    withContext(Dispatchers.Main) { onDismissRequest() }
+                                }
+                            }
+                        )
+                    }
                 )
             }
-    }
-
-    @Parcelize
-    internal data class Defaults(
-        @TypeParceler<UUID, UUIDParceler>
-        val id: UUID,
-        val name: String,
-        val description: String
-    ) : Parcelable
-
-    private val partyId: UUID by serializableArgument(ARGUMENT_PARTY_ID)
-    private val defaults: Defaults? by optionalParcelableArgument(ARGUMENT_DEFAULTS)
-    private val viewModel: EncountersViewModel by viewModel { parametersOf(partyId) }
-
-    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        val activity = requireActivity()
-        val view = activity.layoutInflater.inflate(R.layout.dialog_encounter, null)
-
-        val form = Form(activity).apply {
-            addTextInput(view.findViewById<TextInput>(R.id.encounterName)).apply {
-                addLiveRule(R.string.error_cannot_be_empty) { ! it.isNullOrBlank() }
-                setMaxLength(Encounter.NAME_MAX_LENGTH, false)
-                defaults?.let { setDefaultValue(it.name) }
-            }
-
-            addTextInput(view.findViewById<TextInput>(R.id.encounterDescription)).apply {
-                setMaxLength(Encounter.DESCRIPTION_MAX_LENGTH, false)
-                defaults?.let { setDefaultValue(it.description) }
-            }
-        }
-
-        val dialog = AlertDialog.Builder(activity, R.style.FormDialog)
-            .setTitle(
-                if (defaults == null)
-                    getString(R.string.title_encounter_create)
-                else null
-            )
-            .setView(view)
-            .setPositiveButton(R.string.button_save, null)
-            .create()
-
-        dialog.setOnShowListener {
-            dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener {
-                if (! form.validate()) {
-                    return@setOnClickListener
-                }
-
-                it.isEnabled = false
-                view.findViewById<View>(R.id.mainView).toggleVisibility(false)
-                view.findViewById<View>(R.id.progress).toggleVisibility(true)
-
-                dialogSubmitted(view)
-            }
-        }
-
-        return dialog
-    }
-
-    private fun dialogSubmitted(view: View) {
-        // To create view model in UI thread
-        val viewModel = viewModel
-
-        launch {
-            val defaults = defaults
-            if (defaults != null) {
-                viewModel.updateEncounter(
-                    defaults.id,
-                    view.findViewById<TextInput>(R.id.encounterName).getValue(),
-                    view.findViewById<TextInput>(R.id.encounterDescription).getValue()
+        ) {
+            ScrollableColumn(
+                contentPadding = PaddingValues(Spacing.bodyPadding),
+                verticalArrangement = Arrangement.spacedBy(Spacing.small),
+            ) {
+                TextInput(
+                    label = stringResource(R.string.label_name),
+                    value = name,
+                    onValueChange = { name = it },
+                    validate = validate,
+                    maxLength = Encounter.NAME_MAX_LENGTH,
+                    rules = Rules(Rules.NotBlank()),
                 )
-            } else {
-                viewModel.createEncounter(
-                    view.findViewById<TextInput>(R.id.encounterName).getValue(),
-                    view.findViewById<TextInput>(R.id.encounterDescription).getValue()
+
+                TextInput(
+                    label = stringResource(R.string.label_description),
+                    value = description,
+                    onValueChange = { description = it },
+                    validate = validate,
+                    maxLength = Encounter.DESCRIPTION_MAX_LENGTH,
+                    multiLine = true,
                 )
-            }
-            withContext(Dispatchers.Main) {
-                toast(R.string.message_encounter_saved)
-                dismiss()
             }
         }
     }

@@ -19,7 +19,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import cz.frantisekmasa.wfrp_master.combat.domain.encounter.Encounter
-import cz.frantisekmasa.wfrp_master.combat.domain.encounter.Npc
 import cz.frantisekmasa.wfrp_master.combat.ui.StartCombatDialog
 import cz.frantisekmasa.wfrp_master.core.domain.identifiers.NpcId
 import cz.frantisekmasa.wfrp_master.core.ui.buttons.BackButton
@@ -29,7 +28,6 @@ import cz.frantisekmasa.wfrp_master.core.ui.primitives.EmptyUI
 import cz.frantisekmasa.wfrp_master.core.ui.scaffolding.OptionsAction
 import cz.frantisekmasa.wfrp_master.core.ui.scaffolding.Subtitle
 import cz.frantisekmasa.wfrp_master.core.ui.scaffolding.TopBarAction
-import cz.frantisekmasa.wfrp_master.core.ui.viewinterop.fragmentManager
 import cz.frantisekmasa.wfrp_master.core.viewModel.viewModel
 import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.ui.common.composables.*
@@ -114,21 +112,19 @@ private fun TopAppBarActions(
     viewModel: EncounterDetailViewModel
 ) {
     val context = AmbientContext.current
-    val fragmentManager = fragmentManager()
     val coroutineScope = rememberCoroutineScope()
 
-    TopBarAction(
-        onClick = {
-            EncounterDialog.newInstance(
-                partyId,
-                EncounterDialog.Defaults(
-                    encounter.id,
-                    encounter.name,
-                    encounter.description
-                )
-            ).show(fragmentManager, null)
-        }
-    ) {
+    var editDialogOpened by savedInstanceState { false }
+
+    if (editDialogOpened) {
+        EncounterDialog(
+            existingEncounter = encounter,
+            partyId = partyId,
+            onDismissRequest = { editDialogOpened = false },
+        )
+    }
+
+    TopBarAction(onClick = { editDialogOpened = true }) {
         Icon(vectorResource(R.drawable.ic_edit))
     }
 

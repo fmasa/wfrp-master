@@ -145,15 +145,12 @@ private fun screens(
         TabScreen(R.string.title_encounters) { party ->
             val encountersViewModel: EncountersViewModel by viewModel { parametersOf(party.id) }
             EncountersScreen(
-                encountersViewModel,
+                partyId = party.id,
+                viewModel = encountersViewModel,
                 modifier = modifier,
                 onEncounterClick = {
                     backStack.push(Route.EncounterDetail(EncounterId(party.id, it.id)))
                 },
-                onNewEncounterDialogRequest = {
-                    EncounterDialog.newInstance(party.id, null)
-                        .show(fragmentManager, null)
-                }
             )
         },
     )
