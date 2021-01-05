@@ -16,7 +16,6 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import cz.frantisekmasa.wfrp_master.combat.R
 import cz.frantisekmasa.wfrp_master.core.auth.AmbientUser
-import cz.frantisekmasa.wfrp_master.core.domain.identifiers.CharacterId
 import cz.frantisekmasa.wfrp_master.core.domain.identifiers.EncounterId
 import cz.frantisekmasa.wfrp_master.core.ui.buttons.BackButton
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.DraggableListFor
@@ -39,29 +38,8 @@ import timber.log.Timber
 @Composable
 fun ActiveCombatScreen(routing: Routing<Route.ActiveCombat>) {
     val viewModel: CombatViewModel = newViewModel { parametersOf(routing.route.partyId) }
-    val context = AmbientContext.current
 
-    LaunchedEffect(routing.route) {
-        viewModel.isCombatActive.collect { active ->
-            Timber.d("Is combat active? $active")
-
-            if (active) {
-                return@collect
-            }
-
-            Timber.d("Closing combat screen")
-
-            withContext(Dispatchers.Main) {
-                Toast.makeText(
-                    context,
-                    context.getString(R.string.no_active_combat),
-                    Toast.LENGTH_SHORT
-                ).show()
-
-                routing.popUpTo(routing.route, inclusive = true)
-            }
-        }
-    }
+    AutoCloseOnEndedCombat(viewModel, routing)
 
     val coroutineScope = rememberCoroutineScope()
 
@@ -132,6 +110,36 @@ fun ActiveCombatScreen(routing: Routing<Route.ActiveCombat>) {
                     isGameMaster = isGameMaster,
                     routing = routing,
                 )
+            }
+        }
+    }
+}
+
+@Composable
+private fun AutoCloseOnEndedCombat(
+    viewModel: CombatViewModel,
+    routing: Routing<Route.ActiveCombat>
+) {
+    val context = AmbientContext.current
+
+    LaunchedEffect(routing.route) {
+        viewModel.isCombatActive.collect { active ->
+            Timber.d("Is combat active? $active")
+
+            if (active) {
+                return@collect
+            }
+
+            Timber.d("Closing combat screen")
+
+            withContext(Dispatchers.Main) {
+                Toast.makeText(
+                    context,
+                    context.getString(R.string.no_active_combat),
+                    Toast.LENGTH_SHORT
+                ).show()
+
+                routing.popUpTo(routing.route, inclusive = true)
             }
         }
     }
