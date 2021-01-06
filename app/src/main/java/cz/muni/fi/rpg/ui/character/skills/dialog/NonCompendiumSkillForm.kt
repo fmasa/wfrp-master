@@ -13,6 +13,7 @@ import androidx.compose.ui.res.stringResource
 import cz.frantisekmasa.wfrp_master.core.domain.Characteristic
 import cz.frantisekmasa.wfrp_master.core.ui.forms.*
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.FullScreenProgress
+import cz.frantisekmasa.wfrp_master.core.ui.primitives.NumberPicker
 import cz.frantisekmasa.wfrp_master.core.ui.scaffolding.SaveAction
 import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.model.domain.skills.Skill
