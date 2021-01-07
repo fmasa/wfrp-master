@@ -2,11 +2,11 @@ package cz.muni.fi.rpg.ui.common.composables
 
 import androidx.compose.material.*
 import androidx.compose.runtime.*
-import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.unit.sp
 import cz.frantisekmasa.wfrp_master.core.media.AmbientSoundEnabled
+import cz.frantisekmasa.wfrp_master.core.ui.shell.AmbientSystemUiController
 import cz.frantisekmasa.wfrp_master.core.viewModel.viewModel
 import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.viewModels.SettingsViewModel
@@ -60,11 +60,26 @@ class Theme {
     }
 }
 
+private val darkSystemColor = Color(35, 35, 35)
+
 @Composable
 fun Theme(content: @Composable () -> Unit) {
     val viewModel: SettingsViewModel by viewModel()
     val darkMode by viewModel.darkMode.collectAsState(false)
     val soundEnabled by viewModel.soundEnabled.collectAsState(false)
+
+    val colors = if (darkMode) Theme.DarkColors() else Theme.LightColors()
+    val systemUi = AmbientSystemUiController.current
+
+    onCommit(colors.isLight, systemUi) {
+        systemUi.setStatusBarColor(
+            if (colors.isLight) Color(167, 20, 20) else darkSystemColor
+        )
+
+        systemUi.setNavigationBarColor(
+            if (colors.isLight) Color(235, 235, 235) else darkSystemColor
+        )
+    }
 
     MaterialTheme(
         colors = if (darkMode) Theme.DarkColors() else Theme.LightColors(),
