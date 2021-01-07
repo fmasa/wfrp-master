@@ -81,4 +81,8 @@ class Npc(
         require(name.isNotBlank() && name.length <= NAME_MAX_LENGTH)
         require(note.length <= NOTE_MAX_LENGTH)
     }
+
+    fun updateCurrentWounds(wounds: Int) {
+        this.wounds = this.wounds.copy(current = wounds)
+    }
 }

@@ -18,8 +18,9 @@ import cz.frantisekmasa.wfrp_master.core.domain.character.Character
 import cz.frantisekmasa.wfrp_master.core.domain.character.Points
 import cz.frantisekmasa.wfrp_master.core.domain.Stats
 import cz.frantisekmasa.wfrp_master.core.domain.identifiers.CharacterId
+import cz.frantisekmasa.wfrp_master.core.ui.components.CharacteristicsTable
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.CardContainer
-import cz.muni.fi.rpg.ui.common.composables.NumberPicker
+import cz.frantisekmasa.wfrp_master.core.ui.primitives.NumberPicker
 import cz.muni.fi.rpg.ui.common.composables.Theme
 import cz.frantisekmasa.wfrp_master.core.viewModel.viewModel
 import cz.muni.fi.rpg.viewModels.CharacterStatsViewModel
@@ -154,43 +155,6 @@ private fun PointItem(
 @Composable
 private fun CharacteristicsSection(stats: Stats) {
     CardContainer(modifier = Modifier.padding(horizontal = 8.dp)) {
-        Row(horizontalArrangement = Arrangement.SpaceEvenly, modifier = Modifier.fillMaxWidth()) {
-            Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                CharacteristicItem(Characteristic.WEAPON_SKILL, stats.weaponSkill)
-                CharacteristicItem(Characteristic.AGILITY, stats.agility)
-            }
-
-            Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                CharacteristicItem(Characteristic.BALLISTIC_SKILL, stats.ballisticSkill)
-                CharacteristicItem(Characteristic.DEXTERITY, stats.dexterity)
-            }
-
-            Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                CharacteristicItem(Characteristic.STRENGTH, stats.strength)
-                CharacteristicItem(Characteristic.INTELLIGENCE, stats.intelligence)
-            }
-
-            Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                CharacteristicItem(Characteristic.TOUGHNESS, stats.toughness)
-                CharacteristicItem(Characteristic.WILL_POWER, stats.willPower)
-            }
-
-            Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                CharacteristicItem(Characteristic.INITIATIVE, stats.initiative)
-                CharacteristicItem(Characteristic.FELLOWSHIP, stats.fellowship)
-            }
-        }
-    }
-}
-
-@Composable
-private fun CharacteristicItem(characteristic: Characteristic, value: Int) {
-    Column(horizontalAlignment = Alignment.CenterHorizontally) {
-        Text(characteristic.getShortcutName(), style = MaterialTheme.typography.subtitle1)
-        Text(
-            value.toString(),
-            Modifier.padding(vertical = 12.dp),
-            style = MaterialTheme.typography.h5
-        )
+        CharacteristicsTable(stats)
     }
 }

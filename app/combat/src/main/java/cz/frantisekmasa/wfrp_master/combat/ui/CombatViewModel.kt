@@ -2,6 +2,7 @@ package cz.frantisekmasa.wfrp_master.combat.ui
 
 import cz.frantisekmasa.wfrp_master.combat.domain.encounter.Npc
 import cz.frantisekmasa.wfrp_master.combat.domain.encounter.NpcRepository
+import cz.frantisekmasa.wfrp_master.combat.domain.encounter.Wounds
 import cz.frantisekmasa.wfrp_master.core.domain.character.Character
 import cz.frantisekmasa.wfrp_master.core.domain.character.CharacterRepository
 import cz.frantisekmasa.wfrp_master.core.domain.identifiers.CharacterId
@@ -98,8 +99,7 @@ class CombatViewModel(
 
                             CombatantItem.Character(
                                 characterId = CharacterId(partyId, character.id),
-                                userId = character.userId,
-                                name = character.getName(),
+                                character = character,
                                 combatant = combatant,
                             )
                         }
@@ -108,7 +108,7 @@ class CombatViewModel(
 
                             CombatantItem.Npc(
                                 npcId = combatant.npcId,
-                                name = npc.name,
+                                npc = npc,
                                 combatant = combatant,
                             )
                         }
@@ -157,4 +157,23 @@ class CombatViewModel(
     ): Flow<R> =
         first.combine(second) { a, b -> Pair(a, b) }
             .combine(third) { (a, b), c -> transform(a, b, c) }
+
+    suspend fun updateWounds(combatant: CombatantItem, wounds: Wounds) {
+        when(combatant) {
+            is CombatantItem.Character -> {
+                val character = characters.get(combatant.characterId)
+
+                character.updatePoints(character.getPoints().copy(wounds = wounds.current))
+
+                characters.save(partyId, character)
+            }
+            is CombatantItem.Npc -> {
+                val npc = npcs.get(combatant.npcId)
+
+                npc.updateCurrentWounds(wounds.current)
+
+                npcs.save(combatant.npcId.encounterId, npc)
+            }
+        }
+    }
 }

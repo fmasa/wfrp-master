@@ -2,6 +2,9 @@
 <resources>
     <!-- Domain -->
 
+    <!-- Stuff shared between NPCs and characters -->
+    <string name="label_wounds">Wounds</string>
+
     <!-- Species -->
     <string name="race_dwarf">Dwarf</string>
     <string name="race_high_elf">High Elf</string>

@@ -7,18 +7,24 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.material.ButtonDefaults.IconSize
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.composed
 import androidx.compose.ui.gesture.tapGestureFilter
 import androidx.compose.ui.platform.AmbientContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.text.intl.Locale
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.toUpperCase
 import androidx.compose.ui.unit.dp
 import cz.frantisekmasa.wfrp_master.combat.R
+import cz.frantisekmasa.wfrp_master.combat.domain.encounter.Wounds
 import cz.frantisekmasa.wfrp_master.core.auth.AmbientUser
 import cz.frantisekmasa.wfrp_master.core.ui.buttons.BackButton
+import cz.frantisekmasa.wfrp_master.core.ui.components.CharacteristicsTable
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.DraggableListFor
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.FullScreenProgress
+import cz.frantisekmasa.wfrp_master.core.ui.primitives.NumberPicker
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.Spacing
 import cz.frantisekmasa.wfrp_master.core.ui.scaffolding.OptionsAction
 import cz.frantisekmasa.wfrp_master.core.ui.scaffolding.SubheadBar
@@ -43,74 +49,109 @@ fun ActiveCombatScreen(routing: Routing<Route.ActiveCombat>) {
     val coroutineScope = rememberCoroutineScope()
 
     val party = viewModel.party.collectAsState(null).value
+    val combatants = remember { viewModel.combatants() }.collectAsState(null).value
     val isGameMaster = AmbientUser.current.id == party?.gameMasterId
 
-    Scaffold(
-        topBar = {
-            TopAppBar(
-                navigationIcon = { BackButton(onClick = { routing.backStack.pop() }) },
-                title = {
-                    Column {
-                        Text(stringResource(R.string.title_combat))
-                        party?.let { Subtitle(it.getName()) }
-                    }
-                },
-                actions = {
-                    if (!isGameMaster) {
-                        return@TopAppBar
-                    }
+    var openedCombatant by remember { mutableStateOf<CombatantItem?>(null) }
+    val bottomSheetState = rememberModalBottomSheetState(ModalBottomSheetValue.Hidden)
 
-                    OptionsAction {
-                        DropdownMenuItem(
-                            content = { Text(stringResource(R.string.combat_end)) },
-                            onClick = {
-                                coroutineScope.launch(Dispatchers.IO) {
-                                    viewModel.endCombat()
+    ModalBottomSheetLayout(
+        sheetState = bottomSheetState,
+        sheetContent = {
+            if (!bottomSheetState.isVisible) {
+                Box(Modifier.height(1.dp))
+                return@ModalBottomSheetLayout
+            }
+
+            openedCombatant?.let { combatant ->
+                /*
+             There are two things happening
+             1. We always need fresh version of given combatant,
+                because user may have edited combatant, i.e. by changing her advantage.
+                So we cannot used value from saved mutable state.
+             2. We have to show sheet only if fresh combatant is in the collection,
+                because she may have been removed from combat.
+             */
+                val freshCombatant =
+                    combatants?.firstOrNull { it.areSameEntity(combatant) } ?: return@let
+
+                CombatantSheet(freshCombatant, routing, viewModel)
+            }
+        }) {
+
+        Scaffold(
+            topBar = {
+                TopAppBar(
+                    navigationIcon = { BackButton(onClick = { routing.backStack.pop() }) },
+                    title = {
+                        Column {
+                            Text(stringResource(R.string.title_combat))
+                            party?.let { Subtitle(it.getName()) }
+                        }
+                    },
+                    actions = {
+                        if (!isGameMaster) {
+                            return@TopAppBar
+                        }
+
+                        OptionsAction {
+                            DropdownMenuItem(
+                                content = { Text(stringResource(R.string.combat_end)) },
+                                onClick = {
+                                    coroutineScope.launch(Dispatchers.IO) {
+                                        viewModel.endCombat()
+                                    }
                                 }
-                            }
-                        )
+                            )
+                        }
                     }
+                )
+            },
+            floatingActionButton = {
+                if (!isGameMaster) {
+                    // Only GMs should manage turns and rounds
+                    return@Scaffold
                 }
-            )
-        },
-        floatingActionButton = {
-            if (!isGameMaster) {
-                // Only GMs should manage turns and rounds
+
+                FloatingActionButton(
+                    onClick = { coroutineScope.launch(Dispatchers.IO) { viewModel.nextTurn() } }
+                ) {
+                    Icon(vectorResource(R.drawable.ic_round_next))
+                }
+            },
+
+            ) {
+            val round = viewModel.round.collectAsState(null).value
+            val turn = viewModel.turn.collectAsState(null).value
+
+            if (combatants == null || round == null || turn == null || party == null) {
+                FullScreenProgress()
                 return@Scaffold
             }
 
-            FloatingActionButton(
-                onClick = { coroutineScope.launch(Dispatchers.IO) { viewModel.nextTurn() } }
-            ) {
-                Icon(vectorResource(R.drawable.ic_round_next))
-            }
-        }
-    ) {
-        val combatants = remember { viewModel.combatants() }.collectAsState(null).value
-        val round = viewModel.round.collectAsState(null).value
-        val turn = viewModel.turn.collectAsState(null).value
+            Column {
+                SubheadBar(stringResource(R.string.n_round, round))
 
-        if (combatants == null || round == null || turn == null || party == null) {
-            FullScreenProgress()
-            return@Scaffold
-        }
-
-        Column {
-            SubheadBar(stringResource(R.string.n_round, round))
-
-            ScrollableColumn(Modifier.fillMaxHeight()) {
-                CombatantList(
-                    coroutineScope = coroutineScope,
-                    combatants = combatants,
-                    viewModel = viewModel,
-                    turn = turn,
-                    isGameMaster = isGameMaster,
-                    routing = routing,
-                )
+                ScrollableColumn(Modifier.fillMaxHeight()) {
+                    CombatantList(
+                        coroutineScope = coroutineScope,
+                        combatants = combatants,
+                        viewModel = viewModel,
+                        turn = turn,
+                        isGameMaster = isGameMaster,
+                        onCombatantClicked = {
+                            openedCombatant = it
+                            bottomSheetState.show()
+                        }
+                    )
+                }
             }
         }
     }
 }
+
+private fun canEditCombatant(userId: String, isGameMaster: Boolean, combatant: CombatantItem) =
+    isGameMaster || (combatant is CombatantItem.Character && combatant.userId == userId)
 
 @Composable
 private fun AutoCloseOnEndedCombat(
@@ -148,9 +189,11 @@ private fun CombatantList(
     combatants: List<CombatantItem>,
     viewModel: CombatViewModel,
     turn: Int,
-    routing: Routing<*>,
     isGameMaster: Boolean,
+    onCombatantClicked: (CombatantItem) -> Unit,
 ) {
+    val userId = AmbientUser.current.id
+
     DraggableListFor(
         combatants,
         onReorder = { items ->
@@ -165,29 +208,73 @@ private fun CombatantList(
             onTurn = index == turn - 1,
             combatant,
             isDragged = isDragged,
-            modifier = Modifier.combatantClickableModifier(isGameMaster, combatant, routing),
+            modifier = when {
+                canEditCombatant(userId, isGameMaster, combatant) -> Modifier.tapGestureFilter {
+                    onCombatantClicked(combatant)
+                }
+                else -> Modifier
+            }
         )
     }
 }
 
-private fun Modifier.combatantClickableModifier(
-    isGameMaster: Boolean,
+@Composable
+private fun CombatantSheet(
     combatant: CombatantItem,
-    routing: Routing<*>
-): Modifier =
-    composed {
-        val userId = AmbientUser.current.id
+    routing: Routing<*>,
+    viewModel: CombatViewModel
+) {
+    ScrollableColumn(
+        contentPadding = PaddingValues(Spacing.bodyPadding),
+        verticalArrangement = Arrangement.spacedBy(Spacing.small),
+    ) {
+        Text(
+            combatant.name,
+            modifier = Modifier.fillMaxWidth(),
+            style = MaterialTheme.typography.h6,
+            textAlign = TextAlign.Center
+        )
 
-        when {
-            combatant is CombatantItem.Npc && isGameMaster -> tapGestureFilter {
-                routing.backStack.push(Route.NpcDetail(combatant.npcId))
-            }
-            combatant is CombatantItem.Character && (isGameMaster || userId == combatant.userId) -> tapGestureFilter {
-                routing.backStack.push(Route.CharacterDetail(combatant.characterId))
-            }
-            else -> this
+        Row {
+            CombatantWounds(combatant, viewModel)
+        }
+
+        TextButton(
+            modifier = Modifier.align(Alignment.CenterHorizontally),
+            onClick = {
+                routing.backStack.push(
+                    when (combatant) {
+                        is CombatantItem.Npc -> Route.NpcDetail(combatant.npcId)
+                        is CombatantItem.Character -> Route.CharacterDetail(combatant.characterId)
+                    }
+                )
+            },
+            content = { Text(stringResource(R.string.button_detail).toUpperCase(Locale.current)) },
+        )
+
+        CharacteristicsTable(combatant.characteristics)
+    }
+}
+
+@Composable
+private fun CombatantWounds(combatant: CombatantItem, viewModel: CombatViewModel) {
+    val coroutineScope = rememberCoroutineScope()
+    val updateWounds = { wounds: Wounds ->
+        coroutineScope.launch(Dispatchers.IO) {
+            viewModel.updateWounds(combatant, wounds)
         }
     }
+
+    val wounds = combatant.wounds
+
+    NumberPicker(
+        label = stringResource(R.string.label_wounds),
+        value = wounds.current,
+        maxValue = wounds.max,
+        onIncrement = { updateWounds(wounds.restore(1)) },
+        onDecrement = { updateWounds(wounds.lose(1)) },
+    )
+}
 
 @Composable
 private fun CombatantListItem(
