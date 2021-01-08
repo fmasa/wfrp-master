@@ -76,7 +76,7 @@ data class Character(
         this.race = race
         this.characteristicsBase = characteristicsBase
         this.characteristicsAdvances = characteristicsAdvances
-        points = points.withMaxWounds(maxWounds, if (hardyTalent) getCharacteristics().getToughnessBonus() else 0)
+        points = points.withMaxWounds(maxWounds, if (hardyTalent) getCharacteristics().toughnessBonus else 0)
         this.psychology = psychology
         this.motivation = motivation
         this.note = note
@@ -113,7 +113,7 @@ data class Character(
     fun updatePoints(newPoints: Points) {
         require(
             (!hardyTalent && newPoints.hardyWoundsBonus == 0) ||
-            (hardyTalent && newPoints.hardyWoundsBonus == getCharacteristics().getToughnessBonus())
+            (hardyTalent && newPoints.hardyWoundsBonus == getCharacteristics().toughnessBonus)
         ) { "Hardy talent and wounds bonus are wrong" }
         points = newPoints
     }
