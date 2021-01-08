@@ -1,6 +1,7 @@
 package cz.frantisekmasa.wfrp_master.combat.ui
 
 import android.widget.Toast
+import androidx.compose.animation.asDisposableClock
 import androidx.compose.foundation.ScrollableColumn
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -10,6 +11,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.gesture.tapGestureFilter
+import androidx.compose.ui.platform.AmbientAnimationClock
 import androidx.compose.ui.platform.AmbientContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
@@ -53,7 +55,7 @@ fun ActiveCombatScreen(routing: Routing<Route.ActiveCombat>) {
     val isGameMaster = AmbientUser.current.id == party?.gameMasterId
 
     var openedCombatant by remember { mutableStateOf<CombatantItem?>(null) }
-    val bottomSheetState = rememberModalBottomSheetState(ModalBottomSheetValue.Hidden)
+    val bottomSheetState = rememberNotSavedModalBottomSheetState()
 
     ModalBottomSheetLayout(
         sheetState = bottomSheetState,
@@ -152,6 +154,19 @@ fun ActiveCombatScreen(routing: Routing<Route.ActiveCombat>) {
 
 private fun canEditCombatant(userId: String, isGameMaster: Boolean, combatant: CombatantItem) =
     isGameMaster || (combatant is CombatantItem.Character && combatant.userId == userId)
+
+@Composable
+private fun rememberNotSavedModalBottomSheetState(): ModalBottomSheetState {
+    val disposableClock = AmbientAnimationClock.current.asDisposableClock()
+    return remember(disposableClock) {
+        ModalBottomSheetState(
+            initialValue = ModalBottomSheetValue.Hidden,
+            clock = disposableClock,
+            animationSpec = SwipeableDefaults.AnimationSpec,
+            confirmStateChange = { true },
+        )
+    }
+}
 
 @Composable
 private fun AutoCloseOnEndedCombat(
