@@ -10,8 +10,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.drawOpacity
-import androidx.compose.ui.drawLayer
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import cz.muni.fi.rpg.R
@@ -73,7 +74,7 @@ fun FloatingActionsMenu(
             horizontalAlignment = Alignment.End,
             verticalArrangement = Arrangement.spacedBy(transition[yOffset]),
             modifier = Modifier
-                .drawOpacity(transition[opacity])
+                .alpha(transition[opacity])
                 .padding(bottom = transition[yOffset])
         ) {
             if (state.value == MenuState.EXPANDED) {
@@ -86,7 +87,7 @@ fun FloatingActionsMenu(
         ) {
             Icon(
                 vectorResource(R.drawable.ic_add),
-                modifier = Modifier.drawLayer(rotationZ = transition[iconRotation])
+                modifier = Modifier.graphicsLayer(rotationZ = transition[iconRotation])
             )
         }
     }
