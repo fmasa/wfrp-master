@@ -22,7 +22,6 @@ import cz.frantisekmasa.wfrp_master.core.R
 fun NumberPicker(
     value: Int,
     modifier: Modifier = Modifier,
-    maxValue: Int? = null,
     label: String? = null,
     color: Color = MaterialTheme.colors.onSurface,
     onIncrement: () -> Unit,
@@ -50,7 +49,7 @@ fun NumberPicker(
             )
 
             Text(
-                maxValue?.let { "$value/$it" } ?: value.toString(),
+                value.toString(),
                 style = MaterialTheme.typography.h5,
                 color = color,
                 modifier = Modifier.padding(horizontal = 12.dp)
