@@ -5,6 +5,9 @@ import cz.frantisekmasa.wfrp_master.core.domain.character.CurrentConditions
 import cz.frantisekmasa.wfrp_master.core.domain.Stats
 import java.util.*
 
+/**
+ * TODO: Turn into immutable data class
+ */
 class Npc(
     val id: UUID,
     name: String,
@@ -74,9 +77,6 @@ class Npc(
         this.trappings = trappings
     }
 
-    override fun equals(other: Any?) = other is Npc && other.id == id
-    override fun hashCode() = id.hashCode()
-
     private fun validate(name: String, note: String) {
         require(name.isNotBlank() && name.length <= NAME_MAX_LENGTH)
         require(note.length <= NOTE_MAX_LENGTH)
@@ -84,5 +84,43 @@ class Npc(
 
     fun updateCurrentWounds(wounds: Int) {
         this.wounds = this.wounds.copy(current = wounds)
+    }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as Npc
+
+        if (id != other.id) return false
+        if (position != other.position) return false
+        if (name != other.name) return false
+        if (note != other.note) return false
+        if (wounds != other.wounds) return false
+        if (stats != other.stats) return false
+        if (armor != other.armor) return false
+        if (enemy != other.enemy) return false
+        if (alive != other.alive) return false
+        if (traits != other.traits) return false
+        if (trappings != other.trappings) return false
+        if (conditions != other.conditions) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        var result = id.hashCode()
+        result = 31 * result + position
+        result = 31 * result + name.hashCode()
+        result = 31 * result + note.hashCode()
+        result = 31 * result + wounds.hashCode()
+        result = 31 * result + stats.hashCode()
+        result = 31 * result + armor.hashCode()
+        result = 31 * result + enemy.hashCode()
+        result = 31 * result + alive.hashCode()
+        result = 31 * result + traits.hashCode()
+        result = 31 * result + trappings.hashCode()
+        result = 31 * result + conditions.hashCode()
+        return result
     }
 }
