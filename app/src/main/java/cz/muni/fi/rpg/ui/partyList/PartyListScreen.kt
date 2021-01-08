@@ -52,7 +52,7 @@ fun PartyListScreen(routing: Routing<Route.PartyList>) {
         },
         modifier = Modifier.fillMaxHeight(),
         floatingActionButton = {
-            FloatingActionsMenu(menuState) {
+            FloatingActionsMenu(menuState, R.drawable.ic_add) {
                 ExtendedFloatingActionButton(
                     icon = { Icon(vectorResource(R.drawable.ic_camera)) },
                     text = { Text(stringResource(R.string.scanCode_title)) },

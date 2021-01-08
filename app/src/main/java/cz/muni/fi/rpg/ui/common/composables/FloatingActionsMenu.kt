@@ -1,5 +1,6 @@
 package cz.muni.fi.rpg.ui.common.composables
 
+import androidx.annotation.DrawableRes
 import androidx.compose.animation.DpPropKey
 import androidx.compose.animation.core.*
 import androidx.compose.animation.transition
@@ -65,6 +66,7 @@ private val transitionDefinition = transitionDefinition<MenuState> {
 @Composable
 fun FloatingActionsMenu(
     state: MutableState<MenuState>,
+    @DrawableRes iconRes: Int,
     subButtons: @Composable ColumnScope.() -> Unit
 ) {
     val transition = transition(definition = transitionDefinition, toState = state.value)
@@ -86,7 +88,7 @@ fun FloatingActionsMenu(
             onClick = { state.value = toState(state.value) },
         ) {
             Icon(
-                vectorResource(R.drawable.ic_add),
+                vectorResource(iconRes),
                 modifier = Modifier.graphicsLayer(rotationZ = transition[iconRotation])
             )
         }
