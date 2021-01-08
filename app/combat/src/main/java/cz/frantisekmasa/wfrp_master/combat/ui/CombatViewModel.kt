@@ -162,13 +162,22 @@ class CombatViewModel(
         when(combatant) {
             is CombatantItem.Character -> {
                 val character = characters.get(combatant.characterId)
+                val points = character.getPoints()
 
-                character.updatePoints(character.getPoints().copy(wounds = wounds.current))
+                if (points.wounds == wounds.current) {
+                    return
+                }
+
+                character.updatePoints(points.copy(wounds = wounds.current))
 
                 characters.save(partyId, character)
             }
             is CombatantItem.Npc -> {
                 val npc = npcs.get(combatant.npcId)
+
+                if (npc.wounds == wounds) {
+                    return
+                }
 
                 npc.updateCurrentWounds(wounds.current)
 
