@@ -88,7 +88,7 @@ private fun TestResultCard(
 
                 SingleLineTextValue(
                     R.string.item_success_level,
-                    testResult.successLevel,
+                    testResult.successLevelText,
                 )
 
                 SingleLineTextValue(

@@ -21,14 +21,21 @@ data class TestResult(
         get() = isSuccess && rollsDouble()
 
     val isSuccess: Boolean
-        get() = successLevelNumber() > 0 || rollValue <= testedValue
+        get() = successLevel > 0 || rollValue <= testedValue
 
-    val successLevel: String
-        get() = (if (isSuccess) "+" else "") + successLevelNumber()
+    val successLevel: Int
+        get() = when (rollValue) {
+            in 1..5 -> 1
+            in 96..100 -> -1
+            else -> testedValue / 10 - rollValue / 10
+        }
+
+    val successLevelText: String
+        get() = (if (isSuccess) "+" else "") + successLevel
 
     val dramaticResult: DramaticResult
         get() {
-            val successLevel = successLevelNumber()
+            val successLevel = successLevel
 
             return when {
                 successLevel == 0 && isSuccess -> DramaticResult.MARGINAL_SUCCESS
@@ -38,12 +45,6 @@ data class TestResult(
         }
 
     override fun toString(): String = (rollValue % 100).toString().padStart(2, '0')
-
-    private fun successLevelNumber() = when (rollValue) {
-        in 1..5 -> 1
-        in 96..100 -> -1
-        else -> testedValue / 10 - rollValue / 10
-    }
 
     private fun rollsDouble() = rollValue == 100 || rollValue % 11 == 0 // 100 is rolled as 00, thus special treatment
 
