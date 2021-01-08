@@ -5,6 +5,7 @@ import kotlin.random.Random
 
 class Dice(
     val sides: Int,
+    private val random: Random = Random,
 ) {
     init {
         require(sides > 0) { "Number of dice sides must be large than zero" }
@@ -14,5 +15,5 @@ class Dice(
 
     }
 
-    fun roll(): Int = if (sides == 1) 1 else Random.nextInt(1, sides + 1)
+    fun roll(): Int = if (sides == 1) 1 else random.nextInt(1, sides + 1)
 }
