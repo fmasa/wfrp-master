@@ -14,5 +14,5 @@ class Dice(
 
     }
 
-    fun roll(): Int = if (sides == 1) 1 else Random.nextInt(1, sides)
+    fun roll(): Int = if (sides == 1) 1 else Random.nextInt(1, sides + 1)
 }
