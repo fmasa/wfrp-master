@@ -14,10 +14,7 @@ sealed class CombatantItem {
     abstract val characteristics: Stats
     abstract val wounds: Wounds
 
-    fun areSameEntity(other: CombatantItem): Boolean {
-        return (this is Character && other is Character && characterId == other.characterId) ||
-                (this is Npc && other is Npc && npcId == other.npcId)
-    }
+    fun areSameEntity(other: CombatantItem): Boolean = combatant.areSameEntity(other.combatant)
 
     data class Character(
         val characterId: CharacterId,
