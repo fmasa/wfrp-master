@@ -235,10 +235,6 @@ private fun CombatantSheet(
             textAlign = TextAlign.Center
         )
 
-        Row {
-            CombatantWounds(combatant, viewModel)
-        }
-
         TextButton(
             modifier = Modifier.align(Alignment.CenterHorizontally),
             onClick = {
@@ -251,6 +247,16 @@ private fun CombatantSheet(
             },
             content = { Text(stringResource(R.string.button_detail).toUpperCase(Locale.current)) },
         )
+
+        Row(Modifier.padding(bottom = Spacing.medium)) {
+            Box(Modifier.weight(1f), contentAlignment = Alignment.TopCenter) {
+                CombatantWounds(combatant, viewModel)
+            }
+
+            Box(Modifier.weight(1f), contentAlignment = Alignment.TopCenter) {
+                CombatantAdvantage(combatant, viewModel)
+            }
+        }
 
         CharacteristicsTable(combatant.characteristics)
     }
@@ -270,9 +276,28 @@ private fun CombatantWounds(combatant: CombatantItem, viewModel: CombatViewModel
     NumberPicker(
         label = stringResource(R.string.label_wounds),
         value = wounds.current,
-        maxValue = wounds.max,
         onIncrement = { updateWounds(wounds.restore(1)) },
         onDecrement = { updateWounds(wounds.lose(1)) },
+    )
+}
+
+
+@Composable
+private fun CombatantAdvantage(combatant: CombatantItem, viewModel: CombatViewModel) {
+    val coroutineScope = rememberCoroutineScope()
+    val updateAdvantage = { advantage: Int ->
+        coroutineScope.launch(Dispatchers.IO) {
+            viewModel.updateAdvantage(combatant.combatant, advantage)
+        }
+    }
+
+    val advantage = combatant.combatant.advantage
+
+    NumberPicker(
+        label = stringResource(R.string.label_advantage),
+        value = advantage,
+        onIncrement = { updateAdvantage(advantage + 1) },
+        onDecrement = { updateAdvantage(advantage - 1) },
     )
 }
 

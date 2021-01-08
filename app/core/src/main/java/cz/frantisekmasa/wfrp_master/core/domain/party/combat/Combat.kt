@@ -33,6 +33,18 @@ data class Combat(
         else copy (turn = turn + 1)
     }
 
+    fun updateCombatant(combatant: Combatant): Combat {
+        val index = combatants.indexOfFirst { it.areSameEntity(combatant) }
+
+        require(index != -1) { "Combatant of same entity as $combatant was not found"}
+
+        return copy(
+            combatants = combatants.toMutableList()
+            .also { it[index] = combatant }
+            .toList()
+        )
+    }
+
     fun reorderCombatants(reorderedCombatants: List<Combatant>): Combat {
         require(reorderedCombatants.containsSameItems(combatants)) { "Combatants must be same" }
 

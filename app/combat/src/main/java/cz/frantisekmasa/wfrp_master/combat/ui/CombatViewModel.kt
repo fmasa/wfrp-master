@@ -16,6 +16,7 @@ import cz.frantisekmasa.wfrp_master.core.utils.right
 import kotlinx.coroutines.flow.*
 import timber.log.Timber
 import java.util.*
+import kotlin.math.max
 
 class CombatViewModel(
     private val partyId: UUID,
@@ -183,6 +184,18 @@ class CombatViewModel(
 
                 npcs.save(combatant.npcId.encounterId, npc)
             }
+        }
+    }
+
+    suspend fun updateAdvantage(combatant: Combatant, advantage: Int) {
+        val newAdvantage = max(0, advantage)
+
+        if (newAdvantage == combatant.advantage) {
+            return
+        }
+
+        updateCombat { combat ->
+            combat.updateCombatant(combatant.withAdvantage(newAdvantage))
         }
     }
 }
