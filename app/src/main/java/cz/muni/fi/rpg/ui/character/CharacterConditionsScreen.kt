@@ -21,7 +21,7 @@ import cz.frantisekmasa.wfrp_master.core.domain.character.Condition
 import cz.frantisekmasa.wfrp_master.core.domain.character.Character
 import cz.frantisekmasa.wfrp_master.core.domain.character.CurrentConditions
 import cz.muni.fi.rpg.R
-import cz.muni.fi.rpg.ui.common.composables.NumberPicker
+import cz.frantisekmasa.wfrp_master.core.ui.primitives.NumberPicker
 import cz.muni.fi.rpg.viewModels.CharacterViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

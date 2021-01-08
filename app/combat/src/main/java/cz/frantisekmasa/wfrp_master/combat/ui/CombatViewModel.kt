@@ -2,6 +2,7 @@ package cz.frantisekmasa.wfrp_master.combat.ui
 
 import cz.frantisekmasa.wfrp_master.combat.domain.encounter.Npc
 import cz.frantisekmasa.wfrp_master.combat.domain.encounter.NpcRepository
+import cz.frantisekmasa.wfrp_master.combat.domain.encounter.Wounds
 import cz.frantisekmasa.wfrp_master.core.domain.character.Character
 import cz.frantisekmasa.wfrp_master.core.domain.character.CharacterRepository
 import cz.frantisekmasa.wfrp_master.core.domain.identifiers.CharacterId
@@ -15,6 +16,7 @@ import cz.frantisekmasa.wfrp_master.core.utils.right
 import kotlinx.coroutines.flow.*
 import timber.log.Timber
 import java.util.*
+import kotlin.math.max
 
 class CombatViewModel(
     private val partyId: UUID,
@@ -30,12 +32,12 @@ class CombatViewModel(
         .mapLatest { it.getActiveCombat() }
         .filterNotNull()
 
-    val isCombatActive: Flow<Boolean> = party
-        .mapLatest { it.hasActiveCombat() }
+    private val activeEncounterId: Flow<EncounterId> = combat
+        .mapLatest { EncounterId(partyId, it.encounterId) }
         .distinctUntilChanged()
 
-    val activeEncounterId: Flow<EncounterId> = combat
-        .mapLatest { EncounterId(partyId, it.encounterId) }
+    val isCombatActive: Flow<Boolean> = party
+        .mapLatest { it.hasActiveCombat() }
         .distinctUntilChanged()
 
     val turn: Flow<Int> = combat
@@ -98,8 +100,7 @@ class CombatViewModel(
 
                             CombatantItem.Character(
                                 characterId = CharacterId(partyId, character.id),
-                                userId = character.userId,
-                                name = character.getName(),
+                                character = character,
                                 combatant = combatant,
                             )
                         }
@@ -108,7 +109,7 @@ class CombatViewModel(
 
                             CombatantItem.Npc(
                                 npcId = combatant.npcId,
-                                name = npc.name,
+                                npc = npc,
                                 combatant = combatant,
                             )
                         }
@@ -157,4 +158,44 @@ class CombatViewModel(
     ): Flow<R> =
         first.combine(second) { a, b -> Pair(a, b) }
             .combine(third) { (a, b), c -> transform(a, b, c) }
+
+    suspend fun updateWounds(combatant: CombatantItem, wounds: Wounds) {
+        when(combatant) {
+            is CombatantItem.Character -> {
+                val character = characters.get(combatant.characterId)
+                val points = character.getPoints()
+
+                if (points.wounds == wounds.current) {
+                    return
+                }
+
+                character.updatePoints(points.copy(wounds = wounds.current))
+
+                characters.save(partyId, character)
+            }
+            is CombatantItem.Npc -> {
+                val npc = npcs.get(combatant.npcId)
+
+                if (npc.wounds == wounds) {
+                    return
+                }
+
+                npc.updateCurrentWounds(wounds.current)
+
+                npcs.save(combatant.npcId.encounterId, npc)
+            }
+        }
+    }
+
+    suspend fun updateAdvantage(combatant: Combatant, advantage: Int) {
+        val newAdvantage = max(0, advantage)
+
+        if (newAdvantage == combatant.advantage) {
+            return
+        }
+
+        updateCombat { combat ->
+            combat.updateCombatant(combatant.withAdvantage(newAdvantage))
+        }
+    }
 }

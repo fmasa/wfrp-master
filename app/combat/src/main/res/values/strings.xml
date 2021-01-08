@@ -12,4 +12,7 @@
 
     <string name="title_characters">Characters</string>
     <string name="title_npcs">NPCs</string>
+    <string name="button_detail">Detail</string>
+
+    <string name="label_advantage">Advantage</string>
 </resources>

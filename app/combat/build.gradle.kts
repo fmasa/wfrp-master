@@ -43,6 +43,7 @@ android {
                 "-Xallow-jvm-ir-dependencies" +
                 "-Xopt-in=androidx.compose.foundation.layout.ExperimentalLayout" +
                 "-Xopt-in=kotlinx.coroutines.ExperimentalCoroutinesApi" +
+                "-Xopt-in=androidx.compose.material.ExperimentalMaterialApi" +
                 "-P" +
                 "plugin:androidx.compose.compiler.plugins.kotlin:suppressKotlinVersionCompatibilityCheck=true"
     }

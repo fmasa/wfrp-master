@@ -18,7 +18,7 @@ import cz.muni.fi.rpg.R
 import cz.frantisekmasa.wfrp_master.core.domain.Armor
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.CardContainer
 import cz.muni.fi.rpg.ui.common.composables.CardTitle
-import cz.muni.fi.rpg.ui.common.composables.NumberPicker
+import cz.frantisekmasa.wfrp_master.core.ui.primitives.NumberPicker
 
 @Composable
 internal fun ArmorCard(armor: Armor, onChange: (Armor) -> Unit) {
