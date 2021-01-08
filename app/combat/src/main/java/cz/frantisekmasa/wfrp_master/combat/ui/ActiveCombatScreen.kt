@@ -59,6 +59,7 @@ fun ActiveCombatScreen(routing: Routing<Route.ActiveCombat>) {
 
     ModalBottomSheetLayout(
         sheetState = bottomSheetState,
+        sheetShape = MaterialTheme.shapes.small,
         sheetContent = {
             if (!bottomSheetState.isVisible) {
                 Box(Modifier.height(1.dp))
