@@ -3,11 +3,14 @@ package cz.muni.fi.rpg.ui.gameMaster.rolls
 import android.os.Parcelable
 import androidx.compose.runtime.*
 import androidx.compose.runtime.savedinstancestate.savedInstanceState
+import androidx.compose.ui.res.stringResource
 import cz.frantisekmasa.wfrp_master.compendium.domain.Skill
 import cz.frantisekmasa.wfrp_master.core.domain.rolls.Dice
+import cz.frantisekmasa.wfrp_master.core.domain.rolls.RollExpression
 import cz.frantisekmasa.wfrp_master.core.domain.rolls.TestResult
 import cz.frantisekmasa.wfrp_master.core.ui.dialogs.FullScreenDialog
 import cz.frantisekmasa.wfrp_master.core.viewModel.newViewModel
+import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.viewModels.SkillTestViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
@@ -42,15 +45,18 @@ fun SkillTestDialog(partyId: UUID, onDismissRequest: () -> Unit) {
                         coroutineScope.launch(Dispatchers.IO) {
                             val results = characters.map {
                                 async {
-                                    SkillTestResult(
+                                    val testResult = viewModel.performSkillTest(
+                                        it,
+                                        currentStep.selectedSkill,
+                                        testModifier,
+                                    )
+
+                                    RollResult(
                                         characterId = it.id,
                                         characterName = it.getName(),
-                                        testName = currentStep.selectedSkill.name,
-                                        testResult = viewModel.performSkillTest(
-                                            it,
-                                            currentStep.selectedSkill,
-                                            testModifier,
-                                        ),
+                                        roll = if (testResult != null)
+                                            Roll.Test(currentStep.selectedSkill.name, testResult)
+                                        else Roll.CharacterDoesNotHaveAdvances,
                                     )
                                 }
                             }
@@ -65,7 +71,7 @@ fun SkillTestDialog(partyId: UUID, onDismissRequest: () -> Unit) {
             }
             is SkillTestDialogStep.ShowResults -> {
                 TestResultScreen(
-                    testName = currentStep.testName,
+                    testName = stringResource(R.string.title_test, currentStep.testName),
                     onDismissRequest = onDismissRequest,
                     results = currentStep.results,
                     onRerollRequest = { step = currentStep.rerollForCharacter(it) }
@@ -85,7 +91,7 @@ private sealed class SkillTestDialogStep : Parcelable {
     @Parcelize
     data class ShowResults(
         val testName: String,
-        val results: List<SkillTestResult>
+        val results: List<RollResult>
     ) : SkillTestDialogStep() {
         fun rerollForCharacter(characterId: String) = copy(
             results = results.map { if (it.characterId == characterId) it.reroll() else it }
@@ -94,11 +100,39 @@ private sealed class SkillTestDialogStep : Parcelable {
 }
 
 @Parcelize
-internal data class SkillTestResult(
+internal data class RollResult(
     val characterId: String,
     val characterName: String,
-    val testName: String,
-    val testResult: TestResult?,
+    val roll: Roll,
 ) : Parcelable {
-    fun reroll() = copy(testResult = testResult?.copy(rollValue = dice.roll()))
+    fun reroll() = copy(roll = roll.reroll())
+}
+
+internal sealed class Roll : Parcelable {
+    abstract fun reroll(): Roll
+
+    @Parcelize
+    data class Generic(
+        val expression: RollExpression,
+        val rolledValue: Int,
+    ) : Roll() {
+        override fun reroll(): Roll = copy(rolledValue = expression.evaluate())
+    }
+
+    @Parcelize
+    data class Test(
+        val testName: String,
+        val result: TestResult
+    ) : Roll() {
+        override fun reroll() = copy(result = result.copy(rollValue = dice.roll()))
+
+        companion object {
+            val dice = Dice(100)
+        }
+    }
+
+    @Parcelize
+    object CharacterDoesNotHaveAdvances : Roll() {
+        override fun reroll() = this
+    }
 }

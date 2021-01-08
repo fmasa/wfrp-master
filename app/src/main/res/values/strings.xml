@@ -48,14 +48,16 @@
     <string name="button_add_non_compendium_spell">…or add non-Compendium spell</string>
 
     <!-- Skill Test Dialog -->
+    <string name="title_roll">Roll</string>
     <string name="title_skill_select">Select skill</string>
     <string name="title_skill_test">Perform skill test</string>
     <string name="title_test">%1$s Test</string>
     <string name="button_test_execute">Execute</string>
     <string name="button_test_reroll">Reroll</string>
 
+
     <string name="item_roll">Roll</string>
-    <string name="item_roll_value">%1$d vs %2$d</string>
+    <string name="item_roll_value">%1$d vs %2$s</string>
     <string name="error_needs_skill_advance">Character cannot test against advanced skill (s)he does not know.</string>
     <string name="item_success_level">SL</string>
     <string name="item_dramatic_result">Dramatic Result</string>
