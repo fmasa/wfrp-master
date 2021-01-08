@@ -39,7 +39,7 @@ import cz.frantisekmasa.wfrp_master.navigation.Routing
 
 @Composable
 fun PartyListScreen(routing: Routing<Route.PartyList>) {
-    val menuState = remember { mutableStateOf(MenuState.COLLAPSED) }
+    var menuState by remember { mutableStateOf(MenuState.COLLAPSED) }
     val fragmentManager = fragmentManager()
     val context = AmbientContext.current
 
@@ -52,13 +52,17 @@ fun PartyListScreen(routing: Routing<Route.PartyList>) {
         },
         modifier = Modifier.fillMaxHeight(),
         floatingActionButton = {
-            FloatingActionsMenu(menuState, R.drawable.ic_add) {
+            FloatingActionsMenu(
+                state = menuState,
+                onToggleRequest = { menuState = it },
+                iconRes = R.drawable.ic_add,
+            ) {
                 ExtendedFloatingActionButton(
                     icon = { Icon(vectorResource(R.drawable.ic_camera)) },
                     text = { Text(stringResource(R.string.scanCode_title)) },
                     onClick = {
                         routing.backStack.push(Route.InvitationScanner)
-                        menuState.value = MenuState.COLLAPSED
+                        menuState = MenuState.COLLAPSED
                     }
                 )
                 ExtendedFloatingActionButton(
@@ -74,7 +78,7 @@ fun PartyListScreen(routing: Routing<Route.PartyList>) {
                                 routing.backStack.push(Route.GameMaster(party.id))
                             }
                             .show(fragmentManager, null)
-                        menuState.value = MenuState.COLLAPSED
+                        menuState = MenuState.COLLAPSED
                     }
                 )
             }
@@ -86,7 +90,7 @@ fun PartyListScreen(routing: Routing<Route.PartyList>) {
 
         MainContainer(
             Modifier.clickable(
-                onClick = { menuState.value = MenuState.COLLAPSED },
+                onClick = { menuState = MenuState.COLLAPSED },
                 indication = null,
             ),
             userId,

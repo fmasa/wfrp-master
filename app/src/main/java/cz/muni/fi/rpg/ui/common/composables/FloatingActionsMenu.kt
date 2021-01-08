@@ -65,11 +65,12 @@ private val transitionDefinition = transitionDefinition<MenuState> {
 
 @Composable
 fun FloatingActionsMenu(
-    state: MutableState<MenuState>,
+    state: MenuState,
+    onToggleRequest: (MenuState) -> Unit,
     @DrawableRes iconRes: Int,
     subButtons: @Composable ColumnScope.() -> Unit
 ) {
-    val transition = transition(definition = transitionDefinition, toState = state.value)
+    val transition = transition(definition = transitionDefinition, toState = state)
 
     Column(horizontalAlignment = Alignment.End) {
         Column(
@@ -79,13 +80,13 @@ fun FloatingActionsMenu(
                 .alpha(transition[opacity])
                 .padding(bottom = transition[yOffset])
         ) {
-            if (state.value == MenuState.EXPANDED) {
+            if (state == MenuState.EXPANDED) {
                 subButtons()
             }
         }
 
         FloatingActionButton(
-            onClick = { state.value = toState(state.value) },
+            onClick = { onToggleRequest(toState(state)) },
         ) {
             Icon(
                 vectorResource(iconRes),
