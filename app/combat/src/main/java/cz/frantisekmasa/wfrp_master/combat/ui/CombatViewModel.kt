@@ -3,6 +3,9 @@ package cz.frantisekmasa.wfrp_master.combat.ui
 import cz.frantisekmasa.wfrp_master.combat.domain.encounter.Npc
 import cz.frantisekmasa.wfrp_master.combat.domain.encounter.NpcRepository
 import cz.frantisekmasa.wfrp_master.combat.domain.encounter.Wounds
+import cz.frantisekmasa.wfrp_master.combat.domain.initiative.InitiativeCharacteristicStrategy
+import cz.frantisekmasa.wfrp_master.combat.domain.initiative.InitiativeStrategy
+import cz.frantisekmasa.wfrp_master.core.domain.Stats
 import cz.frantisekmasa.wfrp_master.core.domain.character.Character
 import cz.frantisekmasa.wfrp_master.core.domain.character.CharacterRepository
 import cz.frantisekmasa.wfrp_master.core.domain.identifiers.CharacterId
@@ -17,16 +20,17 @@ import kotlinx.coroutines.flow.*
 import timber.log.Timber
 import java.util.*
 import kotlin.math.max
+import kotlin.random.Random
 
 class CombatViewModel(
     private val partyId: UUID,
+    private val random: Random,
     private val parties: PartyRepository,
     private val npcs: NpcRepository,
     private val characters: CharacterRepository,
 ) {
 
     val party: Flow<Party> = parties.getLive(partyId).right()
-
 
     private val combat: Flow<Combat> = party
         .mapLatest { it.getActiveCombat() }
@@ -60,10 +64,10 @@ class CombatViewModel(
     ) {
         val party = parties.get(partyId)
         val combatants =
-            characters.map { Combatant.Character(it.id, 1) } +
-                    npcs.map { Combatant.Npc(NpcId(encounterId, it.id), 1) }
+            characters.map { it.getCharacteristics() to Combatant.Character(it.id, 1) } +
+                    npcs.map { it.stats to Combatant.Npc(NpcId(encounterId, it.id), 1) }
 
-        party.startCombat(encounterId, rollInitiativeForCombatants(combatants))
+        party.startCombat(encounterId, rollInitiativeForCombatants(party, combatants))
 
         parties.save(party)
     }
@@ -120,9 +124,18 @@ class CombatViewModel(
 
     suspend fun endCombat() = updateParty { it.endCombat() }
 
-    private fun rollInitiativeForCombatants(combatants: List<Combatant>): List<Combatant> {
-        return combatants.map { it.withInitiative(1) }
-            .sortedBy { it.initiative } // This is very naive approach, but for PoC it's enough
+    private fun rollInitiativeForCombatants(party: Party, combatants: List<Pair<Stats, Combatant>>): List<Combatant> {
+        val strategy = initiativeStrategy(party)
+
+        return combatants.shuffled(random) // Shuffle combatants first to randomize result for ties
+            .map { (characteristics, combatant) -> strategy.determineInitiative(characteristics) to combatant }
+            .sortedByDescending { (initiativeOrder, _) -> initiativeOrder }
+            .map { (initiativeOrder, combatant) -> combatant.withInitiative(initiativeOrder.toInt()) }
+    }
+
+    private fun initiativeStrategy(party: Party): InitiativeStrategy {
+        // TODO: Store configuration of strategy in party
+        return InitiativeCharacteristicStrategy(random) // Default strategy from rulebook
     }
 
     private suspend fun updateParty(update: (Party) -> Unit) {
