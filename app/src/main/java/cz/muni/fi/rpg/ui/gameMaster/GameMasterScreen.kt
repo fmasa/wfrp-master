@@ -31,7 +31,6 @@ import cz.frantisekmasa.wfrp_master.core.viewModel.viewModel
 import cz.frantisekmasa.wfrp_master.core.domain.party.Party
 import cz.muni.fi.rpg.ui.common.AdManager
 import cz.muni.fi.rpg.ui.common.composables.*
-import cz.muni.fi.rpg.ui.gameMaster.encounters.EncounterDialog
 import cz.muni.fi.rpg.ui.gameMaster.encounters.EncountersScreen
 import cz.frantisekmasa.wfrp_master.navigation.Route
 import cz.frantisekmasa.wfrp_master.navigation.Routing
@@ -118,8 +117,6 @@ private fun screens(
     backStack: BackStack<Route>,
     modifier: Modifier
 ): Array<TabScreen<Party>> {
-    val fragmentManager = fragmentManager()
-
     return arrayOf(
         TabScreen(R.string.title_characters) { party ->
             PartySummaryScreen(
