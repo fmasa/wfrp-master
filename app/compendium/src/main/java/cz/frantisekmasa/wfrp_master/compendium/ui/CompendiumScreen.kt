@@ -12,7 +12,6 @@ import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.*
-import androidx.compose.runtime.savedinstancestate.savedInstanceState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.WithConstraints
 import androidx.compose.ui.layout.WithConstraintsScope
@@ -119,7 +118,7 @@ fun <T : CompendiumItem> CompendiumTab(
     onRemove: (T) -> Unit,
     itemContent: @Composable LazyItemScope.(T) -> Unit,
 ) {
-    val dialogState = savedInstanceState<DialogState<T?>> { DialogState.Closed() }
+    val dialogState = remember { mutableStateOf<DialogState<T?>>(DialogState.Closed()) }
 
     dialog(dialogState)
 

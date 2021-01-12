@@ -1,5 +1,6 @@
 package cz.frantisekmasa.wfrp_master.core.domain.rolls
 
+import android.os.Parcelable
 import com.github.h0tk3y.betterParse.combinators.leftAssociative
 import com.github.h0tk3y.betterParse.combinators.or
 import com.github.h0tk3y.betterParse.combinators.skip
@@ -12,10 +13,11 @@ import com.github.h0tk3y.betterParse.lexer.literalToken
 import com.github.h0tk3y.betterParse.lexer.regexToken
 import com.github.h0tk3y.betterParse.parser.ParseException
 import com.github.h0tk3y.betterParse.parser.Parser
+import kotlinx.parcelize.Parcelize
 
 class InvalidRollExpression(cause: Throwable?) : Exception(cause)
 
-interface RollExpression {
+interface RollExpression : Parcelable {
     companion object {
         fun fromString(text: String, constants: Map<String, Int> = emptyMap()): RollExpression =
             try {
@@ -28,20 +30,25 @@ interface RollExpression {
     fun evaluate(): Int
 }
 
-private class DiceRoll(sides: Int) : RollExpression {
-    private val dice = Dice(sides)
+@Parcelize
+private data class DiceRoll(private val sides: Int) : RollExpression {
+    override fun evaluate() = Dice(sides).roll()
 
-    override fun evaluate() = dice.roll()
+    override fun toString(): String = "d$sides"
 }
 
-private class Multiplication(
+@Parcelize
+private data class Multiplication(
     private val a: RollExpression,
     private val b: RollExpression,
 ) : RollExpression {
     override fun evaluate() = a.evaluate() * b.evaluate()
+
+    override fun toString(): String = "$a × $b"
 }
 
-private class Division(
+@Parcelize
+private data class Division(
     private val dividend: RollExpression,
     private val divisor: RollExpression,
 ) : RollExpression {
@@ -54,24 +61,33 @@ private class Division(
 
         return dividend.evaluate() / divisor
     }
+
+    override fun toString(): String = "$dividend ÷ $divisor"
 }
 
-private class Addition(
+@Parcelize
+private data class Addition(
     private val a: RollExpression,
     private val b: RollExpression,
 ) : RollExpression {
     override fun evaluate() = a.evaluate() + b.evaluate()
+
+    override fun toString(): String = "$a + $b"
 }
 
-private class Subtraction(
+@Parcelize
+private data class Subtraction(
     private val a: RollExpression,
     private val b: RollExpression,
 ) : RollExpression {
     override fun evaluate() = a.evaluate() - b.evaluate()
+    override fun toString(): String = "$a - $b"
 }
 
-private class IntegerLiteral(private val value: Int) : RollExpression {
+@Parcelize
+private data class IntegerLiteral(private val value: Int) : RollExpression {
     override fun evaluate() = value
+    override fun toString(): String = "$value"
 }
 
 private class RollExpressionGrammar(val constants: Map<String, Int>) : Grammar<RollExpression>() {

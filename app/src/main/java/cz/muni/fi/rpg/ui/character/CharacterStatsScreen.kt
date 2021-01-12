@@ -4,25 +4,31 @@ import androidx.annotation.StringRes
 import androidx.compose.foundation.ScrollableColumn
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
+import androidx.compose.material.*
+import androidx.compose.runtime.*
+import androidx.compose.runtime.savedinstancestate.savedInstanceState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import cz.frantisekmasa.wfrp_master.core.domain.Characteristic
 import cz.muni.fi.rpg.R
 import cz.frantisekmasa.wfrp_master.core.domain.character.Character
 import cz.frantisekmasa.wfrp_master.core.domain.character.Points
 import cz.frantisekmasa.wfrp_master.core.domain.Stats
 import cz.frantisekmasa.wfrp_master.core.domain.identifiers.CharacterId
 import cz.frantisekmasa.wfrp_master.core.ui.components.CharacteristicsTable
+import cz.frantisekmasa.wfrp_master.core.domain.rolls.RollExpression
+import cz.frantisekmasa.wfrp_master.core.ui.dialogs.FullScreenDialog
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.CardContainer
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.NumberPicker
 import cz.muni.fi.rpg.ui.common.composables.Theme
 import cz.frantisekmasa.wfrp_master.core.viewModel.viewModel
+import cz.muni.fi.rpg.ui.common.composables.FloatingActionsMenu
+import cz.muni.fi.rpg.ui.common.composables.MenuState
+import cz.muni.fi.rpg.ui.gameMaster.rolls.Roll
+import cz.muni.fi.rpg.ui.gameMaster.rolls.RollResult
+import cz.muni.fi.rpg.ui.gameMaster.rolls.TestResultScreen
 import cz.muni.fi.rpg.viewModels.CharacterStatsViewModel
 import org.koin.core.parameter.parametersOf
 import timber.log.Timber
@@ -35,12 +41,54 @@ internal fun CharacterCharacteristicsScreen(
     modifier: Modifier = Modifier,
 ) {
     val viewModel: CharacterStatsViewModel by viewModel { parametersOf(characterId) }
-    ScrollableColumn(
-        modifier.background(MaterialTheme.colors.background)
+
+    var roll: Roll? by savedInstanceState { null }
+
+    roll?.let { currentRoll ->
+        FullScreenDialog(onDismissRequest = { roll = null }) {
+            TestResultScreen(
+                testName = stringResource(R.string.title_roll),
+                results = listOf(
+                    RollResult(
+                        characterId.toString(),
+                        character.getName(),
+                        currentRoll,
+                    )
+                ),
+                onRerollRequest = { roll = currentRoll.reroll() },
+                onDismissRequest = { roll = null })
+        }
+    }
+
+    Scaffold(
+        modifier = modifier.background(MaterialTheme.colors.background),
+        floatingActionButton = {
+            var menuState by remember { mutableStateOf(MenuState.COLLAPSED) }
+
+            FloatingActionsMenu(
+                state = menuState,
+                onToggleRequest = { menuState = it },
+                iconRes = R.drawable.ic_dice_roll,
+            ) {
+                for (dice in listOf("1d100", "1d10")) {
+                    ExtendedFloatingActionButton(
+                        text = { Text(dice) },
+                        onClick = {
+                            menuState = MenuState.COLLAPSED
+
+                            val expression = RollExpression.fromString(dice)
+                            roll = Roll.Generic(expression, expression.evaluate())
+                        }
+                    )
+                }
+            }
+        }
     ) {
-        PointsSection(character.getPoints()) { points -> viewModel.updatePoints { points } }
-        CharacteristicsSection(character.getCharacteristics())
-        Spacer(Modifier.padding(bottom = 8.dp))
+        ScrollableColumn {
+            PointsSection(character.getPoints()) { points -> viewModel.updatePoints { points } }
+            CharacteristicsSection(character.getCharacteristics())
+            Spacer(Modifier.padding(bottom = 8.dp))
+        }
     }
 }
 
@@ -55,7 +103,10 @@ private fun PointsSection(points: Points, onUpdate: (Points) -> Unit) {
     }
 
     Column {
-        CardContainer(Modifier.fillMaxWidth().padding(horizontal = 8.dp)) {
+        CardContainer(
+            Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 8.dp)) {
             Row(
                 horizontalArrangement = Arrangement.SpaceEvenly,
                 modifier = Modifier.fillMaxWidth()

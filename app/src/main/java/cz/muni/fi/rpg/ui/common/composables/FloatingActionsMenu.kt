@@ -1,5 +1,6 @@
 package cz.muni.fi.rpg.ui.common.composables
 
+import androidx.annotation.DrawableRes
 import androidx.compose.animation.DpPropKey
 import androidx.compose.animation.core.*
 import androidx.compose.animation.transition
@@ -10,8 +11,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.drawOpacity
-import androidx.compose.ui.drawLayer
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import cz.muni.fi.rpg.R
@@ -63,30 +65,32 @@ private val transitionDefinition = transitionDefinition<MenuState> {
 
 @Composable
 fun FloatingActionsMenu(
-    state: MutableState<MenuState>,
+    state: MenuState,
+    onToggleRequest: (MenuState) -> Unit,
+    @DrawableRes iconRes: Int,
     subButtons: @Composable ColumnScope.() -> Unit
 ) {
-    val transition = transition(definition = transitionDefinition, toState = state.value)
+    val transition = transition(definition = transitionDefinition, toState = state)
 
     Column(horizontalAlignment = Alignment.End) {
         Column(
             horizontalAlignment = Alignment.End,
             verticalArrangement = Arrangement.spacedBy(transition[yOffset]),
             modifier = Modifier
-                .drawOpacity(transition[opacity])
+                .alpha(transition[opacity])
                 .padding(bottom = transition[yOffset])
         ) {
-            if (state.value == MenuState.EXPANDED) {
+            if (state == MenuState.EXPANDED) {
                 subButtons()
             }
         }
 
         FloatingActionButton(
-            onClick = { state.value = toState(state.value) },
+            onClick = { onToggleRequest(toState(state)) },
         ) {
             Icon(
-                vectorResource(R.drawable.ic_add),
-                modifier = Modifier.drawLayer(rotationZ = transition[iconRotation])
+                vectorResource(iconRes),
+                modifier = Modifier.graphicsLayer(rotationZ = transition[iconRotation])
             )
         }
     }
