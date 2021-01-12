@@ -50,6 +50,7 @@ import cz.muni.fi.rpg.model.domain.inventory.InventoryItem
 import cz.muni.fi.rpg.model.domain.skills.Skill
 import cz.muni.fi.rpg.model.domain.spells.Spell
 import cz.muni.fi.rpg.model.domain.talents.Talent
+import cz.muni.fi.rpg.ui.partySettings.PartySettingsViewModel
 import org.koin.core.qualifier.named
 import cz.frantisekmasa.wfrp_master.compendium.domain.Skill as CompendiumSkill
 import cz.frantisekmasa.wfrp_master.compendium.domain.Spell as ComepndiumSpell
@@ -155,5 +156,6 @@ val appModule = module {
         scoped { (partyId: UUID) -> GameMasterViewModel(partyId, get(), get()) }
         scoped { (partyId: UUID) -> SkillTestViewModel(partyId, skillCompendium(), get(), get()) }
         scoped { (partyId: UUID) -> CombatViewModel(partyId, get(), get(), get()) }
+        scoped { (partyId: UUID) -> PartySettingsViewModel(partyId, get()) }
     }
 }

@@ -20,6 +20,9 @@ sealed class Route {
     data class GameMaster(val partyId: UUID) : Route()
 
     @Immutable
+    data class PartySettings(val partyId: UUID) : Route()
+
+    @Immutable
     data class CharacterCreation(val partyId: UUID, val userId: String?) : Route()
 
     @Immutable

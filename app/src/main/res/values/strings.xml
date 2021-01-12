@@ -6,7 +6,7 @@
     <!-- Party rename Dialog -->
     <string name="title_party_rename">Rename Party</string>
 
-    <string name="label_party_name">Party Name</string>
+    <string name="label_party_name">Party name</string>
     <string name="assembleParty_button_positive">create</string>
     <string name="button_create">create</string>
     <string name="error_party_name_blank">Party name cannot be empty</string>
@@ -146,6 +146,9 @@
     <string name="title_calendar">Calendar</string>
     <string name="title_characters">Characters</string>
     <string name="title_encounters">Encounters</string>
+
+    <string name="title_party_settings">Party Settings</string>
+    <string name="party_section_general">General</string>
 
     <string name="title_encounter_create">Create Encounter</string>
     <string name="message_encounter_saved">Encounter was saved</string>

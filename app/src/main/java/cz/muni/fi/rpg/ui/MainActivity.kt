@@ -35,6 +35,7 @@ import cz.frantisekmasa.wfrp_master.core.auth.AmbientUser
 import cz.frantisekmasa.wfrp_master.core.ui.shell.AmbientSystemUiController
 import cz.frantisekmasa.wfrp_master.core.ui.shell.rememberSystemUiController
 import cz.muni.fi.rpg.ui.joinParty.InvitationScannerScreen
+import cz.muni.fi.rpg.ui.partySettings.PartySettingsScreen
 import cz.muni.fi.rpg.ui.settings.SettingsScreen
 import cz.muni.fi.rpg.viewModels.AuthenticationViewModel
 import org.koin.android.ext.android.inject
@@ -78,6 +79,9 @@ class MainActivity : AuthenticatedActivity(R.layout.activity_main) {
                                 }
                                 is Route.GameMaster -> {
                                     GameMasterScreen(Routing(route, backStack), adManager)
+                                }
+                                is Route.PartySettings -> {
+                                    PartySettingsScreen(Routing(route, backStack))
                                 }
                                 is Route.About -> {
                                     AboutScreen(Routing(route, backStack))

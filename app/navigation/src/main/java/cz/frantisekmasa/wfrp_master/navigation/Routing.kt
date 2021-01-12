@@ -26,4 +26,12 @@ data class Routing<T : Route>(
 
         popUpTo(route, inclusive)
     }
+
+    fun navigateTo(route: Route) {
+        backStack.push(route)
+    }
+
+    fun pop() {
+        backStack.pop()
+    }
 }
