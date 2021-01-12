@@ -3,8 +3,10 @@ package cz.frantisekmasa.wfrp_master.combat.ui
 import cz.frantisekmasa.wfrp_master.combat.domain.encounter.Npc
 import cz.frantisekmasa.wfrp_master.combat.domain.encounter.NpcRepository
 import cz.frantisekmasa.wfrp_master.combat.domain.encounter.Wounds
+import cz.frantisekmasa.wfrp_master.combat.domain.initiative.BonusesPlus1d10Strategy
 import cz.frantisekmasa.wfrp_master.combat.domain.initiative.InitiativeCharacteristicStrategy
-import cz.frantisekmasa.wfrp_master.combat.domain.initiative.InitiativeStrategy
+import cz.frantisekmasa.wfrp_master.combat.domain.initiative.InitiativePlus1d10Strategy
+import cz.frantisekmasa.wfrp_master.combat.domain.initiative.InitiativeTestStrategy
 import cz.frantisekmasa.wfrp_master.core.domain.Stats
 import cz.frantisekmasa.wfrp_master.core.domain.character.Character
 import cz.frantisekmasa.wfrp_master.core.domain.character.CharacterRepository
@@ -15,6 +17,7 @@ import cz.frantisekmasa.wfrp_master.core.domain.party.Party
 import cz.frantisekmasa.wfrp_master.core.domain.party.PartyRepository
 import cz.frantisekmasa.wfrp_master.core.domain.party.combat.Combat
 import cz.frantisekmasa.wfrp_master.core.domain.party.combat.Combatant
+import cz.frantisekmasa.wfrp_master.core.domain.party.settings.InitiativeStrategy
 import cz.frantisekmasa.wfrp_master.core.utils.right
 import kotlinx.coroutines.flow.*
 import timber.log.Timber
@@ -133,9 +136,11 @@ class CombatViewModel(
             .map { (initiativeOrder, combatant) -> combatant.withInitiative(initiativeOrder.toInt()) }
     }
 
-    private fun initiativeStrategy(party: Party): InitiativeStrategy {
-        // TODO: Store configuration of strategy in party
-        return InitiativeCharacteristicStrategy(random) // Default strategy from rulebook
+    private fun initiativeStrategy(party: Party) = when(party.getSettings().initiativeStrategy) {
+        InitiativeStrategy.INITIATIVE_CHARACTERISTIC -> InitiativeCharacteristicStrategy(random)
+        InitiativeStrategy.INITIATIVE_TEST -> InitiativeTestStrategy(random)
+        InitiativeStrategy.INITIATIVE_PLUS_1D10 -> InitiativePlus1d10Strategy(random)
+        InitiativeStrategy.BONUSES_PLUS_1D10 -> BonusesPlus1d10Strategy(random)
     }
 
     private suspend fun updateParty(update: (Party) -> Unit) {

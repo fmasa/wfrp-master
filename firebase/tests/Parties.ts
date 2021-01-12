@@ -120,6 +120,10 @@ class Parties extends Suite {
                 return; // This field is optional for now (BC), TODO: Remove in later versions
             }
 
+            if (field === "settings") {
+                return; // This field is optional for now (BC), TODO: Remove in later versions
+            }
+
             const party = this.validParty();
             const partyId = party.id;
 

@@ -15,6 +15,11 @@ export interface Party {
     }
     users: string[];
     activeCombat: Combat | null;
+    settings: PartySettings,
+}
+
+interface PartySettings {
+    initiativeStrategy: "INITIATIVE_CHARACTERISTIC" | "INITIATIVE_TEST" | "INITIATIVE_PLUS_1D10" | "BONUSES_PLUS_1D10"
 }
 
 export interface Combat {

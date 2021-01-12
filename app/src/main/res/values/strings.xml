@@ -150,6 +150,13 @@
     <string name="title_party_settings">Party Settings</string>
     <string name="party_section_general">General</string>
 
+    <string name="initiative_rules">Initiative rules</string>
+    <string name="initiative_initiative_characteristic">Initiative, then Agility</string>
+    <string name="initiative_initiative_test">Opposed Initiative Test</string>
+    <string name="initiative_initiative_plus_1d10">Initiative + 1d10</string>
+    <string name="initiative_bonuses_plus_1d10">IB + AgiB + 1d10</string>
+
+
     <string name="title_encounter_create">Create Encounter</string>
     <string name="message_encounter_saved">Encounter was saved</string>
     <string name="no_encounters_prompt">No encounters</string>

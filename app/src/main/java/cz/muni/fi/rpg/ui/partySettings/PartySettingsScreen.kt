@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -21,6 +22,8 @@ import cz.frantisekmasa.wfrp_master.navigation.Route
 import cz.frantisekmasa.wfrp_master.navigation.Routing
 import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.ui.gameMaster.RenamePartyDialog
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import org.koin.core.parameter.parametersOf
 
 @Composable
@@ -47,10 +50,9 @@ fun PartySettingsScreen(routing: Routing<Route.PartySettings>) {
         ) {
             Card(shape = MaterialTheme.shapes.large) {
                 Column {
-                    SectionTitle(R.string.party_section_general)
-
                     val fragmentManager = fragmentManager()
 
+                    SectionTitle(R.string.party_section_general)
                     ListItem(
                         text = { Text(stringResource(R.string.label_party_name)) },
                         secondaryText = { Text(party.getName()) },
@@ -59,6 +61,9 @@ fun PartySettingsScreen(routing: Routing<Route.PartySettings>) {
                                 .show(fragmentManager, null)
                         }
                     )
+
+                    SectionTitle(R.string.title_combat)
+                    InitiativeStrategyItem(party, viewModel)
                 }
             }
         }

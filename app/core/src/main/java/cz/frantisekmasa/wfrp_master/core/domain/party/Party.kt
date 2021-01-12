@@ -5,6 +5,7 @@ import cz.frantisekmasa.wfrp_master.core.domain.Ambitions
 import cz.frantisekmasa.wfrp_master.core.domain.identifiers.EncounterId
 import cz.frantisekmasa.wfrp_master.core.domain.party.combat.Combat
 import cz.frantisekmasa.wfrp_master.core.domain.party.combat.Combatant
+import cz.frantisekmasa.wfrp_master.core.domain.party.settings.Settings
 import cz.frantisekmasa.wfrp_master.core.domain.time.DateTime
 import cz.frantisekmasa.wfrp_master.core.domain.time.ImperialDate
 import kotlinx.parcelize.Parcelize
@@ -23,6 +24,7 @@ data class Party(
         DateTime.TimeOfDay(12, 0)
     ),
     private var activeCombat: Combat? = null,
+    private var settings: Settings = Settings()
 ) : Parcelable {
     companion object {
         const val NAME_MAX_LENGTH = 50
@@ -67,6 +69,10 @@ data class Party(
         this.activeCombat = combat
     }
 
+    fun updateSettings(settings: Settings) {
+        this.settings = settings
+    }
+
     fun endCombat() {
         activeCombat = null
     }
@@ -74,6 +80,8 @@ data class Party(
     fun hasActiveCombat(): Boolean {
         return activeCombat != null
     }
+
+    fun getSettings(): Settings = settings
 
     fun getActiveCombat(): Combat? = activeCombat
 
