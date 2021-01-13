@@ -84,7 +84,7 @@ android {
     }
 
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.0.0-alpha09"
+        kotlinCompilerExtensionVersion = "1.0.0-alpha10"
     }
 
     compileOptions {

@@ -1,18 +1,14 @@
 package cz.frantisekmasa.wfrp_master.core.ui.forms
 
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.FocusRequester
-import androidx.compose.ui.focusRequester
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.Spacing
@@ -45,12 +41,7 @@ fun TextInput(
     horizontalAlignment: Alignment.Horizontal = Alignment.Start,
     rules: Rules = Rules.NoRules
 ) {
-    val focusRequester = remember { FocusRequester() }
-
-    Column(
-        horizontalAlignment = horizontalAlignment,
-        modifier = modifier.clickable(indication = null) { focusRequester.requestFocus() },
-    ) {
+    Column(horizontalAlignment = horizontalAlignment, modifier = modifier) {
         label?.let { InputLabel(label) }
 
         val filters = mutableListOf<Filter>(Filter.MaxLength(maxLength))
@@ -87,7 +78,6 @@ fun TextInput(
                     textStyle = textStyle.copy(color = textColor),
                     singleLine = !multiLine,
                     modifier = Modifier
-                        .focusRequester(focusRequester)
                         .fillMaxWidth()
                         .padding(Spacing.medium)
                 )
