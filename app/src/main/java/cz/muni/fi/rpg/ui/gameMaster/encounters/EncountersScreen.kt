@@ -17,6 +17,7 @@ import androidx.compose.ui.res.loadVectorResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import cz.frantisekmasa.wfrp_master.combat.domain.encounter.Encounter
+import cz.frantisekmasa.wfrp_master.core.domain.party.PartyId
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.DraggableListFor
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.EmptyUI
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.Spacing
@@ -26,7 +27,7 @@ import java.util.*
 
 @Composable
 fun EncountersScreen(
-    partyId: UUID,
+    partyId: PartyId,
     viewModel: EncountersViewModel,
     modifier: Modifier,
     onEncounterClick: (Encounter) -> Unit,

@@ -16,6 +16,7 @@ import androidx.compose.ui.text.toUpperCase
 import androidx.compose.ui.unit.dp
 import arrow.core.extensions.list.foldable.exists
 import cz.frantisekmasa.wfrp_master.combat.R
+import cz.frantisekmasa.wfrp_master.core.domain.party.PartyId
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.Spacing
 import cz.frantisekmasa.wfrp_master.core.viewModel.PartyViewModel
 import cz.frantisekmasa.wfrp_master.core.viewModel.viewModel
@@ -25,7 +26,7 @@ import org.koin.core.parameter.parametersOf
 import java.util.*
 
 @Composable
-fun ActiveCombatBanner(partyId: UUID, routing: Routing<*>) {
+fun ActiveCombatBanner(partyId: PartyId, routing: Routing<*>) {
     val partyViewModel: PartyViewModel by viewModel { parametersOf(partyId) }
 
     if (routing.backStack.elements.contains(Route.ActiveCombat(partyId))) {

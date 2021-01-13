@@ -6,6 +6,7 @@ import cz.frantisekmasa.wfrp_master.core.domain.identifiers.CharacterId
 import cz.frantisekmasa.wfrp_master.core.domain.character.CharacterRepository
 import cz.frantisekmasa.wfrp_master.core.domain.Ambitions
 import cz.frantisekmasa.wfrp_master.core.domain.party.Party
+import cz.frantisekmasa.wfrp_master.core.domain.party.PartyId
 import cz.frantisekmasa.wfrp_master.core.domain.party.PartyRepository
 import cz.frantisekmasa.wfrp_master.core.domain.time.DateTime
 import cz.frantisekmasa.wfrp_master.core.utils.right
@@ -15,7 +16,7 @@ import kotlinx.coroutines.flow.zip
 import java.util.*
 
 class GameMasterViewModel(
-    private val partyId: UUID,
+    private val partyId: PartyId,
     private val parties: PartyRepository,
     private val characterRepository: CharacterRepository
 ) {

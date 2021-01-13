@@ -30,6 +30,7 @@ import cz.frantisekmasa.wfrp_master.compendium.domain.CompendiumItem
 import cz.frantisekmasa.wfrp_master.compendium.domain.Skill
 import cz.frantisekmasa.wfrp_master.compendium.domain.Spell
 import cz.frantisekmasa.wfrp_master.compendium.domain.Talent
+import cz.frantisekmasa.wfrp_master.core.domain.party.PartyId
 import cz.frantisekmasa.wfrp_master.core.ui.buttons.CloseButton
 import cz.frantisekmasa.wfrp_master.core.ui.dialogs.FullScreenDialog
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.FullScreenProgress
@@ -46,7 +47,7 @@ import java.util.*
 @Composable
 internal fun ImportDialog(
     state: ImportDialogState,
-    partyId: UUID,
+    partyId: PartyId,
     onDismissRequest: () -> Unit,
     onComplete: () -> Unit,
 ) {
@@ -67,7 +68,7 @@ internal fun ImportDialog(
 
 @Composable
 private fun ImportedItemsPicker(
-    partyId: UUID,
+    partyId: PartyId,
     state: ImportDialogState.PickingItemsToImport,
     onDismissRequest: () -> Unit,
     onComplete: () -> Unit,

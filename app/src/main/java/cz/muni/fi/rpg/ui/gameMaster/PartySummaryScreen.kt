@@ -17,7 +17,6 @@ import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.unit.dp
 import com.github.zsoltk.compose.router.BackStack
 import cz.frantisekmasa.wfrp_master.compendium.ui.CompendiumViewModel
-import cz.frantisekmasa.wfrp_master.core.domain.Ambitions
 import cz.muni.fi.rpg.R
 import cz.frantisekmasa.wfrp_master.core.domain.character.Character
 import cz.frantisekmasa.wfrp_master.core.domain.identifiers.CharacterId
@@ -25,6 +24,7 @@ import cz.frantisekmasa.wfrp_master.core.ui.primitives.ContextMenu
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.EmptyUI
 import cz.frantisekmasa.wfrp_master.core.viewModel.viewModel
 import cz.frantisekmasa.wfrp_master.core.domain.party.Invitation
+import cz.frantisekmasa.wfrp_master.core.domain.party.PartyId
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.CardContainer
 import cz.muni.fi.rpg.ui.common.composables.*
 import cz.muni.fi.rpg.ui.gameMaster.adapter.Player
@@ -35,11 +35,10 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 import org.koin.core.parameter.parametersOf
-import java.util.*
 
 @Composable
 internal fun PartySummaryScreen(
-    partyId: UUID,
+    partyId: PartyId,
     backStack: BackStack<Route>,
     modifier: Modifier,
     viewModel: GameMasterViewModel,

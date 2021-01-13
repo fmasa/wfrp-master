@@ -8,12 +8,12 @@ import cz.frantisekmasa.wfrp_master.combat.domain.encounter.Encounter
 import cz.frantisekmasa.wfrp_master.combat.domain.encounter.EncounterNotFound
 import cz.frantisekmasa.wfrp_master.combat.domain.encounter.EncounterRepository
 import cz.frantisekmasa.wfrp_master.core.domain.identifiers.EncounterId
+import cz.frantisekmasa.wfrp_master.core.domain.party.PartyId
 import cz.frantisekmasa.wfrp_master.core.firestore.AggregateMapper
 import cz.frantisekmasa.wfrp_master.core.firestore.COLLECTION_PARTIES
 import cz.frantisekmasa.wfrp_master.core.firestore.documentFlow
 import cz.frantisekmasa.wfrp_master.core.firestore.queryFlow
 import kotlinx.coroutines.tasks.await
-import java.util.*
 
 /* internal */ class FirestoreEncounterRepository(
     private val firestore: FirebaseFirestore,
@@ -43,7 +43,7 @@ import java.util.*
         )
     }
 
-    override suspend fun save(partyId: UUID, vararg encounters: Encounter) {
+    override suspend fun save(partyId: PartyId, vararg encounters: Encounter) {
         firestore.runTransaction { transaction ->
             encounters.forEach { encounter ->
                 transaction.set(
@@ -55,7 +55,7 @@ import java.util.*
         }.await()
     }
 
-    override fun findByParty(partyId: UUID) = queryFlow(
+    override fun findByParty(partyId: PartyId) = queryFlow(
         encounters(partyId).orderBy("position", Query.Direction.ASCENDING),
         mapper
     )
@@ -64,7 +64,7 @@ import java.util.*
         encounters(id.partyId).document(id.encounterId.toString()).delete().await()
     }
 
-    override suspend fun getNextPosition(partyId: UUID): Int {
+    override suspend fun getNextPosition(partyId: PartyId): Int {
         val snapshot = encounters(partyId)
             .orderBy("position", Query.Direction.DESCENDING)
             .get()
@@ -76,6 +76,6 @@ import java.util.*
         return lastPosition + 1
     }
 
-    private fun encounters(partyId: UUID) =
+    private fun encounters(partyId: PartyId) =
         parties.document(partyId.toString()).collection(COLLECTION_ENCOUNTERS)
 }

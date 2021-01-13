@@ -5,6 +5,7 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.savedinstancestate.savedInstanceState
 import androidx.compose.ui.res.stringResource
 import cz.frantisekmasa.wfrp_master.compendium.domain.Skill
+import cz.frantisekmasa.wfrp_master.core.domain.party.PartyId
 import cz.frantisekmasa.wfrp_master.core.domain.rolls.Dice
 import cz.frantisekmasa.wfrp_master.core.domain.rolls.RollExpression
 import cz.frantisekmasa.wfrp_master.core.domain.rolls.TestResult
@@ -18,12 +19,11 @@ import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
 import org.koin.core.parameter.parametersOf
-import java.util.*
 
 private val dice = Dice(100)
 
 @Composable
-fun SkillTestDialog(partyId: UUID, onDismissRequest: () -> Unit) {
+fun SkillTestDialog(partyId: PartyId, onDismissRequest: () -> Unit) {
     FullScreenDialog(onDismissRequest = onDismissRequest) {
         val viewModel: SkillTestViewModel = newViewModel { parametersOf(partyId) }
         var step: SkillTestDialogStep by savedInstanceState { SkillTestDialogStep.SkillPicking }

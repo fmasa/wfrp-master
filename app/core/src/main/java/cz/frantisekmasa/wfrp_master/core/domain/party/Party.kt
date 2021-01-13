@@ -13,7 +13,7 @@ import java.util.*
 
 @Parcelize
 data class Party(
-    val id: UUID,
+    val id: PartyId,
     private var name: String,
     val gameMasterId: String?, // Remove support for single-player parties in 1.14
     val users: Set<String>,
@@ -34,7 +34,6 @@ data class Party(
 
     init {
         require(gameMasterId == null || gameMasterId in users)
-        require(id.version() == 4) {"Party identifier must be UUIDv4"}
         require(name.isNotBlank()) {"Party name must not be empty"}
         require(name.length <= NAME_MAX_LENGTH) {"Party name is too long"}
     }

@@ -28,6 +28,7 @@ import cz.frantisekmasa.wfrp_master.core.domain.character.Character
 import cz.frantisekmasa.wfrp_master.core.domain.character.CharacterFeatureRepository
 import cz.frantisekmasa.wfrp_master.core.domain.character.CharacterRepository
 import cz.frantisekmasa.wfrp_master.core.domain.character.Feature
+import cz.frantisekmasa.wfrp_master.core.domain.party.PartyId
 import cz.muni.fi.rpg.model.domain.inventory.InventoryItemRepository
 import cz.muni.fi.rpg.model.domain.invitation.InvitationProcessor
 import cz.muni.fi.rpg.model.domain.skills.SkillRepository
@@ -130,8 +131,8 @@ val appModule = module {
     viewModel { (characterId: CharacterId) -> CharacterStatsViewModel(characterId, get()) }
     viewModel { (characterId: CharacterId) -> CharacterMiscViewModel(characterId, get(), get()) }
     viewModel { (characterId: CharacterId) -> CharacterViewModel(characterId, get()) }
-    viewModel { (partyId: UUID) -> EncountersViewModel(partyId, get()) }
-    viewModel { (partyId: UUID) -> PartyViewModel(partyId, get()) }
+    viewModel { (partyId: PartyId) -> EncountersViewModel(partyId, get()) }
+    viewModel { (partyId: PartyId) -> PartyViewModel(partyId, get()) }
     viewModel { (encounterId: EncounterId) -> EncounterDetailViewModel(encounterId, get(), get(), get()) }
     viewModel { (characterId: CharacterId) -> InventoryViewModel(characterId, get(), get(), get()) }
     viewModel { (characterId: CharacterId) -> SkillsViewModel(characterId, get(), skillCompendium()) }
@@ -142,8 +143,8 @@ val appModule = module {
     viewModel { InvitationScannerViewModel(get(), get()) }
     viewModel { PartyListViewModel(get()) }
     viewModel { SettingsViewModel(get(), get()) }
-    viewModel { (partyId: UUID) -> CharacterCreationViewModel(partyId, get()) }
-    viewModel { (partyId: UUID) ->
+    viewModel { (partyId: PartyId) -> CharacterCreationViewModel(partyId, get()) }
+    viewModel { (partyId: PartyId) ->
         CompendiumViewModel(
             partyId,
             skillCompendium(),
@@ -154,9 +155,9 @@ val appModule = module {
     }
 
     scope(named(KoinScopeType.Screen)) {
-        scoped { (partyId: UUID) -> GameMasterViewModel(partyId, get(), get()) }
-        scoped { (partyId: UUID) -> SkillTestViewModel(partyId, skillCompendium(), get(), get()) }
-        scoped { (partyId: UUID) -> CombatViewModel(partyId, Random, get(), get(), get()) }
-        scoped { (partyId: UUID) -> PartySettingsViewModel(partyId, get()) }
+        scoped { (partyId: PartyId) -> GameMasterViewModel(partyId, get(), get()) }
+        scoped { (partyId: PartyId) -> SkillTestViewModel(partyId, skillCompendium(), get(), get()) }
+        scoped { (partyId: PartyId) -> CombatViewModel(partyId, Random, get(), get(), get()) }
+        scoped { (partyId: PartyId) -> PartySettingsViewModel(partyId, get()) }
     }
 }

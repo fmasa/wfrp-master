@@ -21,6 +21,7 @@ import androidx.compose.ui.unit.dp
 import cz.frantisekmasa.wfrp_master.combat.domain.encounter.Encounter
 import cz.frantisekmasa.wfrp_master.combat.ui.StartCombatDialog
 import cz.frantisekmasa.wfrp_master.core.domain.identifiers.NpcId
+import cz.frantisekmasa.wfrp_master.core.domain.party.PartyId
 import cz.frantisekmasa.wfrp_master.core.ui.buttons.BackButton
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.CardContainer
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.ContextMenu
@@ -108,7 +109,7 @@ fun EncounterDetailScreen(routing: Routing<Route.EncounterDetail>) {
 private fun TopAppBarActions(
     routing: Routing<Route.EncounterDetail>,
     encounter: Encounter,
-    partyId: UUID,
+    partyId: PartyId,
     viewModel: EncounterDetailViewModel
 ) {
     val context = AmbientContext.current

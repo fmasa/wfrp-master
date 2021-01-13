@@ -6,13 +6,13 @@ import cz.frantisekmasa.wfrp_master.compendium.domain.Skill
 import cz.frantisekmasa.wfrp_master.compendium.domain.Spell
 import cz.frantisekmasa.wfrp_master.compendium.domain.Talent
 import cz.frantisekmasa.wfrp_master.core.domain.party.Party
+import cz.frantisekmasa.wfrp_master.core.domain.party.PartyId
 import cz.frantisekmasa.wfrp_master.core.domain.party.PartyRepository
 import cz.frantisekmasa.wfrp_master.core.utils.right
 import kotlinx.coroutines.flow.Flow
-import java.util.UUID
 
 class CompendiumViewModel(
-    private val partyId: UUID,
+    private val partyId: PartyId,
     private val skillCompendium: Compendium<Skill>,
     private val talentsCompendium: Compendium<Talent>,
     private val spellCompendium: Compendium<Spell>,

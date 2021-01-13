@@ -4,6 +4,7 @@ import androidx.compose.runtime.Immutable
 import cz.frantisekmasa.wfrp_master.core.domain.identifiers.CharacterId
 import cz.frantisekmasa.wfrp_master.core.domain.identifiers.EncounterId
 import cz.frantisekmasa.wfrp_master.core.domain.identifiers.NpcId
+import cz.frantisekmasa.wfrp_master.core.domain.party.PartyId
 import java.util.*
 
 sealed class Route {
@@ -17,13 +18,13 @@ sealed class Route {
     object Settings : Route()
 
     @Immutable
-    data class GameMaster(val partyId: UUID) : Route()
+    data class GameMaster(val partyId: PartyId) : Route()
 
     @Immutable
-    data class PartySettings(val partyId: UUID) : Route()
+    data class PartySettings(val partyId: PartyId) : Route()
 
     @Immutable
-    data class CharacterCreation(val partyId: UUID, val userId: String?) : Route()
+    data class CharacterCreation(val partyId: PartyId, val userId: String?) : Route()
 
     @Immutable
     data class CharacterDetail(val characterId: CharacterId) : Route()
@@ -41,13 +42,13 @@ sealed class Route {
     data class NpcCreation(val encounterId: EncounterId) : Route()
 
     @Immutable
-    data class Compendium(val partyId: UUID) : Route()
+    data class Compendium(val partyId: PartyId) : Route()
 
     @Immutable
-    data class CompendiumImport(val partyId: UUID) : Route()
+    data class CompendiumImport(val partyId: PartyId) : Route()
 
     object InvitationScanner : Route()
 
     @Immutable
-    data class ActiveCombat(val partyId: UUID) : Route()
+    data class ActiveCombat(val partyId: PartyId) : Route()
 }

@@ -27,6 +27,7 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import cz.frantisekmasa.wfrp_master.core.auth.AmbientUser
 import cz.frantisekmasa.wfrp_master.core.domain.identifiers.CharacterId
+import cz.frantisekmasa.wfrp_master.core.domain.party.PartyId
 import cz.frantisekmasa.wfrp_master.core.ui.buttons.HamburgerButton
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.ContextMenu
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.EmptyUI
@@ -153,7 +154,7 @@ private fun MainContainer(
 @Composable
 fun PartyList(parties: List<Party>, onClick: (Party) -> Unit, onRemove: (Party) -> Unit) {
     ScrollableColumn(Modifier.padding(top = 12.dp).fillMaxHeight()) {
-        val contextMenuOpened = remember { mutableStateOf<UUID?>(null) }
+        val contextMenuOpened = remember { mutableStateOf<PartyId?>(null) }
 
         for (party in parties) {
             PartyItem(party,

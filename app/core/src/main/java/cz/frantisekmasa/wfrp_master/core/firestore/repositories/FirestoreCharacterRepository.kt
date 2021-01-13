@@ -6,12 +6,12 @@ import cz.frantisekmasa.wfrp_master.core.domain.character.Character
 import cz.frantisekmasa.wfrp_master.core.domain.character.CharacterNotFound
 import cz.frantisekmasa.wfrp_master.core.domain.character.CharacterRepository
 import cz.frantisekmasa.wfrp_master.core.domain.identifiers.CharacterId
+import cz.frantisekmasa.wfrp_master.core.domain.party.PartyId
 import cz.frantisekmasa.wfrp_master.core.firestore.*
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.tasks.await
 import timber.log.Timber
-import java.util.*
 
 /* internal */ class FirestoreCharacterRepository(
     firestore: FirebaseFirestore,
@@ -19,7 +19,7 @@ import java.util.*
 ) : CharacterRepository {
     private val parties = firestore.collection(COLLECTION_PARTIES)
 
-    override suspend fun save(partyId: UUID, character: Character) {
+    override suspend fun save(partyId: PartyId, character: Character) {
         val data = mapper.toDocumentData(character)
 
         Timber.d("Saving character $data in party $partyId to firestore")
@@ -49,11 +49,11 @@ import java.util.*
         it.bimap({ e -> CharacterNotFound(characterId, e) }, mapper::fromDocumentSnapshot)
     }
 
-    override suspend fun hasCharacterInParty(userId: String, partyId: UUID): Boolean {
+    override suspend fun hasCharacterInParty(userId: String, partyId: PartyId): Boolean {
         return characters(partyId).whereEqualTo("userId", userId).get().await().size() != 0
     }
 
-    override fun inParty(partyId: UUID): Flow<List<Character>> =
+    override fun inParty(partyId: PartyId): Flow<List<Character>> =
     // TODO: Filter archived characters via whereEqualTo() once all historic characters have `archived` field set
         // These should be migrated in 1.14
         queryFlow(
@@ -61,6 +61,6 @@ import java.util.*
             mapper
         ).map { parties -> parties.filter { !it.isArchived() } }
 
-    private fun characters(partyId: UUID) =
+    private fun characters(partyId: PartyId) =
         parties.document(partyId.toString()).collection(COLLECTION_CHARACTERS)
 }

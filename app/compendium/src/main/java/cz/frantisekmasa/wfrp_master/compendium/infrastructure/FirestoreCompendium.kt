@@ -6,6 +6,7 @@ import com.google.firebase.firestore.SetOptions
 import cz.frantisekmasa.wfrp_master.compendium.domain.Compendium
 import cz.frantisekmasa.wfrp_master.compendium.domain.CompendiumItem
 import cz.frantisekmasa.wfrp_master.compendium.domain.exceptions.CompendiumItemNotFound
+import cz.frantisekmasa.wfrp_master.core.domain.party.PartyId
 import cz.frantisekmasa.wfrp_master.core.firestore.AggregateMapper
 import cz.frantisekmasa.wfrp_master.core.firestore.COLLECTION_PARTIES
 import cz.frantisekmasa.wfrp_master.core.firestore.queryFlow
@@ -24,12 +25,12 @@ import java.util.*
     private val mapper: AggregateMapper<T>,
 ) : Compendium<T>, CoroutineScope by CoroutineScope(Dispatchers.IO) {
 
-    override fun liveForParty(partyId: UUID): Flow<List<T>> = queryFlow(
+    override fun liveForParty(partyId: PartyId): Flow<List<T>> = queryFlow(
         collection(partyId).orderBy("name"),
         mapper,
     )
 
-    override suspend fun getItem(partyId: UUID, itemId: UUID): T {
+    override suspend fun getItem(partyId: PartyId, itemId: UUID): T {
         try {
             val snapshot = collection(partyId).document(itemId.toString()).get().await()
 
@@ -48,7 +49,7 @@ import java.util.*
         }
     }
 
-    override suspend fun saveItems(partyId: UUID, vararg items: T) {
+    override suspend fun saveItems(partyId: PartyId, vararg items: T) {
         val itemsData = coroutineScope {
             items.map { it.id to async { mapper.toDocumentData(it) } }
                 .map { (id, data) -> id to data.await() }
@@ -67,14 +68,14 @@ import java.util.*
         }.await()
     }
 
-    override suspend fun remove(partyId: UUID, item: T) {
+    override suspend fun remove(partyId: PartyId, item: T) {
         collection(partyId)
             .document(item.id.toString())
             .delete()
             .await()
     }
 
-    private fun collection(partyId: UUID) =
+    private fun collection(partyId: PartyId) =
         firestore.collection(COLLECTION_PARTIES)
             .document(partyId.toString())
             .collection(collectionName)
