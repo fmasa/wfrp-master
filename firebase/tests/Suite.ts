@@ -55,6 +55,9 @@ export abstract class Suite {
                 minutes: 10,
             },
             activeCombat: null,
+            settings: {
+                initiativeStrategy: "INITIATIVE_CHARACTERISTIC",
+            }
         }
     }
 

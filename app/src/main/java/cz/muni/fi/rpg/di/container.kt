@@ -50,7 +50,9 @@ import cz.muni.fi.rpg.model.domain.inventory.InventoryItem
 import cz.muni.fi.rpg.model.domain.skills.Skill
 import cz.muni.fi.rpg.model.domain.spells.Spell
 import cz.muni.fi.rpg.model.domain.talents.Talent
+import cz.muni.fi.rpg.ui.partySettings.PartySettingsViewModel
 import org.koin.core.qualifier.named
+import kotlin.random.Random
 import cz.frantisekmasa.wfrp_master.compendium.domain.Skill as CompendiumSkill
 import cz.frantisekmasa.wfrp_master.compendium.domain.Spell as ComepndiumSpell
 import cz.frantisekmasa.wfrp_master.compendium.domain.Talent as CompendiumTalent
@@ -154,6 +156,7 @@ val appModule = module {
     scope(named(KoinScopeType.Screen)) {
         scoped { (partyId: UUID) -> GameMasterViewModel(partyId, get(), get()) }
         scoped { (partyId: UUID) -> SkillTestViewModel(partyId, skillCompendium(), get(), get()) }
-        scoped { (partyId: UUID) -> CombatViewModel(partyId, get(), get(), get()) }
+        scoped { (partyId: UUID) -> CombatViewModel(partyId, Random, get(), get(), get()) }
+        scoped { (partyId: UUID) -> PartySettingsViewModel(partyId, get()) }
     }
 }

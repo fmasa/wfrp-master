@@ -26,12 +26,10 @@ import cz.frantisekmasa.wfrp_master.core.ui.scaffolding.TopBarAction
 import cz.frantisekmasa.wfrp_master.core.ui.scaffolding.tabs.TabContent
 import cz.frantisekmasa.wfrp_master.core.ui.scaffolding.tabs.TabRow
 import cz.frantisekmasa.wfrp_master.core.ui.scaffolding.tabs.TabScreen
-import cz.frantisekmasa.wfrp_master.core.ui.viewinterop.fragmentManager
 import cz.frantisekmasa.wfrp_master.core.viewModel.viewModel
 import cz.frantisekmasa.wfrp_master.core.domain.party.Party
 import cz.muni.fi.rpg.ui.common.AdManager
 import cz.muni.fi.rpg.ui.common.composables.*
-import cz.muni.fi.rpg.ui.gameMaster.encounters.EncounterDialog
 import cz.muni.fi.rpg.ui.gameMaster.encounters.EncountersScreen
 import cz.frantisekmasa.wfrp_master.navigation.Route
 import cz.frantisekmasa.wfrp_master.navigation.Routing
@@ -43,7 +41,6 @@ import org.koin.core.parameter.parametersOf
 fun GameMasterScreen(routing: Routing<Route.GameMaster>, adManager: AdManager) {
     val viewModel = ViewModel.GameMaster(routing.route.partyId)
     val party = viewModel.party.collectAsState(null).value
-    val fragmentManager = fragmentManager()
 
     Scaffold(
         topBar = {
@@ -57,11 +54,10 @@ fun GameMasterScreen(routing: Routing<Route.GameMaster>, adManager: AdManager) {
                                 return@TopBarAction
                             }
 
-                            RenamePartyDialog.newInstance(party.id, party.getName())
-                                .show(fragmentManager, null)
+                            routing.navigateTo(Route.PartySettings(party.id))
                         },
                     ) {
-                        Icon(vectorResource(R.drawable.ic_edit))
+                        Icon(vectorResource(R.drawable.ic_settings))
                     }
                 }
             )
@@ -118,8 +114,6 @@ private fun screens(
     backStack: BackStack<Route>,
     modifier: Modifier
 ): Array<TabScreen<Party>> {
-    val fragmentManager = fragmentManager()
-
     return arrayOf(
         TabScreen(R.string.title_characters) { party ->
             PartySummaryScreen(

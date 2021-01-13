@@ -404,7 +404,7 @@ service cloud.firestore {
             }
 
             function isValidNewParty(party, uid) {
-                return ["id", "name", "users", "gameMasterId", "accessCode", "ambitions", "archived", "time", "activeCombat"].hasAll(party.keys())
+                return ["id", "name", "users", "gameMasterId", "accessCode", "ambitions", "archived", "time", "activeCombat", "settings"].hasAll(party.keys())
                     && party.id is string && party.id == partyId && isValidUuid(party.id)
                     && isValidPartyName(party.name)
                     && party.users == [uid]
@@ -413,14 +413,15 @@ service cloud.firestore {
                     && (party.gameMasterId == uid || party.gameMasterId == null)
                     && party.accessCode is string && party.accessCode != ""
                     && (! ("time" in party) || isValidImperialTime(party.time))
-                    && areAmbitionsValid(party.ambitions);
+                    && areAmbitionsValid(party.ambitions)
+                    && (! ("settings" in party) || areValidSettings(party.settings))
             }
 
             function isValidPartyEdit() {
                 let party = request.resource.data;
                 let diff = resource.data.diff(request.resource.data);
 
-                return ["ambitions", "name", "archived", "time", "users", "activeCombat"].toSet().hasAll(diff.affectedKeys())
+                return ["ambitions", "name", "archived", "time", "users", "activeCombat", "settings"].toSet().hasAll(diff.affectedKeys())
                     && areAmbitionsValid(party.ambitions)
                     && isValidPartyName(party.name)
                     && party.users.toSet() == resource.data.users.toSet()
@@ -429,6 +430,7 @@ service cloud.firestore {
                         || party.activeCombat == null
                         || isValidCombat(party.activeCombat)
                     )
+                    && (! ("settings" in party) || areValidSettings(party.settings))
                     && party.archived is bool;
             }
 
@@ -437,6 +439,17 @@ service cloud.firestore {
                     && time.keys().toSet() == ["imperialDay", "minutes"].toSet()
                     && time.minutes is int && time.minutes >= 0 && time.minutes < 60 * 24
                     && time.imperialDay is int;
+            }
+
+            function areValidSettings(settings) {
+                return settings is map
+                    && ["initiativeStrategy"].toSet().hasAll(settings.keys())
+                    && settings.initiativeStrategy in [
+                        "INITIATIVE_CHARACTERISTIC",
+                        "INITIATIVE_TEST",
+                        "INITIATIVE_PLUS_1D10",
+                        "BONUSES_PLUS_1D10"
+                    ]
             }
 
             function isValidCombat(combat) {

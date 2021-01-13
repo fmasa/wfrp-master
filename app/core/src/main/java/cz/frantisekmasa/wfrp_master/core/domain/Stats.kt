@@ -29,6 +29,10 @@ data class Stats(
         )
     }
 
+    val agilityBonus: Int get() = agility / 10
+    val toughnessBonus: Int get() = toughness / 10
+    val initiativeBonus: Int get() = initiative / 10
+
     operator fun plus(other: Stats) = Stats(
         weaponSkill = weaponSkill + other.weaponSkill,
         dexterity = dexterity + other.dexterity,
@@ -41,6 +45,4 @@ data class Stats(
         willPower = willPower + other.willPower,
         fellowship = fellowship + other.fellowship
     )
-
-    fun getToughnessBonus() = toughness / 10
 }
