@@ -62,7 +62,7 @@ fun PartyListScreen(routing: Routing<Route.PartyList>) {
                     icon = { Icon(vectorResource(R.drawable.ic_camera)) },
                     text = { Text(stringResource(R.string.scanCode_title)) },
                     onClick = {
-                        routing.backStack.push(Route.InvitationScanner)
+                        routing.navigateTo(Route.InvitationScanner)
                         menuState = MenuState.COLLAPSED
                     }
                 )
@@ -76,7 +76,7 @@ fun PartyListScreen(routing: Routing<Route.PartyList>) {
                     onClick = {
                         AssemblePartyDialog()
                             .setOnSuccessListener { party ->
-                                routing.backStack.push(Route.GameMaster(party.id))
+                                routing.navigateTo(Route.GameMaster(party.id))
                             }
                             .show(fragmentManager, null)
                         menuState = MenuState.COLLAPSED
@@ -98,9 +98,9 @@ fun PartyListScreen(routing: Routing<Route.PartyList>) {
             viewModel,
             onClick = {
                 if (it.gameMasterId == userId) {
-                    routing.backStack.push(Route.GameMaster(it.id))
+                    routing.navigateTo(Route.GameMaster(it.id))
                 } else {
-                    routing.backStack.push(Route.CharacterDetail(CharacterId(it.id, userId)))
+                    routing.navigateTo(Route.CharacterDetail(CharacterId(it.id, userId)))
                 }
             },
             onRemove = { with(coroutineScope) { removeParty(context, viewModel, it) } },

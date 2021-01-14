@@ -1,5 +1,6 @@
 package cz.muni.fi.rpg.viewModels
 
+import androidx.lifecycle.ViewModel
 import arrow.core.extensions.list.foldable.exists
 import cz.frantisekmasa.wfrp_master.core.domain.character.Character
 import cz.frantisekmasa.wfrp_master.core.domain.identifiers.CharacterId
@@ -11,25 +12,29 @@ import cz.frantisekmasa.wfrp_master.core.domain.party.PartyRepository
 import cz.frantisekmasa.wfrp_master.core.domain.time.DateTime
 import cz.frantisekmasa.wfrp_master.core.utils.right
 import cz.muni.fi.rpg.ui.gameMaster.adapter.Player
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.zip
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.*
 import java.util.*
 
 class GameMasterViewModel(
     private val partyId: PartyId,
     private val parties: PartyRepository,
     private val characterRepository: CharacterRepository
-) {
+) : ViewModel(), CoroutineScope by CoroutineScope(Dispatchers.IO) {
 
-    val party: Flow<Party> = parties.getLive(partyId).right()
+    val party: StateFlow<Party?> = parties.getLive(partyId)
+        .right()
+        .stateIn(this, SharingStarted.WhileSubscribed(), null)
+
     val characters: Flow<List<Character>> = characterRepository.inParty(partyId)
 
     /**
      * Returns flow which emits either CharacterId of players current character or NULL if user
      * didn't create character yet
      */
-    fun getPlayers(): Flow<List<Player>> {
-        return party.zip(characters) { party, characters ->
+    val players: StateFlow<List<Player>?> =
+        party.filterNotNull().zip(characterRepository.inParty(partyId)) { party, characters ->
             val players = characters.map { Player.ExistingCharacter(it) }
             val usersWithoutCharacter = party.users
                 .filter { it != party.gameMasterId }
@@ -37,8 +42,7 @@ class GameMasterViewModel(
                 .map { Player.UserWithoutCharacter(it) }
 
             players + usersWithoutCharacter
-        }
-    }
+        }.stateIn(this, SharingStarted.WhileSubscribed(), null)
 
     suspend fun archiveCharacter(id: CharacterId) {
         val character = characterRepository.get(id)

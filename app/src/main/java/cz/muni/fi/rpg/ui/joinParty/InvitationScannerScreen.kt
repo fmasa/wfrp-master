@@ -51,7 +51,7 @@ fun InvitationScannerScreen(routing: Routing<Route>) {
             TopAppBar(
                 title = { Text(stringResource(R.string.qr_scan_prompt)) },
                 navigationIcon = {
-                    BackButton(onClick = { routing.backStack.pop() })
+                    BackButton(onClick = { routing.pop() })
                 },
             )
         },
@@ -94,7 +94,7 @@ fun InvitationScannerScreen(routing: Routing<Route>) {
                                     Toast.LENGTH_LONG
                                 )
 
-                                routing.backStack.pop()
+                                routing.pop()
                             }
                         }
                     }
@@ -143,7 +143,7 @@ fun InvitationScannerScreen(routing: Routing<Route>) {
                                     }
 
                                     withContext(Dispatchers.Main) {
-                                        routing.backStack.pop()
+                                        routing.pop()
                                     }
                                 } catch (e: Throwable) {
                                     when (e) {

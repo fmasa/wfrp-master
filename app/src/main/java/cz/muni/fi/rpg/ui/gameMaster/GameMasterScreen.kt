@@ -16,7 +16,6 @@ import androidx.compose.ui.layout.WithConstraints
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
-import com.github.zsoltk.compose.router.BackStack
 import cz.frantisekmasa.wfrp_master.combat.ui.ActiveCombatBanner
 import cz.muni.fi.rpg.R
 import cz.frantisekmasa.wfrp_master.core.domain.identifiers.CharacterId
@@ -40,7 +39,7 @@ import org.koin.core.parameter.parametersOf
 @Composable
 fun GameMasterScreen(routing: Routing<Route.GameMaster>, adManager: AdManager) {
     val viewModel = ViewModel.GameMaster(routing.route.partyId)
-    val party = viewModel.party.collectAsState(null).value
+    val party = viewModel.party.collectAsState().value
 
     Scaffold(
         topBar = {
@@ -74,7 +73,7 @@ fun GameMasterScreen(routing: Routing<Route.GameMaster>, adManager: AdManager) {
         WithConstraints(Modifier.fillMaxSize()) {
             val screens = screens(
                 viewModel,
-                routing.backStack,
+                routing,
                 Modifier.width(maxWidth).padding(top = 6.dp)
             )
             val screenWidth = constraints.maxWidth.toFloat()
@@ -111,7 +110,7 @@ fun GameMasterScreen(routing: Routing<Route.GameMaster>, adManager: AdManager) {
 @Composable
 private fun screens(
     viewModel: GameMasterViewModel,
-    backStack: BackStack<Route>,
+    routing: Routing<Route.GameMaster>,
     modifier: Modifier
 ): Array<TabScreen<Party>> {
     return arrayOf(
@@ -120,12 +119,12 @@ private fun screens(
                 modifier = modifier,
                 partyId = party.id,
                 viewModel = viewModel,
-                backStack = backStack,
+                routing = routing,
                 onCharacterOpenRequest = {
-                    backStack.push(Route.CharacterDetail(CharacterId(party.id, it.id)))
+                    routing.navigateTo(Route.CharacterDetail(CharacterId(party.id, it.id)))
                 },
                 onCharacterCreateRequest = {
-                    backStack.push(Route.CharacterCreation(party.id, it))
+                    routing.navigateTo(Route.CharacterCreation(party.id, it))
                 },
             )
         },
@@ -143,7 +142,7 @@ private fun screens(
                 viewModel = encountersViewModel,
                 modifier = modifier,
                 onEncounterClick = {
-                    backStack.push(Route.EncounterDetail(EncounterId(party.id, it.id)))
+                    routing.navigateTo(Route.EncounterDetail(EncounterId(party.id, it.id)))
                 },
             )
         },

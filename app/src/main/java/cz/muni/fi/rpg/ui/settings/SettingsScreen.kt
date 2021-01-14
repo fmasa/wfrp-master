@@ -33,7 +33,7 @@ fun SettingsScreen(routing: Routing<Route.Settings>) {
         topBar = {
             TopAppBar(
                 navigationIcon = {
-                    BackButton(onClick = { routing.backStack.pop() })
+                    BackButton(onClick = { routing.pop() })
                 },
                 title = { Text(stringResource(R.string.settings)) }
             )

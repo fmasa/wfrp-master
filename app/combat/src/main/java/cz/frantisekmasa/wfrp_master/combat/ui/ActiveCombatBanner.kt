@@ -14,7 +14,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.intl.Locale
 import androidx.compose.ui.text.toUpperCase
 import androidx.compose.ui.unit.dp
-import arrow.core.extensions.list.foldable.exists
 import cz.frantisekmasa.wfrp_master.combat.R
 import cz.frantisekmasa.wfrp_master.core.domain.party.PartyId
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.Spacing
@@ -29,12 +28,6 @@ import java.util.*
 fun ActiveCombatBanner(partyId: PartyId, routing: Routing<*>) {
     val partyViewModel: PartyViewModel by viewModel { parametersOf(partyId) }
 
-    if (routing.backStack.elements.contains(Route.ActiveCombat(partyId))) {
-        // Prevent long and confusing back stack when user goes i.e.
-        // combat -> character detail -> combat
-        return
-    }
-
     partyViewModel.party
         .collectAsState(null)
         .value
@@ -47,7 +40,7 @@ fun ActiveCombatBanner(partyId: PartyId, routing: Routing<*>) {
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Text(stringResource(R.string.combat_in_progress))
-            TextButton(onClick = { routing.backStack.push(Route.ActiveCombat(partyId)) }) {
+            TextButton(onClick = { routing.navigateTo(Route.ActiveCombat(partyId)) }) {
                 Text(stringResource(R.string.button_open).toUpperCase(Locale.current))
             }
         }

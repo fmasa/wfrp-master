@@ -10,7 +10,7 @@ import cz.frantisekmasa.wfrp_master.core.domain.rolls.Dice
 import cz.frantisekmasa.wfrp_master.core.domain.rolls.RollExpression
 import cz.frantisekmasa.wfrp_master.core.domain.rolls.TestResult
 import cz.frantisekmasa.wfrp_master.core.ui.dialogs.FullScreenDialog
-import cz.frantisekmasa.wfrp_master.core.viewModel.newViewModel
+import cz.frantisekmasa.wfrp_master.core.viewModel.viewModel
 import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.viewModels.SkillTestViewModel
 import kotlinx.coroutines.Dispatchers
@@ -25,7 +25,7 @@ private val dice = Dice(100)
 @Composable
 fun SkillTestDialog(partyId: PartyId, onDismissRequest: () -> Unit) {
     FullScreenDialog(onDismissRequest = onDismissRequest) {
-        val viewModel: SkillTestViewModel = newViewModel { parametersOf(partyId) }
+        val viewModel: SkillTestViewModel by viewModel { parametersOf(partyId) }
         var step: SkillTestDialogStep by savedInstanceState { SkillTestDialogStep.SkillPicking }
 
         when (val currentStep = step) {

@@ -1,5 +1,6 @@
 package cz.muni.fi.rpg.ui.partySettings
 
+import androidx.lifecycle.ViewModel
 import cz.frantisekmasa.wfrp_master.core.domain.party.Party
 import cz.frantisekmasa.wfrp_master.core.domain.party.PartyId
 import cz.frantisekmasa.wfrp_master.core.domain.party.PartyRepository
@@ -10,7 +11,7 @@ import kotlinx.coroutines.flow.Flow
 class PartySettingsViewModel(
     private val partyId: PartyId,
     private val parties: PartyRepository
-) {
+) : ViewModel() {
     val party: Flow<Party> = parties.getLive(partyId).right()
 
     suspend fun updateSettings(change: (Settings) -> Settings) {

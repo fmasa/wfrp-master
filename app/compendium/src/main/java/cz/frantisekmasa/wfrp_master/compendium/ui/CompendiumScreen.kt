@@ -63,9 +63,9 @@ private fun TopBar(routing: Routing<Route.Compendium>) {
                 }
             }
         },
-        navigationIcon = { BackButton(onClick = { routing.backStack.pop() }) },
+        navigationIcon = { BackButton(onClick = { routing.pop() }) },
         actions = {
-            TopBarAction(onClick = { routing.backStack.push(Route.CompendiumImport(partyId)) }) {
+            TopBarAction(onClick = { routing.navigateTo(Route.CompendiumImport(partyId)) }) {
                 Text(stringResource(R.string.button_import).toUpperCase(Locale.current))
             }
         }

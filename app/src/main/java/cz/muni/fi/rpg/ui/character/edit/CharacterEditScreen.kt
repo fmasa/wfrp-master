@@ -89,13 +89,13 @@ fun CharacterEditScreen(routing: Routing<Route.CharacterEdit>) {
 
                         coroutineScope.launch(Dispatchers.IO) {
                             updateCharacter(viewModel, formData)
-                            withContext(Dispatchers.Main) { routing.backStack.pop() }
+                            withContext(Dispatchers.Main) { routing.pop() }
                         }
                     } else {
                         validate.value = true
                     }
                 },
-                onBack = { routing.backStack.pop() },
+                onBack = { routing.pop() },
                 actionsEnabled = submitEnabled.value && character != null
             )
         }

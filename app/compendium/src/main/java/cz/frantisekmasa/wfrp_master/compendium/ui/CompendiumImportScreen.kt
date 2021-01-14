@@ -53,7 +53,7 @@ private fun TopBar(routing: Routing<Route.CompendiumImport>) {
                 }
             }
         },
-        navigationIcon = { BackButton(onClick = { routing.backStack.pop() }) },
+        navigationIcon = { BackButton(onClick = { routing.pop() }) },
     )
 }
 
@@ -69,7 +69,7 @@ private fun MainContainer(routing: Routing<Route.CompendiumImport>) {
             state = it,
             partyId = routing.route.partyId,
             onDismissRequest = { importState = null },
-            onComplete = { routing.backStack.pop() },
+            onComplete = { routing.pop() },
         )
     }
 

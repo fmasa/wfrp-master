@@ -15,7 +15,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.unit.dp
-import com.github.zsoltk.compose.router.BackStack
 import cz.frantisekmasa.wfrp_master.compendium.ui.CompendiumViewModel
 import cz.muni.fi.rpg.R
 import cz.frantisekmasa.wfrp_master.core.domain.character.Character
@@ -29,6 +28,7 @@ import cz.frantisekmasa.wfrp_master.core.ui.primitives.CardContainer
 import cz.muni.fi.rpg.ui.common.composables.*
 import cz.muni.fi.rpg.ui.gameMaster.adapter.Player
 import cz.frantisekmasa.wfrp_master.navigation.Route
+import cz.frantisekmasa.wfrp_master.navigation.Routing
 import cz.muni.fi.rpg.ui.gameMaster.rolls.SkillTestDialog
 import cz.muni.fi.rpg.viewModels.GameMasterViewModel
 import kotlinx.coroutines.Dispatchers
@@ -39,7 +39,7 @@ import org.koin.core.parameter.parametersOf
 @Composable
 internal fun PartySummaryScreen(
     partyId: PartyId,
-    backStack: BackStack<Route>,
+    routing: Routing<*>,
     modifier: Modifier,
     viewModel: GameMasterViewModel,
     onCharacterOpenRequest: (Character) -> Unit,
@@ -63,7 +63,7 @@ internal fun PartySummaryScreen(
         }
     ) {
         ScrollableColumn(Modifier.background(MaterialTheme.colors.background)) {
-            val party = viewModel.party.collectAsState(null).value
+            val party = viewModel.party.collectAsState().value
                 ?: return@ScrollableColumn
 
             val invitationDialogVisible = remember { mutableStateOf(false) }
@@ -102,7 +102,7 @@ internal fun PartySummaryScreen(
                 Modifier
                     .fillMaxWidth()
                     .padding(8.dp)
-                    .clickable(onClick = { backStack.push(Route.Compendium(partyId)) })
+                    .clickable(onClick = { routing.navigateTo(Route.Compendium(partyId)) })
             ) {
                 Column(Modifier.fillMaxWidth().padding(horizontal = 8.dp)) {
                     CardTitle(R.string.title_compendium)
@@ -147,7 +147,7 @@ private fun PlayersCard(
 
             CardTitle(R.string.title_characters)
 
-            val players = viewModel.getPlayers().collectAsState(null).value
+            val players = viewModel.players.collectAsState().value
 
             when {
                 players == null -> {
@@ -183,7 +183,7 @@ private fun PlayersCard(
             ) {
                 PrimaryButton(R.string.button_create, onClick = { onCharacterCreateRequest(null) })
 
-                val party = viewModel.party.collectAsState(null).value
+                val party = viewModel.party.collectAsState().value
 
                 PrimaryButton(
                     R.string.button_invite,

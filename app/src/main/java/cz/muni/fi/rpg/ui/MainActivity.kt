@@ -7,15 +7,12 @@ import android.view.MenuItem
 import androidx.compose.runtime.*
 import androidx.compose.ui.platform.ComposeView
 import androidx.drawerlayout.widget.DrawerLayout
-import com.github.zsoltk.compose.backpress.AmbientBackPressHandler
-import com.github.zsoltk.compose.backpress.BackPressHandler
+import androidx.navigation.compose.*
 import com.github.zsoltk.compose.router.BackStack
-import com.github.zsoltk.compose.router.Router
 import cz.frantisekmasa.wfrp_master.combat.ui.ActiveCombatScreen
 import cz.frantisekmasa.wfrp_master.compendium.ui.CompendiumImportScreen
 import cz.frantisekmasa.wfrp_master.compendium.ui.CompendiumScreen
 import cz.frantisekmasa.wfrp_master.core.ui.buttons.AmbientHamburgerButtonHandler
-import cz.frantisekmasa.wfrp_master.core.ui.shell.KoinScope
 import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.ui.character.CharacterDetailScreen
 import cz.muni.fi.rpg.ui.character.edit.CharacterEditScreen
@@ -45,9 +42,9 @@ class MainActivity : AuthenticatedActivity(R.layout.activity_main) {
 
     private val adManager: AdManager by inject()
 
-    private val backPressHandler = BackPressHandler()
-
     private lateinit var backStack: BackStack<Route>
+
+    private var navigateTo: (Route) -> Unit = {}
 
     override fun onCreate(savedInstanceState: Bundle?) {
         setupKoinFragmentFactory()
@@ -57,79 +54,118 @@ class MainActivity : AuthenticatedActivity(R.layout.activity_main) {
         adManager.initialize()
 
         findViewById<ComposeView>(R.id.compose).setContent {
+            val navController = rememberNavController()
+
+            onCommit {
+                navigateTo = {
+                    navController.navigate(it.toString()) {
+                        launchSingleTop = true
+                    }
+                }
+            }
+
+            onDispose {
+                navigateTo = {}
+            }
+
             val auth: AuthenticationViewModel by viewModel()
             val user = auth.user.collectAsState(null).value ?: return@setContent
 
             Providers(
-                AmbientBackPressHandler provides backPressHandler,
                 AmbientHamburgerButtonHandler provides { openDrawer() },
                 AmbientUser provides user,
                 AmbientSystemUiController provides rememberSystemUiController(window),
             ) {
                 Theme {
-                    Router<Route>(defaultRouting = Route.PartyList) { backStack ->
-                        this.backStack = backStack
-                        val route = backStack.last()
+                    NavHost(navController, startDestination = Route.PartyList.toString()) {
+                        composable(Route.PartyList.toString()) {
+                            PartyListScreen(Routing(Route.PartyList, navController))
+                        }
 
-                        KoinScope(route) {
-                            @Suppress("UNUSED_VARIABLE") // This val is there just to force `when` to be exhaustive
-                            val nothing = when (route) {
-                                is Route.PartyList -> {
-                                    PartyListScreen(Routing(route, backStack))
-                                }
-                                is Route.GameMaster -> {
-                                    GameMasterScreen(Routing(route, backStack), adManager)
-                                }
-                                is Route.PartySettings -> {
-                                    PartySettingsScreen(Routing(route, backStack))
-                                }
-                                is Route.About -> {
-                                    AboutScreen(Routing(route, backStack))
-                                }
-                                is Route.CharacterCreation -> {
-                                    CharacterCreationScreen(Routing(route, backStack))
-                                }
-                                is Route.CharacterDetail -> {
-                                    CharacterDetailScreen(Routing(route, backStack), adManager)
-                                }
-                                is Route.CharacterEdit -> {
-                                    CharacterEditScreen(Routing(route, backStack))
-                                }
-                                is Route.EncounterDetail -> {
-                                    EncounterDetailScreen(Routing(route, backStack))
-                                }
-                                is Route.NpcDetail -> {
-                                    NpcDetailScreen(Routing(route, backStack))
-                                }
-                                is Route.NpcCreation -> {
-                                    NpcCreationScreen(Routing(route, backStack))
-                                }
-                                is Route.Settings -> {
-                                    SettingsScreen(Routing(route, backStack))
-                                }
-                                is Route.Compendium -> {
-                                    CompendiumScreen(Routing(route, backStack))
-                                }
-                                is Route.CompendiumImport -> {
-                                    CompendiumImportScreen(Routing(route, backStack))
-                                }
-                                is Route.InvitationScanner -> {
-                                    InvitationScannerScreen(Routing(route, backStack))
-                                }
-                                is Route.ActiveCombat -> {
-                                    ActiveCombatScreen(Routing(route, backStack))
-                                }
-                            }
+                        composable(Route.GameMaster.toString()) {
+                            GameMasterScreen(
+                                Routing(Route.GameMaster.fromEntry(it), navController),
+                                adManager
+                            )
+                        }
+
+                        composable(Route.PartySettings.toString()) {
+                            PartySettingsScreen(
+                                Routing(
+                                    Route.PartySettings.fromEntry(it),
+                                    navController
+                                )
+                            )
+                        }
+
+                        composable(Route.About.toString()) {
+                            AboutScreen(Routing(Route.About, navController))
+                        }
+
+                        composable(Route.CharacterCreation.toString()) {
+                            CharacterCreationScreen(
+                                Routing(
+                                    Route.CharacterCreation.fromEntry(it),
+                                    navController
+                                )
+                            )
+                        }
+
+                        composable(Route.CharacterDetail.toString()) {
+                            CharacterDetailScreen(
+                                Routing(Route.CharacterDetail.fromEntry(it), navController),
+                                adManager,
+                            )
+                        }
+
+                        composable(Route.CharacterEdit.toString()) {
+                            CharacterEditScreen(
+                                Routing(Route.CharacterEdit.fromEntry(it), navController)
+                            )
+                        }
+
+                        composable(Route.EncounterDetail.toString()) {
+                            EncounterDetailScreen(
+                                Routing(Route.EncounterDetail.fromEntry(it), navController)
+                            )
+                        }
+
+                        composable(Route.NpcDetail.toString()) {
+                            NpcDetailScreen(Routing(Route.NpcDetail.fromEntry(it), navController))
+                        }
+
+                        composable(Route.NpcCreation.toString()) {
+                            NpcCreationScreen(
+                                Routing(Route.NpcCreation.fromEntry(it), navController),
+                            )
+                        }
+
+                        composable(Route.Settings.toString()) {
+                            SettingsScreen(Routing(Route.Settings, navController))
+                        }
+
+                        composable(Route.Compendium.toString()) {
+                            CompendiumScreen(Routing(Route.Compendium.fromEntry(it), navController))
+                        }
+
+                        composable(Route.CompendiumImport.toString()) {
+                            CompendiumImportScreen(
+                                Routing(Route.CompendiumImport.fromEntry(it), navController)
+                            )
+                        }
+
+                        composable(Route.InvitationScanner.toString()) {
+                            InvitationScannerScreen(Routing(Route.InvitationScanner, navController))
+                        }
+
+                        composable(Route.ActiveCombat.toString()) {
+                            ActiveCombatScreen(
+                                Routing(Route.ActiveCombat.fromEntry(it), navController)
+                            )
                         }
                     }
                 }
             }
-        }
-    }
-
-    override fun onBackPressed() {
-        if (!backPressHandler.handle()) {
-            super.onBackPressed()
         }
     }
 
@@ -169,18 +205,14 @@ class MainActivity : AuthenticatedActivity(R.layout.activity_main) {
 
     @Suppress("UNUSED_PARAMETER")
     fun openAbout(item: MenuItem) {
-        if (backStack.last() != Route.About) {
-            backStack.push(Route.About)
-        }
+        navigateTo(Route.About)
 
         findViewById<DrawerLayout>(R.id.drawer_layout).close()
     }
 
     @Suppress("UNUSED_PARAMETER")
     fun openSettings(item: MenuItem) {
-        if (backStack.last() != Route.Settings) {
-            backStack.push(Route.Settings)
-        }
+        navigateTo(Route.Settings)
 
         findViewById<DrawerLayout>(R.id.drawer_layout).close()
     }

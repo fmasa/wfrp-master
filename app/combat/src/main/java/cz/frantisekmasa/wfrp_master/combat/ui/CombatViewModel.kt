@@ -1,5 +1,6 @@
 package cz.frantisekmasa.wfrp_master.combat.ui
 
+import androidx.lifecycle.ViewModel
 import cz.frantisekmasa.wfrp_master.combat.domain.encounter.Npc
 import cz.frantisekmasa.wfrp_master.combat.domain.encounter.NpcRepository
 import cz.frantisekmasa.wfrp_master.combat.domain.encounter.Wounds
@@ -31,7 +32,7 @@ class CombatViewModel(
     private val parties: PartyRepository,
     private val npcs: NpcRepository,
     private val characters: CharacterRepository,
-) {
+): ViewModel() {
 
     val party: Flow<Party> = parties.getLive(partyId).right()
 

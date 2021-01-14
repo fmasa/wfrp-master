@@ -31,7 +31,7 @@ import cz.frantisekmasa.wfrp_master.core.ui.primitives.Spacing
 import cz.frantisekmasa.wfrp_master.core.ui.scaffolding.OptionsAction
 import cz.frantisekmasa.wfrp_master.core.ui.scaffolding.SubheadBar
 import cz.frantisekmasa.wfrp_master.core.ui.scaffolding.Subtitle
-import cz.frantisekmasa.wfrp_master.core.viewModel.newViewModel
+import cz.frantisekmasa.wfrp_master.core.viewModel.viewModel
 import cz.frantisekmasa.wfrp_master.navigation.Route
 import cz.frantisekmasa.wfrp_master.navigation.Routing
 import kotlinx.coroutines.CoroutineScope
@@ -44,7 +44,7 @@ import timber.log.Timber
 
 @Composable
 fun ActiveCombatScreen(routing: Routing<Route.ActiveCombat>) {
-    val viewModel: CombatViewModel = newViewModel { parametersOf(routing.route.partyId) }
+    val viewModel: CombatViewModel by viewModel { parametersOf(routing.route.partyId) }
 
     AutoCloseOnEndedCombat(viewModel, routing)
 
@@ -85,7 +85,7 @@ fun ActiveCombatScreen(routing: Routing<Route.ActiveCombat>) {
         Scaffold(
             topBar = {
                 TopAppBar(
-                    navigationIcon = { BackButton(onClick = { routing.backStack.pop() }) },
+                    navigationIcon = { BackButton(onClick = { routing.pop() }) },
                     title = {
                         Column {
                             Text(stringResource(R.string.title_combat))
@@ -254,7 +254,7 @@ private fun CombatantSheet(
         TextButton(
             modifier = Modifier.align(Alignment.CenterHorizontally),
             onClick = {
-                routing.backStack.push(
+                routing.navigateTo(
                     when (combatant) {
                         is CombatantItem.Npc -> Route.NpcDetail(combatant.npcId)
                         is CombatantItem.Character -> Route.CharacterDetail(combatant.characterId)

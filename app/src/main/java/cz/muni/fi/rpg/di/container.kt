@@ -12,7 +12,6 @@ import cz.frantisekmasa.wfrp_master.combat.domain.encounter.Npc
 import cz.frantisekmasa.wfrp_master.combat.ui.CombatViewModel
 import cz.frantisekmasa.wfrp_master.compendium.infrastructure.FirestoreCompendium
 import cz.frantisekmasa.wfrp_master.compendium.ui.CompendiumViewModel
-import cz.frantisekmasa.wfrp_master.core.di.KoinScopeType
 import cz.frantisekmasa.wfrp_master.core.domain.identifiers.CharacterId
 import cz.frantisekmasa.wfrp_master.core.domain.identifiers.EncounterId
 import cz.frantisekmasa.wfrp_master.core.domain.party.Party
@@ -41,7 +40,6 @@ import cz.muni.fi.rpg.viewModels.*
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.core.scope.Scope
 import org.koin.dsl.module
-import java.util.*
 import cz.frantisekmasa.wfrp_master.core.firestore.aggregateMapper
 import cz.frantisekmasa.wfrp_master.core.firestore.repositories.FirestoreCharacterFeatureRepository
 import cz.frantisekmasa.wfrp_master.core.firestore.repositories.FirestoreCharacterRepository
@@ -52,7 +50,6 @@ import cz.muni.fi.rpg.model.domain.skills.Skill
 import cz.muni.fi.rpg.model.domain.spells.Spell
 import cz.muni.fi.rpg.model.domain.talents.Talent
 import cz.muni.fi.rpg.ui.partySettings.PartySettingsViewModel
-import org.koin.core.qualifier.named
 import kotlin.random.Random
 import cz.frantisekmasa.wfrp_master.compendium.domain.Skill as CompendiumSkill
 import cz.frantisekmasa.wfrp_master.compendium.domain.Spell as ComepndiumSpell
@@ -153,11 +150,8 @@ val appModule = module {
             get(),
         )
     }
-
-    scope(named(KoinScopeType.Screen)) {
-        scoped { (partyId: PartyId) -> GameMasterViewModel(partyId, get(), get()) }
-        scoped { (partyId: PartyId) -> SkillTestViewModel(partyId, skillCompendium(), get(), get()) }
-        scoped { (partyId: PartyId) -> CombatViewModel(partyId, Random, get(), get(), get()) }
-        scoped { (partyId: PartyId) -> PartySettingsViewModel(partyId, get()) }
-    }
+    viewModel { (partyId: PartyId) -> GameMasterViewModel(partyId, get(), get()) }
+    viewModel { (partyId: PartyId) -> SkillTestViewModel(partyId, skillCompendium(), get(), get()) }
+    viewModel { (partyId: PartyId) -> CombatViewModel(partyId, Random, get(), get(), get()) }
+    viewModel { (partyId: PartyId) -> PartySettingsViewModel(partyId, get()) }
 }

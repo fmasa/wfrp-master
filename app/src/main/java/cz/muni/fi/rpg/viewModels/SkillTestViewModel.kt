@@ -1,5 +1,6 @@
 package cz.muni.fi.rpg.viewModels
 
+import androidx.lifecycle.ViewModel
 import cz.frantisekmasa.wfrp_master.compendium.domain.Compendium
 import cz.frantisekmasa.wfrp_master.core.domain.Stats
 import cz.frantisekmasa.wfrp_master.core.domain.identifiers.CharacterId
@@ -19,7 +20,7 @@ class SkillTestViewModel(
     skillCompendium: Compendium<CompendiumSkill>,
     characterRepository: CharacterRepository,
     private val characterSkills: SkillRepository,
-) {
+): ViewModel() {
     val characters: Flow<List<Character>> = characterRepository
         .inParty(partyId)
 

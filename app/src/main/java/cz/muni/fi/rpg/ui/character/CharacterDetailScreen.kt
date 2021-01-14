@@ -48,7 +48,7 @@ fun CharacterDetailScreen(routing: Routing<Route.CharacterDetail>, adManager: Ad
     LaunchedEffect(routing.route.characterId) {
         withContext(Dispatchers.IO) {
             if (!viewModel.characterExists()) {
-                routing.backStack.replace(
+                routing.replace(
                     Route.CharacterCreation(characterId.partyId, characterId.id)
                 )
             }
@@ -67,7 +67,7 @@ fun CharacterDetailScreen(routing: Routing<Route.CharacterDetail>, adManager: Ad
                 },
                 actions = {
                     TopBarAction(
-                        onClick = { routing.backStack.push(Route.CharacterEdit(characterId)) }
+                        onClick = { routing.navigateTo(Route.CharacterEdit(characterId)) }
                     ) {
                         Icon(vectorResource(R.drawable.ic_edit))
                     }
@@ -106,7 +106,11 @@ private fun MainContainer(
         val screens = screens(characterId, viewModel, Modifier.width(maxWidth).padding(top = 6.dp))
 
         Column(Modifier.fillMaxHeight()) {
-            ActiveCombatBanner(partyId = characterId.partyId, routing = routing)
+            if (! routing.route.comingFromCombat) {
+                // Prevent long and confusing back stack when user goes i.e.
+                // combat -> character detail -> combat
+                ActiveCombatBanner(partyId = characterId.partyId, routing = routing)
+            }
 
             val scrollState = key(screenWidth, screens.size) { rememberScrollState(0f) }
 
