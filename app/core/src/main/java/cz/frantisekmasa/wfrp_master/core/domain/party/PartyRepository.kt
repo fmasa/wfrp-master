@@ -3,7 +3,6 @@ package cz.frantisekmasa.wfrp_master.core.domain.party
 import arrow.core.Either
 import kotlinx.coroutines.flow.Flow
 import cz.frantisekmasa.wfrp_master.core.connectivity.CouldNotConnectToBackend
-import java.util.*
 
 interface PartyRepository {
 
@@ -15,9 +14,9 @@ interface PartyRepository {
     /**
      * @throws PartyNotFound
      */
-    suspend fun get(id: UUID): Party
+    suspend fun get(id: PartyId): Party
 
-    fun getLive(id: UUID): Flow<Either<PartyNotFound, Party>>
+    fun getLive(id: PartyId): Flow<Either<PartyNotFound, Party>>
 
     /**
      * Creates RecyclerView Adapter with parties that user has access to

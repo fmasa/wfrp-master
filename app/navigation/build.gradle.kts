@@ -4,7 +4,7 @@ plugins {
     id("kotlin-parcelize")
 }
 
-val composeVersion = "1.0.0-alpha09"
+val composeVersion = "1.0.0-alpha10"
 
 android {
     compileSdkVersion(29)
@@ -51,7 +51,6 @@ android {
 dependencies {
     implementation(project(":app:core"))
 
-    // TODO: Wrap by adapter so that this does not leak to rest of the app
-    // Then change this from api() to implementation()
-    api("com.github.zsoltk:compose-router:0.23.0")
+    // Navigation
+    api("androidx.navigation:navigation-compose:1.0.0-alpha05")
 }

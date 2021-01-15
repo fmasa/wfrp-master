@@ -9,6 +9,7 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.savedinstancestate.savedInstanceState
 import androidx.compose.ui.res.stringResource
 import cz.frantisekmasa.wfrp_master.combat.domain.encounter.Encounter
+import cz.frantisekmasa.wfrp_master.core.domain.party.PartyId
 import cz.frantisekmasa.wfrp_master.core.ui.buttons.CloseButton
 import cz.frantisekmasa.wfrp_master.core.ui.dialogs.FullScreenDialog
 import cz.frantisekmasa.wfrp_master.core.ui.forms.Rules
@@ -27,7 +28,7 @@ import java.util.*
 @Composable
 fun EncounterDialog(
     existingEncounter: Encounter?,
-    partyId: UUID,
+    partyId: PartyId,
     onDismissRequest: () -> Unit,
 ) {
     val viewModel: EncountersViewModel by viewModel { parametersOf(partyId) }

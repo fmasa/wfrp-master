@@ -21,6 +21,7 @@ import androidx.compose.ui.unit.dp
 import cz.frantisekmasa.wfrp_master.combat.domain.encounter.Encounter
 import cz.frantisekmasa.wfrp_master.combat.ui.StartCombatDialog
 import cz.frantisekmasa.wfrp_master.core.domain.identifiers.NpcId
+import cz.frantisekmasa.wfrp_master.core.domain.party.PartyId
 import cz.frantisekmasa.wfrp_master.core.ui.buttons.BackButton
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.CardContainer
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.ContextMenu
@@ -65,7 +66,7 @@ fun EncounterDetailScreen(routing: Routing<Route.EncounterDetail>) {
                     }
                 },
                 navigationIcon = {
-                    BackButton(onClick = { routing.backStack.pop() })
+                    BackButton(onClick = { routing.pop() })
                 },
                 actions = {
                     encounter?.let {
@@ -96,7 +97,7 @@ fun EncounterDetailScreen(routing: Routing<Route.EncounterDetail>) {
                     onDismissRequest = { startCombatDialogVisible = false },
                     onComplete = {
                         startCombatDialogVisible = false
-                        routing.backStack.push(Route.ActiveCombat(partyId = encounterId.partyId))
+                        routing.navigateTo(Route.ActiveCombat(partyId = encounterId.partyId))
                     },
                 )
             }
@@ -108,7 +109,7 @@ fun EncounterDetailScreen(routing: Routing<Route.EncounterDetail>) {
 private fun TopAppBarActions(
     routing: Routing<Route.EncounterDetail>,
     encounter: Encounter,
-    partyId: UUID,
+    partyId: PartyId,
     viewModel: EncounterDetailViewModel
 ) {
     val context = AmbientContext.current
@@ -136,7 +137,7 @@ private fun TopAppBarActions(
                 .setPositiveButton(R.string.remove) { _, _ ->
                     coroutineScope.launch(Dispatchers.IO) {
                         viewModel.remove()
-                        withContext(Dispatchers.Main) { routing.backStack.pop() }
+                        withContext(Dispatchers.Main) { routing.pop() }
                     }
                 }.setNegativeButton(R.string.button_cancel, null)
                 .create()
@@ -163,8 +164,8 @@ private fun MainContainer(
             DescriptionCard(viewModel)
             CombatantsCard(
                 viewModel,
-                onCreateRequest = { routing.backStack.push(Route.NpcCreation(encounterId)) },
-                onEditRequest = { routing.backStack.push(Route.NpcDetail(it)) },
+                onCreateRequest = { routing.navigateTo(Route.NpcCreation(encounterId)) },
+                onEditRequest = { routing.navigateTo(Route.NpcDetail(it)) },
                 onRemoveRequest = { viewModel.removeNpc(it) },
             )
         }

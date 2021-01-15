@@ -2,11 +2,11 @@ package cz.frantisekmasa.wfrp_master.core.domain.character
 
 import arrow.core.Either
 import cz.frantisekmasa.wfrp_master.core.domain.identifiers.CharacterId
+import cz.frantisekmasa.wfrp_master.core.domain.party.PartyId
 import kotlinx.coroutines.flow.Flow
-import java.util.UUID
 
 interface CharacterRepository {
-    suspend fun save(partyId: UUID, character: Character)
+    suspend fun save(partyId: PartyId, character: Character)
 
     /**
      * @throws CharacterNotFound
@@ -15,7 +15,7 @@ interface CharacterRepository {
 
     fun getLive(characterId: CharacterId): Flow<Either<CharacterNotFound, Character>>
 
-    suspend fun hasCharacterInParty(userId: String, partyId: UUID) : Boolean
+    suspend fun hasCharacterInParty(userId: String, partyId: PartyId) : Boolean
 
-    fun inParty(partyId: UUID): Flow<List<Character>>
+    fun inParty(partyId: PartyId): Flow<List<Character>>
 }

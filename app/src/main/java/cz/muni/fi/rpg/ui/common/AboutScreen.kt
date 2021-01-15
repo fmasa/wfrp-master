@@ -25,7 +25,7 @@ fun AboutScreen(routing: Routing<Route.About>) {
         topBar = {
             TopAppBar(
                 title = { Text(stringResource(R.string.about)) },
-                navigationIcon = { BackButton(onClick = { routing.backStack.pop() }) }
+                navigationIcon = { BackButton(onClick = { routing.pop() }) }
             )
         }
     ) {

@@ -1,37 +1,34 @@
 package cz.frantisekmasa.wfrp_master.navigation
 
-import com.github.zsoltk.compose.router.BackStack
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.*
 
 data class Routing<T : Route>(
     val route: T,
-    val backStack: BackStack<Route>,
+    private val navController: NavHostController,
 ) {
     /**
      * Pops all routes above given route
      *
      * @param inclusive pop given route as well
      */
-    tailrec fun popUpTo(route: T, inclusive: Boolean = false) {
-        if (backStack.size == 1) {
-            return
+    fun popUpTo(route: T, inclusive: Boolean = false) {
+        navController.navigate(route.toString()) {
+            popUpTo(route.toString()) { this.inclusive = inclusive }
         }
-
-        if (backStack.last() == route) {
-            if (inclusive) {
-                backStack.pop()
-            }
-
-            return
-        }
-
-        popUpTo(route, inclusive)
     }
 
     fun navigateTo(route: Route) {
-        backStack.push(route)
+        navController.navigate(route.toString())
     }
 
     fun pop() {
-        backStack.pop()
+        navController.popBackStack()
+    }
+
+    fun replace(newRoute: Route) {
+        navController.navigate(newRoute.toString()) {
+            popUpTo(route.toString()) { inclusive = true }
+        }
     }
 }

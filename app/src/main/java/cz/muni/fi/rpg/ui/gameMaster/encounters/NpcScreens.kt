@@ -230,10 +230,10 @@ fun NpcDetailScreen(
                             trappings = emptyList(),
                         )
 
-                        withContext(Dispatchers.Main) { routing.backStack.pop() }
+                        withContext(Dispatchers.Main) { routing.pop() }
                     }
                 },
-                onBack = { routing.backStack.pop() },
+                onBack = { routing.pop() },
                 actionsEnabled = submitEnabled.value && data != null,
             )
         }
@@ -280,12 +280,12 @@ fun NpcCreationScreen(routing: Routing<Route.NpcCreation>) {
                                     trappings = emptyList(),
                                 )
 
-                                withContext(Dispatchers.Main) { routing.backStack.pop() }
+                                withContext(Dispatchers.Main) { routing.pop() }
                             }
                         }
                     }
                 },
-                onBack = { routing.backStack.pop() },
+                onBack = { routing.pop() },
                 actionsEnabled = submitEnabled.value,
             )
         }

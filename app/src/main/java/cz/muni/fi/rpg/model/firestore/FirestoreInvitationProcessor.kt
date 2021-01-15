@@ -6,10 +6,10 @@ import com.google.firebase.firestore.SetOptions
 import cz.muni.fi.rpg.model.domain.invitation.AlreadyInParty
 import cz.muni.fi.rpg.model.domain.invitation.InvitationProcessor
 import cz.frantisekmasa.wfrp_master.core.domain.party.Invitation
+import cz.frantisekmasa.wfrp_master.core.domain.party.PartyId
 import cz.frantisekmasa.wfrp_master.core.domain.party.PartyNotFound
 import cz.frantisekmasa.wfrp_master.core.domain.party.PartyRepository
 import kotlinx.coroutines.tasks.await
-import java.util.*
 
 class FirestoreInvitationProcessor(
     private val firestore: FirebaseFirestore,
@@ -42,7 +42,7 @@ class FirestoreInvitationProcessor(
             .await()
     }
 
-    private suspend fun isAlreadyInParty(userId: String, partyId: UUID): Boolean {
+    private suspend fun isAlreadyInParty(userId: String, partyId: PartyId): Boolean {
         return try {
             parties.get(partyId).users.contains(userId)
         } catch (e: PartyNotFound) {

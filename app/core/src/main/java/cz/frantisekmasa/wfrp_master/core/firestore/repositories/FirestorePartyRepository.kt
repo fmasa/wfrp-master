@@ -5,6 +5,7 @@ import com.google.firebase.firestore.FirebaseFirestoreException
 import com.google.firebase.firestore.SetOptions
 import cz.frantisekmasa.wfrp_master.core.connectivity.CouldNotConnectToBackend
 import cz.frantisekmasa.wfrp_master.core.domain.party.Party
+import cz.frantisekmasa.wfrp_master.core.domain.party.PartyId
 import cz.frantisekmasa.wfrp_master.core.domain.party.PartyNotFound
 import cz.frantisekmasa.wfrp_master.core.domain.party.PartyRepository
 import cz.frantisekmasa.wfrp_master.core.firestore.AggregateMapper
@@ -12,7 +13,6 @@ import cz.frantisekmasa.wfrp_master.core.firestore.documentFlow
 import cz.frantisekmasa.wfrp_master.core.firestore.queryFlow
 import kotlinx.coroutines.tasks.await
 import timber.log.Timber
-import java.util.*
 
 /* internal */ class FirestorePartyRepository(
     private val firestore: FirebaseFirestore,
@@ -38,7 +38,7 @@ import java.util.*
         }
     }
 
-    override suspend fun get(id: UUID): Party {
+    override suspend fun get(id: PartyId): Party {
         try {
             val party = parties.document(id.toString()).get().await()
             return this.mapper.fromDocumentSnapshot(party)
@@ -47,7 +47,7 @@ import java.util.*
         }
     }
 
-    override fun getLive(id: UUID) = documentFlow(parties.document(id.toString())) {
+    override fun getLive(id: PartyId) = documentFlow(parties.document(id.toString())) {
         it.bimap(
             { e -> PartyNotFound(id, e) },
             { snapshot -> mapper.fromDocumentSnapshot(snapshot) }

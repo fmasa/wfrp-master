@@ -11,7 +11,9 @@ import androidx.fragment.app.DialogFragment
 import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.model.domain.common.CouldNotConnectToBackend
 import cz.frantisekmasa.wfrp_master.core.domain.party.Party
+import cz.frantisekmasa.wfrp_master.core.domain.party.PartyId
 import cz.muni.fi.rpg.ui.common.forms.Form
+import cz.muni.fi.rpg.ui.common.parcelableArgument
 import cz.muni.fi.rpg.ui.common.serializableArgument
 import cz.muni.fi.rpg.ui.common.stringArgument
 import cz.muni.fi.rpg.ui.common.toast
@@ -21,11 +23,10 @@ import kotlinx.coroutines.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 import timber.log.Timber
-import java.util.*
 
 internal class RenamePartyDialog : DialogFragment(), CoroutineScope by CoroutineScope(Dispatchers.Main) {
     companion object {
-        fun newInstance(partyId: UUID, currentName: String) = RenamePartyDialog().apply {
+        fun newInstance(partyId: PartyId, currentName: String) = RenamePartyDialog().apply {
             arguments = bundleOf(
                 "partyId" to partyId,
                 "currentName" to currentName
@@ -33,7 +34,7 @@ internal class RenamePartyDialog : DialogFragment(), CoroutineScope by Coroutine
         }
     }
 
-    private val partyId: UUID by serializableArgument("partyId")
+    private val partyId: PartyId by parcelableArgument("partyId")
     private val currentName: String by stringArgument("currentName", "")
 
     private val viewModel: GameMasterViewModel by viewModel { parametersOf(partyId) }

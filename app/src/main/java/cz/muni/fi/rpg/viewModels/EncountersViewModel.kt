@@ -4,12 +4,13 @@ import androidx.lifecycle.ViewModel
 import cz.frantisekmasa.wfrp_master.combat.domain.encounter.Encounter
 import cz.frantisekmasa.wfrp_master.combat.domain.encounter.EncounterRepository
 import cz.frantisekmasa.wfrp_master.core.domain.identifiers.EncounterId
+import cz.frantisekmasa.wfrp_master.core.domain.party.PartyId
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.Flow
 import java.util.*
 
 class EncountersViewModel(
-    private val partyId: UUID,
+    private val partyId: PartyId,
     private val encounterRepository: EncounterRepository
 ) : ViewModel(), CoroutineScope by CoroutineScope(Dispatchers.IO) {
 

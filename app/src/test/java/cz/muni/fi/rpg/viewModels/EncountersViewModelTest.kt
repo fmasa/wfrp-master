@@ -5,6 +5,7 @@ import cz.frantisekmasa.wfrp_master.combat.domain.encounter.Encounter
 import cz.frantisekmasa.wfrp_master.combat.domain.encounter.EncounterNotFound
 import cz.frantisekmasa.wfrp_master.combat.domain.encounter.EncounterRepository
 import cz.frantisekmasa.wfrp_master.core.domain.identifiers.EncounterId
+import cz.frantisekmasa.wfrp_master.core.domain.party.PartyId
 import kotlinx.coroutines.flow.Flow
 import org.junit.Assert.assertEquals
 import kotlinx.coroutines.runBlocking
@@ -23,15 +24,15 @@ class EncountersViewModelTest {
             error("Not necessary")
         }
 
-        override suspend fun save(partyId: UUID, vararg encounters: Encounter) {
+        override suspend fun save(partyId: PartyId, vararg encounters: Encounter) {
             encounters.forEach {
                 positions[it.id] = it.position
             }
         }
 
-        override fun findByParty(partyId: UUID): Flow<List<Encounter>> = error("Not necessary")
+        override fun findByParty(partyId: PartyId): Flow<List<Encounter>> = error("Not necessary")
         override suspend fun remove(id: EncounterId) = error("Not necessary")
-        override suspend fun getNextPosition(partyId: UUID): Int = error("Not necessary")
+        override suspend fun getNextPosition(partyId: PartyId): Int = error("Not necessary")
     }
 
     @Test
@@ -44,7 +45,7 @@ class EncountersViewModelTest {
         )
 
         val repository = Repository(mutableMapOf(*encounters.toList().toTypedArray()))
-        val viewModel = EncountersViewModel(UUID.randomUUID(), repository)
+        val viewModel = EncountersViewModel(PartyId.generate(), repository)
 
         runBlocking {
             viewModel.reorderEncounters(

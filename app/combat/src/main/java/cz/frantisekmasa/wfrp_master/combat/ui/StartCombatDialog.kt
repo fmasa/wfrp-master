@@ -21,7 +21,7 @@ import cz.frantisekmasa.wfrp_master.core.ui.primitives.CardContainer
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.CardTitle
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.Spacing
 import cz.frantisekmasa.wfrp_master.core.ui.scaffolding.TopBarAction
-import cz.frantisekmasa.wfrp_master.core.viewModel.newViewModel
+import cz.frantisekmasa.wfrp_master.core.viewModel.viewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
@@ -35,7 +35,7 @@ fun StartCombatDialog(
     onComplete: () -> Unit,
 ) {
     FullScreenDialog(onDismissRequest = onDismissRequest) {
-        val viewModel: CombatViewModel = newViewModel { parametersOf(encounterId.partyId) }
+        val viewModel: CombatViewModel by viewModel { parametersOf(encounterId.partyId) }
         val npcs: MutableMap<Npc, Boolean> = remember { mutableStateMapOf() }
         val characters: MutableMap<Character, Boolean> = remember { mutableStateMapOf() }
 

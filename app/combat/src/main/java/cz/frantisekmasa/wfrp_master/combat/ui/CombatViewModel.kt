@@ -1,5 +1,6 @@
 package cz.frantisekmasa.wfrp_master.combat.ui
 
+import androidx.lifecycle.ViewModel
 import cz.frantisekmasa.wfrp_master.combat.domain.encounter.Npc
 import cz.frantisekmasa.wfrp_master.combat.domain.encounter.NpcRepository
 import cz.frantisekmasa.wfrp_master.combat.domain.encounter.Wounds
@@ -14,6 +15,7 @@ import cz.frantisekmasa.wfrp_master.core.domain.identifiers.CharacterId
 import cz.frantisekmasa.wfrp_master.core.domain.identifiers.EncounterId
 import cz.frantisekmasa.wfrp_master.core.domain.identifiers.NpcId
 import cz.frantisekmasa.wfrp_master.core.domain.party.Party
+import cz.frantisekmasa.wfrp_master.core.domain.party.PartyId
 import cz.frantisekmasa.wfrp_master.core.domain.party.PartyRepository
 import cz.frantisekmasa.wfrp_master.core.domain.party.combat.Combat
 import cz.frantisekmasa.wfrp_master.core.domain.party.combat.Combatant
@@ -21,17 +23,16 @@ import cz.frantisekmasa.wfrp_master.core.domain.party.settings.InitiativeStrateg
 import cz.frantisekmasa.wfrp_master.core.utils.right
 import kotlinx.coroutines.flow.*
 import timber.log.Timber
-import java.util.*
 import kotlin.math.max
 import kotlin.random.Random
 
 class CombatViewModel(
-    private val partyId: UUID,
+    private val partyId: PartyId,
     private val random: Random,
     private val parties: PartyRepository,
     private val npcs: NpcRepository,
     private val characters: CharacterRepository,
-) {
+): ViewModel() {
 
     val party: Flow<Party> = parties.getLive(partyId).right()
 

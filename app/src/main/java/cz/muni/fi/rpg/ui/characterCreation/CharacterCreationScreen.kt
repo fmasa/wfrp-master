@@ -40,7 +40,7 @@ fun CharacterCreationScreen(routing: Routing<Route.CharacterCreation>) {
                 title = {
                     Text(stringResource(R.string.title_characterCreation))
                 },
-                navigationIcon = { BackButton(onClick = { routing.backStack.pop() }) }
+                navigationIcon = { BackButton(onClick = { routing.pop() }) }
             )
         }
     ) {
@@ -72,7 +72,7 @@ private fun MainContainer(routing: Routing<Route.CharacterCreation>) {
                 points
             )
 
-            routing.backStack.replace(Route.CharacterDetail(characterId))
+            routing.replace(Route.CharacterDetail(characterId))
         }
     }
 

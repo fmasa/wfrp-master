@@ -23,6 +23,7 @@ import androidx.compose.ui.text.toUpperCase
 import androidx.compose.ui.unit.Dp
 import cz.frantisekmasa.wfrp_master.compendium.R
 import cz.frantisekmasa.wfrp_master.compendium.domain.CompendiumItem
+import cz.frantisekmasa.wfrp_master.core.domain.party.PartyId
 import cz.frantisekmasa.wfrp_master.core.ui.buttons.BackButton
 import cz.frantisekmasa.wfrp_master.core.ui.dialogs.DialogState
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.ContextMenu
@@ -62,9 +63,9 @@ private fun TopBar(routing: Routing<Route.Compendium>) {
                 }
             }
         },
-        navigationIcon = { BackButton(onClick = { routing.backStack.pop() }) },
+        navigationIcon = { BackButton(onClick = { routing.pop() }) },
         actions = {
-            TopBarAction(onClick = { routing.backStack.push(Route.CompendiumImport(partyId)) }) {
+            TopBarAction(onClick = { routing.navigateTo(Route.CompendiumImport(partyId)) }) {
                 Text(stringResource(R.string.button_import).toUpperCase(Locale.current))
             }
         }
@@ -99,7 +100,7 @@ private fun WithConstraintsScope.MainContent(routing: Routing<Route.Compendium>)
 }
 
 @Composable
-private fun WithConstraintsScope.tabs(partyId: UUID): Array<TabScreen<CompendiumViewModel>> {
+private fun WithConstraintsScope.tabs(partyId: PartyId): Array<TabScreen<CompendiumViewModel>> {
     val viewModel: CompendiumViewModel by viewModel { parametersOf(partyId) }
 
     return arrayOf(

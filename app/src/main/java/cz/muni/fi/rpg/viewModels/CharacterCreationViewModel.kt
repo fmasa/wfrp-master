@@ -7,6 +7,7 @@ import com.google.firebase.ktx.Firebase
 import cz.frantisekmasa.wfrp_master.core.domain.character.Character
 import cz.frantisekmasa.wfrp_master.core.domain.identifiers.CharacterId
 import cz.frantisekmasa.wfrp_master.core.domain.character.CharacterRepository
+import cz.frantisekmasa.wfrp_master.core.domain.party.PartyId
 import cz.muni.fi.rpg.ui.characterCreation.CharacterBasicInfoForm
 import cz.muni.fi.rpg.ui.characterCreation.CharacterCharacteristicsForm
 import cz.muni.fi.rpg.ui.characterCreation.PointsPoolForm
@@ -16,7 +17,7 @@ import timber.log.Timber
 import java.util.*
 
 class CharacterCreationViewModel(
-    private val partyId: UUID,
+    private val partyId: PartyId,
     private val characters: CharacterRepository
 ) : ViewModel() {
 

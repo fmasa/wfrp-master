@@ -27,6 +27,7 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import cz.frantisekmasa.wfrp_master.core.auth.AmbientUser
 import cz.frantisekmasa.wfrp_master.core.domain.identifiers.CharacterId
+import cz.frantisekmasa.wfrp_master.core.domain.party.PartyId
 import cz.frantisekmasa.wfrp_master.core.ui.buttons.HamburgerButton
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.ContextMenu
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.EmptyUI
@@ -61,7 +62,7 @@ fun PartyListScreen(routing: Routing<Route.PartyList>) {
                     icon = { Icon(vectorResource(R.drawable.ic_camera)) },
                     text = { Text(stringResource(R.string.scanCode_title)) },
                     onClick = {
-                        routing.backStack.push(Route.InvitationScanner)
+                        routing.navigateTo(Route.InvitationScanner)
                         menuState = MenuState.COLLAPSED
                     }
                 )
@@ -75,7 +76,7 @@ fun PartyListScreen(routing: Routing<Route.PartyList>) {
                     onClick = {
                         AssemblePartyDialog()
                             .setOnSuccessListener { party ->
-                                routing.backStack.push(Route.GameMaster(party.id))
+                                routing.navigateTo(Route.GameMaster(party.id))
                             }
                             .show(fragmentManager, null)
                         menuState = MenuState.COLLAPSED
@@ -97,9 +98,9 @@ fun PartyListScreen(routing: Routing<Route.PartyList>) {
             viewModel,
             onClick = {
                 if (it.gameMasterId == userId) {
-                    routing.backStack.push(Route.GameMaster(it.id))
+                    routing.navigateTo(Route.GameMaster(it.id))
                 } else {
-                    routing.backStack.push(Route.CharacterDetail(CharacterId(it.id, userId)))
+                    routing.navigateTo(Route.CharacterDetail(CharacterId(it.id, userId)))
                 }
             },
             onRemove = { with(coroutineScope) { removeParty(context, viewModel, it) } },
@@ -153,7 +154,7 @@ private fun MainContainer(
 @Composable
 fun PartyList(parties: List<Party>, onClick: (Party) -> Unit, onRemove: (Party) -> Unit) {
     ScrollableColumn(Modifier.padding(top = 12.dp).fillMaxHeight()) {
-        val contextMenuOpened = remember { mutableStateOf<UUID?>(null) }
+        val contextMenuOpened = remember { mutableStateOf<PartyId?>(null) }
 
         for (party in parties) {
             PartyItem(party,

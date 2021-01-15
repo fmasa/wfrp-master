@@ -4,7 +4,7 @@ plugins {
     id("kotlin-parcelize")
 }
 
-val composeVersion = "1.0.0-alpha09"
+val composeVersion = "1.0.0-alpha10"
 
 android {
     compileSdkVersion(29)
@@ -69,6 +69,7 @@ dependencies {
     api("org.koin:koin-android:2.2.0")
     api("org.koin:koin-androidx-viewmodel:2.2.0")
     api("org.koin:koin-androidx-fragment:2.2.0")
+
 
     // Firebase-related dependencies
     api("com.google.firebase:firebase-analytics:18.0.0")
