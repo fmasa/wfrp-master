@@ -8,7 +8,6 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.platform.ComposeView
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.compose.*
-import com.github.zsoltk.compose.router.BackStack
 import cz.frantisekmasa.wfrp_master.combat.ui.ActiveCombatScreen
 import cz.frantisekmasa.wfrp_master.compendium.ui.CompendiumImportScreen
 import cz.frantisekmasa.wfrp_master.compendium.ui.CompendiumScreen
@@ -41,8 +40,6 @@ import org.koin.androidx.fragment.android.setupKoinFragmentFactory
 class MainActivity : AuthenticatedActivity(R.layout.activity_main) {
 
     private val adManager: AdManager by inject()
-
-    private lateinit var backStack: BackStack<Route>
 
     private var navigateTo: (Route) -> Unit = {}
 
