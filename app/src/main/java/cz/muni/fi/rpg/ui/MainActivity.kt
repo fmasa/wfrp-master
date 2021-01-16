@@ -30,6 +30,7 @@ import cz.frantisekmasa.wfrp_master.navigation.Routing
 import cz.frantisekmasa.wfrp_master.core.auth.AmbientUser
 import cz.frantisekmasa.wfrp_master.core.ui.shell.AmbientSystemUiController
 import cz.frantisekmasa.wfrp_master.core.ui.shell.rememberSystemUiController
+import cz.frantisekmasa.wfrp_master.core.ui.viewinterop.AmbientActivity
 import cz.muni.fi.rpg.ui.joinParty.InvitationScannerScreen
 import cz.muni.fi.rpg.ui.partySettings.PartySettingsScreen
 import cz.muni.fi.rpg.ui.settings.SettingsScreen
@@ -72,6 +73,7 @@ class MainActivity : AuthenticatedActivity(R.layout.activity_main) {
                 AmbientHamburgerButtonHandler provides { openDrawer() },
                 AmbientUser provides user,
                 AmbientSystemUiController provides rememberSystemUiController(window),
+                AmbientActivity provides this
             ) {
                 Theme {
                     NavHost(navController, startDestination = Route.PartyList.toString()) {
