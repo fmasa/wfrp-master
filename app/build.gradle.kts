@@ -124,9 +124,6 @@ dependencies {
     // Time picker dialog
     implementation("com.vanpra.compose-material-dialogs:datetime:0.2.8")
 
-    // Navigation
-    implementation("com.github.zsoltk:compose-router:0.23.0")
-
     // Shared Preferences DataStore
     implementation("androidx.datastore:datastore-preferences:1.0.0-alpha05");
 

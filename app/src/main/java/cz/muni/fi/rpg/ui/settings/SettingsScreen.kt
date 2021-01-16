@@ -20,10 +20,10 @@ import androidx.compose.ui.unit.dp
 import cz.frantisekmasa.wfrp_master.core.ui.buttons.BackButton
 import cz.muni.fi.rpg.R
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.CardContainer
-import cz.frantisekmasa.wfrp_master.core.viewModel.viewModel
 import cz.frantisekmasa.wfrp_master.navigation.Route
 import cz.frantisekmasa.wfrp_master.navigation.Routing
 import cz.muni.fi.rpg.viewModels.SettingsViewModel
+import cz.muni.fi.rpg.viewModels.provideSettingsViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 
@@ -39,8 +39,11 @@ fun SettingsScreen(routing: Routing<Route.Settings>) {
             )
         }
     ) {
-        ScrollableColumn(Modifier.background(MaterialTheme.colors.background).padding(top = 6.dp)) {
-            val viewModel: SettingsViewModel by viewModel()
+        ScrollableColumn(
+            Modifier
+                .background(MaterialTheme.colors.background)
+                .padding(top = 6.dp)) {
+            val viewModel = provideSettingsViewModel()
 
             SignInCard(viewModel)
             DarkModeCard(viewModel)
@@ -73,10 +76,15 @@ private fun SwitchCard(
     value: Flow<Boolean>,
     onChange: suspend (newValue: Boolean) -> Unit
 ) {
-    CardContainer(Modifier.fillMaxWidth().padding(horizontal = 8.dp)) {
+    CardContainer(
+        Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 8.dp)) {
         Row(
             horizontalArrangement = Arrangement.SpaceBetween,
-            modifier = Modifier.fillMaxWidth().padding(horizontal = 8.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 8.dp),
         ) {
             Text(stringResource(name))
 

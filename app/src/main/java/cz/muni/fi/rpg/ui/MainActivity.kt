@@ -8,7 +8,6 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.platform.ComposeView
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.compose.*
-import com.github.zsoltk.compose.router.BackStack
 import cz.frantisekmasa.wfrp_master.combat.ui.ActiveCombatScreen
 import cz.frantisekmasa.wfrp_master.compendium.ui.CompendiumImportScreen
 import cz.frantisekmasa.wfrp_master.compendium.ui.CompendiumScreen
@@ -31,6 +30,7 @@ import cz.frantisekmasa.wfrp_master.navigation.Routing
 import cz.frantisekmasa.wfrp_master.core.auth.AmbientUser
 import cz.frantisekmasa.wfrp_master.core.ui.shell.AmbientSystemUiController
 import cz.frantisekmasa.wfrp_master.core.ui.shell.rememberSystemUiController
+import cz.frantisekmasa.wfrp_master.core.ui.viewinterop.AmbientActivity
 import cz.muni.fi.rpg.ui.joinParty.InvitationScannerScreen
 import cz.muni.fi.rpg.ui.partySettings.PartySettingsScreen
 import cz.muni.fi.rpg.ui.settings.SettingsScreen
@@ -41,8 +41,6 @@ import org.koin.androidx.fragment.android.setupKoinFragmentFactory
 class MainActivity : AuthenticatedActivity(R.layout.activity_main) {
 
     private val adManager: AdManager by inject()
-
-    private lateinit var backStack: BackStack<Route>
 
     private var navigateTo: (Route) -> Unit = {}
 
@@ -75,6 +73,7 @@ class MainActivity : AuthenticatedActivity(R.layout.activity_main) {
                 AmbientHamburgerButtonHandler provides { openDrawer() },
                 AmbientUser provides user,
                 AmbientSystemUiController provides rememberSystemUiController(window),
+                AmbientActivity provides this
             ) {
                 Theme {
                     NavHost(navController, startDestination = Route.PartyList.toString()) {

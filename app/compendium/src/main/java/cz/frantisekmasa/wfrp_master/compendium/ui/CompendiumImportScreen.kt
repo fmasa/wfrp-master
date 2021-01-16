@@ -24,7 +24,7 @@ import cz.frantisekmasa.wfrp_master.compendium.R
 import cz.frantisekmasa.wfrp_master.compendium.domain.importer.RulebookCompendiumImporter
 import cz.frantisekmasa.wfrp_master.core.ui.buttons.BackButton
 import cz.frantisekmasa.wfrp_master.core.ui.scaffolding.Subtitle
-import cz.frantisekmasa.wfrp_master.core.ui.viewinterop.activity
+import cz.frantisekmasa.wfrp_master.core.ui.viewinterop.AmbientActivity
 import cz.frantisekmasa.wfrp_master.core.ui.viewinterop.registerForActivityResult
 import cz.frantisekmasa.wfrp_master.core.viewModel.viewModel
 import cz.frantisekmasa.wfrp_master.navigation.Route
@@ -110,7 +110,7 @@ private fun MainContainer(routing: Routing<Route.CompendiumImport>) {
         verticalArrangement = Arrangement.spacedBy(20.dp, Alignment.CenterVertically),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        val activity = activity()
+        val activity = AmbientActivity.current
         val storeUrl = stringResource(R.string.rulebook_store_url)
 
         Text(
