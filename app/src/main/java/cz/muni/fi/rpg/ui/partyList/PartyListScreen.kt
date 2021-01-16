@@ -133,7 +133,7 @@ private fun MainContainer(
     onClick: (Party) -> Unit,
     onRemove: (Party) -> Unit,
 ) {
-    val parties = viewModel.liveForUser(userId).collectAsState(null)
+    val parties = remember { viewModel.liveForUser(userId) }.collectAsState(null)
 
     Box(modifier) {
         parties.value?.let {
