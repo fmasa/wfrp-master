@@ -20,19 +20,17 @@ data class Routing<T : Route>(
         }
     }
 
-    fun navigateTo(route: Route) {
+    fun navigateTo(route: Route, popUpTo: Route? = null, inclusive: Boolean = false) {
         Timber.d("Navigating to $route")
-        navController.navigate(route.toString())
+        navController.navigate(route.toString()) {
+            popUpTo?.let {
+                popUpTo(it.toString()) { this.inclusive = inclusive }
+            }
+        }
     }
 
     fun pop() {
         navController.popBackStack()
-    }
-
-    fun replace(newRoute: Route) {
-        navController.navigate(newRoute.toString()) {
-            popUpTo(route.toString()) { inclusive = true }
-        }
     }
 }
 

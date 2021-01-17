@@ -49,8 +49,9 @@ fun CharacterDetailScreen(routing: Routing<Route.CharacterDetail>, adManager: Ad
         withContext(Dispatchers.IO) {
             if (!viewModel.characterExists()) {
                 withContext(Dispatchers.Main) {
-                    routing.replace(
-                        Route.CharacterCreation(characterId.partyId, characterId.id)
+                    routing.navigateTo(
+                        Route.CharacterCreation(characterId.partyId, characterId.id),
+                        popUpTo = Route.PartyList,
                     )
                 }
             }
