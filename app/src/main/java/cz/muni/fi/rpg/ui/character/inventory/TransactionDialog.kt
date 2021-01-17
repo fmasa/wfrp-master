@@ -1,91 +1,191 @@
 package cz.muni.fi.rpg.ui.character.inventory
 
-import android.app.Dialog
-import android.os.Bundle
-import android.view.View
-import android.widget.ArrayAdapter
-import android.widget.Spinner
-import androidx.appcompat.app.AlertDialog
-import androidx.core.os.bundleOf
-import androidx.fragment.app.DialogFragment
+import androidx.compose.foundation.ScrollableColumn
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.*
+import androidx.compose.material.*
+import androidx.compose.runtime.*
+import androidx.compose.runtime.savedinstancestate.savedInstanceState
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.style.TextAlign
 import cz.muni.fi.rpg.R
-import cz.frantisekmasa.wfrp_master.core.domain.identifiers.CharacterId
 import cz.frantisekmasa.wfrp_master.core.domain.character.NotEnoughMoney
 import cz.frantisekmasa.wfrp_master.core.domain.Money
-import cz.muni.fi.rpg.ui.common.adapters.SpinnerAdapterWithWidthMatchingSelectedItem
-import cz.muni.fi.rpg.ui.common.parcelableArgument
-import cz.muni.fi.rpg.ui.views.TextInput
+import cz.frantisekmasa.wfrp_master.core.ui.buttons.CloseButton
+import cz.frantisekmasa.wfrp_master.core.ui.dialogs.FullScreenDialog
+import cz.frantisekmasa.wfrp_master.core.ui.forms.TextInput
+import cz.frantisekmasa.wfrp_master.core.ui.primitives.Spacing
+import cz.frantisekmasa.wfrp_master.core.ui.scaffolding.SaveAction
+import cz.frantisekmasa.wfrp_master.core.ui.scaffolding.SubheadBar
 import cz.muni.fi.rpg.viewModels.InventoryViewModel
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import org.koin.androidx.viewmodel.ext.android.viewModel
-import org.koin.core.parameter.parametersOf
 
-class TransactionDialog : DialogFragment(), CoroutineScope by CoroutineScope(Dispatchers.Default) {
-    companion object {
-        const val ARGUMENT_CHARACTER_ID = "characterId"
+@Composable
+fun TransactionDialog(
+    balance: Money,
+    viewModel: InventoryViewModel,
+    onDismissRequest: () -> Unit,
+) {
+    FullScreenDialog(onDismissRequest = onDismissRequest) {
+        var crowns by savedInstanceState { "" }
+        var shillings by savedInstanceState { "" }
+        var pennies by savedInstanceState { "" }
+        var operation by savedInstanceState { Operation.ADD }
 
-        fun newInstance(characterId: CharacterId) = TransactionDialog().apply {
-            arguments = bundleOf(ARGUMENT_CHARACTER_ID to characterId)
-        }
-    }
+        var errorMessage: String? by remember { mutableStateOf(null) }
 
-    private val characterId: CharacterId by parcelableArgument(ARGUMENT_CHARACTER_ID)
-    private val viewModel: InventoryViewModel by viewModel { parametersOf(characterId) }
+        Scaffold(
+            topBar = {
+                TopAppBar(
+                    title = { Text(stringResource(R.string.title_transaction)) },
+                    navigationIcon = { CloseButton(onClick = onDismissRequest) },
+                    actions = {
+                        val coroutineScope = rememberCoroutineScope()
+                        val notEnoughMoneyMessage = stringResource(R.string.not_enough_money)
+                        var saving by remember { mutableStateOf(false) }
 
-    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        val activity = requireActivity()
-        val layoutInflater = activity.layoutInflater
+                        SaveAction(
+                            enabled = !saving,
+                            onClick = {
+                                val money = Money.sum(
+                                    Money.crowns(crowns.toIntValue()),
+                                    Money.shillings(shillings.toIntValue()),
+                                    Money.pennies(pennies.toIntValue()),
+                                )
 
-        val view = layoutInflater.inflate(R.layout.dialog_transaction, null)
+                                if (money.isZero()) {
+                                    onDismissRequest()
+                                    return@SaveAction
+                                }
 
-        view.findViewById<Spinner>(R.id.directionSpinner).adapter = SpinnerAdapterWithWidthMatchingSelectedItem(
-            ArrayAdapter(
-                requireContext(),
-                R.layout.title_spinner_dropdown_item,
-                listOf(getString(R.string.money_subtract), getString(R.string.money_add))
-            ),
-            R.layout.title_spinner_item,
-            layoutInflater
-        )
-
-        val dialog = AlertDialog.Builder(activity, R.style.FormDialog)
-            .setView(view)
-            .setPositiveButton(R.string.button_submit, null).create()
-
-        dialog.setOnShowListener {
-            dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener {
-                onConfirm(view)
+                                saving = true
+                                errorMessage = null
+                                coroutineScope.launch(Dispatchers.IO) {
+                                    try {
+                                        when (operation) {
+                                            Operation.ADD -> viewModel.addMoney(money)
+                                            Operation.SUBTRACT -> viewModel.subtractMoney(money)
+                                        }
+                                        withContext(Dispatchers.Main) {
+                                            onDismissRequest()
+                                        }
+                                    } catch (e: NotEnoughMoney) {
+                                        saving = false
+                                        errorMessage = notEnoughMoneyMessage
+                                    }
+                                }
+                            },
+                        )
+                    }
+                )
             }
-        }
-
-        return dialog
-    }
-
-    private fun onConfirm(view: View) {
-        val notEnoughMoneyError = view.findViewById<View>(R.id.notEnoughMoneyError)
-        notEnoughMoneyError.visibility = View.GONE
-
-        val amount = Money.crowns(getIntValue(view.findViewById(R.id.crownsInput))) +
-                Money.shillings(getIntValue(view.findViewById(R.id.shillingsInput))) +
-                Money.pennies(getIntValue(view.findViewById(R.id.penniesInput)))
-
-        launch {
-            try {
-                if (view.findViewById<Spinner>(R.id.directionSpinner).selectedItemId == 0L) {
-                    viewModel.subtractMoney(amount)
-                } else {
-                    viewModel.addMoney(amount)
+        ) {
+            Column {
+                SubheadBar(
+                    Modifier.clickable {
+                        crowns = balance.getCrowns().toInputValue()
+                        shillings = balance.getShillings().toInputValue()
+                        pennies = balance.getPennies().toInputValue()
+                    }
+                ) {
+                    Row(horizontalArrangement = Arrangement.spacedBy(Spacing.small)) {
+                        Text(stringResource(R.string.money_balance) + ":", fontWeight = FontWeight.SemiBold)
+                        MoneyBalance(balance)
+                    }
                 }
 
-                dismiss()
-            } catch (e: NotEnoughMoney) {
-                withContext(Dispatchers.Main) { notEnoughMoneyError.visibility = View.VISIBLE }
+                ScrollableColumn(
+                    contentPadding = PaddingValues(Spacing.bodyPadding),
+                    verticalArrangement = Arrangement.spacedBy(Spacing.small)
+                ) {
+                    Row(
+                        Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.spacedBy(
+                            Spacing.medium,
+                            Alignment.CenterHorizontally
+                        )
+                    ) {
+                        RadioButtonWithText(
+                            selected = operation == Operation.ADD,
+                            onClick = { operation = Operation.ADD },
+                            text = stringResource(R.string.money_add),
+                        )
+
+                        RadioButtonWithText(
+                            selected = operation == Operation.SUBTRACT,
+                            onClick = { operation = Operation.SUBTRACT },
+                            text = stringResource(R.string.money_subtract),
+                        )
+                    }
+
+                    Row(horizontalArrangement = Arrangement.spacedBy(Spacing.medium)) {
+                        TextInput(
+                            modifier = Modifier.weight(1f),
+                            label = stringResource(R.string.label_crowns),
+                            value = crowns,
+                            onValueChange = { crowns = it },
+                            validate = false,
+                            keyboardType = KeyboardType.Number,
+                            maxLength = 4,
+                            placeholder = "0",
+                        )
+
+                        TextInput(
+                            modifier = Modifier.weight(1f),
+                            label = stringResource(R.string.label_shillings),
+                            value = shillings,
+                            onValueChange = { shillings = it },
+                            validate = false,
+                            keyboardType = KeyboardType.Number,
+                            maxLength = 4,
+                            placeholder = "0",
+                        )
+
+                        TextInput(
+                            modifier = Modifier.weight(1f),
+                            label = stringResource(R.string.label_pennies),
+                            value = pennies,
+                            onValueChange = { pennies = it },
+                            validate = false,
+                            keyboardType = KeyboardType.Number,
+                            maxLength = 4,
+                            placeholder = "0",
+                        )
+                    }
+
+                    errorMessage?.let {
+                        Text(
+                            it,
+                            Modifier.fillMaxWidth(),
+                            color = MaterialTheme.colors.error,
+                            textAlign = TextAlign.Center,
+                        )
+                    }
+                }
             }
         }
     }
+}
 
-    private fun getIntValue(view: TextInput) = view.getValue().toIntOrNull() ?: 0
+private fun Int.toInputValue(): String = if (this == 0) "" else toString()
+
+private fun String.toIntValue(): Int = toIntOrNull() ?: 0
+
+@Composable
+private fun RadioButtonWithText(text: String, selected: Boolean, onClick: () -> Unit) {
+    Row(horizontalArrangement = Arrangement.spacedBy(Spacing.tiny)) {
+        RadioButton(selected = selected, onClick = onClick)
+        Text(text)
+    }
+}
+
+private enum class Operation {
+    SUBTRACT,
+    ADD,
 }

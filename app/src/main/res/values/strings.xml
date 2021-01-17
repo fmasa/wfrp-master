@@ -140,6 +140,8 @@
     <string name="not_enough_money">Character does not have enough money</string>
     <string name="money_subtract">Subtract</string>
     <string name="money_add">Add</string>
+    <string name="title_transaction">New money transaction</string>
+    <string name="money_balance">Balance</string>
 
     <!-- Game Master -->
     <string name="button_invite">Invite</string>
