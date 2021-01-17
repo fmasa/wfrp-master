@@ -27,7 +27,6 @@ import cz.frantisekmasa.wfrp_master.core.ui.buttons.BackButton
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.FullScreenProgress
 import cz.frantisekmasa.wfrp_master.core.ui.scaffolding.SubheadBar
 import cz.frantisekmasa.wfrp_master.core.ui.viewinterop.activity
-import cz.frantisekmasa.wfrp_master.core.viewModel.viewModel
 import cz.frantisekmasa.wfrp_master.navigation.Route
 import cz.frantisekmasa.wfrp_master.navigation.Routing
 import cz.muni.fi.rpg.R
@@ -36,7 +35,7 @@ import cz.muni.fi.rpg.model.domain.invitation.InvalidInvitation
 import cz.frantisekmasa.wfrp_master.core.domain.party.Invitation
 import cz.muni.fi.rpg.ui.common.composables.PrimaryButton
 import cz.muni.fi.rpg.ui.common.toast
-import cz.muni.fi.rpg.viewModels.InvitationScannerViewModel
+import cz.muni.fi.rpg.viewModels.provideJoinPartyViewModel
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -63,7 +62,7 @@ fun InvitationScannerScreen(routing: Routing<Route>) {
             verticalArrangement = Arrangement.Center,
             modifier = Modifier.fillMaxHeight()
         ) {
-            val viewModel: InvitationScannerViewModel by viewModel()
+            val viewModel = provideJoinPartyViewModel()
             val coroutineScope = rememberCoroutineScope()
 
             var screenState: InvitationScannerScreenState by savedInstanceState {
