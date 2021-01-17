@@ -1,24 +1,19 @@
 package cz.muni.fi.rpg.ui
 
-import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
-import android.view.MenuItem
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.runtime.*
-import androidx.compose.ui.platform.ComposeView
-import androidx.drawerlayout.widget.DrawerLayout
+import androidx.compose.ui.platform.AmbientLifecycleOwner
+import androidx.compose.ui.platform.setContent
 import androidx.navigation.compose.*
 import cz.frantisekmasa.wfrp_master.combat.ui.ActiveCombatScreen
 import cz.frantisekmasa.wfrp_master.compendium.ui.CompendiumImportScreen
 import cz.frantisekmasa.wfrp_master.compendium.ui.CompendiumScreen
-import cz.frantisekmasa.wfrp_master.core.ui.buttons.AmbientHamburgerButtonHandler
-import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.ui.character.CharacterDetailScreen
 import cz.muni.fi.rpg.ui.character.edit.CharacterEditScreen
 import cz.muni.fi.rpg.ui.characterCreation.CharacterCreationScreen
 import cz.muni.fi.rpg.ui.common.AboutScreen
 import cz.muni.fi.rpg.ui.common.AdManager
-import cz.muni.fi.rpg.ui.common.composables.Theme
 import cz.muni.fi.rpg.ui.gameMaster.GameMasterScreen
 import cz.muni.fi.rpg.ui.gameMaster.encounters.EncounterDetailScreen
 import cz.muni.fi.rpg.ui.gameMaster.encounters.NpcCreationScreen
@@ -33,17 +28,17 @@ import cz.frantisekmasa.wfrp_master.core.ui.viewinterop.AmbientActivity
 import cz.muni.fi.rpg.ui.joinParty.InvitationScannerScreen
 import cz.muni.fi.rpg.ui.partySettings.PartySettingsScreen
 import cz.muni.fi.rpg.ui.settings.SettingsScreen
-import cz.muni.fi.rpg.viewModels.AuthenticationViewModel
+import cz.muni.fi.rpg.ui.shell.AmbientOnBackPressedDispatcher
+import cz.muni.fi.rpg.ui.shell.DrawerShell
 import cz.muni.fi.rpg.viewModels.provideAuthenticationViewModel
 import org.koin.android.ext.android.inject
 import org.koin.androidx.fragment.android.setupKoinFragmentFactory
 
-class MainActivity : AuthenticatedActivity(R.layout.activity_main) {
+class MainActivity : AuthenticatedActivity() {
 
     private val adManager: AdManager by inject()
 
-    private var navigateTo: (Route) -> Unit = {}
-
+    @ExperimentalMaterialApi
     override fun onCreate(savedInstanceState: Bundle?) {
         setupKoinFragmentFactory()
 
@@ -51,31 +46,26 @@ class MainActivity : AuthenticatedActivity(R.layout.activity_main) {
 
         adManager.initialize()
 
-        findViewById<ComposeView>(R.id.compose).setContent {
+        setContent {
             Providers(
-                AmbientHamburgerButtonHandler provides { openDrawer() },
                 AmbientActivity provides this,
                 AmbientSystemUiController provides rememberSystemUiController(window),
+                AmbientOnBackPressedDispatcher provides onBackPressedDispatcher
             ) {
                 val navController = rememberNavController()
+                val lifecycleOwner = AmbientLifecycleOwner.current
+                val onBackPressedDispatcher = AmbientOnBackPressedDispatcher.current
 
-                onCommit {
-                    navigateTo = {
-                        navController.navigate(it.toString()) {
-                            launchSingleTop = true
-                        }
-                    }
-                }
-
-                onDispose {
-                    navigateTo = {}
+                onCommit(navController, lifecycleOwner, onBackPressedDispatcher) {
+                    navController.setLifecycleOwner(lifecycleOwner)
+                    navController.setOnBackPressedDispatcher(onBackPressedDispatcher)
                 }
 
                 val auth = provideAuthenticationViewModel()
                 val user = auth.user.collectAsState(null).value ?: return@Providers
 
                 Providers(AmbientUser provides user) {
-                    Theme {
+                    DrawerShell(navController) {
                         NavHost(navController, startDestination = Route.PartyList.toString()) {
                             composable(Route.PartyList.toString()) {
                                 PartyListScreen(Routing(Route.PartyList, navController))
@@ -182,53 +172,5 @@ class MainActivity : AuthenticatedActivity(R.layout.activity_main) {
                 }
             }
         }
-    }
-
-    private fun openDrawer() {
-        findViewById<DrawerLayout>(R.id.drawer_layout)?.open()
-    }
-
-    @Suppress("UNUSED_PARAMETER")
-    fun reportIssue(item: MenuItem) {
-        val intent = Intent(Intent.ACTION_SEND).apply {
-            type = "plain/text"
-            putExtra(Intent.EXTRA_EMAIL, arrayOf(getString(R.string.issue_email_address)))
-            putExtra(Intent.EXTRA_SUBJECT, getString(R.string.issue_email_subject))
-        }
-        startActivity(Intent.createChooser(intent, ""))
-    }
-
-    @Suppress("UNUSED_PARAMETER")
-    fun rateApp(item: MenuItem) {
-        val intent = Intent(Intent.ACTION_VIEW).apply {
-            data = Uri.parse(getString(R.string.store_listing_url))
-            setPackage("com.android.vending")
-        }
-
-        startActivity(intent)
-    }
-
-    @Suppress("UNUSED_PARAMETER")
-    fun openPrivacyPolicy(item: MenuItem) {
-        val urlString = getString(R.string.privacy_policy_url)
-        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(urlString)).apply {
-            addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-        }
-
-        startActivity(intent)
-    }
-
-    @Suppress("UNUSED_PARAMETER")
-    fun openAbout(item: MenuItem) {
-        navigateTo(Route.About)
-
-        findViewById<DrawerLayout>(R.id.drawer_layout).close()
-    }
-
-    @Suppress("UNUSED_PARAMETER")
-    fun openSettings(item: MenuItem) {
-        navigateTo(Route.Settings)
-
-        findViewById<DrawerLayout>(R.id.drawer_layout).close()
     }
 }

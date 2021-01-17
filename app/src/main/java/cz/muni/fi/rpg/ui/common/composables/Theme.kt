@@ -12,6 +12,7 @@ import cz.muni.fi.rpg.viewModels.provideSettingsViewModel
 
 class Theme {
     class FixedColors(
+        val primaryDark: Color,
         val danger: Color,
         val currencyGold: Color,
         val currencySilver: Color,
@@ -20,6 +21,7 @@ class Theme {
 
     companion object {
         val fixedColors = FixedColors(
+            primaryDark =  Color(167, 20, 20),
             danger = Color(183, 28, 28),
             currencyGold = Color(255, 183, 77),
             currencySilver = Color(158, 158, 158),
@@ -72,7 +74,7 @@ fun Theme(content: @Composable () -> Unit) {
 
     onCommit(colors.isLight, systemUi) {
         systemUi.setStatusBarColor(
-            if (colors.isLight) Color(167, 20, 20) else darkSystemColor
+            if (colors.isLight) Theme.fixedColors.primaryDark else darkSystemColor
         )
 
         systemUi.setNavigationBarColor(

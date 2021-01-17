@@ -8,8 +8,8 @@ import com.google.firebase.auth.FirebaseAuth
 import cz.muni.fi.rpg.ui.common.toast
 import org.koin.android.ext.android.inject
 
-abstract class AuthenticatedActivity(@LayoutRes contentLayoutId: Int) :
-    AppCompatActivity(contentLayoutId) {
+abstract class AuthenticatedActivity :
+    AppCompatActivity() {
 
     private val auth: FirebaseAuth by inject()
 
