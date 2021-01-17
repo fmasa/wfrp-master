@@ -66,8 +66,8 @@ private val darkSystemColor = Color(35, 35, 35)
 @Composable
 fun Theme(content: @Composable () -> Unit) {
     val viewModel = provideSettingsViewModel()
-    val darkMode by viewModel.darkMode.collectAsState(false)
-    val soundEnabled by viewModel.soundEnabled.collectAsState(false)
+    val darkMode by viewModel.darkMode.collectAsState()
+    val soundEnabled by viewModel.soundEnabled.collectAsState()
 
     val colors = if (darkMode) Theme.DarkColors() else Theme.LightColors()
     val systemUi = AmbientSystemUiController.current
