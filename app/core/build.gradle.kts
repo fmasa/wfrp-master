@@ -57,9 +57,6 @@ dependencies {
     api("androidx.core:core-ktx:1.3.2")
     api("androidx.fragment:fragment-ktx:1.3.0-rc01")
 
-    // Styles
-    api("com.google.android.material:material:1.2.1")
-
     // Jetpack Compose
     api("androidx.compose.ui:ui:$composeVersion")
     api("androidx.compose.material:material:$composeVersion")
@@ -68,7 +65,6 @@ dependencies {
     // Koin
     api("org.koin:koin-android:2.2.0")
     api("org.koin:koin-androidx-viewmodel:2.2.0")
-
 
     // Firebase-related dependencies
     api("com.google.firebase:firebase-analytics:18.0.0")
