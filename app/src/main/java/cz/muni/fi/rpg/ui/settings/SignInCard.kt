@@ -32,13 +32,14 @@ import cz.muni.fi.rpg.ui.common.composables.*
 import cz.muni.fi.rpg.ui.common.toggleVisibility
 import cz.muni.fi.rpg.viewModels.AuthenticationViewModel
 import cz.muni.fi.rpg.viewModels.SettingsViewModel
+import cz.muni.fi.rpg.viewModels.provideAuthenticationViewModel
 import kotlinx.coroutines.*
 import kotlinx.coroutines.tasks.await
 import timber.log.Timber
 
 @Composable
 fun SignInCard(viewModel: SettingsViewModel) {
-    val authViewModel: AuthenticationViewModel by viewModel()
+    val authViewModel = provideAuthenticationViewModel()
 
     val contract = GoogleSignInContract(authViewModel)
     val context = AmbientContext.current
@@ -82,9 +83,14 @@ fun SignInCard(viewModel: SettingsViewModel) {
         }
     }
 
-    CardContainer(Modifier.fillMaxWidth().padding(horizontal = 8.dp)) {
+    CardContainer(
+        Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 8.dp)) {
         Column(
-            modifier = Modifier.fillMaxWidth().padding(horizontal = 8.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 8.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             CardTitle(R.string.title_account)

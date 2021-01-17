@@ -21,4 +21,9 @@ fun activity(): AppCompatActivity {
     return context
 }
 
-val AmbientActivity = staticAmbientOf<AppCompatActivity> { error("AmbientActivity was not set") }
+/**
+ * Use [ProvideActivity] to pass this
+ */
+val AmbientActivity = staticAmbientOf<AppCompatActivity> {
+    error("AmbientActivity was not initialized. Did you forget to call ProvideActivity?")
+}

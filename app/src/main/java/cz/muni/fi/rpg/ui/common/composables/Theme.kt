@@ -6,12 +6,13 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.unit.sp
 import cz.frantisekmasa.wfrp_master.core.media.AmbientSoundEnabled
-import cz.frantisekmasa.wfrp_master.core.ui.shell.AmbientSystemUiController
 import cz.muni.fi.rpg.R
+import cz.muni.fi.rpg.ui.shell.AmbientSystemUiController
 import cz.muni.fi.rpg.viewModels.provideSettingsViewModel
 
 class Theme {
     class FixedColors(
+        val primaryDark: Color,
         val danger: Color,
         val currencyGold: Color,
         val currencySilver: Color,
@@ -20,6 +21,7 @@ class Theme {
 
     companion object {
         val fixedColors = FixedColors(
+            primaryDark =  Color(167, 20, 20),
             danger = Color(183, 28, 28),
             currencyGold = Color(255, 183, 77),
             currencySilver = Color(158, 158, 158),
@@ -64,15 +66,15 @@ private val darkSystemColor = Color(35, 35, 35)
 @Composable
 fun Theme(content: @Composable () -> Unit) {
     val viewModel = provideSettingsViewModel()
-    val darkMode by viewModel.darkMode.collectAsState(false)
-    val soundEnabled by viewModel.soundEnabled.collectAsState(false)
+    val darkMode by viewModel.darkMode.collectAsState()
+    val soundEnabled by viewModel.soundEnabled.collectAsState()
 
     val colors = if (darkMode) Theme.DarkColors() else Theme.LightColors()
     val systemUi = AmbientSystemUiController.current
 
     onCommit(colors.isLight, systemUi) {
         systemUi.setStatusBarColor(
-            if (colors.isLight) Color(167, 20, 20) else darkSystemColor
+            if (colors.isLight) Theme.fixedColors.primaryDark else darkSystemColor
         )
 
         systemUi.setNavigationBarColor(

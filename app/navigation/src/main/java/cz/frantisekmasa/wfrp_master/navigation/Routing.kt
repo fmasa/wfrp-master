@@ -1,6 +1,7 @@
 package cz.frantisekmasa.wfrp_master.navigation
 
 import androidx.navigation.NavHostController
+import androidx.navigation.NavOptionsBuilder
 import androidx.navigation.compose.*
 
 data class Routing<T : Route>(
@@ -31,4 +32,8 @@ data class Routing<T : Route>(
             popUpTo(route.toString()) { inclusive = true }
         }
     }
+}
+
+fun NavHostController.navigate(route: Route, builder: NavOptionsBuilder.() -> Unit = {}) {
+    navigate(route.toString(), builder)
 }

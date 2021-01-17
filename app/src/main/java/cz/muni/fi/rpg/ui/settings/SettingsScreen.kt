@@ -24,7 +24,7 @@ import cz.frantisekmasa.wfrp_master.navigation.Route
 import cz.frantisekmasa.wfrp_master.navigation.Routing
 import cz.muni.fi.rpg.viewModels.SettingsViewModel
 import cz.muni.fi.rpg.viewModels.provideSettingsViewModel
-import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
 @Composable
@@ -73,7 +73,7 @@ private fun SoundCard(viewModel: SettingsViewModel) {
 @Composable
 private fun SwitchCard(
     @StringRes name: Int,
-    value: Flow<Boolean>,
+    value: StateFlow<Boolean>,
     onChange: suspend (newValue: Boolean) -> Unit
 ) {
     CardContainer(
@@ -88,14 +88,13 @@ private fun SwitchCard(
         ) {
             Text(stringResource(name))
 
-            val enabled by value.collectAsState(null)
+            val enabled by value.collectAsState()
             val coroutineScope = rememberCoroutineScope()
 
             Switch(
-                checked = enabled == true,
-                enabled = enabled != null,
+                checked = enabled,
                 onCheckedChange = {
-                    enabled?.let { currentState ->
+                    enabled.let { currentState ->
                         coroutineScope.launch {
                             onChange(!currentState)
                         }
