@@ -3,6 +3,7 @@ package cz.muni.fi.rpg.viewModels
 import android.content.Context
 import androidx.compose.runtime.Composable
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.firebase.auth.FirebaseAuth
@@ -11,7 +12,6 @@ import com.google.firebase.auth.GoogleAuthProvider
 import cz.frantisekmasa.wfrp_master.core.auth.User
 import cz.frantisekmasa.wfrp_master.core.ui.viewinterop.AmbientActivity
 import cz.muni.fi.rpg.R
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.*
@@ -20,9 +20,7 @@ import kotlinx.coroutines.tasks.await
 import org.koin.androidx.viewmodel.ext.android.getViewModel
 import timber.log.Timber
 
-class AuthenticationViewModel(private val auth: FirebaseAuth) : ViewModel(),
-    CoroutineScope by CoroutineScope(Dispatchers.Main) {
-
+class AuthenticationViewModel(private val auth: FirebaseAuth) : ViewModel() {
     val user: StateFlow<User?> = callbackFlow {
         auth.currentUser?.let { offer(it) }
 
@@ -42,7 +40,7 @@ class AuthenticationViewModel(private val auth: FirebaseAuth) : ViewModel(),
             id = it.uid,
             email = if (it.email == "") null else it.email
         )
-    }.stateIn(this, SharingStarted.Eagerly, null)
+    }.stateIn(viewModelScope, SharingStarted.Eagerly, null)
 
     fun isAuthenticated() = auth.currentUser != null
 
