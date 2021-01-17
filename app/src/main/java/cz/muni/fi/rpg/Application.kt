@@ -5,7 +5,6 @@ import cz.frantisekmasa.wfrp_master.core.logging.CrashlyticsTree
 import cz.frantisekmasa.wfrp_master.core.logging.KoinTimberLogger
 import cz.muni.fi.rpg.di.appModule
 import org.koin.android.ext.koin.androidContext
-import org.koin.androidx.fragment.koin.fragmentFactory
 import org.koin.core.context.startKoin
 import org.koin.core.logger.Level
 import timber.log.Timber
@@ -16,8 +15,6 @@ class Application : BaseApplication() {
         super.onCreate()
 
         startKoin {
-            fragmentFactory()
-
             // declare used Android context
             androidContext(this@Application)
             logger(KoinTimberLogger(Level.ERROR))
