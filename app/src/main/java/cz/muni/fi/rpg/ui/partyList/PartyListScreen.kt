@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.*
 import androidx.compose.runtime.*
+import androidx.compose.runtime.savedinstancestate.savedInstanceState
 import cz.muni.fi.rpg.R
 import cz.frantisekmasa.wfrp_master.core.domain.party.Party
 import cz.muni.fi.rpg.viewModels.PartyListViewModel
@@ -32,7 +33,6 @@ import cz.frantisekmasa.wfrp_master.core.ui.buttons.HamburgerButton
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.ContextMenu
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.EmptyUI
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.ItemIcon
-import cz.frantisekmasa.wfrp_master.core.ui.viewinterop.fragmentManager
 import cz.frantisekmasa.wfrp_master.core.viewModel.viewModel
 import cz.muni.fi.rpg.ui.common.composables.*
 import cz.frantisekmasa.wfrp_master.navigation.Route
@@ -40,9 +40,23 @@ import cz.frantisekmasa.wfrp_master.navigation.Routing
 
 @Composable
 fun PartyListScreen(routing: Routing<Route.PartyList>) {
+
+    val viewModel: PartyListViewModel by viewModel()
     var menuState by remember { mutableStateOf(MenuState.COLLAPSED) }
-    val fragmentManager = fragmentManager()
     val context = AmbientContext.current
+
+    var createPartyDialogVisible by savedInstanceState { false }
+
+    if (createPartyDialogVisible) {
+        CreatePartyDialog(
+            viewModel = viewModel,
+            onSuccess = { partyId ->
+                createPartyDialogVisible = false
+                routing.navigateTo(Route.GameMaster(partyId))
+            },
+            onDismissRequest = { createPartyDialogVisible = false }
+        )
+    }
 
     Scaffold(
         topBar = {
@@ -74,18 +88,13 @@ fun PartyListScreen(routing: Routing<Route.PartyList>) {
                     },
                     text = { Text(stringResource(R.string.assembleParty_title)) },
                     onClick = {
-                        AssemblePartyDialog()
-                            .setOnSuccessListener { party ->
-                                routing.navigateTo(Route.GameMaster(party.id))
-                            }
-                            .show(fragmentManager, null)
+                        createPartyDialogVisible = true
                         menuState = MenuState.COLLAPSED
                     }
                 )
             }
         }
     ) {
-        val viewModel: PartyListViewModel by viewModel()
         val coroutineScope = rememberCoroutineScope()
         val userId = AmbientUser.current.id
 
@@ -153,7 +162,11 @@ private fun MainContainer(
 
 @Composable
 fun PartyList(parties: List<Party>, onClick: (Party) -> Unit, onRemove: (Party) -> Unit) {
-    ScrollableColumn(Modifier.padding(top = 12.dp).fillMaxHeight()) {
+    ScrollableColumn(
+        Modifier
+            .padding(top = 12.dp)
+            .fillMaxHeight()
+    ) {
         val contextMenuOpened = remember { mutableStateOf<PartyId?>(null) }
 
         for (party in parties) {
