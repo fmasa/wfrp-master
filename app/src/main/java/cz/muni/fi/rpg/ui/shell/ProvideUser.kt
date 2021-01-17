@@ -9,7 +9,7 @@ import cz.muni.fi.rpg.viewModels.provideAuthenticationViewModel
 @Composable
 fun ProvideUser(content: @Composable () -> Unit) {
     val auth = provideAuthenticationViewModel()
-    val user = auth.user.collectAsState(null).value ?: return
+    val user = auth.user.collectAsState().value ?: return
 
     Providers(AmbientUser provides user, content = content)
 }

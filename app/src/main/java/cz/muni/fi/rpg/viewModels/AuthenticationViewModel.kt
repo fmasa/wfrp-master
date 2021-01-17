@@ -14,9 +14,7 @@ import cz.muni.fi.rpg.R
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.awaitClose
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.callbackFlow
-import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import org.koin.androidx.viewmodel.ext.android.getViewModel
@@ -25,7 +23,7 @@ import timber.log.Timber
 class AuthenticationViewModel(private val auth: FirebaseAuth) : ViewModel(),
     CoroutineScope by CoroutineScope(Dispatchers.Main) {
 
-    val user: Flow<User> = callbackFlow {
+    val user: StateFlow<User?> = callbackFlow {
         auth.currentUser?.let { offer(it) }
 
         val listener = FirebaseAuth.AuthStateListener {
@@ -44,7 +42,7 @@ class AuthenticationViewModel(private val auth: FirebaseAuth) : ViewModel(),
             id = it.uid,
             email = if (it.email == "") null else it.email
         )
-    }
+    }.stateIn(this, SharingStarted.Eagerly, null)
 
     fun isAuthenticated() = auth.currentUser != null
 
