@@ -1,6 +1,8 @@
 package cz.muni.fi.rpg.viewModels
 
 import android.content.Context
+import android.content.Intent
+import androidx.activity.result.contract.ActivityResultContract
 import androidx.compose.runtime.Composable
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -11,6 +13,7 @@ import com.google.firebase.auth.FirebaseAuthUserCollisionException
 import com.google.firebase.auth.GoogleAuthProvider
 import cz.frantisekmasa.wfrp_master.core.auth.User
 import cz.frantisekmasa.wfrp_master.core.ui.viewinterop.AmbientActivity
+import cz.frantisekmasa.wfrp_master.core.ui.viewinterop.IntentResult
 import cz.muni.fi.rpg.R
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.awaitClose
@@ -21,6 +24,22 @@ import org.koin.androidx.viewmodel.ext.android.getViewModel
 import timber.log.Timber
 
 class AuthenticationViewModel(private val auth: FirebaseAuth) : ViewModel() {
+    val authenticated: StateFlow<Boolean?> = callbackFlow {
+        offer(auth.currentUser != null)
+
+        val listener = FirebaseAuth.AuthStateListener {
+            auth.currentUser?.let {
+                launch(Dispatchers.Main) {
+                    offer(auth.currentUser != null)
+                }
+            }
+        }
+
+        auth.addAuthStateListener(listener)
+
+        awaitClose { auth.removeAuthStateListener(listener) }
+    }.stateIn(viewModelScope, SharingStarted.Eagerly, null)
+
     val user: StateFlow<User?> = callbackFlow {
         auth.currentUser?.let { offer(it) }
 
@@ -70,7 +89,26 @@ class AuthenticationViewModel(private val auth: FirebaseAuth) : ViewModel() {
         user.linkWithCredential(GoogleAuthProvider.getCredential(idToken, null)).await()
     }
 
+    fun googleSignInContract(): ActivityResultContract<Int?, IntentResult> {
+        return object : ActivityResultContract<Int?, IntentResult>() {
+
+            override fun createIntent(context: Context, requestCode: Int?) =
+                getGoogleSignInIntent(context)
+
+            override fun parseResult(resultCode: Int, intent: Intent?): IntentResult {
+                Timber.d(resultCode.toString())
+                return IntentResult(resultCode, intent)
+            }
+        }
+    }
+
     fun getGoogleSignInIntent(context: Context) = googleClient(context).signInIntent
+
+    suspend fun attemptToRestoreExistingGoogleSignIn(context: Context): Boolean {
+        val googleToken = obtainGoogleToken(context)
+
+        return googleToken != null && signInWithGoogleToken(googleToken)
+    }
 
     suspend fun obtainGoogleToken(context: Context): String? {
         val lastAccount = GoogleSignIn.getLastSignedInAccount(context)

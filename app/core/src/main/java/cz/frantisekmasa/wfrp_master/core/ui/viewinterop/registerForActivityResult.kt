@@ -1,6 +1,7 @@
 package cz.frantisekmasa.wfrp_master.core.ui.viewinterop
 
 import android.content.Context
+import android.content.Intent
 import androidx.activity.result.ActivityResultCallback
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContract
@@ -33,6 +34,11 @@ fun <I, O> registerForActivityResult(
 
     return lazy { handler.getLauncher() }
 }
+
+data class IntentResult(
+    val resultCode: Int,
+    val intent: Intent?,
+)
 
 /**
  * @internal This would be private if Fragments didn't have to public

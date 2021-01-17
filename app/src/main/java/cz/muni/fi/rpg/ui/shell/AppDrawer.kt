@@ -34,7 +34,6 @@ fun AppDrawer(drawerState: DrawerState, navController: NavHostController) {
         Modifier
             .fillMaxSize()
     ) {
-
         DrawerItem(
             icon = R.drawable.ic_settings,
             text = R.string.settings,
@@ -125,7 +124,7 @@ private fun DrawerHeader() {
         Modifier
             .padding(bottom = Spacing.small)
             .fillMaxWidth()
-            .drawerHeaderBackground(),
+            .splashBackground(),
         contentAlignment = Alignment.Center,
     ) {
         Row(
@@ -144,16 +143,3 @@ private fun DrawerHeader() {
     }
 }
 
-private fun Modifier.drawerHeaderBackground() = composed {
-    val darkMode = !MaterialTheme.colors.isLight
-
-    if (darkMode) {
-        background(MaterialTheme.colors.primarySurface)
-    } else {
-        background(
-            Brush.verticalGradient(
-                listOf(Color(181, 12, 15), Color(138, 11, 14))
-            )
-        )
-    }
-}

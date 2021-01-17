@@ -1,12 +1,10 @@
 package cz.muni.fi.rpg.ui.settings
 
 import android.content.Context
-import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.TextView
 import android.widget.Toast
-import androidx.activity.result.contract.ActivityResultContract
 import androidx.appcompat.app.AlertDialog
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
@@ -26,7 +24,6 @@ import cz.frantisekmasa.wfrp_master.core.auth.AmbientUser
 import cz.frantisekmasa.wfrp_master.core.auth.User
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.CardContainer
 import cz.frantisekmasa.wfrp_master.core.ui.viewinterop.registerForActivityResult
-import cz.frantisekmasa.wfrp_master.core.viewModel.viewModel
 import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.ui.common.composables.*
 import cz.muni.fi.rpg.ui.common.toggleVisibility
@@ -41,7 +38,7 @@ import timber.log.Timber
 fun SignInCard(viewModel: SettingsViewModel) {
     val authViewModel = provideAuthenticationViewModel()
 
-    val contract = GoogleSignInContract(authViewModel)
+    val contract = remember(authViewModel) { authViewModel.googleSignInContract() }
     val context = AmbientContext.current
     val coroutineScope = rememberCoroutineScope()
     val user = AmbientUser.current
@@ -181,24 +178,6 @@ private fun CoroutineScope.showSignInConfirmationDialog(
             view.findViewById<View>(R.id.mainView).toggleVisibility(true)
             view.findViewById<View>(R.id.progress).toggleVisibility(false)
         }
-    }
-}
-
-private data class Result(
-    val resultCode: Int,
-    val intent: Intent?,
-)
-
-private class GoogleSignInContract(
-    private val authViewModel: AuthenticationViewModel
-) : ActivityResultContract<Int?, Result>() {
-
-    override fun createIntent(context: Context, requestCode: Int?) =
-        authViewModel.getGoogleSignInIntent(context)
-
-    override fun parseResult(resultCode: Int, intent: Intent?): Result {
-        Timber.d(resultCode.toString())
-        return Result(resultCode, intent)
     }
 }
 

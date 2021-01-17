@@ -19,22 +19,20 @@ fun DrawerShell(navController: NavHostController, bodyContent: @Composable () ->
 
     DrawerBackPressHandler(drawerState)
 
-    Theme {
-        ModalDrawerLayoutWithFixedDrawerWidth(
-            drawerState = drawerState,
-            drawerContent = {
-                Column(Modifier.consumeTaps()) {
-                    AppDrawer(drawerState, navController)
-                }
-            },
-            bodyContent = {
-                Providers(
-                    AmbientHamburgerButtonHandler provides { drawerState.open() },
-                    content = bodyContent,
-                )
-            },
-        )
-    }
+    ModalDrawerLayoutWithFixedDrawerWidth(
+        drawerState = drawerState,
+        drawerContent = {
+            Column(Modifier.consumeTaps()) {
+                AppDrawer(drawerState, navController)
+            }
+        },
+        bodyContent = {
+            Providers(
+                AmbientHamburgerButtonHandler provides { drawerState.open() },
+                content = bodyContent,
+            )
+        },
+    )
 }
 
 @Composable

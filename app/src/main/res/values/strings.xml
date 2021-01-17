@@ -280,9 +280,8 @@
     <string name="party_remove_confirmation">Do you really want to remove this party?</string>
     <string name="party_remove_multiple_members">All members will lose access.</string>
     <string name="message_party_removed">Party was removed</string>
-    <string name="google_sign_in_error">We could not sign you in via Google.\nBut you can always sign in later.</string>
+    <string name="google_sign_in_error">We could not sign you in via Google.\nYour data will be tied to this device, but you can always sign in later in Settings.</string>
     <string name="already_has_character">You already have active character in this party</string>
-    <string name="preference_dismissed_google_sign_in">dismissed_google_sign_in</string>
 
     <!-- Settings -->
     <string name="settings">Settings</string>
