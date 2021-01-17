@@ -12,11 +12,14 @@ fun rememberSystemUiController(window: Window): SystemUiController {
     return remember { SystemUiController(window) }
 }
 
+/**
+ * Use [ProvideActivity] to pass this
+ */
 val AmbientSystemUiController = staticAmbientOf<SystemUiController> {
-    error("System UI Controller was not initialized")
+    error("System UI Controller was not initialized. Did you forget to call ProvideActivity?")
 }
 
-class SystemUiController internal constructor(private val window: Window) {
+class SystemUiController(private val window: Window) {
     fun setStatusBarColor(color: Color) {
         window.statusBarColor = color.toArgb()
     }
