@@ -1,4 +1,4 @@
-package cz.frantisekmasa.wfrp_master.core.ui.shell
+package cz.muni.fi.rpg.ui.shell
 
 import android.view.Window
 import androidx.compose.runtime.Composable

@@ -6,8 +6,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.unit.sp
 import cz.frantisekmasa.wfrp_master.core.media.AmbientSoundEnabled
-import cz.frantisekmasa.wfrp_master.core.ui.shell.AmbientSystemUiController
 import cz.muni.fi.rpg.R
+import cz.muni.fi.rpg.ui.shell.AmbientSystemUiController
 import cz.muni.fi.rpg.viewModels.provideSettingsViewModel
 
 class Theme {
