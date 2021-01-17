@@ -1,47 +1,64 @@
 package cz.muni.fi.rpg.ui.settings
 
-import android.content.Context
-import android.view.LayoutInflater
-import android.view.View
-import android.widget.TextView
+import android.os.Parcelable
 import android.widget.Toast
-import androidx.appcompat.app.AlertDialog
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.ScrollableColumn
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.OutlinedButton
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.runtime.*
+import androidx.compose.runtime.savedinstancestate.savedInstanceState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.AmbientContext
 import androidx.compose.ui.res.imageResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.intl.Locale
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.toUpperCase
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.Dialog
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.firebase.auth.FirebaseAuthUserCollisionException
 import cz.frantisekmasa.wfrp_master.core.auth.AmbientUser
-import cz.frantisekmasa.wfrp_master.core.auth.User
+import cz.frantisekmasa.wfrp_master.core.ui.dialogs.DialogProgress
+import cz.frantisekmasa.wfrp_master.core.ui.dialogs.DialogTitle
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.CardContainer
+import cz.frantisekmasa.wfrp_master.core.ui.primitives.Spacing
+import cz.frantisekmasa.wfrp_master.core.ui.primitives.shortToast
 import cz.frantisekmasa.wfrp_master.core.ui.viewinterop.registerForActivityResult
+import cz.frantisekmasa.wfrp_master.navigation.Route
+import cz.frantisekmasa.wfrp_master.navigation.Routing
 import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.ui.common.composables.*
-import cz.muni.fi.rpg.ui.common.toggleVisibility
 import cz.muni.fi.rpg.viewModels.AuthenticationViewModel
 import cz.muni.fi.rpg.viewModels.SettingsViewModel
 import cz.muni.fi.rpg.viewModels.provideAuthenticationViewModel
 import kotlinx.coroutines.*
 import kotlinx.coroutines.tasks.await
+import kotlinx.parcelize.Parcelize
 import timber.log.Timber
 
 @Composable
-fun SignInCard(viewModel: SettingsViewModel) {
+fun SignInCard(viewModel: SettingsViewModel, routing: Routing<Route.Settings>) {
     val authViewModel = provideAuthenticationViewModel()
 
     val contract = remember(authViewModel) { authViewModel.googleSignInContract() }
     val context = AmbientContext.current
     val coroutineScope = rememberCoroutineScope()
-    val user = AmbientUser.current
+
+    var pendingSingInConfirmation: PendingSingInConfirmation? by savedInstanceState { null }
+
+    pendingSingInConfirmation?.let {
+        ConfirmSignInDialog(
+            it.idToken,
+            viewModel,
+            authViewModel,
+            routing,
+            onDismissRequest = { pendingSingInConfirmation = null },
+        )
+    }
 
     val launcher by registerForActivityResult(contract) { result ->
         coroutineScope.launch(Dispatchers.IO) {
@@ -56,15 +73,8 @@ fun SignInCard(viewModel: SettingsViewModel) {
                                 e,
                                 "Account \"${e.email}\" is already associated with another account"
                             )
-                            withContext(Dispatchers.Main) {
-                                coroutineScope.showSignInConfirmationDialog(
-                                    context,
-                                    authViewModel,
-                                    user,
-                                    viewModel,
-                                    idToken
-                                )
-                            }
+
+                            pendingSingInConfirmation = PendingSingInConfirmation(idToken)
                         }
                     }
             } catch (e: Throwable) {
@@ -83,7 +93,8 @@ fun SignInCard(viewModel: SettingsViewModel) {
     CardContainer(
         Modifier
             .fillMaxWidth()
-            .padding(horizontal = 8.dp)) {
+            .padding(horizontal = 8.dp)
+    ) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
@@ -117,68 +128,94 @@ fun SignInCard(viewModel: SettingsViewModel) {
     }
 }
 
-private fun CoroutineScope.showSignInConfirmationDialog(
-    context: Context,
-    authViewModel: AuthenticationViewModel,
-    user: User,
+@Composable
+fun ConfirmSignInDialog(
+    idToken: String,
     viewModel: SettingsViewModel,
-    idToken: String
+    authViewModel: AuthenticationViewModel,
+    routing: Routing<Route.Settings>,
+    onDismissRequest: () -> Unit,
 ) {
-    val view = LayoutInflater.from(context).inflate(R.layout.sign_in_confirmation_dialog, null)
+    val coroutineScope = rememberCoroutineScope()
+    val userId = AmbientUser.current.id
 
-    val dialog = AlertDialog.Builder(context)
-        .setTitle(context.getString(R.string.title_duplicate_account))
-        .setView(view)
-        .setPositiveButton(context.getString(R.string.button_sign_in), null)
-        .setNegativeButton(R.string.button_cancel, null)
-        .create()
+    var partyNames: List<String>? by savedInstanceState { null }
+    var processing by remember { mutableStateOf(false) }
 
-    dialog.setOnShowListener {
-        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener {
-            it.isEnabled = false
-            dialog.getButton(AlertDialog.BUTTON_NEGATIVE).isEnabled = false
-            view.findViewById<View>(R.id.mainView).toggleVisibility(false)
-            view.findViewById<View>(R.id.progress).toggleVisibility(true)
+    val loading = partyNames == null || processing
 
-            launch(Dispatchers.Default) {
-                try {
-                    authViewModel.signInWithGoogleToken(idToken).let { success ->
-                        withContext(Dispatchers.Main) {
-                            if (!success) {
-                                Toast.makeText(context, "Google sign-in failed", Toast.LENGTH_SHORT)
-                                    .show()
-                            }
-                        }
-                    }
-                } catch (e: Throwable) {
-                    Timber.e(e)
-                    throw e
-                }
-
-                withContext(Dispatchers.Main) { dialog.dismiss() }
-            }
-        }
+    LaunchedEffect(null) {
+        partyNames = withContext(Dispatchers.IO) { viewModel.getPartyNames(userId) }
     }
 
-    dialog.setCanceledOnTouchOutside(false)
-    dialog.show()
+    Dialog(onDismissRequest = onDismissRequest) {
+        Surface(shape = MaterialTheme.shapes.medium) {
+            Column {
+                ScrollableColumn(
+                    contentPadding = PaddingValues(Spacing.bodyPadding),
+                    verticalArrangement = Arrangement.spacedBy(Spacing.small),
+                ) {
+                    DialogTitle(stringResource(R.string.title_duplicate_account))
 
-    launch {
-        val partyNames = viewModel.getPartyNames(user.id)
+                    if (loading) {
+                        DialogProgress()
+                        return@ScrollableColumn
+                    }
 
-        withContext(Dispatchers.Main) {
-            val parties: TextView = view.findViewById(R.id.parties)
-            if (partyNames.isEmpty()) {
-                view.findViewById<View>(R.id.loseAccessToParties).toggleVisibility(false)
-                parties.toggleVisibility(false)
+                    Text(stringResource(R.string.google_account_collision))
+                    Text(stringResource(R.string.google_account_collision_line_2))
+
+                    if (partyNames!!.isNotEmpty()) {
+                        Column {
+                            Text(stringResource(R.string.lose_access_to_parties))
+                            Text(partyNames!!.joinToString("\n"), fontWeight = FontWeight.SemiBold)
+                        }
+                    }
+                }
+
+                Row(
+                    horizontalArrangement = Arrangement.spacedBy(Spacing.small, Alignment.End),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(bottom = Spacing.small, end = Spacing.small),
+                ) {
+                    TextButton(enabled = !loading, onClick = onDismissRequest) {
+                        Text(stringResource(R.string.button_cancel).toUpperCase(Locale.current))
+                    }
+
+                    val context = AmbientContext.current
+
+                    TextButton(
+                        enabled = !loading,
+                        onClick = {
+                            coroutineScope.launch(Dispatchers.Default) {
+                                try {
+                                    authViewModel.signInWithGoogleToken(idToken).let { success ->
+                                        if (!success) {
+                                            shortToast(context, R.string.google_sign_in_failed)
+                                        }
+                                    }
+                                } catch (e: Throwable) {
+                                    Timber.e(e)
+                                    throw e
+                                }
+
+                                withContext(Dispatchers.Main) {
+                                    onDismissRequest()
+                                    routing.popUpTo(Route.PartyList)
+                                }
+                            }
+                        }
+                    ) {
+                        Text(stringResource(R.string.button_sign_in).toUpperCase(Locale.current))
+                    }
+                }
             }
-
-            parties.text = partyNames.joinToString("\n")
-
-            view.findViewById<View>(R.id.mainView).toggleVisibility(true)
-            view.findViewById<View>(R.id.progress).toggleVisibility(false)
         }
     }
 }
+
+@Parcelize
+private data class PendingSingInConfirmation(val idToken: String) : Parcelable
 
 private const val CODE_GOOGLE_SIGN_IN = 1

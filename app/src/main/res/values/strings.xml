@@ -291,9 +291,11 @@
     <string name="not_signed_in_description">You are not signed-in.\nSigning-in lets you keep access to parties between devices.</string>
     <string name="title_account">Account</string>
     <string name="signed_in_as">You are signed-in as</string>
-    <string name="google_account_collision">There is already different WFRP Master account associated with given Google account.\nDo you want to sign in to that account instead?</string>
+    <string name="google_account_collision">There is already different WFRP Master account associated with given Google account.</string>
+    <string name="google_account_collision_line_2">Do you want to sign in to that account instead?</string>
     <string name="title_duplicate_account">Existing account found</string>
     <string name="button_sign_in">Sign in</string>
+    <string name="google_sign_in_failed">Google sign-in failed</string>
     <string name="lose_access_to_parties">You will lose access to these parties:</string>
     <string name="mannslieb_phase">Mannslieb phase: %1$s</string>
     <string name="players_number">%1$d players</string>

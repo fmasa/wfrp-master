@@ -14,7 +14,7 @@ data class Routing<T : Route>(
      *
      * @param inclusive pop given route as well
      */
-    fun popUpTo(route: T, inclusive: Boolean = false) {
+    fun popUpTo(route: Route, inclusive: Boolean = false) {
         navController.navigate(route.toString()) {
             popUpTo(route.toString()) { this.inclusive = inclusive }
         }

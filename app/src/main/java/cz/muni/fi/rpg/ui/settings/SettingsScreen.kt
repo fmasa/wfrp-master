@@ -45,7 +45,7 @@ fun SettingsScreen(routing: Routing<Route.Settings>) {
                 .padding(top = 6.dp)) {
             val viewModel = provideSettingsViewModel()
 
-            SignInCard(viewModel)
+            SignInCard(viewModel, routing)
             DarkModeCard(viewModel)
             SoundCard(viewModel)
         }
