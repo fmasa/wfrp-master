@@ -25,6 +25,7 @@ import com.google.firebase.dynamiclinks.ktx.shortLinkAsync
 import com.google.firebase.ktx.Firebase
 import cz.muni.fi.rpg.R
 import cz.frantisekmasa.wfrp_master.core.domain.party.Invitation
+import cz.frantisekmasa.wfrp_master.navigation.Route
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -77,7 +78,7 @@ private fun sharingOptions(invitation: Invitation): StateFlow<SharingOptions?> {
         withContext(Dispatchers.IO) {
             val json = jsonMapper.writeValueAsString(invitation)
             val link = Firebase.dynamicLinks.shortLinkAsync {
-                link = Uri.parse("https://dnd-master-58fca.web.app/app/invitation?invitation=$json")
+                link = Route.InvitationLink(json).toDeepLink()
                 androidParameters { }
                 domainUriPrefix = "https://wfrp.page.link"
             }

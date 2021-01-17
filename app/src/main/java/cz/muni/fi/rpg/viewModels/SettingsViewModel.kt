@@ -7,11 +7,13 @@ import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.preferencesKey
 import androidx.datastore.preferences.createDataStore
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import cz.frantisekmasa.wfrp_master.core.domain.party.PartyRepository
 import cz.frantisekmasa.wfrp_master.core.ui.viewinterop.AmbientActivity
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.getViewModel
 
 class SettingsViewModel(
@@ -35,6 +37,12 @@ class SettingsViewModel(
         dataStore.edit { it[AppSettings.SOUND_ENABLED] = enabled }
     }
 
+    fun userDismissedGoogleSignIn() {
+        viewModelScope.launch(Dispatchers.IO) {
+            dataStore.edit { it[AppSettings.GOOGLE_SIGN_IN_DISMISSED] = true }
+        }
+    }
+
     private fun getPreference(
         preference: Preferences.Key<Boolean>,
         defaultValue: Boolean
@@ -48,6 +56,7 @@ class SettingsViewModel(
 private object AppSettings {
     val DARK_MODE = preferencesKey<Boolean>("dark_mode")
     val SOUND_ENABLED = preferencesKey<Boolean>("sound_enabled")
+    val GOOGLE_SIGN_IN_DISMISSED = preferencesKey<Boolean>("dismissed_google_sign_in")
 }
 
 @Composable

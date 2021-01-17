@@ -2,7 +2,6 @@ package cz.muni.fi.rpg.ui.partySettings
 
 import androidx.annotation.StringRes
 import androidx.compose.foundation.ScrollableColumn
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
@@ -15,12 +14,10 @@ import androidx.compose.ui.text.font.FontWeight
 import cz.frantisekmasa.wfrp_master.core.ui.buttons.BackButton
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.FullScreenProgress
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.Spacing
-import cz.frantisekmasa.wfrp_master.core.ui.viewinterop.fragmentManager
 import cz.frantisekmasa.wfrp_master.core.viewModel.viewModel
 import cz.frantisekmasa.wfrp_master.navigation.Route
 import cz.frantisekmasa.wfrp_master.navigation.Routing
 import cz.muni.fi.rpg.R
-import cz.muni.fi.rpg.ui.gameMaster.RenamePartyDialog
 import org.koin.core.parameter.parametersOf
 
 @Composable
@@ -47,17 +44,8 @@ fun PartySettingsScreen(routing: Routing<Route.PartySettings>) {
         ) {
             Card(shape = MaterialTheme.shapes.large) {
                 Column {
-                    val fragmentManager = fragmentManager()
-
                     SectionTitle(R.string.party_section_general)
-                    ListItem(
-                        text = { Text(stringResource(R.string.label_party_name)) },
-                        secondaryText = { Text(party.getName()) },
-                        modifier = Modifier.clickable {
-                            RenamePartyDialog.newInstance(party.id, party.getName())
-                                .show(fragmentManager, null)
-                        }
-                    )
+                    PartyNameItem(party.getName(), viewModel)
 
                     SectionTitle(R.string.title_combat)
                     InitiativeStrategyItem(party, viewModel)

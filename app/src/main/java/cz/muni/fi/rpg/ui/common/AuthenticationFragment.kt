@@ -115,14 +115,6 @@ class AuthenticationFragment : Fragment(), CoroutineScope by CoroutineScope(Disp
                 launch {
                     if (viewModel.authenticateAnonymously()) {
                         notifyDependentsThatUserIsAuthenticated()
-                        activity?.getPreferences(Context.MODE_PRIVATE)?.let {
-                            it.edit {
-                                putBoolean(
-                                    getString(R.string.preference_dismissed_google_sign_in),
-                                    true
-                                )
-                            }
-                        }
                     } else {
                         withContext(Dispatchers.Main) { toast("Authentication failed.") }
                     }

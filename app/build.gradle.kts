@@ -115,9 +115,6 @@ dependencies {
     implementation(project(":app:combat"))
 
     implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar"))))
-    implementation("androidx.appcompat:appcompat:1.2.0")
-    implementation("androidx.constraintlayout:constraintlayout:2.1.0-alpha1")
-
     // Allow use of Java 8 APIs on older Android versions
     coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:1.1.1")
 
@@ -139,11 +136,6 @@ dependencies {
     implementation("androidx.camera:camera-core:1.0.0-rc01")
     implementation("androidx.camera:camera-lifecycle:1.0.0-rc01")
     implementation("androidx.camera:camera-view:1.0.0-alpha20")
-
-    implementation("androidx.annotation:annotation:1.1.0")
-    implementation("androidx.lifecycle:lifecycle-extensions:2.2.0")
-    implementation("androidx.legacy:legacy-support-v4:1.0.0")
-    implementation("androidx.drawerlayout:drawerlayout:1.1.1")
 
     // Testing utilities
     testImplementation("junit:junit:4.13.1")

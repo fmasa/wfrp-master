@@ -1,7 +1,11 @@
 package cz.frantisekmasa.wfrp_master.navigation
 
+import android.net.Uri
 import androidx.compose.runtime.Immutable
+import androidx.core.net.toUri
 import androidx.navigation.NavBackStackEntry
+import androidx.navigation.NavDeepLink
+import androidx.navigation.navDeepLink
 import cz.frantisekmasa.wfrp_master.core.domain.identifiers.CharacterId
 import cz.frantisekmasa.wfrp_master.core.domain.identifiers.EncounterId
 import cz.frantisekmasa.wfrp_master.core.domain.identifiers.NpcId
@@ -75,12 +79,12 @@ sealed class Route {
                     PartyId.fromString(entry.stringArgument("partyId")),
                     entry.stringArgument("characterId"),
                 ),
-                entry.stringArgument("fromCombat") == "1",
+                entry.arguments?.getString("fromCombat") == "1",
             )
         }
 
         override fun toString() =
-            "parties/${characterId.partyId}/characters/{${characterId.id}}?comingFromCombat=${if (comingFromCombat) 1 else 0}"
+            "parties/${characterId.partyId}/characters/${characterId.id}?comingFromCombat=${if (comingFromCombat) 1 else 0}"
     }
 
     @Immutable
@@ -95,7 +99,7 @@ sealed class Route {
             )
         }
 
-        override fun toString() = "parties/{${characterId.partyId}/characters/${characterId.id}"
+        override fun toString() = "parties/${characterId.partyId}/characters/${characterId.id}"
     }
 
     @Immutable
@@ -174,6 +178,28 @@ sealed class Route {
 
     object InvitationScanner : Route() {
         override fun toString() = "invitation-scanner"
+    }
+
+    data class InvitationLink(val invitationJson: String) : Route() {
+        companion object {
+            private const val DEEP_LINK_PATTERN =
+                "https://dnd-master-58fca.web.app/app/invitation?invitation={invitationJson}"
+
+            override fun toString() = "invitation-link?invitationJson={invitationJson}"
+
+            fun deepLinks(): List<NavDeepLink> = listOf(
+                navDeepLink { uriPattern = DEEP_LINK_PATTERN }
+            )
+
+            fun fromEntry(entry: NavBackStackEntry) = InvitationLink(
+                entry.arguments?.getString("invitationJson") ?: ""
+            )
+        }
+
+        fun toDeepLink(): Uri =
+            DEEP_LINK_PATTERN.replace("{invitationJson}", invitationJson).toUri()
+
+        override fun toString(): String = "invitation-link?invitationJson=$invitationJson"
     }
 
     @Immutable

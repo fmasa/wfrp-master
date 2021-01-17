@@ -1,8 +1,5 @@
 package cz.muni.fi.rpg.ui.partyList
 
-import android.content.Context
-import android.widget.Toast
-import androidx.appcompat.app.AlertDialog
 import androidx.compose.foundation.ScrollableColumn
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -10,13 +7,10 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.*
 import androidx.compose.runtime.*
+import androidx.compose.runtime.savedinstancestate.savedInstanceState
 import cz.muni.fi.rpg.R
 import cz.frantisekmasa.wfrp_master.core.domain.party.Party
 import cz.muni.fi.rpg.viewModels.PartyListViewModel
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import java.util.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.gesture.longPressGestureFilter
@@ -29,10 +23,10 @@ import cz.frantisekmasa.wfrp_master.core.auth.AmbientUser
 import cz.frantisekmasa.wfrp_master.core.domain.identifiers.CharacterId
 import cz.frantisekmasa.wfrp_master.core.domain.party.PartyId
 import cz.frantisekmasa.wfrp_master.core.ui.buttons.HamburgerButton
+import cz.frantisekmasa.wfrp_master.core.ui.dialogs.DialogState
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.ContextMenu
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.EmptyUI
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.ItemIcon
-import cz.frantisekmasa.wfrp_master.core.ui.viewinterop.fragmentManager
 import cz.frantisekmasa.wfrp_master.core.viewModel.viewModel
 import cz.muni.fi.rpg.ui.common.composables.*
 import cz.frantisekmasa.wfrp_master.navigation.Route
@@ -40,9 +34,23 @@ import cz.frantisekmasa.wfrp_master.navigation.Routing
 
 @Composable
 fun PartyListScreen(routing: Routing<Route.PartyList>) {
+
+    val viewModel: PartyListViewModel by viewModel()
     var menuState by remember { mutableStateOf(MenuState.COLLAPSED) }
-    val fragmentManager = fragmentManager()
     val context = AmbientContext.current
+
+    var createPartyDialogVisible by savedInstanceState { false }
+
+    if (createPartyDialogVisible) {
+        CreatePartyDialog(
+            viewModel = viewModel,
+            onSuccess = { partyId ->
+                createPartyDialogVisible = false
+                routing.navigateTo(Route.GameMaster(partyId))
+            },
+            onDismissRequest = { createPartyDialogVisible = false }
+        )
+    }
 
     Scaffold(
         topBar = {
@@ -74,20 +82,26 @@ fun PartyListScreen(routing: Routing<Route.PartyList>) {
                     },
                     text = { Text(stringResource(R.string.assembleParty_title)) },
                     onClick = {
-                        AssemblePartyDialog()
-                            .setOnSuccessListener { party ->
-                                routing.navigateTo(Route.GameMaster(party.id))
-                            }
-                            .show(fragmentManager, null)
+                        createPartyDialogVisible = true
                         menuState = MenuState.COLLAPSED
                     }
                 )
             }
         }
     ) {
-        val viewModel: PartyListViewModel by viewModel()
-        val coroutineScope = rememberCoroutineScope()
         val userId = AmbientUser.current.id
+
+        var removePartyDialogState by remember {
+            mutableStateOf<DialogState<Party>>(DialogState.Closed())
+        }
+
+        removePartyDialogState.IfOpened { party ->
+            RemovePartyDialog(
+                party,
+                viewModel,
+                onDismissRequest = { removePartyDialogState = DialogState.Closed() },
+            )
+        }
 
         MainContainer(
             Modifier.clickable(
@@ -103,7 +117,7 @@ fun PartyListScreen(routing: Routing<Route.PartyList>) {
                     routing.navigateTo(Route.CharacterDetail(CharacterId(it.id, userId)))
                 }
             },
-            onRemove = { with(coroutineScope) { removeParty(context, viewModel, it) } },
+            onRemove = { removePartyDialogState = DialogState.Opened(it) },
         )
     }
 }
@@ -153,7 +167,11 @@ private fun MainContainer(
 
 @Composable
 fun PartyList(parties: List<Party>, onClick: (Party) -> Unit, onRemove: (Party) -> Unit) {
-    ScrollableColumn(Modifier.padding(top = 12.dp).fillMaxHeight()) {
+    ScrollableColumn(
+        Modifier
+            .padding(top = 12.dp)
+            .fillMaxHeight()
+    ) {
         val contextMenuOpened = remember { mutableStateOf<PartyId?>(null) }
 
         for (party in parties) {
@@ -171,30 +189,4 @@ fun PartyList(parties: List<Party>, onClick: (Party) -> Unit, onRemove: (Party) 
             )
         }
     }
-}
-
-private fun CoroutineScope.removeParty(
-    context: Context,
-    viewModel: PartyListViewModel,
-    party: Party
-) {
-    val message = context.getString(R.string.party_remove_confirmation)
-
-    AlertDialog.Builder(context)
-        .setPositiveButton(R.string.remove) { _, _ ->
-            launch(Dispatchers.IO) {
-                viewModel.archive(party.id)
-                withContext(Dispatchers.Main) {
-                    Toast.makeText(context, R.string.message_party_removed, Toast.LENGTH_LONG)
-                        .show()
-                }
-            }
-        }
-        .setNegativeButton(R.string.button_cancel, null)
-        .setMessage(context.getString(R.string.party_remove_confirmation))
-        .setMessage(
-            if (party.users.size > 1)
-                "$message\n\n${context.getString(R.string.party_remove_multiple_members)}"
-            else message
-        ).show()
 }

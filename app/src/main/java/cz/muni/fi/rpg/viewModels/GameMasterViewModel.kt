@@ -52,14 +52,6 @@ class GameMasterViewModel(
         characterRepository.save(id.partyId, character)
     }
 
-    suspend fun renameParty(newName: String) {
-        val party = parties.get(partyId)
-
-        party.rename(newName)
-
-        parties.save(party)
-    }
-
     suspend fun changeTime(change: (DateTime) -> DateTime) {
         val party = parties.get(partyId)
 

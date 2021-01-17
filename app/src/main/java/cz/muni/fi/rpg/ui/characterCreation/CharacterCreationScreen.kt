@@ -72,7 +72,7 @@ private fun MainContainer(routing: Routing<Route.CharacterCreation>) {
                 points
             )
 
-            routing.replace(Route.CharacterDetail(characterId))
+            routing.navigateTo(Route.CharacterDetail(characterId), popUpTo = Route.PartyList)
         }
     }
 

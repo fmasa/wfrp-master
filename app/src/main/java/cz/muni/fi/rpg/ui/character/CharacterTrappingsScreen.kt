@@ -22,11 +22,13 @@ import cz.frantisekmasa.wfrp_master.core.ui.dialogs.DialogState
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.CardContainer
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.ContextMenu
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.EmptyUI
+import cz.frantisekmasa.wfrp_master.core.ui.primitives.Spacing
 import cz.frantisekmasa.wfrp_master.core.ui.viewinterop.fragmentManager
 import cz.frantisekmasa.wfrp_master.core.viewModel.viewModel
 import cz.muni.fi.rpg.model.domain.inventory.InventoryItem
 import cz.muni.fi.rpg.ui.character.inventory.ArmorCard
 import cz.muni.fi.rpg.ui.character.inventory.InventoryItemDialog
+import cz.muni.fi.rpg.ui.character.inventory.MoneyBalance
 import cz.muni.fi.rpg.ui.character.inventory.TransactionDialog
 import cz.muni.fi.rpg.ui.common.composables.*
 import cz.muni.fi.rpg.viewModels.InventoryViewModel
@@ -37,17 +39,28 @@ internal fun CharacterTrappingsScreen(
     characterId: CharacterId,
     modifier: Modifier,
 ) {
-    val fragmentManager = fragmentManager()
     val viewModel: InventoryViewModel by viewModel { parametersOf(characterId) }
 
     ScrollableColumn(modifier) {
-        viewModel.money.collectAsState(null).value?.let {
-            CurrentMoney(
-                value = it,
-                onClick = {
-                    TransactionDialog.newInstance(characterId).show(fragmentManager, null)
-                }
+        viewModel.money.collectAsState(null).value?.let { money ->
+            var transactionDialogVisible by savedInstanceState { false }
+
+            MoneyBalance(
+                money,
+                Modifier
+                    .fillMaxWidth()
+                    .clickable { transactionDialogVisible = true }
+                    .padding(Spacing.medium)
+                    .padding(end = 8.dp),
             )
+
+            if (transactionDialogVisible) {
+                TransactionDialog(
+                    money,
+                    viewModel,
+                    onDismissRequest = { transactionDialogVisible = false },
+                )
+            }
         }
 
         viewModel.armor.collectAsState(null).value?.let { armor ->
@@ -81,38 +94,6 @@ internal fun CharacterTrappingsScreen(
 
         Spacer(Modifier.padding(bottom = 20.dp))
     }
-}
-
-@Composable
-private fun CurrentMoney(value: Money, onClick: () -> Unit) {
-    Row(
-        Modifier
-            .padding(end = 8.dp)
-            .clickable(onClick = onClick)
-            .fillMaxWidth()
-            .padding(12.dp),
-        horizontalArrangement = Arrangement.spacedBy(8.dp, Alignment.End)
-    ) {
-        ProvideTextStyle(MaterialTheme.typography.body1) {
-            MoneyIcon(Theme.fixedColors.currencyGold)
-            Text(value.getCrowns().toString() + " " + stringResource(R.string.gold_coins_shortcut))
-
-            MoneyIcon(Theme.fixedColors.currencySilver)
-            Text(value.getShillings().toString() + " " + stringResource(R.string.silver_shillings_shortcut))
-
-            MoneyIcon(Theme.fixedColors.currencyBrass)
-            Text(value.getPennies().toString() + " " + stringResource(R.string.brass_pennies_shortcut))
-        }
-    }
-}
-
-@Composable
-private fun MoneyIcon(tint: Color) {
-    Icon(
-        vectorResource(R.drawable.ic_coins),
-        tint = tint,
-        modifier = Modifier.size(18.dp)
-    )
 }
 
 @Composable

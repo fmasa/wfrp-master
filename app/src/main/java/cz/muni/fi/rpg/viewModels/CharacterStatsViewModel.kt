@@ -1,6 +1,7 @@
 package cz.muni.fi.rpg.viewModels
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import arrow.core.Either
 import cz.frantisekmasa.wfrp_master.core.domain.character.Character
 import cz.frantisekmasa.wfrp_master.core.domain.identifiers.CharacterId
@@ -20,7 +21,7 @@ class CharacterStatsViewModel(
     val character: Flow<Either<CharacterNotFound, Character>> = characters.getLive(characterId)
 
     fun updatePoints(mutation: (points: Points) -> Points) {
-        launch {
+        viewModelScope.launch {
             val character = characters.get(characterId)
             try {
                 character.updatePoints(mutation(character.getPoints()))

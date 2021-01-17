@@ -17,6 +17,7 @@ class Theme {
         val currencyGold: Color,
         val currencySilver: Color,
         val currencyBrass: Color,
+        val splashScreenContent: Color,
     )
 
     companion object {
@@ -26,6 +27,7 @@ class Theme {
             currencyGold = Color(255, 183, 77),
             currencySilver = Color(158, 158, 158),
             currencyBrass = Color(141, 110, 99),
+            splashScreenContent = Color(234, 234, 234),
         )
 
         @Composable

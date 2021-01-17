@@ -18,6 +18,7 @@ import cz.muni.fi.rpg.ui.gameMaster.GameMasterScreen
 import cz.muni.fi.rpg.ui.gameMaster.encounters.EncounterDetailScreen
 import cz.muni.fi.rpg.ui.gameMaster.encounters.NpcCreationScreen
 import cz.muni.fi.rpg.ui.gameMaster.encounters.NpcDetailScreen
+import cz.muni.fi.rpg.ui.joinParty.InvitationLinkScreen
 import cz.muni.fi.rpg.ui.joinParty.InvitationScannerScreen
 import cz.muni.fi.rpg.ui.partyList.PartyListScreen
 import cz.muni.fi.rpg.ui.partySettings.PartySettingsScreen
@@ -119,6 +120,13 @@ fun NavGraph(navController: NavHostController, adManager: AdManager) {
                     navController
                 )
             )
+        }
+
+        composable(
+            Route.InvitationLink.toString(),
+            deepLinks = Route.InvitationLink.deepLinks(),
+        ) {
+            InvitationLinkScreen(Routing(Route.InvitationLink.fromEntry(it), navController))
         }
 
         composable(Route.ActiveCombat.toString()) {

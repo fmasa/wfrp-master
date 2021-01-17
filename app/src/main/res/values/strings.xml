@@ -140,6 +140,8 @@
     <string name="not_enough_money">Character does not have enough money</string>
     <string name="money_subtract">Subtract</string>
     <string name="money_add">Add</string>
+    <string name="title_transaction">New money transaction</string>
+    <string name="money_balance">Balance</string>
 
     <!-- Game Master -->
     <string name="button_invite">Invite</string>
@@ -278,9 +280,8 @@
     <string name="party_remove_confirmation">Do you really want to remove this party?</string>
     <string name="party_remove_multiple_members">All members will lose access.</string>
     <string name="message_party_removed">Party was removed</string>
-    <string name="google_sign_in_error">We could not sign you in via Google.\nBut you can always sign in later.</string>
+    <string name="google_sign_in_error">We could not sign you in via Google.\nYour data will be tied to this device, but you can always sign in later in Settings.</string>
     <string name="already_has_character">You already have active character in this party</string>
-    <string name="preference_dismissed_google_sign_in">dismissed_google_sign_in</string>
 
     <!-- Settings -->
     <string name="settings">Settings</string>
@@ -290,9 +291,11 @@
     <string name="not_signed_in_description">You are not signed-in.\nSigning-in lets you keep access to parties between devices.</string>
     <string name="title_account">Account</string>
     <string name="signed_in_as">You are signed-in as</string>
-    <string name="google_account_collision">There is already different WFRP Master account associated with given Google account.\nDo you want to sign in to that account instead?</string>
+    <string name="google_account_collision">There is already different WFRP Master account associated with given Google account.</string>
+    <string name="google_account_collision_line_2">Do you want to sign in to that account instead?</string>
     <string name="title_duplicate_account">Existing account found</string>
     <string name="button_sign_in">Sign in</string>
+    <string name="google_sign_in_failed">Google sign-in failed</string>
     <string name="lose_access_to_parties">You will lose access to these parties:</string>
     <string name="mannslieb_phase">Mannslieb phase: %1$s</string>
     <string name="players_number">%1$d players</string>
