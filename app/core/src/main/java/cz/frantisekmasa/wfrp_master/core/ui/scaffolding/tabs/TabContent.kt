@@ -33,6 +33,10 @@ fun <T> TabContent(
     var dragStart by remember { mutableStateOf(0f) }
     var previousScroll by remember { mutableStateOf(0f) }
 
+    // We want to ignore drags from small area next to the start of the screen
+    // to let user open the navigation drawer.
+    val ignoredDragOffset = with(AmbientDensity.current) { 10.dp.toPx() }
+
     Row(
         modifier = modifier
             .clipToBounds()
@@ -81,7 +85,8 @@ fun <T> TabContent(
                         anchors.minByOrNull { abs(it - (scrollState.value + relativeVelocity)) }
                             ?: 0f
                     )
-                }
+                },
+                canStartDragging = { it.x % screenWidth > ignoredDragOffset },
             ),
         horizontalArrangement = Arrangement.Start,
         verticalAlignment = Alignment.Top
@@ -102,27 +107,37 @@ fun Modifier.nestedDraggable(
     orientation: Orientation,
     onDragStarted: (startedPosition: Offset) -> Unit = {},
     onDragStopped: (velocity: Float) -> Unit = {},
-    onDrag: Density.(Float) -> Float
+    onDrag: Density.(Float) -> Float,
+    canStartDragging: (startedPosition: Offset) -> Boolean,
 ): Modifier = composed {
     val density = AmbientDensity.current
 
     scrollGestureFilter(
         orientation = orientation,
         scrollCallback = object : ScrollCallback {
+            private var dragging: Boolean = false
+
             override fun onStart(downPosition: Offset) {
-                onDragStarted(downPosition)
+                if (canStartDragging(downPosition)) {
+                    dragging = true
+                    onDragStarted(downPosition)
+                }
             }
 
             override fun onScroll(scrollDistance: Float): Float {
-                return with(density) { abs(onDrag(-scrollDistance)) }
+                return if (dragging)
+                    with(density) { abs(onDrag(-scrollDistance)) } else
+                    0f
             }
 
             override fun onCancel() {
                 onDragStopped(0f)
+                dragging = false
             }
 
             override fun onStop(velocity: Float) {
                 onDragStopped(-velocity)
+                dragging = false
             }
         },
     )
