@@ -23,6 +23,7 @@ import cz.frantisekmasa.wfrp_master.core.ui.dialogs.FullScreenDialog
 import cz.frantisekmasa.wfrp_master.core.ui.forms.Rules
 import cz.frantisekmasa.wfrp_master.core.ui.forms.TextInput
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.Spacing
+import cz.frantisekmasa.wfrp_master.core.ui.primitives.longToast
 import cz.frantisekmasa.wfrp_master.core.ui.scaffolding.SaveAction
 import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.model.domain.common.CouldNotConnectToBackend
@@ -97,11 +98,5 @@ fun CreatePartyDialog(
                 )
             }
         }
-    }
-}
-
-private suspend fun longToast(context: Context, @StringRes messageRes: Int) {
-    withContext(Dispatchers.Main) {
-        Toast.makeText(context, messageRes, Toast.LENGTH_LONG)
     }
 }

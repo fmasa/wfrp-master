@@ -20,6 +20,7 @@ import cz.frantisekmasa.wfrp_master.core.ui.dialogs.FullScreenDialog
 import cz.frantisekmasa.wfrp_master.core.ui.forms.Rules
 import cz.frantisekmasa.wfrp_master.core.ui.forms.TextInput
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.Spacing
+import cz.frantisekmasa.wfrp_master.core.ui.primitives.longToast
 import cz.frantisekmasa.wfrp_master.core.ui.scaffolding.SaveAction
 import cz.muni.fi.rpg.ui.partySettings.PartySettingsViewModel
 import kotlinx.coroutines.*
@@ -95,11 +96,5 @@ fun RenamePartyDialog(
                 )
             }
         }
-    }
-}
-
-private suspend fun longToast(context: Context, @StringRes messageRes: Int) {
-    withContext(Dispatchers.Main) {
-        Toast.makeText(context, messageRes, Toast.LENGTH_LONG)
     }
 }
