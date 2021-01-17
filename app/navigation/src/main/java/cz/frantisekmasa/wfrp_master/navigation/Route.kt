@@ -75,12 +75,12 @@ sealed class Route {
                     PartyId.fromString(entry.stringArgument("partyId")),
                     entry.stringArgument("characterId"),
                 ),
-                entry.stringArgument("fromCombat") == "1",
+                entry.arguments?.getString("fromCombat") == "1",
             )
         }
 
         override fun toString() =
-            "parties/${characterId.partyId}/characters/{${characterId.id}}?comingFromCombat=${if (comingFromCombat) 1 else 0}"
+            "parties/${characterId.partyId}/characters/${characterId.id}?comingFromCombat=${if (comingFromCombat) 1 else 0}"
     }
 
     @Immutable
@@ -95,7 +95,7 @@ sealed class Route {
             )
         }
 
-        override fun toString() = "parties/{${characterId.partyId}/characters/${characterId.id}"
+        override fun toString() = "parties/${characterId.partyId}/characters/${characterId.id}"
     }
 
     @Immutable

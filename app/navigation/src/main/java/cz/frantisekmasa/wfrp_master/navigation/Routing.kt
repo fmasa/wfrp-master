@@ -3,6 +3,7 @@ package cz.frantisekmasa.wfrp_master.navigation
 import androidx.navigation.NavHostController
 import androidx.navigation.NavOptionsBuilder
 import androidx.navigation.compose.*
+import timber.log.Timber
 
 data class Routing<T : Route>(
     val route: T,
@@ -20,6 +21,7 @@ data class Routing<T : Route>(
     }
 
     fun navigateTo(route: Route) {
+        Timber.d("Navigating to $route")
         navController.navigate(route.toString())
     }
 
