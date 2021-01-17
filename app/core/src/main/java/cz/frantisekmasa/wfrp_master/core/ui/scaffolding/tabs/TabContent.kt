@@ -5,9 +5,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.MaterialTheme
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.onDispose
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
@@ -32,9 +30,8 @@ fun <T> TabContent(
     screenWidth: Float,
     modifier: Modifier = Modifier,
 ) {
-    val canDrag = mutableStateOf(true)
-    val dragStart = mutableStateOf(0f)
-    val previousScroll = mutableStateOf(0f)
+    var dragStart by remember { mutableStateOf(0f) }
+    var previousScroll by remember { mutableStateOf(0f) }
 
     Row(
         modifier = modifier
@@ -44,50 +41,45 @@ fun <T> TabContent(
             .background(MaterialTheme.colors.background)
             .nestedDraggable(
                 Orientation.Horizontal,
-                reverseDirection = true,
-                onDragStarted = { dragStart.value = scrollState.value },
+                onDragStarted = { dragStart = scrollState.value },
                 onDrag = { delta ->
-                    previousScroll.value = scrollState.value
+                    previousScroll = scrollState.value
                     scrollState.scrollBy(delta)
 
-                    val previousScreenOffset = max(dragStart.value - screenWidth, 0f)
+                    val previousScreenOffset = max(dragStart - screenWidth, 0f)
                     val nextScreenOffset =
-                        min(dragStart.value + screenWidth, screenWidth * screens.size)
+                        min(dragStart + screenWidth, screenWidth * screens.size)
 
                     if (scrollState.value >= nextScreenOffset) {
-                        dragStart.value = nextScreenOffset
+                        dragStart = nextScreenOffset
                     } else if (scrollState.value <= previousScreenOffset) {
-                        dragStart.value = previousScreenOffset
+                        dragStart = previousScreenOffset
                     }
 
-                    scrollState.value - previousScroll.value
+                    scrollState.value - previousScroll
                 },
                 onDragStopped = { velocity ->
-                    canDrag.value = false
-
                     // If scrollState didn't change, do nothing
                     if (scrollState.value % screenWidth == 0f) {
-                        canDrag.value = true
                         return@nestedDraggable
                     }
 
-                    val direction = direction(previousScroll.value, scrollState.value)
+                    val direction = direction(previousScroll, scrollState.value)
 
                     val relativeVelocity = if (direction == Direction.END)
                         abs(velocity) else
                         abs(velocity) * -1
 
                     val anchors = listOf(
-                        if (scrollState.value < dragStart.value)
-                            max(dragStart.value - screenWidth, 0f) else
-                            min(dragStart.value + screenWidth, screenWidth * screens.size),
-                        dragStart.value,
+                        if (scrollState.value < dragStart)
+                            max(dragStart - screenWidth, 0f) else
+                            min(dragStart + screenWidth, screenWidth * screens.size),
+                        dragStart,
                     )
 
                     scrollState.smoothScrollTo(
                         anchors.minByOrNull { abs(it - (scrollState.value + relativeVelocity)) }
-                            ?: 0f,
-                        onEnd = { _, _ -> canDrag.value = true },
+                            ?: 0f
                     )
                 }
             ),
@@ -108,52 +100,30 @@ private enum class Direction {
 
 fun Modifier.nestedDraggable(
     orientation: Orientation,
-    enabled: Boolean = true,
-    reverseDirection: Boolean = false,
-    interactionState: InteractionState? = null,
-    startDragImmediately: Boolean = false,
-    canDrag: (androidx.compose.ui.gesture.Direction) -> Boolean = { enabled },
     onDragStarted: (startedPosition: Offset) -> Unit = {},
     onDragStopped: (velocity: Float) -> Unit = {},
     onDrag: Density.(Float) -> Float
 ): Modifier = composed {
     val density = AmbientDensity.current
-    onDispose {
-        interactionState?.removeInteraction(Interaction.Dragged)
-    }
 
     scrollGestureFilter(
+        orientation = orientation,
         scrollCallback = object : ScrollCallback {
-
             override fun onStart(downPosition: Offset) {
-                if (enabled) {
-                    interactionState?.addInteraction(Interaction.Dragged)
-                    onDragStarted(downPosition)
-                }
+                onDragStarted(downPosition)
             }
 
             override fun onScroll(scrollDistance: Float): Float {
-                if (!enabled) return 0f
-                val toConsume = if (reverseDirection) scrollDistance * -1 else scrollDistance
-                return with(density) { abs(onDrag(toConsume)) }
+                return with(density) { abs(onDrag(-scrollDistance)) }
             }
 
             override fun onCancel() {
-                if (enabled) {
-                    interactionState?.removeInteraction(Interaction.Dragged)
-                    onDragStopped(0f)
-                }
+                onDragStopped(0f)
             }
 
             override fun onStop(velocity: Float) {
-                if (enabled) {
-                    interactionState?.removeInteraction(Interaction.Dragged)
-                    onDragStopped(if (reverseDirection) velocity * -1 else velocity)
-                }
+                onDragStopped(-velocity)
             }
         },
-        orientation = orientation,
-        canDrag = canDrag,
-        startDragImmediately = startDragImmediately
     )
 }
