@@ -15,13 +15,13 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import cz.muni.fi.rpg.R
 import cz.frantisekmasa.wfrp_master.core.domain.identifiers.CharacterId
+import cz.frantisekmasa.wfrp_master.core.ui.primitives.CardItem
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.ContextMenu
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.EmptyUI
 import cz.frantisekmasa.wfrp_master.core.viewModel.viewModel
 import cz.muni.fi.rpg.model.domain.spells.Spell
 import cz.muni.fi.rpg.ui.character.spells.dialog.AddSpellDialog
 import cz.muni.fi.rpg.ui.character.spells.dialog.EditSpellDialog
-import cz.muni.fi.rpg.ui.common.composables.*
 import cz.muni.fi.rpg.viewModels.SpellsViewModel
 import org.koin.core.parameter.parametersOf
 

@@ -1,4 +1,4 @@
-package cz.muni.fi.rpg.ui.character.inventory
+package cz.frantisekmasa.wfrp_master.inventory.ui
 
 import androidx.compose.foundation.ScrollableColumn
 import androidx.compose.foundation.layout.Arrangement
@@ -11,14 +11,13 @@ import androidx.compose.runtime.savedinstancestate.savedInstanceState
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import cz.frantisekmasa.wfrp_master.core.ui.buttons.CloseButton
-import cz.muni.fi.rpg.R
 import cz.frantisekmasa.wfrp_master.core.ui.dialogs.FullScreenDialog
 import cz.frantisekmasa.wfrp_master.core.ui.forms.Rules
 import cz.frantisekmasa.wfrp_master.core.ui.forms.TextInput
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.Spacing
 import cz.frantisekmasa.wfrp_master.core.ui.scaffolding.SaveAction
-import cz.muni.fi.rpg.model.domain.inventory.InventoryItem
-import cz.muni.fi.rpg.viewModels.InventoryViewModel
+import cz.frantisekmasa.wfrp_master.inventory.domain.InventoryItem
+import cz.frantisekmasa.wfrp_master.inventory.R
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -26,7 +25,7 @@ import java.util.*
 import kotlin.math.max
 
 @Composable
-fun InventoryItemDialog(
+internal fun InventoryItemDialog(
     viewModel: InventoryViewModel,
     existingItem: InventoryItem?,
     onDismissRequest: () -> Unit,

@@ -7,10 +7,10 @@ import com.google.firebase.firestore.SetOptions
 import cz.frantisekmasa.wfrp_master.core.firestore.AggregateMapper
 import cz.frantisekmasa.wfrp_master.core.firestore.queryFlow
 import cz.frantisekmasa.wfrp_master.core.domain.identifiers.CharacterId
-import cz.muni.fi.rpg.model.domain.inventory.InventoryItem
-import cz.muni.fi.rpg.model.domain.inventory.InventoryItemId
-import cz.muni.fi.rpg.model.domain.inventory.InventoryItemNotFound
-import cz.muni.fi.rpg.model.domain.inventory.InventoryItemRepository
+import cz.frantisekmasa.wfrp_master.inventory.domain.InventoryItem
+import cz.frantisekmasa.wfrp_master.inventory.domain.InventoryItemId
+import cz.frantisekmasa.wfrp_master.inventory.domain.InventoryItemNotFound
+import cz.frantisekmasa.wfrp_master.inventory.domain.InventoryItemRepository
 import cz.muni.fi.rpg.model.firestore.*
 import kotlinx.coroutines.tasks.await
 import timber.log.Timber

@@ -28,7 +28,7 @@ import cz.frantisekmasa.wfrp_master.core.domain.character.CharacterFeatureReposi
 import cz.frantisekmasa.wfrp_master.core.domain.character.CharacterRepository
 import cz.frantisekmasa.wfrp_master.core.domain.character.Feature
 import cz.frantisekmasa.wfrp_master.core.domain.party.PartyId
-import cz.muni.fi.rpg.model.domain.inventory.InventoryItemRepository
+import cz.frantisekmasa.wfrp_master.inventory.domain.InventoryItemRepository
 import cz.muni.fi.rpg.model.domain.invitation.InvitationProcessor
 import cz.muni.fi.rpg.model.domain.skills.SkillRepository
 import cz.muni.fi.rpg.model.domain.spells.SpellRepository
@@ -45,7 +45,8 @@ import cz.frantisekmasa.wfrp_master.core.firestore.repositories.FirestoreCharact
 import cz.frantisekmasa.wfrp_master.core.firestore.repositories.FirestoreCharacterRepository
 import cz.frantisekmasa.wfrp_master.core.firestore.repositories.FirestorePartyRepository
 import cz.frantisekmasa.wfrp_master.core.viewModel.PartyViewModel
-import cz.muni.fi.rpg.model.domain.inventory.InventoryItem
+import cz.frantisekmasa.wfrp_master.inventory.domain.InventoryItem
+import cz.frantisekmasa.wfrp_master.inventory.ui.InventoryViewModel
 import cz.muni.fi.rpg.model.domain.skills.Skill
 import cz.muni.fi.rpg.model.domain.spells.Spell
 import cz.muni.fi.rpg.model.domain.talents.Talent
@@ -103,7 +104,8 @@ val appModule = module {
     /**
      * Repositories
      */
-    single<InventoryItemRepository> { FirestoreInventoryItemRepository(get(), aggregateMapper(InventoryItem::class)) }
+    single<InventoryItemRepository> { FirestoreInventoryItemRepository(get(), aggregateMapper(
+        InventoryItem::class)) }
     single<CharacterRepository> {
         CharacterRepositoryIdentityMap(10, FirestoreCharacterRepository(get(), aggregateMapper(Character::class)))
     }

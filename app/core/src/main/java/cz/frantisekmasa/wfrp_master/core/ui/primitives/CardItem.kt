@@ -1,4 +1,4 @@
-package cz.muni.fi.rpg.ui.common.composables
+package cz.frantisekmasa.wfrp_master.core.ui.primitives
 
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.clickable
@@ -7,8 +7,6 @@ import androidx.compose.material.ListItem
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import cz.frantisekmasa.wfrp_master.core.ui.primitives.ContextMenu
-import cz.frantisekmasa.wfrp_master.core.ui.primitives.ItemIcon
 
 @Composable
 fun CardItem(
