@@ -25,6 +25,7 @@ import cz.frantisekmasa.wfrp_master.navigation.Routing
 import cz.muni.fi.rpg.viewModels.CharacterCreationViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.koin.core.parameter.parametersOf
 
 private enum class FormState {
@@ -72,7 +73,9 @@ private fun MainContainer(routing: Routing<Route.CharacterCreation>) {
                 points
             )
 
-            routing.navigateTo(Route.CharacterDetail(characterId), popUpTo = Route.PartyList)
+            withContext(Dispatchers.Main) {
+                routing.navigateTo(Route.CharacterDetail(characterId), popUpTo = Route.PartyList)
+            }
         }
     }
 
