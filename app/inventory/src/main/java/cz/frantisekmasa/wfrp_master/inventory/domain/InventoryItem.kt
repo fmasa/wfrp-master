@@ -11,7 +11,8 @@ typealias InventoryItemId = UUID
     val id: InventoryItemId,
     val name: String,
     val description: String,
-    val quantity: Int
+    val quantity: Int,
+    val encumbrance: Encumbrance = Encumbrance.Zero,
 ) : Parcelable {
     companion object {
         const val NAME_MAX_LENGTH = 50

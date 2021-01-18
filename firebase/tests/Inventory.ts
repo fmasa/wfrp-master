@@ -2,6 +2,7 @@ import {suite, test} from "mocha-typescript";
 import {CharacterSubCollectionSuite} from "./CharacterSubCollectionSuite";
 import {uuid} from "uuidv4";
 import * as firebase from "@firebase/testing";
+import {withoutField} from "./utils";
 import {CollectionReference, Firestore} from "./firebase";
 
 @suite
@@ -11,6 +12,7 @@ class Inventory extends CharacterSubCollectionSuite {
         quantity: 1,
         name: "Sword of Chaos Champion",
         description: "Trust me, you don't want to show it to people",
+        encumbrance: 10,
     };
 
     private inventoryItems(app: Firestore, userId: string): CollectionReference
@@ -28,6 +30,8 @@ class Inventory extends CharacterSubCollectionSuite {
             const items = this.inventoryItems(this.authedApp(userId), this.userId1);
 
             await firebase.assertSucceeds(items.doc(this.inventoryItem.id).set(this.inventoryItem));
+
+            await firebase.assertSucceeds(items.doc(this.inventoryItem.id).set(withoutField(this.inventoryItem, "encumbrance")));
         }
     }
 
@@ -92,6 +96,11 @@ class Inventory extends CharacterSubCollectionSuite {
         const items = this.inventoryItems(this.authedApp(this.userId1), this.userId1);
 
         await Promise.all(Object.keys(this.inventoryItem).map(field => {
+            // For BC, TODO: remove in future version
+            if (field === "encumbrance") {
+                return Promise.resolve();
+            }
+
             const item = {...this.inventoryItem};
             const itemId = item.id;
 
