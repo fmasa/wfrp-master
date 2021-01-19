@@ -13,8 +13,16 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.Spacing
 
-private interface Filter {
+interface Filter {
+    companion object {
+        val DigitsAndDotSymbolsOnly: Filter = AllowedCharacters(('0'..'9').toList() + '.')
+    }
+
     fun process(value: String): String
+
+    private class AllowedCharacters(private val characters: List<Char>): Filter {
+        override fun process(value: String) = value.filter { it in characters }
+    }
 
     class MaxLength(private val maxLength: Int) : Filter {
         override fun process(value: String) = if (value.length <= maxLength)
@@ -39,15 +47,17 @@ fun TextInput(
     multiLine: Boolean = false,
     placeholder: String? = null,
     horizontalAlignment: Alignment.Horizontal = Alignment.Start,
-    rules: Rules = Rules.NoRules
+    rules: Rules = Rules.NoRules,
+    filters: List<Filter> = emptyList(),
 ) {
     Column(horizontalAlignment = horizontalAlignment, modifier = modifier) {
         label?.let { InputLabel(label) }
 
-        val filters = mutableListOf<Filter>(Filter.MaxLength(maxLength))
+        val allFilters = filters.toMutableList()
+        allFilters.add(Filter.MaxLength(maxLength))
 
         if (!multiLine) {
-            filters.add(Filter.SingleLine)
+            allFilters.add(Filter.SingleLine)
         }
 
         val errorMessage = if (validate) rules.errorMessage(value) else null
@@ -68,7 +78,7 @@ fun TextInput(
                     value = value,
                     onValueChange = {
                         val filteredValue =
-                            filters.fold(it) { value, filter -> filter.process(value) }
+                            allFilters.fold(it) { value, filter -> filter.process(value) }
 
                         if (filteredValue != value) {
                             onValueChange(filteredValue)

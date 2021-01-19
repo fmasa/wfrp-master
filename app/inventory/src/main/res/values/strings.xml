@@ -14,6 +14,7 @@
 
     <!-- Transaction Dialog -->
     <string name="inventory_item_quantity">Quantity</string>
+    <string name="inventory_item_encumbrance">Encumbrance (per unit)</string>
     <string name="label_crowns">Crowns</string>
     <string name="label_shillings">Shillings</string>
     <string name="label_pennies">Pennies</string>
