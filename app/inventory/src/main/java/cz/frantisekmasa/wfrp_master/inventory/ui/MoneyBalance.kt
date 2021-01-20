@@ -1,6 +1,5 @@
-package cz.muni.fi.rpg.ui.character.inventory
+package cz.frantisekmasa.wfrp_master.inventory.ui
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
@@ -14,8 +13,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import cz.frantisekmasa.wfrp_master.core.domain.Money
-import cz.muni.fi.rpg.R
-import cz.muni.fi.rpg.ui.common.composables.Theme
+import cz.frantisekmasa.wfrp_master.inventory.R
 
 @Composable
 fun MoneyBalance(value: Money, modifier: Modifier = Modifier) {
@@ -24,13 +22,13 @@ fun MoneyBalance(value: Money, modifier: Modifier = Modifier) {
         horizontalArrangement = Arrangement.spacedBy(8.dp, Alignment.End)
     ) {
         ProvideTextStyle(MaterialTheme.typography.body1) {
-            MoneyIcon(Theme.fixedColors.currencyGold)
+            MoneyIcon(colorGold)
             Text(value.getCrowns().toString() + " " + stringResource(R.string.gold_coins_shortcut))
 
-            MoneyIcon(Theme.fixedColors.currencySilver)
+            MoneyIcon(colorSilver)
             Text(value.getShillings().toString() + " " + stringResource(R.string.silver_shillings_shortcut))
 
-            MoneyIcon(Theme.fixedColors.currencyBrass)
+            MoneyIcon(colorBrass)
             Text(value.getPennies().toString() + " " + stringResource(R.string.brass_pennies_shortcut))
         }
     }
@@ -44,3 +42,7 @@ private fun MoneyIcon(tint: Color) {
         modifier = Modifier.size(18.dp)
     )
 }
+
+val colorGold = Color(255, 183, 77)
+val colorSilver = Color(158, 158, 158)
+val colorBrass = Color(141, 110, 99)

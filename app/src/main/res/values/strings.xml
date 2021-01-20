@@ -129,19 +129,6 @@
     <string name="character_icon_description">Character icon</string>
     <string name="no_characters_in_party_prompt">No player has joined this party yet.</string>>
 
-    <string name="gold_coins_shortcut">gc</string>
-    <string name="silver_shillings_shortcut">s</string>
-    <string name="brass_pennies_shortcut">p</string>
-
-    <string name="label_crowns">Crowns</string>
-    <string name="label_shillings">Shillings</string>
-    <string name="label_pennies">Pennies</string>
-    <string name="title_transaction_end">money</string>
-    <string name="not_enough_money">Character does not have enough money</string>
-    <string name="money_subtract">Subtract</string>
-    <string name="money_add">Add</string>
-    <string name="title_transaction">New money transaction</string>
-    <string name="money_balance">Balance</string>
 
     <!-- Game Master -->
     <string name="button_invite">Invite</string>
@@ -170,12 +157,6 @@
     <string name="title_npc">NPC</string>
     <string name="title_npc_edit">Edit NPC</string>
 
-    <string name="inventory_item_icon_description">Inventory item icon</string>
-    <string name="no_inventory_item_prompt">There is no item in your inventory.</string>
-    <string name="title_inventory_item_add">Add inventory item</string>
-    <string name="title_inventory_item_edit">Edit inventory item</string>
-    <string name="inventory_item_quantity">Quantity</string>
-
     <string name="button_edit_info">Edit info</string>
     <string name="error_value_is_0">Value cannot be 0</string>
     <string name="error_value_not_greater_or_equal_to">Value must be greater or equal to %1$d</string>
@@ -198,14 +179,7 @@
     <string name="skill_test_number_shortcut">TN</string>
 
     <string name="remove">Remove</string>
-    <string name="inventory_toast_item_saved">Item was saved.</string>
-    <string name="multiplication_symbol">×</string>
-    <string name="quantity">× %1$d</string>
     <string name="error_name_blank">Name cannot be blank.</string>
-    <string name="error_invalid_quantity">Quantity must be number greater than 0</string>
-    <string name="navigation_drawer_open">Open navigation drawer</string>
-    <string name="navigation_drawer_close">Close navigation drawer</string>
-    <string name="nav_header_desc">Navigation header</string>
 
     <string name="menu_home">Home</string>
     <string name="menu_gallery">Gallery</string>
@@ -257,16 +231,6 @@
     <string name="share_link">Share link</string>
     <string name="waiting_for_character">Waiting for player to create character</string>
     <string name="message_party_updated">Party was updated</string>
-    <string name="armor_shield">Shield</string>
-    <string name="armor_left_leg">Left Leg</string>
-    <string name="armor_right_leg">Right Leg</string>
-    <string name="armor_left_arm">Left Arm</string>
-    <string name="armor_right_arm">Right Arm</string>
-    <string name="armor_body">Body</string>
-    <string name="armor_head">Head</string>
-    <string name="title_armor">Armor</string>
-    <string name="title_inventory_add_item">Add Item</string>
-    <string name="title_change_armor">Change Armor</string>
     <string name="label_character_note">Additional notes</string>
     <string name="label_character_note_input">Additional notes (Optional)</string>
     <string name="title_checkbox_hardy">Hardy (Increase maximum wounds by TB)</string>

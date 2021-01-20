@@ -1,4 +1,4 @@
-package cz.muni.fi.rpg.ui.character.inventory
+package cz.frantisekmasa.wfrp_master.inventory.ui
 
 import androidx.compose.foundation.ScrollableColumn
 import androidx.compose.foundation.layout.Arrangement
@@ -7,18 +7,16 @@ import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.*
-import androidx.compose.runtime.savedinstancestate.savedInstanceState
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import cz.frantisekmasa.wfrp_master.core.ui.buttons.CloseButton
-import cz.muni.fi.rpg.R
 import cz.frantisekmasa.wfrp_master.core.ui.dialogs.FullScreenDialog
-import cz.frantisekmasa.wfrp_master.core.ui.forms.Rules
-import cz.frantisekmasa.wfrp_master.core.ui.forms.TextInput
+import cz.frantisekmasa.wfrp_master.core.ui.forms.*
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.Spacing
 import cz.frantisekmasa.wfrp_master.core.ui.scaffolding.SaveAction
-import cz.muni.fi.rpg.model.domain.inventory.InventoryItem
-import cz.muni.fi.rpg.viewModels.InventoryViewModel
+import cz.frantisekmasa.wfrp_master.inventory.domain.InventoryItem
+import cz.frantisekmasa.wfrp_master.inventory.R
+import cz.frantisekmasa.wfrp_master.inventory.domain.Encumbrance
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -26,7 +24,7 @@ import java.util.*
 import kotlin.math.max
 
 @Composable
-fun InventoryItemDialog(
+internal fun InventoryItemDialog(
     viewModel: InventoryViewModel,
     existingItem: InventoryItem?,
     onDismissRequest: () -> Unit,
@@ -35,9 +33,18 @@ fun InventoryItemDialog(
         val coroutineScope = rememberCoroutineScope()
         var validate by remember { mutableStateOf(false) }
 
-        var name by savedInstanceState { existingItem?.name ?: "" }
-        var description by savedInstanceState { existingItem?.description ?: "" }
-        var quantity by savedInstanceState { existingItem?.quantity?.toString() ?: "1" }
+        val name = inputValue(existingItem?.name ?: "", Rules.NotBlank())
+
+        val description = inputValue(existingItem?.description ?: "")
+
+        val quantity = inputValue(
+            existingItem?.quantity?.toString() ?: "1",
+            Rules.PositiveInteger(),
+        )
+        val encumbrance = inputValue(
+            existingItem?.encumbrance?.toString() ?: "0",
+            Rules.NonNegativeNumber(),
+        )
 
         Scaffold(
             topBar = {
@@ -54,11 +61,13 @@ fun InventoryItemDialog(
                     },
                     actions = {
                         var saving by remember { mutableStateOf(false) }
+                        val isValid = listOf(name, encumbrance, quantity, description)
+                            .all { it.isValid() }
 
                         SaveAction(
-                            enabled = !saving && (!validate || name.isNotBlank()),
+                            enabled = !saving && (!validate || isValid),
                             onClick = {
-                                if (name.isBlank()) {
+                                if (!isValid) {
                                     validate = true
                                     return@SaveAction
                                 }
@@ -69,9 +78,10 @@ fun InventoryItemDialog(
                                     viewModel.saveInventoryItem(
                                         InventoryItem(
                                             id = existingItem?.id ?: UUID.randomUUID(),
-                                            name = name,
-                                            description = description,
-                                            quantity = max(1, quantity.toIntOrNull() ?: 1),
+                                            name = name.value,
+                                            description = description.value,
+                                            quantity = max(1, quantity.toInt()),
+                                            encumbrance = Encumbrance(encumbrance.toDouble()),
                                         )
                                     )
 
@@ -90,24 +100,29 @@ fun InventoryItemDialog(
                 TextInput(
                     label = stringResource(R.string.label_name),
                     value = name,
-                    onValueChange = { name = it },
                     validate = validate,
                     maxLength = InventoryItem.NAME_MAX_LENGTH,
-                    rules = Rules(Rules.NotBlank()),
                 )
 
                 TextInput(
                     label = stringResource(R.string.inventory_item_quantity),
                     value = quantity,
-                    onValueChange = { quantity = it },
                     validate = validate,
                     keyboardType = KeyboardType.Number,
                 )
 
                 TextInput(
+                    label = stringResource(R.string.inventory_item_encumbrance),
+                    value = encumbrance,
+                    maxLength = 8,
+                    validate = validate,
+                    keyboardType = KeyboardType.Number,
+                    filters = listOf(Filter.DigitsAndDotSymbolsOnly),
+                )
+
+                TextInput(
                     label = stringResource(R.string.label_description),
                     value = description,
-                    onValueChange = { description = it },
                     validate = validate,
                     maxLength = InventoryItem.DESCRIPTION_MAX_LENGTH,
                 )

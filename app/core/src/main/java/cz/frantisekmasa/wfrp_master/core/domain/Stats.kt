@@ -30,6 +30,7 @@ data class Stats(
     }
 
     val agilityBonus: Int get() = agility / 10
+    val strengthBonus: Int get() = strength / 10
     val toughnessBonus: Int get() = toughness / 10
     val initiativeBonus: Int get() = initiative / 10
 

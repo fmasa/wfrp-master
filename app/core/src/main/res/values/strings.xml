@@ -5,6 +5,16 @@
     <!-- Stuff shared between NPCs and characters -->
     <string name="label_wounds">Wounds</string>
 
+    <!-- Armor -->
+    <string name="armor_shield">Shield</string>
+    <string name="armor_left_leg">Left Leg</string>
+    <string name="armor_right_leg">Right Leg</string>
+    <string name="armor_left_arm">Left Arm</string>
+    <string name="armor_right_arm">Right Arm</string>
+    <string name="armor_body">Body</string>
+    <string name="armor_head">Head</string>
+    <string name="title_armor">Armor</string>
+
     <!-- Species -->
     <string name="race_dwarf">Dwarf</string>
     <string name="race_high_elf">High Elf</string>
@@ -25,6 +35,8 @@
 
     <!-- Form errors -->
     <string name="error_cannot_be_empty">Cannot be empty!</string>
+    <string name="error_must_be_non_negative_number">Must be greater or equal to 0</string>
+    <string name="error_must_be_positive_int">Must be positive number without decimals</string>
 
     <!-- Common input labels -->
     <string name="label_name" translatable="false">Name</string>

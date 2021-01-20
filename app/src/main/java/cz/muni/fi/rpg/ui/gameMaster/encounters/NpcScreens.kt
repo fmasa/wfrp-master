@@ -19,6 +19,7 @@ import cz.frantisekmasa.wfrp_master.core.domain.Armor
 import cz.frantisekmasa.wfrp_master.core.domain.Stats
 import cz.frantisekmasa.wfrp_master.core.ui.buttons.BackButton
 import cz.frantisekmasa.wfrp_master.core.ui.forms.CheckboxWithText
+import cz.frantisekmasa.wfrp_master.core.ui.forms.Rule
 import cz.frantisekmasa.wfrp_master.core.ui.forms.Rules
 import cz.frantisekmasa.wfrp_master.core.ui.forms.TextInput
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.HorizontalLine
@@ -323,7 +324,7 @@ private fun MainContainer(data: FormData, validate: Boolean) {
                         validate = validate,
                         rules = Rules(
                             Rules.NotBlank(),
-                            { v: String -> v.toInt() > 0 } to stringResource(R.string.error_value_is_0)
+                            Rule(R.string.error_value_is_0) { v: String -> v.toInt() > 0 }
                         ),
                     )
                 }
@@ -407,7 +408,7 @@ private fun CharacteristicsSegment(data: CharacteristicsFormData, validate: Bool
                         maxLength = 3,
                         modifier = Modifier.weight(1f),
                         rules = Rules(
-                            { v: String -> toIntValue(v) <= 100 } to stringResource(R.string.error_value_over_100)
+                            Rule(R.string.error_value_over_100) { v: String -> toIntValue(v) <= 100 }
                         )
                     )
                 }
@@ -456,7 +457,7 @@ private fun ArmorSegment(data: ArmorFormData, validate: Boolean) {
                         maxLength = 3,
                         modifier = Modifier.weight(1f),
                         rules = Rules(
-                            { v: String -> toIntValue(v) <= 100 } to stringResource(R.string.error_value_over_100)
+                            Rule(R.string.error_value_over_100) { v: String -> toIntValue(v) <= 100 }
                         )
                     )
                 }

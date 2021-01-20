@@ -150,11 +150,12 @@ service cloud.firestore {
                     allow delete: if canEditCharacter();
 
                     function isValidInventoryItem(item) {
-                        return item.keys().toSet() == ["id", "name", "description", "quantity"].toSet()
+                        return ["id", "name", "description", "quantity", "encumbrance"].hasAll(item.keys())
                             && item.id is string && item.id == itemId && isValidUuid(item.id)
                             && item.name is string && isNotBlank(item.name) && item.name.size() <= 50
                             && item.description is string && item.description.size() <= 200
-                            && item.quantity is int && item.quantity > 0;
+                            && item.quantity is int && item.quantity > 0
+                            && (! ("encumbrance" in item) || (item.encumbrance is number && item.encumbrance >= 0));
                     }
                 }
 

@@ -1,4 +1,4 @@
-package cz.muni.fi.rpg.model.domain.inventory
+package cz.frantisekmasa.wfrp_master.inventory.domain
 
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
@@ -7,11 +7,12 @@ import java.util.*
 typealias InventoryItemId = UUID
 
 @Parcelize
-data class InventoryItem(
+/* internal */ data class InventoryItem(
     val id: InventoryItemId,
     val name: String,
     val description: String,
-    val quantity: Int
+    val quantity: Int,
+    val encumbrance: Encumbrance = Encumbrance.Zero,
 ) : Parcelable {
     companion object {
         const val NAME_MAX_LENGTH = 50

@@ -1,4 +1,4 @@
-package cz.muni.fi.rpg.ui.character.inventory
+package cz.frantisekmasa.wfrp_master.inventory.ui
 
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
@@ -14,11 +14,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
-import cz.muni.fi.rpg.R
 import cz.frantisekmasa.wfrp_master.core.domain.Armor
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.CardContainer
-import cz.muni.fi.rpg.ui.common.composables.CardTitle
+import cz.frantisekmasa.wfrp_master.core.ui.primitives.CardTitle
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.NumberPicker
+import cz.frantisekmasa.wfrp_master.inventory.R
 
 @Composable
 internal fun ArmorCard(armor: Armor, onChange: (Armor) -> Unit) {

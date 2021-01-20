@@ -24,6 +24,7 @@ import cz.frantisekmasa.wfrp_master.core.domain.identifiers.NpcId
 import cz.frantisekmasa.wfrp_master.core.domain.party.PartyId
 import cz.frantisekmasa.wfrp_master.core.ui.buttons.BackButton
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.CardContainer
+import cz.frantisekmasa.wfrp_master.core.ui.primitives.CardItem
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.ContextMenu
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.EmptyUI
 import cz.frantisekmasa.wfrp_master.core.ui.scaffolding.OptionsAction

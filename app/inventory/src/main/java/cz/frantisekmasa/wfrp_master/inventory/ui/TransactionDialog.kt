@@ -1,4 +1,4 @@
-package cz.muni.fi.rpg.ui.character.inventory
+package cz.frantisekmasa.wfrp_master.inventory.ui
 
 import androidx.compose.foundation.ScrollableColumn
 import androidx.compose.foundation.clickable
@@ -12,7 +12,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
-import cz.muni.fi.rpg.R
 import cz.frantisekmasa.wfrp_master.core.domain.character.NotEnoughMoney
 import cz.frantisekmasa.wfrp_master.core.domain.Money
 import cz.frantisekmasa.wfrp_master.core.ui.buttons.CloseButton
@@ -21,7 +20,7 @@ import cz.frantisekmasa.wfrp_master.core.ui.forms.TextInput
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.Spacing
 import cz.frantisekmasa.wfrp_master.core.ui.scaffolding.SaveAction
 import cz.frantisekmasa.wfrp_master.core.ui.scaffolding.SubheadBar
-import cz.muni.fi.rpg.viewModels.InventoryViewModel
+import cz.frantisekmasa.wfrp_master.inventory.R
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext

@@ -1,4 +1,4 @@
-package cz.muni.fi.rpg.model.domain.inventory
+package cz.frantisekmasa.wfrp_master.inventory.domain
 
 import cz.frantisekmasa.wfrp_master.core.domain.identifiers.CharacterId
 

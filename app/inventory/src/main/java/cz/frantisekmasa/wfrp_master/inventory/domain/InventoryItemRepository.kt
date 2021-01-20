@@ -1,9 +1,9 @@
-package cz.muni.fi.rpg.model.domain.inventory
+package cz.frantisekmasa.wfrp_master.inventory.domain
 
 import cz.frantisekmasa.wfrp_master.core.domain.identifiers.CharacterId
 import kotlinx.coroutines.flow.Flow
 
-interface InventoryItemRepository {
+/* internal */ interface InventoryItemRepository {
     /**
      * Returns observable list of character's inventory items
      */

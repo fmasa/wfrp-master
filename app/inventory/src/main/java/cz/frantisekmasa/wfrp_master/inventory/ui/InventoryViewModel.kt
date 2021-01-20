@@ -1,19 +1,21 @@
-package cz.muni.fi.rpg.viewModels
+package cz.frantisekmasa.wfrp_master.inventory.ui
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import cz.frantisekmasa.wfrp_master.core.domain.Armor
 import cz.frantisekmasa.wfrp_master.core.domain.character.CharacterFeatureRepository
 import cz.frantisekmasa.wfrp_master.core.domain.identifiers.CharacterId
 import cz.frantisekmasa.wfrp_master.core.domain.character.CharacterRepository
 import cz.frantisekmasa.wfrp_master.core.domain.character.NotEnoughMoney
 import cz.frantisekmasa.wfrp_master.core.domain.Money
-import cz.muni.fi.rpg.model.domain.inventory.InventoryItem
-import cz.muni.fi.rpg.model.domain.inventory.InventoryItemRepository
+import cz.frantisekmasa.wfrp_master.inventory.domain.InventoryItem
+import cz.frantisekmasa.wfrp_master.inventory.domain.InventoryItemRepository
 import cz.frantisekmasa.wfrp_master.core.utils.right
+import cz.frantisekmasa.wfrp_master.inventory.domain.Encumbrance
+import cz.frantisekmasa.wfrp_master.inventory.domain.sum
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
 class InventoryViewModel(
@@ -22,11 +24,23 @@ class InventoryViewModel(
     private val armorRepository: CharacterFeatureRepository<Armor>,
     private val characters: CharacterRepository
 ) : ViewModel(), CoroutineScope by CoroutineScope(Dispatchers.IO) {
-    val inventory: Flow<List<InventoryItem>> = inventoryItems.findAllForCharacter(characterId)
+    private val character = characters.getLive(characterId).right()
+
+    val inventory: StateFlow<List<InventoryItem>?> =
+        inventoryItems.findAllForCharacter(characterId)
+            .stateIn(viewModelScope, SharingStarted.Lazily, null)
+
+    val maxEncumbrance: StateFlow<Encumbrance?> =
+        character.map { Encumbrance.maximumForCharacter(it.getCharacteristics()) }
+            .stateIn(viewModelScope, SharingStarted.Lazily, null)
+
+    val totalEncumbrance: StateFlow<Encumbrance?> = inventory
+        .map { items -> items?.map { it.encumbrance * it.quantity }?.sum() }
+        .stateIn(viewModelScope, SharingStarted.Lazily, null)
 
     val armor: Flow<Armor> = armorRepository.getLive(characterId).right()
 
-    val money: Flow<Money> = characters.getLive(characterId).right().map { it.getMoney() }
+    val money: Flow<Money> = character.map { it.getMoney() }
 
     suspend fun addMoney(amount: Money) {
         val character = characters.get(characterId)
