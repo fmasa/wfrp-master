@@ -12,7 +12,7 @@ class Inventory extends CharacterSubCollectionSuite {
         quantity: 1,
         name: "Sword of Chaos Champion",
         description: "Trust me, you don't want to show it to people",
-        encumbrance: 10,
+        encumbrance: 10.15,
     };
 
     private inventoryItems(app: Firestore, userId: string): CollectionReference

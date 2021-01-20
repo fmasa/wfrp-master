@@ -20,7 +20,6 @@ import cz.frantisekmasa.wfrp_master.core.ui.scaffolding.SaveAction
 import cz.frantisekmasa.wfrp_master.inventory.domain.InventoryItem
 import cz.frantisekmasa.wfrp_master.inventory.R
 import cz.frantisekmasa.wfrp_master.inventory.domain.Encumbrance
-import cz.frantisekmasa.wfrp_master.inventory.domain.toEncumbranceOrNull
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -57,9 +56,12 @@ internal fun InventoryItemDialog(
                     },
                     actions = {
                         var saving by remember { mutableStateOf(false) }
+                        val isValid = name.isNotBlank() &&
+                                encumbrance.toDoubleOrNull() !== null &&
+                                quantity.toIntOrNull() !== null
 
                         SaveAction(
-                            enabled = !saving && (!validate || name.isNotBlank()),
+                            enabled = !saving && (!validate || isValid),
                             onClick = {
                                 if (name.isBlank()) {
                                     validate = true
@@ -74,8 +76,8 @@ internal fun InventoryItemDialog(
                                             id = existingItem?.id ?: UUID.randomUUID(),
                                             name = name,
                                             description = description,
-                                            quantity = max(1, quantity.toIntOrNull() ?: 1),
-                                            encumbrance = encumbrance.toEncumbranceOrNull() ?: Encumbrance.Zero, // TODO: validate and show error instead of fallback
+                                            quantity = max(1, quantity.toInt()),
+                                            encumbrance = Encumbrance(encumbrance.toDouble()),
                                         )
                                     )
 

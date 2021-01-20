@@ -155,7 +155,7 @@ service cloud.firestore {
                             && item.name is string && isNotBlank(item.name) && item.name.size() <= 50
                             && item.description is string && item.description.size() <= 200
                             && item.quantity is int && item.quantity > 0
-                            && (! ("encumbrance" in item) || (item.encumbrance is int && item.encumbrance >= 0));
+                            && (! ("encumbrance" in item) || (item.encumbrance is number && item.encumbrance >= 0));
                     }
                 }
 
