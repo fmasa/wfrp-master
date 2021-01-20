@@ -122,7 +122,7 @@ private fun InventoryItemsCard(
     onRemove: (InventoryItem) -> Unit,
     onNewItemButtonClicked: () -> Unit,
 ) {
-    val items = viewModel.inventory.collectAsState(null).value ?: return
+    val items = viewModel.inventory.collectAsState().value ?: return
 
     CardContainer(Modifier.padding(horizontal = 8.dp)) {
         Column(Modifier.padding(horizontal = 8.dp)) {

@@ -26,14 +26,16 @@ class InventoryViewModel(
 ) : ViewModel(), CoroutineScope by CoroutineScope(Dispatchers.IO) {
     private val character = characters.getLive(characterId).right()
 
-    val inventory: Flow<List<InventoryItem>> = inventoryItems.findAllForCharacter(characterId)
+    val inventory: StateFlow<List<InventoryItem>?> =
+        inventoryItems.findAllForCharacter(characterId)
+            .stateIn(viewModelScope, SharingStarted.Lazily, null)
 
     val maxEncumbrance: StateFlow<Encumbrance?> =
         character.map { Encumbrance.maximumForCharacter(it.getCharacteristics()) }
             .stateIn(viewModelScope, SharingStarted.Lazily, null)
 
     val totalEncumbrance: StateFlow<Encumbrance?> = inventory
-        .map { items -> items.map { it.encumbrance * it.quantity }.sum() }
+        .map { items -> items?.map { it.encumbrance * it.quantity }?.sum() }
         .stateIn(viewModelScope, SharingStarted.Lazily, null)
 
     val armor: Flow<Armor> = armorRepository.getLive(characterId).right()
