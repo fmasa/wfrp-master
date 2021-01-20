@@ -7,6 +7,9 @@ import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.Stable
+import androidx.compose.runtime.savedinstancestate.savedInstanceState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
@@ -33,6 +36,37 @@ interface Filter {
     object SingleLine : Filter {
         override fun process(value: String): String = value.replace("\n", "")
     }
+}
+
+// TODO: Use this version everywhere where input must be validated
+// as it allows to define validation only on InputValue and then use value.isValid()
+@Composable
+fun TextInput(
+    value: InputValue,
+    validate: Boolean,
+    modifier: Modifier = Modifier,
+    label: String? = null,
+    keyboardType: KeyboardType = KeyboardType.Text,
+    maxLength: Int = Int.MAX_VALUE,
+    multiLine: Boolean = false,
+    placeholder: String? = null,
+    horizontalAlignment: Alignment.Horizontal = Alignment.Start,
+    filters: List<Filter> = emptyList(),
+) {
+    TextInput(
+        value = value.value,
+        onValueChange = { value.value = it },
+        label = label,
+        validate = validate,
+        keyboardType = keyboardType,
+        maxLength = maxLength,
+        multiLine = multiLine,
+        placeholder = placeholder,
+        horizontalAlignment = horizontalAlignment,
+        filters = filters,
+        modifier = modifier,
+        rules = value.rules,
+    )
 }
 
 @Composable
@@ -111,3 +145,29 @@ fun TextInput(
         }
     }
 }
+
+@Stable
+class InputValue(
+    private val state: MutableState<String>,
+    internal val rules: Rules,
+) {
+    var value: String
+        set(value) {
+            state.value = value
+        }
+        get() = state.value
+
+    fun isValid() = rules.errorMessage(value) == null
+
+    fun toInt(): Int = value.toInt()
+    fun toDouble(): Double = value.toDouble()
+}
+
+@Composable
+fun inputValue(default: String) = InputValue(savedInstanceState { default }, Rules.NoRules)
+
+@Composable
+fun inputValue(default: String, vararg rules: Rule) = InputValue(
+    savedInstanceState { default },
+    Rules(*rules),
+)
