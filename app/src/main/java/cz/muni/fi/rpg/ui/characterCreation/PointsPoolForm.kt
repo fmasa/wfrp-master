@@ -15,6 +15,7 @@ import cz.frantisekmasa.wfrp_master.core.ui.forms.FormData
 import cz.frantisekmasa.wfrp_master.core.ui.forms.Rules
 import cz.muni.fi.rpg.R
 import cz.frantisekmasa.wfrp_master.core.domain.character.Points
+import cz.frantisekmasa.wfrp_master.core.ui.forms.Rule
 import cz.frantisekmasa.wfrp_master.core.ui.forms.TextInput
 
 object PointsPoolForm {
@@ -67,8 +68,8 @@ fun PointsPoolForm(data: PointsPoolForm.Data, validate: Boolean) {
             maxLength = 3,
             rules = Rules(
                 Rules.NotBlank(),
-                { v: String -> v.toInt() > 0 } to stringResource(R.string.error_value_is_0),
-                { v: String -> v.toInt() <= 100 } to stringResource(R.string.error_value_over_100),
+                Rule(R.string.error_value_is_0) { v: String -> v.toInt() > 0 },
+                Rule(R.string.error_value_over_100) { v: String -> v.toInt() <= 100 },
             ),
         )
 
@@ -81,9 +82,7 @@ fun PointsPoolForm(data: PointsPoolForm.Data, validate: Boolean) {
             placeholder = "0",
             maxLength = 3,
             keyboardType = KeyboardType.Number,
-            rules = Rules(
-                { v: String -> toValue(v) <= 100 } to stringResource(R.string.error_value_over_100)
-            )
+            rules = Rules(Rule(R.string.error_value_over_100) { v: String -> toValue(v) <= 100 }),
         )
 
         TextInput(
@@ -95,9 +94,7 @@ fun PointsPoolForm(data: PointsPoolForm.Data, validate: Boolean) {
             placeholder = "0",
             maxLength = 3,
             keyboardType = KeyboardType.Number,
-            rules = Rules(
-                { v: String -> toValue(v) <= 100 } to stringResource(R.string.error_value_over_100)
-            )
+            rules = Rules(Rule(R.string.error_value_over_100) { v: String -> toValue(v) <= 100 }),
         )
     }
 }

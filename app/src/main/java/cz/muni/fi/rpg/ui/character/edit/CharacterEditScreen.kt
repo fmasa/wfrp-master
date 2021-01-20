@@ -21,6 +21,7 @@ import cz.frantisekmasa.wfrp_master.core.ui.texts.SaveButtonText
 import cz.frantisekmasa.wfrp_master.core.viewModel.viewModel
 import cz.muni.fi.rpg.R
 import cz.frantisekmasa.wfrp_master.core.domain.character.Character
+import cz.frantisekmasa.wfrp_master.core.ui.forms.Rule
 import cz.muni.fi.rpg.ui.characterCreation.CharacterBasicInfoForm
 import cz.muni.fi.rpg.ui.characterCreation.CharacterCharacteristicsForm
 import cz.frantisekmasa.wfrp_master.navigation.Route
@@ -141,7 +142,7 @@ private fun MaxWoundsSegment(data: CharacterEditScreen.WoundsData, validate: Boo
             validate = validate,
             rules = Rules(
                 Rules.NotBlank(),
-                { v: String -> v.toInt() > 0 } to stringResource(R.string.error_value_is_0),
+                Rule(R.string.error_value_is_0) { v: String -> v.toInt() > 0 },
             )
         )
 
