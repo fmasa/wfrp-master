@@ -12,6 +12,17 @@ class Rules(private vararg val rules: Rule) {
 
         @Composable
         fun NotBlank() = Rule(R.string.error_cannot_be_empty) { it.isNotBlank() }
+
+        @Composable
+        fun NonNegativeNumber() =
+            Rule(R.string.error_must_be_non_negative_number) {
+                it.toDoubleOrNull()?.let { n -> n >= 0 } ?: false
+            }
+
+        @Composable
+        fun PositiveInteger() = Rule(R.string.error_must_be_positive_int) {
+            it.toIntOrNull()?.let { n -> n > 0 } ?: false
+        }
     }
 
     /**

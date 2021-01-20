@@ -35,6 +35,8 @@
 
     <!-- Form errors -->
     <string name="error_cannot_be_empty">Cannot be empty!</string>
+    <string name="error_must_be_non_negative_number">Must be greater or equal to 0</string>
+    <string name="error_must_be_positive_int">Must be positive number without decimals</string>
 
     <!-- Common input labels -->
     <string name="label_name" translatable="false">Name</string>

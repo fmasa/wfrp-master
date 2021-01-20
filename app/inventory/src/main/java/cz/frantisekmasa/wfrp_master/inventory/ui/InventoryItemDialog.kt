@@ -13,6 +13,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import cz.frantisekmasa.wfrp_master.core.ui.buttons.CloseButton
 import cz.frantisekmasa.wfrp_master.core.ui.dialogs.FullScreenDialog
 import cz.frantisekmasa.wfrp_master.core.ui.forms.Filter
+import cz.frantisekmasa.wfrp_master.core.ui.forms.Rule
 import cz.frantisekmasa.wfrp_master.core.ui.forms.Rules
 import cz.frantisekmasa.wfrp_master.core.ui.forms.TextInput
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.Spacing
@@ -39,7 +40,7 @@ internal fun InventoryItemDialog(
         var name by savedInstanceState { existingItem?.name ?: "" }
         var description by savedInstanceState { existingItem?.description ?: "" }
         var quantity by savedInstanceState { existingItem?.quantity?.toString() ?: "1" }
-        var encumbrance by savedInstanceState { existingItem?.encumbrance?.toString() ?: "" }
+        var encumbrance by savedInstanceState { existingItem?.encumbrance?.toString() ?: "0" }
 
         Scaffold(
             topBar = {
@@ -57,8 +58,8 @@ internal fun InventoryItemDialog(
                     actions = {
                         var saving by remember { mutableStateOf(false) }
                         val isValid = name.isNotBlank() &&
-                                encumbrance.toDoubleOrNull() !== null &&
-                                quantity.toIntOrNull() !== null
+                                (encumbrance.toDoubleOrNull() !== null && encumbrance.toDouble() >= 0) &&
+                                (quantity.toIntOrNull() !== null && quantity.toInt() > 0)
 
                         SaveAction(
                             enabled = !saving && (!validate || isValid),
@@ -104,22 +105,28 @@ internal fun InventoryItemDialog(
 
                 TextInput(
                     label = stringResource(R.string.inventory_item_quantity),
-                    placeholder = "1",
                     value = quantity,
                     onValueChange = { quantity = it },
                     validate = validate,
                     keyboardType = KeyboardType.Number,
+                    rules = Rules(
+                        Rules.NotBlank(),
+                        Rules.PositiveInteger(),
+                    ),
                 )
 
                 TextInput(
                     label = stringResource(R.string.inventory_item_encumbrance),
-                    placeholder = "0",
                     value = encumbrance,
                     onValueChange = { encumbrance = it },
                     maxLength = 8,
                     validate = validate,
                     keyboardType = KeyboardType.Number,
                     filters = listOf(Filter.DigitsAndDotSymbolsOnly),
+                    rules = Rules(
+                        Rules.NotBlank(),
+                        Rules.NonNegativeNumber(),
+                    ),
                 )
 
                 TextInput(
