@@ -133,6 +133,7 @@
     <!-- Game Master -->
     <string name="button_invite">Invite</string>
     <string name="title_calendar">Calendar</string>
+    <string name="title_select_time">Select Time</string>
     <string name="title_characters">Characters</string>
     <string name="title_encounters">Encounters</string>
 
