@@ -16,11 +16,11 @@ import com.eazypermissions.common.model.PermissionResult
 import com.eazypermissions.coroutinespermission.PermissionManager
 import cz.frantisekmasa.wfrp_master.core.ui.buttons.BackButton
 import cz.frantisekmasa.wfrp_master.core.ui.scaffolding.SubheadBar
-import cz.frantisekmasa.wfrp_master.core.ui.viewinterop.activity
 import cz.frantisekmasa.wfrp_master.navigation.Route
 import cz.frantisekmasa.wfrp_master.navigation.Routing
 import cz.muni.fi.rpg.R
 import cz.frantisekmasa.wfrp_master.core.domain.party.Invitation
+import cz.frantisekmasa.wfrp_master.core.ui.viewinterop.AmbientActivity
 import cz.muni.fi.rpg.ui.common.toast
 import cz.muni.fi.rpg.viewModels.provideJoinPartyViewModel
 import kotlinx.coroutines.launch
@@ -54,7 +54,7 @@ fun InvitationScannerScreen(routing: Routing<Route>) {
 
             when (val state = screenState) {
                 InvitationScannerScreenState.WaitingForPermissions -> {
-                    val activity = activity()
+                    val activity = AmbientActivity.current
 
                     LaunchedEffect(null) {
                         val permissionResult = PermissionManager.requestPermissions(
