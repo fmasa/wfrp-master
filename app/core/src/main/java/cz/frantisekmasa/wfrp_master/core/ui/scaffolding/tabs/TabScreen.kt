@@ -6,5 +6,5 @@ import androidx.compose.runtime.Composable
 
 data class TabScreen<T>(
     @StringRes internal val tabName: Int,
-    internal val content: @Composable (T) -> Unit
+    val content: @Composable (T) -> Unit
 )

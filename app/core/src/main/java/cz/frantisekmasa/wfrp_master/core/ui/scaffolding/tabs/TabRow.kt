@@ -1,6 +1,5 @@
 package cz.frantisekmasa.wfrp_master.core.ui.scaffolding.tabs
 
-import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
@@ -17,12 +16,11 @@ import java.util.*
 @Composable
 fun <T> ColumnScope.TabRow(
     screens: Array<TabScreen<T>>,
-    scrollState: ScrollState,
-    screenWidth: Float,
+    pagerState: PagerState,
     fullWidthTabs: Boolean = false
 ) {
-    val selectedTabIndex = (scrollState.value / screenWidth).toInt()
-    val scrolledPercentage = ((scrollState.value % screenWidth) / screenWidth)
+    val selectedTabIndex = pagerState.selectedScreen
+    val scrolledPercentage = pagerState.scrolledPercentage
 
     val tabs = @Composable {
         val tabModifier = if (fullWidthTabs) Modifier.weight(1f) else Modifier
@@ -33,7 +31,7 @@ fun <T> ColumnScope.TabRow(
                 selectedContentColor = MaterialTheme.colors.primary,
                 unselectedContentColor = MaterialTheme.colors.onSurface.copy(alpha = ContentAlpha.medium),
                 selected = index == (if (scrolledPercentage > 0.5f) selectedTabIndex + 1 else selectedTabIndex),
-                onClick = { scrollState.smoothScrollTo(index * screenWidth) },
+                onClick = { pagerState.selectScreen(index) },
                 text = { Text(stringResource(screen.tabName).toUpperCase(Locale.getDefault())) },
             )
         }

@@ -33,6 +33,7 @@ import cz.frantisekmasa.wfrp_master.core.ui.scaffolding.TopBarAction
 import cz.frantisekmasa.wfrp_master.core.ui.scaffolding.tabs.TabContent
 import cz.frantisekmasa.wfrp_master.core.ui.scaffolding.tabs.TabRow
 import cz.frantisekmasa.wfrp_master.core.ui.scaffolding.tabs.TabScreen
+import cz.frantisekmasa.wfrp_master.core.ui.scaffolding.tabs.rememberPagerState
 import cz.frantisekmasa.wfrp_master.core.viewModel.viewModel
 import cz.frantisekmasa.wfrp_master.navigation.Route
 import cz.frantisekmasa.wfrp_master.navigation.Routing
@@ -80,21 +81,19 @@ private fun WithConstraintsScope.MainContent(routing: Routing<Route.Compendium>)
         val viewModel: CompendiumViewModel by viewModel { parametersOf(routing.route.partyId) }
 
         val tabs = tabs(routing.route.partyId)
-        val scrollState = key(screenWidth, tabs.size) { rememberScrollState(0f) }
+        val pagerState = rememberPagerState(screenWidth, tabs.size)
 
         TabRow(
             tabs,
-            scrollState = scrollState,
-            screenWidth = screenWidth,
+            pagerState = pagerState,
             fullWidthTabs = true,
         )
 
         TabContent(
             item = viewModel,
             screens = tabs,
-            scrollState = scrollState,
-            screenWidth = screenWidth,
-            modifier = Modifier.weight(1f)
+            state = pagerState,
+            modifier = Modifier.weight(1f),
         )
     }
 }
