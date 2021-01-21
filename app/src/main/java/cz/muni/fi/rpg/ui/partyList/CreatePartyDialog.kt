@@ -1,20 +1,13 @@
 package cz.muni.fi.rpg.ui.partyList
 
-import android.content.Context
-import android.widget.Toast
-import androidx.annotation.StringRes
 import androidx.compose.foundation.ScrollableColumn
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.*
-import androidx.compose.runtime.savedinstancestate.savedInstanceState
 import androidx.compose.ui.platform.AmbientContext
 import androidx.compose.ui.res.stringResource
-import com.google.firebase.analytics.ktx.analytics
-import com.google.firebase.analytics.ktx.logEvent
-import com.google.firebase.ktx.Firebase
 import cz.frantisekmasa.wfrp_master.core.auth.AmbientUser
 import cz.frantisekmasa.wfrp_master.core.domain.party.Party
 import cz.frantisekmasa.wfrp_master.core.domain.party.PartyId
@@ -22,6 +15,7 @@ import cz.frantisekmasa.wfrp_master.core.ui.buttons.CloseButton
 import cz.frantisekmasa.wfrp_master.core.ui.dialogs.FullScreenDialog
 import cz.frantisekmasa.wfrp_master.core.ui.forms.Rules
 import cz.frantisekmasa.wfrp_master.core.ui.forms.TextInput
+import cz.frantisekmasa.wfrp_master.core.ui.forms.inputValue
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.Spacing
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.longToast
 import cz.frantisekmasa.wfrp_master.core.ui.scaffolding.SaveAction
@@ -42,7 +36,7 @@ fun CreatePartyDialog(
 
     FullScreenDialog(onDismissRequest = onDismissRequest) {
         var validate by remember { mutableStateOf(false) }
-        var partyName by savedInstanceState { "" }
+        val partyName = inputValue("", Rules.NotBlank())
 
         Scaffold(
             topBar = {
@@ -59,7 +53,7 @@ fun CreatePartyDialog(
                         SaveAction(
                             enabled = !saving,
                             onClick = {
-                                if (partyName.isBlank()) {
+                                if (!partyName.isValid()) {
                                     validate = true
                                     return@SaveAction
                                 }
@@ -68,7 +62,7 @@ fun CreatePartyDialog(
 
                                 coroutineScope.launch(Dispatchers.IO) {
                                     try {
-                                        val partyId = viewModel.createParty(partyName, userId)
+                                        val partyId = viewModel.createParty(partyName.value, userId)
 
                                         withContext(Dispatchers.Main) { onSuccess(partyId) }
                                     } catch (e: CouldNotConnectToBackend) {
@@ -91,9 +85,7 @@ fun CreatePartyDialog(
                 TextInput(
                     label = stringResource(R.string.label_party_name),
                     value = partyName,
-                    onValueChange = { partyName = it },
                     validate = validate,
-                    rules = Rules(Rules.NotBlank()),
                     maxLength = Party.NAME_MAX_LENGTH,
                 )
             }

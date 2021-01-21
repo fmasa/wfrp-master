@@ -6,46 +6,38 @@ import androidx.compose.runtime.savedinstancestate.savedInstanceState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import cz.frantisekmasa.wfrp_master.core.ui.forms.ChipList
-import cz.frantisekmasa.wfrp_master.core.ui.forms.FormData
-import cz.frantisekmasa.wfrp_master.core.ui.forms.Rules
 import cz.muni.fi.rpg.R
 import cz.frantisekmasa.wfrp_master.core.domain.character.Character
 import cz.frantisekmasa.wfrp_master.core.domain.character.Race
-import cz.frantisekmasa.wfrp_master.core.ui.forms.TextInput
+import cz.frantisekmasa.wfrp_master.core.ui.forms.*
 
 object CharacterBasicInfoForm {
     @Stable
     class Data(
-        val name: MutableState<String>,
-        val socialClass: MutableState<String>,
-        val career: MutableState<String>,
+        val name: InputValue,
+        val socialClass: InputValue,
+        val career: InputValue,
         val race: MutableState<Race>,
-        val psychology: MutableState<String>,
-        val motivation: MutableState<String>,
-        val note: MutableState<String>,
+        val psychology: InputValue,
+        val motivation: InputValue,
+        val note: InputValue,
     ) : FormData {
         companion object {
             @Composable
-            fun empty() = Data(
-                name = savedInstanceState { "" },
-                socialClass = savedInstanceState { "" },
-                career = savedInstanceState { "" },
-                race = savedInstanceState { Race.HUMAN },
-                psychology = savedInstanceState { "" },
-                motivation = savedInstanceState { "" },
-                note = savedInstanceState { "" },
-            )
+            fun empty() = fromDefaults(null)
 
             @Composable
-            fun fromCharacter(character: Character) = Data(
-                name = savedInstanceState { character.getName() },
-                socialClass = savedInstanceState { character.getSocialClass() },
-                career = savedInstanceState { character.getCareer() },
-                race = savedInstanceState { character.getRace() },
-                psychology = savedInstanceState { character.getPsychology() },
-                motivation = savedInstanceState { character.getMotivation() },
-                note = savedInstanceState { character.getNote() },
+            fun fromCharacter(character: Character) = fromDefaults(character)
+
+            @Composable
+            private fun fromDefaults(character: Character?) = Data(
+                name = inputValue(character?.getName() ?: "", Rules.NotBlank()),
+                socialClass = inputValue(character?.getSocialClass() ?: "", Rules.NotBlank()),
+                career = inputValue(character?.getCareer() ?: "", Rules.NotBlank()),
+                race = savedInstanceState { character?.getRace() ?: Race.HUMAN },
+                psychology = inputValue(character?.getPsychology() ?: ""),
+                motivation = inputValue(character?.getMotivation() ?: ""),
+                note = inputValue(character?.getNote() ?: ""),
             )
         }
 
@@ -64,31 +56,25 @@ fun CharacterBasicInfoForm(
     Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
         TextInput(
             label = stringResource(R.string.label_name),
-            value = data.name.value,
-            onValueChange = { data.name.value = it },
+            value = data.name,
             maxLength = Character.NAME_MAX_LENGTH,
             validate = validate,
-            rules = Rules(Rules.NotBlank()),
         )
 
         Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
             TextInput(
                 modifier = Modifier.weight(1f),
                 label = stringResource(R.string.label_social_class),
-                value = data.socialClass.value,
-                onValueChange = { data.socialClass.value = it },
+                value = data.socialClass,
                 maxLength = Character.SOCIAL_CLASS_MAX_LENGTH,
                 validate = validate,
-                rules = Rules(Rules.NotBlank()),
             )
 
             TextInput(
                 modifier = Modifier.weight(1f),
                 label = stringResource(R.string.label_career),
-                value = data.career.value,
-                onValueChange = { data.career.value = it },
+                value = data.career,
                 maxLength = Character.CAREER_MAX_LENGTH,
-                rules = Rules(Rules.NotBlank()),
                 validate = validate,
             )
         }
@@ -103,25 +89,21 @@ fun CharacterBasicInfoForm(
 
         TextInput(
             label = stringResource(R.string.label_psychology_input),
-            value = data.psychology.value,
-            onValueChange = { data.psychology.value = it },
+            value = data.psychology,
             maxLength = Character.PSYCHOLOGY_MAX_LENGTH,
             validate = validate,
         )
 
         TextInput(
             label = stringResource(R.string.label_motivation_input),
-            value = data.motivation.value,
-            onValueChange = { data.motivation.value = it },
+            value = data.motivation,
             maxLength = Character.MOTIVATION_MAX_LENGTH,
             validate = validate,
         )
 
         TextInput(
             label = stringResource(R.string.label_character_note_input),
-            value = data.note.value,
-            onValueChange = { data.note.value = it },
-            maxLength = Character.NOTE_MAX_LENGTH,
+            value = data.note,
             multiLine = true,
             validate = validate,
         )

@@ -7,10 +7,25 @@ import androidx.compose.material.Checkbox
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.savedinstancestate.savedInstanceState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 
+@Composable
+fun CheckboxWithText(
+    text: String,
+    state: MutableState<Boolean>,
+    modifier: Modifier = Modifier,
+) {
+    CheckboxWithText(
+        text = text,
+        checked = state.value,
+        onCheckedChange = { state.value = it },
+        modifier = modifier,
+    )
+}
 
 @Composable
 fun CheckboxWithText(
@@ -37,3 +52,6 @@ fun CheckboxWithText(
         )
     }
 }
+
+@Composable
+fun checkboxValue(default: Boolean): MutableState<Boolean> = savedInstanceState { default }

@@ -10,9 +10,7 @@ import androidx.compose.runtime.savedinstancestate.savedInstanceState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import cz.frantisekmasa.wfrp_master.core.ui.forms.FormData
-import cz.frantisekmasa.wfrp_master.core.ui.forms.Rules
-import cz.frantisekmasa.wfrp_master.core.ui.forms.TextInput
+import cz.frantisekmasa.wfrp_master.core.ui.forms.*
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.FullScreenProgress
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.NumberPicker
 import cz.frantisekmasa.wfrp_master.core.ui.scaffolding.SaveAction
@@ -86,11 +84,9 @@ internal fun NonCompendiumTalentForm(
                 TextInput(
                     modifier = Modifier.weight(1f),
                     label = stringResource(R.string.label_name),
-                    value = formData.name.value,
-                    onValueChange = { formData.name.value = it },
+                    value = formData.name,
                     validate = validate,
                     maxLength = Talent.NAME_MAX_LENGTH,
-                    rules = Rules(Rules.NotBlank())
                 )
 
                 NumberPicker(
@@ -98,17 +94,14 @@ internal fun NonCompendiumTalentForm(
                     value = formData.taken.value,
                     onIncrement = { formData.taken.value++ },
                     onDecrement = {
-                        if (formData.taken.value > 1) {
-                            formData.taken.value--
-                        }
+                        formData.taken.value = (formData.taken.value - 1).coerceAtLeast(1)
                     }
                 )
             }
 
             TextInput(
                 label = stringResource(R.string.label_description),
-                value = formData.description.value,
-                onValueChange = { formData.description.value = it },
+                value = formData.description,
                 validate = validate,
                 multiLine = true,
                 maxLength = Talent.DESCRIPTION_MAX_LENGTH,
@@ -119,16 +112,17 @@ internal fun NonCompendiumTalentForm(
 
 private class NonCompendiumTalentFormData(
     val id: UUID,
-    val name: MutableState<String>,
-    val description: MutableState<String>,
+    val name: InputValue,
+    val description: InputValue,
     val taken: MutableState<Int>,
 ) : FormData {
     companion object {
         @Composable
         fun fromTalent(talent: Talent?): NonCompendiumTalentFormData = NonCompendiumTalentFormData(
             id = remember { talent?.id ?: UUID.randomUUID() },
-            name = savedInstanceState { talent?.name ?: "" },
-            description = savedInstanceState { talent?.description ?: "" },
+            name = inputValue(talent?.name ?: "", Rules.NotBlank()),
+            description = inputValue(talent ?. description ?: ""
+        ),
             taken = savedInstanceState { talent?.taken ?: 1 },
         )
     }
@@ -141,8 +135,5 @@ private class NonCompendiumTalentFormData(
         taken = taken.value,
     )
 
-    override fun isValid() =
-        name.value.isNotBlank() && name.value.length <= Talent.NAME_MAX_LENGTH &&
-                description.value.length <= Talent.DESCRIPTION_MAX_LENGTH &&
-                taken.value >= 0
+    override fun isValid() = name.isValid() && description.isValid() && taken.value > 0
 }

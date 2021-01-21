@@ -1,5 +1,6 @@
 package cz.muni.fi.rpg.ui.character.dialogs
 
+import androidx.annotation.StringRes
 import androidx.compose.foundation.ScrollableColumn
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.padding
@@ -7,7 +8,6 @@ import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.*
-import androidx.compose.runtime.savedinstancestate.savedInstanceState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
@@ -19,6 +19,8 @@ import cz.frantisekmasa.wfrp_master.core.ui.primitives.Spacing
 import cz.frantisekmasa.wfrp_master.core.ui.scaffolding.SaveAction
 import cz.muni.fi.rpg.R
 import cz.frantisekmasa.wfrp_master.core.domain.character.Points
+import cz.frantisekmasa.wfrp_master.core.ui.forms.InputValue
+import cz.frantisekmasa.wfrp_master.core.ui.forms.inputValue
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -30,8 +32,8 @@ fun ExperiencePointsDialog(
     onDismissRequest: () -> Unit,
 ) {
     FullScreenDialog(onDismissRequest = onDismissRequest) {
-        var currentPointsValue by savedInstanceState { value.experience.toString() }
-        var spentPointsValue by savedInstanceState { value.spentExperience.toString() }
+        val currentPoints = inputValue(value.experience.toString(), Rules.NonNegativeInteger())
+        val spentPoints = inputValue(value.spentExperience.toString(), Rules.NonNegativeInteger())
 
         val coroutineScope = rememberCoroutineScope()
         var validate by remember { mutableStateOf(false) }
@@ -46,15 +48,15 @@ fun ExperiencePointsDialog(
                         SaveAction(
                             enabled = !saving,
                             onClick = {
-                                if (currentPointsValue.isBlank() || spentPointsValue.isBlank()) {
+                                if (!currentPoints.isValid() || !spentPoints.isValid()) {
                                     validate = true
                                     return@SaveAction
                                 }
 
                                 saving = true
                                 val newPoints = value.copy(
-                                    experience = currentPointsValue.toInt(),
-                                    spentExperience = spentPointsValue.toInt(),
+                                    experience = currentPoints.toInt(),
+                                    spentExperience = spentPoints.toInt(),
                                 )
 
                                 coroutineScope.launch(Dispatchers.IO) {
@@ -73,24 +75,19 @@ fun ExperiencePointsDialog(
                 Modifier.padding(Spacing.bodyPadding),
                 verticalArrangement = Arrangement.spacedBy(Spacing.small)
             ) {
-                TextInput(
-                    label = stringResource(R.string.label_xp_spent),
-                    value = spentPointsValue,
-                    onValueChange = { spentPointsValue = it },
-                    validate = validate,
-                    keyboardType = KeyboardType.Number,
-                    rules = Rules(Rules.NotBlank())
-                )
-
-                TextInput(
-                    label = stringResource(R.string.label_xp_current),
-                    value = currentPointsValue,
-                    onValueChange = { currentPointsValue = it },
-                    validate = validate,
-                    keyboardType = KeyboardType.Number,
-                    rules = Rules(Rules.NotBlank())
-                )
+                PointInput(spentPoints, R.string.label_xp_spent, validate)
+                PointInput(currentPoints, R.string.label_xp_current, validate)
             }
         }
     }
+}
+
+@Composable
+private fun PointInput(value: InputValue, @StringRes labelRes: Int, validate: Boolean) {
+    TextInput(
+        label = stringResource(R.string.label_xp_current),
+        value = value,
+        validate = validate,
+        keyboardType = KeyboardType.Number,
+    )
 }

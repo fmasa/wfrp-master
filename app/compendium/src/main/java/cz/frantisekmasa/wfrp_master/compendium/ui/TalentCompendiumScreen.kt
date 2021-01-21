@@ -5,7 +5,6 @@ import androidx.compose.material.Divider
 import androidx.compose.material.ListItem
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
-import androidx.compose.runtime.savedinstancestate.savedInstanceState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.WithConstraintsScope
 import androidx.compose.ui.res.stringResource
@@ -13,7 +12,10 @@ import androidx.compose.ui.unit.dp
 import cz.frantisekmasa.wfrp_master.compendium.R
 import cz.frantisekmasa.wfrp_master.compendium.domain.Talent
 import cz.frantisekmasa.wfrp_master.core.ui.dialogs.DialogState
+import cz.frantisekmasa.wfrp_master.core.ui.forms.InputValue
+import cz.frantisekmasa.wfrp_master.core.ui.forms.Rules
 import cz.frantisekmasa.wfrp_master.core.ui.forms.TextInput
+import cz.frantisekmasa.wfrp_master.core.ui.forms.inputValue
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.EmptyUI
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.ItemIcon
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.Spacing
@@ -48,17 +50,17 @@ fun WithConstraintsScope.TalentCompendiumTab(viewModel: CompendiumViewModel) {
 
 private data class TalentFormData(
     val id: UUID,
-    val name: MutableState<String>,
-    val maxTimesTaken: MutableState<String>,
-    val description: MutableState<String>,
+    val name: InputValue,
+    val maxTimesTaken: InputValue,
+    val description: InputValue,
 ) : CompendiumItemFormData<Talent> {
     companion object {
         @Composable
-        fun fromState(state: DialogState.Opened<Talent?>) = TalentFormData(
-            id = remember(state) { state.item?.id ?: UUID.randomUUID() },
-            name = savedInstanceState(state) { state.item?.name ?: "" },
-            maxTimesTaken = savedInstanceState(state) { state.item?.maxTimesTaken ?: "" },
-            description = savedInstanceState(state) { state.item?.description ?: "" },
+        fun fromTalent(talent: Talent?) = TalentFormData(
+            id = remember { talent?.id ?: UUID.randomUUID() },
+            name = inputValue(talent?.name ?: "", Rules.NotBlank()),
+            maxTimesTaken = inputValue(talent?.maxTimesTaken ?: ""),
+            description = inputValue(talent?.description ?: ""),
         )
     }
 
@@ -69,11 +71,7 @@ private data class TalentFormData(
         description = description.value,
     )
 
-    override fun isValid() =
-        name.value.isNotBlank() &&
-                name.value.length <= Talent.NAME_MAX_LENGTH &&
-                maxTimesTaken.value.length <= Talent.MAX_TIMES_TAKEN_MAX_LENGTH &&
-                description.value.length <= Talent.DESCRIPTION_MAX_LENGTH
+    override fun isValid() = listOf(name, maxTimesTaken, description).all { it.isValid() }
 }
 
 @Composable
@@ -87,13 +85,12 @@ private fun TalentDialog(
         return
     }
 
-    val formData = TalentFormData.fromState(dialogStateValue)
+    val item = dialogStateValue.item
+    val formData = TalentFormData.fromTalent(item)
 
     CompendiumItemDialog(
         onDismissRequest = { dialogState.value = DialogState.Closed() },
-        title = stringResource(
-            if (dialogStateValue.item == null) R.string.title_talent_new else R.string.title_talent_edit
-        ),
+        title = stringResource(if (item == null) R.string.title_talent_new else R.string.title_talent_edit),
         formData = formData,
         saver = viewModel::save,
     ) { validate ->
@@ -103,24 +100,21 @@ private fun TalentDialog(
         ) {
             TextInput(
                 label = stringResource(R.string.label_name),
-                value = formData.name.value,
-                onValueChange = { formData.name.value = it },
+                value = formData.name,
                 validate = validate,
                 maxLength = Talent.NAME_MAX_LENGTH
             )
 
             TextInput(
                 label = stringResource(R.string.label_talent_max_times_taken),
-                value = formData.maxTimesTaken.value,
-                onValueChange = { formData.maxTimesTaken.value = it },
+                value = formData.maxTimesTaken,
                 validate = validate,
                 maxLength = Talent.MAX_TIMES_TAKEN_MAX_LENGTH,
             )
 
             TextInput(
                 label = stringResource(R.string.label_description),
-                value = formData.description.value,
-                onValueChange = { formData.description.value = it },
+                value = formData.description,
                 validate = validate,
                 maxLength = Talent.DESCRIPTION_MAX_LENGTH,
                 multiLine = true,

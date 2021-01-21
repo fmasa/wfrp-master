@@ -11,9 +11,6 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import cz.frantisekmasa.wfrp_master.core.ui.buttons.BackButton
-import cz.frantisekmasa.wfrp_master.core.ui.forms.CheckboxWithText
-import cz.frantisekmasa.wfrp_master.core.ui.forms.Rules
-import cz.frantisekmasa.wfrp_master.core.ui.forms.TextInput
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.HorizontalLine
 import cz.frantisekmasa.wfrp_master.core.ui.scaffolding.Subtitle
 import cz.frantisekmasa.wfrp_master.core.ui.scaffolding.TopBarAction
@@ -21,7 +18,7 @@ import cz.frantisekmasa.wfrp_master.core.ui.texts.SaveButtonText
 import cz.frantisekmasa.wfrp_master.core.viewModel.viewModel
 import cz.muni.fi.rpg.R
 import cz.frantisekmasa.wfrp_master.core.domain.character.Character
-import cz.frantisekmasa.wfrp_master.core.ui.forms.Rule
+import cz.frantisekmasa.wfrp_master.core.ui.forms.*
 import cz.muni.fi.rpg.ui.characterCreation.CharacterBasicInfoForm
 import cz.muni.fi.rpg.ui.characterCreation.CharacterCharacteristicsForm
 import cz.frantisekmasa.wfrp_master.navigation.Route
@@ -53,14 +50,17 @@ private object CharacterEditScreen {
 
     @Stable
     class WoundsData(
-        val maxWounds: MutableState<String>,
+        val maxWounds: InputValue,
         val hardyTalent: MutableState<Boolean>,
     ) {
         companion object {
             @Composable
             fun fromCharacter(character: Character) =
                 WoundsData(
-                    maxWounds = savedInstanceState { character.getPoints().maxWounds.toString() },
+                    maxWounds = inputValue(
+                        character.getPoints().maxWounds.toString(),
+                        Rules.PositiveInteger(),
+                    ),
                     hardyTalent = savedInstanceState { character.hasHardyTalent() }
                 )
         }
@@ -121,7 +121,9 @@ private fun CharacterEditMainUI(formData: CharacterEditScreen.FormData, validate
                 stringResource(R.string.title_character_characteristics),
                 style = MaterialTheme.typography.h6,
                 textAlign = TextAlign.Center,
-                modifier = Modifier.padding(top = 20.dp, bottom = 16.dp).fillMaxWidth()
+                modifier = Modifier
+                    .padding(top = 20.dp, bottom = 16.dp)
+                    .fillMaxWidth()
             )
 
             CharacterCharacteristicsForm(formData.characteristics, validate)
@@ -134,16 +136,13 @@ private fun MaxWoundsSegment(data: CharacterEditScreen.WoundsData, validate: Boo
     Column(Modifier.padding(top = 20.dp)) {
         TextInput(
             label = stringResource(R.string.label_max_wounds),
-            modifier = Modifier.fillMaxWidth(0.3f).padding(bottom = 12.dp),
-            value = data.maxWounds.value,
+            modifier = Modifier
+                .fillMaxWidth(0.3f)
+                .padding(bottom = 12.dp),
+            value = data.maxWounds,
             maxLength = 3,
             keyboardType = KeyboardType.Number,
-            onValueChange = { data.maxWounds.value = it },
             validate = validate,
-            rules = Rules(
-                Rules.NotBlank(),
-                Rule(R.string.error_value_is_0) { v: String -> v.toInt() > 0 },
-            )
         )
 
         CheckboxWithText(

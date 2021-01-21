@@ -18,11 +18,12 @@ data class Skill(
     companion object {
         const val NAME_MAX_LENGTH = 50
         const val DESCRIPTION_MAX_LENGTH = 2000
+        const val MIN_ADVANCES = 0
     }
 
     init {
         require(name.isNotEmpty())
-        require(advances >= 0)
+        require(advances >= MIN_ADVANCES)
         require(name.length <= NAME_MAX_LENGTH) { "Maximum allowed name length is $NAME_MAX_LENGTH" }
         require(description.length <= DESCRIPTION_MAX_LENGTH) { "Maximum allowed description length is $DESCRIPTION_MAX_LENGTH" }
     }

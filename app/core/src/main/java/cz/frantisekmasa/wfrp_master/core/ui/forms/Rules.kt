@@ -14,14 +14,34 @@ class Rules(private vararg val rules: Rule) : Rule {
         fun NotBlank() = Rule(R.string.error_cannot_be_empty) { it.isNotBlank() }
 
         @Composable
-        fun NonNegativeNumber() =
-            Rule(R.string.error_must_be_non_negative_number) {
-                it.toDoubleOrNull()?.let { n -> n >= 0 } ?: false
-            }
+        fun NonNegativeNumber() = Rule(R.string.error_must_be_non_negative_number) {
+            it.toDoubleOrNull() != null && it.toDouble() >= 0
+        }
 
         @Composable
         fun PositiveInteger() = Rule(R.string.error_must_be_positive_int) {
-            it.toIntOrNull()?.let { n -> n > 0 } ?: false
+            it.toIntOrNull() != null && it.toInt() > 0
+        }
+
+        @Composable
+        fun NonNegativeInteger() = Rule(R.string.error_must_be_non_negative_number) {
+            it.toIntOrNull() != null && it.toInt() >= 0
+        }
+
+        /**
+         * This is useful usually for inputs that:
+         * - Have small width that doesn't allow us to show full error message
+         * - Do not have *unexpected* validation rules for user
+         */
+        fun withEmptyMessage(rule: Rule) = Rule { if (rule.errorMessage(it) != null) "" else null }
+        fun withEmptyMessage(validate: (String) -> Boolean): Rule = CallbackRule("", validate)
+
+        fun IfNotBlank(rule: Rule): Rule = Rule {
+            if (it.isBlank()) {
+                null
+            } else {
+                rule.errorMessage(it)
+            }
         }
     }
 
@@ -38,14 +58,14 @@ class Rules(private vararg val rules: Rule) : Rule {
     }
 }
 
-interface Rule {
+fun interface Rule {
     /**
      * Returns error message if text value is invalid or null if it's valid
      */
     fun errorMessage(value: String): String?
 }
 
-data class CallbackRule(
+private data class CallbackRule(
     val errorMessage: String,
     val validate: (String) -> Boolean,
 ) : Rule {

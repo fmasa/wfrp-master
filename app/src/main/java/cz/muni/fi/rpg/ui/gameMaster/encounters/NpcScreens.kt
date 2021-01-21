@@ -4,7 +4,6 @@ import androidx.compose.foundation.ScrollableColumn
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.runtime.*
-import androidx.compose.runtime.savedinstancestate.savedInstanceState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -18,10 +17,7 @@ import cz.muni.fi.rpg.R
 import cz.frantisekmasa.wfrp_master.core.domain.Armor
 import cz.frantisekmasa.wfrp_master.core.domain.Stats
 import cz.frantisekmasa.wfrp_master.core.ui.buttons.BackButton
-import cz.frantisekmasa.wfrp_master.core.ui.forms.CheckboxWithText
-import cz.frantisekmasa.wfrp_master.core.ui.forms.Rule
-import cz.frantisekmasa.wfrp_master.core.ui.forms.Rules
-import cz.frantisekmasa.wfrp_master.core.ui.forms.TextInput
+import cz.frantisekmasa.wfrp_master.core.ui.forms.*
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.HorizontalLine
 import cz.frantisekmasa.wfrp_master.core.ui.scaffolding.SaveAction
 import cz.frantisekmasa.wfrp_master.core.viewModel.viewModel
@@ -35,45 +31,44 @@ import org.koin.core.parameter.parametersOf
 
 @Stable
 private class CharacteristicsFormData(
-    val weaponSkill: MutableState<String>,
-    val ballisticSkill: MutableState<String>,
-    val strength: MutableState<String>,
-    val toughness: MutableState<String>,
-    val initiative: MutableState<String>,
-    val agility: MutableState<String>,
-    val dexterity: MutableState<String>,
-    val intelligence: MutableState<String>,
-    val willPower: MutableState<String>,
-    val fellowship: MutableState<String>,
+    val weaponSkill: InputValue,
+    val ballisticSkill: InputValue,
+    val strength: InputValue,
+    val toughness: InputValue,
+    val initiative: InputValue,
+    val agility: InputValue,
+    val dexterity: InputValue,
+    val intelligence: InputValue,
+    val willPower: InputValue,
+    val fellowship: InputValue,
 ) {
     companion object {
         @Composable
-        fun fromCharacteristics(characteristics: Stats) = CharacteristicsFormData(
-            weaponSkill = savedInstanceState { toNumericTextValue(characteristics.weaponSkill) },
-            ballisticSkill = savedInstanceState { toNumericTextValue(characteristics.ballisticSkill) },
-            strength = savedInstanceState { toNumericTextValue(characteristics.strength) },
-            toughness = savedInstanceState { toNumericTextValue(characteristics.toughness) },
-            initiative = savedInstanceState { toNumericTextValue(characteristics.initiative) },
-            agility = savedInstanceState { toNumericTextValue(characteristics.agility) },
-            dexterity = savedInstanceState { toNumericTextValue(characteristics.dexterity) },
-            intelligence = savedInstanceState { toNumericTextValue(characteristics.intelligence) },
-            willPower = savedInstanceState { toNumericTextValue(characteristics.willPower) },
-            fellowship = savedInstanceState { toNumericTextValue(characteristics.fellowship) },
+        fun fromCharacteristics(characteristics: Stats?) = CharacteristicsFormData(
+            weaponSkill = characteristicValue(characteristics?.weaponSkill),
+            ballisticSkill = characteristicValue(characteristics?.ballisticSkill),
+            strength = characteristicValue(characteristics?.strength),
+            toughness = characteristicValue(characteristics?.toughness),
+            initiative = characteristicValue(characteristics?.initiative),
+            agility = characteristicValue(characteristics?.agility),
+            dexterity = characteristicValue(characteristics?.dexterity),
+            intelligence = characteristicValue(characteristics?.intelligence),
+            willPower = characteristicValue(characteristics?.willPower),
+            fellowship = characteristicValue(characteristics?.fellowship),
         )
 
         @Composable
-        fun empty() = CharacteristicsFormData(
-            weaponSkill = savedInstanceState { "" },
-            ballisticSkill = savedInstanceState { "" },
-            strength = savedInstanceState { "" },
-            toughness = savedInstanceState { "" },
-            initiative = savedInstanceState { "" },
-            agility = savedInstanceState { "" },
-            dexterity = savedInstanceState { "" },
-            intelligence = savedInstanceState { "" },
-            willPower = savedInstanceState { "" },
-            fellowship = savedInstanceState { "" },
-        )
+        private fun characteristicValue(value: Int?): InputValue =
+            inputValue(
+                when (value) {
+                    null, 0 -> ""
+                    else -> value.toString()
+                },
+                // We use rule without message, because text these inputs are too small to show error messages
+                Rules.withEmptyMessage {
+                    it.isBlank() || (it.toIntOrNull() != null && it.toInt() in 0..100)
+                },
+            )
     }
 
     fun toCharacteristics() = Stats(
@@ -90,68 +85,72 @@ private class CharacteristicsFormData(
     )
 
     fun isValid() =
-        toIntValue(weaponSkill.value) <= 100 &&
-                toIntValue(ballisticSkill.value) <= 100 &&
-                toIntValue(strength.value) <= 100 &&
-                toIntValue(toughness.value) <= 100 &&
-                toIntValue(initiative.value) <= 100 &&
-                toIntValue(agility.value) <= 100 &&
-                toIntValue(dexterity.value) <= 100 &&
-                toIntValue(intelligence.value) <= 100 &&
-                toIntValue(willPower.value) <= 100 &&
-                toIntValue(fellowship.value) <= 100
+        listOf(
+            weaponSkill,
+            ballisticSkill,
+            strength,
+            toughness,
+            initiative,
+            agility,
+            dexterity,
+            intelligence,
+            willPower,
+            fellowship,
+        ).all { it.isValid() }
 }
 
 @Stable
 private class ArmorFormData(
-    val head: MutableState<String>,
-    val body: MutableState<String>,
-    val shield: MutableState<String>,
-    val leftArm: MutableState<String>,
-    val rightArm: MutableState<String>,
-    val leftLeg: MutableState<String>,
-    val rightLeg: MutableState<String>,
+    val head: InputValue,
+    val body: InputValue,
+    val shield: InputValue,
+    val leftArm: InputValue,
+    val rightArm: InputValue,
+    val leftLeg: InputValue,
+    val rightLeg: InputValue,
 ) {
     companion object {
         @Composable
-        fun fromArmor(armor: Armor) = ArmorFormData(
-            head = savedInstanceState { toNumericTextValue(armor.head) },
-            body = savedInstanceState { toNumericTextValue(armor.body) },
-            shield = savedInstanceState { toNumericTextValue(armor.shield) },
-            leftArm = savedInstanceState { toNumericTextValue(armor.leftArm) },
-            rightArm = savedInstanceState { toNumericTextValue(armor.rightArm) },
-            leftLeg = savedInstanceState { toNumericTextValue(armor.leftLeg) },
-            rightLeg = savedInstanceState { toNumericTextValue(armor.rightLeg) },
+        fun fromArmor(armor: Armor?) = ArmorFormData(
+            head = armorValue(armor?.head),
+            body = armorValue(armor?.body),
+            shield = armorValue(armor?.shield),
+            leftArm = armorValue(armor?.leftArm),
+            rightArm = armorValue(armor?.rightArm),
+            leftLeg = armorValue(armor?.leftLeg),
+            rightLeg = armorValue(armor?.rightLeg),
         )
 
         @Composable
-        fun empty() = ArmorFormData(
-            head = savedInstanceState { "" },
-            body = savedInstanceState { "" },
-            shield = savedInstanceState { "" },
-            leftArm = savedInstanceState { "" },
-            rightArm = savedInstanceState { "" },
-            leftLeg = savedInstanceState { "" },
-            rightLeg = savedInstanceState { "" },
+        private fun armorValue(default: Int?) = inputValue(
+            when (default) {
+                0, null -> ""
+                else -> default.toString()
+            },
+            // We use rule without message, because text these inputs are too small to show error messages
+            Rules.withEmptyMessage { it.isBlank() || (it.toIntOrNull() != null && it.toInt() in 1..100) }
         )
     }
 
     fun toArmor() = Armor(
-        head = toIntValue(head.value),
-        body = toIntValue(body.value),
-        shield = toIntValue(shield.value),
-        leftArm = toIntValue(leftArm.value),
-        rightArm = toIntValue(rightArm.value),
-        leftLeg = toIntValue(leftLeg.value),
-        rightLeg = toIntValue(rightLeg.value),
+        body = body.value.toIntOrNull() ?: 0,
+        shield = shield.value.toIntOrNull() ?: 0,
+        leftArm = leftArm.value.toIntOrNull() ?: 0,
+        rightArm = rightArm.value.toIntOrNull() ?: 0,
+        leftLeg = leftLeg.value.toIntOrNull() ?: 0,
+        rightLeg = rightLeg.value.toIntOrNull() ?: 0,
+        head = head.value.toIntOrNull() ?: 0,
     )
+
+    fun isValid(): Boolean =
+        listOf(body, shield, leftArm, rightArm, leftLeg, rightLeg, head).all { it.isValid() }
 }
 
 @Stable
 private class FormData(
-    val name: MutableState<String>,
-    val note: MutableState<String>,
-    val wounds: MutableState<String>,
+    val name: InputValue,
+    val note: InputValue,
+    val wounds: InputValue,
     val enemy: MutableState<Boolean>,
     val alive: MutableState<Boolean>,
     val characteristics: CharacteristicsFormData,
@@ -159,32 +158,25 @@ private class FormData(
 ) {
     companion object {
         @Composable
-        fun empty() = FormData(
-            name = savedInstanceState { "" },
-            note = savedInstanceState { "" },
-            wounds = savedInstanceState { "" },
-            enemy = savedInstanceState { true },
-            alive = savedInstanceState { true },
-            characteristics = CharacteristicsFormData.empty(),
-            armor = ArmorFormData.empty(),
-        )
+        fun empty() = fromNpc(null)
 
         @Composable
-        fun fromExistingNpc(npc: Npc) = FormData(
-            name = savedInstanceState { npc.name },
-            note = savedInstanceState { npc.note },
-            wounds = savedInstanceState { npc.wounds.max.toString() },
-            enemy = savedInstanceState { npc.enemy },
-            alive = savedInstanceState { npc.alive },
-            characteristics = CharacteristicsFormData.fromCharacteristics(npc.stats),
-            armor = ArmorFormData.fromArmor(npc.armor),
+        fun fromExistingNpc(npc: Npc) = fromNpc(npc)
+
+        @Composable
+        private fun fromNpc(npc: Npc?) = FormData(
+            name = inputValue(npc?.name ?: "", Rules.NotBlank()),
+            note = inputValue(npc?.note ?: ""),
+            wounds = inputValue(npc?.wounds?.max?.toString() ?: "", Rules.PositiveInteger()),
+            enemy = checkboxValue(npc?.enemy ?: true),
+            alive = checkboxValue(npc?.alive ?: true),
+            characteristics = CharacteristicsFormData.fromCharacteristics(npc?.stats),
+            armor = ArmorFormData.fromArmor(npc?.armor),
         )
     }
 
     fun isValid() =
-        characteristics.isValid() &&
-                name.value.isNotBlank() &&
-                toIntValue(wounds.value) > 0
+        characteristics.isValid() && armor.isValid() && name.isValid() && wounds.isValid()
 }
 
 @Composable
@@ -199,7 +191,7 @@ fun NpcDetailScreen(
     val npc = remember { viewModel.npcFlow(npcId) }.collectAsState().value
     val data = npc?.let { FormData.fromExistingNpc(it) }
 
-    val validate = savedInstanceState { false }
+    val validate = remember { mutableStateOf(false) }
     val submitEnabled = remember { mutableStateOf(true) }
 
     Scaffold(
@@ -255,7 +247,7 @@ fun NpcCreationScreen(routing: Routing<Route.NpcCreation>) {
     val viewModel: EncounterDetailViewModel by viewModel { parametersOf(routing.route.encounterId) }
 
     val data = FormData.empty()
-    val validate = savedInstanceState { false }
+    val validate = remember { mutableStateOf(false) }
     val submitEnabled = remember { mutableStateOf(true) }
 
     Scaffold(
@@ -298,7 +290,11 @@ fun NpcCreationScreen(routing: Routing<Route.NpcCreation>) {
 @Composable
 private fun MainContainer(data: FormData, validate: Boolean) {
     ScrollableColumn {
-        Column(Modifier.padding(24.dp).padding(bottom = 30.dp)) {
+        Column(
+            Modifier
+                .padding(24.dp)
+                .padding(bottom = 30.dp)
+        ) {
             Column(verticalArrangement = Arrangement.spacedBy(FormInputVerticalPadding)) {
                 Row(
                     modifier = Modifier.fillMaxWidth(),
@@ -307,32 +303,24 @@ private fun MainContainer(data: FormData, validate: Boolean) {
                     TextInput(
                         modifier = Modifier.weight(0.7f),
                         label = stringResource(R.string.label_name),
-                        value = data.name.value,
-                        onValueChange = { data.name.value = it },
+                        value = data.name,
                         maxLength = Npc.NAME_MAX_LENGTH,
                         validate = validate,
-                        rules = Rules(Rules.NotBlank()),
                     )
 
                     TextInput(
                         modifier = Modifier.weight(0.3f),
                         label = stringResource(R.string.label_wounds),
-                        value = data.wounds.value,
-                        onValueChange = { data.wounds.value = it },
+                        value = data.wounds,
                         keyboardType = KeyboardType.Number,
                         maxLength = 3,
                         validate = validate,
-                        rules = Rules(
-                            Rules.NotBlank(),
-                            Rule(R.string.error_value_is_0) { v: String -> v.toInt() > 0 }
-                        ),
                     )
                 }
 
                 TextInput(
                     label = stringResource(R.string.label_description),
-                    value = data.note.value,
-                    onValueChange = { data.note.value = it },
+                    value = data.note,
                     validate = validate,
                     multiLine = true,
                 )
@@ -357,7 +345,9 @@ private fun MainContainer(data: FormData, validate: Boolean) {
                 stringResource(R.string.title_character_characteristics),
                 style = MaterialTheme.typography.h6,
                 textAlign = TextAlign.Center,
-                modifier = Modifier.padding(top = 20.dp, bottom = 16.dp).fillMaxWidth()
+                modifier = Modifier
+                    .padding(top = 20.dp, bottom = 16.dp)
+                    .fillMaxWidth()
             )
 
             CharacteristicsSegment(data.characteristics, validate)
@@ -368,7 +358,9 @@ private fun MainContainer(data: FormData, validate: Boolean) {
                 stringResource(R.string.title_armor),
                 style = MaterialTheme.typography.h6,
                 textAlign = TextAlign.Center,
-                modifier = Modifier.padding(top = 20.dp, bottom = 16.dp).fillMaxWidth()
+                modifier = Modifier
+                    .padding(top = 20.dp, bottom = 16.dp)
+                    .fillMaxWidth()
             )
 
             ArmorSegment(data.armor, validate)
@@ -400,16 +392,12 @@ private fun CharacteristicsSegment(data: CharacteristicsFormData, validate: Bool
                 for ((characteristic, value) in rowCharacteristics) {
                     TextInput(
                         label = characteristic.getShortcutName(),
-                        value = value.value,
+                        value = value,
                         placeholder = "0",
                         keyboardType = KeyboardType.Number,
-                        onValueChange = { value.value = it },
                         validate = validate,
                         maxLength = 3,
                         modifier = Modifier.weight(1f),
-                        rules = Rules(
-                            Rule(R.string.error_value_over_100) { v: String -> toIntValue(v) <= 100 }
-                        )
                     )
                 }
             }
@@ -449,16 +437,12 @@ private fun ArmorSegment(data: ArmorFormData, validate: Boolean) {
 
                     TextInput(
                         label = stringResource(label),
-                        value = value.value,
+                        value = value,
                         placeholder = "0",
                         keyboardType = KeyboardType.Number,
-                        onValueChange = { value.value = it },
                         validate = validate,
                         maxLength = 3,
                         modifier = Modifier.weight(1f),
-                        rules = Rules(
-                            Rule(R.string.error_value_over_100) { v: String -> toIntValue(v) <= 100 }
-                        )
                     )
                 }
             }
@@ -479,6 +463,3 @@ private fun NpcDetailTopBar(
         actions = { SaveAction(onClick = onSave, enabled = actionsEnabled) }
     )
 }
-
-private fun toNumericTextValue(value: Int) = if (value == 0) "" else value.toString()
-private fun toIntValue(value: String) = value.toIntOrNull() ?: 0
