@@ -38,6 +38,7 @@ import cz.frantisekmasa.wfrp_master.core.viewModel.viewModel
 import cz.frantisekmasa.wfrp_master.navigation.Route
 import cz.frantisekmasa.wfrp_master.navigation.Routing
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.StateFlow
 import org.koin.core.parameter.parametersOf
 import java.util.*
 
@@ -111,7 +112,7 @@ private fun WithConstraintsScope.tabs(partyId: PartyId): Array<TabScreen<Compend
 
 @Composable
 fun <T : CompendiumItem> CompendiumTab(
-    liveItems: Flow<List<T>>,
+    liveItems: StateFlow<List<T>?>,
     width: Dp,
     emptyUI: @Composable () -> Unit,
     dialog: @Composable (MutableState<DialogState<T?>>) -> Unit,
@@ -131,7 +132,7 @@ fun <T : CompendiumItem> CompendiumTab(
         }
     ) {
         Column(Modifier.fillMaxSize().background(MaterialTheme.colors.background)) {
-            val items = liveItems.collectAsState(null).value
+            val items = liveItems.collectAsState().value
 
             when {
                 items == null -> FullScreenProgress()

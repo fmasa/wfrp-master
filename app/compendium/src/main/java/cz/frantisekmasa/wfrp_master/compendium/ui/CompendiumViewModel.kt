@@ -1,6 +1,7 @@
 package cz.frantisekmasa.wfrp_master.compendium.ui
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import cz.frantisekmasa.wfrp_master.compendium.domain.Compendium
 import cz.frantisekmasa.wfrp_master.compendium.domain.Skill
 import cz.frantisekmasa.wfrp_master.compendium.domain.Spell
@@ -10,6 +11,9 @@ import cz.frantisekmasa.wfrp_master.core.domain.party.PartyId
 import cz.frantisekmasa.wfrp_master.core.domain.party.PartyRepository
 import cz.frantisekmasa.wfrp_master.core.utils.right
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.stateIn
 
 class CompendiumViewModel(
     private val partyId: PartyId,
@@ -56,7 +60,16 @@ class CompendiumViewModel(
         spellCompendium.saveItems(partyId, *spells.toTypedArray())
     }
 
-    val skills: Flow<List<Skill>> by lazy { skillCompendium.liveForParty(partyId) }
-    val talents: Flow<List<Talent>> by lazy { talentsCompendium.liveForParty(partyId) }
-    val spells: Flow<List<Spell>> by lazy { spellCompendium.liveForParty(partyId) }
+    val skills: StateFlow<List<Skill>?> =
+        skillCompendium.liveForParty(partyId)
+            .stateIn(viewModelScope, SharingStarted.WhileSubscribed(stopTimeoutMillis = 1000L), null)
+
+    val talents: StateFlow<List<Talent>?> =
+        talentsCompendium.liveForParty(partyId)
+            .stateIn(viewModelScope, SharingStarted.WhileSubscribed(stopTimeoutMillis = 1000L), null)
+
+    val spells: StateFlow<List<Spell>?> =
+        spellCompendium.liveForParty(partyId)
+            .stateIn(viewModelScope, SharingStarted.WhileSubscribed(stopTimeoutMillis = 1000L), null)
+
 }
