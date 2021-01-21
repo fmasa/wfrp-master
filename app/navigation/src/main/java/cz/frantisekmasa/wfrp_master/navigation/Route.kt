@@ -90,7 +90,7 @@ sealed class Route {
     @Immutable
     data class CharacterEdit(val characterId: CharacterId) : Route() {
         companion object {
-            override fun toString() = "parties/{partyId}/characters/{characterId}"
+            override fun toString() = "parties/{partyId}/character-edit/{characterId}"
             fun fromEntry(entry: NavBackStackEntry) = CharacterEdit(
                 CharacterId(
                     PartyId.fromString(entry.stringArgument("partyId")),
@@ -99,7 +99,7 @@ sealed class Route {
             )
         }
 
-        override fun toString() = "parties/${characterId.partyId}/characters/${characterId.id}"
+        override fun toString() = "parties/${characterId.partyId}/character-edit/${characterId.id}"
     }
 
     @Immutable
@@ -134,7 +134,7 @@ sealed class Route {
         }
 
         override fun toString() =
-            "parties/{${npcId.encounterId.partyId}}/encounters/${npcId.encounterId.encounterId}/npcs/${npcId.npcId}"
+            "parties/${npcId.encounterId.partyId}/encounters/${npcId.encounterId.encounterId}/npcs/${npcId.npcId}"
     }
 
     @Immutable
@@ -150,7 +150,7 @@ sealed class Route {
         }
 
         override fun toString() =
-            "parties/{${encounterId.partyId}}/encounters/${encounterId.encounterId}/new-npc"
+            "parties/${encounterId.partyId}/encounters/${encounterId.encounterId}/new-npc"
     }
 
     @Immutable
