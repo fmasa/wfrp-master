@@ -14,10 +14,7 @@ import cz.frantisekmasa.wfrp_master.compendium.domain.CompendiumItem
 import cz.frantisekmasa.wfrp_master.compendium.domain.Skill
 import cz.frantisekmasa.wfrp_master.core.domain.Characteristic
 import cz.frantisekmasa.wfrp_master.core.ui.dialogs.DialogState
-import cz.frantisekmasa.wfrp_master.core.ui.forms.CheckboxWithText
-import cz.frantisekmasa.wfrp_master.core.ui.forms.ChipList
-import cz.frantisekmasa.wfrp_master.core.ui.forms.FormData
-import cz.frantisekmasa.wfrp_master.core.ui.forms.TextInput
+import cz.frantisekmasa.wfrp_master.core.ui.forms.*
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.EmptyUI
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.ItemIcon
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.Spacing
@@ -56,21 +53,19 @@ interface CompendiumItemFormData<T : CompendiumItem> : FormData {
 
 private data class SkillFormData(
     val id: UUID,
-    val name: MutableState<String>,
-    val description: MutableState<String>,
+    val name: InputValue,
+    val description: InputValue,
     val characteristic: MutableState<Characteristic>,
     val advanced: MutableState<Boolean>,
 ) : CompendiumItemFormData<Skill> {
     companion object {
         @Composable
-        fun fromState(state: DialogState.Opened<Skill?>) = SkillFormData(
-            id = remember(state) { state.item?.id ?: UUID.randomUUID() },
-            name = savedInstanceState(state) { state.item?.name ?: "" },
-            description = savedInstanceState(state) { state.item?.description ?: "" },
-            characteristic = savedInstanceState(state) {
-                state.item?.characteristic ?: Characteristic.AGILITY
-            },
-            advanced = savedInstanceState(state) { state.item?.advanced ?: false },
+        fun fromItem(item: Skill?) = SkillFormData(
+            id = remember { item?.id ?: UUID.randomUUID() },
+            name = inputValue(item?.name ?: "", Rules.NotBlank()),
+            description = inputValue(item?.description ?: ""),
+            characteristic = savedInstanceState { item?.characteristic ?: Characteristic.AGILITY },
+            advanced = checkboxValue(item?.advanced ?: false),
         )
     }
 
@@ -83,7 +78,7 @@ private data class SkillFormData(
     )
 
     override fun isValid() =
-        name.value.isNotBlank() &&
+        name.isValid() &&
                 name.value.length <= Skill.NAME_MAX_LENGTH &&
                 description.value.length <= Skill.DESCRIPTION_MAX_LENGTH
 }
@@ -99,7 +94,7 @@ private fun SkillDialog(
         return
     }
 
-    val formData = SkillFormData.fromState(dialogStateValue)
+    val formData = SkillFormData.fromItem(dialogStateValue.item)
 
     CompendiumItemDialog(
         title = stringResource(
@@ -117,16 +112,14 @@ private fun SkillDialog(
         ) {
             TextInput(
                 label = stringResource(R.string.label_name),
-                value = formData.name.value,
-                onValueChange = { formData.name.value = it },
+                value = formData.name,
                 validate = validate,
                 maxLength = Skill.NAME_MAX_LENGTH
             )
 
             TextInput(
                 label = stringResource(R.string.label_description),
-                value = formData.description.value,
-                onValueChange = { formData.description.value = it },
+                value = formData.description,
                 validate = validate,
                 maxLength = Skill.DESCRIPTION_MAX_LENGTH,
                 multiLine = true,
@@ -141,7 +134,9 @@ private fun SkillDialog(
             )
 
             Box(
-                modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 8.dp),
                 contentAlignment = Alignment.TopCenter,
             ) {
                 CheckboxWithText(

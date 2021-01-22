@@ -85,11 +85,9 @@ internal fun NonCompendiumSkillForm(
                 TextInput(
                     modifier = Modifier.weight(1f),
                     label = stringResource(R.string.label_skill_name),
-                    value = formData.name.value,
-                    onValueChange = { formData.name.value = it },
+                    value = formData.name,
                     validate = validate,
                     maxLength = Skill.NAME_MAX_LENGTH,
-                    rules = Rules(Rules.NotBlank())
                 )
 
                 NumberPicker(
@@ -97,17 +95,15 @@ internal fun NonCompendiumSkillForm(
                     value = formData.advances.value,
                     onIncrement = { formData.advances.value++ },
                     onDecrement = {
-                        if (formData.advances.value > 1) {
-                            formData.advances.value--
-                        }
+                        formData.advances.value = (formData.advances.value - 1)
+                            .coerceAtLeast(Skill.MIN_ADVANCES)
                     }
                 )
             }
 
             TextInput(
                 label = stringResource(R.string.label_skill_description),
-                value = formData.description.value,
-                onValueChange = { formData.description.value = it },
+                value = formData.description,
                 validate = validate,
                 multiLine = true,
                 maxLength = Skill.DESCRIPTION_MAX_LENGTH,
@@ -136,8 +132,8 @@ internal fun NonCompendiumSkillForm(
 
 private class NonCompendiumSkillFormData(
     val id: UUID,
-    val name: MutableState<String>,
-    val description: MutableState<String>,
+    val name: InputValue,
+    val description: InputValue,
     val characteristic: MutableState<Characteristic>,
     val advanced: MutableState<Boolean>,
     val advances: MutableState<Int>,
@@ -146,12 +142,12 @@ private class NonCompendiumSkillFormData(
         @Composable
         fun fromSkill(skill: Skill?): NonCompendiumSkillFormData = NonCompendiumSkillFormData(
             id = remember { skill?.id ?: UUID.randomUUID() },
-            name = savedInstanceState { skill?.name ?: "" },
-            description = savedInstanceState { skill?.description ?: "" },
+            name = inputValue(skill?.name ?: "", Rules.NotBlank()),
+            description = inputValue(skill?.description ?: ""),
             characteristic = savedInstanceState {
                 skill?.characteristic ?: Characteristic.values().first()
             },
-            advanced = savedInstanceState { skill?.advanced ?: false },
+            advanced = checkboxValue(skill?.advanced ?: false),
             advances = savedInstanceState { skill?.advances ?: 1 }
         )
     }
@@ -166,8 +162,5 @@ private class NonCompendiumSkillFormData(
         advances = advances.value
     )
 
-    override fun isValid() =
-        name.value.isNotBlank() && name.value.length <= Skill.NAME_MAX_LENGTH &&
-            description.value.length <= Skill.DESCRIPTION_MAX_LENGTH &&
-            advances.value >= 0
+    override fun isValid() = name.isValid() && description.isValid()
 }

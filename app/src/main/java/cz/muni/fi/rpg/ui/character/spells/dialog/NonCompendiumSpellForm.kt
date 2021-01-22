@@ -6,11 +6,9 @@ import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.*
-import androidx.compose.runtime.savedinstancestate.savedInstanceState
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
-import cz.frantisekmasa.wfrp_master.core.ui.forms.FormData
-import cz.frantisekmasa.wfrp_master.core.ui.forms.TextInput
+import cz.frantisekmasa.wfrp_master.core.ui.forms.*
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.FullScreenProgress
 import cz.frantisekmasa.wfrp_master.core.ui.scaffolding.SaveAction
 import cz.muni.fi.rpg.R
@@ -77,49 +75,43 @@ internal fun NonCompendiumSpellForm(
         ) {
             TextInput(
                 label = stringResource(R.string.label_name),
-                value = formData.name.value,
-                onValueChange = { formData.name.value = it },
+                value = formData.name,
                 validate = validate,
                 maxLength = Spell.NAME_MAX_LENGTH
             )
 
             TextInput(
                 label = stringResource(R.string.label_spell_range),
-                value = formData.range.value,
-                onValueChange = { formData.range.value = it },
+                value = formData.range,
                 validate = validate,
                 maxLength = Spell.RANGE_MAX_LENGTH,
             )
 
             TextInput(
                 label = stringResource(R.string.label_spell_target),
-                value = formData.target.value,
-                onValueChange = { formData.target.value = it },
+                value = formData.target,
                 validate = validate,
                 maxLength = Spell.TARGET_MAX_LENGTH,
             )
 
             TextInput(
                 label = stringResource(R.string.label_spell_duration),
-                value = formData.duration.value,
-                onValueChange = { formData.duration.value = it },
+                value = formData.duration,
                 validate = validate,
                 maxLength = Spell.DURATION_MAX_LENGTH,
             )
 
             TextInput(
                 label = stringResource(R.string.label_spell_casting_number),
-                value = formData.castingNumber.value,
+                value = formData.castingNumber,
                 keyboardType = KeyboardType.Number,
-                onValueChange = { formData.castingNumber.value = it },
                 validate = validate,
                 maxLength = 2,
             )
 
             TextInput(
                 label = stringResource(R.string.label_spell_effect),
-                value = formData.effect.value,
-                onValueChange = { formData.effect.value = it },
+                value = formData.effect,
                 validate = validate,
                 maxLength = Spell.EFFECT_MAX_LENGTH,
                 multiLine = true,
@@ -130,23 +122,26 @@ internal fun NonCompendiumSpellForm(
 
 private class NonCompendiumSpellFormData(
     val id: UUID,
-    val name: MutableState<String>,
-    val range: MutableState<String>,
-    val target: MutableState<String>,
-    val duration: MutableState<String>,
-    val castingNumber: MutableState<String>,
-    val effect: MutableState<String>,
+    val name: InputValue,
+    val range: InputValue,
+    val target: InputValue,
+    val duration: InputValue,
+    val castingNumber: InputValue,
+    val effect: InputValue,
 ) : FormData {
     companion object {
         @Composable
         fun fromSpell(item: Spell?): NonCompendiumSpellFormData = NonCompendiumSpellFormData(
             id = item?.id ?: UUID.randomUUID(),
-            name = savedInstanceState { item?.name ?: "" },
-            range = savedInstanceState { item ?. range ?: "" },
-            target = savedInstanceState { item?.target ?: "" },
-            duration = savedInstanceState{ item?.duration ?: "" },
-            castingNumber = savedInstanceState { item?.castingNumber?.toString() ?: "" },
-            effect = savedInstanceState { item?.effect ?: "" },
+            name = inputValue(item?.name ?: "", Rules.NotBlank()),
+            range = inputValue(item ?. range ?: ""),
+            target = inputValue(item?.target ?: ""),
+            duration = inputValue(item?.duration ?: ""),
+            castingNumber = inputValue(
+                item?.castingNumber?.toString() ?: "",
+                Rules.PositiveInteger(),
+            ),
+            effect = inputValue(item?.effect ?: ""),
         )
     }
 
@@ -161,11 +156,5 @@ private class NonCompendiumSpellFormData(
     )
 
     override fun isValid() =
-        name.value.isNotBlank() &&
-                name.value.length <= Spell.NAME_MAX_LENGTH &&
-                range.value.length <= Spell.RANGE_MAX_LENGTH &&
-                target.value.length <= Spell.TARGET_MAX_LENGTH &&
-                duration.value.length <= Spell.DURATION_MAX_LENGTH &&
-                (castingNumber.value.toIntOrNull() ?: 0) >= 0 &&
-                effect.value.length <= Spell.EFFECT_MAX_LENGTH
+        listOf(name, range, target, duration, castingNumber, effect).all { it.isValid() }
 }

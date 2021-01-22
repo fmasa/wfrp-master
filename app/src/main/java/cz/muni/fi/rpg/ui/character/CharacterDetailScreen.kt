@@ -25,6 +25,7 @@ import cz.muni.fi.rpg.R
 import cz.frantisekmasa.wfrp_master.core.domain.character.Character
 import cz.muni.fi.rpg.ui.character.skills.CharacterSkillsScreen
 import cz.frantisekmasa.wfrp_master.combat.ui.ActiveCombatBanner
+import cz.frantisekmasa.wfrp_master.core.ui.scaffolding.tabs.rememberPagerState
 import cz.frantisekmasa.wfrp_master.core.viewModel.PartyViewModel
 import cz.frantisekmasa.wfrp_master.inventory.ui.CharacterTrappingsScreen
 import cz.muni.fi.rpg.ui.common.AdManager
@@ -107,7 +108,10 @@ private fun MainContainer(
 
     WithConstraints(Modifier.fillMaxSize()) {
         val screenWidth = constraints.maxWidth.toFloat()
-        val screens = screens(characterId, viewModel, Modifier.width(maxWidth).padding(top = 6.dp))
+        val screens = screens(characterId, viewModel,
+            Modifier
+                .width(maxWidth)
+                .padding(top = 6.dp))
 
         Column(Modifier.fillMaxHeight()) {
             if (! routing.route.comingFromCombat) {
@@ -116,16 +120,15 @@ private fun MainContainer(
                 ActiveCombatBanner(partyId = characterId.partyId, routing = routing)
             }
 
-            val scrollState = key(screenWidth, screens.size) { rememberScrollState(0f) }
+            val pagerState = rememberPagerState(screenWidth, screenCount = screens.size)
 
-            TabRow(screens, scrollState, screenWidth)
+            TabRow(screens, pagerState)
 
             TabContent(
                 item = character,
                 screens = screens,
-                scrollState = scrollState,
-                screenWidth = screenWidth,
-                Modifier.weight(1f)
+                state = pagerState,
+                modifier = Modifier.weight(1f),
             )
 
             BannerAd(stringResource(R.string.character_ad_unit_id), adManager)

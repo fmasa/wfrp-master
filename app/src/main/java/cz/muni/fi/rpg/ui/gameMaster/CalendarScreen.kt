@@ -45,7 +45,10 @@ internal fun CalendarScreen(
 ) {
     val dateTime = party.getTime()
 
-    ScrollableColumn(modifier.background(MaterialTheme.colors.background).padding(top = 6.dp)) {
+    ScrollableColumn(
+        modifier
+            .background(MaterialTheme.colors.background)
+            .padding(top = 6.dp)) {
         CardContainer(Modifier.padding(horizontal = 8.dp)) {
             Column(Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
                 Time(
@@ -67,6 +70,7 @@ private fun Time(viewModel: GameMasterViewModel, time: DateTime.TimeOfDay) {
     val coroutineScope = rememberCoroutineScope()
 
     dialog.build {
+        title(stringResource(R.string.title_select_time))
         timepicker(
             initialTime = LocalTime.of(time.hour, time.minute),
             onCancel = { dialog.hide() },
@@ -109,7 +113,9 @@ private fun Date(viewModel: GameMasterViewModel, date: ImperialDate) {
                     }
 
                     Row(
-                        Modifier.fillMaxWidth().padding(bottom = 10.dp, end = 10.dp),
+                        Modifier
+                            .fillMaxWidth()
+                            .padding(bottom = 10.dp, end = 10.dp),
                         horizontalArrangement = Arrangement.End
                     ) {
                         val coroutineScope = rememberCoroutineScope()

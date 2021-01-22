@@ -1,12 +1,12 @@
 package cz.muni.fi.rpg.viewModels
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import cz.frantisekmasa.wfrp_master.compendium.domain.Compendium
 import cz.frantisekmasa.wfrp_master.compendium.domain.Spell as CompendiumSpell
 import cz.frantisekmasa.wfrp_master.core.domain.identifiers.CharacterId
 import cz.muni.fi.rpg.model.domain.spells.Spell
 import cz.muni.fi.rpg.model.domain.spells.SpellRepository
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -17,7 +17,7 @@ class SpellsViewModel(
     private val characterId: CharacterId,
     private val spellRepository: SpellRepository,
     private val compendium: Compendium<CompendiumSpell>
-) : ViewModel(), CoroutineScope by CoroutineScope(Dispatchers.IO) {
+) : ViewModel() {
     val spells: Flow<List<Spell>> = spellRepository.findAllForCharacter(characterId)
     val compendiumSpellsCount: Flow<Int> by lazy { compendiumSpells.map { it.size } }
 
@@ -34,7 +34,7 @@ class SpellsViewModel(
         spellRepository.save(characterId, spell)
     }
 
-    fun removeSpell(spell: Spell) = launch {
+    fun removeSpell(spell: Spell) = viewModelScope.launch(Dispatchers.IO) {
         spellRepository.remove(characterId, spell.id)
     }
 }

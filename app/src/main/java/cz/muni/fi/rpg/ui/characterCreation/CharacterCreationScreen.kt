@@ -59,7 +59,7 @@ private fun MainContainer(routing: Routing<Route.CharacterCreation>) {
     val formState = savedInstanceState { FormState.EDITED_BY_USER }
 
     val basicInfo = CharacterBasicInfoForm.Data.empty()
-    val characteristics = CharacterCharacteristicsForm.Data.empty()
+    val characteristics = CharacterCharacteristicsForm.Data.fromCharacter(null)
     val points = PointsPoolForm.Data.empty()
 
 

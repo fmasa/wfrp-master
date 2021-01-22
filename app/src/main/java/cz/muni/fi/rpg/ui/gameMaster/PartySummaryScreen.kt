@@ -33,7 +33,7 @@ import cz.frantisekmasa.wfrp_master.navigation.Routing
 import cz.muni.fi.rpg.ui.gameMaster.rolls.SkillTestDialog
 import cz.muni.fi.rpg.viewModels.GameMasterViewModel
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import org.koin.core.parameter.parametersOf
 
@@ -124,11 +124,11 @@ internal fun PartySummaryScreen(
 @Composable
 private fun <T> RowScope.CompendiumSummary(
     @StringRes text: Int,
-    itemsCount: Flow<List<T>>,
+    itemsCount: StateFlow<List<T>?>,
 ) {
     Column(Modifier.weight(1f), horizontalAlignment = Alignment.CenterHorizontally) {
         Text(
-            itemsCount.collectAsState(null).value?.size?.toString() ?: "?",
+            itemsCount.collectAsState().value?.size?.toString() ?: "?",
             style = MaterialTheme.typography.h6
         )
         Text(stringResource(text))

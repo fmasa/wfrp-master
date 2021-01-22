@@ -33,10 +33,12 @@ import cz.frantisekmasa.wfrp_master.core.ui.scaffolding.TopBarAction
 import cz.frantisekmasa.wfrp_master.core.ui.scaffolding.tabs.TabContent
 import cz.frantisekmasa.wfrp_master.core.ui.scaffolding.tabs.TabRow
 import cz.frantisekmasa.wfrp_master.core.ui.scaffolding.tabs.TabScreen
+import cz.frantisekmasa.wfrp_master.core.ui.scaffolding.tabs.rememberPagerState
 import cz.frantisekmasa.wfrp_master.core.viewModel.viewModel
 import cz.frantisekmasa.wfrp_master.navigation.Route
 import cz.frantisekmasa.wfrp_master.navigation.Routing
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.StateFlow
 import org.koin.core.parameter.parametersOf
 import java.util.*
 
@@ -80,21 +82,19 @@ private fun WithConstraintsScope.MainContent(routing: Routing<Route.Compendium>)
         val viewModel: CompendiumViewModel by viewModel { parametersOf(routing.route.partyId) }
 
         val tabs = tabs(routing.route.partyId)
-        val scrollState = key(screenWidth, tabs.size) { rememberScrollState(0f) }
+        val pagerState = rememberPagerState(screenWidth, tabs.size)
 
         TabRow(
             tabs,
-            scrollState = scrollState,
-            screenWidth = screenWidth,
+            pagerState = pagerState,
             fullWidthTabs = true,
         )
 
         TabContent(
             item = viewModel,
             screens = tabs,
-            scrollState = scrollState,
-            screenWidth = screenWidth,
-            modifier = Modifier.weight(1f)
+            state = pagerState,
+            modifier = Modifier.weight(1f),
         )
     }
 }
@@ -112,7 +112,7 @@ private fun WithConstraintsScope.tabs(partyId: PartyId): Array<TabScreen<Compend
 
 @Composable
 fun <T : CompendiumItem> CompendiumTab(
-    liveItems: Flow<List<T>>,
+    liveItems: StateFlow<List<T>?>,
     width: Dp,
     emptyUI: @Composable () -> Unit,
     dialog: @Composable (MutableState<DialogState<T?>>) -> Unit,
@@ -132,7 +132,7 @@ fun <T : CompendiumItem> CompendiumTab(
         }
     ) {
         Column(Modifier.fillMaxSize().background(MaterialTheme.colors.background)) {
-            val items = liveItems.collectAsState(null).value
+            val items = liveItems.collectAsState().value
 
             when {
                 items == null -> FullScreenProgress()

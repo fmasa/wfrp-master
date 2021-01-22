@@ -120,7 +120,7 @@ dependencies {
     coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:1.1.1")
 
     // Time picker dialog
-    implementation("com.vanpra.compose-material-dialogs:datetime:0.2.8")
+    implementation("com.vanpra.compose-material-dialogs:datetime:0.2.11")
 
     // Shared Preferences DataStore
     implementation("androidx.datastore:datastore-preferences:1.0.0-alpha05");

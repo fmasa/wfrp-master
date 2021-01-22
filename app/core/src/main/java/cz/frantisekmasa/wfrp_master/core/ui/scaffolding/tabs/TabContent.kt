@@ -1,92 +1,169 @@
 package cz.frantisekmasa.wfrp_master.core.ui.scaffolding.tabs
 
 import androidx.compose.foundation.*
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.composed
 import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.gesture.ScrollCallback
 import androidx.compose.ui.gesture.scrollGestureFilter
 import androidx.compose.ui.gesture.scrollorientationlocking.Orientation
 import androidx.compose.ui.platform.AmbientDensity
-import androidx.compose.ui.unit.Density
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import kotlin.math.abs
 import kotlin.math.max
 import kotlin.math.min
 
 
+// TODO: Render only screens that are visible + fixed amount of screens around
+//@Stable
+//data class PagerState(
+//    private val scrollState: ScrollState,
+//    private val screenWidth: Float,
+//    private val offscreenLimit: Int,
+//    private val screenCount: Int,
+//) {
+//    val renderedPages: List<Int>
+//        get() {
+//            val screenCenter = scrollState.value + screenWidth / 2
+//            val renderedRange =
+//                (screenCenter - screenWidth * offscreenLimit)..(screenCenter + screenWidth * offscreenLimit)
+//
+//            return (0 until screenCount).filter { x -> (x + screenWidth / 2) in renderedRange }
+//        }
+//}
+
+@Stable
+class PagerState(
+    private val ignoredDragOffset: Float,
+    internal val scrollState: ScrollState,
+    private val screenWidth: Float,
+    private val screenCount: Int,
+) {
+    private var previousScroll: Float = 0f
+    private var dragStart: Float = 0f
+
+    val selectedScreen: Int
+        get() = (scrollState.value / screenWidth).toInt()
+
+
+    val scrolledPercentage: Float
+        get() = (scrollState.value % screenWidth) / screenWidth
+
+    fun selectScreen(index: Int) {
+        if (index !in 0 until screenCount) {
+            return
+        }
+
+        scrollState.smoothScrollTo(index * screenWidth)
+    }
+
+    internal val scrollCallback = object : ScrollCallback {
+        private var dragging: Boolean = false
+
+        override fun onStart(downPosition: Offset) {
+            if (downPosition.x % screenWidth > ignoredDragOffset) {
+                dragging = true
+                dragStart = scrollState.value
+            }
+        }
+
+        override fun onScroll(scrollDistance: Float): Float {
+            if (!dragging) {
+                return 0f // TODO: Check if we cannot simply consume everything
+            }
+
+            previousScroll = scrollState.value
+            val newsScrollState = previousScroll - scrollDistance
+
+            scrollState.scrollTo(newsScrollState)
+
+            val previousScreenOffset = max(dragStart - screenWidth, 0f)
+            val nextScreenOffset = min(dragStart + screenWidth, screenWidth * screenCount)
+
+            if (newsScrollState >= nextScreenOffset) {
+                dragStart = nextScreenOffset
+            } else if (newsScrollState <= previousScreenOffset) {
+                dragStart = previousScreenOffset
+            }
+
+            return abs(scrollState.value - previousScroll)
+        }
+
+        override fun onCancel() {
+            onDragStopped(0f)
+            dragging = false
+        }
+
+        override fun onStop(velocity: Float) {
+            onDragStopped(-velocity)
+            dragging = false
+        }
+
+        private fun onDragStopped(velocity: Float) {
+            // If scrollState didn't change, do nothing
+            if (scrollState.value % screenWidth == 0f) {
+                return
+            }
+
+            val direction = direction(previousScroll, scrollState.value)
+
+            val relativeVelocity = if (direction == Direction.END)
+                abs(velocity) else
+                abs(velocity) * -1
+
+            val anchors = listOf(
+                if (scrollState.value < dragStart)
+                    max(dragStart - screenWidth, 0f) else
+                    min(dragStart + screenWidth, screenWidth * screenCount),
+                dragStart,
+            )
+
+            scrollState.smoothScrollTo(
+                anchors.minByOrNull { abs(it - (scrollState.value + relativeVelocity)) }
+                    ?: 0f
+            )
+        }
+    }
+}
+
+@Composable
+fun rememberPagerState(
+    screenWidth: Float,
+    screenCount: Int,
+    ignoredDragOffset: Dp = 10.dp,
+): PagerState {
+    val density = AmbientDensity.current
+    val scrollState = key(screenWidth, screenCount) { rememberScrollState(0f) }
+    val ignoredDragOffsetPx = remember(ignoredDragOffset) {
+        with(density) { ignoredDragOffset.toPx() }
+    }
+
+    return remember(scrollState, ignoredDragOffset) {
+        PagerState(ignoredDragOffsetPx, scrollState, screenWidth, screenCount)
+    }
+}
+
 @Composable
 fun <T> TabContent(
     item: T,
+    state: PagerState,
     screens: Array<TabScreen<T>>,
-    scrollState: ScrollState,
-    screenWidth: Float,
     modifier: Modifier = Modifier,
 ) {
-    var dragStart by remember { mutableStateOf(0f) }
-    var previousScroll by remember { mutableStateOf(0f) }
-
-    // We want to ignore drags from small area next to the start of the screen
-    // to let user open the navigation drawer.
-    val ignoredDragOffset = with(AmbientDensity.current) { 10.dp.toPx() }
-
     Row(
         modifier = modifier
             .clipToBounds()
             .padding(0.dp)
-            .horizontalScroll(scrollState, false)
+            .horizontalScroll(state.scrollState, false)
             .background(MaterialTheme.colors.background)
-            .nestedDraggable(
+            .scrollGestureFilter(
+                state.scrollCallback,
                 Orientation.Horizontal,
-                onDragStarted = { dragStart = scrollState.value },
-                onDrag = { delta ->
-                    previousScroll = scrollState.value
-                    scrollState.scrollBy(delta)
-
-                    val previousScreenOffset = max(dragStart - screenWidth, 0f)
-                    val nextScreenOffset =
-                        min(dragStart + screenWidth, screenWidth * screens.size)
-
-                    if (scrollState.value >= nextScreenOffset) {
-                        dragStart = nextScreenOffset
-                    } else if (scrollState.value <= previousScreenOffset) {
-                        dragStart = previousScreenOffset
-                    }
-
-                    scrollState.value - previousScroll
-                },
-                onDragStopped = { velocity ->
-                    // If scrollState didn't change, do nothing
-                    if (scrollState.value % screenWidth == 0f) {
-                        return@nestedDraggable
-                    }
-
-                    val direction = direction(previousScroll, scrollState.value)
-
-                    val relativeVelocity = if (direction == Direction.END)
-                        abs(velocity) else
-                        abs(velocity) * -1
-
-                    val anchors = listOf(
-                        if (scrollState.value < dragStart)
-                            max(dragStart - screenWidth, 0f) else
-                            min(dragStart + screenWidth, screenWidth * screens.size),
-                        dragStart,
-                    )
-
-                    scrollState.smoothScrollTo(
-                        anchors.minByOrNull { abs(it - (scrollState.value + relativeVelocity)) }
-                            ?: 0f
-                    )
-                },
-                canStartDragging = { it.x % screenWidth > ignoredDragOffset },
             ),
         horizontalArrangement = Arrangement.Start,
         verticalAlignment = Alignment.Top
@@ -100,45 +177,4 @@ private fun direction(from: Float, to: Float) = if (from < to) Direction.END els
 private enum class Direction {
     START,
     END,
-}
-
-
-fun Modifier.nestedDraggable(
-    orientation: Orientation,
-    onDragStarted: (startedPosition: Offset) -> Unit = {},
-    onDragStopped: (velocity: Float) -> Unit = {},
-    onDrag: Density.(Float) -> Float,
-    canStartDragging: (startedPosition: Offset) -> Boolean,
-): Modifier = composed {
-    val density = AmbientDensity.current
-
-    scrollGestureFilter(
-        orientation = orientation,
-        scrollCallback = object : ScrollCallback {
-            private var dragging: Boolean = false
-
-            override fun onStart(downPosition: Offset) {
-                if (canStartDragging(downPosition)) {
-                    dragging = true
-                    onDragStarted(downPosition)
-                }
-            }
-
-            override fun onScroll(scrollDistance: Float): Float {
-                return if (dragging)
-                    with(density) { abs(onDrag(-scrollDistance)) } else
-                    0f
-            }
-
-            override fun onCancel() {
-                onDragStopped(0f)
-                dragging = false
-            }
-
-            override fun onStop(velocity: Float) {
-                onDragStopped(-velocity)
-                dragging = false
-            }
-        },
-    )
 }

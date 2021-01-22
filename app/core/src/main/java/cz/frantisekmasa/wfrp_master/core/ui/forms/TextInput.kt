@@ -70,7 +70,7 @@ fun TextInput(
 }
 
 @Composable
-fun TextInput(
+private fun TextInput(
     value: String,
     onValueChange: (String) -> Unit,
     validate: Boolean,
@@ -124,6 +124,7 @@ fun TextInput(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(Spacing.medium)
+                        .then(if (multiLine) Modifier.heightIn(min = 48.dp) else Modifier),
                 )
 
                 if (placeholder != null && value.isEmpty()) {
@@ -136,7 +137,7 @@ fun TextInput(
             }
         }
 
-        if (errorMessage != null) {
+        if (errorMessage != null && errorMessage.isNotBlank()) {
             Text(
                 errorMessage,
                 color = MaterialTheme.colors.error,

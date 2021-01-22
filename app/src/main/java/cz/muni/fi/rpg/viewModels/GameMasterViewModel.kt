@@ -1,6 +1,7 @@
 package cz.muni.fi.rpg.viewModels
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import arrow.core.extensions.list.foldable.exists
 import cz.frantisekmasa.wfrp_master.core.domain.character.Character
 import cz.frantisekmasa.wfrp_master.core.domain.identifiers.CharacterId
@@ -12,20 +13,17 @@ import cz.frantisekmasa.wfrp_master.core.domain.party.PartyRepository
 import cz.frantisekmasa.wfrp_master.core.domain.time.DateTime
 import cz.frantisekmasa.wfrp_master.core.utils.right
 import cz.muni.fi.rpg.ui.gameMaster.adapter.Player
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
-import java.util.*
 
 class GameMasterViewModel(
     private val partyId: PartyId,
     private val parties: PartyRepository,
     private val characterRepository: CharacterRepository
-) : ViewModel(), CoroutineScope by CoroutineScope(Dispatchers.IO) {
+) : ViewModel() {
 
     val party: StateFlow<Party?> = parties.getLive(partyId)
         .right()
-        .stateIn(this, SharingStarted.WhileSubscribed(), null)
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
 
     val characters: Flow<List<Character>> = characterRepository.inParty(partyId)
 
@@ -42,7 +40,7 @@ class GameMasterViewModel(
                 .map { Player.UserWithoutCharacter(it) }
 
             players + usersWithoutCharacter
-        }.stateIn(this, SharingStarted.WhileSubscribed(), null)
+        }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
 
     suspend fun archiveCharacter(id: CharacterId) {
         val character = characterRepository.get(id)

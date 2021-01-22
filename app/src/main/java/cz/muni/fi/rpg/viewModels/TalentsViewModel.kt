@@ -1,12 +1,12 @@
 package cz.muni.fi.rpg.viewModels
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import cz.frantisekmasa.wfrp_master.compendium.domain.Compendium
 import cz.frantisekmasa.wfrp_master.compendium.domain.Talent as CompendiumTalent
 import cz.frantisekmasa.wfrp_master.core.domain.identifiers.CharacterId
 import cz.muni.fi.rpg.model.domain.talents.Talent
 import cz.muni.fi.rpg.model.domain.talents.TalentRepository
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -18,7 +18,7 @@ class TalentsViewModel(
     private val characterId: CharacterId,
     private val talentRepository: TalentRepository,
     private val compendium: Compendium<CompendiumTalent>,
-) : ViewModel(), CoroutineScope by CoroutineScope(Dispatchers.IO) {
+) : ViewModel() {
 
     val talents: Flow<List<Talent>> = talentRepository.findAllForCharacter(characterId)
     val compendiumTalentsCount: Flow<Int> by lazy { compendiumTalents.map { it.size } }
@@ -34,7 +34,9 @@ class TalentsViewModel(
 
     suspend fun saveTalent(talent: Talent) = talentRepository.save(characterId, talent)
 
-    fun removeTalent(talent: Talent) = launch { talentRepository.remove(characterId, talent.id) }
+    fun removeTalent(talent: Talent) = viewModelScope.launch(Dispatchers.IO) {
+        talentRepository.remove(characterId, talent.id)
+    }
 
     suspend fun saveCompendiumTalent(talentId: UUID, compendiumTalentId: UUID, timesTaken: Int) {
         val compendiumTalent = compendium.getItem(

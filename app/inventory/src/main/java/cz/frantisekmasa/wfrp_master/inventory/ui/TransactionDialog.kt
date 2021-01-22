@@ -1,5 +1,6 @@
 package cz.frantisekmasa.wfrp_master.inventory.ui
 
+import androidx.annotation.StringRes
 import androidx.compose.foundation.ScrollableColumn
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -16,7 +17,10 @@ import cz.frantisekmasa.wfrp_master.core.domain.character.NotEnoughMoney
 import cz.frantisekmasa.wfrp_master.core.domain.Money
 import cz.frantisekmasa.wfrp_master.core.ui.buttons.CloseButton
 import cz.frantisekmasa.wfrp_master.core.ui.dialogs.FullScreenDialog
+import cz.frantisekmasa.wfrp_master.core.ui.forms.InputValue
+import cz.frantisekmasa.wfrp_master.core.ui.forms.Rules
 import cz.frantisekmasa.wfrp_master.core.ui.forms.TextInput
+import cz.frantisekmasa.wfrp_master.core.ui.forms.inputValue
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.Spacing
 import cz.frantisekmasa.wfrp_master.core.ui.scaffolding.SaveAction
 import cz.frantisekmasa.wfrp_master.core.ui.scaffolding.SubheadBar
@@ -32,11 +36,12 @@ fun TransactionDialog(
     onDismissRequest: () -> Unit,
 ) {
     FullScreenDialog(onDismissRequest = onDismissRequest) {
-        var crowns by savedInstanceState { "" }
-        var shillings by savedInstanceState { "" }
-        var pennies by savedInstanceState { "" }
+        val crowns = inputValue("", Rules.IfNotBlank(Rules.PositiveInteger()))
+        val shillings = inputValue("", Rules.IfNotBlank(Rules.PositiveInteger()))
+        val pennies = inputValue("", Rules.IfNotBlank(Rules.PositiveInteger()))
         var operation by savedInstanceState { Operation.ADD }
 
+        var validate by remember { mutableStateOf(false) }
         var errorMessage: String? by remember { mutableStateOf(null) }
 
         Scaffold(
@@ -52,6 +57,10 @@ fun TransactionDialog(
                         SaveAction(
                             enabled = !saving,
                             onClick = {
+                                if (! listOf(crowns, shillings, pennies).all { it.isValid() }) {
+                                    validate = true
+                                }
+
                                 val money = Money.sum(
                                     Money.crowns(crowns.toIntValue()),
                                     Money.shillings(shillings.toIntValue()),
@@ -88,9 +97,9 @@ fun TransactionDialog(
             Column {
                 SubheadBar(
                     Modifier.clickable {
-                        crowns = balance.getCrowns().toInputValue()
-                        shillings = balance.getShillings().toInputValue()
-                        pennies = balance.getPennies().toInputValue()
+                        crowns.value = balance.getCrowns().toInputValue()
+                        shillings.value = balance.getShillings().toInputValue()
+                        pennies.value = balance.getPennies().toInputValue()
                     }
                 ) {
                     Row(horizontalArrangement = Arrangement.spacedBy(Spacing.small)) {
@@ -124,38 +133,9 @@ fun TransactionDialog(
                     }
 
                     Row(horizontalArrangement = Arrangement.spacedBy(Spacing.medium)) {
-                        TextInput(
-                            modifier = Modifier.weight(1f),
-                            label = stringResource(R.string.label_crowns),
-                            value = crowns,
-                            onValueChange = { crowns = it },
-                            validate = false,
-                            keyboardType = KeyboardType.Number,
-                            maxLength = 4,
-                            placeholder = "0",
-                        )
-
-                        TextInput(
-                            modifier = Modifier.weight(1f),
-                            label = stringResource(R.string.label_shillings),
-                            value = shillings,
-                            onValueChange = { shillings = it },
-                            validate = false,
-                            keyboardType = KeyboardType.Number,
-                            maxLength = 4,
-                            placeholder = "0",
-                        )
-
-                        TextInput(
-                            modifier = Modifier.weight(1f),
-                            label = stringResource(R.string.label_pennies),
-                            value = pennies,
-                            onValueChange = { pennies = it },
-                            validate = false,
-                            keyboardType = KeyboardType.Number,
-                            maxLength = 4,
-                            placeholder = "0",
-                        )
+                        CoinInput(crowns, R.string.label_crowns, validate)
+                        CoinInput(shillings, R.string.label_shillings, validate)
+                        CoinInput(pennies, R.string.label_pennies, validate)
                     }
 
                     errorMessage?.let {
@@ -172,9 +152,22 @@ fun TransactionDialog(
     }
 }
 
+@Composable
+private fun RowScope.CoinInput(value: InputValue, @StringRes labelRes: Int, validate: Boolean) {
+    TextInput(
+        modifier = Modifier.weight(1f),
+        label = stringResource(labelRes),
+        value = value,
+        validate = validate,
+        keyboardType = KeyboardType.Number,
+        maxLength = 4,
+        placeholder = "0",
+    )
+}
+
 private fun Int.toInputValue(): String = if (this == 0) "" else toString()
 
-private fun String.toIntValue(): Int = toIntOrNull() ?: 0
+private fun InputValue.toIntValue(): Int = value.toIntOrNull() ?: 0
 
 @Composable
 private fun RadioButtonWithText(text: String, selected: Boolean, onClick: () -> Unit) {

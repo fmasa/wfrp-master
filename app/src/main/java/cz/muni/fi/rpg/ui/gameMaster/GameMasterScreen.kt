@@ -9,7 +9,6 @@ import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.key
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.WithConstraints
@@ -27,6 +26,7 @@ import cz.frantisekmasa.wfrp_master.core.ui.scaffolding.tabs.TabRow
 import cz.frantisekmasa.wfrp_master.core.ui.scaffolding.tabs.TabScreen
 import cz.frantisekmasa.wfrp_master.core.viewModel.viewModel
 import cz.frantisekmasa.wfrp_master.core.domain.party.Party
+import cz.frantisekmasa.wfrp_master.core.ui.scaffolding.tabs.rememberPagerState
 import cz.muni.fi.rpg.ui.common.AdManager
 import cz.muni.fi.rpg.ui.common.composables.*
 import cz.muni.fi.rpg.ui.gameMaster.encounters.EncountersScreen
@@ -74,27 +74,27 @@ fun GameMasterScreen(routing: Routing<Route.GameMaster>, adManager: AdManager) {
             val screens = screens(
                 viewModel,
                 routing,
-                Modifier.width(maxWidth).padding(top = 6.dp)
+                Modifier
+                    .width(maxWidth)
+                    .padding(top = 6.dp)
             )
             val screenWidth = constraints.maxWidth.toFloat()
 
             Column(Modifier.fillMaxHeight()) {
                 ActiveCombatBanner(partyId = party.id, routing = routing)
 
-                val scrollState = key(screenWidth, screens.size) { rememberScrollState(0f) }
+                val tabContentState = rememberPagerState(screenWidth, screens.size)
 
                 TabRow(
                     screens,
-                    scrollState = scrollState,
-                    screenWidth = screenWidth,
+                    pagerState = tabContentState,
                     fullWidthTabs = true,
                 )
 
                 TabContent(
                     item = party,
                     screens = screens,
-                    scrollState = scrollState,
-                    screenWidth = screenWidth,
+                    state = tabContentState,
                     modifier = Modifier.weight(1f)
                 )
 

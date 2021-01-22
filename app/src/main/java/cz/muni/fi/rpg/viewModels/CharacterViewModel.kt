@@ -6,13 +6,12 @@ import cz.frantisekmasa.wfrp_master.core.domain.character.CharacterNotFound
 import cz.frantisekmasa.wfrp_master.core.domain.character.CharacterRepository
 import cz.frantisekmasa.wfrp_master.core.domain.identifiers.CharacterId
 import cz.frantisekmasa.wfrp_master.core.utils.right
-import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.Flow
 
 class CharacterViewModel(
     private val characterId: CharacterId,
     private val characters: CharacterRepository
-) : ViewModel(), CoroutineScope by CoroutineScope(Dispatchers.Default) {
+) : ViewModel() {
 
     val character: Flow<Character> = characters.getLive(characterId).right()
 

@@ -1,12 +1,12 @@
 package cz.muni.fi.rpg.viewModels
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import cz.frantisekmasa.wfrp_master.compendium.domain.Compendium
 import cz.frantisekmasa.wfrp_master.core.domain.identifiers.CharacterId
 import cz.frantisekmasa.wfrp_master.compendium.domain.Skill as CompendiumSkill
 import cz.muni.fi.rpg.model.domain.skills.Skill
 import cz.muni.fi.rpg.model.domain.skills.SkillRepository
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
@@ -16,7 +16,7 @@ class SkillsViewModel(
     private val characterId: CharacterId,
     private val skillRepository: SkillRepository,
     private val compendium: Compendium<CompendiumSkill>
-) : ViewModel(), CoroutineScope by CoroutineScope(Dispatchers.IO) {
+) : ViewModel() {
 
     val skills: Flow<List<Skill>> = skillRepository.forCharacter(characterId)
     val compendiumSkillsCount: Flow<Int> by lazy { compendiumSkills.map { it.size } }
@@ -52,7 +52,7 @@ class SkillsViewModel(
     }
 
 
-    fun removeSkill(skill: Skill) = launch {
+    fun removeSkill(skill: Skill) = viewModelScope.launch(Dispatchers.IO) {
         skillRepository.remove(characterId, skill.id)
     }
 }

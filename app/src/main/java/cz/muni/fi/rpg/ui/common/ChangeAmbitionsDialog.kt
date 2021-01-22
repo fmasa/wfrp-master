@@ -7,12 +7,12 @@ import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.*
-import androidx.compose.runtime.savedinstancestate.savedInstanceState
 import androidx.compose.ui.res.stringResource
 import cz.frantisekmasa.wfrp_master.core.domain.Ambitions
 import cz.frantisekmasa.wfrp_master.core.ui.buttons.CloseButton
 import cz.frantisekmasa.wfrp_master.core.ui.dialogs.FullScreenDialog
 import cz.frantisekmasa.wfrp_master.core.ui.forms.TextInput
+import cz.frantisekmasa.wfrp_master.core.ui.forms.inputValue
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.Spacing
 import cz.frantisekmasa.wfrp_master.core.ui.scaffolding.SaveAction
 import cz.muni.fi.rpg.R
@@ -28,8 +28,8 @@ fun ChangeAmbitionsDialog(
     onDismissRequest: () -> Unit,
 ) {
     FullScreenDialog(onDismissRequest = onDismissRequest) {
-        var shortTerm by savedInstanceState { defaults.shortTerm }
-        var longTerm by savedInstanceState { defaults.longTerm }
+        var shortTerm = inputValue(defaults.shortTerm)
+        var longTerm = inputValue(defaults.longTerm)
 
         Scaffold(
             topBar = {
@@ -46,7 +46,12 @@ fun ChangeAmbitionsDialog(
                                 saving = true
 
                                 coroutineScope.launch(Dispatchers.IO) {
-                                    save(Ambitions(shortTerm = shortTerm, longTerm = longTerm))
+                                    save(
+                                        Ambitions(
+                                            shortTerm = shortTerm.value,
+                                            longTerm = longTerm.value
+                                        )
+                                    )
 
                                     withContext(Dispatchers.Main) { onDismissRequest() }
                                 }
@@ -63,7 +68,6 @@ fun ChangeAmbitionsDialog(
                 TextInput(
                     label = stringResource(R.string.label_ambition_short_term),
                     value = shortTerm,
-                    onValueChange = { shortTerm = it },
                     validate = false,
                     maxLength = Ambitions.MAX_LENGTH,
                     multiLine = true,
@@ -72,13 +76,11 @@ fun ChangeAmbitionsDialog(
                 TextInput(
                     label = stringResource(R.string.label_ambition_long_term),
                     value = longTerm,
-                    onValueChange = { longTerm = it },
                     validate = false,
                     maxLength = Ambitions.MAX_LENGTH,
                     multiLine = true,
                 )
             }
-
         }
     }
 }

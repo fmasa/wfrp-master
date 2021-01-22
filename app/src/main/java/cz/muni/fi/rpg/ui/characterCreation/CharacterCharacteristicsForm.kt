@@ -15,43 +15,28 @@ import androidx.compose.ui.unit.dp
 import cz.muni.fi.rpg.R
 import cz.frantisekmasa.wfrp_master.core.domain.character.Character
 import cz.frantisekmasa.wfrp_master.core.domain.Stats
-import cz.frantisekmasa.wfrp_master.core.ui.forms.FormData
+import cz.frantisekmasa.wfrp_master.core.ui.forms.*
 import cz.muni.fi.rpg.ui.common.chunk
-import cz.frantisekmasa.wfrp_master.core.ui.forms.TextInput
 
 object CharacterCharacteristicsForm {
     @Stable
     class Data(
-        val weaponSkill: MutableState<Pair<String, String>>,
-        val ballisticSkill: MutableState<Pair<String, String>>,
-        val strength: MutableState<Pair<String, String>>,
-        val toughness: MutableState<Pair<String, String>>,
-        val initiative: MutableState<Pair<String, String>>,
-        val agility: MutableState<Pair<String, String>>,
-        val dexterity: MutableState<Pair<String, String>>,
-        val intelligence: MutableState<Pair<String, String>>,
-        val willPower: MutableState<Pair<String, String>>,
-        val fellowship: MutableState<Pair<String, String>>,
+        val weaponSkill: Pair<InputValue, InputValue>,
+        val ballisticSkill: Pair<InputValue, InputValue>,
+        val strength: Pair<InputValue, InputValue>,
+        val toughness: Pair<InputValue, InputValue>,
+        val initiative: Pair<InputValue, InputValue>,
+        val agility: Pair<InputValue, InputValue>,
+        val dexterity: Pair<InputValue, InputValue>,
+        val intelligence: Pair<InputValue, InputValue>,
+        val willPower: Pair<InputValue, InputValue>,
+        val fellowship: Pair<InputValue, InputValue>,
     ) : FormData {
         companion object {
             @Composable
-            fun empty() = Data(
-                weaponSkill = savedInstanceState { "" to "" },
-                ballisticSkill = savedInstanceState { "" to "" },
-                strength = savedInstanceState { "" to "" },
-                toughness = savedInstanceState { "" to "" },
-                initiative = savedInstanceState { "" to "" },
-                agility = savedInstanceState { "" to "" },
-                dexterity = savedInstanceState { "" to "" },
-                intelligence = savedInstanceState { "" to "" },
-                willPower = savedInstanceState { "" to "" },
-                fellowship = savedInstanceState { "" to "" },
-            )
-
-            @Composable
-            fun fromCharacter(character: Character): Data {
-                val base = character.getCharacteristicsBase()
-                val advances = character.getCharacteristicsAdvances()
+            fun fromCharacter(character: Character?): Data {
+                val base = character?.getCharacteristicsBase()
+                val advances = character?.getCharacteristicsAdvances()
 
                 return Data(
                     weaponSkill = toPair(base, advances) { it.weaponSkill },
@@ -68,41 +53,60 @@ object CharacterCharacteristicsForm {
             }
 
             @Composable
-            private fun toPair(base: Stats, advances: Stats, getValue: (Stats) -> Int) =
-                savedInstanceState {
-                    toTextValue(getValue(base)) to toTextValue(getValue(advances))
-                }
+            private fun toPair(base: Stats?, advances: Stats?, getValue: (Stats) -> Int) = Pair(
+                characteristicValue(base?.let(getValue)),
+                characteristicValue(advances?.let(getValue)),
+            )
 
-            private fun toTextValue(value: Int) = if (value == 0) "" else value.toString()
+            @Composable
+            private fun characteristicValue(defaultValue: Int?) = inputValue(
+                defaultValue?.toTextValue() ?: "",
+                // Inputs are too thin to show error message
+                Rules.withEmptyMessage(Rules.IfNotBlank(Rules.NonNegativeInteger()))
+            )
+
+            private fun Int.toTextValue() = if (this == 0) "" else this.toString()
         }
 
-        // There is no need for validation as it's ensured by keyboard
-        override fun isValid() = true
+        override fun isValid() =
+            listOf(
+                weaponSkill,
+                ballisticSkill,
+                strength,
+                toughness,
+                initiative,
+                agility,
+                dexterity,
+                intelligence,
+                willPower,
+                fellowship,
+            ).all { (base, advances) -> base.isValid() && advances.isValid() }
+
 
         fun toBaseCharacteristics(): Stats = Stats(
-            weaponSkill = toValue(weaponSkill.value.first),
-            ballisticSkill = toValue(ballisticSkill.value.first),
-            strength = toValue(strength.value.first),
-            toughness = toValue(toughness.value.first),
-            initiative = toValue(initiative.value.first),
-            agility = toValue(agility.value.first),
-            dexterity = toValue(dexterity.value.first),
-            intelligence = toValue(intelligence.value.first),
-            willPower = toValue(willPower.value.first),
-            fellowship = toValue(fellowship.value.first),
+            weaponSkill = toValue(weaponSkill.first.value),
+            ballisticSkill = toValue(ballisticSkill.first.value),
+            strength = toValue(strength.first.value),
+            toughness = toValue(toughness.first.value),
+            initiative = toValue(initiative.first.value),
+            agility = toValue(agility.first.value),
+            dexterity = toValue(dexterity.first.value),
+            intelligence = toValue(intelligence.first.value),
+            willPower = toValue(willPower.first.value),
+            fellowship = toValue(fellowship.first.value),
         )
 
         fun toCharacteristicAdvances(): Stats = Stats(
-            weaponSkill = toValue(weaponSkill.value.second),
-            ballisticSkill = toValue(ballisticSkill.value.second),
-            strength = toValue(strength.value.second),
-            toughness = toValue(toughness.value.second),
-            initiative = toValue(initiative.value.second),
-            agility = toValue(agility.value.second),
-            dexterity = toValue(dexterity.value.second),
-            intelligence = toValue(intelligence.value.second),
-            willPower = toValue(willPower.value.second),
-            fellowship = toValue(fellowship.value.second),
+            weaponSkill = toValue(weaponSkill.second.value),
+            ballisticSkill = toValue(ballisticSkill.second.value),
+            strength = toValue(strength.second.value),
+            toughness = toValue(toughness.second.value),
+            initiative = toValue(initiative.second.value),
+            agility = toValue(agility.second.value),
+            dexterity = toValue(dexterity.second.value),
+            intelligence = toValue(intelligence.second.value),
+            willPower = toValue(willPower.second.value),
+            fellowship = toValue(fellowship.second.value),
         )
 
         private fun toValue(value: String) = value.toIntOrNull() ?: 0
@@ -151,7 +155,7 @@ private fun CharacteristicInputs(
     @StringRes labelRes: Int,
     validate: Boolean,
     modifier: Modifier,
-    baseAndAdvances: MutableState<Pair<String, String>>
+    baseAndAdvances: Pair<InputValue, InputValue>
 ) {
     Column(modifier) {
         Text(stringResource(labelRes), Modifier.align(Alignment.CenterHorizontally))
@@ -161,15 +165,14 @@ private fun CharacteristicInputs(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(4.dp),
         ) {
-            val base = baseAndAdvances.value.first
-            val advances = baseAndAdvances.value.second
+            val base = baseAndAdvances.first
+            val advances = baseAndAdvances.second
 
             TextInput(
                 modifier = Modifier.weight(1f),
                 label = stringResource(R.string.label_base),
                 keyboardType = KeyboardType.Number,
                 value = base,
-                onValueChange = { baseAndAdvances.value = it to advances },
                 horizontalAlignment = Alignment.CenterHorizontally,
                 validate = validate,
                 maxLength = 3,
@@ -181,7 +184,6 @@ private fun CharacteristicInputs(
                 label = stringResource(R.string.label_advances),
                 keyboardType = KeyboardType.Number,
                 value = advances,
-                onValueChange = { baseAndAdvances.value = base to it },
                 horizontalAlignment = Alignment.CenterHorizontally,
                 validate = validate,
                 maxLength = 3,

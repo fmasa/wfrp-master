@@ -1,43 +1,42 @@
 package cz.muni.fi.rpg.ui.characterCreation
 
+import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.Stable
-import androidx.compose.runtime.savedinstancestate.savedInstanceState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
-import cz.frantisekmasa.wfrp_master.core.ui.forms.FormData
-import cz.frantisekmasa.wfrp_master.core.ui.forms.Rules
 import cz.muni.fi.rpg.R
 import cz.frantisekmasa.wfrp_master.core.domain.character.Points
-import cz.frantisekmasa.wfrp_master.core.ui.forms.Rule
-import cz.frantisekmasa.wfrp_master.core.ui.forms.TextInput
+import cz.frantisekmasa.wfrp_master.core.ui.forms.*
 
 object PointsPoolForm {
 
     @Stable
     class Data(
-        val maxWounds: MutableState<String>,
-        val fatePoints: MutableState<String>,
-        val resiliencePoints: MutableState<String>,
+        val maxWounds: InputValue,
+        val fatePoints: InputValue,
+        val resiliencePoints: InputValue,
     ) : FormData {
         companion object {
             @Composable
             fun empty() = Data(
-                maxWounds = savedInstanceState { "" },
-                fatePoints = savedInstanceState { "" },
-                resiliencePoints = savedInstanceState { "" },
+                maxWounds = inputValue("", Rules.PositiveInteger()),
+                fatePoints = inputValue("", Rules.IfNotBlank(Rules(Rules.NonNegativeInteger()))),
+                resiliencePoints = inputValue(
+                    "",
+                    Rules.IfNotBlank(Rules(Rules.NonNegativeInteger()))
+                ),
             )
         }
+
         override fun isValid(): Boolean =
-            toValue(maxWounds.value) > 0 &&
-                    toValue(fatePoints.value) <= 100 &&
-                    toValue(resiliencePoints.value) <= 100
+            listOf(maxWounds, fatePoints, resiliencePoints).all { it.isValid() }
 
         fun toPoints(): Points = Points(
             corruption = 0,
@@ -58,45 +57,28 @@ object PointsPoolForm {
 @Composable
 fun PointsPoolForm(data: PointsPoolForm.Data, validate: Boolean) {
     Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(16.dp)) {
-        TextInput(
-            modifier = Modifier.weight(1f),
-            label = stringResource(R.string.label_max_wounds),
-            value = data.maxWounds.value,
-            onValueChange = { data.maxWounds.value = it },
-            validate = validate,
-            keyboardType = KeyboardType.Number,
-            maxLength = 3,
-            rules = Rules(
-                Rules.NotBlank(),
-                Rule(R.string.error_value_is_0) { v: String -> v.toInt() > 0 },
-                Rule(R.string.error_value_over_100) { v: String -> v.toInt() <= 100 },
-            ),
-        )
-
-        TextInput(
-            modifier = Modifier.weight(1f),
-            label = stringResource(R.string.label_fate_points),
-            value = data.fatePoints.value,
-            onValueChange = { data.fatePoints.value = it },
-            validate = validate,
-            placeholder = "0",
-            maxLength = 3,
-            keyboardType = KeyboardType.Number,
-            rules = Rules(Rule(R.string.error_value_over_100) { v: String -> toValue(v) <= 100 }),
-        )
-
-        TextInput(
-            modifier = Modifier.weight(1f),
-            label = stringResource(R.string.label_resilience),
-            value = data.resiliencePoints.value,
-            onValueChange = { data.resiliencePoints.value = it },
-            validate = validate,
-            placeholder = "0",
-            maxLength = 3,
-            keyboardType = KeyboardType.Number,
-            rules = Rules(Rule(R.string.error_value_over_100) { v: String -> toValue(v) <= 100 }),
-        )
+        PointInput(data.maxWounds, R.string.label_max_wounds, validate, null)
+        PointInput(data.fatePoints, R.string.label_fate_points, validate, "0")
+        PointInput(data.resiliencePoints, R.string.label_resilience, validate, "0")
     }
+}
+
+@Composable
+private fun RowScope.PointInput(
+    value: InputValue,
+    @StringRes labelRes: Int,
+    validate: Boolean,
+    placeholder: String?,
+) {
+    TextInput(
+        modifier = Modifier.weight(1f),
+        label = stringResource(labelRes),
+        value = value,
+        validate = validate,
+        placeholder = placeholder,
+        maxLength = 2,
+        keyboardType = KeyboardType.Number,
+    )
 }
 
 private fun toValue(value: String) = value.toIntOrNull() ?: 0

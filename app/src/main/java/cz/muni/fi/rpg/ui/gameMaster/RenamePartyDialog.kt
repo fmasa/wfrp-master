@@ -1,15 +1,11 @@
 package cz.muni.fi.rpg.ui.gameMaster
 
-import android.content.Context
-import android.widget.Toast
-import androidx.annotation.StringRes
 import androidx.compose.foundation.ScrollableColumn
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.*
-import androidx.compose.runtime.savedinstancestate.savedInstanceState
 import androidx.compose.ui.platform.AmbientContext
 import androidx.compose.ui.res.stringResource
 import cz.frantisekmasa.wfrp_master.core.domain.party.Party
@@ -19,6 +15,7 @@ import cz.frantisekmasa.wfrp_master.core.ui.buttons.CloseButton
 import cz.frantisekmasa.wfrp_master.core.ui.dialogs.FullScreenDialog
 import cz.frantisekmasa.wfrp_master.core.ui.forms.Rules
 import cz.frantisekmasa.wfrp_master.core.ui.forms.TextInput
+import cz.frantisekmasa.wfrp_master.core.ui.forms.inputValue
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.Spacing
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.longToast
 import cz.frantisekmasa.wfrp_master.core.ui.scaffolding.SaveAction
@@ -34,7 +31,7 @@ fun RenamePartyDialog(
 ) {
     FullScreenDialog(onDismissRequest = onDismissRequest) {
         var validate by remember { mutableStateOf(false) }
-        var newName by savedInstanceState { currentName }
+        var newName = inputValue(currentName, Rules.NotBlank())
 
         Scaffold(
             topBar = {
@@ -50,7 +47,7 @@ fun RenamePartyDialog(
                         SaveAction(
                             enabled = !saving,
                             onClick = {
-                                if (newName.isBlank()) {
+                                if (!newName.isValid()) {
                                     validate = true
                                     return@SaveAction
                                 }
@@ -59,7 +56,7 @@ fun RenamePartyDialog(
 
                                 coroutineScope.launch(Dispatchers.IO) {
                                     try {
-                                        viewModel.renameParty(newName)
+                                        viewModel.renameParty(newName.value)
                                         longToast(context, R.string.message_party_updated)
                                         Timber.d("Party was renamed")
 
@@ -89,9 +86,7 @@ fun RenamePartyDialog(
                 TextInput(
                     label = stringResource(R.string.label_party_name),
                     value = newName,
-                    onValueChange = { newName = it },
                     validate = validate,
-                    rules = Rules(Rules.NotBlank()),
                     maxLength = Party.NAME_MAX_LENGTH,
                 )
             }
