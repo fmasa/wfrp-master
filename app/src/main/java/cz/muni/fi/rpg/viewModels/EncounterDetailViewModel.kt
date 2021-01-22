@@ -1,6 +1,7 @@
 package cz.muni.fi.rpg.viewModels
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import cz.frantisekmasa.wfrp_master.combat.domain.encounter.*
 import cz.frantisekmasa.wfrp_master.core.domain.Armor
 import cz.frantisekmasa.wfrp_master.core.domain.Stats
@@ -21,7 +22,7 @@ class EncounterDetailViewModel(
     private val encounters: EncounterRepository,
     private val npcRepository: NpcRepository,
     private val parties: PartyRepository,
-) : ViewModel(), CoroutineScope by CoroutineScope(Dispatchers.IO) {
+) : ViewModel() {
     val encounter: Flow<Encounter> = encounters.getLive(encounterId).right()
     val npcs: Flow<List<NpcListItem>> = npcRepository
         .findByEncounter(encounterId)
@@ -100,7 +101,7 @@ class EncounterDetailViewModel(
     fun npcFlow(npcId: NpcId): StateFlow<Npc?> {
         val flow = MutableStateFlow<Npc?>(null)
 
-        launch {
+        viewModelScope.launch(Dispatchers.IO) {
             try {
                 val npc = npcRepository.get(npcId)
                 withContext(Dispatchers.Main) { flow.value = npc }
@@ -113,5 +114,5 @@ class EncounterDetailViewModel(
         return flow
     }
 
-    fun removeNpc(npcId: NpcId) = launch { npcRepository.remove(npcId) }
+    fun removeNpc(npcId: NpcId) = viewModelScope.launch(Dispatchers.IO) { npcRepository.remove(npcId) }
 }

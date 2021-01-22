@@ -1,6 +1,7 @@
 package cz.muni.fi.rpg.viewModels
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import cz.frantisekmasa.wfrp_master.combat.domain.encounter.Encounter
 import cz.frantisekmasa.wfrp_master.combat.domain.encounter.EncounterRepository
 import cz.frantisekmasa.wfrp_master.core.domain.identifiers.EncounterId
@@ -12,7 +13,7 @@ import java.util.*
 class EncountersViewModel(
     private val partyId: PartyId,
     private val encounterRepository: EncounterRepository
-) : ViewModel(), CoroutineScope by CoroutineScope(Dispatchers.IO) {
+) : ViewModel() {
 
     val encounters: Flow<List<Encounter>> by lazy { encounterRepository.findByParty(partyId) }
 
@@ -34,7 +35,7 @@ class EncountersViewModel(
         encounterRepository.save(partyId, encounter.update(name, description))
     }
 
-    fun reorderEncounters(positions: Map<UUID, Int>) = launch {
+    fun reorderEncounters(positions: Map<UUID, Int>) = viewModelScope.launch(Dispatchers.IO) {
         val encounters = positions.keys
             .map(::encounterAsync)
             .awaitAll()
@@ -50,7 +51,7 @@ class EncountersViewModel(
     }
 
     private fun encounterAsync(id: UUID): Deferred<Pair<UUID, Encounter>> {
-        return async {
+        return viewModelScope.async(Dispatchers.IO) {
             id to encounterRepository.get(
                 EncounterId(
                     partyId = partyId,

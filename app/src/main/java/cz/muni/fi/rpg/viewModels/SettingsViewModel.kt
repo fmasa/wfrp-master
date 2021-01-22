@@ -10,7 +10,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import cz.frantisekmasa.wfrp_master.core.domain.party.PartyRepository
 import cz.frantisekmasa.wfrp_master.core.ui.viewinterop.AmbientActivity
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
@@ -19,7 +18,7 @@ import org.koin.androidx.viewmodel.ext.android.getViewModel
 class SettingsViewModel(
     context: Context,
     private val parties: PartyRepository,
-) : ViewModel(), CoroutineScope by CoroutineScope(Dispatchers.IO) {
+) : ViewModel() {
     val darkMode: StateFlow<Boolean> by lazy { getPreference(AppSettings.DARK_MODE, false) }
     val soundEnabled: StateFlow<Boolean> by lazy { getPreference(AppSettings.SOUND_ENABLED, true) }
 
@@ -49,7 +48,7 @@ class SettingsViewModel(
     ): StateFlow<Boolean> {
         return dataStore.data
             .map { preferences -> preferences[preference] ?: defaultValue }
-            .stateIn(this, SharingStarted.Eagerly, defaultValue)
+            .stateIn(viewModelScope, SharingStarted.Eagerly, defaultValue)
     }
 }
 

@@ -13,7 +13,6 @@ import cz.frantisekmasa.wfrp_master.inventory.domain.InventoryItemRepository
 import cz.frantisekmasa.wfrp_master.core.utils.right
 import cz.frantisekmasa.wfrp_master.inventory.domain.Encumbrance
 import cz.frantisekmasa.wfrp_master.inventory.domain.sum
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
@@ -23,7 +22,7 @@ class InventoryViewModel(
     private val inventoryItems: InventoryItemRepository,
     private val armorRepository: CharacterFeatureRepository<Armor>,
     private val characters: CharacterRepository
-) : ViewModel(), CoroutineScope by CoroutineScope(Dispatchers.IO) {
+) : ViewModel() {
     private val character = characters.getLive(characterId).right()
 
     val inventory: StateFlow<List<InventoryItem>?> =
@@ -64,11 +63,11 @@ class InventoryViewModel(
         inventoryItems.save(characterId, inventoryItem)
     }
 
-    fun removeInventoryItem(inventoryItem: InventoryItem) = launch {
+    fun removeInventoryItem(inventoryItem: InventoryItem) = viewModelScope.launch(Dispatchers.IO) {
         inventoryItems.remove(characterId, inventoryItem.id)
     }
 
-    fun updateArmor(armor: Armor) = launch {
+    fun updateArmor(armor: Armor) = viewModelScope.launch(Dispatchers.IO) {
         armorRepository.save(characterId, armor)
     }
 }
