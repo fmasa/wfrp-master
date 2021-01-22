@@ -124,6 +124,7 @@ private fun TextInput(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(Spacing.medium)
+                        .then(if (multiLine) Modifier.heightIn(min = 48.dp) else Modifier),
                 )
 
                 if (placeholder != null && value.isEmpty()) {
