@@ -8,6 +8,8 @@ import androidx.datastore.preferences.core.preferencesKey
 import androidx.datastore.preferences.createDataStore
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.google.firebase.analytics.ktx.analytics
+import com.google.firebase.ktx.Firebase
 import cz.frantisekmasa.wfrp_master.core.domain.party.PartyRepository
 import cz.frantisekmasa.wfrp_master.core.ui.viewinterop.AmbientActivity
 import cz.muni.fi.rpg.model.ads.LocationProvider
@@ -28,6 +30,7 @@ class SettingsViewModel(
 
     val darkMode: StateFlow<Boolean> by lazy { getPreference(AppSettings.DARK_MODE, false) }
     val soundEnabled: StateFlow<Boolean> by lazy { getPreference(AppSettings.SOUND_ENABLED, true) }
+    val personalizedAds: StateFlow<Boolean> by lazy { getPreference(AppSettings.PERSONALIZED_ADS, false) }
 
     private val dataStore = context.createDataStore("settings")
 
@@ -50,6 +53,15 @@ class SettingsViewModel(
     suspend fun toggleSound(enabled: Boolean) {
         dataStore.edit { it[AppSettings.SOUND_ENABLED] = enabled }
     }
+
+    suspend fun togglePersonalizedAds(enabled: Boolean) {
+        Firebase.analytics.logEvent(
+            if (enabled) "personalized_ads_enabled" else "personalized_ads_disabled",
+            null,
+        )
+        dataStore.edit { it[AppSettings.PERSONALIZED_ADS] = enabled }
+    }
+
 
     fun userDismissedGoogleSignIn() {
         viewModelScope.launch(Dispatchers.IO) {

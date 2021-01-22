@@ -48,6 +48,7 @@ fun SettingsScreen(routing: Routing<Route.Settings>) {
             SignInCard(viewModel, routing)
             DarkModeCard(viewModel)
             SoundCard(viewModel)
+            PersonalizedAds(viewModel)
         }
     }
 }
@@ -67,6 +68,15 @@ private fun SoundCard(viewModel: SettingsViewModel) {
         name = R.string.settings_sound,
         value = viewModel.soundEnabled,
         onChange = { viewModel.toggleSound(it) }
+    )
+}
+
+@Composable
+private fun PersonalizedAds(viewModel: SettingsViewModel) {
+    SwitchCard(
+        name = R.string.settings_personalized_ads,
+        value = viewModel.personalizedAds,
+        onChange = { viewModel.togglePersonalizedAds(it) },
     )
 }
 
