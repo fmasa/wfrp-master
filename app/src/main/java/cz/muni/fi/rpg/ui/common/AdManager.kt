@@ -12,9 +12,11 @@ import com.google.android.gms.ads.MobileAds
 
 @Stable
 class AdManager(private val context: Context) {
-    private var showNonPersonalizedAdsOnly: Boolean = true
+    private var personalizedAds: Boolean = true
 
-    fun initialize() {
+    fun initialize(personalizedAds: Boolean) {
+        this.personalizedAds = personalizedAds
+
         // Setup AdMob
         MobileAds.initialize(context) { }
     }
@@ -29,7 +31,7 @@ class AdManager(private val context: Context) {
             AdRequest.Builder()
                 .addNetworkExtrasBundle(
                     AdMobAdapter::class.java,
-                    bundleOf("npa" to if (showNonPersonalizedAdsOnly) "1" else "0")
+                    bundleOf("npa" to if (personalizedAds) "0" else "1")
                 )
                 .build()
         )

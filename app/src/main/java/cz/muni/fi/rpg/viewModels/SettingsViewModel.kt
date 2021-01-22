@@ -10,19 +10,34 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import cz.frantisekmasa.wfrp_master.core.domain.party.PartyRepository
 import cz.frantisekmasa.wfrp_master.core.ui.viewinterop.AmbientActivity
+import cz.muni.fi.rpg.model.ads.LocationProvider
+import cz.muni.fi.rpg.ui.common.AdManager
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.koin.androidx.viewmodel.ext.android.getViewModel
+import timber.log.Timber
 
 class SettingsViewModel(
     context: Context,
     private val parties: PartyRepository,
+    private val locationProvider: LocationProvider,
+    private val adManager: AdManager,
 ) : ViewModel() {
+
     val darkMode: StateFlow<Boolean> by lazy { getPreference(AppSettings.DARK_MODE, false) }
     val soundEnabled: StateFlow<Boolean> by lazy { getPreference(AppSettings.SOUND_ENABLED, true) }
 
     private val dataStore = context.createDataStore("settings")
+
+    suspend fun initializeAds() {
+        val personalizedAds = refreshPersonalizedAdConsent()
+
+        withContext(Dispatchers.Main) {
+            adManager.initialize(personalizedAds)
+        }
+    }
 
     suspend fun getPartyNames(userId: String): List<String> {
         return parties.forUser(userId).map { it.getName() }
@@ -42,6 +57,22 @@ class SettingsViewModel(
         }
     }
 
+    private suspend fun refreshPersonalizedAdConsent(): Boolean {
+        val personalizedAdsAllowed = dataStore.data.first()[AppSettings.PERSONALIZED_ADS]
+
+        if (personalizedAdsAllowed != null) {
+            return personalizedAdsAllowed
+        }
+
+        val personalizedAds = !locationProvider.isUserInEeaOrUnknown()
+
+        Timber.d("Checked whether we can show personalized ads to user. Result: $personalizedAds")
+
+        dataStore.edit { it[AppSettings.PERSONALIZED_ADS] = personalizedAds }
+
+        return personalizedAds
+    }
+
     private fun getPreference(
         preference: Preferences.Key<Boolean>,
         defaultValue: Boolean
@@ -56,6 +87,7 @@ private object AppSettings {
     val DARK_MODE = preferencesKey<Boolean>("dark_mode")
     val SOUND_ENABLED = preferencesKey<Boolean>("sound_enabled")
     val GOOGLE_SIGN_IN_DISMISSED = preferencesKey<Boolean>("dismissed_google_sign_in")
+    val PERSONALIZED_ADS = preferencesKey<Boolean>("personalized_ads")
 }
 
 @Composable

@@ -11,6 +11,8 @@ plugins {
     id("com.google.firebase.crashlytics")
 }
 
+val ktorVersion = "1.5.0"
+
 android {
 
     lintOptions {
@@ -137,6 +139,11 @@ dependencies {
     implementation("androidx.camera:camera-core:1.0.0-rc01")
     implementation("androidx.camera:camera-lifecycle:1.0.0-rc01")
     implementation("androidx.camera:camera-view:1.0.0-alpha20")
+
+    // HTTP Client
+    implementation("io.ktor:ktor-client-core:$ktorVersion")
+    implementation("io.ktor:ktor-client-cio:$ktorVersion")
+    implementation("io.ktor:ktor-client-jackson:$ktorVersion")
 
     // Testing utilities
     testImplementation("junit:junit:4.13.1")

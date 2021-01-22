@@ -15,8 +15,6 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        adManager.initialize()
-
         setContent {
             ProvideActivity(this) {
                 WfrpMasterApp(adManager)

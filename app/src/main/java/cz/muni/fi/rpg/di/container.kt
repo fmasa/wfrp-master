@@ -47,6 +47,8 @@ import cz.frantisekmasa.wfrp_master.core.firestore.repositories.FirestorePartyRe
 import cz.frantisekmasa.wfrp_master.core.viewModel.PartyViewModel
 import cz.frantisekmasa.wfrp_master.inventory.domain.InventoryItem
 import cz.frantisekmasa.wfrp_master.inventory.ui.InventoryViewModel
+import cz.muni.fi.rpg.model.ads.AdmobLocationProvider
+import cz.muni.fi.rpg.model.ads.LocationProvider
 import cz.muni.fi.rpg.model.domain.skills.Skill
 import cz.muni.fi.rpg.model.domain.spells.Spell
 import cz.muni.fi.rpg.model.domain.talents.Talent
@@ -101,6 +103,8 @@ val appModule = module {
         mapper
     }
 
+    single<LocationProvider> { AdmobLocationProvider() }
+
     /**
      * Repositories
      */
@@ -140,7 +144,7 @@ val appModule = module {
     viewModel { AuthenticationViewModel(get()) }
     viewModel { JoinPartyViewModel(get(), get()) }
     viewModel { PartyListViewModel(get()) }
-    viewModel { SettingsViewModel(get(), get()) }
+    viewModel { SettingsViewModel(get(), get(), get(), get()) }
     viewModel { (partyId: PartyId) -> CharacterCreationViewModel(partyId, get()) }
     viewModel { (partyId: PartyId) ->
         CompendiumViewModel(
