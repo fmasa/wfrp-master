@@ -15,12 +15,14 @@ import cz.frantisekmasa.wfrp_master.core.viewModel.providePremiumViewModel
 import cz.muni.fi.rpg.viewModels.provideSettingsViewModel
 
 @Composable
-fun BannerAd(unitId: String, adManager: AdManager) {
+fun BannerAd(unitId: String) {
     val premiumActive = providePremiumViewModel().active == true
 
     if (premiumActive) {
         return
     }
+
+    val viewModel = provideAdViewModel()
 
     val size = AdSize.SMART_BANNER
     val personalizedAds = provideSettingsViewModel().personalizedAds.collectAsState()
@@ -38,7 +40,7 @@ fun BannerAd(unitId: String, adManager: AdManager) {
                 AdView(it).apply {
                     adUnitId = unitId
                     adSize = size
-                    adManager.initializeUnit(this)
+                    viewModel.initializeAdUnit(this)
                 }
             }
         )

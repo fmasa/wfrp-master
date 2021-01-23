@@ -27,7 +27,6 @@ import cz.frantisekmasa.wfrp_master.core.ads.BannerAd
 import cz.frantisekmasa.wfrp_master.core.ui.scaffolding.tabs.rememberPagerState
 import cz.frantisekmasa.wfrp_master.core.viewModel.PartyViewModel
 import cz.frantisekmasa.wfrp_master.inventory.ui.CharacterTrappingsScreen
-import cz.frantisekmasa.wfrp_master.core.ads.AdManager
 import cz.frantisekmasa.wfrp_master.navigation.Route
 import cz.frantisekmasa.wfrp_master.navigation.Routing
 import cz.muni.fi.rpg.viewModels.*
@@ -36,7 +35,7 @@ import kotlinx.coroutines.withContext
 import org.koin.core.parameter.parametersOf
 
 @Composable
-fun CharacterDetailScreen(routing: Routing<Route.CharacterDetail>, adManager: AdManager) {
+fun CharacterDetailScreen(routing: Routing<Route.CharacterDetail>) {
     val characterId = routing.route.characterId
 
     val viewModel: CharacterViewModel by viewModel { parametersOf(characterId) }
@@ -82,7 +81,6 @@ fun CharacterDetailScreen(routing: Routing<Route.CharacterDetail>, adManager: Ad
             routing = routing,
             character = character,
             viewModel = viewModel,
-            adManager = adManager,
         )
     }
 }
@@ -92,7 +90,6 @@ private fun MainContainer(
     routing: Routing<Route.CharacterDetail>,
     character: Character?,
     viewModel: CharacterViewModel,
-    adManager: AdManager,
 ) {
     if (character == null) {
         Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
@@ -129,7 +126,7 @@ private fun MainContainer(
                 modifier = Modifier.weight(1f),
             )
 
-            BannerAd(stringResource(R.string.character_ad_unit_id), adManager)
+            BannerAd(stringResource(R.string.character_ad_unit_id))
         }
     }
 }

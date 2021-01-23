@@ -37,6 +37,7 @@ import cz.muni.fi.rpg.model.domain.talents.TalentRepository
 import cz.muni.fi.rpg.model.firestore.*
 import cz.muni.fi.rpg.model.firestore.repositories.*
 import cz.frantisekmasa.wfrp_master.core.ads.AdManager
+import cz.frantisekmasa.wfrp_master.core.ads.AdViewModel
 import cz.muni.fi.rpg.viewModels.*
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.core.scope.Scope
@@ -152,6 +153,7 @@ val appModule = module {
     viewModel { PartyListViewModel(get()) }
     viewModel { SettingsViewModel(get(), get(), get(), get()) }
     viewModel { PremiumViewModel(get()) }
+    viewModel { AdViewModel(get()) }
     viewModel { (partyId: PartyId) -> CharacterCreationViewModel(partyId, get()) }
     viewModel { (partyId: PartyId) ->
         CompendiumViewModel(

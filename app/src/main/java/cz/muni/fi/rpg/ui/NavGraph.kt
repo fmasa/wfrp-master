@@ -13,7 +13,6 @@ import cz.muni.fi.rpg.ui.character.CharacterDetailScreen
 import cz.muni.fi.rpg.ui.character.edit.CharacterEditScreen
 import cz.muni.fi.rpg.ui.characterCreation.CharacterCreationScreen
 import cz.muni.fi.rpg.ui.common.AboutScreen
-import cz.frantisekmasa.wfrp_master.core.ads.AdManager
 import cz.muni.fi.rpg.ui.gameMaster.GameMasterScreen
 import cz.muni.fi.rpg.ui.gameMaster.encounters.EncounterDetailScreen
 import cz.muni.fi.rpg.ui.gameMaster.encounters.NpcCreationScreen
@@ -25,17 +24,14 @@ import cz.muni.fi.rpg.ui.partySettings.PartySettingsScreen
 import cz.muni.fi.rpg.ui.settings.SettingsScreen
 
 @Composable
-fun NavGraph(navController: NavHostController, adManager: AdManager) {
+fun NavGraph(navController: NavHostController) {
     NavHost(navController, startDestination = Route.PartyList.toString()) {
         composable(Route.PartyList.toString()) {
             PartyListScreen(Routing(Route.PartyList, navController))
         }
 
         composable(Route.GameMaster.toString()) {
-            GameMasterScreen(
-                Routing(Route.GameMaster.fromEntry(it), navController),
-                adManager
-            )
+            GameMasterScreen(Routing(Route.GameMaster.fromEntry(it), navController))
         }
 
         composable(Route.PartySettings.toString()) {
@@ -61,10 +57,7 @@ fun NavGraph(navController: NavHostController, adManager: AdManager) {
         }
 
         composable(Route.CharacterDetail.toString()) {
-            CharacterDetailScreen(
-                Routing(Route.CharacterDetail.fromEntry(it), navController),
-                adManager,
-            )
+            CharacterDetailScreen(Routing(Route.CharacterDetail.fromEntry(it), navController))
         }
 
         composable(Route.CharacterEdit.toString()) {

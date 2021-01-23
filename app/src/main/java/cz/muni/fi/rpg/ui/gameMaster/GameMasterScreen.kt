@@ -28,7 +28,6 @@ import cz.frantisekmasa.wfrp_master.core.ui.scaffolding.tabs.TabScreen
 import cz.frantisekmasa.wfrp_master.core.viewModel.viewModel
 import cz.frantisekmasa.wfrp_master.core.domain.party.Party
 import cz.frantisekmasa.wfrp_master.core.ui.scaffolding.tabs.rememberPagerState
-import cz.frantisekmasa.wfrp_master.core.ads.AdManager
 import cz.muni.fi.rpg.ui.common.composables.*
 import cz.muni.fi.rpg.ui.gameMaster.encounters.EncountersScreen
 import cz.frantisekmasa.wfrp_master.navigation.Route
@@ -38,7 +37,7 @@ import cz.muni.fi.rpg.viewModels.GameMasterViewModel
 import org.koin.core.parameter.parametersOf
 
 @Composable
-fun GameMasterScreen(routing: Routing<Route.GameMaster>, adManager: AdManager) {
+fun GameMasterScreen(routing: Routing<Route.GameMaster>) {
     val viewModel = ViewModel.GameMaster(routing.route.partyId)
     val party = viewModel.party.collectAsState().value
 
@@ -99,10 +98,7 @@ fun GameMasterScreen(routing: Routing<Route.GameMaster>, adManager: AdManager) {
                     modifier = Modifier.weight(1f)
                 )
 
-                BannerAd(
-                    unitId = stringResource(R.string.game_master_ad_unit_id),
-                    adManager = adManager
-                )
+                BannerAd(stringResource(R.string.game_master_ad_unit_id))
             }
         }
     }
