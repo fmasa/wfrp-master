@@ -21,6 +21,8 @@ import androidx.compose.ui.text.toUpperCase
 import androidx.compose.ui.unit.dp
 import cz.frantisekmasa.wfrp_master.combat.R
 import cz.frantisekmasa.wfrp_master.combat.domain.encounter.Wounds
+import cz.frantisekmasa.wfrp_master.core.ads.AdManager
+import cz.frantisekmasa.wfrp_master.core.ads.BannerAd
 import cz.frantisekmasa.wfrp_master.core.auth.AmbientUser
 import cz.frantisekmasa.wfrp_master.core.ui.buttons.BackButton
 import cz.frantisekmasa.wfrp_master.core.ui.components.CharacteristicsTable
@@ -80,75 +82,80 @@ fun ActiveCombatScreen(routing: Routing<Route.ActiveCombat>) {
 
                 CombatantSheet(freshCombatant, routing, viewModel)
             }
-        }) {
+        },
+    ) {
+        Column {
+            Scaffold(
+                modifier = Modifier.weight(1f),
+                topBar = {
+                    TopAppBar(
+                        navigationIcon = { BackButton(onClick = { routing.pop() }) },
+                        title = {
+                            Column {
+                                Text(stringResource(R.string.title_combat))
+                                party?.let { Subtitle(it.getName()) }
+                            }
+                        },
+                        actions = {
+                            if (!isGameMaster) {
+                                return@TopAppBar
+                            }
 
-        Scaffold(
-            topBar = {
-                TopAppBar(
-                    navigationIcon = { BackButton(onClick = { routing.pop() }) },
-                    title = {
-                        Column {
-                            Text(stringResource(R.string.title_combat))
-                            party?.let { Subtitle(it.getName()) }
-                        }
-                    },
-                    actions = {
-                        if (!isGameMaster) {
-                            return@TopAppBar
-                        }
-
-                        OptionsAction {
-                            DropdownMenuItem(
-                                content = { Text(stringResource(R.string.combat_end)) },
-                                onClick = {
-                                    coroutineScope.launch(Dispatchers.IO) {
-                                        viewModel.endCombat()
+                            OptionsAction {
+                                DropdownMenuItem(
+                                    content = { Text(stringResource(R.string.combat_end)) },
+                                    onClick = {
+                                        coroutineScope.launch(Dispatchers.IO) {
+                                            viewModel.endCombat()
+                                        }
                                     }
-                                }
-                            )
+                                )
+                            }
                         }
+                    )
+                },
+                floatingActionButton = {
+                    if (!isGameMaster) {
+                        // Only GMs should manage turns and rounds
+                        return@Scaffold
                     }
-                )
-            },
-            floatingActionButton = {
-                if (!isGameMaster) {
-                    // Only GMs should manage turns and rounds
+
+                    FloatingActionButton(
+                        onClick = { coroutineScope.launch(Dispatchers.IO) { viewModel.nextTurn() } }
+                    ) {
+                        Icon(vectorResource(R.drawable.ic_round_next))
+                    }
+                },
+
+                ) {
+                val round = viewModel.round.collectAsState(null).value
+                val turn = viewModel.turn.collectAsState(null).value
+
+                if (combatants == null || round == null || turn == null || party == null) {
+                    FullScreenProgress()
                     return@Scaffold
                 }
 
-                FloatingActionButton(
-                    onClick = { coroutineScope.launch(Dispatchers.IO) { viewModel.nextTurn() } }
-                ) {
-                    Icon(vectorResource(R.drawable.ic_round_next))
-                }
-            },
+                Column {
+                    SubheadBar(stringResource(R.string.n_round, round))
 
-            ) {
-            val round = viewModel.round.collectAsState(null).value
-            val turn = viewModel.turn.collectAsState(null).value
-
-            if (combatants == null || round == null || turn == null || party == null) {
-                FullScreenProgress()
-                return@Scaffold
-            }
-
-            Column {
-                SubheadBar(stringResource(R.string.n_round, round))
-
-                ScrollableColumn(Modifier.fillMaxHeight()) {
-                    CombatantList(
-                        coroutineScope = coroutineScope,
-                        combatants = combatants,
-                        viewModel = viewModel,
-                        turn = turn,
-                        isGameMaster = isGameMaster,
-                        onCombatantClicked = {
-                            openedCombatant = it
-                            bottomSheetState.show()
-                        }
-                    )
+                    ScrollableColumn(Modifier.fillMaxHeight()) {
+                        CombatantList(
+                            coroutineScope = coroutineScope,
+                            combatants = combatants,
+                            viewModel = viewModel,
+                            turn = turn,
+                            isGameMaster = isGameMaster,
+                            onCombatantClicked = {
+                                openedCombatant = it
+                                bottomSheetState.show()
+                            }
+                        )
+                    }
                 }
             }
+
+            BannerAd(stringResource(R.string.combat_ad_unit_id))
         }
     }
 }
