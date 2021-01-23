@@ -8,10 +8,12 @@ import arrow.core.extensions.list.foldable.exists
 import com.google.firebase.analytics.ktx.analytics
 import com.google.firebase.ktx.Firebase
 import com.revenuecat.purchases.*
+import cz.frantisekmasa.wfrp_master.core.auth.UserId
 import cz.frantisekmasa.wfrp_master.core.ui.viewinterop.AmbientActivity
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.koin.androidx.viewmodel.ext.android.getViewModel
+import timber.log.Timber
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
@@ -23,17 +25,26 @@ class PremiumViewModel(private val purchases: Purchases) : ViewModel() {
     var active by mutableStateOf<Boolean?>(null)
         private set
 
-    suspend fun refreshPremiumStatus() {
-        active = suspendCoroutine { continuation ->
-            purchases.getPurchaserInfoWith(
-                { continuation.resume(null) },
-                { info ->
-                    continuation.resume(
-                        info.nonSubscriptionTransactions.exists { it.productId == premiumProductId }
-                    )
+    suspend fun refreshPremiumForUser(userId: UserId) {
+        val success: Boolean = suspendCoroutine { continuation ->
+            purchases.identifyWith(
+                userId.toString(),
+                {
+                    Timber.e("\"${it.message}\" caused by \"${it.underlyingErrorMessage}\"")
+
+                    continuation.resume(false)
+                },
+                {
+                    continuation.resume(true)
                 }
             )
         }
+
+        if (!success) {
+            return
+        }
+
+        refreshPremiumStatus()
     }
 
     suspend fun purchasePremium(activity: Activity): PurchaseResult {
@@ -48,6 +59,18 @@ class PremiumViewModel(private val purchases: Purchases) : ViewModel() {
         return result
     }
 
+    private suspend fun refreshPremiumStatus() {
+        active = suspendCoroutine { continuation ->
+            purchases.getPurchaserInfoWith(
+                { continuation.resume(null) },
+                { info ->
+                    continuation.resume(
+                        info.nonSubscriptionTransactions.exists { it.productId == premiumProductId }
+                    )
+                }
+            )
+        }
+    }
     private suspend fun offering(): Offering? = suspendCoroutine { continuation ->
         purchases.getOfferingsWith(
             { continuation.resume(null) },

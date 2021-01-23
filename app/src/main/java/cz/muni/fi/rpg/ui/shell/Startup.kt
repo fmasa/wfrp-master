@@ -3,6 +3,7 @@ package cz.muni.fi.rpg.ui.shell
 import androidx.compose.runtime.*
 import androidx.compose.runtime.savedinstancestate.savedInstanceState
 import cz.frantisekmasa.wfrp_master.core.auth.AmbientUser
+import cz.frantisekmasa.wfrp_master.core.auth.UserId
 import cz.muni.fi.rpg.ui.premium.providePremiumViewModel
 import cz.muni.fi.rpg.ui.startup.StartupScreen
 import cz.muni.fi.rpg.viewModels.provideAuthenticationViewModel
@@ -20,10 +21,10 @@ fun Startup(content: @Composable () -> Unit) {
     val premiumActive = premiumViewModel.active
     var adsInitialized by savedInstanceState { false }
 
-    if (premiumActive == null) {
+    if (user != null) {
         LaunchedEffect("premium") {
             withContext(Dispatchers.IO) {
-                premiumViewModel.refreshPremiumStatus()
+                premiumViewModel.refreshPremiumForUser(UserId.fromString(user.id))
             }
         }
     }
