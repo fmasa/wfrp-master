@@ -91,6 +91,10 @@ dependencies {
     // TODO: Make is implementation only
     api("com.fasterxml.jackson.module:jackson-module-kotlin:2.11.0")
 
+    // Premium
+    // TODO: Make implementation only
+    api("com.revenuecat.purchases:purchases:4.0.2")
+
     // Testing utilities
     testImplementation("junit:junit:4.13.1")
     androidTestImplementation("androidx.test.ext:junit:1.1.2")

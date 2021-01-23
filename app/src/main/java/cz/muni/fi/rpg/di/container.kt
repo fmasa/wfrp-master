@@ -54,7 +54,7 @@ import cz.muni.fi.rpg.model.domain.skills.Skill
 import cz.muni.fi.rpg.model.domain.spells.Spell
 import cz.muni.fi.rpg.model.domain.talents.Talent
 import cz.muni.fi.rpg.ui.partySettings.PartySettingsViewModel
-import cz.muni.fi.rpg.ui.premium.PremiumViewModel
+import cz.frantisekmasa.wfrp_master.core.viewModel.PremiumViewModel
 import kotlin.random.Random
 import cz.frantisekmasa.wfrp_master.compendium.domain.Skill as CompendiumSkill
 import cz.frantisekmasa.wfrp_master.compendium.domain.Spell as ComepndiumSpell

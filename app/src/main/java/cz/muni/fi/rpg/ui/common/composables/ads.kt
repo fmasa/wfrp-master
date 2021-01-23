@@ -12,7 +12,7 @@ import androidx.compose.ui.viewinterop.AndroidView
 import com.google.android.gms.ads.AdSize
 import com.google.android.gms.ads.AdView
 import cz.muni.fi.rpg.ui.common.AdManager
-import cz.muni.fi.rpg.ui.premium.providePremiumViewModel
+import cz.frantisekmasa.wfrp_master.core.viewModel.providePremiumViewModel
 import cz.muni.fi.rpg.viewModels.provideSettingsViewModel
 
 @Composable
