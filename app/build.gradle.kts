@@ -133,6 +133,9 @@ dependencies {
     // Permission management
     implementation("com.sagar:coroutinespermission:2.0.3")
 
+    // Premium
+    implementation("com.revenuecat.purchases:purchases:4.0.2")
+
     // QR code scanning
     implementation("com.google.zxing:core:3.3.3")
     implementation("androidx.camera:camera-camera2:1.0.0-rc01")
