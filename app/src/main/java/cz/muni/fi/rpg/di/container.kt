@@ -6,6 +6,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.firestoreSettings
 import com.google.firebase.ktx.Firebase
+import com.revenuecat.purchases.Purchases
 import cz.frantisekmasa.wfrp_master.combat.domain.encounter.Encounter
 import cz.frantisekmasa.wfrp_master.combat.domain.encounter.EncounterRepository
 import cz.frantisekmasa.wfrp_master.combat.domain.encounter.Npc
@@ -47,10 +48,13 @@ import cz.frantisekmasa.wfrp_master.core.firestore.repositories.FirestorePartyRe
 import cz.frantisekmasa.wfrp_master.core.viewModel.PartyViewModel
 import cz.frantisekmasa.wfrp_master.inventory.domain.InventoryItem
 import cz.frantisekmasa.wfrp_master.inventory.ui.InventoryViewModel
+import cz.muni.fi.rpg.model.ads.AdmobLocationProvider
+import cz.muni.fi.rpg.model.ads.LocationProvider
 import cz.muni.fi.rpg.model.domain.skills.Skill
 import cz.muni.fi.rpg.model.domain.spells.Spell
 import cz.muni.fi.rpg.model.domain.talents.Talent
 import cz.muni.fi.rpg.ui.partySettings.PartySettingsViewModel
+import cz.muni.fi.rpg.ui.premium.PremiumViewModel
 import kotlin.random.Random
 import cz.frantisekmasa.wfrp_master.compendium.domain.Skill as CompendiumSkill
 import cz.frantisekmasa.wfrp_master.compendium.domain.Spell as ComepndiumSpell
@@ -101,6 +105,12 @@ val appModule = module {
         mapper
     }
 
+    single<LocationProvider> { AdmobLocationProvider() }
+    single {
+        Purchases.configure(get(), "TGwuwqSQDUkhhYUtPGLdWilEzpOosKVU").apply {
+            Purchases.debugLogsEnabled = BuildConfig.DEBUG
+        }
+    }
     /**
      * Repositories
      */
@@ -140,7 +150,8 @@ val appModule = module {
     viewModel { AuthenticationViewModel(get()) }
     viewModel { JoinPartyViewModel(get(), get()) }
     viewModel { PartyListViewModel(get()) }
-    viewModel { SettingsViewModel(get(), get()) }
+    viewModel { SettingsViewModel(get(), get(), get(), get()) }
+    viewModel { PremiumViewModel(get()) }
     viewModel { (partyId: PartyId) -> CharacterCreationViewModel(partyId, get()) }
     viewModel { (partyId: PartyId) ->
         CompendiumViewModel(

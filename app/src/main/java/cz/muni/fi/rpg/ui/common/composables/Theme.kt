@@ -7,7 +7,9 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.unit.sp
 import cz.frantisekmasa.wfrp_master.core.media.AmbientSoundEnabled
 import cz.muni.fi.rpg.R
+import cz.muni.fi.rpg.ui.premium.providePremiumViewModel
 import cz.muni.fi.rpg.ui.shell.AmbientSystemUiController
+import cz.muni.fi.rpg.viewModels.SettingsViewModel
 import cz.muni.fi.rpg.viewModels.provideSettingsViewModel
 
 class Theme {
@@ -62,7 +64,7 @@ private val darkSystemColor = Color(35, 35, 35)
 @Composable
 fun Theme(content: @Composable () -> Unit) {
     val viewModel = provideSettingsViewModel()
-    val darkMode by viewModel.darkMode.collectAsState()
+    val darkMode = darkModeEnabled(viewModel)
     val soundEnabled by viewModel.soundEnabled.collectAsState()
 
     val colors = if (darkMode) Theme.DarkColors() else Theme.LightColors()
@@ -88,4 +90,15 @@ fun Theme(content: @Composable () -> Unit) {
             content()
         }
     }
+}
+
+@Composable
+private fun darkModeEnabled(settings: SettingsViewModel): Boolean {
+    val premiumActive = providePremiumViewModel().active
+
+    if (premiumActive != true) {
+        return false
+    }
+
+    return settings.darkMode.collectAsState().value
 }

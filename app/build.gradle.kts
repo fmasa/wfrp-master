@@ -11,6 +11,8 @@ plugins {
     id("com.google.firebase.crashlytics")
 }
 
+val ktorVersion = "1.5.0"
+
 android {
 
     lintOptions {
@@ -131,12 +133,20 @@ dependencies {
     // Permission management
     implementation("com.sagar:coroutinespermission:2.0.3")
 
+    // Premium
+    implementation("com.revenuecat.purchases:purchases:4.0.2")
+
     // QR code scanning
     implementation("com.google.zxing:core:3.3.3")
     implementation("androidx.camera:camera-camera2:1.0.0-rc01")
     implementation("androidx.camera:camera-core:1.0.0-rc01")
     implementation("androidx.camera:camera-lifecycle:1.0.0-rc01")
     implementation("androidx.camera:camera-view:1.0.0-alpha20")
+
+    // HTTP Client
+    implementation("io.ktor:ktor-client-core:$ktorVersion")
+    implementation("io.ktor:ktor-client-cio:$ktorVersion")
+    implementation("io.ktor:ktor-client-jackson:$ktorVersion")
 
     // Testing utilities
     testImplementation("junit:junit:4.13.1")

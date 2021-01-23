@@ -1,19 +1,14 @@
 package cz.muni.fi.rpg.ui.partySettings
 
-import androidx.annotation.StringRes
 import androidx.compose.foundation.ScrollableColumn
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
 import cz.frantisekmasa.wfrp_master.core.ui.buttons.BackButton
+import cz.frantisekmasa.wfrp_master.core.ui.components.settings.SettingsCard
+import cz.frantisekmasa.wfrp_master.core.ui.components.settings.SettingsTitle
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.FullScreenProgress
-import cz.frantisekmasa.wfrp_master.core.ui.primitives.Spacing
 import cz.frantisekmasa.wfrp_master.core.viewModel.viewModel
 import cz.frantisekmasa.wfrp_master.navigation.Route
 import cz.frantisekmasa.wfrp_master.navigation.Routing
@@ -39,28 +34,14 @@ fun PartySettingsScreen(routing: Routing<Route.PartySettings>) {
             return@Scaffold
         }
 
-        ScrollableColumn(
-            contentPadding = PaddingValues(bottom = Spacing.medium)
-        ) {
-            Card(shape = MaterialTheme.shapes.large) {
-                Column {
-                    SectionTitle(R.string.party_section_general)
-                    PartyNameItem(party.getName(), viewModel)
+        ScrollableColumn {
+            SettingsCard {
+                SettingsTitle(R.string.party_section_general)
+                PartyNameItem(party.getName(), viewModel)
 
-                    SectionTitle(R.string.title_combat)
-                    InitiativeStrategyItem(party, viewModel)
-                }
+                SettingsTitle(R.string.title_combat)
+                InitiativeStrategyItem(party, viewModel)
             }
         }
     }
-}
-
-@Composable
-private fun SectionTitle(@StringRes textRes: Int) {
-    Text(
-        text = stringResource(textRes),
-        modifier = Modifier.padding(start = Spacing.large, top = Spacing.bodyPadding),
-        style = MaterialTheme.typography.caption,
-        fontWeight = FontWeight.Bold,
-    )
 }

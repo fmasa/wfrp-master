@@ -5,16 +5,14 @@ import android.net.Uri
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.composed
-import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.AmbientContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
@@ -22,9 +20,14 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.Spacing
+import cz.frantisekmasa.wfrp_master.core.ui.viewinterop.AmbientActivity
 import cz.frantisekmasa.wfrp_master.navigation.Route
 import cz.frantisekmasa.wfrp_master.navigation.navigate
 import cz.muni.fi.rpg.R
+import cz.muni.fi.rpg.ui.premium.providePremiumViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import timber.log.Timber
 
 @Composable
 fun AppDrawer(drawerState: DrawerState, navController: NavHostController) {
@@ -34,6 +37,8 @@ fun AppDrawer(drawerState: DrawerState, navController: NavHostController) {
         Modifier
             .fillMaxSize()
     ) {
+        PremiumItem()
+
         DrawerItem(
             icon = R.drawable.ic_settings,
             text = R.string.settings,
@@ -98,14 +103,44 @@ fun AppDrawer(drawerState: DrawerState, navController: NavHostController) {
     }
 }
 
+@Composable
+private fun PremiumItem() {
+    val premiumViewModel = providePremiumViewModel()
+    val coroutineScope = rememberCoroutineScope()
+    val activity = AmbientActivity.current
+
+    if (premiumViewModel.active == true) {
+        return
+    }
+
+    DrawerItem(
+        icon = R.drawable.ic_premium,
+        text = R.string.buy_premium,
+        onClick = {
+            coroutineScope.launch(Dispatchers.IO) {
+                val result = premiumViewModel.purchasePremium(activity)
+                Timber.d(result.toString())
+            }
+        },
+        modifier = Modifier.padding(bottom = Spacing.tiny),
+    )
+
+    Divider()
+}
 
 @Composable
-private fun DrawerItem(@DrawableRes icon: Int, @StringRes text: Int, onClick: () -> Unit) {
+private fun DrawerItem(
+    @DrawableRes icon: Int,
+    @StringRes text: Int,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier
+) {
     Row(
         Modifier
             .fillMaxWidth()
             .clickable(onClick = onClick)
-            .padding(vertical = Spacing.medium, horizontal = Spacing.large),
+            .padding(vertical = Spacing.medium, horizontal = Spacing.large)
+            .then(modifier),
         horizontalArrangement = Arrangement.spacedBy(Spacing.medium),
         verticalAlignment = Alignment.CenterVertically,
     ) {
