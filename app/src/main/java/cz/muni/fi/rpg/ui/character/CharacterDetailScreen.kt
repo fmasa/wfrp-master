@@ -1,12 +1,10 @@
 package cz.muni.fi.rpg.ui.character
 
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.key
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.WithConstraints
@@ -25,11 +23,11 @@ import cz.muni.fi.rpg.R
 import cz.frantisekmasa.wfrp_master.core.domain.character.Character
 import cz.muni.fi.rpg.ui.character.skills.CharacterSkillsScreen
 import cz.frantisekmasa.wfrp_master.combat.ui.ActiveCombatBanner
+import cz.frantisekmasa.wfrp_master.core.ads.BannerAd
 import cz.frantisekmasa.wfrp_master.core.ui.scaffolding.tabs.rememberPagerState
 import cz.frantisekmasa.wfrp_master.core.viewModel.PartyViewModel
 import cz.frantisekmasa.wfrp_master.inventory.ui.CharacterTrappingsScreen
-import cz.muni.fi.rpg.ui.common.AdManager
-import cz.muni.fi.rpg.ui.common.composables.*
+import cz.frantisekmasa.wfrp_master.core.ads.AdManager
 import cz.frantisekmasa.wfrp_master.navigation.Route
 import cz.frantisekmasa.wfrp_master.navigation.Routing
 import cz.muni.fi.rpg.viewModels.*

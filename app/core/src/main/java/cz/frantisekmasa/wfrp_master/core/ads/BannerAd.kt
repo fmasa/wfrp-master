@@ -1,4 +1,4 @@
-package cz.muni.fi.rpg.ui.common.composables
+package cz.frantisekmasa.wfrp_master.core.ads
 
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -11,7 +11,6 @@ import androidx.compose.ui.platform.AmbientDensity
 import androidx.compose.ui.viewinterop.AndroidView
 import com.google.android.gms.ads.AdSize
 import com.google.android.gms.ads.AdView
-import cz.muni.fi.rpg.ui.common.AdManager
 import cz.frantisekmasa.wfrp_master.core.viewModel.providePremiumViewModel
 import cz.muni.fi.rpg.viewModels.provideSettingsViewModel
 

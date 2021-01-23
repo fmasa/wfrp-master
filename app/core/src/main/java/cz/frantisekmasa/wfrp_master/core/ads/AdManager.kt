@@ -1,4 +1,4 @@
-package cz.muni.fi.rpg.ui.common
+package cz.frantisekmasa.wfrp_master.core.ads
 
 import android.content.Context
 import android.widget.LinearLayout

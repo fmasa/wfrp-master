@@ -13,7 +13,7 @@ import cz.muni.fi.rpg.ui.character.CharacterDetailScreen
 import cz.muni.fi.rpg.ui.character.edit.CharacterEditScreen
 import cz.muni.fi.rpg.ui.characterCreation.CharacterCreationScreen
 import cz.muni.fi.rpg.ui.common.AboutScreen
-import cz.muni.fi.rpg.ui.common.AdManager
+import cz.frantisekmasa.wfrp_master.core.ads.AdManager
 import cz.muni.fi.rpg.ui.gameMaster.GameMasterScreen
 import cz.muni.fi.rpg.ui.gameMaster.encounters.EncounterDetailScreen
 import cz.muni.fi.rpg.ui.gameMaster.encounters.NpcCreationScreen

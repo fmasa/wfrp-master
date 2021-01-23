@@ -16,6 +16,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import cz.frantisekmasa.wfrp_master.combat.ui.ActiveCombatBanner
+import cz.frantisekmasa.wfrp_master.core.ads.BannerAd
 import cz.muni.fi.rpg.R
 import cz.frantisekmasa.wfrp_master.core.domain.identifiers.CharacterId
 import cz.frantisekmasa.wfrp_master.core.domain.identifiers.EncounterId
@@ -27,7 +28,7 @@ import cz.frantisekmasa.wfrp_master.core.ui.scaffolding.tabs.TabScreen
 import cz.frantisekmasa.wfrp_master.core.viewModel.viewModel
 import cz.frantisekmasa.wfrp_master.core.domain.party.Party
 import cz.frantisekmasa.wfrp_master.core.ui.scaffolding.tabs.rememberPagerState
-import cz.muni.fi.rpg.ui.common.AdManager
+import cz.frantisekmasa.wfrp_master.core.ads.AdManager
 import cz.muni.fi.rpg.ui.common.composables.*
 import cz.muni.fi.rpg.ui.gameMaster.encounters.EncountersScreen
 import cz.frantisekmasa.wfrp_master.navigation.Route

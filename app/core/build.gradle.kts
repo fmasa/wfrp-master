@@ -95,6 +95,18 @@ dependencies {
     // TODO: Make implementation only
     api("com.revenuecat.purchases:purchases:4.0.2")
 
+    // Ads
+    api("com.google.android.gms:play-services-ads:19.6.0")
+
+    // Shared Preferences DataStore
+    implementation("androidx.datastore:datastore-preferences:1.0.0-alpha05");
+
+    // HTTP Client
+    val ktorVersion = "1.5.0"
+    implementation("io.ktor:ktor-client-core:$ktorVersion")
+    implementation("io.ktor:ktor-client-cio:$ktorVersion")
+    implementation("io.ktor:ktor-client-jackson:$ktorVersion")
+
     // Testing utilities
     testImplementation("junit:junit:4.13.1")
     androidTestImplementation("androidx.test.ext:junit:1.1.2")
