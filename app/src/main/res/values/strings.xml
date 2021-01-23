@@ -254,6 +254,9 @@
     <string name="settings_dark_mode">Dark Mode</string>
     <string name="settings_sound">Sound Effects</string>
     <string name="settings_personalized_ads">Personalized Ads</string>
+    <string name="settings_general">General</string>
+    <string name="settings_premium">Premium</string>
+    <string name="settings_only_for_premium">This option is available only for Premium users</string>
 
     <string name="not_signed_in_description">You are not signed-in.\nSigning-in lets you keep access to parties between devices.</string>
     <string name="title_account">Account</string>
