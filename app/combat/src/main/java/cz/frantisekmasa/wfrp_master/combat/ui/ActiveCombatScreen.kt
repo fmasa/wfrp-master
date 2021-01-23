@@ -200,7 +200,7 @@ private fun AutoCloseOnEndedCombat(
                     Toast.LENGTH_SHORT
                 ).show()
 
-                routing.popUpTo(routing.route, inclusive = true)
+                routing.pop()
             }
         }
     }
