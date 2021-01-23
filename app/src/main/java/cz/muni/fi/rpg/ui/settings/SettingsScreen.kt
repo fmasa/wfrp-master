@@ -52,12 +52,15 @@ fun SettingsScreen(routing: Routing<Route.Settings>) {
             SignInCard(viewModel, routing)
 
             SettingsCard {
-                SettingsTitle(R.string.settings_general)
-                SoundCard(viewModel)
-                PersonalizedAds(viewModel)
-
                 val premiumViewModel = providePremiumViewModel()
                 val premiumActive = premiumViewModel.active == true
+
+                SettingsTitle(R.string.settings_general)
+                SoundCard(viewModel)
+
+                if (!premiumActive) {
+                    PersonalizedAds(viewModel)
+                }
 
                 SettingsTitle(R.string.settings_premium)
 
