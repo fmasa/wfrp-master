@@ -1,4 +1,4 @@
-package cz.muni.fi.rpg.ui.premium
+package cz.frantisekmasa.wfrp_master.core.viewModel
 
 import android.app.Activity
 import androidx.annotation.UiThread

@@ -12,8 +12,8 @@ import com.google.firebase.analytics.ktx.analytics
 import com.google.firebase.ktx.Firebase
 import cz.frantisekmasa.wfrp_master.core.domain.party.PartyRepository
 import cz.frantisekmasa.wfrp_master.core.ui.viewinterop.AmbientActivity
-import cz.muni.fi.rpg.model.ads.LocationProvider
-import cz.muni.fi.rpg.ui.common.AdManager
+import cz.frantisekmasa.wfrp_master.core.ads.LocationProvider
+import cz.frantisekmasa.wfrp_master.core.ads.AdManager
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch

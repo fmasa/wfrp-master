@@ -21,8 +21,8 @@ import cz.frantisekmasa.wfrp_master.core.ui.viewinterop.AmbientActivity
 import cz.muni.fi.rpg.R
 import cz.frantisekmasa.wfrp_master.navigation.Route
 import cz.frantisekmasa.wfrp_master.navigation.Routing
-import cz.muni.fi.rpg.ui.premium.PremiumViewModel
-import cz.muni.fi.rpg.ui.premium.providePremiumViewModel
+import cz.frantisekmasa.wfrp_master.core.viewModel.PremiumViewModel
+import cz.frantisekmasa.wfrp_master.core.viewModel.providePremiumViewModel
 import cz.muni.fi.rpg.viewModels.SettingsViewModel
 import cz.muni.fi.rpg.viewModels.provideSettingsViewModel
 import kotlinx.coroutines.Dispatchers

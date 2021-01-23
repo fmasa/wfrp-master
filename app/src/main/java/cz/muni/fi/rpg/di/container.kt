@@ -36,7 +36,8 @@ import cz.muni.fi.rpg.model.domain.spells.SpellRepository
 import cz.muni.fi.rpg.model.domain.talents.TalentRepository
 import cz.muni.fi.rpg.model.firestore.*
 import cz.muni.fi.rpg.model.firestore.repositories.*
-import cz.muni.fi.rpg.ui.common.AdManager
+import cz.frantisekmasa.wfrp_master.core.ads.AdManager
+import cz.frantisekmasa.wfrp_master.core.ads.AdViewModel
 import cz.muni.fi.rpg.viewModels.*
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.core.scope.Scope
@@ -48,13 +49,13 @@ import cz.frantisekmasa.wfrp_master.core.firestore.repositories.FirestorePartyRe
 import cz.frantisekmasa.wfrp_master.core.viewModel.PartyViewModel
 import cz.frantisekmasa.wfrp_master.inventory.domain.InventoryItem
 import cz.frantisekmasa.wfrp_master.inventory.ui.InventoryViewModel
-import cz.muni.fi.rpg.model.ads.AdmobLocationProvider
-import cz.muni.fi.rpg.model.ads.LocationProvider
+import cz.frantisekmasa.wfrp_master.core.ads.AdmobLocationProvider
+import cz.frantisekmasa.wfrp_master.core.ads.LocationProvider
 import cz.muni.fi.rpg.model.domain.skills.Skill
 import cz.muni.fi.rpg.model.domain.spells.Spell
 import cz.muni.fi.rpg.model.domain.talents.Talent
 import cz.muni.fi.rpg.ui.partySettings.PartySettingsViewModel
-import cz.muni.fi.rpg.ui.premium.PremiumViewModel
+import cz.frantisekmasa.wfrp_master.core.viewModel.PremiumViewModel
 import kotlin.random.Random
 import cz.frantisekmasa.wfrp_master.compendium.domain.Skill as CompendiumSkill
 import cz.frantisekmasa.wfrp_master.compendium.domain.Spell as ComepndiumSpell
@@ -152,6 +153,7 @@ val appModule = module {
     viewModel { PartyListViewModel(get()) }
     viewModel { SettingsViewModel(get(), get(), get(), get()) }
     viewModel { PremiumViewModel(get()) }
+    viewModel { AdViewModel(get()) }
     viewModel { (partyId: PartyId) -> CharacterCreationViewModel(partyId, get()) }
     viewModel { (partyId: PartyId) ->
         CompendiumViewModel(

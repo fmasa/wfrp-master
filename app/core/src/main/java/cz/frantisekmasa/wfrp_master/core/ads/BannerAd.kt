@@ -1,4 +1,4 @@
-package cz.muni.fi.rpg.ui.common.composables
+package cz.frantisekmasa.wfrp_master.core.ads
 
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -11,17 +11,18 @@ import androidx.compose.ui.platform.AmbientDensity
 import androidx.compose.ui.viewinterop.AndroidView
 import com.google.android.gms.ads.AdSize
 import com.google.android.gms.ads.AdView
-import cz.muni.fi.rpg.ui.common.AdManager
-import cz.muni.fi.rpg.ui.premium.providePremiumViewModel
+import cz.frantisekmasa.wfrp_master.core.viewModel.providePremiumViewModel
 import cz.muni.fi.rpg.viewModels.provideSettingsViewModel
 
 @Composable
-fun BannerAd(unitId: String, adManager: AdManager) {
+fun BannerAd(unitId: String) {
     val premiumActive = providePremiumViewModel().active == true
 
     if (premiumActive) {
         return
     }
+
+    val viewModel = provideAdViewModel()
 
     val size = AdSize.SMART_BANNER
     val personalizedAds = provideSettingsViewModel().personalizedAds.collectAsState()
@@ -39,7 +40,7 @@ fun BannerAd(unitId: String, adManager: AdManager) {
                 AdView(it).apply {
                     adUnitId = unitId
                     adSize = size
-                    adManager.initializeUnit(this)
+                    viewModel.initializeAdUnit(this)
                 }
             }
         )

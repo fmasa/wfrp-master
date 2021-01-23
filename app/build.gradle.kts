@@ -11,8 +11,6 @@ plugins {
     id("com.google.firebase.crashlytics")
 }
 
-val ktorVersion = "1.5.0"
-
 android {
 
     lintOptions {
@@ -124,17 +122,10 @@ dependencies {
     // Time picker dialog
     implementation("com.vanpra.compose-material-dialogs:datetime:0.2.11")
 
-    // Shared Preferences DataStore
-    implementation("androidx.datastore:datastore-preferences:1.0.0-alpha05");
-
-    implementation("com.google.android.gms:play-services-ads:19.6.0")
     implementation("com.google.android.gms:play-services-auth:19.0.0")
 
     // Permission management
     implementation("com.sagar:coroutinespermission:2.0.3")
-
-    // Premium
-    implementation("com.revenuecat.purchases:purchases:4.0.2")
 
     // QR code scanning
     implementation("com.google.zxing:core:3.3.3")
@@ -142,11 +133,6 @@ dependencies {
     implementation("androidx.camera:camera-core:1.0.0-rc01")
     implementation("androidx.camera:camera-lifecycle:1.0.0-rc01")
     implementation("androidx.camera:camera-view:1.0.0-alpha20")
-
-    // HTTP Client
-    implementation("io.ktor:ktor-client-core:$ktorVersion")
-    implementation("io.ktor:ktor-client-cio:$ktorVersion")
-    implementation("io.ktor:ktor-client-jackson:$ktorVersion")
 
     // Testing utilities
     testImplementation("junit:junit:4.13.1")

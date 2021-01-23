@@ -5,7 +5,6 @@ import android.net.Uri
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
@@ -24,7 +23,7 @@ import cz.frantisekmasa.wfrp_master.core.ui.viewinterop.AmbientActivity
 import cz.frantisekmasa.wfrp_master.navigation.Route
 import cz.frantisekmasa.wfrp_master.navigation.navigate
 import cz.muni.fi.rpg.R
-import cz.muni.fi.rpg.ui.premium.providePremiumViewModel
+import cz.frantisekmasa.wfrp_master.core.viewModel.providePremiumViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import timber.log.Timber

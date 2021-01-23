@@ -7,7 +7,7 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.unit.sp
 import cz.frantisekmasa.wfrp_master.core.media.AmbientSoundEnabled
 import cz.muni.fi.rpg.R
-import cz.muni.fi.rpg.ui.premium.providePremiumViewModel
+import cz.frantisekmasa.wfrp_master.core.viewModel.providePremiumViewModel
 import cz.muni.fi.rpg.ui.shell.AmbientSystemUiController
 import cz.muni.fi.rpg.viewModels.SettingsViewModel
 import cz.muni.fi.rpg.viewModels.provideSettingsViewModel
