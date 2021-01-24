@@ -13,6 +13,7 @@ internal fun InputLabel(label: String) {
     Text(
         label,
         style = MaterialTheme.typography.body2,
+        maxLines = 1,
         modifier = Modifier.padding(bottom = 4.dp),
     )
 }
