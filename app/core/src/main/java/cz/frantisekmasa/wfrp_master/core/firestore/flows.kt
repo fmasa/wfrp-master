@@ -10,6 +10,7 @@ import com.google.firebase.firestore.Query
 import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.*
+import timber.log.Timber
 
 fun <T : Any> queryFlow(
     query: Query,
@@ -35,6 +36,8 @@ fun <T : Any> documentFlow(
     document: DocumentReference,
     snapshotProcessor: (result: Either<FirebaseFirestoreException?, DocumentSnapshot>) -> T,
 ): Flow<T> = callbackFlow {
+    Timber.d("Attaching document listener for ${document.path}")
+
     val listener = document.addSnapshotListener { snapshot, exception ->
         exception?.let { offer(snapshotProcessor(Left(it))) }
         snapshot?.let {
@@ -48,5 +51,8 @@ fun <T : Any> documentFlow(
         }
     }
 
-    awaitClose { listener.remove() }
+    awaitClose {
+        Timber.d("Detaching document listener for ${document.path}")
+        listener.remove()
+    }
 }
