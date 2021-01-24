@@ -33,7 +33,7 @@ import cz.frantisekmasa.wfrp_master.navigation.Routing
 import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.ui.common.composables.*
 import cz.muni.fi.rpg.viewModels.AuthenticationViewModel
-import cz.muni.fi.rpg.viewModels.SettingsViewModel
+import cz.frantisekmasa.wfrp_master.core.viewModel.SettingsViewModel
 import cz.muni.fi.rpg.viewModels.provideAuthenticationViewModel
 import kotlinx.coroutines.*
 import kotlinx.coroutines.tasks.await

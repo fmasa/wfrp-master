@@ -1,4 +1,4 @@
-package cz.muni.fi.rpg.viewModels
+package cz.frantisekmasa.wfrp_master.core.viewModel
 
 import android.content.Context
 import androidx.compose.runtime.Composable

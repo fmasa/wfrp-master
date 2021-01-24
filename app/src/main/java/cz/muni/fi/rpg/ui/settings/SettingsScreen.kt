@@ -23,8 +23,8 @@ import cz.frantisekmasa.wfrp_master.navigation.Route
 import cz.frantisekmasa.wfrp_master.navigation.Routing
 import cz.frantisekmasa.wfrp_master.core.viewModel.PremiumViewModel
 import cz.frantisekmasa.wfrp_master.core.viewModel.providePremiumViewModel
-import cz.muni.fi.rpg.viewModels.SettingsViewModel
-import cz.muni.fi.rpg.viewModels.provideSettingsViewModel
+import cz.frantisekmasa.wfrp_master.core.viewModel.SettingsViewModel
+import cz.frantisekmasa.wfrp_master.core.viewModel.provideSettingsViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch

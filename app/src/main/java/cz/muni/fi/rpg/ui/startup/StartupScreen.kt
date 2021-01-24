@@ -20,7 +20,7 @@ import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.ui.common.composables.Theme
 import cz.muni.fi.rpg.ui.shell.splashBackground
 import cz.muni.fi.rpg.viewModels.AuthenticationViewModel
-import cz.muni.fi.rpg.viewModels.provideSettingsViewModel
+import cz.frantisekmasa.wfrp_master.core.viewModel.provideSettingsViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
