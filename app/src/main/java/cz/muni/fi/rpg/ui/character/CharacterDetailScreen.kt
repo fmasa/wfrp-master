@@ -4,7 +4,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.WithConstraints
@@ -41,8 +41,8 @@ fun CharacterDetailScreen(routing: Routing<Route.CharacterDetail>) {
     val viewModel: CharacterViewModel by viewModel { parametersOf(characterId) }
     val partyViewModel: PartyViewModel by viewModel { parametersOf(characterId.partyId) }
 
-    val character = viewModel.character.collectAsState(null).value
-    val party = partyViewModel.party.collectAsState(null).value
+    val character = viewModel.character.observeAsState().value
+    val party = partyViewModel.party.observeAsState().value
 
     LaunchedEffect(routing.route.characterId) {
         withContext(Dispatchers.IO) {

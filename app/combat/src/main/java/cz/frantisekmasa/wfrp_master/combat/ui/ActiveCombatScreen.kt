@@ -8,17 +8,20 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.material.ButtonDefaults.IconSize
 import androidx.compose.runtime.*
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.gesture.tapGestureFilter
 import androidx.compose.ui.platform.AmbientAnimationClock
 import androidx.compose.ui.platform.AmbientContext
+import androidx.compose.ui.platform.AmbientLifecycleOwner
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.intl.Locale
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.toUpperCase
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.Observer
 import cz.frantisekmasa.wfrp_master.combat.R
 import cz.frantisekmasa.wfrp_master.combat.domain.encounter.Wounds
 import cz.frantisekmasa.wfrp_master.core.ads.AdManager
@@ -38,9 +41,7 @@ import cz.frantisekmasa.wfrp_master.navigation.Route
 import cz.frantisekmasa.wfrp_master.navigation.Routing
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import org.koin.core.parameter.parametersOf
 import timber.log.Timber
 
@@ -52,8 +53,8 @@ fun ActiveCombatScreen(routing: Routing<Route.ActiveCombat>) {
 
     val coroutineScope = rememberCoroutineScope()
 
-    val party = viewModel.party.collectAsState(null).value
-    val combatants = remember { viewModel.combatants() }.collectAsState(null).value
+    val party = viewModel.party.observeAsState(null).value
+    val combatants = remember { viewModel.combatants() }.observeAsState().value
     val isGameMaster = AmbientUser.current.id == party?.gameMasterId
 
     var openedCombatant by remember { mutableStateOf<CombatantItem?>(null) }
@@ -128,8 +129,8 @@ fun ActiveCombatScreen(routing: Routing<Route.ActiveCombat>) {
                 },
 
                 ) {
-                val round = viewModel.round.collectAsState(null).value
-                val turn = viewModel.turn.collectAsState(null).value
+                val round = viewModel.round.observeAsState().value
+                val turn = viewModel.turn.observeAsState().value
 
                 if (combatants == null || round == null || turn == null || party == null) {
                     FullScreenProgress()
@@ -182,27 +183,32 @@ private fun AutoCloseOnEndedCombat(
     routing: Routing<Route.ActiveCombat>
 ) {
     val context = AmbientContext.current
+    val lifecycleOwner = AmbientLifecycleOwner.current
 
-    LaunchedEffect(routing.route) {
-        viewModel.isCombatActive.collect { active ->
-            Timber.d("Is combat active? $active")
-
-            if (active) {
-                return@collect
-            }
+    val observer: Observer<Boolean> = remember(routing) {
+        Observer { active ->
+           if (active) {
+               return@Observer
+           }
 
             Timber.d("Closing combat screen")
 
-            withContext(Dispatchers.Main) {
-                Toast.makeText(
-                    context,
-                    context.getString(R.string.no_active_combat),
-                    Toast.LENGTH_SHORT
-                ).show()
+            Toast.makeText(
+                context,
+                context.getString(R.string.no_active_combat),
+                Toast.LENGTH_SHORT
+            ).show()
 
-                routing.pop()
-            }
+            routing.pop()
         }
+    }
+
+    onActive {
+        viewModel.isCombatActive.observe(lifecycleOwner, observer)
+    }
+
+    onDispose {
+        viewModel.isCombatActive.removeObserver(observer)
     }
 }
 

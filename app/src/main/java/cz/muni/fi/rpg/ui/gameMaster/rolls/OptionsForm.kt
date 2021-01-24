@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.selection.toggleable
 import androidx.compose.material.*
 import androidx.compose.runtime.*
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.savedinstancestate.savedInstanceState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -30,7 +31,7 @@ internal fun OptionsForm(
     onNewSkillPickingRequest: () -> Unit,
     onExecute: (characters: Set<Character>, testModifier: Int) -> Unit,
 ) {
-    val characters = viewModel.characters.collectAsState(null).value
+    val characters = viewModel.characters.observeAsState().value
     val characterIds = characters?.map { it.id }?.toSet()
 
     var validate by remember { mutableStateOf(false) }

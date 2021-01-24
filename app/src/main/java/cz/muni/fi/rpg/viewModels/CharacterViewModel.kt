@@ -1,6 +1,8 @@
 package cz.muni.fi.rpg.viewModels
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.asLiveData
 import cz.frantisekmasa.wfrp_master.core.domain.character.Character
 import cz.frantisekmasa.wfrp_master.core.domain.character.CharacterNotFound
 import cz.frantisekmasa.wfrp_master.core.domain.character.CharacterRepository
@@ -13,7 +15,7 @@ class CharacterViewModel(
     private val characters: CharacterRepository
 ) : ViewModel() {
 
-    val character: Flow<Character> = characters.getLive(characterId).right()
+    val character: LiveData<Character> = characters.getLive(characterId).right().asLiveData()
 
     suspend fun update(change: (Character) -> Unit) {
         val character = characters.get(characterId)

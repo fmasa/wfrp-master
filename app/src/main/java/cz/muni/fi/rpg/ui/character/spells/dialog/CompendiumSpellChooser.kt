@@ -9,6 +9,7 @@ import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.*
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.EmptyUI
@@ -34,8 +35,8 @@ internal fun CompendiumSpellChooser(
             TopAppBar(title = { Text(stringResource(R.string.title_choose_compendium_spell)) })
         }
     ) {
-        val compendiumSpells = viewModel.notUsedSpellsFromCompendium.collectAsState(null).value
-        val totalCompendiumSpellCount = viewModel.compendiumSpellsCount.collectAsState(null).value
+        val compendiumSpells = viewModel.notUsedSpellsFromCompendium.observeAsState().value
+        val totalCompendiumSpellCount = viewModel.compendiumSpellsCount.observeAsState().value
         var saving by remember { mutableStateOf(false) }
 
         if (compendiumSpells == null || totalCompendiumSpellCount == null || saving) {

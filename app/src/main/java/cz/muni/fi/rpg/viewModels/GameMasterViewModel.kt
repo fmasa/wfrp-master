@@ -1,9 +1,9 @@
 package cz.muni.fi.rpg.viewModels
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.asLiveData
 import arrow.core.extensions.list.foldable.exists
-import cz.frantisekmasa.wfrp_master.core.domain.character.Character
 import cz.frantisekmasa.wfrp_master.core.domain.identifiers.CharacterId
 import cz.frantisekmasa.wfrp_master.core.domain.character.CharacterRepository
 import cz.frantisekmasa.wfrp_master.core.domain.Ambitions
@@ -21,18 +21,15 @@ class GameMasterViewModel(
     private val characterRepository: CharacterRepository
 ) : ViewModel() {
 
-    val party: StateFlow<Party?> = parties.getLive(partyId)
-        .right()
-        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
-
-    val characters: Flow<List<Character>> = characterRepository.inParty(partyId)
+    private val partyFlow: Flow<Party> = parties.getLive(partyId).right()
+    val party: LiveData<Party> = partyFlow.asLiveData()
 
     /**
-     * Returns flow which emits either CharacterId of players current character or NULL if user
+     * Returns LiveData which emits either CharacterId of players current character or NULL if user
      * didn't create character yet
      */
-    val players: StateFlow<List<Player>?> =
-        party.filterNotNull().zip(characterRepository.inParty(partyId)) { party, characters ->
+    val players: LiveData<List<Player>?> =
+        partyFlow.filterNotNull().zip(characterRepository.inParty(partyId)) { party, characters ->
             val players = characters.map { Player.ExistingCharacter(it) }
             val usersWithoutCharacter = party.users
                 .filter { it != party.gameMasterId }
@@ -40,7 +37,7 @@ class GameMasterViewModel(
                 .map { Player.UserWithoutCharacter(it) }
 
             players + usersWithoutCharacter
-        }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
+        }.asLiveData()
 
     suspend fun archiveCharacter(id: CharacterId) {
         val character = characterRepository.get(id)

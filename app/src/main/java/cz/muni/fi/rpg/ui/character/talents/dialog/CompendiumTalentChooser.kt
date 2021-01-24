@@ -9,7 +9,7 @@ import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import cz.frantisekmasa.wfrp_master.compendium.domain.Talent
@@ -31,8 +31,8 @@ internal fun CompendiumTalentChooser(
             TopAppBar(title = { Text(stringResource(R.string.title_choose_compendium_talent)) })
         }
     ) {
-        val compendiumTalents = viewModel.notUsedTalentsFromCompendium.collectAsState(null).value
-        val totalCompendiumTalentCount = viewModel.compendiumTalentsCount.collectAsState(null).value
+        val compendiumTalents = viewModel.notUsedTalentsFromCompendium.observeAsState().value
+        val totalCompendiumTalentCount = viewModel.compendiumTalentsCount.observeAsState().value
 
         if (compendiumTalents == null || totalCompendiumTalentCount == null) {
             FullScreenProgress()

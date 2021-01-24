@@ -8,11 +8,12 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.*
 import androidx.compose.runtime.*
-import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.LiveData
 import cz.frantisekmasa.wfrp_master.core.ui.buttons.BackButton
 import cz.frantisekmasa.wfrp_master.core.ui.components.settings.SettingsCard
 import cz.frantisekmasa.wfrp_master.core.ui.components.settings.SettingsTitle
@@ -23,10 +24,9 @@ import cz.frantisekmasa.wfrp_master.navigation.Route
 import cz.frantisekmasa.wfrp_master.navigation.Routing
 import cz.frantisekmasa.wfrp_master.core.viewModel.PremiumViewModel
 import cz.frantisekmasa.wfrp_master.core.viewModel.providePremiumViewModel
-import cz.muni.fi.rpg.viewModels.SettingsViewModel
-import cz.muni.fi.rpg.viewModels.provideSettingsViewModel
+import cz.frantisekmasa.wfrp_master.core.viewModel.SettingsViewModel
+import cz.frantisekmasa.wfrp_master.core.viewModel.provideSettingsViewModel
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
 @Composable
@@ -122,7 +122,7 @@ private fun PersonalizedAds(viewModel: SettingsViewModel) {
 @Composable
 private fun SwitchItem(
     @StringRes name: Int,
-    value: StateFlow<Boolean>,
+    value: LiveData<Boolean>,
     onChange: suspend (newValue: Boolean) -> Unit,
     disabledText: String? = null,
     enabled: Boolean = true,
@@ -137,7 +137,8 @@ private fun SwitchItem(
         },
         secondaryText = disabledText?.let { { Text(disabledText, color = color) } },
         trailing = {
-            val checked by value.collectAsState()
+            val checked = value.observeAsState().value ?: return@ListItem
+
             val coroutineScope = rememberCoroutineScope()
 
             Switch(

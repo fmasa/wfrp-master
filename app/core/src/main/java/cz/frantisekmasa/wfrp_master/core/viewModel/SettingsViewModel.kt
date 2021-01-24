@@ -1,4 +1,4 @@
-package cz.muni.fi.rpg.viewModels
+package cz.frantisekmasa.wfrp_master.core.viewModel
 
 import android.content.Context
 import androidx.compose.runtime.Composable
@@ -6,7 +6,9 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.preferencesKey
 import androidx.datastore.preferences.createDataStore
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.analytics.ktx.analytics
 import com.google.firebase.ktx.Firebase
@@ -28,9 +30,9 @@ class SettingsViewModel(
     private val adManager: AdManager,
 ) : ViewModel() {
 
-    val darkMode: StateFlow<Boolean> by lazy { getPreference(AppSettings.DARK_MODE, false) }
-    val soundEnabled: StateFlow<Boolean> by lazy { getPreference(AppSettings.SOUND_ENABLED, true) }
-    val personalizedAds: StateFlow<Boolean> by lazy { getPreference(AppSettings.PERSONALIZED_ADS, false) }
+    val darkMode: LiveData<Boolean> by lazy { getPreference(AppSettings.DARK_MODE, false) }
+    val soundEnabled: LiveData<Boolean> by lazy { getPreference(AppSettings.SOUND_ENABLED, true) }
+    val personalizedAds: LiveData<Boolean> by lazy { getPreference(AppSettings.PERSONALIZED_ADS, false) }
 
     private val dataStore = context.createDataStore("settings")
 
@@ -88,10 +90,10 @@ class SettingsViewModel(
     private fun getPreference(
         preference: Preferences.Key<Boolean>,
         defaultValue: Boolean
-    ): StateFlow<Boolean> {
+    ): LiveData<Boolean> {
         return dataStore.data
             .map { preferences -> preferences[preference] ?: defaultValue }
-            .stateIn(viewModelScope, SharingStarted.Eagerly, defaultValue)
+            .asLiveData()
     }
 }
 

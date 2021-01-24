@@ -3,6 +3,7 @@ package cz.muni.fi.rpg.ui.character.talents
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.savedinstancestate.savedInstanceState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -22,7 +23,7 @@ internal fun TalentsCard(
     viewModel: TalentsViewModel,
     onRemove: (Talent) -> Unit,
 ) {
-    val talents = viewModel.talents.collectAsState(null).value ?: return
+    val talents = viewModel.talents.observeAsState().value ?: return
 
     CardContainer(Modifier.padding(horizontal = 8.dp).padding(bottom = 8.dp)) {
         Column(Modifier.padding(horizontal = 6.dp)) {

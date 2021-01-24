@@ -8,7 +8,7 @@ import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.WithConstraints
@@ -39,7 +39,7 @@ import org.koin.core.parameter.parametersOf
 @Composable
 fun GameMasterScreen(routing: Routing<Route.GameMaster>) {
     val viewModel = ViewModel.GameMaster(routing.route.partyId)
-    val party = viewModel.party.collectAsState().value
+    val party = viewModel.party.observeAsState().value
 
     Scaffold(
         topBar = {

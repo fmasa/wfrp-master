@@ -1,6 +1,8 @@
 package cz.frantisekmasa.wfrp_master.combat.ui
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.asLiveData
 import cz.frantisekmasa.wfrp_master.combat.domain.encounter.Npc
 import cz.frantisekmasa.wfrp_master.combat.domain.encounter.NpcRepository
 import cz.frantisekmasa.wfrp_master.combat.domain.encounter.Wounds
@@ -34,27 +36,32 @@ class CombatViewModel(
     private val characters: CharacterRepository,
 ): ViewModel() {
 
-    val party: Flow<Party> = parties.getLive(partyId).right()
+    private val partyFlow = parties.getLive(partyId).right()
 
-    private val combat: Flow<Combat> = party
+    val party: LiveData<Party> = partyFlow.asLiveData()
+
+    private val combatFlow: Flow<Combat> = partyFlow
         .mapLatest { it.getActiveCombat() }
         .filterNotNull()
 
-    private val activeEncounterId: Flow<EncounterId> = combat
+    private val activeEncounterId: Flow<EncounterId> = combatFlow
         .mapLatest { EncounterId(partyId, it.encounterId) }
         .distinctUntilChanged()
 
-    val isCombatActive: Flow<Boolean> = party
+    val isCombatActive: LiveData<Boolean> = partyFlow
         .mapLatest { it.hasActiveCombat() }
         .distinctUntilChanged()
+        .asLiveData()
 
-    val turn: Flow<Int> = combat
+    val turn: LiveData<Int> = combatFlow
         .mapLatest { it.getTurn() }
         .distinctUntilChanged()
+        .asLiveData()
 
-    val round: Flow<Int> = combat
+    val round: LiveData<Int> = combatFlow
         .mapLatest { it.getRound() }
         .distinctUntilChanged()
+        .asLiveData()
 
     suspend fun loadNpcsFromEncounter(encounterId: EncounterId): List<Npc> =
         npcs.findByEncounter(encounterId).first()
@@ -81,14 +88,14 @@ class CombatViewModel(
     suspend fun reorderCombatants(combatants: List<Combatant>) =
         updateCombat { it.reorderCombatants(combatants) }
 
-    fun combatants(): Flow<List<CombatantItem>> {
+    fun combatants(): LiveData<List<CombatantItem>> {
         val npcsFlow = activeEncounterId.transform { emitAll(npcs.findByEncounter(it)) }
 
         val charactersFlow = characters
             .inParty(partyId)
             .distinctUntilChanged()
 
-        val combatantsFlow = party
+        val combatantsFlow = partyFlow
             .mapNotNull { it.getActiveCombat()?.getCombatants() }
             .distinctUntilChanged()
 
@@ -123,7 +130,7 @@ class CombatViewModel(
                         }
                     }
                 }
-        }
+        }.asLiveData()
     }
 
     suspend fun endCombat() = updateParty { it.endCombat() }

@@ -1,6 +1,8 @@
 package cz.muni.fi.rpg.viewModels
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import cz.frantisekmasa.wfrp_master.combat.domain.encounter.Encounter
 import cz.frantisekmasa.wfrp_master.combat.domain.encounter.EncounterRepository
@@ -15,7 +17,9 @@ class EncountersViewModel(
     private val encounterRepository: EncounterRepository
 ) : ViewModel() {
 
-    val encounters: Flow<List<Encounter>> by lazy { encounterRepository.findByParty(partyId) }
+    val encounters: LiveData<List<Encounter>> by lazy {
+        encounterRepository.findByParty(partyId).asLiveData()
+    }
 
     suspend fun createEncounter(name: String, description: String) {
         encounterRepository.save(

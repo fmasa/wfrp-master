@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.*
 import androidx.compose.runtime.*
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.savedinstancestate.savedInstanceState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -53,7 +54,7 @@ fun EncounterDetailScreen(routing: Routing<Route.EncounterDetail>) {
     Scaffold(
         topBar = {
             val partyId = encounterId.partyId
-            val encounter = viewModel.encounter.collectAsState(null).value
+            val encounter = viewModel.encounter.observeAsState().value
 
             TopAppBar(
                 title = {
@@ -61,7 +62,7 @@ fun EncounterDetailScreen(routing: Routing<Route.EncounterDetail>) {
                         encounter?.let { Text(it.name) }
 
                         val partyViewModel: PartyViewModel by viewModel { parametersOf(partyId) }
-                        partyViewModel.party.collectAsState(null).value?.let {
+                        partyViewModel.party.observeAsState().value?.let {
                             Subtitle(it.getName())
                         }
                     }
@@ -178,7 +179,7 @@ private fun DescriptionCard(viewModel: EncounterDetailViewModel) {
     CardContainer(Modifier.fillMaxWidth().padding(horizontal = 8.dp)) {
         CardTitle(R.string.title_description)
 
-        val encounter = viewModel.encounter.collectAsState(null).value
+        val encounter = viewModel.encounter.observeAsState().value
 
         if (encounter == null) {
             Box(Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
@@ -201,7 +202,7 @@ private fun CombatantsCard(
     CardContainer(Modifier.fillMaxWidth().padding(8.dp)) {
         CardTitle(R.string.title_npcs)
 
-        val npcs = viewModel.npcs.collectAsState(null).value
+        val npcs = viewModel.npcs.observeAsState().value
 
         if (npcs == null) {
             Box(Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {

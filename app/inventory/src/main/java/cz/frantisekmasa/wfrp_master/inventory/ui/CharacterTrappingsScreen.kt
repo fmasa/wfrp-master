@@ -8,6 +8,7 @@ import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.savedinstancestate.savedInstanceState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -40,7 +41,7 @@ fun CharacterTrappingsScreen(
                     .padding(Spacing.medium),
             )
 
-            viewModel.money.collectAsState(null).value?.let { money ->
+            viewModel.money.observeAsState(null).value?.let { money ->
                 var transactionDialogVisible by savedInstanceState { false }
 
                 MoneyBalance(
@@ -62,7 +63,7 @@ fun CharacterTrappingsScreen(
             }
         }
 
-        viewModel.armor.collectAsState(null).value?.let { armor ->
+        viewModel.armor.observeAsState(null).value?.let { armor ->
             ArmorCard(armor, onChange = { viewModel.updateArmor(it) })
         }
 
@@ -97,8 +98,8 @@ fun CharacterTrappingsScreen(
 
 @Composable
 private fun CharacterEncumbrance(viewModel: InventoryViewModel, modifier: Modifier) {
-    val max = viewModel.maxEncumbrance.collectAsState().value
-    val total = viewModel.totalEncumbrance.collectAsState().value
+    val max = viewModel.maxEncumbrance.observeAsState().value
+    val total = viewModel.totalEncumbrance.observeAsState().value
 
     val isOverburdened = max != null && total != null && total > max
 
@@ -122,7 +123,7 @@ private fun InventoryItemsCard(
     onRemove: (InventoryItem) -> Unit,
     onNewItemButtonClicked: () -> Unit,
 ) {
-    val items = viewModel.inventory.collectAsState().value ?: return
+    val items = viewModel.inventory.observeAsState().value ?: return
 
     CardContainer(Modifier.padding(horizontal = 8.dp)) {
         Column(Modifier.padding(horizontal = 8.dp)) {

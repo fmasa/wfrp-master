@@ -1,7 +1,8 @@
 package cz.frantisekmasa.wfrp_master.compendium.ui
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.asLiveData
 import cz.frantisekmasa.wfrp_master.compendium.domain.Compendium
 import cz.frantisekmasa.wfrp_master.compendium.domain.Skill
 import cz.frantisekmasa.wfrp_master.compendium.domain.Spell
@@ -10,10 +11,6 @@ import cz.frantisekmasa.wfrp_master.core.domain.party.Party
 import cz.frantisekmasa.wfrp_master.core.domain.party.PartyId
 import cz.frantisekmasa.wfrp_master.core.domain.party.PartyRepository
 import cz.frantisekmasa.wfrp_master.core.utils.right
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.stateIn
 
 class CompendiumViewModel(
     private val partyId: PartyId,
@@ -22,7 +19,7 @@ class CompendiumViewModel(
     private val spellCompendium: Compendium<Spell>,
     parties: PartyRepository,
 ) : ViewModel() {
-    val party: Flow<Party> = parties.getLive(partyId).right()
+    val party: LiveData<Party> = parties.getLive(partyId).right().asLiveData()
 
     suspend fun save(skill: Skill) {
         skillCompendium.saveItems(partyId, skill)
@@ -60,16 +57,10 @@ class CompendiumViewModel(
         spellCompendium.saveItems(partyId, *spells.toTypedArray())
     }
 
-    val skills: StateFlow<List<Skill>?> =
-        skillCompendium.liveForParty(partyId)
-            .stateIn(viewModelScope, SharingStarted.WhileSubscribed(stopTimeoutMillis = 1000L), null)
+    val skills: LiveData<List<Skill>> = skillCompendium.liveForParty(partyId).asLiveData()
 
-    val talents: StateFlow<List<Talent>?> =
-        talentsCompendium.liveForParty(partyId)
-            .stateIn(viewModelScope, SharingStarted.WhileSubscribed(stopTimeoutMillis = 1000L), null)
+    val talents: LiveData<List<Talent>> = talentsCompendium.liveForParty(partyId).asLiveData()
 
-    val spells: StateFlow<List<Spell>?> =
-        spellCompendium.liveForParty(partyId)
-            .stateIn(viewModelScope, SharingStarted.WhileSubscribed(stopTimeoutMillis = 1000L), null)
+    val spells: LiveData<List<Spell>> = spellCompendium.liveForParty(partyId).asLiveData()
 
 }

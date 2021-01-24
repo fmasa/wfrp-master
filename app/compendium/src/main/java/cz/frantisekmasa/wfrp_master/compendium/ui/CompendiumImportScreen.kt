@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.*
 import androidx.compose.runtime.*
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.AmbientContext
@@ -48,7 +49,7 @@ private fun TopBar(routing: Routing<Route.CompendiumImport>) {
         title = {
             Column {
                 Text(stringResource(R.string.title_compendium_import))
-                viewModel.party.collectAsState(null).value?.let {
+                viewModel.party.observeAsState().value?.let {
                     Subtitle(it.getName())
                 }
             }

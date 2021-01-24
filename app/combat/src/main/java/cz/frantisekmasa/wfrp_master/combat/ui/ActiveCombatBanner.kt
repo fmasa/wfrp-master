@@ -8,6 +8,7 @@ import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.material.TextButton
 import androidx.compose.runtime.*
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -29,7 +30,7 @@ fun ActiveCombatBanner(partyId: PartyId, routing: Routing<*>) {
     val partyViewModel: PartyViewModel by viewModel { parametersOf(partyId) }
 
     partyViewModel.party
-        .collectAsState(null)
+        .observeAsState()
         .value
         ?.getActiveCombat() ?: return
 
