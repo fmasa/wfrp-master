@@ -1,6 +1,7 @@
 package cz.frantisekmasa.wfrp_master.core.ui.forms
 
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
@@ -12,6 +13,7 @@ import androidx.compose.runtime.Stable
 import androidx.compose.runtime.savedinstancestate.savedInstanceState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.Spacing
@@ -102,7 +104,9 @@ private fun TextInput(
         Surface(
             shape = RoundedCornerShape(Spacing.tiny),
             border = BorderStroke(1.dp, borderColor),
-            color = MaterialTheme.colors.surface,
+            color = if (MaterialTheme.colors.isLight)
+                MaterialTheme.colors.surface else
+                Color(33, 33, 33), // TODO: Move to Theme
         ) {
             val textStyle = AmbientTextStyle.current
             val textColor = MaterialTheme.colors.onSurface
