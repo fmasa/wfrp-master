@@ -6,6 +6,7 @@ import androidx.lifecycle.asLiveData
 import com.google.firebase.analytics.ktx.analytics
 import com.google.firebase.analytics.ktx.logEvent
 import com.google.firebase.ktx.Firebase
+import cz.frantisekmasa.wfrp_master.core.auth.UserId
 import cz.frantisekmasa.wfrp_master.core.domain.party.Party
 import cz.frantisekmasa.wfrp_master.core.domain.party.PartyId
 import cz.frantisekmasa.wfrp_master.core.domain.party.PartyRepository
@@ -48,5 +49,13 @@ class PartyListViewModel(
         }
 
         return partyId
+    }
+
+    suspend fun leaveParty(partyId: PartyId, userId: UserId) {
+        val party = parties.get(partyId)
+
+        party.leave(userId)
+
+        parties.save(party)
     }
 }

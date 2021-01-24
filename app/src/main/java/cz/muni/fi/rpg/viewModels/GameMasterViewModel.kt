@@ -31,10 +31,9 @@ class GameMasterViewModel(
     val players: LiveData<List<Player>?> =
         partyFlow.filterNotNull().zip(characterRepository.inParty(partyId)) { party, characters ->
             val players = characters.map { Player.ExistingCharacter(it) }
-            val usersWithoutCharacter = party.users
-                .filter { it != party.gameMasterId }
-                .filter { userId -> !players.exists { it.character.userId == userId } }
-                .map { Player.UserWithoutCharacter(it) }
+            val usersWithoutCharacter = party.getPlayers()
+                .filter { userId -> !players.exists { it.character.userId == userId.toString() } }
+                .map { Player.UserWithoutCharacter(it.toString()) }
 
             players + usersWithoutCharacter
         }.asLiveData()

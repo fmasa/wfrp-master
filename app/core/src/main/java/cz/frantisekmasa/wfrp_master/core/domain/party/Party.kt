@@ -1,6 +1,7 @@
 package cz.frantisekmasa.wfrp_master.core.domain.party
 
 import android.os.Parcelable
+import cz.frantisekmasa.wfrp_master.core.auth.UserId
 import cz.frantisekmasa.wfrp_master.core.domain.Ambitions
 import cz.frantisekmasa.wfrp_master.core.domain.identifiers.EncounterId
 import cz.frantisekmasa.wfrp_master.core.domain.party.combat.Combat
@@ -16,7 +17,7 @@ data class Party(
     val id: PartyId,
     private var name: String,
     val gameMasterId: String?, // Remove support for single-player parties in 1.14
-    val users: Set<String>,
+    private var users: Set<String>,
     private var archived: Boolean = false,
     private var ambitions: Ambitions = Ambitions("", ""),
     private var time: DateTime = DateTime(
@@ -93,4 +94,14 @@ data class Party(
     fun changeTime(time: DateTime) {
         this.time = time
     }
+
+    fun leave(userId: UserId) {
+        users = users.filter { it != userId.toString() }.toSet()
+    }
+
+    fun isMember(userId: UserId): Boolean = users.contains(userId.toString())
+
+    fun getPlayers(): List<UserId> =
+        users.filter { it != gameMasterId }
+            .map(UserId::fromString)
 }

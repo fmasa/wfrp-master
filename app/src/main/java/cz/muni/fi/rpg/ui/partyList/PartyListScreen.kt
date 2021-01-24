@@ -81,11 +81,23 @@ fun PartyListScreen(routing: Routing<Route.PartyList>) {
             mutableStateOf<DialogState<Party>>(DialogState.Closed())
         }
 
+        var leavePartyDialogState by remember {
+            mutableStateOf<DialogState<Party>>(DialogState.Closed())
+        }
+
         removePartyDialogState.IfOpened { party ->
             RemovePartyDialog(
                 party,
                 viewModel,
                 onDismissRequest = { removePartyDialogState = DialogState.Closed() },
+            )
+        }
+
+        leavePartyDialogState.IfOpened { party ->
+            LeavePartyDialog(
+                party,
+                viewModel,
+                onDismissRequest = { leavePartyDialogState = DialogState.Closed() },
             )
         }
 
@@ -103,6 +115,7 @@ fun PartyListScreen(routing: Routing<Route.PartyList>) {
                 }
             },
             onRemove = { removePartyDialogState = DialogState.Opened(it) },
+            onLeaveRequest = { leavePartyDialogState = DialogState.Opened(it) },
         )
     }
 }
@@ -182,6 +195,7 @@ private fun MainContainer(
     parties: List<Party>?,
     onClick: (Party) -> Unit,
     onRemove: (Party) -> Unit,
+    onLeaveRequest: (Party) -> Unit,
 ) {
     Box(modifier) {
         parties?.let {
@@ -194,13 +208,23 @@ private fun MainContainer(
                 return@let
             }
 
-            PartyList(parties = it, onClick = onClick, onRemove = onRemove)
+            PartyList(
+                parties = it,
+                onClick = onClick,
+                onRemove = onRemove,
+                onLeaveRequest = onLeaveRequest,
+            )
         }
     }
 }
 
 @Composable
-fun PartyList(parties: List<Party>, onClick: (Party) -> Unit, onRemove: (Party) -> Unit) {
+fun PartyList(
+    parties: List<Party>,
+    onClick: (Party) -> Unit,
+    onRemove: (Party) -> Unit,
+    onLeaveRequest: (Party) -> Unit,
+) {
     ScrollableColumn(
         Modifier
             .padding(top = 12.dp)
@@ -214,9 +238,20 @@ fun PartyList(parties: List<Party>, onClick: (Party) -> Unit, onRemove: (Party) 
                 onLongPress = { contextMenuOpened.value = party.id }
             )
 
+            val isGameMaster =
+                AmbientUser.current.id == party.gameMasterId || party.gameMasterId == null
+
             ContextMenu(
                 items = listOf(
-                    ContextMenu.Item(stringResource(R.string.remove), onClick = { onRemove(party) })
+                    if (isGameMaster)
+                        ContextMenu.Item(
+                            stringResource(R.string.remove),
+                            onClick = { onRemove(party) },
+                        )
+                    else ContextMenu.Item(
+                        stringResource(R.string.button_leave),
+                        onClick = { onLeaveRequest(party) },
+                    )
                 ),
                 onDismissRequest = { contextMenuOpened.value = null },
                 expanded = contextMenuOpened.value == party.id

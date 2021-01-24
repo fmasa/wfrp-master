@@ -157,6 +157,19 @@ class Parties extends Suite {
     }
 
     @test
+    async "should let users leave party"() {
+        const userId = "user123";
+        const party = await this.createUserAccessibleParty(userId);
+
+        return firebase.assertSucceeds(
+            this.authedApp(userId)
+                .collection("parties")
+                .doc(party.id)
+                .set({...party, users: party.users.filter(id => id != userId)})
+        );
+    }
+
+    @test
     async "should NOT let users add different users to parties"() {
         const party = await this.createValidParty();
         const userId = "user123";
