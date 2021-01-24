@@ -1,6 +1,8 @@
 package cz.muni.fi.rpg.viewModels
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import cz.frantisekmasa.wfrp_master.compendium.domain.Compendium
 import cz.frantisekmasa.wfrp_master.core.domain.identifiers.CharacterId
@@ -17,14 +19,15 @@ class SkillsViewModel(
     private val skillRepository: SkillRepository,
     private val compendium: Compendium<CompendiumSkill>
 ) : ViewModel() {
+    private val skillsFlow = skillRepository.forCharacter(characterId)
 
-    val skills: Flow<List<Skill>> = skillRepository.forCharacter(characterId)
-    val compendiumSkillsCount: Flow<Int> by lazy { compendiumSkills.map { it.size } }
-    val notUsedSkillsFromCompendium: Flow<List<CompendiumSkill>> by lazy {
-        compendiumSkills.zip(skills) { compendiumSkills, characterSkills ->
+    val skills: LiveData<List<Skill>> = skillsFlow.asLiveData()
+    val compendiumSkillsCount: LiveData<Int> by lazy { compendiumSkills.map { it.size }.asLiveData() }
+    val notUsedSkillsFromCompendium: LiveData<List<CompendiumSkill>> by lazy {
+        compendiumSkills.zip(skillsFlow) { compendiumSkills, characterSkills ->
             val skillsUsedByCharacter = characterSkills.mapNotNull { it.compendiumId }.toSet()
             compendiumSkills.filter { !skillsUsedByCharacter.contains(it.id) }
-        }
+        }.asLiveData()
     }
 
     private val compendiumSkills by lazy { compendium.liveForParty(characterId.partyId) }

@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.*
 import androidx.compose.runtime.*
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.savedinstancestate.savedInstanceState
 import cz.muni.fi.rpg.R
 import cz.frantisekmasa.wfrp_master.core.domain.party.Party
@@ -147,7 +148,7 @@ private fun MainContainer(
     onClick: (Party) -> Unit,
     onRemove: (Party) -> Unit,
 ) {
-    val parties = remember { viewModel.liveForUser(userId) }.collectAsState(null)
+    val parties = remember { viewModel.liveForUser(userId) }.observeAsState()
 
     Box(modifier) {
         parties.value?.let {

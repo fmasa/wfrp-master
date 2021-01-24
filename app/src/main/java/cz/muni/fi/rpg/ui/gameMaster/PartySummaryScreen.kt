@@ -7,6 +7,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.runtime.*
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.savedinstancestate.savedInstanceState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -15,6 +16,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.LiveData
 import cz.frantisekmasa.wfrp_master.compendium.ui.CompendiumViewModel
 import cz.muni.fi.rpg.R
 import cz.frantisekmasa.wfrp_master.core.domain.character.Character
@@ -64,7 +66,7 @@ internal fun PartySummaryScreen(
         }
     ) {
         ScrollableColumn(Modifier.background(MaterialTheme.colors.background)) {
-            val party = viewModel.party.collectAsState().value
+            val party = viewModel.party.observeAsState().value
                 ?: return@ScrollableColumn
 
             val invitationDialogVisible = remember { mutableStateOf(false) }
@@ -124,11 +126,11 @@ internal fun PartySummaryScreen(
 @Composable
 private fun <T> RowScope.CompendiumSummary(
     @StringRes text: Int,
-    itemsCount: StateFlow<List<T>?>,
+    itemsCount: LiveData<List<T>>,
 ) {
     Column(Modifier.weight(1f), horizontalAlignment = Alignment.CenterHorizontally) {
         Text(
-            itemsCount.collectAsState().value?.size?.toString() ?: "?",
+            itemsCount.observeAsState().value?.size?.toString() ?: "?",
             style = MaterialTheme.typography.h6
         )
         Text(stringResource(text))
@@ -148,7 +150,7 @@ private fun PlayersCard(
 
             CardTitle(R.string.title_characters)
 
-            val players = viewModel.players.collectAsState().value
+            val players = viewModel.players.observeAsState().value
 
             when {
                 players == null -> {
@@ -184,7 +186,7 @@ private fun PlayersCard(
             ) {
                 PrimaryButton(R.string.button_create, onClick = { onCharacterCreateRequest(null) })
 
-                val party = viewModel.party.collectAsState().value
+                val party = viewModel.party.observeAsState().value
 
                 PrimaryButton(
                     R.string.button_invite,

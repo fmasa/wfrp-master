@@ -9,7 +9,7 @@ import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import cz.frantisekmasa.wfrp_master.compendium.domain.Skill
@@ -31,8 +31,8 @@ internal fun CompendiumSkillChooser(
             TopAppBar(title = { Text(stringResource(R.string.title_choose_compendium_skill)) })
         }
     ) {
-        val compendiumSkills = viewModel.notUsedSkillsFromCompendium.collectAsState(null).value
-        val totalCompendiumSkillCount = viewModel.compendiumSkillsCount.collectAsState(null).value
+        val compendiumSkills = viewModel.notUsedSkillsFromCompendium.observeAsState().value
+        val totalCompendiumSkillCount = viewModel.compendiumSkillsCount.observeAsState().value
 
         if (compendiumSkills == null || totalCompendiumSkillCount == null) {
             FullScreenProgress()

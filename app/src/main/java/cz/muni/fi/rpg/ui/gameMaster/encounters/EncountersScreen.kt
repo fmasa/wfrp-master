@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.material.*
 import androidx.compose.material.Icon
 import androidx.compose.runtime.*
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.savedinstancestate.savedInstanceState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -23,7 +24,6 @@ import cz.frantisekmasa.wfrp_master.core.ui.primitives.EmptyUI
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.Spacing
 import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.viewModels.EncountersViewModel
-import java.util.*
 
 @Composable
 fun EncountersScreen(
@@ -32,7 +32,7 @@ fun EncountersScreen(
     modifier: Modifier,
     onEncounterClick: (Encounter) -> Unit,
 ) {
-    val encounters = viewModel.encounters.collectAsState(null).value
+    val encounters = viewModel.encounters.observeAsState().value
 
     if (encounters == null) {
         Box(modifier.fillMaxSize()) {

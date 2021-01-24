@@ -8,7 +8,7 @@ import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.res.stringResource
@@ -36,7 +36,7 @@ internal fun SkillChooser(
             )
         }
     ) {
-        val skills = viewModel.skills.collectAsState(null).value
+        val skills = viewModel.skills.observeAsState().value
 
         if (skills == null) {
             FullScreenProgress()

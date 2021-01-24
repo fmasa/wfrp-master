@@ -1,6 +1,8 @@
 package cz.muni.fi.rpg.viewModels
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import cz.frantisekmasa.wfrp_master.compendium.domain.Compendium
 import cz.frantisekmasa.wfrp_master.compendium.domain.Talent as CompendiumTalent
@@ -20,14 +22,15 @@ class TalentsViewModel(
     private val compendium: Compendium<CompendiumTalent>,
 ) : ViewModel() {
 
-    val talents: Flow<List<Talent>> = talentRepository.findAllForCharacter(characterId)
-    val compendiumTalentsCount: Flow<Int> by lazy { compendiumTalents.map { it.size } }
+    private val talentsFlow = talentRepository.findAllForCharacter(characterId)
+    val talents: LiveData<List<Talent>> = talentsFlow.asLiveData()
+    val compendiumTalentsCount: LiveData<Int> by lazy { compendiumTalents.map { it.size }.asLiveData() }
 
-    val notUsedTalentsFromCompendium: Flow<List<CompendiumTalent>> by lazy {
-        compendiumTalents.zip(talents) { compendiumTalents, characterTalents ->
+    val notUsedTalentsFromCompendium: LiveData<List<CompendiumTalent>> by lazy {
+        compendiumTalents.zip(talentsFlow) { compendiumTalents, characterTalents ->
             val talentsUsedByCharacter = characterTalents.mapNotNull { it.compendiumId }.toSet()
             compendiumTalents.filter { !talentsUsedByCharacter.contains(it.id) }
-        }
+        }.asLiveData()
     }
 
     private val compendiumTalents = compendium.liveForParty(characterId.partyId)

@@ -1,6 +1,8 @@
 package cz.frantisekmasa.wfrp_master.inventory.ui
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import cz.frantisekmasa.wfrp_master.core.domain.Armor
 import cz.frantisekmasa.wfrp_master.core.domain.character.CharacterFeatureRepository
@@ -23,23 +25,20 @@ class InventoryViewModel(
     private val armorRepository: CharacterFeatureRepository<Armor>,
     private val characters: CharacterRepository
 ) : ViewModel() {
+
     private val character = characters.getLive(characterId).right()
+    private val itemsFlow = inventoryItems.findAllForCharacter(characterId)
+    val inventory: LiveData<List<InventoryItem>?> = itemsFlow.asLiveData()
 
-    val inventory: StateFlow<List<InventoryItem>?> =
-        inventoryItems.findAllForCharacter(characterId)
-            .stateIn(viewModelScope, SharingStarted.Lazily, null)
+    val maxEncumbrance: LiveData<Encumbrance> =
+        character.map { Encumbrance.maximumForCharacter(it.getCharacteristics()) }.asLiveData()
 
-    val maxEncumbrance: StateFlow<Encumbrance?> =
-        character.map { Encumbrance.maximumForCharacter(it.getCharacteristics()) }
-            .stateIn(viewModelScope, SharingStarted.Lazily, null)
+    val totalEncumbrance: LiveData<Encumbrance?> = itemsFlow
+        .map { items -> items.map { it.encumbrance * it.quantity }.sum() }
+        .asLiveData()
 
-    val totalEncumbrance: StateFlow<Encumbrance?> = inventory
-        .map { items -> items?.map { it.encumbrance * it.quantity }?.sum() }
-        .stateIn(viewModelScope, SharingStarted.Lazily, null)
-
-    val armor: Flow<Armor> = armorRepository.getLive(characterId).right()
-
-    val money: Flow<Money> = character.map { it.getMoney() }
+    val armor: LiveData<Armor> = armorRepository.getLive(characterId).right().asLiveData()
+    val money: LiveData<Money> = character.map { it.getMoney() }.asLiveData()
 
     suspend fun addMoney(amount: Money) {
         val character = characters.get(characterId)

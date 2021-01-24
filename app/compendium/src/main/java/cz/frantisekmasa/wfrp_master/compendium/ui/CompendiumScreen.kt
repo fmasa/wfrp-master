@@ -12,6 +12,7 @@ import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.*
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.WithConstraints
 import androidx.compose.ui.layout.WithConstraintsScope
@@ -21,6 +22,7 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.intl.Locale
 import androidx.compose.ui.text.toUpperCase
 import androidx.compose.ui.unit.Dp
+import androidx.lifecycle.LiveData
 import cz.frantisekmasa.wfrp_master.compendium.R
 import cz.frantisekmasa.wfrp_master.compendium.domain.CompendiumItem
 import cz.frantisekmasa.wfrp_master.core.domain.party.PartyId
@@ -60,7 +62,7 @@ private fun TopBar(routing: Routing<Route.Compendium>) {
         title = {
             Column {
                 Text(stringResource(R.string.title_compendium))
-                viewModel.party.collectAsState(null).value?.let {
+                viewModel.party.observeAsState().value?.let {
                     Subtitle(it.getName())
                 }
             }
@@ -112,7 +114,7 @@ private fun WithConstraintsScope.tabs(partyId: PartyId): Array<TabScreen<Compend
 
 @Composable
 fun <T : CompendiumItem> CompendiumTab(
-    liveItems: StateFlow<List<T>?>,
+    liveItems: LiveData<List<T>>,
     width: Dp,
     emptyUI: @Composable () -> Unit,
     dialog: @Composable (MutableState<DialogState<T?>>) -> Unit,
@@ -132,7 +134,7 @@ fun <T : CompendiumItem> CompendiumTab(
         }
     ) {
         Column(Modifier.fillMaxSize().background(MaterialTheme.colors.background)) {
-            val items = liveItems.collectAsState().value
+            val items = liveItems.observeAsState().value
 
             when {
                 items == null -> FullScreenProgress()

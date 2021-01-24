@@ -6,7 +6,7 @@ import kotlinx.parcelize.Parcelize
 import java.util.*
 
 @Parcelize
-class PartyId private constructor(@JsonValue private val value: UUID) : Parcelable {
+data class PartyId internal constructor(@JsonValue private val value: UUID) : Parcelable {
     companion object {
         fun fromString(id: String): PartyId = PartyId(UUID.fromString(id))
         fun generate(): PartyId = PartyId(UUID.randomUUID())

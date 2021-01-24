@@ -8,6 +8,7 @@ import androidx.compose.material.Icon
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.savedinstancestate.savedInstanceState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -56,7 +57,7 @@ internal fun CharacterSpellsScreen(
 
 @Composable
 private fun MainContainer(viewModel: SpellsViewModel) {
-    val spells = viewModel.spells.collectAsState(null).value ?: return
+    val spells = viewModel.spells.observeAsState().value ?: return
 
     if (spells.isEmpty()) {
         EmptyUI(

@@ -3,7 +3,7 @@ package cz.muni.fi.rpg.ui.partySettings
 import androidx.compose.foundation.ScrollableColumn
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.res.stringResource
 import cz.frantisekmasa.wfrp_master.core.ui.buttons.BackButton
 import cz.frantisekmasa.wfrp_master.core.ui.components.settings.SettingsCard
@@ -27,7 +27,7 @@ fun PartySettingsScreen(routing: Routing<Route.PartySettings>) {
             )
         },
     ) {
-        val party = viewModel.party.collectAsState(null).value
+        val party = viewModel.party.observeAsState().value
 
         if (party == null) {
             FullScreenProgress()
