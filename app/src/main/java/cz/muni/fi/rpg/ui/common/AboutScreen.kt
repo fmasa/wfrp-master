@@ -44,10 +44,13 @@ fun AboutScreen(routing: Routing<Route.About>) {
                 Divider(Modifier.padding(vertical = 12.dp))
 
                 Text(
-                    stringResource(R.string.title_about_icons),
-                    style = MaterialTheme.typography.h5,
+                    stringResource(R.string.title_about_attribution),
+                    style = MaterialTheme.typography.h6,
                 )
-                Text(stringResource(R.string.iconsAttribution))
+
+                listOf(R.string.attribution_icons, R.string.attribution_dice_roll_sound).forEach {
+                    Text(stringResource(it), textAlign = TextAlign.Center)
+                }
             }
         }
     }

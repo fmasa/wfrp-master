@@ -124,7 +124,8 @@
     <string name="no_spells">No spells</string>
     <string name="no_spells_sub_text">You don\'t know any spells.</string>
     <string name="no_skills">Character doesn\'t have any skills.</string>
-    <string name="iconsAttribution">Icons made by Delapouite and Lorc.\nAvailable on https://game-icons.net</string>
+    <string name="attribution_icons">Icons made by Delapouite and Lorc.\nAvailable on https://game-icons.net</string>
+    <string name="attribution_dice_roll_sound">\"Shake And Roll Dice\" sound was made by Mike Koenig (soundbible.com) and used via CC BY 3.0 license</string>
 
     <string name="character_icon_description">Character icon</string>
     <string name="no_characters_in_party_prompt">No player has joined this party yet.</string>>
@@ -214,7 +215,7 @@
     <string name="report_issue">Report an Issue</string>
     <string name="issue_email_address">frantisekmasa1+wfrp-master@gmail.com</string>
     <string name="issue_email_subject">Issue Report for WFRP Master</string>
-    <string name="title_about_icons">Icons</string>
+    <string name="title_about_attribution">Attribution</string>
     <string name="about_body">
         This application was created by František Maša and his student peers, now it\'s developed
         in free time by František Maša.\n
