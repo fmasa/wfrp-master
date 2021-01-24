@@ -4,6 +4,7 @@ import androidx.annotation.StringRes
 import androidx.compose.foundation.ScrollableColumn
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.*
@@ -57,6 +58,7 @@ fun SettingsScreen(routing: Routing<Route.Settings>) {
 
                 SettingsTitle(R.string.settings_general)
                 SoundCard(viewModel)
+                DarkModeCard(viewModel)
 
                 if (!premiumActive) {
                     PersonalizedAds(viewModel)
@@ -67,8 +69,6 @@ fun SettingsScreen(routing: Routing<Route.Settings>) {
                 if (!premiumActive) {
                     BuyPremiumButton(premiumViewModel)
                 }
-
-                DarkModeCard(viewModel, premiumActive)
             }
         }
     }
@@ -91,13 +91,11 @@ private fun BuyPremiumButton(viewModel: PremiumViewModel) {
 }
 
 @Composable
-private fun DarkModeCard(viewModel: SettingsViewModel, premiumActive: Boolean) {
+private fun DarkModeCard(viewModel: SettingsViewModel) {
     SwitchItem(
         name = R.string.settings_dark_mode,
-        value = viewModel.darkMode,
+        value = viewModel.darkMode.value ?: isSystemInDarkTheme(),
         onChange = { viewModel.toggleDarkMode(it) },
-        disabledText = stringResource(R.string.settings_only_for_premium),
-        enabled = premiumActive,
     )
 }
 
@@ -105,7 +103,7 @@ private fun DarkModeCard(viewModel: SettingsViewModel, premiumActive: Boolean) {
 private fun SoundCard(viewModel: SettingsViewModel) {
     SwitchItem(
         name = R.string.settings_sound,
-        value = viewModel.soundEnabled,
+        value = viewModel.soundEnabled.observeAsState().value,
         onChange = { viewModel.toggleSound(it) }
     )
 }
@@ -114,7 +112,7 @@ private fun SoundCard(viewModel: SettingsViewModel) {
 private fun PersonalizedAds(viewModel: SettingsViewModel) {
     SwitchItem(
         name = R.string.settings_personalized_ads,
-        value = viewModel.personalizedAds,
+        value = viewModel.personalizedAds.observeAsState().value,
         onChange = { viewModel.togglePersonalizedAds(it) },
     )
 }
@@ -122,7 +120,7 @@ private fun PersonalizedAds(viewModel: SettingsViewModel) {
 @Composable
 private fun SwitchItem(
     @StringRes name: Int,
-    value: LiveData<Boolean>,
+    value: Boolean?,
     onChange: suspend (newValue: Boolean) -> Unit,
     disabledText: String? = null,
     enabled: Boolean = true,
@@ -137,8 +135,7 @@ private fun SwitchItem(
         },
         secondaryText = disabledText?.let { { Text(disabledText, color = color) } },
         trailing = {
-            val checked = value.observeAsState().value ?: return@ListItem
-
+            val checked = value ?: return@ListItem
             val coroutineScope = rememberCoroutineScope()
 
             Switch(
