@@ -122,6 +122,7 @@ private fun TextInput(
                             onValueChange(filteredValue)
                         }
                     },
+                    cursorColor = textColor,
                     keyboardOptions = KeyboardOptions.Default.copy(keyboardType = keyboardType),
                     textStyle = textStyle.copy(color = textColor),
                     singleLine = !multiLine,
