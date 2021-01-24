@@ -15,7 +15,6 @@ import cz.muni.fi.rpg.viewModels.PartyListViewModel
 import java.util.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.gesture.longPressGestureFilter
-import androidx.compose.ui.platform.AmbientContext
 import androidx.compose.ui.res.loadVectorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
@@ -38,8 +37,6 @@ fun PartyListScreen(routing: Routing<Route.PartyList>) {
 
     val viewModel: PartyListViewModel by viewModel()
     var menuState by remember { mutableStateOf(MenuState.COLLAPSED) }
-    val context = AmbientContext.current
-
     var createPartyDialogVisible by savedInstanceState { false }
 
     if (createPartyDialogVisible) {
