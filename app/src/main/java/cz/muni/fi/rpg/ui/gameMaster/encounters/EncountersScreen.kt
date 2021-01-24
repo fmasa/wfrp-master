@@ -15,6 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.gesture.tapGestureFilter
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.loadVectorResource
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import cz.frantisekmasa.wfrp_master.combat.domain.encounter.Encounter
@@ -22,7 +23,10 @@ import cz.frantisekmasa.wfrp_master.core.domain.party.PartyId
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.DraggableListFor
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.EmptyUI
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.Spacing
+import cz.frantisekmasa.wfrp_master.core.viewModel.PremiumViewModel
+import cz.frantisekmasa.wfrp_master.core.viewModel.providePremiumViewModel
 import cz.muni.fi.rpg.R
+import cz.muni.fi.rpg.ui.common.BuyPremiumPrompt
 import cz.muni.fi.rpg.viewModels.EncountersViewModel
 
 @Composable
@@ -46,9 +50,10 @@ fun EncountersScreen(
     Scaffold(
         modifier = modifier,
         floatingActionButton = {
-            FloatingActionButton(onClick = { createDialogOpened = true }) {
-                loadVectorResource(R.drawable.ic_add).resource.resource?.let { Icon(it) }
-            }
+            AddEncounterButton(
+                encounterCount = encounters.size,
+                onCreateEncounterRequest = { createDialogOpened = true },
+            )
         }
     ) {
 
@@ -61,6 +66,29 @@ fun EncountersScreen(
         }
 
         EncounterList(encounters, viewModel, onEncounterClick)
+    }
+}
+
+@Composable
+private fun AddEncounterButton(encounterCount: Int, onCreateEncounterRequest: () -> Unit) {
+    val premiumViewModel = providePremiumViewModel()
+
+    if (encounterCount >= PremiumViewModel.FREE_ENCOUNTER_COUNT && premiumViewModel.active != true) {
+        var premiumPromptVisible by remember { mutableStateOf(false) }
+
+        FloatingActionButton(onClick = { premiumPromptVisible = true }) {
+            Icon(vectorResource(R.drawable.ic_premium))
+        }
+
+        if (premiumPromptVisible) {
+            BuyPremiumPrompt(onDismissRequest = { premiumPromptVisible = false })
+        }
+
+        return
+    }
+
+    FloatingActionButton(onClick = onCreateEncounterRequest) {
+        Icon(vectorResource(R.drawable.ic_add))
     }
 }
 

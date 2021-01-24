@@ -222,8 +222,14 @@
     </string>
     <string name="store_listing_url">https://play.google.com/store/apps/details?id=cz.frantisekmasa.dnd</string>
     <string name="rate_app">Rate the App</string>
-    <string name="buy_premium">Buy Premium</string>
-
+    <string name="buy_premium">Upgrade to Premium</string>
+    <string name="button_upgrade">UPGRADE</string>
+    <string name="premium_prompt">
+        Thank you for using WFRP Master!
+        In free version you are limited to one Party and three Encounters.
+        To join more Parties or create more Encounters, please upgrade to Premium version.
+        \n\nIf you have previously purchased Premium, make sure you are signed in as the same user in Settings.
+    </string>
     <string name="privacy_policy_url">https://dnd-master-58fca.web.app/privacy-policy.html</string>
     <string name="label_privacy_policy">Privacy Policy</string>
     <string name="label_psychology_input">Psychology (Optional)</string>

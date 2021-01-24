@@ -4,14 +4,20 @@ import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.*
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.platform.AmbientContext
 import androidx.compose.ui.res.stringResource
+import cz.frantisekmasa.wfrp_master.core.auth.AmbientUser
 import cz.frantisekmasa.wfrp_master.core.domain.party.Invitation
 import cz.frantisekmasa.wfrp_master.core.ui.buttons.BackButton
+import cz.frantisekmasa.wfrp_master.core.ui.primitives.FullScreenProgress
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.longToast
+import cz.frantisekmasa.wfrp_master.core.viewModel.PremiumViewModel
+import cz.frantisekmasa.wfrp_master.core.viewModel.providePremiumViewModel
 import cz.frantisekmasa.wfrp_master.navigation.Route
 import cz.frantisekmasa.wfrp_master.navigation.Routing
 import cz.muni.fi.rpg.R
+import cz.muni.fi.rpg.ui.common.BuyPremiumPrompt
 import cz.muni.fi.rpg.viewModels.provideJoinPartyViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -29,6 +35,20 @@ fun InvitationLinkScreen(routing: Routing<Route.InvitationLink>) {
         val context = AmbientContext.current
         val invitationJson = routing.route.invitationJson
         val viewModel = provideJoinPartyViewModel()
+        val premiumViewModel = providePremiumViewModel()
+
+        val userId = AmbientUser.current.id
+        val parties = remember { viewModel.userParties(userId) }.observeAsState().value
+
+        if (parties == null) {
+            FullScreenProgress()
+            return@Scaffold
+        }
+
+        if (parties.size >= PremiumViewModel.FREE_PARTY_COUNT && premiumViewModel.active != true) {
+            BuyPremiumPrompt(onDismissRequest = { routing.pop() })
+            return@Scaffold
+        }
 
         var invitation: Invitation? by remember { mutableStateOf(null) }
 

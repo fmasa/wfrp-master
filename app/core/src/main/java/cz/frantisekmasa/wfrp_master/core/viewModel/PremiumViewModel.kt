@@ -19,6 +19,9 @@ import kotlin.coroutines.suspendCoroutine
 
 class PremiumViewModel(private val purchases: Purchases) : ViewModel() {
     companion object {
+        const val FREE_PARTY_COUNT = 1
+        const val FREE_ENCOUNTER_COUNT = 3
+
         const val premiumProductId = "premium"
     }
 

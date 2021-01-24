@@ -27,15 +27,20 @@ import cz.frantisekmasa.wfrp_master.core.ui.dialogs.DialogState
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.ContextMenu
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.EmptyUI
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.ItemIcon
+import cz.frantisekmasa.wfrp_master.core.viewModel.PremiumViewModel
+import cz.frantisekmasa.wfrp_master.core.viewModel.providePremiumViewModel
 import cz.frantisekmasa.wfrp_master.core.viewModel.viewModel
 import cz.muni.fi.rpg.ui.common.composables.*
 import cz.frantisekmasa.wfrp_master.navigation.Route
 import cz.frantisekmasa.wfrp_master.navigation.Routing
+import cz.muni.fi.rpg.ui.common.BuyPremiumPrompt
 
 @Composable
 fun PartyListScreen(routing: Routing<Route.PartyList>) {
-
     val viewModel: PartyListViewModel by viewModel()
+    val userId = AmbientUser.current.id
+    val parties = remember { viewModel.liveForUser(userId) }.observeAsState().value
+
     var menuState by remember { mutableStateOf(MenuState.COLLAPSED) }
     var createPartyDialogVisible by savedInstanceState { false }
 
@@ -59,36 +64,19 @@ fun PartyListScreen(routing: Routing<Route.PartyList>) {
         },
         modifier = Modifier.fillMaxHeight(),
         floatingActionButton = {
-            FloatingActionsMenu(
-                state = menuState,
-                onToggleRequest = { menuState = it },
-                iconRes = R.drawable.ic_add,
-            ) {
-                ExtendedFloatingActionButton(
-                    icon = { Icon(vectorResource(R.drawable.ic_camera)) },
-                    text = { Text(stringResource(R.string.scanCode_title)) },
-                    onClick = {
-                        routing.navigateTo(Route.InvitationScanner)
-                        menuState = MenuState.COLLAPSED
-                    }
-                )
-                ExtendedFloatingActionButton(
-                    icon = {
-                        loadVectorResource(R.drawable.ic_group_add).resource.resource?.let {
-                            Icon(it)
-                        }
-                    },
-                    text = { Text(stringResource(R.string.assembleParty_title)) },
-                    onClick = {
-                        createPartyDialogVisible = true
-                        menuState = MenuState.COLLAPSED
-                    }
-                )
+            if (parties == null) {
+                return@Scaffold
             }
+
+            Menu(
+                state = menuState,
+                routing = routing,
+                onStateChangeRequest = { menuState = it },
+                onCreatePartyRequest = { createPartyDialogVisible = true },
+                partyCount = parties.size
+            )
         }
     ) {
-        val userId = AmbientUser.current.id
-
         var removePartyDialogState by remember {
             mutableStateOf<DialogState<Party>>(DialogState.Closed())
         }
@@ -106,8 +94,7 @@ fun PartyListScreen(routing: Routing<Route.PartyList>) {
                 onClick = { menuState = MenuState.COLLAPSED },
                 indication = null,
             ),
-            userId,
-            viewModel,
+            parties,
             onClick = {
                 if (it.gameMasterId == userId) {
                     routing.navigateTo(Route.GameMaster(it.id))
@@ -116,6 +103,58 @@ fun PartyListScreen(routing: Routing<Route.PartyList>) {
                 }
             },
             onRemove = { removePartyDialogState = DialogState.Opened(it) },
+        )
+    }
+}
+
+@Composable
+private fun Menu(
+    state: MenuState,
+    routing: Routing<Route.PartyList>,
+    onStateChangeRequest: (MenuState) -> Unit,
+    onCreatePartyRequest: () -> Unit,
+    partyCount: Int
+) {
+    val premiumViewModel = providePremiumViewModel()
+
+    if (partyCount >= PremiumViewModel.FREE_PARTY_COUNT && premiumViewModel.active != true) {
+        var premiumPromptVisible by remember { mutableStateOf(false) }
+
+        FloatingActionButton(onClick = { premiumPromptVisible = true }) {
+            Icon(vectorResource(R.drawable.ic_premium))
+        }
+
+        if (premiumPromptVisible) {
+            BuyPremiumPrompt(onDismissRequest = { premiumPromptVisible = false })
+        }
+
+        return
+    }
+
+    FloatingActionsMenu(
+        state = state,
+        onToggleRequest = { onStateChangeRequest(it) },
+        iconRes = R.drawable.ic_add,
+    ) {
+        ExtendedFloatingActionButton(
+            icon = { Icon(vectorResource(R.drawable.ic_camera)) },
+            text = { Text(stringResource(R.string.scanCode_title)) },
+            onClick = {
+                routing.navigateTo(Route.InvitationScanner)
+                onStateChangeRequest(MenuState.COLLAPSED)
+            }
+        )
+        ExtendedFloatingActionButton(
+            icon = {
+                loadVectorResource(R.drawable.ic_group_add).resource.resource?.let {
+                    Icon(it)
+                }
+            },
+            text = { Text(stringResource(R.string.assembleParty_title)) },
+            onClick = {
+                onCreatePartyRequest()
+                onStateChangeRequest(MenuState.COLLAPSED)
+            }
         )
     }
 }
@@ -140,15 +179,12 @@ fun PartyItem(party: Party, onClick: () -> Unit, onLongPress: () -> Unit) {
 @Composable
 private fun MainContainer(
     modifier: Modifier,
-    userId: String,
-    viewModel: PartyListViewModel,
+    parties: List<Party>?,
     onClick: (Party) -> Unit,
     onRemove: (Party) -> Unit,
 ) {
-    val parties = remember { viewModel.liveForUser(userId) }.observeAsState()
-
     Box(modifier) {
-        parties.value?.let {
+        parties?.let {
             if (it.isEmpty()) {
                 EmptyUI(
                     textId = R.string.no_parties_prompt,
