@@ -19,6 +19,7 @@ import cz.frantisekmasa.wfrp_master.core.domain.Stats
 import cz.frantisekmasa.wfrp_master.core.domain.identifiers.CharacterId
 import cz.frantisekmasa.wfrp_master.core.ui.components.CharacteristicsTable
 import cz.frantisekmasa.wfrp_master.core.domain.rolls.RollExpression
+import cz.frantisekmasa.wfrp_master.core.media.rememberSoundPlayer
 import cz.frantisekmasa.wfrp_master.core.ui.dialogs.FullScreenDialog
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.CardContainer
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.NumberPicker
@@ -46,6 +47,12 @@ internal fun CharacterCharacteristicsScreen(
 
     roll?.let { currentRoll ->
         FullScreenDialog(onDismissRequest = { roll = null }) {
+            val rollSound = rememberSoundPlayer(R.raw.roll_sound)
+
+            onActive {
+                rollSound.play()
+            }
+
             TestResultScreen(
                 testName = stringResource(R.string.title_roll),
                 results = listOf(
@@ -55,7 +62,10 @@ internal fun CharacterCharacteristicsScreen(
                         currentRoll,
                     )
                 ),
-                onRerollRequest = { roll = currentRoll.reroll() },
+                onRerollRequest = {
+                    roll = currentRoll.reroll()
+                    rollSound.play()
+                },
                 onDismissRequest = { roll = null })
         }
     }

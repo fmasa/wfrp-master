@@ -10,7 +10,7 @@ import androidx.compose.ui.platform.AmbientContext
 @Composable
 fun rememberSoundPlayer(@RawRes soundResource: Int): SoundPlayer {
     if (!AmbientSoundEnabled.current) {
-        return {} as SoundPlayer
+        return SoundPlayer {}
     }
 
     val context = AmbientContext.current
@@ -20,15 +20,16 @@ fun rememberSoundPlayer(@RawRes soundResource: Int): SoundPlayer {
         player.release()
     }
 
-    return {
+    return SoundPlayer {
         if (player.isPlaying) {
-            player.stop()
+            player.pause()
+            player.seekTo(0)
         }
 
         player.start()
-    } as SoundPlayer
+    }
 }
 
-interface SoundPlayer {
+fun interface SoundPlayer {
     fun play()
 }
