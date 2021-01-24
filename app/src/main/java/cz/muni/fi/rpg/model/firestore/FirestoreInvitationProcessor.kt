@@ -3,6 +3,7 @@ package cz.muni.fi.rpg.model.firestore
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.SetOptions
+import cz.frantisekmasa.wfrp_master.core.auth.UserId
 import cz.muni.fi.rpg.model.domain.invitation.AlreadyInParty
 import cz.muni.fi.rpg.model.domain.invitation.InvitationProcessor
 import cz.frantisekmasa.wfrp_master.core.domain.party.Invitation
@@ -44,7 +45,7 @@ class FirestoreInvitationProcessor(
 
     private suspend fun isAlreadyInParty(userId: String, partyId: PartyId): Boolean {
         return try {
-            parties.get(partyId).users.contains(userId)
+            parties.get(partyId).isMember(UserId.fromString(userId))
         } catch (e: PartyNotFound) {
             false
         }

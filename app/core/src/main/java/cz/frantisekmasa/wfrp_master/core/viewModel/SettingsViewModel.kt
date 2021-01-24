@@ -30,7 +30,7 @@ class SettingsViewModel(
     private val adManager: AdManager,
 ) : ViewModel() {
 
-    val darkMode: LiveData<Boolean> by lazy { getPreference(AppSettings.DARK_MODE, false) }
+    val darkMode: LiveData<Boolean?> by lazy { getPreference(AppSettings.DARK_MODE) }
     val soundEnabled: LiveData<Boolean> by lazy { getPreference(AppSettings.SOUND_ENABLED, true) }
     val personalizedAds: LiveData<Boolean> by lazy { getPreference(AppSettings.PERSONALIZED_ADS, false) }
 
@@ -93,6 +93,12 @@ class SettingsViewModel(
     ): LiveData<Boolean> {
         return dataStore.data
             .map { preferences -> preferences[preference] ?: defaultValue }
+            .asLiveData()
+    }
+
+    private fun getPreference(preference: Preferences.Key<Boolean>): LiveData<Boolean?> {
+        return dataStore.data
+            .map { preferences -> preferences[preference] }
             .asLiveData()
     }
 }

@@ -150,7 +150,7 @@ val appModule = module {
     viewModel { (characterId: CharacterId) -> SpellsViewModel(characterId, get(), spellCompendium()) }
     viewModel { (characterId: CharacterId) -> TalentsViewModel(characterId, get(), talentCompendium()) }
     viewModel { AuthenticationViewModel(get()) }
-    viewModel { JoinPartyViewModel(get(), get()) }
+    viewModel { JoinPartyViewModel(get(), get(), get()) }
     viewModel { PartyListViewModel(get()) }
     viewModel { SettingsViewModel(get(), get(), get(), get()) }
     viewModel { PremiumViewModel(get()) }
