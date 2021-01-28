@@ -24,7 +24,6 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Observer
 import cz.frantisekmasa.wfrp_master.combat.R
 import cz.frantisekmasa.wfrp_master.combat.domain.encounter.Wounds
-import cz.frantisekmasa.wfrp_master.core.ads.AdManager
 import cz.frantisekmasa.wfrp_master.core.ads.BannerAd
 import cz.frantisekmasa.wfrp_master.core.auth.AmbientUser
 import cz.frantisekmasa.wfrp_master.core.ui.buttons.BackButton
@@ -39,9 +38,7 @@ import cz.frantisekmasa.wfrp_master.core.ui.scaffolding.Subtitle
 import cz.frantisekmasa.wfrp_master.core.viewModel.viewModel
 import cz.frantisekmasa.wfrp_master.navigation.Route
 import cz.frantisekmasa.wfrp_master.navigation.Routing
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 import org.koin.core.parameter.parametersOf
 import timber.log.Timber
 
@@ -203,8 +200,15 @@ private fun AutoCloseOnEndedCombat(
         }
     }
 
+    val coroutineScope = rememberCoroutineScope()
+
     onActive {
-        viewModel.isCombatActive.observe(lifecycleOwner, observer)
+        coroutineScope.launch(Dispatchers.Default) {
+            delay(3_000)
+            withContext(Dispatchers.Main) {
+                viewModel.isCombatActive.observe(lifecycleOwner, observer)
+            }
+        }
     }
 
     onDispose {
