@@ -1,5 +1,6 @@
 package cz.frantisekmasa.wfrp_master.compendium.ui
 
+import androidx.annotation.MainThread
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -49,7 +50,7 @@ internal fun ImportDialog(
     state: ImportDialogState,
     partyId: PartyId,
     onDismissRequest: () -> Unit,
-    onComplete: () -> Unit,
+    @MainThread onComplete: () -> Unit,
 ) {
     FullScreenDialog(onDismissRequest = onDismissRequest) {
         when (state) {
@@ -71,7 +72,7 @@ private fun ImportedItemsPicker(
     partyId: PartyId,
     state: ImportDialogState.PickingItemsToImport,
     onDismissRequest: () -> Unit,
-    onComplete: () -> Unit,
+    @MainThread onComplete: () -> Unit,
 ) {
     val viewModel: CompendiumViewModel by viewModel { parametersOf(partyId) }
 
@@ -172,7 +173,9 @@ private fun ImportedItemsPicker(
                             state.spells.filter { selectedItems[it.id] ?: false }
                         )
 
-                        onComplete()
+                        withContext(Dispatchers.Main) {
+                            onComplete()
+                        }
                     }
                 },
                 onClose = onDismissRequest,
