@@ -33,12 +33,13 @@ fun CharacterTrappingsScreen(
     val viewModel: InventoryViewModel by viewModel { parametersOf(characterId) }
 
     ScrollableColumn(modifier) {
-        Row {
+        Row(
+            Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+        ) {
             CharacterEncumbrance(
                 viewModel,
-                Modifier
-                    .weight(1f)
-                    .padding(Spacing.medium),
+                Modifier.padding(Spacing.medium),
             )
 
             viewModel.money.observeAsState(null).value?.let { money ->
@@ -47,7 +48,6 @@ fun CharacterTrappingsScreen(
                 MoneyBalance(
                     money,
                     Modifier
-                        .weight(1f)
                         .clickable { transactionDialogVisible = true }
                         .padding(Spacing.medium)
                         .padding(end = 8.dp),
