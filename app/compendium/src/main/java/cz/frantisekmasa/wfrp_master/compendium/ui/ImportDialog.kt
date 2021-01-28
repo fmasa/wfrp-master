@@ -4,7 +4,7 @@ import androidx.annotation.MainThread
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumnFor
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyItemScope
 import androidx.compose.foundation.selection.toggleable
 import androidx.compose.material.Checkbox
@@ -42,7 +42,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.koin.core.parameter.parametersOf
-import java.util.*
 
 
 @Composable
@@ -221,14 +220,18 @@ private fun <T : CompendiumItem> ItemPicker(
                 Text(
                     label,
                     textAlign = TextAlign.Center,
-                    modifier = Modifier.align(Alignment.CenterHorizontally).padding(16.dp)
+                    modifier = Modifier
+                        .align(Alignment.CenterHorizontally)
+                        .padding(16.dp)
                 )
             }
 
             if (isLoading) {
                 FullScreenProgress()
             } else {
-                LazyColumnFor(items, itemContent = itemContent)
+                LazyColumn {
+                    items(items, itemContent)
+                }
             }
         }
     }

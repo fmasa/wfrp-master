@@ -2,7 +2,7 @@ package cz.muni.fi.rpg.ui.character.spells.dialog
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumnFor
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.ListItem
 import androidx.compose.material.OutlinedButton
 import androidx.compose.material.Scaffold
@@ -55,43 +55,45 @@ internal fun CompendiumSpellChooser(
                         else null,
                     )
                 } else {
-                    LazyColumnFor(
-                        items = compendiumSpells,
-                        contentPadding = PaddingValues(BodyPadding),
-                    ) { spell ->
-                        val coroutineScope = rememberCoroutineScope()
-                        ListItem(
-                            modifier = Modifier.clickable(
-                                onClick = {
-                                    saving = false
+                    val coroutineScope = rememberCoroutineScope()
 
-                                    coroutineScope.launch(Dispatchers.IO) {
-                                        viewModel.saveSpell(
-                                            Spell(
-                                                id = UUID.randomUUID(),
-                                                compendiumId = spell.id,
-                                                name = spell.name,
-                                                range = spell.range,
-                                                target = spell.target,
-                                                duration = spell.duration,
-                                                castingNumber = spell.castingNumber,
-                                                effect = spell.effect,
+                    LazyColumn(contentPadding = PaddingValues(BodyPadding)) {
+                        items(compendiumSpells) { spell ->
+                            ListItem(
+                                modifier = Modifier.clickable(
+                                    onClick = {
+                                        saving = false
+
+                                        coroutineScope.launch(Dispatchers.IO) {
+                                            viewModel.saveSpell(
+                                                Spell(
+                                                    id = UUID.randomUUID(),
+                                                    compendiumId = spell.id,
+                                                    name = spell.name,
+                                                    range = spell.range,
+                                                    target = spell.target,
+                                                    duration = spell.duration,
+                                                    castingNumber = spell.castingNumber,
+                                                    effect = spell.effect,
+                                                )
                                             )
-                                        )
 
-                                        withContext(Dispatchers.Main) { onComplete() }
+                                            withContext(Dispatchers.Main) { onComplete() }
+                                        }
                                     }
-                                }
-                            ),
-                            icon = { ItemIcon(R.drawable.ic_spells, ItemIcon.Size.Small) },
-                            text = { Text(spell.name) }
-                        )
+                                ),
+                                icon = { ItemIcon(R.drawable.ic_spells, ItemIcon.Size.Small) },
+                                text = { Text(spell.name) }
+                            )
+                        }
                     }
                 }
             }
 
             OutlinedButton(
-                modifier = Modifier.fillMaxWidth().padding(BodyPadding),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(BodyPadding),
                 onClick = onCustomSpellRequest,
             ) {
                 Text(stringResource(R.string.button_add_non_compendium_spell))

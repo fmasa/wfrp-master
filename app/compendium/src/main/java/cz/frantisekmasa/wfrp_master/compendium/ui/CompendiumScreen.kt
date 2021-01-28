@@ -3,7 +3,7 @@ package cz.frantisekmasa.wfrp_master.compendium.ui
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.lazy.LazyColumnFor
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyItemScope
 import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Icon
@@ -39,8 +39,6 @@ import cz.frantisekmasa.wfrp_master.core.ui.scaffolding.tabs.rememberPagerState
 import cz.frantisekmasa.wfrp_master.core.viewModel.viewModel
 import cz.frantisekmasa.wfrp_master.navigation.Route
 import cz.frantisekmasa.wfrp_master.navigation.Routing
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.StateFlow
 import org.koin.core.parameter.parametersOf
 import java.util.*
 
@@ -126,14 +124,19 @@ fun <T : CompendiumItem> CompendiumTab(
     dialog(dialogState)
 
     Scaffold(
-        modifier = Modifier.width(width).fillMaxHeight(),
+        modifier = Modifier
+            .width(width)
+            .fillMaxHeight(),
         floatingActionButton = {
             FloatingActionButton(onClick = { dialogState.value = DialogState.Opened(null) }) {
                 Icon(vectorResource(R.drawable.ic_add))
             }
         }
     ) {
-        Column(Modifier.fillMaxSize().background(MaterialTheme.colors.background)) {
+        Column(
+            Modifier
+                .fillMaxSize()
+                .background(MaterialTheme.colors.background)) {
             val items = liveItems.observeAsState().value
 
             when {
@@ -142,27 +145,27 @@ fun <T : CompendiumItem> CompendiumTab(
                 else -> {
                     val contextMenuOpened = remember { mutableStateOf<UUID?>(null) }
 
-                    LazyColumnFor(
-                        items = items,
-                    ) { item ->
-                        Box(
-                            Modifier
-                                .clickable(
-                                    onClick = { dialogState.value = DialogState.Opened(item) }
-                                )
-                                .longPressGestureFilter { contextMenuOpened.value = item.id }
-                        ) {
-                            itemContent(item)
+                    LazyColumn {
+                        items(items) { item ->
+                            Box(
+                                Modifier
+                                    .clickable(
+                                        onClick = { dialogState.value = DialogState.Opened(item) }
+                                    )
+                                    .longPressGestureFilter { contextMenuOpened.value = item.id }
+                            ) {
+                                itemContent(item)
 
-                            ContextMenu(
-                                items = listOf(
-                                    ContextMenu.Item(
-                                        stringResource(R.string.button_remove),
-                                        onClick = { onRemove(item) })
-                                ),
-                                onDismissRequest = { contextMenuOpened.value = null },
-                                expanded = contextMenuOpened.value == item.id
-                            )
+                                ContextMenu(
+                                    items = listOf(
+                                        ContextMenu.Item(
+                                            stringResource(R.string.button_remove),
+                                            onClick = { onRemove(item) })
+                                    ),
+                                    onDismissRequest = { contextMenuOpened.value = null },
+                                    expanded = contextMenuOpened.value == item.id
+                                )
+                            }
                         }
                     }
                 }
