@@ -32,7 +32,7 @@ fun CharacterTrappingsScreen(
 ) {
     val viewModel: InventoryViewModel by viewModel { parametersOf(characterId) }
 
-    ScrollableColumn(modifier) {
+    ScrollableColumn(modifier, contentPadding = PaddingValues(top = Spacing.tiny)) {
         Row(
             Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween,

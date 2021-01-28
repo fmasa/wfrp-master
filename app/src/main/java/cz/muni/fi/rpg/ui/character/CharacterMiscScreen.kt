@@ -19,6 +19,7 @@ import cz.frantisekmasa.wfrp_master.core.ui.primitives.SingleLineTextValue
 import cz.frantisekmasa.wfrp_master.core.viewModel.viewModel
 import cz.frantisekmasa.wfrp_master.core.domain.character.Points
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.CardContainer
+import cz.frantisekmasa.wfrp_master.core.ui.primitives.Spacing
 import cz.muni.fi.rpg.ui.character.dialogs.ExperiencePointsDialog
 import cz.muni.fi.rpg.ui.common.composables.*
 import cz.muni.fi.rpg.viewModels.CharacterMiscViewModel
@@ -32,7 +33,10 @@ internal fun CharacterMiscScreen(
 ) {
     val viewModel: CharacterMiscViewModel by viewModel { parametersOf(characterId) }
 
-    ScrollableColumn(modifier.background(MaterialTheme.colors.background)) {
+    ScrollableColumn(
+        modifier.background(MaterialTheme.colors.background),
+        contentPadding = PaddingValues(top = Spacing.small),
+    ) {
         MainCard(character)
 
         ExperiencePointsCard(

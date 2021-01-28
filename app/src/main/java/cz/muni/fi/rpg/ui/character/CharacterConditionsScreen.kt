@@ -22,6 +22,7 @@ import cz.frantisekmasa.wfrp_master.core.domain.character.Character
 import cz.frantisekmasa.wfrp_master.core.domain.character.CurrentConditions
 import cz.muni.fi.rpg.R
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.NumberPicker
+import cz.frantisekmasa.wfrp_master.core.ui.primitives.Spacing
 import cz.muni.fi.rpg.viewModels.CharacterViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -52,7 +53,8 @@ internal fun CharacterConditionsScreen(
 
     LazyColumnFor(
         items = Condition.values().toList(),
-        modifier.background(MaterialTheme.colors.surface)
+        modifier.background(MaterialTheme.colors.surface),
+        contentPadding = PaddingValues(top = Spacing.small),
     ) { condition ->
         ConditionRow(condition, conditions.count(condition), updateConditions)
         Divider()
