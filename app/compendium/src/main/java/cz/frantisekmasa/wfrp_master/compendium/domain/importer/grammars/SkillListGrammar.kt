@@ -26,7 +26,7 @@ object SkillListGrammar : Grammar<List<Skill>>() {
         "\\n*([a-zA-Z ]+) \\(($characteristicShortcutRegex)\\) (basic|advanced)(, grouped)?\\n"
 
     @Language("RegExp")
-    private const val specialisationsRegex = "\\n*Specialisations: (([a-zA-Z ]+)(,\n?[a-zA-Z ]+)*)\\n*"
+    private const val specialisationsRegex = "\\n*Specialisations: (([a-zA-Z \\-–—]+)(,\n?[a-zA-Z \\-–—]+)*)\\n*"
 
     private val skillNameLine by regexToken(skillNameLineRegex)
     private val specialisationsLine by regexToken(specialisationsRegex)

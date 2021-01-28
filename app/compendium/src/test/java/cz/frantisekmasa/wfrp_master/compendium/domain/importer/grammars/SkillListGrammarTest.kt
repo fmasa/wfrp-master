@@ -81,7 +81,7 @@ class SkillListGrammarTest : TestCase() {
                     advanced = false,
                 ),
                 Skill(
-                    id = result[3].id,
+                    id = result[4].id,
                     name = "Art (Wood-carving)",
                     description ="""
                         Create works of art in your chosen medium.
