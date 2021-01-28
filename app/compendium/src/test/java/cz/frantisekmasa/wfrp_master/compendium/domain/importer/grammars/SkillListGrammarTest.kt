@@ -25,7 +25,7 @@ class SkillListGrammarTest : TestCase() {
             Create works of art in your chosen medium.
             Not having access to appropriate Trade Tools will incur a penalty
             to your Test.
-            Specialisations: Cartography, Engraving
+            Specialisations: Cartography, Engraving, Wood-carving
         """.trimIndent()
 
         val result = SkillListGrammar.parseToEnd(data)
@@ -72,6 +72,17 @@ class SkillListGrammarTest : TestCase() {
                 Skill(
                     id = result[3].id,
                     name = "Art (Engraving)",
+                    description ="""
+                        Create works of art in your chosen medium.
+                        Not having access to appropriate Trade Tools will incur a penalty
+                        to your Test.
+                    """.trimIndent(),
+                    Characteristic.DEXTERITY,
+                    advanced = false,
+                ),
+                Skill(
+                    id = result[4].id,
+                    name = "Art (Wood-carving)",
                     description ="""
                         Create works of art in your chosen medium.
                         Not having access to appropriate Trade Tools will incur a penalty

@@ -2,7 +2,7 @@ package cz.muni.fi.rpg.ui.character.skills.dialog
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumnFor
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.ListItem
 import androidx.compose.material.OutlinedButton
 import androidx.compose.material.Scaffold
@@ -50,21 +50,22 @@ internal fun CompendiumSkillChooser(
                         else null,
                     )
                 } else {
-                    LazyColumnFor(
-                        items = compendiumSkills,
-                        contentPadding = PaddingValues(BodyPadding),
-                    ) { skill ->
-                        ListItem(
-                            modifier = Modifier.clickable(onClick = { onSkillSelected(skill) }),
-                            icon = { ItemIcon(skill.characteristic.getIconId(), ItemIcon.Size.Small) },
-                            text = { Text(skill.name) }
-                        )
+                    LazyColumn(contentPadding = PaddingValues(BodyPadding)) {
+                        items(compendiumSkills) { skill ->
+                            ListItem(
+                                modifier = Modifier.clickable(onClick = { onSkillSelected(skill) }),
+                                icon = { ItemIcon(skill.characteristic.getIconId(), ItemIcon.Size.Small) },
+                                text = { Text(skill.name) }
+                            )
+                        }
                     }
                 }
             }
 
             OutlinedButton(
-                modifier = Modifier.fillMaxWidth().padding(BodyPadding),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(BodyPadding),
                 onClick = onCustomSkillRequest,
             ) {
                 Text(stringResource(R.string.button_add_non_compendium_skill))

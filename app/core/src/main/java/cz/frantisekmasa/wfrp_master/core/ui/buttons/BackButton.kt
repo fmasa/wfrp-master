@@ -8,5 +8,5 @@ import cz.frantisekmasa.wfrp_master.core.R
 
 @Composable
 fun BackButton(onClick: () -> Unit) {
-    IconButton(onClick = onClick) { Icon(vectorResource(R.drawable.ic_navigate_back)) }
+    IconButton(onClick = onClick) { Icon(vectorResource(R.drawable.ic_arrow_back)) }
 }

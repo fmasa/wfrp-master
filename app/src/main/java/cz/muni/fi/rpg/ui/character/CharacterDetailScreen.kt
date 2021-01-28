@@ -103,10 +103,7 @@ private fun MainContainer(
 
     WithConstraints(Modifier.fillMaxSize()) {
         val screenWidth = constraints.maxWidth.toFloat()
-        val screens = screens(characterId, viewModel,
-            Modifier
-                .width(maxWidth)
-                .padding(top = 6.dp))
+        val screens = screens(characterId, viewModel, Modifier.width(maxWidth))
 
         Column(Modifier.fillMaxHeight()) {
             if (! routing.route.comingFromCombat) {

@@ -2,7 +2,7 @@ package cz.muni.fi.rpg.ui.character.talents.dialog
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumnFor
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.ListItem
 import androidx.compose.material.OutlinedButton
 import androidx.compose.material.Scaffold
@@ -50,21 +50,22 @@ internal fun CompendiumTalentChooser(
                         else null,
                     )
                 } else {
-                    LazyColumnFor(
-                        items = compendiumTalents,
-                        contentPadding = PaddingValues(BodyPadding),
-                    ) { talent ->
-                        ListItem(
-                            modifier = Modifier.clickable(onClick = { onTalentSelected(talent) }),
-                            icon = { ItemIcon(R.drawable.ic_skills, ItemIcon.Size.Small) },
-                            text = { Text(talent.name) }
-                        )
+                    LazyColumn(contentPadding = PaddingValues(BodyPadding)) {
+                        items(compendiumTalents) { talent ->
+                            ListItem(
+                                modifier = Modifier.clickable(onClick = { onTalentSelected(talent) }),
+                                icon = { ItemIcon(R.drawable.ic_skills, ItemIcon.Size.Small) },
+                                text = { Text(talent.name) }
+                            )
+                        }
                     }
                 }
             }
 
             OutlinedButton(
-                modifier = Modifier.fillMaxWidth().padding(BodyPadding),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(BodyPadding),
                 onClick = onCustomTalentRequest,
             ) {
                 Text(stringResource(R.string.button_add_non_compendium_talent))

@@ -32,7 +32,12 @@ fun <T> ColumnScope.TabRow(
                 unselectedContentColor = MaterialTheme.colors.onSurface.copy(alpha = ContentAlpha.medium),
                 selected = index == (if (scrolledPercentage > 0.5f) selectedTabIndex + 1 else selectedTabIndex),
                 onClick = { pagerState.selectScreen(index) },
-                text = { Text(stringResource(screen.tabName).toUpperCase(Locale.getDefault())) },
+                text = {
+                    Text(
+                        stringResource(screen.tabName).toUpperCase(Locale.getDefault()),
+                        maxLines = 1,
+                    )
+                },
             )
         }
     }

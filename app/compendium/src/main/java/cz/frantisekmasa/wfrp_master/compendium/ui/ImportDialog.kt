@@ -1,9 +1,10 @@
 package cz.frantisekmasa.wfrp_master.compendium.ui
 
+import androidx.annotation.MainThread
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumnFor
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyItemScope
 import androidx.compose.foundation.selection.toggleable
 import androidx.compose.material.Checkbox
@@ -41,7 +42,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.koin.core.parameter.parametersOf
-import java.util.*
 
 
 @Composable
@@ -49,7 +49,7 @@ internal fun ImportDialog(
     state: ImportDialogState,
     partyId: PartyId,
     onDismissRequest: () -> Unit,
-    onComplete: () -> Unit,
+    @MainThread onComplete: () -> Unit,
 ) {
     FullScreenDialog(onDismissRequest = onDismissRequest) {
         when (state) {
@@ -71,7 +71,7 @@ private fun ImportedItemsPicker(
     partyId: PartyId,
     state: ImportDialogState.PickingItemsToImport,
     onDismissRequest: () -> Unit,
-    onComplete: () -> Unit,
+    @MainThread onComplete: () -> Unit,
 ) {
     val viewModel: CompendiumViewModel by viewModel { parametersOf(partyId) }
 
@@ -172,7 +172,9 @@ private fun ImportedItemsPicker(
                             state.spells.filter { selectedItems[it.id] ?: false }
                         )
 
-                        onComplete()
+                        withContext(Dispatchers.Main) {
+                            onComplete()
+                        }
                     }
                 },
                 onClose = onDismissRequest,
@@ -218,14 +220,18 @@ private fun <T : CompendiumItem> ItemPicker(
                 Text(
                     label,
                     textAlign = TextAlign.Center,
-                    modifier = Modifier.align(Alignment.CenterHorizontally).padding(16.dp)
+                    modifier = Modifier
+                        .align(Alignment.CenterHorizontally)
+                        .padding(16.dp)
                 )
             }
 
             if (isLoading) {
                 FullScreenProgress()
             } else {
-                LazyColumnFor(items, itemContent = itemContent)
+                LazyColumn {
+                    items(items, itemContent)
+                }
             }
         }
     }

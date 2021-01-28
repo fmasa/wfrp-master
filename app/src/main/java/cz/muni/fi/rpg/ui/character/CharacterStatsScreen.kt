@@ -23,6 +23,7 @@ import cz.frantisekmasa.wfrp_master.core.media.rememberSoundPlayer
 import cz.frantisekmasa.wfrp_master.core.ui.dialogs.FullScreenDialog
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.CardContainer
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.NumberPicker
+import cz.frantisekmasa.wfrp_master.core.ui.primitives.Spacing
 import cz.muni.fi.rpg.ui.common.composables.Theme
 import cz.frantisekmasa.wfrp_master.core.viewModel.viewModel
 import cz.muni.fi.rpg.ui.common.composables.FloatingActionsMenu
@@ -94,7 +95,7 @@ internal fun CharacterCharacteristicsScreen(
             }
         }
     ) {
-        ScrollableColumn {
+        ScrollableColumn(contentPadding = PaddingValues(top = Spacing.small)) {
             PointsSection(character.getPoints()) { points -> viewModel.updatePoints { points } }
             CharacteristicsSection(character.getCharacteristics())
             Spacer(Modifier.padding(bottom = 8.dp))

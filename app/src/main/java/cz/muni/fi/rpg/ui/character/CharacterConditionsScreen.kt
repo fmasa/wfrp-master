@@ -3,7 +3,7 @@ package cz.muni.fi.rpg.ui.character
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumnFor
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.Divider
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Switch
@@ -22,6 +22,7 @@ import cz.frantisekmasa.wfrp_master.core.domain.character.Character
 import cz.frantisekmasa.wfrp_master.core.domain.character.CurrentConditions
 import cz.muni.fi.rpg.R
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.NumberPicker
+import cz.frantisekmasa.wfrp_master.core.ui.primitives.Spacing
 import cz.muni.fi.rpg.viewModels.CharacterViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -50,12 +51,14 @@ internal fun CharacterConditionsScreen(
         }
     }
 
-    LazyColumnFor(
-        items = Condition.values().toList(),
-        modifier.background(MaterialTheme.colors.surface)
-    ) { condition ->
-        ConditionRow(condition, conditions.count(condition), updateConditions)
-        Divider()
+    LazyColumn(
+        modifier.background(MaterialTheme.colors.surface),
+        contentPadding = PaddingValues(top = Spacing.small),
+    ) {
+        items(Condition.values().toList()) { condition ->
+            ConditionRow(condition, conditions.count(condition), updateConditions)
+            Divider()
+        }
     }
 }
 
@@ -75,7 +78,9 @@ private fun ConditionRow(
         ConditionIcon(condition)
         Text(
             condition.name.toLowerCase(Locale.current).capitalize(Locale.current),
-            modifier = Modifier.weight(1f).padding(start = 8.dp),
+            modifier = Modifier
+                .weight(1f)
+                .padding(start = 8.dp),
         )
 
         if (condition.isStackable()) {

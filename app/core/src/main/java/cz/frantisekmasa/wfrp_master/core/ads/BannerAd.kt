@@ -18,7 +18,7 @@ import cz.frantisekmasa.wfrp_master.core.viewModel.provideSettingsViewModel
 fun BannerAd(unitId: String) {
     val premiumActive = providePremiumViewModel().active == true
 
-    if (premiumActive) {
+    if (premiumActive || true) {
         return
     }
 
