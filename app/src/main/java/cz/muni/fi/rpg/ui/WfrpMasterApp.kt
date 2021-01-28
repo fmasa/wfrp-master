@@ -1,9 +1,11 @@
 package cz.muni.fi.rpg.ui
 
+import androidx.compose.foundation.layout.Column
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.runtime.Composable
 import cz.muni.fi.rpg.ui.common.composables.Theme
 import cz.muni.fi.rpg.ui.shell.DrawerShell
+import cz.muni.fi.rpg.ui.shell.NetworkStatusBanner
 import cz.muni.fi.rpg.ui.shell.Startup
 import cz.muni.fi.rpg.ui.shell.rememberNavControllerWithAnalytics
 
@@ -14,8 +16,11 @@ fun WfrpMasterApp() {
 
     Theme {
         Startup {
-            DrawerShell(navController) {
-                NavGraph(navController)
+            Column {
+                NetworkStatusBanner()
+                DrawerShell(navController) {
+                    NavGraph(navController)
+                }
             }
         }
     }
