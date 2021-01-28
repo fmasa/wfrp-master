@@ -33,7 +33,6 @@ import cz.frantisekmasa.wfrp_master.core.ui.primitives.FullScreenProgress
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.NumberPicker
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.Spacing
 import cz.frantisekmasa.wfrp_master.core.ui.scaffolding.OptionsAction
-import cz.frantisekmasa.wfrp_master.core.ui.scaffolding.SubheadBar
 import cz.frantisekmasa.wfrp_master.core.ui.scaffolding.Subtitle
 import cz.frantisekmasa.wfrp_master.core.viewModel.viewModel
 import cz.frantisekmasa.wfrp_master.navigation.Route
@@ -112,20 +111,7 @@ fun ActiveCombatScreen(routing: Routing<Route.ActiveCombat>) {
                         }
                     )
                 },
-                floatingActionButton = {
-                    if (!isGameMaster) {
-                        // Only GMs should manage turns and rounds
-                        return@Scaffold
-                    }
-
-                    FloatingActionButton(
-                        onClick = { coroutineScope.launch(Dispatchers.IO) { viewModel.nextTurn() } }
-                    ) {
-                        Icon(vectorResource(R.drawable.ic_round_next))
-                    }
-                },
-
-                ) {
+            ) {
                 val round = viewModel.round.observeAsState().value
                 val turn = viewModel.turn.observeAsState().value
 
@@ -135,9 +121,7 @@ fun ActiveCombatScreen(routing: Routing<Route.ActiveCombat>) {
                 }
 
                 Column {
-                    SubheadBar(stringResource(R.string.n_round, round))
-
-                    ScrollableColumn(Modifier.fillMaxHeight()) {
+                    ScrollableColumn(Modifier.weight(1f)) {
                         CombatantList(
                             coroutineScope = coroutineScope,
                             combatants = combatants,
@@ -150,6 +134,10 @@ fun ActiveCombatScreen(routing: Routing<Route.ActiveCombat>) {
                             }
                         )
                     }
+
+                    if (isGameMaster) {
+                        BottomBar(turn, round, viewModel)
+                    }
                 }
             }
 
@@ -160,6 +148,38 @@ fun ActiveCombatScreen(routing: Routing<Route.ActiveCombat>) {
 
 private fun canEditCombatant(userId: String, isGameMaster: Boolean, combatant: CombatantItem) =
     isGameMaster || (combatant is CombatantItem.Character && combatant.userId == userId)
+
+@Composable
+private fun BottomBar(turn: Int, round: Int, viewModel: CombatViewModel) {
+    val coroutineScope = rememberCoroutineScope()
+
+    BottomAppBar(backgroundColor = MaterialTheme.colors.surface) {
+        Row(
+            Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            IconButton(
+                enabled = round > 1 || turn > 1,
+                onClick = {
+                    coroutineScope.launch(Dispatchers.IO) { viewModel.previousTurn() }
+                },
+            ) {
+                Icon(vectorResource(R.drawable.ic_arrow_back))
+            }
+
+            Text(stringResource(R.string.n_round, round))
+
+            IconButton(
+                onClick = {
+                    coroutineScope.launch(Dispatchers.IO) { viewModel.nextTurn() }
+                }
+            ) {
+                Icon(vectorResource(R.drawable.ic_arrow_forward))
+            }
+        }
+    }
+}
 
 @Composable
 private fun rememberNotSavedModalBottomSheetState(): ModalBottomSheetState {
@@ -184,9 +204,9 @@ private fun AutoCloseOnEndedCombat(
 
     val observer: Observer<Boolean> = remember(routing) {
         Observer { active ->
-           if (active) {
-               return@Observer
-           }
+            if (active) {
+                return@Observer
+            }
 
             Timber.d("Closing combat screen")
 

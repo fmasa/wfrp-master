@@ -27,6 +27,16 @@ data class Combat(
     fun getTurn() = turn
     fun getRound() = round
 
+    fun previousTurn(): Combat {
+        if (turn == 1 && round == 1) {
+            return this
+        }
+
+        return if (turn == 1)
+            copy (turn = combatants.size, round = round - 1)
+        else copy (turn = turn -1)
+    }
+
     fun nextTurn(): Combat {
         return if (turn == combatants.size)
             copy (turn = 1, round = round + 1)
