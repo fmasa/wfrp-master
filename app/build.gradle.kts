@@ -139,4 +139,8 @@ dependencies {
     androidTestImplementation("androidx.test.ext:junit:1.1.2")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.3.0")
     testImplementation("org.mockito:mockito-core:2.7.22")
+
+    // Checking network access
+    implementation("com.github.pwittchen:reactivenetwork-rx2:3.0.8")
+    api("org.jetbrains.kotlinx:kotlinx-coroutines-rx2:1.4.2")
 }
