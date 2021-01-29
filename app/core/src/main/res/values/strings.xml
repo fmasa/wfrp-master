@@ -32,12 +32,22 @@
     <string name="button_submit">Submit</string>
     <string name="button_open">Open</string>
     <string name="button_remove">Remove</string>
+    <string name="open_context_menu">Open context menu</string>
 
     <!-- Form errors -->
     <string name="error_cannot_be_empty">Cannot be empty!</string>
     <string name="error_must_be_non_negative_number">Must be greater or equal to 0</string>
     <string name="error_must_be_positive_int">Must be positive number without decimals</string>
     <string name="error_not_integer">Must be number without decimals</string>
+
+    <!-- Icon descriptions -->
+    <string name="icon_increment">Increment value</string>
+    <string name="icon_decrement">Decrement value</string>
+    <string name="icon_close_dialog">Close current dialog</string>
+    <string name="icon_back_button">Return to previous screen</string>
+    <string name="icon_hamburger">Open navigation drawer</string>
+    <string name="icon_open_selectbox">Open select-box</string>
+    <string name="icon_action_more">Open context menu</string>
 
     <!-- Common input labels -->
     <string name="label_name" translatable="false">Name</string>

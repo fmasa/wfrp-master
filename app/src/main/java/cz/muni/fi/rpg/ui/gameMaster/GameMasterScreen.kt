@@ -11,7 +11,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.layout.WithConstraints
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
@@ -56,7 +55,10 @@ fun GameMasterScreen(routing: Routing<Route.GameMaster>) {
                             routing.navigateTo(Route.PartySettings(party.id))
                         },
                     ) {
-                        Icon(vectorResource(R.drawable.ic_settings))
+                        Icon(
+                            vectorResource(R.drawable.ic_settings),
+                            stringResource(R.string.title_party_settings),
+                        )
                     }
                 }
             )
@@ -70,7 +72,7 @@ fun GameMasterScreen(routing: Routing<Route.GameMaster>) {
             return@Scaffold
         }
 
-        WithConstraints(Modifier.fillMaxSize()) {
+        BoxWithConstraints(Modifier.fillMaxSize()) {
             val screens = screens(
                 viewModel,
                 routing,

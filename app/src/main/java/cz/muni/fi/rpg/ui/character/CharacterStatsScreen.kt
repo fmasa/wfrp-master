@@ -1,9 +1,10 @@
 package cz.muni.fi.rpg.ui.character
 
 import androidx.annotation.StringRes
-import androidx.compose.foundation.ScrollableColumn
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.savedinstancestate.savedInstanceState
@@ -32,6 +33,8 @@ import cz.muni.fi.rpg.ui.gameMaster.rolls.Roll
 import cz.muni.fi.rpg.ui.gameMaster.rolls.RollResult
 import cz.muni.fi.rpg.ui.gameMaster.rolls.TestResultScreen
 import cz.muni.fi.rpg.viewModels.CharacterStatsViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import org.koin.core.parameter.parametersOf
 import timber.log.Timber
 import java.lang.IllegalArgumentException
@@ -50,8 +53,8 @@ internal fun CharacterCharacteristicsScreen(
         FullScreenDialog(onDismissRequest = { roll = null }) {
             val rollSound = rememberSoundPlayer(R.raw.roll_sound)
 
-            onActive {
-                rollSound.play()
+            LaunchedEffect(Unit) {
+                withContext(Dispatchers.Main) { rollSound.play() }
             }
 
             TestResultScreen(
@@ -95,7 +98,11 @@ internal fun CharacterCharacteristicsScreen(
             }
         }
     ) {
-        ScrollableColumn(contentPadding = PaddingValues(top = Spacing.small)) {
+        Column(
+            Modifier
+                .verticalScroll(rememberScrollState())
+                .padding(top = Spacing.small),
+        ) {
             PointsSection(character.getPoints()) { points -> viewModel.updatePoints { points } }
             CharacteristicsSection(character.getCharacteristics())
             Spacer(Modifier.padding(bottom = 8.dp))

@@ -1,7 +1,8 @@
 package cz.muni.fi.rpg.ui.gameMaster.encounters
 
-import androidx.compose.foundation.ScrollableColumn
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -19,6 +20,7 @@ import cz.frantisekmasa.wfrp_master.core.domain.Stats
 import cz.frantisekmasa.wfrp_master.core.ui.buttons.BackButton
 import cz.frantisekmasa.wfrp_master.core.ui.forms.*
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.HorizontalLine
+import cz.frantisekmasa.wfrp_master.core.ui.primitives.Spacing
 import cz.frantisekmasa.wfrp_master.core.ui.scaffolding.SaveAction
 import cz.frantisekmasa.wfrp_master.core.viewModel.viewModel
 import cz.muni.fi.rpg.ui.common.chunk
@@ -289,82 +291,81 @@ fun NpcCreationScreen(routing: Routing<Route.NpcCreation>) {
 
 @Composable
 private fun MainContainer(data: FormData, validate: Boolean) {
-    ScrollableColumn {
-        Column(
-            Modifier
-                .padding(24.dp)
-                .padding(bottom = 30.dp)
-        ) {
-            Column(verticalArrangement = Arrangement.spacedBy(FormInputVerticalPadding)) {
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.spacedBy(FormInputHorizontalPadding)
-                ) {
-                    TextInput(
-                        modifier = Modifier.weight(0.7f),
-                        label = stringResource(R.string.label_name),
-                        value = data.name,
-                        maxLength = Npc.NAME_MAX_LENGTH,
-                        validate = validate,
-                    )
-
-                    TextInput(
-                        modifier = Modifier.weight(0.3f),
-                        label = stringResource(R.string.label_wounds),
-                        value = data.wounds,
-                        keyboardType = KeyboardType.Number,
-                        maxLength = 3,
-                        validate = validate,
-                    )
-                }
-
+    Column(
+        Modifier
+            .verticalScroll(rememberScrollState())
+            .padding(Spacing.bodyPadding)
+            .padding(bottom = 30.dp)
+    ) {
+        Column(verticalArrangement = Arrangement.spacedBy(FormInputVerticalPadding)) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(FormInputHorizontalPadding)
+            ) {
                 TextInput(
-                    label = stringResource(R.string.label_description),
-                    value = data.note,
+                    modifier = Modifier.weight(0.7f),
+                    label = stringResource(R.string.label_name),
+                    value = data.name,
+                    maxLength = Npc.NAME_MAX_LENGTH,
                     validate = validate,
-                    multiLine = true,
                 )
 
-                Row(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
-                    CheckboxWithText(
-                        text = stringResource(R.string.label_enemy),
-                        checked = data.enemy.value,
-                        onCheckedChange = { data.enemy.value = it }
-                    )
-                    CheckboxWithText(
-                        text = stringResource(R.string.label_alive),
-                        checked = data.alive.value,
-                        onCheckedChange = { data.alive.value = it }
-                    )
-                }
+                TextInput(
+                    modifier = Modifier.weight(0.3f),
+                    label = stringResource(R.string.label_wounds),
+                    value = data.wounds,
+                    keyboardType = KeyboardType.Number,
+                    maxLength = 3,
+                    validate = validate,
+                )
             }
 
-            HorizontalLine()
-
-            Text(
-                stringResource(R.string.title_character_characteristics),
-                style = MaterialTheme.typography.h6,
-                textAlign = TextAlign.Center,
-                modifier = Modifier
-                    .padding(top = 20.dp, bottom = 16.dp)
-                    .fillMaxWidth()
+            TextInput(
+                label = stringResource(R.string.label_description),
+                value = data.note,
+                validate = validate,
+                multiLine = true,
             )
 
-            CharacteristicsSegment(data.characteristics, validate)
-
-            HorizontalLine()
-
-            Text(
-                stringResource(R.string.title_armor),
-                style = MaterialTheme.typography.h6,
-                textAlign = TextAlign.Center,
-                modifier = Modifier
-                    .padding(top = 20.dp, bottom = 16.dp)
-                    .fillMaxWidth()
-            )
-
-            ArmorSegment(data.armor, validate)
+            Row(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
+                CheckboxWithText(
+                    text = stringResource(R.string.label_enemy),
+                    checked = data.enemy.value,
+                    onCheckedChange = { data.enemy.value = it }
+                )
+                CheckboxWithText(
+                    text = stringResource(R.string.label_alive),
+                    checked = data.alive.value,
+                    onCheckedChange = { data.alive.value = it }
+                )
+            }
         }
+
+        HorizontalLine()
+
+        Text(
+            stringResource(R.string.title_character_characteristics),
+            style = MaterialTheme.typography.h6,
+            textAlign = TextAlign.Center,
+            modifier = Modifier
+                .padding(top = 20.dp, bottom = 16.dp)
+                .fillMaxWidth()
+        )
+
+        CharacteristicsSegment(data.characteristics, validate)
+
+        HorizontalLine()
+
+        Text(
+            stringResource(R.string.title_armor),
+            style = MaterialTheme.typography.h6,
+            textAlign = TextAlign.Center,
+            modifier = Modifier
+                .padding(top = 20.dp, bottom = 16.dp)
+                .fillMaxWidth()
+        )
+
+        ArmorSegment(data.armor, validate)
     }
 }
 

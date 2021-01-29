@@ -318,4 +318,18 @@
 
     <string name="error_camera_permission_required">Camera permission is required for QR code scanning</string>
     <string name="no_internet">No internet connection</string>
+
+    <!-- Image/Icon descriptions -->
+    <string name="icon_add_encounter">Add encounter</string>
+    <string name="icon_add_spell">Add spell</string>
+    <string name="icon_application_logo">Application logo</string>
+    <string name="icon_edit_character">Edit character</string>
+    <string name="icon_edit_encounter">Edit encounter</string>
+    <string name="icon_hidden_skill_test">Hidden skill test</string>
+    <string name="icon_toggle_fab_menu">Toggle menu</string>
+    <string name="image_invitation_qr_code">Invitation QR code</string>
+    <string name="icon_previous_years">Previous years</string>
+    <string name="icon_next_years">Next years</string>
+    <string name="icon_previous_month">Previous month</string>
+    <string name="icon_next_month">Next month</string>
 </resources>

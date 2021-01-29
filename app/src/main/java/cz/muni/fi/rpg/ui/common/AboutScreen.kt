@@ -1,7 +1,8 @@
 package cz.muni.fi.rpg.ui.common
 
-import androidx.compose.foundation.ScrollableColumn
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Divider
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
@@ -29,7 +30,7 @@ fun AboutScreen(routing: Routing<Route.About>) {
             )
         }
     ) {
-        ScrollableColumn {
+        Column(Modifier.verticalScroll(rememberScrollState())) {
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier

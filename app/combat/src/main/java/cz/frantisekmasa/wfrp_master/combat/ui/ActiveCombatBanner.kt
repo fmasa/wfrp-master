@@ -23,7 +23,7 @@ import cz.frantisekmasa.wfrp_master.core.viewModel.viewModel
 import cz.frantisekmasa.wfrp_master.navigation.Route
 import cz.frantisekmasa.wfrp_master.navigation.Routing
 import org.koin.core.parameter.parametersOf
-import java.util.*
+
 
 @Composable
 fun ActiveCombatBanner(partyId: PartyId, routing: Routing<*>) {

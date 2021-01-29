@@ -4,7 +4,7 @@ import kotlin.random.Random
 
 
 class Dice(
-    val sides: Int,
+    private val sides: Int,
     private val random: Random = Random,
 ) {
     init {

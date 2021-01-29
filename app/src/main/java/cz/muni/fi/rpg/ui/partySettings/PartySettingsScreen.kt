@@ -1,9 +1,12 @@
 package cz.muni.fi.rpg.ui.partySettings
 
-import androidx.compose.foundation.ScrollableColumn
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import cz.frantisekmasa.wfrp_master.core.ui.buttons.BackButton
 import cz.frantisekmasa.wfrp_master.core.ui.components.settings.SettingsCard
@@ -34,7 +37,7 @@ fun PartySettingsScreen(routing: Routing<Route.PartySettings>) {
             return@Scaffold
         }
 
-        ScrollableColumn {
+        Column(Modifier.verticalScroll(rememberScrollState())) {
             SettingsCard {
                 SettingsTitle(R.string.party_section_general)
                 PartyNameItem(party.getName(), viewModel)

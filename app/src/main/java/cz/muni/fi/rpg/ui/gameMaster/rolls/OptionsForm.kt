@@ -1,8 +1,9 @@
 package cz.muni.fi.rpg.ui.gameMaster.rolls
 
-import androidx.compose.foundation.ScrollableColumn
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.selection.toggleable
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
@@ -20,6 +21,7 @@ import cz.frantisekmasa.wfrp_master.core.ui.primitives.Spacing
 import cz.frantisekmasa.wfrp_master.core.ui.scaffolding.TopBarAction
 import cz.muni.fi.rpg.R
 import cz.frantisekmasa.wfrp_master.core.domain.character.Character
+import cz.frantisekmasa.wfrp_master.core.ui.primitives.VisualOnlyIconDescription
 import cz.muni.fi.rpg.viewModels.SkillTestViewModel
 
 
@@ -34,7 +36,6 @@ internal fun OptionsForm(
     val characters = viewModel.characters.observeAsState().value
     val characterIds = characters?.map { it.id }?.toSet()
 
-    var validate by remember { mutableStateOf(false) }
     var executing by remember { mutableStateOf(false) }
 
     var difficulty by savedInstanceState { 0 }
@@ -48,7 +49,7 @@ internal fun OptionsForm(
                 actions = {
                     TopBarAction(
                         textRes = R.string.button_test_execute,
-                        enabled = !executing && (!validate || selectedCharacterIds.isNotEmpty()),
+                        enabled = !executing && (selectedCharacterIds.isNotEmpty()),
                         onClick = {
                             val charactersById =
                                 characters?.associateBy { it.id } ?: return@TopBarAction
@@ -70,8 +71,10 @@ internal fun OptionsForm(
             return@Scaffold
         }
 
-        ScrollableColumn(
-            contentPadding = PaddingValues(Spacing.bodyPadding),
+        Column(
+            Modifier
+                .verticalScroll(rememberScrollState())
+                .padding(Spacing.bodyPadding),
             verticalArrangement = Arrangement.spacedBy(Spacing.small),
         ) {
             SelectBoxToggle(
@@ -80,6 +83,7 @@ internal fun OptionsForm(
             ) {
                 Icon(
                     vectorResource(selectedSkill.characteristic.getIconId()),
+                    VisualOnlyIconDescription, // TODO: Add characteristic-derived description
                     Modifier.width(24.dp)
                 )
                 Text(selectedSkill.name, Modifier.padding(start = Spacing.small))

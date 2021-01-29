@@ -20,7 +20,7 @@ data class TestResult(
     val isCritical: Boolean
         get() = isSuccess && rollsDouble()
 
-    val isSuccess: Boolean
+    private val isSuccess: Boolean
         get() = successLevel > 0 || rollValue <= testedValue
 
     val successLevel: Int

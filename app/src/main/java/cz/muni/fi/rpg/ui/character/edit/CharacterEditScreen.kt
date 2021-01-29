@@ -1,7 +1,8 @@
 package cz.muni.fi.rpg.ui.character.edit
 
-import androidx.compose.foundation.ScrollableColumn
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
@@ -108,7 +109,11 @@ fun CharacterEditScreen(routing: Routing<Route.CharacterEdit>) {
 
 @Composable
 private fun CharacterEditMainUI(formData: CharacterEditScreen.FormData, validate: Boolean) {
-    ScrollableColumn(Modifier.fillMaxSize()) {
+    Column(
+        Modifier
+            .fillMaxSize()
+            .verticalScroll(rememberScrollState()),
+    ) {
         Column(Modifier.padding(24.dp)) {
             CharacterBasicInfoForm(formData.basicInfo, validate)
 
@@ -148,7 +153,7 @@ private fun MaxWoundsSegment(data: CharacterEditScreen.WoundsData, validate: Boo
 
         CheckboxWithText(
             text = stringResource(R.string.title_checkbox_hardy),
-            checked = data . hardyTalent . value,
+            checked = data.hardyTalent.value,
             onCheckedChange = { data.hardyTalent.value = it }
         )
     }

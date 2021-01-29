@@ -14,6 +14,8 @@ import androidx.compose.ui.gesture.scrollorientationlocking.Orientation
 import androidx.compose.ui.platform.AmbientDensity
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 import kotlin.math.abs
 import kotlin.math.max
 import kotlin.math.min
@@ -39,6 +41,7 @@ import kotlin.math.min
 
 @Stable
 class PagerState(
+    private val coroutineScope: CoroutineScope,
     private val ignoredDragOffset: Float,
     internal val scrollState: ScrollState,
     private val screenWidth: Float,
@@ -59,7 +62,7 @@ class PagerState(
             return
         }
 
-        scrollState.smoothScrollTo(index * screenWidth)
+        coroutineScope.launch { scrollState.smoothScrollTo(index * screenWidth) }
     }
 
     internal val scrollCallback = object : ScrollCallback {
@@ -77,21 +80,23 @@ class PagerState(
                 return 0f // TODO: Check if we cannot simply consume everything
             }
 
-            previousScroll = scrollState.value
-            val newsScrollState = previousScroll - scrollDistance
+            coroutineScope.launch {
+                previousScroll = scrollState.value
+                val newsScrollState = previousScroll - scrollDistance
 
-            scrollState.scrollTo(newsScrollState)
+                scrollState.scrollTo(newsScrollState)
 
-            val previousScreenOffset = max(dragStart - screenWidth, 0f)
-            val nextScreenOffset = min(dragStart + screenWidth, screenWidth * screenCount)
+                val previousScreenOffset = max(dragStart - screenWidth, 0f)
+                val nextScreenOffset = min(dragStart + screenWidth, screenWidth * screenCount)
 
-            if (newsScrollState >= nextScreenOffset) {
-                dragStart = nextScreenOffset
-            } else if (newsScrollState <= previousScreenOffset) {
-                dragStart = previousScreenOffset
+                if (newsScrollState >= nextScreenOffset) {
+                    dragStart = nextScreenOffset
+                } else if (newsScrollState <= previousScreenOffset) {
+                    dragStart = previousScreenOffset
+                }
             }
 
-            return abs(scrollState.value - previousScroll)
+            return abs(scrollDistance)
         }
 
         override fun onCancel() {
@@ -105,9 +110,10 @@ class PagerState(
         }
 
         private fun onDragStopped(velocity: Float) {
+            coroutineScope.launch {
             // If scrollState didn't change, do nothing
             if (scrollState.value % screenWidth == 0f) {
-                return
+                return@launch
             }
 
             val direction = direction(previousScroll, scrollState.value)
@@ -123,10 +129,12 @@ class PagerState(
                 dragStart,
             )
 
-            scrollState.smoothScrollTo(
-                anchors.minByOrNull { abs(it - (scrollState.value + relativeVelocity)) }
-                    ?: 0f
-            )
+            val scrollPosition = scrollState.value + relativeVelocity
+
+                scrollState.smoothScrollTo(
+                    anchors.minByOrNull { abs(it - scrollPosition) } ?: 0f
+                )
+            }
         }
     }
 }
@@ -143,8 +151,10 @@ fun rememberPagerState(
         with(density) { ignoredDragOffset.toPx() }
     }
 
-    return remember(scrollState, ignoredDragOffset) {
-        PagerState(ignoredDragOffsetPx, scrollState, screenWidth, screenCount)
+    val coroutineScope = rememberCoroutineScope()
+
+    return remember(scrollState, ignoredDragOffset, coroutineScope) {
+        PagerState(coroutineScope, ignoredDragOffsetPx, scrollState, screenWidth, screenCount)
     }
 }
 

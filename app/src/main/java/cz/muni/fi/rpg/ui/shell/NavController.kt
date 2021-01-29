@@ -1,10 +1,7 @@
 package cz.muni.fi.rpg.ui.shell
 
 import android.os.Bundle
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.onActive
-import androidx.compose.runtime.onDispose
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.core.os.bundleOf
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination
@@ -21,12 +18,10 @@ fun rememberNavControllerWithAnalytics(): NavHostController {
     val navController = rememberNavController()
     val listener = remember { DestinationAnalyticsLogger() }
 
-    onActive {
+    DisposableEffect(listener, navController) {
         navController.addOnDestinationChangedListener(listener)
-    }
 
-    onDispose {
-        navController.removeOnDestinationChangedListener(listener)
+        onDispose { navController.removeOnDestinationChangedListener(listener) }
     }
 
     return navController

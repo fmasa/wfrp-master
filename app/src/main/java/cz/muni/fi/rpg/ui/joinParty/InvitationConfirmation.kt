@@ -21,11 +21,11 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.core.text.bold
 import cz.frantisekmasa.wfrp_master.core.auth.AmbientUser
 import cz.frantisekmasa.wfrp_master.core.domain.party.Invitation
+import cz.frantisekmasa.wfrp_master.core.ui.buttons.PrimaryButton
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.FullScreenProgress
 import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.model.domain.invitation.AlreadyInParty
 import cz.muni.fi.rpg.model.domain.invitation.InvalidInvitation
-import cz.muni.fi.rpg.ui.common.composables.PrimaryButton
 import cz.muni.fi.rpg.viewModels.JoinPartyViewModel
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Dispatchers

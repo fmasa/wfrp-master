@@ -18,6 +18,7 @@ import androidx.compose.ui.text.intl.Locale
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.toUpperCase
 import androidx.compose.ui.unit.dp
+import cz.frantisekmasa.wfrp_master.core.ui.primitives.VisualOnlyIconDescription
 
 @Composable
 fun CardTitle(@StringRes textRes: Int, @DrawableRes iconRes: Int? = null) {
@@ -34,6 +35,7 @@ fun CardTitle(text: String, @DrawableRes iconRes: Int? = null) {
         if (iconRes != null) {
             Image(
                 vectorResource(iconRes),
+                VisualOnlyIconDescription,
                 Modifier.padding(end = 4.dp)
                     .width(24.dp)
                     .height(24.dp),
@@ -41,32 +43,5 @@ fun CardTitle(text: String, @DrawableRes iconRes: Int? = null) {
             )
         }
         Text(text, style = MaterialTheme.typography.h6, textAlign = TextAlign.Center)
-    }
-}
-
-@Composable
-fun CardButton(@StringRes textRes: Int, onClick: () -> Unit) {
-    Box(
-        contentAlignment = Alignment.TopCenter,
-        modifier = Modifier.fillMaxWidth().padding(top = 16.dp),
-    ) {
-        OutlinedButton(onClick = onClick) {
-            Text(stringResource(textRes).toUpperCase(Locale.current))
-        }
-    }
-}
-
-@Composable
-fun PrimaryButton(
-    @StringRes textRes: Int,
-    enabled: Boolean = true,
-    onClick: () -> Unit
-) {
-    Button(
-        onClick = onClick,
-        enabled = enabled,
-        modifier = Modifier.padding(top = 16.dp)
-    ) {
-        Text(stringResource(textRes).toUpperCase(Locale.current))
     }
 }

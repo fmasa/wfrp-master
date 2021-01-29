@@ -13,6 +13,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import cz.frantisekmasa.wfrp_master.core.domain.Money
+import cz.frantisekmasa.wfrp_master.core.ui.primitives.VisualOnlyIconDescription
 import cz.frantisekmasa.wfrp_master.inventory.R
 
 @Composable
@@ -38,6 +39,7 @@ fun MoneyBalance(value: Money, modifier: Modifier = Modifier) {
 private fun MoneyIcon(tint: Color) {
     Icon(
         vectorResource(R.drawable.ic_coins),
+        VisualOnlyIconDescription,
         tint = tint,
         modifier = Modifier.size(18.dp)
     )

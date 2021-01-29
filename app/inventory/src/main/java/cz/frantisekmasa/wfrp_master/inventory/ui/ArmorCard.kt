@@ -18,6 +18,7 @@ import cz.frantisekmasa.wfrp_master.core.domain.Armor
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.CardContainer
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.CardTitle
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.NumberPicker
+import cz.frantisekmasa.wfrp_master.core.ui.primitives.VisualOnlyIconDescription
 import cz.frantisekmasa.wfrp_master.inventory.R
 
 @Composable
@@ -101,7 +102,7 @@ internal fun ArmorCard(armor: Armor, onChange: (Armor) -> Unit) {
 }
 
 @Composable
-private fun RowScope.ArmorPart(
+private fun ArmorPart(
     @DrawableRes iconRes: Int,
     @StringRes nameRes: Int,
     points: Int,
@@ -110,7 +111,7 @@ private fun RowScope.ArmorPart(
     onChange: (Int) -> Unit,
 ) {
     Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = modifier) {
-        Icon(vectorResource(iconRes))
+        Icon(vectorResource(iconRes), VisualOnlyIconDescription)
         NumberPicker(
             value = points,
             onIncrement = {

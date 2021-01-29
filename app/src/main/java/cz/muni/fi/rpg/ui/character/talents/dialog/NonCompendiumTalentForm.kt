@@ -1,7 +1,8 @@
 package cz.muni.fi.rpg.ui.character.talents.dialog
 
-import androidx.compose.foundation.ScrollableColumn
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
@@ -13,6 +14,7 @@ import androidx.compose.ui.res.stringResource
 import cz.frantisekmasa.wfrp_master.core.ui.forms.*
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.FullScreenProgress
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.NumberPicker
+import cz.frantisekmasa.wfrp_master.core.ui.primitives.Spacing
 import cz.frantisekmasa.wfrp_master.core.ui.scaffolding.SaveAction
 import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.model.domain.talents.Talent
@@ -72,8 +74,10 @@ internal fun NonCompendiumTalentForm(
             return@Scaffold
         }
 
-        ScrollableColumn(
-            contentPadding = PaddingValues(BodyPadding),
+        Column(
+            Modifier
+                .verticalScroll(rememberScrollState())
+                .padding(Spacing.bodyPadding),
             verticalArrangement = Arrangement.spacedBy(FormInputVerticalPadding)
         ) {
             Row(

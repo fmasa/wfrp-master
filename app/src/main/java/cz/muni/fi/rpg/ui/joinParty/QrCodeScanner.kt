@@ -78,9 +78,11 @@ internal fun QrCodeScanner(
         },
     )
 
-    onDispose {
-        if (cameraBound) {
-            cameraProviderFuture.get().unbindAll()
+    DisposableEffect(Unit) {
+        onDispose {
+            if (cameraBound) {
+                cameraProviderFuture.get().unbindAll()
+            }
         }
     }
 }

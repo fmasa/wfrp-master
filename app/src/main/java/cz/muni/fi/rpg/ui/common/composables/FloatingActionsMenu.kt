@@ -8,12 +8,11 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Icon
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
-import androidx.compose.ui.draw.drawOpacity
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import cz.muni.fi.rpg.R
@@ -90,7 +89,8 @@ fun FloatingActionsMenu(
         ) {
             Icon(
                 vectorResource(iconRes),
-                modifier = Modifier.graphicsLayer(rotationZ = transition[iconRotation])
+                stringResource(R.string.icon_toggle_fab_menu),
+                modifier = Modifier.graphicsLayer(rotationZ = transition[iconRotation]),
             )
         }
     }

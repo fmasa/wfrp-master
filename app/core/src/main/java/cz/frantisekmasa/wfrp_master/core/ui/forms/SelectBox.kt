@@ -7,6 +7,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import cz.frantisekmasa.wfrp_master.core.R
@@ -74,11 +75,16 @@ fun SelectBoxToggle(
             modifier = Modifier.clickable(onClick = onClick),
         ) {
             Row(
-                modifier = Modifier.fillMaxWidth().padding(Spacing.medium),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(Spacing.medium),
                 horizontalArrangement = Arrangement.SpaceBetween,
             ) {
                 Row { content() }
-                Icon(vectorResource(R.drawable.ic_caret_down))
+                Icon(
+                    vectorResource(R.drawable.ic_caret_down),
+                    stringResource(R.string.icon_open_selectbox),
+                )
             }
         }
     }

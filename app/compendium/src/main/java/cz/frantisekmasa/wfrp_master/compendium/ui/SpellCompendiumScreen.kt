@@ -6,9 +6,9 @@ import androidx.compose.material.ListItem
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.layout.WithConstraintsScope
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import cz.frantisekmasa.wfrp_master.compendium.R
 import cz.frantisekmasa.wfrp_master.compendium.domain.Spell
@@ -25,7 +25,7 @@ import kotlinx.coroutines.launch
 import java.util.*
 
 @Composable
-fun WithConstraintsScope.SpellCompendiumTab(viewModel: CompendiumViewModel) {
+fun SpellCompendiumTab(viewModel: CompendiumViewModel, width: Dp) {
     val coroutineScope = rememberCoroutineScope()
 
     CompendiumTab(
@@ -39,7 +39,7 @@ fun WithConstraintsScope.SpellCompendiumTab(viewModel: CompendiumViewModel) {
         },
         onRemove = { coroutineScope.launch(Dispatchers.IO) { viewModel.remove(it) } },
         dialog = { SpellDialog(it, viewModel) },
-        width = maxWidth,
+        width = width,
     ) { spell ->
         ListItem(
             icon = { ItemIcon(R.drawable.ic_spells) },

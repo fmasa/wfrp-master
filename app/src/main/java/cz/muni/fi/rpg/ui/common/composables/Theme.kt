@@ -11,6 +11,8 @@ import cz.frantisekmasa.wfrp_master.core.media.AmbientSoundEnabled
 import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.ui.shell.AmbientSystemUiController
 import cz.frantisekmasa.wfrp_master.core.viewModel.provideSettingsViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 class Theme {
     class FixedColors(
@@ -70,14 +72,16 @@ fun Theme(content: @Composable () -> Unit) {
     val colors = if (darkMode) Theme.DarkColors() else Theme.LightColors()
     val systemUi = AmbientSystemUiController.current
 
-    onCommit(colors.isLight, systemUi) {
-        systemUi.setStatusBarColor(
-            if (colors.isLight) Theme.fixedColors.primaryDark else darkSystemColor
-        )
+    LaunchedEffect(colors.isLight, systemUi) {
+        withContext(Dispatchers.Main) {
+            systemUi.setStatusBarColor(
+                if (colors.isLight) Theme.fixedColors.primaryDark else darkSystemColor
+            )
 
-        systemUi.setNavigationBarColor(
-            if (colors.isLight) Color(235, 235, 235) else darkSystemColor
-        )
+            systemUi.setNavigationBarColor(
+                if (colors.isLight) Color(235, 235, 235) else darkSystemColor
+            )
+        }
     }
 
     MaterialTheme(

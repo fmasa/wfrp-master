@@ -3,6 +3,7 @@ package cz.muni.fi.rpg.ui.character
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Icon
 import androidx.compose.material.Scaffold
@@ -37,10 +38,11 @@ internal fun CharacterSpellsScreen(
     Scaffold(
         modifier = modifier,
         floatingActionButton = {
-            FloatingActionButton(
-                onClick = { showAddSpellDialog = true }
-            ) {
-                Icon(vectorResource(R.drawable.ic_add))
+            FloatingActionButton(onClick = { showAddSpellDialog = true }) {
+                Icon(
+                    vectorResource(R.drawable.ic_add),
+                    stringResource(R.string.icon_add_spell),
+                )
             }
         }
     ) {

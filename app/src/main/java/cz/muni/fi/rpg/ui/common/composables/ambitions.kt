@@ -25,6 +25,7 @@ import androidx.compose.ui.unit.dp
 import cz.muni.fi.rpg.R
 import cz.frantisekmasa.wfrp_master.core.domain.Ambitions
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.CardContainer
+import cz.frantisekmasa.wfrp_master.core.ui.primitives.VisualOnlyIconDescription
 import cz.muni.fi.rpg.ui.common.ChangeAmbitionsDialog
 
 @Composable
@@ -73,7 +74,7 @@ fun AmbitionsCard(
                 if (value.isBlank()) {
                     Providers(AmbientContentAlpha provides ContentAlpha.medium) {
                         Row(verticalAlignment = Alignment.CenterVertically) {
-                            Icon(vectorResource(R.drawable.ic_none))
+                            Icon(vectorResource(R.drawable.ic_none), VisualOnlyIconDescription)
                             Text(
                                 stringResource(R.string.note_ambition_not_filled),
                                 style = MaterialTheme.typography.body2,

@@ -4,7 +4,7 @@ plugins {
     id("kotlin-parcelize")
 }
 
-val composeVersion = "1.0.0-alpha10"
+val composeVersion = "1.0.0-alpha11"
 
 android {
     compileSdkVersion(29)
@@ -102,7 +102,7 @@ dependencies {
     api("com.google.android.gms:play-services-ads:19.6.0")
 
     // Shared Preferences DataStore
-    implementation("androidx.datastore:datastore-preferences:1.0.0-alpha05");
+    implementation("androidx.datastore:datastore-preferences:1.0.0-alpha05")
 
     // HTTP Client
     val ktorVersion = "1.5.0"

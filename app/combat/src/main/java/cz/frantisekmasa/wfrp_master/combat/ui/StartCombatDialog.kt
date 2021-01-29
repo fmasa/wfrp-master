@@ -1,11 +1,10 @@
 package cz.frantisekmasa.wfrp_master.combat.ui
 
 import androidx.annotation.StringRes
-import androidx.compose.foundation.ScrollableColumn
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.selection.toggleable
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
@@ -81,8 +80,10 @@ fun StartCombatDialog(
                 )
             }
         ) {
-            ScrollableColumn(
-                contentPadding = PaddingValues(Spacing.bodyPadding),
+            Column( // TODO: Consider LazyColumn
+                Modifier
+                    .verticalScroll(rememberScrollState())
+                    .padding(Spacing.bodyPadding),
                 verticalArrangement = Arrangement.spacedBy(Spacing.small),
             ) {
                 CombatantList(

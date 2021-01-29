@@ -41,6 +41,7 @@ fun ItemIcon(@DrawableRes drawableResource: Int, size: ItemIcon.Size = ItemIcon.
 
     Image(
         vectorResource(drawableResource),
+        VisualOnlyIconDescription, // TODO: Provide mechanism to specify what does this image means, such as: ("Character's image", "Strength-based skill", etc.)
         colorFilter = ColorFilter.tint(MaterialTheme.colors.surface),
         modifier = Modifier
             .background(backgroundColor, CircleShape)

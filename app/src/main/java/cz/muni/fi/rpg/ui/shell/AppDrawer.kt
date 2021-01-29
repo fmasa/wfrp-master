@@ -19,6 +19,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.Spacing
+import cz.frantisekmasa.wfrp_master.core.ui.primitives.VisualOnlyIconDescription
 import cz.frantisekmasa.wfrp_master.core.ui.viewinterop.AmbientActivity
 import cz.frantisekmasa.wfrp_master.navigation.Route
 import cz.frantisekmasa.wfrp_master.navigation.navigate
@@ -143,7 +144,7 @@ private fun DrawerItem(
         horizontalArrangement = Arrangement.spacedBy(Spacing.medium),
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        Icon(vectorResource(icon))
+        Icon(vectorResource(icon), VisualOnlyIconDescription)
         Text(
             stringResource(text),
             style = MaterialTheme.typography.caption.copy(fontWeight = FontWeight.SemiBold),
@@ -167,7 +168,11 @@ private fun DrawerHeader() {
                 .padding(top = Spacing.small),
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            Image(vectorResource(R.drawable.splash_screen_image), Modifier.size(80.dp))
+            Image(
+                vectorResource(R.drawable.splash_screen_image),
+                VisualOnlyIconDescription,
+                Modifier.size(80.dp),
+            )
             Text(
                 stringResource(R.string.app_name),
                 style = MaterialTheme.typography.h6,

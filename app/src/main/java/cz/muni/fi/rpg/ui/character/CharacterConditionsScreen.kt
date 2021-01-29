@@ -4,6 +4,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Divider
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Switch
@@ -77,7 +78,7 @@ private fun ConditionRow(
     ) {
         ConditionIcon(condition)
         Text(
-            condition.name.toLowerCase(Locale.current).capitalize(Locale.current),
+            conditionName(condition),
             modifier = Modifier
                 .weight(1f)
                 .padding(start = 8.dp),
@@ -120,6 +121,15 @@ private fun ConditionIcon(condition: Condition) {
         Condition.UNCONSCIOUS -> R.drawable.ic_condition_unconscious
         Condition.BLEEDING -> R.drawable.ic_condition_bleeding
     }
-    Image(vectorResource(iconRes), Modifier.size(28.dp))
+    Image(
+        vectorResource(iconRes),
+        conditionName(condition),
+        Modifier.size(28.dp)
+    )
+}
+
+@Composable
+private fun conditionName(condition: Condition): String {
+    return condition.name.toLowerCase(Locale.current).capitalize(Locale.current)
 }
 

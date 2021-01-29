@@ -8,7 +8,6 @@ import cz.frantisekmasa.wfrp_master.core.domain.party.PartyId
 import cz.frantisekmasa.wfrp_master.core.domain.party.PartyRepository
 import cz.frantisekmasa.wfrp_master.core.domain.party.settings.Settings
 import cz.frantisekmasa.wfrp_master.core.utils.right
-import kotlinx.coroutines.flow.Flow
 
 class PartySettingsViewModel(
     private val partyId: PartyId,

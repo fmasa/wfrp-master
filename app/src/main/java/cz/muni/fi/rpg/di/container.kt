@@ -138,7 +138,6 @@ val appModule = module {
     /**
      * ViewModels
      */
-    viewModel { (characterId: CharacterId) -> ArmorViewModel(characterId, get()) }
     viewModel { (characterId: CharacterId) -> CharacterStatsViewModel(characterId, get()) }
     viewModel { (characterId: CharacterId) -> CharacterMiscViewModel(characterId, get(), get()) }
     viewModel { (characterId: CharacterId) -> CharacterViewModel(characterId, get()) }

@@ -2,9 +2,10 @@ package cz.frantisekmasa.wfrp_master.combat.ui
 
 import android.widget.Toast
 import androidx.compose.animation.asDisposableClock
-import androidx.compose.foundation.ScrollableColumn
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.material.ButtonDefaults.IconSize
 import androidx.compose.runtime.*
@@ -121,7 +122,11 @@ fun ActiveCombatScreen(routing: Routing<Route.ActiveCombat>) {
                 }
 
                 Column {
-                    ScrollableColumn(Modifier.weight(1f)) {
+                    Column(
+                        Modifier
+                            .weight(1f)
+                            .verticalScroll(rememberScrollState())
+                    ) {
                         CombatantList(
                             coroutineScope = coroutineScope,
                             combatants = combatants,
@@ -165,7 +170,10 @@ private fun BottomBar(turn: Int, round: Int, viewModel: CombatViewModel) {
                     coroutineScope.launch(Dispatchers.IO) { viewModel.previousTurn() }
                 },
             ) {
-                Icon(vectorResource(R.drawable.ic_arrow_back))
+                Icon(
+                    vectorResource(R.drawable.ic_arrow_back),
+                    stringResource(R.string.icon_previous_turn),
+                )
             }
 
             Text(stringResource(R.string.n_round, round))
@@ -175,7 +183,10 @@ private fun BottomBar(turn: Int, round: Int, viewModel: CombatViewModel) {
                     coroutineScope.launch(Dispatchers.IO) { viewModel.nextTurn() }
                 }
             ) {
-                Icon(vectorResource(R.drawable.ic_arrow_forward))
+                Icon(
+                    vectorResource(R.drawable.ic_arrow_forward),
+                    stringResource(R.string.icon_next_turn),
+                )
             }
         }
     }
@@ -222,17 +233,15 @@ private fun AutoCloseOnEndedCombat(
 
     val coroutineScope = rememberCoroutineScope()
 
-    onActive {
+    DisposableEffect(viewModel, lifecycleOwner, context) {
         coroutineScope.launch(Dispatchers.Default) {
             delay(3_000)
             withContext(Dispatchers.Main) {
                 viewModel.isCombatActive.observe(lifecycleOwner, observer)
             }
         }
-    }
 
-    onDispose {
-        viewModel.isCombatActive.removeObserver(observer)
+        onDispose { viewModel.isCombatActive.removeObserver(observer) }
     }
 }
 
@@ -277,8 +286,9 @@ private fun CombatantSheet(
     routing: Routing<*>,
     viewModel: CombatViewModel
 ) {
-    ScrollableColumn(
-        contentPadding = PaddingValues(Spacing.bodyPadding),
+    Column(
+        Modifier.verticalScroll(rememberScrollState())
+            .padding(Spacing.bodyPadding),
         verticalArrangement = Arrangement.spacedBy(Spacing.small),
     ) {
         Text(
@@ -380,13 +390,24 @@ private fun CombatantListItem(
 
             ListItem(
                 icon = {
-                    Icon(
-                        when (combatant) {
-                            is CombatantItem.Character -> vectorResource(R.drawable.ic_character)
-                            is CombatantItem.Npc -> vectorResource(R.drawable.ic_npc)
-                        },
-                        modifier = Modifier.size(IconSize)
-                    )
+                    val iconModifier = Modifier.size(IconSize)
+
+                    when (combatant) {
+                        is CombatantItem.Character -> {
+                            Icon(
+                                vectorResource(R.drawable.ic_character),
+                                stringResource(R.string.icon_combatant_character),
+                                iconModifier,
+                            )
+                        }
+                        is CombatantItem.Npc -> {
+                            Icon(
+                                vectorResource(R.drawable.ic_npc),
+                                stringResource(R.string.icon_combatant_npc),
+                                iconModifier,
+                            )
+                        }
+                    }
                 },
                 text = { Text(combatant.name) }
             )

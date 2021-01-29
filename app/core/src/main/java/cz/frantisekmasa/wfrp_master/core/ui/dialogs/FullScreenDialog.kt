@@ -41,10 +41,6 @@ data class AndroidDialogProperties(
  * In order to let the user dismiss the Dialog, the implementation of [onDismissRequest] should
  * contain a way to remove to remove the dialog from the composition hierarchy.
  *
- * Example usage:
- *
- * @sample androidx.compose.ui.samples.DialogSample
- *
  * @param onDismissRequest Executes when the user tries to dismiss the Dialog.
  * @param properties Typically platform specific properties to further configure the dialog.
  * @param content The content to be displayed inside the dialog.
@@ -60,14 +56,14 @@ fun FullScreenDialog(
     val lightTheme = MaterialTheme.colors.isLight
 
     val dialog = remember(view, lightTheme, properties) {
-        DialogWrapper(view, lightTheme,).apply {
+        DialogWrapper(view, lightTheme).apply {
             setProperties(properties)
         }
     }
 
     dialog.onCloseRequest = onDismissRequest
 
-    onActive {
+    DisposableEffect(Unit) {
         dialog.show()
 
         onDispose {
@@ -76,8 +72,9 @@ fun FullScreenDialog(
         }
     }
 
-    val composition = compositionReference()
-    onCommit {
+    val composition = rememberCompositionReference()
+
+    SideEffect {
         dialog.setContent(composition) {
             // TODO(b/159900354): draw a scrim and add margins around the Compose Dialog, and
             //  consume clicks so they can't pass through to the underlying UI

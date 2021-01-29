@@ -1,9 +1,10 @@
 package cz.frantisekmasa.wfrp_master.inventory.ui
 
 import androidx.annotation.StringRes
-import androidx.compose.foundation.ScrollableColumn
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.savedinstancestate.savedInstanceState
@@ -108,8 +109,10 @@ fun TransactionDialog(
                     }
                 }
 
-                ScrollableColumn(
-                    contentPadding = PaddingValues(Spacing.bodyPadding),
+                Column(
+                    Modifier
+                        .verticalScroll(rememberScrollState())
+                        .padding(Spacing.bodyPadding),
                     verticalArrangement = Arrangement.spacedBy(Spacing.small)
                 ) {
                     Row(

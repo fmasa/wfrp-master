@@ -1,12 +1,14 @@
 package cz.muni.fi.rpg.ui.gameMaster.encounters
 
-import androidx.compose.foundation.ScrollableColumn
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Scaffold
 import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.*
-import androidx.compose.runtime.savedinstancestate.savedInstanceState
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import cz.frantisekmasa.wfrp_master.combat.domain.encounter.Encounter
 import cz.frantisekmasa.wfrp_master.core.domain.party.PartyId
@@ -79,8 +81,10 @@ fun EncounterDialog(
                 )
             }
         ) {
-            ScrollableColumn(
-                contentPadding = PaddingValues(Spacing.bodyPadding),
+            Column(
+                Modifier
+                    .verticalScroll(rememberScrollState())
+                    .padding(Spacing.bodyPadding),
                 verticalArrangement = Arrangement.spacedBy(Spacing.small),
             ) {
                 TextInput(

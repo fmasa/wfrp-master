@@ -1,12 +1,15 @@
 package cz.frantisekmasa.wfrp_master.inventory.ui
 
-import androidx.compose.foundation.ScrollableColumn
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.*
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import cz.frantisekmasa.wfrp_master.core.ui.buttons.CloseButton
@@ -93,8 +96,10 @@ internal fun InventoryItemDialog(
                 )
             }
         ) {
-            ScrollableColumn(
-                contentPadding = PaddingValues(Spacing.bodyPadding),
+            Column(
+                Modifier
+                    .verticalScroll(rememberScrollState())
+                    .padding(Spacing.bodyPadding),
                 verticalArrangement = Arrangement.spacedBy(Spacing.small),
             ) {
                 TextInput(

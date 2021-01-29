@@ -10,7 +10,8 @@ import androidx.compose.ui.gesture.tapGestureFilter
 import androidx.compose.ui.platform.AmbientLifecycleOwner
 import androidx.navigation.NavHostController
 import cz.frantisekmasa.wfrp_master.core.ui.buttons.AmbientHamburgerButtonHandler
-import cz.muni.fi.rpg.ui.common.composables.Theme
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 @Composable
 @ExperimentalMaterialApi
@@ -40,19 +41,19 @@ private fun DrawerBackPressHandler(drawerState: DrawerState) {
     val onBackPressedDispatcher = AmbientOnBackPressedDispatcher.current
     val lifecycleOwner = AmbientLifecycleOwner.current
     val callback = remember { CloseDrawerOnBackPressCallback(drawerState) }
-
-    onCommit(onBackPressedDispatcher, lifecycleOwner) {
+    DisposableEffect(onBackPressedDispatcher, lifecycleOwner) {
         callback.remove()
-
         onBackPressedDispatcher.addCallback(lifecycleOwner, callback)
+
+        onDispose {
+            callback.remove()
+        }
     }
 
-    onCommit(drawerState.isOpen) {
-        callback.isEnabled = drawerState.isOpen
-    }
-
-    onDispose {
-        callback.remove()
+    LaunchedEffect(drawerState.isOpen) {
+        withContext(Dispatchers.Main) {
+            callback.isEnabled = drawerState.isOpen
+        }
     }
 }
 

@@ -1,8 +1,6 @@
 package cz.muni.fi.rpg.ui.character
 
-import androidx.compose.foundation.ScrollableColumn
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.*
@@ -33,9 +31,11 @@ internal fun CharacterMiscScreen(
 ) {
     val viewModel: CharacterMiscViewModel by viewModel { parametersOf(characterId) }
 
-    ScrollableColumn(
-        modifier.background(MaterialTheme.colors.background),
-        contentPadding = PaddingValues(top = Spacing.small),
+    Column(
+        modifier
+            .background(MaterialTheme.colors.background)
+            .verticalScroll(rememberScrollState())
+            .padding(top = Spacing.small),
     ) {
         MainCard(character)
 
@@ -107,8 +107,14 @@ private fun ExperiencePointsCard(points: Points, viewModel: CharacterMiscViewMod
 
 @Composable
 private fun Card(modifier: Modifier = Modifier, content: @Composable () -> Unit) {
-    CardContainer(Modifier.fillMaxWidth().padding(horizontal = 8.dp).then(modifier)) {
-        Box(modifier = Modifier.fillMaxWidth().padding(horizontal = 8.dp)) {
+    CardContainer(
+        Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 8.dp)
+            .then(modifier)) {
+        Box(modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 8.dp)) {
             content()
         }
         R.drawable.common_google_signin_btn_icon_dark

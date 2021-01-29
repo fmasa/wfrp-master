@@ -9,7 +9,6 @@ import androidx.compose.ui.gesture.scrollorientationlocking.Orientation
 import androidx.compose.ui.gesture.tapGestureFilter
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
-import androidx.compose.ui.layout.WithConstraints
 import androidx.compose.ui.platform.AmbientDensity
 import androidx.compose.ui.platform.AmbientLayoutDirection
 import androidx.compose.ui.semantics.dismiss
@@ -35,13 +34,14 @@ fun ModalDrawerLayoutWithFixedDrawerWidth(
     scrimColor: Color = DrawerDefaults.scrimColor,
     bodyContent: @Composable () -> Unit
 ) {
-    WithConstraints(modifier.fillMaxSize()) {
+    BoxWithConstraints(modifier.fillMaxSize()) {
         // TODO : think about Infinite max bounds case
         if (!constraints.hasBoundedWidth) {
             throw IllegalStateException("Drawer shouldn't have infinite width")
         }
 
-        val minValue = -constraints.maxWidth.toFloat()
+        val mainConstraints = constraints
+        val minValue = -mainConstraints.maxWidth.toFloat()
         val maxValue = 0f
 
         val anchors = mapOf(minValue to DrawerValue.Closed, maxValue to DrawerValue.Open)
@@ -72,9 +72,9 @@ fun ModalDrawerLayoutWithFixedDrawerWidth(
                 modifier = with(AmbientDensity.current) {
                     Modifier.preferredSizeIn(
                         minWidth = DrawerWidth,
-                        minHeight = constraints.minHeight.toDp(),
+                        minHeight = mainConstraints.minHeight.toDp(),
                         maxWidth = DrawerWidth,
-                        maxHeight = constraints.maxHeight.toDp()
+                        maxHeight = mainConstraints.maxHeight.toDp()
                     )
                 }
                     .semantics {

@@ -1,15 +1,18 @@
 package cz.muni.fi.rpg.ui.character.spells.dialog
 
-import androidx.compose.foundation.ScrollableColumn
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.*
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import cz.frantisekmasa.wfrp_master.core.ui.forms.*
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.FullScreenProgress
+import cz.frantisekmasa.wfrp_master.core.ui.primitives.Spacing
 import cz.frantisekmasa.wfrp_master.core.ui.scaffolding.SaveAction
 import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.model.domain.spells.Spell
@@ -69,9 +72,11 @@ internal fun NonCompendiumSpellForm(
             return@Scaffold
         }
 
-        ScrollableColumn(
-            contentPadding = PaddingValues(BodyPadding),
-            verticalArrangement = Arrangement.spacedBy(FormInputVerticalPadding)
+        Column(
+            Modifier
+                .verticalScroll(rememberScrollState())
+                .padding(Spacing.bodyPadding),
+            verticalArrangement = Arrangement.spacedBy(FormInputVerticalPadding),
         ) {
             TextInput(
                 label = stringResource(R.string.label_name),

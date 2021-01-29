@@ -1,11 +1,14 @@
 package cz.muni.fi.rpg.ui.gameMaster
 
-import androidx.compose.foundation.ScrollableColumn
-import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.*
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.AmbientContext
 import androidx.compose.ui.res.stringResource
 import cz.frantisekmasa.wfrp_master.core.domain.party.Party
@@ -31,7 +34,7 @@ fun RenamePartyDialog(
 ) {
     FullScreenDialog(onDismissRequest = onDismissRequest) {
         var validate by remember { mutableStateOf(false) }
-        var newName = inputValue(currentName, Rules.NotBlank())
+        val newName = inputValue(currentName, Rules.NotBlank())
 
         Scaffold(
             topBar = {
@@ -82,7 +85,11 @@ fun RenamePartyDialog(
                 )
             }
         ) {
-            ScrollableColumn(contentPadding = PaddingValues(Spacing.bodyPadding)) {
+            Column(
+                Modifier
+                    .verticalScroll(rememberScrollState())
+                    .padding(Spacing.bodyPadding),
+            ) {
                 TextInput(
                     label = stringResource(R.string.label_party_name),
                     value = newName,

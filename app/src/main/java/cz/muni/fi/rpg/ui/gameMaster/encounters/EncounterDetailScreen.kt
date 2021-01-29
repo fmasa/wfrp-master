@@ -1,7 +1,6 @@
 package cz.muni.fi.rpg.ui.gameMaster.encounters
 
 import androidx.appcompat.app.AlertDialog
-import androidx.compose.foundation.ScrollableColumn
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -9,6 +8,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
@@ -24,10 +25,8 @@ import cz.frantisekmasa.wfrp_master.combat.ui.StartCombatDialog
 import cz.frantisekmasa.wfrp_master.core.domain.identifiers.NpcId
 import cz.frantisekmasa.wfrp_master.core.domain.party.PartyId
 import cz.frantisekmasa.wfrp_master.core.ui.buttons.BackButton
-import cz.frantisekmasa.wfrp_master.core.ui.primitives.CardContainer
-import cz.frantisekmasa.wfrp_master.core.ui.primitives.CardItem
-import cz.frantisekmasa.wfrp_master.core.ui.primitives.ContextMenu
-import cz.frantisekmasa.wfrp_master.core.ui.primitives.EmptyUI
+import cz.frantisekmasa.wfrp_master.core.ui.buttons.PrimaryButton
+import cz.frantisekmasa.wfrp_master.core.ui.primitives.*
 import cz.frantisekmasa.wfrp_master.core.ui.scaffolding.OptionsAction
 import cz.frantisekmasa.wfrp_master.core.ui.scaffolding.Subtitle
 import cz.frantisekmasa.wfrp_master.core.ui.scaffolding.TopBarAction
@@ -38,6 +37,7 @@ import cz.frantisekmasa.wfrp_master.navigation.Route
 import cz.frantisekmasa.wfrp_master.navigation.Routing
 import cz.muni.fi.rpg.viewModels.EncounterDetailViewModel
 import cz.frantisekmasa.wfrp_master.core.viewModel.PartyViewModel
+import cz.muni.fi.rpg.ui.common.composables.CardTitle
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -85,7 +85,13 @@ fun EncounterDetailScreen(routing: Routing<Route.EncounterDetail>) {
         floatingActionButtonPosition = FabPosition.Center,
         floatingActionButton = {
             ExtendedFloatingActionButton(
-                icon = { Icon(vectorResource(R.drawable.ic_encounter), Modifier.width(24.dp)) },
+                icon = {
+                    Icon(
+                        vectorResource(R.drawable.ic_encounter),
+                        VisualOnlyIconDescription,
+                        Modifier.width(24.dp),
+                    )
+                },
                 text = { Text(stringResource(R.string.title_start_combat)) },
                 onClick = { startCombatDialogVisible = true },
             )
@@ -128,7 +134,10 @@ private fun TopAppBarActions(
     }
 
     TopBarAction(onClick = { editDialogOpened = true }) {
-        Icon(vectorResource(R.drawable.ic_edit))
+        Icon(
+            vectorResource(R.drawable.ic_edit),
+            stringResource(R.string.icon_edit_encounter),
+        )
     }
 
 
@@ -159,10 +168,16 @@ private fun MainContainer(
     val encounterId = routing.route.encounterId
 
     Box(
-        Modifier.fillMaxSize().background(MaterialTheme.colors.background)
+        Modifier
+            .fillMaxSize()
+            .background(MaterialTheme.colors.background)
             .padding(top = 6.dp)
     ) {
-        ScrollableColumn(Modifier.fillMaxWidth()) {
+        Column(
+            Modifier
+                .fillMaxWidth()
+                .verticalScroll(rememberScrollState()),
+        ) {
             DescriptionCard(viewModel)
             CombatantsCard(
                 viewModel,
@@ -176,7 +191,10 @@ private fun MainContainer(
 
 @Composable
 private fun DescriptionCard(viewModel: EncounterDetailViewModel) {
-    CardContainer(Modifier.fillMaxWidth().padding(horizontal = 8.dp)) {
+    CardContainer(
+        Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 8.dp)) {
         CardTitle(R.string.title_description)
 
         val encounter = viewModel.encounter.observeAsState().value
@@ -199,7 +217,10 @@ private fun CombatantsCard(
     onEditRequest: (NpcId) -> Unit,
     onRemoveRequest: (NpcId) -> Unit,
 ) {
-    CardContainer(Modifier.fillMaxWidth().padding(8.dp)) {
+    CardContainer(
+        Modifier
+            .fillMaxWidth()
+            .padding(8.dp)) {
         CardTitle(R.string.title_npcs)
 
         val npcs = viewModel.npcs.observeAsState().value

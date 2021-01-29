@@ -13,6 +13,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.Spacing
+import cz.frantisekmasa.wfrp_master.core.ui.primitives.VisualOnlyIconDescription
 import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.viewModels.provideNetworkViewModel
 
@@ -32,7 +33,11 @@ fun NetworkStatusBanner() {
             horizontalArrangement = Arrangement.spacedBy(Spacing.small, Alignment.CenterHorizontally),
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            Icon(vectorResource(R.drawable.ic_offline), Modifier.size(18.dp))
+            Icon(
+                vectorResource(R.drawable.ic_offline),
+                VisualOnlyIconDescription,
+                Modifier.size(18.dp),
+            )
             Text(stringResource(R.string.no_internet))
         }
     }

@@ -1,10 +1,13 @@
 package cz.frantisekmasa.wfrp_master.compendium.ui
 
-import androidx.compose.foundation.ScrollableColumn
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.*
+import androidx.compose.ui.Modifier
 import cz.frantisekmasa.wfrp_master.compendium.domain.CompendiumItem
 import cz.frantisekmasa.wfrp_master.core.ui.buttons.CloseButton
 import cz.frantisekmasa.wfrp_master.core.ui.dialogs.DialogProgress
@@ -49,7 +52,7 @@ internal fun <T : CompendiumItem> CompendiumItemDialog(
                 DialogProgress()
                 return@Scaffold
             }
-            ScrollableColumn {
+            Column(Modifier.verticalScroll(rememberScrollState())) {
                 form(validate.value)
             }
         }

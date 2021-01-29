@@ -5,7 +5,7 @@ import cz.frantisekmasa.wfrp_master.core.domain.rolls.Dice
 import kotlin.random.Random
 
 internal class BonusesPlus1d10Strategy(random: Random) : InitiativeStrategy {
-    val dice = Dice(10, random)
+    private val dice = Dice(10, random)
 
     override fun determineInitiative(characteristics: Stats) = InitiativeOrder(
         characteristics.initiativeBonus + characteristics.agilityBonus + dice.roll()

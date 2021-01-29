@@ -1,24 +1,23 @@
 package cz.muni.fi.rpg.ui.settings
 
 import androidx.annotation.StringRes
-import androidx.compose.foundation.ScrollableColumn
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.*
+import androidx.compose.material.AmbientContentColor
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.LiveData
 import cz.frantisekmasa.wfrp_master.core.ui.buttons.BackButton
 import cz.frantisekmasa.wfrp_master.core.ui.components.settings.SettingsCard
 import cz.frantisekmasa.wfrp_master.core.ui.components.settings.SettingsTitle
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.Spacing
+import cz.frantisekmasa.wfrp_master.core.ui.primitives.VisualOnlyIconDescription
 import cz.frantisekmasa.wfrp_master.core.ui.viewinterop.AmbientActivity
 import cz.muni.fi.rpg.R
 import cz.frantisekmasa.wfrp_master.navigation.Route
@@ -42,8 +41,9 @@ fun SettingsScreen(routing: Routing<Route.Settings>) {
             )
         }
     ) {
-        ScrollableColumn(
+        Column(
             Modifier
+                .verticalScroll(rememberScrollState())
                 .background(MaterialTheme.colors.background)
                 .padding(top = 6.dp),
             verticalArrangement = Arrangement.spacedBy(Spacing.medium),
@@ -85,7 +85,7 @@ private fun BuyPremiumButton(viewModel: PremiumViewModel) {
                 viewModel.purchasePremium(activity)
             }
         },
-        icon = { Icon(vectorResource(R.drawable.ic_premium)) },
+        icon = { Icon(vectorResource(R.drawable.ic_premium), VisualOnlyIconDescription) },
         text = { Text(stringResource(R.string.buy_premium)) },
     )
 }

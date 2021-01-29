@@ -3,6 +3,7 @@ package cz.muni.fi.rpg.ui.character.talents.dialog
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.ListItem
 import androidx.compose.material.OutlinedButton
 import androidx.compose.material.Scaffold

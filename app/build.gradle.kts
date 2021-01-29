@@ -22,7 +22,7 @@ android {
     defaultConfig {
         applicationId = "cz.frantisekmasa.dnd"
         minSdkVersion(21)
-        targetSdkVersion(29)
+        targetSdkVersion(30)
         versionCode = System.getenv("SUPPLY_VERSION_CODE")?.toIntOrNull() ?: 1
         versionName = System.getenv("SUPPLY_VERSION_NAME") ?: "dev"
 
@@ -84,7 +84,7 @@ android {
     }
 
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.0.0-alpha10"
+        kotlinCompilerExtensionVersion = "1.0.0-alpha11"
     }
 
     compileOptions {
@@ -118,9 +118,6 @@ dependencies {
     implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar"))))
     // Allow use of Java 8 APIs on older Android versions
     coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:1.1.1")
-
-    // Time picker dialog
-    implementation("com.vanpra.compose-material-dialogs:datetime:0.2.11")
 
     implementation("com.google.android.gms:play-services-auth:19.0.0")
 

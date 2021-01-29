@@ -1,9 +1,7 @@
 package cz.muni.fi.rpg.ui.gameMaster
 
 import androidx.annotation.StringRes
-import androidx.compose.foundation.ScrollableColumn
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.runtime.*
@@ -11,8 +9,8 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.savedinstancestate.savedInstanceState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.loadVectorResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.unit.dp
@@ -26,6 +24,7 @@ import cz.frantisekmasa.wfrp_master.core.ui.primitives.EmptyUI
 import cz.frantisekmasa.wfrp_master.core.viewModel.viewModel
 import cz.frantisekmasa.wfrp_master.core.domain.party.Invitation
 import cz.frantisekmasa.wfrp_master.core.domain.party.PartyId
+import cz.frantisekmasa.wfrp_master.core.ui.buttons.PrimaryButton
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.CardContainer
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.CardItem
 import cz.muni.fi.rpg.ui.common.composables.*
@@ -35,7 +34,6 @@ import cz.frantisekmasa.wfrp_master.navigation.Routing
 import cz.muni.fi.rpg.ui.gameMaster.rolls.SkillTestDialog
 import cz.muni.fi.rpg.viewModels.GameMasterViewModel
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import org.koin.core.parameter.parametersOf
 
@@ -61,20 +59,27 @@ internal fun PartySummaryScreen(
         modifier,
         floatingActionButton = {
             FloatingActionButton(onClick = { skillTestDialogVisible = true }) {
-                loadVectorResource(R.drawable.ic_dice_roll).resource.resource?.let { Icon(it) }
+                Icon(
+                    vectorResource(R.drawable.ic_dice_roll),
+                    stringResource(R.string.icon_hidden_skill_test),
+                )
             }
         }
     ) {
-        ScrollableColumn(Modifier.background(MaterialTheme.colors.background)) {
+        Column(
+            Modifier
+                .background(MaterialTheme.colors.background)
+                .verticalScroll(rememberScrollState()),
+        ) {
             val party = viewModel.party.observeAsState().value
-                ?: return@ScrollableColumn
+                ?: return@Column
 
-            val invitationDialogVisible = remember { mutableStateOf(false) }
+            var invitationDialogVisible by remember { mutableStateOf(false) }
 
-            if (invitationDialogVisible.value) {
+            if (invitationDialogVisible) {
                 InvitationDialog2(
                     invitation = party.getInvitation(),
-                    onDismissRequest = { invitationDialogVisible.value = false },
+                    onDismissRequest = { invitationDialogVisible = false },
                 )
             }
 
@@ -89,7 +94,7 @@ internal fun PartySummaryScreen(
                         viewModel.archiveCharacter(CharacterId(partyId, it.id))
                     }
                 },
-                onInvitationDialogRequest = { invitationDialogVisible.value = true },
+                onInvitationDialogRequest = { invitationDialogVisible = true },
             )
 
 
@@ -107,7 +112,10 @@ internal fun PartySummaryScreen(
                     .padding(8.dp)
                     .clickable(onClick = { routing.navigateTo(Route.Compendium(partyId)) })
             ) {
-                Column(Modifier.fillMaxWidth().padding(horizontal = 8.dp)) {
+                Column(
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 8.dp)) {
                     CardTitle(R.string.title_compendium)
 
                     val compendium: CompendiumViewModel by viewModel { parametersOf(partyId) }
@@ -145,7 +153,10 @@ private fun PlayersCard(
     onRemoveCharacter: (Character) -> Unit,
     onInvitationDialogRequest: (Invitation) -> Unit,
 ) {
-    CardContainer(Modifier.fillMaxWidth().padding(8.dp)) {
+    CardContainer(
+        Modifier
+            .fillMaxWidth()
+            .padding(8.dp)) {
         Column(Modifier.fillMaxWidth()) {
 
             CardTitle(R.string.title_characters)
@@ -155,7 +166,8 @@ private fun PlayersCard(
             when {
                 players == null -> {
                     CircularProgressIndicator(
-                        Modifier.align(Alignment.CenterHorizontally)
+                        Modifier
+                            .align(Alignment.CenterHorizontally)
                             .padding(vertical = 16.dp)
                     )
                 }
