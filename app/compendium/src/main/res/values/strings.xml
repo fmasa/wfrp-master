@@ -10,17 +10,20 @@
     <string name="label_skill_characteristic">Characteristic</string>
     <string name="label_skill_advanced">Advanced</string>
 
-    <!-- Spell dialog -->
+    <!-- Talent dialog -->
     <string name="title_talent_edit">Edit Talent</string>
     <string name="title_talent_new">New Talent</string>
 
+    <!-- Spell dialog -->
     <string name="label_spell_effect">Effect</string>
     <string name="label_spell_casting_number">Casting Number (CN)</string>
     <string name="label_spell_duration">Duration</string>
     <string name="label_spell_target">Target</string>
     <string name="label_spell_range">Range</string>
-
     <string name="label_lore" translatable="false">Lore</string>
+
+    <!-- Icon descriptions -->
+    <string name="icon_add_compendium_item">Add compendium item</string>
 
     <string name="title_skill_new" translatable="false">New Skill</string>
     <string name="title_skill_edit" translatable="false">Edit Skill</string>

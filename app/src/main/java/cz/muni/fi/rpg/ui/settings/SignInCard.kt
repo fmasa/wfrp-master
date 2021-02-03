@@ -3,8 +3,9 @@ package cz.muni.fi.rpg.ui.settings
 import android.os.Parcelable
 import android.widget.Toast
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.ScrollableColumn
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.savedinstancestate.savedInstanceState
@@ -26,6 +27,7 @@ import cz.frantisekmasa.wfrp_master.core.ui.dialogs.DialogProgress
 import cz.frantisekmasa.wfrp_master.core.ui.dialogs.DialogTitle
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.CardContainer
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.Spacing
+import cz.frantisekmasa.wfrp_master.core.ui.primitives.VisualOnlyIconDescription
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.shortToast
 import cz.frantisekmasa.wfrp_master.core.ui.viewinterop.registerForActivityResult
 import cz.frantisekmasa.wfrp_master.navigation.Route
@@ -119,7 +121,10 @@ fun SignInCard(viewModel: SettingsViewModel, routing: Routing<Route.Settings>) {
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.spacedBy(4.dp)
                     ) {
-                        Image(imageResource(R.drawable.googleg_standard_color_18))
+                        Image(
+                            imageResource(R.drawable.googleg_standard_color_18),
+                            VisualOnlyIconDescription,
+                        )
                         Text("Sign-in")
                     }
                 }
@@ -151,24 +156,25 @@ fun ConfirmSignInDialog(
     Dialog(onDismissRequest = onDismissRequest) {
         Surface(shape = MaterialTheme.shapes.medium) {
             Column {
-                ScrollableColumn(
-                    contentPadding = PaddingValues(Spacing.bodyPadding),
+                Column(
+                    Modifier
+                        .verticalScroll(rememberScrollState())
+                        .padding(Spacing.bodyPadding),
                     verticalArrangement = Arrangement.spacedBy(Spacing.small),
                 ) {
                     DialogTitle(stringResource(R.string.title_duplicate_account))
 
                     if (loading) {
                         DialogProgress()
-                        return@ScrollableColumn
-                    }
+                    } else {
+                        Text(stringResource(R.string.google_account_collision))
+                        Text(stringResource(R.string.google_account_collision_line_2))
 
-                    Text(stringResource(R.string.google_account_collision))
-                    Text(stringResource(R.string.google_account_collision_line_2))
-
-                    if (partyNames!!.isNotEmpty()) {
-                        Column {
-                            Text(stringResource(R.string.lose_access_to_parties))
-                            Text(partyNames!!.joinToString("\n"), fontWeight = FontWeight.SemiBold)
+                        if (partyNames!!.isNotEmpty()) {
+                            Column {
+                                Text(stringResource(R.string.lose_access_to_parties))
+                                Text(partyNames!!.joinToString("\n"), fontWeight = FontWeight.SemiBold)
+                            }
                         }
                     }
                 }
@@ -188,6 +194,7 @@ fun ConfirmSignInDialog(
                     TextButton(
                         enabled = !loading,
                         onClick = {
+                            processing = true
                             coroutineScope.launch(Dispatchers.Default) {
                                 try {
                                     authViewModel.signInWithGoogleToken(idToken).let { success ->

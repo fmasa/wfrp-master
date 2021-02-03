@@ -8,7 +8,7 @@ import cz.frantisekmasa.wfrp_master.core.domain.character.CharacterNotFound
 import cz.frantisekmasa.wfrp_master.core.domain.character.CharacterRepository
 import cz.frantisekmasa.wfrp_master.core.domain.identifiers.CharacterId
 import cz.frantisekmasa.wfrp_master.core.utils.right
-import kotlinx.coroutines.flow.Flow
+
 
 class CharacterViewModel(
     private val characterId: CharacterId,

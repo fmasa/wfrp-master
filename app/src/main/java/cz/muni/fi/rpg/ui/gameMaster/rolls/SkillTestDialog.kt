@@ -20,8 +20,6 @@ import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
 import org.koin.core.parameter.parametersOf
 
-private val dice = Dice(100)
-
 @Composable
 fun SkillTestDialog(partyId: PartyId, onDismissRequest: () -> Unit) {
     FullScreenDialog(onDismissRequest = onDismissRequest) {

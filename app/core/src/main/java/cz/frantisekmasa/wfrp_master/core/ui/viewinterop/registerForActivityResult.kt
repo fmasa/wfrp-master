@@ -5,9 +5,7 @@ import android.content.Intent
 import androidx.activity.result.ActivityResultCallback
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContract
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.onCommit
-import androidx.compose.runtime.onDispose
+import androidx.compose.runtime.*
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commitNow
 
@@ -18,17 +16,16 @@ fun <I, O> registerForActivityResult(
 ): Lazy<ActivityResultLauncher<I>> {
     val fragmentManager = fragmentManager()
 
-    val handler = ActivityResultHandler(contract, callback)
-
-    onCommit {
-        fragmentManager.commitNow {
-            add(handler, null)
-        }
+    val handler = remember(contract, callback) {
+        ActivityResultHandler(contract, callback)
+            .also { fragmentManager.commitNow { add(it, null) } }
     }
 
-    onDispose {
-        fragmentManager.commitNow {
-            remove(handler)
+    DisposableEffect(handler) {
+        onDispose {
+            fragmentManager.commitNow {
+                remove(handler)
+            }
         }
     }
 

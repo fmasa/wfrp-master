@@ -7,10 +7,8 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.layout.WithConstraints
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
-import androidx.compose.ui.unit.dp
 import cz.frantisekmasa.wfrp_master.core.domain.identifiers.CharacterId
 import cz.frantisekmasa.wfrp_master.core.ui.buttons.HamburgerButton
 import cz.frantisekmasa.wfrp_master.core.ui.scaffolding.Subtitle
@@ -71,7 +69,10 @@ fun CharacterDetailScreen(routing: Routing<Route.CharacterDetail>) {
                     TopBarAction(
                         onClick = { routing.navigateTo(Route.CharacterEdit(characterId)) }
                     ) {
-                        Icon(vectorResource(R.drawable.ic_edit))
+                        Icon(
+                            vectorResource(R.drawable.ic_edit),
+                            stringResource(R.string.icon_edit_character),
+                        )
                     }
                 }
             )
@@ -101,7 +102,7 @@ private fun MainContainer(
 
     val characterId = routing.route.characterId
 
-    WithConstraints(Modifier.fillMaxSize()) {
+    BoxWithConstraints(Modifier.fillMaxSize()) {
         val screenWidth = constraints.maxWidth.toFloat()
         val screens = screens(characterId, viewModel, Modifier.width(maxWidth))
 

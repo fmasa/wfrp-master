@@ -13,18 +13,6 @@ import java.io.Serializable
  * Utility extension functions for UI components
  */
 
-fun View.toggleVisibility(visible: Boolean) {
-    visibility = if (visible) View.VISIBLE else View.GONE
-}
-
-fun Fragment.stringArgument(name: String, default: String? = null) = lazy {
-    requireArguments().getString(name) ?: default ?: error("Argument $name was not passed")
-}
-
-inline fun <reified T : Parcelable> Fragment.parcelableArgument(name: String) = lazy {
-    requireArguments().getParcelable<T>(name) ?: error("Argument $name was not passed")
-}
-
 inline fun <reified T : Parcelable> Fragment.optionalParcelableArgument(name: String) = lazy {
     requireArguments().getParcelable<T>(name)
 }
@@ -41,21 +29,6 @@ inline fun <reified T : Serializable> Fragment.serializableArgument(name: String
 @UiThread
 fun Activity.toast(message: String, duration: Int = Toast.LENGTH_SHORT) {
     Toast.makeText(this, message, duration).show()
-}
-
-@UiThread
-fun Activity.toast(@StringRes message: Int, duration: Int = Toast.LENGTH_SHORT) {
-    Toast.makeText(this, message, duration).show()
-}
-
-@UiThread
-fun Fragment.toast(message: String, duration: Int = Toast.LENGTH_SHORT) {
-    context?.let { Toast.makeText(it, message, duration).show() }
-}
-
-@UiThread
-fun Fragment.toast(@StringRes message: Int, duration: Int = Toast.LENGTH_SHORT) {
-    context?.let { Toast.makeText(it, message, duration).show() }
 }
 
 fun <T> List<T>.chunk(itemsInChunk: Int): List<List<T>> {

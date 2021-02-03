@@ -59,12 +59,19 @@ fun EmptyUI(
     val text = stringResource(textId)
 
     Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.fillMaxWidth()) {
-        Spacer(Modifier.fillMaxHeight(0.35f))
+        if (size == EmptyUI.Size.Large) {
+            Spacer(Modifier.fillMaxHeight(0.35f))
+        }
 
         if (image == null) {
             Spacer(size.modifier.aspectRatio(1f))
         } else {
-            Image(image, modifier = size.modifier, colorFilter = ColorFilter.tint(disabledColor))
+            Image(
+                image,
+                contentDescription = VisualOnlyIconDescription,
+                modifier = size.modifier,
+                colorFilter = ColorFilter.tint(disabledColor),
+            )
         }
 
         Text(text, style = size.textStyle)

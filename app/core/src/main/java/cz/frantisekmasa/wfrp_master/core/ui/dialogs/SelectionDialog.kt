@@ -1,8 +1,10 @@
 package cz.frantisekmasa.wfrp_master.core.ui.dialogs
 
-import androidx.compose.foundation.ScrollableColumn
+import androidx.compose.foundation.InteractionState
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -42,14 +44,17 @@ fun <T> SelectionDialog(
                     )
                 }
 
-                ScrollableColumn(
+                LazyColumn(
                     verticalArrangement = Arrangement.spacedBy(Spacing.extraLarge)
                 ) {
-                    items.forEach { item ->
+                    items(items) { item ->
                         Row(
                             modifier = Modifier
                                 .padding(horizontal = Spacing.extraLarge)
-                                .clickable(indication = null) { currentItem = item },
+                                .clickable(
+                                    interactionState = remember { InteractionState() },
+                                    indication = null
+                                ) { currentItem = item },
                             horizontalArrangement = Arrangement.spacedBy(Spacing.extraLarge),
                             verticalAlignment = Alignment.CenterVertically,
                         ) {

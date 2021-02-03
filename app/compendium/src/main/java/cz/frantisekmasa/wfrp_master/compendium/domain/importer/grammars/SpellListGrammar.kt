@@ -32,7 +32,7 @@ class SpellListGrammar(private val loreName: String) : Grammar<List<Spell>>() {
 
         Spell(
             id = UUID.randomUUID(),
-            name = parts[0].trim(),
+            name = cleanupName(parts[0]),
             castingNumber = parts[1].toInt(),
             range = extractTextValue(range),
             target = extractTextValue(target),
@@ -43,6 +43,11 @@ class SpellListGrammar(private val loreName: String) : Grammar<List<Spell>>() {
     }
 
     private fun extractTextValue(value: TokenMatch) = value.text.split(':', limit = 2)[1].trim()
+
+    private fun cleanupName(name: String) =
+        // Names starting by "T" have extra space after T for some reason
+        name.replace(Regex("^(T )"), "T")
+            .trim()
 
     override val rootParser = skip(zeroOrMore(sentence)) *
         oneOrMore(spell) map { it }

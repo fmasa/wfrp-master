@@ -1,10 +1,8 @@
 package cz.muni.fi.rpg.ui.partyList
 
-import androidx.compose.foundation.ScrollableColumn
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
@@ -14,19 +12,14 @@ import cz.frantisekmasa.wfrp_master.core.domain.party.Party
 import cz.muni.fi.rpg.viewModels.PartyListViewModel
 import java.util.*
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.gesture.longPressGestureFilter
-import androidx.compose.ui.res.loadVectorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import cz.frantisekmasa.wfrp_master.core.auth.AmbientUser
 import cz.frantisekmasa.wfrp_master.core.domain.identifiers.CharacterId
-import cz.frantisekmasa.wfrp_master.core.domain.party.PartyId
 import cz.frantisekmasa.wfrp_master.core.ui.buttons.HamburgerButton
 import cz.frantisekmasa.wfrp_master.core.ui.dialogs.DialogState
-import cz.frantisekmasa.wfrp_master.core.ui.primitives.ContextMenu
-import cz.frantisekmasa.wfrp_master.core.ui.primitives.EmptyUI
-import cz.frantisekmasa.wfrp_master.core.ui.primitives.ItemIcon
+import cz.frantisekmasa.wfrp_master.core.ui.primitives.*
 import cz.frantisekmasa.wfrp_master.core.viewModel.PremiumViewModel
 import cz.frantisekmasa.wfrp_master.core.viewModel.providePremiumViewModel
 import cz.frantisekmasa.wfrp_master.core.viewModel.viewModel
@@ -102,10 +95,7 @@ fun PartyListScreen(routing: Routing<Route.PartyList>) {
         }
 
         MainContainer(
-            Modifier.clickable(
-                onClick = { menuState = MenuState.COLLAPSED },
-                indication = null,
-            ),
+            Modifier,
             parties,
             onClick = {
                 if (it.gameMasterId == userId) {
@@ -134,7 +124,7 @@ private fun Menu(
         var premiumPromptVisible by remember { mutableStateOf(false) }
 
         FloatingActionButton(onClick = { premiumPromptVisible = true }) {
-            Icon(vectorResource(R.drawable.ic_premium))
+            Icon(vectorResource(R.drawable.ic_premium), stringResource(R.string.buy_premium))
         }
 
         if (premiumPromptVisible) {
@@ -150,7 +140,7 @@ private fun Menu(
         iconRes = R.drawable.ic_add,
     ) {
         ExtendedFloatingActionButton(
-            icon = { Icon(vectorResource(R.drawable.ic_camera)) },
+            icon = { Icon(vectorResource(R.drawable.ic_camera), VisualOnlyIconDescription) },
             text = { Text(stringResource(R.string.scanCode_title)) },
             onClick = {
                 routing.navigateTo(Route.InvitationScanner)
@@ -159,9 +149,7 @@ private fun Menu(
         )
         ExtendedFloatingActionButton(
             icon = {
-                loadVectorResource(R.drawable.ic_group_add).resource.resource?.let {
-                    Icon(it)
-                }
+                Icon(vectorResource(R.drawable.ic_group_add), VisualOnlyIconDescription)
             },
             text = { Text(stringResource(R.string.assembleParty_title)) },
             onClick = {
@@ -173,20 +161,19 @@ private fun Menu(
 }
 
 @Composable
-fun PartyItem(party: Party, onClick: () -> Unit, onLongPress: () -> Unit) {
-    val playersCount = party.getPlayerCounts()
+fun PartyItem(party: Party) {
+    Column {
+        val playersCount = party.getPlayerCounts()
 
-    ListItem(
-        icon = { ItemIcon(R.drawable.ic_group, ItemIcon.Size.Large) },
-        text = { Text(party.getName()) },
-        trailing = if (playersCount > 0)
-            ({ Text(stringResource(R.string.players_number, playersCount)) })
-        else null,
-        modifier = Modifier
-            .clickable(onClick = onClick)
-            .longPressGestureFilter { onLongPress() },
-    )
-    Divider()
+        ListItem(
+            icon = { ItemIcon(R.drawable.ic_group, ItemIcon.Size.Large) },
+            text = { Text(party.getName()) },
+            trailing = if (playersCount > 0)
+                ({ Text(stringResource(R.string.players_number, playersCount)) })
+            else null,
+        )
+        Divider()
+    }
 }
 
 @Composable
@@ -225,23 +212,16 @@ fun PartyList(
     onRemove: (Party) -> Unit,
     onLeaveRequest: (Party) -> Unit,
 ) {
-    ScrollableColumn(
-        Modifier
-            .padding(top = 12.dp)
-            .fillMaxHeight()
+    LazyColumn(
+        Modifier.fillMaxHeight(),
+        contentPadding = PaddingValues(top = 12.dp)
     ) {
-        val contextMenuOpened = remember { mutableStateOf<PartyId?>(null) }
-
-        for (party in parties) {
-            PartyItem(party,
-                onClick = { onClick(party) },
-                onLongPress = { contextMenuOpened.value = party.id }
-            )
-
+        items(parties) { party ->
             val isGameMaster =
                 AmbientUser.current.id == party.gameMasterId || party.gameMasterId == null
 
-            ContextMenu(
+            WithContextMenu(
+                onClick = { onClick(party) },
                 items = listOf(
                     if (isGameMaster)
                         ContextMenu.Item(
@@ -252,10 +232,10 @@ fun PartyList(
                         stringResource(R.string.button_leave),
                         onClick = { onLeaveRequest(party) },
                     )
-                ),
-                onDismissRequest = { contextMenuOpened.value = null },
-                expanded = contextMenuOpened.value == party.id
-            )
+                )
+            ) {
+                PartyItem(party)
+            }
         }
     }
 }

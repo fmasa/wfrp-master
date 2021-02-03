@@ -2,9 +2,9 @@ package cz.frantisekmasa.wfrp_master.compendium.ui
 
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyItemScope
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
@@ -14,9 +14,6 @@ import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.layout.WithConstraints
-import androidx.compose.ui.layout.WithConstraintsScope
-import androidx.compose.ui.gesture.longPressGestureFilter
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.intl.Locale
@@ -30,6 +27,7 @@ import cz.frantisekmasa.wfrp_master.core.ui.buttons.BackButton
 import cz.frantisekmasa.wfrp_master.core.ui.dialogs.DialogState
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.ContextMenu
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.FullScreenProgress
+import cz.frantisekmasa.wfrp_master.core.ui.primitives.WithContextMenu
 import cz.frantisekmasa.wfrp_master.core.ui.scaffolding.Subtitle
 import cz.frantisekmasa.wfrp_master.core.ui.scaffolding.TopBarAction
 import cz.frantisekmasa.wfrp_master.core.ui.scaffolding.tabs.TabContent
@@ -40,12 +38,11 @@ import cz.frantisekmasa.wfrp_master.core.viewModel.viewModel
 import cz.frantisekmasa.wfrp_master.navigation.Route
 import cz.frantisekmasa.wfrp_master.navigation.Routing
 import org.koin.core.parameter.parametersOf
-import java.util.*
 
 @Composable
 fun CompendiumScreen(routing: Routing<Route.Compendium>) {
     Scaffold(topBar = { TopBar(routing) }) {
-        WithConstraints(Modifier.fillMaxSize()) {
+        BoxWithConstraints(Modifier.fillMaxSize()) {
             MainContent(routing)
         }
     }
@@ -75,14 +72,15 @@ private fun TopBar(routing: Routing<Route.Compendium>) {
 }
 
 @Composable
-private fun WithConstraintsScope.MainContent(routing: Routing<Route.Compendium>) {
-    val screenWidth = constraints.maxWidth.toFloat()
+private fun BoxWithConstraintsScope.MainContent(routing: Routing<Route.Compendium>) {
+    val screenWidthPx = constraints.maxWidth.toFloat()
+    val screenWidthDp = maxWidth
 
     Column {
         val viewModel: CompendiumViewModel by viewModel { parametersOf(routing.route.partyId) }
 
-        val tabs = tabs(routing.route.partyId)
-        val pagerState = rememberPagerState(screenWidth, tabs.size)
+        val tabs = tabs(routing.route.partyId, screenWidthDp)
+        val pagerState = rememberPagerState(screenWidthPx, tabs.size)
 
         TabRow(
             tabs,
@@ -100,13 +98,13 @@ private fun WithConstraintsScope.MainContent(routing: Routing<Route.Compendium>)
 }
 
 @Composable
-private fun WithConstraintsScope.tabs(partyId: PartyId): Array<TabScreen<CompendiumViewModel>> {
+private fun tabs(partyId: PartyId, tabWidth: Dp): Array<TabScreen<CompendiumViewModel>> {
     val viewModel: CompendiumViewModel by viewModel { parametersOf(partyId) }
 
     return arrayOf(
-        TabScreen(R.string.tab_skills) { SkillCompendiumTab(viewModel) },
-        TabScreen(R.string.tab_talents) { TalentCompendiumTab(viewModel) },
-        TabScreen(R.string.tab_spells) { SpellCompendiumTab(viewModel) }
+        TabScreen(R.string.tab_skills) { SkillCompendiumTab(viewModel, tabWidth) },
+        TabScreen(R.string.tab_talents) { TalentCompendiumTab(viewModel, tabWidth) },
+        TabScreen(R.string.tab_spells) { SpellCompendiumTab(viewModel, tabWidth) }
     )
 }
 
@@ -129,7 +127,10 @@ fun <T : CompendiumItem> CompendiumTab(
             .fillMaxHeight(),
         floatingActionButton = {
             FloatingActionButton(onClick = { dialogState.value = DialogState.Opened(null) }) {
-                Icon(vectorResource(R.drawable.ic_add))
+                Icon(
+                    vectorResource(R.drawable.ic_add),
+                    stringResource(R.string.icon_add_compendium_item),
+                )
             }
         }
     ) {
@@ -143,28 +144,18 @@ fun <T : CompendiumItem> CompendiumTab(
                 items == null -> FullScreenProgress()
                 items.isEmpty() -> emptyUI()
                 else -> {
-                    val contextMenuOpened = remember { mutableStateOf<UUID?>(null) }
-
                     LazyColumn {
                         items(items) { item ->
-                            Box(
-                                Modifier
-                                    .clickable(
-                                        onClick = { dialogState.value = DialogState.Opened(item) }
+                            WithContextMenu(
+                                items = listOf(
+                                    ContextMenu.Item(
+                                        stringResource(R.string.button_remove),
+                                        onClick = { onRemove(item) }
                                     )
-                                    .longPressGestureFilter { contextMenuOpened.value = item.id }
+                                ),
+                                onClick = { dialogState.value = DialogState.Opened(item) },
                             ) {
                                 itemContent(item)
-
-                                ContextMenu(
-                                    items = listOf(
-                                        ContextMenu.Item(
-                                            stringResource(R.string.button_remove),
-                                            onClick = { onRemove(item) })
-                                    ),
-                                    onDismissRequest = { contextMenuOpened.value = null },
-                                    expanded = contextMenuOpened.value == item.id
-                                )
                             }
                         }
                     }

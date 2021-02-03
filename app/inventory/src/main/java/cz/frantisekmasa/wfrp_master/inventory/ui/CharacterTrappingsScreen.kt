@@ -1,9 +1,10 @@
 package cz.frantisekmasa.wfrp_master.inventory.ui
 
-import androidx.compose.foundation.AmbientContentColor
-import androidx.compose.foundation.ScrollableColumn
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.AmbientContentColor
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
@@ -32,7 +33,11 @@ fun CharacterTrappingsScreen(
 ) {
     val viewModel: InventoryViewModel by viewModel { parametersOf(characterId) }
 
-    ScrollableColumn(modifier, contentPadding = PaddingValues(top = Spacing.tiny)) {
+    Column(
+        modifier
+            .verticalScroll(rememberScrollState())
+            .padding(top = Spacing.tiny),
+    ) {
         Row(
             Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween,
@@ -108,7 +113,11 @@ private fun CharacterEncumbrance(viewModel: InventoryViewModel, modifier: Modifi
         horizontalArrangement = Arrangement.spacedBy(Spacing.small),
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        Icon(vectorResource(R.drawable.ic_encumbrance), Modifier.size(18.dp))
+        Icon(
+            vectorResource(R.drawable.ic_encumbrance),
+            stringResource(R.string.icon_total_encumbrance),
+            Modifier.size(18.dp),
+        )
         Text(
             "${total ?: ""} / ${max ?: "?"}",
             color = if (isOverburdened) MaterialTheme.colors.error else AmbientContentColor.current
@@ -173,6 +182,7 @@ private fun InventoryItemList(
                             ) {
                                 Icon(
                                     vectorResource(R.drawable.ic_encumbrance),
+                                    stringResource(R.string.icon_item_encumbrance),
                                     Modifier.size(Spacing.medium),
                                 )
                                 Text((item.encumbrance * item.quantity).toString())

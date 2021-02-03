@@ -1,8 +1,6 @@
 package cz.muni.fi.rpg.ui.gameMaster.encounters
 
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.ScrollableColumn
-import androidx.compose.foundation.background
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.layout.Box
 import androidx.compose.material.*
@@ -14,7 +12,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.gesture.tapGestureFilter
 import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.res.loadVectorResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -23,6 +21,7 @@ import cz.frantisekmasa.wfrp_master.core.domain.party.PartyId
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.DraggableListFor
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.EmptyUI
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.Spacing
+import cz.frantisekmasa.wfrp_master.core.ui.primitives.VisualOnlyIconDescription
 import cz.frantisekmasa.wfrp_master.core.viewModel.PremiumViewModel
 import cz.frantisekmasa.wfrp_master.core.viewModel.providePremiumViewModel
 import cz.muni.fi.rpg.R
@@ -77,7 +76,7 @@ private fun AddEncounterButton(encounterCount: Int, onCreateEncounterRequest: ()
         var premiumPromptVisible by remember { mutableStateOf(false) }
 
         FloatingActionButton(onClick = { premiumPromptVisible = true }) {
-            Icon(vectorResource(R.drawable.ic_premium))
+            Icon(vectorResource(R.drawable.ic_premium), stringResource(R.string.buy_premium))
         }
 
         if (premiumPromptVisible) {
@@ -88,7 +87,7 @@ private fun AddEncounterButton(encounterCount: Int, onCreateEncounterRequest: ()
     }
 
     FloatingActionButton(onClick = onCreateEncounterRequest) {
-        Icon(vectorResource(R.drawable.ic_add))
+        Icon(vectorResource(R.drawable.ic_add), stringResource(R.string.icon_add_encounter))
     }
 }
 
@@ -108,15 +107,16 @@ private fun EncounterList(
         return
     }
 
-    val icon = loadVectorResource(R.drawable.ic_encounter).resource.resource
+    val icon = vectorResource(R.drawable.ic_encounter)
     val iconSize = 28.dp
 
-    ScrollableColumn(
+    Column(
         Modifier
             .background(MaterialTheme.colors.background)
-            .fillMaxWidth(),
+            .fillMaxWidth()
+            .verticalScroll(rememberScrollState())
+            .padding(Spacing.bodyPadding),
         horizontalAlignment = Alignment.CenterHorizontally,
-        contentPadding = PaddingValues(Spacing.bodyPadding),
     ) {
         DraggableListFor(
             encounters,
@@ -137,13 +137,12 @@ private fun EncounterList(
                     Modifier.padding(12.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    icon?.let {
-                        Image(
-                            icon,
-                            Modifier.size(iconSize),
-                            colorFilter = ColorFilter.tint(MaterialTheme.colors.onSurface)
-                        )
-                    }
+                    Image(
+                        icon,
+                        VisualOnlyIconDescription,
+                        Modifier.size(iconSize),
+                        colorFilter = ColorFilter.tint(MaterialTheme.colors.onSurface)
+                    )
                     Text(
                         encounter.name,
                         modifier = Modifier.padding(start = 8.dp),

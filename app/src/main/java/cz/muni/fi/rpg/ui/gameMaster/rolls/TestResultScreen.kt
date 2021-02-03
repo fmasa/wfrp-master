@@ -1,8 +1,9 @@
 package cz.muni.fi.rpg.ui.gameMaster.rolls
 
-import androidx.compose.foundation.ScrollableColumn
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
@@ -12,11 +13,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import cz.frantisekmasa.wfrp_master.core.ui.buttons.CardButton
 import cz.frantisekmasa.wfrp_master.core.ui.buttons.CloseButton
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.SingleLineTextValue
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.Spacing
 import cz.muni.fi.rpg.R
-import cz.muni.fi.rpg.ui.common.composables.CardButton
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.CardContainer
 import cz.muni.fi.rpg.ui.common.composables.CardTitle
 
@@ -35,8 +36,8 @@ internal fun TestResultScreen(
             )
         },
     ) {
-        ScrollableColumn(contentPadding = PaddingValues(Spacing.bodyPadding)) {
-            for (result in results) {
+        LazyColumn(contentPadding = PaddingValues(Spacing.bodyPadding)) {
+            items(results) { result ->
                 TestResultCard(
                     result = result,
                     onRerollRequest = { onRerollRequest(result.characterId) }

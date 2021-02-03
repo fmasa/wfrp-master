@@ -5,23 +5,19 @@ import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.unit.sp
 import cz.frantisekmasa.wfrp_master.core.media.AmbientSoundEnabled
-import cz.muni.fi.rpg.R
-import cz.muni.fi.rpg.ui.shell.AmbientSystemUiController
+import cz.frantisekmasa.wfrp_master.core.ui.theme.SystemBarsChangingEffect
 import cz.frantisekmasa.wfrp_master.core.viewModel.provideSettingsViewModel
 
 class Theme {
     class FixedColors(
-        val primaryDark: Color,
         val danger: Color,
         val splashScreenContent: Color,
     )
 
     companion object {
         val fixedColors = FixedColors(
-            primaryDark =  Color(167, 20, 20),
             danger = Color(183, 28, 28),
             splashScreenContent = Color(234, 234, 234),
         )
@@ -30,16 +26,16 @@ class Theme {
         internal fun LightColors() = lightColors(
             primary = Color(183, 28, 28),
             primaryVariant = Color(183, 28, 28),
-            secondary = colorResource(R.color.colorPrimary),
-            secondaryVariant = colorResource(R.color.colorPrimary),
-            background = colorResource(R.color.colorBackgroundUnderCard),
-            surface = colorResource(R.color.colorCardBackground),
-            error = colorResource(R.color.colorDanger),
-            onPrimary = Color.White,
-            onSecondary = Color.White,
-            onBackground = Color.Black,
-            onSurface = Color.Black,
-            onError = Color.White,
+            secondary = Color(183,28,28),
+            secondaryVariant = Color(183,28,28),
+            background = Color(250, 250, 250),
+            surface = Color(255, 255, 255),
+            error = Color(183, 28, 28),
+            onPrimary = Color(255, 255, 255),
+            onSecondary = Color(255, 255, 255),
+            onBackground = Color(0, 0, 0),
+            onSurface = Color(0, 0, 0),
+            onError = Color(255, 255, 255),
         )
 
         @Composable
@@ -49,7 +45,7 @@ class Theme {
             secondary = Color(183, 28, 28),
             background = Color(18, 18, 18),
             surface = Color(18, 18, 18),
-            error = colorResource(R.color.colorDanger),
+            error = Color(183, 28, 28),
             onPrimary = Color.Black,
             onSecondary = Color.White,
             onBackground = Color.White,
@@ -59,26 +55,11 @@ class Theme {
     }
 }
 
-private val darkSystemColor = Color(35, 35, 35)
-
 @Composable
 fun Theme(content: @Composable () -> Unit) {
     val viewModel = provideSettingsViewModel()
     val darkMode = viewModel.darkMode.observeAsState().value ?: isSystemInDarkTheme()
     val soundEnabled = viewModel.soundEnabled.observeAsState().value ?: false
-
-    val colors = if (darkMode) Theme.DarkColors() else Theme.LightColors()
-    val systemUi = AmbientSystemUiController.current
-
-    onCommit(colors.isLight, systemUi) {
-        systemUi.setStatusBarColor(
-            if (colors.isLight) Theme.fixedColors.primaryDark else darkSystemColor
-        )
-
-        systemUi.setNavigationBarColor(
-            if (colors.isLight) Color(235, 235, 235) else darkSystemColor
-        )
-    }
 
     MaterialTheme(
         colors = if (darkMode) Theme.DarkColors() else Theme.LightColors(),
@@ -86,6 +67,7 @@ fun Theme(content: @Composable () -> Unit) {
             caption = MaterialTheme.typography.caption.copy(fontSize = 14.sp),
         ),
     ) {
+        SystemBarsChangingEffect()
         Providers(AmbientSoundEnabled provides soundEnabled) {
             content()
         }

@@ -1,9 +1,10 @@
 package cz.muni.fi.rpg.ui.characterCreation
 
 import androidx.annotation.StringRes
-import androidx.compose.foundation.ScrollableColumn
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.savedinstancestate.savedInstanceState
@@ -12,11 +13,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.intl.Locale
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.toUpperCase
 import androidx.compose.ui.unit.dp
 import cz.frantisekmasa.wfrp_master.core.ui.buttons.BackButton
 import cz.frantisekmasa.wfrp_master.core.ui.forms.FormData
+import cz.frantisekmasa.wfrp_master.core.ui.primitives.VisualOnlyIconDescription
 import cz.frantisekmasa.wfrp_master.core.ui.scaffolding.SubheadBar
 import cz.muni.fi.rpg.R
 import cz.frantisekmasa.wfrp_master.core.viewModel.viewModel
@@ -92,7 +93,12 @@ private fun MainContainer(routing: Routing<Route.CharacterCreation>) {
     )
 
     Column(Modifier.fillMaxSize()) {
-        ScrollableColumn(Modifier.weight(1f).background(MaterialTheme.colors.background)) {
+        Column(
+            Modifier
+                .weight(1f)
+                .background(MaterialTheme.colors.background)
+                .verticalScroll(rememberScrollState())
+        ) {
             val currentStep = steps[currentStepIndex.value]
 
             SubheadBar(stringResource(currentStep.labelRes))
@@ -128,7 +134,10 @@ private fun BottomBar(
         color = MaterialTheme.colors.onSurface.copy(alpha = ContentAlpha.medium),
         modifier = Modifier.fillMaxWidth(),
     ) {
-        Box(Modifier.fillMaxWidth().background(MaterialTheme.colors.surface)) {
+        Box(
+            Modifier
+                .fillMaxWidth()
+                .background(MaterialTheme.colors.surface)) {
             val buttonModifier = Modifier.padding(8.dp)
 
             if (currentStepIndex > 0) {
@@ -138,7 +147,8 @@ private fun BottomBar(
                         onChange(currentStepIndex - 1, false)
                     },
                 ) {
-                    Icon(vectorResource(R.drawable.ic_caret_left))
+                    Icon(
+                        vectorResource(R.drawable.ic_caret_left), VisualOnlyIconDescription)
                     Text(
                         stringResource(steps[currentStepIndex - 1].labelRes)
                             .toUpperCase(Locale.current),
@@ -202,6 +212,6 @@ private fun NextButton(
 ) {
     TextButton(modifier = modifier, onClick = onClick) {
         Text(stringResource(label).toUpperCase(Locale.current))
-        Icon(vectorResource(R.drawable.ic_caret_right))
+        Icon(vectorResource(R.drawable.ic_caret_right), VisualOnlyIconDescription)
     }
 }

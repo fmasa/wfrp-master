@@ -37,7 +37,7 @@ class QrCodeScannerAnalyser(
             }
 
             // Luminance plane
-            val buffer = image.planes[0].buffer;
+            val buffer = image.planes[0].buffer
             val bytes = ByteArray(buffer.capacity())
             buffer.get(bytes)
 

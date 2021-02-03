@@ -6,8 +6,8 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.savedinstancestate.savedInstanceState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.layout.WithConstraintsScope
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import cz.frantisekmasa.wfrp_master.compendium.R
 import cz.frantisekmasa.wfrp_master.compendium.domain.CompendiumItem
@@ -23,7 +23,7 @@ import kotlinx.coroutines.launch
 import java.util.*
 
 @Composable
-fun WithConstraintsScope.SkillCompendiumTab(viewModel: CompendiumViewModel) {
+fun SkillCompendiumTab(viewModel: CompendiumViewModel, width: Dp) {
     val coroutineScope = rememberCoroutineScope()
 
     CompendiumTab(
@@ -37,7 +37,7 @@ fun WithConstraintsScope.SkillCompendiumTab(viewModel: CompendiumViewModel) {
         },
         onRemove = { coroutineScope.launch(Dispatchers.IO) { viewModel.remove(it) } },
         dialog = { SkillDialog(it, viewModel) },
-        width = maxWidth,
+        width = width,
     ) { skill ->
         ListItem(
             icon = { ItemIcon(skill.characteristic.getIconId()) },

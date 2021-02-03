@@ -4,7 +4,7 @@ plugins {
     id("kotlin-parcelize")
 }
 
-val composeVersion = "1.0.0-alpha10"
+val composeVersion = "1.0.0-alpha11"
 
 android {
     compileSdkVersion(29)
@@ -52,5 +52,5 @@ dependencies {
     implementation(project(":app:core"))
 
     // Navigation
-    api("androidx.navigation:navigation-compose:1.0.0-alpha05")
+    api("androidx.navigation:navigation-compose:1.0.0-alpha06")
 }

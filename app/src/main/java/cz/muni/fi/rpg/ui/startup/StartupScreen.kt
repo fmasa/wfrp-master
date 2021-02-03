@@ -98,7 +98,11 @@ private fun SplashScreen() {
         contentAlignment = Alignment.Center,
     ) {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
-            Image(vectorResource(R.drawable.splash_screen_image), Modifier.size(140.dp))
+            Image(
+                vectorResource(R.drawable.splash_screen_image),
+                stringResource(R.string.icon_application_logo),
+                Modifier.size (140.dp)
+            )
             Text(
                 stringResource(R.string.app_name),
                 style = MaterialTheme.typography.h6,

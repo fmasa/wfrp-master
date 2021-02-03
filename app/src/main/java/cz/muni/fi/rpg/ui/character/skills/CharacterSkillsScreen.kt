@@ -1,8 +1,8 @@
 package cz.muni.fi.rpg.ui.character.skills
 
-import androidx.compose.foundation.ScrollableColumn
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
@@ -21,9 +21,10 @@ fun CharacterSkillsScreen(
     characterId: CharacterId,
     characterVm: CharacterViewModel,
 ) {
-    ScrollableColumn(
-        modifier.background(MaterialTheme.colors.background),
-        contentPadding = PaddingValues(top = Spacing.small)
+    Column(
+        modifier
+            .background(MaterialTheme.colors.background)
+            .padding(top = Spacing.small),
     ) {
 
         val talentsViewModel: TalentsViewModel by viewModel { parametersOf(characterId) }

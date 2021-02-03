@@ -37,6 +37,8 @@ object TalentListGrammar : Grammar<List<Talent>>() {
 
     private fun cleanupName(name: String) =
         name.replace("does. m as T e R Talen T l is T ", "")
+            // Names starting by "T" have extra space after T for some reason
+            .replace(Regex("^(T )"), "T")
             .trim()
 
 }

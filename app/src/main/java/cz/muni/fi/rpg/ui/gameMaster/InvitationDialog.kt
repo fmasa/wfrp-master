@@ -2,15 +2,14 @@ package cz.muni.fi.rpg.ui.gameMaster
 
 import android.content.Context
 import android.content.Intent
-import android.net.Uri
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.AmbientContext
-import androidx.compose.ui.res.loadVectorResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.intl.Locale
 import androidx.compose.ui.text.toUpperCase
 import androidx.compose.ui.unit.dp
@@ -25,6 +24,7 @@ import com.google.firebase.dynamiclinks.ktx.shortLinkAsync
 import com.google.firebase.ktx.Firebase
 import cz.muni.fi.rpg.R
 import cz.frantisekmasa.wfrp_master.core.domain.party.Invitation
+import cz.frantisekmasa.wfrp_master.core.ui.primitives.VisualOnlyIconDescription
 import cz.frantisekmasa.wfrp_master.navigation.Route
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -39,14 +39,19 @@ internal fun InvitationDialog2(invitation: Invitation, onDismissRequest: () -> U
             Column(Modifier.padding(20.dp)) {
                 Text(
                     stringResource(R.string.invitation_code_description),
-                    Modifier.fillMaxWidth().padding(top = 16.dp),
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(top = 16.dp),
                     style = MaterialTheme.typography.h6,
                 )
 
                 val sharingOptions = sharingOptions(invitation).collectAsState().value
 
                 if (sharingOptions == null) {
-                    Box(Modifier.fillMaxWidth().aspectRatio(1f), contentAlignment = Alignment.Center) {
+                    Box(
+                        Modifier
+                            .fillMaxWidth()
+                            .aspectRatio(1f), contentAlignment = Alignment.Center) {
                         CircularProgressIndicator()
                     }
                 } else {
@@ -60,7 +65,7 @@ internal fun InvitationDialog2(invitation: Invitation, onDismissRequest: () -> U
                             startInvitationSendingIntent(context, invitation, sharingOptions.link)
                         },
                     ) {
-                        loadVectorResource(R.drawable.ic_share).resource.resource?.let { Icon(it) }
+                        Icon(vectorResource(R.drawable.ic_share), VisualOnlyIconDescription)
                         Text(stringResource(R.string.share_link).toUpperCase(Locale.current))
                     }
                 }

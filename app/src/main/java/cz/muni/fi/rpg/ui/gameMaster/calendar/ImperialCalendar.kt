@@ -2,6 +2,7 @@ package cz.muni.fi.rpg.ui.gameMaster.calendar
 
 import android.os.Bundle
 import android.os.Parcelable
+import androidx.compose.foundation.InteractionState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -21,6 +22,7 @@ import androidx.compose.runtime.savedinstancestate.SaverScope
 import androidx.compose.runtime.savedinstancestate.savedInstanceState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.intl.Locale
@@ -56,7 +58,10 @@ fun ImperialCalendar(date: ImperialDate, onDateChange: (ImperialDate) -> Unit) {
                                 activeYearRange = activeYearRange.move(-YEAR_ROWS * YEAR_COLUMNS)
                             }
                         }) {
-                        Icon(vectorResource(R.drawable.ic_caret_left))
+                        Icon(
+                            vectorResource(R.drawable.ic_caret_left),
+                            stringResource(R.string.icon_previous_years),
+                        )
                     }
 
                     Text(
@@ -67,12 +72,18 @@ fun ImperialCalendar(date: ImperialDate, onDateChange: (ImperialDate) -> Unit) {
                     IconButton(onClick = {
                         activeYearRange = activeYearRange.move(+YEAR_ROWS * YEAR_COLUMNS)
                     }) {
-                        Icon(vectorResource(R.drawable.ic_caret_right))
+                        Icon(
+                            vectorResource(R.drawable.ic_caret_right),
+                            stringResource(R.string.icon_next_years),
+                        )
                     }
                 }
                 ActiveScreen.DAYS_OF_MONTH -> {
                     IconButton(onClick = { activeMonth = activeMonth.previousMonth() }) {
-                        Icon(vectorResource(R.drawable.ic_caret_left))
+                        Icon(
+                            vectorResource(R.drawable.ic_caret_left),
+                            stringResource(R.string.icon_previous_month),
+                        )
                     }
 
                     Text(
@@ -82,7 +93,10 @@ fun ImperialCalendar(date: ImperialDate, onDateChange: (ImperialDate) -> Unit) {
                     )
 
                     IconButton(onClick = { activeMonth = activeMonth.nextMonth() }) {
-                        Icon(vectorResource(R.drawable.ic_caret_right))
+                        Icon(
+                            vectorResource(R.drawable.ic_caret_right),
+                            stringResource(R.string.icon_next_month),
+                        )
                     }
                 }
             }
@@ -244,6 +258,7 @@ private fun RowScope.Week(days: List<Int?>, selectedDay: Int?, onDaySelect: (Int
                 modifier
                     .clickable(
                         onClick = { day?.let(onDaySelect) },
+                        interactionState = remember { InteractionState() },
                         indication = rememberRipple(bounded = false, radius = 24.dp)
                     )
                     .size(36.dp)

@@ -53,10 +53,11 @@ fun CardTitle(text: String, @DrawableRes iconRes: Int? = null) {
         if (iconRes != null) {
             Image(
                 vectorResource(iconRes),
+                VisualOnlyIconDescription,
                 Modifier.padding(end = 4.dp)
                     .width(24.dp)
                     .height(24.dp),
-                colorFilter = ColorFilter.tint(MaterialTheme.colors.onSurface)
+                colorFilter = ColorFilter.tint(MaterialTheme.colors.onSurface),
             )
         }
         Text(text, style = MaterialTheme.typography.h6, textAlign = TextAlign.Center)

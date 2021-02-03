@@ -53,7 +53,8 @@ fun OptionsAction(items: @Composable ColumnScope.() -> Unit) {
             IconButton(onClick = { contextMenuExpanded = true }) {
                 Icon(
                     vectorResource(R.drawable.ic_more),
-                    tint = contentColorFor(MaterialTheme.colors.primarySurface),
+                    stringResource(R.string.icon_action_more),
+                    tint = contentColorFor (MaterialTheme.colors.primarySurface),
                 )
             }
         },

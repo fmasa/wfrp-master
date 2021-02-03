@@ -1,7 +1,6 @@
 package cz.frantisekmasa.wfrp_master.core.domain.party.combat
 
 import android.os.Parcelable
-import cz.frantisekmasa.wfrp_master.core.domain.identifiers.NpcId
 import kotlinx.parcelize.Parcelize
 import java.util.*
 
@@ -19,9 +18,6 @@ data class Combat(
 
         combatants = combatants.toList()
     }
-
-    val npcIds: List<NpcId>
-        get() = combatants.mapNotNull { if (it is Combatant.Npc) it.npcId else null  }
 
     fun getCombatants() = combatants
     fun getTurn() = turn

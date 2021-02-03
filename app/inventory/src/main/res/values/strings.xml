@@ -24,4 +24,8 @@
     <string name="money_add">Add</string>
     <string name="title_transaction">New money transaction</string>
     <string name="money_balance">Balance</string>
+
+    <!-- Icon descriptions -->
+    <string name="icon_total_encumbrance">Total encumbrance of character (current encumbrance / total encumbrance)</string>
+    <string name="icon_item_encumbrance">Item encumbrance</string>
 </resources>

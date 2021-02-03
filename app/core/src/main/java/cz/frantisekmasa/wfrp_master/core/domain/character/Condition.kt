@@ -14,6 +14,7 @@ enum class Condition {
     SURPRISED,
     UNCONSCIOUS;
 
+    @Suppress("unused") // TODO: This may be used in future
     fun getFutureConditions(): Array<Condition> = when (this) {
         BLEEDING -> arrayOf(FATIGUED)
         BROKEN -> arrayOf(FATIGUED)
