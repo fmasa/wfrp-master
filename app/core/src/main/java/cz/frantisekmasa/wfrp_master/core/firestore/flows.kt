@@ -21,7 +21,8 @@ fun <T : Any> queryFlow(
         snapshot?.let {
             launch {
                 val items = withContext(Dispatchers.Default) {
-                    snapshot.map(snapshotParser::fromDocumentSnapshot)
+                    snapshot.map { async { snapshotParser.fromDocumentSnapshot(it) } }
+                        .awaitAll()
                 }
 
                 withContext(Dispatchers.Main) { offer(items) }
