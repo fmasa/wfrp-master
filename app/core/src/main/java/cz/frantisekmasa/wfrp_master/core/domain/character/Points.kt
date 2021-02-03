@@ -18,9 +18,7 @@ data class Points(
     init {
         require(corruption >= 0)
         require(fate >= 0)
-        require(fortune in 0..fate)
         require(resilience >= 0)
-        require(resolve in 0..resilience)
         require(wounds in 0..(maxWounds + hardyWoundsBonus))
         require(maxWounds > 0)
         require(experience >= 0)
