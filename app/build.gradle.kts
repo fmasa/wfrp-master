@@ -9,6 +9,7 @@ plugins {
     id("com.google.gms.google-services")
     id("kotlin-kapt")
     id("com.google.firebase.crashlytics")
+    id("com.google.firebase.firebase-perf")
 }
 
 android {
@@ -140,4 +141,7 @@ dependencies {
     // Checking network access
     implementation("com.github.pwittchen:reactivenetwork-rx2:3.0.8")
     api("org.jetbrains.kotlinx:kotlinx-coroutines-rx2:1.4.2")
+
+    // Firebase Performance
+    implementation("com.google.firebase:firebase-perf-ktx:19.1.0")
 }
