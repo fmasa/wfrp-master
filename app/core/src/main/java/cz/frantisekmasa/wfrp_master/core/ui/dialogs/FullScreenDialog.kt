@@ -21,6 +21,9 @@ import androidx.lifecycle.ViewTreeLifecycleOwner
 import androidx.lifecycle.ViewTreeViewModelStoreOwner
 import androidx.savedstate.ViewTreeSavedStateRegistryOwner
 import cz.frantisekmasa.wfrp_master.core.R
+import cz.frantisekmasa.wfrp_master.core.ui.theme.AmbientSystemUiController
+import cz.frantisekmasa.wfrp_master.core.ui.theme.SystemBarsChangingEffect
+import cz.frantisekmasa.wfrp_master.core.ui.theme.rememberSystemUiController
 
 
 /**
@@ -63,7 +66,7 @@ fun FullScreenDialog(
 
     dialog.onCloseRequest = onDismissRequest
 
-    DisposableEffect(Unit) {
+    DisposableEffect(dialog) {
         dialog.show()
 
         onDispose {
@@ -129,7 +132,14 @@ private class DialogWrapper(
 
     fun setContent(parentComposition: CompositionReference, children: @Composable () -> Unit) {
         // TODO: This should probably create a child composition of the original
-        composition = dialogLayout.setContent(parentComposition, children)
+        composition = dialogLayout.setContent(parentComposition) {
+            Providers(
+                AmbientSystemUiController provides rememberSystemUiController(window!!)
+            ) {
+                SystemBarsChangingEffect()
+                children()
+            }
+        }
     }
 
     private fun setSecureFlagEnabled(secureFlagEnabled: Boolean) {
