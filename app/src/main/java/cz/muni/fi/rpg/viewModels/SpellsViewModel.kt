@@ -10,8 +10,8 @@ import cz.frantisekmasa.wfrp_master.core.domain.identifiers.CharacterId
 import cz.muni.fi.rpg.model.domain.spells.Spell
 import cz.muni.fi.rpg.model.domain.spells.SpellRepository
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.combineTransform
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.zip
 import kotlinx.coroutines.launch
 
 class SpellsViewModel(
@@ -24,9 +24,10 @@ class SpellsViewModel(
     val compendiumSpellsCount: LiveData<Int> by lazy { compendiumSpells.map { it.size }.asLiveData() }
 
     val notUsedSpellsFromCompendium: LiveData<List<CompendiumSpell>> by lazy {
-        compendiumSpells.zip(spellsFlow) { compendiumSpells, characterSpells ->
+        compendiumSpells.combineTransform(spellsFlow) { compendiumSpells, characterSpells ->
             val spellsUsedByCharacter = characterSpells.mapNotNull { it.compendiumId }.toSet()
-            compendiumSpells.filter { !spellsUsedByCharacter.contains(it.id) }
+
+            emit(compendiumSpells.filter { !spellsUsedByCharacter.contains(it.id) })
         }.asLiveData()
     }
 

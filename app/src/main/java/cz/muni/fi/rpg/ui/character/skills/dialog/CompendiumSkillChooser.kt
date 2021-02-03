@@ -10,6 +10,7 @@ import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.key
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -53,11 +54,13 @@ internal fun CompendiumSkillChooser(
                 } else {
                     LazyColumn(contentPadding = PaddingValues(BodyPadding)) {
                         items(compendiumSkills) { skill ->
-                            ListItem(
-                                modifier = Modifier.clickable(onClick = { onSkillSelected(skill) }),
-                                icon = { ItemIcon(skill.characteristic.getIconId(), ItemIcon.Size.Small) },
-                                text = { Text(skill.name) }
-                            )
+                            key(skill.id) {
+                                ListItem(
+                                    modifier = Modifier.clickable(onClick = { onSkillSelected(skill) }),
+                                    icon = { ItemIcon(skill.characteristic.getIconId(), ItemIcon.Size.Small) },
+                                    text = { Text(skill.name) }
+                                )
+                            }
                         }
                     }
                 }

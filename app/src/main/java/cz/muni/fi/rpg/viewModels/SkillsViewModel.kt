@@ -24,9 +24,10 @@ class SkillsViewModel(
     val skills: LiveData<List<Skill>> = skillsFlow.asLiveData()
     val compendiumSkillsCount: LiveData<Int> by lazy { compendiumSkills.map { it.size }.asLiveData() }
     val notUsedSkillsFromCompendium: LiveData<List<CompendiumSkill>> by lazy {
-        compendiumSkills.zip(skillsFlow) { compendiumSkills, characterSkills ->
+        compendiumSkills.combineTransform(skillsFlow) { compendiumSkills, characterSkills ->
             val skillsUsedByCharacter = characterSkills.mapNotNull { it.compendiumId }.toSet()
-            compendiumSkills.filter { !skillsUsedByCharacter.contains(it.id) }
+
+            emit(compendiumSkills.filter { !skillsUsedByCharacter.contains(it.id) })
         }.asLiveData()
     }
 
