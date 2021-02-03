@@ -69,7 +69,8 @@ object SkillListGrammar : Grammar<List<Skill>>() {
 
     private fun cleanupName(name: String) =
         name.replace("m as T e R s kill l is T ", "")
-            .replace("T rade", "Trade")
+            // Names starting by "T" have extra space after T for some reason
+            .replace(Regex("^(T )"), "T")
 
     private fun cleanupDescription(description: String) =
         description
