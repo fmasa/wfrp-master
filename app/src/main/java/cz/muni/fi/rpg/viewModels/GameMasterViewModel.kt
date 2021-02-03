@@ -29,13 +29,13 @@ class GameMasterViewModel(
      * didn't create character yet
      */
     val players: LiveData<List<Player>?> =
-        partyFlow.filterNotNull().zip(characterRepository.inParty(partyId)) { party, characters ->
+        partyFlow.filterNotNull().combineTransform(characterRepository.inParty(partyId)) { party, characters ->
             val players = characters.map { Player.ExistingCharacter(it) }
             val usersWithoutCharacter = party.getPlayers()
                 .filter { userId -> !players.exists { it.character.userId == userId.toString() } }
                 .map { Player.UserWithoutCharacter(it.toString()) }
 
-            players + usersWithoutCharacter
+            emit(players + usersWithoutCharacter)
         }.asLiveData()
 
     suspend fun archiveCharacter(id: CharacterId) {

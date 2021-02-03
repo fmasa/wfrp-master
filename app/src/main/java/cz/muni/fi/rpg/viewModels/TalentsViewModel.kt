@@ -10,8 +10,8 @@ import cz.frantisekmasa.wfrp_master.core.domain.identifiers.CharacterId
 import cz.muni.fi.rpg.model.domain.talents.Talent
 import cz.muni.fi.rpg.model.domain.talents.TalentRepository
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.combineTransform
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.zip
 import kotlinx.coroutines.launch
 import java.util.*
 
@@ -26,9 +26,10 @@ class TalentsViewModel(
     val compendiumTalentsCount: LiveData<Int> by lazy { compendiumTalents.map { it.size }.asLiveData() }
 
     val notUsedTalentsFromCompendium: LiveData<List<CompendiumTalent>> by lazy {
-        compendiumTalents.zip(talentsFlow) { compendiumTalents, characterTalents ->
+        compendiumTalents.combineTransform(talentsFlow) { compendiumTalents, characterTalents ->
             val talentsUsedByCharacter = characterTalents.mapNotNull { it.compendiumId }.toSet()
-            compendiumTalents.filter { !talentsUsedByCharacter.contains(it.id) }
+
+            emit(compendiumTalents.filter { !talentsUsedByCharacter.contains(it.id) })
         }.asLiveData()
     }
 
