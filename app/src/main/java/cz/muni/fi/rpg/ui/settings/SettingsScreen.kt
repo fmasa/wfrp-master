@@ -62,11 +62,8 @@ fun SettingsScreen(routing: Routing<Route.Settings>) {
 
                 if (!premiumActive) {
                     PersonalizedAds(viewModel)
-                }
 
-                SettingsTitle(R.string.settings_premium)
-
-                if (!premiumActive) {
+                    SettingsTitle(R.string.settings_premium)
                     BuyPremiumButton(premiumViewModel)
                 }
             }
