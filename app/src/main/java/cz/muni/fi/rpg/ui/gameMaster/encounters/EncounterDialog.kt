@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Scaffold
+import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
@@ -45,7 +46,16 @@ fun EncounterDialog(
             topBar = {
                 TopAppBar(
                     navigationIcon = { CloseButton(onClick = onDismissRequest) },
-                    title = {},
+                    title = {
+                        Text(
+                            stringResource(
+                                when {
+                                    existingEncounter != null -> R.string.title_encounter_edit
+                                    else -> R.string.title_encounter_create
+                                }
+                            )
+                        )
+                    },
                     actions = {
                         val coroutineScope = rememberCoroutineScope()
                         var saving by remember { mutableStateOf(false) }
