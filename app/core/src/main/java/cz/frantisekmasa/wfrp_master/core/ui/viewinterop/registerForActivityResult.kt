@@ -9,20 +9,39 @@ import androidx.compose.runtime.*
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commitNow
 
+// TODO: Add abstraction that allows surviving activity death
+
+@Deprecated("Use explicit keys",
+    ReplaceWith("registerForActivityResult(keys = listOf(contract), contract = contract, callback = callback)")
+)
 @Composable
 fun <I, O> registerForActivityResult(
+    contract: ActivityResultContract<I, O>?,
+    callback: ActivityResultCallback<O>
+): Lazy<ActivityResultLauncher<I>> = registerForActivityResult(
+    keys = listOf(contract),
+    contract = contract,
+    callback = callback
+)
+@Composable
+fun <I, O> registerForActivityResult(
+    keys: Any?,
     contract: ActivityResultContract<I, O>?,
     callback: ActivityResultCallback<O>
 ): Lazy<ActivityResultLauncher<I>> {
     val fragmentManager = fragmentManager()
 
-    val handler = remember(contract, callback) {
+    val handler = remember(keys, fragmentManager) {
         ActivityResultHandler(contract, callback)
             .also { fragmentManager.commitNow { add(it, null) } }
     }
 
     DisposableEffect(handler) {
         onDispose {
+            if (fragmentManager.isStateSaved) {
+                return@onDispose
+            }
+
             fragmentManager.commitNow {
                 remove(handler)
             }
