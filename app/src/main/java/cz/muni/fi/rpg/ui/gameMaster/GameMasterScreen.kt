@@ -76,9 +76,7 @@ fun GameMasterScreen(routing: Routing<Route.GameMaster>) {
             val screens = screens(
                 viewModel,
                 routing,
-                Modifier
-                    .width(maxWidth)
-                    .padding(top = 6.dp)
+                Modifier.width(maxWidth)
             )
             val screenWidth = constraints.maxWidth.toFloat()
 

@@ -45,15 +45,13 @@ internal fun SkillsCard(
             } else {
                 var editedSkill: Skill? by savedInstanceState { null }
 
-                Column {
-                    for (skill in skills) {
-                        SkillItem(
-                            skill,
-                            characteristics,
-                            onClick = { editedSkill = skill },
-                            onRemove = { onRemove(skill) },
-                        )
-                    }
+                for (skill in skills) {
+                    SkillItem(
+                        skill,
+                        characteristics,
+                        onClick = { editedSkill = skill },
+                        onRemove = { onRemove(skill) },
+                    )
                 }
 
                 editedSkill?.let { skill ->
