@@ -246,6 +246,7 @@
     <string name="question_remove_encounter">Do you really want to remove this encounter?</string>
     <string name="label_enemy">Enemy</string>
     <string name="title_npc_attributes">Attributes</string>
+    <string name="title_encounter_edit">Edit encounter</string>
     <string name="message_npc_not_found">NPC does not exist</string>
     <string name="message_npc_saved">NPC was saved</string>
     <string name="label_alive">Alive</string>
@@ -324,7 +325,6 @@
     <string name="icon_add_spell">Add spell</string>
     <string name="icon_application_logo">Application logo</string>
     <string name="icon_edit_character">Edit character</string>
-    <string name="icon_edit_encounter">Edit encounter</string>
     <string name="icon_hidden_skill_test">Hidden skill test</string>
     <string name="icon_toggle_fab_menu">Toggle menu</string>
     <string name="image_invitation_qr_code">Invitation QR code</string>
