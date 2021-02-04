@@ -34,6 +34,12 @@ internal fun QrCodeScanner(
             val view = PreviewView(context)
                 .apply {
                     scaleType = PreviewView.ScaleType.FILL_CENTER
+
+                    // Since Jetpack Compose Alpha 11 there is a regression causing distortion
+                    // of SurfaceView rendering.
+                    // see https://kotlinlang.slack.com/archives/CJLTWPH7S/p1612283410237200
+                    // This forces use of TextureView
+                    implementationMode = PreviewView.ImplementationMode.COMPATIBLE
                 }
 
             cameraProviderFuture.addListener(
