@@ -90,6 +90,7 @@ internal fun PartySummaryScreen(
                 onCharacterOpenRequest = onCharacterOpenRequest,
                 onCharacterCreateRequest = onCharacterCreateRequest,
                 onRemoveCharacter = {
+                    // TODO: Remove this character from combat (see [Combat::removeNpc()])
                     coroutineScope.launch(Dispatchers.IO) {
                         viewModel.archiveCharacter(CharacterId(partyId, it.id))
                     }
