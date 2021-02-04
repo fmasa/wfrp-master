@@ -4,6 +4,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
+import com.google.firebase.analytics.ktx.analytics
+import com.google.firebase.analytics.ktx.logEvent
+import com.google.firebase.ktx.Firebase
 import cz.frantisekmasa.wfrp_master.combat.domain.encounter.Encounter
 import cz.frantisekmasa.wfrp_master.combat.domain.encounter.EncounterRepository
 import cz.frantisekmasa.wfrp_master.core.domain.identifiers.EncounterId
@@ -21,15 +24,22 @@ class EncountersViewModel(
     }
 
     suspend fun createEncounter(name: String, description: String) {
+        val encounterId = UUID.randomUUID()
+
         encounterRepository.save(
             partyId,
             Encounter(
-                UUID.randomUUID(),
+                encounterId,
                 name,
                 description,
                 encounterRepository.getNextPosition(partyId)
             )
         )
+
+        Firebase.analytics.logEvent("create_encounter") {
+            param("encounterId", encounterId.toString())
+            param("partyId", partyId.toString())
+        }
     }
 
     suspend fun updateEncounter(id: UUID, name: String, description: String) {

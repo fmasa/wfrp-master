@@ -6,6 +6,7 @@ import androidx.compose.runtime.*
 import androidx.lifecycle.ViewModel
 import arrow.core.extensions.list.foldable.exists
 import com.google.firebase.analytics.ktx.analytics
+import com.google.firebase.analytics.ktx.logEvent
 import com.google.firebase.ktx.Firebase
 import com.revenuecat.purchases.*
 import cz.frantisekmasa.wfrp_master.core.auth.UserId
@@ -14,6 +15,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.koin.androidx.viewmodel.ext.android.getViewModel
 import timber.log.Timber
+import java.util.*
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
@@ -86,6 +88,11 @@ class PremiumViewModel(private val purchases: Purchases) : ViewModel() {
         activity: Activity,
         packageToPurchase: Package
     ): PurchaseResult = suspendCoroutine { continuation ->
+        val purchaseId = UUID.randomUUID()
+        Firebase.analytics.logEvent("premium_purchase_opened") {
+            param("id", purchaseId.toString())
+        }
+
         purchases.purchasePackageWith(
             activity,
             packageToPurchase,
@@ -97,7 +104,9 @@ class PremiumViewModel(private val purchases: Purchases) : ViewModel() {
                 )
             },
             { _, _ ->
-                Firebase.analytics.logEvent("premium_purchase", null)
+                Firebase.analytics.logEvent("premium_purchase") {
+                    param("id", purchaseId.toString())
+                }
                 continuation.resume(PurchaseResult.Success)
             }
         )

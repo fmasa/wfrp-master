@@ -21,6 +21,8 @@ import androidx.compose.ui.text.intl.Locale
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.toUpperCase
 import androidx.compose.ui.unit.dp
+import com.google.firebase.analytics.ktx.analytics
+import com.google.firebase.ktx.Firebase
 import cz.frantisekmasa.wfrp_master.compendium.R
 import cz.frantisekmasa.wfrp_master.compendium.domain.importer.RulebookCompendiumImporter
 import cz.frantisekmasa.wfrp_master.core.ui.buttons.BackButton
@@ -102,6 +104,8 @@ private fun MainContainer(routing: Routing<Route.CompendiumImport>) {
                         }
                     }
                 }
+
+                Firebase.analytics.logEvent("compendium_imported", null)
             }
         }
     )
