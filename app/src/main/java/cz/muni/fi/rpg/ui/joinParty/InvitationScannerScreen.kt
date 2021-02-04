@@ -6,6 +6,7 @@ import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.savedinstancestate.savedInstanceState
@@ -84,7 +85,7 @@ fun InvitationScannerScreen(routing: Routing<Route>) {
                 InvitationScannerScreenState.Scanning -> {
                     SubheadBar(stringResource(R.string.qr_scan_prompt))
                     QrCodeScanner(
-                        modifier = Modifier.weight(1f),
+                        modifier = Modifier.fillMaxSize(),
                         onSuccessfulScan = { qrCodeData ->
                             coroutineScope.launch {
                                 viewModel.deserializeInvitationJson(qrCodeData)?.let {
