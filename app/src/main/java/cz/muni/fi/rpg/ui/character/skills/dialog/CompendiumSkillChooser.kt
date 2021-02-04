@@ -15,6 +15,7 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import cz.frantisekmasa.wfrp_master.compendium.domain.Skill
+import cz.frantisekmasa.wfrp_master.core.ui.buttons.CloseButton
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.EmptyUI
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.FullScreenProgress
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.ItemIcon
@@ -27,10 +28,14 @@ internal fun CompendiumSkillChooser(
     viewModel: SkillsViewModel,
     onSkillSelected: (Skill) -> Unit,
     onCustomSkillRequest: () -> Unit,
+    onDismissRequest: () -> Unit,
 ) {
     Scaffold(
         topBar = {
-            TopAppBar(title = { Text(stringResource(R.string.title_choose_compendium_skill)) })
+            TopAppBar(
+                navigationIcon = { CloseButton(onDismissRequest) },
+                title = { Text(stringResource(R.string.title_choose_compendium_skill)) },
+            )
         }
     ) {
         val compendiumSkills = viewModel.notUsedSkillsFromCompendium.observeAsState().value

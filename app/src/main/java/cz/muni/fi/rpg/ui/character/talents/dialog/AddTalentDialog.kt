@@ -24,19 +24,20 @@ fun AddTalentDialog(viewModel: TalentsViewModel, onDismissRequest: () -> Unit) {
                 CompendiumTalentChooser(
                     viewModel = viewModel,
                     onTalentSelected = { state = FillingInTimesTaken(it.id) },
-                    onCustomTalentRequest = { state = FillingInCustomTalent }
+                    onCustomTalentRequest = { state = FillingInCustomTalent },
+                    onDismissRequest = onDismissRequest,
                 )
             is FillingInTimesTaken ->
                 TimesTakenForm(
                     existingTalent = null,
                     compendiumTalentId = currentState.compendiumTalentId,
                     viewModel = viewModel,
-                    onComplete = onDismissRequest,
+                    onDismissRequest = onDismissRequest,
                 )
             is FillingInCustomTalent -> NonCompendiumTalentForm(
                 viewModel = viewModel,
                 existingTalent = null,
-                onComplete = onDismissRequest,
+                onDismissRequest = onDismissRequest,
             )
         }
     }

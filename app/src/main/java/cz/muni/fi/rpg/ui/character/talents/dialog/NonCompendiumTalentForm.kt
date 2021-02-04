@@ -11,6 +11,7 @@ import androidx.compose.runtime.savedinstancestate.savedInstanceState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import cz.frantisekmasa.wfrp_master.core.ui.buttons.CloseButton
 import cz.frantisekmasa.wfrp_master.core.ui.forms.*
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.FullScreenProgress
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.NumberPicker
@@ -29,7 +30,7 @@ import java.util.*
 internal fun NonCompendiumTalentForm(
     viewModel: TalentsViewModel,
     existingTalent: Talent?,
-    onComplete: () -> Unit,
+    onDismissRequest: () -> Unit,
 ) {
     val formData = NonCompendiumTalentFormData.fromTalent(existingTalent)
     var saving by remember { mutableStateOf(false) }
@@ -38,6 +39,7 @@ internal fun NonCompendiumTalentForm(
     Scaffold(
         topBar = {
             TopAppBar(
+                navigationIcon = { CloseButton(onDismissRequest) },
                 title = {
                     Text(
                         stringResource(
@@ -61,7 +63,7 @@ internal fun NonCompendiumTalentForm(
                             coroutineScope.launch(Dispatchers.IO) {
                                 saving = true
                                 viewModel.saveTalent(formData.toTalent())
-                                withContext(Dispatchers.Main) { onComplete() }
+                                withContext(Dispatchers.Main) { onDismissRequest() }
                             }
                         }
                     )

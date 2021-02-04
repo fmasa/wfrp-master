@@ -24,19 +24,20 @@ fun AddSkillDialog(viewModel: SkillsViewModel, onDismissRequest: () -> Unit) {
                 CompendiumSkillChooser(
                     viewModel = viewModel,
                     onSkillSelected = { state = FillingInAdvances(it.id) },
-                    onCustomSkillRequest = { state = FillingInCustomSkill }
+                    onCustomSkillRequest = { state = FillingInCustomSkill },
+                    onDismissRequest = onDismissRequest,
                 )
             is FillingInAdvances ->
                 AdvancesForm(
                     existingSkill = null,
                     compendiumSkillId = currentState.compendiumSkillId,
                     viewModel = viewModel,
-                    onComplete = onDismissRequest,
+                    onDismissRequest = onDismissRequest,
                 )
             is FillingInCustomSkill -> NonCompendiumSkillForm(
                 viewModel = viewModel,
                 existingSkill = null,
-                onComplete = onDismissRequest,
+                onDismissRequest = onDismissRequest,
             )
         }
     }
