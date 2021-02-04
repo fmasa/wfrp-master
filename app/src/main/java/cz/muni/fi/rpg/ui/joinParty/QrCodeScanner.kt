@@ -8,6 +8,7 @@ import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.camera.view.PreviewView
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.AmbientConfiguration
 import androidx.compose.ui.platform.AmbientContext
 import androidx.compose.ui.platform.AmbientLifecycleOwner
 import androidx.compose.ui.viewinterop.AndroidView
@@ -28,55 +29,64 @@ internal fun QrCodeScanner(
     var cameraBound by remember { mutableStateOf(false) }
     val executor by remember { lazy { Executors.newSingleThreadExecutor() } }
 
-    AndroidView(
-        modifier = modifier,
-        viewBlock = {
-            val view = PreviewView(context)
-                .apply {
-                    scaleType = PreviewView.ScaleType.FILL_CENTER
-                }
+    val orientation = AmbientConfiguration.current.orientation
 
-            cameraProviderFuture.addListener(
-                {
-                    val cameraProvider = cameraProviderFuture.get()
+    key(orientation) {
+        AndroidView(
+            modifier = modifier,
+            viewBlock = {
+                PreviewView(context)
+                    .apply {
+                        scaleType = PreviewView.ScaleType.FILL_CENTER
 
-                    val preview = Preview.Builder()
-                        .build()
-                        .apply {
-                            setSurfaceProvider(view.surfaceProvider)
-                        }
-
-                    @SuppressLint("RestrictedApi")
-                    val analysis = ImageAnalysis.Builder()
-                        .setImageQueueDepth(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
-                        .build()
-                        .apply {
-                            setAnalyzer(
-                                executor,
-                                QrCodeScannerAnalyser(onQrCodesDetected = onSuccessfulScan)
-                            )
-                        }
-
-                    try {
-                        cameraProvider.unbindAll()
-
-                        cameraBound = true
-                        cameraProvider.bindToLifecycle(
-                            lifecycleOwner,
-                            CameraSelector.DEFAULT_BACK_CAMERA,
-                            preview,
-                            analysis
-                        )
-                    } catch (e: Exception) {
-                        Timber.e(e, "Camera binding failed")
+                        // Since Jetpack Compose Alpha 11 there is a regression causing distortion
+                        // of SurfaceView rendering.
+                        // see https://kotlinlang.slack.com/archives/CJLTWPH7S/p1612283410237200
+                        // This forces use of TextureView
+                        implementationMode = PreviewView.ImplementationMode.COMPATIBLE
                     }
-                },
-                ContextCompat.getMainExecutor(context)
-            )
+            },
+            update = { view ->
+                cameraProviderFuture.addListener(
+                    {
+                        val cameraProvider = cameraProviderFuture.get()
 
-            view
-        },
-    )
+                        val preview = Preview.Builder()
+                            .build()
+                            .apply {
+                                setSurfaceProvider(view.surfaceProvider)
+                            }
+
+                        @SuppressLint("RestrictedApi")
+                        val analysis = ImageAnalysis.Builder()
+                            .setImageQueueDepth(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
+                            .build()
+                            .apply {
+                                setAnalyzer(
+                                    executor,
+                                    QrCodeScannerAnalyser(onQrCodesDetected = onSuccessfulScan)
+                                )
+                            }
+
+                        try {
+                            cameraProvider.unbindAll()
+
+                            cameraBound = true
+                            cameraProvider.bindToLifecycle(
+                                lifecycleOwner,
+                                CameraSelector.DEFAULT_BACK_CAMERA,
+                                preview,
+                                analysis
+                            )
+                        } catch (e: Exception) {
+                            Timber.e(e, "Camera binding failed")
+                        }
+                    },
+                    ContextCompat.getMainExecutor(context)
+                )
+            },
+        )
+    }
 
     DisposableEffect(Unit) {
         onDispose {
