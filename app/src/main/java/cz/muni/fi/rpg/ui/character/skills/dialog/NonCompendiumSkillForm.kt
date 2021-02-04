@@ -12,6 +12,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import cz.frantisekmasa.wfrp_master.core.domain.Characteristic
+import cz.frantisekmasa.wfrp_master.core.ui.buttons.CloseButton
 import cz.frantisekmasa.wfrp_master.core.ui.forms.*
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.FullScreenProgress
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.NumberPicker
@@ -30,7 +31,7 @@ import java.util.*
 internal fun NonCompendiumSkillForm(
     viewModel: SkillsViewModel,
     existingSkill: Skill?,
-    onComplete: () -> Unit,
+    onDismissRequest: () -> Unit,
 ) {
     val formData = NonCompendiumSkillFormData.fromSkill(existingSkill)
     var saving by remember { mutableStateOf(false) }
@@ -39,6 +40,7 @@ internal fun NonCompendiumSkillForm(
     Scaffold(
         topBar = {
             TopAppBar(
+                navigationIcon = { CloseButton(onDismissRequest) },
                 title = {
                     Text(
                         stringResource(
@@ -62,7 +64,7 @@ internal fun NonCompendiumSkillForm(
                             coroutineScope.launch(Dispatchers.IO) {
                                 saving = true
                                 viewModel.saveSkill(formData.toSkill())
-                                withContext(Dispatchers.Main) { onComplete() }
+                                withContext(Dispatchers.Main) { onDismissRequest() }
                             }
                         }
                     )

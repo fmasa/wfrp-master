@@ -3,6 +3,7 @@
     <color name="colorPrimary">#B71C1C</color>
     <color name="colorPrimaryDark">#a71414</color>
     <color name="colorTitleBarDark">#000</color>
+    <color name="background">#232323</color>
     <color name="colorAccent">#a71414</color>
     <color name="colorFabText">#FFFFFF</color>
     <color name="colorFabLabelText">#000000</color>

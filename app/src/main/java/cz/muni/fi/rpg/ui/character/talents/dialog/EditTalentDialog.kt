@@ -17,13 +17,13 @@ fun EditTalentDialog(
                 existingTalent = talent,
                 compendiumTalentId = talent.compendiumId,
                 viewModel = viewModel,
-                onComplete = onDismissRequest
+                onDismissRequest = onDismissRequest
             )
         } else {
             NonCompendiumTalentForm(
                 viewModel = viewModel,
                 existingTalent = talent,
-                onComplete = onDismissRequest
+                onDismissRequest = onDismissRequest
             )
         }
     }

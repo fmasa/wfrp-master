@@ -14,6 +14,7 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import cz.frantisekmasa.wfrp_master.compendium.domain.Talent
+import cz.frantisekmasa.wfrp_master.core.ui.buttons.CloseButton
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.EmptyUI
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.FullScreenProgress
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.ItemIcon
@@ -26,10 +27,14 @@ internal fun CompendiumTalentChooser(
     viewModel: TalentsViewModel,
     onTalentSelected: (Talent) -> Unit,
     onCustomTalentRequest: () -> Unit,
+    onDismissRequest: () -> Unit,
 ) {
     Scaffold(
         topBar = {
-            TopAppBar(title = { Text(stringResource(R.string.title_choose_compendium_talent)) })
+            TopAppBar(
+                navigationIcon = { CloseButton(onDismissRequest) },
+                title = { Text(stringResource(R.string.title_choose_compendium_talent)) }
+            )
         }
     ) {
         val compendiumTalents = viewModel.notUsedTalentsFromCompendium.observeAsState().value

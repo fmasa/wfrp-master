@@ -54,7 +54,7 @@ fun OptionsAction(items: @Composable ColumnScope.() -> Unit) {
                 Icon(
                     vectorResource(R.drawable.ic_more),
                     stringResource(R.string.icon_action_more),
-                    tint = contentColorFor (MaterialTheme.colors.primarySurface),
+                    tint = contentColorFor(MaterialTheme.colors.primarySurface),
                 )
             }
         },

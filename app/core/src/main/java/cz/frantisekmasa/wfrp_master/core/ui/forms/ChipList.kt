@@ -1,18 +1,18 @@
 package cz.frantisekmasa.wfrp_master.core.ui.forms
 
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.FlowRow
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.AmbientContentColor
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.AmbientDensity
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import cz.frantisekmasa.wfrp_master.core.ui.primitives.Spacing
 
 @Composable
 fun <T> ChipList(
@@ -49,19 +49,23 @@ private fun Chip(
     onClick: () -> Unit,
     selected: Boolean = false
 ) {
-    val textStyle = MaterialTheme.typography.body2
-    val padding = 8.dp
-    val borderRadius = with(AmbientDensity.current) { textStyle.fontSize.toDp() / 2 + padding }
     val color = if (selected) MaterialTheme.colors.primary else AmbientContentColor.current
 
     Surface(
-        shape = RoundedCornerShape(size = borderRadius),
+        border = if (selected) BorderStroke(1.dp, color.copy(alpha = 0.25f)) else null,
+        shape = RoundedCornerShape(Spacing.small),
         color = if (selected) color.copy(alpha = 0.15f) else color.copy(alpha = 0.1f),
     ) {
+        val fontStyle = MaterialTheme.typography.body2.copy(color = color)
+
         Text(
             text,
-            style = MaterialTheme.typography.body2.copy(color = color),
-            modifier = Modifier.clickable(onClick = onClick).padding(padding),
+            style = fontStyle,
+            textAlign = TextAlign.Center,
+            modifier = Modifier
+                .clickable(onClick = onClick)
+                .preferredWidthIn(min = with(AmbientDensity.current) { fontStyle.fontSize.toDp() * 3 })
+                .padding(Spacing.small),
         )
     }
 }

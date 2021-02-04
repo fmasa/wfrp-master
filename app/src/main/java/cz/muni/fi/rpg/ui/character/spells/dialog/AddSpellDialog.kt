@@ -24,11 +24,12 @@ fun AddSpellDialog(viewModel: SpellsViewModel, onDismissRequest: () -> Unit) {
                     viewModel = viewModel,
                     onComplete = onDismissRequest,
                     onCustomSpellRequest = { state = FillingInCustomSpell },
+                    onDismissRequest = onDismissRequest,
                 )
             is FillingInCustomSpell -> NonCompendiumSpellForm(
                 viewModel = viewModel,
                 existingSpell = null,
-                onComplete = onDismissRequest,
+                onDismissRequest = onDismissRequest,
             )
         }
     }

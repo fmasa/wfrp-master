@@ -21,7 +21,7 @@ fun EditSpellDialog(
             NonCompendiumSpellForm(
                 viewModel = viewModel,
                 existingSpell = spell,
-                onComplete = onDismissRequest
+                onDismissRequest = onDismissRequest
             )
         }
     }

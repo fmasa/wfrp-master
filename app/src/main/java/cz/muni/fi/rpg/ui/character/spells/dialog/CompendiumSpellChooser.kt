@@ -13,6 +13,7 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import cz.frantisekmasa.wfrp_master.core.ui.buttons.CloseButton
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.EmptyUI
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.FullScreenProgress
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.ItemIcon
@@ -30,10 +31,14 @@ internal fun CompendiumSpellChooser(
     viewModel: SpellsViewModel,
     onComplete: () -> Unit,
     onCustomSpellRequest: () -> Unit,
+    onDismissRequest: () -> Unit,
 ) {
     Scaffold(
         topBar = {
-            TopAppBar(title = { Text(stringResource(R.string.title_choose_compendium_spell)) })
+            TopAppBar(
+                navigationIcon = { CloseButton(onDismissRequest) },
+                title = { Text(stringResource(R.string.title_choose_compendium_spell)) },
+            )
         }
     ) {
         val compendiumSpells = viewModel.notUsedSpellsFromCompendium.observeAsState().value

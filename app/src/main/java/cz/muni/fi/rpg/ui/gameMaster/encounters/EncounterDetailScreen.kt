@@ -29,7 +29,6 @@ import cz.frantisekmasa.wfrp_master.core.ui.buttons.PrimaryButton
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.*
 import cz.frantisekmasa.wfrp_master.core.ui.scaffolding.OptionsAction
 import cz.frantisekmasa.wfrp_master.core.ui.scaffolding.Subtitle
-import cz.frantisekmasa.wfrp_master.core.ui.scaffolding.TopBarAction
 import cz.frantisekmasa.wfrp_master.core.viewModel.viewModel
 import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.ui.common.composables.*
@@ -133,10 +132,11 @@ private fun TopAppBarActions(
         )
     }
 
-    TopBarAction(onClick = { editDialogOpened = true }) {
+    IconButton(onClick = { editDialogOpened = true }) {
         Icon(
             vectorResource(R.drawable.ic_edit),
-            stringResource(R.string.icon_edit_encounter),
+            stringResource(R.string.title_encounter_edit),
+            tint = contentColorFor(MaterialTheme.colors.primarySurface),
         )
     }
 

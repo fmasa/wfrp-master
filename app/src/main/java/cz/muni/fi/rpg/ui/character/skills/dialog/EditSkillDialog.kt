@@ -17,13 +17,13 @@ fun EditSkillDialog(
                 existingSkill = skill,
                 compendiumSkillId = skill.compendiumId,
                 viewModel = viewModel,
-                onComplete = onDismissRequest
+                onDismissRequest = onDismissRequest
             )
         } else {
             NonCompendiumSkillForm(
                 viewModel = viewModel,
                 existingSkill = skill,
-                onComplete = onDismissRequest
+                onDismissRequest = onDismissRequest,
             )
         }
     }

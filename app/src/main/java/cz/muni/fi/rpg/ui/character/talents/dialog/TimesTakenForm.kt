@@ -14,6 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.AmbientContext
 import androidx.compose.ui.res.stringResource
 import cz.frantisekmasa.wfrp_master.compendium.domain.exceptions.CompendiumItemNotFound
+import cz.frantisekmasa.wfrp_master.core.ui.buttons.CloseButton
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.FullScreenProgress
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.NumberPicker
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.Spacing
@@ -33,7 +34,7 @@ internal fun TimesTakenForm(
     existingTalent: Talent?,
     compendiumTalentId: UUID,
     viewModel: TalentsViewModel,
-    onComplete: () -> Unit,
+    onDismissRequest: () -> Unit,
 ) {
     var saving by remember { mutableStateOf(false) }
     var timesTaken by savedInstanceState { existingTalent?.taken ?: 1 }
@@ -41,6 +42,7 @@ internal fun TimesTakenForm(
     Scaffold(
         topBar = {
             TopAppBar(
+                navigationIcon = { CloseButton(onDismissRequest) },
                 title = {
                     Text(
                         stringResource(
@@ -77,7 +79,7 @@ internal fun TimesTakenForm(
                                         ).show()
                                     }
                                 } finally {
-                                    withContext(Dispatchers.Main) { onComplete() }
+                                    withContext(Dispatchers.Main) { onDismissRequest() }
                                 }
                             }
                         }

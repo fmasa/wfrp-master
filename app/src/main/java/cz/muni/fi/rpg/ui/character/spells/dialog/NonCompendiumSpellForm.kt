@@ -10,6 +10,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
+import cz.frantisekmasa.wfrp_master.core.ui.buttons.CloseButton
 import cz.frantisekmasa.wfrp_master.core.ui.forms.*
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.FullScreenProgress
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.Spacing
@@ -27,7 +28,7 @@ import java.util.*
 internal fun NonCompendiumSpellForm(
     viewModel: SpellsViewModel,
     existingSpell: Spell?,
-    onComplete: () -> Unit,
+    onDismissRequest: () -> Unit,
 ) {
     val formData = NonCompendiumSpellFormData.fromSpell(existingSpell)
     var saving by remember { mutableStateOf(false) }
@@ -36,6 +37,7 @@ internal fun NonCompendiumSpellForm(
     Scaffold(
         topBar = {
             TopAppBar(
+                navigationIcon = { CloseButton(onDismissRequest) },
                 title = {
                     Text(
                         stringResource(
@@ -59,7 +61,7 @@ internal fun NonCompendiumSpellForm(
                             coroutineScope.launch(Dispatchers.IO) {
                                 saving = true
                                 viewModel.saveSpell(formData.toSpell())
-                                withContext(Dispatchers.Main) { onComplete() }
+                                withContext(Dispatchers.Main) { onDismissRequest() }
                             }
                         }
                     )
