@@ -167,25 +167,20 @@ private fun MainContainer(
 ) {
     val encounterId = routing.route.encounterId
 
-    Box(
+    Column(
         Modifier
             .fillMaxSize()
             .background(MaterialTheme.colors.background)
-            .padding(top = 6.dp)
+            .verticalScroll(rememberScrollState())
+            .padding(top = 6.dp),
     ) {
-        Column(
-            Modifier
-                .fillMaxWidth()
-                .verticalScroll(rememberScrollState()),
-        ) {
-            DescriptionCard(viewModel)
-            CombatantsCard(
-                viewModel,
-                onCreateRequest = { routing.navigateTo(Route.NpcCreation(encounterId)) },
-                onEditRequest = { routing.navigateTo(Route.NpcDetail(it)) },
-                onRemoveRequest = { viewModel.removeNpc(it) },
-            )
-        }
+        DescriptionCard(viewModel)
+        CombatantsCard(
+            viewModel,
+            onCreateRequest = { routing.navigateTo(Route.NpcCreation(encounterId)) },
+            onEditRequest = { routing.navigateTo(Route.NpcDetail(it)) },
+            onRemoveRequest = { viewModel.removeNpc(it) },
+        )
     }
 }
 
