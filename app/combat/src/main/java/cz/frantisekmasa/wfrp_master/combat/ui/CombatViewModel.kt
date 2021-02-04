@@ -3,6 +3,9 @@ package cz.frantisekmasa.wfrp_master.combat.ui
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
+import com.google.firebase.analytics.ktx.analytics
+import com.google.firebase.analytics.ktx.logEvent
+import com.google.firebase.ktx.Firebase
 import cz.frantisekmasa.wfrp_master.combat.domain.encounter.Npc
 import cz.frantisekmasa.wfrp_master.combat.domain.encounter.NpcRepository
 import cz.frantisekmasa.wfrp_master.combat.domain.encounter.Wounds
@@ -81,6 +84,10 @@ class CombatViewModel(
         party.startCombat(encounterId, rollInitiativeForCombatants(party, combatants))
 
         parties.save(party)
+
+        Firebase.analytics.logEvent("combat_started") {
+            param("partyId", partyId.toString())
+        }
     }
 
     suspend fun previousTurn() = updateCombat { it.previousTurn() }
