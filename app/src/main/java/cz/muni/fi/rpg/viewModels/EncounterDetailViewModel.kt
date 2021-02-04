@@ -117,5 +117,25 @@ class EncounterDetailViewModel(
         return flow
     }
 
-    fun removeNpc(npcId: NpcId) = viewModelScope.launch(Dispatchers.IO) { npcRepository.remove(npcId) }
+    fun removeNpc(npcId: NpcId) = viewModelScope.launch(Dispatchers.IO) {
+        val party = parties.get(encounterId.partyId)
+
+        party.getActiveCombat()?.let { combat ->
+            val updatedCombat = combat.removeNpc(npcId)
+
+            if (updatedCombat == combat) {
+                return@let
+            }
+
+            if (updatedCombat == null) {
+                party.endCombat()
+            } else {
+                party.updateCombat(updatedCombat)
+            }
+
+            parties.save(party)
+        }
+
+        npcRepository.remove(npcId)
+    }
 }

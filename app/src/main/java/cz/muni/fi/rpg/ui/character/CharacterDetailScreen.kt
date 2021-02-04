@@ -31,6 +31,7 @@ import cz.muni.fi.rpg.viewModels.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.koin.core.parameter.parametersOf
+import timber.log.Timber
 
 @Composable
 fun CharacterDetailScreen(routing: Routing<Route.CharacterDetail>) {
@@ -107,6 +108,7 @@ private fun MainContainer(
         val screens = screens(characterId, viewModel, Modifier.width(maxWidth))
 
         Column(Modifier.fillMaxHeight()) {
+            Timber.d("Route: ${routing.route}")
             if (! routing.route.comingFromCombat) {
                 // Prevent long and confusing back stack when user goes i.e.
                 // combat -> character detail -> combat
