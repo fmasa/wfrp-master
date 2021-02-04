@@ -58,7 +58,10 @@ fun StartupScreen(viewModel: AuthenticationViewModel) {
 
     val context = AmbientContext.current
     val contract = remember(viewModel) { viewModel.googleSignInContract() }
-    val googleSignInLauncher by registerForActivityResult(contract) { result ->
+    val googleSignInLauncher by registerForActivityResult(
+        keys = listOf(contract, coroutineScope),
+        contract = contract,
+    ) { result ->
         if (result.resultCode == 0) {
             Timber.d("Google Sign-In dialog was dismissed")
             showAnonymousAuthenticationDialog = true
