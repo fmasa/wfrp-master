@@ -120,7 +120,7 @@ class CombatViewModel(
                 .map { combatant ->
                     when (combatant) {
                         is Combatant.Character -> {
-                            val character = charactersById.getValue(combatant.characterId)
+                            val character = charactersById[combatant.characterId] ?: return@map null
 
                             CombatantItem.Character(
                                 characterId = CharacterId(partyId, character.id),
@@ -129,7 +129,7 @@ class CombatViewModel(
                             )
                         }
                         is Combatant.Npc -> {
-                            val npc = npcsById.getValue(combatant.npcId.npcId)
+                            val npc = npcsById[combatant.npcId.npcId] ?: return@map null
 
                             CombatantItem.Npc(
                                 npcId = combatant.npcId,
@@ -138,7 +138,7 @@ class CombatViewModel(
                             )
                         }
                     }
-                }
+                }.filterNotNull()
         }.asLiveData()
     }
 

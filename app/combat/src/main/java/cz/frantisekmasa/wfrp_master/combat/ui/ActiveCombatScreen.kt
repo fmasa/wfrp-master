@@ -304,7 +304,7 @@ private fun CombatantSheet(
                 routing.navigateTo(
                     when (combatant) {
                         is CombatantItem.Npc -> Route.NpcDetail(combatant.npcId)
-                        is CombatantItem.Character -> Route.CharacterDetail(combatant.characterId)
+                        is CombatantItem.Character -> Route.CharacterDetail(combatant.characterId, comingFromCombat = true)
                     }
                 )
             },

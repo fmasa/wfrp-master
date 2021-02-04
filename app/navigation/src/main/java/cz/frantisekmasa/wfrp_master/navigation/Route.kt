@@ -79,7 +79,7 @@ sealed class Route {
                     PartyId.fromString(entry.stringArgument("partyId")),
                     entry.stringArgument("characterId"),
                 ),
-                entry.arguments?.getString("fromCombat") == "1",
+                entry.stringArgument("comingFromCombat") == "1",
             )
         }
 

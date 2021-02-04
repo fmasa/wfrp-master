@@ -1,6 +1,7 @@
 package cz.frantisekmasa.wfrp_master.core.domain.party.combat
 
 import android.os.Parcelable
+import cz.frantisekmasa.wfrp_master.core.domain.identifiers.NpcId
 import kotlinx.parcelize.Parcelize
 import java.util.*
 
@@ -59,4 +60,28 @@ data class Combat(
 
     private fun <T> List<T>.containsSameItems(other: List<T>) =
         other.size != size || other.containsAll(this)
+
+    fun removeNpc(npcId: NpcId): Combat? {
+        val removedIndex =  combatants.indexOfFirst { it is Combatant.Npc && it.npcId == npcId }
+
+        if (removedIndex == -1) {
+            return this
+        }
+
+        if (combatants.size == 1) {
+            return null
+        }
+
+        val isOnTurn = turn == removedIndex + 1
+
+        return copy(
+            combatants = combatants.filterIndexed { index, _ -> index != removedIndex },
+            round = if (isOnTurn && turn == combatants.size) round + 1 else round,
+            turn = when {
+                isOnTurn && turn == combatants.size -> 1 // Going to next combatant, effectively ending round
+                turn > removedIndex + 1 -> turn - 1 // Reducing number of turns
+                else -> turn // Active combatant is before NPC
+            }
+        )
+    }
 }
