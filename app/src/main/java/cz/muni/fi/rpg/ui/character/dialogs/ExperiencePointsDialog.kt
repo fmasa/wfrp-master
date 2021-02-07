@@ -89,7 +89,7 @@ fun ExperiencePointsDialog(
 @Composable
 private fun PointInput(value: InputValue, @StringRes labelRes: Int, validate: Boolean) {
     TextInput(
-        label = stringResource(R.string.label_xp_current),
+        label = stringResource(labelRes),
         value = value,
         validate = validate,
         keyboardType = KeyboardType.Number,
