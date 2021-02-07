@@ -3,6 +3,7 @@ package cz.frantisekmasa.wfrp_master.core.firestore.repositories
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.FirebaseFirestoreException
 import com.google.firebase.firestore.SetOptions
+import com.google.firebase.firestore.Source
 import cz.frantisekmasa.wfrp_master.core.connectivity.CouldNotConnectToBackend
 import cz.frantisekmasa.wfrp_master.core.domain.party.Party
 import cz.frantisekmasa.wfrp_master.core.domain.party.PartyId
@@ -40,7 +41,7 @@ import timber.log.Timber
 
     override suspend fun get(id: PartyId): Party {
         try {
-            val party = parties.document(id.toString()).get().await()
+            val party = parties.document(id.toString()).get(Source.SERVER).await()
             return this.mapper.fromDocumentSnapshot(party)
         } catch (e: FirebaseFirestoreException) {
             throw PartyNotFound(id, e)

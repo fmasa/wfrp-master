@@ -36,19 +36,6 @@ internal class FirestoreInventoryItemRepository(
             .await()
     }
 
-    override suspend fun get(characterId: CharacterId, itemId: InventoryItemId): InventoryItem {
-        try {
-            return mapper.fromDocumentSnapshot(
-                inventoryItems(characterId)
-                    .document(itemId.toString())
-                    .get()
-                    .await()
-            )
-        } catch (e: FirebaseFirestoreException) {
-            throw InventoryItemNotFound(itemId, characterId, e)
-        }
-    }
-
     override suspend fun remove(characterId: CharacterId, itemId: InventoryItemId) {
         inventoryItems(characterId).document(itemId.toString()).delete().await()
     }
