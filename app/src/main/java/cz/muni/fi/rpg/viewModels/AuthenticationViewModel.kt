@@ -12,6 +12,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthUserCollisionException
 import com.google.firebase.auth.GoogleAuthProvider
 import cz.frantisekmasa.wfrp_master.core.auth.User
+import cz.frantisekmasa.wfrp_master.core.logging.Reporter
 import cz.frantisekmasa.wfrp_master.core.ui.viewinterop.AmbientActivity
 import cz.frantisekmasa.wfrp_master.core.ui.viewinterop.IntentResult
 import cz.muni.fi.rpg.R
@@ -60,6 +61,12 @@ class AuthenticationViewModel(private val auth: FirebaseAuth) : ViewModel() {
             email = if (it.email == "") null else it.email
         )
     }.stateIn(viewModelScope, SharingStarted.Eagerly, null)
+
+    init {
+        viewModelScope.launch {
+            user.collect { it?.let { Reporter.setUserId(it.id) } }
+        }
+    }
 
     fun isAuthenticated() = auth.currentUser != null
 

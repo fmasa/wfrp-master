@@ -78,7 +78,7 @@ private fun MainContainer(routing: Routing<Route.CompendiumImport>) {
 
     val fileChooser by registerFileChooser(
         onFileChoose = {
-            coroutineScope.launch(Dispatchers.Default) {
+            coroutineScope.launch(Dispatchers.IO) {
                 context.contentResolver.openInputStream(it)?.use { inputStream ->
                     try {
                         importState = ImportDialogState.LoadingItems
@@ -98,8 +98,14 @@ private fun MainContainer(routing: Routing<Route.CompendiumImport>) {
                         Timber.e(e)
 
                         withContext(Dispatchers.Main) {
-                            Toast.makeText(context, R.string.error_import_failed, Toast.LENGTH_LONG)
-                                .show()
+                            Toast.makeText(
+                                context,
+                                when (e) {
+                                    is OutOfMemoryError -> R.string.error_import_not_enough_memory
+                                    else -> R.string.error_import_failed
+                                },
+                                Toast.LENGTH_LONG
+                            ).show()
                             importState = null
                         }
                     }
