@@ -78,7 +78,7 @@ private fun MainContainer(routing: Routing<Route.CompendiumImport>) {
 
     val fileChooser by registerFileChooser(
         onFileChoose = {
-            coroutineScope.launch(Dispatchers.Default) {
+            coroutineScope.launch(Dispatchers.IO) {
                 context.contentResolver.openInputStream(it)?.use { inputStream ->
                     try {
                         importState = ImportDialogState.LoadingItems
