@@ -54,5 +54,6 @@
     <string name="rulebook_import_pick_skills" translatable="false">Select which skills you want to import.</string>
     <string name="rulebook_import_pick_talents" translatable="false">Select which talents you want to import.</string>
     <string name="rulebook_import_pick_spells" translatable="false">Select which spells you want to import.</string>
-    <string name="error_import_failed" translatable="false">PDF import failed. Check that chose valid rulebook PDF.</string>
+    <string name="error_import_failed">PDF import failed. Check that you chose valid rulebook PDF.</string>
+    <string name="error_import_not_enough_memory">PDF import failed. Not enough available RAM on device.</string>
 </resources>
