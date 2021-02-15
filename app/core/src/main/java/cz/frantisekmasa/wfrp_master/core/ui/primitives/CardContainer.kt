@@ -14,6 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -24,14 +25,19 @@ fun CardContainer(
     bodyPadding: PaddingValues = PaddingValues(),
     content: @Composable ColumnScope.() -> Unit,
 ) {
-    Box(Modifier.padding(vertical = 6.dp).then(modifier)) {
+    Box(
+        Modifier
+            .padding(vertical = 6.dp)
+            .then(modifier)) {
         Card(
             modifier = Modifier.fillMaxWidth(),
             elevation = 2.dp,
             shape = RoundedCornerShape(4.dp)
         ) {
             Column(
-                Modifier.padding(vertical = 16.dp, horizontal = 8.dp).padding(bodyPadding),
+                Modifier
+                    .padding(vertical = 16.dp, horizontal = 8.dp)
+                    .padding(bodyPadding),
                 content = content
             )
         }
@@ -54,7 +60,8 @@ fun CardTitle(text: String, @DrawableRes iconRes: Int? = null) {
             Image(
                 vectorResource(iconRes),
                 VisualOnlyIconDescription,
-                Modifier.padding(end = 4.dp)
+                Modifier
+                    .padding(end = 4.dp)
                     .width(24.dp)
                     .height(24.dp),
                 colorFilter = ColorFilter.tint(MaterialTheme.colors.onSurface),
@@ -75,15 +82,20 @@ fun MultiLineTextValue(@StringRes labelRes: Int, value: String) {
 }
 
 @Composable
-fun SingleLineTextValue(@StringRes labelRes: Int, value: String) {
+fun SingleLineTextValue(@StringRes labelRes: Int, value: AnnotatedString) {
     if (value.isBlank()) return
 
     Row {
         Text(
             stringResource(labelRes) + ":",
             fontWeight = FontWeight.Bold,
-            modifier = Modifier.padding(end = 4.dp)
+            modifier = Modifier.padding(end = Spacing.tiny),
         )
         Text(value)
     }
+}
+
+@Composable
+fun SingleLineTextValue(@StringRes labelRes: Int, value: String) {
+    SingleLineTextValue(labelRes, AnnotatedString(value))
 }
