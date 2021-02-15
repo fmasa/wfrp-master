@@ -20,7 +20,6 @@ import cz.frantisekmasa.wfrp_master.core.ui.primitives.NumberPicker
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.Spacing
 import cz.frantisekmasa.wfrp_master.core.ui.scaffolding.SaveAction
 import cz.muni.fi.rpg.R
-import cz.muni.fi.rpg.model.domain.skills.Skill
 import cz.muni.fi.rpg.ui.common.composables.*
 import cz.muni.fi.rpg.viewModels.SkillsViewModel
 import kotlinx.coroutines.Dispatchers
@@ -31,13 +30,12 @@ import java.util.*
 
 @Composable
 internal fun AdvancesForm(
-    existingSkill: Skill?,
     compendiumSkillId: UUID,
     viewModel: SkillsViewModel,
     onDismissRequest: () -> Unit,
 ) {
     var saving by remember { mutableStateOf(false) }
-    var advances by savedInstanceState { existingSkill?.advances ?: 1 }
+    var advances by savedInstanceState { 1 }
 
     Scaffold(
         topBar = {
@@ -45,11 +43,7 @@ internal fun AdvancesForm(
                 navigationIcon = { CloseButton(onDismissRequest) },
                 title = {
                     Text(
-                        stringResource(
-                            if (existingSkill != null)
-                                R.string.title_skill_edit else
-                                R.string.title_skill_new
-                        )
+                        stringResource(R.string.title_skill_new)
                     )
                 },
                 actions = {
@@ -64,7 +58,7 @@ internal fun AdvancesForm(
 
                                 try {
                                     viewModel.saveCompendiumSkill(
-                                        skillId = existingSkill?.id ?: UUID.randomUUID(),
+                                        skillId = UUID.randomUUID(),
                                         compendiumSkillId = compendiumSkillId,
                                         advances = advances,
                                     )

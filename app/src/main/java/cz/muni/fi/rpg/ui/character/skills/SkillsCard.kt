@@ -21,6 +21,7 @@ import cz.muni.fi.rpg.ui.character.skills.dialog.EditSkillDialog
 import cz.muni.fi.rpg.ui.common.composables.*
 import cz.muni.fi.rpg.viewModels.CharacterViewModel
 import cz.muni.fi.rpg.viewModels.SkillsViewModel
+import java.util.*
 
 @Composable
 internal fun SkillsCard(
@@ -43,22 +44,22 @@ internal fun SkillsCard(
                     size = EmptyUI.Size.Small
                 )
             } else {
-                var editedSkill: Skill? by savedInstanceState { null }
+                var editedSkillId: UUID? by savedInstanceState { null }
 
                 for (skill in skills) {
                     SkillItem(
                         skill,
                         characteristics,
-                        onClick = { editedSkill = skill },
+                        onClick = { editedSkillId = skill.id },
                         onRemove = { onRemove(skill) },
                     )
                 }
 
-                editedSkill?.let { skill ->
+                editedSkillId?.let { skillId ->
                     EditSkillDialog(
                         viewModel = skillsVm,
-                        skill = skill,
-                        onDismissRequest = { editedSkill = null }
+                        skillId = skillId,
+                        onDismissRequest = { editedSkillId = null }
                     )
                 }
             }
