@@ -13,7 +13,8 @@ data class Spell(
     val target: String,
     val duration: String,
     val castingNumber: Int,
-    val effect: String
+    val effect: String,
+    val memorized: Boolean = true, // TODO: Remove default value and migrate stored data
 ): Parcelable {
     companion object {
         const val NAME_MAX_LENGTH = 50
@@ -22,6 +23,8 @@ data class Spell(
         const val DURATION_MAX_LENGTH = 50
         const val EFFECT_MAX_LENGTH = 1000
     }
+
+    val effectiveCastingNumber: Int get() = if (memorized) castingNumber else castingNumber * 2
 
     init {
         require(name.isNotBlank()) { "Name must not be blank" }

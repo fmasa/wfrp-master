@@ -1,14 +1,21 @@
 package cz.muni.fi.rpg.ui.character.spells.dialog
 
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import cz.frantisekmasa.wfrp_master.core.ui.buttons.CloseButton
+import cz.frantisekmasa.wfrp_master.core.ui.scaffolding.SubheadBar
 import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.model.domain.spells.Spell
 import cz.muni.fi.rpg.ui.common.composables.BodyPadding
@@ -19,6 +26,7 @@ import java.util.*
 fun SpellDetail(
     spell: Spell,
     onDismissRequest: () -> Unit,
+    onMemorizedChange: (memorized: Boolean) -> Unit,
 ) {
     Scaffold(
         topBar = {
@@ -30,37 +38,70 @@ fun SpellDetail(
             )
         }
     ) {
-        Column(Modifier.padding(BodyPadding)) {
-            TextItem(
-                label = stringResource(R.string.spell_casting_number_shortcut),
-                value = spell.castingNumber.toString(),
-            )
+        Column(Modifier.verticalScroll(rememberScrollState())) {
+            SubheadBar {
+                Row(
+                    Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    Text(stringResource(R.string.spell_memorized))
+                    Switch(
+                        checked = spell.memorized,
+                        onCheckedChange = { onMemorizedChange(it) },
+                    )
+                }
+            }
 
-            TextItem(
-                label = stringResource(R.string.label_spell_range),
-                value = spell.range,
-            )
+            Column(Modifier.padding(BodyPadding)) {
+                TextItem(
+                    label = stringResource(R.string.spell_casting_number_shortcut),
+                    value = with(AnnotatedString.Builder()) {
+                        if (spell.castingNumber != spell.effectiveCastingNumber) {
+                            pushStyle(SpanStyle(textDecoration = TextDecoration.LineThrough))
+                            append(spell.castingNumber.toString())
+                            pop()
 
-            TextItem(
-                label = stringResource(R.string.label_spell_target),
-                value = spell.target,
-            )
+                            append(" ➔ ")
+                        }
 
-            TextItem(
-                label = stringResource(R.string.label_spell_duration),
-                value = spell.duration,
-            )
+                        append(spell.effectiveCastingNumber.toString())
 
-            Text(
-                text = spell.effect,
-                modifier = Modifier.padding(top = 8.dp),
-            )
+                        toAnnotatedString()
+                    }
+                )
+
+                TextItem(
+                    label = stringResource(R.string.label_spell_range),
+                    value = spell.range,
+                )
+
+                TextItem(
+                    label = stringResource(R.string.label_spell_target),
+                    value = spell.target,
+                )
+
+                TextItem(
+                    label = stringResource(R.string.label_spell_duration),
+                    value = spell.duration,
+                )
+
+                Text(
+                    text = spell.effect,
+                    modifier = Modifier.padding(top = 8.dp),
+                )
+            }
         }
     }
 }
 
 @Composable
 private fun TextItem(label: String, value: String) {
+    TextItem(label, AnnotatedString(value))
+}
+
+@Composable
+private fun TextItem(label: String, value: AnnotatedString) {
     Row {
         Text(
             text = "$label: ",
@@ -86,6 +127,7 @@ fun SpellDetailPreview() {
                 castingNumber = 0,
             ),
             onDismissRequest = {},
+            onMemorizedChange = {},
         )
     }
 }

@@ -49,7 +49,7 @@ enum class Characteristic {
         BALLISTIC_SKILL -> R.drawable.ic_ballistic_skill
         DEXTERITY -> R.drawable.ic_dexterity
         INITIATIVE -> R.drawable.ic_initiative
-        INTELLIGENCE -> R.drawable.ic_intelligence
+        INTELLIGENCE -> R.drawable.ic_brain
         FELLOWSHIP -> R.drawable.ic_fellowship
         STRENGTH -> R.drawable.ic_strength
         TOUGHNESS -> R.drawable.ic_toughness
