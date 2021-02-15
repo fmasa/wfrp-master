@@ -18,6 +18,7 @@ import cz.muni.fi.rpg.ui.character.talents.dialog.AddTalentDialog
 import cz.muni.fi.rpg.ui.character.talents.dialog.EditTalentDialog
 import cz.muni.fi.rpg.ui.common.composables.*
 import cz.muni.fi.rpg.viewModels.TalentsViewModel
+import java.util.*
 
 @Composable
 internal fun TalentsCard(
@@ -32,21 +33,21 @@ internal fun TalentsCard(
 
             if (talents.isNotEmpty()) {
                 Column {
-                    var editedTalent: Talent? by savedInstanceState { null }
+                    var editedTalentId: UUID? by savedInstanceState { null }
 
                     for (talent in talents) {
                         TalentItem(
                             talent,
-                            onClick = { editedTalent = talent },
+                            onClick = { editedTalentId = talent.id },
                             onRemove = { onRemove(talent) }
                         )
                     }
                     
-                    editedTalent?.let { 
+                    editedTalentId?.let {
                         EditTalentDialog(
                             viewModel = viewModel,
-                            talent = it,
-                            onDismissRequest = { editedTalent = null },
+                            talentId = it,
+                            onDismissRequest = { editedTalentId = null },
                         )
                     }
                 }
