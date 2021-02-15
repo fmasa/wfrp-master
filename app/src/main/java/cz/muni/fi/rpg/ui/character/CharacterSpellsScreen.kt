@@ -1,7 +1,6 @@
 package cz.muni.fi.rpg.ui.character
 
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.FloatingActionButton
@@ -11,6 +10,7 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.savedinstancestate.savedInstanceState
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
@@ -20,6 +20,7 @@ import cz.frantisekmasa.wfrp_master.core.domain.identifiers.CharacterId
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.CardItem
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.ContextMenu
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.EmptyUI
+import cz.frantisekmasa.wfrp_master.core.ui.primitives.Spacing
 import cz.frantisekmasa.wfrp_master.core.viewModel.viewModel
 import cz.muni.fi.rpg.model.domain.spells.Spell
 import cz.muni.fi.rpg.ui.character.spells.dialog.AddSpellDialog
@@ -100,9 +101,25 @@ private fun SpellItem(spell: Spell, onClick: () -> Unit, onRemove: () -> Unit) {
         onClick = onClick,
         contextMenuItems = listOf(ContextMenu.Item(stringResource(R.string.remove), onRemove)),
         badge = {
-            Row {
-                Text(stringResource(R.string.spell_casting_number_shortcut))
-                Text(spell.effectiveCastingNumber.toString(), Modifier.padding(start = 4.dp))
+            Column(
+                verticalArrangement = Arrangement.spacedBy(Spacing.tiny),
+                horizontalAlignment = Alignment.CenterHorizontally,
+            ) {
+                Row {
+                    Text(stringResource(R.string.spell_casting_number_shortcut))
+                    Text(
+                        spell.effectiveCastingNumber.toString(),
+                        Modifier.padding(start = Spacing.tiny),
+                    )
+                }
+
+                if (spell.memorized) {
+                    Icon(
+                        vectorResource(R.drawable.ic_brain),
+                        stringResource(R.string.spell_memorized),
+                        Modifier.size(16.dp),
+                    )
+                }
             }
         }
     )
