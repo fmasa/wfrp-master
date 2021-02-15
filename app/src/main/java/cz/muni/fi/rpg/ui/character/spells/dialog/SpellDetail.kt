@@ -15,6 +15,7 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import cz.frantisekmasa.wfrp_master.core.ui.buttons.CloseButton
+import cz.frantisekmasa.wfrp_master.core.ui.primitives.SingleLineTextValue
 import cz.frantisekmasa.wfrp_master.core.ui.scaffolding.SubheadBar
 import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.model.domain.spells.Spell
@@ -54,9 +55,9 @@ fun SpellDetail(
             }
 
             Column(Modifier.padding(BodyPadding)) {
-                TextItem(
-                    label = stringResource(R.string.spell_casting_number_shortcut),
-                    value = with(AnnotatedString.Builder()) {
+                SingleLineTextValue(
+                    R.string.spell_casting_number_shortcut,
+                    with(AnnotatedString.Builder()) {
                         if (spell.castingNumber != spell.effectiveCastingNumber) {
                             pushStyle(SpanStyle(textDecoration = TextDecoration.LineThrough))
                             append(spell.castingNumber.toString())
@@ -71,20 +72,11 @@ fun SpellDetail(
                     }
                 )
 
-                TextItem(
-                    label = stringResource(R.string.label_spell_range),
-                    value = spell.range,
-                )
+                SingleLineTextValue(R.string.label_spell_range, spell.range)
 
-                TextItem(
-                    label = stringResource(R.string.label_spell_target),
-                    value = spell.target,
-                )
+                SingleLineTextValue(R.string.label_spell_target, spell.target)
 
-                TextItem(
-                    label = stringResource(R.string.label_spell_duration),
-                    value = spell.duration,
-                )
+                SingleLineTextValue(R.string.label_spell_duration, spell.duration)
 
                 Text(
                     text = spell.effect,
@@ -94,23 +86,6 @@ fun SpellDetail(
         }
     }
 }
-
-@Composable
-private fun TextItem(label: String, value: String) {
-    TextItem(label, AnnotatedString(value))
-}
-
-@Composable
-private fun TextItem(label: String, value: AnnotatedString) {
-    Row {
-        Text(
-            text = "$label: ",
-            fontWeight = FontWeight.Bold,
-        )
-        Text(value)
-    }
-}
-
 
 @Preview
 @Composable

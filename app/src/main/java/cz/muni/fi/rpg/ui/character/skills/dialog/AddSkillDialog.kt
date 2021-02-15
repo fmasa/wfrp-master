@@ -29,7 +29,6 @@ fun AddSkillDialog(viewModel: SkillsViewModel, onDismissRequest: () -> Unit) {
                 )
             is FillingInAdvances ->
                 AdvancesForm(
-                    existingSkill = null,
                     compendiumSkillId = currentState.compendiumSkillId,
                     viewModel = viewModel,
                     onDismissRequest = onDismissRequest,

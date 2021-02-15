@@ -23,6 +23,18 @@
     <string name="race_human">Human</string>
     <string name="race_gnome">Gnome</string>
 
+    <!-- Characteristics -->
+    <string name="label_agility">Agility</string>
+    <string name="label_ballistic_skill">Ballistic Skill</string>
+    <string name="label_dexterity">Dexterity</string>
+    <string name="label_fellowship">Fellowship</string>
+    <string name="label_initiative">Initiative</string>
+    <string name="label_intelligence">Intelligence</string>
+    <string name="label_strength">Strength</string>
+    <string name="label_toughness">Toughness</string>
+    <string name="label_weapon_skill">Weapon Skill</string>
+    <string name="label_will_power">Will Power</string>
+
     <!-- End of Domain -->
 
     <!-- Common UI elements -->
@@ -33,6 +45,8 @@
     <string name="button_open">Open</string>
     <string name="button_remove">Remove</string>
     <string name="open_context_menu">Open context menu</string>
+    <string name="boolean_yes">Yes</string>
+    <string name="boolean_no">No</string>
 
     <!-- Form errors -->
     <string name="error_cannot_be_empty">Cannot be empty!</string>

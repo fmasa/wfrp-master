@@ -105,17 +105,8 @@
     <string name="label_fortune_points">Fortune</string>
     <string name="label_fate_points">Fate</string>
 
-    <string name="label_weapon_skill">Weapon Skill</string>
-    <string name="label_ballistic_skill">Ballistic Skill</string>
-    <string name="label_dexterity">Dexterity</string>
-    <string name="label_fellowship">Fellowship</string>
-    <string name="label_will_power">Will Power</string>
-    <string name="label_intelligence">Intelligence</string>
-    <string name="label_agility">Agility</string>
     <string name="label_toughness_bonus">TB</string>
-    <string name="label_toughness">Toughness</string>
     <string name="label_strength_bonus">SB</string>
-    <string name="label_strength">Strength</string>
 
     <string name="button_edit">Edit</string>
     <string name="subtitle_edit_character">Edit character</string>
@@ -196,7 +187,6 @@
     <string name="error_required">Required</string>
     <string name="label_resilience">Resilience</string>
     <string name="label_resolve">Resolve</string>
-    <string name="label_initiative">Initiative</string>
 
     <!-- Ambitions -->
     <string name="title_party_ambitions">Party ambitions</string>
