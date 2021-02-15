@@ -332,4 +332,5 @@
     <string name="icon_next_years">Next years</string>
     <string name="icon_previous_month">Previous month</string>
     <string name="icon_next_month">Next month</string>
+    <string name="spell_memorized">Memorized</string>
 </resources>

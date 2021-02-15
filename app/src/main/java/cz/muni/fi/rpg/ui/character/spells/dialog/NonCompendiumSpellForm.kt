@@ -7,6 +7,8 @@ import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.*
+import androidx.compose.runtime.savedinstancestate.savedInstanceState
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
@@ -87,6 +89,19 @@ internal fun NonCompendiumSpellForm(
                 maxLength = Spell.NAME_MAX_LENGTH
             )
 
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = Spacing.small),
+                contentAlignment = Alignment.Center
+            ) {
+                CheckboxWithText(
+                    stringResource(R.string.spell_memorized),
+                    checked = formData.memorized.value,
+                    onCheckedChange = { formData.memorized.value = it },
+                )
+            }
+
             TextInput(
                 label = stringResource(R.string.label_spell_range),
                 value = formData.range,
@@ -130,6 +145,7 @@ internal fun NonCompendiumSpellForm(
 private class NonCompendiumSpellFormData(
     val id: UUID,
     val name: InputValue,
+    val memorized: MutableState<Boolean>,
     val range: InputValue,
     val target: InputValue,
     val duration: InputValue,
@@ -140,6 +156,7 @@ private class NonCompendiumSpellFormData(
         @Composable
         fun fromSpell(item: Spell?): NonCompendiumSpellFormData = NonCompendiumSpellFormData(
             id = item?.id ?: UUID.randomUUID(),
+            memorized = savedInstanceState { item?.memorized ?: false },
             name = inputValue(item?.name ?: "", Rules.NotBlank()),
             range = inputValue(item ?. range ?: ""),
             target = inputValue(item?.target ?: ""),
@@ -155,6 +172,7 @@ private class NonCompendiumSpellFormData(
     fun toSpell(): Spell = Spell(
         id = id,
         name = name.value,
+        memorized = memorized.value,
         range = range.value,
         target = target.value,
         duration = duration.value,

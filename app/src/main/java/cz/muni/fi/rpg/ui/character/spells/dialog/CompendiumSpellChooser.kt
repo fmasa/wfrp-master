@@ -81,6 +81,7 @@ internal fun CompendiumSpellChooser(
                                                     duration = spell.duration,
                                                     castingNumber = spell.castingNumber,
                                                     effect = spell.effect,
+                                                    memorized = false,
                                                 )
                                             )
 

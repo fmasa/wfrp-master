@@ -15,6 +15,7 @@ class Spells extends CharacterSubCollectionSuite {
         castingNumber: 0,
         effect: "Your staff blinks with bright white light which blinds target for 1d10 minutes",
         compendiumId: null,
+        memorized: false,
     };
 
     private spells(app: Firestore, userId: string): CollectionReference
@@ -98,6 +99,10 @@ class Spells extends CharacterSubCollectionSuite {
         for (const field of Object.keys(this.spell)) {
             if (field === "compendiumId") {
                 continue; // (BC) Compendium ID was introduced in 2.0 (TODO: remove in 2.3)
+            }
+
+            if (field === "memorized") {
+                continue; // (BC) Memorized spells were introduced in 2.1 (TODO: remove in 2.4)
             }
 
             const spell = {...this.spell};

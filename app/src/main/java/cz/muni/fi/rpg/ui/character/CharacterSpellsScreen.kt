@@ -26,6 +26,7 @@ import cz.muni.fi.rpg.ui.character.spells.dialog.AddSpellDialog
 import cz.muni.fi.rpg.ui.character.spells.dialog.EditSpellDialog
 import cz.muni.fi.rpg.viewModels.SpellsViewModel
 import org.koin.core.parameter.parametersOf
+import java.util.*
 
 @Composable
 internal fun CharacterSpellsScreen(
@@ -69,23 +70,23 @@ private fun MainContainer(viewModel: SpellsViewModel) {
         return
     }
 
-    var editedSpell: Spell? by savedInstanceState { null }
+    var editedSpellId: UUID? by savedInstanceState { null }
 
     LazyColumn {
         items(spells) { spell ->
             SpellItem(
                 spell,
-                onClick = { editedSpell = spell },
+                onClick = { editedSpellId = spell.id },
                 onRemove = { viewModel.removeSpell(spell) }
             )
         }
     }
 
-    editedSpell?.let {
+    editedSpellId?.let {
         EditSpellDialog(
             viewModel = viewModel,
-            spell = it,
-            onDismissRequest = { editedSpell = null },
+            spellId = it,
+            onDismissRequest = { editedSpellId = null },
         )
     }
 }
@@ -101,7 +102,7 @@ private fun SpellItem(spell: Spell, onClick: () -> Unit, onRemove: () -> Unit) {
         badge = {
             Row {
                 Text(stringResource(R.string.spell_casting_number_shortcut))
-                Text(spell.castingNumber.toString(), Modifier.padding(start = 4.dp))
+                Text(spell.effectiveCastingNumber.toString(), Modifier.padding(start = 4.dp))
             }
         }
     )
