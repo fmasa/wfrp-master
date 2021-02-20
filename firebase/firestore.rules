@@ -76,6 +76,41 @@ service cloud.firestore {
                         && spell.lore is string && spell.lore.size() <= 50;
                 }
             }
+
+            match /blessings/{blessingId} {
+                allow read: if hasAccessToParty();
+                allow create: if isGameMaster() && isValidBlessing(request.resource.data);
+                allow update: if isGameMaster() && isValidBlessing(request.resource.data);
+                allow delete: if isGameMaster();
+
+                function isValidBlessing(blessing) {
+                    return blessing.keys().toSet() == ["id", "name", "range", "target", "duration", "effect"].toSet()
+                        && blessing.id is string && blessing.id == blessingId && isValidUuid(blessing.id)
+                        && blessing.name is string && isNotBlank(blessing.name) && blessing.name.size() <= 50
+                        && blessing.range is string && blessing.range.size() <= 50
+                        && blessing.target is string && blessing.target.size() <= 50
+                        && blessing.duration is string && blessing.duration.size() <= 50
+                        && blessing.effect is string && blessing.effect.size() <= 1000;
+                }
+            }
+
+            match /miracles/{miracleId} {
+                allow read: if hasAccessToParty();
+                allow create: if isGameMaster() && isValidMiracle(request.resource.data);
+                allow update: if isGameMaster() && isValidMiracle(request.resource.data);
+                allow delete: if isGameMaster();
+
+                function isValidMiracle(miracle) {
+                    return miracle.keys().toSet() == ["id", "name", "range", "target", "duration", "effect", "cultName"].toSet()
+                        && miracle.id is string && miracle.id == miracleId && isValidUuid(miracle.id)
+                        && miracle.name is string && isNotBlank(miracle.name) && miracle.name.size() <= 50
+                        && miracle.range is string && miracle.range.size() <= 50
+                        && miracle.target is string && miracle.target.size() <= 50
+                        && miracle.duration is string && miracle.duration.size() <= 50
+                        && miracle.effect is string && miracle.effect.size() <= 1000
+                        && miracle.cultName is string && miracle.cultName.size() <= 50;
+                }
+            }
             // End of Compendium
 
             match /encounters/{encounterId} {

@@ -19,6 +19,25 @@ interface Talent {
     description: string;
 }
 
+interface Blessing {
+    id: string;
+    name: string;
+    range: string;
+    target: string;
+    duration: string;
+    effect: string;
+}
+
+interface Miracle {
+    id: string;
+    name: string;
+    range: string;
+    target: string;
+    duration: string;
+    effect: string;
+    cultName: string;
+}
+
 interface Spell {
     id: string;
     name: string;
@@ -209,6 +228,43 @@ class TalentCompendiumTest extends CompendiumTest<Talent> {
                 name: "Sneaky brieky",
                 maxTimesTaken: "Fellowship Bonus",
                 description: "+ 1O to sneak rolls",
+            }
+        ]
+    }
+}
+
+@suite
+class BlessingCompendiumTest extends CompendiumTest<Blessing> {
+    protected collectionName = "blessings";
+
+    protected validItems(): Blessing[] {
+        return [
+            {
+                id: uuid(),
+                name: "Blessing of Battle",
+                range: "6 yards",
+                target: "1",
+                duration: "6 rounds",
+                effect: "Your target gains +10 WS",
+            }
+        ]
+    }
+}
+
+@suite
+class MiracleCompendiumTest extends CompendiumTest<Miracle> {
+    protected collectionName = "miracles";
+
+    protected validItems(): Miracle[] {
+        return [
+            {
+                id: uuid(),
+                name: "Becalm",
+                range: "IB miles",
+                target: "1 sailing vessel...",
+                duration: "1 Hour",
+                effect: "Calm waters around your ship",
+                cultName: "Manann",
             }
         ]
     }

@@ -24,6 +24,8 @@ import cz.frantisekmasa.wfrp_master.core.domain.Armor
 import cz.frantisekmasa.wfrp_master.combat.domain.encounter.NpcRepository
 import cz.frantisekmasa.wfrp_master.combat.infrastructure.FirestoreEncounterRepository
 import cz.frantisekmasa.wfrp_master.combat.infrastructure.FirestoreNpcRepository
+import cz.frantisekmasa.wfrp_master.compendium.domain.Blessing
+import cz.frantisekmasa.wfrp_master.compendium.domain.Miracle
 import cz.frantisekmasa.wfrp_master.core.domain.character.Character
 import cz.frantisekmasa.wfrp_master.core.domain.character.CharacterFeatureRepository
 import cz.frantisekmasa.wfrp_master.core.domain.character.CharacterRepository
@@ -79,6 +81,18 @@ val appModule = module {
         COLLECTION_COMPENDIUM_SPELLS,
         get(),
         aggregateMapper(ComepndiumSpell::class),
+    )
+
+    fun Scope.blessingCompendium() = FirestoreCompendium(
+        COLLECTION_COMPENDIUM_BLESSINGS,
+        get(),
+        aggregateMapper(Blessing::class),
+    )
+
+    fun Scope.miracleCompendium() = FirestoreCompendium(
+        COLLECTION_COMPENDIUM_MIRACLES,
+        get(),
+        aggregateMapper(Miracle::class),
     )
 
     /**
@@ -162,6 +176,8 @@ val appModule = module {
             skillCompendium(),
             talentCompendium(),
             spellCompendium(),
+            blessingCompendium(),
+            miracleCompendium(),
             get(),
         )
     }
