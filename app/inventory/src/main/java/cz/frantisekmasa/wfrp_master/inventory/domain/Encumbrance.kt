@@ -4,6 +4,7 @@ import android.os.Parcelable
 import com.fasterxml.jackson.annotation.JsonValue
 import cz.frantisekmasa.wfrp_master.core.domain.Stats
 import kotlinx.parcelize.Parcelize
+import java.text.DecimalFormat
 
 @Parcelize
 data class Encumbrance(
@@ -12,6 +13,7 @@ data class Encumbrance(
 ) : Parcelable {
     companion object {
         val Zero: Encumbrance = Encumbrance(0.0)
+        private val formatter = DecimalFormat("#,##0.###")
 
         fun maximumForCharacter(characteristics: Stats): Encumbrance = Encumbrance(
             (characteristics.strengthBonus + characteristics.toughnessBonus).toDouble()
@@ -26,12 +28,7 @@ data class Encumbrance(
     operator fun times(multiplier: Int) = Encumbrance(value * multiplier)
     operator fun plus(addend: Encumbrance) = Encumbrance(value + addend.value)
 
-    override fun toString(): String = value.formatWithMaximumDecimalPlaces(3)
+    override fun toString(): String = formatter.format(value)
 }
 
 fun Iterable<Encumbrance>.sum(): Encumbrance = fold(Encumbrance.Zero) { a, b -> a + b }
-
-private fun Double.formatWithMaximumDecimalPlaces(decimals: Int) =
-    "%.${decimals}f".format(this)
-        .trimEnd('0')
-        .trimEnd('.')

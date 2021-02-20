@@ -35,5 +35,6 @@ class EncumbranceTest {
         assertEquals("0.001", Encumbrance(0.001).toString())
         assertEquals("10", Encumbrance(10.000).toString())
         assertEquals("12", Encumbrance(12.0).toString())
+        assertEquals("12,000", Encumbrance(12000.0).toString())
     }
 }
