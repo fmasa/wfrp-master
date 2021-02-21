@@ -6,6 +6,7 @@
     <string name="tab_talents">Talents</string>
     <string name="tab_spells">Spells</string>
     <string name="tab_blessings">Blessings</string>
+    <string name="tab_miracles">Miracles</string>
 
     <!-- Skills -->
     <string name="label_skill_characteristic">Characteristic</string>
@@ -38,6 +39,16 @@
 
     <string name="no_blessings_in_compendium">No blessings</string>
     <string name="no_blessings_in_compendium_sub_text">There are no blessings in your compendium yet.</string>
+
+    <!-- Miracles -->
+    <string name="label_miracle_cult_name">Cult name</string>
+
+    <string name="title_miracle_add">New Miracle</string>
+    <string name="title_miracle_edit">Edit Miracle</string>
+
+    <string name="no_miracles_in_compendium">No miracles</string>
+    <string name="no_miracles_in_compendium_sub_text">There are no miracles in your compendium yet.</string>
+
 
     <!-- Icon descriptions -->
     <string name="icon_add_compendium_item">Add compendium item</string>

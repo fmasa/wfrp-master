@@ -46,6 +46,14 @@ class CompendiumViewModel(
         talentsCompendium.remove(partyId, talent)
     }
 
+    suspend fun save(miracle: Miracle) {
+        miracleCompendium.saveItems(partyId, miracle)
+    }
+
+    suspend fun remove(miracle: Miracle) {
+        miracleCompendium.remove(partyId, miracle)
+    }
+
     suspend fun saveMultipleTalents(talents: List<Talent>) {
         talentsCompendium.saveItems(partyId, *talents.toTypedArray())
     }
