@@ -40,6 +40,7 @@ fun CompendiumScreen(routing: Routing<Route.Compendium>) {
             tab(R.string.tab_skills) { SkillCompendiumTab(viewModel, screenWidth) }
             tab(R.string.tab_talents) { TalentCompendiumTab(viewModel, screenWidth) }
             tab(R.string.tab_spells) { SpellCompendiumTab(viewModel, screenWidth) }
+            tab(R.string.tab_blessings) { BlessingCompendiumTab(viewModel, screenWidth) }
         }
     }
 }

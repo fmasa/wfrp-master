@@ -103,21 +103,21 @@ internal fun NonCompendiumSpellForm(
             }
 
             TextInput(
-                label = stringResource(R.string.label_spell_range),
+                label = stringResource(R.string.label_range),
                 value = formData.range,
                 validate = validate,
                 maxLength = Spell.RANGE_MAX_LENGTH,
             )
 
             TextInput(
-                label = stringResource(R.string.label_spell_target),
+                label = stringResource(R.string.label_target),
                 value = formData.target,
                 validate = validate,
                 maxLength = Spell.TARGET_MAX_LENGTH,
             )
 
             TextInput(
-                label = stringResource(R.string.label_spell_duration),
+                label = stringResource(R.string.label_duration),
                 value = formData.duration,
                 validate = validate,
                 maxLength = Spell.DURATION_MAX_LENGTH,
@@ -132,7 +132,7 @@ internal fun NonCompendiumSpellForm(
             )
 
             TextInput(
-                label = stringResource(R.string.label_spell_effect),
+                label = stringResource(R.string.label_effect),
                 value = formData.effect,
                 validate = validate,
                 maxLength = Spell.EFFECT_MAX_LENGTH,

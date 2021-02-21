@@ -5,22 +5,39 @@
     <string name="tab_skills">Skills</string>
     <string name="tab_talents">Talents</string>
     <string name="tab_spells">Spells</string>
+    <string name="tab_blessings">Blessings</string>
 
-    <!-- Skill dialog -->
+    <!-- Skills -->
     <string name="label_skill_characteristic">Characteristic</string>
     <string name="label_skill_advanced">Advanced</string>
 
-    <!-- Talent dialog -->
+    <!-- Talents -->
     <string name="title_talent_edit">Edit Talent</string>
     <string name="title_talent_new">New Talent</string>
 
-    <!-- Spell dialog -->
-    <string name="label_spell_effect">Effect</string>
+    <!-- Spell / Blessings / Miracles -->
+    <string name="label_duration">Duration</string>
+    <string name="label_target">Target</string>
+    <string name="label_range">Range</string>
+    <string name="label_effect">Effect</string>
+
+    <!-- Spells -->
     <string name="label_spell_casting_number">Casting Number (CN)</string>
-    <string name="label_spell_duration">Duration</string>
-    <string name="label_spell_target">Target</string>
-    <string name="label_spell_range">Range</string>
-    <string name="label_lore" translatable="false">Lore</string>
+    <string name="label_spell_lore" translatable="false">Lore</string>
+
+    <string name="title_spell_add">Add Spell</string>
+    <string name="title_spell_new" translatable="false">New Spell</string>
+    <string name="title_spell_edit" translatable="false">Edit Spell</string>
+
+    <string name="no_spells_in_compendium" translatable="false">No spells</string>
+    <string name="no_spells_in_compendium_sub_text" translatable="false">There are no spells in your compendium yet.</string>
+
+    <!-- Blessings -->
+    <string name="title_blessing_add">New Blessing</string>
+    <string name="title_blessing_edit">Edit Blessing</string>
+
+    <string name="no_blessings_in_compendium">No blessings</string>
+    <string name="no_blessings_in_compendium_sub_text">There are no blessings in your compendium yet.</string>
 
     <!-- Icon descriptions -->
     <string name="icon_add_compendium_item">Add compendium item</string>
@@ -34,13 +51,6 @@
     <string name="no_talents_in_compendium" translatable="false">No talents</string>
     <string name="no_talents_in_compendium_sub_text" translatable="false">There are no talents in your compendium yet.</string>
     <string name="no_talents_in_compendium_sub_text_player" translatable="false">Your GM has to add them first.</string>
-
-    <string name="title_spell_add">Add Spell</string>
-    <string name="title_spell_new" translatable="false">New Spell</string>
-    <string name="title_spell_edit" translatable="false">Edit Spell</string>
-    <string name="no_spells_in_compendium" translatable="false">No spells</string>
-    <string name="no_spells_in_compendium_sub_text" translatable="false">There are no spells in your compendium yet.</string>
-
     <string name="label_talent_max_times_taken" translatable="false">Max</string>
     <string name="no_spells_in_compendium_sub_text_player" translatable="false" />
 
