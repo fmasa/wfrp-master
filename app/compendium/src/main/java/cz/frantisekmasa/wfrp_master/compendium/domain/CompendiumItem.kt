@@ -5,4 +5,5 @@ import java.util.UUID
 
 interface CompendiumItem : Parcelable {
     val id: UUID
+    val name: String
 }

@@ -9,7 +9,7 @@ import java.util.*
 @Parcelize
 data class Skill(
     override val id: UUID,
-    val name: String,
+    override val name: String,
     val description: String,
     val characteristic: Characteristic,
     val advanced: Boolean,

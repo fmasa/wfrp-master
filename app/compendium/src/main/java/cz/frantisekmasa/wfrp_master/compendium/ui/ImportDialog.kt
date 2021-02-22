@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyItemScope
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.selection.toggleable
 import androidx.compose.material.Checkbox
@@ -14,19 +13,14 @@ import androidx.compose.material.Scaffold
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.Immutable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
-import androidx.compose.runtime.toMutableStateMap
+import androidx.compose.runtime.*
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.LiveData
 import cz.frantisekmasa.wfrp_master.compendium.R
 import cz.frantisekmasa.wfrp_master.compendium.domain.CompendiumItem
 import cz.frantisekmasa.wfrp_master.compendium.domain.Skill
@@ -36,9 +30,8 @@ import cz.frantisekmasa.wfrp_master.core.domain.party.PartyId
 import cz.frantisekmasa.wfrp_master.core.ui.buttons.CloseButton
 import cz.frantisekmasa.wfrp_master.core.ui.dialogs.FullScreenDialog
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.FullScreenProgress
-import cz.frantisekmasa.wfrp_master.core.ui.scaffolding.SaveAction
+import cz.frantisekmasa.wfrp_master.core.ui.scaffolding.TopBarAction
 import cz.frantisekmasa.wfrp_master.core.viewModel.viewModel
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -75,125 +68,38 @@ private fun ImportedItemsPicker(
     @MainThread onComplete: () -> Unit,
 ) {
     val viewModel: CompendiumViewModel by viewModel { parametersOf(partyId) }
-
-    var saving by remember { mutableStateOf(false) }
     var screen by remember(state) { mutableStateOf(ItemsScreen.SKILLS) }
-
-    val selectedItems = remember(state) {
-        (state.skills.map { it.id to true } +
-            state.talents.map { it.id to true } +
-            state.spells.map { it.id to true }).toMutableStateMap()
-    }
-
-    val coroutineScope = rememberCoroutineScope()
-
-    val save: (suspend CoroutineScope.() -> Unit) -> Unit = { action ->
-        coroutineScope.launch {
-            saving = true
-
-            withContext(Dispatchers.IO, action)
-
-            saving = false
-        }
-    }
 
     when (screen) {
         ItemsScreen.SKILLS -> {
             ItemPicker(
                 label = stringResource(R.string.rulebook_import_pick_skills),
                 items = state.skills,
-                isLoading = saving,
-                onSave = {
-                    save {
-                        viewModel.saveMultipleSkills(
-                            state.skills.filter { selectedItems[it.id] ?: false }
-                        )
-
-                        screen = ItemsScreen.TALENTS
-                    }
-                },
+                onSave = viewModel::saveMultipleSkills,
+                onContinue = { screen = ItemsScreen.TALENTS },
                 onClose = onDismissRequest,
-            ) { skill ->
-                ListItem(
-                    icon = {
-                        Checkbox(
-                            checked = selectedItems[skill.id] ?: false,
-                            onCheckedChange = { selectedItems[skill.id] = it },
-                        )
-                    },
-                    modifier = Modifier.toggleable(
-                        value = selectedItems[skill.id] ?: false,
-                        onValueChange = { selectedItems[skill.id] = it },
-                    )
-                ) {
-                    Text(skill.name)
-                }
-            }
+                existingItems = viewModel.skills,
+            )
         }
         ItemsScreen.TALENTS -> {
             ItemPicker(
                 label = stringResource(R.string.rulebook_import_pick_talents),
                 items = state.talents,
-                isLoading = saving,
-                onSave = {
-                    save {
-                        viewModel.saveMultipleTalents(
-                            state.talents.filter { selectedItems[it.id] ?: false }
-                        )
-
-                        screen = ItemsScreen.SPELLS
-                    }
-                },
+                onSave = viewModel::saveMultipleTalents,
+                onContinue = { screen = ItemsScreen.SPELLS },
                 onClose = onDismissRequest,
-            ) { talent ->
-                ListItem(
-                    icon = {
-                        Checkbox(
-                            checked = selectedItems[talent.id] ?: false,
-                            onCheckedChange = { selectedItems[talent.id] = it },
-                        )
-                    },
-                    modifier = Modifier.toggleable(
-                        value = selectedItems[talent.id] ?: false,
-                        onValueChange = { selectedItems[talent.id] = it },
-                    )
-                ) {
-                    Text(talent.name)
-                }
-            }
+                existingItems = viewModel.talents,
+            )
         }
         ItemsScreen.SPELLS -> {
             ItemPicker(
                 label = stringResource(R.string.rulebook_import_pick_spells),
                 items = state.spells,
-                isLoading = saving,
-                onSave = {
-                    save {
-                        viewModel.saveMultipleSpells(
-                            state.spells.filter { selectedItems[it.id] ?: false }
-                        )
-
-                        withContext(Dispatchers.Main) {
-                            onComplete()
-                        }
-                    }
-                },
+                onSave = viewModel::saveMultipleSpells,
+                onContinue = onComplete,
                 onClose = onDismissRequest,
-            ) { spell ->
-                ListItem(
-                    icon = {
-                        Checkbox(
-                            checked = selectedItems[spell.id] ?: false,
-                            onCheckedChange = { selectedItems[spell.id] = it },
-                        )
-                    },
-                    modifier = Modifier.toggleable(
-                        value = selectedItems[spell.id] ?: false,
-                        onValueChange = { selectedItems[spell.id] = it },
-                    ),
-                    text = { Text(spell.name) },
-                )
-            }
+                existingItems = viewModel.spells,
+            )
         }
     }
 }
@@ -201,18 +107,55 @@ private fun ImportedItemsPicker(
 @Composable
 private fun <T : CompendiumItem> ItemPicker(
     label: String,
-    isLoading: Boolean,
-    onSave: () -> Unit,
+    onSave: suspend (items: List<T>) -> Unit,
     onClose: () -> Unit,
+    onContinue: () -> Unit,
+    existingItems: LiveData<List<T>>,
     items: List<T>,
-    itemContent: @Composable LazyItemScope.(T) -> Unit,
 ) {
+    val existingItemsList = existingItems.observeAsState().value
+    val existingItemNames = remember(existingItemsList) {
+        existingItemsList?.map { it.name }?.toHashSet() ?: emptySet()
+    }
+
+    val selectedItems = remember(items, existingItemNames) {
+        if (existingItemsList == null) {
+            return@remember mutableStateMapOf()
+        }
+
+        items.map { it.id to !existingItemNames.contains(it.name) }.toMutableStateMap()
+    }
+    val atLeastOneSelected = selectedItems.containsValue(true)
+
+    var saving by remember { mutableStateOf(false) }
+    val isLoading = saving || existingItemsList == null
+
     Scaffold(
         topBar = {
             TopAppBar(
                 navigationIcon = { CloseButton(onClick = onClose) },
                 title = { Text(stringResource(R.string.title_importing_rulebook)) },
-                actions = { SaveAction(enabled = !isLoading, onClick = onSave) }
+                actions = {
+                    val coroutineScope = rememberCoroutineScope()
+                    TopBarAction(
+                        textRes = if (atLeastOneSelected) R.string.button_save else R.string.button_skip,
+                        enabled = !isLoading,
+                        onClick = {
+                            coroutineScope.launch {
+                                saving = true
+
+                                if (atLeastOneSelected) {
+                                    withContext(Dispatchers.IO) {
+                                        onSave(items.filter { selectedItems.contains(it.id) })
+                                    }
+                                }
+
+                                withContext(Dispatchers.Main) { onContinue() }
+                                saving = false
+                            }
+                        }
+                    )
+                }
             )
         },
     ) {
@@ -229,9 +172,27 @@ private fun <T : CompendiumItem> ItemPicker(
 
             if (isLoading) {
                 FullScreenProgress()
-            } else {
-                LazyColumn {
-                    items(items, itemContent = itemContent)
+                return@Column
+            }
+
+            LazyColumn {
+                items(items) { item ->
+                    ListItem(
+                        icon = {
+                            Checkbox(
+                                checked = selectedItems[item.id] ?: false,
+                                onCheckedChange = { selectedItems[item.id] = it },
+                            )
+                        },
+                        modifier = Modifier.toggleable(
+                            value = selectedItems[item.id] ?: false,
+                            onValueChange = { selectedItems[item.id] = it },
+                        ),
+                        text = { Text(item.name) },
+                        secondaryText = if (existingItemNames.contains(item.name)) {
+                            { Text(stringResource(R.string.item_with_name_exists)) }
+                        } else null
+                    )
                 }
             }
         }

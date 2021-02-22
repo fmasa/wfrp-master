@@ -6,7 +6,7 @@ import java.util.*
 @Parcelize
 data class Talent(
     override val id: UUID,
-    val name: String,
+    override val name: String,
     val maxTimesTaken: String,
     val description: String,
 ): CompendiumItem {
