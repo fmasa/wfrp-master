@@ -86,11 +86,13 @@ private fun MainContainer(routing: Routing<Route.CompendiumImport>) {
                         val skills = async { importer.importSkills() }
                         val talents = async { importer.importTalents() }
                         val spells = async { importer.importSpells() }
+                        val blessings = async { importer.importBlessings() }
 
                         importState = ImportDialogState.PickingItemsToImport(
                             skills.await(),
                             talents.await(),
                             spells.await(),
+                            blessings.await(),
                         )
                     } catch (e: Throwable) {
                         Timber.e(e)

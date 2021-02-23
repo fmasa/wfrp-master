@@ -22,10 +22,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.LiveData
 import cz.frantisekmasa.wfrp_master.compendium.R
-import cz.frantisekmasa.wfrp_master.compendium.domain.CompendiumItem
-import cz.frantisekmasa.wfrp_master.compendium.domain.Skill
-import cz.frantisekmasa.wfrp_master.compendium.domain.Spell
-import cz.frantisekmasa.wfrp_master.compendium.domain.Talent
+import cz.frantisekmasa.wfrp_master.compendium.domain.*
 import cz.frantisekmasa.wfrp_master.core.domain.party.PartyId
 import cz.frantisekmasa.wfrp_master.core.ui.buttons.CloseButton
 import cz.frantisekmasa.wfrp_master.core.ui.dialogs.FullScreenDialog
@@ -96,9 +93,19 @@ private fun ImportedItemsPicker(
                 label = stringResource(R.string.rulebook_import_pick_spells),
                 items = state.spells,
                 onSave = viewModel::saveMultipleSpells,
-                onContinue = onComplete,
+                onContinue = { screen = ItemsScreen.BLESSINGS },
                 onClose = onDismissRequest,
                 existingItems = viewModel.spells,
+            )
+        }
+        ItemsScreen.BLESSINGS -> {
+            ItemPicker(
+                label = stringResource(R.string.rulebook_import_pick_blessings),
+                items = state.blessings,
+                onSave = viewModel::saveMultipleBlessings,
+                onContinue = onComplete,
+                onClose = onDismissRequest,
+                existingItems = viewModel.blessings,
             )
         }
     }
@@ -206,6 +213,7 @@ internal sealed class ImportDialogState {
         val skills: List<Skill>,
         val talents: List<Talent>,
         val spells: List<Spell>,
+        val blessings: List<Blessing>,
     ) : ImportDialogState()
 }
 
@@ -213,4 +221,5 @@ private enum class ItemsScreen {
     SKILLS,
     TALENTS,
     SPELLS,
+    BLESSINGS,
 }

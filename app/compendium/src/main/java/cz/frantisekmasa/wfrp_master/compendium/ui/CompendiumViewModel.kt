@@ -66,6 +66,10 @@ class CompendiumViewModel(
         spellCompendium.remove(partyId, spell)
     }
 
+    suspend fun saveMultipleSpells(spells: List<Spell>) {
+        spellCompendium.saveItems(partyId, *spells.toTypedArray())
+    }
+
     suspend fun save(blessing: Blessing) {
         blessingCompendium.saveItems(partyId, blessing)
     }
@@ -74,7 +78,7 @@ class CompendiumViewModel(
         blessingCompendium.remove(partyId, blessing)
     }
 
-    suspend fun saveMultipleSpells(spells: List<Spell>) {
-        spellCompendium.saveItems(partyId, *spells.toTypedArray())
+    suspend fun saveMultipleBlessings(blessings: List<Blessing>) {
+        blessingCompendium.saveItems(partyId, *blessings.toTypedArray())
     }
 }

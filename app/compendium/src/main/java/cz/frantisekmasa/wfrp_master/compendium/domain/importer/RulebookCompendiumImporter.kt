@@ -5,9 +5,11 @@ import arrow.core.extensions.list.functorFilter.filter
 import com.github.h0tk3y.betterParse.grammar.parseToEnd
 import com.lowagie.text.pdf.PdfReader
 import com.lowagie.text.pdf.parser.PdfTextExtractor
+import cz.frantisekmasa.wfrp_master.compendium.domain.Blessing
 import cz.frantisekmasa.wfrp_master.compendium.domain.Skill
 import cz.frantisekmasa.wfrp_master.compendium.domain.Spell
 import cz.frantisekmasa.wfrp_master.compendium.domain.Talent
+import cz.frantisekmasa.wfrp_master.compendium.domain.importer.grammars.BlessingListGrammar
 import cz.frantisekmasa.wfrp_master.compendium.domain.importer.grammars.SkillListGrammar
 import cz.frantisekmasa.wfrp_master.compendium.domain.importer.grammars.SpellListGrammar
 import cz.frantisekmasa.wfrp_master.compendium.domain.importer.grammars.TalentListGrammar
@@ -72,6 +74,20 @@ class RulebookCompendiumImporter(rulebookPdf: InputStream) : CompendiumImporter,
                 }
             }
             .flatten()
+    }
+
+    override suspend fun importBlessings(): List<Blessing> {
+        val text = getCleanedUpTextFromPage(reader, 221)
+            .split(Regex("VII R ?e ?l ?i ?g ?i ?o ?n", RegexOption.IGNORE_CASE))[0]
+
+        try {
+            return BlessingListGrammar.parseToEnd(text)
+        } catch (e: Throwable) {
+            text.dumpWithLineNumbers()
+
+            Timber.e(e)
+            throw e
+        }
     }
 
     private fun splitLoresByMagicTypes(text: String): List<String> {
