@@ -54,7 +54,8 @@ fun <T> ColumnScope.TabRow(
                     scrolledPercentage
                 )
                 .fillMaxWidth()
-                .preferredHeight(2.dp)
+                /* TODO: REMOVE COMMENT */
+                .height(2.dp)
                 .background(color = MaterialTheme.colors.primary)
         )
     }
@@ -97,5 +98,6 @@ private fun Modifier.animatedTabIndicatorOffset(
     fillMaxWidth()
         .wrapContentSize(Alignment.BottomStart)
         .offset(x = originTab.left + originTab.width * scrolledPercentage)
-        .preferredWidth(currentTabWidth + widthDiff * scrolledPercentage)
+        /* TODO: REMOVE COMMENT */
+        .width(currentTabWidth + widthDiff * scrolledPercentage)
 }

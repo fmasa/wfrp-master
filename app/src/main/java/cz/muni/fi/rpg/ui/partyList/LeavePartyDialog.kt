@@ -9,7 +9,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.intl.Locale
 import androidx.compose.ui.text.toUpperCase
-import cz.frantisekmasa.wfrp_master.core.auth.AmbientUser
+import cz.frantisekmasa.wfrp_master.core.auth.LocalUser
 import cz.frantisekmasa.wfrp_master.core.auth.UserId
 import cz.frantisekmasa.wfrp_master.core.domain.party.Party
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.Spacing
@@ -40,7 +40,7 @@ fun LeavePartyDialog(party: Party, viewModel: PartyListViewModel, onDismissReque
         },
         confirmButton = {
             val coroutineScope = rememberCoroutineScope()
-            val userId = UserId.fromString(AmbientUser.current.id)
+            val userId = UserId.fromString(LocalUser.current.id)
 
             TextButton(
                 enabled = !removing,

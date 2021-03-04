@@ -3,7 +3,7 @@ package cz.frantisekmasa.wfrp_master.core.ui.theme
 import android.view.Window
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.staticAmbientOf
+import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 
@@ -13,7 +13,7 @@ fun rememberSystemUiController(window: Window): SystemUiController {
     return remember { SystemUiController(window) }
 }
 
-val AmbientSystemUiController = staticAmbientOf<SystemUiController> {
+val LocalSystemUiController = staticCompositionLocalOf<SystemUiController> {
     error("System UI Controller was not initialized. Did you forget to call ProvideActivity?")
 }
 

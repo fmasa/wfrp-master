@@ -13,12 +13,12 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.runtime.savedinstancestate.savedInstanceState
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.AmbientContext
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import cz.frantisekmasa.wfrp_master.combat.domain.encounter.Encounter
 import cz.frantisekmasa.wfrp_master.combat.ui.StartCombatDialog
@@ -48,7 +48,7 @@ fun EncounterDetailScreen(routing: Routing<Route.EncounterDetail>) {
     val encounterId = routing.route.encounterId
     val viewModel: EncounterDetailViewModel by viewModel { parametersOf(encounterId) }
 
-    var startCombatDialogVisible by savedInstanceState { false }
+    var startCombatDialogVisible by rememberSaveable { mutableStateOf(false) }
 
     Scaffold(
         topBar = {
@@ -86,7 +86,7 @@ fun EncounterDetailScreen(routing: Routing<Route.EncounterDetail>) {
             ExtendedFloatingActionButton(
                 icon = {
                     Icon(
-                        vectorResource(R.drawable.ic_encounter),
+                        painterResource(R.drawable.ic_encounter),
                         VisualOnlyIconDescription,
                         Modifier.width(24.dp),
                     )
@@ -95,7 +95,7 @@ fun EncounterDetailScreen(routing: Routing<Route.EncounterDetail>) {
                 onClick = { startCombatDialogVisible = true },
             )
         },
-        bodyContent = {
+        content = {
             MainContainer(routing, viewModel)
 
             if (startCombatDialogVisible) {
@@ -119,10 +119,10 @@ private fun TopAppBarActions(
     partyId: PartyId,
     viewModel: EncounterDetailViewModel
 ) {
-    val context = AmbientContext.current
+    val context = LocalContext.current
     val coroutineScope = rememberCoroutineScope()
 
-    var editDialogOpened by savedInstanceState { false }
+    var editDialogOpened by rememberSaveable { mutableStateOf(false) }
 
     if (editDialogOpened) {
         EncounterDialog(
@@ -134,7 +134,7 @@ private fun TopAppBarActions(
 
     IconButton(onClick = { editDialogOpened = true }) {
         Icon(
-            vectorResource(R.drawable.ic_edit),
+            painterResource(R.drawable.ic_edit),
             stringResource(R.string.title_encounter_edit),
             tint = contentColorFor(MaterialTheme.colors.primarySurface),
         )
@@ -263,7 +263,7 @@ private fun NpcList(
     for (npc in npcs) {
         val alpha = if (npc.alive) ContentAlpha.high else ContentAlpha.disabled
 
-        Providers(AmbientContentAlpha provides alpha) {
+        CompositionLocalProvider(LocalContentAlpha provides alpha) {
             CardItem(
                 name = npc.name,
                 iconRes = if (npc.alive) R.drawable.ic_npc else R.drawable.ic_dead,

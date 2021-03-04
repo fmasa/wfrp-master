@@ -4,17 +4,17 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.AmbientContentColor
+import androidx.compose.material.LocalContentColor
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.runtime.savedinstancestate.savedInstanceState
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import cz.frantisekmasa.wfrp_master.core.domain.identifiers.CharacterId
 import cz.frantisekmasa.wfrp_master.core.ui.buttons.CardButton
@@ -48,7 +48,7 @@ fun CharacterTrappingsScreen(
             )
 
             viewModel.money.observeAsState(null).value?.let { money ->
-                var transactionDialogVisible by savedInstanceState { false }
+                var transactionDialogVisible by rememberSaveable { mutableStateOf(false) }
 
                 MoneyBalance(
                     money,
@@ -114,13 +114,13 @@ private fun CharacterEncumbrance(viewModel: InventoryViewModel, modifier: Modifi
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Icon(
-            vectorResource(R.drawable.ic_encumbrance),
+            painterResource(R.drawable.ic_encumbrance),
             stringResource(R.string.icon_total_encumbrance),
             Modifier.size(18.dp),
         )
         Text(
             "${total ?: ""} / ${max ?: "?"}",
-            color = if (isOverburdened) MaterialTheme.colors.error else AmbientContentColor.current
+            color = if (isOverburdened) MaterialTheme.colors.error else LocalContentColor.current
         )
     }
 }
@@ -181,7 +181,7 @@ private fun InventoryItemList(
                                 horizontalArrangement = Arrangement.spacedBy(Spacing.tiny)
                             ) {
                                 Icon(
-                                    vectorResource(R.drawable.ic_encumbrance),
+                                    painterResource(R.drawable.ic_encumbrance),
                                     stringResource(R.string.icon_item_encumbrance),
                                     Modifier.size(Spacing.medium),
                                 )

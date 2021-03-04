@@ -7,10 +7,10 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.runtime.savedinstancestate.savedInstanceState
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import cz.frantisekmasa.wfrp_master.compendium.domain.Skill
 import cz.frantisekmasa.wfrp_master.core.ui.buttons.CloseButton
@@ -38,8 +38,10 @@ internal fun OptionsForm(
 
     var executing by remember { mutableStateOf(false) }
 
-    var difficulty by savedInstanceState { 0 }
-    var selectedCharacterIds by savedInstanceState(characterIds) { characterIds ?: emptySet() }
+    var difficulty by rememberSaveable { mutableStateOf(0) }
+    var selectedCharacterIds by rememberSaveable(characterIds) {
+        mutableStateOf(characterIds ?: emptySet())
+    }
 
     Scaffold(
         topBar = {
@@ -82,7 +84,7 @@ internal fun OptionsForm(
                 onClick = onNewSkillPickingRequest,
             ) {
                 Icon(
-                    vectorResource(selectedSkill.characteristic.getIconId()),
+                    painterResource(selectedSkill.characteristic.getIconId()),
                     VisualOnlyIconDescription, // TODO: Add characteristic-derived description
                     Modifier.width(24.dp)
                 )

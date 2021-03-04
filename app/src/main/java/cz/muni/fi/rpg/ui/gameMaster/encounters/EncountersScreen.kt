@@ -7,13 +7,12 @@ import androidx.compose.material.*
 import androidx.compose.material.Icon
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.runtime.savedinstancestate.savedInstanceState
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.gesture.tapGestureFilter
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import cz.frantisekmasa.wfrp_master.combat.domain.encounter.Encounter
@@ -44,7 +43,7 @@ fun EncountersScreen(
         return
     }
 
-    var createDialogOpened by savedInstanceState { false }
+    var createDialogOpened by rememberSaveable { mutableStateOf(false) }
 
     Scaffold(
         modifier = modifier,
@@ -76,7 +75,7 @@ private fun AddEncounterButton(encounterCount: Int, onCreateEncounterRequest: ()
         var premiumPromptVisible by remember { mutableStateOf(false) }
 
         FloatingActionButton(onClick = { premiumPromptVisible = true }) {
-            Icon(vectorResource(R.drawable.ic_premium), stringResource(R.string.buy_premium))
+            Icon(painterResource(R.drawable.ic_premium), stringResource(R.string.buy_premium))
         }
 
         if (premiumPromptVisible) {
@@ -87,7 +86,7 @@ private fun AddEncounterButton(encounterCount: Int, onCreateEncounterRequest: ()
     }
 
     FloatingActionButton(onClick = onCreateEncounterRequest) {
-        Icon(vectorResource(R.drawable.ic_add), stringResource(R.string.icon_add_encounter))
+        Icon(painterResource(R.drawable.ic_add), stringResource(R.string.icon_add_encounter))
     }
 }
 
@@ -107,19 +106,20 @@ private fun EncounterList(
         return
     }
 
-    val icon = vectorResource(R.drawable.ic_encounter)
+    val icon = painterResource(R.drawable.ic_encounter)
     val iconSize = 28.dp
 
     Column(
         Modifier
             .background(MaterialTheme.colors.background)
-            .fillMaxWidth()
+            .fillMaxSize()
             .verticalScroll(rememberScrollState())
             .padding(Spacing.bodyPadding),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         DraggableListFor(
             encounters,
+            modifier = Modifier.fillMaxHeight(),
             itemSpacing = Spacing.small,
             onReorder = {
                 viewModel.reorderEncounters(
@@ -131,7 +131,7 @@ private fun EncounterList(
                 elevation = if (isDragged) 6.dp else 2.dp,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .tapGestureFilter { onClick(encounter) }
+                    .clickable { onClick(encounter) }
             ) {
                 Row(
                     Modifier.padding(12.dp),

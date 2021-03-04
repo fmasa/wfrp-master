@@ -7,12 +7,12 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.*
 import androidx.compose.runtime.*
-import androidx.compose.runtime.savedinstancestate.savedInstanceState
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.AmbientContext
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import cz.frantisekmasa.wfrp_master.core.ui.viewinterop.registerForActivityResult
@@ -43,7 +43,7 @@ fun StartupScreen(viewModel: AuthenticationViewModel) {
 
     val coroutineScope = rememberCoroutineScope()
 
-    var showAnonymousAuthenticationDialog by savedInstanceState { false }
+    var showAnonymousAuthenticationDialog by rememberSaveable { mutableStateOf(false) }
 
     if (showAnonymousAuthenticationDialog) {
         val settings = provideSettingsViewModel()
@@ -56,7 +56,7 @@ fun StartupScreen(viewModel: AuthenticationViewModel) {
 
     }
 
-    val context = AmbientContext.current
+    val context = LocalContext.current
     val contract = remember(viewModel) { viewModel.googleSignInContract() }
     val googleSignInLauncher by registerForActivityResult(
         keys = listOf(contract, coroutineScope),
@@ -102,7 +102,7 @@ private fun SplashScreen() {
     ) {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
             Image(
-                vectorResource(R.drawable.splash_screen_image),
+                painterResource(R.drawable.splash_screen_image),
                 stringResource(R.string.icon_application_logo),
                 Modifier.size (140.dp)
             )

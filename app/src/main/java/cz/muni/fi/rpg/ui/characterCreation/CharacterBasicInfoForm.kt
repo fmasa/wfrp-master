@@ -2,7 +2,7 @@ package cz.muni.fi.rpg.ui.characterCreation
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.*
-import androidx.compose.runtime.savedinstancestate.savedInstanceState
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -34,7 +34,7 @@ object CharacterBasicInfoForm {
                 name = inputValue(character?.getName() ?: "", Rules.NotBlank()),
                 socialClass = inputValue(character?.getSocialClass() ?: "", Rules.NotBlank()),
                 career = inputValue(character?.getCareer() ?: "", Rules.NotBlank()),
-                race = savedInstanceState { character?.getRace() ?: Race.HUMAN },
+                race = rememberSaveable { mutableStateOf(character?.getRace() ?: Race.HUMAN) },
                 psychology = inputValue(character?.getPsychology() ?: ""),
                 motivation = inputValue(character?.getMotivation() ?: ""),
                 note = inputValue(character?.getNote() ?: ""),

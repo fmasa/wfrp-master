@@ -13,7 +13,7 @@ import com.google.firebase.auth.FirebaseAuthUserCollisionException
 import com.google.firebase.auth.GoogleAuthProvider
 import cz.frantisekmasa.wfrp_master.core.auth.User
 import cz.frantisekmasa.wfrp_master.core.logging.Reporter
-import cz.frantisekmasa.wfrp_master.core.ui.viewinterop.AmbientActivity
+import cz.frantisekmasa.wfrp_master.core.ui.viewinterop.LocalActivity
 import cz.frantisekmasa.wfrp_master.core.ui.viewinterop.IntentResult
 import cz.muni.fi.rpg.R
 import kotlinx.coroutines.Dispatchers
@@ -164,4 +164,4 @@ class AuthenticationViewModel(private val auth: FirebaseAuth) : ViewModel() {
 
 @Composable
 fun provideAuthenticationViewModel(): AuthenticationViewModel =
-    AmbientActivity.current.getViewModel()
+    LocalActivity.current.getViewModel()

@@ -2,7 +2,7 @@ package cz.muni.fi.rpg.ui.gameMaster.rolls
 
 import android.os.Parcelable
 import androidx.compose.runtime.*
-import androidx.compose.runtime.savedinstancestate.savedInstanceState
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.res.stringResource
 import cz.frantisekmasa.wfrp_master.compendium.domain.Skill
 import cz.frantisekmasa.wfrp_master.core.domain.party.PartyId
@@ -24,7 +24,7 @@ import org.koin.core.parameter.parametersOf
 fun SkillTestDialog(partyId: PartyId, onDismissRequest: () -> Unit) {
     FullScreenDialog(onDismissRequest = onDismissRequest) {
         val viewModel: SkillTestViewModel by viewModel { parametersOf(partyId) }
-        var step: SkillTestDialogStep by savedInstanceState { SkillTestDialogStep.SkillPicking }
+        var step: SkillTestDialogStep by rememberSaveable { mutableStateOf(SkillTestDialogStep.SkillPicking) }
 
         when (val currentStep = step) {
             SkillTestDialogStep.SkillPicking -> SkillChooser(

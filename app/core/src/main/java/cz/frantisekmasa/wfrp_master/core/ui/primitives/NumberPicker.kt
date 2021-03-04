@@ -7,7 +7,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import cz.frantisekmasa.wfrp_master.core.R
 
@@ -38,10 +38,10 @@ fun NumberPicker(
 
             IconButton(
                 onClick = onDecrement,
-                modifier = Modifier.preferredSize(width = 48.dp, height = 24.dp),
+                modifier = Modifier.size(width = 48.dp, height = 24.dp), /* TODO: REMOVE COMMENT */
             ) {
                 Icon(
-                    vectorResource(R.drawable.ic_remove_circle),
+                    painterResource(R.drawable.ic_remove_circle),
                     contentDescription = stringResource(R.string.icon_decrement),
                     tint = tint,
                 )
@@ -55,10 +55,10 @@ fun NumberPicker(
 
             IconButton(
                 onClick = onIncrement,
-                modifier = Modifier.preferredSize(width = 48.dp, height = 24.dp),
+                modifier = Modifier.size(width = 48.dp, height = 24.dp), /* TODO: REMOVE COMMENT */
             ) {
                 Icon(
-                    vectorResource(R.drawable.ic_add_circle),
+                    painterResource(R.drawable.ic_add_circle),
                     contentDescription = stringResource(R.string.icon_increment),
                     tint = tint,
                 )

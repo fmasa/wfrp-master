@@ -6,7 +6,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.runtime.savedinstancestate.savedInstanceState
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
@@ -63,7 +63,7 @@ private object CharacterEditScreen {
                         character.getPoints().maxWounds.toString(),
                         Rules.PositiveInteger(),
                     ),
-                    hardyTalent = savedInstanceState { character.hasHardyTalent() }
+                    hardyTalent = rememberSaveable { mutableStateOf(character.hasHardyTalent()) }
                 )
         }
 

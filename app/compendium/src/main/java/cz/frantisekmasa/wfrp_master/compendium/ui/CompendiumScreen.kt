@@ -15,7 +15,7 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.intl.Locale
 import androidx.compose.ui.text.toUpperCase
 import androidx.compose.ui.unit.Dp
@@ -128,7 +128,7 @@ fun <T : CompendiumItem> CompendiumTab(
         floatingActionButton = {
             FloatingActionButton(onClick = { dialogState.value = DialogState.Opened(null) }) {
                 Icon(
-                    vectorResource(R.drawable.ic_add),
+                    painterResource(R.drawable.ic_add),
                     stringResource(R.string.icon_add_compendium_item),
                 )
             }

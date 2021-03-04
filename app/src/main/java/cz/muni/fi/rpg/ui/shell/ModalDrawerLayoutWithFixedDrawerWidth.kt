@@ -1,22 +1,25 @@
 package cz.muni.fi.rpg.ui.shell
 
 import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.gestures.Orientation
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.gesture.scrollorientationlocking.Orientation
-import androidx.compose.ui.gesture.tapGestureFilter
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
-import androidx.compose.ui.platform.AmbientDensity
-import androidx.compose.ui.platform.AmbientLayoutDirection
+import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.semantics.dismiss
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
+import kotlinx.coroutines.launch
 import kotlin.math.roundToInt
 
 
@@ -40,12 +43,13 @@ fun ModalDrawerLayoutWithFixedDrawerWidth(
             throw IllegalStateException("Drawer shouldn't have infinite width")
         }
 
+        val coroutineScope = rememberCoroutineScope()
         val mainConstraints = constraints
         val minValue = -mainConstraints.maxWidth.toFloat()
         val maxValue = 0f
 
         val anchors = mapOf(minValue to DrawerValue.Closed, maxValue to DrawerValue.Open)
-        val isRtl = AmbientLayoutDirection.current == LayoutDirection.Rtl
+        val isRtl = LocalLayoutDirection.current == LayoutDirection.Rtl
         Box(
             Modifier.swipeable(
                 state = drawerState,
@@ -63,14 +67,14 @@ fun ModalDrawerLayoutWithFixedDrawerWidth(
             }
             Scrim(
                 open = drawerState.isOpen,
-                onClose = { drawerState.close() },
+                onClose = { coroutineScope.launch { drawerState.close() } },
                 fraction = { calculateFraction(minValue, maxValue, drawerState.offset.value) },
                 color = scrimColor
             )
 
             Surface(
-                modifier = with(AmbientDensity.current) {
-                    Modifier.preferredSizeIn(
+                modifier = with(LocalDensity.current) {
+                    Modifier.sizeIn( /* TODO: REMOVE COMMENT */
                         minWidth = DrawerWidth,
                         minHeight = mainConstraints.minHeight.toDp(),
                         maxWidth = DrawerWidth,
@@ -79,7 +83,10 @@ fun ModalDrawerLayoutWithFixedDrawerWidth(
                 }
                     .semantics {
                         if (drawerState.isOpen) {
-                            dismiss(action = { drawerState.close(); true })
+                            dismiss(action = {
+                                coroutineScope.launch { drawerState.close() };
+                                true
+                            })
                         }
                     }
                     .offset { IntOffset(drawerState.offset.value.roundToInt(), 0) },
@@ -102,7 +109,9 @@ private fun Scrim(
     color: Color
 ) {
     val dismissDrawer = if (open) {
-        Modifier.tapGestureFilter { onClose() }
+        Modifier.pointerInput(onClose) {
+            detectTapGestures { onClose() }
+        }
     } else {
         Modifier
     }

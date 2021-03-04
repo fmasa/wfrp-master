@@ -231,7 +231,7 @@ private fun <T : CompendiumItem> ItemPicker(
                 FullScreenProgress()
             } else {
                 LazyColumn {
-                    items(items, itemContent)
+                    items(items, itemContent = itemContent)
                 }
             }
         }

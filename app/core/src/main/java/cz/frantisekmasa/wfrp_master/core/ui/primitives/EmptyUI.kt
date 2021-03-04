@@ -11,7 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.res.loadVectorResource
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
@@ -33,7 +33,9 @@ object EmptyUI {
 
         val modifier: Modifier
             get() = when (this) {
-                Small -> Modifier.width(60.dp).padding(top = 16.dp)
+                Small -> Modifier
+                    .width(60.dp)
+                    .padding(top = 16.dp)
                 Large -> Modifier.width(64.dp)
             }
 
@@ -53,8 +55,6 @@ fun EmptyUI(
     @StringRes subTextId: Int? = null,
     size: EmptyUI.Size = EmptyUI.Size.Large
 ) {
-    val image = loadVectorResource(drawableResourceId).resource.resource
-
     val disabledColor = MaterialTheme.colors.onSurface.copy(ContentAlpha.disabled)
     val text = stringResource(textId)
 
@@ -63,16 +63,12 @@ fun EmptyUI(
             Spacer(Modifier.fillMaxHeight(0.35f))
         }
 
-        if (image == null) {
-            Spacer(size.modifier.aspectRatio(1f))
-        } else {
-            Image(
-                image,
-                contentDescription = VisualOnlyIconDescription,
-                modifier = size.modifier,
-                colorFilter = ColorFilter.tint(disabledColor),
-            )
-        }
+        Image(
+            painterResource(drawableResourceId),
+            contentDescription = VisualOnlyIconDescription,
+            modifier = size.modifier,
+            colorFilter = ColorFilter.tint(disabledColor),
+        )
 
         Text(text, style = size.textStyle)
 

@@ -12,15 +12,15 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.AmbientContext
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.Spacing
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.VisualOnlyIconDescription
-import cz.frantisekmasa.wfrp_master.core.ui.viewinterop.AmbientActivity
+import cz.frantisekmasa.wfrp_master.core.ui.viewinterop.LocalActivity
 import cz.frantisekmasa.wfrp_master.navigation.Route
 import cz.frantisekmasa.wfrp_master.navigation.navigate
 import cz.muni.fi.rpg.R
@@ -39,16 +39,18 @@ fun AppDrawer(drawerState: DrawerState, navController: NavHostController) {
     ) {
         PremiumItem()
 
+        val coroutineScope = rememberCoroutineScope()
+
         DrawerItem(
             icon = R.drawable.ic_settings,
             text = R.string.settings,
             onClick = {
-                drawerState.close()
+                coroutineScope.launch { drawerState.close() }
                 navController.navigate(Route.Settings) { launchSingleTop = true }
             },
         )
 
-        val context = AmbientContext.current
+        val context = LocalContext.current
         DrawerItem(
             icon = R.drawable.ic_review,
             text = R.string.rate_app,
@@ -96,7 +98,7 @@ fun AppDrawer(drawerState: DrawerState, navController: NavHostController) {
             icon = R.drawable.ic_info,
             text = R.string.about,
             onClick = {
-                drawerState.close()
+                coroutineScope.launch { drawerState.close() }
                 navController.navigate(Route.About) { launchSingleTop = true }
             },
         )
@@ -107,7 +109,7 @@ fun AppDrawer(drawerState: DrawerState, navController: NavHostController) {
 private fun PremiumItem() {
     val premiumViewModel = providePremiumViewModel()
     val coroutineScope = rememberCoroutineScope()
-    val activity = AmbientActivity.current
+    val activity = LocalActivity.current
 
     if (premiumViewModel.active == true) {
         return
@@ -144,7 +146,7 @@ private fun DrawerItem(
         horizontalArrangement = Arrangement.spacedBy(Spacing.medium),
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        Icon(vectorResource(icon), VisualOnlyIconDescription)
+        Icon(painterResource(icon), VisualOnlyIconDescription)
         Text(
             stringResource(text),
             style = MaterialTheme.typography.caption.copy(fontWeight = FontWeight.SemiBold),
@@ -169,7 +171,7 @@ private fun DrawerHeader() {
             verticalAlignment = Alignment.CenterVertically,
         ) {
             Image(
-                vectorResource(R.drawable.splash_screen_image),
+                painterResource(R.drawable.splash_screen_image),
                 VisualOnlyIconDescription,
                 Modifier.size(80.dp),
             )

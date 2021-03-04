@@ -1,8 +1,8 @@
 package cz.frantisekmasa.wfrp_master.combat.ui
 
 import android.widget.Toast
-import androidx.compose.animation.asDisposableClock
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -12,12 +12,10 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.gesture.tapGestureFilter
-import androidx.compose.ui.platform.AmbientAnimationClock
-import androidx.compose.ui.platform.AmbientContext
-import androidx.compose.ui.platform.AmbientLifecycleOwner
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalLifecycleOwner
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.intl.Locale
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.toUpperCase
@@ -26,7 +24,7 @@ import androidx.lifecycle.Observer
 import cz.frantisekmasa.wfrp_master.combat.R
 import cz.frantisekmasa.wfrp_master.combat.domain.encounter.Wounds
 import cz.frantisekmasa.wfrp_master.core.ads.BannerAd
-import cz.frantisekmasa.wfrp_master.core.auth.AmbientUser
+import cz.frantisekmasa.wfrp_master.core.auth.LocalUser
 import cz.frantisekmasa.wfrp_master.core.ui.buttons.BackButton
 import cz.frantisekmasa.wfrp_master.core.ui.components.CharacteristicsTable
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.DraggableListFor
@@ -52,7 +50,7 @@ fun ActiveCombatScreen(routing: Routing<Route.ActiveCombat>) {
 
     val party = viewModel.party.observeAsState(null).value
     val combatants = remember { viewModel.combatants() }.observeAsState().value
-    val isGameMaster = AmbientUser.current.id == party?.gameMasterId
+    val isGameMaster = LocalUser.current.id == party?.gameMasterId
 
     var openedCombatant by remember { mutableStateOf<CombatantItem?>(null) }
     val bottomSheetState = rememberNotSavedModalBottomSheetState()
@@ -135,7 +133,7 @@ fun ActiveCombatScreen(routing: Routing<Route.ActiveCombat>) {
                             isGameMaster = isGameMaster,
                             onCombatantClicked = {
                                 openedCombatant = it
-                                bottomSheetState.show()
+                                coroutineScope.launch { bottomSheetState.show() }
                             }
                         )
                     }
@@ -171,7 +169,7 @@ private fun BottomBar(turn: Int, round: Int, viewModel: CombatViewModel) {
                 },
             ) {
                 Icon(
-                    vectorResource(R.drawable.ic_arrow_back),
+                    painterResource(R.drawable.ic_arrow_back),
                     stringResource(R.string.icon_previous_turn),
                 )
             }
@@ -184,7 +182,7 @@ private fun BottomBar(turn: Int, round: Int, viewModel: CombatViewModel) {
                 }
             ) {
                 Icon(
-                    vectorResource(R.drawable.ic_arrow_forward),
+                    painterResource(R.drawable.ic_arrow_forward),
                     stringResource(R.string.icon_next_turn),
                 )
             }
@@ -194,11 +192,9 @@ private fun BottomBar(turn: Int, round: Int, viewModel: CombatViewModel) {
 
 @Composable
 private fun rememberNotSavedModalBottomSheetState(): ModalBottomSheetState {
-    val disposableClock = AmbientAnimationClock.current.asDisposableClock()
-    return remember(disposableClock) {
+    return remember {
         ModalBottomSheetState(
             initialValue = ModalBottomSheetValue.Hidden,
-            clock = disposableClock,
             animationSpec = SwipeableDefaults.AnimationSpec,
             confirmStateChange = { true },
         )
@@ -210,8 +206,8 @@ private fun AutoCloseOnEndedCombat(
     viewModel: CombatViewModel,
     routing: Routing<Route.ActiveCombat>
 ) {
-    val context = AmbientContext.current
-    val lifecycleOwner = AmbientLifecycleOwner.current
+    val context = LocalContext.current
+    val lifecycleOwner = LocalLifecycleOwner.current
 
     val observer: Observer<Boolean> = remember(routing) {
         Observer { active ->
@@ -254,7 +250,7 @@ private fun CombatantList(
     isGameMaster: Boolean,
     onCombatantClicked: (CombatantItem) -> Unit,
 ) {
-    val userId = AmbientUser.current.id
+    val userId = LocalUser.current.id
 
     DraggableListFor(
         combatants,
@@ -271,7 +267,7 @@ private fun CombatantList(
             combatant,
             isDragged = isDragged,
             modifier = when {
-                canEditCombatant(userId, isGameMaster, combatant) -> Modifier.tapGestureFilter {
+                canEditCombatant(userId, isGameMaster, combatant) -> Modifier.clickable {
                     onCombatantClicked(combatant)
                 }
                 else -> Modifier
@@ -287,7 +283,8 @@ private fun CombatantSheet(
     viewModel: CombatViewModel
 ) {
     Column(
-        Modifier.verticalScroll(rememberScrollState())
+        Modifier
+            .verticalScroll(rememberScrollState())
             .padding(Spacing.bodyPadding),
         verticalArrangement = Arrangement.spacedBy(Spacing.small),
     ) {
@@ -376,7 +373,7 @@ private fun CombatantListItem(
         elevation = if (isDragged) 6.dp else 2.dp,
         shape = MaterialTheme.shapes.medium,
     ) {
-        Row(Modifier.preferredHeight(IntrinsicSize.Max)) {
+        Row(Modifier.height(IntrinsicSize.Max)) { /* TODO: REMOVE COMMENT */
             Box(
                 Modifier
                     .fillMaxHeight()
@@ -395,14 +392,14 @@ private fun CombatantListItem(
                     when (combatant) {
                         is CombatantItem.Character -> {
                             Icon(
-                                vectorResource(R.drawable.ic_character),
+                                painterResource(R.drawable.ic_character),
                                 stringResource(R.string.icon_combatant_character),
                                 iconModifier,
                             )
                         }
                         is CombatantItem.Npc -> {
                             Icon(
-                                vectorResource(R.drawable.ic_npc),
+                                painterResource(R.drawable.ic_npc),
                                 stringResource(R.string.icon_combatant_npc),
                                 iconModifier,
                             )

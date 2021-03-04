@@ -4,7 +4,7 @@ plugins {
     id("kotlin-parcelize")
 }
 
-val composeVersion = "1.0.0-alpha11"
+val composeVersion = "1.0.0-beta01"
 
 android {
     compileSdkVersion(29)

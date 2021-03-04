@@ -7,7 +7,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.intl.Locale
 import androidx.compose.ui.text.toUpperCase
 import cz.muni.fi.rpg.R
-import cz.frantisekmasa.wfrp_master.core.ui.viewinterop.AmbientActivity
+import cz.frantisekmasa.wfrp_master.core.ui.viewinterop.LocalActivity
 import cz.frantisekmasa.wfrp_master.core.viewModel.providePremiumViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -15,7 +15,7 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun BuyPremiumPrompt(onDismissRequest: () -> Unit) {
-    val activity = AmbientActivity.current
+    val activity = LocalActivity.current
     val viewModel = providePremiumViewModel()
     val coroutineScope = rememberCoroutineScope()
 

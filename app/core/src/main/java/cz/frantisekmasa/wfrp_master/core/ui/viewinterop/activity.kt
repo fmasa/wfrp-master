@@ -1,8 +1,8 @@
 package cz.frantisekmasa.wfrp_master.core.ui.viewinterop
 
 import androidx.appcompat.app.AppCompatActivity
-import androidx.compose.runtime.staticAmbientOf
+import androidx.compose.runtime.staticCompositionLocalOf
 
-val AmbientActivity = staticAmbientOf<AppCompatActivity> {
-    error("AmbientActivity was not initialized. Did you forget to call ProvideActivity?")
+val LocalActivity = staticCompositionLocalOf<AppCompatActivity> {
+    error("LocalActivity was not initialized. Did you forget to call ProvideActivity?")
 }

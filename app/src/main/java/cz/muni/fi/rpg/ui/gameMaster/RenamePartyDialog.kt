@@ -9,7 +9,7 @@ import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.AmbientContext
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import cz.frantisekmasa.wfrp_master.core.domain.party.Party
 import cz.muni.fi.rpg.R
@@ -39,7 +39,7 @@ fun RenamePartyDialog(
         Scaffold(
             topBar = {
                 val coroutineScope = rememberCoroutineScope()
-                val context = AmbientContext.current
+                val context = LocalContext.current
 
                 var saving by remember { mutableStateOf(false) }
 

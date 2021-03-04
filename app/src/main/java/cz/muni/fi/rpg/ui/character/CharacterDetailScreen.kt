@@ -8,7 +8,7 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.res.painterResource
 import cz.frantisekmasa.wfrp_master.core.domain.identifiers.CharacterId
 import cz.frantisekmasa.wfrp_master.core.ui.buttons.HamburgerButton
 import cz.frantisekmasa.wfrp_master.core.ui.scaffolding.Subtitle
@@ -71,7 +71,7 @@ fun CharacterDetailScreen(routing: Routing<Route.CharacterDetail>) {
                         onClick = { routing.navigateTo(Route.CharacterEdit(characterId)) }
                     ) {
                         Icon(
-                            vectorResource(R.drawable.ic_edit),
+                            painterResource(R.drawable.ic_edit),
                             stringResource(R.string.icon_edit_character),
                         )
                     }
@@ -108,7 +108,6 @@ private fun MainContainer(
         val screens = screens(characterId, viewModel, Modifier.width(maxWidth))
 
         Column(Modifier.fillMaxHeight()) {
-            Timber.d("Route: ${routing.route}")
             if (! routing.route.comingFromCombat) {
                 // Prevent long and confusing back stack when user goes i.e.
                 // combat -> character detail -> combat

@@ -15,7 +15,7 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.AmbientContext
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.intl.Locale
 import androidx.compose.ui.text.style.TextAlign
@@ -27,7 +27,7 @@ import cz.frantisekmasa.wfrp_master.compendium.R
 import cz.frantisekmasa.wfrp_master.compendium.domain.importer.RulebookCompendiumImporter
 import cz.frantisekmasa.wfrp_master.core.ui.buttons.BackButton
 import cz.frantisekmasa.wfrp_master.core.ui.scaffolding.Subtitle
-import cz.frantisekmasa.wfrp_master.core.ui.viewinterop.AmbientActivity
+import cz.frantisekmasa.wfrp_master.core.ui.viewinterop.LocalActivity
 import cz.frantisekmasa.wfrp_master.core.ui.viewinterop.registerForActivityResult
 import cz.frantisekmasa.wfrp_master.core.viewModel.viewModel
 import cz.frantisekmasa.wfrp_master.navigation.Route
@@ -62,7 +62,7 @@ private fun TopBar(routing: Routing<Route.CompendiumImport>) {
 
 @Composable
 private fun MainContainer(routing: Routing<Route.CompendiumImport>) {
-    val context = AmbientContext.current
+    val context = LocalContext.current
     val coroutineScope = rememberCoroutineScope()
 
     var importState by remember { mutableStateOf<ImportDialogState?>(null) }
@@ -121,7 +121,7 @@ private fun MainContainer(routing: Routing<Route.CompendiumImport>) {
         verticalArrangement = Arrangement.spacedBy(20.dp, Alignment.CenterVertically),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        val activity = AmbientActivity.current
+        val activity = LocalActivity.current
         val storeUrl = stringResource(R.string.rulebook_store_url)
 
         Text(

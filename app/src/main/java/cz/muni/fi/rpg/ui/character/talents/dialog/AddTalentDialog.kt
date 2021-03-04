@@ -2,7 +2,7 @@ package cz.muni.fi.rpg.ui.character.talents.dialog
 
 import android.os.Parcelable
 import androidx.compose.runtime.*
-import androidx.compose.runtime.savedinstancestate.savedInstanceState
+import androidx.compose.runtime.saveable.rememberSaveable
 import cz.frantisekmasa.wfrp_master.core.ui.dialogs.FullScreenDialog
 import cz.muni.fi.rpg.viewModels.TalentsViewModel
 import kotlinx.parcelize.Parcelize
@@ -10,7 +10,7 @@ import java.util.*
 
 @Composable
 fun AddTalentDialog(viewModel: TalentsViewModel, onDismissRequest: () -> Unit) {
-    var state: AddTalentDialogState by savedInstanceState { ChoosingCompendiumTalent }
+    var state: AddTalentDialogState by rememberSaveable { mutableStateOf(ChoosingCompendiumTalent) }
 
     FullScreenDialog(onDismissRequest = {
         if (state != ChoosingCompendiumTalent) {

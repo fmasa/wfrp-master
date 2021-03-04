@@ -5,15 +5,15 @@ import androidx.annotation.RawRes
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.remember
-import androidx.compose.ui.platform.AmbientContext
+import androidx.compose.ui.platform.LocalContext
 
 @Composable
 fun rememberSoundPlayer(@RawRes soundResource: Int): SoundPlayer {
-    if (!AmbientSoundEnabled.current) {
+    if (!LocalSoundEnabled.current) {
         return SoundPlayer {}
     }
 
-    val context = AmbientContext.current
+    val context = LocalContext.current
     val player = remember { MediaPlayer.create(context, soundResource) }
 
     DisposableEffect(Unit) {

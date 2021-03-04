@@ -10,7 +10,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import cz.frantisekmasa.wfrp_master.core.domain.Money
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.VisualOnlyIconDescription
@@ -38,7 +38,7 @@ fun MoneyBalance(value: Money, modifier: Modifier = Modifier) {
 @Composable
 private fun MoneyIcon(tint: Color) {
     Icon(
-        vectorResource(R.drawable.ic_coins),
+        painterResource(R.drawable.ic_coins),
         VisualOnlyIconDescription,
         tint = tint,
         modifier = Modifier.size(18.dp)

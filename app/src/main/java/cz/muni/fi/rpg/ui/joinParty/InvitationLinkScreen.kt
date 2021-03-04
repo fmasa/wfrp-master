@@ -5,9 +5,9 @@ import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.ui.platform.AmbientContext
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import cz.frantisekmasa.wfrp_master.core.auth.AmbientUser
+import cz.frantisekmasa.wfrp_master.core.auth.LocalUser
 import cz.frantisekmasa.wfrp_master.core.domain.party.Invitation
 import cz.frantisekmasa.wfrp_master.core.ui.buttons.BackButton
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.FullScreenProgress
@@ -32,12 +32,12 @@ fun InvitationLinkScreen(routing: Routing<Route.InvitationLink>) {
             )
         },
     ) {
-        val context = AmbientContext.current
+        val context = LocalContext.current
         val invitationJson = routing.route.invitationJson
         val viewModel = provideJoinPartyViewModel()
         val premiumViewModel = providePremiumViewModel()
 
-        val userId = AmbientUser.current.id
+        val userId = LocalUser.current.id
         val parties = remember { viewModel.userParties(userId) }.observeAsState().value
 
         if (parties == null) {

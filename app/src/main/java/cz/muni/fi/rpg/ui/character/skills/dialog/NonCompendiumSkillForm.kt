@@ -7,7 +7,7 @@ import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.*
-import androidx.compose.runtime.savedinstancestate.savedInstanceState
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -150,11 +150,13 @@ private class NonCompendiumSkillFormData(
             id = remember { skill?.id ?: UUID.randomUUID() },
             name = inputValue(skill?.name ?: "", Rules.NotBlank()),
             description = inputValue(skill?.description ?: ""),
-            characteristic = savedInstanceState {
-                skill?.characteristic ?: Characteristic.values().first()
+            characteristic = rememberSaveable {
+                mutableStateOf(
+                    skill?.characteristic ?: Characteristic.values().first()
+                )
             },
             advanced = checkboxValue(skill?.advanced ?: false),
-            advances = savedInstanceState { skill?.advances ?: 1 }
+            advances = rememberSaveable { mutableStateOf(skill?.advances ?: 1) }
         )
     }
 

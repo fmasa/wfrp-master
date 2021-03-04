@@ -12,8 +12,7 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.res.vectorResource
-import androidx.compose.ui.unit.dp
+import androidx.compose.ui.res.painterResource
 import cz.frantisekmasa.wfrp_master.combat.ui.ActiveCombatBanner
 import cz.frantisekmasa.wfrp_master.core.ads.BannerAd
 import cz.muni.fi.rpg.R
@@ -56,7 +55,7 @@ fun GameMasterScreen(routing: Routing<Route.GameMaster>) {
                         },
                     ) {
                         Icon(
-                            vectorResource(R.drawable.ic_settings),
+                            painterResource(R.drawable.ic_settings),
                             stringResource(R.string.title_party_settings),
                         )
                     }

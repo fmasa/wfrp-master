@@ -7,9 +7,9 @@ import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.AmbientContext
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.intl.Locale
 import androidx.compose.ui.text.toUpperCase
 import androidx.compose.ui.unit.dp
@@ -55,7 +55,7 @@ internal fun InvitationDialog2(invitation: Invitation, onDismissRequest: () -> U
                         CircularProgressIndicator()
                     }
                 } else {
-                    val context = AmbientContext.current
+                    val context = LocalContext.current
 
                     QrCode(sharingOptions.json)
 
@@ -65,7 +65,7 @@ internal fun InvitationDialog2(invitation: Invitation, onDismissRequest: () -> U
                             startInvitationSendingIntent(context, invitation, sharingOptions.link)
                         },
                     ) {
-                        Icon(vectorResource(R.drawable.ic_share), VisualOnlyIconDescription)
+                        Icon(painterResource(R.drawable.ic_share), VisualOnlyIconDescription)
                         Text(stringResource(R.string.share_link).toUpperCase(Locale.current))
                     }
                 }

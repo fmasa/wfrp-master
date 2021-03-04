@@ -13,7 +13,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.capitalize
 import androidx.compose.ui.text.intl.Locale
 import androidx.compose.ui.text.toLowerCase
@@ -122,7 +122,7 @@ private fun ConditionIcon(condition: Condition) {
         Condition.BLEEDING -> R.drawable.ic_condition_bleeding
     }
     Image(
-        vectorResource(iconRes),
+        painterResource(iconRes),
         conditionName(condition),
         Modifier.size(28.dp)
     )

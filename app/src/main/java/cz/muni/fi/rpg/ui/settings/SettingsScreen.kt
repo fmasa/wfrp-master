@@ -6,19 +6,19 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.*
-import androidx.compose.material.AmbientContentColor
+import androidx.compose.material.LocalContentColor
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import cz.frantisekmasa.wfrp_master.core.ui.buttons.BackButton
 import cz.frantisekmasa.wfrp_master.core.ui.components.settings.SettingsCard
 import cz.frantisekmasa.wfrp_master.core.ui.components.settings.SettingsTitle
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.Spacing
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.VisualOnlyIconDescription
-import cz.frantisekmasa.wfrp_master.core.ui.viewinterop.AmbientActivity
+import cz.frantisekmasa.wfrp_master.core.ui.viewinterop.LocalActivity
 import cz.muni.fi.rpg.R
 import cz.frantisekmasa.wfrp_master.navigation.Route
 import cz.frantisekmasa.wfrp_master.navigation.Routing
@@ -74,7 +74,7 @@ fun SettingsScreen(routing: Routing<Route.Settings>) {
 @Composable
 private fun BuyPremiumButton(viewModel: PremiumViewModel) {
     val coroutineScope = rememberCoroutineScope()
-    val activity = AmbientActivity.current
+    val activity = LocalActivity.current
 
     ListItem(
         modifier = Modifier.clickable {
@@ -82,7 +82,7 @@ private fun BuyPremiumButton(viewModel: PremiumViewModel) {
                 viewModel.purchasePremium(activity)
             }
         },
-        icon = { Icon(vectorResource(R.drawable.ic_premium), VisualOnlyIconDescription) },
+        icon = { Icon(painterResource(R.drawable.ic_premium), VisualOnlyIconDescription) },
         text = { Text(stringResource(R.string.buy_premium)) },
     )
 }
@@ -122,7 +122,7 @@ private fun SwitchItem(
     disabledText: String? = null,
     enabled: Boolean = true,
 ) {
-    val color = AmbientContentColor.current.copy(
+    val color = LocalContentColor.current.copy(
         alpha = if (enabled) ContentAlpha.high else ContentAlpha.disabled
     )
 

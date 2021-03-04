@@ -2,13 +2,13 @@ package cz.muni.fi.rpg.ui.gameMaster.calendar
 
 import android.os.Bundle
 import android.os.Parcelable
-import androidx.compose.foundation.InteractionState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.AmbientContentColor
+import androidx.compose.material.LocalContentColor
 import androidx.compose.material.Button
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
@@ -17,13 +17,13 @@ import androidx.compose.material.Text
 import androidx.compose.material.TextButton
 import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.runtime.*
-import androidx.compose.runtime.savedinstancestate.Saver
-import androidx.compose.runtime.savedinstancestate.SaverScope
-import androidx.compose.runtime.savedinstancestate.savedInstanceState
+import androidx.compose.runtime.saveable.Saver
+import androidx.compose.runtime.saveable.SaverScope
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.intl.Locale
 import androidx.compose.ui.text.toUpperCase
@@ -36,13 +36,13 @@ import kotlinx.parcelize.Parcelize
 @Composable
 fun ImperialCalendar(date: ImperialDate, onDateChange: (ImperialDate) -> Unit) {
     Column {
-        var activeScreen by savedInstanceState { ActiveScreen.DAYS_OF_MONTH }
-        var activeMonth by savedInstanceState { ActiveMonth.forDate(date) }
-        var activeYearRange by savedInstanceState(activeMonth, saver = IntRangeSaver()) {
+        var activeScreen by rememberSaveable { mutableStateOf(ActiveScreen.DAYS_OF_MONTH) }
+        var activeMonth by rememberSaveable { mutableStateOf(ActiveMonth.forDate(date)) }
+        var activeYearRange by rememberSaveable(activeMonth, stateSaver = IntRangeSaver()) {
             val size = YEAR_COLUMNS * YEAR_ROWS
             val firstYear = (activeMonth.year - 1) / size * size + 1
 
-            firstYear until firstYear + size
+            mutableStateOf(firstYear until firstYear + size)
         }
 
         Row(
@@ -59,7 +59,7 @@ fun ImperialCalendar(date: ImperialDate, onDateChange: (ImperialDate) -> Unit) {
                             }
                         }) {
                         Icon(
-                            vectorResource(R.drawable.ic_caret_left),
+                            painterResource(R.drawable.ic_caret_left),
                             stringResource(R.string.icon_previous_years),
                         )
                     }
@@ -73,7 +73,7 @@ fun ImperialCalendar(date: ImperialDate, onDateChange: (ImperialDate) -> Unit) {
                         activeYearRange = activeYearRange.move(+YEAR_ROWS * YEAR_COLUMNS)
                     }) {
                         Icon(
-                            vectorResource(R.drawable.ic_caret_right),
+                            painterResource(R.drawable.ic_caret_right),
                             stringResource(R.string.icon_next_years),
                         )
                     }
@@ -81,7 +81,7 @@ fun ImperialCalendar(date: ImperialDate, onDateChange: (ImperialDate) -> Unit) {
                 ActiveScreen.DAYS_OF_MONTH -> {
                     IconButton(onClick = { activeMonth = activeMonth.previousMonth() }) {
                         Icon(
-                            vectorResource(R.drawable.ic_caret_left),
+                            painterResource(R.drawable.ic_caret_left),
                             stringResource(R.string.icon_previous_month),
                         )
                     }
@@ -94,7 +94,7 @@ fun ImperialCalendar(date: ImperialDate, onDateChange: (ImperialDate) -> Unit) {
 
                     IconButton(onClick = { activeMonth = activeMonth.nextMonth() }) {
                         Icon(
-                            vectorResource(R.drawable.ic_caret_right),
+                            painterResource(R.drawable.ic_caret_right),
                             stringResource(R.string.icon_next_month),
                         )
                     }
@@ -148,7 +148,7 @@ private fun YearPicker(
                                 year.toString(),
                                 color = if (isSelected)
                                     MaterialTheme.colors.onPrimary
-                                else AmbientContentColor.current
+                                else LocalContentColor.current
                             )
                         }
                     }
@@ -168,7 +168,7 @@ private fun StandaloneDay(
     val modifier = Modifier.fillMaxWidth()
     val dayName = day.readableName.toUpperCase(Locale.current)
 
-    val inactiveTextColor = AmbientContentColor.current
+    val inactiveTextColor = LocalContentColor.current
 
     Box(Modifier.padding(bottom = 8.dp)) {
         if (selected) {
@@ -258,7 +258,7 @@ private fun RowScope.Week(days: List<Int?>, selectedDay: Int?, onDaySelect: (Int
                 modifier
                     .clickable(
                         onClick = { day?.let(onDaySelect) },
-                        interactionState = remember { InteractionState() },
+                        interactionSource = remember { MutableInteractionSource() },
                         indication = rememberRipple(bounded = false, radius = 24.dp)
                     )
                     .size(36.dp)

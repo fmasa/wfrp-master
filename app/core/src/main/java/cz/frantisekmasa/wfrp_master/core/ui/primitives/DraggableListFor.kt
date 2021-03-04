@@ -1,19 +1,18 @@
 package cz.frantisekmasa.wfrp_master.core.ui.primitives
 
-import androidx.compose.animation.animatedFloat
-import androidx.compose.animation.core.AnimatedFloat
+import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.AnimationVector1D
+import androidx.compose.foundation.gestures.detectDragGesturesAfterLongPress
 import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.composed
-import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.gesture.LongPressDragObserver
-import androidx.compose.ui.gesture.longPressDragGestureFilter
+import androidx.compose.ui.input.pointer.consumeAllChanges
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.Layout
-import androidx.compose.ui.platform.AmbientDensity
-import androidx.compose.ui.unit.Density
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import kotlinx.coroutines.launch
 import java.util.*
 import kotlin.math.roundToInt
 
@@ -23,9 +22,6 @@ import kotlin.math.roundToInt
  * Note: Dragging is started after long press. Because of this, items cannot use clickable() modifier.
  * As workaround you can use tapGestureFilter() - it has worse accesibility (there is no support for labels),
  * but it works.
- *
- * TODO: Figure out solution for use of this modifier. Maybe using clickable(onLongClick=()) internally
- *       instead of longPressDragGestureFilter?
  */
 @Composable
 fun <T> DraggableListFor(
@@ -35,49 +31,52 @@ fun <T> DraggableListFor(
     itemSpacing: Dp = 0.dp,
     itemContent: @Composable (index: Int, item: T, isDragged: Boolean) -> Unit
 ) {
-    val dragY = animatedFloat(0f)
+    val dragY = remember { Animatable(0f) }
     var draggedItemIndex by remember { mutableStateOf<Int?>(null) }
-
     var placeableHeights: List<Int> by remember { mutableStateOf(emptyList()) }
 
-    val itemSpacingPx = with(AmbientDensity.current) { itemSpacing.toIntPx() }
-
+    val itemSpacingPx = with(LocalDensity.current) { itemSpacing.roundToPx() }
+    val coroutineScope = rememberCoroutineScope()
     Layout(
         modifier = modifier,
         content = {
             items.forEachIndexed { index, item ->
-                val isDragged = draggedItemIndex == index
-
                 Box(
-                    Modifier.scrollFriendlyDraggable(
-                        onDrag = { delta ->
-                            dragY.snapTo(dragY.value + delta)
-                        },
-                        onDragStarted = {
-                            dragY.snapTo(0f)
-                            draggedItemIndex = index
-                        },
-                        onDragStopped = {
-                            val newIndex = newItemIndex(
-                                draggedItemIndex = draggedItemIndex!!,
-                                draggedItemYCoordinate = calculateYCoordinateOfDraggedItem(
-                                    dragY,
+                    Modifier.pointerInput(placeableHeights, itemSpacingPx, coroutineScope) {
+                        detectDragGesturesAfterLongPress(
+                            onDragStart = {
+                                coroutineScope.launch { dragY.snapTo(0f) }
+                                draggedItemIndex = index
+                            },
+                            onDragEnd = {
+                                val newIndex = newItemIndex(
+                                    draggedItemIndex = draggedItemIndex!!,
+                                    draggedItemYCoordinate = calculateYCoordinateOfDraggedItem(
+                                        dragY,
+                                        placeableHeights,
+                                        draggedItemIndex,
+                                    )!!,
                                     placeableHeights,
-                                    draggedItemIndex,
-                                )!!,
-                                placeableHeights,
-                                itemSpacingPx
-                            )
+                                    itemSpacingPx
+                                )
 
-                            if (index != newIndex) {
-                                onReorder(items.moveItem(index, newIndex))
-                            }
+                                if (index != newIndex) {
+                                    onReorder(items.moveItem(index, newIndex))
+                                }
 
-                            draggedItemIndex = null
-                        },
-                    )
+                                draggedItemIndex = null
+                            },
+                            onDrag = { change, delta ->
+                                coroutineScope.launch {
+                                    dragY.snapTo(dragY.value + delta.y)
+                                    change.consumeAllChanges()
+                                }
+                            },
+                            onDragCancel = { draggedItemIndex = null }
+                        )
+                    }
                 ) {
-                    itemContent(index, item, isDragged)
+                    itemContent(index, item, draggedItemIndex == index)
                 }
             }
         },
@@ -143,7 +142,7 @@ private fun newItemIndex(
 }
 
 private fun calculateYCoordinateOfDraggedItem(
-    draggedItemYOffset: AnimatedFloat,
+    draggedItemYOffset: Animatable<Float, AnimationVector1D>,
     placeableHeights: List<Int>,
     draggedItemIndex: Int?,
 ): Int? {
@@ -163,48 +162,4 @@ private fun <T> List<T>.moveItem(sourceIndex: Int, targetIndex: Int): List<T> {
                 Collections.rotate(subList(targetIndex, sourceIndex + 1), 1)
             }
         }
-}
-
-private fun Modifier.scrollFriendlyDraggable(
-    onDragStarted: () -> Unit = {},
-    onDragStopped: () -> Unit = {},
-    onDrag: Density.(Float) -> Unit
-) = composed {
-    val density = AmbientDensity.current
-
-    longPressDragGestureFilter(
-        DragCallback(
-            onDragStarted = onDragStarted,
-            onDragStopped = onDragStopped,
-            onDrag = onDrag,
-            density = density,
-        )
-    )
-}
-
-
-private class DragCallback(
-    private val onDragStarted: () -> Unit = {},
-    private val onDragStopped: () -> Unit = {},
-    private val onDrag: Density.(Float) -> Unit,
-    private val density: Density,
-) : LongPressDragObserver {
-
-    override fun onLongPress(pxPosition: Offset) {
-        onDragStarted()
-    }
-
-    override fun onDrag(dragDistance: Offset): Offset {
-        with(density) { onDrag(dragDistance.y) }
-
-        return dragDistance
-    }
-
-    override fun onCancel() {
-        onDragStopped()
-    }
-
-    override fun onStop(velocity: Offset) {
-        onDragStopped()
-    }
 }

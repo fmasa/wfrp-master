@@ -1,7 +1,5 @@
 package cz.frantisekmasa.wfrp_master.core.ui.dialogs
 
-import androidx.compose.foundation.InteractionState
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -16,6 +14,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import cz.frantisekmasa.wfrp_master.core.R
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.Spacing
+import cz.frantisekmasa.wfrp_master.core.ui.primitives.clickableWithoutIndication
 
 @Composable
 fun <T> SelectionDialog(
@@ -51,10 +50,7 @@ fun <T> SelectionDialog(
                         Row(
                             modifier = Modifier
                                 .padding(horizontal = Spacing.extraLarge)
-                                .clickable(
-                                    interactionState = remember { InteractionState() },
-                                    indication = null
-                                ) { currentItem = item },
+                                .clickableWithoutIndication { currentItem = item },
                             horizontalArrangement = Arrangement.spacedBy(Spacing.extraLarge),
                             verticalAlignment = Alignment.CenterVertically,
                         ) {

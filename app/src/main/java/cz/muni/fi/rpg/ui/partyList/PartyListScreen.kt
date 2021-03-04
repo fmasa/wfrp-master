@@ -6,16 +6,16 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.runtime.savedinstancestate.savedInstanceState
+import androidx.compose.runtime.saveable.rememberSaveable
 import cz.muni.fi.rpg.R
 import cz.frantisekmasa.wfrp_master.core.domain.party.Party
 import cz.muni.fi.rpg.viewModels.PartyListViewModel
 import java.util.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
-import cz.frantisekmasa.wfrp_master.core.auth.AmbientUser
+import cz.frantisekmasa.wfrp_master.core.auth.LocalUser
 import cz.frantisekmasa.wfrp_master.core.domain.identifiers.CharacterId
 import cz.frantisekmasa.wfrp_master.core.ui.buttons.HamburgerButton
 import cz.frantisekmasa.wfrp_master.core.ui.dialogs.DialogState
@@ -31,11 +31,11 @@ import cz.muni.fi.rpg.ui.common.BuyPremiumPrompt
 @Composable
 fun PartyListScreen(routing: Routing<Route.PartyList>) {
     val viewModel: PartyListViewModel by viewModel()
-    val userId = AmbientUser.current.id
+    val userId = LocalUser.current.id
     val parties = remember { viewModel.liveForUser(userId) }.observeAsState().value
 
     var menuState by remember { mutableStateOf(MenuState.COLLAPSED) }
-    var createPartyDialogVisible by savedInstanceState { false }
+    var createPartyDialogVisible by rememberSaveable { mutableStateOf(false) }
 
     if (createPartyDialogVisible) {
         CreatePartyDialog(
@@ -124,7 +124,7 @@ private fun Menu(
         var premiumPromptVisible by remember { mutableStateOf(false) }
 
         FloatingActionButton(onClick = { premiumPromptVisible = true }) {
-            Icon(vectorResource(R.drawable.ic_premium), stringResource(R.string.buy_premium))
+            Icon(painterResource(R.drawable.ic_premium), stringResource(R.string.buy_premium))
         }
 
         if (premiumPromptVisible) {
@@ -140,7 +140,7 @@ private fun Menu(
         iconRes = R.drawable.ic_add,
     ) {
         ExtendedFloatingActionButton(
-            icon = { Icon(vectorResource(R.drawable.ic_camera), VisualOnlyIconDescription) },
+            icon = { Icon(painterResource(R.drawable.ic_camera), VisualOnlyIconDescription) },
             text = { Text(stringResource(R.string.scanCode_title)) },
             onClick = {
                 routing.navigateTo(Route.InvitationScanner)
@@ -149,7 +149,7 @@ private fun Menu(
         )
         ExtendedFloatingActionButton(
             icon = {
-                Icon(vectorResource(R.drawable.ic_group_add), VisualOnlyIconDescription)
+                Icon(painterResource(R.drawable.ic_group_add), VisualOnlyIconDescription)
             },
             text = { Text(stringResource(R.string.assembleParty_title)) },
             onClick = {
@@ -218,7 +218,7 @@ fun PartyList(
     ) {
         items(parties) { party ->
             val isGameMaster =
-                AmbientUser.current.id == party.gameMasterId || party.gameMasterId == null
+                LocalUser.current.id == party.gameMasterId || party.gameMasterId == null
 
             WithContextMenu(
                 onClick = { onClick(party) },
