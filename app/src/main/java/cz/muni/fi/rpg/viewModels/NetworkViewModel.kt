@@ -6,12 +6,12 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import com.github.pwittchen.reactivenetwork.library.rx2.ReactiveNetwork
-import cz.frantisekmasa.wfrp_master.core.ui.viewinterop.AmbientActivity
+import cz.frantisekmasa.wfrp_master.core.ui.viewinterop.LocalActivity
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.rx2.asFlow
 import org.koin.androidx.viewmodel.ext.android.getViewModel
 
-class NetworkViewModel(val context: Context) : ViewModel() {
+class NetworkViewModel(context: Context) : ViewModel() {
     val isConnectedToInternet: LiveData<Boolean>
         = ReactiveNetwork.observeNetworkConnectivity(context)
         .asFlow()
@@ -20,4 +20,4 @@ class NetworkViewModel(val context: Context) : ViewModel() {
 }
 
 @Composable
-fun provideNetworkViewModel(): NetworkViewModel = AmbientActivity.current.getViewModel()
+fun provideNetworkViewModel(): NetworkViewModel = LocalActivity.current.getViewModel()

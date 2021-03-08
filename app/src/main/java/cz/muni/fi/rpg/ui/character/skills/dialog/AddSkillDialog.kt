@@ -2,7 +2,7 @@ package cz.muni.fi.rpg.ui.character.skills.dialog
 
 import android.os.Parcelable
 import androidx.compose.runtime.*
-import androidx.compose.runtime.savedinstancestate.savedInstanceState
+import androidx.compose.runtime.saveable.rememberSaveable
 import cz.frantisekmasa.wfrp_master.core.ui.dialogs.FullScreenDialog
 import cz.muni.fi.rpg.viewModels.SkillsViewModel
 import kotlinx.parcelize.Parcelize
@@ -10,7 +10,7 @@ import java.util.*
 
 @Composable
 fun AddSkillDialog(viewModel: SkillsViewModel, onDismissRequest: () -> Unit) {
-    var state: AddSkillDialogState by savedInstanceState { ChoosingCompendiumSkill }
+    var state: AddSkillDialogState by rememberSaveable { mutableStateOf(ChoosingCompendiumSkill) }
 
     FullScreenDialog(onDismissRequest = {
         if (state != ChoosingCompendiumSkill) {

@@ -8,11 +8,11 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.runtime.*
-import androidx.compose.runtime.savedinstancestate.savedInstanceState
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.AmbientContext
-import androidx.compose.ui.res.imageResource
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.intl.Locale
@@ -22,7 +22,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.firebase.auth.FirebaseAuthUserCollisionException
-import cz.frantisekmasa.wfrp_master.core.auth.AmbientUser
+import cz.frantisekmasa.wfrp_master.core.auth.LocalUser
 import cz.frantisekmasa.wfrp_master.core.ui.dialogs.DialogProgress
 import cz.frantisekmasa.wfrp_master.core.ui.dialogs.DialogTitle
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.CardContainer
@@ -47,10 +47,10 @@ fun SignInCard(viewModel: SettingsViewModel, routing: Routing<Route.Settings>) {
     val authViewModel = provideAuthenticationViewModel()
 
     val contract = remember(authViewModel) { authViewModel.googleSignInContract() }
-    val context = AmbientContext.current
+    val context = LocalContext.current
     val coroutineScope = rememberCoroutineScope()
 
-    var pendingSingInConfirmation: PendingSingInConfirmation? by savedInstanceState { null }
+    var pendingSingInConfirmation: PendingSingInConfirmation? by rememberSaveable { mutableStateOf(null) }
 
     pendingSingInConfirmation?.let {
         ConfirmSignInDialog(
@@ -105,7 +105,7 @@ fun SignInCard(viewModel: SettingsViewModel, routing: Routing<Route.Settings>) {
         ) {
             CardTitle(R.string.title_account)
 
-            val email = AmbientUser.current.email
+            val email = LocalUser.current.email
             if (email != null) {
                 Text(stringResource(R.string.signed_in_as))
                 Text(email)
@@ -122,7 +122,7 @@ fun SignInCard(viewModel: SettingsViewModel, routing: Routing<Route.Settings>) {
                         horizontalArrangement = Arrangement.spacedBy(4.dp)
                     ) {
                         Image(
-                            imageResource(R.drawable.googleg_standard_color_18),
+                            painterResource(R.drawable.googleg_standard_color_18),
                             VisualOnlyIconDescription,
                         )
                         Text("Sign-in")
@@ -142,9 +142,9 @@ fun ConfirmSignInDialog(
     onDismissRequest: () -> Unit,
 ) {
     val coroutineScope = rememberCoroutineScope()
-    val userId = AmbientUser.current.id
+    val userId = LocalUser.current.id
 
-    var partyNames: List<String>? by savedInstanceState { null }
+    var partyNames: List<String>? by rememberSaveable { mutableStateOf(null) }
     var processing by remember { mutableStateOf(false) }
 
     val loading = partyNames == null || processing
@@ -189,7 +189,7 @@ fun ConfirmSignInDialog(
                         Text(stringResource(R.string.button_cancel).toUpperCase(Locale.current))
                     }
 
-                    val context = AmbientContext.current
+                    val context = LocalContext.current
 
                     TextButton(
                         enabled = !loading,

@@ -8,17 +8,17 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.AmbientContentAlpha
+import androidx.compose.material.LocalContentAlpha
 import androidx.compose.material.ContentAlpha
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
-import androidx.compose.runtime.savedinstancestate.savedInstanceState
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -38,7 +38,7 @@ fun AmbitionsCard(
 ) {
     val title = stringResource(titleRes)
 
-    var dialogOpened by savedInstanceState { false }
+    var dialogOpened by rememberSaveable { mutableStateOf(false) }
 
     if (dialogOpened && onSave != null) {
         ChangeAmbitionsDialog(
@@ -72,9 +72,9 @@ fun AmbitionsCard(
                 )
 
                 if (value.isBlank()) {
-                    Providers(AmbientContentAlpha provides ContentAlpha.medium) {
+                    CompositionLocalProvider(LocalContentAlpha provides ContentAlpha.medium) {
                         Row(verticalAlignment = Alignment.CenterVertically) {
-                            Icon(vectorResource(R.drawable.ic_none), VisualOnlyIconDescription)
+                            Icon(painterResource(R.drawable.ic_none), VisualOnlyIconDescription)
                             Text(
                                 stringResource(R.string.note_ambition_not_filled),
                                 style = MaterialTheme.typography.body2,

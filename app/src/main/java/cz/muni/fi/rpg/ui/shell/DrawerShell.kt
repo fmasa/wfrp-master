@@ -6,11 +6,13 @@ import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
-import androidx.compose.ui.gesture.tapGestureFilter
-import androidx.compose.ui.platform.AmbientLifecycleOwner
+import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.navigation.NavHostController
-import cz.frantisekmasa.wfrp_master.core.ui.buttons.AmbientHamburgerButtonHandler
+import cz.frantisekmasa.wfrp_master.core.ui.buttons.LocalHamburgerButtonHandler
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 @Composable
@@ -23,13 +25,14 @@ fun DrawerShell(navController: NavHostController, bodyContent: @Composable () ->
     ModalDrawerLayoutWithFixedDrawerWidth(
         drawerState = drawerState,
         drawerContent = {
-            Column(Modifier.consumeTaps()) {
+            Column {
                 AppDrawer(drawerState, navController)
             }
         },
         bodyContent = {
-            Providers(
-                AmbientHamburgerButtonHandler provides { drawerState.open() },
+            val coroutineScope = rememberCoroutineScope()
+            CompositionLocalProvider(
+                LocalHamburgerButtonHandler provides { coroutineScope.launch { drawerState.open() } },
                 content = bodyContent,
             )
         },
@@ -38,9 +41,12 @@ fun DrawerShell(navController: NavHostController, bodyContent: @Composable () ->
 
 @Composable
 private fun DrawerBackPressHandler(drawerState: DrawerState) {
-    val onBackPressedDispatcher = AmbientOnBackPressedDispatcher.current
-    val lifecycleOwner = AmbientLifecycleOwner.current
-    val callback = remember { CloseDrawerOnBackPressCallback(drawerState) }
+    val onBackPressedDispatcher = LocalOnBackPressedDispatcher.current
+    val lifecycleOwner = LocalLifecycleOwner.current
+    val coroutineScope = rememberCoroutineScope()
+    val callback = remember(drawerState, coroutineScope) {
+        CloseDrawerOnBackPressCallback(drawerState, coroutineScope)
+    }
     DisposableEffect(onBackPressedDispatcher, lifecycleOwner) {
         callback.remove()
         onBackPressedDispatcher.addCallback(lifecycleOwner, callback)
@@ -57,15 +63,12 @@ private fun DrawerBackPressHandler(drawerState: DrawerState) {
     }
 }
 
-private fun Modifier.consumeTaps() = composed {
-    tapGestureFilter {}
-}
-
 private class CloseDrawerOnBackPressCallback(
-    var drawerState: DrawerState
+    val drawerState: DrawerState,
+    val coroutineScope: CoroutineScope
 ) : OnBackPressedCallback(true) {
 
     override fun handleOnBackPressed() {
-        drawerState.close()
+        coroutineScope.launch { drawerState.close() }
     }
 }

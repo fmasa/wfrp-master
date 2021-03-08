@@ -7,7 +7,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.runtime.*
-import androidx.compose.runtime.savedinstancestate.savedInstanceState
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -47,7 +47,7 @@ internal fun CharacterCharacteristicsScreen(
 ) {
     val viewModel: CharacterStatsViewModel by viewModel { parametersOf(characterId) }
 
-    var roll: Roll? by savedInstanceState { null }
+    var roll: Roll? by rememberSaveable { mutableStateOf(null) }
 
     roll?.let { currentRoll ->
         FullScreenDialog(onDismissRequest = { roll = null }) {

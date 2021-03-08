@@ -9,11 +9,11 @@ import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.runtime.savedinstancestate.savedInstanceState
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import cz.muni.fi.rpg.R
 import cz.frantisekmasa.wfrp_master.core.domain.identifiers.CharacterId
@@ -35,14 +35,14 @@ internal fun CharacterSpellsScreen(
     modifier: Modifier,
 ) {
     val viewModel: SpellsViewModel by viewModel { parametersOf(characterId) }
-    var showAddSpellDialog by savedInstanceState { false }
+    var showAddSpellDialog by rememberSaveable { mutableStateOf(false) }
 
     Scaffold(
         modifier = modifier,
         floatingActionButton = {
             FloatingActionButton(onClick = { showAddSpellDialog = true }) {
                 Icon(
-                    vectorResource(R.drawable.ic_add),
+                    painterResource(R.drawable.ic_add),
                     stringResource(R.string.icon_add_spell),
                 )
             }
@@ -71,7 +71,7 @@ private fun MainContainer(viewModel: SpellsViewModel) {
         return
     }
 
-    var editedSpellId: UUID? by savedInstanceState { null }
+    var editedSpellId: UUID? by rememberSaveable { mutableStateOf(null) }
 
     LazyColumn {
         items(spells) { spell ->
@@ -115,7 +115,7 @@ private fun SpellItem(spell: Spell, onClick: () -> Unit, onRemove: () -> Unit) {
 
                 if (spell.memorized) {
                     Icon(
-                        vectorResource(R.drawable.ic_brain),
+                        painterResource(R.drawable.ic_brain),
                         stringResource(R.string.spell_memorized),
                         Modifier.size(16.dp),
                     )

@@ -18,8 +18,8 @@
         <meta-data android:name="com.google.android.gms.ads.APPLICATION_ID"
             android:value="ca-app-pub-8647604386686373~4029550903"/>
         <meta-data
-            android:name="firebase_analytics_collection_deactivated"
-            android:value="${analytics_deactivated}" />
+            android:name="firebase_crashlytics_collection_enabled"
+            android:value="${analytics_activated}" />
         <meta-data
             android:name="google_analytics_automatic_screen_reporting_enabled"
             android:value="false" />

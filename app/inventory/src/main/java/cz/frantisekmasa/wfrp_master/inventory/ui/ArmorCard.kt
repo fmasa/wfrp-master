@@ -3,16 +3,13 @@ package cz.frantisekmasa.wfrp_master.inventory.ui
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.AmbientContentAlpha
-import androidx.compose.material.ContentAlpha
-import androidx.compose.material.Icon
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.Providers
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import cz.frantisekmasa.wfrp_master.core.domain.Armor
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.CardContainer
@@ -111,7 +108,7 @@ private fun ArmorPart(
     onChange: (Int) -> Unit,
 ) {
     Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = modifier) {
-        Icon(vectorResource(iconRes), VisualOnlyIconDescription)
+        Icon(painterResource(iconRes), VisualOnlyIconDescription)
         NumberPicker(
             value = points,
             onIncrement = {
@@ -126,7 +123,7 @@ private fun ArmorPart(
             },
         )
 
-        Providers(AmbientContentAlpha provides ContentAlpha.medium) {
+        CompositionLocalProvider(LocalContentAlpha provides ContentAlpha.medium) {
             Text(stringResource(nameRes))
             if (rollRange != null) {
                 Text("${formatRoll(rollRange.first)} - ${formatRoll(rollRange.last)}")

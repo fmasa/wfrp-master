@@ -5,6 +5,8 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Divider
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Switch
@@ -13,7 +15,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.capitalize
 import androidx.compose.ui.text.intl.Locale
 import androidx.compose.ui.text.toLowerCase
@@ -52,11 +54,13 @@ internal fun CharacterConditionsScreen(
         }
     }
 
-    LazyColumn(
-        modifier.background(MaterialTheme.colors.surface),
-        contentPadding = PaddingValues(top = Spacing.small),
+    Column(
+        modifier
+            .background(MaterialTheme.colors.surface)
+            .verticalScroll(rememberScrollState())
+            .padding(top = Spacing.small)
     ) {
-        items(Condition.values().toList()) { condition ->
+        Condition.values().forEach { condition ->
             ConditionRow(condition, conditions.count(condition), updateConditions)
             Divider()
         }
@@ -122,7 +126,7 @@ private fun ConditionIcon(condition: Condition) {
         Condition.BLEEDING -> R.drawable.ic_condition_bleeding
     }
     Image(
-        vectorResource(iconRes),
+        painterResource(iconRes),
         conditionName(condition),
         Modifier.size(28.dp)
     )

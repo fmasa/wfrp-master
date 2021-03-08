@@ -4,7 +4,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.runtime.savedinstancestate.savedInstanceState
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -44,7 +44,7 @@ internal fun SkillsCard(
                     size = EmptyUI.Size.Small
                 )
             } else {
-                var editedSkillId: UUID? by savedInstanceState { null }
+                var editedSkillId: UUID? by rememberSaveable { mutableStateOf(null) }
 
                 for (skill in skills) {
                     SkillItem(
@@ -64,7 +64,7 @@ internal fun SkillsCard(
                 }
             }
 
-            var showAddSkillDialog by savedInstanceState { false }
+            var showAddSkillDialog by rememberSaveable { mutableStateOf(false) }
 
             CardButton(R.string.title_addSkill, onClick = { showAddSkillDialog = true })
 

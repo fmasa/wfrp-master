@@ -7,7 +7,7 @@ import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.*
-import androidx.compose.runtime.savedinstancestate.savedInstanceState
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -156,7 +156,7 @@ private class NonCompendiumSpellFormData(
         @Composable
         fun fromSpell(item: Spell?): NonCompendiumSpellFormData = NonCompendiumSpellFormData(
             id = item?.id ?: UUID.randomUUID(),
-            memorized = savedInstanceState { item?.memorized ?: false },
+            memorized = rememberSaveable { mutableStateOf(item?.memorized ?: false) },
             name = inputValue(item?.name ?: "", Rules.NotBlank()),
             range = inputValue(item ?. range ?: ""),
             target = inputValue(item?.target ?: ""),

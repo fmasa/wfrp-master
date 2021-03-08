@@ -4,7 +4,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.runtime.savedinstancestate.savedInstanceState
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -33,7 +33,7 @@ internal fun TalentsCard(
 
             if (talents.isNotEmpty()) {
                 Column {
-                    var editedTalentId: UUID? by savedInstanceState { null }
+                    var editedTalentId: UUID? by rememberSaveable { mutableStateOf(null) }
 
                     for (talent in talents) {
                         TalentItem(
@@ -53,7 +53,7 @@ internal fun TalentsCard(
                 }
             }
 
-            var showAddTalentDialog by savedInstanceState { false }
+            var showAddTalentDialog by rememberSaveable { mutableStateOf(false) }
             
             CardButton(
                 R.string.title_talent_add,

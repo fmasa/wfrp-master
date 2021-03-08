@@ -7,11 +7,11 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.runtime.*
-import androidx.compose.runtime.savedinstancestate.savedInstanceState
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.intl.Locale
 import androidx.compose.ui.text.toUpperCase
 import androidx.compose.ui.unit.dp
@@ -56,8 +56,8 @@ private fun MainContainer(routing: Routing<Route.CharacterCreation>) {
     val coroutineScope = rememberCoroutineScope()
 
     val validate = remember { mutableStateOf(false) }
-    val currentStepIndex = savedInstanceState { 0 }
-    val formState = savedInstanceState { FormState.EDITED_BY_USER }
+    val currentStepIndex = rememberSaveable { mutableStateOf(0) }
+    val formState = rememberSaveable { mutableStateOf(FormState.EDITED_BY_USER) }
 
     val basicInfo = CharacterBasicInfoForm.Data.empty()
     val characteristics = CharacterCharacteristicsForm.Data.fromCharacter(null)
@@ -148,7 +148,7 @@ private fun BottomBar(
                     },
                 ) {
                     Icon(
-                        vectorResource(R.drawable.ic_caret_left), VisualOnlyIconDescription)
+                        painterResource(R.drawable.ic_caret_left), VisualOnlyIconDescription)
                     Text(
                         stringResource(steps[currentStepIndex - 1].labelRes)
                             .toUpperCase(Locale.current),
@@ -212,6 +212,6 @@ private fun NextButton(
 ) {
     TextButton(modifier = modifier, onClick = onClick) {
         Text(stringResource(label).toUpperCase(Locale.current))
-        Icon(vectorResource(R.drawable.ic_caret_right), VisualOnlyIconDescription)
+        Icon(painterResource(R.drawable.ic_caret_right), VisualOnlyIconDescription)
     }
 }

@@ -8,10 +8,10 @@ import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.*
-import androidx.compose.runtime.savedinstancestate.savedInstanceState
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.AmbientContext
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import cz.frantisekmasa.wfrp_master.compendium.domain.exceptions.CompendiumItemNotFound
 import cz.frantisekmasa.wfrp_master.core.ui.buttons.CloseButton
@@ -35,7 +35,7 @@ internal fun AdvancesForm(
     onDismissRequest: () -> Unit,
 ) {
     var saving by remember { mutableStateOf(false) }
-    var advances by savedInstanceState { 1 }
+    var advances by rememberSaveable { mutableStateOf(1) }
 
     Scaffold(
         topBar = {
@@ -48,7 +48,7 @@ internal fun AdvancesForm(
                 },
                 actions = {
                     val coroutineScope = rememberCoroutineScope()
-                    val context = AmbientContext.current
+                    val context = LocalContext.current
 
                     SaveAction(
                         enabled = !saving,

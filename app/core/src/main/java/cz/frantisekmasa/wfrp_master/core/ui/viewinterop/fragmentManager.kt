@@ -5,5 +5,5 @@ import androidx.fragment.app.FragmentManager
 
 @Composable
 fun fragmentManager() : FragmentManager {
-    return AmbientActivity.current.supportFragmentManager
+    return LocalActivity.current.supportFragmentManager
 }

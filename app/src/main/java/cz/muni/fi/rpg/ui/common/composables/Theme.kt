@@ -6,7 +6,7 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.sp
-import cz.frantisekmasa.wfrp_master.core.media.AmbientSoundEnabled
+import cz.frantisekmasa.wfrp_master.core.media.LocalSoundEnabled
 import cz.frantisekmasa.wfrp_master.core.ui.theme.SystemBarsChangingEffect
 import cz.frantisekmasa.wfrp_master.core.viewModel.provideSettingsViewModel
 
@@ -68,7 +68,7 @@ fun Theme(content: @Composable () -> Unit) {
         ),
     ) {
         SystemBarsChangingEffect()
-        Providers(AmbientSoundEnabled provides soundEnabled) {
+        CompositionLocalProvider(LocalSoundEnabled provides soundEnabled) {
             content()
         }
     }

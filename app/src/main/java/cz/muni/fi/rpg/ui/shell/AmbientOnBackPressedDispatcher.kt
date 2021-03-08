@@ -1,11 +1,11 @@
 package cz.muni.fi.rpg.ui.shell
 
 import androidx.activity.OnBackPressedDispatcher
-import androidx.compose.runtime.staticAmbientOf
+import androidx.compose.runtime.staticCompositionLocalOf
 
 /**
  * Use [ProvideActivity] to pass this
  */
-val AmbientOnBackPressedDispatcher = staticAmbientOf<OnBackPressedDispatcher> {
-    error("AmbientOnBackPressedDispatcher was not initialized. Did you forget to call ProvideActivity?")
+val LocalOnBackPressedDispatcher = staticCompositionLocalOf<OnBackPressedDispatcher> {
+    error("LocalOnBackPressedDispatcher was not initialized. Did you forget to call ProvideActivity?")
 }

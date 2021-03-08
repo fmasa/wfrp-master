@@ -8,7 +8,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.AmbientContext
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import cz.frantisekmasa.wfrp_master.combat.R
 import cz.frantisekmasa.wfrp_master.combat.domain.encounter.Npc
@@ -58,7 +58,7 @@ fun StartCombatDialog(
                     actions = {
                         val saving by remember { mutableStateOf(false) }
                         val coroutineScope = rememberCoroutineScope()
-                        val context = AmbientContext.current
+                        val context = LocalContext.current
 
                         TopBarAction(
                             textRes = R.string.button_save,

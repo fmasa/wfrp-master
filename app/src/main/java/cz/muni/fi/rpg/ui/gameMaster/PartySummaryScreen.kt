@@ -6,11 +6,11 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.runtime.savedinstancestate.savedInstanceState
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.unit.dp
@@ -46,7 +46,7 @@ internal fun PartySummaryScreen(
     onCharacterOpenRequest: (Character) -> Unit,
     onCharacterCreateRequest: (userId: String?) -> Unit,
 ) {
-    var skillTestDialogVisible by savedInstanceState { false }
+    var skillTestDialogVisible by rememberSaveable { mutableStateOf(false) }
 
     if (skillTestDialogVisible) {
         SkillTestDialog(
@@ -60,7 +60,7 @@ internal fun PartySummaryScreen(
         floatingActionButton = {
             FloatingActionButton(onClick = { skillTestDialogVisible = true }) {
                 Icon(
-                    vectorResource(R.drawable.ic_dice_roll),
+                    painterResource(R.drawable.ic_dice_roll),
                     stringResource(R.string.icon_hidden_skill_test),
                 )
             }

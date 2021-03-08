@@ -3,7 +3,7 @@ package cz.frantisekmasa.wfrp_master.compendium.ui
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.runtime.*
-import androidx.compose.runtime.savedinstancestate.savedInstanceState
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -64,7 +64,7 @@ private data class SkillFormData(
             id = remember { item?.id ?: UUID.randomUUID() },
             name = inputValue(item?.name ?: "", Rules.NotBlank()),
             description = inputValue(item?.description ?: ""),
-            characteristic = savedInstanceState { item?.characteristic ?: Characteristic.AGILITY },
+            characteristic = rememberSaveable { mutableStateOf(item?.characteristic ?: Characteristic.AGILITY) },
             advanced = checkboxValue(item?.advanced ?: false),
         )
     }

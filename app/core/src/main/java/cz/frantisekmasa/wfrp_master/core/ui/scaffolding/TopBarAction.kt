@@ -6,7 +6,7 @@ import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.intl.Locale
 import androidx.compose.ui.text.toUpperCase
 import cz.frantisekmasa.wfrp_master.core.R
@@ -24,7 +24,7 @@ fun TopBarAction(
         colorBase.copy(alpha = if (enabled) ContentAlpha.high else ContentAlpha.medium)
 
     TextButton(onClick = onClick, enabled = enabled, modifier = modifier) {
-        Providers(AmbientContentColor provides contentColor) { content() }
+        CompositionLocalProvider(LocalContentColor provides contentColor) { content() }
     }
 }
 
@@ -45,21 +45,19 @@ fun TopBarAction(
 }
 
 @Composable
-fun OptionsAction(items: @Composable ColumnScope.() -> Unit) {
+fun OptionsAction(content: @Composable ColumnScope.() -> Unit) {
     var contextMenuExpanded by remember { mutableStateOf(false) }
+    IconButton(onClick = { contextMenuExpanded = true }) {
+        Icon(
+            painterResource(R.drawable.ic_more),
+            stringResource(R.string.icon_action_more),
+            tint = contentColorFor(MaterialTheme.colors.primarySurface),
+        )
+    }
 
     DropdownMenu(
-        toggle = {
-            IconButton(onClick = { contextMenuExpanded = true }) {
-                Icon(
-                    vectorResource(R.drawable.ic_more),
-                    stringResource(R.string.icon_action_more),
-                    tint = contentColorFor(MaterialTheme.colors.primarySurface),
-                )
-            }
-        },
         expanded = contextMenuExpanded, onDismissRequest = { contextMenuExpanded = false },
-        dropdownContent = items,
+        content = content,
     )
 }
 

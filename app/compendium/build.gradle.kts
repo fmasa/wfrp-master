@@ -4,7 +4,7 @@ plugins {
     id("kotlin-parcelize")
 }
 
-val composeVersion = "1.0.0-alpha11"
+val composeVersion = "1.0.0-beta01"
 
 android {
     compileSdkVersion(29)
@@ -43,6 +43,7 @@ android {
                 "-Xallow-jvm-ir-dependencies" +
                 "-Xopt-in=androidx.compose.foundation.layout.ExperimentalLayout" +
                 "-Xopt-in=kotlinx.coroutines.ExperimentalCoroutinesApi" +
+                "-Xopt-in=androidx.compose.material.ExperimentalMaterialApi" +
                 "-P" +
                 "plugin:androidx.compose.compiler.plugins.kotlin:suppressKotlinVersionCompatibilityCheck=true"
     }
@@ -53,7 +54,7 @@ dependencies {
     implementation(project(":app:navigation"))
 
     // Tools for Rulebook PDF parsing
-    implementation("com.github.librepdf:openpdf:1.3.23")
+    implementation("com.github.librepdf:openpdf:1.3.25")
     implementation("com.github.andob:android-awt:1.0.0")
 
     // Testing utilities

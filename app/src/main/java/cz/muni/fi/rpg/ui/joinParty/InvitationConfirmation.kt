@@ -15,11 +15,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.AmbientContext
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.core.text.bold
-import cz.frantisekmasa.wfrp_master.core.auth.AmbientUser
+import cz.frantisekmasa.wfrp_master.core.auth.LocalUser
 import cz.frantisekmasa.wfrp_master.core.domain.party.Invitation
 import cz.frantisekmasa.wfrp_master.core.ui.buttons.PrimaryButton
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.FullScreenProgress
@@ -65,8 +65,8 @@ fun InvitationConfirmation(
             modifier = Modifier.fillMaxWidth()
         )
 
-        val userId = AmbientUser.current.id
-        val context = AmbientContext.current
+        val userId = LocalUser.current.id
+        val context = LocalContext.current
 
         PrimaryButton(
             R.string.title_joinParty,

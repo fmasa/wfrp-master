@@ -9,9 +9,10 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.AmbientDensity
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import cz.frantisekmasa.wfrp_master.core.ui.primitives.FlowRow
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.Spacing
 
 @Composable
@@ -27,7 +28,7 @@ fun <T> ChipList(
             InputLabel(it)
         }
 
-        FlowRow(mainAxisSpacing = 8.dp, crossAxisSpacing = 8.dp) {
+        FlowRow(verticalSpacing = 8.dp, horizontalSpacing = 8.dp) {
             for ((itemValue, itemLabel) in items) {
                 Chip(
                     text = itemLabel,
@@ -49,7 +50,7 @@ private fun Chip(
     onClick: () -> Unit,
     selected: Boolean = false
 ) {
-    val color = if (selected) MaterialTheme.colors.primary else AmbientContentColor.current
+    val color = if (selected) MaterialTheme.colors.primary else LocalContentColor.current
 
     Surface(
         border = if (selected) BorderStroke(1.dp, color.copy(alpha = 0.25f)) else null,
@@ -64,7 +65,8 @@ private fun Chip(
             textAlign = TextAlign.Center,
             modifier = Modifier
                 .clickable(onClick = onClick)
-                .preferredWidthIn(min = with(AmbientDensity.current) { fontStyle.fontSize.toDp() * 3 })
+                /* TODO: REMOVE COMMENT */
+                .widthIn(min = with(LocalDensity.current) { fontStyle.fontSize.toDp() * 3 })
                 .padding(Spacing.small),
         )
     }

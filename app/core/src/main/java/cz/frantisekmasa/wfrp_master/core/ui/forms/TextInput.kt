@@ -9,10 +9,12 @@ import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.Stable
-import androidx.compose.runtime.savedinstancestate.savedInstanceState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.Spacing
@@ -107,7 +109,7 @@ private fun TextInput(
                 MaterialTheme.colors.surface else
                 Color(33, 33, 33), // TODO: Move to Theme
         ) {
-            val textStyle = AmbientTextStyle.current
+            val textStyle = LocalTextStyle.current
             val textColor = MaterialTheme.colors.onSurface
 
             Box(contentAlignment = Alignment.CenterStart) {
@@ -121,7 +123,7 @@ private fun TextInput(
                             onValueChange(filteredValue)
                         }
                     },
-                    cursorColor = textColor,
+                    cursorBrush = SolidColor(textColor),
                     keyboardOptions = KeyboardOptions.Default.copy(keyboardType = keyboardType),
                     textStyle = textStyle.copy(color = textColor),
                     singleLine = !multiLine,
@@ -169,10 +171,10 @@ class InputValue(
 }
 
 @Composable
-fun inputValue(default: String) = InputValue(savedInstanceState { default }, Rules.NoRules)
+fun inputValue(default: String) = InputValue(rememberSaveable { mutableStateOf(default) }, Rules.NoRules)
 
 @Composable
 fun inputValue(default: String, vararg rules: Rule) = InputValue(
-    savedInstanceState { default },
+    rememberSaveable { mutableStateOf(default) },
     Rules(*rules),
 )

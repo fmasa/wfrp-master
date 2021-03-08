@@ -12,7 +12,7 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 
@@ -40,7 +40,7 @@ fun ItemIcon(@DrawableRes drawableResource: Int, size: ItemIcon.Size = ItemIcon.
     val backgroundColor = MaterialTheme.colors.onSurface.copy(alpha = ContentAlpha.medium)
 
     Image(
-        vectorResource(drawableResource),
+        painterResource(drawableResource),
         VisualOnlyIconDescription, // TODO: Provide mechanism to specify what does this image means, such as: ("Character's image", "Strength-based skill", etc.)
         colorFilter = ColorFilter.tint(MaterialTheme.colors.surface),
         modifier = Modifier

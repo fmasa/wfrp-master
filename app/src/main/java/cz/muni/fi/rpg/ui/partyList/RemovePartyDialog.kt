@@ -6,7 +6,7 @@ import androidx.compose.material.AlertDialog
 import androidx.compose.material.Text
 import androidx.compose.material.TextButton
 import androidx.compose.runtime.*
-import androidx.compose.ui.platform.AmbientContext
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.intl.Locale
@@ -48,7 +48,7 @@ fun RemovePartyDialog(party: Party, viewModel: PartyListViewModel, onDismissRequ
         },
         confirmButton = {
             val coroutineScope = rememberCoroutineScope()
-            val context = AmbientContext.current
+            val context = LocalContext.current
 
             TextButton(
                 enabled = !removing,

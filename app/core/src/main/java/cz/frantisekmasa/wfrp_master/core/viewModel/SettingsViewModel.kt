@@ -13,7 +13,7 @@ import androidx.lifecycle.viewModelScope
 import com.google.firebase.analytics.ktx.analytics
 import com.google.firebase.ktx.Firebase
 import cz.frantisekmasa.wfrp_master.core.domain.party.PartyRepository
-import cz.frantisekmasa.wfrp_master.core.ui.viewinterop.AmbientActivity
+import cz.frantisekmasa.wfrp_master.core.ui.viewinterop.LocalActivity
 import cz.frantisekmasa.wfrp_master.core.ads.LocationProvider
 import cz.frantisekmasa.wfrp_master.core.ads.AdManager
 import kotlinx.coroutines.Dispatchers
@@ -112,5 +112,5 @@ private object AppSettings {
 
 @Composable
 fun provideSettingsViewModel(): SettingsViewModel {
-    return AmbientActivity.current.getViewModel()
+    return LocalActivity.current.getViewModel()
 }

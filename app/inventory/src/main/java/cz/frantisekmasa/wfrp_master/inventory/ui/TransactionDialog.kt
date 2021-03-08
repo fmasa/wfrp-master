@@ -7,7 +7,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.runtime.*
-import androidx.compose.runtime.savedinstancestate.savedInstanceState
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -40,7 +40,7 @@ fun TransactionDialog(
         val crowns = inputValue("", Rules.IfNotBlank(Rules.PositiveInteger()))
         val shillings = inputValue("", Rules.IfNotBlank(Rules.PositiveInteger()))
         val pennies = inputValue("", Rules.IfNotBlank(Rules.PositiveInteger()))
-        var operation by savedInstanceState { Operation.ADD }
+        var operation by rememberSaveable { mutableStateOf(Operation.ADD) }
 
         var validate by remember { mutableStateOf(false) }
         var errorMessage: String? by remember { mutableStateOf(null) }

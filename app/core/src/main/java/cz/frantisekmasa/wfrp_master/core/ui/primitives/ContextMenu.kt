@@ -1,8 +1,7 @@
 package cz.frantisekmasa.wfrp_master.core.ui.primitives
 
-import androidx.compose.foundation.AmbientIndication
-import androidx.compose.foundation.InteractionState
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.combinedClickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.material.DropdownMenu
 import androidx.compose.material.DropdownMenuItem
 import androidx.compose.material.MaterialTheme
@@ -26,34 +25,27 @@ fun WithContextMenu(
     toggle: @Composable () -> Unit,
 ) {
     var expanded by remember { mutableStateOf(false) }
-    val toggleInteractionState = remember { InteractionState() }
-
     val onLongClickLabel = stringResource(string.open_context_menu)
 
-    DropdownMenu(
-        expanded = expanded,
-        toggle = toggle,
-        toggleModifier = Modifier.clickable(
+    Box(
+        Modifier.combinedClickable(
             onLongClickLabel = onLongClickLabel,
             onLongClick = { expanded = true },
             onClick = onClick,
-            indication = AmbientIndication.current(),
-            interactionState = toggleInteractionState,
         ),
-        onDismissRequest = { expanded = false },
     ) {
+        toggle()
+    }
+
+    DropdownMenu(expanded = expanded, onDismissRequest = { expanded = false }) {
         for (item in items) {
-            // Using key to recompose after long click is release
-            // see https://issuetracker.google.com/issues/179238010
-            key(toggleInteractionState.value) {
-                DropdownMenuItem(
-                    onClick = {
-                        expanded = false
-                        item.onClick()
-                    }
-                ) {
-                    Text(item.text, style = MaterialTheme.typography.subtitle1)
+            DropdownMenuItem(
+                onClick = {
+                    expanded = false
+                    item.onClick()
                 }
+            ) {
+                Text(item.text, style = MaterialTheme.typography.subtitle1)
             }
         }
     }

@@ -14,7 +14,7 @@ plugins {
 
 android {
 
-    lintOptions {
+    lint {
         disable("InvalidFragmentVersionForActivityResult") // This is temporary until we drop authentication fragment
     }
 
@@ -64,7 +64,7 @@ android {
             resValue("string", "app_name", "[Debug] WFRP Master")
             resValue("string", "character_ad_unit_id", "ca-app-pub-3940256099942544/6300978111")
             resValue("string", "game_master_ad_unit_id", "ca-app-pub-3940256099942544/6300978111")
-            manifestPlaceholders(mapOf("analytics_deactivated" to "true"))
+            manifestPlaceholders(mapOf("analytics_activated" to "false"))
         }
 
 
@@ -76,7 +76,7 @@ android {
             resValue("string", "app_name", "WFRP Master")
             resValue("string", "character_ad_unit_id", "ca-app-pub-8647604386686373/9919978313")
             resValue("string", "game_master_ad_unit_id", "ca-app-pub-8647604386686373/7714574658")
-            manifestPlaceholders(mapOf("analytics_deactivated" to "false"))
+            manifestPlaceholders(mapOf("analytics_activated" to "true"))
         }
     }
 
@@ -85,7 +85,7 @@ android {
     }
 
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.0.0-alpha11"
+        kotlinCompilerExtensionVersion = "1.0.0-beta01"
     }
 
     compileOptions {
@@ -104,6 +104,7 @@ android {
                 "-Xskip-prerelease-check" +
                 "-Xopt-in=androidx.compose.foundation.layout.ExperimentalLayout" +
                 "-Xopt-in=kotlinx.coroutines.ExperimentalCoroutinesApi" +
+                "-Xopt-in=androidx.compose.material.ExperimentalMaterialApi" +
                 "-P" +
                 "plugin:androidx.compose.compiler.plugins.kotlin:suppressKotlinVersionCompatibilityCheck=true"
     }
@@ -118,7 +119,7 @@ dependencies {
 
     implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar"))))
     // Allow use of Java 8 APIs on older Android versions
-    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:1.1.1")
+    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:1.1.5")
 
     implementation("com.google.android.gms:play-services-auth:19.0.0")
 
@@ -127,10 +128,10 @@ dependencies {
 
     // QR code scanning
     implementation("com.google.zxing:core:3.3.3")
-    implementation("androidx.camera:camera-camera2:1.0.0-rc01")
-    implementation("androidx.camera:camera-core:1.0.0-rc01")
-    implementation("androidx.camera:camera-lifecycle:1.0.0-rc01")
-    implementation("androidx.camera:camera-view:1.0.0-alpha20")
+    implementation("androidx.camera:camera-camera2:1.1.0-alpha02")
+    implementation("androidx.camera:camera-core:1.1.0-alpha02")
+    implementation("androidx.camera:camera-lifecycle:1.1.0-alpha02")
+    implementation("androidx.camera:camera-view:1.0.0-alpha22")
 
     // Testing utilities
     testImplementation("junit:junit:4.13.1")
@@ -138,10 +139,13 @@ dependencies {
     androidTestImplementation("androidx.test.espresso:espresso-core:3.3.0")
     testImplementation("org.mockito:mockito-core:2.7.22")
 
+    // Time picker
+    implementation("com.vanpra.compose-material-dialogs:datetime:0.3.0")
+
     // Checking network access
     implementation("com.github.pwittchen:reactivenetwork-rx2:3.0.8")
     api("org.jetbrains.kotlinx:kotlinx-coroutines-rx2:1.4.2")
 
     // Firebase Performance
-    implementation("com.google.firebase:firebase-perf-ktx:19.1.0")
+    implementation("com.google.firebase:firebase-perf-ktx:19.1.1")
 }

@@ -8,7 +8,7 @@ import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import cz.frantisekmasa.wfrp_master.core.R
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.Spacing
@@ -34,9 +34,8 @@ fun <T> SelectBox(
 
         DropdownMenu(
             expanded = dropdownMenuExpanded,
-            toggle = {},
             onDismissRequest = { dropdownMenuExpanded = false },
-            dropdownModifier = Modifier.fillMaxWidth(),
+            modifier = Modifier.fillMaxWidth(),
         ) {
             for ((itemValue, itemLabel) in items) {
                 DropdownMenuItem(
@@ -82,7 +81,7 @@ fun SelectBoxToggle(
             ) {
                 Row { content() }
                 Icon(
-                    vectorResource(R.drawable.ic_caret_down),
+                    painterResource(R.drawable.ic_caret_down),
                     stringResource(R.string.icon_open_selectbox),
                 )
             }

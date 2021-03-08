@@ -8,9 +8,9 @@ import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.camera.view.PreviewView
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.AmbientConfiguration
-import androidx.compose.ui.platform.AmbientContext
-import androidx.compose.ui.platform.AmbientLifecycleOwner
+import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
 import timber.log.Timber
@@ -22,19 +22,19 @@ internal fun QrCodeScanner(
     onSuccessfulScan: (qrCodeData: String) -> Unit,
     modifier: Modifier,
 ) {
-    val lifecycleOwner = AmbientLifecycleOwner.current
-    val context = AmbientContext.current
+    val lifecycleOwner = LocalLifecycleOwner.current
+    val context = LocalContext.current
 
     val cameraProviderFuture = remember { ProcessCameraProvider.getInstance(context) }
     var cameraBound by remember { mutableStateOf(false) }
     val executor by remember { lazy { Executors.newSingleThreadExecutor() } }
 
-    val orientation = AmbientConfiguration.current.orientation
+    val orientation = LocalConfiguration.current.orientation
 
     key(orientation) {
         AndroidView(
             modifier = modifier,
-            viewBlock = {
+            factory = {
                 PreviewView(context)
                     .apply {
                         scaleType = PreviewView.ScaleType.FILL_CENTER

@@ -16,7 +16,7 @@ private val lightNavigationBarColor = Color(235, 235, 235)
  */
 @Composable
 fun SystemBarsChangingEffect() {
-    val systemUi = AmbientSystemUiController.current
+    val systemUi = LocalSystemUiController.current
     val colors = MaterialTheme.colors
 
     LaunchedEffect(colors.isLight, systemUi) {

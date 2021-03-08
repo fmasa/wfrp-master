@@ -12,8 +12,7 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.res.vectorResource
-import androidx.compose.ui.unit.dp
+import androidx.compose.ui.res.painterResource
 import cz.frantisekmasa.wfrp_master.combat.ui.ActiveCombatBanner
 import cz.frantisekmasa.wfrp_master.core.ads.BannerAd
 import cz.muni.fi.rpg.R
@@ -21,12 +20,9 @@ import cz.frantisekmasa.wfrp_master.core.domain.identifiers.CharacterId
 import cz.frantisekmasa.wfrp_master.core.domain.identifiers.EncounterId
 import cz.frantisekmasa.wfrp_master.core.ui.buttons.HamburgerButton
 import cz.frantisekmasa.wfrp_master.core.ui.scaffolding.TopBarAction
-import cz.frantisekmasa.wfrp_master.core.ui.scaffolding.tabs.TabContent
-import cz.frantisekmasa.wfrp_master.core.ui.scaffolding.tabs.TabRow
-import cz.frantisekmasa.wfrp_master.core.ui.scaffolding.tabs.TabScreen
 import cz.frantisekmasa.wfrp_master.core.viewModel.viewModel
 import cz.frantisekmasa.wfrp_master.core.domain.party.Party
-import cz.frantisekmasa.wfrp_master.core.ui.scaffolding.tabs.rememberPagerState
+import cz.frantisekmasa.wfrp_master.core.ui.scaffolding.tabs.*
 import cz.muni.fi.rpg.ui.common.composables.*
 import cz.muni.fi.rpg.ui.gameMaster.encounters.EncountersScreen
 import cz.frantisekmasa.wfrp_master.navigation.Route
@@ -56,7 +52,7 @@ fun GameMasterScreen(routing: Routing<Route.GameMaster>) {
                         },
                     ) {
                         Icon(
-                            vectorResource(R.drawable.ic_settings),
+                            painterResource(R.drawable.ic_settings),
                             stringResource(R.string.title_party_settings),
                         )
                     }
@@ -72,76 +68,52 @@ fun GameMasterScreen(routing: Routing<Route.GameMaster>) {
             return@Scaffold
         }
 
-        BoxWithConstraints(Modifier.fillMaxSize()) {
-            val screens = screens(
-                viewModel,
-                routing,
-                Modifier.width(maxWidth)
-            )
-            val screenWidth = constraints.maxWidth.toFloat()
+        Column(Modifier.fillMaxSize()) {
+            ActiveCombatBanner(partyId = party.id, routing = routing)
 
-            Column(Modifier.fillMaxHeight()) {
-                ActiveCombatBanner(partyId = party.id, routing = routing)
+            TabPager(
+                modifier = Modifier.weight(1f),
+                fullWidthTabs = true,
+            ) {
+                val modifier = Modifier.width(screenWidth)
 
-                val tabContentState = rememberPagerState(screenWidth, screens.size)
+                tab(R.string.title_characters) {
+                    PartySummaryScreen(
+                        modifier = modifier,
+                        partyId = party.id,
+                        viewModel = viewModel,
+                        routing = routing,
+                        onCharacterOpenRequest = {
+                            routing.navigateTo(Route.CharacterDetail(CharacterId(party.id, it.id)))
+                        },
+                        onCharacterCreateRequest = {
+                            routing.navigateTo(Route.CharacterCreation(party.id, it))
+                        },
+                    )
+                }
 
-                TabRow(
-                    screens,
-                    pagerState = tabContentState,
-                    fullWidthTabs = true,
-                )
+                tab(R.string.title_calendar) {
+                    CalendarScreen(
+                        party,
+                        modifier = modifier,
+                        viewModel = viewModel,
+                    )
+                }
 
-                TabContent(
-                    item = party,
-                    screens = screens,
-                    state = tabContentState,
-                    modifier = Modifier.weight(1f)
-                )
-
-                BannerAd(stringResource(R.string.game_master_ad_unit_id))
+                tab(R.string.title_encounters) {
+                    val encountersViewModel: EncountersViewModel by viewModel { parametersOf(party.id) }
+                    EncountersScreen(
+                        partyId = party.id,
+                        viewModel = encountersViewModel,
+                        modifier = modifier,
+                        onEncounterClick = {
+                            routing.navigateTo(Route.EncounterDetail(EncounterId(party.id, it.id)))
+                        },
+                    )
+                }
             }
+
+            BannerAd(stringResource(R.string.game_master_ad_unit_id))
         }
     }
-}
-
-@Composable
-private fun screens(
-    viewModel: GameMasterViewModel,
-    routing: Routing<Route.GameMaster>,
-    modifier: Modifier
-): Array<TabScreen<Party>> {
-    return arrayOf(
-        TabScreen(R.string.title_characters) { party ->
-            PartySummaryScreen(
-                modifier = modifier,
-                partyId = party.id,
-                viewModel = viewModel,
-                routing = routing,
-                onCharacterOpenRequest = {
-                    routing.navigateTo(Route.CharacterDetail(CharacterId(party.id, it.id)))
-                },
-                onCharacterCreateRequest = {
-                    routing.navigateTo(Route.CharacterCreation(party.id, it))
-                },
-            )
-        },
-        TabScreen(R.string.title_calendar) { party ->
-            CalendarScreen(
-                party,
-                modifier = modifier,
-                viewModel = viewModel,
-            )
-        },
-        TabScreen(R.string.title_encounters) { party ->
-            val encountersViewModel: EncountersViewModel by viewModel { parametersOf(party.id) }
-            EncountersScreen(
-                partyId = party.id,
-                viewModel = encountersViewModel,
-                modifier = modifier,
-                onEncounterClick = {
-                    routing.navigateTo(Route.EncounterDetail(EncounterId(party.id, it.id)))
-                },
-            )
-        },
-    )
 }

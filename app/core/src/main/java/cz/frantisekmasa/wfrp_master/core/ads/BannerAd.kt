@@ -6,8 +6,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.key
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.AmbientContext
-import androidx.compose.ui.platform.AmbientDensity
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.viewinterop.AndroidView
 import com.google.android.gms.ads.AdSize
 import com.google.android.gms.ads.AdView
@@ -31,12 +31,12 @@ fun BannerAd(unitId: String) {
         AndroidView(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(with(AmbientDensity.current) {
+                .height(with(LocalDensity.current) {
                     size
-                        .getHeightInPixels(AmbientContext.current)
+                        .getHeightInPixels(LocalContext.current)
                         .toDp()
                 }),
-            viewBlock = {
+            factory = {
                 AdView(it).apply {
                     adUnitId = unitId
                     adSize = size

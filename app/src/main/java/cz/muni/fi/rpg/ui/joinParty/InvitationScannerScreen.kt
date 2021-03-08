@@ -9,7 +9,7 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.*
 import androidx.compose.runtime.*
-import androidx.compose.runtime.savedinstancestate.savedInstanceState
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -21,7 +21,7 @@ import cz.frantisekmasa.wfrp_master.navigation.Route
 import cz.frantisekmasa.wfrp_master.navigation.Routing
 import cz.muni.fi.rpg.R
 import cz.frantisekmasa.wfrp_master.core.domain.party.Invitation
-import cz.frantisekmasa.wfrp_master.core.ui.viewinterop.AmbientActivity
+import cz.frantisekmasa.wfrp_master.core.ui.viewinterop.LocalActivity
 import cz.muni.fi.rpg.ui.common.toast
 import cz.muni.fi.rpg.viewModels.provideJoinPartyViewModel
 import kotlinx.coroutines.launch
@@ -49,13 +49,13 @@ fun InvitationScannerScreen(routing: Routing<Route>) {
             val viewModel = provideJoinPartyViewModel()
             val coroutineScope = rememberCoroutineScope()
 
-            var screenState: InvitationScannerScreenState by savedInstanceState {
-                InvitationScannerScreenState.WaitingForPermissions
+            var screenState: InvitationScannerScreenState by rememberSaveable {
+                mutableStateOf(InvitationScannerScreenState.WaitingForPermissions)
             }
 
             when (val state = screenState) {
                 InvitationScannerScreenState.WaitingForPermissions -> {
-                    val activity = AmbientActivity.current
+                    val activity = LocalActivity.current
 
                     LaunchedEffect(null) {
                         val permissionResult = PermissionManager.requestPermissions(

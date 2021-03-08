@@ -1,5 +1,5 @@
 package cz.frantisekmasa.wfrp_master.core.auth
 
-import androidx.compose.runtime.ambientOf
+import androidx.compose.runtime.compositionLocalOf
 
-val AmbientUser = ambientOf<User> { error("Logged in user was not provided!") }
+val LocalUser = compositionLocalOf<User> { error("Logged in user was not provided!") }

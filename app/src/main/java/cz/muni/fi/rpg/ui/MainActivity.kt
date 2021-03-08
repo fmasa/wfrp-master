@@ -1,9 +1,9 @@
 package cz.muni.fi.rpg.ui
 
 import android.os.Bundle
+import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.ui.platform.setContent
 import cz.muni.fi.rpg.ui.shell.*
 
 class MainActivity : AppCompatActivity() {

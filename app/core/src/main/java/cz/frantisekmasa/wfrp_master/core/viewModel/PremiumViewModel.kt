@@ -10,7 +10,7 @@ import com.google.firebase.analytics.ktx.logEvent
 import com.google.firebase.ktx.Firebase
 import com.revenuecat.purchases.*
 import cz.frantisekmasa.wfrp_master.core.auth.UserId
-import cz.frantisekmasa.wfrp_master.core.ui.viewinterop.AmbientActivity
+import cz.frantisekmasa.wfrp_master.core.ui.viewinterop.LocalActivity
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.koin.androidx.viewmodel.ext.android.getViewModel
@@ -114,7 +114,7 @@ class PremiumViewModel(private val purchases: Purchases) : ViewModel() {
 }
 
 @Composable
-fun providePremiumViewModel(): PremiumViewModel = AmbientActivity.current.getViewModel()
+fun providePremiumViewModel(): PremiumViewModel = LocalActivity.current.getViewModel()
 
 sealed class PurchaseResult {
     object Success : PurchaseResult()
