@@ -5,6 +5,8 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Divider
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Switch
@@ -52,11 +54,13 @@ internal fun CharacterConditionsScreen(
         }
     }
 
-    LazyColumn(
-        modifier.background(MaterialTheme.colors.surface),
-        contentPadding = PaddingValues(top = Spacing.small),
+    Column(
+        modifier
+            .background(MaterialTheme.colors.surface)
+            .verticalScroll(rememberScrollState())
+            .padding(top = Spacing.small)
     ) {
-        items(Condition.values().toList()) { condition ->
+        Condition.values().forEach { condition ->
             ConditionRow(condition, conditions.count(condition), updateConditions)
             Divider()
         }

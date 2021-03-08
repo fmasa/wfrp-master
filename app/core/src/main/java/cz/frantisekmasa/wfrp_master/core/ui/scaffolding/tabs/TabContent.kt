@@ -8,33 +8,35 @@ import androidx.compose.material.SwipeableState
 import androidx.compose.material.rememberSwipeableState
 import androidx.compose.material.swipeable
 import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clipToBounds
-import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.layout.*
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
-import timber.log.Timber
-import kotlin.math.roundToInt
 
 
 @Stable
 class PagerState(
     private val coroutineScope: CoroutineScope,
-    internal val scrollState: ScrollState,
     internal val swipeableState: SwipeableState<Int>,
-    private val screenWidth: Int,
+    internal val screenWidth: Int,
     private val screenCount: Int,
 ) {
     val selectedScreen: Int
-        get() = scrollState.value / screenWidth
+        get() = scrollOffset / screenWidth
 
 
     val scrolledPercentage: Float
-        get() = (scrollState.value % screenWidth).toFloat() / screenWidth
+        get() = (scrollOffset % screenWidth).toFloat() / screenWidth
 
-    val anchors = (0..screenCount).map { it * screenWidth.toFloat() to it }.toMap()
+    val scrollOffset by derivedStateOf {
+        val offset = swipeableState.offset.value
+
+        if (offset.isNaN()) 0 else offset.toInt()
+    }
+
+    val anchors = (0 until screenCount).map { it * screenWidth.toFloat() to it }.toMap()
 
     fun selectScreen(index: Int) {
         if (index !in 0 until screenCount) {
@@ -42,34 +44,21 @@ class PagerState(
         }
 
         coroutineScope.launch {
-            scrollState.animateScrollTo(index * screenWidth)
+            swipeableState.animateTo(index)
         }
     }
 }
 
 @Composable
 fun rememberPagerState(
-    screenWidth: Float,
+    screenWidth: Int,
     screenCount: Int,
-    ignoredDragOffset: Dp = 10.dp,
 ): PagerState {
-    val scrollState = key(screenWidth, screenCount) { rememberScrollState(0) }
     val swipeableState = key(screenWidth, screenCount) { rememberSwipeableState(0) }
     val coroutineScope = rememberCoroutineScope()
 
-    val offset = swipeableState.offset.value
-
-    DisposableEffect(offset) {
-        if (!offset.isNaN()) {
-            coroutineScope.launch {
-                scrollState.scrollTo(offset.roundToInt())
-            }
-        }
-        onDispose {  }
-    }
-
-    return remember(scrollState, ignoredDragOffset, coroutineScope) {
-        PagerState(coroutineScope, scrollState, swipeableState, screenWidth.roundToInt(), screenCount)
+    return remember(coroutineScope, swipeableState) {
+        PagerState(coroutineScope, swipeableState, screenWidth, screenCount)
     }
 }
 
@@ -80,21 +69,59 @@ fun <T> TabContent(
     screens: Array<TabScreen<T>>,
     modifier: Modifier = Modifier,
 ) {
-    Row(
-        modifier = modifier
+    Pager(
+        modifier = modifier,
+        state = state,
+        screens = remember(screens) { screens.map { { it.content(item) } } },
+    )
+}
+
+@Composable
+private fun Pager(
+    state: PagerState,
+    screens: List<@Composable () -> Unit>,
+    modifier: Modifier = Modifier,
+) {
+    val screenWidth = state.screenWidth
+
+    val visibleBounds by derivedStateOf { state.scrollOffset until state.scrollOffset + screenWidth }
+
+    val visibleScreens by derivedStateOf {
+        screens.indices.filter {
+            val start = it * screenWidth
+            val end = (it + 1) * screenWidth - 1
+
+            start in visibleBounds || end in visibleBounds
+        }
+    }
+
+    SubcomposeLayout(
+        modifier
             .clipToBounds()
             .padding(0.dp)
             .background(MaterialTheme.colors.background)
-            .horizontalScroll(state.scrollState, enabled = false)
             .swipeable(
                 orientation = Orientation.Horizontal,
                 state = state.swipeableState,
                 anchors = state.anchors,
                 reverseDirection = true,
             ),
-        horizontalArrangement = Arrangement.Start,
-        verticalAlignment = Alignment.Top
-    ) {
-        screens.forEach { it.content(item) }
+    ) { constraints ->
+        val pagerScreens = visibleScreens.foldRight(emptyList<PagerScreen>()) { screen, previous ->
+            previous + PagerScreen(screen, subcompose(screen, screens[screen]).first())
+        }
+
+        layout(width = screenWidth, height = constraints.maxHeight) {
+            pagerScreens.forEach {
+                it.measurable
+                    .measure(constraints)
+                    .place(it.index * screenWidth - state.scrollOffset, 0)
+            }
+        }
     }
 }
+
+private class PagerScreen(
+    val index: Int,
+    val measurable: Measurable,
+)

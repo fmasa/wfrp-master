@@ -4,9 +4,11 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.Stable
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.painterResource
 import cz.frantisekmasa.wfrp_master.core.domain.identifiers.CharacterId
@@ -31,7 +33,6 @@ import cz.muni.fi.rpg.viewModels.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.koin.core.parameter.parametersOf
-import timber.log.Timber
 
 @Composable
 fun CharacterDetailScreen(routing: Routing<Route.CharacterDetail>) {
@@ -104,7 +105,7 @@ private fun MainContainer(
     val characterId = routing.route.characterId
 
     BoxWithConstraints(Modifier.fillMaxSize()) {
-        val screenWidth = constraints.maxWidth.toFloat()
+        val screenWidth = constraints.maxWidth
         val screens = screens(characterId, viewModel, Modifier.width(maxWidth))
 
         Column(Modifier.fillMaxHeight()) {
@@ -131,6 +132,7 @@ private fun MainContainer(
 }
 
 @Composable
+@Stable
 private fun screens(
     characterId: CharacterId,
     viewModel: CharacterViewModel,

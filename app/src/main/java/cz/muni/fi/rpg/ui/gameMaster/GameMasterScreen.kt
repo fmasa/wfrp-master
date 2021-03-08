@@ -77,7 +77,7 @@ fun GameMasterScreen(routing: Routing<Route.GameMaster>) {
                 routing,
                 Modifier.width(maxWidth)
             )
-            val screenWidth = constraints.maxWidth.toFloat()
+            val screenWidth = constraints.maxWidth
 
             Column(Modifier.fillMaxHeight()) {
                 ActiveCombatBanner(partyId = party.id, routing = routing)

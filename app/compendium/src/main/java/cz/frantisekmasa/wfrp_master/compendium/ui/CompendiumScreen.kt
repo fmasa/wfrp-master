@@ -73,7 +73,7 @@ private fun TopBar(routing: Routing<Route.Compendium>) {
 
 @Composable
 private fun BoxWithConstraintsScope.MainContent(routing: Routing<Route.Compendium>) {
-    val screenWidthPx = constraints.maxWidth.toFloat()
+    val screenWidthPx = constraints.maxWidth
     val screenWidthDp = maxWidth
 
     Column {
