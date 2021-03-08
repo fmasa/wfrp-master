@@ -1,4 +1,4 @@
-package cz.frantisekmasa.wfrp_master.core.ui.scaffolding.tabs
+package cz.frantisekmasa.wfrp_master.core.ui.scaffolding
 
 import androidx.compose.foundation.*
 import androidx.compose.foundation.gestures.Orientation
@@ -63,21 +63,7 @@ fun rememberPagerState(
 }
 
 @Composable
-fun <T> TabContent(
-    item: T,
-    state: PagerState,
-    screens: Array<TabScreen<T>>,
-    modifier: Modifier = Modifier,
-) {
-    Pager(
-        modifier = modifier,
-        state = state,
-        screens = remember(screens) { screens.map { { it.content(item) } } },
-    )
-}
-
-@Composable
-private fun Pager(
+fun Pager(
     state: PagerState,
     screens: List<@Composable () -> Unit>,
     modifier: Modifier = Modifier,

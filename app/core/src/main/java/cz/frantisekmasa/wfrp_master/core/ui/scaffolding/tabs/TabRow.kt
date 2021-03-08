@@ -8,14 +8,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import cz.frantisekmasa.wfrp_master.core.ui.scaffolding.PagerState
 import java.util.*
 
 
 @Composable
-fun <T> ColumnScope.TabRow(
-    screens: Array<TabScreen<T>>,
+internal fun ColumnScope.TabRow(
+    names: List<String>,
     pagerState: PagerState,
     fullWidthTabs: Boolean = false
 ) {
@@ -25,7 +25,7 @@ fun <T> ColumnScope.TabRow(
     val tabs = @Composable {
         val tabModifier = if (fullWidthTabs) Modifier.weight(1f) else Modifier
 
-        screens.forEachIndexed { index, screen ->
+        names.forEachIndexed { index, tabName ->
             Tab(
                 modifier = tabModifier,
                 selectedContentColor = MaterialTheme.colors.primary,
@@ -34,7 +34,7 @@ fun <T> ColumnScope.TabRow(
                 onClick = { pagerState.selectScreen(index) },
                 text = {
                     Text(
-                        stringResource(screen.tabName).toUpperCase(Locale.getDefault()),
+                        tabName.toUpperCase(Locale.getDefault()),
                         maxLines = 1,
                     )
                 },

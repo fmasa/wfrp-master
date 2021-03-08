@@ -4,27 +4,21 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.Stable
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.painterResource
-import cz.frantisekmasa.wfrp_master.core.domain.identifiers.CharacterId
 import cz.frantisekmasa.wfrp_master.core.ui.buttons.HamburgerButton
 import cz.frantisekmasa.wfrp_master.core.ui.scaffolding.Subtitle
 import cz.frantisekmasa.wfrp_master.core.ui.scaffolding.TopBarAction
-import cz.frantisekmasa.wfrp_master.core.ui.scaffolding.tabs.TabContent
-import cz.frantisekmasa.wfrp_master.core.ui.scaffolding.tabs.TabRow
-import cz.frantisekmasa.wfrp_master.core.ui.scaffolding.tabs.TabScreen
 import cz.frantisekmasa.wfrp_master.core.viewModel.viewModel
 import cz.muni.fi.rpg.R
 import cz.frantisekmasa.wfrp_master.core.domain.character.Character
 import cz.muni.fi.rpg.ui.character.skills.CharacterSkillsScreen
 import cz.frantisekmasa.wfrp_master.combat.ui.ActiveCombatBanner
 import cz.frantisekmasa.wfrp_master.core.ads.BannerAd
-import cz.frantisekmasa.wfrp_master.core.ui.scaffolding.tabs.rememberPagerState
+import cz.frantisekmasa.wfrp_master.core.ui.scaffolding.tabs.*
 import cz.frantisekmasa.wfrp_master.core.viewModel.PartyViewModel
 import cz.frantisekmasa.wfrp_master.inventory.ui.CharacterTrappingsScreen
 import cz.frantisekmasa.wfrp_master.navigation.Route
@@ -104,80 +98,64 @@ private fun MainContainer(
 
     val characterId = routing.route.characterId
 
-    BoxWithConstraints(Modifier.fillMaxSize()) {
-        val screenWidth = constraints.maxWidth
-        val screens = screens(characterId, viewModel, Modifier.width(maxWidth))
+    Column(Modifier.fillMaxSize()) {
+        if (! routing.route.comingFromCombat) {
+            // Prevent long and confusing back stack when user goes i.e.
+            // combat -> character detail -> combat
+            ActiveCombatBanner(partyId = characterId.partyId, routing = routing)
+        }
 
-        Column(Modifier.fillMaxHeight()) {
-            if (! routing.route.comingFromCombat) {
-                // Prevent long and confusing back stack when user goes i.e.
-                // combat -> character detail -> combat
-                ActiveCombatBanner(partyId = characterId.partyId, routing = routing)
+        TabPager(Modifier.weight(1f)) {
+            val modifier = Modifier.width(screenWidth)
+
+            tab(R.string.title_misc) {
+                CharacterMiscScreen(
+                    characterId = characterId,
+                    character = character,
+                    modifier = modifier,
+                )
             }
 
-            val pagerState = rememberPagerState(screenWidth, screenCount = screens.size)
+            tab(R.string.title_character_stats) {
+                CharacterCharacteristicsScreen(
+                    characterId = characterId,
+                    character = character,
+                    modifier = modifier,
+                )
+            }
 
-            TabRow(screens, pagerState)
+            tab(R.string.title_character_conditions) {
+                CharacterConditionsScreen(
+                    character = character,
+                    viewModel = viewModel,
+                    modifier = modifier,
+                )
+            }
 
-            TabContent(
-                item = character,
-                screens = screens,
-                state = pagerState,
-                modifier = Modifier.weight(1f),
-            )
+            tab(R.string.title_character_skills) {
+                CharacterSkillsScreen(
+                    characterVm = viewModel,
+                    modifier = modifier,
+                    characterId = characterId,
+                )
+            }
 
-            BannerAd(stringResource(R.string.character_ad_unit_id))
+            tab(R.string.title_character_spells) {
+                CharacterSpellsScreen(
+                    characterId = characterId,
+                    modifier = modifier,
+                )
+            }
+
+            tab(R.string.title_character_trappings) {
+                CharacterTrappingsScreen(
+                    characterId = characterId,
+                    modifier = modifier,
+                )
+            }
         }
+
+        BannerAd(stringResource(R.string.character_ad_unit_id))
     }
 }
 
-@Composable
-@Stable
-private fun screens(
-    characterId: CharacterId,
-    viewModel: CharacterViewModel,
-    modifier: Modifier
-): Array<TabScreen<Character>> = arrayOf(
-    TabScreen(
-        R.string.title_misc
-    ) { character ->
-        CharacterMiscScreen(
-            characterId = characterId,
-            character = character,
-            modifier = modifier,
-        )
-    },
-    TabScreen(R.string.title_character_stats) { character ->
-        CharacterCharacteristicsScreen(
-            characterId = characterId,
-            character = character,
-            modifier = modifier,
-        )
-    },
-    TabScreen(R.string.title_character_conditions) { character ->
-        CharacterConditionsScreen(
-            character = character,
-            viewModel = viewModel,
-            modifier = modifier,
-        )
-    },
-    TabScreen(R.string.title_character_skills) {
-        CharacterSkillsScreen(
-            characterVm = viewModel,
-            modifier = modifier,
-            characterId = characterId,
-        )
-    },
-    TabScreen(R.string.title_character_spells) {
-        CharacterSpellsScreen(
-            characterId = characterId,
-            modifier = modifier,
-        )
-    },
-    TabScreen(R.string.title_character_trappings) {
-        CharacterTrappingsScreen(
-            characterId = characterId,
-            modifier = modifier,
-        )
-    },
-)
