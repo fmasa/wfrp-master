@@ -1,5 +1,6 @@
 package cz.muni.fi.rpg.ui.startup
 
+import androidx.activity.compose.registerForActivityResult
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -15,7 +16,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.google.android.gms.auth.api.signin.GoogleSignIn
-import cz.frantisekmasa.wfrp_master.core.ui.viewinterop.registerForActivityResult
 import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.ui.common.composables.Theme
 import cz.muni.fi.rpg.ui.shell.splashBackground
@@ -58,24 +58,23 @@ fun StartupScreen(viewModel: AuthenticationViewModel) {
 
     val context = LocalContext.current
     val contract = remember(viewModel) { viewModel.googleSignInContract() }
-    val googleSignInLauncher by registerForActivityResult(
-        keys = listOf(contract, coroutineScope),
-        contract = contract,
-    ) { result ->
-        if (result.resultCode == 0) {
-            Timber.d("Google Sign-In dialog was dismissed")
-            showAnonymousAuthenticationDialog = true
-            return@registerForActivityResult
-        }
-
-        coroutineScope.launch(Dispatchers.IO) {
-            try {
-                GoogleSignIn.getSignedInAccountFromIntent(result.intent)
-                    .await()
-                    .idToken
-                    ?.let { idToken -> viewModel.signInWithGoogleToken(idToken) }
-            } catch (e: Throwable) {
+    val googleSignInLauncher = key(contract, coroutineScope) {
+        registerForActivityResult(contract) { result ->
+            if (result.resultCode == 0) {
+                Timber.d("Google Sign-In dialog was dismissed")
                 showAnonymousAuthenticationDialog = true
+                return@registerForActivityResult
+            }
+
+            coroutineScope.launch(Dispatchers.IO) {
+                try {
+                    GoogleSignIn.getSignedInAccountFromIntent(result.intent)
+                        .await()
+                        .idToken
+                        ?.let { idToken -> viewModel.signInWithGoogleToken(idToken) }
+                } catch (e: Throwable) {
+                    showAnonymousAuthenticationDialog = true
+                }
             }
         }
     }

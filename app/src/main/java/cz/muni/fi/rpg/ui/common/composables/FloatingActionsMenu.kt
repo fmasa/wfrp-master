@@ -58,7 +58,7 @@ fun FloatingActionsMenu(
         }
     }
 
-    Column(horizontalAlignment = Alignment.End) {
+    Column(horizontalAlignment = Alignment.End, modifier = Modifier.fillMaxWidth()) {
         Column(
             horizontalAlignment = Alignment.End,
             verticalArrangement = Arrangement.spacedBy(menuYOffset),

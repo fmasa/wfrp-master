@@ -14,7 +14,6 @@ import com.google.firebase.auth.GoogleAuthProvider
 import cz.frantisekmasa.wfrp_master.core.auth.User
 import cz.frantisekmasa.wfrp_master.core.logging.Reporter
 import cz.frantisekmasa.wfrp_master.core.ui.viewinterop.LocalActivity
-import cz.frantisekmasa.wfrp_master.core.ui.viewinterop.IntentResult
 import cz.muni.fi.rpg.R
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.awaitClose
@@ -159,6 +158,12 @@ class AuthenticationViewModel(private val auth: FirebaseAuth) : ViewModel() {
             .requestIdToken(context.getString(R.string.default_web_client_id))
             .requestEmail()
             .build()
+    )
+
+
+    data class IntentResult(
+        val resultCode: Int,
+        val intent: Intent?,
     )
 }
 

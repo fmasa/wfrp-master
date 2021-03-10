@@ -4,7 +4,7 @@ plugins {
     id("kotlin-parcelize")
 }
 
-val composeVersion = "1.0.0-beta01"
+val composeVersion = "1.0.0-beta02"
 
 android {
     compileSdkVersion(29)
@@ -64,8 +64,8 @@ dependencies {
     api("androidx.compose.material:material:$composeVersion")
     api("androidx.compose.ui:ui-tooling:$composeVersion")
     api("androidx.compose.runtime:runtime-livedata:$composeVersion")
-    api("androidx.activity:activity-compose:1.3.0-alpha03")
-    api("androidx.lifecycle:lifecycle-viewmodel-compose:1.0.0-alpha02")
+    api("androidx.activity:activity-compose:1.3.0-alpha04")
+    api("androidx.lifecycle:lifecycle-viewmodel-compose:1.0.0-alpha03")
 
 
     // Koin
