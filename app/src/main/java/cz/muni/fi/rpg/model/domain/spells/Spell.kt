@@ -1,12 +1,12 @@
 package cz.muni.fi.rpg.model.domain.spells
 
-import android.os.Parcelable
+import cz.frantisekmasa.wfrp_master.core.domain.character.CharacterItem
 import kotlinx.parcelize.Parcelize
 import java.util.UUID
 
 @Parcelize
 data class Spell(
-    val id: UUID,
+    override val id: UUID,
     val compendiumId: UUID? = null,
     val name: String,
     val range: String,
@@ -15,7 +15,7 @@ data class Spell(
     val castingNumber: Int,
     val effect: String,
     val memorized: Boolean = true, // TODO: Remove default value and migrate stored data
-): Parcelable {
+): CharacterItem {
     companion object {
         const val NAME_MAX_LENGTH = 50
         const val RANGE_MAX_LENGTH = 50

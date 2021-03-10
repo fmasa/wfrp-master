@@ -1,11 +1,5 @@
 package cz.muni.fi.rpg.di
 
-import com.fasterxml.jackson.databind.json.JsonMapper
-import com.fasterxml.jackson.module.kotlin.registerKotlinModule
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.ktx.firestore
-import com.google.firebase.firestore.ktx.firestoreSettings
-import com.google.firebase.ktx.Firebase
 import com.revenuecat.purchases.Purchases
 import cz.frantisekmasa.wfrp_master.combat.domain.encounter.Encounter
 import cz.frantisekmasa.wfrp_master.combat.domain.encounter.EncounterRepository
@@ -20,22 +14,15 @@ import cz.frantisekmasa.wfrp_master.core.domain.party.PartyRepository
 import cz.muni.fi.rpg.BuildConfig
 import cz.muni.fi.rpg.model.cache.CharacterRepositoryIdentityMap
 import cz.muni.fi.rpg.model.cache.PartyRepositoryIdentityMap
-import cz.frantisekmasa.wfrp_master.core.domain.Armor
 import cz.frantisekmasa.wfrp_master.combat.domain.encounter.NpcRepository
 import cz.frantisekmasa.wfrp_master.combat.infrastructure.FirestoreEncounterRepository
 import cz.frantisekmasa.wfrp_master.combat.infrastructure.FirestoreNpcRepository
 import cz.frantisekmasa.wfrp_master.compendium.domain.Blessing
 import cz.frantisekmasa.wfrp_master.compendium.domain.Miracle
-import cz.frantisekmasa.wfrp_master.core.domain.character.Character
-import cz.frantisekmasa.wfrp_master.core.domain.character.CharacterFeatureRepository
-import cz.frantisekmasa.wfrp_master.core.domain.character.CharacterRepository
-import cz.frantisekmasa.wfrp_master.core.domain.character.Feature
+import cz.frantisekmasa.wfrp_master.core.CoreModule
 import cz.frantisekmasa.wfrp_master.core.domain.party.PartyId
-import cz.frantisekmasa.wfrp_master.inventory.domain.InventoryItemRepository
 import cz.muni.fi.rpg.model.domain.invitation.InvitationProcessor
 import cz.muni.fi.rpg.model.domain.skills.SkillRepository
-import cz.muni.fi.rpg.model.domain.spells.SpellRepository
-import cz.muni.fi.rpg.model.domain.talents.TalentRepository
 import cz.muni.fi.rpg.model.firestore.*
 import cz.muni.fi.rpg.model.firestore.repositories.*
 import cz.frantisekmasa.wfrp_master.core.ads.AdManager
@@ -45,26 +32,36 @@ import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.core.scope.Scope
 import org.koin.dsl.module
 import cz.frantisekmasa.wfrp_master.core.firestore.aggregateMapper
-import cz.frantisekmasa.wfrp_master.core.firestore.repositories.FirestoreCharacterFeatureRepository
 import cz.frantisekmasa.wfrp_master.core.firestore.repositories.FirestoreCharacterRepository
 import cz.frantisekmasa.wfrp_master.core.firestore.repositories.FirestorePartyRepository
 import cz.frantisekmasa.wfrp_master.core.viewModel.PartyViewModel
-import cz.frantisekmasa.wfrp_master.inventory.domain.InventoryItem
-import cz.frantisekmasa.wfrp_master.inventory.ui.InventoryViewModel
 import cz.frantisekmasa.wfrp_master.core.ads.AdmobLocationProvider
 import cz.frantisekmasa.wfrp_master.core.ads.LocationProvider
+import cz.frantisekmasa.wfrp_master.core.domain.character.*
+import cz.frantisekmasa.wfrp_master.core.firestore.repositories.FirestoreCharacterItemRepository
 import cz.muni.fi.rpg.model.domain.skills.Skill
 import cz.muni.fi.rpg.model.domain.spells.Spell
 import cz.muni.fi.rpg.model.domain.talents.Talent
 import cz.muni.fi.rpg.ui.partySettings.PartySettingsViewModel
 import cz.frantisekmasa.wfrp_master.core.viewModel.PremiumViewModel
 import cz.frantisekmasa.wfrp_master.core.viewModel.SettingsViewModel
+import cz.frantisekmasa.wfrp_master.inventory.InventoryModule
+import org.koin.core.qualifier.named
 import kotlin.random.Random
+import kotlin.reflect.KClass
 import cz.frantisekmasa.wfrp_master.compendium.domain.Skill as CompendiumSkill
 import cz.frantisekmasa.wfrp_master.compendium.domain.Spell as ComepndiumSpell
 import cz.frantisekmasa.wfrp_master.compendium.domain.Talent as CompendiumTalent
 
-val appModule = module {
+private enum class Services {
+    CHARACTER_TALENT_REPOSITORY,
+    CHARACTER_SPELL_REPOSITORY,
+}
+
+val appModule =
+    CoreModule +
+    InventoryModule +
+    module {
     fun Scope.skillCompendium() = FirestoreCompendium(
         COLLECTION_COMPENDIUM_SKILLS,
         get(),
@@ -95,31 +92,16 @@ val appModule = module {
         aggregateMapper(Miracle::class),
     )
 
-    /**
-     * Common database stuff
-     */
-    single {
-        val firestore = Firebase.firestore
-
-        @Suppress("ConstantConditionIf")
-        if (BuildConfig.FIRESTORE_EMULATOR_URL != "") {
-            firestore.firestoreSettings = firestoreSettings {
-                host = BuildConfig.FIRESTORE_EMULATOR_URL
-                isSslEnabled = false
-            }
-        }
-
-        firestore
-    }
+    fun <T : CharacterItem> Scope.characterItemRepository(
+        classRef: KClass<T>,
+        collectionName: String,
+    ): CharacterItemRepository<T> = FirestoreCharacterItemRepository(
+        collectionName = collectionName,
+        mapper = aggregateMapper(classRef),
+        get(),
+    )
 
     single<InvitationProcessor> { FirestoreInvitationProcessor(get(), get()) }
-    single { FirebaseAuth.getInstance() }
-    single {
-        val mapper = JsonMapper()
-        mapper.registerKotlinModule()
-
-        mapper
-    }
 
     single<LocationProvider> { AdmobLocationProvider() }
     single {
@@ -127,23 +109,29 @@ val appModule = module {
             Purchases.debugLogsEnabled = BuildConfig.DEBUG
         }
     }
-    /**
-     * Repositories
-     */
-    single<InventoryItemRepository> { FirestoreInventoryItemRepository(get(), aggregateMapper(
-        InventoryItem::class)) }
+//    /**
+//     * Character item repositories
+//     */
+//    single(named("inventoryItemRepository")) {
+//        characterItemRepository(InventoryItem::class, COLLECTION_INVENTORY_ITEMS)
+//    }
+
+    single<SkillRepository> { FirestoreSkillRepository(get(), aggregateMapper(Skill::class)) }
+    single(named(Services.CHARACTER_TALENT_REPOSITORY)) {
+        characterItemRepository(Talent::class, COLLECTION_TALENTS)
+    }
+    single(named(Services.CHARACTER_SPELL_REPOSITORY)) {
+        characterItemRepository(Spell::class, COLLECTION_SPELLS)
+    }
+
+
     single<CharacterRepository> {
         CharacterRepositoryIdentityMap(10, FirestoreCharacterRepository(get(), aggregateMapper(Character::class)))
     }
     single<PartyRepository> {
         PartyRepositoryIdentityMap(10, FirestorePartyRepository(get(), aggregateMapper(Party::class)))
     }
-    single<SkillRepository> { FirestoreSkillRepository(get(), aggregateMapper(Skill::class)) }
-    single<TalentRepository> { FirestoreTalentRepository(get(), aggregateMapper(Talent::class)) }
-    single<SpellRepository> { FirestoreSpellRepository(get(), aggregateMapper(Spell::class)) }
-    single<CharacterFeatureRepository<Armor>> {
-        FirestoreCharacterFeatureRepository(Feature.ARMOR, get(), Armor(), aggregateMapper(Armor::class))
-    }
+
     single<EncounterRepository> { FirestoreEncounterRepository(get(), aggregateMapper(Encounter::class)) }
     single<NpcRepository> { FirestoreNpcRepository(get(), aggregateMapper(Npc::class)) }
 
@@ -158,10 +146,19 @@ val appModule = module {
     viewModel { (partyId: PartyId) -> EncountersViewModel(partyId, get()) }
     viewModel { (partyId: PartyId) -> PartyViewModel(partyId, get()) }
     viewModel { (encounterId: EncounterId) -> EncounterDetailViewModel(encounterId, get(), get(), get()) }
-    viewModel { (characterId: CharacterId) -> InventoryViewModel(characterId, get(), get(), get()) }
     viewModel { (characterId: CharacterId) -> SkillsViewModel(characterId, get(), skillCompendium()) }
-    viewModel { (characterId: CharacterId) -> SpellsViewModel(characterId, get(), spellCompendium()) }
-    viewModel { (characterId: CharacterId) -> TalentsViewModel(characterId, get(), talentCompendium()) }
+    viewModel { (characterId: CharacterId) -> SpellsViewModel(
+        characterId,
+        get(named(Services.CHARACTER_SPELL_REPOSITORY)),
+        spellCompendium(),
+    ) }
+    viewModel { (characterId: CharacterId) ->
+        TalentsViewModel(
+            characterId,
+            get(named(Services.CHARACTER_TALENT_REPOSITORY)),
+            talentCompendium(),
+        )
+    }
     viewModel { AuthenticationViewModel(get()) }
     viewModel { NetworkViewModel(get()) }
     viewModel { JoinPartyViewModel(get(), get(), get()) }

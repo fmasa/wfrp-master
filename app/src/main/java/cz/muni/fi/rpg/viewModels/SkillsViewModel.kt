@@ -19,7 +19,7 @@ class SkillsViewModel(
     private val skillRepository: SkillRepository,
     private val compendium: Compendium<CompendiumSkill>
 ) : ViewModel() {
-    private val skillsFlow = skillRepository.forCharacter(characterId)
+    private val skillsFlow = skillRepository.findAllForCharacter(characterId)
 
     val skills: LiveData<List<Skill>> = skillsFlow.asLiveData()
     val compendiumSkillsCount: LiveData<Int> by lazy { compendiumSkills.map { it.size }.asLiveData() }

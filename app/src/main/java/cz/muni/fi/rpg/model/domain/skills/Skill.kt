@@ -1,20 +1,20 @@
 package cz.muni.fi.rpg.model.domain.skills
 
-import android.os.Parcelable
 import cz.frantisekmasa.wfrp_master.core.domain.Characteristic
+import cz.frantisekmasa.wfrp_master.core.domain.character.CharacterItem
 import kotlinx.parcelize.Parcelize
 import java.util.UUID
 
 @Parcelize
 data class Skill(
-    val id: UUID,
+    override val id: UUID,
     val compendiumId: UUID? = null,
     val advanced: Boolean,
     val characteristic: Characteristic,
     val name: String,
     val description: String,
     val advances: Int = 0
-) : Parcelable {
+) : CharacterItem {
     companion object {
         const val NAME_MAX_LENGTH = 50
         const val DESCRIPTION_MAX_LENGTH = 2000

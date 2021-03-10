@@ -23,25 +23,6 @@ android {
         versionName = System.getenv("SUPPLY_VERSION_NAME") ?: "dev"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-
-        //
-        // Firestore emulator setup
-        //
-        val properties = Properties()
-        val propertiesFile = File("local.properties")
-
-        if (propertiesFile.exists()) {
-            properties.load(FileInputStream("local.properties"))
-        }
-
-        buildConfigField(
-            "String",
-            "FIRESTORE_EMULATOR_URL",
-            "\"${properties.getOrDefault("dev.firestoreEmulatorUrl", "")}\""
-        )
-        //
-        // End of Firestore Emulator setup
-        //
     }
 
     signingConfigs {

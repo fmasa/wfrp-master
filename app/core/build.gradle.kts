@@ -1,3 +1,7 @@
+import java.io.File
+import java.io.FileInputStream
+import java.util.*
+
 plugins {
     id("com.android.library")
     id("kotlin-android")
@@ -14,6 +18,25 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+
+        //
+        // Firestore emulator setup
+        //
+        val properties = Properties()
+        val propertiesFile = File("local.properties")
+
+        if (propertiesFile.exists()) {
+            properties.load(FileInputStream("local.properties"))
+        }
+
+        buildConfigField(
+            "String",
+            "FIRESTORE_EMULATOR_URL",
+            "\"${properties.getOrDefault("dev.firestoreEmulatorUrl", "")}\""
+        )
+        //
+        // End of Firestore Emulator setup
+        //
     }
 
     buildTypes {
