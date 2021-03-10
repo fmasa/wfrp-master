@@ -2,6 +2,7 @@ package cz.muni.fi.rpg.ui.settings
 
 import android.os.Parcelable
 import android.widget.Toast
+import androidx.activity.compose.registerForActivityResult
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -29,7 +30,6 @@ import cz.frantisekmasa.wfrp_master.core.ui.primitives.CardContainer
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.Spacing
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.VisualOnlyIconDescription
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.shortToast
-import cz.frantisekmasa.wfrp_master.core.ui.viewinterop.registerForActivityResult
 import cz.frantisekmasa.wfrp_master.navigation.Route
 import cz.frantisekmasa.wfrp_master.navigation.Routing
 import cz.muni.fi.rpg.R
@@ -62,7 +62,7 @@ fun SignInCard(viewModel: SettingsViewModel, routing: Routing<Route.Settings>) {
         )
     }
 
-    val launcher by registerForActivityResult(contract) { result ->
+    val launcher = registerForActivityResult(contract) { result ->
         coroutineScope.launch(Dispatchers.IO) {
             try {
                 GoogleSignIn.getSignedInAccountFromIntent(result.intent)

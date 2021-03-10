@@ -13,11 +13,6 @@ plugins {
 }
 
 android {
-
-    lint {
-        disable("InvalidFragmentVersionForActivityResult") // This is temporary until we drop authentication fragment
-    }
-
     compileSdkVersion(30)
 
     defaultConfig {

@@ -1,11 +1,10 @@
 package cz.frantisekmasa.wfrp_master.compendium.ui
 
-import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.widget.Toast
-import androidx.activity.result.ActivityResultLauncher
-import androidx.activity.result.contract.ActivityResultContract
+import androidx.activity.compose.registerForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -28,7 +27,6 @@ import cz.frantisekmasa.wfrp_master.compendium.domain.importer.RulebookCompendiu
 import cz.frantisekmasa.wfrp_master.core.ui.buttons.BackButton
 import cz.frantisekmasa.wfrp_master.core.ui.scaffolding.Subtitle
 import cz.frantisekmasa.wfrp_master.core.ui.viewinterop.LocalActivity
-import cz.frantisekmasa.wfrp_master.core.ui.viewinterop.registerForActivityResult
 import cz.frantisekmasa.wfrp_master.core.viewModel.viewModel
 import cz.frantisekmasa.wfrp_master.navigation.Route
 import cz.frantisekmasa.wfrp_master.navigation.Routing
@@ -76,8 +74,8 @@ private fun MainContainer(routing: Routing<Route.CompendiumImport>) {
         )
     }
 
-    val fileChooser by registerFileChooser(
-        onFileChoose = {
+    val fileChooser = registerForActivityResult(ActivityResultContracts.GetContent(),
+        onResult = {
             coroutineScope.launch(Dispatchers.IO) {
                 context.contentResolver.openInputStream(it)?.use { inputStream ->
                     try {
@@ -130,7 +128,7 @@ private fun MainContainer(routing: Routing<Route.CompendiumImport>) {
         )
 
         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-            Button(onClick = { fileChooser.launch(CHOOSE_COMPENDIUM_FILE) }) {
+            Button(onClick = { fileChooser.launch("application/pdf") }) {
                 Text(stringResource(R.string.import_rulebook).toUpperCase(Locale.current))
             }
             OutlinedButton(
@@ -151,28 +149,3 @@ private fun MainContainer(routing: Routing<Route.CompendiumImport>) {
     }
 }
 
-@Composable
-private fun registerFileChooser(onFileChoose: (Uri) -> Unit): Lazy<ActivityResultLauncher<Int?>> {
-    return registerForActivityResult(FileOpenContract()) { result ->
-        result.intent?.data?.let(onFileChoose)
-    }
-}
-
-private data class Result(val intent: Intent?)
-
-private class FileOpenContract : ActivityResultContract<Int?, Result>() {
-    override fun createIntent(context: Context, requestCode: Int?): Intent {
-        val intent = Intent(Intent.ACTION_GET_CONTENT)
-        intent.type = "application/pdf"
-        intent.addCategory(Intent.CATEGORY_OPENABLE)
-
-        return intent
-    }
-
-    override fun parseResult(resultCode: Int, intent: Intent?): Result {
-        Timber.d(resultCode.toString())
-        return Result(intent)
-    }
-}
-
-private const val CHOOSE_COMPENDIUM_FILE = 2
