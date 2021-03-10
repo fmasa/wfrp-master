@@ -8,5 +8,5 @@ import org.koin.core.parameter.ParametersDefinition
 
 @Composable
 inline fun <reified T : ViewModel> viewModel(noinline parameters: ParametersDefinition? = null): Lazy<T> {
-    return LocalViewModelStoreOwner.current.viewModel(parameters = parameters)
+    return LocalViewModelStoreOwner.current!!.viewModel(parameters = parameters)
 }

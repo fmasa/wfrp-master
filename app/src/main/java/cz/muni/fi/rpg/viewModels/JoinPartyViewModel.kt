@@ -43,4 +43,4 @@ class JoinPartyViewModel(
 
 @Composable
 fun provideJoinPartyViewModel(): JoinPartyViewModel =
-    LocalViewModelStoreOwner.current.getViewModel()
+    LocalViewModelStoreOwner.current!!.getViewModel()

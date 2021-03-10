@@ -85,7 +85,7 @@ android {
     }
 
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.0.0-beta01"
+        kotlinCompilerExtensionVersion = "1.0.0-beta02"
     }
 
     compileOptions {
@@ -140,7 +140,7 @@ dependencies {
     testImplementation("org.mockito:mockito-core:2.7.22")
 
     // Time picker
-    implementation("com.vanpra.compose-material-dialogs:datetime:0.3.0")
+    implementation("com.vanpra.compose-material-dialogs:datetime:0.3.1")
 
     // Checking network access
     implementation("com.github.pwittchen:reactivenetwork-rx2:3.0.8")
