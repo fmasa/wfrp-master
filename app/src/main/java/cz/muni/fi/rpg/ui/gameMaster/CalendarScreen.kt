@@ -76,8 +76,14 @@ private fun Time(viewModel: GameMasterViewModel, time: DateTime.TimeOfDay) {
 
                     withContext(Dispatchers.Main) { dialog.hide() }
                 }
+
             }
         )
+
+        buttons {
+            positiveButton(stringResource(R.string.button_save))
+            negativeButton(stringResource(R.string.button_cancel))
+        }
     }
 
     Text(
