@@ -7,8 +7,8 @@ buildscript {
     }
 
     dependencies {
-        classpath("com.android.tools.build:gradle:7.0.0-alpha12")
-        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.4.30")
+        classpath("com.android.tools.build:gradle:${Versions.agp}")
+        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:${Versions.kotlin}")
 
         // Firebase-related dependencies
         classpath("com.google.gms:google-services:4.3.5")

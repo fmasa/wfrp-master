@@ -1,6 +1,4 @@
 import java.io.File
-import java.io.FileInputStream
-import java.util.*
 
 plugins {
     id("com.android.application")
@@ -61,7 +59,7 @@ android {
     }
 
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.0.0-beta03"
+        kotlinCompilerExtensionVersion = Versions.compose
     }
 
     compileOptions {
@@ -76,7 +74,6 @@ android {
         jvmTarget = "1.8"
         useIR = true
         freeCompilerArgs = freeCompilerArgs +
-                "-Xallow-jvm-ir-dependencies" +
                 "-Xskip-prerelease-check" +
                 "-Xopt-in=androidx.compose.foundation.layout.ExperimentalLayout" +
                 "-Xopt-in=kotlinx.coroutines.ExperimentalCoroutinesApi" +
