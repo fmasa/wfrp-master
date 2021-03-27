@@ -1,6 +1,4 @@
-import java.io.File
-import java.io.FileInputStream
-import java.util.*
+import org.jetbrains.kotlin.konan.properties.loadProperties
 
 plugins {
     id("com.android.library")
@@ -22,12 +20,7 @@ android {
         //
         // Firestore emulator setup
         //
-        val properties = Properties()
-        val propertiesFile = File("local.properties")
-
-        if (propertiesFile.exists()) {
-            properties.load(FileInputStream("local.properties"))
-        }
+        val properties = loadProperties("local.properties");
 
         buildConfigField(
             "String",
