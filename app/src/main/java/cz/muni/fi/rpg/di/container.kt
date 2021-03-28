@@ -46,6 +46,7 @@ import cz.muni.fi.rpg.ui.partySettings.PartySettingsViewModel
 import cz.frantisekmasa.wfrp_master.core.viewModel.PremiumViewModel
 import cz.frantisekmasa.wfrp_master.core.viewModel.SettingsViewModel
 import cz.frantisekmasa.wfrp_master.inventory.InventoryModule
+import cz.frantisekmasa.wfrp_master.religion.ReligionModule
 import org.koin.core.qualifier.named
 import kotlin.random.Random
 import kotlin.reflect.KClass
@@ -61,6 +62,7 @@ private enum class Services {
 val appModule =
     CoreModule +
     InventoryModule +
+    ReligionModule +
     module {
     fun Scope.skillCompendium() = FirestoreCompendium(
         COLLECTION_COMPENDIUM_SKILLS,
