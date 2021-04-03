@@ -172,7 +172,7 @@ private fun MainContainer(
             .fillMaxSize()
             .background(MaterialTheme.colors.background)
             .verticalScroll(rememberScrollState())
-            .padding(top = 6.dp),
+            .padding(top = 6.dp, bottom = Spacing.bottomPaddingUnderFab),
     ) {
         DescriptionCard(viewModel)
         CombatantsCard(

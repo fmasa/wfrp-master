@@ -19,18 +19,16 @@ import cz.frantisekmasa.wfrp_master.compendium.ui.CompendiumViewModel
 import cz.muni.fi.rpg.R
 import cz.frantisekmasa.wfrp_master.core.domain.character.Character
 import cz.frantisekmasa.wfrp_master.core.domain.identifiers.CharacterId
-import cz.frantisekmasa.wfrp_master.core.ui.primitives.ContextMenu
-import cz.frantisekmasa.wfrp_master.core.ui.primitives.EmptyUI
 import cz.frantisekmasa.wfrp_master.core.viewModel.viewModel
 import cz.frantisekmasa.wfrp_master.core.domain.party.Invitation
 import cz.frantisekmasa.wfrp_master.core.domain.party.PartyId
 import cz.frantisekmasa.wfrp_master.core.ui.buttons.PrimaryButton
-import cz.frantisekmasa.wfrp_master.core.ui.primitives.CardContainer
-import cz.frantisekmasa.wfrp_master.core.ui.primitives.CardItem
+import cz.frantisekmasa.wfrp_master.core.ui.primitives.*
 import cz.muni.fi.rpg.ui.common.composables.*
 import cz.muni.fi.rpg.ui.gameMaster.adapter.Player
 import cz.frantisekmasa.wfrp_master.navigation.Route
 import cz.frantisekmasa.wfrp_master.navigation.Routing
+import cz.muni.fi.rpg.ui.common.composables.CardTitle
 import cz.muni.fi.rpg.ui.gameMaster.rolls.SkillTestDialog
 import cz.muni.fi.rpg.viewModels.GameMasterViewModel
 import kotlinx.coroutines.Dispatchers
@@ -69,7 +67,8 @@ internal fun PartySummaryScreen(
         Column(
             Modifier
                 .background(MaterialTheme.colors.background)
-                .verticalScroll(rememberScrollState()),
+                .verticalScroll(rememberScrollState())
+                .padding(bottom = Spacing.bottomPaddingUnderFab)
         ) {
             val party = viewModel.party.observeAsState().value
                 ?: return@Column

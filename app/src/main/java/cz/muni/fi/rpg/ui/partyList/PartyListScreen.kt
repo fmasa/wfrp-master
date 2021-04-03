@@ -214,7 +214,7 @@ fun PartyList(
 ) {
     LazyColumn(
         Modifier.fillMaxHeight(),
-        contentPadding = PaddingValues(top = 12.dp)
+        contentPadding = PaddingValues(top = 12.dp, bottom = Spacing.bottomPaddingUnderFab)
     ) {
         items(parties) { party ->
             val isGameMaster =
