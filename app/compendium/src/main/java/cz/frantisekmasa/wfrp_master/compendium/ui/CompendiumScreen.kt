@@ -21,6 +21,7 @@ import cz.frantisekmasa.wfrp_master.core.ui.buttons.BackButton
 import cz.frantisekmasa.wfrp_master.core.ui.dialogs.DialogState
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.ContextMenu
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.FullScreenProgress
+import cz.frantisekmasa.wfrp_master.core.ui.primitives.Spacing
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.WithContextMenu
 import cz.frantisekmasa.wfrp_master.core.ui.scaffolding.Subtitle
 import cz.frantisekmasa.wfrp_master.core.ui.scaffolding.TopBarAction
@@ -105,7 +106,7 @@ fun <T : CompendiumItem> CompendiumTab(
                 items == null -> FullScreenProgress()
                 items.isEmpty() -> emptyUI()
                 else -> {
-                    LazyColumn {
+                    LazyColumn(contentPadding = PaddingValues(bottom = Spacing.bottomPaddingUnderFab)) {
                         items(items) { item ->
                             WithContextMenu(
                                 items = listOf(

@@ -101,7 +101,7 @@ internal fun CharacterCharacteristicsScreen(
         Column(
             Modifier
                 .verticalScroll(rememberScrollState())
-                .padding(top = Spacing.small),
+                .padding(top = Spacing.small, bottom = Spacing.bottomPaddingUnderFab),
         ) {
             PointsSection(character.getPoints()) { points -> viewModel.updatePoints { points } }
             CharacteristicsSection(character.getCharacteristics())

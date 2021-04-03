@@ -114,7 +114,7 @@ private fun EncounterList(
             .background(MaterialTheme.colors.background)
             .fillMaxSize()
             .verticalScroll(rememberScrollState())
-            .padding(Spacing.bodyPadding),
+            .padding(Spacing.bodyPaddingWithFab),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         DraggableListFor(

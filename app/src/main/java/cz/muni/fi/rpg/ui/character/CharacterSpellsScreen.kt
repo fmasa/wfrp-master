@@ -73,7 +73,7 @@ private fun MainContainer(viewModel: SpellsViewModel) {
 
     var editedSpellId: UUID? by rememberSaveable { mutableStateOf(null) }
 
-    LazyColumn {
+    LazyColumn(contentPadding = PaddingValues(bottom = Spacing.bottomPaddingUnderFab)) {
         items(spells) { spell ->
             SpellItem(
                 spell,
