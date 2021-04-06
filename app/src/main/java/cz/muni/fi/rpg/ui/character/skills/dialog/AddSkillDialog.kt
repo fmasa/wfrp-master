@@ -23,7 +23,7 @@ fun AddSkillDialog(viewModel: SkillsViewModel, onDismissRequest: () -> Unit) {
             ChoosingCompendiumSkill ->
                 CompendiumSkillChooser(
                     viewModel = viewModel,
-                    onSkillSelected = { state = FillingInAdvances(it.id) },
+                    onSkillSelected = { state = FillingInAdvances(it.id, it.advanced) },
                     onCustomSkillRequest = { state = FillingInCustomSkill },
                     onDismissRequest = onDismissRequest,
                 )
@@ -31,6 +31,7 @@ fun AddSkillDialog(viewModel: SkillsViewModel, onDismissRequest: () -> Unit) {
                 AdvancesForm(
                     compendiumSkillId = currentState.compendiumSkillId,
                     viewModel = viewModel,
+                    isAdvanced = currentState.isAdvanced,
                     onDismissRequest = onDismissRequest,
                 )
             is FillingInCustomSkill -> NonCompendiumSkillForm(
@@ -45,7 +46,10 @@ fun AddSkillDialog(viewModel: SkillsViewModel, onDismissRequest: () -> Unit) {
 private sealed class AddSkillDialogState : Parcelable
 
 @Parcelize
-private class FillingInAdvances(val compendiumSkillId: UUID) : AddSkillDialogState()
+private class FillingInAdvances(
+    val compendiumSkillId: UUID,
+    val isAdvanced: Boolean,
+) : AddSkillDialogState()
 
 @Parcelize
 private object ChoosingCompendiumSkill : AddSkillDialogState()

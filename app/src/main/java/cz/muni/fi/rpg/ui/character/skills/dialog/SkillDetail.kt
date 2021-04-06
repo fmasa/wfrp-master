@@ -34,7 +34,11 @@ fun SkillDetail(
         }
     ) {
         Column(Modifier.verticalScroll(rememberScrollState())) {
-            AdvancesBar(skill.advances, onAdvancesChange)
+            AdvancesBar(
+                advances = skill.advances,
+                minAdvances = if (skill.advanced) 1 else 0,
+                onAdvancesChange = onAdvancesChange,
+            )
 
             Column(Modifier.padding(Spacing.bodyPadding)) {
                 SingleLineTextValue(
@@ -59,7 +63,11 @@ fun SkillDetail(
 }
 
 @Composable
-private fun AdvancesBar(advances: Int, onAdvancesChange: (advances: Int) -> Unit) {
+private fun AdvancesBar(
+    advances: Int,
+    minAdvances: Int,
+    onAdvancesChange: (advances: Int) -> Unit
+) {
     SubheadBar {
         Row(
             Modifier.fillMaxWidth(),
@@ -71,7 +79,7 @@ private fun AdvancesBar(advances: Int, onAdvancesChange: (advances: Int) -> Unit
                 value = advances,
                 onIncrement = { onAdvancesChange(advances + 1) },
                 onDecrement = {
-                    if (advances > 1) {
+                    if (advances > minAdvances) {
                         onAdvancesChange(advances - 1)
                     }
                 }

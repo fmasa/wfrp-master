@@ -32,6 +32,7 @@ import java.util.*
 internal fun AdvancesForm(
     compendiumSkillId: UUID,
     viewModel: SkillsViewModel,
+    isAdvanced: Boolean,
     onDismissRequest: () -> Unit,
 ) {
     var saving by remember { mutableStateOf(false) }
@@ -97,11 +98,14 @@ internal fun AdvancesForm(
                     text = stringResource(R.string.label_advances),
                     modifier = Modifier.weight(1f),
                 )
+
+                val minAdvances = if (isAdvanced) 1 else 0
+
                 NumberPicker(
                     value = advances,
                     onIncrement = { advances++ },
                     onDecrement = {
-                        if (advances > 1) {
+                        if (advances > minAdvances) {
                             advances--
                         }
                     }
