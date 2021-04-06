@@ -15,7 +15,7 @@ internal class FirestoreSpellRepository(
     private val mapper: AggregateMapper<Spell>
 ) : SpellRepository {
     override fun findAllForCharacter(characterId: CharacterId) = queryFlow(
-        spellsCollection(characterId),
+        spellsCollection(characterId).orderBy("name"),
         mapper,
     )
 

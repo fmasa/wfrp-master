@@ -16,7 +16,7 @@ internal class FirestoreSkillRepository(
     private val mapper: AggregateMapper<Skill>
 ) : SkillRepository {
     override fun forCharacter(characterId: CharacterId): Flow<List<Skill>> =
-        queryFlow(skillsCollection(characterId), mapper)
+        queryFlow(skillsCollection(characterId).orderBy("name"), mapper)
 
     override suspend fun findByCompendiumId(
         characterId: CharacterId,
