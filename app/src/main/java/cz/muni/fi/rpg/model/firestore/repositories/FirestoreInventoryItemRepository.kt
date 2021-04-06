@@ -22,7 +22,7 @@ internal class FirestoreInventoryItemRepository(
     private val parties = firestore.collection(COLLECTION_PARTIES)
 
     override fun findAllForCharacter(characterId: CharacterId) = queryFlow(
-        inventoryItems(characterId),
+        inventoryItems(characterId).orderBy("name"),
         mapper,
     )
 

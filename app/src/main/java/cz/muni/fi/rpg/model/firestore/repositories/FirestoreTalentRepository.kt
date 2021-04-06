@@ -15,7 +15,7 @@ internal class FirestoreTalentRepository(
     private val mapper: AggregateMapper<Talent>
 ) : TalentRepository {
     override fun findAllForCharacter(characterId: CharacterId) = queryFlow(
-        talentsCollection(characterId),
+        talentsCollection(characterId).orderBy("name"),
         mapper,
     )
 
