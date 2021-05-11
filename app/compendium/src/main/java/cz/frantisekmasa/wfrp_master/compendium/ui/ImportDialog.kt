@@ -103,9 +103,19 @@ private fun ImportedItemsPicker(
                 label = stringResource(R.string.rulebook_import_pick_blessings),
                 items = state.blessings,
                 onSave = viewModel::saveMultipleBlessings,
-                onContinue = onComplete,
+                onContinue = { screen = ItemsScreen.MIRACLES },
                 onClose = onDismissRequest,
                 existingItems = viewModel.blessings,
+            )
+        }
+        ItemsScreen.MIRACLES -> {
+            ItemPicker(
+                label = stringResource(R.string.rulebook_import_pick_miracles),
+                items = state.miracles,
+                onSave = viewModel::saveMultipleMiracles,
+                onContinue = onComplete,
+                onClose = onDismissRequest,
+                existingItems = viewModel.miracles,
             )
         }
     }
@@ -121,21 +131,31 @@ private fun <T : CompendiumItem> ItemPicker(
     items: List<T>,
 ) {
     val existingItemsList = existingItems.observeAsState().value
+
+    if (existingItemsList == null) {
+        Scaffold(
+            topBar = {
+                TopAppBar(
+                    navigationIcon = { CloseButton(onClose) },
+                    title = { Text(stringResource(R.string.title_importing_rulebook)) }
+                )
+            },
+            content = { FullScreenProgress() }
+        )
+        return
+    }
+
     val existingItemNames = remember(existingItemsList) {
-        existingItemsList?.map { it.name }?.toHashSet() ?: emptySet()
+        existingItemsList.map { it.name }.toHashSet()
     }
 
     val selectedItems = remember(items, existingItemNames) {
-        if (existingItemsList == null) {
-            return@remember mutableStateMapOf()
-        }
-
         items.map { it.id to !existingItemNames.contains(it.name) }.toMutableStateMap()
     }
     val atLeastOneSelected = selectedItems.containsValue(true)
 
     var saving by remember { mutableStateOf(false) }
-    val isLoading = saving || existingItemsList == null
+    val isLoading = saving
 
     Scaffold(
         topBar = {
@@ -214,6 +234,7 @@ internal sealed class ImportDialogState {
         val talents: List<Talent>,
         val spells: List<Spell>,
         val blessings: List<Blessing>,
+        val miracles: List<Miracle>,
     ) : ImportDialogState()
 }
 
@@ -222,4 +243,5 @@ private enum class ItemsScreen {
     TALENTS,
     SPELLS,
     BLESSINGS,
+    MIRACLES
 }

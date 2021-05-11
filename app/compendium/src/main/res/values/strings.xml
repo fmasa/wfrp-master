@@ -76,6 +76,7 @@
     <string name="rulebook_import_pick_talents" translatable="false">Select which talents you want to import.</string>
     <string name="rulebook_import_pick_spells" translatable="false">Select which spells you want to import.</string>
     <string name="rulebook_import_pick_blessings">Select which blessings you want to import.</string>
+    <string name="rulebook_import_pick_miracles">Select which miracles you want to import.</string>
 
     <string name="item_with_name_exists">Item already exists</string>
     <string name="error_import_failed">PDF import failed. Check that you chose valid rulebook PDF.</string>

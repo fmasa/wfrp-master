@@ -4,7 +4,7 @@ import com.github.h0tk3y.betterParse.grammar.parseToEnd
 import cz.frantisekmasa.wfrp_master.compendium.domain.Blessing
 import junit.framework.TestCase
 
-class BlessingListTest : TestCase() {
+class BlessingListGrammarTest : TestCase() {
     fun test() {
         val data = """
             Blessing of Battle

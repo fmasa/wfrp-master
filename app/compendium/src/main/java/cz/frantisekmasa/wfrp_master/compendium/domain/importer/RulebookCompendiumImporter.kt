@@ -5,14 +5,8 @@ import arrow.core.extensions.list.functorFilter.filter
 import com.github.h0tk3y.betterParse.grammar.parseToEnd
 import com.lowagie.text.pdf.PdfReader
 import com.lowagie.text.pdf.parser.PdfTextExtractor
-import cz.frantisekmasa.wfrp_master.compendium.domain.Blessing
-import cz.frantisekmasa.wfrp_master.compendium.domain.Skill
-import cz.frantisekmasa.wfrp_master.compendium.domain.Spell
-import cz.frantisekmasa.wfrp_master.compendium.domain.Talent
-import cz.frantisekmasa.wfrp_master.compendium.domain.importer.grammars.BlessingListGrammar
-import cz.frantisekmasa.wfrp_master.compendium.domain.importer.grammars.SkillListGrammar
-import cz.frantisekmasa.wfrp_master.compendium.domain.importer.grammars.SpellListGrammar
-import cz.frantisekmasa.wfrp_master.compendium.domain.importer.grammars.TalentListGrammar
+import cz.frantisekmasa.wfrp_master.compendium.domain.*
+import cz.frantisekmasa.wfrp_master.compendium.domain.importer.grammars.*
 import kotlinx.coroutines.*
 import timber.log.Timber
 import java.io.InputStream
@@ -49,7 +43,7 @@ class RulebookCompendiumImporter(rulebookPdf: InputStream) : CompendiumImporter,
     }
 
     private fun String.dumpWithLineNumbers() {
-        Timber.d(lines().mapIndexed { index, line -> "${index + 1} > $line" }.joinToString("\n"))
+        Timber.d(lines().mapIndexed { index, line -> "XYZ > $line" }.joinToString("\n"))
     }
 
     override suspend fun importSpells(): List<Spell> {
@@ -88,6 +82,65 @@ class RulebookCompendiumImporter(rulebookPdf: InputStream) : CompendiumImporter,
             Timber.e(e)
             throw e
         }
+    }
+
+    override suspend fun importMiracles(): List<Miracle> {
+        val text = (222..228).joinToString("\n") { getCleanedUpTextFromPage(reader, it) }
+        val miraclesByCult = splitMiraclesByCult(text)
+
+        try {
+            return miraclesByCult
+                .flatMap { (cultName, text) -> MiracleListGrammar(cultName).parseToEnd(text) }
+                .toList()
+        } catch (e: Throwable) {
+            text.dumpWithLineNumbers()
+
+            Timber.e(e)
+            throw e
+        }
+    }
+
+    private fun splitMiraclesByCult(text: String): Sequence<Pair<String, String>> {
+        val cultNames = listOf(
+            "Manann",
+            "Morr",
+            "Myrmidia",
+            "Ranald",
+            "Rhya",
+            "Shallya",
+            "Sigmar",
+            "Taal",
+            "Ulric",
+            "Verena"
+        )
+
+        val buildTitle = { cultName: String -> "Miracles of $cultName" }
+
+        var partiallyFixedText = text
+        cultNames.forEach { cultName ->
+            val title = buildTitle(cultName)
+
+            partiallyFixedText = partiallyFixedText.replace(
+                Regex(title.asSequence().joinToString(" ?"), RegexOption.IGNORE_CASE),
+                "\n---\n$cultName\n",
+            )
+        }
+
+        partiallyFixedText = partiallyFixedText
+            .replace(Regex("\n +"), "\n")
+            .replace("\n\n", "\n")
+            .replace("\nT ", "\nT")
+            .replace("\nV ", "\nV")
+
+        return partiallyFixedText
+            .split("\n---\n")
+            .asSequence()
+            .drop(1) // This is some general stuff before first cult's miracles
+            .mapNotNull { section ->
+                val (cultName, miraclesText) = section.split('\n', limit = 2)
+
+                cultName to miraclesText
+            }
     }
 
     private fun splitLoresByMagicTypes(text: String): List<String> {

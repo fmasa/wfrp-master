@@ -81,4 +81,8 @@ class CompendiumViewModel(
     suspend fun saveMultipleBlessings(blessings: List<Blessing>) {
         blessingCompendium.saveItems(partyId, *blessings.toTypedArray())
     }
+
+    suspend fun saveMultipleMiracles(miracles: List<Miracle>) {
+        miracleCompendium.saveItems(partyId, *miracles.toTypedArray())
+    }
 }
