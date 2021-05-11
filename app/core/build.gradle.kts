@@ -1,3 +1,4 @@
+import org.jetbrains.kotlin.konan.properties.Properties
 import org.jetbrains.kotlin.konan.properties.loadProperties
 
 plugins {
@@ -9,7 +10,11 @@ android {
         //
         // Firestore emulator setup
         //
-        val properties = loadProperties("local.properties");
+        val propertiesFile = File("local.properties")
+
+        val properties = if(propertiesFile.exists())
+            loadProperties("local.properties")
+        else Properties()
 
         buildConfigField(
             "String",
@@ -64,7 +69,7 @@ dependencies {
     api("io.arrow-kt:arrow-core:0.10.4")
 
     // Parser combinator library (grammars etc.)
-    api("com.github.h0tk3y.betterParse:better-parse:0.4.0")
+    api("com.github.h0tk3y.betterParse:better-parse:0.4.2")
 
     // JSON encoding
     // TODO: Make is implementation only
