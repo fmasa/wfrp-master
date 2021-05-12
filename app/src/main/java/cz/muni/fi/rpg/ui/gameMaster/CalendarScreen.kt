@@ -13,7 +13,9 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import com.vanpra.composematerialdialogs.MaterialDialog
-import com.vanpra.composematerialdialogs.datetime.timepicker
+import com.vanpra.composematerialdialogs.buttons
+import com.vanpra.composematerialdialogs.datetime.timepicker.timepicker
+import com.vanpra.composematerialdialogs.title
 import cz.frantisekmasa.wfrp_master.core.ui.buttons.SaveTextButton
 import cz.muni.fi.rpg.R
 import cz.frantisekmasa.wfrp_master.core.domain.party.Party
@@ -68,7 +70,7 @@ private fun Time(viewModel: GameMasterViewModel, time: DateTime.TimeOfDay) {
         title(stringResource(R.string.title_select_time))
         timepicker(
             LocalTime.of(time.hour, time.minute),
-            onComplete = { newTime ->
+            onTimeChange = { newTime ->
                 coroutineScope.launch(Dispatchers.IO) {
                     viewModel.changeTime {
                         it.withTime(DateTime.TimeOfDay(newTime.hour, newTime.minute))
