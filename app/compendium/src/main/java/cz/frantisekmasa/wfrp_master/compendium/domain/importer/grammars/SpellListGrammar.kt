@@ -50,5 +50,5 @@ class SpellListGrammar(private val loreName: String) : Grammar<List<Spell>>() {
             .trim()
 
     override val rootParser = skip(zeroOrMore(sentence)) *
-        oneOrMore(spell) map { it }
+        oneOrMore(spell)
 }

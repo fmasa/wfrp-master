@@ -36,13 +36,12 @@ fun CompendiumScreen(routing: Routing<Route.Compendium>) {
     Scaffold(topBar = { TopBar(routing) }) {
         val viewModel: CompendiumViewModel by viewModel { parametersOf(routing.route.partyId) }
 
-        TabPager(
-            modifier = Modifier.fillMaxSize(),
-            fullWidthTabs = true,
-        ) {
+        TabPager(Modifier.fillMaxSize()) {
             tab(R.string.tab_skills) { SkillCompendiumTab(viewModel, screenWidth) }
             tab(R.string.tab_talents) { TalentCompendiumTab(viewModel, screenWidth) }
             tab(R.string.tab_spells) { SpellCompendiumTab(viewModel, screenWidth) }
+            tab(R.string.tab_blessings) { BlessingCompendiumTab(viewModel, screenWidth) }
+            tab(R.string.tab_miracles) { MiracleCompendiumTab(viewModel, screenWidth) }
         }
     }
 }

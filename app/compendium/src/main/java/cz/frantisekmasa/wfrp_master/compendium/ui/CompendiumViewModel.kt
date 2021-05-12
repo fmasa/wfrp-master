@@ -3,10 +3,7 @@ package cz.frantisekmasa.wfrp_master.compendium.ui
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
-import cz.frantisekmasa.wfrp_master.compendium.domain.Compendium
-import cz.frantisekmasa.wfrp_master.compendium.domain.Skill
-import cz.frantisekmasa.wfrp_master.compendium.domain.Spell
-import cz.frantisekmasa.wfrp_master.compendium.domain.Talent
+import cz.frantisekmasa.wfrp_master.compendium.domain.*
 import cz.frantisekmasa.wfrp_master.core.domain.party.Party
 import cz.frantisekmasa.wfrp_master.core.domain.party.PartyId
 import cz.frantisekmasa.wfrp_master.core.domain.party.PartyRepository
@@ -17,9 +14,17 @@ class CompendiumViewModel(
     private val skillCompendium: Compendium<Skill>,
     private val talentsCompendium: Compendium<Talent>,
     private val spellCompendium: Compendium<Spell>,
+    private val blessingCompendium: Compendium<Blessing>,
+    private val miracleCompendium: Compendium<Miracle>,
     parties: PartyRepository,
 ) : ViewModel() {
     val party: LiveData<Party> = parties.getLive(partyId).right().asLiveData()
+
+    val skills: LiveData<List<Skill>> = skillCompendium.liveForParty(partyId).asLiveData()
+    val talents: LiveData<List<Talent>> = talentsCompendium.liveForParty(partyId).asLiveData()
+    val spells: LiveData<List<Spell>> = spellCompendium.liveForParty(partyId).asLiveData()
+    val blessings: LiveData<List<Blessing>> = blessingCompendium.liveForParty(partyId).asLiveData()
+    val miracles: LiveData<List<Miracle>> = miracleCompendium.liveForParty(partyId).asLiveData()
 
     suspend fun save(skill: Skill) {
         skillCompendium.saveItems(partyId, skill)
@@ -41,6 +46,14 @@ class CompendiumViewModel(
         talentsCompendium.remove(partyId, talent)
     }
 
+    suspend fun save(miracle: Miracle) {
+        miracleCompendium.saveItems(partyId, miracle)
+    }
+
+    suspend fun remove(miracle: Miracle) {
+        miracleCompendium.remove(partyId, miracle)
+    }
+
     suspend fun saveMultipleTalents(talents: List<Talent>) {
         talentsCompendium.saveItems(partyId, *talents.toTypedArray())
     }
@@ -57,10 +70,19 @@ class CompendiumViewModel(
         spellCompendium.saveItems(partyId, *spells.toTypedArray())
     }
 
-    val skills: LiveData<List<Skill>> = skillCompendium.liveForParty(partyId).asLiveData()
+    suspend fun save(blessing: Blessing) {
+        blessingCompendium.saveItems(partyId, blessing)
+    }
 
-    val talents: LiveData<List<Talent>> = talentsCompendium.liveForParty(partyId).asLiveData()
+    suspend fun remove(blessing: Blessing) {
+        blessingCompendium.remove(partyId, blessing)
+    }
 
-    val spells: LiveData<List<Spell>> = spellCompendium.liveForParty(partyId).asLiveData()
+    suspend fun saveMultipleBlessings(blessings: List<Blessing>) {
+        blessingCompendium.saveItems(partyId, *blessings.toTypedArray())
+    }
 
+    suspend fun saveMultipleMiracles(miracles: List<Miracle>) {
+        miracleCompendium.saveItems(partyId, *miracles.toTypedArray())
+    }
 }

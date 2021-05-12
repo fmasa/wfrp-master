@@ -40,6 +40,7 @@
     <!-- Common UI elements -->
     <string name="button_finish">Finish</string>
     <string name="button_save">Save</string>
+    <string name="button_skip">Skip</string>
     <string name="button_cancel">Cancel</string>
     <string name="button_submit">Submit</string>
     <string name="button_open">Open</string>

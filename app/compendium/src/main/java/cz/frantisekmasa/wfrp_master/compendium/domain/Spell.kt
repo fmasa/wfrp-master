@@ -6,7 +6,7 @@ import java.util.UUID
 @Parcelize
 data class Spell(
     override val id: UUID,
-    val name: String,
+    override val name: String,
     val range: String,
     val target: String,
     val duration: String,

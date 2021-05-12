@@ -39,11 +39,11 @@
     <!-- Spell Dialog -->
     <string name="title_spell_add">Add Spell</string>
     <string name="message_spell_saved">Spell was saved</string>
-    <string name="label_spell_effect">Effect</string>
+    <string name="label_effect">Effect</string>
     <string name="label_spell_casting_number">Casting Number (CN)</string>
-    <string name="label_spell_duration">Duration</string>
-    <string name="label_spell_target">Target</string>
-    <string name="label_spell_range">Range</string>
+    <string name="label_duration">Duration</string>
+    <string name="label_target">Target</string>
+    <string name="label_range">Range</string>
     <string name="title_choose_compendium_spell">Choose Compendium spell…</string>
     <string name="button_add_non_compendium_spell">…or add non-Compendium spell</string>
 
@@ -273,7 +273,7 @@
     <!-- Compendium -->
     <string name="title_compendium">Compendium</string>
 
-    <string name="label_lore">Lore</string>
+    <string name="label_spell_lore">Lore</string>
 
     <string name="title_skill_new">New Skill</string>
     <string name="title_skill_edit">Edit Skill</string>

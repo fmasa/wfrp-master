@@ -1,6 +1,6 @@
 package cz.frantisekmasa.wfrp_master.inventory.domain
 
-import android.os.Parcelable
+import cz.frantisekmasa.wfrp_master.core.domain.character.CharacterItem
 import kotlinx.parcelize.Parcelize
 import java.util.*
 
@@ -8,12 +8,12 @@ typealias InventoryItemId = UUID
 
 @Parcelize
 /* internal */ data class InventoryItem(
-    val id: InventoryItemId,
+    override val id: InventoryItemId,
     val name: String,
     val description: String,
     val quantity: Int,
     val encumbrance: Encumbrance = Encumbrance.Zero,
-) : Parcelable {
+) : CharacterItem {
     companion object {
         const val NAME_MAX_LENGTH = 50
         const val DESCRIPTION_MAX_LENGTH = 200

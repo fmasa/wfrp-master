@@ -1,6 +1,4 @@
 import java.io.File
-import java.io.FileInputStream
-import java.util.*
 
 plugins {
     id("com.android.application")
@@ -23,25 +21,6 @@ android {
         versionName = System.getenv("SUPPLY_VERSION_NAME") ?: "dev"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-
-        //
-        // Firestore emulator setup
-        //
-        val properties = Properties()
-        val propertiesFile = File("local.properties")
-
-        if (propertiesFile.exists()) {
-            properties.load(FileInputStream("local.properties"))
-        }
-
-        buildConfigField(
-            "String",
-            "FIRESTORE_EMULATOR_URL",
-            "\"${properties.getOrDefault("dev.firestoreEmulatorUrl", "")}\""
-        )
-        //
-        // End of Firestore Emulator setup
-        //
     }
 
     signingConfigs {
@@ -80,7 +59,7 @@ android {
     }
 
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.0.0-beta03"
+        kotlinCompilerExtensionVersion = Versions.compose
     }
 
     compileOptions {
@@ -95,7 +74,6 @@ android {
         jvmTarget = "1.8"
         useIR = true
         freeCompilerArgs = freeCompilerArgs +
-                "-Xallow-jvm-ir-dependencies" +
                 "-Xskip-prerelease-check" +
                 "-Xopt-in=androidx.compose.foundation.layout.ExperimentalLayout" +
                 "-Xopt-in=kotlinx.coroutines.ExperimentalCoroutinesApi" +
@@ -111,6 +89,7 @@ dependencies {
     implementation(project(":app:compendium"))
     implementation(project(":app:combat"))
     implementation(project(":app:inventory"))
+    implementation(project(":app:religion"))
 
     implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar"))))
     // Allow use of Java 8 APIs on older Android versions
