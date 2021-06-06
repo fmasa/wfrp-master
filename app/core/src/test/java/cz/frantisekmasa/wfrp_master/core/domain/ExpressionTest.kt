@@ -1,8 +1,8 @@
-package cz.frantisekmasa.wfrp_master.core.domain.rolls
+package cz.frantisekmasa.wfrp_master.core.domain
 
 import junit.framework.TestCase
 
-class RollExpressionTest : TestCase() {
+class ExpressionTest : TestCase() {
     fun testSimpleArithmetics() {
         assertSame(1, "1".evaluate())
         assertSame(2, "1 + 1".evaluate())
@@ -54,11 +54,11 @@ class RollExpressionTest : TestCase() {
                 expression.evaluate()
 
                 false
-            } catch(e: InvalidRollExpression) {
+            } catch(e: InvalidExpression) {
                 true
             }
         )
     }
 
-    private fun String.evaluate() = RollExpression.fromString(this).evaluate()
+    private fun String.evaluate() = Expression.fromString(this).evaluate()
 }

@@ -1,4 +1,4 @@
-package cz.frantisekmasa.wfrp_master.core.domain.rolls
+package cz.frantisekmasa.wfrp_master.core.domain
 
 import android.os.Parcelable
 import com.github.h0tk3y.betterParse.combinators.leftAssociative
@@ -13,17 +13,18 @@ import com.github.h0tk3y.betterParse.lexer.literalToken
 import com.github.h0tk3y.betterParse.lexer.regexToken
 import com.github.h0tk3y.betterParse.parser.ParseException
 import com.github.h0tk3y.betterParse.parser.Parser
+import cz.frantisekmasa.wfrp_master.core.domain.rolls.Dice
 import kotlinx.parcelize.Parcelize
 
-class InvalidRollExpression(cause: Throwable?) : Exception(cause)
+class InvalidExpression(cause: Throwable?) : Exception(cause)
 
-interface RollExpression : Parcelable {
+interface Expression : Parcelable {
     companion object {
-        fun fromString(text: String, constants: Map<String, Int> = emptyMap()): RollExpression =
+        fun fromString(text: String, constants: Map<String, Int> = emptyMap()): Expression =
             try {
                 RollExpressionGrammar(constants).parseToEnd(text)
             } catch (e: ParseException) {
-                throw InvalidRollExpression(e)
+                throw InvalidExpression(e)
             }
     }
 
@@ -36,7 +37,7 @@ interface RollExpression : Parcelable {
 }
 
 @Parcelize
-private data class DiceRoll(private val sides: Int) : RollExpression {
+private data class DiceRoll(private val sides: Int) : Expression {
     override fun evaluate() = Dice(sides).roll()
     override fun isDeterministic() = false
     override fun toString(): String = "d$sides"
@@ -44,9 +45,9 @@ private data class DiceRoll(private val sides: Int) : RollExpression {
 
 @Parcelize
 private data class Multiplication(
-    private val a: RollExpression,
-    private val b: RollExpression,
-) : RollExpression {
+    private val a: Expression,
+    private val b: Expression,
+) : Expression {
     override fun evaluate() = a.evaluate() * b.evaluate()
     override fun isDeterministic() = a.isDeterministic() && b.isDeterministic()
     override fun toString(): String = "$a × $b"
@@ -54,9 +55,9 @@ private data class Multiplication(
 
 @Parcelize
 private data class Division(
-    private val dividend: RollExpression,
-    private val divisor: RollExpression,
-) : RollExpression {
+    private val dividend: Expression,
+    private val divisor: Expression,
+) : Expression {
     override fun evaluate(): Int {
         val divisor = divisor.evaluate()
 
@@ -73,9 +74,9 @@ private data class Division(
 
 @Parcelize
 private data class Addition(
-    private val a: RollExpression,
-    private val b: RollExpression,
-) : RollExpression {
+    private val a: Expression,
+    private val b: Expression,
+) : Expression {
     override fun evaluate() = a.evaluate() + b.evaluate()
     override fun isDeterministic() = a.isDeterministic() && b.isDeterministic()
     override fun toString(): String = "$a + $b"
@@ -83,22 +84,22 @@ private data class Addition(
 
 @Parcelize
 private data class Subtraction(
-    private val a: RollExpression,
-    private val b: RollExpression,
-) : RollExpression {
+    private val a: Expression,
+    private val b: Expression,
+) : Expression {
     override fun evaluate() = a.evaluate() - b.evaluate()
     override fun isDeterministic() = a.isDeterministic() && b.isDeterministic()
     override fun toString(): String = "$a - $b"
 }
 
 @Parcelize
-private data class IntegerLiteral(private val value: Int) : RollExpression {
+private data class IntegerLiteral(private val value: Int) : Expression {
     override fun evaluate() = value
     override fun isDeterministic() = true
     override fun toString(): String = "$value"
 }
 
-private class RollExpressionGrammar(val constants: Map<String, Int>) : Grammar<RollExpression>() {
+private class RollExpressionGrammar(val constants: Map<String, Int>) : Grammar<Expression>() {
     @Suppress("unused")
     val whitespace by regexToken("\\s+", ignore = true)
     val dice by regexToken("[0-9]+d[1-9][0-9]*")
@@ -125,7 +126,7 @@ private class RollExpressionGrammar(val constants: Map<String, Int>) : Grammar<R
         if (operator.type == multiply) Multiplication(l, r) else Division(l, r)
     }
 
-    override val rootParser: Parser<RollExpression> by leftAssociative(
+    override val rootParser: Parser<Expression> by leftAssociative(
         multiplicationOrDivision,
         plus or minus
     ) { l, operator, r -> if (operator.type == plus) Addition(l, r) else Subtraction(l, r) }
