@@ -26,4 +26,17 @@ internal data class Miracle(
         effect.requireMaxLength(CompendiumMiracle.EFFECT_MAX_LENGTH, "effect")
         cultName.requireMaxLength(CompendiumMiracle.CULT_NAME_MAX_LENGTH, "cultName")
     }
+
+    companion object {
+        fun fromCompendium(miracle: CompendiumMiracle): Miracle = Miracle(
+            UUID.randomUUID(),
+            compendiumId = miracle.id,
+            name = miracle.name,
+            range = miracle.range,
+            target = miracle.target,
+            duration = miracle.duration,
+            effect = miracle.effect,
+            cultName = miracle.cultName,
+        )
+    }
 }

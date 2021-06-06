@@ -161,6 +161,7 @@
     <string name="error_party_update_no_connection">You need to be connected to internet to update party</string>
     <string name="title_character_skills">Skills</string>
     <string name="title_character_talents">Talents</string>
+    <string name="title_character_religion">Religion</string>
     <string name="title_character_spells">Spells</string>
     <string name="title_character_characteristics">Characteristics</string>
 

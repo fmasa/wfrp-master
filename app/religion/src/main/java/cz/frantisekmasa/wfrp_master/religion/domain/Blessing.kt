@@ -24,4 +24,16 @@ internal data class Blessing(
         duration.requireMaxLength(CompendiumBlessing.DURATION_MAX_LENGTH, "duration")
         effect.requireMaxLength(CompendiumBlessing.EFFECT_MAX_LENGTH, "effect")
     }
+
+    companion object {
+        fun fromCompendium(blessing: CompendiumBlessing): Blessing = Blessing(
+            id = UUID.randomUUID(),
+            compendiumId = blessing.id,
+            name = blessing.name,
+            range = blessing.range,
+            target = blessing.target,
+            duration = blessing.duration,
+            effect = blessing.effect,
+        )
+    }
 }
