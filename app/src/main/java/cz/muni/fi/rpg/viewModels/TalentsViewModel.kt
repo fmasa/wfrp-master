@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
-import cz.frantisekmasa.wfrp_master.compendium.domain.Compendium
+import cz.frantisekmasa.wfrp_master.core.domain.compendium.Compendium
 import cz.frantisekmasa.wfrp_master.compendium.domain.Talent as CompendiumTalent
 import cz.frantisekmasa.wfrp_master.core.domain.identifiers.CharacterId
 import cz.muni.fi.rpg.model.domain.talents.Talent

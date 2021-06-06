@@ -49,6 +49,9 @@
     <string name="boolean_yes">Yes</string>
     <string name="boolean_no">No</string>
 
+    <!-- Character Items -->
+    <string name="no_items_in_compendium_sub_text_player" translatable="false">Your GM has to add them first.</string>
+
     <!-- Form errors -->
     <string name="error_cannot_be_empty">Cannot be empty!</string>
     <string name="error_must_be_non_negative_number">Must be greater or equal to 0</string>

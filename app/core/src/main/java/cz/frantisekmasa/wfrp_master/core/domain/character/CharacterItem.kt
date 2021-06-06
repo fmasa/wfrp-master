@@ -5,4 +5,5 @@ import java.util.*
 
 interface CharacterItem : Parcelable {
     val id: UUID
+    val compendiumId: UUID?
 }

@@ -17,9 +17,9 @@ import cz.frantisekmasa.wfrp_master.core.ui.buttons.CloseButton
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.EmptyUI
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.FullScreenProgress
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.ItemIcon
+import cz.frantisekmasa.wfrp_master.core.ui.primitives.Spacing
 import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.model.domain.spells.Spell
-import cz.muni.fi.rpg.ui.common.composables.BodyPadding
 import cz.muni.fi.rpg.viewModels.SpellsViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -63,7 +63,7 @@ internal fun CompendiumSpellChooser(
                 } else {
                     val coroutineScope = rememberCoroutineScope()
 
-                    LazyColumn(contentPadding = PaddingValues(BodyPadding)) {
+                    LazyColumn(contentPadding = PaddingValues(Spacing.bodyPadding)) {
                         items(compendiumSpells) { spell ->
                             ListItem(
                                 modifier = Modifier.clickable(
@@ -100,7 +100,7 @@ internal fun CompendiumSpellChooser(
             OutlinedButton(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(BodyPadding),
+                    .padding(Spacing.bodyPadding),
                 onClick = onCustomSpellRequest,
             ) {
                 Text(stringResource(R.string.button_add_non_compendium_spell))

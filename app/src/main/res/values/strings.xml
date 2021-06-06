@@ -100,7 +100,6 @@
     <string name="label_social_class">Class</string>
 
     <string name="label_corruption">Corruption</string>
-    <string name="label_sin">Sin</string>
     <string name="label_max_wounds">Max. Wounds</string>
     <string name="label_fortune_points">Fortune</string>
     <string name="label_fate_points">Fate</string>
@@ -161,6 +160,7 @@
     <string name="error_party_update_no_connection">You need to be connected to internet to update party</string>
     <string name="title_character_skills">Skills</string>
     <string name="title_character_talents">Talents</string>
+    <string name="title_character_religion">Religion</string>
     <string name="title_character_spells">Spells</string>
     <string name="title_character_characteristics">Characteristics</string>
 

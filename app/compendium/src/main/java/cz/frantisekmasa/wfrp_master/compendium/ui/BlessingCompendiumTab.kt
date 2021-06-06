@@ -74,7 +74,7 @@ private data class BlessingFormData(
         )
     }
 
-    override fun toItem() = Blessing(
+    override fun toValue() = Blessing(
         id = id,
         name = name.value,
         range = range.value,
@@ -102,7 +102,7 @@ private fun BlessingDialog(
     val formData = BlessingFormData.fromItem(item)
 
     CompendiumItemDialog(
-        title = stringResource(if (item == null) R.string.title_blessing_add else R.string.title_blessing_edit),
+        title = stringResource(if (item == null) R.string.title_blessing_new else R.string.title_blessing_edit),
         formData = formData,
         saver = viewModel::save,
         onDismissRequest = { dialogState.value = DialogState.Closed() }

@@ -38,7 +38,7 @@ android {
             resValue("string", "app_name", "[Debug] WFRP Master")
             resValue("string", "character_ad_unit_id", "ca-app-pub-3940256099942544/6300978111")
             resValue("string", "game_master_ad_unit_id", "ca-app-pub-3940256099942544/6300978111")
-            manifestPlaceholders(mapOf("analytics_activated" to "false"))
+            addManifestPlaceholders(mapOf("analytics_activated" to "false"))
         }
 
 
@@ -50,7 +50,7 @@ android {
             resValue("string", "app_name", "WFRP Master")
             resValue("string", "character_ad_unit_id", "ca-app-pub-8647604386686373/9919978313")
             resValue("string", "game_master_ad_unit_id", "ca-app-pub-8647604386686373/7714574658")
-            manifestPlaceholders(mapOf("analytics_activated" to "true"))
+            addManifestPlaceholders(mapOf("analytics_activated" to "true"))
         }
     }
 

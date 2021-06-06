@@ -9,7 +9,7 @@ import java.util.*
 @Parcelize
 internal data class Miracle(
     override val id: UUID,
-    val compendiumId: UUID?,
+    override val compendiumId: UUID?,
     val name: String,
     val range: String,
     val target: String,
@@ -25,5 +25,18 @@ internal data class Miracle(
         duration.requireMaxLength(CompendiumMiracle.DURATION_MAX_LENGTH, "duration")
         effect.requireMaxLength(CompendiumMiracle.EFFECT_MAX_LENGTH, "effect")
         cultName.requireMaxLength(CompendiumMiracle.CULT_NAME_MAX_LENGTH, "cultName")
+    }
+
+    companion object {
+        fun fromCompendium(miracle: CompendiumMiracle): Miracle = Miracle(
+            UUID.randomUUID(),
+            compendiumId = miracle.id,
+            name = miracle.name,
+            range = miracle.range,
+            target = miracle.target,
+            duration = miracle.duration,
+            effect = miracle.effect,
+            cultName = miracle.cultName,
+        )
     }
 }

@@ -10,7 +10,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import cz.frantisekmasa.wfrp_master.compendium.R
-import cz.frantisekmasa.wfrp_master.compendium.domain.CompendiumItem
+import cz.frantisekmasa.wfrp_master.core.domain.compendium.CompendiumItem
 import cz.frantisekmasa.wfrp_master.compendium.domain.Skill
 import cz.frantisekmasa.wfrp_master.core.domain.Characteristic
 import cz.frantisekmasa.wfrp_master.core.ui.dialogs.DialogState
@@ -47,9 +47,7 @@ fun SkillCompendiumTab(viewModel: CompendiumViewModel, width: Dp) {
     }
 }
 
-interface CompendiumItemFormData<T : CompendiumItem> : FormData {
-    fun toItem(): T
-}
+interface CompendiumItemFormData<T : CompendiumItem> : HydratedFormData<T>
 
 private data class SkillFormData(
     val id: UUID,
@@ -69,7 +67,7 @@ private data class SkillFormData(
         )
     }
 
-    override fun toItem() = Skill(
+    override fun toValue() = Skill(
         id = id,
         name = name.value,
         description = description.value,

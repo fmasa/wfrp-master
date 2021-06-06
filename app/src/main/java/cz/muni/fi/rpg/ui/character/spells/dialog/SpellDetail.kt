@@ -15,10 +15,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import cz.frantisekmasa.wfrp_master.core.ui.buttons.CloseButton
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.SingleLineTextValue
+import cz.frantisekmasa.wfrp_master.core.ui.primitives.Spacing
 import cz.frantisekmasa.wfrp_master.core.ui.scaffolding.SubheadBar
 import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.model.domain.spells.Spell
-import cz.muni.fi.rpg.ui.common.composables.BodyPadding
 import cz.muni.fi.rpg.ui.common.composables.Theme
 import java.util.*
 
@@ -53,7 +53,7 @@ fun SpellDetail(
                 }
             }
 
-            Column(Modifier.padding(BodyPadding)) {
+            Column(Modifier.padding(Spacing.bodyPadding)) {
                 SingleLineTextValue(
                     R.string.spell_casting_number_shortcut,
                     with(AnnotatedString.Builder()) {

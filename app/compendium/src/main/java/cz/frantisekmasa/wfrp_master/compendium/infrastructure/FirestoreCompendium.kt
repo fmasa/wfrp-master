@@ -3,8 +3,8 @@ package cz.frantisekmasa.wfrp_master.compendium.infrastructure
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.FirebaseFirestoreException
 import com.google.firebase.firestore.SetOptions
-import cz.frantisekmasa.wfrp_master.compendium.domain.Compendium
-import cz.frantisekmasa.wfrp_master.compendium.domain.CompendiumItem
+import cz.frantisekmasa.wfrp_master.core.domain.compendium.Compendium
+import cz.frantisekmasa.wfrp_master.core.domain.compendium.CompendiumItem
 import cz.frantisekmasa.wfrp_master.compendium.domain.exceptions.CompendiumItemNotFound
 import cz.frantisekmasa.wfrp_master.core.domain.party.PartyId
 import cz.frantisekmasa.wfrp_master.core.firestore.AggregateMapper

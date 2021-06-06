@@ -64,7 +64,7 @@ private data class TalentFormData(
         )
     }
 
-    override fun toItem() = Talent(
+    override fun toValue() = Talent(
         id = id,
         name = name.value,
         maxTimesTaken = maxTimesTaken.value,

@@ -75,7 +75,7 @@ private data class MiracleFormData(
         )
     }
 
-    override fun toItem() = Miracle(
+    override fun toValue() = Miracle(
         id = id,
         name = name.value,
         cultName = cultName.value,
@@ -104,7 +104,7 @@ private fun MiracleDialog(
     val formData = MiracleFormData.fromItem(item)
 
     CompendiumItemDialog(
-        title = stringResource(if (item == null) R.string.title_miracle_add else R.string.title_miracle_edit),
+        title = stringResource(if (item == null) R.string.title_miracle_new else R.string.title_miracle_edit),
         formData = formData,
         saver = viewModel::save,
         onDismissRequest = { dialogState.value = DialogState.Closed() }

@@ -9,7 +9,7 @@ import java.util.*
 @Parcelize
 internal data class Blessing(
     override val id: UUID,
-    val compendiumId: UUID?,
+    override val compendiumId: UUID?,
     val name: String,
     val range: String,
     val target: String,
@@ -23,5 +23,17 @@ internal data class Blessing(
         target.requireMaxLength(CompendiumBlessing.TARGET_MAX_LENGTH, "target")
         duration.requireMaxLength(CompendiumBlessing.DURATION_MAX_LENGTH, "duration")
         effect.requireMaxLength(CompendiumBlessing.EFFECT_MAX_LENGTH, "effect")
+    }
+
+    companion object {
+        fun fromCompendium(blessing: CompendiumBlessing): Blessing = Blessing(
+            id = UUID.randomUUID(),
+            compendiumId = blessing.id,
+            name = blessing.name,
+            range = blessing.range,
+            target = blessing.target,
+            duration = blessing.duration,
+            effect = blessing.effect,
+        )
     }
 }

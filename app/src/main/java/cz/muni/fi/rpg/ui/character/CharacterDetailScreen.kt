@@ -23,6 +23,7 @@ import cz.frantisekmasa.wfrp_master.core.viewModel.PartyViewModel
 import cz.frantisekmasa.wfrp_master.inventory.ui.CharacterTrappingsScreen
 import cz.frantisekmasa.wfrp_master.navigation.Route
 import cz.frantisekmasa.wfrp_master.navigation.Routing
+import cz.frantisekmasa.wfrp_master.religion.ui.CharacterReligionScreen
 import cz.muni.fi.rpg.viewModels.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -144,6 +145,15 @@ private fun MainContainer(
                 CharacterSpellsScreen(
                     characterId = characterId,
                     modifier = modifier,
+                )
+            }
+
+            tab(R.string.title_character_religion) {
+                CharacterReligionScreen(
+                    characterId = characterId,
+                    modifier = modifier,
+                    character = character,
+                    updateCharacter = viewModel::update,
                 )
             }
 

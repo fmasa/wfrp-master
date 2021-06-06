@@ -1,8 +1,7 @@
-package cz.frantisekmasa.wfrp_master.compendium.domain
+package cz.frantisekmasa.wfrp_master.core.domain.compendium
 
-import kotlinx.coroutines.flow.Flow
-import cz.frantisekmasa.wfrp_master.compendium.domain.exceptions.CompendiumItemNotFound
 import cz.frantisekmasa.wfrp_master.core.domain.party.PartyId
+import kotlinx.coroutines.flow.Flow
 import java.util.*
 
 interface Compendium<T : CompendiumItem> {

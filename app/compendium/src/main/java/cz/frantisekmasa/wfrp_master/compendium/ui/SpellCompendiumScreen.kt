@@ -73,7 +73,7 @@ private data class SpellFormData(
         )
     }
 
-    override fun toItem() = Spell(
+    override fun toValue() = Spell(
         id = id,
         name = name.value,
         lore = lore.value,

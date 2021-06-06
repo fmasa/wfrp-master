@@ -147,15 +147,13 @@ private fun PointsSection(points: Points, onUpdate: (Points) -> Unit) {
                 ) { newValue ->
                     updateIfChanged { it.copy(corruption = newValue) }
                 }
-
-                PointItem(R.string.label_sin, points.sin, modifier = modifier) { newValue ->
-                    updateIfChanged { it.copy(sin = newValue) }
-                }
             }
         }
 
         Row(
-            modifier = Modifier.padding(horizontal = 8.dp),
+            modifier = Modifier
+                .padding(horizontal = 8.dp)
+                .fillMaxWidth(),
             horizontalArrangement = Arrangement.spacedBy(12.dp, Alignment.CenterHorizontally)
         ) {
             CardContainer(Modifier.weight(1f)) {

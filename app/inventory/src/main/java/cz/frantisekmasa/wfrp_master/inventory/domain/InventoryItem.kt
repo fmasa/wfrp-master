@@ -19,6 +19,9 @@ typealias InventoryItemId = UUID
         const val DESCRIPTION_MAX_LENGTH = 200
     }
 
+    // TODO: Add support for Trappings compendium
+    override val compendiumId: UUID? get() = null
+
     init {
         require(name.isNotBlank()) { "Inventory item must have non-blank name" }
         require(quantity > 0) { "Inventory item quantity must be > 0" }

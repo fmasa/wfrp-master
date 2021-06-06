@@ -1,7 +1,7 @@
-package cz.frantisekmasa.wfrp_master.compendium.domain
+package cz.frantisekmasa.wfrp_master.core.domain.compendium
 
 import android.os.Parcelable
-import java.util.UUID
+import java.util.*
 
 interface CompendiumItem : Parcelable {
     val id: UUID

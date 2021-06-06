@@ -1,6 +1,7 @@
 package cz.frantisekmasa.wfrp_master.compendium.domain
 
 import cz.frantisekmasa.wfrp_master.core.common.requireMaxLength
+import cz.frantisekmasa.wfrp_master.core.domain.compendium.CompendiumItem
 import kotlinx.parcelize.Parcelize
 import java.util.*
 
