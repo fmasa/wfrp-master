@@ -151,7 +151,9 @@ private fun PointsSection(points: Points, onUpdate: (Points) -> Unit) {
         }
 
         Row(
-            modifier = Modifier.padding(horizontal = 8.dp),
+            modifier = Modifier
+                .padding(horizontal = 8.dp)
+                .fillMaxWidth(),
             horizontalArrangement = Arrangement.spacedBy(12.dp, Alignment.CenterHorizontally)
         ) {
             CardContainer(Modifier.weight(1f)) {
