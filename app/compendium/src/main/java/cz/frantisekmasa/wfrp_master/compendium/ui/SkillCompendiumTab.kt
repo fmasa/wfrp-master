@@ -10,7 +10,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import cz.frantisekmasa.wfrp_master.compendium.R
-import cz.frantisekmasa.wfrp_master.compendium.domain.CompendiumItem
+import cz.frantisekmasa.wfrp_master.core.domain.compendium.CompendiumItem
 import cz.frantisekmasa.wfrp_master.compendium.domain.Skill
 import cz.frantisekmasa.wfrp_master.core.domain.Characteristic
 import cz.frantisekmasa.wfrp_master.core.ui.dialogs.DialogState

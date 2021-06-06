@@ -3,7 +3,7 @@ package cz.muni.fi.rpg.viewModels
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
-import cz.frantisekmasa.wfrp_master.compendium.domain.Compendium
+import cz.frantisekmasa.wfrp_master.core.domain.compendium.Compendium
 import cz.frantisekmasa.wfrp_master.core.domain.Stats
 import cz.frantisekmasa.wfrp_master.core.domain.identifiers.CharacterId
 import cz.frantisekmasa.wfrp_master.core.domain.rolls.Dice

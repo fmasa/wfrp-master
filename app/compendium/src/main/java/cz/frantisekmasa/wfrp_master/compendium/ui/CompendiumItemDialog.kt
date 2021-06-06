@@ -8,7 +8,7 @@ import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import cz.frantisekmasa.wfrp_master.compendium.domain.CompendiumItem
+import cz.frantisekmasa.wfrp_master.core.domain.compendium.CompendiumItem
 import cz.frantisekmasa.wfrp_master.core.ui.buttons.CloseButton
 import cz.frantisekmasa.wfrp_master.core.ui.dialogs.DialogProgress
 import cz.frantisekmasa.wfrp_master.core.ui.dialogs.FullScreenDialog

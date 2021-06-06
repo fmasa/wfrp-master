@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import cz.frantisekmasa.wfrp_master.compendium.domain.*
+import cz.frantisekmasa.wfrp_master.core.domain.compendium.Compendium
 import cz.frantisekmasa.wfrp_master.core.domain.party.Party
 import cz.frantisekmasa.wfrp_master.core.domain.party.PartyId
 import cz.frantisekmasa.wfrp_master.core.domain.party.PartyRepository

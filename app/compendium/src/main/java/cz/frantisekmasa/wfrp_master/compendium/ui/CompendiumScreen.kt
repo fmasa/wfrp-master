@@ -16,7 +16,7 @@ import androidx.compose.ui.text.toUpperCase
 import androidx.compose.ui.unit.Dp
 import androidx.lifecycle.LiveData
 import cz.frantisekmasa.wfrp_master.compendium.R
-import cz.frantisekmasa.wfrp_master.compendium.domain.CompendiumItem
+import cz.frantisekmasa.wfrp_master.core.domain.compendium.CompendiumItem
 import cz.frantisekmasa.wfrp_master.core.ui.buttons.BackButton
 import cz.frantisekmasa.wfrp_master.core.ui.dialogs.DialogState
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.ContextMenu
