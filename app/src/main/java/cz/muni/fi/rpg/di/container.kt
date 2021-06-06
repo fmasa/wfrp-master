@@ -46,6 +46,8 @@ import cz.muni.fi.rpg.ui.partySettings.PartySettingsViewModel
 import cz.frantisekmasa.wfrp_master.core.viewModel.PremiumViewModel
 import cz.frantisekmasa.wfrp_master.core.viewModel.SettingsViewModel
 import cz.frantisekmasa.wfrp_master.inventory.InventoryModule
+import cz.frantisekmasa.wfrp_master.religion.COLLECTION_COMPENDIUM_BLESSINGS
+import cz.frantisekmasa.wfrp_master.religion.COLLECTION_COMPENDIUM_MIRACLES
 import cz.frantisekmasa.wfrp_master.religion.ReligionModule
 import org.koin.core.qualifier.named
 import kotlin.random.Random
