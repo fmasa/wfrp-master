@@ -18,8 +18,8 @@ import cz.frantisekmasa.wfrp_master.core.ui.buttons.CloseButton
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.EmptyUI
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.FullScreenProgress
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.ItemIcon
+import cz.frantisekmasa.wfrp_master.core.ui.primitives.Spacing
 import cz.muni.fi.rpg.R
-import cz.muni.fi.rpg.ui.common.composables.BodyPadding
 import cz.muni.fi.rpg.viewModels.TalentsViewModel
 
 @Composable
@@ -56,7 +56,7 @@ internal fun CompendiumTalentChooser(
                         else null,
                     )
                 } else {
-                    LazyColumn(contentPadding = PaddingValues(BodyPadding)) {
+                    LazyColumn(contentPadding = PaddingValues(Spacing.bodyPadding)) {
                         items(compendiumTalents) { talent ->
                             ListItem(
                                 modifier = Modifier.clickable(onClick = { onTalentSelected(talent) }),
@@ -71,7 +71,7 @@ internal fun CompendiumTalentChooser(
             OutlinedButton(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(BodyPadding),
+                    .padding(Spacing.bodyPadding),
                 onClick = onCustomTalentRequest,
             ) {
                 Text(stringResource(R.string.button_add_non_compendium_talent))
