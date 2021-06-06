@@ -75,7 +75,7 @@ private data class MiracleFormData(
         )
     }
 
-    override fun toItem() = Miracle(
+    override fun toValue() = Miracle(
         id = id,
         name = name.value,
         cultName = cultName.value,

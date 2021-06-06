@@ -74,7 +74,7 @@ private data class BlessingFormData(
         )
     }
 
-    override fun toItem() = Blessing(
+    override fun toValue() = Blessing(
         id = id,
         name = name.value,
         range = range.value,

@@ -12,6 +12,7 @@ import cz.frantisekmasa.wfrp_master.core.domain.compendium.CompendiumItem
 import cz.frantisekmasa.wfrp_master.core.ui.buttons.CloseButton
 import cz.frantisekmasa.wfrp_master.core.ui.dialogs.DialogProgress
 import cz.frantisekmasa.wfrp_master.core.ui.dialogs.FullScreenDialog
+import cz.frantisekmasa.wfrp_master.core.ui.forms.HydratedFormData
 import cz.frantisekmasa.wfrp_master.core.ui.scaffolding.SaveAction
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -26,7 +27,7 @@ private enum class FormState {
 @Composable
 internal fun <T : CompendiumItem> CompendiumItemDialog(
     title: String,
-    formData: CompendiumItemFormData<T>,
+    formData: HydratedFormData<T>,
     saver: suspend (T) -> Unit,
     onDismissRequest: () -> Unit,
     form: @Composable (validate: Boolean) -> Unit,
@@ -62,7 +63,7 @@ internal fun <T : CompendiumItem> CompendiumItemDialog(
 @Composable
 private fun <T : CompendiumItem> CompendiumItemDialogTopBar(
     title: String,
-    formData: CompendiumItemFormData<T>,
+    formData: HydratedFormData<T>,
     saver: suspend (T) -> Unit,
     formState: MutableState<FormState>,
     validate: MutableState<Boolean>,
@@ -85,7 +86,7 @@ private fun <T : CompendiumItem> CompendiumItemDialogTopBar(
 
                         formState.value = FormState.SAVING
                         coroutineScope.launch(Dispatchers.IO) {
-                            saver(formData.toItem())
+                            saver(formData.toValue())
                             withContext(Dispatchers.Main) {
                                 onDismissRequest()
                             }
