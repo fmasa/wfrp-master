@@ -9,7 +9,7 @@ import java.util.*
 @Parcelize
 internal data class Miracle(
     override val id: UUID,
-    val compendiumId: UUID?,
+    override val compendiumId: UUID?,
     val name: String,
     val range: String,
     val target: String,

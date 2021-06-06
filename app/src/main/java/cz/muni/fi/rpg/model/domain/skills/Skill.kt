@@ -8,7 +8,7 @@ import java.util.UUID
 @Parcelize
 data class Skill(
     override val id: UUID,
-    val compendiumId: UUID? = null,
+    override val compendiumId: UUID? = null,
     val advanced: Boolean,
     val characteristic: Characteristic,
     val name: String,
