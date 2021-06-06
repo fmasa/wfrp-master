@@ -28,12 +28,17 @@ interface RollExpression : Parcelable {
     }
 
     fun evaluate(): Int
+
+    /**
+     * Returns true if calls to [evaluate] always return the same value.
+     */
+    fun isDeterministic(): Boolean
 }
 
 @Parcelize
 private data class DiceRoll(private val sides: Int) : RollExpression {
     override fun evaluate() = Dice(sides).roll()
-
+    override fun isDeterministic() = false
     override fun toString(): String = "d$sides"
 }
 
@@ -43,7 +48,7 @@ private data class Multiplication(
     private val b: RollExpression,
 ) : RollExpression {
     override fun evaluate() = a.evaluate() * b.evaluate()
-
+    override fun isDeterministic() = a.isDeterministic() && b.isDeterministic()
     override fun toString(): String = "$a × $b"
 }
 
@@ -62,6 +67,7 @@ private data class Division(
         return dividend.evaluate() / divisor
     }
 
+    override fun isDeterministic() = dividend.isDeterministic() && divisor.isDeterministic()
     override fun toString(): String = "$dividend ÷ $divisor"
 }
 
@@ -71,7 +77,7 @@ private data class Addition(
     private val b: RollExpression,
 ) : RollExpression {
     override fun evaluate() = a.evaluate() + b.evaluate()
-
+    override fun isDeterministic() = a.isDeterministic() && b.isDeterministic()
     override fun toString(): String = "$a + $b"
 }
 
@@ -81,12 +87,14 @@ private data class Subtraction(
     private val b: RollExpression,
 ) : RollExpression {
     override fun evaluate() = a.evaluate() - b.evaluate()
+    override fun isDeterministic() = a.isDeterministic() && b.isDeterministic()
     override fun toString(): String = "$a - $b"
 }
 
 @Parcelize
 private data class IntegerLiteral(private val value: Int) : RollExpression {
     override fun evaluate() = value
+    override fun isDeterministic() = true
     override fun toString(): String = "$value"
 }
 
