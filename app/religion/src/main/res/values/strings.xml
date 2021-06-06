@@ -14,4 +14,5 @@
 
     <!-- Common -->
     <string name="no_items_in_compendium_sub_text_player">Your GM has to add them first.</string>
+    <string name="label_sin_points">Sin points</string>
 </resources>

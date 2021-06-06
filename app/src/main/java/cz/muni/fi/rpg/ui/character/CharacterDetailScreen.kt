@@ -152,6 +152,8 @@ private fun MainContainer(
                 CharacterReligionScreen(
                     characterId = characterId,
                     modifier = modifier,
+                    character = character,
+                    updateCharacter = viewModel::update,
                 )
             }
 

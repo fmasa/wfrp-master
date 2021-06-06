@@ -147,10 +147,6 @@ private fun PointsSection(points: Points, onUpdate: (Points) -> Unit) {
                 ) { newValue ->
                     updateIfChanged { it.copy(corruption = newValue) }
                 }
-
-                PointItem(R.string.label_sin, points.sin, modifier = modifier) { newValue ->
-                    updateIfChanged { it.copy(sin = newValue) }
-                }
             }
         }
 
