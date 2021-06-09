@@ -171,7 +171,9 @@ private fun InventoryItemList(
                         onClick = { onRemove(item) })
                 ),
                 badge = {
-                    if (item.encumbrance != Encumbrance.Zero) {
+                    val encumbrance = item.effectiveEncumbrance
+
+                    if (encumbrance != Encumbrance.Zero) {
                         Column(horizontalAlignment = Alignment.End) {
                             if (item.quantity > 1) {
                                 Text(stringResource(R.string.quantity, item.quantity))
@@ -185,7 +187,7 @@ private fun InventoryItemList(
                                     stringResource(R.string.icon_item_encumbrance),
                                     Modifier.size(Spacing.medium),
                                 )
-                                Text((item.encumbrance * item.quantity).toString())
+                                Text(encumbrance.toString())
                             }
                         }
                     }

@@ -34,7 +34,7 @@ class InventoryViewModel(
         character.map { Encumbrance.maximumForCharacter(it.getCharacteristics()) }.asLiveData()
 
     val totalEncumbrance: LiveData<Encumbrance?> = itemsFlow
-        .map { items -> items.map { it.encumbrance * it.quantity }.sum() }
+        .map { items -> items.map { it.effectiveEncumbrance }.sum() }
         .asLiveData()
 
     val armor: LiveData<Armor> = armorRepository.getLive(characterId).right().asLiveData()
