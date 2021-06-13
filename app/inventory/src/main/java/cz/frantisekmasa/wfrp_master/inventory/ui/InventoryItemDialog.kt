@@ -1,28 +1,15 @@
 package cz.frantisekmasa.wfrp_master.inventory.ui
 
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.Scaffold
-import androidx.compose.material.Text
-import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.*
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
-import cz.frantisekmasa.wfrp_master.core.ui.buttons.CloseButton
+import cz.frantisekmasa.wfrp_master.core.ui.components.FormDialog
 import cz.frantisekmasa.wfrp_master.core.ui.dialogs.FullScreenDialog
 import cz.frantisekmasa.wfrp_master.core.ui.forms.*
-import cz.frantisekmasa.wfrp_master.core.ui.primitives.Spacing
-import cz.frantisekmasa.wfrp_master.core.ui.scaffolding.SaveAction
 import cz.frantisekmasa.wfrp_master.inventory.domain.InventoryItem
 import cz.frantisekmasa.wfrp_master.inventory.R
 import cz.frantisekmasa.wfrp_master.inventory.domain.Encumbrance
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import cz.frantisekmasa.wfrp_master.inventory.domain.InventoryItemId
 import java.util.*
 import kotlin.math.max
 
@@ -33,105 +20,75 @@ internal fun InventoryItemDialog(
     onDismissRequest: () -> Unit,
 ) {
     FullScreenDialog(onDismissRequest = onDismissRequest) {
-        val coroutineScope = rememberCoroutineScope()
-        var validate by remember { mutableStateOf(false) }
+        val formData = InventoryItemFormData.fromItem(existingItem)
 
-        val name = inputValue(existingItem?.name ?: "", Rules.NotBlank())
+        FormDialog(
+            title = if (existingItem != null)
+                R.string.title_inventory_item_edit
+            else R.string.title_inventory_item_add,
+            onDismissRequest = onDismissRequest,
+            formData = formData,
+            onSave = viewModel::saveInventoryItem,
+        ) { validate ->
+            TextInput(
+                label = stringResource(R.string.label_name),
+                value = formData.name,
+                validate = validate,
+                maxLength = InventoryItem.NAME_MAX_LENGTH,
+            )
 
-        val description = inputValue(existingItem?.description ?: "")
+            TextInput(
+                label = stringResource(R.string.inventory_item_quantity),
+                value = formData.quantity,
+                validate = validate,
+                keyboardType = KeyboardType.Number,
+            )
 
-        val quantity = inputValue(
-            existingItem?.quantity?.toString() ?: "1",
-            Rules.PositiveInteger(),
-        )
-        val encumbrance = inputValue(
-            existingItem?.encumbrance?.toString() ?: "0",
-            Rules.NonNegativeNumber(),
-        )
+            TextInput(
+                label = stringResource(R.string.inventory_item_encumbrance),
+                value = formData.encumbrance,
+                maxLength = 8,
+                validate = validate,
+                keyboardType = KeyboardType.Number,
+                filters = listOf(Filter.DigitsAndDotSymbolsOnly),
+            )
 
-        Scaffold(
-            topBar = {
-                TopAppBar(
-                    navigationIcon = { CloseButton(onClick = onDismissRequest) },
-                    title = {
-                        Text(
-                            stringResource(
-                                if (existingItem != null)
-                                    R.string.title_inventory_item_edit
-                                else R.string.title_inventory_item_add
-                            )
-                        )
-                    },
-                    actions = {
-                        var saving by remember { mutableStateOf(false) }
-                        val isValid = listOf(name, encumbrance, quantity, description)
-                            .all { it.isValid() }
-
-                        SaveAction(
-                            enabled = !saving && (!validate || isValid),
-                            onClick = {
-                                if (!isValid) {
-                                    validate = true
-                                    return@SaveAction
-                                }
-
-                                saving = true
-
-                                coroutineScope.launch(Dispatchers.IO) {
-                                    viewModel.saveInventoryItem(
-                                        InventoryItem(
-                                            id = existingItem?.id ?: UUID.randomUUID(),
-                                            name = name.value,
-                                            description = description.value,
-                                            quantity = max(1, quantity.toInt()),
-                                            encumbrance = Encumbrance(encumbrance.toDouble()),
-                                        )
-                                    )
-
-                                    withContext(Dispatchers.Main) { onDismissRequest() }
-                                }
-                            }
-                        )
-                    }
-                )
-            }
-        ) {
-            Column(
-                Modifier
-                    .verticalScroll(rememberScrollState())
-                    .padding(Spacing.bodyPadding),
-                verticalArrangement = Arrangement.spacedBy(Spacing.small),
-            ) {
-                TextInput(
-                    label = stringResource(R.string.label_name),
-                    value = name,
-                    validate = validate,
-                    maxLength = InventoryItem.NAME_MAX_LENGTH,
-                )
-
-                TextInput(
-                    label = stringResource(R.string.inventory_item_quantity),
-                    value = quantity,
-                    validate = validate,
-                    keyboardType = KeyboardType.Number,
-                )
-
-                TextInput(
-                    label = stringResource(R.string.inventory_item_encumbrance),
-                    value = encumbrance,
-                    maxLength = 8,
-                    validate = validate,
-                    keyboardType = KeyboardType.Number,
-                    filters = listOf(Filter.DigitsAndDotSymbolsOnly),
-                )
-
-                TextInput(
-                    label = stringResource(R.string.label_description),
-                    value = description,
-                    validate = validate,
-                    maxLength = InventoryItem.DESCRIPTION_MAX_LENGTH,
-                )
-            }
+            TextInput(
+                label = stringResource(R.string.label_description),
+                value = formData.description,
+                validate = validate,
+                maxLength = InventoryItem.DESCRIPTION_MAX_LENGTH,
+            )
         }
+    }
+}
+
+private class InventoryItemFormData(
+    val id: InventoryItemId,
+    val name: InputValue,
+    val encumbrance: InputValue,
+    val quantity: InputValue,
+    val description: InputValue,
+) : HydratedFormData<InventoryItem> {
+    override fun isValid() =
+        listOf(name, encumbrance, quantity, description).all { it.isValid() }
+
+    override fun toValue() = InventoryItem(
+        id = id,
+        name = name.value,
+        description = description.value,
+        quantity = max(1, quantity.toInt()),
+        encumbrance = Encumbrance(encumbrance.toDouble()),
+    )
+
+    companion object {
+        @Composable
+        fun fromItem(item: InventoryItem?) = InventoryItemFormData(
+            id = remember(item) { item?.id ?: UUID.randomUUID() },
+            name = inputValue(item?.name ?: "", Rules.NotBlank()),
+            encumbrance = inputValue(item?.encumbrance?.toString() ?: "0"),
+            quantity = inputValue(item?.quantity?.toString() ?: "1"),
+            description = inputValue(item?.description ?: ""),
+        )
     }
 }
