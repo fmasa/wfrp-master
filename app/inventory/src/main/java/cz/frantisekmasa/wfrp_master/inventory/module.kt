@@ -1,6 +1,6 @@
 package cz.frantisekmasa.wfrp_master.inventory
 
-import cz.frantisekmasa.wfrp_master.core.domain.Armor
+import cz.frantisekmasa.wfrp_master.inventory.domain.Armor
 import cz.frantisekmasa.wfrp_master.core.domain.character.CharacterFeatureRepository
 import cz.frantisekmasa.wfrp_master.core.domain.character.CharacterItemRepository
 import cz.frantisekmasa.wfrp_master.core.domain.character.Feature

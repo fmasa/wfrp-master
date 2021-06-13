@@ -1,4 +1,4 @@
-package cz.frantisekmasa.wfrp_master.core.domain
+package cz.frantisekmasa.wfrp_master.inventory.domain
 
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize

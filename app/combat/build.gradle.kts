@@ -17,4 +17,5 @@ android {
 dependencies {
     implementation(project(":app:core"))
     implementation(project(":app:navigation"))
+    implementation(project(mapOf("path" to ":app:inventory")))
 }
