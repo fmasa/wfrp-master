@@ -19,7 +19,8 @@ fun CheckboxWithText(
     text: String,
     modifier: Modifier = Modifier,
     checked: Boolean,
-    onCheckedChange: (Boolean) -> Unit
+    onCheckedChange: (Boolean) -> Unit,
+    badge: @Composable () -> Unit = {},
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
@@ -34,6 +35,8 @@ fun CheckboxWithText(
             modifier = Modifier.padding(start = 4.dp),
             style = MaterialTheme.typography.body2
         )
+
+        badge()
     }
 }
 

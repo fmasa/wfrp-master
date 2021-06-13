@@ -8,7 +8,7 @@ import kotlinx.parcelize.Parcelize
 @Parcelize
 data class ArmourPoints(
     @JsonValue
-    private val value: Int
+    val value: Int
 ): Parcelable {
     init {
         require(value >= 0) { "Armour points cannot be negative" }

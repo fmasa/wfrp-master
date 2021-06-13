@@ -8,7 +8,7 @@ import kotlinx.parcelize.Parcelize
 @Parcelize
 data class AmmunitionRangeExpression(
     @JsonValue
-    private val value: String
+    val value: String
 ) : Parcelable {
     init {
         require(
@@ -26,10 +26,6 @@ data class AmmunitionRangeExpression(
     }
 
     companion object {
-        fun parse(value: String): Result<AmmunitionRangeExpression> {
-            return runCatching { AmmunitionRangeExpression(value) }
-        }
-
-        fun isValid(value: String) = parse(value).isSuccess
+        fun isValid(value: String) = runCatching { AmmunitionRangeExpression(value) }.isSuccess
     }
 }

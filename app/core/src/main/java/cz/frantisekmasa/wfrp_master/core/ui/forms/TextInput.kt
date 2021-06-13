@@ -6,10 +6,8 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.Stable
-import androidx.compose.runtime.mutableStateOf
+import androidx.compose.material.Text
+import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -49,6 +47,7 @@ fun TextInput(
     validate: Boolean,
     modifier: Modifier = Modifier,
     label: String? = null,
+    helperText: String? = null,
     keyboardType: KeyboardType = KeyboardType.Text,
     maxLength: Int = Int.MAX_VALUE,
     multiLine: Boolean = false,
@@ -60,6 +59,7 @@ fun TextInput(
         value = value.value,
         onValueChange = { value.value = it },
         label = label,
+        helperText = helperText,
         validate = validate,
         keyboardType = keyboardType,
         maxLength = maxLength,
@@ -79,6 +79,7 @@ private fun TextInput(
     validate: Boolean,
     modifier: Modifier = Modifier,
     label: String? = null,
+    helperText: String? = null,
     keyboardType: KeyboardType = KeyboardType.Text,
     maxLength: Int = Int.MAX_VALUE,
     multiLine: Boolean = false,
@@ -143,12 +144,14 @@ private fun TextInput(
             }
         }
 
+        if (helperText != null && helperText.isNotBlank()) {
+            CompositionLocalProvider(LocalContentAlpha provides ContentAlpha.medium) {
+                Text(helperText, style = MaterialTheme.typography.body2)
+            }
+        }
+
         if (errorMessage != null && errorMessage.isNotBlank()) {
-            Text(
-                errorMessage,
-                color = MaterialTheme.colors.error,
-                style = MaterialTheme.typography.body2,
-            )
+            ErrorMessage(errorMessage)
         }
     }
 }

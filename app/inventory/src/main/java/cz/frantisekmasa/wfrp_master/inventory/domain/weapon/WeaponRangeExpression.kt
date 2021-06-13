@@ -8,7 +8,7 @@ import kotlinx.parcelize.Parcelize
 @Parcelize
 data class WeaponRangeExpression(
     @JsonValue
-    private val value: String
+    val value: String
 ) : Parcelable {
     init {
         require(

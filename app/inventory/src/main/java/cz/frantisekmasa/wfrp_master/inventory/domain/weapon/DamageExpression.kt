@@ -8,7 +8,7 @@ import kotlinx.parcelize.Parcelize
 @Parcelize
 data class DamageExpression(
     @JsonValue
-    private val value: String
+    val value: String
 ) : Parcelable {
     init {
         require(
@@ -26,10 +26,6 @@ data class DamageExpression(
     }
 
     companion object {
-        fun parse(value: String): Result<DamageExpression> {
-            return runCatching { DamageExpression(value) }
-        }
-
-        fun isValid(value: String) = parse(value).isSuccess
+        fun isValid(value: String) = runCatching { DamageExpression(value) }.isSuccess
     }
 }

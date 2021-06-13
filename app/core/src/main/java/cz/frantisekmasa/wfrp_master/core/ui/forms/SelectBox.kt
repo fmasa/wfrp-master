@@ -7,11 +7,30 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import cz.frantisekmasa.wfrp_master.core.R
+import cz.frantisekmasa.wfrp_master.core.domain.NamedEnum
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.Spacing
+
+@Composable
+inline fun <reified T : NamedEnum> SelectBox(
+    label: String? = null,
+    value: T,
+    noinline onValueChange: (T) -> Unit,
+    items: Array<T>,
+) {
+    val context = LocalContext.current
+
+    SelectBox(
+        label = label,
+        value = value,
+        onValueChange = onValueChange,
+        items = remember(context, items) { items.map { it to context.getString(it.nameRes) } }
+    )
+}
 
 @Composable
 fun <T> SelectBox(
