@@ -13,6 +13,7 @@ typealias InventoryItemId = UUID
     val description: String,
     val quantity: Int,
     val encumbrance: Encumbrance = Encumbrance.Zero,
+    val containerId: InventoryItemId? = null,
     val trappingType: TrappingType? = null,
 ) : CharacterItem {
     companion object {
@@ -25,6 +26,11 @@ typealias InventoryItemId = UUID
 
     val effectiveEncumbrance: Encumbrance get() {
         val type = trappingType
+
+        if (containerId != null) {
+            // Encumbrance of items carried in a container are ignored, see rulebook page 301
+            return Encumbrance.Zero
+        }
 
         if (type != null && type is TrappingType.WearableTrapping && type.worn) {
             // See rulebook page 293

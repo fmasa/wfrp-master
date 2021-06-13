@@ -185,13 +185,22 @@ service cloud.firestore {
                     allow delete: if canEditCharacter();
 
                     function isValidInventoryItem(item) {
-                        return ["id", "name", "description", "quantity", "encumbrance", "trappingType"].hasAll(item.keys())
+                        return ["id", "name", "description", "quantity", "encumbrance", "trappingType", "containerId"].hasAll(item.keys())
                             && item.id is string && item.id == itemId && isValidUuid(item.id)
                             && item.name is string && isNotBlank(item.name) && item.name.size() <= 50
                             && item.description is string && item.description.size() <= 200
                             && item.quantity is int && item.quantity > 0
                             && (! ("encumbrance" in item) || (item.encumbrance is number && item.encumbrance >= 0))
-                            && (! ("trappingType" in item) || item.trappingType == null || item.trappingType is map);
+                            && (! ("trappingType" in item) || item.trappingType == null || item.trappingType is map)
+                            && (! ("containerId" in item)
+                                || item.containerId == null || containerExists(item.containerId)
+                            );
+                    }
+
+                    function containerExists(containerId) {
+                        let container = get(/databases/$(database)/documents/parties/$(partyId)/characters/$(userId)/inventory/$(containerId));
+
+                        return container.data.type != null && container.data.type.kind == "CONTAINER";
                     }
                 }
 
