@@ -37,7 +37,23 @@ class InventoryViewModel(
         .map { items -> items.map { it.effectiveEncumbrance }.sum() }
         .asLiveData()
 
-    val armor: LiveData<Armor> = armorRepository.getLive(characterId).right().asLiveData()
+    val armor: LiveData<EquippedArmour> =
+        armorRepository
+            .getLive(characterId)
+            .right()
+            .combine(itemsFlow) { armour, items ->
+                EquippedArmour(
+                    armourFromItems = Armor.fromItems(items),
+                    legacyArmour = armour,
+                )
+            }
+            .asLiveData()
+
+    data class EquippedArmour(
+        val armourFromItems: Armor,
+        val legacyArmour: Armor,
+    )
+
     val money: LiveData<Money> = character.map { it.getMoney() }.asLiveData()
 
     suspend fun addMoney(amount: Money) {

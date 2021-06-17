@@ -17,10 +17,13 @@ import cz.frantisekmasa.wfrp_master.core.ui.primitives.CardTitle
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.NumberPicker
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.VisualOnlyIconDescription
 import cz.frantisekmasa.wfrp_master.inventory.R
+import cz.frantisekmasa.wfrp_master.inventory.ui.InventoryViewModel.EquippedArmour
 
 @Composable
-internal fun ArmorCard(armor: Armor, onChange: (Armor) -> Unit) {
-    val change = { mutation: Armor.() -> Armor -> onChange(with(armor, mutation)) }
+internal fun ArmorCard(armor: EquippedArmour, onChange: (Armor) -> Unit) {
+    val change = { mutation: Armor.() -> Armor ->
+        onChange(with(armor.legacyArmour, mutation))
+    }
 
     CardContainer(Modifier.padding(horizontal = 8.dp)) {
         CardTitle(R.string.title_armor)
@@ -30,14 +33,16 @@ internal fun ArmorCard(armor: Armor, onChange: (Armor) -> Unit) {
             ArmorPart(
                 iconRes = R.drawable.ic_armor_shield,
                 nameRes = R.string.armor_shield,
-                points = armor.shield,
+                base = armor.armourFromItems.shield,
+                points = armor.legacyArmour.shield,
                 onChange = { change { copy(shield = it) } },
                 modifier = Modifier.weight(1f),
             )
             ArmorPart(
                 iconRes = R.drawable.ic_armor_head,
                 nameRes = R.string.armor_head,
-                points = armor.head,
+                base = armor.armourFromItems.head,
+                points = armor.legacyArmour.head,
                 rollRange = 1..9,
                 onChange = { change { copy(head = it) } },
                 modifier = Modifier.weight(1f),
@@ -50,7 +55,8 @@ internal fun ArmorCard(armor: Armor, onChange: (Armor) -> Unit) {
             ArmorPart(
                 iconRes = R.drawable.ic_armor_arm_right,
                 nameRes = R.string.armor_right_arm,
-                points = armor.rightArm,
+                base = armor.armourFromItems.rightArm,
+                points = armor.legacyArmour.rightArm,
                 rollRange = 25..44,
                 onChange = { change { copy(rightArm = it) } },
                 modifier = Modifier.weight(1f),
@@ -59,7 +65,8 @@ internal fun ArmorCard(armor: Armor, onChange: (Armor) -> Unit) {
             ArmorPart(
                 iconRes = R.drawable.ic_armor_chest,
                 nameRes = R.string.armor_body,
-                points = armor.body,
+                base = armor.armourFromItems.body,
+                points = armor.legacyArmour.body,
                 rollRange = 45..79,
                 onChange = { change { copy(body = it) } },
                 modifier = Modifier.weight(1f),
@@ -68,7 +75,8 @@ internal fun ArmorCard(armor: Armor, onChange: (Armor) -> Unit) {
             ArmorPart(
                 iconRes = R.drawable.ic_armor_arm_left,
                 nameRes = R.string.armor_left_arm,
-                points = armor.leftArm,
+                base = armor.armourFromItems.leftArm,
+                points = armor.legacyArmour.leftArm,
                 rollRange = 10..24,
                 onChange = { change { copy(leftArm = it) } },
                 modifier = Modifier.weight(1f),
@@ -82,7 +90,8 @@ internal fun ArmorCard(armor: Armor, onChange: (Armor) -> Unit) {
             ArmorPart(
                 iconRes = R.drawable.ic_armor_leg_right,
                 nameRes = R.string.armor_right_leg,
-                points = armor.rightLeg,
+                base = armor.armourFromItems.rightLeg,
+                points = armor.legacyArmour.rightLeg,
                 rollRange = 90..100,
                 onChange = { change { copy(rightLeg = it) } },
             )
@@ -90,7 +99,8 @@ internal fun ArmorCard(armor: Armor, onChange: (Armor) -> Unit) {
             ArmorPart(
                 iconRes = R.drawable.ic_armor_leg_left,
                 nameRes = R.string.armor_left_leg,
-                points = armor.leftLeg,
+                base = armor.armourFromItems.leftLeg,
+                points = armor.legacyArmour.leftLeg,
                 rollRange = 80..89,
                 onChange = { change { copy(leftLeg = it) } },
             )
@@ -103,6 +113,7 @@ private fun ArmorPart(
     @DrawableRes iconRes: Int,
     @StringRes nameRes: Int,
     points: Int,
+    base: Int,
     modifier: Modifier = Modifier,
     rollRange: IntRange? = null,
     onChange: (Int) -> Unit,
@@ -110,7 +121,7 @@ private fun ArmorPart(
     Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = modifier) {
         Icon(painterResource(iconRes), VisualOnlyIconDescription)
         NumberPicker(
-            value = points,
+            value = base + points,
             onIncrement = {
                 if (points < Armor.MAX_VALUE) {
                     onChange(points + 1)
