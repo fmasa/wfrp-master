@@ -24,6 +24,7 @@ import cz.frantisekmasa.wfrp_master.core.viewModel.viewModel
 import cz.frantisekmasa.wfrp_master.inventory.R
 import cz.frantisekmasa.wfrp_master.inventory.domain.Encumbrance
 import cz.frantisekmasa.wfrp_master.inventory.domain.InventoryItem
+import cz.frantisekmasa.wfrp_master.inventory.domain.TrappingType
 import org.koin.core.parameter.parametersOf
 
 @Composable
@@ -140,7 +141,7 @@ private fun InventoryItemsCard(
             if (items.isEmpty()) {
                 EmptyUI(
                     R.string.no_inventory_item_prompt,
-                    R.drawable.ic_inventory,
+                    R.drawable.ic_container,
                     size = EmptyUI.Size.Small
                 )
             } else {
@@ -163,7 +164,7 @@ private fun InventoryItemList(
             CardItem(
                 name = item.name,
                 description = item.description,
-                iconRes = R.drawable.ic_inventory,
+                iconRes = trappingIcon(item.trappingType),
                 onClick = { onClick(item) },
                 contextMenuItems = listOf(
                     ContextMenu.Item(
@@ -195,4 +196,14 @@ private fun InventoryItemList(
             )
         }
     }
+}
+
+@Composable
+private fun trappingIcon(trappingType: TrappingType?) = when(trappingType) {
+    is TrappingType.Ammunition -> R.drawable.ic_ammunition
+    is TrappingType.Armour -> R.drawable.ic_armor_chest
+    is TrappingType.MeleeWeapon -> R.drawable.ic_weapon_skill
+    is TrappingType.Container -> R.drawable.ic_container
+    is TrappingType.RangedWeapon -> R.drawable.ic_ballistic_skill
+    null -> R.drawable.ic_miscellaneous
 }
