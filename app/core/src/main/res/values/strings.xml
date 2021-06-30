@@ -15,6 +15,12 @@
     <string name="armor_head">Head</string>
     <string name="title_armor">Armor</string>
 
+    <string name="armor_type_boiled_leather">Boiled Leather</string>
+    <string name="armor_type_mail">Mail</string>
+    <string name="armor_type_other">Other</string>
+    <string name="armor_type_plate">Plate</string>
+    <string name="armor_type_soft_leather">Soft Leather</string>
+
     <!-- Species -->
     <string name="race_dwarf">Dwarf</string>
     <string name="race_high_elf">High Elf</string>

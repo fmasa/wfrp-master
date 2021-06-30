@@ -12,6 +12,7 @@ data class Encumbrance(
     private val value: Double,
 ) : Parcelable {
     companion object {
+        val One: Encumbrance = Encumbrance(1.0)
         val Zero: Encumbrance = Encumbrance(0.0)
         private val formatter = DecimalFormat("#,##0.###")
 
@@ -27,6 +28,7 @@ data class Encumbrance(
     operator fun compareTo(other: Encumbrance) = value.compareTo(other.value)
     operator fun times(multiplier: Int) = Encumbrance(value * multiplier)
     operator fun plus(addend: Encumbrance) = Encumbrance(value + addend.value)
+    operator fun minus(other: Encumbrance) = Encumbrance((value - other.value).coerceAtLeast(0.0))
 
     override fun toString(): String = formatter.format(value)
 }

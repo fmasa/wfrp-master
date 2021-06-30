@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
-import cz.frantisekmasa.wfrp_master.core.domain.Armor
+import cz.frantisekmasa.wfrp_master.inventory.domain.Armor
 import cz.frantisekmasa.wfrp_master.core.domain.character.CharacterFeatureRepository
 import cz.frantisekmasa.wfrp_master.core.domain.identifiers.CharacterId
 import cz.frantisekmasa.wfrp_master.core.domain.character.CharacterRepository
@@ -34,10 +34,26 @@ class InventoryViewModel(
         character.map { Encumbrance.maximumForCharacter(it.getCharacteristics()) }.asLiveData()
 
     val totalEncumbrance: LiveData<Encumbrance?> = itemsFlow
-        .map { items -> items.map { it.encumbrance * it.quantity }.sum() }
+        .map { items -> items.map { it.effectiveEncumbrance }.sum() }
         .asLiveData()
 
-    val armor: LiveData<Armor> = armorRepository.getLive(characterId).right().asLiveData()
+    val armor: LiveData<EquippedArmour> =
+        armorRepository
+            .getLive(characterId)
+            .right()
+            .combine(itemsFlow) { armour, items ->
+                EquippedArmour(
+                    armourFromItems = Armor.fromItems(items),
+                    legacyArmour = armour,
+                )
+            }
+            .asLiveData()
+
+    data class EquippedArmour(
+        val armourFromItems: Armor,
+        val legacyArmour: Armor,
+    )
+
     val money: LiveData<Money> = character.map { it.getMoney() }.asLiveData()
 
     suspend fun addMoney(amount: Money) {

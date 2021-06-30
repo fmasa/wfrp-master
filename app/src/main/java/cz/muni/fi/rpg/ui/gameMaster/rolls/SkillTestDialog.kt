@@ -7,7 +7,7 @@ import androidx.compose.ui.res.stringResource
 import cz.frantisekmasa.wfrp_master.compendium.domain.Skill
 import cz.frantisekmasa.wfrp_master.core.domain.party.PartyId
 import cz.frantisekmasa.wfrp_master.core.domain.rolls.Dice
-import cz.frantisekmasa.wfrp_master.core.domain.rolls.RollExpression
+import cz.frantisekmasa.wfrp_master.core.domain.Expression
 import cz.frantisekmasa.wfrp_master.core.domain.rolls.TestResult
 import cz.frantisekmasa.wfrp_master.core.ui.dialogs.FullScreenDialog
 import cz.frantisekmasa.wfrp_master.core.viewModel.viewModel
@@ -111,7 +111,7 @@ internal sealed class Roll : Parcelable {
 
     @Parcelize
     data class Generic(
-        val expression: RollExpression,
+        val expression: Expression,
         val rolledValue: Int,
     ) : Roll() {
         override fun reroll(): Roll = copy(rolledValue = expression.evaluate())

@@ -15,7 +15,7 @@ import cz.frantisekmasa.wfrp_master.combat.domain.encounter.Npc
 import cz.frantisekmasa.wfrp_master.combat.domain.encounter.Wounds
 import cz.frantisekmasa.wfrp_master.core.domain.Characteristic
 import cz.muni.fi.rpg.R
-import cz.frantisekmasa.wfrp_master.core.domain.Armor
+import cz.frantisekmasa.wfrp_master.inventory.domain.Armor
 import cz.frantisekmasa.wfrp_master.core.domain.Stats
 import cz.frantisekmasa.wfrp_master.core.ui.buttons.BackButton
 import cz.frantisekmasa.wfrp_master.core.ui.forms.*

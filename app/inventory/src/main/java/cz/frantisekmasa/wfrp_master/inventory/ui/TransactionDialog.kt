@@ -135,7 +135,10 @@ fun TransactionDialog(
                         )
                     }
 
-                    Row(horizontalArrangement = Arrangement.spacedBy(Spacing.medium)) {
+                    Row(
+                        Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.spacedBy(Spacing.medium),
+                    ) {
                         CoinInput(crowns, R.string.label_crowns, validate)
                         CoinInput(shillings, R.string.label_shillings, validate)
                         CoinInput(pennies, R.string.label_pennies, validate)

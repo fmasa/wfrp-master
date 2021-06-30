@@ -19,7 +19,7 @@ import cz.frantisekmasa.wfrp_master.core.domain.character.Points
 import cz.frantisekmasa.wfrp_master.core.domain.Stats
 import cz.frantisekmasa.wfrp_master.core.domain.identifiers.CharacterId
 import cz.frantisekmasa.wfrp_master.core.ui.components.CharacteristicsTable
-import cz.frantisekmasa.wfrp_master.core.domain.rolls.RollExpression
+import cz.frantisekmasa.wfrp_master.core.domain.Expression
 import cz.frantisekmasa.wfrp_master.core.media.rememberSoundPlayer
 import cz.frantisekmasa.wfrp_master.core.ui.dialogs.FullScreenDialog
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.CardContainer
@@ -90,7 +90,7 @@ internal fun CharacterCharacteristicsScreen(
                         onClick = {
                             menuState = MenuState.COLLAPSED
 
-                            val expression = RollExpression.fromString(dice)
+                            val expression = Expression.fromString(dice)
                             roll = Roll.Generic(expression, expression.evaluate())
                         }
                     )
