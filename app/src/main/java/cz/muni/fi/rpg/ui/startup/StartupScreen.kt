@@ -1,6 +1,6 @@
 package cz.muni.fi.rpg.ui.startup
 
-import androidx.activity.compose.registerForActivityResult
+import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -59,11 +59,11 @@ fun StartupScreen(viewModel: AuthenticationViewModel) {
     val context = LocalContext.current
     val contract = remember(viewModel) { viewModel.googleSignInContract() }
     val googleSignInLauncher = key(contract, coroutineScope) {
-        registerForActivityResult(contract) { result ->
+        rememberLauncherForActivityResult(contract) { result ->
             if (result.resultCode == 0) {
                 Timber.d("Google Sign-In dialog was dismissed")
                 showAnonymousAuthenticationDialog = true
-                return@registerForActivityResult
+                return@rememberLauncherForActivityResult
             }
 
             coroutineScope.launch(Dispatchers.IO) {

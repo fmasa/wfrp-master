@@ -11,9 +11,9 @@ buildscript {
         classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:${Versions.kotlin}")
 
         // Firebase-related dependencies
-        classpath("com.google.gms:google-services:4.3.5")
-        classpath("com.google.firebase:firebase-crashlytics-gradle:2.7.0")
-        classpath("com.google.firebase:perf-plugin:1.3.4")
+        classpath("com.google.gms:google-services:4.3.8")
+        classpath("com.google.firebase:firebase-crashlytics-gradle:2.7.1")
+        //classpath("com.google.firebase:perf-plugin:1.4.0")
     }
 }
 

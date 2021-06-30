@@ -3,7 +3,7 @@ package cz.frantisekmasa.wfrp_master.compendium.ui
 import android.content.Intent
 import android.net.Uri
 import android.widget.Toast
-import androidx.activity.compose.registerForActivityResult
+import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -74,7 +74,8 @@ private fun MainContainer(routing: Routing<Route.CompendiumImport>) {
         )
     }
 
-    val fileChooser = registerForActivityResult(ActivityResultContracts.GetContent(),
+    val fileChooser = rememberLauncherForActivityResult(
+        ActivityResultContracts.GetContent(),
         onResult = {
             coroutineScope.launch(Dispatchers.IO) {
                 context.contentResolver.openInputStream(it)?.use { inputStream ->
