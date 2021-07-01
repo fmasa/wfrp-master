@@ -7,7 +7,7 @@ plugins {
     id("com.google.gms.google-services")
     id("kotlin-kapt")
     id("com.google.firebase.crashlytics")
-    id("com.google.firebase.firebase-perf")
+    //id("com.google.firebase.firebase-perf")
 }
 
 android {
@@ -78,6 +78,7 @@ android {
                 "-Xopt-in=androidx.compose.foundation.layout.ExperimentalLayout" +
                 "-Xopt-in=kotlinx.coroutines.ExperimentalCoroutinesApi" +
                 "-Xopt-in=androidx.compose.material.ExperimentalMaterialApi" +
+                "-Xopt-in=androidx.compose.animation.ExperimentalAnimationApi" +
                 "-P" +
                 "plugin:androidx.compose.compiler.plugins.kotlin:suppressKotlinVersionCompatibilityCheck=true"
     }
@@ -114,12 +115,12 @@ dependencies {
     testImplementation("org.mockito:mockito-core:2.7.22")
 
     // Time picker
-    implementation("io.github.vanpra.compose-material-dialogs:datetime:0.4.0")
+    implementation("io.github.vanpra.compose-material-dialogs:datetime:0.4.3")
 
     // Checking network access
     implementation("com.github.pwittchen:reactivenetwork-rx2:3.0.8")
     api("org.jetbrains.kotlinx:kotlinx-coroutines-rx2:1.4.2")
 
     // Firebase Performance
-    implementation("com.google.firebase:firebase-perf-ktx:19.1.1")
+//    implementation("com.google.firebase:firebase-perf-ktx:20.0.1")
 }

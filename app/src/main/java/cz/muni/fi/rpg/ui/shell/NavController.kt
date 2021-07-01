@@ -6,7 +6,6 @@ import androidx.core.os.bundleOf
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.KEY_ROUTE
 import androidx.navigation.compose.rememberNavController
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.ktx.analytics
@@ -33,7 +32,7 @@ private class DestinationAnalyticsLogger : NavController.OnDestinationChangedLis
         destination: NavDestination,
         arguments: Bundle?
     ) {
-        val route = arguments?.getString(KEY_ROUTE) ?: return
+        val route = destination.route ?: return
 
         Timber.d("Showing screen $route")
 

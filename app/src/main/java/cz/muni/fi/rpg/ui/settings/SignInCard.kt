@@ -2,7 +2,7 @@ package cz.muni.fi.rpg.ui.settings
 
 import android.os.Parcelable
 import android.widget.Toast
-import androidx.activity.compose.registerForActivityResult
+import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -62,7 +62,7 @@ fun SignInCard(viewModel: SettingsViewModel, routing: Routing<Route.Settings>) {
         )
     }
 
-    val launcher = registerForActivityResult(contract) { result ->
+    val launcher = rememberLauncherForActivityResult(contract) { result ->
         coroutineScope.launch(Dispatchers.IO) {
             try {
                 GoogleSignIn.getSignedInAccountFromIntent(result.intent)

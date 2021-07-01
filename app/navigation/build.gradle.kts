@@ -6,5 +6,5 @@ dependencies {
     implementation(project(":app:core"))
 
     // Navigation
-    api("androidx.navigation:navigation-compose:1.0.0-alpha10")
+    api("androidx.navigation:navigation-compose:2.4.0-alpha03")
 }
