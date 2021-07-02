@@ -4,10 +4,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.LocalContentColor
-import androidx.compose.material.Icon
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -34,37 +31,35 @@ fun CharacterTrappingsScreen(
 ) {
     val viewModel: InventoryViewModel by viewModel { parametersOf(characterId) }
 
-    Column(
-        modifier
-            .verticalScroll(rememberScrollState())
-            .padding(top = Spacing.tiny),
-    ) {
-        Row(
-            Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween,
-        ) {
-            CharacterEncumbrance(
-                viewModel,
-                Modifier.padding(Spacing.medium),
-            )
-
-            viewModel.money.observeAsState(null).value?.let { money ->
-                var transactionDialogVisible by rememberSaveable { mutableStateOf(false) }
-
-                MoneyBalance(
-                    money,
-                    Modifier
-                        .clickable { transactionDialogVisible = true }
-                        .padding(Spacing.medium)
-                        .padding(end = 8.dp),
+    Column(modifier.verticalScroll(rememberScrollState())) {
+        TopPanel {
+            Row(
+                Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+            ) {
+                CharacterEncumbrance(
+                    viewModel,
+                    Modifier.padding(Spacing.medium),
                 )
 
-                if (transactionDialogVisible) {
-                    TransactionDialog(
+                viewModel.money.observeAsState(null).value?.let { money ->
+                    var transactionDialogVisible by rememberSaveable { mutableStateOf(false) }
+
+                    MoneyBalance(
                         money,
-                        viewModel,
-                        onDismissRequest = { transactionDialogVisible = false },
+                        Modifier
+                            .clickable { transactionDialogVisible = true }
+                            .padding(Spacing.medium)
+                            .padding(end = 8.dp),
                     )
+
+                    if (transactionDialogVisible) {
+                        TransactionDialog(
+                            money,
+                            viewModel,
+                            onDismissRequest = { transactionDialogVisible = false },
+                        )
+                    }
                 }
             }
         }
