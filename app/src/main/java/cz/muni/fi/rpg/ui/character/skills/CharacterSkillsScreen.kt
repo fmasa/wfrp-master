@@ -1,7 +1,6 @@
 package cz.muni.fi.rpg.ui.character.skills
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -9,6 +8,9 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import cz.frantisekmasa.wfrp_master.core.domain.identifiers.CharacterId
+import cz.frantisekmasa.wfrp_master.core.ui.components.Breakpoint
+import cz.frantisekmasa.wfrp_master.core.ui.components.ColumnSize.*
+import cz.frantisekmasa.wfrp_master.core.ui.components.Container
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.Spacing
 import cz.muni.fi.rpg.ui.character.talents.TalentsCard
 import cz.frantisekmasa.wfrp_master.core.viewModel.viewModel

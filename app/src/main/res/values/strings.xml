@@ -99,11 +99,6 @@
     <string name="label_career">Career</string>
     <string name="label_social_class">Class</string>
 
-    <string name="label_corruption">Corruption</string>
-    <string name="label_max_wounds">Max. Wounds</string>
-    <string name="label_fortune_points">Fortune</string>
-    <string name="label_fate_points">Fate</string>
-
     <string name="label_toughness_bonus">TB</string>
     <string name="label_strength_bonus">SB</string>
 
@@ -179,14 +174,11 @@
     <string name="menu_slideshow">Slideshow</string>
     <string name="about">About</string>
 
-    <string name="xp_points">Experience points (XP)</string>
+    <string name="xp_points">XP</string>
+    <string name="xp_points_spent">%1$d spent</string>
     <string name="xp_long">Experience points</string>
     <string name="label_xp_current">Current XP</string>
     <string name="label_xp_spent">Previously spent XP</string>
-
-    <string name="error_required">Required</string>
-    <string name="label_resilience">Resilience</string>
-    <string name="label_resolve">Resolve</string>
 
     <!-- Ambitions -->
     <string name="title_party_ambitions">Party ambitions</string>
@@ -194,7 +186,6 @@
     <string name="label_ambition_short_term">Short-term</string>
     <string name="label_ambition_long_term">Long-term</string>
     <string name="note_ambition_not_filled">Ambition not filled</string>
-    <string name="title_misc">Misc</string>
     <string name="spell_casting_number_shortcut">CN</string>
     <string name="title_character_creation_points">Point pools</string>
     <string name="label_base">Base</string>

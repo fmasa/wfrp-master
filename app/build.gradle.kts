@@ -79,6 +79,7 @@ android {
                 "-Xopt-in=kotlinx.coroutines.ExperimentalCoroutinesApi" +
                 "-Xopt-in=androidx.compose.material.ExperimentalMaterialApi" +
                 "-Xopt-in=androidx.compose.animation.ExperimentalAnimationApi" +
+                "-Xopt-in=androidx.compose.animation.ExperimentalFoundationApi" +
                 "-P" +
                 "plugin:androidx.compose.compiler.plugins.kotlin:suppressKotlinVersionCompatibilityCheck=true"
     }
