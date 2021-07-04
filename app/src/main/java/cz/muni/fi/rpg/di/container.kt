@@ -145,7 +145,6 @@ val appModule =
      * ViewModels
      */
     viewModel { (characterId: CharacterId) -> CharacterStatsViewModel(characterId, get()) }
-    viewModel { (characterId: CharacterId) -> CharacterMiscViewModel(characterId, get(), get()) }
     viewModel { (characterId: CharacterId) -> CharacterViewModel(characterId, get()) }
     viewModel { (partyId: PartyId) -> EncountersViewModel(partyId, get()) }
     viewModel { (partyId: PartyId) -> PartyViewModel(partyId, get()) }
