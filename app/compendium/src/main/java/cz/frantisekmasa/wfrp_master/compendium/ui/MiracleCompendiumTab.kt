@@ -26,7 +26,7 @@ import cz.frantisekmasa.wfrp_master.core.ui.primitives.ItemIcon
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.Spacing
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import java.util.*
+import java.util.UUID
 
 @Composable
 fun MiracleCompendiumTab(viewModel: CompendiumViewModel, width: Dp) {

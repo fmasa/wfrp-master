@@ -1,13 +1,18 @@
 package cz.muni.fi.rpg.ui.partySettings
 
 import androidx.compose.foundation.clickable
-import androidx.compose.material.*
-import androidx.compose.runtime.*
+import androidx.compose.material.ListItem
+import androidx.compose.material.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import cz.frantisekmasa.wfrp_master.core.domain.party.Party
 import cz.frantisekmasa.wfrp_master.core.domain.party.settings.InitiativeStrategy
-import cz.frantisekmasa.wfrp_master.core.domain.party.settings.Settings
 import cz.frantisekmasa.wfrp_master.core.ui.dialogs.SelectionDialog
 import cz.frantisekmasa.wfrp_master.core.utils.launchLogged
 import cz.muni.fi.rpg.R
@@ -33,7 +38,8 @@ internal fun InitiativeStrategyItem(
                     withContext(Dispatchers.Main) { dialogVisible = false }
                 }
             },
-            onDismissRequest = { dialogVisible = false })
+            onDismissRequest = { dialogVisible = false }
+        )
     }
 
     ListItem(
@@ -61,7 +67,6 @@ private fun InitiativeStrategyDialog(
         Text(strategyLabel(strategy))
     }
 }
-
 
 @Composable
 private fun strategyLabel(strategy: InitiativeStrategy) = stringResource(

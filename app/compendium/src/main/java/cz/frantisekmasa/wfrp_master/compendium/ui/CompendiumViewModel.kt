@@ -3,7 +3,11 @@ package cz.frantisekmasa.wfrp_master.compendium.ui
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
-import cz.frantisekmasa.wfrp_master.compendium.domain.*
+import cz.frantisekmasa.wfrp_master.compendium.domain.Blessing
+import cz.frantisekmasa.wfrp_master.compendium.domain.Miracle
+import cz.frantisekmasa.wfrp_master.compendium.domain.Skill
+import cz.frantisekmasa.wfrp_master.compendium.domain.Spell
+import cz.frantisekmasa.wfrp_master.compendium.domain.Talent
 import cz.frantisekmasa.wfrp_master.core.domain.compendium.Compendium
 import cz.frantisekmasa.wfrp_master.core.domain.party.Party
 import cz.frantisekmasa.wfrp_master.core.domain.party.PartyId

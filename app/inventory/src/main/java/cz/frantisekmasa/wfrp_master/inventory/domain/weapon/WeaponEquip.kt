@@ -4,7 +4,7 @@ import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
-enum class WeaponEquip: Parcelable {
+enum class WeaponEquip : Parcelable {
     PRIMARY_HAND,
     OFF_HAND,
 }

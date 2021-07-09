@@ -1,7 +1,21 @@
 package cz.frantisekmasa.wfrp_master.core.ui.components
 
-import androidx.compose.foundation.layout.*
-import androidx.compose.runtime.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.BoxWithConstraints
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.Stable
+import androidx.compose.runtime.State
+import androidx.compose.runtime.compositionLocalOf
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberUpdatedState
+import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -48,7 +62,7 @@ fun Container(
     Column(modifier, verticalArrangement = verticalArrangement) {
         val scope by rememberStateOfColumns(content)
 
-         scope.rows.forEach { row ->
+        scope.rows.forEach { row ->
             Row(horizontalArrangement = horizontalArrangement) {
                 row.forEach { column ->
                     Column(Modifier.weight(column.weight.toFloat()), content = column.content)
@@ -78,7 +92,7 @@ private fun rememberStateOfColumns(content: ContainerScope.() -> Unit): State<Co
 }
 
 enum class ColumnSize(val value: Int) {
-    FullWidth(GRID_COLUMNS.toInt()),
+    FullWidth(GRID_COLUMNS),
     HalfWidth(FullWidth.value / 2),
 }
 

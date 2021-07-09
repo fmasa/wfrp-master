@@ -8,7 +8,7 @@ import kotlinx.parcelize.Parcelize
 data class Damage(
     @JsonValue
     private val value: Int
-): Parcelable {
+) : Parcelable {
     init {
         require(value >= 0) { "Damage cannot be negative" }
     }

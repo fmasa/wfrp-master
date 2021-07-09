@@ -17,7 +17,12 @@ import cz.frantisekmasa.wfrp_master.core.ui.viewinterop.LocalActivity
 import cz.muni.fi.rpg.R
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.awaitClose
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.callbackFlow
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import org.koin.androidx.viewmodel.ext.android.getViewModel
@@ -25,12 +30,12 @@ import timber.log.Timber
 
 class AuthenticationViewModel(private val auth: FirebaseAuth) : ViewModel() {
     val authenticated: StateFlow<Boolean?> = callbackFlow {
-        offer(auth.currentUser != null)
+        trySend(auth.currentUser != null)
 
         val listener = FirebaseAuth.AuthStateListener {
             auth.currentUser?.let {
                 launch(Dispatchers.Main) {
-                    offer(auth.currentUser != null)
+                    this@callbackFlow.trySend(auth.currentUser != null).isSuccess
                 }
             }
         }
@@ -41,12 +46,12 @@ class AuthenticationViewModel(private val auth: FirebaseAuth) : ViewModel() {
     }.stateIn(viewModelScope, SharingStarted.Eagerly, null)
 
     val user: StateFlow<User?> = callbackFlow {
-        auth.currentUser?.let { offer(it) }
+        auth.currentUser?.let { this.trySend(it).isSuccess }
 
         val listener = FirebaseAuth.AuthStateListener {
             auth.currentUser?.let {
                 launch(Dispatchers.Main) {
-                    offer(it)
+                    trySend(it)
                 }
             }
         }
@@ -159,7 +164,6 @@ class AuthenticationViewModel(private val auth: FirebaseAuth) : ViewModel() {
             .requestEmail()
             .build()
     )
-
 
     data class IntentResult(
         val resultCode: Int,

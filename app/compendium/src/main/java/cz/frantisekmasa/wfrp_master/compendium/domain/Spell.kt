@@ -14,7 +14,7 @@ data class Spell(
     val castingNumber: Int,
     val effect: String,
     val lore: String,
-): CompendiumItem {
+) : CompendiumItem {
     companion object {
         const val NAME_MAX_LENGTH = 50
         const val RANGE_MAX_LENGTH = 50

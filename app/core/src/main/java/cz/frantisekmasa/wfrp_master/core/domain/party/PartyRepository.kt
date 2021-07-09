@@ -1,8 +1,8 @@
 package cz.frantisekmasa.wfrp_master.core.domain.party
 
 import arrow.core.Either
-import kotlinx.coroutines.flow.Flow
 import cz.frantisekmasa.wfrp_master.core.connectivity.CouldNotConnectToBackend
+import kotlinx.coroutines.flow.Flow
 
 interface PartyRepository {
 

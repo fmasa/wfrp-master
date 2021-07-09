@@ -5,14 +5,25 @@ import arrow.core.extensions.list.functorFilter.filter
 import com.github.h0tk3y.betterParse.grammar.parseToEnd
 import com.lowagie.text.pdf.PdfReader
 import com.lowagie.text.pdf.parser.PdfTextExtractor
-import cz.frantisekmasa.wfrp_master.compendium.domain.*
-import cz.frantisekmasa.wfrp_master.compendium.domain.importer.grammars.*
-import kotlinx.coroutines.*
+import cz.frantisekmasa.wfrp_master.compendium.domain.Blessing
+import cz.frantisekmasa.wfrp_master.compendium.domain.Miracle
+import cz.frantisekmasa.wfrp_master.compendium.domain.Skill
+import cz.frantisekmasa.wfrp_master.compendium.domain.Spell
+import cz.frantisekmasa.wfrp_master.compendium.domain.Talent
+import cz.frantisekmasa.wfrp_master.compendium.domain.importer.grammars.BlessingListGrammar
+import cz.frantisekmasa.wfrp_master.compendium.domain.importer.grammars.MiracleListGrammar
+import cz.frantisekmasa.wfrp_master.compendium.domain.importer.grammars.SkillListGrammar
+import cz.frantisekmasa.wfrp_master.compendium.domain.importer.grammars.SpellListGrammar
+import cz.frantisekmasa.wfrp_master.compendium.domain.importer.grammars.TalentListGrammar
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import timber.log.Timber
 import java.io.InputStream
-import java.util.*
+import java.util.Locale
 
-class RulebookCompendiumImporter(rulebookPdf: InputStream) : CompendiumImporter, CoroutineScope by CoroutineScope(Dispatchers.Default) {
+class RulebookCompendiumImporter(rulebookPdf: InputStream) :
+    CompendiumImporter,
+    CoroutineScope by CoroutineScope(Dispatchers.Default) {
     private val locale = Locale.ENGLISH
     private val reader = PdfReader(rulebookPdf)
 
@@ -168,17 +179,16 @@ class RulebookCompendiumImporter(rulebookPdf: InputStream) : CompendiumImporter,
                 "(\\n|\\. )(The )?l ?o ?r ?e ? of ([a-zA-Z ]+?)(?=(arcane|spells|isconcernedwith|\\n))",
                 RegexOption.IGNORE_CASE
             )
-        ) {
-            val lore = it.groupValues[3]
+        ) { result ->
+            val lore = result.groupValues[3]
                 .replace(" ", "")
-                .toLowerCase(locale)
-                .capitalize(locale)
+                .lowercase(locale)
+                .replaceFirstChar { if (it.isLowerCase()) it.titlecase(locale) else it.toString() }
 
-            val prefix = if (it.groupValues[1] == ". ") ".\n" else "\n"
+            val prefix = if (result.groupValues[1] == ". ") ".\n" else "\n"
 
             "$prefix[Lore of $lore]\n"
         }
-
 
     private fun getCleanedUpTextFromPage(reader: PdfReader, page: Int): String {
         val pageText = PdfTextExtractor(reader).getTextFromPage(page, true)
@@ -230,4 +240,3 @@ class RulebookCompendiumImporter(rulebookPdf: InputStream) : CompendiumImporter,
         return text
     }
 }
-

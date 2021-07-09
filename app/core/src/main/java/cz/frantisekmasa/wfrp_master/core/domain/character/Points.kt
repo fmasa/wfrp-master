@@ -1,8 +1,8 @@
 package cz.frantisekmasa.wfrp_master.core.domain.character
 
 import androidx.annotation.StringRes
-import cz.frantisekmasa.wfrp_master.core.domain.NamedEnum
 import cz.frantisekmasa.wfrp_master.core.R
+import cz.frantisekmasa.wfrp_master.core.domain.NamedEnum
 import kotlin.math.min
 
 data class Points(

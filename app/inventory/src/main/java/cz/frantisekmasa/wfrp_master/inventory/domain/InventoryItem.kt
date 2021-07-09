@@ -2,7 +2,7 @@ package cz.frantisekmasa.wfrp_master.inventory.domain
 
 import cz.frantisekmasa.wfrp_master.core.domain.character.CharacterItem
 import kotlinx.parcelize.Parcelize
-import java.util.*
+import java.util.UUID
 
 typealias InventoryItemId = UUID
 
@@ -46,5 +46,4 @@ typealias InventoryItemId = UUID
         require(name.length <= NAME_MAX_LENGTH) { "Maximum allowed name length is $NAME_MAX_LENGTH" }
         require(description.length <= DESCRIPTION_MAX_LENGTH) { "Maximum allowed description length is $DESCRIPTION_MAX_LENGTH" }
     }
-
 }

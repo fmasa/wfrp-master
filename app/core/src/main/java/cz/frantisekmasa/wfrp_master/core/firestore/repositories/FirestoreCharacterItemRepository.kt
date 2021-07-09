@@ -10,7 +10,7 @@ import cz.frantisekmasa.wfrp_master.core.firestore.COLLECTION_PARTIES
 import cz.frantisekmasa.wfrp_master.core.firestore.queryFlow
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.tasks.await
-import java.util.*
+import java.util.UUID
 
 open class FirestoreCharacterItemRepository<T : CharacterItem>(
     private val collectionName: String,

@@ -1,6 +1,6 @@
 package cz.frantisekmasa.wfrp_master.combat.domain.encounter
 
-import java.util.*
+import java.util.UUID
 
 data class Encounter(
     val id: UUID,

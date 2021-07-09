@@ -27,7 +27,7 @@ class BlessingListGrammarTest : TestCase() {
                 Blessing(
                     blessings[0].id,
                     name = "Blessing of Battle",
-                    range ="6 yards",
+                    range = "6 yards",
                     target = "1",
                     duration = "6 rounds",
                     effect = "Your target gains +10 WS."
@@ -35,7 +35,7 @@ class BlessingListGrammarTest : TestCase() {
                 Blessing(
                     blessings[1].id,
                     name = "Blessing of Breath",
-                    range ="6 yards",
+                    range = "6 yards",
                     target = "1",
                     duration = "6 rounds",
                     effect = """

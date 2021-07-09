@@ -31,11 +31,13 @@ fun BannerAd(unitId: String) {
         AndroidView(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(with(LocalDensity.current) {
-                    size
-                        .getHeightInPixels(LocalContext.current)
-                        .toDp()
-                }),
+                .height(
+                    with(LocalDensity.current) {
+                        size
+                            .getHeightInPixels(LocalContext.current)
+                            .toDp()
+                    }
+                ),
             factory = {
                 AdView(it).apply {
                     adUnitId = unitId

@@ -1,10 +1,14 @@
 package cz.muni.fi.rpg.ui.character.talents
 
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Text
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -16,9 +20,9 @@ import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.model.domain.talents.Talent
 import cz.muni.fi.rpg.ui.character.talents.dialog.AddTalentDialog
 import cz.muni.fi.rpg.ui.character.talents.dialog.EditTalentDialog
-import cz.muni.fi.rpg.ui.common.composables.*
+import cz.muni.fi.rpg.ui.common.composables.CardTitle
 import cz.muni.fi.rpg.viewModels.TalentsViewModel
-import java.util.*
+import java.util.UUID
 
 @Composable
 internal fun TalentsCard(
@@ -42,7 +46,7 @@ internal fun TalentsCard(
                             onRemove = { onRemove(talent) }
                         )
                     }
-                    
+
                     editedTalentId?.let {
                         EditTalentDialog(
                             viewModel = viewModel,
@@ -54,12 +58,12 @@ internal fun TalentsCard(
             }
 
             var showAddTalentDialog by rememberSaveable { mutableStateOf(false) }
-            
+
             CardButton(
                 R.string.title_talent_add,
                 onClick = { showAddTalentDialog = true }
             )
-            
+
             if (showAddTalentDialog) {
                 AddTalentDialog(
                     viewModel = viewModel,

@@ -61,7 +61,7 @@ class SkillListGrammarTest : TestCase() {
                 Skill(
                     id = result[2].id,
                     name = "Art (Cartography)",
-                    description ="""
+                    description = """
                         Create works of art in your chosen medium.
                         Not having access to appropriate Trade Tools will incur a penalty
                         to your Test.
@@ -72,7 +72,7 @@ class SkillListGrammarTest : TestCase() {
                 Skill(
                     id = result[3].id,
                     name = "Art (Engraving)",
-                    description ="""
+                    description = """
                         Create works of art in your chosen medium.
                         Not having access to appropriate Trade Tools will incur a penalty
                         to your Test.
@@ -83,7 +83,7 @@ class SkillListGrammarTest : TestCase() {
                 Skill(
                     id = result[4].id,
                     name = "Art (Wood-carving)",
-                    description ="""
+                    description = """
                         Create works of art in your chosen medium.
                         Not having access to appropriate Trade Tools will incur a penalty
                         to your Test.

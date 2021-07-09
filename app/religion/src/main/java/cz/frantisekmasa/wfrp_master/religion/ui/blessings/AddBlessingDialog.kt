@@ -13,13 +13,15 @@ import kotlinx.parcelize.Parcelize
 internal fun AddBlessingDialog(viewModel: BlessingsViewModel, onDismissRequest: () -> Unit) {
     var state: AddMiracleDialogState by rememberSaveable { mutableStateOf(ChoosingCompendiumMiracle) }
 
-    FullScreenDialog(onDismissRequest = {
-        if (state != ChoosingCompendiumMiracle) {
-            state = ChoosingCompendiumMiracle
-        } else {
-            onDismissRequest()
+    FullScreenDialog(
+        onDismissRequest = {
+            if (state != ChoosingCompendiumMiracle) {
+                state = ChoosingCompendiumMiracle
+            } else {
+                onDismissRequest()
+            }
         }
-    }) {
+    ) {
         when (state) {
             ChoosingCompendiumMiracle ->
                 CompendiumBlessingChooser(

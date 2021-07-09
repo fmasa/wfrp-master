@@ -2,7 +2,7 @@ package cz.frantisekmasa.wfrp_master.core.domain.compendium
 
 import cz.frantisekmasa.wfrp_master.core.domain.party.PartyId
 import kotlinx.coroutines.flow.Flow
-import java.util.*
+import java.util.UUID
 
 interface Compendium<T : CompendiumItem> {
 

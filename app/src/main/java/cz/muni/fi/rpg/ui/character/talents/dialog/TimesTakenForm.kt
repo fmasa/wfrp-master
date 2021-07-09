@@ -1,14 +1,22 @@
 package cz.muni.fi.rpg.ui.character.talents.dialog
 
 import android.widget.Toast
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -21,13 +29,12 @@ import cz.frantisekmasa.wfrp_master.core.ui.primitives.Spacing
 import cz.frantisekmasa.wfrp_master.core.ui.scaffolding.SaveAction
 import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.model.domain.talents.Talent
-import cz.muni.fi.rpg.ui.common.composables.*
 import cz.muni.fi.rpg.viewModels.TalentsViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import timber.log.Timber
-import java.util.*
+import java.util.UUID
 
 @Composable
 internal fun TimesTakenForm(
@@ -68,7 +75,7 @@ internal fun TimesTakenForm(
                                         compendiumTalentId = compendiumTalentId,
                                         timesTaken = timesTaken,
                                     )
-                                } catch(e: CompendiumItemNotFound) {
+                                } catch (e: CompendiumItemNotFound) {
                                     Timber.d(e)
 
                                     withContext(Dispatchers.Main) {

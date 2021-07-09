@@ -54,7 +54,7 @@ class ExpressionTest : TestCase() {
                 expression.evaluate()
 
                 false
-            } catch(e: InvalidExpression) {
+            } catch (e: InvalidExpression) {
                 true
             }
         )

@@ -7,7 +7,7 @@ plugins {
     id("com.google.gms.google-services")
     id("kotlin-kapt")
     id("com.google.firebase.crashlytics")
-    //id("com.google.firebase.firebase-perf")
+    // id("com.google.firebase.firebase-perf")
 }
 
 android {
@@ -41,7 +41,6 @@ android {
             addManifestPlaceholders(mapOf("analytics_activated" to "false"))
         }
 
-
         getByName("release") {
             isMinifyEnabled = false
             signingConfig = signingConfigs.getByName("release")
@@ -74,14 +73,14 @@ android {
         jvmTarget = "1.8"
         useIR = true
         freeCompilerArgs = freeCompilerArgs +
-                "-Xskip-prerelease-check" +
-                "-Xopt-in=androidx.compose.foundation.layout.ExperimentalLayout" +
-                "-Xopt-in=kotlinx.coroutines.ExperimentalCoroutinesApi" +
-                "-Xopt-in=androidx.compose.material.ExperimentalMaterialApi" +
-                "-Xopt-in=androidx.compose.animation.ExperimentalAnimationApi" +
-                "-Xopt-in=androidx.compose.animation.ExperimentalFoundationApi" +
-                "-P" +
-                "plugin:androidx.compose.compiler.plugins.kotlin:suppressKotlinVersionCompatibilityCheck=true"
+            "-Xskip-prerelease-check" +
+            "-Xopt-in=androidx.compose.foundation.layout.ExperimentalLayout" +
+            "-Xopt-in=kotlinx.coroutines.ExperimentalCoroutinesApi" +
+            "-Xopt-in=androidx.compose.material.ExperimentalMaterialApi" +
+            "-Xopt-in=androidx.compose.animation.ExperimentalAnimationApi" +
+            "-Xopt-in=androidx.compose.animation.ExperimentalFoundationApi" +
+            "-P" +
+            "plugin:androidx.compose.compiler.plugins.kotlin:suppressKotlinVersionCompatibilityCheck=true"
     }
 }
 

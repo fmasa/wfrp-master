@@ -1,14 +1,26 @@
 package cz.frantisekmasa.wfrp_master.combat.ui
 
 import androidx.annotation.StringRes
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.selection.toggleable
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.*
-import androidx.compose.runtime.*
+import androidx.compose.material.Checkbox
+import androidx.compose.material.ListItem
+import androidx.compose.material.Scaffold
+import androidx.compose.material.Text
+import androidx.compose.material.TopAppBar
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateMapOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import cz.frantisekmasa.wfrp_master.combat.R
 import cz.frantisekmasa.wfrp_master.combat.domain.encounter.Npc
@@ -58,7 +70,6 @@ fun StartCombatDialog(
                     actions = {
                         val saving by remember { mutableStateOf(false) }
                         val coroutineScope = rememberCoroutineScope()
-                        val context = LocalContext.current
 
                         TopBarAction(
                             textRes = R.string.button_save,
@@ -73,8 +84,8 @@ fun StartCombatDialog(
                                 }
                             },
                             enabled = !saving &&
-                                    isAtLeastOneChecked(npcs) &&
-                                    isAtLeastOneChecked(characters),
+                                isAtLeastOneChecked(npcs) &&
+                                isAtLeastOneChecked(characters),
                         )
                     }
                 )
@@ -101,7 +112,6 @@ fun StartCombatDialog(
         }
     }
 }
-
 
 private fun isAtLeastOneChecked(items: Map<out Any, Boolean>) = items.containsValue(true)
 private fun <T> pickCheckedOnes(items: Map<T, Boolean>): List<T> =

@@ -1,11 +1,16 @@
 package cz.frantisekmasa.wfrp_master.compendium.domain.importer.grammars
 
-import com.github.h0tk3y.betterParse.combinators.*
+import com.github.h0tk3y.betterParse.combinators.map
+import com.github.h0tk3y.betterParse.combinators.oneOrMore
+import com.github.h0tk3y.betterParse.combinators.or
+import com.github.h0tk3y.betterParse.combinators.skip
+import com.github.h0tk3y.betterParse.combinators.times
+import com.github.h0tk3y.betterParse.combinators.zeroOrMore
 import com.github.h0tk3y.betterParse.grammar.Grammar
 import com.github.h0tk3y.betterParse.lexer.literalToken
 import com.github.h0tk3y.betterParse.lexer.regexToken
 import cz.frantisekmasa.wfrp_master.compendium.domain.Blessing
-import java.util.*
+import java.util.UUID
 
 object BlessingListGrammar : Grammar<List<Blessing>>() {
     private val blessingName by regexToken("Blessing of [a-zA-Z ]+\n")

@@ -3,7 +3,7 @@ package cz.frantisekmasa.wfrp_master.core.domain.party.combat
 import android.os.Parcelable
 import cz.frantisekmasa.wfrp_master.core.domain.identifiers.NpcId
 import kotlinx.parcelize.Parcelize
-import java.util.*
+import java.util.UUID
 
 @Parcelize
 data class Combat(
@@ -11,7 +11,7 @@ data class Combat(
     private var combatants: List<Combatant>,
     private val turn: Int = 1,
     private val round: Int = 1
-): Parcelable {
+) : Parcelable {
 
     init {
         require(turn >= 1 && turn <= combatants.size)
@@ -30,25 +30,25 @@ data class Combat(
         }
 
         return if (turn == 1)
-            copy (turn = combatants.size, round = round - 1)
-        else copy (turn = turn -1)
+            copy(turn = combatants.size, round = round - 1)
+        else copy(turn = turn - 1)
     }
 
     fun nextTurn(): Combat {
         return if (turn == combatants.size)
-            copy (turn = 1, round = round + 1)
-        else copy (turn = turn + 1)
+            copy(turn = 1, round = round + 1)
+        else copy(turn = turn + 1)
     }
 
     fun updateCombatant(combatant: Combatant): Combat {
         val index = combatants.indexOfFirst { it.areSameEntity(combatant) }
 
-        require(index != -1) { "Combatant of same entity as $combatant was not found"}
+        require(index != -1) { "Combatant of same entity as $combatant was not found" }
 
         return copy(
             combatants = combatants.toMutableList()
-            .also { it[index] = combatant }
-            .toList()
+                .also { it[index] = combatant }
+                .toList()
         )
     }
 
@@ -62,7 +62,7 @@ data class Combat(
         other.size != size || other.containsAll(this)
 
     fun removeNpc(npcId: NpcId): Combat? {
-        val removedIndex =  combatants.indexOfFirst { it is Combatant.Npc && it.npcId == npcId }
+        val removedIndex = combatants.indexOfFirst { it is Combatant.Npc && it.npcId == npcId }
 
         if (removedIndex == -1) {
             return this

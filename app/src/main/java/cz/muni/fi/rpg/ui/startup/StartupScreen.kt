@@ -6,21 +6,32 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.size
-import androidx.compose.material.*
-import androidx.compose.runtime.*
+import androidx.compose.material.AlertDialog
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Text
+import androidx.compose.material.TextButton
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.key
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.google.android.gms.auth.api.signin.GoogleSignIn
+import cz.frantisekmasa.wfrp_master.core.viewModel.provideSettingsViewModel
 import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.ui.common.composables.Theme
 import cz.muni.fi.rpg.ui.shell.splashBackground
 import cz.muni.fi.rpg.viewModels.AuthenticationViewModel
-import cz.frantisekmasa.wfrp_master.core.viewModel.provideSettingsViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
@@ -48,12 +59,13 @@ fun StartupScreen(viewModel: AuthenticationViewModel) {
     if (showAnonymousAuthenticationDialog) {
         val settings = provideSettingsViewModel()
 
-        AnonymousAuthenticationExplanationDialog(onDismissRequest = {
-            settings.userDismissedGoogleSignIn()
-            coroutineScope.launch { viewModel.authenticateAnonymously() }
-            showAnonymousAuthenticationDialog = false
-        })
-
+        AnonymousAuthenticationExplanationDialog(
+            onDismissRequest = {
+                settings.userDismissedGoogleSignIn()
+                coroutineScope.launch { viewModel.authenticateAnonymously() }
+                showAnonymousAuthenticationDialog = false
+            }
+        )
     }
 
     val context = LocalContext.current
@@ -103,7 +115,7 @@ private fun SplashScreen() {
             Image(
                 painterResource(R.drawable.splash_screen_image),
                 stringResource(R.string.icon_application_logo),
-                Modifier.size (140.dp)
+                Modifier.size(140.dp)
             )
             Text(
                 stringResource(R.string.app_name),

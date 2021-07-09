@@ -16,7 +16,6 @@ val CoreModule = module {
         }
     }
 
-
     /**
      * Common database stuff
      */

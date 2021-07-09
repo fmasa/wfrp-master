@@ -7,7 +7,7 @@ import kotlinx.parcelize.Parcelize
 data class Ambitions(
     val shortTerm: String,
     val longTerm: String
-): Parcelable {
+) : Parcelable {
     companion object {
         const val MAX_LENGTH = 400
     }

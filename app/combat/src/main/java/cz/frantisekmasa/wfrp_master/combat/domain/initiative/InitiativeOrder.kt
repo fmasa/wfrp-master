@@ -27,5 +27,3 @@ data class InitiativeOrder(private val comparableValues: List<Int>) : Comparable
         return 0
     }
 }
-
-

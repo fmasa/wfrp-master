@@ -9,7 +9,7 @@ import com.github.h0tk3y.betterParse.grammar.Grammar
 import com.github.h0tk3y.betterParse.lexer.TokenMatch
 import com.github.h0tk3y.betterParse.lexer.regexToken
 import cz.frantisekmasa.wfrp_master.compendium.domain.Spell
-import java.util.*
+import java.util.UUID
 
 class SpellListGrammar(private val loreName: String) : Grammar<List<Spell>>() {
     private val spellNameWithCastingNumber by regexToken("\\n*[a-zA-Zâ ’\\-]+\\nCN: \\d+")

@@ -5,9 +5,27 @@ import androidx.compose.animation.core.TweenSpec
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.gestures.detectTapGestures
-import androidx.compose.foundation.layout.*
-import androidx.compose.material.*
-import androidx.compose.runtime.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.layout.sizeIn
+import androidx.compose.material.DrawerDefaults
+import androidx.compose.material.DrawerValue
+import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.FractionalThreshold
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Surface
+import androidx.compose.material.SwipeableState
+import androidx.compose.material.contentColorFor
+import androidx.compose.material.swipeable
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Stable
+import androidx.compose.runtime.State
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.Saver
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
@@ -25,7 +43,6 @@ import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.launch
 import kotlin.math.roundToInt
-
 
 @Composable
 @ExperimentalMaterialApi
@@ -87,10 +104,12 @@ fun ModalDrawerLayoutWithFixedDrawerWidth(
                 }
                     .semantics {
                         if (drawerState.isOpen) {
-                            dismiss(action = {
-                                coroutineScope.launch { drawerState.close() };
-                                true
-                            })
+                            dismiss(
+                                action = {
+                                    coroutineScope.launch { drawerState.close() }
+                                    true
+                                }
+                            )
                         }
                     }
                     .offset { IntOffset(drawerState.offset.value.roundToInt(), 0) },
@@ -267,4 +286,3 @@ private fun calculateFraction(a: Float, b: Float, pos: Float) =
 private val AnimationSpec = TweenSpec<Float>(durationMillis = 256)
 private val DrawerVelocityThreshold = 400.dp
 private val DrawerWidth = 280.dp
-

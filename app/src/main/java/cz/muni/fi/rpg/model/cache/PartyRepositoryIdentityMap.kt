@@ -20,7 +20,10 @@ internal class PartyRepositoryIdentityMap(
     private val identityMap = IdentityMap<PartyId, Flow<Either<PartyNotFound, Party>>>(maxEntries)
 
     @Synchronized
-    override fun getLive(id: PartyId) = identityMap.getOrPut(id, {
-        inner.getLive(id).shareIn(scope, SharingStarted.WhileSubscribed(), 1)
-    })
+    override fun getLive(id: PartyId) = identityMap.getOrPut(
+        id,
+        {
+            inner.getLive(id).shareIn(scope, SharingStarted.WhileSubscribed(), 1)
+        }
+    )
 }

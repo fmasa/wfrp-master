@@ -1,9 +1,9 @@
 package cz.frantisekmasa.wfrp_master.combat.domain.encounter
 
-import cz.frantisekmasa.wfrp_master.core.domain.character.CurrentConditions
 import cz.frantisekmasa.wfrp_master.core.domain.Stats
+import cz.frantisekmasa.wfrp_master.core.domain.character.CurrentConditions
 import cz.frantisekmasa.wfrp_master.inventory.domain.Armor
-import java.util.*
+import java.util.UUID
 
 /**
  * TODO: Turn into immutable data class

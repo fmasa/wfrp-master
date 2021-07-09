@@ -1,6 +1,10 @@
 package cz.frantisekmasa.wfrp_master.religion.ui.miracles
 
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Scaffold
@@ -16,9 +20,9 @@ import cz.frantisekmasa.wfrp_master.core.ui.dialogs.FullScreenDialog
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.SingleLineTextValue
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.Spacing
 import cz.frantisekmasa.wfrp_master.core.ui.scaffolding.SubheadBar
-import cz.frantisekmasa.wfrp_master.religion.domain.Miracle
 import cz.frantisekmasa.wfrp_master.religion.R
-import java.util.*
+import cz.frantisekmasa.wfrp_master.religion.domain.Miracle
+import java.util.UUID
 
 @Composable
 internal fun EditMiracleDialog(

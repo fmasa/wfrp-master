@@ -24,7 +24,6 @@ class CurrentConditions private constructor(private val conditions: Map<Conditio
         }
     fun count(condition: Condition) = conditions.getOrElse(condition, { 0 })
 
-
     fun toMap() = conditions
 
     private fun withCondition(condition: Condition, count: Int) = CurrentConditions(

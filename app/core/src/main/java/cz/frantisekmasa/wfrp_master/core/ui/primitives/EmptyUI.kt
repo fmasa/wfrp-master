@@ -3,7 +3,12 @@ package cz.frantisekmasa.wfrp_master.core.ui.primitives
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.material.ContentAlpha
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
@@ -33,18 +38,19 @@ object EmptyUI {
 
         val modifier: Modifier
             get() = when (this) {
-                Small -> Modifier
-                    .width(60.dp)
-                    .padding(top = 16.dp)
+                Small ->
+                    Modifier
+                        .width(60.dp)
+                        .padding(top = 16.dp)
                 Large -> Modifier.width(64.dp)
             }
 
         val textStyle: TextStyle
             @Composable
             get() = when (this) {
-            Small -> MaterialTheme.typography.subtitle1
-            Large -> MaterialTheme.typography.h6
-        }
+                Small -> MaterialTheme.typography.subtitle1
+                Large -> MaterialTheme.typography.h6
+            }
     }
 }
 

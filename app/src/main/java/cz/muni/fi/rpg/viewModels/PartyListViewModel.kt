@@ -15,7 +15,7 @@ import timber.log.Timber
 
 class PartyListViewModel(
     private val parties: PartyRepository
-): ViewModel() {
+) : ViewModel() {
 
     fun liveForUser(userId: String): LiveData<List<Party>> {
         return parties.forUserLive(userId).asLiveData()

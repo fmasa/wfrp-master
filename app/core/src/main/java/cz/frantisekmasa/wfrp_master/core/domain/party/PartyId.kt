@@ -3,7 +3,7 @@ package cz.frantisekmasa.wfrp_master.core.domain.party
 import android.os.Parcelable
 import com.fasterxml.jackson.annotation.JsonValue
 import kotlinx.parcelize.Parcelize
-import java.util.*
+import java.util.UUID
 
 @Parcelize
 data class PartyId internal constructor(@JsonValue private val value: UUID) : Parcelable {

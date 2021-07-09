@@ -17,7 +17,6 @@ class MannsliebPhaseTest : TestCase("MannsliebPhaseTest") {
     fun testFullMoon() {
         assertSame(MannsliebPhase.FULL_MOON, MannsliebPhase.at(ImperialDate.of(ImperialDate.StandaloneDay.HEXENSTAG, 1)))
         assertSame(MannsliebPhase.FULL_MOON, MannsliebPhase.at(ImperialDate.of(18, 2, 1)))
-
     }
 
     fun testNewMoon() {

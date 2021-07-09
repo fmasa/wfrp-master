@@ -1,8 +1,11 @@
 package cz.muni.fi.rpg.ui.common.composables
 
 import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.material.*
-import androidx.compose.runtime.*
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.darkColors
+import androidx.compose.material.lightColors
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.sp
@@ -23,11 +26,11 @@ class Theme {
         )
 
         @Composable
-        internal fun LightColors() = lightColors(
+        internal fun lightColors() = lightColors(
             primary = Color(183, 28, 28),
             primaryVariant = Color(183, 28, 28),
-            secondary = Color(183,28,28),
-            secondaryVariant = Color(183,28,28),
+            secondary = Color(183, 28, 28),
+            secondaryVariant = Color(183, 28, 28),
             background = Color(250, 250, 250),
             surface = Color(255, 255, 255),
             error = Color(183, 28, 28),
@@ -39,7 +42,7 @@ class Theme {
         )
 
         @Composable
-        internal fun DarkColors() = darkColors(
+        internal fun darkColors() = darkColors(
             primary = Color(239, 154, 154),
             primaryVariant = Color(239, 154, 154),
             secondary = Color(183, 28, 28),
@@ -62,7 +65,7 @@ fun Theme(content: @Composable () -> Unit) {
     val soundEnabled = viewModel.soundEnabled.observeAsState().value ?: false
 
     MaterialTheme(
-        colors = if (darkMode) Theme.DarkColors() else Theme.LightColors(),
+        colors = if (darkMode) Theme.darkColors() else Theme.lightColors(),
         typography = MaterialTheme.typography.copy(
             caption = MaterialTheme.typography.caption.copy(fontSize = 14.sp),
         ),

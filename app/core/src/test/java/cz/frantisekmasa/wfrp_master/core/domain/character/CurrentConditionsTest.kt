@@ -1,6 +1,7 @@
 package cz.frantisekmasa.wfrp_master.core.domain.character
 
-import org.junit.Assert.*
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertSame
 import org.junit.Test
 
 class CurrentConditionsTest {
@@ -52,7 +53,7 @@ class CurrentConditionsTest {
 
     @Test
     fun testAddingExistingNonStackableConditionIsNoop() {
-        val conditions =  CurrentConditions.none().addConditions(Condition.UNCONSCIOUS)
+        val conditions = CurrentConditions.none().addConditions(Condition.UNCONSCIOUS)
 
         assertSame(conditions, conditions.addConditions(Condition.UNCONSCIOUS))
     }

@@ -15,7 +15,7 @@ interface CharacterRepository {
 
     fun getLive(characterId: CharacterId): Flow<Either<CharacterNotFound, Character>>
 
-    suspend fun hasCharacterInParty(userId: String, partyId: PartyId) : Boolean
+    suspend fun hasCharacterInParty(userId: String, partyId: PartyId): Boolean
 
     fun inParty(partyId: PartyId): Flow<List<Character>>
 }

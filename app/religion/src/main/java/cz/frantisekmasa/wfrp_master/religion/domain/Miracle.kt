@@ -1,10 +1,10 @@
 package cz.frantisekmasa.wfrp_master.religion.domain
 
-import cz.frantisekmasa.wfrp_master.compendium.domain.Miracle as CompendiumMiracle
 import cz.frantisekmasa.wfrp_master.core.common.requireMaxLength
 import cz.frantisekmasa.wfrp_master.core.domain.character.CharacterItem
 import kotlinx.parcelize.Parcelize
-import java.util.*
+import java.util.UUID
+import cz.frantisekmasa.wfrp_master.compendium.domain.Miracle as CompendiumMiracle
 
 @Parcelize
 internal data class Miracle(

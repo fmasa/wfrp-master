@@ -8,7 +8,7 @@ import com.github.h0tk3y.betterParse.grammar.Grammar
 import com.github.h0tk3y.betterParse.lexer.regexToken
 import cz.frantisekmasa.wfrp_master.compendium.domain.Talent
 import org.intellij.lang.annotations.Language
-import java.util.*
+import java.util.UUID
 
 object TalentListGrammar : Grammar<List<Talent>>() {
     @Language("RegExp")
@@ -18,11 +18,11 @@ object TalentListGrammar : Grammar<List<Talent>>() {
     private val sentence by regexToken("((?!($talentNameWithMaxRegex))[a-záA-Z0-9 \\[\\],\\n()+\\-–—:;‘’…/!%=×&])+?[.…?\n]+")
 
     private val talent by talentName * oneOrMore(sentence) map { (nameWithRegex, descriptionSentences) ->
-        val (name, maxTimesTaken)
-            = talentNameWithMaxRegex.toRegex()
-            .matchEntire(nameWithRegex.text)
-            ?.destructured
-            ?: error("First two talent lines should have been matched against $talentNameWithMaxRegex")
+        val (name, maxTimesTaken) =
+            talentNameWithMaxRegex.toRegex()
+                .matchEntire(nameWithRegex.text)
+                ?.destructured
+                ?: error("First two talent lines should have been matched against $talentNameWithMaxRegex")
 
         Talent(
             id = UUID.randomUUID(),
@@ -30,7 +30,6 @@ object TalentListGrammar : Grammar<List<Talent>>() {
             maxTimesTaken = maxTimesTaken,
             description = descriptionSentences.joinToString("") { it.text }.trim(),
         )
-
     }
 
     override val rootParser by skip(oneOrMore(sentence)) * oneOrMore(talent)
@@ -40,5 +39,4 @@ object TalentListGrammar : Grammar<List<Talent>>() {
             // Names starting by "T" have extra space after T for some reason
             .replace(Regex("^(T )"), "T")
             .trim()
-
 }

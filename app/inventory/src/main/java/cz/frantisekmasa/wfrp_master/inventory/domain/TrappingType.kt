@@ -6,7 +6,15 @@ import com.fasterxml.jackson.annotation.JsonTypeName
 import cz.frantisekmasa.wfrp_master.inventory.domain.armour.ArmourLocation
 import cz.frantisekmasa.wfrp_master.inventory.domain.armour.ArmourPoints
 import cz.frantisekmasa.wfrp_master.inventory.domain.armour.ArmourType
-import cz.frantisekmasa.wfrp_master.inventory.domain.weapon.*
+import cz.frantisekmasa.wfrp_master.inventory.domain.weapon.AmmunitionRangeExpression
+import cz.frantisekmasa.wfrp_master.inventory.domain.weapon.DamageExpression
+import cz.frantisekmasa.wfrp_master.inventory.domain.weapon.MeleeWeaponGroup
+import cz.frantisekmasa.wfrp_master.inventory.domain.weapon.RangedWeaponGroup
+import cz.frantisekmasa.wfrp_master.inventory.domain.weapon.Reach
+import cz.frantisekmasa.wfrp_master.inventory.domain.weapon.WeaponEquip
+import cz.frantisekmasa.wfrp_master.inventory.domain.weapon.WeaponFlaw
+import cz.frantisekmasa.wfrp_master.inventory.domain.weapon.WeaponQuality
+import cz.frantisekmasa.wfrp_master.inventory.domain.weapon.WeaponRangeExpression
 import kotlinx.parcelize.Parcelize
 
 typealias Rating = Int
@@ -47,7 +55,7 @@ sealed class TrappingType : Parcelable {
         val qualities: Map<WeaponQuality, Rating>,
         val flaws: Map<WeaponFlaw, Rating>,
         val damage: DamageExpression,
-    ): TrappingType()
+    ) : TrappingType()
 
     @Parcelize
     @JsonTypeName("ARMOUR")

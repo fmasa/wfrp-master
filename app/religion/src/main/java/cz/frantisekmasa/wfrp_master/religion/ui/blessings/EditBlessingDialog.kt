@@ -1,6 +1,7 @@
 package cz.frantisekmasa.wfrp_master.religion.ui.blessings
 
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Scaffold
@@ -16,9 +17,7 @@ import cz.frantisekmasa.wfrp_master.core.ui.primitives.SingleLineTextValue
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.Spacing
 import cz.frantisekmasa.wfrp_master.religion.R
 import cz.frantisekmasa.wfrp_master.religion.domain.Blessing
-import cz.frantisekmasa.wfrp_master.religion.ui.blessings.NonCompendiumBlessingForm
-import java.util.*
-
+import java.util.UUID
 
 @Composable
 internal fun EditBlessingDialog(

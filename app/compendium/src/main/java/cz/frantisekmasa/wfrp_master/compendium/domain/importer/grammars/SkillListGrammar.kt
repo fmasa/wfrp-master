@@ -11,7 +11,7 @@ import com.github.h0tk3y.betterParse.lexer.regexToken
 import cz.frantisekmasa.wfrp_master.compendium.domain.Skill
 import cz.frantisekmasa.wfrp_master.core.domain.Characteristic
 import org.intellij.lang.annotations.Language
-import java.util.*
+import java.util.UUID
 
 private val characteristicShortcuts = Characteristic
     .values()
