@@ -63,6 +63,7 @@
     <string name="error_must_be_non_negative_number">Must be greater or equal to 0</string>
     <string name="error_must_be_positive_int">Must be positive number without decimals</string>
     <string name="error_not_integer">Must be number without decimals</string>
+    <string name="error_required">Required</string>
 
     <!-- Icon descriptions -->
     <string name="icon_increment">Increment value</string>
@@ -86,4 +87,17 @@
     <string name="test_dramatic_failure">Failure</string>
     <string name="test_dramatic_impressive_failure">Impressive Failure</string>
     <string name="test_dramatic_astounding_failure">Astounding Failure</string>
+
+    <!-- Social Status -->
+    <string name="social_status_gold">Gold</string>
+    <string name="social_status_silver">Silver</string>
+    <string name="social_status_brass">Brass</string>
+
+    <!-- Points -->
+    <string name="label_corruption">Corruption</string>
+    <string name="label_fate_points">Fate</string>
+    <string name="label_fortune_points">Fortune</string>
+    <string name="label_max_wounds">Max. Wounds</string>
+    <string name="label_resilience">Resilience</string>
+    <string name="label_resolve">Resolve</string>
 </resources>

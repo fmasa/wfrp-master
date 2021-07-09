@@ -9,6 +9,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -45,10 +46,9 @@ fun <T> ChipList(
 }
 
 @Composable
-private fun Chip(
-    text: String,
-    onClick: () -> Unit,
-    selected: Boolean = false
+fun Chip(
+    selected: Boolean = false,
+    content: @Composable (Color) -> Unit,
 ) {
     val color = if (selected) MaterialTheme.colors.primary else LocalContentColor.current
 
@@ -57,15 +57,30 @@ private fun Chip(
         shape = RoundedCornerShape(Spacing.small),
         color = if (selected) color.copy(alpha = 0.15f) else color.copy(alpha = 0.1f),
     ) {
+        content(color)
+    }
+}
+
+@Composable
+fun Chip(
+    text: String,
+    onClick: (() -> Unit)? = null,
+    selected: Boolean = false
+) {
+    Chip(
+        selected = selected,
+    ) { color ->
         val fontStyle = MaterialTheme.typography.body2.copy(color = color)
+
+        val modifier = if (onClick != null)
+            Modifier.clickable(onClick = onClick)
+        else Modifier
 
         Text(
             text,
             style = fontStyle,
             textAlign = TextAlign.Center,
-            modifier = Modifier
-                .clickable(onClick = onClick)
-                /* TODO: REMOVE COMMENT */
+            modifier = modifier
                 .widthIn(min = with(LocalDensity.current) { fontStyle.fontSize.toDp() * 3 })
                 .padding(Spacing.small),
         )

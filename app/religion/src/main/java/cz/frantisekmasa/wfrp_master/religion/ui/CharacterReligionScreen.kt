@@ -14,6 +14,7 @@ import cz.frantisekmasa.wfrp_master.core.domain.identifiers.CharacterId
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.CardContainer
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.NumberPicker
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.Spacing
+import cz.frantisekmasa.wfrp_master.core.ui.primitives.TopPanel
 import cz.frantisekmasa.wfrp_master.core.viewModel.getViewModel
 import cz.frantisekmasa.wfrp_master.religion.R
 import cz.frantisekmasa.wfrp_master.religion.ui.blessings.BlessingsCard
@@ -33,7 +34,6 @@ fun CharacterReligionScreen(
         modifier
             .background(MaterialTheme.colors.background)
             .verticalScroll(rememberScrollState())
-            .padding(top = Spacing.small),
     ) {
         SinPoints(character, updateCharacter)
 
@@ -47,11 +47,7 @@ private fun SinPoints(
     character: Character,
     updateCharacter: suspend ((Character) -> Unit) -> Unit,
 ) {
-    CardContainer(
-        Modifier
-            .padding(horizontal = Spacing.small)
-            .fillMaxWidth()
-    ) {
+    TopPanel {
         Row(
             horizontalArrangement = Arrangement.Center,
             modifier = Modifier.fillMaxWidth()

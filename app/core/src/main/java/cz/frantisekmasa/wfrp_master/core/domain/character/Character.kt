@@ -110,6 +110,9 @@ data class Character(
 
     fun getConditions() = conditions
 
+    /** TODO: Implement social status in character */
+    fun getStatus() = SocialStatus(SocialStatus.Tier.GOLD, 1)
+
     fun updatePoints(newPoints: Points) {
         require(
             (!hardyTalent && newPoints.hardyWoundsBonus == 0) ||

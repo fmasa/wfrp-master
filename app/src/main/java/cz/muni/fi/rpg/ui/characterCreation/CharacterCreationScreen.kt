@@ -1,6 +1,10 @@
 package cz.muni.fi.rpg.ui.characterCreation
 
 import androidx.annotation.StringRes
+import androidx.compose.animation.*
+import androidx.compose.animation.AnimatedContentScope.SlideDirection
+import androidx.compose.animation.core.snap
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -14,6 +18,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.intl.Locale
 import androidx.compose.ui.text.toUpperCase
+import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import cz.frantisekmasa.wfrp_master.core.ui.buttons.BackButton
 import cz.frantisekmasa.wfrp_master.core.ui.forms.FormData
@@ -28,6 +33,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.koin.core.parameter.parametersOf
+import timber.log.Timber
 
 private enum class FormState {
     EDITED_BY_USER,
@@ -99,11 +105,27 @@ private fun MainContainer(routing: Routing<Route.CharacterCreation>) {
                 .background(MaterialTheme.colors.background)
                 .verticalScroll(rememberScrollState())
         ) {
-            val currentStep = steps[currentStepIndex.value]
+            SubheadBar(stringResource(steps[currentStepIndex.value].labelRes))
 
-            SubheadBar(stringResource(currentStep.labelRes))
-
-            Box(Modifier.padding(24.dp)) { currentStep.render() }
+            AnimatedContent(
+                targetState = currentStepIndex.value,
+                transitionSpec = {
+                    if (initialState == targetState) {
+                        fadeIn(0f, snap()) with fadeOut(0f, snap())
+                    } else {
+                        val direction = if (targetState > initialState)
+                            SlideDirection.Start
+                        else SlideDirection.End
+                        val animationSpec = tween<IntOffset>(250)
+                        slideIntoContainer(direction, animationSpec) with
+                            slideOutOfContainer(direction, animationSpec)
+                    }
+                },
+            ) {
+                Box(Modifier.fillMaxWidth().padding(24.dp)) {
+                    steps[it].render()
+                }
+            }
         }
 
         BottomBar(

@@ -18,6 +18,7 @@ import cz.frantisekmasa.wfrp_master.core.domain.character.Character
 import cz.muni.fi.rpg.ui.character.skills.CharacterSkillsScreen
 import cz.frantisekmasa.wfrp_master.combat.ui.ActiveCombatBanner
 import cz.frantisekmasa.wfrp_master.core.ads.BannerAd
+import cz.frantisekmasa.wfrp_master.core.domain.party.Party
 import cz.frantisekmasa.wfrp_master.core.ui.scaffolding.tabs.*
 import cz.frantisekmasa.wfrp_master.core.viewModel.PartyViewModel
 import cz.frantisekmasa.wfrp_master.inventory.ui.CharacterTrappingsScreen
@@ -78,6 +79,7 @@ fun CharacterDetailScreen(routing: Routing<Route.CharacterDetail>) {
         MainContainer(
             routing = routing,
             character = character,
+            party = party,
             viewModel = viewModel,
         )
     }
@@ -87,9 +89,10 @@ fun CharacterDetailScreen(routing: Routing<Route.CharacterDetail>) {
 private fun MainContainer(
     routing: Routing<Route.CharacterDetail>,
     character: Character?,
+    party: Party?,
     viewModel: CharacterViewModel,
 ) {
-    if (character == null) {
+    if (character == null || party == null) {
         Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
             CircularProgressIndicator()
         }
@@ -109,18 +112,11 @@ private fun MainContainer(
         TabPager(Modifier.weight(1f)) {
             val modifier = Modifier.width(screenWidth)
 
-            tab(R.string.title_misc) {
-                CharacterMiscScreen(
-                    characterId = characterId,
-                    character = character,
-                    modifier = modifier,
-                )
-            }
-
             tab(R.string.title_character_stats) {
                 CharacterCharacteristicsScreen(
                     characterId = characterId,
                     character = character,
+                    party = party,
                     modifier = modifier,
                 )
             }

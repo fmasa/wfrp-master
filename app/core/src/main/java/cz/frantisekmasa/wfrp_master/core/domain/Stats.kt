@@ -46,4 +46,17 @@ data class Stats(
         willPower = willPower + other.willPower,
         fellowship = fellowship + other.fellowship
     )
+
+    fun get(characteristic: Characteristic): Int = when(characteristic) {
+        Characteristic.AGILITY -> agility
+        Characteristic.BALLISTIC_SKILL -> ballisticSkill
+        Characteristic.DEXTERITY -> dexterity
+        Characteristic.FELLOWSHIP -> fellowship
+        Characteristic.INITIATIVE -> initiative
+        Characteristic.INTELLIGENCE -> intelligence
+        Characteristic.STRENGTH -> strength
+        Characteristic.TOUGHNESS -> toughness
+        Characteristic.WEAPON_SKILL -> weaponSkill
+        Characteristic.WILL_POWER -> willPower
+    }
 }
