@@ -2,48 +2,31 @@ package cz.muni.fi.rpg.ui.character.skills.dialog
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.Scaffold
-import androidx.compose.material.Text
-import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import cz.frantisekmasa.wfrp_master.core.domain.Characteristic
-import cz.frantisekmasa.wfrp_master.core.ui.buttons.CloseButton
+import cz.frantisekmasa.wfrp_master.core.ui.components.FormDialog
 import cz.frantisekmasa.wfrp_master.core.ui.forms.CheckboxWithText
 import cz.frantisekmasa.wfrp_master.core.ui.forms.ChipList
-import cz.frantisekmasa.wfrp_master.core.ui.forms.FormData
+import cz.frantisekmasa.wfrp_master.core.ui.forms.HydratedFormData
 import cz.frantisekmasa.wfrp_master.core.ui.forms.InputValue
 import cz.frantisekmasa.wfrp_master.core.ui.forms.Rules
 import cz.frantisekmasa.wfrp_master.core.ui.forms.TextInput
 import cz.frantisekmasa.wfrp_master.core.ui.forms.checkboxValue
 import cz.frantisekmasa.wfrp_master.core.ui.forms.inputValue
-import cz.frantisekmasa.wfrp_master.core.ui.primitives.FullScreenProgress
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.NumberPicker
-import cz.frantisekmasa.wfrp_master.core.ui.primitives.Spacing
-import cz.frantisekmasa.wfrp_master.core.ui.scaffolding.SaveAction
 import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.model.domain.skills.Skill
 import cz.muni.fi.rpg.ui.common.composables.FormInputHorizontalPadding
-import cz.muni.fi.rpg.ui.common.composables.FormInputVerticalPadding
 import cz.muni.fi.rpg.viewModels.SkillsViewModel
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import java.util.UUID
 
 @Composable
@@ -53,104 +36,61 @@ internal fun NonCompendiumSkillForm(
     onDismissRequest: () -> Unit,
 ) {
     val formData = NonCompendiumSkillFormData.fromSkill(existingSkill)
-    var saving by remember { mutableStateOf(false) }
-    var validate by remember { mutableStateOf(false) }
 
-    Scaffold(
-        topBar = {
-            TopAppBar(
-                navigationIcon = { CloseButton(onDismissRequest) },
-                title = {
-                    Text(
-                        stringResource(
-                            if (existingSkill != null)
-                                R.string.title_skill_edit else
-                                R.string.title_skill_new
-                        )
-                    )
-                },
-                actions = {
-                    val coroutineScope = rememberCoroutineScope()
+    FormDialog(
+        title = if (existingSkill != null) R.string.title_skill_edit else R.string.title_skill_new,
+        onDismissRequest = onDismissRequest,
+        formData = formData,
+        onSave = viewModel::saveSkill,
+    ) { validate ->
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(FormInputHorizontalPadding),
+            verticalAlignment = Alignment.Bottom,
+        ) {
+            TextInput(
+                modifier = Modifier.weight(1f),
+                label = stringResource(R.string.label_skill_name),
+                value = formData.name,
+                validate = validate,
+                maxLength = Skill.NAME_MAX_LENGTH,
+            )
 
-                    SaveAction(
-                        enabled = !saving,
-                        onClick = {
-                            if (!formData.isValid()) {
-                                validate = true
-                                return@SaveAction
-                            }
-
-                            coroutineScope.launch(Dispatchers.IO) {
-                                saving = true
-                                viewModel.saveSkill(formData.toSkill())
-                                withContext(Dispatchers.Main) { onDismissRequest() }
-                            }
-                        }
-                    )
+            NumberPicker(
+                label = stringResource(R.string.label_advances),
+                value = formData.advances.value,
+                onIncrement = { formData.advances.value++ },
+                onDecrement = {
+                    formData.advances.value = (formData.advances.value - 1)
+                        .coerceAtLeast(Skill.MIN_ADVANCES)
                 }
             )
         }
-    ) {
-        if (saving) {
-            FullScreenProgress()
-            return@Scaffold
-        }
 
-        Column(
-            Modifier
-                .verticalScroll(rememberScrollState())
-                .padding(Spacing.bodyPadding),
-            verticalArrangement = Arrangement.spacedBy(FormInputVerticalPadding)
+        TextInput(
+            label = stringResource(R.string.label_skill_description),
+            value = formData.description,
+            validate = validate,
+            multiLine = true,
+            maxLength = Skill.DESCRIPTION_MAX_LENGTH,
+        )
+
+        ChipList(
+            label = stringResource(R.string.label_skill_characteristic),
+            items = Characteristic.values().map { it to it.getShortcutName() },
+            value = formData.characteristic.value,
+            onValueChange = { formData.characteristic.value = it }
+        )
+
+        Box(
+            modifier = Modifier.fillMaxWidth(),
+            contentAlignment = Alignment.TopCenter
         ) {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(FormInputHorizontalPadding),
-                verticalAlignment = Alignment.Bottom,
-            ) {
-                TextInput(
-                    modifier = Modifier.weight(1f),
-                    label = stringResource(R.string.label_skill_name),
-                    value = formData.name,
-                    validate = validate,
-                    maxLength = Skill.NAME_MAX_LENGTH,
-                )
-
-                NumberPicker(
-                    label = stringResource(R.string.label_advances),
-                    value = formData.advances.value,
-                    onIncrement = { formData.advances.value++ },
-                    onDecrement = {
-                        formData.advances.value = (formData.advances.value - 1)
-                            .coerceAtLeast(Skill.MIN_ADVANCES)
-                    }
-                )
-            }
-
-            TextInput(
-                label = stringResource(R.string.label_skill_description),
-                value = formData.description,
-                validate = validate,
-                multiLine = true,
-                maxLength = Skill.DESCRIPTION_MAX_LENGTH,
+            CheckboxWithText(
+                text = stringResource(R.string.label_skill_advanced),
+                checked = formData.advanced.value,
+                onCheckedChange = { formData.advanced.value = it },
             )
-
-            ChipList(
-                label = stringResource(R.string.label_skill_characteristic),
-                items = Characteristic.values().map { it to it.getShortcutName() },
-                value = formData.characteristic.value,
-                onValueChange = { formData.characteristic.value = it }
-            )
-
-            Box(
-                modifier = Modifier.fillMaxWidth(),
-                contentAlignment = Alignment.TopCenter
-            ) {
-                CheckboxWithText(
-                    text = stringResource(R.string.label_skill_advanced),
-                    checked = formData.advanced.value,
-                    onCheckedChange = { formData.advanced.value = it },
-                )
-            }
         }
     }
 }
@@ -162,7 +102,7 @@ private class NonCompendiumSkillFormData(
     val characteristic: MutableState<Characteristic>,
     val advanced: MutableState<Boolean>,
     val advances: MutableState<Int>,
-) : FormData {
+) : HydratedFormData<Skill> {
     companion object {
         @Composable
         fun fromSkill(skill: Skill?): NonCompendiumSkillFormData = NonCompendiumSkillFormData(
@@ -179,7 +119,7 @@ private class NonCompendiumSkillFormData(
         )
     }
 
-    fun toSkill(): Skill = Skill(
+    override fun toValue(): Skill = Skill(
         id = id,
         compendiumId = null,
         advanced = advanced.value,
