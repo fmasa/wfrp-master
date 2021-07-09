@@ -25,25 +25,31 @@ fun CharacterSkillsScreen(
     characterId: CharacterId,
     characterVm: CharacterViewModel,
 ) {
-    Column(
+    Container(
         modifier
             .background(MaterialTheme.colors.background)
             .verticalScroll(rememberScrollState())
             .padding(top = Spacing.small),
     ) {
 
-        val talentsViewModel: TalentsViewModel by viewModel { parametersOf(characterId) }
-        val skillsViewModel: SkillsViewModel by viewModel { parametersOf(characterId) }
+        val size = if (breakpoint > Breakpoint.XSmall) HalfWidth else FullWidth
 
-        SkillsCard(
-            characterVm,
-            skillsViewModel,
-            onRemove = { skillsViewModel.removeSkill(it) },
-        )
+        column(size) {
+            val skillsViewModel: SkillsViewModel by viewModel { parametersOf(characterId) }
 
-        TalentsCard(
-            talentsViewModel,
-            onRemove = { talentsViewModel.removeTalent(it) },
-        )
+            SkillsCard(
+                characterVm,
+                skillsViewModel,
+                onRemove = { skillsViewModel.removeSkill(it) },
+            )
+        }
+
+        column(size) {
+            val talentsViewModel: TalentsViewModel by viewModel { parametersOf(characterId) }
+            TalentsCard(
+                talentsViewModel,
+                onRemove = { talentsViewModel.removeTalent(it) },
+            )
+        }
     }
 }
