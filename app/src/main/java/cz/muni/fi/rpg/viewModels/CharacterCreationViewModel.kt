@@ -33,6 +33,8 @@ class CharacterCreationViewModel(
             try {
                 Timber.d("Creating character")
 
+                val characteristics = characteristicsData.toValue()
+
                 characters.save(
                     characterId.partyId,
                     Character(
@@ -42,9 +44,9 @@ class CharacterCreationViewModel(
                         career = info.career.value,
                         socialClass = info.socialClass.value,
                         race = info.race.value,
-                        characteristicsBase = characteristicsData.toBaseCharacteristics(),
-                        characteristicsAdvances = characteristicsData.toCharacteristicAdvances(),
-                        points = points.toPoints(),
+                        characteristicsBase = characteristics.base,
+                        characteristicsAdvances = characteristics.advances,
+                        points = points.toValue(),
                         psychology = info.psychology.value,
                         motivation = info.motivation.value,
                         note = info.note.value,

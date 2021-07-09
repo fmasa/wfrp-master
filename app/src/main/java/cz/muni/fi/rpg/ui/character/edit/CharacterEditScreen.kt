@@ -199,6 +199,8 @@ private suspend fun updateCharacter(
     viewModel: CharacterViewModel,
     formData: CharacterEditScreen.FormData
 ) {
+    val characteristics = formData.characteristics.toValue()
+
     viewModel.update {
         it.update(
             name = formData.basicInfo.name.value,
@@ -208,8 +210,8 @@ private suspend fun updateCharacter(
             motivation = formData.basicInfo.motivation.value,
             socialClass = formData.basicInfo.socialClass.value,
             note = formData.basicInfo.note.value,
-            characteristicsBase = formData.characteristics.toBaseCharacteristics(),
-            characteristicsAdvances = formData.characteristics.toCharacteristicAdvances(),
+            characteristicsBase = characteristics.base,
+            characteristicsAdvances = characteristics.advances,
             maxWounds = formData.wounds.maxWounds.value.toInt(),
             hardyTalent = formData.wounds.hardyTalent.value,
         )

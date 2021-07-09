@@ -12,7 +12,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import cz.frantisekmasa.wfrp_master.core.domain.character.Points
-import cz.frantisekmasa.wfrp_master.core.ui.forms.FormData
+import cz.frantisekmasa.wfrp_master.core.ui.forms.HydratedFormData
 import cz.frantisekmasa.wfrp_master.core.ui.forms.InputValue
 import cz.frantisekmasa.wfrp_master.core.ui.forms.Rules
 import cz.frantisekmasa.wfrp_master.core.ui.forms.TextInput
@@ -26,7 +26,7 @@ object PointsPoolForm {
         val maxWounds: InputValue,
         val fatePoints: InputValue,
         val resiliencePoints: InputValue,
-    ) : FormData {
+    ) : HydratedFormData<Points> {
         companion object {
             @Composable
             fun empty() = Data(
@@ -42,7 +42,7 @@ object PointsPoolForm {
         override fun isValid(): Boolean =
             listOf(maxWounds, fatePoints, resiliencePoints).all { it.isValid() }
 
-        fun toPoints(): Points = Points(
+        override fun toValue(): Points = Points(
             corruption = 0,
             fate = toValue(fatePoints.value),
             fortune = toValue(fatePoints.value),

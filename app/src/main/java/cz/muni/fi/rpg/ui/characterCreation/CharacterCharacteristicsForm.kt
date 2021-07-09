@@ -15,7 +15,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import cz.frantisekmasa.wfrp_master.core.domain.Stats
 import cz.frantisekmasa.wfrp_master.core.domain.character.Character
-import cz.frantisekmasa.wfrp_master.core.ui.forms.FormData
+import cz.frantisekmasa.wfrp_master.core.ui.forms.HydratedFormData
 import cz.frantisekmasa.wfrp_master.core.ui.forms.InputValue
 import cz.frantisekmasa.wfrp_master.core.ui.forms.Rules
 import cz.frantisekmasa.wfrp_master.core.ui.forms.TextInput
@@ -36,7 +36,7 @@ object CharacterCharacteristicsForm {
         val intelligence: Pair<InputValue, InputValue>,
         val willPower: Pair<InputValue, InputValue>,
         val fellowship: Pair<InputValue, InputValue>,
-    ) : FormData {
+    ) : HydratedFormData<Value> {
         companion object {
             @Composable
             fun fromCharacter(character: Character?): Data {
@@ -87,34 +87,40 @@ object CharacterCharacteristicsForm {
                 fellowship,
             ).all { (base, advances) -> base.isValid() && advances.isValid() }
 
-        fun toBaseCharacteristics(): Stats = Stats(
-            weaponSkill = toValue(weaponSkill.first.value),
-            ballisticSkill = toValue(ballisticSkill.first.value),
-            strength = toValue(strength.first.value),
-            toughness = toValue(toughness.first.value),
-            initiative = toValue(initiative.first.value),
-            agility = toValue(agility.first.value),
-            dexterity = toValue(dexterity.first.value),
-            intelligence = toValue(intelligence.first.value),
-            willPower = toValue(willPower.first.value),
-            fellowship = toValue(fellowship.first.value),
-        )
-
-        fun toCharacteristicAdvances(): Stats = Stats(
-            weaponSkill = toValue(weaponSkill.second.value),
-            ballisticSkill = toValue(ballisticSkill.second.value),
-            strength = toValue(strength.second.value),
-            toughness = toValue(toughness.second.value),
-            initiative = toValue(initiative.second.value),
-            agility = toValue(agility.second.value),
-            dexterity = toValue(dexterity.second.value),
-            intelligence = toValue(intelligence.second.value),
-            willPower = toValue(willPower.second.value),
-            fellowship = toValue(fellowship.second.value),
+        override fun toValue(): Value = Value(
+            base = Stats(
+                weaponSkill = toValue(weaponSkill.first.value),
+                ballisticSkill = toValue(ballisticSkill.first.value),
+                strength = toValue(strength.first.value),
+                toughness = toValue(toughness.first.value),
+                initiative = toValue(initiative.first.value),
+                agility = toValue(agility.first.value),
+                dexterity = toValue(dexterity.first.value),
+                intelligence = toValue(intelligence.first.value),
+                willPower = toValue(willPower.first.value),
+                fellowship = toValue(fellowship.first.value),
+            ),
+            advances = Stats(
+                weaponSkill = toValue(weaponSkill.second.value),
+                ballisticSkill = toValue(ballisticSkill.second.value),
+                strength = toValue(strength.second.value),
+                toughness = toValue(toughness.second.value),
+                initiative = toValue(initiative.second.value),
+                agility = toValue(agility.second.value),
+                dexterity = toValue(dexterity.second.value),
+                intelligence = toValue(intelligence.second.value),
+                willPower = toValue(willPower.second.value),
+                fellowship = toValue(fellowship.second.value),
+            ),
         )
 
         private fun toValue(value: String) = value.toIntOrNull() ?: 0
     }
+
+    data class Value(
+        val base: Stats,
+        val advances: Stats,
+    )
 }
 
 @Composable
