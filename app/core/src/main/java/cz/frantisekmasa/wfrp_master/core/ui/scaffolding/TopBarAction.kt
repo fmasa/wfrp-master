@@ -19,28 +19,12 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.intl.Locale
 import androidx.compose.ui.text.toUpperCase
 import cz.frantisekmasa.wfrp_master.core.R
-
-@Deprecated("Use version that expects only string resource")
-@Composable
-fun TopBarAction(
-    modifier: Modifier = Modifier,
-    enabled: Boolean = true,
-    onClick: () -> Unit,
-    content: @Composable () -> Unit,
-) {
-    val colorBase = contentColorFor(MaterialTheme.colors.primarySurface)
-    val contentColor =
-        colorBase.copy(alpha = if (enabled) ContentAlpha.high else ContentAlpha.medium)
-
-    TextButton(onClick = onClick, enabled = enabled, modifier = modifier) {
-        CompositionLocalProvider(LocalContentColor provides contentColor) { content() }
-    }
-}
 
 @Composable
 fun TopBarAction(
@@ -49,28 +33,36 @@ fun TopBarAction(
     onClick: () -> Unit,
     @StringRes textRes: Int,
 ) {
-    TopBarAction(
-        modifier = modifier,
-        enabled = enabled,
-        onClick = onClick
-    ) {
-        Text(stringResource(textRes).toUpperCase(Locale.current))
+    val colorBase = contentColorFor(MaterialTheme.colors.primarySurface)
+    val contentColor =
+        colorBase.copy(alpha = if (enabled) ContentAlpha.high else ContentAlpha.medium)
+
+    TextButton(onClick = onClick, enabled = enabled, modifier = modifier) {
+        CompositionLocalProvider(LocalContentColor provides contentColor) {
+            Text(stringResource(textRes).toUpperCase(Locale.current))
+        }
     }
 }
 
 @Composable
 fun OptionsAction(content: @Composable ColumnScope.() -> Unit) {
     var contextMenuExpanded by remember { mutableStateOf(false) }
-    IconButton(onClick = { contextMenuExpanded = true }) {
-        Icon(
-            painterResource(R.drawable.ic_more),
-            stringResource(R.string.icon_action_more),
-            tint = contentColorFor(MaterialTheme.colors.primarySurface),
-        )
-    }
+
+    IconAction(
+        painterResource(R.drawable.ic_more),
+        stringResource(R.string.icon_action_more),
+        onClick = { contextMenuExpanded = true }
+    )
 
     DropdownMenu(
         expanded = contextMenuExpanded, onDismissRequest = { contextMenuExpanded = false },
         content = content,
     )
+}
+
+@Composable
+fun IconAction(painter: Painter, description: String, onClick: () -> Unit) {
+    IconButton(onClick = onClick) {
+        Icon(painter, description, tint = contentColorFor(MaterialTheme.colors.primarySurface))
+    }
 }

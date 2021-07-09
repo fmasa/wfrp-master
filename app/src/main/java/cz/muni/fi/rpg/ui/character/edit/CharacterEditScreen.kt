@@ -31,9 +31,8 @@ import cz.frantisekmasa.wfrp_master.core.ui.forms.Rules
 import cz.frantisekmasa.wfrp_master.core.ui.forms.TextInput
 import cz.frantisekmasa.wfrp_master.core.ui.forms.inputValue
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.HorizontalLine
+import cz.frantisekmasa.wfrp_master.core.ui.scaffolding.SaveAction
 import cz.frantisekmasa.wfrp_master.core.ui.scaffolding.Subtitle
-import cz.frantisekmasa.wfrp_master.core.ui.scaffolding.TopBarAction
-import cz.frantisekmasa.wfrp_master.core.ui.texts.SaveButtonText
 import cz.frantisekmasa.wfrp_master.core.viewModel.viewModel
 import cz.frantisekmasa.wfrp_master.navigation.Route
 import cz.frantisekmasa.wfrp_master.navigation.Routing
@@ -190,7 +189,7 @@ private fun CharacterEditTopBar(
             }
         },
         actions = {
-            TopBarAction(onClick = onSave, enabled = actionsEnabled) { SaveButtonText() }
+            SaveAction(enabled = actionsEnabled, onClick = onSave)
         }
     )
 }

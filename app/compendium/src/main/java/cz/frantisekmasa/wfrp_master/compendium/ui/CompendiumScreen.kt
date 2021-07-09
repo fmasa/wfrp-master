@@ -23,8 +23,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.intl.Locale
-import androidx.compose.ui.text.toUpperCase
 import androidx.compose.ui.unit.Dp
 import androidx.lifecycle.LiveData
 import cz.frantisekmasa.wfrp_master.compendium.R
@@ -75,9 +73,10 @@ private fun TopBar(routing: Routing<Route.Compendium>) {
         },
         navigationIcon = { BackButton(onClick = { routing.pop() }) },
         actions = {
-            TopBarAction(onClick = { routing.navigateTo(Route.CompendiumImport(partyId)) }) {
-                Text(stringResource(R.string.button_import).toUpperCase(Locale.current))
-            }
+            TopBarAction(
+                textRes = R.string.button_import,
+                onClick = { routing.navigateTo(Route.CompendiumImport(partyId)) },
+            )
         }
     )
 }

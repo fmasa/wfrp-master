@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.CircularProgressIndicator
-import androidx.compose.material.Icon
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
@@ -20,7 +19,7 @@ import cz.frantisekmasa.wfrp_master.core.ads.BannerAd
 import cz.frantisekmasa.wfrp_master.core.domain.identifiers.CharacterId
 import cz.frantisekmasa.wfrp_master.core.domain.identifiers.EncounterId
 import cz.frantisekmasa.wfrp_master.core.ui.buttons.HamburgerButton
-import cz.frantisekmasa.wfrp_master.core.ui.scaffolding.TopBarAction
+import cz.frantisekmasa.wfrp_master.core.ui.scaffolding.IconAction
 import cz.frantisekmasa.wfrp_master.core.ui.scaffolding.tabs.TabPager
 import cz.frantisekmasa.wfrp_master.core.ui.scaffolding.tabs.tab
 import cz.frantisekmasa.wfrp_master.core.viewModel.viewModel
@@ -43,20 +42,17 @@ fun GameMasterScreen(routing: Routing<Route.GameMaster>) {
                 title = { party?.let { Text(it.getName()) } },
                 navigationIcon = { HamburgerButton() },
                 actions = {
-                    TopBarAction(
+                    IconAction(
+                        painterResource(R.drawable.ic_settings),
+                        stringResource(R.string.title_party_settings),
                         onClick = {
                             if (party == null) {
-                                return@TopBarAction
+                                return@IconAction
                             }
 
                             routing.navigateTo(Route.PartySettings(party.id))
                         },
-                    ) {
-                        Icon(
-                            painterResource(R.drawable.ic_settings),
-                            stringResource(R.string.title_party_settings),
-                        )
-                    }
+                    )
                 }
             )
         }

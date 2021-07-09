@@ -14,6 +14,7 @@ import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
+import androidx.compose.material.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -36,7 +37,6 @@ import cz.frantisekmasa.wfrp_master.core.domain.time.DateTime
 import cz.frantisekmasa.wfrp_master.core.domain.time.ImperialDate
 import cz.frantisekmasa.wfrp_master.core.domain.time.MannsliebPhase
 import cz.frantisekmasa.wfrp_master.core.domain.time.YearSeason
-import cz.frantisekmasa.wfrp_master.core.ui.buttons.SaveTextButton
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.CardContainer
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.VisualOnlyIconDescription
 import cz.muni.fi.rpg.R
@@ -133,14 +133,14 @@ private fun Date(viewModel: GameMasterViewModel, date: ImperialDate) {
                         horizontalArrangement = Arrangement.End
                     ) {
                         val coroutineScope = rememberCoroutineScope()
-                        SaveTextButton(
+                        TextButton(
                             onClick = {
                                 coroutineScope.launch(Dispatchers.IO) {
                                     viewModel.changeTime { it.copy(date = selectedDate) }
                                     dialogVisible = false
                                 }
                             }
-                        )
+                        ) { Text(stringResource(R.string.button_save).uppercase()) }
                     }
                 }
             }
