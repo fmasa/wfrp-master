@@ -9,7 +9,7 @@ import kotlinx.parcelize.Parcelize
 data class TestResult(
     val rollValue: Int,
     val testedValue: Int,
-): Parcelable {
+) : Parcelable {
     init {
         require(rollValue in 1..100) { "Roll value must be larger than 0 and lower or equal than 100" }
     }

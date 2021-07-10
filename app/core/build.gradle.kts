@@ -12,7 +12,7 @@ android {
         //
         val propertiesFile = File("local.properties")
 
-        val properties = if(propertiesFile.exists())
+        val properties = if (propertiesFile.exists())
             loadProperties("local.properties")
         else Properties()
 
@@ -43,7 +43,6 @@ dependencies {
     api("androidx.compose.runtime:runtime-livedata:${Versions.compose}")
     api("androidx.activity:activity-compose:1.3.0-beta02")
     api("androidx.lifecycle:lifecycle-viewmodel-compose:1.0.0-alpha07")
-
 
     // Koin
     api("org.koin:koin-android:2.2.0")

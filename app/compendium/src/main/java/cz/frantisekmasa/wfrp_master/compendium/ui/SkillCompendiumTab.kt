@@ -1,8 +1,18 @@
 package cz.frantisekmasa.wfrp_master.compendium.ui
 
-import androidx.compose.foundation.layout.*
-import androidx.compose.material.*
-import androidx.compose.runtime.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material.Divider
+import androidx.compose.material.ListItem
+import androidx.compose.material.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -10,17 +20,24 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import cz.frantisekmasa.wfrp_master.compendium.R
-import cz.frantisekmasa.wfrp_master.core.domain.compendium.CompendiumItem
 import cz.frantisekmasa.wfrp_master.compendium.domain.Skill
 import cz.frantisekmasa.wfrp_master.core.domain.Characteristic
+import cz.frantisekmasa.wfrp_master.core.domain.compendium.CompendiumItem
 import cz.frantisekmasa.wfrp_master.core.ui.dialogs.DialogState
-import cz.frantisekmasa.wfrp_master.core.ui.forms.*
+import cz.frantisekmasa.wfrp_master.core.ui.forms.CheckboxWithText
+import cz.frantisekmasa.wfrp_master.core.ui.forms.ChipList
+import cz.frantisekmasa.wfrp_master.core.ui.forms.HydratedFormData
+import cz.frantisekmasa.wfrp_master.core.ui.forms.InputValue
+import cz.frantisekmasa.wfrp_master.core.ui.forms.Rules
+import cz.frantisekmasa.wfrp_master.core.ui.forms.TextInput
+import cz.frantisekmasa.wfrp_master.core.ui.forms.checkboxValue
+import cz.frantisekmasa.wfrp_master.core.ui.forms.inputValue
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.EmptyUI
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.ItemIcon
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.Spacing
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import java.util.*
+import java.util.UUID
 
 @Composable
 fun SkillCompendiumTab(viewModel: CompendiumViewModel, width: Dp) {
@@ -77,8 +94,8 @@ private data class SkillFormData(
 
     override fun isValid() =
         name.isValid() &&
-                name.value.length <= Skill.NAME_MAX_LENGTH &&
-                description.value.length <= Skill.DESCRIPTION_MAX_LENGTH
+            name.value.length <= Skill.NAME_MAX_LENGTH &&
+            description.value.length <= Skill.DESCRIPTION_MAX_LENGTH
 }
 
 @Composable
@@ -102,7 +119,7 @@ private fun SkillDialog(
         ),
         formData = formData,
         saver = viewModel::save,
-        onDismissRequest = {dialogState.value = DialogState.Closed()}
+        onDismissRequest = { dialogState.value = DialogState.Closed() }
     ) { validate ->
         Column(
             verticalArrangement = Arrangement.spacedBy(12.dp),

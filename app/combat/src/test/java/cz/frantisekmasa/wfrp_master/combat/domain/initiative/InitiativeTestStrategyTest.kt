@@ -1,7 +1,7 @@
 package cz.frantisekmasa.wfrp_master.combat.domain.initiative
 
 import cz.frantisekmasa.wfrp_master.core.domain.Stats
-import org.junit.Assert.*
+import org.junit.Assert.assertTrue
 import org.junit.Test
 
 class InitiativeTestStrategyTest {

@@ -7,7 +7,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.material.TextButton
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -24,7 +24,6 @@ import cz.frantisekmasa.wfrp_master.navigation.Route
 import cz.frantisekmasa.wfrp_master.navigation.Routing
 import org.koin.core.parameter.parametersOf
 
-
 @Composable
 fun ActiveCombatBanner(partyId: PartyId, routing: Routing<*>) {
     val partyViewModel: PartyViewModel by viewModel { parametersOf(partyId) }
@@ -36,7 +35,9 @@ fun ActiveCombatBanner(partyId: PartyId, routing: Routing<*>) {
 
     Surface(elevation = 8.dp) {
         Row(
-            Modifier.fillMaxWidth().padding(Spacing.bodyPadding),
+            Modifier
+                .fillMaxWidth()
+                .padding(Spacing.bodyPadding),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
         ) {

@@ -2,7 +2,7 @@ package cz.muni.fi.rpg.model.domain.talents
 
 import cz.frantisekmasa.wfrp_master.core.domain.character.CharacterItem
 import kotlinx.parcelize.Parcelize
-import java.util.*
+import java.util.UUID
 
 @Parcelize
 data class Talent(
@@ -21,6 +21,6 @@ data class Talent(
         require(name.isNotEmpty())
         require(name.length <= NAME_MAX_LENGTH) { "Maximum allowed name length is $NAME_MAX_LENGTH" }
         require(description.length <= DESCRIPTION_MAX_LENGTH) { "Maximum allowed description length is $DESCRIPTION_MAX_LENGTH" }
-        require(taken in 1..999) { "Skill can be taken 1-100x"}
+        require(taken in 1..999) { "Skill can be taken 1-100x" }
     }
 }

@@ -11,7 +11,7 @@ enum class MannsliebPhase(val readableName: String) {
         private const val MANNSLIEB_WANING_PERIOD = 12
 
         fun at(date: ImperialDate): MannsliebPhase {
-            return when((date.dayOfYear - 1) % (MANNSLIEB_WAXING_PERIOD + MANNSLIEB_WANING_PERIOD)) {
+            return when ((date.dayOfYear - 1) % (MANNSLIEB_WAXING_PERIOD + MANNSLIEB_WANING_PERIOD)) {
                 0 -> FULL_MOON
                 in 1..MANNSLIEB_WANING_PERIOD -> WANING
                 MANNSLIEB_WANING_PERIOD + 1 -> NEW_MOON

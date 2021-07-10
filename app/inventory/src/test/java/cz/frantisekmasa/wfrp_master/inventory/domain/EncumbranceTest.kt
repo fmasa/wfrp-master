@@ -1,9 +1,8 @@
 package cz.frantisekmasa.wfrp_master.inventory.domain
 
 import cz.frantisekmasa.wfrp_master.core.domain.Stats
+import org.junit.Assert.assertEquals
 import org.junit.Test
-
-import org.junit.Assert.*
 
 class EncumbranceTest {
     @Test

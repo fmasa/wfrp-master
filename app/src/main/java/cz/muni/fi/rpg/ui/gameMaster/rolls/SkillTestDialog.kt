@@ -1,13 +1,17 @@
 package cz.muni.fi.rpg.ui.gameMaster.rolls
 
 import android.os.Parcelable
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.res.stringResource
 import cz.frantisekmasa.wfrp_master.compendium.domain.Skill
+import cz.frantisekmasa.wfrp_master.core.domain.Expression
 import cz.frantisekmasa.wfrp_master.core.domain.party.PartyId
 import cz.frantisekmasa.wfrp_master.core.domain.rolls.Dice
-import cz.frantisekmasa.wfrp_master.core.domain.Expression
 import cz.frantisekmasa.wfrp_master.core.domain.rolls.TestResult
 import cz.frantisekmasa.wfrp_master.core.ui.dialogs.FullScreenDialog
 import cz.frantisekmasa.wfrp_master.core.viewModel.viewModel
@@ -30,7 +34,8 @@ fun SkillTestDialog(partyId: PartyId, onDismissRequest: () -> Unit) {
             SkillTestDialogStep.SkillPicking -> SkillChooser(
                 viewModel = viewModel,
                 onDismissRequest = onDismissRequest,
-                onSkillSelected = { step = SkillTestDialogStep.Options(selectedSkill = it) })
+                onSkillSelected = { step = SkillTestDialogStep.Options(selectedSkill = it) }
+            )
             is SkillTestDialogStep.Options -> {
                 val coroutineScope = rememberCoroutineScope()
 

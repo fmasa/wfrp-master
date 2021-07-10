@@ -1,7 +1,7 @@
 package cz.frantisekmasa.wfrp_master.compendium.domain.importer.grammars
 
 import cz.frantisekmasa.wfrp_master.compendium.domain.Miracle
-import java.util.*
+import java.util.UUID
 
 class MiracleListGrammar(private val cultName: String) {
     fun parseToEnd(text: String): List<Miracle> {

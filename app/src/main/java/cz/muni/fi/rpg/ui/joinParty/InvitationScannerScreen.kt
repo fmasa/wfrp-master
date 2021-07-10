@@ -7,21 +7,28 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material.*
-import androidx.compose.runtime.*
+import androidx.compose.material.Scaffold
+import androidx.compose.material.Text
+import androidx.compose.material.TopAppBar
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.eazypermissions.common.model.PermissionResult
 import com.eazypermissions.coroutinespermission.PermissionManager
+import cz.frantisekmasa.wfrp_master.core.domain.party.Invitation
 import cz.frantisekmasa.wfrp_master.core.ui.buttons.BackButton
 import cz.frantisekmasa.wfrp_master.core.ui.scaffolding.SubheadBar
+import cz.frantisekmasa.wfrp_master.core.ui.viewinterop.LocalActivity
 import cz.frantisekmasa.wfrp_master.navigation.Route
 import cz.frantisekmasa.wfrp_master.navigation.Routing
 import cz.muni.fi.rpg.R
-import cz.frantisekmasa.wfrp_master.core.domain.party.Invitation
-import cz.frantisekmasa.wfrp_master.core.ui.viewinterop.LocalActivity
 import cz.muni.fi.rpg.ui.common.toast
 import cz.muni.fi.rpg.viewModels.provideJoinPartyViewModel
 import kotlinx.coroutines.launch
@@ -64,7 +71,7 @@ fun InvitationScannerScreen(routing: Routing<Route>) {
                             Manifest.permission.CAMERA,
                         )
 
-                        when(permissionResult) {
+                        when (permissionResult) {
                             is PermissionResult.PermissionGranted -> {
                                 screenState = InvitationScannerScreenState.Scanning
                             }

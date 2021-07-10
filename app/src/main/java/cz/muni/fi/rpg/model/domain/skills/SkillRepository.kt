@@ -2,7 +2,6 @@ package cz.muni.fi.rpg.model.domain.skills
 
 import cz.frantisekmasa.wfrp_master.core.domain.character.CharacterItemRepository
 import cz.frantisekmasa.wfrp_master.core.domain.identifiers.CharacterId
-import kotlinx.coroutines.flow.Flow
 import java.util.UUID
 
 interface SkillRepository : CharacterItemRepository<Skill> {

@@ -1,11 +1,41 @@
 package cz.muni.fi.rpg.ui.character
 
-import androidx.compose.foundation.*
-import androidx.compose.foundation.layout.*
-import androidx.compose.material.*
-import androidx.compose.runtime.*
-import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxScope
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
+import androidx.compose.foundation.layout.IntrinsicSize
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.RowScope
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.Button
+import androidx.compose.material.Card
+import androidx.compose.material.ContentAlpha
+import androidx.compose.material.ExtendedFloatingActionButton
+import androidx.compose.material.Icon
+import androidx.compose.material.LocalContentAlpha
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Scaffold
+import androidx.compose.material.Surface
+import androidx.compose.material.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -14,23 +44,27 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import cz.frantisekmasa.wfrp_master.core.domain.Characteristic
-import cz.muni.fi.rpg.R
+import cz.frantisekmasa.wfrp_master.core.domain.Expression
+import cz.frantisekmasa.wfrp_master.core.domain.Stats
 import cz.frantisekmasa.wfrp_master.core.domain.character.Character
 import cz.frantisekmasa.wfrp_master.core.domain.character.Points
-import cz.frantisekmasa.wfrp_master.core.domain.Stats
-import cz.frantisekmasa.wfrp_master.core.domain.identifiers.CharacterId
-import cz.frantisekmasa.wfrp_master.core.domain.Expression
 import cz.frantisekmasa.wfrp_master.core.domain.character.Points.PointPool
 import cz.frantisekmasa.wfrp_master.core.domain.character.SocialStatus
+import cz.frantisekmasa.wfrp_master.core.domain.identifiers.CharacterId
 import cz.frantisekmasa.wfrp_master.core.domain.party.Party
 import cz.frantisekmasa.wfrp_master.core.media.rememberSoundPlayer
 import cz.frantisekmasa.wfrp_master.core.ui.components.Breakpoint
-import cz.frantisekmasa.wfrp_master.core.ui.components.ColumnSize.*
+import cz.frantisekmasa.wfrp_master.core.ui.components.ColumnSize.FullWidth
+import cz.frantisekmasa.wfrp_master.core.ui.components.ColumnSize.HalfWidth
 import cz.frantisekmasa.wfrp_master.core.ui.components.Container
 import cz.frantisekmasa.wfrp_master.core.ui.components.LocalBreakpoint
 import cz.frantisekmasa.wfrp_master.core.ui.dialogs.FullScreenDialog
-import cz.frantisekmasa.wfrp_master.core.ui.primitives.*
+import cz.frantisekmasa.wfrp_master.core.ui.primitives.ItemIcon
+import cz.frantisekmasa.wfrp_master.core.ui.primitives.NumberPicker
+import cz.frantisekmasa.wfrp_master.core.ui.primitives.Spacing
+import cz.frantisekmasa.wfrp_master.core.ui.primitives.TopPanel
 import cz.frantisekmasa.wfrp_master.core.viewModel.viewModel
+import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.ui.character.dialogs.ExperiencePointsDialog
 import cz.muni.fi.rpg.ui.common.composables.AmbitionsCard
 import cz.muni.fi.rpg.ui.common.composables.FloatingActionsMenu
@@ -76,7 +110,8 @@ internal fun CharacterCharacteristicsScreen(
                     roll = currentRoll.reroll()
                     rollSound.play()
                 },
-                onDismissRequest = { roll = null })
+                onDismissRequest = { roll = null }
+            )
         }
     }
 
@@ -165,7 +200,6 @@ internal fun CharacterCharacteristicsScreen(
                     )
                 }
             }
-
         }
     }
 }
@@ -190,9 +224,9 @@ private fun CharacterTopPanel(character: Character, points: Points, onUpdate: (P
                         Column(Modifier.padding(start = Spacing.medium)) {
                             Text(character.getName(), fontWeight = FontWeight.Bold)
                             Text(
-                                stringResource(character.getRace().getReadableNameId())
-                                    + " "
-                                    + character.getCareer(),
+                                stringResource(character.getRace().getReadableNameId()) +
+                                    " " +
+                                    character.getCareer(),
                                 style = MaterialTheme.typography.caption
                             )
                         }

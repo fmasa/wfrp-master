@@ -2,25 +2,37 @@ package cz.frantisekmasa.wfrp_master.core.ui.dialogs
 
 import android.app.Dialog
 import android.content.Context
-import android.graphics.Outline
-import android.view.*
+import android.view.View
+import android.view.ViewGroup
+import android.view.Window
 import androidx.compose.foundation.layout.Box
 import androidx.compose.material.MaterialTheme
-import cz.frantisekmasa.wfrp_master.core.R
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionContext
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.SideEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCompositionContext
+import androidx.compose.runtime.rememberUpdatedState
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.*
+import androidx.compose.ui.platform.AbstractComposeView
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalLayoutDirection
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.semantics.dialog
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.LayoutDirection
-import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewTreeLifecycleOwner
 import androidx.lifecycle.ViewTreeViewModelStoreOwner
 import androidx.savedstate.ViewTreeSavedStateRegistryOwner
+import cz.frantisekmasa.wfrp_master.core.R
 import cz.frantisekmasa.wfrp_master.core.ui.theme.LocalSystemUiController
 import cz.frantisekmasa.wfrp_master.core.ui.theme.rememberSystemUiController
-
 
 @Composable
 fun FullScreenDialog(
@@ -109,14 +121,12 @@ private class DialogWrapper(
     density: Density,
     lightTheme: Boolean,
 ) : Dialog(
-        composeView.context,
-        if (lightTheme)
-            R.style.AppTheme_Light_FullScreenDialog
-        else R.style.AppTheme_Dark_FullScreenDialog
+    composeView.context,
+    if (lightTheme)
+        R.style.AppTheme_Light_FullScreenDialog
+    else R.style.AppTheme_Dark_FullScreenDialog
 ) {
     private val dialogLayout: DialogLayout
-
-    private val maxSupportedElevation = 30.dp
 
     init {
         val window = window ?: error("Dialog has no window")

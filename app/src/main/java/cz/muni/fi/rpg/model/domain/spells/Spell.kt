@@ -15,7 +15,7 @@ data class Spell(
     val castingNumber: Int,
     val effect: String,
     val memorized: Boolean = true, // TODO: Remove default value and migrate stored data
-): CharacterItem {
+) : CharacterItem {
     companion object {
         const val NAME_MAX_LENGTH = 50
         const val RANGE_MAX_LENGTH = 50

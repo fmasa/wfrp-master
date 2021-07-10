@@ -22,7 +22,6 @@ import cz.frantisekmasa.wfrp_master.core.ui.primitives.Spacing
 import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.viewModels.SkillTestViewModel
 
-
 @Composable
 internal fun SkillChooser(
     viewModel: SkillTestViewModel,

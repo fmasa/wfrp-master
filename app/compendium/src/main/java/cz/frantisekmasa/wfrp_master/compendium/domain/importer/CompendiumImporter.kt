@@ -1,6 +1,10 @@
 package cz.frantisekmasa.wfrp_master.compendium.domain.importer
 
-import cz.frantisekmasa.wfrp_master.compendium.domain.*
+import cz.frantisekmasa.wfrp_master.compendium.domain.Blessing
+import cz.frantisekmasa.wfrp_master.compendium.domain.Miracle
+import cz.frantisekmasa.wfrp_master.compendium.domain.Skill
+import cz.frantisekmasa.wfrp_master.compendium.domain.Spell
+import cz.frantisekmasa.wfrp_master.compendium.domain.Talent
 
 interface CompendiumImporter {
     suspend fun importSkills(): List<Skill>
@@ -9,7 +13,7 @@ interface CompendiumImporter {
 
     suspend fun importSpells(): List<Spell>
 
-    suspend fun importBlessings() : List<Blessing>
+    suspend fun importBlessings(): List<Blessing>
 
-    suspend fun importMiracles() : List<Miracle>
+    suspend fun importMiracles(): List<Miracle>
 }

@@ -1,10 +1,11 @@
 package cz.frantisekmasa.wfrp_master.core.ads
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategy
-import io.ktor.client.*
-import io.ktor.client.engine.cio.*
-import io.ktor.client.features.json.*
-import io.ktor.client.request.*
+import io.ktor.client.HttpClient
+import io.ktor.client.engine.cio.CIO
+import io.ktor.client.features.json.JacksonSerializer
+import io.ktor.client.features.json.JsonFeature
+import io.ktor.client.request.get
 import timber.log.Timber
 
 class AdmobLocationProvider : LocationProvider {

@@ -2,11 +2,11 @@ package cz.frantisekmasa.wfrp_master.combat.ui
 
 import cz.frantisekmasa.wfrp_master.combat.domain.encounter.Wounds
 import cz.frantisekmasa.wfrp_master.core.domain.Stats
-import cz.frantisekmasa.wfrp_master.core.domain.character.Character as CharacterEntity
 import cz.frantisekmasa.wfrp_master.core.domain.identifiers.CharacterId
 import cz.frantisekmasa.wfrp_master.core.domain.identifiers.NpcId
 import cz.frantisekmasa.wfrp_master.core.domain.party.combat.Combatant
 import cz.frantisekmasa.wfrp_master.combat.domain.encounter.Npc as NpcEntity
+import cz.frantisekmasa.wfrp_master.core.domain.character.Character as CharacterEntity
 
 sealed class CombatantItem {
     abstract val combatant: Combatant

@@ -2,7 +2,7 @@ package cz.frantisekmasa.wfrp_master.core.domain.character
 
 import cz.frantisekmasa.wfrp_master.core.domain.identifiers.CharacterId
 import kotlinx.coroutines.flow.Flow
-import java.util.*
+import java.util.UUID
 
 /**
  * @see [CharacterItem]

@@ -2,7 +2,6 @@ package cz.frantisekmasa.wfrp_master.core.domain.rolls
 
 import kotlin.random.Random
 
-
 class Dice(
     private val sides: Int,
     private val random: Random = Random,
@@ -12,7 +11,6 @@ class Dice(
     }
 
     fun companion() {
-
     }
 
     fun roll(): Int = if (sides == 1) 1 else random.nextInt(1, sides + 1)

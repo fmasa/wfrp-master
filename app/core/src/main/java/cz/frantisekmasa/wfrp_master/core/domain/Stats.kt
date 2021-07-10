@@ -47,7 +47,7 @@ data class Stats(
         fellowship = fellowship + other.fellowship
     )
 
-    fun get(characteristic: Characteristic): Int = when(characteristic) {
+    fun get(characteristic: Characteristic): Int = when (characteristic) {
         Characteristic.AGILITY -> agility
         Characteristic.BALLISTIC_SKILL -> ballisticSkill
         Characteristic.DEXTERITY -> dexterity

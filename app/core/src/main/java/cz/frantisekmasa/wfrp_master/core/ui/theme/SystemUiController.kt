@@ -7,7 +7,6 @@ import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 
-
 @Composable
 fun rememberSystemUiController(window: Window): SystemUiController {
     return remember { SystemUiController(window) }

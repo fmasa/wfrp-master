@@ -2,9 +2,10 @@ package cz.frantisekmasa.wfrp_master.inventory.ui
 
 import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.Column
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.snapshots.SnapshotStateMap
 import androidx.compose.ui.res.stringResource
@@ -12,15 +13,36 @@ import androidx.compose.ui.text.input.KeyboardType
 import cz.frantisekmasa.wfrp_master.core.domain.NamedEnum
 import cz.frantisekmasa.wfrp_master.core.ui.components.FormDialog
 import cz.frantisekmasa.wfrp_master.core.ui.dialogs.FullScreenDialog
-import cz.frantisekmasa.wfrp_master.core.ui.forms.*
+import cz.frantisekmasa.wfrp_master.core.ui.forms.CheckboxWithText
+import cz.frantisekmasa.wfrp_master.core.ui.forms.ErrorMessage
+import cz.frantisekmasa.wfrp_master.core.ui.forms.Filter
+import cz.frantisekmasa.wfrp_master.core.ui.forms.HydratedFormData
+import cz.frantisekmasa.wfrp_master.core.ui.forms.InputLabel
+import cz.frantisekmasa.wfrp_master.core.ui.forms.InputValue
+import cz.frantisekmasa.wfrp_master.core.ui.forms.Rule
+import cz.frantisekmasa.wfrp_master.core.ui.forms.Rules
+import cz.frantisekmasa.wfrp_master.core.ui.forms.SelectBox
+import cz.frantisekmasa.wfrp_master.core.ui.forms.TextInput
+import cz.frantisekmasa.wfrp_master.core.ui.forms.inputValue
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.NumberPicker
 import cz.frantisekmasa.wfrp_master.inventory.R
-import cz.frantisekmasa.wfrp_master.inventory.domain.*
+import cz.frantisekmasa.wfrp_master.inventory.domain.Encumbrance
+import cz.frantisekmasa.wfrp_master.inventory.domain.InventoryItem
+import cz.frantisekmasa.wfrp_master.inventory.domain.InventoryItemId
+import cz.frantisekmasa.wfrp_master.inventory.domain.TrappingType
 import cz.frantisekmasa.wfrp_master.inventory.domain.armour.ArmourLocation
 import cz.frantisekmasa.wfrp_master.inventory.domain.armour.ArmourPoints
 import cz.frantisekmasa.wfrp_master.inventory.domain.armour.ArmourType
-import cz.frantisekmasa.wfrp_master.inventory.domain.weapon.*
-import java.util.*
+import cz.frantisekmasa.wfrp_master.inventory.domain.weapon.AmmunitionRangeExpression
+import cz.frantisekmasa.wfrp_master.inventory.domain.weapon.DamageExpression
+import cz.frantisekmasa.wfrp_master.inventory.domain.weapon.MeleeWeaponGroup
+import cz.frantisekmasa.wfrp_master.inventory.domain.weapon.RangedWeaponGroup
+import cz.frantisekmasa.wfrp_master.inventory.domain.weapon.Reach
+import cz.frantisekmasa.wfrp_master.inventory.domain.weapon.WeaponEquip
+import cz.frantisekmasa.wfrp_master.inventory.domain.weapon.WeaponFlaw
+import cz.frantisekmasa.wfrp_master.inventory.domain.weapon.WeaponQuality
+import cz.frantisekmasa.wfrp_master.inventory.domain.weapon.WeaponRangeExpression
+import java.util.UUID
 import kotlin.math.max
 
 @Composable
@@ -354,7 +376,7 @@ private class TrappingTypeFormData(
         TrappingTypeOption.MISCELLANEOUS -> true
     }
 
-    override fun toValue(): TrappingType? = when(type.value) {
+    override fun toValue(): TrappingType? = when (type.value) {
         TrappingTypeOption.AMMUNITION -> TrappingType.Ammunition(
             weaponGroups = ammunitionWeaponGroups.value,
             range = AmmunitionRangeExpression(ammunitionRange.value),
@@ -493,7 +515,6 @@ private class TrappingTypeFormData(
             SnapshotStateMap<K, V>().apply { putAll(map) }
     }
 }
-
 
 private enum class TrappingTypeOption(@StringRes override val nameRes: Int) : NamedEnum {
     AMMUNITION(R.string.trapping_type_ammunition),

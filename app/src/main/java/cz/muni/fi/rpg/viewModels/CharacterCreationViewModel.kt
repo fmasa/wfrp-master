@@ -5,8 +5,8 @@ import com.google.firebase.analytics.ktx.analytics
 import com.google.firebase.analytics.ktx.logEvent
 import com.google.firebase.ktx.Firebase
 import cz.frantisekmasa.wfrp_master.core.domain.character.Character
-import cz.frantisekmasa.wfrp_master.core.domain.identifiers.CharacterId
 import cz.frantisekmasa.wfrp_master.core.domain.character.CharacterRepository
+import cz.frantisekmasa.wfrp_master.core.domain.identifiers.CharacterId
 import cz.frantisekmasa.wfrp_master.core.domain.party.PartyId
 import cz.muni.fi.rpg.ui.characterCreation.CharacterBasicInfoForm
 import cz.muni.fi.rpg.ui.characterCreation.CharacterCharacteristicsForm
@@ -14,7 +14,7 @@ import cz.muni.fi.rpg.ui.characterCreation.PointsPoolForm
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import timber.log.Timber
-import java.util.*
+import java.util.UUID
 
 class CharacterCreationViewModel(
     private val partyId: PartyId,
@@ -33,6 +33,8 @@ class CharacterCreationViewModel(
             try {
                 Timber.d("Creating character")
 
+                val characteristics = characteristicsData.toValue()
+
                 characters.save(
                     characterId.partyId,
                     Character(
@@ -42,9 +44,9 @@ class CharacterCreationViewModel(
                         career = info.career.value,
                         socialClass = info.socialClass.value,
                         race = info.race.value,
-                        characteristicsBase = characteristicsData.toBaseCharacteristics(),
-                        characteristicsAdvances = characteristicsData.toCharacteristicAdvances(),
-                        points = points.toPoints(),
+                        characteristicsBase = characteristics.base,
+                        characteristicsAdvances = characteristics.advances,
+                        points = points.toValue(),
                         psychology = info.psychology.value,
                         motivation = info.motivation.value,
                         note = info.note.value,

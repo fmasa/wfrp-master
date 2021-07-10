@@ -16,7 +16,7 @@ sealed class Combatant : Parcelable {
 
     fun areSameEntity(other: Combatant): Boolean {
         return (this is Character && other is Character && characterId == other.characterId) ||
-                (this is Npc && other is Npc && npcId == other.npcId)
+            (this is Npc && other is Npc && npcId == other.npcId)
     }
 
     @Parcelize

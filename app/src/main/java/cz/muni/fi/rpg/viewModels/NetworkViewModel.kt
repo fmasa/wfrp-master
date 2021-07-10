@@ -12,11 +12,11 @@ import kotlinx.coroutines.rx2.asFlow
 import org.koin.androidx.viewmodel.ext.android.getViewModel
 
 class NetworkViewModel(context: Context) : ViewModel() {
-    val isConnectedToInternet: LiveData<Boolean>
-        = ReactiveNetwork.observeNetworkConnectivity(context)
-        .asFlow()
-        .map { it.available() }
-        .asLiveData()
+    val isConnectedToInternet: LiveData<Boolean> =
+        ReactiveNetwork.observeNetworkConnectivity(context)
+            .asFlow()
+            .map { it.available() }
+            .asLiveData()
 }
 
 @Composable

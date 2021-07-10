@@ -1,39 +1,59 @@
 package cz.muni.fi.rpg.ui.characterCreation
 
 import androidx.annotation.StringRes
-import androidx.compose.animation.*
+import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedContentScope.SlideDirection
 import androidx.compose.animation.core.snap
 import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.with
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.*
-import androidx.compose.runtime.*
+import androidx.compose.material.CircularProgressIndicator
+import androidx.compose.material.ContentAlpha
+import androidx.compose.material.Icon
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Scaffold
+import androidx.compose.material.Surface
+import androidx.compose.material.Text
+import androidx.compose.material.TextButton
+import androidx.compose.material.TopAppBar
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.intl.Locale
 import androidx.compose.ui.text.toUpperCase
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import cz.frantisekmasa.wfrp_master.core.ui.buttons.BackButton
 import cz.frantisekmasa.wfrp_master.core.ui.forms.FormData
+import cz.frantisekmasa.wfrp_master.core.ui.forms.HydratedFormData
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.VisualOnlyIconDescription
 import cz.frantisekmasa.wfrp_master.core.ui.scaffolding.SubheadBar
-import cz.muni.fi.rpg.R
 import cz.frantisekmasa.wfrp_master.core.viewModel.viewModel
 import cz.frantisekmasa.wfrp_master.navigation.Route
 import cz.frantisekmasa.wfrp_master.navigation.Routing
+import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.viewModels.CharacterCreationViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.koin.core.parameter.parametersOf
-import timber.log.Timber
 
 private enum class FormState {
     EDITED_BY_USER,
@@ -68,7 +88,6 @@ private fun MainContainer(routing: Routing<Route.CharacterCreation>) {
     val basicInfo = CharacterBasicInfoForm.Data.empty()
     val characteristics = CharacterCharacteristicsForm.Data.fromCharacter(null)
     val points = PointsPoolForm.Data.empty()
-
 
     val saveCharacter = {
         formState.value = FormState.CREATING_CHARACTER
@@ -159,7 +178,8 @@ private fun BottomBar(
         Box(
             Modifier
                 .fillMaxWidth()
-                .background(MaterialTheme.colors.surface)) {
+                .background(MaterialTheme.colors.surface)
+        ) {
             val buttonModifier = Modifier.padding(8.dp)
 
             if (currentStepIndex > 0) {
@@ -170,7 +190,8 @@ private fun BottomBar(
                     },
                 ) {
                     Icon(
-                        painterResource(R.drawable.ic_caret_left), VisualOnlyIconDescription)
+                        painterResource(R.drawable.ic_caret_left), VisualOnlyIconDescription
+                    )
                     Text(
                         stringResource(steps[currentStepIndex - 1].labelRes)
                             .toUpperCase(Locale.current),
@@ -188,14 +209,17 @@ private fun BottomBar(
                         CircularProgressIndicator(Modifier.size(20.dp), strokeWidth = 2.dp)
                     }
 
-                    NextButton(R.string.button_finish, buttonModifier, onClick = {
-                        if (!currentStep.data.isValid()) {
-                            onChange(currentStepIndex, true)
-                            return@NextButton
-                        }
+                    NextButton(
+                        R.string.button_finish, buttonModifier,
+                        onClick = {
+                            if (!currentStep.data.isValid()) {
+                                onChange(currentStepIndex, true)
+                                return@NextButton
+                            }
 
-                        onFinish()
-                    })
+                            onFinish()
+                        }
+                    )
                 }
             } else {
                 NextButton(

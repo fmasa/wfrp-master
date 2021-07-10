@@ -14,7 +14,6 @@ import androidx.compose.ui.text.intl.Locale
 import androidx.compose.ui.text.toUpperCase
 import androidx.compose.ui.unit.dp
 
-
 @Composable
 fun CardButton(@StringRes textRes: Int, onClick: () -> Unit) {
     Box(

@@ -38,7 +38,6 @@ fun TabPager(
             )
         }
     }
-
 }
 
 interface TabPagerScope {

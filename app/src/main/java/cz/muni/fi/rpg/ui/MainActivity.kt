@@ -4,7 +4,7 @@ import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.material.ExperimentalMaterialApi
-import cz.muni.fi.rpg.ui.shell.*
+import cz.muni.fi.rpg.ui.shell.ProvideActivity
 
 class MainActivity : AppCompatActivity() {
     @ExperimentalMaterialApi

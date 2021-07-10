@@ -1,34 +1,57 @@
 package cz.muni.fi.rpg.ui.gameMaster
 
 import androidx.annotation.StringRes
-import androidx.compose.foundation.*
-import androidx.compose.foundation.layout.*
-import androidx.compose.material.*
-import androidx.compose.runtime.*
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.RowScope
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.CircularProgressIndicator
+import androidx.compose.material.FloatingActionButton
+import androidx.compose.material.Icon
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.ProvideTextStyle
+import androidx.compose.material.Scaffold
+import androidx.compose.material.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.LiveData
 import cz.frantisekmasa.wfrp_master.compendium.ui.CompendiumViewModel
-import cz.muni.fi.rpg.R
 import cz.frantisekmasa.wfrp_master.core.domain.character.Character
 import cz.frantisekmasa.wfrp_master.core.domain.identifiers.CharacterId
-import cz.frantisekmasa.wfrp_master.core.viewModel.viewModel
 import cz.frantisekmasa.wfrp_master.core.domain.party.Invitation
 import cz.frantisekmasa.wfrp_master.core.domain.party.PartyId
 import cz.frantisekmasa.wfrp_master.core.ui.buttons.PrimaryButton
-import cz.frantisekmasa.wfrp_master.core.ui.primitives.*
-import cz.muni.fi.rpg.ui.common.composables.*
-import cz.muni.fi.rpg.ui.gameMaster.adapter.Player
+import cz.frantisekmasa.wfrp_master.core.ui.primitives.CardContainer
+import cz.frantisekmasa.wfrp_master.core.ui.primitives.CardItem
+import cz.frantisekmasa.wfrp_master.core.ui.primitives.ContextMenu
+import cz.frantisekmasa.wfrp_master.core.ui.primitives.EmptyUI
+import cz.frantisekmasa.wfrp_master.core.ui.primitives.Spacing
+import cz.frantisekmasa.wfrp_master.core.viewModel.viewModel
 import cz.frantisekmasa.wfrp_master.navigation.Route
 import cz.frantisekmasa.wfrp_master.navigation.Routing
+import cz.muni.fi.rpg.R
+import cz.muni.fi.rpg.ui.common.composables.AmbitionsCard
 import cz.muni.fi.rpg.ui.common.composables.CardTitle
+import cz.muni.fi.rpg.ui.gameMaster.adapter.Player
 import cz.muni.fi.rpg.ui.gameMaster.rolls.SkillTestDialog
 import cz.muni.fi.rpg.viewModels.GameMasterViewModel
 import kotlinx.coroutines.Dispatchers
@@ -97,14 +120,12 @@ internal fun PartySummaryScreen(
                 onInvitationDialogRequest = { invitationDialogVisible = true },
             )
 
-
             AmbitionsCard(
                 modifier = Modifier.padding(horizontal = 8.dp),
                 titleRes = R.string.title_party_ambitions,
                 ambitions = party.getAmbitions(),
                 onSave = { viewModel.updatePartyAmbitions(it) },
             )
-
 
             CardContainer(
                 Modifier
@@ -115,7 +136,8 @@ internal fun PartySummaryScreen(
                 Column(
                     Modifier
                         .fillMaxWidth()
-                        .padding(horizontal = 8.dp)) {
+                        .padding(horizontal = 8.dp)
+                ) {
                     CardTitle(R.string.title_compendium)
 
                     val compendium: CompendiumViewModel by viewModel { parametersOf(partyId) }
@@ -156,7 +178,8 @@ private fun PlayersCard(
     CardContainer(
         Modifier
             .fillMaxWidth()
-            .padding(8.dp)) {
+            .padding(8.dp)
+    ) {
         Column(Modifier.fillMaxWidth()) {
 
             CardTitle(R.string.title_characters)
@@ -238,9 +261,11 @@ private fun PlayerItem(
                 iconRes = icon,
                 onClick = { onCharacterOpenRequest(character) },
                 contextMenuItems = if (character.userId == null)
-                    listOf(ContextMenu.Item(stringResource(R.string.remove)) {
-                        onRemoveCharacter(character)
-                    })
+                    listOf(
+                        ContextMenu.Item(stringResource(R.string.remove)) {
+                            onRemoveCharacter(character)
+                        }
+                    )
                 else emptyList()
             )
         }

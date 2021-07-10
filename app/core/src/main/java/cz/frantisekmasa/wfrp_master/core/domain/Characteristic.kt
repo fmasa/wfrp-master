@@ -59,7 +59,7 @@ enum class Characteristic {
     }
 
     @StringRes
-    fun getNameId(): Int = when(this) {
+    fun getNameId(): Int = when (this) {
         AGILITY -> R.string.label_agility
         BALLISTIC_SKILL -> R.string.label_ballistic_skill
         DEXTERITY -> R.string.label_dexterity

@@ -7,7 +7,12 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -69,7 +74,7 @@ fun CreatePartyDialog(
 
                                         withContext(Dispatchers.Main) { onSuccess(partyId) }
                                     } catch (e: CouldNotConnectToBackend) {
-                                        Timber.i(e,"User could not assemble party, because (s)he is offline")
+                                        Timber.i(e, "User could not assemble party, because (s)he is offline")
                                         longToast(context, R.string.error_party_creation_no_connection)
                                     } catch (e: Throwable) {
                                         longToast(context, R.string.error_unkown)

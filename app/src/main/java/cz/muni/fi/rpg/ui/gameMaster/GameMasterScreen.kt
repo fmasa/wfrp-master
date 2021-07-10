@@ -1,9 +1,10 @@
 package cz.muni.fi.rpg.ui.gameMaster
 
-import androidx.compose.foundation.*
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.width
 import androidx.compose.material.CircularProgressIndicator
-import androidx.compose.material.Icon
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
@@ -11,24 +12,23 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import cz.frantisekmasa.wfrp_master.combat.ui.ActiveCombatBanner
 import cz.frantisekmasa.wfrp_master.core.ads.BannerAd
-import cz.muni.fi.rpg.R
 import cz.frantisekmasa.wfrp_master.core.domain.identifiers.CharacterId
 import cz.frantisekmasa.wfrp_master.core.domain.identifiers.EncounterId
 import cz.frantisekmasa.wfrp_master.core.ui.buttons.HamburgerButton
-import cz.frantisekmasa.wfrp_master.core.ui.scaffolding.TopBarAction
+import cz.frantisekmasa.wfrp_master.core.ui.scaffolding.IconAction
+import cz.frantisekmasa.wfrp_master.core.ui.scaffolding.tabs.TabPager
+import cz.frantisekmasa.wfrp_master.core.ui.scaffolding.tabs.tab
 import cz.frantisekmasa.wfrp_master.core.viewModel.viewModel
-import cz.frantisekmasa.wfrp_master.core.domain.party.Party
-import cz.frantisekmasa.wfrp_master.core.ui.scaffolding.tabs.*
-import cz.muni.fi.rpg.ui.common.composables.*
-import cz.muni.fi.rpg.ui.gameMaster.encounters.EncountersScreen
 import cz.frantisekmasa.wfrp_master.navigation.Route
 import cz.frantisekmasa.wfrp_master.navigation.Routing
+import cz.muni.fi.rpg.R
+import cz.muni.fi.rpg.ui.common.composables.ViewModel
+import cz.muni.fi.rpg.ui.gameMaster.encounters.EncountersScreen
 import cz.muni.fi.rpg.viewModels.EncountersViewModel
-import cz.muni.fi.rpg.viewModels.GameMasterViewModel
 import org.koin.core.parameter.parametersOf
 
 @Composable
@@ -42,20 +42,17 @@ fun GameMasterScreen(routing: Routing<Route.GameMaster>) {
                 title = { party?.let { Text(it.getName()) } },
                 navigationIcon = { HamburgerButton() },
                 actions = {
-                    TopBarAction(
+                    IconAction(
+                        painterResource(R.drawable.ic_settings),
+                        stringResource(R.string.title_party_settings),
                         onClick = {
                             if (party == null) {
-                                return@TopBarAction
+                                return@IconAction
                             }
 
                             routing.navigateTo(Route.PartySettings(party.id))
                         },
-                    ) {
-                        Icon(
-                            painterResource(R.drawable.ic_settings),
-                            stringResource(R.string.title_party_settings),
-                        )
-                    }
+                    )
                 }
             )
         }

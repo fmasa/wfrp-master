@@ -65,10 +65,12 @@ class JacksonAggregateMapperTest : TestCase("JacksonAggregateMapperTest") {
 
         val snapshot = mock(DocumentSnapshot::class.java)
         `when`(snapshot.data)
-            .thenReturn(mapOf(
-                "field" to "foo",
-                "fieldWithDefaultValue" to "default_value"
-            ))
+            .thenReturn(
+                mapOf(
+                    "field" to "foo",
+                    "fieldWithDefaultValue" to "default_value"
+                )
+            )
 
         assertEquals(
             DataAggregateWithDefaultValue("foo"),

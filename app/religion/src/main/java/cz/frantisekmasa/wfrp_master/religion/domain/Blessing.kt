@@ -2,9 +2,9 @@ package cz.frantisekmasa.wfrp_master.religion.domain
 
 import cz.frantisekmasa.wfrp_master.core.common.requireMaxLength
 import cz.frantisekmasa.wfrp_master.core.domain.character.CharacterItem
-import cz.frantisekmasa.wfrp_master.compendium.domain.Blessing as CompendiumBlessing
 import kotlinx.parcelize.Parcelize
-import java.util.*
+import java.util.UUID
+import cz.frantisekmasa.wfrp_master.compendium.domain.Blessing as CompendiumBlessing
 
 @Parcelize
 internal data class Blessing(

@@ -3,12 +3,16 @@ package cz.frantisekmasa.wfrp_master.religion.ui.miracles
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.res.stringResource
-import cz.frantisekmasa.wfrp_master.compendium.domain.Miracle.Companion as CompendiumMiracle
 import cz.frantisekmasa.wfrp_master.core.ui.components.FormDialog
-import cz.frantisekmasa.wfrp_master.core.ui.forms.*
+import cz.frantisekmasa.wfrp_master.core.ui.forms.HydratedFormData
+import cz.frantisekmasa.wfrp_master.core.ui.forms.InputValue
+import cz.frantisekmasa.wfrp_master.core.ui.forms.Rules
+import cz.frantisekmasa.wfrp_master.core.ui.forms.TextInput
+import cz.frantisekmasa.wfrp_master.core.ui.forms.inputValue
 import cz.frantisekmasa.wfrp_master.religion.R
 import cz.frantisekmasa.wfrp_master.religion.domain.Miracle
-import java.util.*
+import java.util.UUID
+import cz.frantisekmasa.wfrp_master.compendium.domain.Miracle.Companion as CompendiumMiracle
 
 @Composable
 internal fun NonCompendiumMiracleForm(
@@ -68,7 +72,6 @@ internal fun NonCompendiumMiracleForm(
         )
     }
 }
-
 
 private data class NonCompendiumMiracleFormData(
     val id: UUID,

@@ -26,7 +26,15 @@ import cz.frantisekmasa.wfrp_master.core.domain.party.combat.Combat
 import cz.frantisekmasa.wfrp_master.core.domain.party.combat.Combatant
 import cz.frantisekmasa.wfrp_master.core.domain.party.settings.InitiativeStrategy
 import cz.frantisekmasa.wfrp_master.core.utils.right
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.emitAll
+import kotlinx.coroutines.flow.filterNotNull
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.mapLatest
+import kotlinx.coroutines.flow.mapNotNull
+import kotlinx.coroutines.flow.transform
 import timber.log.Timber
 import kotlin.math.max
 import kotlin.random.Random
@@ -37,7 +45,7 @@ class CombatViewModel(
     private val parties: PartyRepository,
     private val npcs: NpcRepository,
     private val characters: CharacterRepository,
-): ViewModel() {
+) : ViewModel() {
 
     private val partyFlow = parties.getLive(partyId).right()
 
@@ -79,7 +87,7 @@ class CombatViewModel(
         val party = parties.get(partyId)
         val combatants =
             characters.map { it.getCharacteristics() to Combatant.Character(it.id, 1) } +
-                    npcs.map { it.stats to Combatant.Npc(NpcId(encounterId, it.id), 1) }
+                npcs.map { it.stats to Combatant.Npc(NpcId(encounterId, it.id), 1) }
 
         party.startCombat(encounterId, rollInitiativeForCombatants(party, combatants))
 
@@ -153,7 +161,7 @@ class CombatViewModel(
             .map { (initiativeOrder, combatant) -> combatant.withInitiative(initiativeOrder.toInt()) }
     }
 
-    private fun initiativeStrategy(party: Party) = when(party.getSettings().initiativeStrategy) {
+    private fun initiativeStrategy(party: Party) = when (party.getSettings().initiativeStrategy) {
         InitiativeStrategy.INITIATIVE_CHARACTERISTIC -> InitiativeCharacteristicStrategy(random)
         InitiativeStrategy.INITIATIVE_TEST -> InitiativeTestStrategy(random)
         InitiativeStrategy.INITIATIVE_PLUS_1D10 -> InitiativePlus1d10Strategy(random)
@@ -195,7 +203,7 @@ class CombatViewModel(
             .combine(third) { (a, b), c -> transform(a, b, c) }
 
     suspend fun updateWounds(combatant: CombatantItem, wounds: Wounds) {
-        when(combatant) {
+        when (combatant) {
             is CombatantItem.Character -> {
                 val character = characters.get(combatant.characterId)
                 val points = character.getPoints()

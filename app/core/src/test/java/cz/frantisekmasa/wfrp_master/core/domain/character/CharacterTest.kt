@@ -2,7 +2,9 @@ package cz.frantisekmasa.wfrp_master.core.domain.character
 
 import cz.frantisekmasa.wfrp_master.core.domain.Money
 import cz.frantisekmasa.wfrp_master.core.domain.Stats
-import org.junit.Assert.*
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertSame
+import org.junit.Assert.fail
 import org.junit.Test
 import java.lang.IllegalArgumentException
 
@@ -76,7 +78,7 @@ class CharacterTest {
 
     @Test
     fun testCannotUpdatePointsWithNonZeroWoundsBonusWhenHardyTalentIsNotEnabled() {
-        val character =  character()
+        val character = character()
 
         try {
             character.updatePoints(character.getPoints().copy(hardyWoundsBonus = 5))

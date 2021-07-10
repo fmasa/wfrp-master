@@ -2,20 +2,29 @@ package cz.frantisekmasa.wfrp_master.core.viewModel
 
 import android.app.Activity
 import androidx.annotation.UiThread
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
-import arrow.core.extensions.list.foldable.exists
 import com.google.firebase.analytics.ktx.analytics
 import com.google.firebase.analytics.ktx.logEvent
 import com.google.firebase.ktx.Firebase
-import com.revenuecat.purchases.*
+import com.revenuecat.purchases.Offering
+import com.revenuecat.purchases.Package
+import com.revenuecat.purchases.Purchases
+import com.revenuecat.purchases.PurchasesError
+import com.revenuecat.purchases.getOfferingsWith
+import com.revenuecat.purchases.getPurchaserInfoWith
+import com.revenuecat.purchases.identifyWith
+import com.revenuecat.purchases.purchasePackageWith
 import cz.frantisekmasa.wfrp_master.core.auth.UserId
 import cz.frantisekmasa.wfrp_master.core.ui.viewinterop.LocalActivity
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.koin.androidx.viewmodel.ext.android.getViewModel
 import timber.log.Timber
-import java.util.*
+import java.util.UUID
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
@@ -70,7 +79,7 @@ class PremiumViewModel(private val purchases: Purchases) : ViewModel() {
                 { continuation.resume(null) },
                 { info ->
                     continuation.resume(
-                        info.nonSubscriptionTransactions.exists { it.productId == premiumProductId }
+                        info.nonSubscriptionTransactions.any { it.productId == premiumProductId }
                     )
                 }
             )

@@ -2,7 +2,6 @@ package cz.frantisekmasa.wfrp_master.navigation
 
 import androidx.navigation.NavHostController
 import androidx.navigation.NavOptionsBuilder
-import androidx.navigation.compose.*
 import timber.log.Timber
 
 data class Routing<T : Route>(

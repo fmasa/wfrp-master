@@ -3,14 +3,14 @@ package cz.muni.fi.rpg.viewModels
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
-import cz.frantisekmasa.wfrp_master.core.domain.compendium.Compendium
 import cz.frantisekmasa.wfrp_master.core.domain.Stats
-import cz.frantisekmasa.wfrp_master.core.domain.identifiers.CharacterId
-import cz.frantisekmasa.wfrp_master.core.domain.rolls.Dice
-import cz.frantisekmasa.wfrp_master.core.domain.rolls.TestResult
 import cz.frantisekmasa.wfrp_master.core.domain.character.Character
 import cz.frantisekmasa.wfrp_master.core.domain.character.CharacterRepository
+import cz.frantisekmasa.wfrp_master.core.domain.compendium.Compendium
+import cz.frantisekmasa.wfrp_master.core.domain.identifiers.CharacterId
 import cz.frantisekmasa.wfrp_master.core.domain.party.PartyId
+import cz.frantisekmasa.wfrp_master.core.domain.rolls.Dice
+import cz.frantisekmasa.wfrp_master.core.domain.rolls.TestResult
 import cz.muni.fi.rpg.model.domain.skills.Skill
 import cz.muni.fi.rpg.model.domain.skills.SkillRepository
 import cz.frantisekmasa.wfrp_master.compendium.domain.Skill as CompendiumSkill
@@ -20,7 +20,7 @@ class SkillTestViewModel(
     skillCompendium: Compendium<CompendiumSkill>,
     characterRepository: CharacterRepository,
     private val characterSkills: SkillRepository,
-): ViewModel() {
+) : ViewModel() {
     val characters: LiveData<List<Character>> = characterRepository.inParty(partyId).asLiveData()
     val skills: LiveData<List<CompendiumSkill>> = skillCompendium.liveForParty(partyId).asLiveData()
 

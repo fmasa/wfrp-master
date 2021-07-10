@@ -70,10 +70,10 @@ data class ImperialDate(
 
             return ImperialDate(
                 (year - 1) * DAYS_IN_YEAR +
-                        Month.values()
-                            .takeWhile { it.standaloneDayAtTheBeginning != day }
-                            .map { it.numberOfDays + if (it.standaloneDayAtTheBeginning != null) 1 else 0 }
-                            .sum()
+                    Month.values()
+                        .takeWhile { it.standaloneDayAtTheBeginning != day }
+                        .map { it.numberOfDays + if (it.standaloneDayAtTheBeginning != null) 1 else 0 }
+                        .sum()
             )
         }
 
@@ -87,12 +87,12 @@ data class ImperialDate(
             require(year > 0) { "Year must be >= 1." }
 
             val imperialDay = (year - 1) * DAYS_IN_YEAR +
-                    // Days in previous months
-                    Month.values().takeWhile { it != monthInYear }
-                        .map { it.numberOfDays + if (it.standaloneDayAtTheBeginning != null) 1 else 0 }
-                        .sum() +
-                    // Days in current month
-                    if (monthInYear.standaloneDayAtTheBeginning != null) day else day - 1
+                // Days in previous months
+                Month.values().takeWhile { it != monthInYear }
+                    .map { it.numberOfDays + if (it.standaloneDayAtTheBeginning != null) 1 else 0 }
+                    .sum() +
+                // Days in current month
+                if (monthInYear.standaloneDayAtTheBeginning != null) day else day - 1
 
             return ImperialDate(imperialDay)
         }

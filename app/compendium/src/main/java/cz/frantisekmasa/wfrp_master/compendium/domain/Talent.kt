@@ -2,7 +2,7 @@ package cz.frantisekmasa.wfrp_master.compendium.domain
 
 import cz.frantisekmasa.wfrp_master.core.domain.compendium.CompendiumItem
 import kotlinx.parcelize.Parcelize
-import java.util.*
+import java.util.UUID
 
 @Parcelize
 data class Talent(
@@ -10,7 +10,7 @@ data class Talent(
     override val name: String,
     val maxTimesTaken: String,
     val description: String,
-): CompendiumItem {
+) : CompendiumItem {
     companion object {
         const val NAME_MAX_LENGTH = 50
         const val MAX_TIMES_TAKEN_MAX_LENGTH = 100

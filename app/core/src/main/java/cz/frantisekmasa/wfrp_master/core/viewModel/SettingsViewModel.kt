@@ -12,12 +12,13 @@ import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.analytics.ktx.analytics
 import com.google.firebase.ktx.Firebase
+import cz.frantisekmasa.wfrp_master.core.ads.AdManager
+import cz.frantisekmasa.wfrp_master.core.ads.LocationProvider
 import cz.frantisekmasa.wfrp_master.core.domain.party.PartyRepository
 import cz.frantisekmasa.wfrp_master.core.ui.viewinterop.LocalActivity
-import cz.frantisekmasa.wfrp_master.core.ads.LocationProvider
-import cz.frantisekmasa.wfrp_master.core.ads.AdManager
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.koin.androidx.viewmodel.ext.android.getViewModel
@@ -63,7 +64,6 @@ class SettingsViewModel(
         )
         dataStore.edit { it[AppSettings.PERSONALIZED_ADS] = enabled }
     }
-
 
     fun userDismissedGoogleSignIn() {
         viewModelScope.launch(Dispatchers.IO) {

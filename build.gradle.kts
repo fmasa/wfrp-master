@@ -13,7 +13,7 @@ buildscript {
         // Firebase-related dependencies
         classpath("com.google.gms:google-services:4.3.8")
         classpath("com.google.firebase:firebase-crashlytics-gradle:2.7.1")
-        //classpath("com.google.firebase:perf-plugin:1.4.0")
+        // classpath("com.google.firebase:perf-plugin:1.4.0")
     }
 }
 
@@ -26,6 +26,14 @@ allprojects {
         maven(url = "https://jitpack.io")
         maven(url = "https://dl.bintray.com/hotkeytlt/maven")
     }
+}
+
+subprojects {
+    apply(plugin = "org.jlleitschuh.gradle.ktlint")
+}
+
+plugins {
+    id("org.jlleitschuh.gradle.ktlint") version "10.1.0"
 }
 
 tasks.register("clean", Delete::class) {

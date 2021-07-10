@@ -64,7 +64,7 @@ class SpellListGrammarTest : TestCase() {
                         large obstacle, they take Damage equal to the distance travelled 
                         in yards. For every +2 SL, you may push creatures back another 
                         Willpower Bonus in yards
-                """.trimIndent(),
+                    """.trimIndent(),
                     lore = "Chaos"
                 ),
                 Spell(
@@ -79,7 +79,7 @@ class SpellListGrammarTest : TestCase() {
                         yards. This movement allows you to traverse gaps, avoid perils and 
                         pitfalls, and ignore obstacles. For every +2 SL you may increase 
                         the distance travelled by your Willpower Bonus in yards.
-                """.trimIndent(),
+                    """.trimIndent(),
                     lore = "Chaos"
                 ),
                 Spell(

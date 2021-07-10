@@ -10,7 +10,7 @@ import cz.frantisekmasa.wfrp_master.core.domain.party.settings.Settings
 import cz.frantisekmasa.wfrp_master.core.domain.time.DateTime
 import cz.frantisekmasa.wfrp_master.core.domain.time.ImperialDate
 import kotlinx.parcelize.Parcelize
-import java.util.*
+import java.util.UUID
 
 @Parcelize
 data class Party(
@@ -35,8 +35,8 @@ data class Party(
 
     init {
         require(gameMasterId == null || gameMasterId in users)
-        require(name.isNotBlank()) {"Party name must not be empty"}
-        require(name.length <= NAME_MAX_LENGTH) {"Party name is too long"}
+        require(name.isNotBlank()) { "Party name must not be empty" }
+        require(name.length <= NAME_MAX_LENGTH) { "Party name is too long" }
     }
 
     fun getPlayerCounts(): Int = users.size - 1

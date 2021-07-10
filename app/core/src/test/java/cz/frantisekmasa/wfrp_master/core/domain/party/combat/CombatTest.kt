@@ -3,9 +3,10 @@ package cz.frantisekmasa.wfrp_master.core.domain.party.combat
 import cz.frantisekmasa.wfrp_master.core.domain.identifiers.EncounterId
 import cz.frantisekmasa.wfrp_master.core.domain.identifiers.NpcId
 import cz.frantisekmasa.wfrp_master.core.domain.party.PartyId
-import org.junit.Assert.*
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNull
 import org.junit.Test
-import java.util.*
+import java.util.UUID
 
 class CombatTest {
     private val encounterId = EncounterId(PartyId.generate(), UUID.randomUUID())

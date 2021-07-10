@@ -7,7 +7,11 @@ import cz.frantisekmasa.wfrp_master.core.domain.character.CharacterNotFound
 import cz.frantisekmasa.wfrp_master.core.domain.character.CharacterRepository
 import cz.frantisekmasa.wfrp_master.core.domain.identifiers.CharacterId
 import cz.frantisekmasa.wfrp_master.core.domain.party.PartyId
-import cz.frantisekmasa.wfrp_master.core.firestore.*
+import cz.frantisekmasa.wfrp_master.core.firestore.AggregateMapper
+import cz.frantisekmasa.wfrp_master.core.firestore.COLLECTION_CHARACTERS
+import cz.frantisekmasa.wfrp_master.core.firestore.COLLECTION_PARTIES
+import cz.frantisekmasa.wfrp_master.core.firestore.documentFlow
+import cz.frantisekmasa.wfrp_master.core.firestore.queryFlow
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.tasks.await
@@ -54,7 +58,7 @@ import timber.log.Timber
     }
 
     override fun inParty(partyId: PartyId): Flow<List<Character>> =
-    // TODO: Filter archived characters via whereEqualTo() once all historic characters have `archived` field set
+        // TODO: Filter archived characters via whereEqualTo() once all historic characters have `archived` field set
         // These should be migrated in 1.14
         queryFlow(
             characters(partyId),

@@ -1,31 +1,38 @@
 package cz.muni.fi.rpg.ui.character
 
-import androidx.compose.foundation.layout.*
-import androidx.compose.material.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.width
+import androidx.compose.material.CircularProgressIndicator
+import androidx.compose.material.Scaffold
+import androidx.compose.material.Text
+import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.painterResource
-import cz.frantisekmasa.wfrp_master.core.ui.buttons.HamburgerButton
-import cz.frantisekmasa.wfrp_master.core.ui.scaffolding.Subtitle
-import cz.frantisekmasa.wfrp_master.core.ui.scaffolding.TopBarAction
-import cz.frantisekmasa.wfrp_master.core.viewModel.viewModel
-import cz.muni.fi.rpg.R
-import cz.frantisekmasa.wfrp_master.core.domain.character.Character
-import cz.muni.fi.rpg.ui.character.skills.CharacterSkillsScreen
+import androidx.compose.ui.res.stringResource
 import cz.frantisekmasa.wfrp_master.combat.ui.ActiveCombatBanner
 import cz.frantisekmasa.wfrp_master.core.ads.BannerAd
+import cz.frantisekmasa.wfrp_master.core.domain.character.Character
 import cz.frantisekmasa.wfrp_master.core.domain.party.Party
-import cz.frantisekmasa.wfrp_master.core.ui.scaffolding.tabs.*
+import cz.frantisekmasa.wfrp_master.core.ui.buttons.HamburgerButton
+import cz.frantisekmasa.wfrp_master.core.ui.scaffolding.IconAction
+import cz.frantisekmasa.wfrp_master.core.ui.scaffolding.Subtitle
+import cz.frantisekmasa.wfrp_master.core.ui.scaffolding.tabs.TabPager
+import cz.frantisekmasa.wfrp_master.core.ui.scaffolding.tabs.tab
 import cz.frantisekmasa.wfrp_master.core.viewModel.PartyViewModel
+import cz.frantisekmasa.wfrp_master.core.viewModel.viewModel
 import cz.frantisekmasa.wfrp_master.inventory.ui.CharacterTrappingsScreen
 import cz.frantisekmasa.wfrp_master.navigation.Route
 import cz.frantisekmasa.wfrp_master.navigation.Routing
 import cz.frantisekmasa.wfrp_master.religion.ui.CharacterReligionScreen
-import cz.muni.fi.rpg.viewModels.*
+import cz.muni.fi.rpg.R
+import cz.muni.fi.rpg.ui.character.skills.CharacterSkillsScreen
+import cz.muni.fi.rpg.viewModels.CharacterViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.koin.core.parameter.parametersOf
@@ -64,14 +71,11 @@ fun CharacterDetailScreen(routing: Routing<Route.CharacterDetail>) {
                     }
                 },
                 actions = {
-                    TopBarAction(
-                        onClick = { routing.navigateTo(Route.CharacterEdit(characterId)) }
-                    ) {
-                        Icon(
-                            painterResource(R.drawable.ic_edit),
-                            stringResource(R.string.icon_edit_character),
-                        )
-                    }
+                    IconAction(
+                        painterResource(R.drawable.ic_edit),
+                        stringResource(R.string.icon_edit_character),
+                        onClick = { routing.navigateTo(Route.CharacterEdit(characterId)) },
+                    )
                 }
             )
         }
@@ -164,4 +168,3 @@ private fun MainContainer(
         BannerAd(stringResource(R.string.character_ad_unit_id))
     }
 }
-

@@ -4,7 +4,7 @@ import androidx.annotation.DrawableRes
 import androidx.compose.material.Divider
 import androidx.compose.material.ListItem
 import androidx.compose.material.Text
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
 
 @Composable
 fun CardItem(

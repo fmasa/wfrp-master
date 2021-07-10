@@ -9,10 +9,13 @@ import cz.frantisekmasa.wfrp_master.core.connectivity.CouldNotConnectToBackend
 import cz.frantisekmasa.wfrp_master.core.domain.character.CharacterFeatureRepository
 import cz.frantisekmasa.wfrp_master.core.domain.character.Feature
 import cz.frantisekmasa.wfrp_master.core.domain.identifiers.CharacterId
-import cz.frantisekmasa.wfrp_master.core.firestore.*
+import cz.frantisekmasa.wfrp_master.core.firestore.AggregateMapper
+import cz.frantisekmasa.wfrp_master.core.firestore.COLLECTION_CHARACTERS
+import cz.frantisekmasa.wfrp_master.core.firestore.COLLECTION_FEATURES
+import cz.frantisekmasa.wfrp_master.core.firestore.COLLECTION_PARTIES
+import cz.frantisekmasa.wfrp_master.core.firestore.documentFlow
 import kotlinx.coroutines.tasks.await
 import timber.log.Timber
-import java.util.*
 
 /* internal */ class FirestoreCharacterFeatureRepository<T : Any>(
     feature: Feature,
@@ -21,7 +24,7 @@ import java.util.*
     private val mapper: AggregateMapper<T>
 ) : CharacterFeatureRepository<T> {
 
-    private val documentId = feature.name.toLowerCase(Locale.ROOT)
+    private val documentId = feature.name.lowercase()
     private val parties = firestore.collection(COLLECTION_PARTIES)
 
     override suspend fun save(characterId: CharacterId, feature: T) {

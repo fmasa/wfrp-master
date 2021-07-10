@@ -1,15 +1,27 @@
 package cz.muni.fi.rpg.ui.characterCreation
 
-import androidx.compose.foundation.layout.*
-import androidx.compose.runtime.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.Stable
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import cz.muni.fi.rpg.R
 import cz.frantisekmasa.wfrp_master.core.domain.character.Character
 import cz.frantisekmasa.wfrp_master.core.domain.character.Race
-import cz.frantisekmasa.wfrp_master.core.ui.forms.*
+import cz.frantisekmasa.wfrp_master.core.ui.forms.ChipList
+import cz.frantisekmasa.wfrp_master.core.ui.forms.FormData
+import cz.frantisekmasa.wfrp_master.core.ui.forms.InputValue
+import cz.frantisekmasa.wfrp_master.core.ui.forms.Rules
+import cz.frantisekmasa.wfrp_master.core.ui.forms.TextInput
+import cz.frantisekmasa.wfrp_master.core.ui.forms.inputValue
+import cz.muni.fi.rpg.R
 
 object CharacterBasicInfoForm {
     @Stable
@@ -43,8 +55,8 @@ object CharacterBasicInfoForm {
 
         override fun isValid(): Boolean =
             name.value.isNotBlank() &&
-                    socialClass.value.isNotBlank() &&
-                    career.value.isNotBlank()
+                socialClass.value.isNotBlank() &&
+                career.value.isNotBlank()
     }
 }
 

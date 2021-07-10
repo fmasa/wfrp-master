@@ -5,7 +5,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import cz.frantisekmasa.wfrp_master.core.domain.compendium.Compendium
-import cz.frantisekmasa.wfrp_master.compendium.domain.Spell as CompendiumSpell
 import cz.frantisekmasa.wfrp_master.core.domain.identifiers.CharacterId
 import cz.muni.fi.rpg.model.domain.spells.Spell
 import cz.muni.fi.rpg.model.domain.spells.SpellRepository
@@ -13,6 +12,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.combineTransform
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
+import cz.frantisekmasa.wfrp_master.compendium.domain.Spell as CompendiumSpell
 
 class SpellsViewModel(
     private val characterId: CharacterId,

@@ -7,9 +7,14 @@ import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestoreException
 import com.google.firebase.firestore.Query
-import kotlinx.coroutines.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.channels.awaitClose
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.callbackFlow
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import timber.log.Timber
 
 fun <T : Any> queryFlow(
@@ -25,7 +30,7 @@ fun <T : Any> queryFlow(
                         .awaitAll()
                 }
 
-                withContext(Dispatchers.Main) { offer(items) }
+                withContext(Dispatchers.Main) { this@callbackFlow.trySend(items).isSuccess }
             }
         }
     }
@@ -40,14 +45,14 @@ fun <T : Any> documentFlow(
     Timber.d("Attaching document listener for ${document.path}")
 
     val listener = document.addSnapshotListener { snapshot, exception ->
-        exception?.let { offer(snapshotProcessor(Left(it))) }
+        exception?.let { trySend(snapshotProcessor(Left(it))) }
         snapshot?.let {
             launch {
 
                 val data = withContext(Dispatchers.Default) {
                     snapshotProcessor(if (snapshot.exists()) Right(it) else Left(null))
                 }
-                withContext(Dispatchers.Main) { offer(data) }
+                withContext(Dispatchers.Main) { this@callbackFlow.trySend(data).isSuccess }
             }
         }
     }

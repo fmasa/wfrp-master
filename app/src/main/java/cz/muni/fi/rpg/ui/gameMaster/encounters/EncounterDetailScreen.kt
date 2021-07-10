@@ -10,15 +10,33 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.*
-import androidx.compose.runtime.*
+import androidx.compose.material.CircularProgressIndicator
+import androidx.compose.material.ContentAlpha
+import androidx.compose.material.DropdownMenuItem
+import androidx.compose.material.ExtendedFloatingActionButton
+import androidx.compose.material.FabPosition
+import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
+import androidx.compose.material.LocalContentAlpha
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Scaffold
+import androidx.compose.material.Text
+import androidx.compose.material.TopAppBar
+import androidx.compose.material.contentColorFor
+import androidx.compose.material.primarySurface
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import cz.frantisekmasa.wfrp_master.combat.domain.encounter.Encounter
 import cz.frantisekmasa.wfrp_master.combat.ui.StartCombatDialog
@@ -26,22 +44,25 @@ import cz.frantisekmasa.wfrp_master.core.domain.identifiers.NpcId
 import cz.frantisekmasa.wfrp_master.core.domain.party.PartyId
 import cz.frantisekmasa.wfrp_master.core.ui.buttons.BackButton
 import cz.frantisekmasa.wfrp_master.core.ui.buttons.PrimaryButton
-import cz.frantisekmasa.wfrp_master.core.ui.primitives.*
+import cz.frantisekmasa.wfrp_master.core.ui.primitives.CardContainer
+import cz.frantisekmasa.wfrp_master.core.ui.primitives.CardItem
+import cz.frantisekmasa.wfrp_master.core.ui.primitives.ContextMenu
+import cz.frantisekmasa.wfrp_master.core.ui.primitives.EmptyUI
+import cz.frantisekmasa.wfrp_master.core.ui.primitives.Spacing
+import cz.frantisekmasa.wfrp_master.core.ui.primitives.VisualOnlyIconDescription
 import cz.frantisekmasa.wfrp_master.core.ui.scaffolding.OptionsAction
 import cz.frantisekmasa.wfrp_master.core.ui.scaffolding.Subtitle
+import cz.frantisekmasa.wfrp_master.core.viewModel.PartyViewModel
 import cz.frantisekmasa.wfrp_master.core.viewModel.viewModel
-import cz.muni.fi.rpg.R
-import cz.muni.fi.rpg.ui.common.composables.*
 import cz.frantisekmasa.wfrp_master.navigation.Route
 import cz.frantisekmasa.wfrp_master.navigation.Routing
-import cz.muni.fi.rpg.viewModels.EncounterDetailViewModel
-import cz.frantisekmasa.wfrp_master.core.viewModel.PartyViewModel
+import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.ui.common.composables.CardTitle
+import cz.muni.fi.rpg.viewModels.EncounterDetailViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.koin.core.parameter.parametersOf
-import java.util.*
 
 @Composable
 fun EncounterDetailScreen(routing: Routing<Route.EncounterDetail>) {
@@ -140,25 +161,25 @@ private fun TopAppBarActions(
         )
     }
 
-
     OptionsAction {
-        DropdownMenuItem(onClick = {
-            AlertDialog.Builder(context)
-                .setMessage(R.string.question_remove_encounter)
-                .setPositiveButton(R.string.remove) { _, _ ->
-                    coroutineScope.launch(Dispatchers.IO) {
-                        viewModel.remove()
-                        withContext(Dispatchers.Main) { routing.pop() }
-                    }
-                }.setNegativeButton(R.string.button_cancel, null)
-                .create()
-                .show()
-        }) {
+        DropdownMenuItem(
+            onClick = {
+                AlertDialog.Builder(context)
+                    .setMessage(R.string.question_remove_encounter)
+                    .setPositiveButton(R.string.remove) { _, _ ->
+                        coroutineScope.launch(Dispatchers.IO) {
+                            viewModel.remove()
+                            withContext(Dispatchers.Main) { routing.pop() }
+                        }
+                    }.setNegativeButton(R.string.button_cancel, null)
+                    .create()
+                    .show()
+            }
+        ) {
             Text(stringResource(R.string.remove))
         }
     }
 }
-
 
 @Composable
 private fun MainContainer(
@@ -189,7 +210,8 @@ private fun DescriptionCard(viewModel: EncounterDetailViewModel) {
     CardContainer(
         Modifier
             .fillMaxWidth()
-            .padding(horizontal = 8.dp)) {
+            .padding(horizontal = 8.dp)
+    ) {
         CardTitle(R.string.title_description)
 
         val encounter = viewModel.encounter.observeAsState().value
@@ -215,7 +237,8 @@ private fun CombatantsCard(
     CardContainer(
         Modifier
             .fillMaxWidth()
-            .padding(8.dp)) {
+            .padding(8.dp)
+    ) {
         CardTitle(R.string.title_npcs)
 
         val npcs = viewModel.npcs.observeAsState().value

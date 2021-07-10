@@ -116,7 +116,7 @@ data class Character(
     fun updatePoints(newPoints: Points) {
         require(
             (!hardyTalent && newPoints.hardyWoundsBonus == 0) ||
-            (hardyTalent && newPoints.hardyWoundsBonus == getCharacteristics().toughnessBonus)
+                (hardyTalent && newPoints.hardyWoundsBonus == getCharacteristics().toughnessBonus)
         ) { "Hardy talent and wounds bonus are wrong" }
         points = newPoints
     }

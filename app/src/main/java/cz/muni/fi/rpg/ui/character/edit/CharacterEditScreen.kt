@@ -1,30 +1,44 @@
 package cz.muni.fi.rpg.ui.character.edit
 
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.*
-import androidx.compose.runtime.*
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Scaffold
+import androidx.compose.material.Text
+import androidx.compose.material.TopAppBar
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.Stable
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import cz.frantisekmasa.wfrp_master.core.ui.buttons.BackButton
-import cz.frantisekmasa.wfrp_master.core.ui.primitives.HorizontalLine
-import cz.frantisekmasa.wfrp_master.core.ui.scaffolding.Subtitle
-import cz.frantisekmasa.wfrp_master.core.ui.scaffolding.TopBarAction
-import cz.frantisekmasa.wfrp_master.core.ui.texts.SaveButtonText
-import cz.frantisekmasa.wfrp_master.core.viewModel.viewModel
-import cz.muni.fi.rpg.R
 import cz.frantisekmasa.wfrp_master.core.domain.character.Character
-import cz.frantisekmasa.wfrp_master.core.ui.forms.*
-import cz.muni.fi.rpg.ui.characterCreation.CharacterBasicInfoForm
-import cz.muni.fi.rpg.ui.characterCreation.CharacterCharacteristicsForm
+import cz.frantisekmasa.wfrp_master.core.ui.buttons.BackButton
+import cz.frantisekmasa.wfrp_master.core.ui.forms.CheckboxWithText
+import cz.frantisekmasa.wfrp_master.core.ui.forms.InputValue
+import cz.frantisekmasa.wfrp_master.core.ui.forms.Rules
+import cz.frantisekmasa.wfrp_master.core.ui.forms.TextInput
+import cz.frantisekmasa.wfrp_master.core.ui.forms.inputValue
+import cz.frantisekmasa.wfrp_master.core.ui.primitives.HorizontalLine
+import cz.frantisekmasa.wfrp_master.core.ui.scaffolding.SaveAction
+import cz.frantisekmasa.wfrp_master.core.ui.scaffolding.Subtitle
+import cz.frantisekmasa.wfrp_master.core.viewModel.viewModel
 import cz.frantisekmasa.wfrp_master.navigation.Route
 import cz.frantisekmasa.wfrp_master.navigation.Routing
+import cz.muni.fi.rpg.R
+import cz.muni.fi.rpg.ui.characterCreation.CharacterBasicInfoForm
+import cz.muni.fi.rpg.ui.characterCreation.CharacterCharacteristicsForm
 import cz.muni.fi.rpg.viewModels.CharacterViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -175,7 +189,7 @@ private fun CharacterEditTopBar(
             }
         },
         actions = {
-            TopBarAction(onClick = onSave, enabled = actionsEnabled) { SaveButtonText() }
+            SaveAction(enabled = actionsEnabled, onClick = onSave)
         }
     )
 }
@@ -184,6 +198,8 @@ private suspend fun updateCharacter(
     viewModel: CharacterViewModel,
     formData: CharacterEditScreen.FormData
 ) {
+    val characteristics = formData.characteristics.toValue()
+
     viewModel.update {
         it.update(
             name = formData.basicInfo.name.value,
@@ -193,8 +209,8 @@ private suspend fun updateCharacter(
             motivation = formData.basicInfo.motivation.value,
             socialClass = formData.basicInfo.socialClass.value,
             note = formData.basicInfo.note.value,
-            characteristicsBase = formData.characteristics.toBaseCharacteristics(),
-            characteristicsAdvances = formData.characteristics.toCharacteristicAdvances(),
+            characteristicsBase = characteristics.base,
+            characteristicsAdvances = characteristics.advances,
             maxWounds = formData.wounds.maxWounds.value.toInt(),
             hardyTalent = formData.wounds.hardyTalent.value,
         )

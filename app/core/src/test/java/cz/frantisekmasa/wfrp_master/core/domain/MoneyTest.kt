@@ -1,8 +1,8 @@
 package cz.frantisekmasa.wfrp_master.core.domain
 
-import org.junit.Assert.*
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertSame
 import org.junit.Test
-import java.lang.IllegalArgumentException
 
 class MoneyTest {
     @Test

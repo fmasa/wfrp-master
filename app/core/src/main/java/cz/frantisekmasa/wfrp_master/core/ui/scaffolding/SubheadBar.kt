@@ -30,7 +30,7 @@ fun SubheadBar(modifier: Modifier = Modifier, content: @Composable () -> Unit) {
             modifier = modifier.fillMaxWidth().padding(Spacing.large),
             contentAlignment = Alignment.Center,
         ) {
-           content()
+            content()
         }
     }
 }
