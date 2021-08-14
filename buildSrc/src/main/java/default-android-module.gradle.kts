@@ -7,11 +7,10 @@ plugins {
 }
 
 configure<LibraryExtension> {
-    compileSdkVersion(30)
+    compileSdk = Versions.Android.compileSdk
 
     defaultConfig {
-        minSdkVersion(21)
-
+        minSdk = Versions.Android.minSdk
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
     }
@@ -36,7 +35,6 @@ configure<LibraryExtension> {
 
     kotlinOptions {
         jvmTarget = "1.8"
-        useIR = true
         freeCompilerArgs = freeCompilerArgs +
             "-Xopt-in=androidx.compose.foundation.layout.ExperimentalLayout" +
             "-Xopt-in=kotlinx.coroutines.ExperimentalCoroutinesApi" +

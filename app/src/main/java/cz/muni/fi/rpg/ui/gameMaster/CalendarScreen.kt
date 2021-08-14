@@ -29,8 +29,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import com.vanpra.composematerialdialogs.MaterialDialog
-import com.vanpra.composematerialdialogs.buttons
-import com.vanpra.composematerialdialogs.datetime.timepicker.timepicker
+import com.vanpra.composematerialdialogs.datetime.time.timepicker
 import com.vanpra.composematerialdialogs.title
 import cz.frantisekmasa.wfrp_master.core.domain.party.Party
 import cz.frantisekmasa.wfrp_master.core.domain.time.DateTime
@@ -81,7 +80,12 @@ private fun Time(viewModel: GameMasterViewModel, time: DateTime.TimeOfDay) {
     val dialog = remember { MaterialDialog() }
     val coroutineScope = rememberCoroutineScope()
 
-    dialog.build {
+    dialog.build(
+        buttons = {
+            positiveButton(stringResource(R.string.button_save))
+            negativeButton(stringResource(R.string.button_cancel))
+        }
+    ) {
         title(stringResource(R.string.title_select_time))
         timepicker(
             LocalTime.of(time.hour, time.minute),
@@ -95,11 +99,6 @@ private fun Time(viewModel: GameMasterViewModel, time: DateTime.TimeOfDay) {
                 }
             }
         )
-
-        buttons {
-            positiveButton(stringResource(R.string.button_save))
-            negativeButton(stringResource(R.string.button_cancel))
-        }
     }
 
     Text(
