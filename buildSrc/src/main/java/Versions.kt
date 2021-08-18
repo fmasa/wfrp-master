@@ -6,4 +6,10 @@ object Versions {
     val agp = loadPropertyFromResources(versionsFile, "androidGradlePluginVersion")
     val compose = loadPropertyFromResources(versionsFile, "composeVersion")
     val kotlin = loadPropertyFromResources(versionsFile, "kotlinVersion")
+
+    object Android {
+        val minSdk = loadPropertyFromResources(versionsFile, "androidMinSdk").toInt()
+        val compileSdk = loadPropertyFromResources(versionsFile, "androidCompileSdk").toInt()
+        val targetSdk = loadPropertyFromResources(versionsFile, "androidTargetSdk").toInt()
+    }
 }

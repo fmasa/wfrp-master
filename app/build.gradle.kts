@@ -1,5 +1,3 @@
-import java.io.File
-
 plugins {
     id("com.android.application")
     id("kotlin-android")
@@ -11,12 +9,12 @@ plugins {
 }
 
 android {
-    compileSdkVersion(30)
+    compileSdk = Versions.Android.compileSdk
 
     defaultConfig {
         applicationId = "cz.frantisekmasa.dnd"
-        minSdkVersion(21)
-        targetSdkVersion(30)
+        minSdk = Versions.Android.minSdk
+        targetSdk = Versions.Android.targetSdk
         versionCode = System.getenv("SUPPLY_VERSION_CODE")?.toIntOrNull() ?: 1
         versionName = System.getenv("SUPPLY_VERSION_NAME") ?: "dev"
 
@@ -71,7 +69,6 @@ android {
 
     kotlinOptions {
         jvmTarget = "1.8"
-        useIR = true
         freeCompilerArgs = freeCompilerArgs +
             "-Xskip-prerelease-check" +
             "-Xopt-in=androidx.compose.foundation.layout.ExperimentalLayout" +
@@ -115,7 +112,7 @@ dependencies {
     testImplementation("org.mockito:mockito-core:2.7.22")
 
     // Time picker
-    implementation("io.github.vanpra.compose-material-dialogs:datetime:0.4.3")
+    implementation("io.github.vanpra.compose-material-dialogs:datetime:0.5.1")
 
     // Checking network access
     implementation("com.github.pwittchen:reactivenetwork-rx2:3.0.8")
