@@ -14,7 +14,7 @@ data class Skill(
     val description: String,
     val characteristic: Characteristic,
     val advanced: Boolean,
-) : CompendiumItem, Parcelable {
+) : CompendiumItem<Skill>(), Parcelable {
     companion object {
         const val NAME_MAX_LENGTH = 50
         const val DESCRIPTION_MAX_LENGTH = 2000
@@ -25,4 +25,6 @@ data class Skill(
         name.requireMaxLength(NAME_MAX_LENGTH, "name")
         description.requireMaxLength(DESCRIPTION_MAX_LENGTH, "description")
     }
+
+    override fun duplicate() = copy(id = UUID.randomUUID(), name = duplicateName())
 }

@@ -20,6 +20,7 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -40,7 +41,10 @@ import cz.frantisekmasa.wfrp_master.core.ui.scaffolding.tabs.tab
 import cz.frantisekmasa.wfrp_master.core.viewModel.viewModel
 import cz.frantisekmasa.wfrp_master.navigation.Route
 import cz.frantisekmasa.wfrp_master.navigation.Routing
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import org.koin.core.parameter.parametersOf
+import kotlin.coroutines.EmptyCoroutineContext
 
 @Composable
 fun CompendiumScreen(routing: Routing<Route.Compendium>) {
@@ -82,12 +86,13 @@ private fun TopBar(routing: Routing<Route.Compendium>) {
 }
 
 @Composable
-fun <T : CompendiumItem> CompendiumTab(
+fun <T : CompendiumItem<T>> CompendiumTab(
     liveItems: LiveData<List<T>>,
     width: Dp,
     emptyUI: @Composable () -> Unit,
     dialog: @Composable (MutableState<DialogState<T?>>) -> Unit,
-    onRemove: (T) -> Unit,
+    remover: suspend (T) -> Unit,
+    saver: suspend (T) -> Unit,
     itemContent: @Composable LazyItemScope.(T) -> Unit,
 ) {
     val dialogState = remember { mutableStateOf<DialogState<T?>>(DialogState.Closed()) }
@@ -112,6 +117,7 @@ fun <T : CompendiumItem> CompendiumTab(
                 .fillMaxSize()
                 .background(MaterialTheme.colors.background)
         ) {
+            val coroutineScope = rememberCoroutineScope { EmptyCoroutineContext + Dispatchers.IO }
             val items = liveItems.observeAsState().value
 
             when {
@@ -123,9 +129,15 @@ fun <T : CompendiumItem> CompendiumTab(
                             WithContextMenu(
                                 items = listOf(
                                     ContextMenu.Item(
+                                        stringResource(R.string.button_duplicate),
+                                        onClick = {
+                                            coroutineScope.launch { saver(item.duplicate()) }
+                                        }
+                                    ),
+                                    ContextMenu.Item(
                                         stringResource(R.string.button_remove),
-                                        onClick = { onRemove(item) }
-                                    )
+                                        onClick = { coroutineScope.launch { remover(item) } }
+                                    ),
                                 ),
                                 onClick = { dialogState.value = DialogState.Opened(item) },
                             ) {

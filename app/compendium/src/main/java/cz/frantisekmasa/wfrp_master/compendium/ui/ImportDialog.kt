@@ -133,7 +133,7 @@ private fun ImportedItemsPicker(
 }
 
 @Composable
-private fun <T : CompendiumItem> ItemPicker(
+private fun <T : CompendiumItem<T>> ItemPicker(
     label: String,
     onSave: suspend (items: List<T>) -> Unit,
     onClose: () -> Unit,

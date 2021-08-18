@@ -13,7 +13,10 @@ import kotlinx.coroutines.flow.combineTransform
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
 
-abstract class CharacterItemViewModel<TItem : CharacterItem, TCompendiumItem : CompendiumItem>(
+abstract class CharacterItemViewModel<
+    TItem : CharacterItem,
+    TCompendiumItem : CompendiumItem<TCompendiumItem>
+    >(
     private val characterId: CharacterId,
     private val repository: CharacterItemRepository<TItem>,
     private val compendium: Compendium<TCompendiumItem>,

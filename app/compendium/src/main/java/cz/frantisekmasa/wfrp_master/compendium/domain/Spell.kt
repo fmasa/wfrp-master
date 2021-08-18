@@ -14,7 +14,7 @@ data class Spell(
     val castingNumber: Int,
     val effect: String,
     val lore: String,
-) : CompendiumItem {
+) : CompendiumItem<Spell>() {
     companion object {
         const val NAME_MAX_LENGTH = 50
         const val RANGE_MAX_LENGTH = 50
@@ -33,4 +33,6 @@ data class Spell(
         require(effect.length <= EFFECT_MAX_LENGTH) { "Effect must be shorter than $EFFECT_MAX_LENGTH" }
         require(lore.length <= LORE_MAX_LENGTH) { "LORE must be shorter than $LORE_MAX_LENGTH" }
     }
+
+    override fun duplicate() = copy(id = UUID.randomUUID(), name = duplicateName())
 }
