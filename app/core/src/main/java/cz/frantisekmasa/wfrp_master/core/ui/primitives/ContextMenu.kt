@@ -31,25 +31,27 @@ fun WithContextMenu(
     var expanded by remember { mutableStateOf(false) }
     val onLongClickLabel = stringResource(string.open_context_menu)
 
-    Box(
-        Modifier.combinedClickable(
-            onLongClickLabel = onLongClickLabel,
-            onLongClick = { expanded = true },
-            onClick = onClick,
-        ),
-    ) {
-        toggle()
-    }
+    Box {
+        Box(
+            Modifier.combinedClickable(
+                onLongClickLabel = onLongClickLabel,
+                onLongClick = { expanded = true },
+                onClick = onClick,
+            ),
+        ) {
+            toggle()
+        }
 
-    DropdownMenu(expanded = expanded, onDismissRequest = { expanded = false }) {
-        for (item in items) {
-            DropdownMenuItem(
-                onClick = {
-                    expanded = false
-                    item.onClick()
+        DropdownMenu(expanded = expanded, onDismissRequest = { expanded = false }) {
+            for (item in items) {
+                DropdownMenuItem(
+                    onClick = {
+                        expanded = false
+                        item.onClick()
+                    }
+                ) {
+                    Text(item.text, style = MaterialTheme.typography.subtitle1)
                 }
-            ) {
-                Text(item.text, style = MaterialTheme.typography.subtitle1)
             }
         }
     }
