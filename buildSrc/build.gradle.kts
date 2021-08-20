@@ -16,7 +16,7 @@ kotlinDslPluginOptions {
 }
 
 val versions = loadProperties("$projectDir/src/main/resources/versions.properties")
-val agpVersion = "7.1.0-alpha04"
+val agpVersion = versions["androidGradlePluginVersion"]
 val kotlinVersion = versions["kotlinVersion"]
 
 dependencies {
