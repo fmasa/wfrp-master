@@ -210,27 +210,26 @@ private fun <T : CompendiumItem<T>> ItemPicker(
 
             if (isLoading) {
                 FullScreenProgress()
-                return@Column
-            }
-
-            LazyColumn {
-                items(items) { item ->
-                    ListItem(
-                        icon = {
-                            Checkbox(
-                                checked = selectedItems[item.id] ?: false,
-                                onCheckedChange = { selectedItems[item.id] = it },
-                            )
-                        },
-                        modifier = Modifier.toggleable(
-                            value = selectedItems[item.id] ?: false,
-                            onValueChange = { selectedItems[item.id] = it },
-                        ),
-                        text = { Text(item.name) },
-                        secondaryText = if (existingItemNames.contains(item.name)) {
-                            { Text(stringResource(R.string.item_with_name_exists)) }
-                        } else null
-                    )
+            } else {
+                LazyColumn {
+                    items(items) { item ->
+                        ListItem(
+                            icon = {
+                                Checkbox(
+                                    checked = selectedItems[item.id] ?: false,
+                                    onCheckedChange = { selectedItems[item.id] = it },
+                                )
+                            },
+                            modifier = Modifier.toggleable(
+                                value = selectedItems[item.id] ?: false,
+                                onValueChange = { selectedItems[item.id] = it },
+                            ),
+                            text = { Text(item.name) },
+                            secondaryText = if (existingItemNames.contains(item.name)) {
+                                { Text(stringResource(R.string.item_with_name_exists)) }
+                            } else null
+                        )
+                    }
                 }
             }
         }
