@@ -2,6 +2,7 @@ package cz.frantisekmasa.wfrp_master.combat.domain.encounter
 
 import cz.frantisekmasa.wfrp_master.core.domain.Stats
 import cz.frantisekmasa.wfrp_master.core.domain.character.CurrentConditions
+import cz.frantisekmasa.wfrp_master.core.utils.duplicateName
 import cz.frantisekmasa.wfrp_master.inventory.domain.Armor
 import java.util.UUID
 
@@ -80,6 +81,26 @@ class Npc(
     private fun validate(name: String, note: String) {
         require(name.isNotBlank() && name.length <= NAME_MAX_LENGTH)
         require(note.length <= NOTE_MAX_LENGTH)
+    }
+
+    fun duplicate(position: Int): Npc {
+        val copy = Npc(
+            id = UUID.randomUUID(),
+            position = position,
+            name = duplicateName(name),
+            note = note,
+            wounds = wounds,
+            stats = stats,
+            armor = armor,
+            enemy = enemy,
+            alive = alive,
+            traits = traits,
+            trappings = trappings,
+        )
+
+        copy.conditions = conditions
+
+        return copy
     }
 
     fun updateCurrentWounds(wounds: Int) {
