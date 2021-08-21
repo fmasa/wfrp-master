@@ -29,7 +29,7 @@ private enum class FormState {
 }
 
 @Composable
-internal fun <T : CompendiumItem> CompendiumItemDialog(
+internal fun <T : CompendiumItem<T>> CompendiumItemDialog(
     title: String,
     formData: HydratedFormData<T>,
     saver: suspend (T) -> Unit,
@@ -65,7 +65,7 @@ internal fun <T : CompendiumItem> CompendiumItemDialog(
 }
 
 @Composable
-private fun <T : CompendiumItem> CompendiumItemDialogTopBar(
+private fun <T : CompendiumItem<T>> CompendiumItemDialogTopBar(
     title: String,
     formData: HydratedFormData<T>,
     saver: suspend (T) -> Unit,

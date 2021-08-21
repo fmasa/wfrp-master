@@ -63,6 +63,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.koin.core.parameter.parametersOf
+import kotlin.coroutines.EmptyCoroutineContext
 
 @Composable
 fun EncounterDetailScreen(routing: Routing<Route.EncounterDetail>) {
@@ -187,6 +188,7 @@ private fun MainContainer(
     viewModel: EncounterDetailViewModel
 ) {
     val encounterId = routing.route.encounterId
+    val coroutineScope = rememberCoroutineScope { EmptyCoroutineContext + Dispatchers.IO }
 
     Column(
         Modifier
@@ -201,6 +203,7 @@ private fun MainContainer(
             onCreateRequest = { routing.navigateTo(Route.NpcCreation(encounterId)) },
             onEditRequest = { routing.navigateTo(Route.NpcDetail(it)) },
             onRemoveRequest = { viewModel.removeNpc(it) },
+            onDuplicateRequest = { coroutineScope.launch { viewModel.duplicateNpc(it.npcId) } }
         )
     }
 }
@@ -233,6 +236,7 @@ private fun CombatantsCard(
     onCreateRequest: () -> Unit,
     onEditRequest: (NpcId) -> Unit,
     onRemoveRequest: (NpcId) -> Unit,
+    onDuplicateRequest: (NpcId) -> Unit,
 ) {
     CardContainer(
         Modifier
@@ -264,6 +268,7 @@ private fun CombatantsCard(
                     npcs,
                     onEditRequest = onEditRequest,
                     onRemoveRequest = onRemoveRequest,
+                    onDuplicateRequest = onDuplicateRequest,
                 )
             }
 
@@ -282,6 +287,7 @@ private fun NpcList(
     npcs: List<NpcListItem>,
     onEditRequest: (NpcId) -> Unit,
     onRemoveRequest: (NpcId) -> Unit,
+    onDuplicateRequest: (NpcId) -> Unit,
 ) {
     for (npc in npcs) {
         val alpha = if (npc.alive) ContentAlpha.high else ContentAlpha.disabled
@@ -292,7 +298,14 @@ private fun NpcList(
                 iconRes = if (npc.alive) R.drawable.ic_npc else R.drawable.ic_dead,
                 onClick = { onEditRequest(npc.id) },
                 contextMenuItems = listOf(
-                    ContextMenu.Item(stringResource(R.string.remove)) { onRemoveRequest(npc.id) }
+                    ContextMenu.Item(
+                        text = stringResource(R.string.button_duplicate),
+                        onClick = { onDuplicateRequest(npc.id) },
+                    ),
+                    ContextMenu.Item(
+                        text = stringResource(R.string.remove),
+                        onClick = { onRemoveRequest(npc.id) },
+                    ),
                 ),
             )
         }

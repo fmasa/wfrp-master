@@ -80,6 +80,15 @@ class EncounterDetailViewModel(
         )
     }
 
+    suspend fun duplicateNpc(id: UUID) {
+        val npc = npcRepository.get(NpcId(encounterId, id))
+
+        npcRepository.save(
+            encounterId,
+            npc.duplicate(position = npcRepository.getNextPosition(encounterId))
+        )
+    }
+
     suspend fun updateNpc(
         id: UUID,
         name: String,

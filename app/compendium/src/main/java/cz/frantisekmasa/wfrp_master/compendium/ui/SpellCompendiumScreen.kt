@@ -26,13 +26,11 @@ import cz.frantisekmasa.wfrp_master.core.ui.primitives.EmptyUI
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.ItemIcon
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.Spacing
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import java.util.UUID
+import kotlin.coroutines.EmptyCoroutineContext
 
 @Composable
 fun SpellCompendiumTab(viewModel: CompendiumViewModel, width: Dp) {
-    val coroutineScope = rememberCoroutineScope()
-
     CompendiumTab(
         liveItems = viewModel.spells,
         emptyUI = {
@@ -42,7 +40,8 @@ fun SpellCompendiumTab(viewModel: CompendiumViewModel, width: Dp) {
                 drawableResourceId = R.drawable.ic_spells
             )
         },
-        onRemove = { coroutineScope.launch(Dispatchers.IO) { viewModel.remove(it) } },
+        remover = viewModel::remove,
+        saver = viewModel::save,
         dialog = { SpellDialog(it, viewModel) },
         width = width,
     ) { spell ->

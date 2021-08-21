@@ -9,7 +9,6 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Dp
@@ -24,14 +23,10 @@ import cz.frantisekmasa.wfrp_master.core.ui.forms.inputValue
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.EmptyUI
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.ItemIcon
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.Spacing
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import java.util.UUID
 
 @Composable
 fun MiracleCompendiumTab(viewModel: CompendiumViewModel, width: Dp) {
-    val coroutineScope = rememberCoroutineScope()
-
     CompendiumTab(
         liveItems = viewModel.miracles,
         emptyUI = {
@@ -41,7 +36,8 @@ fun MiracleCompendiumTab(viewModel: CompendiumViewModel, width: Dp) {
                 drawableResourceId = R.drawable.ic_pray
             )
         },
-        onRemove = { coroutineScope.launch(Dispatchers.IO) { viewModel.remove(it) } },
+        remover = viewModel::remove,
+        saver = viewModel::save,
         dialog = { MiracleDialog(it, viewModel) },
         width = width,
     ) { miracle ->

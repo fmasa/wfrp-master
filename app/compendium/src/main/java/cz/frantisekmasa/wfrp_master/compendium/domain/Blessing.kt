@@ -13,7 +13,7 @@ data class Blessing(
     val target: String,
     val duration: String,
     val effect: String,
-) : CompendiumItem {
+) : CompendiumItem<Blessing>() {
     companion object {
         const val NAME_MAX_LENGTH = 50
         const val RANGE_MAX_LENGTH = 50
@@ -29,4 +29,6 @@ data class Blessing(
         duration.requireMaxLength(DURATION_MAX_LENGTH, "duration")
         effect.requireMaxLength(EFFECT_MAX_LENGTH, "effect")
     }
+
+    override fun duplicate() = copy(id = UUID.randomUUID(), name = duplicateName())
 }

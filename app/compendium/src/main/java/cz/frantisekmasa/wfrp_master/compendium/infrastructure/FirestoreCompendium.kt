@@ -19,7 +19,7 @@ import kotlinx.coroutines.tasks.await
 import timber.log.Timber
 import java.util.UUID
 
-/* internal */ class FirestoreCompendium<T : CompendiumItem>(
+/* internal */ class FirestoreCompendium<T : CompendiumItem<T>>(
     private val collectionName: String,
     private val firestore: FirebaseFirestore,
     private val mapper: AggregateMapper<T>,

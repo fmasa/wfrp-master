@@ -10,7 +10,7 @@ data class Talent(
     override val name: String,
     val maxTimesTaken: String,
     val description: String,
-) : CompendiumItem {
+) : CompendiumItem<Talent>() {
     companion object {
         const val NAME_MAX_LENGTH = 50
         const val MAX_TIMES_TAKEN_MAX_LENGTH = 100
@@ -23,4 +23,6 @@ data class Talent(
         require(description.length <= DESCRIPTION_MAX_LENGTH) { "Maximum allowed description length is $DESCRIPTION_MAX_LENGTH" }
         require(maxTimesTaken.length <= MAX_TIMES_TAKEN_MAX_LENGTH) { "Maximum length of is $MAX_TIMES_TAKEN_MAX_LENGTH" }
     }
+
+    override fun duplicate() = copy(id = UUID.randomUUID(), name = duplicateName())
 }

@@ -1,6 +1,7 @@
 package cz.frantisekmasa.wfrp_master.inventory.domain
 
 import cz.frantisekmasa.wfrp_master.core.domain.character.CharacterItem
+import cz.frantisekmasa.wfrp_master.core.utils.duplicateName
 import kotlinx.parcelize.Parcelize
 import java.util.UUID
 
@@ -39,6 +40,11 @@ typealias InventoryItemId = UUID
 
         return encumbrance * quantity
     }
+
+    fun duplicate(): InventoryItem = copy(
+        id = UUID.randomUUID(),
+        name = duplicateName(name),
+    )
 
     init {
         require(name.isNotBlank()) { "Inventory item must have non-blank name" }

@@ -4,7 +4,7 @@ import cz.frantisekmasa.wfrp_master.core.domain.party.PartyId
 import kotlinx.coroutines.flow.Flow
 import java.util.UUID
 
-interface Compendium<T : CompendiumItem> {
+interface Compendium<T : CompendiumItem<T>> {
 
     fun liveForParty(partyId: PartyId): Flow<List<T>>
 

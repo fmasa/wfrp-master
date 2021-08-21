@@ -12,7 +12,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -35,14 +34,10 @@ import cz.frantisekmasa.wfrp_master.core.ui.forms.inputValue
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.EmptyUI
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.ItemIcon
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.Spacing
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import java.util.UUID
 
 @Composable
 fun SkillCompendiumTab(viewModel: CompendiumViewModel, width: Dp) {
-    val coroutineScope = rememberCoroutineScope()
-
     CompendiumTab(
         liveItems = viewModel.skills,
         emptyUI = {
@@ -52,7 +47,8 @@ fun SkillCompendiumTab(viewModel: CompendiumViewModel, width: Dp) {
                 drawableResourceId = R.drawable.ic_skills
             )
         },
-        onRemove = { coroutineScope.launch(Dispatchers.IO) { viewModel.remove(it) } },
+        remover = viewModel::remove,
+        saver = viewModel::save,
         dialog = { SkillDialog(it, viewModel) },
         width = width,
     ) { skill ->
@@ -64,7 +60,7 @@ fun SkillCompendiumTab(viewModel: CompendiumViewModel, width: Dp) {
     }
 }
 
-interface CompendiumItemFormData<T : CompendiumItem> : HydratedFormData<T>
+interface CompendiumItemFormData<T : CompendiumItem<T>> : HydratedFormData<T>
 
 private data class SkillFormData(
     val id: UUID,
