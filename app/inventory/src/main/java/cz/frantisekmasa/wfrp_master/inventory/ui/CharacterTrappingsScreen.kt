@@ -19,6 +19,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -41,7 +42,10 @@ import cz.frantisekmasa.wfrp_master.inventory.R
 import cz.frantisekmasa.wfrp_master.inventory.domain.Encumbrance
 import cz.frantisekmasa.wfrp_master.inventory.domain.InventoryItem
 import cz.frantisekmasa.wfrp_master.inventory.domain.TrappingType
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import org.koin.core.parameter.parametersOf
+import kotlin.coroutines.EmptyCoroutineContext
 
 @Composable
 fun CharacterTrappingsScreen(
@@ -101,12 +105,15 @@ fun CharacterTrappingsScreen(
             )
         }
 
+        val coroutineScope = rememberCoroutineScope { EmptyCoroutineContext + Dispatchers.IO }
+
         InventoryItemsCard(
             viewModel,
             onClick = {
                 inventoryItemDialogState = DialogState.Opened(it)
             },
             onRemove = { viewModel.removeInventoryItem(it) },
+            onDuplicate = { coroutineScope.launch { viewModel.saveInventoryItem(it.duplicate()) } },
             onNewItemButtonClicked = {
                 inventoryItemDialogState = DialogState.Opened(null)
             },
@@ -145,6 +152,7 @@ private fun InventoryItemsCard(
     viewModel: InventoryViewModel,
     onClick: (InventoryItem) -> Unit,
     onRemove: (InventoryItem) -> Unit,
+    onDuplicate: (InventoryItem) -> Unit,
     onNewItemButtonClicked: () -> Unit,
 ) {
     val items = viewModel.inventory.observeAsState().value ?: return
@@ -159,7 +167,12 @@ private fun InventoryItemsCard(
                     size = EmptyUI.Size.Small
                 )
             } else {
-                InventoryItemList(items, onClick = onClick, onRemove = onRemove)
+                InventoryItemList(
+                    items,
+                    onClick = onClick,
+                    onRemove = onRemove,
+                    onDuplicate = onDuplicate
+                )
             }
 
             CardButton(R.string.title_inventory_add_item, onClick = onNewItemButtonClicked)
@@ -172,6 +185,7 @@ private fun InventoryItemList(
     items: List<InventoryItem>,
     onClick: (InventoryItem) -> Unit,
     onRemove: (InventoryItem) -> Unit,
+    onDuplicate: (InventoryItem) -> Unit,
 ) {
     Column {
         for (item in items) {
@@ -182,9 +196,13 @@ private fun InventoryItemList(
                 onClick = { onClick(item) },
                 contextMenuItems = listOf(
                     ContextMenu.Item(
+                        stringResource(R.string.button_duplicate),
+                        onClick = { onDuplicate(item) },
+                    ),
+                    ContextMenu.Item(
                         stringResource(R.string.button_remove),
                         onClick = { onRemove(item) }
-                    )
+                    ),
                 ),
                 badge = {
                     val encumbrance = item.effectiveEncumbrance
