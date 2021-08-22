@@ -10,17 +10,22 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import cz.frantisekmasa.wfrp_master.core.domain.character.Character
 import cz.frantisekmasa.wfrp_master.core.domain.character.Race
+import cz.frantisekmasa.wfrp_master.core.domain.character.SocialStatus
 import cz.frantisekmasa.wfrp_master.core.ui.forms.ChipList
 import cz.frantisekmasa.wfrp_master.core.ui.forms.FormData
 import cz.frantisekmasa.wfrp_master.core.ui.forms.InputValue
 import cz.frantisekmasa.wfrp_master.core.ui.forms.Rules
+import cz.frantisekmasa.wfrp_master.core.ui.forms.SelectBox
+import cz.frantisekmasa.wfrp_master.core.ui.forms.SelectBoxLabel
 import cz.frantisekmasa.wfrp_master.core.ui.forms.TextInput
 import cz.frantisekmasa.wfrp_master.core.ui.forms.inputValue
+import cz.frantisekmasa.wfrp_master.core.ui.primitives.NumberPicker
 import cz.muni.fi.rpg.R
 
 object CharacterBasicInfoForm {
@@ -33,6 +38,8 @@ object CharacterBasicInfoForm {
         val psychology: InputValue,
         val motivation: InputValue,
         val note: InputValue,
+        val socialTier: MutableState<SocialStatus.Tier>,
+        val socialStanding: MutableState<Int>,
     ) : FormData {
         companion object {
             @Composable
@@ -50,6 +57,12 @@ object CharacterBasicInfoForm {
                 psychology = inputValue(character?.getPsychology() ?: ""),
                 motivation = inputValue(character?.getMotivation() ?: ""),
                 note = inputValue(character?.getNote() ?: ""),
+                socialTier = rememberSaveable {
+                    mutableStateOf(character?.getStatus()?.tier ?: SocialStatus.Tier.BRASS)
+                },
+                socialStanding = rememberSaveable {
+                    mutableStateOf(character?.getStatus()?.standing ?: 0)
+                },
             )
         }
 
@@ -73,6 +86,14 @@ fun CharacterBasicInfoForm(
             validate = validate,
         )
 
+        ChipList(
+            label = stringResource(R.string.label_race),
+            modifier = Modifier.padding(top = 8.dp),
+            items = Race.values().map { it to stringResource(it.getReadableNameId()) },
+            value = data.race.value,
+            onValueChange = { data.race.value = it },
+        )
+
         Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
             TextInput(
                 modifier = Modifier.weight(1f),
@@ -91,13 +112,26 @@ fun CharacterBasicInfoForm(
             )
         }
 
-        ChipList(
-            label = stringResource(R.string.label_race),
-            modifier = Modifier.padding(top = 8.dp),
-            items = Race.values().map { it to stringResource(it.getReadableNameId()) },
-            value = data.race.value,
-            onValueChange = { data.race.value = it },
-        )
+        Column {
+            SelectBoxLabel(stringResource(R.string.label_status))
+            Row(
+                Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                SelectBox(
+                    value = data.socialTier.value,
+                    onValueChange = { data.socialTier.value = it },
+                    items = SocialStatus.Tier.values(),
+                    modifier = Modifier.fillMaxWidth(0.6f),
+                )
+                NumberPicker(
+                    value = data.socialStanding.value,
+                    onIncrement = { data.socialStanding.value++ },
+                    onDecrement = { data.socialStanding.value = maxOf(0, data.socialStanding.value) },
+                )
+            }
+        }
 
         TextInput(
             label = stringResource(R.string.label_psychology_input),

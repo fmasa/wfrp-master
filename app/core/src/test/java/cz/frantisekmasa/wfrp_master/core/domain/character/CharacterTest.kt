@@ -6,35 +6,36 @@ import org.junit.Assert.assertEquals
 import org.junit.Assert.assertSame
 import org.junit.Assert.fail
 import org.junit.Test
-import java.lang.IllegalArgumentException
 
 class CharacterTest {
     private fun character() = Character(
-        "Bilbo",
-        "123",
-        "Writer",
-        "Noble",
-        "Does not like orcs",
-        "Food",
-        Race.HALFLING,
-        Stats(20, 40, 2, 4, 80, 5, 5, 4, 0, 10),
-        Stats(20, 40, 2, 4, 80, 5, 5, 4, 0, 10),
-        Points(0, 4, 4, 5, 5, 0, 0, 0, 0, 0, 0)
+        name = "Bilbo",
+        userId = "123",
+        career = "Writer",
+        socialClass = "Noble",
+        status = SocialStatus(SocialStatus.Tier.GOLD, 2),
+        psychology = "Does not like orcs",
+        motivation = "Food",
+        race = Race.HALFLING,
+        characteristicsBase = Stats(20, 40, 2, 4, 80, 5, 5, 4, 0, 10),
+        characteristicsAdvances = Stats(20, 40, 2, 4, 80, 5, 5, 4, 0, 10),
+        points = Points(0, 4, 4, 5, 5, 0, 0, 0, 0, 0, 0)
     )
 
     private fun characterWithHardy() = character().apply {
         update(
-            getName(),
-            getCareer(),
-            getSocialClass(),
-            Race.DWARF,
-            getCharacteristicsBase(),
-            getCharacteristicsAdvances(),
-            getPoints().maxWounds,
-            getPsychology(),
-            getMotivation(),
-            getNote(),
-            true
+            name = getName(),
+            career = getCareer(),
+            socialClass = getSocialClass(),
+            race = Race.DWARF,
+            status = SocialStatus(SocialStatus.Tier.BRASS, 2),
+            characteristicsBase = getCharacteristicsBase(),
+            characteristicsAdvances = getCharacteristicsAdvances(),
+            maxWounds = getPoints().maxWounds,
+            psychology = getPsychology(),
+            motivation = getMotivation(),
+            note = getNote(),
+            hardyTalent = true,
         )
     }
 

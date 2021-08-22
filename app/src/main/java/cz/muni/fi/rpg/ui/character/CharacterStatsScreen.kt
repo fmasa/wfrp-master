@@ -6,22 +6,15 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ColumnScope
-import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Button
-import androidx.compose.material.Card
 import androidx.compose.material.ContentAlpha
 import androidx.compose.material.ExtendedFloatingActionButton
-import androidx.compose.material.Icon
 import androidx.compose.material.LocalContentAlpha
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
@@ -38,7 +31,6 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -49,7 +41,6 @@ import cz.frantisekmasa.wfrp_master.core.domain.Stats
 import cz.frantisekmasa.wfrp_master.core.domain.character.Character
 import cz.frantisekmasa.wfrp_master.core.domain.character.Points
 import cz.frantisekmasa.wfrp_master.core.domain.character.Points.PointPool
-import cz.frantisekmasa.wfrp_master.core.domain.character.SocialStatus
 import cz.frantisekmasa.wfrp_master.core.domain.identifiers.CharacterId
 import cz.frantisekmasa.wfrp_master.core.domain.party.Party
 import cz.frantisekmasa.wfrp_master.core.media.rememberSoundPlayer
@@ -156,31 +147,23 @@ internal fun CharacterCharacteristicsScreen(
 
             CharacteristicsCard(character.getCharacteristics())
 
-            Row(
-                Modifier
-                    .fillMaxWidth()
-                    .padding(top = Spacing.small)
-                    .padding(horizontal = Spacing.responsiveBodyPadding())
-                    .height(IntrinsicSize.Min),
-                horizontalArrangement = Arrangement.spacedBy(Spacing.gutterSize()),
-            ) {
-                ExperiencePointsCard(
-                    points = points,
-                    save = viewModel::updatePoints,
-                    modifier = Modifier.weight(1f),
-                )
+            CardRow(Modifier.padding(top = Spacing.small)) {
+                Box(Modifier.weight(1f), contentAlignment = Alignment.TopCenter) {
+                    CareerSection(character)
+                }
 
-                CareerCard(character, Modifier.weight(1f))
-
-                SocialStatusCard(
-                    character.getStatus(),
-                    Modifier
-                        .weight(1f)
-                        .fillMaxHeight()
-                )
+                Box(Modifier.weight(1f), contentAlignment = Alignment.TopCenter) {
+                    ExperiencePointsSection(
+                        points = points,
+                        save = viewModel::updatePoints,
+                    )
+                }
             }
 
-            Container(Modifier.padding(top = Spacing.tiny)) {
+            Container(
+                Modifier.padding(top = Spacing.tiny),
+                horizontalArrangement = Arrangement.spacedBy(Spacing.gutterSize()),
+            ) {
                 val size = if (breakpoint > Breakpoint.XSmall) HalfWidth else FullWidth
 
                 column(size) {
@@ -388,17 +371,9 @@ private fun CharacteristicsCard(values: Stats) {
 }
 
 @Composable
-private fun CardSection(modifier: Modifier, content: @Composable ColumnScope.() -> Unit) {
-    Card(modifier, elevation = 2.dp) {
-        Column(Modifier.padding(Spacing.responsiveBodyPadding()), content = content)
-    }
-}
-
-@Composable
-private fun ExperiencePointsCard(
+private fun ExperiencePointsSection(
     points: Points,
     save: suspend (Points) -> Unit,
-    modifier: Modifier,
 ) {
     var experiencePointsDialogVisible by rememberSaveable { mutableStateOf(false) }
 
@@ -410,7 +385,11 @@ private fun ExperiencePointsCard(
         )
     }
 
-    CardSection(modifier.clickable(onClick = { experiencePointsDialogVisible = true })) {
+    Column(
+        Modifier
+        .clickable(onClick = { experiencePointsDialogVisible = true })
+        .padding(horizontal = Spacing.large),
+    ) {
         Row(horizontalArrangement = Arrangement.spacedBy(Spacing.tiny)) {
             Text(points.experience.toString(), fontWeight = FontWeight.Bold)
             Text(stringResource(R.string.xp_points))
@@ -426,23 +405,16 @@ private fun ExperiencePointsCard(
 }
 
 @Composable
-private fun CareerCard(character: Character, modifier: Modifier) {
-    CardSection(modifier) {
-        Text(character.getCareer(), fontWeight = FontWeight.Bold)
-        Text(character.getSocialClass(), style = MaterialTheme.typography.caption)
-    }
-}
+private fun CareerSection(character: Character) {
+    val status = character.getStatus()
 
-@Composable
-private fun SocialStatusCard(status: SocialStatus, modifier: Modifier) {
-    CardSection(modifier) {
-        Row(Modifier.fillMaxHeight(), verticalAlignment = Alignment.CenterVertically) {
-            Icon(
-                painterResource(R.drawable.ic_social_status),
-                "Social status icon",
-                Modifier.width(Spacing.extraLarge),
+    Column {
+        Text(character.getCareer(), fontWeight = FontWeight.Bold)
+        CompositionLocalProvider(LocalContentAlpha provides ContentAlpha.medium) {
+            Text(
+                "${character.getSocialClass()} · ${stringResource(status.tier.nameRes)} ${status.standing}",
+                style = MaterialTheme.typography.caption
             )
-            Text(stringResource(status.tier.nameRes) + " ${status.standing}")
         }
     }
 }

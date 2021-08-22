@@ -24,6 +24,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import cz.frantisekmasa.wfrp_master.core.domain.character.Character
+import cz.frantisekmasa.wfrp_master.core.domain.character.SocialStatus
 import cz.frantisekmasa.wfrp_master.core.ui.buttons.BackButton
 import cz.frantisekmasa.wfrp_master.core.ui.forms.CheckboxWithText
 import cz.frantisekmasa.wfrp_master.core.ui.forms.InputValue
@@ -208,6 +209,10 @@ private suspend fun updateCharacter(
             psychology = formData.basicInfo.psychology.value,
             motivation = formData.basicInfo.motivation.value,
             socialClass = formData.basicInfo.socialClass.value,
+            status = SocialStatus(
+                formData.basicInfo.socialTier.value,
+                formData.basicInfo.socialStanding.value,
+            ),
             note = formData.basicInfo.note.value,
             characteristicsBase = characteristics.base,
             characteristicsAdvances = characteristics.advances,
