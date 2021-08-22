@@ -6,6 +6,7 @@ import com.google.firebase.analytics.ktx.logEvent
 import com.google.firebase.ktx.Firebase
 import cz.frantisekmasa.wfrp_master.core.domain.character.Character
 import cz.frantisekmasa.wfrp_master.core.domain.character.CharacterRepository
+import cz.frantisekmasa.wfrp_master.core.domain.character.SocialStatus
 import cz.frantisekmasa.wfrp_master.core.domain.identifiers.CharacterId
 import cz.frantisekmasa.wfrp_master.core.domain.party.PartyId
 import cz.muni.fi.rpg.ui.characterCreation.CharacterBasicInfoForm
@@ -43,6 +44,7 @@ class CharacterCreationViewModel(
                         userId = userId,
                         career = info.career.value,
                         socialClass = info.socialClass.value,
+                        status = SocialStatus(info.socialTier.value, info.socialStanding.value),
                         race = info.race.value,
                         characteristicsBase = characteristics.base,
                         characteristicsAdvances = characteristics.advances,

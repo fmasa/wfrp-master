@@ -3,13 +3,13 @@ package cz.frantisekmasa.wfrp_master.core.domain.character
 import cz.frantisekmasa.wfrp_master.core.domain.Ambitions
 import cz.frantisekmasa.wfrp_master.core.domain.Money
 import cz.frantisekmasa.wfrp_master.core.domain.Stats
-import java.lang.IllegalArgumentException
 
 data class Character(
     private var name: String,
     val userId: String?,
     private var career: String,
     private var socialClass: String,
+    private var status: SocialStatus = SocialStatus(SocialStatus.Tier.BRASS, 0),
     private var psychology: String,
     private var motivation: String,
     private var race: Race,
@@ -52,6 +52,7 @@ data class Character(
         name: String,
         career: String,
         socialClass: String,
+        status: SocialStatus,
         race: Race,
         characteristicsBase: Stats,
         characteristicsAdvances: Stats,
@@ -73,6 +74,7 @@ data class Character(
         this.name = name
         this.career = career
         this.socialClass = socialClass
+        this.status = status
         this.race = race
         this.characteristicsBase = characteristicsBase
         this.characteristicsAdvances = characteristicsAdvances
@@ -110,8 +112,7 @@ data class Character(
 
     fun getConditions() = conditions
 
-    /** TODO: Implement social status in character */
-    fun getStatus() = SocialStatus(SocialStatus.Tier.GOLD, 1)
+    fun getStatus() = status
 
     fun updatePoints(newPoints: Points) {
         require(

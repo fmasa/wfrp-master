@@ -3,6 +3,7 @@ package cz.frantisekmasa.wfrp_master.core.ui.forms
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
@@ -31,19 +32,22 @@ import cz.frantisekmasa.wfrp_master.core.ui.primitives.Spacing
 
 @Composable
 inline fun <reified T : NamedEnum> SelectBox(
-    label: String? = null,
     value: T,
     noinline onValueChange: (T) -> Unit,
     items: Array<T>,
+    modifier: Modifier = Modifier,
+    label: String? = null,
 ) {
     val context = LocalContext.current
 
-    SelectBox(
-        label = label,
-        value = value,
-        onValueChange = onValueChange,
-        items = remember(context, items) { items.map { it to context.getString(it.nameRes) } }
-    )
+    Box(modifier) {
+        SelectBox(
+            label = label,
+            value = value,
+            onValueChange = onValueChange,
+            items = remember(context, items) { items.map { it to context.getString(it.nameRes) } }
+        )
+    }
 }
 
 @Composable
@@ -92,13 +96,7 @@ fun SelectBoxToggle(
     content: @Composable RowScope.() -> Unit,
 ) {
     Column {
-        label?.let {
-            Text(
-                label,
-                style = MaterialTheme.typography.body2,
-                modifier = Modifier.padding(bottom = 2.dp)
-            )
-        }
+        label?.let { SelectBoxLabel(it) }
 
         Surface(
             shape = RoundedCornerShape(Spacing.tiny),

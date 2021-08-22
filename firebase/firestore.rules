@@ -355,6 +355,7 @@ service cloud.firestore {
                             "name",
                             "career",
                             "socialClass",
+                            "status",
                             "points",
                             "race",
                             "characteristicsBase",
@@ -389,7 +390,12 @@ service cloud.firestore {
                         && character.note is string && character.note.size() <= 400
                         && character.hardyTalent is bool
                         && (! ("archived" in character) || (character.archived is bool && (!character.archived || character.userId == null)))
-                        && (! ("conditions" in character) || areValidConditions(character.conditions));
+                        && (! ("conditions" in character) || areValidConditions(character.conditions))
+                        && ! ("status" in character) || (
+                            character.status is map && character.status.keys().toSet() == ["tier", "standing"].toSet()
+                                && character.status.tier in ["BRASS", "SILVER", "GOLD"]
+                                && character.status.standing is int && character.status.standing >= 0
+                        );
                 }
             }
 
