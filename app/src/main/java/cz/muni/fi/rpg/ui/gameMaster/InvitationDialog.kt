@@ -48,7 +48,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
-import org.koin.core.context.KoinContextHandler
+import org.koin.core.context.GlobalContext
 
 @Composable
 internal fun InvitationDialog(invitation: Invitation, onDismissRequest: () -> Unit) {
@@ -101,7 +101,7 @@ internal fun InvitationDialog(invitation: Invitation, onDismissRequest: () -> Un
 
 @Composable
 private fun sharingOptions(invitation: Invitation): StateFlow<SharingOptions?> {
-    val jsonMapper: JsonMapper = KoinContextHandler.get().get()
+    val jsonMapper: JsonMapper = GlobalContext.get().get()
     val flow = remember { MutableStateFlow<SharingOptions?>(null) }
 
     LaunchedEffect(invitation) {
