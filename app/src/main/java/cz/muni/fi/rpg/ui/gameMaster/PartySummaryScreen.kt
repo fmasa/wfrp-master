@@ -99,7 +99,7 @@ internal fun PartySummaryScreen(
             var invitationDialogVisible by remember { mutableStateOf(false) }
 
             if (invitationDialogVisible) {
-                InvitationDialog2(
+                InvitationDialog(
                     invitation = party.getInvitation(),
                     onDismissRequest = { invitationDialogVisible = false },
                 )

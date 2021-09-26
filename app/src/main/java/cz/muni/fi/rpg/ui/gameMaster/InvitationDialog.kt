@@ -51,7 +51,7 @@ import kotlinx.coroutines.withContext
 import org.koin.core.context.KoinContextHandler
 
 @Composable
-internal fun InvitationDialog2(invitation: Invitation, onDismissRequest: () -> Unit) {
+internal fun InvitationDialog(invitation: Invitation, onDismissRequest: () -> Unit) {
     FullScreenDialog(onDismissRequest = onDismissRequest) {
         Scaffold(
             topBar = {
