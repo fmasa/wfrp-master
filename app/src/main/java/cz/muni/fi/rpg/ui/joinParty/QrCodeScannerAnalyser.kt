@@ -5,8 +5,8 @@ import android.graphics.ImageFormat
 import androidx.camera.core.ImageAnalysis
 import androidx.camera.core.ImageProxy
 import com.google.zxing.BinaryBitmap
-import com.google.zxing.NotFoundException
 import com.google.zxing.PlanarYUVLuminanceSource
+import com.google.zxing.ReaderException
 import com.google.zxing.common.HybridBinarizer
 import com.google.zxing.qrcode.QRCodeReader
 import timber.log.Timber
@@ -60,7 +60,7 @@ class QrCodeScannerAnalyser(
 
             val result = reader.decode(binaryBitmap)
             onQrCodesDetected(result.text)
-        } catch (e: NotFoundException) {
+        } catch (e: ReaderException) {
             Timber.d(e)
         } finally {
             imageProxy.close()

@@ -6,6 +6,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.runtime.Composable
@@ -31,7 +32,7 @@ import kotlinx.coroutines.withContext
 internal fun QrCode(data: String) {
     BoxWithConstraints(Modifier.fillMaxWidth()) {
         var qrCode: ImageBitmap? by remember { mutableStateOf(null) }
-        val width = constraints.maxWidth
+        val width = minOf(constraints.maxWidth, constraints.maxHeight)
 
         LaunchedEffect(data, width) {
             qrCode = createQrCode(data, width)
@@ -39,7 +40,7 @@ internal fun QrCode(data: String) {
 
         when (val bitmap = qrCode) {
             null -> {
-                Box(Modifier.fillMaxWidth().aspectRatio(1f), contentAlignment = Alignment.Center) {
+                Box(Modifier.fillMaxSize().aspectRatio(1f), contentAlignment = Alignment.Center) {
                     CircularProgressIndicator()
                 }
             }

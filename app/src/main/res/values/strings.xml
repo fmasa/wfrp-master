@@ -85,7 +85,8 @@
     <string name="error_already_party_member">You are already member of this party</string>
     <string name="error_invalid_invitation">Invitation token is not valid</string>
     <string name="error_unkown">Unknown error occurred</string>
-    <string name="invitation_code_description">Players can join using this code</string>
+    <string name="title_invite_players">Invite players…</string>
+    <string name="invitation_code_description">Players can scan this QR code in their apps</string>
     <string name="title_characterCreation">Describe your character…</string>
     <string name="title_character_stats">Attributes</string>
     <string name="title_character_conditions">Conditions</string>

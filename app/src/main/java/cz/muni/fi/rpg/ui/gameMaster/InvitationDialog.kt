@@ -2,17 +2,19 @@ package cz.muni.fi.rpg.ui.gameMaster
 
 import android.content.Context
 import android.content.Intent
-import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Button
-import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
+import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
+import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -23,9 +25,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.intl.Locale
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.toUpperCase
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.window.Dialog
 import com.fasterxml.jackson.databind.json.JsonMapper
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.ktx.analytics
@@ -35,6 +36,10 @@ import com.google.firebase.dynamiclinks.ktx.dynamicLinks
 import com.google.firebase.dynamiclinks.ktx.shortLinkAsync
 import com.google.firebase.ktx.Firebase
 import cz.frantisekmasa.wfrp_master.core.domain.party.Invitation
+import cz.frantisekmasa.wfrp_master.core.ui.buttons.CloseButton
+import cz.frantisekmasa.wfrp_master.core.ui.dialogs.FullScreenDialog
+import cz.frantisekmasa.wfrp_master.core.ui.primitives.FullScreenProgress
+import cz.frantisekmasa.wfrp_master.core.ui.primitives.Spacing
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.VisualOnlyIconDescription
 import cz.frantisekmasa.wfrp_master.navigation.Route
 import cz.muni.fi.rpg.R
@@ -43,34 +48,39 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
-import org.koin.core.context.KoinContextHandler
+import org.koin.core.context.GlobalContext
 
 @Composable
-internal fun InvitationDialog2(invitation: Invitation, onDismissRequest: () -> Unit) {
-    Dialog(onDismissRequest = onDismissRequest) {
-        Surface(shape = MaterialTheme.shapes.medium) {
-            Column(Modifier.padding(20.dp)) {
-                Text(
-                    stringResource(R.string.invitation_code_description),
-                    Modifier
-                        .fillMaxWidth()
-                        .padding(top = 16.dp),
-                    style = MaterialTheme.typography.h6,
+internal fun InvitationDialog(invitation: Invitation, onDismissRequest: () -> Unit) {
+    FullScreenDialog(onDismissRequest = onDismissRequest) {
+        Scaffold(
+            topBar = {
+                TopAppBar(
+                    navigationIcon = { CloseButton(onClick = onDismissRequest) },
+                    title = { Text(stringResource(R.string.title_invite_players))},
                 )
-
+            }
+        ) {
+            Column(
+                Modifier
+                    .fillMaxSize()
+                    .verticalScroll(rememberScrollState())
+                    .padding(Spacing.bodyPadding),
+                verticalArrangement = Arrangement.spacedBy(Spacing.small, Alignment.CenterVertically)
+            ) {
                 val sharingOptions = sharingOptions(invitation).collectAsState().value
 
                 if (sharingOptions == null) {
-                    Box(
-                        Modifier
-                            .fillMaxWidth()
-                            .aspectRatio(1f),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        CircularProgressIndicator()
-                    }
+                    FullScreenProgress()
                 } else {
                     val context = LocalContext.current
+
+                    Text(
+                        stringResource(R.string.invitation_code_description),
+                        modifier = Modifier.fillMaxWidth(),
+                        textAlign = TextAlign.Center,
+                        style = MaterialTheme.typography.caption,
+                    )
 
                     QrCode(sharingOptions.json)
 
@@ -91,7 +101,7 @@ internal fun InvitationDialog2(invitation: Invitation, onDismissRequest: () -> U
 
 @Composable
 private fun sharingOptions(invitation: Invitation): StateFlow<SharingOptions?> {
-    val jsonMapper: JsonMapper = KoinContextHandler.get().get()
+    val jsonMapper: JsonMapper = GlobalContext.get().get()
     val flow = remember { MutableStateFlow<SharingOptions?>(null) }
 
     LaunchedEffect(invitation) {
