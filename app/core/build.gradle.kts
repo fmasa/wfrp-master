@@ -48,6 +48,9 @@ dependencies {
     api("org.koin:koin-android:2.2.0")
     api("org.koin:koin-androidx-viewmodel:2.2.0")
 
+    // Coil - image library
+    implementation("io.coil-kt:coil-compose:1.3.2")
+
     // Firebase-related dependencies
     api("com.google.firebase:firebase-analytics:19.0.0")
     api("com.firebaseui:firebase-ui-auth:6.2.0")

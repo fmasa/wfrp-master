@@ -370,6 +370,7 @@ service cloud.firestore {
                             "hardyTalent",
                             "conditions",
                             "hardyTalent",
+                            "avatarUrl",
                             "archived"
                         ].hasAll(character.keys())
                         && (character.userId == userId || character.id == userId)
@@ -389,6 +390,7 @@ service cloud.firestore {
                         && areAmbitionsValid(character.ambitions)
                         && character.note is string && character.note.size() <= 400
                         && character.hardyTalent is bool
+                        && (! ("avatarUrl" in character) || character.avatarUrl is string || character.avatarUrl == null)
                         && (! ("archived" in character) || (character.archived is bool && (!character.archived || character.userId == null)))
                         && (! ("conditions" in character) || areValidConditions(character.conditions))
                         && ! ("status" in character) || (

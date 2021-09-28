@@ -203,7 +203,7 @@ private fun CharacterTopPanel(character: Character, points: Points, onUpdate: (P
                     horizontalArrangement = Arrangement.SpaceBetween,
                 ) {
                     Row {
-                        ItemIcon(R.drawable.ic_face, size = ItemIcon.Size.Large)
+                        CharacterAvatar(character.getAvatarUrl(), ItemIcon.Size.Large)
                         Column(Modifier.padding(start = Spacing.medium)) {
                             Text(character.getName(), fontWeight = FontWeight.Bold)
                             Text(
@@ -387,8 +387,8 @@ private fun ExperiencePointsSection(
 
     Column(
         Modifier
-        .clickable(onClick = { experiencePointsDialogVisible = true })
-        .padding(horizontal = Spacing.large),
+            .clickable(onClick = { experiencePointsDialogVisible = true })
+            .padding(horizontal = Spacing.large),
     ) {
         Row(horizontalArrangement = Arrangement.spacedBy(Spacing.tiny)) {
             Text(points.experience.toString(), fontWeight = FontWeight.Bold)
