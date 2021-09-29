@@ -18,6 +18,12 @@ android {
 
         buildConfigField(
             "String",
+            "FUNCTIONS_EMULATOR_URL",
+            "\"${properties.getOrDefault("dev.functionsEmulatorUrl", "")}\""
+        )
+
+        buildConfigField(
+            "String",
             "FIRESTORE_EMULATOR_URL",
             "\"${properties.getOrDefault("dev.firestoreEmulatorUrl", "")}\""
         )
@@ -58,6 +64,7 @@ dependencies {
     api("com.google.firebase:firebase-analytics-ktx:19.0.0")
     api("com.google.firebase:firebase-crashlytics:18.1.0")
     api("com.google.firebase:firebase-dynamic-links-ktx:20.1.0")
+    api("com.google.firebase:firebase-functions-ktx:20.0.1")
 
     // Logging
     api("com.jakewharton.timber:timber:4.7.1")
@@ -86,6 +93,7 @@ dependencies {
 
     // Shared Preferences DataStore
     implementation("androidx.datastore:datastore-preferences:1.0.0-alpha05")
+    implementation("com.google.firebase:firebase-auth-ktx:21.0.1")
 
     // HTTP Client
     val ktorVersion = "1.6.0"

@@ -316,4 +316,10 @@
     <string name="icon_next_month">Next month</string>
     <string name="spell_memorized">Memorized</string>
     <string name="label_status">Status</string>
+
+    <!-- Character sheet -->
+    <string name="error_file_opening_crashed">Could not open file</string>
+    <string name="message_avatar_changed">Avatar was changed</string>
+    <string name="message_avatar_removed">Avatar was removed</string>
+
 </resources>

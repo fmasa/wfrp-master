@@ -10,6 +10,7 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
+import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.Stable
@@ -18,6 +19,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
@@ -31,7 +33,9 @@ import cz.frantisekmasa.wfrp_master.core.ui.forms.InputValue
 import cz.frantisekmasa.wfrp_master.core.ui.forms.Rules
 import cz.frantisekmasa.wfrp_master.core.ui.forms.TextInput
 import cz.frantisekmasa.wfrp_master.core.ui.forms.inputValue
+import cz.frantisekmasa.wfrp_master.core.ui.primitives.FullScreenProgress
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.HorizontalLine
+import cz.frantisekmasa.wfrp_master.core.ui.primitives.Spacing
 import cz.frantisekmasa.wfrp_master.core.ui.scaffolding.SaveAction
 import cz.frantisekmasa.wfrp_master.core.ui.scaffolding.Subtitle
 import cz.frantisekmasa.wfrp_master.core.viewModel.viewModel
@@ -93,16 +97,24 @@ fun CharacterEditScreen(routing: Routing<Route.CharacterEdit>) {
 
     val character = viewModel.character.observeAsState().value
 
+    if (character == null) {
+        FullScreenProgress()
+        return
+    }
+
     val submitEnabled = remember { mutableStateOf(true) }
-    val formData = character?.let { CharacterEditScreen.FormData.fromCharacter(it) }
+    val formData = character.let { CharacterEditScreen.FormData.fromCharacter(it) }
     val validate = remember { mutableStateOf(true) }
 
+    val scaffoldState = rememberScaffoldState()
+
     Scaffold(
+        scaffoldState = scaffoldState,
         topBar = {
             CharacterEditTopBar(
-                character?.getName() ?: "",
+                character.getName(),
                 onSave = {
-                    if (formData?.isValid() == true) {
+                    if (formData.isValid()) {
                         submitEnabled.value = false
 
                         coroutineScope.launch(Dispatchers.IO) {
@@ -114,42 +126,50 @@ fun CharacterEditScreen(routing: Routing<Route.CharacterEdit>) {
                     }
                 },
                 onBack = { routing.pop() },
-                actionsEnabled = submitEnabled.value && character != null
+                actionsEnabled = submitEnabled.value
             )
-        }
+        },
     ) {
-        formData?.let { CharacterEditMainUI(it, validate.value) }
+            Column(
+                Modifier
+                    .fillMaxSize()
+                    .verticalScroll(rememberScrollState())
+                    .padding(Spacing.bodyPadding)
+            ) {
+                EditableCharacterAvatar(
+                    routing.route.characterId,
+                    character,
+                    scaffoldState.snackbarHostState,
+                    Modifier.align(Alignment.CenterHorizontally)
+                )
+                CharacterEditMainUI(formData, validate.value)
+            }
     }
 }
 
 @Composable
-private fun CharacterEditMainUI(formData: CharacterEditScreen.FormData, validate: Boolean) {
-    Column(
-        Modifier
-            .fillMaxSize()
-            .verticalScroll(rememberScrollState()),
-    ) {
-        Column(Modifier.padding(24.dp)) {
-            CharacterBasicInfoForm(formData.basicInfo, validate)
+private fun CharacterEditMainUI(
+    formData: CharacterEditScreen.FormData,
+    validate: Boolean
+) {
+    CharacterBasicInfoForm(formData.basicInfo, validate)
 
-            HorizontalLine()
+    HorizontalLine()
 
-            MaxWoundsSegment(formData.wounds, validate)
+    MaxWoundsSegment(formData.wounds, validate)
 
-            HorizontalLine()
+    HorizontalLine()
 
-            Text(
-                stringResource(R.string.title_character_characteristics),
-                style = MaterialTheme.typography.h6,
-                textAlign = TextAlign.Center,
-                modifier = Modifier
-                    .padding(top = 20.dp, bottom = 16.dp)
-                    .fillMaxWidth()
-            )
+    Text(
+        stringResource(R.string.title_character_characteristics),
+        style = MaterialTheme.typography.h6,
+        textAlign = TextAlign.Center,
+        modifier = Modifier
+            .padding(top = 20.dp, bottom = 16.dp)
+            .fillMaxWidth()
+    )
 
-            CharacterCharacteristicsForm(formData.characteristics, validate)
-        }
-    }
+    CharacterCharacteristicsForm(formData.characteristics, validate)
 }
 
 @Composable
