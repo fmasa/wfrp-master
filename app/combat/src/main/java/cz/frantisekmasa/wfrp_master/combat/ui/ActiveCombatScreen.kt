@@ -12,12 +12,10 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.BottomAppBar
-import androidx.compose.material.ButtonDefaults.IconSize
 import androidx.compose.material.ContentAlpha
 import androidx.compose.material.DropdownMenuItem
 import androidx.compose.material.Icon
@@ -57,9 +55,11 @@ import cz.frantisekmasa.wfrp_master.combat.domain.encounter.Wounds
 import cz.frantisekmasa.wfrp_master.core.ads.BannerAd
 import cz.frantisekmasa.wfrp_master.core.auth.LocalUser
 import cz.frantisekmasa.wfrp_master.core.ui.buttons.BackButton
+import cz.frantisekmasa.wfrp_master.core.ui.components.CharacterAvatar
 import cz.frantisekmasa.wfrp_master.core.ui.components.CharacteristicsTable
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.DraggableListFor
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.FullScreenProgress
+import cz.frantisekmasa.wfrp_master.core.ui.primitives.ItemIcon
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.NumberPicker
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.Spacing
 import cz.frantisekmasa.wfrp_master.core.ui.scaffolding.OptionsAction
@@ -421,22 +421,12 @@ private fun CombatantListItem(
 
             ListItem(
                 icon = {
-                    val iconModifier = Modifier.size(IconSize)
-
                     when (combatant) {
                         is CombatantItem.Character -> {
-                            Icon(
-                                painterResource(R.drawable.ic_character),
-                                stringResource(R.string.icon_combatant_character),
-                                iconModifier,
-                            )
+                            CharacterAvatar(combatant.avatarUrl, ItemIcon.Size.Small)
                         }
                         is CombatantItem.Npc -> {
-                            Icon(
-                                painterResource(R.drawable.ic_npc),
-                                stringResource(R.string.icon_combatant_npc),
-                                iconModifier,
-                            )
+                            ItemIcon(R.drawable.ic_npc, ItemIcon.Size.Small)
                         }
                     }
                 },

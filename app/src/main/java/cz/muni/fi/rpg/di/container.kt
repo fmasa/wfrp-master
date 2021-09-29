@@ -40,6 +40,8 @@ import cz.frantisekmasa.wfrp_master.religion.ReligionModule
 import cz.muni.fi.rpg.BuildConfig
 import cz.muni.fi.rpg.model.cache.CharacterRepositoryIdentityMap
 import cz.muni.fi.rpg.model.cache.PartyRepositoryIdentityMap
+import cz.muni.fi.rpg.model.domain.CharacterAvatarChanger
+import cz.muni.fi.rpg.model.domain.functions.CloudFunctionCharacterAvatarChanger
 import cz.muni.fi.rpg.model.domain.invitation.InvitationProcessor
 import cz.muni.fi.rpg.model.domain.skills.Skill
 import cz.muni.fi.rpg.model.domain.skills.SkillRepository
@@ -154,6 +156,8 @@ val appModule =
             single<NpcRepository> { FirestoreNpcRepository(get(), aggregateMapper(Npc::class)) }
 
             single { AdManager(get()) }
+
+            single<CharacterAvatarChanger> { CloudFunctionCharacterAvatarChanger(get()) }
 
             /**
              * ViewModels

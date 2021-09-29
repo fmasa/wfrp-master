@@ -19,6 +19,4 @@
     <!-- Icon descriptions -->
     <string name="icon_previous_turn">Previous turn</string>
     <string name="icon_next_turn">Next turn</string>
-    <string name="icon_combatant_character">Character combatant</string>
-    <string name="icon_combatant_npc">NPC combatant</string>
 </resources>

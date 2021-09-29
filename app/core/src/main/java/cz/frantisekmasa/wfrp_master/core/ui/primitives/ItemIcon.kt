@@ -15,22 +15,27 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import coil.compose.rememberImagePainter
+import coil.transform.CircleCropTransformation
 
 object ItemIcon {
     enum class Size {
         Small,
-        Large;
+        Large,
+        XLarge;
 
         val dimensions: Dp
             get() = when (this) {
                 Small -> 20.dp
                 Large -> 24.dp
+                XLarge -> 48.dp
             }
 
         val padding: Dp
             get() = when (this) {
                 Small -> 10.dp
                 Large -> 12.dp
+                XLarge -> 24.dp
             }
     }
 }
@@ -50,3 +55,22 @@ fun ItemIcon(@DrawableRes drawableResource: Int, size: ItemIcon.Size = ItemIcon.
             .height(size.dimensions)
     )
 }
+
+@Composable
+fun ItemIcon(url: String, size: ItemIcon.Size = ItemIcon.Size.Small) {
+    val backgroundColor = MaterialTheme.colors.onSurface.copy(alpha = ContentAlpha.medium)
+
+    val dimensions = size.dimensions + size.padding * 2
+
+    Image(
+        rememberImagePainter(url) {
+            transformations(CircleCropTransformation())
+        },
+        VisualOnlyIconDescription, // TODO: Provide mechanism to specify what does this image means, such as: ("Character's image", "Strength-based skill", etc.)
+        modifier = Modifier
+            .background(backgroundColor, CircleShape)
+            .width(dimensions)
+            .height(dimensions)
+    )
+}
+

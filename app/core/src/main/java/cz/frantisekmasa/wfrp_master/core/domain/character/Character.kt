@@ -22,6 +22,7 @@ data class Character(
     private var note: String = "",
     private var hardyTalent: Boolean = false,
     private var archived: Boolean = false,
+    private val avatarUrl: String? = null,
     val id: String = userId ?: error("Either ID or UserId must be present") // TODO: Remove this fallback in 1.14
 ) {
     companion object {
@@ -123,6 +124,8 @@ data class Character(
     }
 
     fun getPoints(): Points = points
+
+    fun getAvatarUrl(): String? = avatarUrl
 
     fun getCharacteristics(): Stats = characteristicsBase + characteristicsAdvances
     fun getCharacteristicsBase() = characteristicsBase
