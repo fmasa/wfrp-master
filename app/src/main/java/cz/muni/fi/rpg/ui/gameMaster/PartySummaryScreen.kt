@@ -40,10 +40,12 @@ import cz.frantisekmasa.wfrp_master.core.domain.identifiers.CharacterId
 import cz.frantisekmasa.wfrp_master.core.domain.party.Invitation
 import cz.frantisekmasa.wfrp_master.core.domain.party.PartyId
 import cz.frantisekmasa.wfrp_master.core.ui.buttons.PrimaryButton
+import cz.frantisekmasa.wfrp_master.core.ui.components.CharacterAvatar
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.CardContainer
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.CardItem
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.ContextMenu
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.EmptyUI
+import cz.frantisekmasa.wfrp_master.core.ui.primitives.ItemIcon
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.Spacing
 import cz.frantisekmasa.wfrp_master.core.viewModel.viewModel
 import cz.frantisekmasa.wfrp_master.navigation.Route
@@ -240,14 +242,13 @@ private fun PlayerItem(
     onCharacterCreateRequest: (userId: String) -> Unit,
     onRemoveCharacter: (Character) -> Unit
 ) {
-    val icon = R.drawable.ic_character
 
     when (player) {
         is Player.UserWithoutCharacter -> {
             ProvideTextStyle(TextStyle.Default.copy(fontStyle = FontStyle.Italic)) {
                 CardItem(
                     name = stringResource(R.string.waiting_for_character),
-                    iconRes = icon,
+                    icon = { CharacterAvatar(null, ItemIcon.Size.Small) },
                     onClick = { onCharacterCreateRequest(player.userId) },
                     contextMenuItems = emptyList(),
                 )
@@ -258,7 +259,7 @@ private fun PlayerItem(
 
             CardItem(
                 name = character.getName(),
-                iconRes = icon,
+                icon = { CharacterAvatar(character.getAvatarUrl(), ItemIcon.Size.Small) },
                 onClick = { onCharacterOpenRequest(character) },
                 contextMenuItems = if (character.userId == null)
                     listOf(

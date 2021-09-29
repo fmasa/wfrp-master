@@ -1,10 +1,10 @@
-package cz.muni.fi.rpg.ui.character
+package cz.frantisekmasa.wfrp_master.core.ui.components
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import cz.frantisekmasa.wfrp_master.core.R
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.ItemIcon
-import cz.muni.fi.rpg.R
 
 @Composable
 fun CharacterAvatar(url: String?, size: ItemIcon.Size, modifier: Modifier = Modifier) {

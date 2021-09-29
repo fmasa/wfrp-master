@@ -22,10 +22,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import cz.frantisekmasa.wfrp_master.core.domain.character.Character
 import cz.frantisekmasa.wfrp_master.core.domain.identifiers.CharacterId
+import cz.frantisekmasa.wfrp_master.core.ui.components.CharacterAvatar
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.ItemIcon
 import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.model.domain.CharacterAvatarChanger
-import cz.muni.fi.rpg.ui.character.CharacterAvatar
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.koin.core.context.GlobalContext

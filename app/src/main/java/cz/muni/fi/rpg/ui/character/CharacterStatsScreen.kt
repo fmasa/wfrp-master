@@ -45,6 +45,7 @@ import cz.frantisekmasa.wfrp_master.core.domain.identifiers.CharacterId
 import cz.frantisekmasa.wfrp_master.core.domain.party.Party
 import cz.frantisekmasa.wfrp_master.core.media.rememberSoundPlayer
 import cz.frantisekmasa.wfrp_master.core.ui.components.Breakpoint
+import cz.frantisekmasa.wfrp_master.core.ui.components.CharacterAvatar
 import cz.frantisekmasa.wfrp_master.core.ui.components.ColumnSize.FullWidth
 import cz.frantisekmasa.wfrp_master.core.ui.components.ColumnSize.HalfWidth
 import cz.frantisekmasa.wfrp_master.core.ui.components.Container

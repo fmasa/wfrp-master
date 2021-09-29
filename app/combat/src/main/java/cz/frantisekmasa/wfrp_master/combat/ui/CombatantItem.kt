@@ -25,6 +25,9 @@ sealed class CombatantItem {
         val userId: String?
             get() = character.userId
 
+        val avatarUrl: String?
+            get() = character.getAvatarUrl()
+
         override val name
             get() = character.getName()
 
