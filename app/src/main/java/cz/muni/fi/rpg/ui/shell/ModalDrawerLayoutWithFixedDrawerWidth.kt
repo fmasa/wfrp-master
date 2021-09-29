@@ -232,23 +232,9 @@ class DrawerState(
         swipeableState.snapTo(targetValue)
     }
 
-    /**
-     * The target value of the drawer state.
-     *
-     * If a swipe is in progress, this is the value that the Drawer would animate to if the
-     * swipe finishes. If an animation is running, this is the target value of that animation.
-     * Finally, if no swipe or animation is in progress, this is the same as the [currentValue].
-     */
-    @ExperimentalMaterialApi
-    @get:ExperimentalMaterialApi
     val targetValue: DrawerValue
         get() = swipeableState.targetValue
 
-    /**
-     * The current position (in pixels) of the drawer sheet.
-     */
-    @ExperimentalMaterialApi
-    @get:ExperimentalMaterialApi
     val offset: State<Float>
         get() = swipeableState.offset
 
