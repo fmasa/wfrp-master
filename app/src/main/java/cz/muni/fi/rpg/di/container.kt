@@ -1,7 +1,6 @@
 package cz.muni.fi.rpg.di
 
 import com.revenuecat.purchases.Purchases
-import cz.frantisekmasa.wfrp_master.combat.domain.encounter.Encounter
 import cz.frantisekmasa.wfrp_master.combat.domain.encounter.EncounterRepository
 import cz.frantisekmasa.wfrp_master.combat.domain.encounter.NpcRepository
 import cz.frantisekmasa.wfrp_master.combat.infrastructure.FirestoreEncounterRepository
@@ -23,7 +22,6 @@ import cz.frantisekmasa.wfrp_master.core.domain.identifiers.CharacterId
 import cz.frantisekmasa.wfrp_master.core.domain.identifiers.EncounterId
 import cz.frantisekmasa.wfrp_master.core.domain.party.PartyId
 import cz.frantisekmasa.wfrp_master.core.domain.party.PartyRepository
-import cz.frantisekmasa.wfrp_master.core.firestore.aggregateMapper
 import cz.frantisekmasa.wfrp_master.core.firestore.repositories.FirestoreCharacterItemRepository
 import cz.frantisekmasa.wfrp_master.core.firestore.repositories.FirestoreCharacterRepository
 import cz.frantisekmasa.wfrp_master.core.firestore.repositories.FirestorePartyRepository
@@ -147,7 +145,7 @@ val appModule =
                 PartyRepositoryIdentityMap(10, FirestorePartyRepository(get(), serializationAggregateMapper()))
             }
 
-            single<EncounterRepository> { FirestoreEncounterRepository(get(), aggregateMapper(Encounter::class)) }
+            single<EncounterRepository> { FirestoreEncounterRepository(get(), serializationAggregateMapper()) }
             single<NpcRepository> { FirestoreNpcRepository(get(), serializationAggregateMapper()) }
 
             single { AdManager(get()) }
