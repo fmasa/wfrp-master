@@ -41,7 +41,6 @@ import cz.muni.fi.rpg.model.cache.PartyRepositoryIdentityMap
 import cz.muni.fi.rpg.model.domain.CharacterAvatarChanger
 import cz.muni.fi.rpg.model.domain.functions.CloudFunctionCharacterAvatarChanger
 import cz.muni.fi.rpg.model.domain.invitation.InvitationProcessor
-import cz.muni.fi.rpg.model.domain.skills.Skill
 import cz.muni.fi.rpg.model.domain.skills.SkillRepository
 import cz.muni.fi.rpg.model.domain.spells.Spell
 import cz.muni.fi.rpg.model.domain.talents.Talent
@@ -135,7 +134,7 @@ val appModule =
                 }
             }
 
-            single<SkillRepository> { FirestoreSkillRepository(get(), aggregateMapper(Skill::class)) }
+            single<SkillRepository> { FirestoreSkillRepository(get(), serializationAggregateMapper()) }
             single(named(Services.CHARACTER_TALENT_REPOSITORY)) {
                 characterItemRepository(Talent::class, COLLECTION_TALENTS)
             }

@@ -3,12 +3,15 @@ package cz.muni.fi.rpg.model.domain.skills
 import cz.frantisekmasa.wfrp_master.core.domain.Characteristic
 import cz.frantisekmasa.wfrp_master.core.domain.character.CharacterItem
 import kotlinx.parcelize.Parcelize
+import kotlinx.serialization.Contextual
+import kotlinx.serialization.Serializable
 import java.util.UUID
 
 @Parcelize
+@Serializable
 data class Skill(
-    override val id: UUID,
-    override val compendiumId: UUID? = null,
+    @Contextual override val id: UUID,
+    @Contextual override val compendiumId: UUID? = null,
     val advanced: Boolean,
     val characteristic: Characteristic,
     val name: String,
