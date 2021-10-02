@@ -27,7 +27,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.intl.Locale
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.toUpperCase
-import com.fasterxml.jackson.databind.json.JsonMapper
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.ktx.analytics
 import com.google.firebase.analytics.ktx.logEvent
@@ -48,6 +47,8 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
 import org.koin.core.context.GlobalContext
 
 @Composable
@@ -101,12 +102,12 @@ internal fun InvitationDialog(invitation: Invitation, onDismissRequest: () -> Un
 
 @Composable
 private fun sharingOptions(invitation: Invitation): StateFlow<SharingOptions?> {
-    val jsonMapper: JsonMapper = GlobalContext.get().get()
+    val serializer: Json = GlobalContext.get().get()
     val flow = remember { MutableStateFlow<SharingOptions?>(null) }
 
     LaunchedEffect(invitation) {
         withContext(Dispatchers.IO) {
-            val json = jsonMapper.writeValueAsString(invitation)
+            val json = serializer.encodeToString(invitation)
             val link = Firebase.dynamicLinks.shortLinkAsync {
                 link = Route.InvitationLink(json).toDeepLink()
                 androidParameters { }

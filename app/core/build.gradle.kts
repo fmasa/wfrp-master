@@ -36,7 +36,6 @@ android {
 
 dependencies {
     // Basic Kotlin stuff
-    api("org.jetbrains.kotlin:kotlin-reflect:${Versions.kotlin}")
     api("org.jetbrains.kotlin:kotlin-stdlib:${Versions.kotlin}")
 
     // Basic Android stuff 
@@ -82,8 +81,6 @@ dependencies {
     api("com.github.h0tk3y.betterParse:better-parse:0.4.2")
 
     // JSON encoding
-    // TODO: Make is implementation only
-    api("com.fasterxml.jackson.module:jackson-module-kotlin:2.12.3")
     api("org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.0")
 
     // Premium
@@ -101,7 +98,7 @@ dependencies {
     val ktorVersion = "1.6.0"
     implementation("io.ktor:ktor-client-core:$ktorVersion")
     implementation("io.ktor:ktor-client-cio:$ktorVersion")
-    implementation("io.ktor:ktor-client-jackson:$ktorVersion")
+    implementation("io.ktor:ktor-client-serialization:$ktorVersion")
 
     api("com.google.accompanist:accompanist-flowlayout:0.12.0")
 }

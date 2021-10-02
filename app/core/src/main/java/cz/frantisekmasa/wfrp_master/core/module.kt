@@ -1,21 +1,19 @@
 package cz.frantisekmasa.wfrp_master.core
 
-import com.fasterxml.jackson.databind.json.JsonMapper
-import com.fasterxml.jackson.module.kotlin.registerKotlinModule
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.firestoreSettings
 import com.google.firebase.functions.ktx.functions
 import com.google.firebase.ktx.Firebase
+import cz.frantisekmasa.wfrp_master.core.serialization.UUIDSerializer
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.modules.SerializersModule
+import kotlinx.serialization.modules.contextual
 import org.koin.dsl.module
 
 val CoreModule = module {
     single { FirebaseAuth.getInstance() }
-    single {
-        JsonMapper().apply {
-            registerKotlinModule()
-        }
-    }
+
 
     single {
         val firestore = Firebase.firestore
@@ -43,5 +41,14 @@ val CoreModule = module {
         }
 
         functions
+    }
+
+    single {
+        Json {
+            encodeDefaults = true
+            serializersModule = SerializersModule {
+                contextual(UUIDSerializer())
+            }
+        }
     }
 }

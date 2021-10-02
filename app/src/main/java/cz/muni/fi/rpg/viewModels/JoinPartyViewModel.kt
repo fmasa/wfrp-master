@@ -5,19 +5,20 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
-import com.fasterxml.jackson.databind.json.JsonMapper
 import cz.frantisekmasa.wfrp_master.core.domain.party.Invitation
 import cz.frantisekmasa.wfrp_master.core.domain.party.Party
 import cz.frantisekmasa.wfrp_master.core.domain.party.PartyRepository
 import cz.muni.fi.rpg.model.domain.invitation.InvitationProcessor
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import kotlinx.serialization.decodeFromString
+import kotlinx.serialization.json.Json
 import org.koin.androidx.viewmodel.ext.android.getViewModel
 import timber.log.Timber
 
 class JoinPartyViewModel(
     private val invitationProcessor: InvitationProcessor,
-    private val jsonMapper: JsonMapper,
+    private val serializer: Json,
     private val parties: PartyRepository,
 ) : ViewModel() {
 
@@ -32,7 +33,7 @@ class JoinPartyViewModel(
     suspend fun deserializeInvitationJson(json: String): Invitation? = withContext(Dispatchers.IO) {
         @Suppress("BlockingMethodInNonBlockingContext")
         try {
-            jsonMapper.readValue(json, Invitation::class.java)
+            serializer.decodeFromString<Invitation>(json)
         } catch (e: Throwable) {
             Timber.w(e)
 
