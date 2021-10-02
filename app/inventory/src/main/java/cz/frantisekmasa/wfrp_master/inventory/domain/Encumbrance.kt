@@ -1,16 +1,15 @@
 package cz.frantisekmasa.wfrp_master.inventory.domain
 
 import android.os.Parcelable
-import com.fasterxml.jackson.annotation.JsonValue
 import cz.frantisekmasa.wfrp_master.core.domain.Stats
 import kotlinx.parcelize.Parcelize
+import kotlinx.serialization.Serializable
 import java.text.DecimalFormat
 
 @Parcelize
-data class Encumbrance(
-    @JsonValue
-    private val value: Double,
-) : Parcelable {
+@JvmInline
+@Serializable
+value class Encumbrance(private val value: Double) : Parcelable {
     companion object {
         val One: Encumbrance = Encumbrance(1.0)
         val Zero: Encumbrance = Encumbrance(0.0)

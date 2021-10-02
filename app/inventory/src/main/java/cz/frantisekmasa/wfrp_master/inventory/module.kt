@@ -4,7 +4,6 @@ import cz.frantisekmasa.wfrp_master.core.domain.character.CharacterFeatureReposi
 import cz.frantisekmasa.wfrp_master.core.domain.character.CharacterItemRepository
 import cz.frantisekmasa.wfrp_master.core.domain.character.Feature
 import cz.frantisekmasa.wfrp_master.core.domain.identifiers.CharacterId
-import cz.frantisekmasa.wfrp_master.core.firestore.aggregateMapper
 import cz.frantisekmasa.wfrp_master.core.firestore.repositories.FirestoreCharacterFeatureRepository
 import cz.frantisekmasa.wfrp_master.core.firestore.repositories.FirestoreCharacterItemRepository
 import cz.frantisekmasa.wfrp_master.core.firestore.serialization.serializationAggregateMapper
@@ -18,7 +17,7 @@ val InventoryModule = module {
     single<CharacterItemRepository<InventoryItem>> {
         FirestoreCharacterItemRepository(
             COLLECTION_INVENTORY_ITEMS,
-            aggregateMapper(InventoryItem::class),
+            serializationAggregateMapper(),
             get()
         )
     }

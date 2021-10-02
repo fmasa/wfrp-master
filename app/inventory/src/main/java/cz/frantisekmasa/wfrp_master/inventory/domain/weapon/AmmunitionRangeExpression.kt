@@ -1,15 +1,14 @@
 package cz.frantisekmasa.wfrp_master.inventory.domain.weapon
 
 import android.os.Parcelable
-import com.fasterxml.jackson.annotation.JsonValue
 import cz.frantisekmasa.wfrp_master.core.domain.Expression
 import kotlinx.parcelize.Parcelize
+import kotlinx.serialization.Serializable
 
+@JvmInline
 @Parcelize
-data class AmmunitionRangeExpression(
-    @JsonValue
-    val value: String
-) : Parcelable {
+@Serializable
+value class AmmunitionRangeExpression(val value: String) : Parcelable {
     init {
         require(
             Expression.fromString(
