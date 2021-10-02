@@ -74,7 +74,7 @@ import org.koin.dsl.module
 import kotlin.random.Random
 import kotlin.reflect.KClass
 import cz.frantisekmasa.wfrp_master.compendium.domain.Skill as CompendiumSkill
-import cz.frantisekmasa.wfrp_master.compendium.domain.Spell as ComepndiumSpell
+import cz.frantisekmasa.wfrp_master.compendium.domain.Spell as CompendiumSpell
 import cz.frantisekmasa.wfrp_master.compendium.domain.Talent as CompendiumTalent
 
 private enum class Services {
@@ -102,7 +102,7 @@ val appModule =
             fun Scope.spellCompendium() = FirestoreCompendium(
                 COLLECTION_COMPENDIUM_SPELLS,
                 get(),
-                aggregateMapper(ComepndiumSpell::class),
+                aggregateMapper(CompendiumSpell::class),
             )
 
             fun Scope.blessingCompendium() = FirestoreCompendium(
