@@ -34,7 +34,7 @@ val ReligionModule = module {
     single<CharacterItemRepository<Blessing>>(named(Service.BLESSING_REPOSITORY)) {
         FirestoreCharacterItemRepository(
             COLLECTION_BLESSINGS,
-            aggregateMapper(Blessing::class),
+            serializationAggregateMapper(),
             get()
         )
     }
