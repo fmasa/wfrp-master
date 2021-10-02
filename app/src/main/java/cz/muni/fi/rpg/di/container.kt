@@ -1,9 +1,7 @@
 package cz.muni.fi.rpg.di
 
 import com.revenuecat.purchases.Purchases
-import cz.frantisekmasa.wfrp_master.combat.domain.encounter.Encounter
 import cz.frantisekmasa.wfrp_master.combat.domain.encounter.EncounterRepository
-import cz.frantisekmasa.wfrp_master.combat.domain.encounter.Npc
 import cz.frantisekmasa.wfrp_master.combat.domain.encounter.NpcRepository
 import cz.frantisekmasa.wfrp_master.combat.infrastructure.FirestoreEncounterRepository
 import cz.frantisekmasa.wfrp_master.combat.infrastructure.FirestoreNpcRepository
@@ -17,19 +15,17 @@ import cz.frantisekmasa.wfrp_master.core.ads.AdManager
 import cz.frantisekmasa.wfrp_master.core.ads.AdViewModel
 import cz.frantisekmasa.wfrp_master.core.ads.AdmobLocationProvider
 import cz.frantisekmasa.wfrp_master.core.ads.LocationProvider
-import cz.frantisekmasa.wfrp_master.core.domain.character.Character
 import cz.frantisekmasa.wfrp_master.core.domain.character.CharacterItem
 import cz.frantisekmasa.wfrp_master.core.domain.character.CharacterItemRepository
 import cz.frantisekmasa.wfrp_master.core.domain.character.CharacterRepository
 import cz.frantisekmasa.wfrp_master.core.domain.identifiers.CharacterId
 import cz.frantisekmasa.wfrp_master.core.domain.identifiers.EncounterId
-import cz.frantisekmasa.wfrp_master.core.domain.party.Party
 import cz.frantisekmasa.wfrp_master.core.domain.party.PartyId
 import cz.frantisekmasa.wfrp_master.core.domain.party.PartyRepository
-import cz.frantisekmasa.wfrp_master.core.firestore.aggregateMapper
 import cz.frantisekmasa.wfrp_master.core.firestore.repositories.FirestoreCharacterItemRepository
 import cz.frantisekmasa.wfrp_master.core.firestore.repositories.FirestoreCharacterRepository
 import cz.frantisekmasa.wfrp_master.core.firestore.repositories.FirestorePartyRepository
+import cz.frantisekmasa.wfrp_master.core.firestore.serialization.serializationAggregateMapper
 import cz.frantisekmasa.wfrp_master.core.viewModel.PartyViewModel
 import cz.frantisekmasa.wfrp_master.core.viewModel.PremiumViewModel
 import cz.frantisekmasa.wfrp_master.core.viewModel.SettingsViewModel
@@ -43,7 +39,6 @@ import cz.muni.fi.rpg.model.cache.PartyRepositoryIdentityMap
 import cz.muni.fi.rpg.model.domain.CharacterAvatarChanger
 import cz.muni.fi.rpg.model.domain.functions.CloudFunctionCharacterAvatarChanger
 import cz.muni.fi.rpg.model.domain.invitation.InvitationProcessor
-import cz.muni.fi.rpg.model.domain.skills.Skill
 import cz.muni.fi.rpg.model.domain.skills.SkillRepository
 import cz.muni.fi.rpg.model.domain.spells.Spell
 import cz.muni.fi.rpg.model.domain.talents.Talent
@@ -74,9 +69,8 @@ import org.koin.core.qualifier.named
 import org.koin.core.scope.Scope
 import org.koin.dsl.module
 import kotlin.random.Random
-import kotlin.reflect.KClass
 import cz.frantisekmasa.wfrp_master.compendium.domain.Skill as CompendiumSkill
-import cz.frantisekmasa.wfrp_master.compendium.domain.Spell as ComepndiumSpell
+import cz.frantisekmasa.wfrp_master.compendium.domain.Spell as CompendiumSpell
 import cz.frantisekmasa.wfrp_master.compendium.domain.Talent as CompendiumTalent
 
 private enum class Services {
@@ -84,48 +78,47 @@ private enum class Services {
     CHARACTER_SPELL_REPOSITORY,
 }
 
+private inline fun <reified T : CharacterItem> Scope.characterItemRepository(
+    collectionName: String,
+): CharacterItemRepository<T> = FirestoreCharacterItemRepository(
+    collectionName = collectionName,
+    mapper = serializationAggregateMapper(),
+    get(),
+)
+
 val appModule =
     CoreModule +
         InventoryModule +
         ReligionModule +
         module {
-            fun Scope.skillCompendium() = FirestoreCompendium(
+            fun Scope.skillCompendium() = FirestoreCompendium<CompendiumSkill>(
                 COLLECTION_COMPENDIUM_SKILLS,
                 get(),
-                aggregateMapper(CompendiumSkill::class),
+                serializationAggregateMapper(),
             )
 
-            fun Scope.talentCompendium() = FirestoreCompendium(
+            fun Scope.talentCompendium() = FirestoreCompendium<CompendiumTalent>(
                 COLLECTION_COMPENDIUM_TALENTS,
                 get(),
-                aggregateMapper(CompendiumTalent::class),
+                serializationAggregateMapper(),
             )
 
-            fun Scope.spellCompendium() = FirestoreCompendium(
+            fun Scope.spellCompendium() = FirestoreCompendium<CompendiumSpell>(
                 COLLECTION_COMPENDIUM_SPELLS,
                 get(),
-                aggregateMapper(ComepndiumSpell::class),
+                serializationAggregateMapper(),
             )
 
-            fun Scope.blessingCompendium() = FirestoreCompendium(
+            fun Scope.blessingCompendium() = FirestoreCompendium<Blessing>(
                 COLLECTION_COMPENDIUM_BLESSINGS,
                 get(),
-                aggregateMapper(Blessing::class),
+                serializationAggregateMapper()
             )
 
-            fun Scope.miracleCompendium() = FirestoreCompendium(
+            fun Scope.miracleCompendium() = FirestoreCompendium<Miracle>(
                 COLLECTION_COMPENDIUM_MIRACLES,
                 get(),
-                aggregateMapper(Miracle::class),
-            )
-
-            fun <T : CharacterItem> Scope.characterItemRepository(
-                classRef: KClass<T>,
-                collectionName: String,
-            ): CharacterItemRepository<T> = FirestoreCharacterItemRepository(
-                collectionName = collectionName,
-                mapper = aggregateMapper(classRef),
-                get(),
+                serializationAggregateMapper()
             )
 
             single<InvitationProcessor> { FirestoreInvitationProcessor(get(), get()) }
@@ -137,23 +130,23 @@ val appModule =
                 }
             }
 
-            single<SkillRepository> { FirestoreSkillRepository(get(), aggregateMapper(Skill::class)) }
+            single<SkillRepository> { FirestoreSkillRepository(get(), serializationAggregateMapper()) }
             single(named(Services.CHARACTER_TALENT_REPOSITORY)) {
-                characterItemRepository(Talent::class, COLLECTION_TALENTS)
+                characterItemRepository<Talent>(COLLECTION_TALENTS)
             }
             single(named(Services.CHARACTER_SPELL_REPOSITORY)) {
-                characterItemRepository(Spell::class, COLLECTION_SPELLS)
+                characterItemRepository<Spell>(COLLECTION_SPELLS)
             }
 
             single<CharacterRepository> {
-                CharacterRepositoryIdentityMap(10, FirestoreCharacterRepository(get(), aggregateMapper(Character::class)))
+                CharacterRepositoryIdentityMap(10, FirestoreCharacterRepository(get(), serializationAggregateMapper()))
             }
             single<PartyRepository> {
-                PartyRepositoryIdentityMap(10, FirestorePartyRepository(get(), aggregateMapper(Party::class)))
+                PartyRepositoryIdentityMap(10, FirestorePartyRepository(get(), serializationAggregateMapper()))
             }
 
-            single<EncounterRepository> { FirestoreEncounterRepository(get(), aggregateMapper(Encounter::class)) }
-            single<NpcRepository> { FirestoreNpcRepository(get(), aggregateMapper(Npc::class)) }
+            single<EncounterRepository> { FirestoreEncounterRepository(get(), serializationAggregateMapper()) }
+            single<NpcRepository> { FirestoreNpcRepository(get(), serializationAggregateMapper()) }
 
             single { AdManager(get()) }
 

@@ -2,7 +2,9 @@ package cz.frantisekmasa.wfrp_master.core.domain.character
 
 import cz.frantisekmasa.wfrp_master.core.R
 import cz.frantisekmasa.wfrp_master.core.domain.NamedEnum
+import kotlinx.serialization.Serializable
 
+@Serializable
 data class SocialStatus(
     val tier: Tier,
     val standing: Int,

@@ -1,5 +1,8 @@
 package cz.frantisekmasa.wfrp_master.core.domain.character
 
+import kotlinx.serialization.Serializable
+
+@Serializable
 class CurrentConditions private constructor(private val conditions: Map<Condition, Int>) {
     companion object {
         fun none() = CurrentConditions(emptyMap())

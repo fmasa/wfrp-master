@@ -1,5 +1,6 @@
 plugins {
     id("default-android-module")
+    kotlin("plugin.serialization")
 }
 
 dependencies {

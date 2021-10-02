@@ -5,11 +5,14 @@ import cz.frantisekmasa.wfrp_master.core.common.requireMaxLength
 import cz.frantisekmasa.wfrp_master.core.domain.Characteristic
 import cz.frantisekmasa.wfrp_master.core.domain.compendium.CompendiumItem
 import kotlinx.parcelize.Parcelize
+import kotlinx.serialization.Contextual
+import kotlinx.serialization.Serializable
 import java.util.UUID
 
 @Parcelize
+@Serializable
 data class Skill(
-    override val id: UUID,
+    @Contextual override val id: UUID,
     override val name: String,
     val description: String,
     val characteristic: Characteristic,

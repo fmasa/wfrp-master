@@ -1,8 +1,6 @@
 package cz.frantisekmasa.wfrp_master.inventory.domain
 
 import android.os.Parcelable
-import com.fasterxml.jackson.annotation.JsonTypeInfo
-import com.fasterxml.jackson.annotation.JsonTypeName
 import cz.frantisekmasa.wfrp_master.inventory.domain.armour.ArmourLocation
 import cz.frantisekmasa.wfrp_master.inventory.domain.armour.ArmourPoints
 import cz.frantisekmasa.wfrp_master.inventory.domain.armour.ArmourType
@@ -16,17 +14,22 @@ import cz.frantisekmasa.wfrp_master.inventory.domain.weapon.WeaponFlaw
 import cz.frantisekmasa.wfrp_master.inventory.domain.weapon.WeaponQuality
 import cz.frantisekmasa.wfrp_master.inventory.domain.weapon.WeaponRangeExpression
 import kotlinx.parcelize.Parcelize
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.json.JsonClassDiscriminator
 
 typealias Rating = Int
 
-@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "kind")
+@Serializable
+@JsonClassDiscriminator("kind")
 sealed class TrappingType : Parcelable {
     interface WearableTrapping {
         val worn: Boolean
     }
 
     @Parcelize
-    @JsonTypeName("MELEE_WEAPON")
+    @Serializable
+    @SerialName("MELEE_WEAPON")
     data class MeleeWeapon(
         val group: MeleeWeaponGroup,
         val reach: Reach,
@@ -37,7 +40,8 @@ sealed class TrappingType : Parcelable {
     ) : TrappingType()
 
     @Parcelize
-    @JsonTypeName("RANGED_WEAPON")
+    @Serializable
+    @SerialName("RANGED_WEAPON")
     data class RangedWeapon(
         val group: RangedWeaponGroup,
         val range: WeaponRangeExpression,
@@ -48,7 +52,8 @@ sealed class TrappingType : Parcelable {
     ) : TrappingType()
 
     @Parcelize
-    @JsonTypeName("AMMUNITION")
+    @Serializable
+    @SerialName("AMMUNITION")
     data class Ammunition(
         val weaponGroups: Set<RangedWeaponGroup>,
         val range: AmmunitionRangeExpression,
@@ -58,7 +63,8 @@ sealed class TrappingType : Parcelable {
     ) : TrappingType()
 
     @Parcelize
-    @JsonTypeName("ARMOUR")
+    @Serializable
+    @SerialName("ARMOUR")
     data class Armour(
         val locations: Set<ArmourLocation>,
         val type: ArmourType,
@@ -67,7 +73,8 @@ sealed class TrappingType : Parcelable {
     ) : TrappingType(), WearableTrapping
 
     @Parcelize
-    @JsonTypeName("CONTAINER")
+    @Serializable
+    @SerialName("CONTAINER")
     data class Container(
         val carries: Encumbrance,
         override val worn: Boolean,

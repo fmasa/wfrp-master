@@ -1,12 +1,14 @@
 package cz.frantisekmasa.wfrp_master.core.domain.party.combat
 
 import android.os.Parcelable
-import com.fasterxml.jackson.annotation.JsonTypeInfo
-import com.fasterxml.jackson.annotation.JsonTypeName
 import cz.frantisekmasa.wfrp_master.core.domain.identifiers.NpcId
 import kotlinx.parcelize.Parcelize
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.json.JsonClassDiscriminator
 
-@JsonTypeInfo(use = JsonTypeInfo.Id.NAME)
+@Serializable
+@JsonClassDiscriminator("@type")
 sealed class Combatant : Parcelable {
     abstract val advantage: Int
     abstract val initiative: Int
@@ -20,7 +22,8 @@ sealed class Combatant : Parcelable {
     }
 
     @Parcelize
-    @JsonTypeName("character")
+    @Serializable
+    @SerialName("character")
     data class Character(
         val characterId: String,
         override val initiative: Int,
@@ -31,7 +34,8 @@ sealed class Combatant : Parcelable {
     }
 
     @Parcelize
-    @JsonTypeName("npc")
+    @Serializable
+    @SerialName("npc")
     data class Npc(
         val npcId: NpcId,
         override val initiative: Int,

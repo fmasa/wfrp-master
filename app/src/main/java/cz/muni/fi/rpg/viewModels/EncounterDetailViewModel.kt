@@ -103,19 +103,20 @@ class EncounterDetailViewModel(
     ) {
         val npc = npcRepository.get(NpcId(encounterId, id))
 
-        npc.update(
-            name,
-            note,
-            Wounds(min(npc.wounds.current, maxWounds), maxWounds),
-            stats,
-            armor,
-            enemy,
-            alive,
-            traits,
-            trappings
+        npcRepository.save(
+            encounterId,
+            npc.copy(
+                name = name,
+                note = note,
+                wounds = Wounds(min(npc.wounds.current, maxWounds), maxWounds),
+                stats = stats,
+                armor = armor,
+                enemy = enemy,
+                alive = alive,
+                traits = traits,
+                trappings = trappings,
+            )
         )
-
-        npcRepository.save(encounterId, npc)
     }
 
     fun npcFlow(npcId: NpcId): StateFlow<Npc?> {

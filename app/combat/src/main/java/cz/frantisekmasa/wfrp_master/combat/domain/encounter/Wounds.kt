@@ -1,8 +1,10 @@
 package cz.frantisekmasa.wfrp_master.combat.domain.encounter
 
+import kotlinx.serialization.Serializable
 import kotlin.math.max
 import kotlin.math.min
 
+@Serializable
 data class Wounds(
     val current: Int,
     val max: Int

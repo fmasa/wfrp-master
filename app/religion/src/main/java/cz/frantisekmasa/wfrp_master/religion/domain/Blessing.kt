@@ -3,13 +3,16 @@ package cz.frantisekmasa.wfrp_master.religion.domain
 import cz.frantisekmasa.wfrp_master.core.common.requireMaxLength
 import cz.frantisekmasa.wfrp_master.core.domain.character.CharacterItem
 import kotlinx.parcelize.Parcelize
+import kotlinx.serialization.Contextual
+import kotlinx.serialization.Serializable
 import java.util.UUID
 import cz.frantisekmasa.wfrp_master.compendium.domain.Blessing as CompendiumBlessing
 
 @Parcelize
+@Serializable
 internal data class Blessing(
-    override val id: UUID,
-    override val compendiumId: UUID?,
+    @Contextual override val id: UUID,
+    @Contextual override val compendiumId: UUID?,
     val name: String,
     val range: String,
     val target: String,

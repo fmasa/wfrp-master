@@ -4,11 +4,14 @@ buildscript {
         jcenter()
         mavenCentral()
         maven("https://plugins.gradle.org/m2/")
+        maven("https://kotlin.bintray.com/kotlinx")
     }
 
     dependencies {
         classpath("com.android.tools.build:gradle:${Versions.agp}")
         classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:${Versions.kotlin}")
+
+        classpath("org.jetbrains.kotlin:kotlin-serialization:${Versions.kotlin}")
 
         // Firebase-related dependencies
         classpath("com.google.gms:google-services:4.3.8")
@@ -34,6 +37,7 @@ subprojects {
 
 plugins {
     id("org.jlleitschuh.gradle.ktlint") version "10.1.0"
+    kotlin("plugin.serialization") version Versions.kotlin
 }
 
 tasks.register("clean", Delete::class) {

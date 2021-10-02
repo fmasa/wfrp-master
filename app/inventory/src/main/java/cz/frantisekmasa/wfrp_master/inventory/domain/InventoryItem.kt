@@ -3,18 +3,21 @@ package cz.frantisekmasa.wfrp_master.inventory.domain
 import cz.frantisekmasa.wfrp_master.core.domain.character.CharacterItem
 import cz.frantisekmasa.wfrp_master.core.utils.duplicateName
 import kotlinx.parcelize.Parcelize
+import kotlinx.serialization.Contextual
+import kotlinx.serialization.Serializable
 import java.util.UUID
 
 typealias InventoryItemId = UUID
 
 @Parcelize
+@Serializable
 /* internal */ data class InventoryItem(
-    override val id: InventoryItemId,
+    @Contextual override val id: InventoryItemId,
     val name: String,
     val description: String,
     val quantity: Int,
     val encumbrance: Encumbrance = Encumbrance.Zero,
-    val containerId: InventoryItemId? = null,
+    @Contextual val containerId: InventoryItemId? = null,
     val trappingType: TrappingType? = null,
 ) : CharacterItem {
     companion object {
