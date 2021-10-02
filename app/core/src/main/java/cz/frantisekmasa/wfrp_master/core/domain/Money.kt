@@ -1,7 +1,9 @@
 package cz.frantisekmasa.wfrp_master.core.domain
 
+import kotlinx.serialization.Serializable
 import kotlin.math.min
 
+@Serializable
 data class Money(private val pennies: Int) : Comparable<Money> {
     companion object {
         private const val SHILLINGS_IN_CROWNS = 20

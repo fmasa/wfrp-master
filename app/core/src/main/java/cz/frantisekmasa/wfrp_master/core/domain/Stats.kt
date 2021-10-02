@@ -1,5 +1,8 @@
 package cz.frantisekmasa.wfrp_master.core.domain
 
+import kotlinx.serialization.Serializable
+
+@Serializable
 data class Stats(
     val weaponSkill: Int,
     val dexterity: Int,

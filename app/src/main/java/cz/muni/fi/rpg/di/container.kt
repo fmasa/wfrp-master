@@ -17,7 +17,6 @@ import cz.frantisekmasa.wfrp_master.core.ads.AdManager
 import cz.frantisekmasa.wfrp_master.core.ads.AdViewModel
 import cz.frantisekmasa.wfrp_master.core.ads.AdmobLocationProvider
 import cz.frantisekmasa.wfrp_master.core.ads.LocationProvider
-import cz.frantisekmasa.wfrp_master.core.domain.character.Character
 import cz.frantisekmasa.wfrp_master.core.domain.character.CharacterItem
 import cz.frantisekmasa.wfrp_master.core.domain.character.CharacterItemRepository
 import cz.frantisekmasa.wfrp_master.core.domain.character.CharacterRepository
@@ -146,7 +145,7 @@ val appModule =
             }
 
             single<CharacterRepository> {
-                CharacterRepositoryIdentityMap(10, FirestoreCharacterRepository(get(), aggregateMapper(Character::class)))
+                CharacterRepositoryIdentityMap(10, FirestoreCharacterRepository(get(), serializationAggregateMapper()))
             }
             single<PartyRepository> {
                 PartyRepositoryIdentityMap(10, FirestorePartyRepository(get(), serializationAggregateMapper()))

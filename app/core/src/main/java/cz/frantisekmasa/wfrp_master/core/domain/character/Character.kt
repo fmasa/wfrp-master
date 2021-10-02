@@ -3,7 +3,9 @@ package cz.frantisekmasa.wfrp_master.core.domain.character
 import cz.frantisekmasa.wfrp_master.core.domain.Ambitions
 import cz.frantisekmasa.wfrp_master.core.domain.Money
 import cz.frantisekmasa.wfrp_master.core.domain.Stats
+import kotlinx.serialization.Serializable
 
+@Serializable
 data class Character(
     private var name: String,
     val userId: String?,

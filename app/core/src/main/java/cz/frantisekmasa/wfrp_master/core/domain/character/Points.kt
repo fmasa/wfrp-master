@@ -3,8 +3,10 @@ package cz.frantisekmasa.wfrp_master.core.domain.character
 import androidx.annotation.StringRes
 import cz.frantisekmasa.wfrp_master.core.R
 import cz.frantisekmasa.wfrp_master.core.domain.NamedEnum
+import kotlinx.serialization.Serializable
 import kotlin.math.min
 
+@Serializable
 data class Points(
     val corruption: Int,
     val fate: Int,
