@@ -1,13 +1,14 @@
 package cz.frantisekmasa.wfrp_master.core.domain.time
 
 import android.os.Parcelable
-import com.fasterxml.jackson.annotation.JsonCreator
-import com.fasterxml.jackson.annotation.JsonUnwrapped
 import kotlinx.parcelize.Parcelize
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
 @Parcelize
+@Serializable
 data class DateTime(
-    @field:JsonUnwrapped
+    @SerialName("imperialDay")
     val date: ImperialDate,
     private val minutes: Int
 ) : Parcelable {
@@ -34,12 +35,6 @@ data class DateTime(
     }
 
     constructor(date: ImperialDate, time: TimeOfDay) : this(date, toMinutes(time))
-
-    /**
-     * This is necessary for deserialization
-     */
-    @JsonCreator
-    constructor(imperialDate: Int, minutes: Int) : this(ImperialDate(imperialDate), minutes)
 
     fun withTime(time: TimeOfDay): DateTime = copy(minutes = toMinutes(time))
 }

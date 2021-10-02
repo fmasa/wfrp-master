@@ -2,8 +2,10 @@ package cz.frantisekmasa.wfrp_master.core.domain
 
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
+import kotlinx.serialization.Serializable
 
 @Parcelize
+@Serializable
 data class Ambitions(
     val shortTerm: String,
     val longTerm: String

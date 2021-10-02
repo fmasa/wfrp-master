@@ -3,10 +3,14 @@ package cz.frantisekmasa.wfrp_master.core.domain.party.combat
 import android.os.Parcelable
 import cz.frantisekmasa.wfrp_master.core.domain.identifiers.NpcId
 import kotlinx.parcelize.Parcelize
+import kotlinx.serialization.Contextual
+import kotlinx.serialization.Serializable
 import java.util.UUID
 
 @Parcelize
+@Serializable
 data class Combat(
+    @Contextual
     val encounterId: UUID,
     private var combatants: List<Combatant>,
     private val turn: Int = 1,

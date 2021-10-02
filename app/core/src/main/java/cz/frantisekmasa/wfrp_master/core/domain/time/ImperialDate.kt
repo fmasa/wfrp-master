@@ -6,9 +6,12 @@ import arrow.core.Either
 import arrow.core.Left
 import arrow.core.Right
 import kotlinx.parcelize.Parcelize
+import kotlinx.serialization.Serializable
 
+@JvmInline
+@Serializable
 @Parcelize
-data class ImperialDate(
+value class ImperialDate(
     @IntRange(from = 0)
     private val imperialDay: Int
 ) : Comparable<ImperialDate>, Parcelable {
@@ -157,4 +160,8 @@ data class ImperialDate(
             { "${it.first} ${it.second.readableName}, ${dayOfWeek?.readableName}, $year" }
         )
     }
+}
+
+private class ImperialDateSerializer {
+
 }

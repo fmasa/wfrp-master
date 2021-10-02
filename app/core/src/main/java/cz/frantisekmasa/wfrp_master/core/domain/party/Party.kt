@@ -10,9 +10,11 @@ import cz.frantisekmasa.wfrp_master.core.domain.party.settings.Settings
 import cz.frantisekmasa.wfrp_master.core.domain.time.DateTime
 import cz.frantisekmasa.wfrp_master.core.domain.time.ImperialDate
 import kotlinx.parcelize.Parcelize
+import kotlinx.serialization.Serializable
 import java.util.UUID
 
 @Parcelize
+@Serializable
 data class Party(
     val id: PartyId,
     private var name: String,
