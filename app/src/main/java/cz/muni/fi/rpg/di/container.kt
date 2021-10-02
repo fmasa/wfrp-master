@@ -3,7 +3,6 @@ package cz.muni.fi.rpg.di
 import com.revenuecat.purchases.Purchases
 import cz.frantisekmasa.wfrp_master.combat.domain.encounter.Encounter
 import cz.frantisekmasa.wfrp_master.combat.domain.encounter.EncounterRepository
-import cz.frantisekmasa.wfrp_master.combat.domain.encounter.Npc
 import cz.frantisekmasa.wfrp_master.combat.domain.encounter.NpcRepository
 import cz.frantisekmasa.wfrp_master.combat.infrastructure.FirestoreEncounterRepository
 import cz.frantisekmasa.wfrp_master.combat.infrastructure.FirestoreNpcRepository
@@ -152,7 +151,7 @@ val appModule =
             }
 
             single<EncounterRepository> { FirestoreEncounterRepository(get(), aggregateMapper(Encounter::class)) }
-            single<NpcRepository> { FirestoreNpcRepository(get(), aggregateMapper(Npc::class)) }
+            single<NpcRepository> { FirestoreNpcRepository(get(), serializationAggregateMapper()) }
 
             single { AdManager(get()) }
 

@@ -4,10 +4,13 @@ import cz.frantisekmasa.wfrp_master.core.domain.Stats
 import cz.frantisekmasa.wfrp_master.core.domain.character.CurrentConditions
 import cz.frantisekmasa.wfrp_master.core.utils.duplicateName
 import cz.frantisekmasa.wfrp_master.inventory.domain.Armor
+import kotlinx.serialization.Contextual
+import kotlinx.serialization.Serializable
 import java.util.UUID
 
+@Serializable
 data class Npc(
-    val id: UUID,
+    @Contextual val id: UUID,
     val name: String,
     val note: String,
     val wounds: Wounds,
