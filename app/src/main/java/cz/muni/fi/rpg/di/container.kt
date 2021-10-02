@@ -23,13 +23,13 @@ import cz.frantisekmasa.wfrp_master.core.domain.character.CharacterItemRepositor
 import cz.frantisekmasa.wfrp_master.core.domain.character.CharacterRepository
 import cz.frantisekmasa.wfrp_master.core.domain.identifiers.CharacterId
 import cz.frantisekmasa.wfrp_master.core.domain.identifiers.EncounterId
-import cz.frantisekmasa.wfrp_master.core.domain.party.Party
 import cz.frantisekmasa.wfrp_master.core.domain.party.PartyId
 import cz.frantisekmasa.wfrp_master.core.domain.party.PartyRepository
 import cz.frantisekmasa.wfrp_master.core.firestore.aggregateMapper
 import cz.frantisekmasa.wfrp_master.core.firestore.repositories.FirestoreCharacterItemRepository
 import cz.frantisekmasa.wfrp_master.core.firestore.repositories.FirestoreCharacterRepository
 import cz.frantisekmasa.wfrp_master.core.firestore.repositories.FirestorePartyRepository
+import cz.frantisekmasa.wfrp_master.core.firestore.serialization.serializationAggregateMapper
 import cz.frantisekmasa.wfrp_master.core.viewModel.PartyViewModel
 import cz.frantisekmasa.wfrp_master.core.viewModel.PremiumViewModel
 import cz.frantisekmasa.wfrp_master.core.viewModel.SettingsViewModel
@@ -149,7 +149,7 @@ val appModule =
                 CharacterRepositoryIdentityMap(10, FirestoreCharacterRepository(get(), aggregateMapper(Character::class)))
             }
             single<PartyRepository> {
-                PartyRepositoryIdentityMap(10, FirestorePartyRepository(get(), aggregateMapper(Party::class)))
+                PartyRepositoryIdentityMap(10, FirestorePartyRepository(get(), serializationAggregateMapper()))
             }
 
             single<EncounterRepository> { FirestoreEncounterRepository(get(), aggregateMapper(Encounter::class)) }

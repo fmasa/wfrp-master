@@ -5,6 +5,7 @@ plugins {
     id("com.google.gms.google-services")
     id("kotlin-kapt")
     id("com.google.firebase.crashlytics")
+    kotlin("plugin.serialization")
     // id("com.google.firebase.firebase-perf")
 }
 
@@ -87,6 +88,7 @@ android {
             "-Xopt-in=androidx.compose.material.ExperimentalMaterialApi" +
             "-Xopt-in=androidx.compose.animation.ExperimentalAnimationApi" +
             "-Xopt-in=androidx.compose.animation.ExperimentalFoundationApi" +
+            "-Xopt-in=kotlinx.serialization.ExperimentalSerializationApi" +
             "-P" +
             "plugin:androidx.compose.compiler.plugins.kotlin:suppressKotlinVersionCompatibilityCheck=true"
     }

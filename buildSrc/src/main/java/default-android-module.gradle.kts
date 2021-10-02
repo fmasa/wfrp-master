@@ -41,6 +41,7 @@ configure<LibraryExtension> {
             "-Xopt-in=androidx.compose.material.ExperimentalMaterialApi" +
             "-Xopt-in=androidx.compose.foundation.ExperimentalFoundationApi" +
             "-Xopt-in=coil.annotation.ExperimentalCoilApi" +
+            "-Xopt-in=kotlinx.serialization.ExperimentalSerializationApi" +
             "-P" +
             "plugin:androidx.compose.compiler.plugins.kotlin:suppressKotlinVersionCompatibilityCheck=true" +
             "-Xallow-result-return-type"

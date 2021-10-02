@@ -3,6 +3,7 @@ import org.jetbrains.kotlin.konan.properties.loadProperties
 
 plugins {
     id("default-android-module")
+    kotlin("plugin.serialization")
 }
 
 android {
@@ -83,6 +84,7 @@ dependencies {
     // JSON encoding
     // TODO: Make is implementation only
     api("com.fasterxml.jackson.module:jackson-module-kotlin:2.12.3")
+    api("org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.0")
 
     // Premium
     // TODO: Make implementation only
