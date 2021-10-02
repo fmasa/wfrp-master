@@ -3,7 +3,6 @@ package cz.frantisekmasa.wfrp_master.religion
 import cz.frantisekmasa.wfrp_master.compendium.infrastructure.FirestoreCompendium
 import cz.frantisekmasa.wfrp_master.core.domain.character.CharacterItemRepository
 import cz.frantisekmasa.wfrp_master.core.domain.identifiers.CharacterId
-import cz.frantisekmasa.wfrp_master.core.firestore.aggregateMapper
 import cz.frantisekmasa.wfrp_master.core.firestore.repositories.FirestoreCharacterItemRepository
 import cz.frantisekmasa.wfrp_master.core.firestore.serialization.serializationAggregateMapper
 import cz.frantisekmasa.wfrp_master.religion.domain.Blessing
@@ -42,7 +41,7 @@ val ReligionModule = module {
     single<CharacterItemRepository<Miracle>>(named(Service.MIRACLE_REPOSITORY)) {
         FirestoreCharacterItemRepository(
             COLLECTION_MIRACLES,
-            aggregateMapper(Miracle::class),
+            serializationAggregateMapper(),
             get()
         )
     }
