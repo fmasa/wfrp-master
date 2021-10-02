@@ -2,11 +2,14 @@ package cz.frantisekmasa.wfrp_master.compendium.domain
 
 import cz.frantisekmasa.wfrp_master.core.domain.compendium.CompendiumItem
 import kotlinx.parcelize.Parcelize
+import kotlinx.serialization.Contextual
+import kotlinx.serialization.Serializable
 import java.util.UUID
 
 @Parcelize
+@Serializable
 data class Spell(
-    override val id: UUID,
+    @Contextual override val id: UUID,
     override val name: String,
     val range: String,
     val target: String,

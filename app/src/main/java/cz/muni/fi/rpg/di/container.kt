@@ -87,34 +87,34 @@ val appModule =
         InventoryModule +
         ReligionModule +
         module {
-            fun Scope.skillCompendium() = FirestoreCompendium(
+            fun Scope.skillCompendium() = FirestoreCompendium<CompendiumSkill>(
                 COLLECTION_COMPENDIUM_SKILLS,
                 get(),
-                aggregateMapper(CompendiumSkill::class),
+                serializationAggregateMapper(),
             )
 
-            fun Scope.talentCompendium() = FirestoreCompendium(
+            fun Scope.talentCompendium() = FirestoreCompendium<CompendiumTalent>(
                 COLLECTION_COMPENDIUM_TALENTS,
                 get(),
-                aggregateMapper(CompendiumTalent::class),
+                serializationAggregateMapper(),
             )
 
-            fun Scope.spellCompendium() = FirestoreCompendium(
+            fun Scope.spellCompendium() = FirestoreCompendium<CompendiumSpell>(
                 COLLECTION_COMPENDIUM_SPELLS,
                 get(),
-                aggregateMapper(CompendiumSpell::class),
+                serializationAggregateMapper(),
             )
 
-            fun Scope.blessingCompendium() = FirestoreCompendium(
+            fun Scope.blessingCompendium() = FirestoreCompendium<Blessing>(
                 COLLECTION_COMPENDIUM_BLESSINGS,
                 get(),
-                aggregateMapper(Blessing::class),
+                serializationAggregateMapper()
             )
 
-            fun Scope.miracleCompendium() = FirestoreCompendium(
+            fun Scope.miracleCompendium() = FirestoreCompendium<Miracle>(
                 COLLECTION_COMPENDIUM_MIRACLES,
                 get(),
-                aggregateMapper(Miracle::class),
+                serializationAggregateMapper()
             )
 
             fun <T : CharacterItem> Scope.characterItemRepository(
