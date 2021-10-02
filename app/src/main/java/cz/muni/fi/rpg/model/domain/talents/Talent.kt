@@ -2,12 +2,15 @@ package cz.muni.fi.rpg.model.domain.talents
 
 import cz.frantisekmasa.wfrp_master.core.domain.character.CharacterItem
 import kotlinx.parcelize.Parcelize
+import kotlinx.serialization.Contextual
+import kotlinx.serialization.Serializable
 import java.util.UUID
 
 @Parcelize
+@Serializable
 data class Talent(
-    override val id: UUID,
-    override val compendiumId: UUID? = null,
+    @Contextual override val id: UUID,
+    @Contextual override val compendiumId: UUID? = null,
     val name: String,
     val description: String,
     val taken: Int

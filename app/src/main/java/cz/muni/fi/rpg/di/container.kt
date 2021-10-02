@@ -71,7 +71,6 @@ import org.koin.core.qualifier.named
 import org.koin.core.scope.Scope
 import org.koin.dsl.module
 import kotlin.random.Random
-import kotlin.reflect.KClass
 import cz.frantisekmasa.wfrp_master.compendium.domain.Skill as CompendiumSkill
 import cz.frantisekmasa.wfrp_master.compendium.domain.Spell as CompendiumSpell
 import cz.frantisekmasa.wfrp_master.compendium.domain.Talent as CompendiumTalent
@@ -80,6 +79,14 @@ private enum class Services {
     CHARACTER_TALENT_REPOSITORY,
     CHARACTER_SPELL_REPOSITORY,
 }
+
+private inline fun <reified T : CharacterItem> Scope.characterItemRepository(
+    collectionName: String,
+): CharacterItemRepository<T> = FirestoreCharacterItemRepository(
+    collectionName = collectionName,
+    mapper = serializationAggregateMapper(),
+    get(),
+)
 
 val appModule =
     CoreModule +
@@ -116,15 +123,6 @@ val appModule =
                 serializationAggregateMapper()
             )
 
-            fun <T : CharacterItem> Scope.characterItemRepository(
-                classRef: KClass<T>,
-                collectionName: String,
-            ): CharacterItemRepository<T> = FirestoreCharacterItemRepository(
-                collectionName = collectionName,
-                mapper = aggregateMapper(classRef),
-                get(),
-            )
-
             single<InvitationProcessor> { FirestoreInvitationProcessor(get(), get()) }
 
             single<LocationProvider> { AdmobLocationProvider() }
@@ -136,10 +134,10 @@ val appModule =
 
             single<SkillRepository> { FirestoreSkillRepository(get(), serializationAggregateMapper()) }
             single(named(Services.CHARACTER_TALENT_REPOSITORY)) {
-                characterItemRepository(Talent::class, COLLECTION_TALENTS)
+                characterItemRepository<Talent>(COLLECTION_TALENTS)
             }
             single(named(Services.CHARACTER_SPELL_REPOSITORY)) {
-                characterItemRepository(Spell::class, COLLECTION_SPELLS)
+                characterItemRepository<Spell>(COLLECTION_SPELLS)
             }
 
             single<CharacterRepository> {
