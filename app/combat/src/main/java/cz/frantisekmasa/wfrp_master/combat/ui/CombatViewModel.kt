@@ -223,9 +223,7 @@ class CombatViewModel(
                     return
                 }
 
-                npc.updateCurrentWounds(wounds.current)
-
-                npcs.save(combatant.npcId.encounterId, npc)
+                npcs.save(combatant.npcId.encounterId, npc.updateCurrentWounds(wounds.current))
             }
         }
     }
