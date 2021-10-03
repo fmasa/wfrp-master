@@ -47,10 +47,12 @@ android {
 
 
         getByName("release") {
-            isMinifyEnabled = false
+            isMinifyEnabled = true
+            isShrinkResources = true
+            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+
             signingConfig = signingConfigs.getByName("release")
 
-            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
             resValue("string", "app_name", "WFRP Master")
             resValue("string", "character_ad_unit_id", "ca-app-pub-8647604386686373/9919978313")
             resValue("string", "game_master_ad_unit_id", "ca-app-pub-8647604386686373/7714574658")
