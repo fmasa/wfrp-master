@@ -1,30 +1,14 @@
-# Add project specific ProGuard rules here.
-# You can control the set of applied configuration files using the
-# proguardFiles setting in build.gradle.kts.
-#
-# For more details, see
-#   http://developer.android.com/guide/developing/tools/proguard.html
-
-# If your project uses WebView with JS, uncomment the following
-# and specify the fully qualified class name to the JavaScript interface
-# class:
-#-keepclassmembers class fqcn.of.javascript.interface.for.webview {
-#   public *;
-#}
-
-# Uncomment this to preserve the line number information for
-# debugging stack traces.
-#-keepattributes SourceFile,LineNumberTable
-
-# If you keep the line number information, uncomment this to
-# hide the original source file name.
-#-renamesourcefileattribute SourceFile
 -keep class com.revenuecat.purchases.** { *; }
 
--keepattributes *Annotation*, InnerClasses
--dontnote kotlinx.serialization.AnnotationsKt # core serialization annotations
+# Optional dependency used for PDF reader when reading encrypted PDFs
+-dontnote com.lowagie.bouncycastle.*
 
-# kotlinx-serialization-json specific. Add this if you have java.lang.NoClassDefFoundError kotlinx.serialization.json.JsonObjectSerializer
+#
+# Kotlinx serialization
+#
+-keepattributes *Annotation*, InnerClasses
+-dontnote kotlinx.serialization.AnnotationsKt
+
 -keepclassmembers class kotlinx.serialization.json.** {
     *** Companion;
 }
@@ -32,11 +16,18 @@
     kotlinx.serialization.KSerializer serializer(...);
 }
 
-# Change here com.yourcompany.yourpackage
--keep,includedescriptorclasses class cz.frantisekmasa.wfrp_master.**$$serializer { *; } # <-- change package name to your app's
--keepclassmembers class com.yourcompany.yourpackage.** { # <-- change package name to your app's
+-keep,includedescriptorclasses class cz.frantisekmasa.wfrp_master.**$$serializer { *; }
+-keepclassmembers class cz.frantisekmasa.wfrp_master.** {
     *** Companion;
 }
--keepclasseswithmembers class cz.frantisekmasa.wfrp_master.** { # <-- change package name to your app's
+-keepclasseswithmembers class cz.frantisekmasa.wfrp_master.** {
+    kotlinx.serialization.KSerializer serializer(...);
+}
+
+-keep,includedescriptorclasses class cz.muni.fi.rpg.**$$serializer { *; }
+-keepclassmembers class cz.muni.fi.rpg.** {
+    *** Companion;
+}
+-keepclasseswithmembers class cz.muni.fi.rpg.** {
     kotlinx.serialization.KSerializer serializer(...);
 }
