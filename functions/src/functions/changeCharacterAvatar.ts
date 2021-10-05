@@ -7,6 +7,7 @@ import * as sharp from "sharp";
 import * as t from "io-ts";
 import {UploadResponse} from "@google-cloud/storage/build/src/bucket";
 import {Bucket} from "@google-cloud/storage";
+import {Sharp} from "sharp";
 
 const imageSize = 500
 
@@ -49,7 +50,7 @@ export const changeCharacterAvatar = functions.https.onCall(async (data, context
 
     const tempFile = await file();
 
-    await sharp(Buffer.from(imageData, "base64"))
+    await (await cropToRectangle(sharp(Buffer.from(imageData, "base64"))))
         .resize(imageSize, imageSize, {fit: "outside"})
         .webp()
         .toFile(tempFile.path);
@@ -80,6 +81,27 @@ export const changeCharacterAvatar = functions.https.onCall(async (data, context
         url,
     };
 });
+
+const cropToRectangle = async (image: Sharp): Promise<Sharp> => {
+    const metadata = await image.metadata();
+    const width = metadata.width;
+    const height = metadata.height;
+
+    if (width == undefined || height == undefined) {
+        console.error("Could not read image width and height");
+
+        return image;
+    }
+
+    const size = Math.min(width, height);
+
+    return image.extract({
+        top: Math.round((height - size) / 2),
+        left: Math.round((width - size) / 2),
+        width: size,
+        height: size,
+    })
+}
 
 const generateAvatarUrl = (response: UploadResponse, bucket: Bucket): string => {
     if ("FIREBASE_STORAGE_EMULATOR_HOST" in process.env) {
