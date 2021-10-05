@@ -7,7 +7,6 @@ import * as sharp from "sharp";
 import * as t from "io-ts";
 import {UploadResponse} from "@google-cloud/storage/build/src/bucket";
 import {Bucket} from "@google-cloud/storage";
-import {Sharp} from "sharp";
 
 const imageSize = 500;
 
@@ -82,7 +81,7 @@ export const changeCharacterAvatar = functions.https.onCall(async (data, context
     };
 });
 
-const cropToRectangle = async (image: Sharp): Promise<Sharp> => {
+const cropToRectangle = async (image: sharp.Sharp): Promise<Sharp> => {
     const metadata = await image.metadata();
     const width = metadata.width;
     const height = metadata.height;
