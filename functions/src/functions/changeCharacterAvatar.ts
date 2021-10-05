@@ -9,7 +9,7 @@ import {UploadResponse} from "@google-cloud/storage/build/src/bucket";
 import {Bucket} from "@google-cloud/storage";
 import {Sharp} from "sharp";
 
-const imageSize = 500
+const imageSize = 500;
 
 const RequestBody = t.interface({
     partyId: t.string,
