@@ -86,7 +86,7 @@ const cropToRectangle = async (image: sharp.Sharp): Promise<Sharp> => {
     const width = metadata.width;
     const height = metadata.height;
 
-    if (width == undefined || height == undefined) {
+    if (width === undefined || height === undefined) {
         console.error("Could not read image width and height");
 
         return image;
