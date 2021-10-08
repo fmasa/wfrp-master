@@ -81,7 +81,7 @@ export const changeCharacterAvatar = functions.https.onCall(async (data, context
     };
 });
 
-const cropToRectangle = async (image: sharp.Sharp): Promise<Sharp> => {
+const cropToRectangle = async (image: sharp.Sharp): Promise<sharp.Sharp> => {
     const metadata = await image.metadata();
     const width = metadata.width;
     const height = metadata.height;
