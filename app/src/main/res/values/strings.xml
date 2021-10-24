@@ -321,5 +321,14 @@
     <string name="error_file_opening_crashed">Could not open file</string>
     <string name="message_avatar_changed">Avatar was changed</string>
     <string name="message_avatar_removed">Avatar was removed</string>
+    <string name="button_open_settings">Open Settings</string>
+    <string name="camera_permission_denied">Camera permission denied</string>
+    <string name="camera_permission_required">Camera permission required</string>
+    <string name="camera_permission_rationale">Access to camera is needed to let you scan QR codes with party invitations.</string>
+    <string name="camera_permission_alternative">Alternatively you can ask your GM for invitation link.</string>
+    <string name="camera_permission_instructions">
+        Please, grant us access on the Settings screen.
+    </string>
+    <string name="button_request_permission">Request permission</string>
 
 </resources>
