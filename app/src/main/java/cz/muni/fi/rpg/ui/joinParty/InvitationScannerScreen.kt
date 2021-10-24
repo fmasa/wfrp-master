@@ -125,14 +125,8 @@ private fun PermissionRequestScreen(camera: PermissionState) {
         TextButton(onClick = { camera.launchPermissionRequest() }) {
             Text(stringResource(R.string.button_request_permission).uppercase())
         }
-        
-        HorizontalLine()
-        
-        Text(
-            stringResource(R.string.camera_permission_alternative),
-            modifier = Modifier.padding(top = Spacing.mediumLarge),
-            textAlign = TextAlign.Center,
-        )
+
+        Alternative()
     }
 }
 
@@ -147,6 +141,8 @@ private fun PermissionDeniedScreen() {
         TextButton(onClick = { context.openApplicationSettings() }) {
             Text(stringResource(R.string.button_open_settings).uppercase())
         }
+
+        Alternative()
     }
 }
 
@@ -166,6 +162,18 @@ private inline fun ScreenBody(content: @Composable ColumnScope.() -> Unit) {
 private fun Rationale() {
     Text(
         stringResource(R.string.camera_permission_rationale),
+        textAlign = TextAlign.Center,
+    )
+}
+
+@Composable
+private fun Alternative() {
+
+    HorizontalLine()
+
+    Text(
+        stringResource(R.string.camera_permission_alternative),
+        modifier = Modifier.padding(top = Spacing.mediumLarge),
         textAlign = TextAlign.Center,
     )
 }
