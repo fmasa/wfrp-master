@@ -87,7 +87,7 @@ dependencies {
     api("com.revenuecat.purchases:purchases:4.0.2")
 
     // Ads
-    api("com.google.android.gms:play-services-ads:20.2.0")
+    api("com.google.android.gms:play-services-ads:20.4.0")
 
     // Shared Preferences DataStore
     implementation("androidx.datastore:datastore-preferences:1.0.0-alpha05")
