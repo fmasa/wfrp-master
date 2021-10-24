@@ -88,7 +88,7 @@ dependencies {
     api("com.google.android.gms:play-services-ads:20.4.0")
 
     // Shared Preferences DataStore
-    implementation("androidx.datastore:datastore-preferences:1.0.0-alpha05")
+    implementation("androidx.datastore:datastore-preferences:1.0.0")
     implementation("com.google.firebase:firebase-auth-ktx:21.0.1")
 
     // HTTP Client
