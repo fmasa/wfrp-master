@@ -50,7 +50,7 @@ fun InvitationScannerScreen(routing: Routing<Route>) {
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text(stringResource(R.string.qr_scan_prompt)) },
+                title = { Text(stringResource(R.string.title_joinParty)) },
                 navigationIcon = {
                     BackButton(onClick = { routing.pop() })
                 },
