@@ -51,8 +51,7 @@ dependencies {
     api("androidx.lifecycle:lifecycle-viewmodel-compose:1.0.0-alpha07")
 
     // Koin
-    api("org.koin:koin-android:2.2.0")
-    api("org.koin:koin-androidx-viewmodel:2.2.0")
+    api("io.insert-koin:koin-android:3.1.2")
 
     // Coil - image library
     implementation("io.coil-kt:coil-compose:1.3.2")
