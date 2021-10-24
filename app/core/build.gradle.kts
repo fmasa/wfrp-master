@@ -96,6 +96,4 @@ dependencies {
     implementation("io.ktor:ktor-client-core:$ktorVersion")
     implementation("io.ktor:ktor-client-cio:$ktorVersion")
     implementation("io.ktor:ktor-client-serialization:$ktorVersion")
-
-    api("com.google.accompanist:accompanist-flowlayout:0.12.0")
 }
