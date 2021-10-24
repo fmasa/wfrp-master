@@ -67,8 +67,8 @@ dependencies {
     api("com.jakewharton.timber:timber:4.7.1")
 
     // Coroutines
-    api("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.0")
-    api("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.5.0")
+    api("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.2")
+    api("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.5.2")
     api("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.3.5")
     api("androidx.lifecycle:lifecycle-livedata-ktx:2.3.1")
 
