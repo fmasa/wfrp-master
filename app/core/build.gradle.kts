@@ -11,9 +11,7 @@ android {
         //
         // Firestore emulator setup
         //
-        val propertiesFile = File("local.properties")
-
-        val properties = if (propertiesFile.exists())
+        val properties = if (File("local.properties").exists())
             loadProperties("local.properties")
         else Properties()
 
@@ -51,27 +49,26 @@ dependencies {
     api("androidx.lifecycle:lifecycle-viewmodel-compose:1.0.0-alpha07")
 
     // Koin
-    api("org.koin:koin-android:2.2.0")
-    api("org.koin:koin-androidx-viewmodel:2.2.0")
+    api("io.insert-koin:koin-android:3.1.2")
 
     // Coil - image library
     implementation("io.coil-kt:coil-compose:1.3.2")
 
     // Firebase-related dependencies
-    api("com.google.firebase:firebase-analytics:19.0.0")
-    api("com.firebaseui:firebase-ui-auth:6.2.0")
-    api("com.google.firebase:firebase-firestore-ktx:23.0.1")
-    api("com.google.firebase:firebase-analytics-ktx:19.0.0")
-    api("com.google.firebase:firebase-crashlytics:18.1.0")
-    api("com.google.firebase:firebase-dynamic-links-ktx:20.1.0")
-    api("com.google.firebase:firebase-functions-ktx:20.0.1")
+    api(platform("com.google.firebase:firebase-bom:28.4.2"))
+    api("com.google.firebase:firebase-analytics-ktx")
+    api("com.google.firebase:firebase-auth-ktx")
+    api("com.google.firebase:firebase-firestore-ktx")
+    api("com.google.firebase:firebase-crashlytics")
+    api("com.google.firebase:firebase-dynamic-links-ktx")
+    api("com.google.firebase:firebase-functions-ktx")
 
     // Logging
     api("com.jakewharton.timber:timber:4.7.1")
 
     // Coroutines
-    api("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.0")
-    api("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.5.0")
+    api("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.2")
+    api("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.5.2")
     api("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.3.5")
     api("androidx.lifecycle:lifecycle-livedata-ktx:2.3.1")
 
@@ -88,10 +85,10 @@ dependencies {
     api("com.revenuecat.purchases:purchases:4.0.2")
 
     // Ads
-    api("com.google.android.gms:play-services-ads:20.2.0")
+    api("com.google.android.gms:play-services-ads:20.4.0")
 
     // Shared Preferences DataStore
-    implementation("androidx.datastore:datastore-preferences:1.0.0-alpha05")
+    implementation("androidx.datastore:datastore-preferences:1.0.0")
     implementation("com.google.firebase:firebase-auth-ktx:21.0.1")
 
     // HTTP Client
@@ -99,6 +96,4 @@ dependencies {
     implementation("io.ktor:ktor-client-core:$ktorVersion")
     implementation("io.ktor:ktor-client-cio:$ktorVersion")
     implementation("io.ktor:ktor-client-serialization:$ktorVersion")
-
-    api("com.google.accompanist:accompanist-flowlayout:0.12.0")
 }

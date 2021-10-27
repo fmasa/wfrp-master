@@ -3,9 +3,9 @@ package cz.frantisekmasa.wfrp_master.core.viewModel
 import android.content.Context
 import androidx.compose.runtime.Composable
 import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
-import androidx.datastore.preferences.core.preferencesKey
-import androidx.datastore.preferences.createDataStore
+import androidx.datastore.preferences.preferencesDataStore
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
@@ -24,6 +24,8 @@ import kotlinx.coroutines.withContext
 import org.koin.androidx.viewmodel.ext.android.getViewModel
 import timber.log.Timber
 
+private val Context.settingsDataStore by preferencesDataStore("settings")
+
 class SettingsViewModel(
     context: Context,
     private val parties: PartyRepository,
@@ -35,7 +37,7 @@ class SettingsViewModel(
     val soundEnabled: LiveData<Boolean> by lazy { getPreference(AppSettings.SOUND_ENABLED, true) }
     val personalizedAds: LiveData<Boolean> by lazy { getPreference(AppSettings.PERSONALIZED_ADS, false) }
 
-    private val dataStore = context.createDataStore("settings")
+    private val dataStore = context.settingsDataStore
 
     suspend fun initializeAds() {
         val personalizedAds = refreshPersonalizedAdConsent()
@@ -104,10 +106,10 @@ class SettingsViewModel(
 }
 
 private object AppSettings {
-    val DARK_MODE = preferencesKey<Boolean>("dark_mode")
-    val SOUND_ENABLED = preferencesKey<Boolean>("sound_enabled")
-    val GOOGLE_SIGN_IN_DISMISSED = preferencesKey<Boolean>("dismissed_google_sign_in")
-    val PERSONALIZED_ADS = preferencesKey<Boolean>("personalized_ads")
+    val DARK_MODE = booleanPreferencesKey("dark_mode")
+    val SOUND_ENABLED = booleanPreferencesKey("sound_enabled")
+    val GOOGLE_SIGN_IN_DISMISSED = booleanPreferencesKey("dismissed_google_sign_in")
+    val PERSONALIZED_ADS = booleanPreferencesKey("personalized_ads")
 }
 
 @Composable

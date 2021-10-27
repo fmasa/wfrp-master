@@ -91,6 +91,7 @@ android {
             "-Xopt-in=androidx.compose.animation.ExperimentalAnimationApi" +
             "-Xopt-in=androidx.compose.animation.ExperimentalFoundationApi" +
             "-Xopt-in=kotlinx.serialization.ExperimentalSerializationApi" +
+            "-Xopt-in=com.google.accompanist.permissions.ExperimentalPermissionsApi" +
             "-P" +
             "plugin:androidx.compose.compiler.plugins.kotlin:suppressKotlinVersionCompatibilityCheck=true"
     }
@@ -111,7 +112,7 @@ dependencies {
     implementation("com.google.android.gms:play-services-auth:19.0.0")
 
     // Permission management
-    implementation("com.sagar:coroutinespermission:2.0.3")
+    implementation("com.google.accompanist:accompanist-permissions:0.20.0")
 
     // QR code scanning
     implementation("com.google.zxing:core:3.3.3")
