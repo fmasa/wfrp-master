@@ -62,6 +62,7 @@ dependencies {
     api("com.google.firebase:firebase-crashlytics")
     api("com.google.firebase:firebase-dynamic-links-ktx")
     api("com.google.firebase:firebase-functions-ktx")
+    api("androidx.work:work-runtime-ktx:2.7.0")
 
     // Logging
     api("com.jakewharton.timber:timber:4.7.1")
