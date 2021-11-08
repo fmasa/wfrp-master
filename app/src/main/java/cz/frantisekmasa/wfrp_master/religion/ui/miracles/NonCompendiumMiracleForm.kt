@@ -1,4 +1,4 @@
-package cz.frantisekmasa.wfrp_master.religion.ui.blessings
+package cz.frantisekmasa.wfrp_master.religion.ui.miracles
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -9,20 +9,21 @@ import cz.frantisekmasa.wfrp_master.core.ui.forms.InputValue
 import cz.frantisekmasa.wfrp_master.core.ui.forms.Rules
 import cz.frantisekmasa.wfrp_master.core.ui.forms.TextInput
 import cz.frantisekmasa.wfrp_master.core.ui.forms.inputValue
-import cz.frantisekmasa.wfrp_master.religion.R
-import cz.frantisekmasa.wfrp_master.religion.domain.Blessing
+import cz.frantisekmasa.wfrp_master.religion.domain.Miracle
+import cz.muni.fi.rpg.R
 import java.util.UUID
+import cz.frantisekmasa.wfrp_master.compendium.domain.Miracle.Companion as CompendiumMiracle
 
 @Composable
-internal fun NonCompendiumBlessingForm(
-    viewModel: BlessingsViewModel,
-    existingBlessing: Blessing?,
+internal fun NonCompendiumMiracleForm(
+    viewModel: MiraclesViewModel,
+    existingMiracle: Miracle?,
     onDismissRequest: () -> Unit,
 ) {
-    val formData = NonCompendiumBlessingFormData.fromBlessing(existingBlessing)
+    val formData = NonCompendiumMiracleFormData.fromMiracle(existingMiracle)
 
     FormDialog(
-        title = if (existingBlessing != null) R.string.title_blessing_new else R.string.title_blessing_edit,
+        title = if (existingMiracle != null) R.string.title_miracle_new else R.string.title_miracle_edit,
         onDismissRequest = onDismissRequest,
         formData = formData,
         onSave = viewModel::saveItem,
@@ -31,64 +32,74 @@ internal fun NonCompendiumBlessingForm(
             label = stringResource(R.string.label_name),
             value = formData.name,
             validate = validate,
-            maxLength = cz.frantisekmasa.wfrp_master.compendium.domain.Blessing.NAME_MAX_LENGTH
+            maxLength = CompendiumMiracle.NAME_MAX_LENGTH
+        )
+
+        TextInput(
+            label = stringResource(R.string.label_miracle_cult_name),
+            value = formData.cultName,
+            validate = validate,
+            maxLength = CompendiumMiracle.CULT_NAME_MAX_LENGTH
         )
 
         TextInput(
             label = stringResource(R.string.label_range),
             value = formData.range,
             validate = validate,
-            maxLength = cz.frantisekmasa.wfrp_master.compendium.domain.Blessing.RANGE_MAX_LENGTH,
+            maxLength = CompendiumMiracle.RANGE_MAX_LENGTH,
         )
 
         TextInput(
             label = stringResource(R.string.label_target),
             value = formData.target,
             validate = validate,
-            maxLength = cz.frantisekmasa.wfrp_master.compendium.domain.Blessing.TARGET_MAX_LENGTH,
+            maxLength = CompendiumMiracle.TARGET_MAX_LENGTH,
         )
 
         TextInput(
             label = stringResource(R.string.label_duration),
             value = formData.duration,
             validate = validate,
-            maxLength = cz.frantisekmasa.wfrp_master.compendium.domain.Blessing.DURATION_MAX_LENGTH,
+            maxLength = CompendiumMiracle.DURATION_MAX_LENGTH,
         )
 
         TextInput(
             label = stringResource(R.string.label_effect),
             value = formData.effect,
             validate = validate,
-            maxLength = cz.frantisekmasa.wfrp_master.compendium.domain.Blessing.EFFECT_MAX_LENGTH,
+            maxLength = CompendiumMiracle.EFFECT_MAX_LENGTH,
             multiLine = true,
         )
     }
 }
 
-private data class NonCompendiumBlessingFormData(
+private data class NonCompendiumMiracleFormData(
     val id: UUID,
     val name: InputValue,
+    val cultName: InputValue,
     val range: InputValue,
     val target: InputValue,
     val duration: InputValue,
     val effect: InputValue,
-) : HydratedFormData<Blessing> {
+) : HydratedFormData<Miracle> {
     companion object {
         @Composable
-        fun fromBlessing(blessing: Blessing?) = NonCompendiumBlessingFormData(
-            id = remember(blessing) { blessing?.id ?: UUID.randomUUID() },
-            name = inputValue(blessing?.name ?: "", Rules.NotBlank()),
-            range = inputValue(blessing?.range ?: ""),
-            target = inputValue(blessing?.target ?: ""),
-            duration = inputValue(blessing?.duration ?: ""),
-            effect = inputValue(blessing?.effect ?: ""),
+        fun fromMiracle(miracle: Miracle?) = NonCompendiumMiracleFormData(
+            id = remember(miracle) { miracle?.id ?: UUID.randomUUID() },
+            name = inputValue(miracle?.name ?: "", Rules.NotBlank()),
+            cultName = inputValue(miracle?.cultName ?: ""),
+            range = inputValue(miracle?.range ?: ""),
+            target = inputValue(miracle?.target ?: ""),
+            duration = inputValue(miracle?.duration ?: ""),
+            effect = inputValue(miracle?.effect ?: ""),
         )
     }
 
-    override fun toValue() = Blessing(
+    override fun toValue() = Miracle(
         id = id,
         compendiumId = null,
         name = name.value,
+        cultName = cultName.value,
         range = range.value,
         target = target.value,
         duration = duration.value,
@@ -96,5 +107,5 @@ private data class NonCompendiumBlessingFormData(
     )
 
     override fun isValid() =
-        listOf(name, range, target, duration, effect).all { it.isValid() }
+        listOf(name, cultName, range, target, duration, effect).all { it.isValid() }
 }

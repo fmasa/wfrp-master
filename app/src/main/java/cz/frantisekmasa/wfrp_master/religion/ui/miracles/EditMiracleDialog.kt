@@ -20,8 +20,8 @@ import cz.frantisekmasa.wfrp_master.core.ui.flow.collectWithLifecycle
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.SingleLineTextValue
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.Spacing
 import cz.frantisekmasa.wfrp_master.core.ui.scaffolding.SubheadBar
-import cz.frantisekmasa.wfrp_master.religion.R
 import cz.frantisekmasa.wfrp_master.religion.domain.Miracle
+import cz.muni.fi.rpg.R
 import java.util.UUID
 
 @Composable

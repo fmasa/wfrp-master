@@ -18,8 +18,8 @@ import cz.frantisekmasa.wfrp_master.core.ui.primitives.CardItem
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.CardTitle
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.ContextMenu
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.EmptyUI
-import cz.frantisekmasa.wfrp_master.religion.R
 import cz.frantisekmasa.wfrp_master.religion.domain.Blessing
+import cz.muni.fi.rpg.R
 import kotlinx.coroutines.launch
 import java.util.UUID
 

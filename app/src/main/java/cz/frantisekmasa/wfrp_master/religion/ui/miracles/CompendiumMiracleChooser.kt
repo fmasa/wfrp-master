@@ -1,4 +1,4 @@
-package cz.frantisekmasa.wfrp_master.religion.ui.blessings
+package cz.frantisekmasa.wfrp_master.religion.ui.miracles
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -28,43 +28,43 @@ import cz.frantisekmasa.wfrp_master.core.ui.primitives.EmptyUI
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.FullScreenProgress
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.ItemIcon
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.Spacing
-import cz.frantisekmasa.wfrp_master.religion.R
-import cz.frantisekmasa.wfrp_master.religion.domain.Blessing
+import cz.frantisekmasa.wfrp_master.religion.domain.Miracle
+import cz.muni.fi.rpg.R
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 @Composable
-internal fun CompendiumBlessingChooser(
-    viewModel: BlessingsViewModel,
+internal fun CompendiumMiracleChooser(
+    viewModel: MiraclesViewModel,
     onComplete: () -> Unit,
-    onCustomBlessingRequest: () -> Unit,
+    onCustomMiracleRequest: () -> Unit,
     onDismissRequest: () -> Unit,
 ) {
     Scaffold(
         topBar = {
             TopAppBar(
                 navigationIcon = { CloseButton(onDismissRequest) },
-                title = { Text(stringResource(R.string.title_choose_compendium_blessing)) },
+                title = { Text(stringResource(R.string.title_choose_compendium_miracle)) },
             )
         }
     ) {
-        val compendiumBlessings = viewModel.notUsedItemsFromCompendium.collectWithLifecycle(null).value
-        val totalCompendiumBlessingCount = viewModel.compendiumItemsCount.collectWithLifecycle(null).value
+        val compendiumMiracles = viewModel.notUsedItemsFromCompendium.collectWithLifecycle(null).value
+        val totalCompendiumMiracleCount = viewModel.compendiumItemsCount.collectWithLifecycle(null).value
         var saving by remember { mutableStateOf(false) }
 
-        if (compendiumBlessings == null || totalCompendiumBlessingCount == null || saving) {
+        if (compendiumMiracles == null || totalCompendiumMiracleCount == null || saving) {
             FullScreenProgress()
             return@Scaffold
         }
 
         Column(Modifier.fillMaxSize()) {
             Box(Modifier.weight(1f)) {
-                if (compendiumBlessings.isEmpty()) {
+                if (compendiumMiracles.isEmpty()) {
                     EmptyUI(
                         drawableResourceId = R.drawable.ic_pray,
-                        textId = R.string.no_blessings_in_compendium,
-                        subTextId = if (totalCompendiumBlessingCount == 0)
+                        textId = R.string.no_miracles_in_compendium,
+                        subTextId = if (totalCompendiumMiracleCount == 0)
                             R.string.no_items_in_compendium_sub_text_player else
                             null,
                     )
@@ -72,7 +72,7 @@ internal fun CompendiumBlessingChooser(
                     val coroutineScope = rememberCoroutineScope()
 
                     LazyColumn(contentPadding = PaddingValues(Spacing.bodyPadding)) {
-                        items(compendiumBlessings) { blessing ->
+                        items(compendiumMiracles) { miracle ->
                             ListItem(
                                 modifier = Modifier.clickable(
                                     onClick = {
@@ -80,7 +80,7 @@ internal fun CompendiumBlessingChooser(
 
                                         coroutineScope.launch(Dispatchers.IO) {
                                             viewModel.saveItem(
-                                                Blessing.fromCompendium(blessing)
+                                                Miracle.fromCompendium(miracle)
                                             )
 
                                             withContext(Dispatchers.Main) { onComplete() }
@@ -88,7 +88,7 @@ internal fun CompendiumBlessingChooser(
                                     }
                                 ),
                                 icon = { ItemIcon(R.drawable.ic_spells, ItemIcon.Size.Small) },
-                                text = { Text(blessing.name) }
+                                text = { Text(miracle.name) }
                             )
                         }
                     }
@@ -99,9 +99,9 @@ internal fun CompendiumBlessingChooser(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(Spacing.bodyPadding),
-                onClick = onCustomBlessingRequest,
+                onClick = onCustomMiracleRequest,
             ) {
-                Text(stringResource(R.string.button_add_non_compendium_blessing))
+                Text(stringResource(R.string.button_add_non_compendium_miracle))
             }
         }
     }

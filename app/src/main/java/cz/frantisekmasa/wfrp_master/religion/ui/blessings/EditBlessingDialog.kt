@@ -15,8 +15,8 @@ import cz.frantisekmasa.wfrp_master.core.ui.dialogs.FullScreenDialog
 import cz.frantisekmasa.wfrp_master.core.ui.flow.collectWithLifecycle
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.SingleLineTextValue
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.Spacing
-import cz.frantisekmasa.wfrp_master.religion.R
 import cz.frantisekmasa.wfrp_master.religion.domain.Blessing
+import cz.muni.fi.rpg.R
 import java.util.UUID
 
 @Composable

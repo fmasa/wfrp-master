@@ -17,9 +17,9 @@ import cz.frantisekmasa.wfrp_master.core.domain.identifiers.CharacterId
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.NumberPicker
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.TopPanel
 import cz.frantisekmasa.wfrp_master.core.viewModel.getViewModel
-import cz.frantisekmasa.wfrp_master.religion.R
 import cz.frantisekmasa.wfrp_master.religion.ui.blessings.BlessingsCard
 import cz.frantisekmasa.wfrp_master.religion.ui.miracles.MiraclesCard
+import cz.muni.fi.rpg.R
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.koin.core.parameter.parametersOf
