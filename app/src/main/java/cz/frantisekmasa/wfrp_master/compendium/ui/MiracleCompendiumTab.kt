@@ -13,8 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import cz.frantisekmasa.wfrp_master.compendium.R
-import cz.frantisekmasa.wfrp_master.compendium.domain.Blessing
+import cz.frantisekmasa.wfrp_master.compendium.domain.Miracle
 import cz.frantisekmasa.wfrp_master.core.ui.dialogs.DialogState
 import cz.frantisekmasa.wfrp_master.core.ui.forms.InputValue
 import cz.frantisekmasa.wfrp_master.core.ui.forms.Rules
@@ -23,45 +22,48 @@ import cz.frantisekmasa.wfrp_master.core.ui.forms.inputValue
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.EmptyUI
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.ItemIcon
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.Spacing
+import cz.muni.fi.rpg.R
 import java.util.UUID
 
 @Composable
-fun BlessingCompendiumTab(viewModel: CompendiumViewModel, width: Dp) {
+fun MiracleCompendiumTab(viewModel: CompendiumViewModel, width: Dp) {
     CompendiumTab(
-        liveItems = viewModel.blessings,
+        liveItems = viewModel.miracles,
         emptyUI = {
             EmptyUI(
-                textId = R.string.no_blessings_in_compendium,
-                subTextId = R.string.no_blessings_in_compendium_sub_text,
+                textId = R.string.no_miracles_in_compendium,
+                subTextId = R.string.no_miracles_in_compendium_sub_text,
                 drawableResourceId = R.drawable.ic_pray
             )
         },
         remover = viewModel::remove,
         saver = viewModel::save,
-        dialog = { BlessingDialog(it, viewModel) },
+        dialog = { MiracleDialog(it, viewModel) },
         width = width,
-    ) { blessing ->
+    ) { miracle ->
         ListItem(
             icon = { ItemIcon(R.drawable.ic_pray) },
-            text = { Text(blessing.name) }
+            text = { Text(miracle.name) }
         )
         Divider()
     }
 }
 
-private data class BlessingFormData(
+private data class MiracleFormData(
     val id: UUID,
     val name: InputValue,
+    val cultName: InputValue,
     val range: InputValue,
     val target: InputValue,
     val duration: InputValue,
     val effect: InputValue,
-) : CompendiumItemFormData<Blessing> {
+) : CompendiumItemFormData<Miracle> {
     companion object {
         @Composable
-        fun fromItem(item: Blessing?) = BlessingFormData(
+        fun fromItem(item: Miracle?) = MiracleFormData(
             id = remember(item) { item?.id ?: UUID.randomUUID() },
             name = inputValue(item?.name ?: "", Rules.NotBlank()),
+            cultName = inputValue(item?.cultName ?: ""),
             range = inputValue(item?.range ?: ""),
             target = inputValue(item?.target ?: ""),
             duration = inputValue(item?.duration ?: ""),
@@ -69,9 +71,10 @@ private data class BlessingFormData(
         )
     }
 
-    override fun toValue() = Blessing(
+    override fun toValue() = Miracle(
         id = id,
         name = name.value,
+        cultName = cultName.value,
         range = range.value,
         target = target.value,
         duration = duration.value,
@@ -79,12 +82,12 @@ private data class BlessingFormData(
     )
 
     override fun isValid() =
-        listOf(name, range, target, duration, effect).all { it.isValid() }
+        listOf(name, cultName, range, target, duration, effect).all { it.isValid() }
 }
 
 @Composable
-private fun BlessingDialog(
-    dialogState: MutableState<DialogState<Blessing?>>,
+private fun MiracleDialog(
+    dialogState: MutableState<DialogState<Miracle?>>,
     viewModel: CompendiumViewModel
 ) {
     val dialogStateValue = dialogState.value
@@ -94,10 +97,10 @@ private fun BlessingDialog(
     }
 
     val item = dialogStateValue.item
-    val formData = BlessingFormData.fromItem(item)
+    val formData = MiracleFormData.fromItem(item)
 
     CompendiumItemDialog(
-        title = stringResource(if (item == null) R.string.title_blessing_new else R.string.title_blessing_edit),
+        title = stringResource(if (item == null) R.string.title_miracle_new else R.string.title_miracle_edit),
         formData = formData,
         saver = viewModel::save,
         onDismissRequest = { dialogState.value = DialogState.Closed() }
@@ -110,35 +113,42 @@ private fun BlessingDialog(
                 label = stringResource(R.string.label_name),
                 value = formData.name,
                 validate = validate,
-                maxLength = Blessing.NAME_MAX_LENGTH
+                maxLength = Miracle.NAME_MAX_LENGTH
+            )
+
+            TextInput(
+                label = stringResource(R.string.label_miracle_cult_name),
+                value = formData.cultName,
+                validate = validate,
+                maxLength = Miracle.CULT_NAME_MAX_LENGTH
             )
 
             TextInput(
                 label = stringResource(R.string.label_range),
                 value = formData.range,
                 validate = validate,
-                maxLength = Blessing.RANGE_MAX_LENGTH,
+                maxLength = Miracle.RANGE_MAX_LENGTH,
             )
 
             TextInput(
                 label = stringResource(R.string.label_target),
                 value = formData.target,
                 validate = validate,
-                maxLength = Blessing.TARGET_MAX_LENGTH,
+                maxLength = Miracle.TARGET_MAX_LENGTH,
             )
 
             TextInput(
                 label = stringResource(R.string.label_duration),
                 value = formData.duration,
                 validate = validate,
-                maxLength = Blessing.DURATION_MAX_LENGTH,
+                maxLength = Miracle.DURATION_MAX_LENGTH,
             )
 
             TextInput(
                 label = stringResource(R.string.label_effect),
                 value = formData.effect,
                 validate = validate,
-                maxLength = Blessing.EFFECT_MAX_LENGTH,
+                maxLength = Miracle.EFFECT_MAX_LENGTH,
                 multiLine = true,
             )
         }

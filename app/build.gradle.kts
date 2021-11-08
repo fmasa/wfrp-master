@@ -104,7 +104,6 @@ android {
 dependencies {
     implementation(project(":app:core"))
     implementation(project(":app:navigation"))
-    implementation(project(":app:compendium"))
     implementation(project(":app:inventory"))
 
     implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar"))))
@@ -135,6 +134,10 @@ dependencies {
     // Checking network access
     implementation("com.github.pwittchen:reactivenetwork-rx2:3.0.8")
     api("org.jetbrains.kotlinx:kotlinx-coroutines-rx2:1.4.2")
+
+    // Tools for Rulebook PDF parsing
+    implementation("com.github.librepdf:openpdf:1.3.25")
+    implementation("com.github.andob:android-awt:1.0.0")
 
     // Firebase Performance
 //    implementation("com.google.firebase:firebase-perf-ktx:20.0.1")

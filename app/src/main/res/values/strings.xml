@@ -366,4 +366,38 @@
     <!-- Icon descriptions -->
     <string name="icon_previous_turn">Previous turn</string>
     <string name="icon_next_turn">Next turn</string>
+
+    <!-- Tabs -->
+    <string name="tab_skills">Skills</string>
+    <string name="tab_talents">Talents</string>
+    <string name="tab_spells">Spells</string>
+    <string name="tab_blessings">Blessings</string>
+    <string name="tab_miracles">Miracles</string>
+
+    <!-- Blessings -->
+    <string name="title_blessing_add">Add Blessing</string>
+    <string name="title_blessing_new">New Blessing</string>
+    <string name="title_blessing_edit">Edit Blessing</string>
+
+    <string name="no_blessings_in_compendium">No blessings</string>
+    <string name="no_blessings_in_compendium_sub_text">There are no blessings in your compendium yet.</string>
+
+    <!-- Miracles -->
+    <string name="label_miracle_cult_name">Cult name</string>
+
+    <string name="title_miracle_add">Add Miracle</string>
+    <string name="title_miracle_new">New Miracle</string>
+    <string name="title_miracle_edit">Edit Miracle</string>
+
+    <string name="no_miracles_in_compendium">No miracles</string>
+    <string name="no_miracles_in_compendium_sub_text">There are no miracles in your compendium yet.</string>
+
+
+    <!-- Icon descriptions -->
+    <string name="icon_add_compendium_item">Add compendium item</string>
+ <string name="rulebook_import_pick_blessings">Select which blessings you want to import.</string>
+    <string name="rulebook_import_pick_miracles">Select which miracles you want to import.</string>
+
+    <string name="item_with_name_exists">Item already exists</string>
+    <string name="error_import_not_enough_memory">PDF import failed. Not enough available RAM on device.</string>
 </resources>
