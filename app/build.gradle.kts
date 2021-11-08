@@ -104,7 +104,6 @@ android {
 dependencies {
     implementation(project(":app:core"))
     implementation(project(":app:navigation"))
-    implementation(project(":app:inventory"))
 
     implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar"))))
     // Allow use of Java 8 APIs on older Android versions

@@ -3,7 +3,7 @@ package cz.frantisekmasa.wfrp_master.inventory.domain.weapon
 import android.os.Parcelable
 import androidx.annotation.StringRes
 import cz.frantisekmasa.wfrp_master.core.domain.NamedEnum
-import cz.frantisekmasa.wfrp_master.inventory.R
+import cz.muni.fi.rpg.R
 import kotlinx.parcelize.Parcelize
 
 @Parcelize

@@ -25,7 +25,6 @@ import cz.frantisekmasa.wfrp_master.core.ui.forms.SelectBox
 import cz.frantisekmasa.wfrp_master.core.ui.forms.TextInput
 import cz.frantisekmasa.wfrp_master.core.ui.forms.inputValue
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.NumberPicker
-import cz.frantisekmasa.wfrp_master.inventory.R
 import cz.frantisekmasa.wfrp_master.inventory.domain.Encumbrance
 import cz.frantisekmasa.wfrp_master.inventory.domain.InventoryItem
 import cz.frantisekmasa.wfrp_master.inventory.domain.InventoryItemId
@@ -42,6 +41,7 @@ import cz.frantisekmasa.wfrp_master.inventory.domain.weapon.WeaponEquip
 import cz.frantisekmasa.wfrp_master.inventory.domain.weapon.WeaponFlaw
 import cz.frantisekmasa.wfrp_master.inventory.domain.weapon.WeaponQuality
 import cz.frantisekmasa.wfrp_master.inventory.domain.weapon.WeaponRangeExpression
+import cz.muni.fi.rpg.R
 import java.util.UUID
 import kotlin.math.max
 

@@ -23,9 +23,9 @@ import cz.frantisekmasa.wfrp_master.core.ui.primitives.CardContainer
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.CardTitle
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.NumberPicker
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.VisualOnlyIconDescription
-import cz.frantisekmasa.wfrp_master.inventory.R
 import cz.frantisekmasa.wfrp_master.inventory.domain.Armor
 import cz.frantisekmasa.wfrp_master.inventory.ui.InventoryViewModel.EquippedArmour
+import cz.muni.fi.rpg.R
 
 @Composable
 internal fun ArmorCard(armor: EquippedArmour, onChange: (Armor) -> Unit) {
