@@ -12,9 +12,9 @@ import cz.frantisekmasa.wfrp_master.core.domain.party.PartyId
 import cz.muni.fi.rpg.ui.characterCreation.CharacterBasicInfoForm
 import cz.muni.fi.rpg.ui.characterCreation.CharacterCharacteristicsForm
 import cz.muni.fi.rpg.ui.characterCreation.PointsPoolForm
+import io.github.aakira.napier.Napier
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import timber.log.Timber
 import java.util.UUID
 
 class CharacterCreationViewModel(
@@ -32,7 +32,7 @@ class CharacterCreationViewModel(
 
         return withContext(Dispatchers.IO) {
             try {
-                Timber.d("Creating character")
+                Napier.d("Creating character")
 
                 val characteristics = characteristicsData.toValue()
 
@@ -62,7 +62,7 @@ class CharacterCreationViewModel(
 
                 characterId
             } catch (e: Throwable) {
-                Timber.e(e)
+                Napier.e(e.toString(), e)
                 throw e
             }
         }

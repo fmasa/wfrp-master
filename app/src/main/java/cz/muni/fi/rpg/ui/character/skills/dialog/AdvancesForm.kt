@@ -29,10 +29,10 @@ import cz.frantisekmasa.wfrp_master.core.ui.primitives.Spacing
 import cz.frantisekmasa.wfrp_master.core.ui.scaffolding.SaveAction
 import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.viewModels.SkillsViewModel
+import io.github.aakira.napier.Napier
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import timber.log.Timber
 import java.util.UUID
 
 @Composable
@@ -71,7 +71,7 @@ internal fun AdvancesForm(
                                         advances = advances,
                                     )
                                 } catch (e: CompendiumItemNotFound) {
-                                    Timber.d(e)
+                                    Napier.d(e.toString(), e)
 
                                     withContext(Dispatchers.Main) {
                                         Toast.makeText(

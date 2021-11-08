@@ -7,6 +7,7 @@ import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestoreException
 import com.google.firebase.firestore.Query
+import io.github.aakira.napier.Napier
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
@@ -15,13 +16,12 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import timber.log.Timber
 
 fun <T : Any> queryFlow(
     query: Query,
     snapshotParser: AggregateMapper<T>,
 ): Flow<List<T>> = callbackFlow {
-    Timber.d("Attaching document listener for query $query")
+    Napier.d("Attaching document listener for query $query")
 
     val listener = query.addSnapshotListener { snapshot, exception ->
         exception?.let { throw it }
@@ -38,7 +38,7 @@ fun <T : Any> queryFlow(
     }
 
     awaitClose {
-        Timber.d("Detaching document listener for query $query")
+        Napier.d("Detaching document listener for query $query")
         listener.remove()
     }
 }
@@ -47,7 +47,7 @@ fun <T : Any> documentFlow(
     document: DocumentReference,
     snapshotProcessor: (result: Either<FirebaseFirestoreException?, DocumentSnapshot>) -> T,
 ): Flow<T> = callbackFlow {
-    Timber.d("Attaching document listener for ${document.path}")
+    Napier.d("Attaching document listener for ${document.path}")
 
     val listener = document.addSnapshotListener { snapshot, exception ->
         exception?.let { trySend(snapshotProcessor(Left(it))) }
@@ -63,7 +63,7 @@ fun <T : Any> documentFlow(
     }
 
     awaitClose {
-        Timber.d("Detaching document listener for ${document.path}")
+        Napier.d("Detaching document listener for ${document.path}")
         listener.remove()
     }
 }

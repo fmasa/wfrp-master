@@ -12,10 +12,10 @@ import cz.frantisekmasa.wfrp_master.core.firestore.COLLECTION_CHARACTERS
 import cz.frantisekmasa.wfrp_master.core.firestore.COLLECTION_PARTIES
 import cz.frantisekmasa.wfrp_master.core.firestore.documentFlow
 import cz.frantisekmasa.wfrp_master.core.firestore.queryFlow
+import io.github.aakira.napier.Napier
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.tasks.await
-import timber.log.Timber
 
 /* internal */ class FirestoreCharacterRepository(
     firestore: FirebaseFirestore,
@@ -26,7 +26,7 @@ import timber.log.Timber
     override suspend fun save(partyId: PartyId, character: Character) {
         val data = mapper.toDocumentData(character)
 
-        Timber.d("Saving character $data in party $partyId to firestore")
+        Napier.d("Saving character $data in party $partyId to firestore")
         characters(partyId).document(character.id).set(data).await()
     }
 

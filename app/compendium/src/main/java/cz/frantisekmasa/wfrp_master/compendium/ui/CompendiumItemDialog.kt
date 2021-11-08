@@ -18,10 +18,10 @@ import cz.frantisekmasa.wfrp_master.core.ui.dialogs.DialogProgress
 import cz.frantisekmasa.wfrp_master.core.ui.dialogs.FullScreenDialog
 import cz.frantisekmasa.wfrp_master.core.ui.forms.HydratedFormData
 import cz.frantisekmasa.wfrp_master.core.ui.scaffolding.SaveAction
+import io.github.aakira.napier.Napier
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import timber.log.Timber
 
 private enum class FormState {
     EDITED_BY_USER,
@@ -84,9 +84,9 @@ private fun <T : CompendiumItem<T>> CompendiumItemDialogTopBar(
             SaveAction(
                 enabled = formState.value == FormState.EDITED_BY_USER,
                 onClick = {
-                    Timber.d("Save action clicked")
+                    Napier.d("Save action clicked")
                     if (formData.isValid()) {
-                        Timber.d("Saving item")
+                        Napier.d("Saving item")
 
                         formState.value = FormState.SAVING
                         coroutineScope.launch(Dispatchers.IO) {
@@ -96,7 +96,7 @@ private fun <T : CompendiumItem<T>> CompendiumItemDialogTopBar(
                             }
                         }
                     } else {
-                        Timber.d("Form values are invalid")
+                        Napier.d("Form values are invalid")
                         validate.value = true
                     }
                 }

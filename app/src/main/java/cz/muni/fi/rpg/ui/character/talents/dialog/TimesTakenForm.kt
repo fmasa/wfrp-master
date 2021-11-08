@@ -30,10 +30,10 @@ import cz.frantisekmasa.wfrp_master.core.ui.scaffolding.SaveAction
 import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.model.domain.talents.Talent
 import cz.muni.fi.rpg.viewModels.TalentsViewModel
+import io.github.aakira.napier.Napier
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import timber.log.Timber
 import java.util.UUID
 
 @Composable
@@ -76,7 +76,7 @@ internal fun TimesTakenForm(
                                         timesTaken = timesTaken,
                                     )
                                 } catch (e: CompendiumItemNotFound) {
-                                    Timber.d(e)
+                                    Napier.d(e.toString(), e)
 
                                     withContext(Dispatchers.Main) {
                                         Toast.makeText(

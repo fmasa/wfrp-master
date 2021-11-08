@@ -37,9 +37,9 @@ import cz.frantisekmasa.wfrp_master.core.viewModel.providePremiumViewModel
 import cz.frantisekmasa.wfrp_master.navigation.Route
 import cz.frantisekmasa.wfrp_master.navigation.navigate
 import cz.muni.fi.rpg.R
+import io.github.aakira.napier.Napier
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import timber.log.Timber
 
 @Composable
 fun AppDrawer(drawerState: DrawerState, navController: NavHostController) {
@@ -130,7 +130,7 @@ private fun PremiumItem() {
         onClick = {
             coroutineScope.launch(Dispatchers.IO) {
                 val result = premiumViewModel.purchasePremium(activity)
-                Timber.d(result.toString())
+                Napier.d(result.toString())
             }
         },
         modifier = Modifier.padding(bottom = Spacing.tiny),

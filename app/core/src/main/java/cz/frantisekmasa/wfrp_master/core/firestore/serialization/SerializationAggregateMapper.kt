@@ -4,6 +4,7 @@ import com.google.firebase.firestore.DocumentSnapshot
 import cz.frantisekmasa.wfrp_master.core.firestore.AggregateMapper
 import cz.frantisekmasa.wfrp_master.core.firestore.DocumentData
 import cz.frantisekmasa.wfrp_master.core.serialization.UUIDSerializer
+import io.github.aakira.napier.Napier
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonArray
@@ -18,14 +19,13 @@ import kotlinx.serialization.json.longOrNull
 import kotlinx.serialization.modules.SerializersModule
 import kotlinx.serialization.modules.contextual
 import kotlinx.serialization.serializer
-import timber.log.Timber
 
 class SerializationAggregateMapper<T : Any>(
     private val serializer: KSerializer<T>,
 ) : AggregateMapper<T> {
     override fun fromDocumentSnapshot(snapshot: DocumentSnapshot): T {
         snapshot.data
-        Timber.d("Mapping document $snapshot to entity")
+        Napier.d("Mapping document $snapshot to entity")
 
         val data = snapshot.data ?: error("Snapshot data shouldn't be null")
 

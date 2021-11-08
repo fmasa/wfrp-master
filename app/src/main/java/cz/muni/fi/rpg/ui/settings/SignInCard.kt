@@ -51,12 +51,12 @@ import cz.frantisekmasa.wfrp_master.navigation.Routing
 import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.viewModels.AuthenticationViewModel
 import cz.muni.fi.rpg.viewModels.provideAuthenticationViewModel
+import io.github.aakira.napier.Napier
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
 import kotlinx.parcelize.Parcelize
-import timber.log.Timber
 
 @Composable
 fun SignInCard(viewModel: SettingsViewModel, routing: Routing<Route.Settings>) {
@@ -87,16 +87,16 @@ fun SignInCard(viewModel: SettingsViewModel, routing: Routing<Route.Settings>) {
                         try {
                             authViewModel.linkAccountToGoogle(idToken)
                         } catch (e: FirebaseAuthUserCollisionException) {
-                            Timber.d(
+                            Napier.d(
+                                "Account \"${e.email}\" is already associated with another account",
                                 e,
-                                "Account \"${e.email}\" is already associated with another account"
                             )
 
                             pendingSingInConfirmation = PendingSingInConfirmation(idToken)
                         }
                     }
             } catch (e: Throwable) {
-                Timber.e(e, "Google sign-in failed")
+                Napier.e("Google sign-in failed", e)
                 withContext(Dispatchers.Main) {
                     Toast.makeText(
                         context,
@@ -219,7 +219,7 @@ fun ConfirmSignInDialog(
                                         }
                                     }
                                 } catch (e: Throwable) {
-                                    Timber.e(e)
+                                    Napier.e(e.toString(), e)
                                     throw e
                                 }
 

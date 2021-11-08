@@ -1,10 +1,10 @@
 package cz.frantisekmasa.wfrp_master.core.utils
 
+import io.github.aakira.napier.Napier
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
-import timber.log.Timber
 import kotlin.coroutines.CoroutineContext
 import kotlin.coroutines.EmptyCoroutineContext
 
@@ -16,7 +16,7 @@ fun CoroutineScope.launchLogged(
     try {
         block()
     } catch (e: Throwable) {
-        Timber.e(e)
+        Napier.e(e.toString(), e)
 
         throw e
     }

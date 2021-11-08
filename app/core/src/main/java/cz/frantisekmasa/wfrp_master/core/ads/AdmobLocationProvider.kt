@@ -1,5 +1,6 @@
 package cz.frantisekmasa.wfrp_master.core.ads
 
+import io.github.aakira.napier.Napier
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.cio.CIO
 import io.ktor.client.features.json.JsonFeature
@@ -7,7 +8,6 @@ import io.ktor.client.features.json.serializer.KotlinxSerializer
 import io.ktor.client.request.get
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import timber.log.Timber
 
 class AdmobLocationProvider : LocationProvider {
     companion object {
@@ -24,7 +24,7 @@ class AdmobLocationProvider : LocationProvider {
         return try {
             client.get<Response>(CONSENT_API_URL).isRequestInEeaOrUnknown
         } catch (e: Throwable) {
-            Timber.e(e)
+            Napier.e(e.toString(), e)
 
             true
         }

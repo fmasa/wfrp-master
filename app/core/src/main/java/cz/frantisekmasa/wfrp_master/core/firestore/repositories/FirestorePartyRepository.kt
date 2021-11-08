@@ -12,8 +12,8 @@ import cz.frantisekmasa.wfrp_master.core.domain.party.PartyRepository
 import cz.frantisekmasa.wfrp_master.core.firestore.AggregateMapper
 import cz.frantisekmasa.wfrp_master.core.firestore.documentFlow
 import cz.frantisekmasa.wfrp_master.core.firestore.queryFlow
+import io.github.aakira.napier.Napier
 import kotlinx.coroutines.tasks.await
-import timber.log.Timber
 
 /* internal */ class FirestorePartyRepository(
     private val firestore: FirebaseFirestore,
@@ -24,7 +24,7 @@ import timber.log.Timber
     override suspend fun save(party: Party) {
         val data = mapper.toDocumentData(party)
 
-        Timber.d("Saving party $data to firestore")
+        Napier.d("Saving party $data to firestore")
         try {
             firestore.runTransaction { transaction ->
                 transaction.set(parties.document(party.id.toString()), data, SetOptions.merge())

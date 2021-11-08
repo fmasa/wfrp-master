@@ -2,7 +2,7 @@ package cz.frantisekmasa.wfrp_master.navigation
 
 import androidx.navigation.NavHostController
 import androidx.navigation.NavOptionsBuilder
-import timber.log.Timber
+import io.github.aakira.napier.Napier
 
 data class Routing<T : Route>(
     val route: T,
@@ -20,7 +20,7 @@ data class Routing<T : Route>(
     }
 
     fun navigateTo(route: Route, popUpTo: Route? = null, inclusive: Boolean = false) {
-        Timber.d("Navigating to $route")
+        Napier.d("Navigating to $route")
         navController.navigate(route.toString()) {
             popUpTo?.let {
                 popUpTo(it.toString()) { this.inclusive = inclusive }

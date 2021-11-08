@@ -41,12 +41,12 @@ import cz.frantisekmasa.wfrp_master.core.ui.viewinterop.LocalActivity
 import cz.frantisekmasa.wfrp_master.core.viewModel.viewModel
 import cz.frantisekmasa.wfrp_master.navigation.Route
 import cz.frantisekmasa.wfrp_master.navigation.Routing
+import io.github.aakira.napier.Napier
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.koin.core.parameter.parametersOf
-import timber.log.Timber
 
 @Composable
 fun CompendiumImportScreen(routing: Routing<Route.CompendiumImport>) {
@@ -112,7 +112,7 @@ private fun MainContainer(routing: Routing<Route.CompendiumImport>) {
                             miracles.await(),
                         )
                     } catch (e: Throwable) {
-                        Timber.e(e)
+                        Napier.e(e.toString(), e)
 
                         withContext(Dispatchers.Main) {
                             Toast.makeText(

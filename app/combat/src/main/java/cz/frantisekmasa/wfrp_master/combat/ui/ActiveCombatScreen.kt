@@ -65,11 +65,11 @@ import cz.frantisekmasa.wfrp_master.core.ui.scaffolding.Subtitle
 import cz.frantisekmasa.wfrp_master.core.viewModel.viewModel
 import cz.frantisekmasa.wfrp_master.navigation.Route
 import cz.frantisekmasa.wfrp_master.navigation.Routing
+import io.github.aakira.napier.Napier
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.koin.core.parameter.parametersOf
-import timber.log.Timber
 
 @Composable
 fun ActiveCombatScreen(routing: Routing<Route.ActiveCombat>) {
@@ -242,7 +242,7 @@ private fun AutoCloseOnEndedCombat(
 
     if (!isCombatActive) {
         SideEffect {
-            Timber.d("Closing combat screen")
+            Napier.d("Closing combat screen")
 
             Toast.makeText(
                 context,

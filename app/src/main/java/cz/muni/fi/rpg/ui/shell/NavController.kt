@@ -12,7 +12,7 @@ import androidx.navigation.compose.rememberNavController
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.ktx.analytics
 import com.google.firebase.ktx.Firebase
-import timber.log.Timber
+import io.github.aakira.napier.Napier
 
 @Composable
 fun rememberNavControllerWithAnalytics(): NavHostController {
@@ -36,7 +36,7 @@ private class DestinationAnalyticsLogger : NavController.OnDestinationChangedLis
     ) {
         val route = destination.route ?: return
 
-        Timber.d("Showing screen $route")
+        Napier.d("Showing screen $route")
 
         Firebase.analytics.logEvent(
             FirebaseAnalytics.Event.SCREEN_VIEW,

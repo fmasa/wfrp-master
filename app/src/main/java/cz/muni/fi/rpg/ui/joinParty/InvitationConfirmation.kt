@@ -31,11 +31,11 @@ import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.model.domain.invitation.AlreadyInParty
 import cz.muni.fi.rpg.model.domain.invitation.InvalidInvitation
 import cz.muni.fi.rpg.viewModels.JoinPartyViewModel
+import io.github.aakira.napier.Napier
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import timber.log.Timber
 
 @Composable
 fun InvitationConfirmation(
@@ -100,7 +100,7 @@ fun InvitationConfirmation(
                             }
                             else -> {
                                 showError(e, context, R.string.error_unkown)
-                                Timber.e(e)
+                                Napier.e(e.toString(), e)
                             }
                         }
 
@@ -119,5 +119,5 @@ private fun showError(
     @StringRes messageRes: Int,
 ) {
     Toast.makeText(context, context.getString(messageRes), Toast.LENGTH_SHORT).show()
-    Timber.i(e, "Invitation processing error: ${e.message}")
+    Napier.i("Invitation processing error: ${e.message}", e)
 }

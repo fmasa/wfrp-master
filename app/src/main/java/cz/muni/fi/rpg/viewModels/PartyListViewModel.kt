@@ -9,8 +9,8 @@ import cz.frantisekmasa.wfrp_master.core.domain.party.Party
 import cz.frantisekmasa.wfrp_master.core.domain.party.PartyId
 import cz.frantisekmasa.wfrp_master.core.domain.party.PartyRepository
 import cz.muni.fi.rpg.model.domain.common.CouldNotConnectToBackend
+import io.github.aakira.napier.Napier
 import kotlinx.coroutines.flow.Flow
-import timber.log.Timber
 
 class PartyListViewModel(
     private val parties: PartyRepository
@@ -42,7 +42,7 @@ class PartyListViewModel(
 
         parties.save(party)
 
-        Timber.d("Party $partyName was successfully created")
+        Napier.d("Party $partyName was successfully created")
         Firebase.analytics.logEvent("create_party") {
             param("id", party.id.toString())
         }

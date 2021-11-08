@@ -28,10 +28,10 @@ import cz.frantisekmasa.wfrp_master.core.ui.scaffolding.SaveAction
 import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.model.domain.common.CouldNotConnectToBackend
 import cz.muni.fi.rpg.ui.partySettings.PartySettingsViewModel
+import io.github.aakira.napier.Napier
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import timber.log.Timber
 
 @Composable
 fun RenamePartyDialog(
@@ -68,20 +68,20 @@ fun RenamePartyDialog(
                                     try {
                                         viewModel.renameParty(newName.value)
                                         longToast(context, R.string.message_party_updated)
-                                        Timber.d("Party was renamed")
+                                        Napier.d("Party was renamed")
 
                                         withContext(Dispatchers.Main) { onDismissRequest() }
 
                                         return@launch
                                     } catch (e: CouldNotConnectToBackend) {
-                                        Timber.i(
+                                        Napier.i(
+                                            "User could not rename party, because (s)he is offline",
                                             e,
-                                            "User could not rename party, because (s)he is offline"
                                         )
                                         longToast(context, R.string.error_party_update_no_connection)
                                     } catch (e: Throwable) {
                                         longToast(context, R.string.error_unkown)
-                                        Timber.e(e)
+                                        Napier.e(e.toString(), e)
                                     }
 
                                     saving = false

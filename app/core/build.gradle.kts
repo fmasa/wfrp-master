@@ -64,7 +64,7 @@ dependencies {
     api("androidx.work:work-runtime-ktx:2.7.0")
 
     // Logging
-    api("com.jakewharton.timber:timber:4.7.1")
+    api("io.github.aakira:napier:2.1.0")
 
     // Coroutines
     api("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.2")

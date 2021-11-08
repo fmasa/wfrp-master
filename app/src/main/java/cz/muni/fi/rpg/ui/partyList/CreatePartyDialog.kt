@@ -30,10 +30,10 @@ import cz.frantisekmasa.wfrp_master.core.ui.scaffolding.SaveAction
 import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.model.domain.common.CouldNotConnectToBackend
 import cz.muni.fi.rpg.viewModels.PartyListViewModel
+import io.github.aakira.napier.Napier
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import timber.log.Timber
 
 @Composable
 fun CreatePartyDialog(
@@ -74,11 +74,11 @@ fun CreatePartyDialog(
 
                                         withContext(Dispatchers.Main) { onSuccess(partyId) }
                                     } catch (e: CouldNotConnectToBackend) {
-                                        Timber.i(e, "User could not assemble party, because (s)he is offline")
+                                        Napier.i("User could not assemble party, because (s)he is offline", e)
                                         longToast(context, R.string.error_party_creation_no_connection)
                                     } catch (e: Throwable) {
                                         longToast(context, R.string.error_unkown)
-                                        Timber.e(e)
+                                        Napier.e(e.toString(), e)
                                     }
 
                                     saving = false

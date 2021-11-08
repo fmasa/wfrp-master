@@ -14,8 +14,8 @@ import cz.frantisekmasa.wfrp_master.core.firestore.COLLECTION_CHARACTERS
 import cz.frantisekmasa.wfrp_master.core.firestore.COLLECTION_FEATURES
 import cz.frantisekmasa.wfrp_master.core.firestore.COLLECTION_PARTIES
 import cz.frantisekmasa.wfrp_master.core.firestore.documentFlow
+import io.github.aakira.napier.Napier
 import kotlinx.coroutines.tasks.await
-import timber.log.Timber
 
 /* internal */ class FirestoreCharacterFeatureRepository<T : Any>(
     feature: Feature,
@@ -30,7 +30,7 @@ import timber.log.Timber
     override suspend fun save(characterId: CharacterId, feature: T) {
         val data = mapper.toDocumentData(feature)
 
-        Timber.d("Saving $documentId for character $characterId to firestore")
+        Napier.d("Saving $documentId for character $characterId to firestore")
         document(characterId).set(data, SetOptions.merge()).await()
     }
 

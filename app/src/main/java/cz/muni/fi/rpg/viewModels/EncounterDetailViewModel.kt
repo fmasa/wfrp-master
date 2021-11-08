@@ -15,6 +15,7 @@ import cz.frantisekmasa.wfrp_master.core.utils.mapItems
 import cz.frantisekmasa.wfrp_master.core.utils.right
 import cz.frantisekmasa.wfrp_master.inventory.domain.Armor
 import cz.muni.fi.rpg.ui.gameMaster.encounters.NpcListItem
+import io.github.aakira.napier.Napier
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -22,7 +23,6 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import timber.log.Timber
 import java.util.UUID
 import kotlin.math.min
 
@@ -125,7 +125,7 @@ class EncounterDetailViewModel(
                 val npc = npcRepository.get(npcId)
                 withContext(Dispatchers.Main) { flow.value = npc }
             } catch (e: Throwable) {
-                Timber.e(e)
+                Napier.e(e.toString(), e)
                 throw e
             }
         }

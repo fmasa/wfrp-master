@@ -20,10 +20,10 @@ import com.revenuecat.purchases.identifyWith
 import com.revenuecat.purchases.purchasePackageWith
 import cz.frantisekmasa.wfrp_master.core.auth.UserId
 import cz.frantisekmasa.wfrp_master.core.ui.viewinterop.LocalActivity
+import io.github.aakira.napier.Napier
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.koin.androidx.viewmodel.ext.android.getViewModel
-import timber.log.Timber
 import java.util.UUID
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
@@ -44,7 +44,7 @@ class PremiumViewModel(private val purchases: Purchases) : ViewModel() {
             purchases.identifyWith(
                 userId.toString(),
                 {
-                    Timber.e("\"${it.message}\" caused by \"${it.underlyingErrorMessage}\"")
+                    Napier.e("\"${it.message}\" caused by \"${it.underlyingErrorMessage}\"")
 
                     continuation.resume(false)
                 },

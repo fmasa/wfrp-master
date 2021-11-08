@@ -26,10 +26,10 @@ import cz.frantisekmasa.wfrp_master.core.ui.components.CharacterAvatar
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.ItemIcon
 import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.model.domain.CharacterAvatarChanger
+import io.github.aakira.napier.Napier
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.koin.core.context.GlobalContext
-import timber.log.Timber
 
 @Composable
 fun EditableCharacterAvatar(
@@ -75,7 +75,7 @@ fun EditableCharacterAvatar(
                     processing = false
                     snackbarHostState.showSnackbar(context.getString(R.string.message_avatar_changed))
                 } catch (e: Throwable) {
-                    Timber.e(e)
+                    Napier.e(e.toString(), e)
                     processing = false
                 }
             }

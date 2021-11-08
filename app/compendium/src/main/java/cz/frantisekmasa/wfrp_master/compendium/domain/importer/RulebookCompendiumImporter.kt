@@ -15,9 +15,9 @@ import cz.frantisekmasa.wfrp_master.compendium.domain.importer.grammars.MiracleL
 import cz.frantisekmasa.wfrp_master.compendium.domain.importer.grammars.SkillListGrammar
 import cz.frantisekmasa.wfrp_master.compendium.domain.importer.grammars.SpellListGrammar
 import cz.frantisekmasa.wfrp_master.compendium.domain.importer.grammars.TalentListGrammar
+import io.github.aakira.napier.Napier
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import timber.log.Timber
 import java.io.InputStream
 import java.util.Locale
 
@@ -34,7 +34,7 @@ class RulebookCompendiumImporter(rulebookPdf: InputStream) :
             return SkillListGrammar.parseToEnd(text)
         } catch (e: Throwable) {
             text.dumpWithLineNumbers()
-            Timber.e(e)
+            Napier.e(e.toString(), e)
 
             throw e
         }
@@ -47,14 +47,14 @@ class RulebookCompendiumImporter(rulebookPdf: InputStream) :
             return TalentListGrammar.parseToEnd(text)
         } catch (e: Throwable) {
             text.dumpWithLineNumbers()
-            Timber.e(e)
+            Napier.e(e.toString(), e)
 
             throw e
         }
     }
 
     private fun String.dumpWithLineNumbers() {
-        Timber.d(lines().mapIndexed { index, line -> "XYZ > $line" }.joinToString("\n"))
+        Napier.d(lines().mapIndexed { index, line -> "XYZ > $line" }.joinToString("\n"))
     }
 
     override suspend fun importSpells(): List<Spell> {
@@ -74,7 +74,7 @@ class RulebookCompendiumImporter(rulebookPdf: InputStream) :
                 } catch (e: Throwable) {
                     text.dumpWithLineNumbers()
 
-                    Timber.e(e)
+                    Napier.e(e.toString(), e)
                     throw e
                 }
             }
@@ -90,7 +90,7 @@ class RulebookCompendiumImporter(rulebookPdf: InputStream) :
         } catch (e: Throwable) {
             text.dumpWithLineNumbers()
 
-            Timber.e(e)
+            Napier.e(e.toString(), e)
             throw e
         }
     }
@@ -106,7 +106,7 @@ class RulebookCompendiumImporter(rulebookPdf: InputStream) :
         } catch (e: Throwable) {
             text.dumpWithLineNumbers()
 
-            Timber.e(e)
+            Napier.e(e.toString(), e)
             throw e
         }
     }

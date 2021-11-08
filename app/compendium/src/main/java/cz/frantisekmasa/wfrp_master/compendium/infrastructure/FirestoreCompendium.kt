@@ -10,13 +10,13 @@ import cz.frantisekmasa.wfrp_master.core.domain.party.PartyId
 import cz.frantisekmasa.wfrp_master.core.firestore.AggregateMapper
 import cz.frantisekmasa.wfrp_master.core.firestore.COLLECTION_PARTIES
 import cz.frantisekmasa.wfrp_master.core.firestore.queryFlow
+import io.github.aakira.napier.Napier
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.tasks.await
-import timber.log.Timber
 import java.util.UUID
 
 /* internal */ class FirestoreCompendium<T : CompendiumItem<T>>(
@@ -57,7 +57,7 @@ import java.util.UUID
 
         firestore.runTransaction { transaction ->
             itemsData.forEach { (id, data) ->
-                Timber.d("Saving Compendium item $data to $collectionName compendium of party $partyId")
+                Napier.d("Saving Compendium item $data to $collectionName compendium of party $partyId")
 
                 transaction.set(
                     collection(partyId).document(id.toString()),

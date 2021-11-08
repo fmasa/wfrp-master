@@ -24,6 +24,7 @@ import cz.frantisekmasa.wfrp_master.core.domain.party.combat.Combat
 import cz.frantisekmasa.wfrp_master.core.domain.party.combat.Combatant
 import cz.frantisekmasa.wfrp_master.core.domain.party.settings.InitiativeStrategy
 import cz.frantisekmasa.wfrp_master.core.utils.right
+import io.github.aakira.napier.Napier
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -33,7 +34,6 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.mapLatest
 import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.coroutines.flow.transform
-import timber.log.Timber
 import kotlin.math.max
 import kotlin.random.Random
 
@@ -166,7 +166,7 @@ class CombatViewModel(
         val combat = party.getActiveCombat()
 
         if (combat == null) {
-            Timber.w("Trying to update non-existing combat")
+            Napier.w("Trying to update non-existing combat")
             return
         }
 
@@ -179,7 +179,7 @@ class CombatViewModel(
         val combat = party.getActiveCombat()
 
         if (combat == null) {
-            Timber.w("Trying to update non-existing combat")
+            Napier.w("Trying to update non-existing combat")
             return@updateParty
         }
 

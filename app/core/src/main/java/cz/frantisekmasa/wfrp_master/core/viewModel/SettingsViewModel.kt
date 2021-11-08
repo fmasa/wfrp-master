@@ -14,6 +14,7 @@ import cz.frantisekmasa.wfrp_master.core.ads.AdManager
 import cz.frantisekmasa.wfrp_master.core.ads.LocationProvider
 import cz.frantisekmasa.wfrp_master.core.domain.party.PartyRepository
 import cz.frantisekmasa.wfrp_master.core.ui.viewinterop.LocalActivity
+import io.github.aakira.napier.Napier
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
@@ -21,7 +22,6 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.koin.androidx.viewmodel.ext.android.getViewModel
-import timber.log.Timber
 
 private val Context.settingsDataStore by preferencesDataStore("settings")
 
@@ -81,7 +81,7 @@ class SettingsViewModel(
 
         val personalizedAds = !locationProvider.isUserInEeaOrUnknown()
 
-        Timber.d("Checked whether we can show personalized ads to user. Result: $personalizedAds")
+        Napier.d("Checked whether we can show personalized ads to user. Result: $personalizedAds")
 
         dataStore.edit { it[AppSettings.PERSONALIZED_ADS] = personalizedAds }
 

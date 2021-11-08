@@ -32,11 +32,11 @@ import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.ui.common.composables.Theme
 import cz.muni.fi.rpg.ui.shell.splashBackground
 import cz.muni.fi.rpg.viewModels.AuthenticationViewModel
+import io.github.aakira.napier.Napier
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
-import timber.log.Timber
 
 @Composable
 fun StartupScreen(viewModel: AuthenticationViewModel) {
@@ -44,7 +44,7 @@ fun StartupScreen(viewModel: AuthenticationViewModel) {
 
     val authenticated by viewModel.authenticated.collectWithLifecycle()
 
-    Timber.d("Authenticated: $authenticated")
+    Napier.d("Authenticated: $authenticated")
 
     if (authenticated != false) {
         // We could not determine whether user is logged in yet or there is delay between
@@ -73,7 +73,7 @@ fun StartupScreen(viewModel: AuthenticationViewModel) {
     val googleSignInLauncher = key(contract, coroutineScope) {
         rememberLauncherForActivityResult(contract) { result ->
             if (result.resultCode == 0) {
-                Timber.d("Google Sign-In dialog was dismissed")
+                Napier.d("Google Sign-In dialog was dismissed")
                 showAnonymousAuthenticationDialog = true
                 return@rememberLauncherForActivityResult
             }

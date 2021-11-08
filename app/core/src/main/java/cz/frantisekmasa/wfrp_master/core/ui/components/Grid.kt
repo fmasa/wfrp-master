@@ -19,7 +19,7 @@ import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import timber.log.Timber
+import io.github.aakira.napier.Napier
 
 val LocalScreenWidth = compositionLocalOf<Dp> { error("Wrap your screen by ScreenWithBreakpoints") }
 val LocalBreakpoint = staticCompositionLocalOf<Breakpoint> { error("Wrap your screen by ScreenWithBreakpoints") }
@@ -30,7 +30,7 @@ fun ScreenWithBreakpoints(content: @Composable () -> Unit) {
     BoxWithConstraints(Modifier.fillMaxWidth()) {
         val breakpoint = resolveBreakpoint(maxWidth)
 
-        Timber.d("Breakpoint calculated as ${breakpoint.name}, width: $maxWidth")
+        Napier.d("Breakpoint calculated as ${breakpoint.name}, width: $maxWidth")
 
         CompositionLocalProvider(
             LocalBreakpoint provides breakpoint,

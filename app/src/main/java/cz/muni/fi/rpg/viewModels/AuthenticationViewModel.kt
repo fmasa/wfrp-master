@@ -15,6 +15,7 @@ import cz.frantisekmasa.wfrp_master.core.auth.User
 import cz.frantisekmasa.wfrp_master.core.logging.Reporter
 import cz.frantisekmasa.wfrp_master.core.ui.viewinterop.LocalActivity
 import cz.muni.fi.rpg.R
+import io.github.aakira.napier.Napier
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.SharingStarted
@@ -26,7 +27,6 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import org.koin.androidx.viewmodel.ext.android.getViewModel
-import timber.log.Timber
 
 class AuthenticationViewModel(private val auth: FirebaseAuth) : ViewModel() {
     val authenticated: StateFlow<Boolean?> = callbackFlow {
@@ -82,7 +82,7 @@ class AuthenticationViewModel(private val auth: FirebaseAuth) : ViewModel() {
 
             true
         } catch (e: Throwable) {
-            Timber.e(e, "Connection of Google credentials to Firebase Auth failed")
+            Napier.e("Connection of Google credentials to Firebase Auth failed", e)
 
             false
         }
@@ -107,7 +107,7 @@ class AuthenticationViewModel(private val auth: FirebaseAuth) : ViewModel() {
                 getGoogleSignInIntent(context)
 
             override fun parseResult(resultCode: Int, intent: Intent?): IntentResult {
-                Timber.d(resultCode.toString())
+                Napier.d(resultCode.toString())
                 return IntentResult(resultCode, intent)
             }
         }
@@ -131,7 +131,7 @@ class AuthenticationViewModel(private val auth: FirebaseAuth) : ViewModel() {
         return try {
             googleClient(context).silentSignIn().await().idToken
         } catch (e: Throwable) {
-            Timber.e(e)
+            Napier.e(e.toString(), e)
 
             null
         }
@@ -144,13 +144,13 @@ class AuthenticationViewModel(private val auth: FirebaseAuth) : ViewModel() {
         check(auth.currentUser == null) { "User is already authenticated" }
 
         return try {
-            Timber.d("Starting Firebase anonymous sign in")
+            Napier.d("Starting Firebase anonymous sign in")
             auth.signInAnonymously().await()
-            Timber.d("User has signed in successfully")
+            Napier.d("User has signed in successfully")
 
             true
         } catch (e: Throwable) {
-            Timber.e(e, "Anonymous sign-in has failed")
+            Napier.e("Anonymous sign-in has failed", e)
             false
         }
     }
