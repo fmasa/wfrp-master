@@ -103,7 +103,6 @@ android {
 
 dependencies {
     implementation(project(":app:core"))
-    implementation(project(":app:navigation"))
 
     implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar"))))
     // Allow use of Java 8 APIs on older Android versions
@@ -137,6 +136,9 @@ dependencies {
     // Tools for Rulebook PDF parsing
     implementation("com.github.librepdf:openpdf:1.3.25")
     implementation("com.github.andob:android-awt:1.0.0")
+
+    // Navigation
+    api("androidx.navigation:navigation-compose:2.4.0-beta02")
 
     // Firebase Performance
 //    implementation("com.google.firebase:firebase-perf-ktx:20.0.1")
