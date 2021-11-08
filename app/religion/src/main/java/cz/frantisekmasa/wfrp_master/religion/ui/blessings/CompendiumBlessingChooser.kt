@@ -16,7 +16,6 @@ import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -24,6 +23,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import cz.frantisekmasa.wfrp_master.core.ui.buttons.CloseButton
+import cz.frantisekmasa.wfrp_master.core.ui.flow.collectWithLifecycle
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.EmptyUI
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.FullScreenProgress
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.ItemIcon
@@ -49,8 +49,8 @@ internal fun CompendiumBlessingChooser(
             )
         }
     ) {
-        val compendiumBlessings = viewModel.notUsedItemsFromCompendium.observeAsState().value
-        val totalCompendiumBlessingCount = viewModel.compendiumItemsCount.observeAsState().value
+        val compendiumBlessings = viewModel.notUsedItemsFromCompendium.collectWithLifecycle(null).value
+        val totalCompendiumBlessingCount = viewModel.compendiumItemsCount.collectWithLifecycle(null).value
         var saving by remember { mutableStateOf(false) }
 
         if (compendiumBlessings == null || totalCompendiumBlessingCount == null || saving) {

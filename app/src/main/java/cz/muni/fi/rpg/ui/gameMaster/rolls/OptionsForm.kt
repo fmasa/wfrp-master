@@ -17,7 +17,6 @@ import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -29,6 +28,7 @@ import androidx.compose.ui.unit.dp
 import cz.frantisekmasa.wfrp_master.compendium.domain.Skill
 import cz.frantisekmasa.wfrp_master.core.domain.character.Character
 import cz.frantisekmasa.wfrp_master.core.ui.buttons.CloseButton
+import cz.frantisekmasa.wfrp_master.core.ui.flow.collectWithLifecycle
 import cz.frantisekmasa.wfrp_master.core.ui.forms.SelectBox
 import cz.frantisekmasa.wfrp_master.core.ui.forms.SelectBoxToggle
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.FullScreenProgress
@@ -46,7 +46,7 @@ internal fun OptionsForm(
     onNewSkillPickingRequest: () -> Unit,
     onExecute: (characters: Set<Character>, testModifier: Int) -> Unit,
 ) {
-    val characters = viewModel.characters.observeAsState().value
+    val characters = viewModel.characters.collectWithLifecycle(null).value
     val characterIds = characters?.map { it.id }?.toSet()
 
     var executing by remember { mutableStateOf(false) }

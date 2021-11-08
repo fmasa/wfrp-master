@@ -15,11 +15,11 @@ import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import cz.frantisekmasa.wfrp_master.compendium.domain.Talent
 import cz.frantisekmasa.wfrp_master.core.ui.buttons.CloseButton
+import cz.frantisekmasa.wfrp_master.core.ui.flow.collectWithLifecycle
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.EmptyUI
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.FullScreenProgress
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.ItemIcon
@@ -42,8 +42,8 @@ internal fun CompendiumTalentChooser(
             )
         }
     ) {
-        val compendiumTalents = viewModel.notUsedTalentsFromCompendium.observeAsState().value
-        val totalCompendiumTalentCount = viewModel.compendiumTalentsCount.observeAsState().value
+        val compendiumTalents = viewModel.notUsedTalentsFromCompendium.collectWithLifecycle(null).value
+        val totalCompendiumTalentCount = viewModel.compendiumTalentsCount.collectWithLifecycle(null).value
 
         if (compendiumTalents == null || totalCompendiumTalentCount == null) {
             FullScreenProgress()

@@ -1,8 +1,6 @@
 package cz.frantisekmasa.wfrp_master.compendium.ui
 
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.asLiveData
 import cz.frantisekmasa.wfrp_master.compendium.domain.Blessing
 import cz.frantisekmasa.wfrp_master.compendium.domain.Miracle
 import cz.frantisekmasa.wfrp_master.compendium.domain.Skill
@@ -13,6 +11,7 @@ import cz.frantisekmasa.wfrp_master.core.domain.party.Party
 import cz.frantisekmasa.wfrp_master.core.domain.party.PartyId
 import cz.frantisekmasa.wfrp_master.core.domain.party.PartyRepository
 import cz.frantisekmasa.wfrp_master.core.utils.right
+import kotlinx.coroutines.flow.Flow
 
 class CompendiumViewModel(
     private val partyId: PartyId,
@@ -23,13 +22,13 @@ class CompendiumViewModel(
     private val miracleCompendium: Compendium<Miracle>,
     parties: PartyRepository,
 ) : ViewModel() {
-    val party: LiveData<Party> = parties.getLive(partyId).right().asLiveData()
 
-    val skills: LiveData<List<Skill>> = skillCompendium.liveForParty(partyId).asLiveData()
-    val talents: LiveData<List<Talent>> = talentsCompendium.liveForParty(partyId).asLiveData()
-    val spells: LiveData<List<Spell>> = spellCompendium.liveForParty(partyId).asLiveData()
-    val blessings: LiveData<List<Blessing>> = blessingCompendium.liveForParty(partyId).asLiveData()
-    val miracles: LiveData<List<Miracle>> = miracleCompendium.liveForParty(partyId).asLiveData()
+    val party: Flow<Party> = parties.getLive(partyId).right()
+    val skills: Flow<List<Skill>> = skillCompendium.liveForParty(partyId)
+    val talents: Flow<List<Talent>> = talentsCompendium.liveForParty(partyId)
+    val spells: Flow<List<Spell>> = spellCompendium.liveForParty(partyId)
+    val blessings: Flow<List<Blessing>> = blessingCompendium.liveForParty(partyId)
+    val miracles: Flow<List<Miracle>> = miracleCompendium.liveForParty(partyId)
 
     suspend fun save(skill: Skill) {
         skillCompendium.saveItems(partyId, skill)

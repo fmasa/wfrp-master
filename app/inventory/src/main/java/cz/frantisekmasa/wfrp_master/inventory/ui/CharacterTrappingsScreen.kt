@@ -16,7 +16,6 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -30,6 +29,7 @@ import androidx.compose.ui.unit.dp
 import cz.frantisekmasa.wfrp_master.core.domain.identifiers.CharacterId
 import cz.frantisekmasa.wfrp_master.core.ui.buttons.CardButton
 import cz.frantisekmasa.wfrp_master.core.ui.dialogs.DialogState
+import cz.frantisekmasa.wfrp_master.core.ui.flow.collectWithLifecycle
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.CardContainer
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.CardItem
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.CardTitle
@@ -65,7 +65,7 @@ fun CharacterTrappingsScreen(
                     Modifier.padding(Spacing.medium),
                 )
 
-                viewModel.money.observeAsState(null).value?.let { money ->
+                viewModel.money.collectWithLifecycle(null).value?.let { money ->
                     var transactionDialogVisible by rememberSaveable { mutableStateOf(false) }
 
                     MoneyBalance(
@@ -87,7 +87,7 @@ fun CharacterTrappingsScreen(
             }
         }
 
-        viewModel.armor.observeAsState(null).value?.let { armor ->
+        viewModel.armor.collectWithLifecycle(null).value?.let { armor ->
             ArmorCard(armor, onChange = { viewModel.updateArmor(it) })
         }
 
@@ -125,8 +125,8 @@ fun CharacterTrappingsScreen(
 
 @Composable
 private fun CharacterEncumbrance(viewModel: InventoryViewModel, modifier: Modifier) {
-    val max = viewModel.maxEncumbrance.observeAsState().value
-    val total = viewModel.totalEncumbrance.observeAsState().value
+    val max = viewModel.maxEncumbrance.collectWithLifecycle(null).value
+    val total = viewModel.totalEncumbrance.collectWithLifecycle(null).value
 
     val isOverburdened = max != null && total != null && total > max
 
@@ -155,7 +155,7 @@ private fun InventoryItemsCard(
     onDuplicate: (InventoryItem) -> Unit,
     onNewItemButtonClicked: () -> Unit,
 ) {
-    val items = viewModel.inventory.observeAsState().value ?: return
+    val items = viewModel.inventory.collectWithLifecycle(null).value ?: return
 
     CardContainer(Modifier.padding(horizontal = 8.dp)) {
         Column(Modifier.padding(horizontal = 8.dp)) {

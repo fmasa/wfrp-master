@@ -1,8 +1,6 @@
 package cz.muni.fi.rpg.viewModels
 
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import cz.frantisekmasa.wfrp_master.combat.domain.encounter.Encounter
 import cz.frantisekmasa.wfrp_master.combat.domain.encounter.EncounterRepository
@@ -18,6 +16,7 @@ import cz.frantisekmasa.wfrp_master.core.utils.right
 import cz.frantisekmasa.wfrp_master.inventory.domain.Armor
 import cz.muni.fi.rpg.ui.gameMaster.encounters.NpcListItem
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -33,12 +32,11 @@ class EncounterDetailViewModel(
     private val npcRepository: NpcRepository,
     private val parties: PartyRepository,
 ) : ViewModel() {
-    val encounter: LiveData<Encounter> = encounters.getLive(encounterId).right().asLiveData()
-    val npcs: LiveData<List<NpcListItem>> = npcRepository
+    val encounter: Flow<Encounter> = encounters.getLive(encounterId).right()
+    val npcs: Flow<List<NpcListItem>> = npcRepository
         .findByEncounter(encounterId)
         .mapItems { NpcListItem(NpcId(encounterId, it.id), it.name, it.alive) }
         .distinctUntilChanged()
-        .asLiveData()
 
     suspend fun remove() {
         val party = parties.get(encounterId.partyId)

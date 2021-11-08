@@ -17,7 +17,6 @@ import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -30,6 +29,7 @@ import cz.frantisekmasa.wfrp_master.compendium.R
 import cz.frantisekmasa.wfrp_master.core.domain.compendium.CompendiumItem
 import cz.frantisekmasa.wfrp_master.core.ui.buttons.BackButton
 import cz.frantisekmasa.wfrp_master.core.ui.dialogs.DialogState
+import cz.frantisekmasa.wfrp_master.core.ui.flow.collectWithLifecycle
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.ContextMenu
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.FullScreenProgress
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.Spacing
@@ -42,6 +42,7 @@ import cz.frantisekmasa.wfrp_master.core.viewModel.viewModel
 import cz.frantisekmasa.wfrp_master.navigation.Route
 import cz.frantisekmasa.wfrp_master.navigation.Routing
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 import org.koin.core.parameter.parametersOf
 import kotlin.coroutines.EmptyCoroutineContext
@@ -70,7 +71,7 @@ private fun TopBar(routing: Routing<Route.Compendium>) {
         title = {
             Column {
                 Text(stringResource(R.string.title_compendium))
-                viewModel.party.observeAsState().value?.let {
+                viewModel.party.collectWithLifecycle(null).value?.let {
                     Subtitle(it.getName())
                 }
             }
@@ -87,7 +88,7 @@ private fun TopBar(routing: Routing<Route.Compendium>) {
 
 @Composable
 fun <T : CompendiumItem<T>> CompendiumTab(
-    liveItems: LiveData<List<T>>,
+    liveItems: Flow<List<T>>,
     width: Dp,
     emptyUI: @Composable () -> Unit,
     dialog: @Composable (MutableState<DialogState<T?>>) -> Unit,
@@ -118,7 +119,7 @@ fun <T : CompendiumItem<T>> CompendiumTab(
                 .background(MaterialTheme.colors.background)
         ) {
             val coroutineScope = rememberCoroutineScope { EmptyCoroutineContext + Dispatchers.IO }
-            val items = liveItems.observeAsState().value
+            val items = liveItems.collectWithLifecycle(null).value
 
             when {
                 items == null -> FullScreenProgress()

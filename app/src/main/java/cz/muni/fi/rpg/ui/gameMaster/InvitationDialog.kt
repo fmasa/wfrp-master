@@ -17,7 +17,6 @@ import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -37,6 +36,7 @@ import com.google.firebase.ktx.Firebase
 import cz.frantisekmasa.wfrp_master.core.domain.party.Invitation
 import cz.frantisekmasa.wfrp_master.core.ui.buttons.CloseButton
 import cz.frantisekmasa.wfrp_master.core.ui.dialogs.FullScreenDialog
+import cz.frantisekmasa.wfrp_master.core.ui.flow.collectWithLifecycle
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.FullScreenProgress
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.Spacing
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.VisualOnlyIconDescription
@@ -69,7 +69,7 @@ internal fun InvitationDialog(invitation: Invitation, onDismissRequest: () -> Un
                     .padding(Spacing.bodyPadding),
                 verticalArrangement = Arrangement.spacedBy(Spacing.small, Alignment.CenterVertically)
             ) {
-                val sharingOptions = sharingOptions(invitation).collectAsState().value
+                val sharingOptions = sharingOptions(invitation).collectWithLifecycle(null).value
 
                 if (sharingOptions == null) {
                     FullScreenProgress()

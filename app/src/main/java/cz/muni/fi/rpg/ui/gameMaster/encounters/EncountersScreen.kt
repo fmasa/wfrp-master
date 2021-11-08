@@ -22,7 +22,6 @@ import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -36,6 +35,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import cz.frantisekmasa.wfrp_master.combat.domain.encounter.Encounter
 import cz.frantisekmasa.wfrp_master.core.domain.party.PartyId
+import cz.frantisekmasa.wfrp_master.core.ui.flow.collectWithLifecycle
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.DraggableListFor
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.EmptyUI
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.Spacing
@@ -53,7 +53,7 @@ fun EncountersScreen(
     modifier: Modifier,
     onEncounterClick: (Encounter) -> Unit,
 ) {
-    val encounters = viewModel.encounters.observeAsState().value
+    val encounters = viewModel.encounters.collectWithLifecycle(null).value
 
     if (encounters == null) {
         Box(modifier.fillMaxSize()) {

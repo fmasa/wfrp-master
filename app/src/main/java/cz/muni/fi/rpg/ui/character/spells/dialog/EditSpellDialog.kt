@@ -1,9 +1,9 @@
 package cz.muni.fi.rpg.ui.character.spells.dialog
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.rememberCoroutineScope
 import cz.frantisekmasa.wfrp_master.core.ui.dialogs.FullScreenDialog
+import cz.frantisekmasa.wfrp_master.core.ui.flow.collectWithLifecycle
 import cz.muni.fi.rpg.viewModels.SpellsViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -15,7 +15,7 @@ fun EditSpellDialog(
     spellId: UUID,
     onDismissRequest: () -> Unit
 ) {
-    val spell = viewModel.spells.observeAsState().value?.firstOrNull { it.id == spellId } ?: return
+    val spell = viewModel.spells.collectWithLifecycle(null).value?.firstOrNull { it.id == spellId } ?: return
 
     FullScreenDialog(onDismissRequest = onDismissRequest) {
         if (spell.compendiumId != null) {

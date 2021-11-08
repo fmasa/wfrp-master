@@ -4,7 +4,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -13,6 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import cz.frantisekmasa.wfrp_master.core.ui.buttons.CardButton
+import cz.frantisekmasa.wfrp_master.core.ui.flow.collectWithLifecycle
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.CardContainer
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.CardItem
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.CardTitle
@@ -25,7 +25,7 @@ import java.util.UUID
 
 @Composable
 internal fun BlessingsCard(viewModel: BlessingsViewModel) {
-    val blessings = viewModel.items.observeAsState().value ?: return
+    val blessings = viewModel.items.collectWithLifecycle(null).value ?: return
     val coroutineScope = rememberCoroutineScope()
 
     CardContainer(

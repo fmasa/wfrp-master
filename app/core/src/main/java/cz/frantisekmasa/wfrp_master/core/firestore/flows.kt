@@ -21,6 +21,8 @@ fun <T : Any> queryFlow(
     query: Query,
     snapshotParser: AggregateMapper<T>,
 ): Flow<List<T>> = callbackFlow {
+    Timber.d("Attaching document listener for query $query")
+
     val listener = query.addSnapshotListener { snapshot, exception ->
         exception?.let { throw it }
         snapshot?.let {
@@ -35,7 +37,10 @@ fun <T : Any> queryFlow(
         }
     }
 
-    awaitClose { listener.remove() }
+    awaitClose {
+        Timber.d("Detaching document listener for query $query")
+        listener.remove()
+    }
 }
 
 fun <T : Any> documentFlow(

@@ -18,7 +18,6 @@ import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.Stable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -33,6 +32,7 @@ import cz.frantisekmasa.wfrp_master.combat.domain.encounter.Wounds
 import cz.frantisekmasa.wfrp_master.core.domain.Characteristic
 import cz.frantisekmasa.wfrp_master.core.domain.Stats
 import cz.frantisekmasa.wfrp_master.core.ui.buttons.BackButton
+import cz.frantisekmasa.wfrp_master.core.ui.flow.collectWithLifecycle
 import cz.frantisekmasa.wfrp_master.core.ui.forms.CheckboxWithText
 import cz.frantisekmasa.wfrp_master.core.ui.forms.InputValue
 import cz.frantisekmasa.wfrp_master.core.ui.forms.Rules
@@ -215,7 +215,7 @@ fun NpcDetailScreen(
     val coroutineScope = rememberCoroutineScope()
     val viewModel: EncounterDetailViewModel by viewModel { parametersOf(npcId.encounterId) }
 
-    val npc = remember { viewModel.npcFlow(npcId) }.collectAsState().value
+    val npc = remember { viewModel.npcFlow(npcId) }.collectWithLifecycle().value
     val data = npc?.let { FormData.fromExistingNpc(it) }
 
     val validate = remember { mutableStateOf(false) }

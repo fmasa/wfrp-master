@@ -9,12 +9,12 @@ import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.res.stringResource
 import cz.frantisekmasa.wfrp_master.compendium.domain.Skill
 import cz.frantisekmasa.wfrp_master.core.ui.buttons.CloseButton
+import cz.frantisekmasa.wfrp_master.core.ui.flow.collectWithLifecycle
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.EmptyUI
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.FullScreenProgress
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.ItemIcon
@@ -36,7 +36,7 @@ internal fun SkillChooser(
             )
         }
     ) {
-        val skills = viewModel.skills.observeAsState().value
+        val skills = viewModel.skills.collectWithLifecycle(null).value
 
         if (skills == null) {
             FullScreenProgress()

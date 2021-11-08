@@ -1,8 +1,6 @@
 package cz.frantisekmasa.wfrp_master.inventory.ui
 
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import cz.frantisekmasa.wfrp_master.core.domain.Money
 import cz.frantisekmasa.wfrp_master.core.domain.character.CharacterFeatureRepository
@@ -16,6 +14,7 @@ import cz.frantisekmasa.wfrp_master.inventory.domain.InventoryItem
 import cz.frantisekmasa.wfrp_master.inventory.domain.InventoryItemRepository
 import cz.frantisekmasa.wfrp_master.inventory.domain.sum
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
@@ -28,34 +27,31 @@ class InventoryViewModel(
 ) : ViewModel() {
 
     private val character = characters.getLive(characterId).right()
-    private val itemsFlow = inventoryItems.findAllForCharacter(characterId)
-    val inventory: LiveData<List<InventoryItem>?> = itemsFlow.asLiveData()
+    val inventory: Flow<List<InventoryItem>> = inventoryItems.findAllForCharacter(characterId)
 
-    val maxEncumbrance: LiveData<Encumbrance> =
-        character.map { Encumbrance.maximumForCharacter(it.getCharacteristics()) }.asLiveData()
+    val maxEncumbrance: Flow<Encumbrance> =
+        character.map { Encumbrance.maximumForCharacter(it.getCharacteristics()) }
 
-    val totalEncumbrance: LiveData<Encumbrance?> = itemsFlow
+    val totalEncumbrance: Flow<Encumbrance?> = inventory
         .map { items -> items.map { it.effectiveEncumbrance }.sum() }
-        .asLiveData()
 
-    val armor: LiveData<EquippedArmour> =
+    val armor: Flow<EquippedArmour> =
         armorRepository
             .getLive(characterId)
             .right()
-            .combine(itemsFlow) { armour, items ->
+            .combine(inventory) { armour, items ->
                 EquippedArmour(
                     armourFromItems = Armor.fromItems(items),
                     legacyArmour = armour,
                 )
             }
-            .asLiveData()
 
     data class EquippedArmour(
         val armourFromItems: Armor,
         val legacyArmour: Armor,
     )
 
-    val money: LiveData<Money> = character.map { it.getMoney() }.asLiveData()
+    val money: Flow<Money> = character.map { it.getMoney() }
 
     suspend fun addMoney(amount: Money) {
         val character = characters.get(characterId)

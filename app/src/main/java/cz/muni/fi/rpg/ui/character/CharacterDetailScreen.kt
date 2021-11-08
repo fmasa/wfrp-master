@@ -10,7 +10,6 @@ import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -20,6 +19,7 @@ import cz.frantisekmasa.wfrp_master.core.ads.BannerAd
 import cz.frantisekmasa.wfrp_master.core.domain.character.Character
 import cz.frantisekmasa.wfrp_master.core.domain.party.Party
 import cz.frantisekmasa.wfrp_master.core.ui.buttons.HamburgerButton
+import cz.frantisekmasa.wfrp_master.core.ui.flow.collectWithLifecycle
 import cz.frantisekmasa.wfrp_master.core.ui.scaffolding.IconAction
 import cz.frantisekmasa.wfrp_master.core.ui.scaffolding.Subtitle
 import cz.frantisekmasa.wfrp_master.core.ui.scaffolding.tabs.TabPager
@@ -44,8 +44,8 @@ fun CharacterDetailScreen(routing: Routing<Route.CharacterDetail>) {
     val viewModel: CharacterViewModel by viewModel { parametersOf(characterId) }
     val partyViewModel: PartyViewModel by viewModel { parametersOf(characterId.partyId) }
 
-    val character = viewModel.character.observeAsState().value
-    val party = partyViewModel.party.observeAsState().value
+    val character = viewModel.character.collectWithLifecycle(null).value
+    val party = partyViewModel.party.collectWithLifecycle(null).value
 
     LaunchedEffect(routing.route.characterId) {
         withContext(Dispatchers.IO) {

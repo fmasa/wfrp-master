@@ -6,9 +6,7 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.preferencesDataStore
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.analytics.ktx.analytics
 import com.google.firebase.ktx.Firebase
@@ -17,6 +15,7 @@ import cz.frantisekmasa.wfrp_master.core.ads.LocationProvider
 import cz.frantisekmasa.wfrp_master.core.domain.party.PartyRepository
 import cz.frantisekmasa.wfrp_master.core.ui.viewinterop.LocalActivity
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
@@ -33,9 +32,9 @@ class SettingsViewModel(
     private val adManager: AdManager,
 ) : ViewModel() {
 
-    val darkMode: LiveData<Boolean?> by lazy { getPreference(AppSettings.DARK_MODE) }
-    val soundEnabled: LiveData<Boolean> by lazy { getPreference(AppSettings.SOUND_ENABLED, true) }
-    val personalizedAds: LiveData<Boolean> by lazy { getPreference(AppSettings.PERSONALIZED_ADS, false) }
+    val darkMode: Flow<Boolean?> by lazy { getPreference(AppSettings.DARK_MODE) }
+    val soundEnabled: Flow<Boolean?> by lazy { getPreference(AppSettings.SOUND_ENABLED) }
+    val personalizedAds: Flow<Boolean?> by lazy { getPreference(AppSettings.PERSONALIZED_ADS, false) }
 
     private val dataStore = context.settingsDataStore
 
@@ -92,16 +91,14 @@ class SettingsViewModel(
     private fun getPreference(
         preference: Preferences.Key<Boolean>,
         defaultValue: Boolean
-    ): LiveData<Boolean> {
+    ): Flow<Boolean> {
         return dataStore.data
             .map { preferences -> preferences[preference] ?: defaultValue }
-            .asLiveData()
     }
 
-    private fun getPreference(preference: Preferences.Key<Boolean>): LiveData<Boolean?> {
+    private fun getPreference(preference: Preferences.Key<Boolean>): Flow<Boolean?> {
         return dataStore.data
             .map { preferences -> preferences[preference] }
-            .asLiveData()
     }
 }
 

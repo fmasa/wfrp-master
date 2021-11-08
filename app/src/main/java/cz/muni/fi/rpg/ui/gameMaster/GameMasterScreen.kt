@@ -9,7 +9,6 @@ import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -19,6 +18,7 @@ import cz.frantisekmasa.wfrp_master.core.ads.BannerAd
 import cz.frantisekmasa.wfrp_master.core.domain.identifiers.CharacterId
 import cz.frantisekmasa.wfrp_master.core.domain.identifiers.EncounterId
 import cz.frantisekmasa.wfrp_master.core.ui.buttons.HamburgerButton
+import cz.frantisekmasa.wfrp_master.core.ui.flow.collectWithLifecycle
 import cz.frantisekmasa.wfrp_master.core.ui.scaffolding.IconAction
 import cz.frantisekmasa.wfrp_master.core.ui.scaffolding.tabs.TabPager
 import cz.frantisekmasa.wfrp_master.core.ui.scaffolding.tabs.tab
@@ -34,7 +34,7 @@ import org.koin.core.parameter.parametersOf
 @Composable
 fun GameMasterScreen(routing: Routing<Route.GameMaster>) {
     val viewModel = ViewModel.GameMaster(routing.route.partyId)
-    val party = viewModel.party.observeAsState().value
+    val party = viewModel.party.collectWithLifecycle(null).value
 
     Scaffold(
         topBar = {

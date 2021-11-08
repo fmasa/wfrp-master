@@ -16,7 +16,6 @@ import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -30,6 +29,7 @@ import cz.frantisekmasa.wfrp_master.core.domain.identifiers.CharacterId
 import cz.frantisekmasa.wfrp_master.core.domain.party.Party
 import cz.frantisekmasa.wfrp_master.core.ui.buttons.HamburgerButton
 import cz.frantisekmasa.wfrp_master.core.ui.dialogs.DialogState
+import cz.frantisekmasa.wfrp_master.core.ui.flow.collectWithLifecycle
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.ContextMenu
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.EmptyUI
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.ItemIcon
@@ -51,7 +51,7 @@ import cz.muni.fi.rpg.viewModels.PartyListViewModel
 fun PartyListScreen(routing: Routing<Route.PartyList>) {
     val viewModel: PartyListViewModel by viewModel()
     val userId = LocalUser.current.id
-    val parties = remember { viewModel.liveForUser(userId) }.observeAsState().value
+    val parties = remember { viewModel.liveForUser(userId) }.collectWithLifecycle(null).value
 
     var menuState by remember { mutableStateOf(MenuState.COLLAPSED) }
     var createPartyDialogVisible by rememberSaveable { mutableStateOf(false) }

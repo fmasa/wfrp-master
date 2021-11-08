@@ -32,9 +32,8 @@ import androidx.compose.material.Text
 import androidx.compose.material.TextButton
 import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -42,14 +41,12 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.intl.Locale
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.toUpperCase
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.Observer
 import cz.frantisekmasa.wfrp_master.combat.R
 import cz.frantisekmasa.wfrp_master.combat.domain.encounter.Wounds
 import cz.frantisekmasa.wfrp_master.core.ads.BannerAd
@@ -57,6 +54,7 @@ import cz.frantisekmasa.wfrp_master.core.auth.LocalUser
 import cz.frantisekmasa.wfrp_master.core.ui.buttons.BackButton
 import cz.frantisekmasa.wfrp_master.core.ui.components.CharacterAvatar
 import cz.frantisekmasa.wfrp_master.core.ui.components.CharacteristicsTable
+import cz.frantisekmasa.wfrp_master.core.ui.flow.collectWithLifecycle
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.DraggableListFor
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.FullScreenProgress
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.ItemIcon
@@ -69,9 +67,7 @@ import cz.frantisekmasa.wfrp_master.navigation.Route
 import cz.frantisekmasa.wfrp_master.navigation.Routing
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import org.koin.core.parameter.parametersOf
 import timber.log.Timber
 
@@ -83,8 +79,8 @@ fun ActiveCombatScreen(routing: Routing<Route.ActiveCombat>) {
 
     val coroutineScope = rememberCoroutineScope()
 
-    val party = viewModel.party.observeAsState(null).value
-    val combatants = remember { viewModel.combatants() }.observeAsState().value
+    val party = viewModel.party.collectWithLifecycle(null).value
+    val combatants = remember { viewModel.combatants() }.collectWithLifecycle(null).value
     val isGameMaster = LocalUser.current.id == party?.gameMasterId
 
     var openedCombatant by remember { mutableStateOf<CombatantItem?>(null) }
@@ -146,8 +142,8 @@ fun ActiveCombatScreen(routing: Routing<Route.ActiveCombat>) {
                     )
                 },
             ) {
-                val round = viewModel.round.observeAsState().value
-                val turn = viewModel.turn.observeAsState().value
+                val round = viewModel.round.collectWithLifecycle(null).value
+                val turn = viewModel.turn.collectWithLifecycle(null).value
 
                 if (combatants == null || round == null || turn == null || party == null) {
                     FullScreenProgress()
@@ -242,14 +238,10 @@ private fun AutoCloseOnEndedCombat(
     routing: Routing<Route.ActiveCombat>
 ) {
     val context = LocalContext.current
-    val lifecycleOwner = LocalLifecycleOwner.current
+    val isCombatActive = viewModel.isCombatActive.collectWithLifecycle(true).value
 
-    val observer: Observer<Boolean> = remember(routing) {
-        Observer { active ->
-            if (active) {
-                return@Observer
-            }
-
+    if (!isCombatActive) {
+        SideEffect {
             Timber.d("Closing combat screen")
 
             Toast.makeText(
@@ -260,19 +252,6 @@ private fun AutoCloseOnEndedCombat(
 
             routing.pop()
         }
-    }
-
-    val coroutineScope = rememberCoroutineScope()
-
-    DisposableEffect(viewModel, lifecycleOwner, context) {
-        coroutineScope.launch(Dispatchers.Default) {
-            delay(3_000)
-            withContext(Dispatchers.Main) {
-                viewModel.isCombatActive.observe(lifecycleOwner, observer)
-            }
-        }
-
-        onDispose { viewModel.isCombatActive.removeObserver(observer) }
     }
 }
 

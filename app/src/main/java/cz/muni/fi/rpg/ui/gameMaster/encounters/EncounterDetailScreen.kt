@@ -27,7 +27,6 @@ import androidx.compose.material.primarySurface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -44,6 +43,7 @@ import cz.frantisekmasa.wfrp_master.core.domain.identifiers.NpcId
 import cz.frantisekmasa.wfrp_master.core.domain.party.PartyId
 import cz.frantisekmasa.wfrp_master.core.ui.buttons.BackButton
 import cz.frantisekmasa.wfrp_master.core.ui.buttons.PrimaryButton
+import cz.frantisekmasa.wfrp_master.core.ui.flow.collectWithLifecycle
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.CardContainer
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.CardItem
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.ContextMenu
@@ -75,7 +75,7 @@ fun EncounterDetailScreen(routing: Routing<Route.EncounterDetail>) {
     Scaffold(
         topBar = {
             val partyId = encounterId.partyId
-            val encounter = viewModel.encounter.observeAsState().value
+            val encounter = viewModel.encounter.collectWithLifecycle(null).value
 
             TopAppBar(
                 title = {
@@ -83,7 +83,7 @@ fun EncounterDetailScreen(routing: Routing<Route.EncounterDetail>) {
                         encounter?.let { Text(it.name) }
 
                         val partyViewModel: PartyViewModel by viewModel { parametersOf(partyId) }
-                        partyViewModel.party.observeAsState().value?.let {
+                        partyViewModel.party.collectWithLifecycle(null).value?.let {
                             Subtitle(it.getName())
                         }
                     }
@@ -217,7 +217,7 @@ private fun DescriptionCard(viewModel: EncounterDetailViewModel) {
     ) {
         CardTitle(R.string.title_description)
 
-        val encounter = viewModel.encounter.observeAsState().value
+        val encounter = viewModel.encounter.collectWithLifecycle(null).value
 
         if (encounter == null) {
             Box(Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
@@ -245,7 +245,7 @@ private fun CombatantsCard(
     ) {
         CardTitle(R.string.title_npcs)
 
-        val npcs = viewModel.npcs.observeAsState().value
+        val npcs = viewModel.npcs.collectWithLifecycle(null).value
 
         if (npcs == null) {
             Box(Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {

@@ -19,7 +19,6 @@ import androidx.compose.material.Switch
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -28,6 +27,7 @@ import androidx.compose.ui.unit.dp
 import cz.frantisekmasa.wfrp_master.core.ui.buttons.BackButton
 import cz.frantisekmasa.wfrp_master.core.ui.components.settings.SettingsCard
 import cz.frantisekmasa.wfrp_master.core.ui.components.settings.SettingsTitle
+import cz.frantisekmasa.wfrp_master.core.ui.flow.collectWithLifecycle
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.Spacing
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.VisualOnlyIconDescription
 import cz.frantisekmasa.wfrp_master.core.ui.viewinterop.LocalActivity
@@ -103,7 +103,7 @@ private fun BuyPremiumButton(viewModel: PremiumViewModel) {
 private fun DarkModeCard(viewModel: SettingsViewModel) {
     SwitchItem(
         name = R.string.settings_dark_mode,
-        value = viewModel.darkMode.value ?: isSystemInDarkTheme(),
+        value = viewModel.darkMode.collectWithLifecycle(isSystemInDarkTheme()).value,
         onChange = { viewModel.toggleDarkMode(it) },
     )
 }
@@ -112,7 +112,7 @@ private fun DarkModeCard(viewModel: SettingsViewModel) {
 private fun SoundCard(viewModel: SettingsViewModel) {
     SwitchItem(
         name = R.string.settings_sound,
-        value = viewModel.soundEnabled.observeAsState().value,
+        value = viewModel.soundEnabled.collectWithLifecycle(null).value,
         onChange = { viewModel.toggleSound(it) }
     )
 }
@@ -121,7 +121,7 @@ private fun SoundCard(viewModel: SettingsViewModel) {
 private fun PersonalizedAds(viewModel: SettingsViewModel) {
     SwitchItem(
         name = R.string.settings_personalized_ads,
-        value = viewModel.personalizedAds.observeAsState().value,
+        value = viewModel.personalizedAds.collectWithLifecycle(null).value,
         onChange = { viewModel.togglePersonalizedAds(it) },
     )
 }

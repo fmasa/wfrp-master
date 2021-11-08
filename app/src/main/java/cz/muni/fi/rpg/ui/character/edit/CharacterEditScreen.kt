@@ -14,7 +14,6 @@ import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.Stable
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -28,6 +27,7 @@ import androidx.compose.ui.unit.dp
 import cz.frantisekmasa.wfrp_master.core.domain.character.Character
 import cz.frantisekmasa.wfrp_master.core.domain.character.SocialStatus
 import cz.frantisekmasa.wfrp_master.core.ui.buttons.BackButton
+import cz.frantisekmasa.wfrp_master.core.ui.flow.collectWithLifecycle
 import cz.frantisekmasa.wfrp_master.core.ui.forms.CheckboxWithText
 import cz.frantisekmasa.wfrp_master.core.ui.forms.InputValue
 import cz.frantisekmasa.wfrp_master.core.ui.forms.Rules
@@ -95,7 +95,7 @@ fun CharacterEditScreen(routing: Routing<Route.CharacterEdit>) {
     val viewModel: CharacterViewModel by viewModel { parametersOf(routing.route.characterId) }
     val coroutineScope = rememberCoroutineScope()
 
-    val character = viewModel.character.observeAsState().value
+    val character = viewModel.character.collectWithLifecycle(null).value
 
     if (character == null) {
         FullScreenProgress()

@@ -7,12 +7,12 @@ import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import cz.frantisekmasa.wfrp_master.core.ui.buttons.BackButton
 import cz.frantisekmasa.wfrp_master.core.ui.components.settings.SettingsCard
 import cz.frantisekmasa.wfrp_master.core.ui.components.settings.SettingsTitle
+import cz.frantisekmasa.wfrp_master.core.ui.flow.collectWithLifecycle
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.FullScreenProgress
 import cz.frantisekmasa.wfrp_master.core.viewModel.viewModel
 import cz.frantisekmasa.wfrp_master.navigation.Route
@@ -32,7 +32,7 @@ fun PartySettingsScreen(routing: Routing<Route.PartySettings>) {
             )
         },
     ) {
-        val party = viewModel.party.observeAsState().value
+        val party = viewModel.party.collectWithLifecycle(null).value
 
         if (party == null) {
             FullScreenProgress()

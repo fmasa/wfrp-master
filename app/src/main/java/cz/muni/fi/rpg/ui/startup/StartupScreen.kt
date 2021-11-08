@@ -12,7 +12,6 @@ import androidx.compose.material.Text
 import androidx.compose.material.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableStateOf
@@ -27,6 +26,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.google.android.gms.auth.api.signin.GoogleSignIn
+import cz.frantisekmasa.wfrp_master.core.ui.flow.collectWithLifecycle
 import cz.frantisekmasa.wfrp_master.core.viewModel.provideSettingsViewModel
 import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.ui.common.composables.Theme
@@ -42,7 +42,7 @@ import timber.log.Timber
 fun StartupScreen(viewModel: AuthenticationViewModel) {
     SplashScreen()
 
-    val authenticated = viewModel.authenticated.collectAsState().value
+    val authenticated by viewModel.authenticated.collectWithLifecycle()
 
     Timber.d("Authenticated: $authenticated")
 

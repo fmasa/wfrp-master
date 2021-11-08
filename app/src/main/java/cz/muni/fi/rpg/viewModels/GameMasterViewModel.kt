@@ -1,8 +1,6 @@
 package cz.muni.fi.rpg.viewModels
 
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.asLiveData
 import arrow.core.extensions.list.foldable.exists
 import cz.frantisekmasa.wfrp_master.core.domain.Ambitions
 import cz.frantisekmasa.wfrp_master.core.domain.character.CharacterRepository
@@ -23,22 +21,21 @@ class GameMasterViewModel(
     private val characterRepository: CharacterRepository
 ) : ViewModel() {
 
-    private val partyFlow: Flow<Party> = parties.getLive(partyId).right()
-    val party: LiveData<Party> = partyFlow.asLiveData()
+    val party: Flow<Party> = parties.getLive(partyId).right()
 
     /**
      * Returns LiveData which emits either CharacterId of players current character or NULL if user
      * didn't create character yet
      */
-    val players: LiveData<List<Player>?> =
-        partyFlow.filterNotNull().combineTransform(characterRepository.inParty(partyId)) { party, characters ->
+    val players: Flow<List<Player>?> =
+        party.filterNotNull().combineTransform(characterRepository.inParty(partyId)) { party, characters ->
             val players = characters.map { Player.ExistingCharacter(it) }
             val usersWithoutCharacter = party.getPlayers()
                 .filter { userId -> !players.exists { it.character.userId == userId.toString() } }
                 .map { Player.UserWithoutCharacter(it.toString()) }
 
             emit(players + usersWithoutCharacter)
-        }.asLiveData()
+        }
 
     suspend fun archiveCharacter(id: CharacterId) {
         val character = characterRepository.get(id)

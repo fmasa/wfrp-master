@@ -8,11 +8,11 @@ import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import cz.frantisekmasa.wfrp_master.core.ui.buttons.CloseButton
 import cz.frantisekmasa.wfrp_master.core.ui.dialogs.FullScreenDialog
+import cz.frantisekmasa.wfrp_master.core.ui.flow.collectWithLifecycle
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.SingleLineTextValue
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.Spacing
 import cz.frantisekmasa.wfrp_master.religion.R
@@ -25,8 +25,10 @@ internal fun EditBlessingDialog(
     blessingId: UUID,
     onDismissRequest: () -> Unit
 ) {
-    val blessing =
-        viewModel.items.observeAsState().value?.firstOrNull { it.id == blessingId } ?: return
+    val blessing = viewModel.items.collectWithLifecycle(null)
+        .value
+        ?.firstOrNull { it.id == blessingId }
+        ?: return
 
     FullScreenDialog(onDismissRequest = onDismissRequest) {
         if (blessing.compendiumId != null) {

@@ -18,7 +18,6 @@ import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -36,6 +35,7 @@ import com.google.firebase.ktx.Firebase
 import cz.frantisekmasa.wfrp_master.compendium.R
 import cz.frantisekmasa.wfrp_master.compendium.domain.importer.RulebookCompendiumImporter
 import cz.frantisekmasa.wfrp_master.core.ui.buttons.BackButton
+import cz.frantisekmasa.wfrp_master.core.ui.flow.collectWithLifecycle
 import cz.frantisekmasa.wfrp_master.core.ui.scaffolding.Subtitle
 import cz.frantisekmasa.wfrp_master.core.ui.viewinterop.LocalActivity
 import cz.frantisekmasa.wfrp_master.core.viewModel.viewModel
@@ -63,7 +63,7 @@ private fun TopBar(routing: Routing<Route.CompendiumImport>) {
         title = {
             Column {
                 Text(stringResource(R.string.title_compendium_import))
-                viewModel.party.observeAsState().value?.let {
+                viewModel.party.collectWithLifecycle(null).value?.let {
                     Subtitle(it.getName())
                 }
             }

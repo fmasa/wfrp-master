@@ -11,12 +11,12 @@ import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import cz.frantisekmasa.wfrp_master.core.ui.buttons.CloseButton
 import cz.frantisekmasa.wfrp_master.core.ui.dialogs.FullScreenDialog
+import cz.frantisekmasa.wfrp_master.core.ui.flow.collectWithLifecycle
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.SingleLineTextValue
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.Spacing
 import cz.frantisekmasa.wfrp_master.core.ui.scaffolding.SubheadBar
@@ -31,7 +31,10 @@ internal fun EditMiracleDialog(
     onDismissRequest: () -> Unit
 ) {
     val miracle =
-        viewModel.items.observeAsState().value?.firstOrNull { it.id == miracleId } ?: return
+        viewModel.items.collectWithLifecycle(null)
+            .value
+            ?.firstOrNull { it.id == miracleId }
+            ?: return
 
     FullScreenDialog(onDismissRequest = onDismissRequest) {
         if (miracle.compendiumId != null) {

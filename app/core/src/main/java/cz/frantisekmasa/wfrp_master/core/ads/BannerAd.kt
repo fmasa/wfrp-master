@@ -4,13 +4,13 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.key
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.viewinterop.AndroidView
 import com.google.android.gms.ads.AdSize
 import com.google.android.gms.ads.AdView
+import cz.frantisekmasa.wfrp_master.core.ui.flow.collectWithLifecycle
 import cz.frantisekmasa.wfrp_master.core.viewModel.providePremiumViewModel
 import cz.frantisekmasa.wfrp_master.core.viewModel.provideSettingsViewModel
 
@@ -25,7 +25,7 @@ fun BannerAd(unitId: String) {
     val viewModel = provideAdViewModel()
 
     val size = AdSize.SMART_BANNER
-    val personalizedAds = provideSettingsViewModel().personalizedAds.observeAsState(false)
+    val personalizedAds = provideSettingsViewModel().personalizedAds.collectWithLifecycle(false)
 
     key(personalizedAds) {
         AndroidView(

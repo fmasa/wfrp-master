@@ -16,7 +16,6 @@ import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -38,10 +37,12 @@ import cz.frantisekmasa.wfrp_master.core.domain.compendium.CompendiumItem
 import cz.frantisekmasa.wfrp_master.core.domain.party.PartyId
 import cz.frantisekmasa.wfrp_master.core.ui.buttons.CloseButton
 import cz.frantisekmasa.wfrp_master.core.ui.dialogs.FullScreenDialog
+import cz.frantisekmasa.wfrp_master.core.ui.flow.collectWithLifecycle
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.FullScreenProgress
 import cz.frantisekmasa.wfrp_master.core.ui.scaffolding.TopBarAction
 import cz.frantisekmasa.wfrp_master.core.viewModel.viewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.koin.core.parameter.parametersOf
@@ -138,10 +139,10 @@ private fun <T : CompendiumItem<T>> ItemPicker(
     onSave: suspend (items: List<T>) -> Unit,
     onClose: () -> Unit,
     onContinue: () -> Unit,
-    existingItems: LiveData<List<T>>,
+    existingItems: Flow<List<T>>,
     items: List<T>,
 ) {
-    val existingItemsList = existingItems.observeAsState().value
+    val existingItemsList = existingItems.collectWithLifecycle(null).value
 
     if (existingItemsList == null) {
         Scaffold(

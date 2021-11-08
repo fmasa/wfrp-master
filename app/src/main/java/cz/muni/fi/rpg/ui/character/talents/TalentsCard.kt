@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
@@ -13,6 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import cz.frantisekmasa.wfrp_master.core.ui.buttons.CardButton
+import cz.frantisekmasa.wfrp_master.core.ui.flow.collectWithLifecycle
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.CardContainer
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.CardItem
 import cz.frantisekmasa.wfrp_master.core.ui.primitives.ContextMenu
@@ -29,7 +29,7 @@ internal fun TalentsCard(
     viewModel: TalentsViewModel,
     onRemove: (Talent) -> Unit,
 ) {
-    val talents = viewModel.talents.observeAsState().value ?: return
+    val talents = viewModel.talents.collectWithLifecycle(null).value ?: return
 
     CardContainer(Modifier.padding(horizontal = 8.dp).padding(bottom = 8.dp)) {
         Column(Modifier.padding(horizontal = 6.dp)) {
