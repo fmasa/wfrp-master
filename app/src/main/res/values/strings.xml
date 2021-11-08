@@ -121,7 +121,6 @@
     <string name="button_invite">Invite</string>
     <string name="title_calendar">Calendar</string>
     <string name="title_select_time">Select Time</string>
-    <string name="title_characters">Characters</string>
     <string name="title_encounters">Encounters</string>
 
     <string name="title_party_settings">Party Settings</string>
@@ -139,7 +138,6 @@
     <string name="no_encounters_prompt">No encounters</string>
     <string name="no_encounters_sub_prompt">Add first encounter for your party.</string>
     <string name="encounter_icon">Encounter icon</string>
-    <string name="title_npcs">NPCs</string>
     <string name="no_npcs_prompt">There are no NPCs yet. Add first one.</string>
     <string name="title_npc_add">New NPC</string>
     <string name="title_npc">NPC</string>
@@ -348,4 +346,24 @@
     <!-- Common -->
     <string name="no_items_in_compendium_sub_text_player">Your GM has to add them first.</string>
     <string name="label_sin_points">Sin points</string>
+
+    <!-- Combat -->
+    <string name="title_start_combat">Start Combat</string>
+    <string name="title_combat">Combat</string>
+    <string name="n_round">Round %1$d</string>
+    <string name="n_turn">Turn %1$d</string>
+    <string name="next_turn">Next turn</string>
+    <string name="combat_in_progress">Combat is in progress</string>
+    <string name="combat_end">End combat</string>
+    <string name="no_active_combat">There is no active combat</string>
+
+    <string name="title_characters">Characters</string>
+    <string name="title_npcs">NPCs</string>
+    <string name="button_detail">Detail</string>
+
+    <string name="label_advantage">Advantage</string>
+
+    <!-- Icon descriptions -->
+    <string name="icon_previous_turn">Previous turn</string>
+    <string name="icon_next_turn">Next turn</string>
 </resources>
