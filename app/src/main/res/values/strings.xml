@@ -517,4 +517,99 @@
     <string name="trapping_type_melee_weapon">Melee Weapon</string>
     <string name="trapping_type_miscellaneous">Miscellaneous</string>
     <string name="trapping_type_ranged_weapon">Ranged Weapon</string>
+
+    <!-- Core -->
+    <!-- Domain -->
+
+    <!-- Stuff shared between NPCs and characters -->
+    <string name="label_wounds">Wounds</string>
+
+    <!-- Armor -->
+    <string name="armor_shield">Shield</string>
+    <string name="armor_left_leg">Left Leg</string>
+    <string name="armor_right_leg">Right Leg</string>
+    <string name="armor_left_arm">Left Arm</string>
+    <string name="armor_right_arm">Right Arm</string>
+    <string name="armor_body">Body</string>
+    <string name="armor_head">Head</string>
+    <string name="title_armor">Armor</string>
+
+    <string name="armor_type_boiled_leather">Boiled Leather</string>
+    <string name="armor_type_mail">Mail</string>
+    <string name="armor_type_other">Other</string>
+    <string name="armor_type_plate">Plate</string>
+    <string name="armor_type_soft_leather">Soft Leather</string>
+
+    <!-- Species -->
+    <string name="race_dwarf">Dwarf</string>
+    <string name="race_high_elf">High Elf</string>
+    <string name="race_wood_elf">Wood Elf</string>
+    <string name="race_halfling">Halfling</string>
+    <string name="race_human">Human</string>
+    <string name="race_gnome">Gnome</string>
+
+    <!-- Characteristics -->
+    <string name="label_agility">Agility</string>
+    <string name="label_ballistic_skill">Ballistic Skill</string>
+    <string name="label_dexterity">Dexterity</string>
+    <string name="label_fellowship">Fellowship</string>
+    <string name="label_initiative">Initiative</string>
+    <string name="label_intelligence">Intelligence</string>
+    <string name="label_strength">Strength</string>
+    <string name="label_toughness">Toughness</string>
+    <string name="label_weapon_skill">Weapon Skill</string>
+    <string name="label_will_power">Will Power</string>
+
+    <!-- End of Domain -->
+
+    <!-- Common UI elements -->
+    <string name="button_finish">Finish</string>
+    <string name="button_save">Save</string>
+    <string name="button_skip">Skip</string>
+    <string name="button_cancel">Cancel</string>
+    <string name="button_duplicate">Duplicate</string>
+    <string name="button_submit">Submit</string>
+    <string name="button_open">Open</string>
+    <string name="button_remove">Remove</string>
+    <string name="open_context_menu">Open context menu</string>
+    <string name="boolean_yes">Yes</string>
+    <string name="boolean_no">No</string>
+
+    <!-- Form errors -->
+    <string name="error_must_be_non_negative_number">Must be greater or equal to 0</string>
+    <string name="error_must_be_positive_int">Must be positive number without decimals</string>
+    <string name="error_not_integer">Must be number without decimals</string>
+    <string name="error_required">Required</string>
+
+    <!-- Icon descriptions -->
+    <string name="icon_increment">Increment value</string>
+    <string name="icon_decrement">Decrement value</string>
+    <string name="icon_close_dialog">Close current dialog</string>
+    <string name="icon_back_button">Return to previous screen</string>
+    <string name="icon_hamburger">Open navigation drawer</string>
+    <string name="icon_open_selectbox">Open select-box</string>
+    <string name="icon_action_more">Open context menu</string>
+
+    <!-- Tests and Rolls -->
+    <string name="test_dramatic_astounding_success">Astounding Success</string>
+    <string name="test_dramatic_impressive_success">Impressive Success</string>
+    <string name="test_dramatic_success">Success</string>
+    <string name="test_dramatic_marginal_success">Marginal Success</string>
+    <string name="test_dramatic_marginal_failure">Marginal Failure</string>
+    <string name="test_dramatic_failure">Failure</string>
+    <string name="test_dramatic_impressive_failure">Impressive Failure</string>
+    <string name="test_dramatic_astounding_failure">Astounding Failure</string>
+
+    <!-- Social Status -->
+    <string name="social_status_gold">Gold</string>
+    <string name="social_status_silver">Silver</string>
+    <string name="social_status_brass">Brass</string>
+
+    <!-- Points -->
+    <string name="label_corruption">Corruption</string>
+    <string name="label_fate_points">Fate</string>
+    <string name="label_fortune_points">Fortune</string>
+    <string name="label_max_wounds">Max. Wounds</string>
+    <string name="label_resilience">Resilience</string>
+    <string name="label_resolve">Resolve</string>
 </resources>

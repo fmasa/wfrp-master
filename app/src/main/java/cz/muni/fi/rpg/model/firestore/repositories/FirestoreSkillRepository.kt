@@ -12,7 +12,7 @@ import java.util.UUID
 
 internal class FirestoreSkillRepository(
     firestore: FirebaseFirestore,
-    private val mapper: AggregateMapper<Skill>,
+    mapper: AggregateMapper<Skill>,
 ) : FirestoreCharacterItemRepository<Skill>(COLLECTION_SKILLS, mapper, firestore), SkillRepository {
     override suspend fun findByCompendiumId(
         characterId: CharacterId,
