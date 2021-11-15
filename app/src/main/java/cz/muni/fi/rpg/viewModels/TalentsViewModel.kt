@@ -2,8 +2,8 @@ package cz.muni.fi.rpg.viewModels
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import cz.frantisekmasa.wfrp_master.core.domain.compendium.Compendium
-import cz.frantisekmasa.wfrp_master.core.domain.identifiers.CharacterId
+import cz.frantisekmasa.wfrp_master.common.core.domain.compendium.Compendium
+import cz.frantisekmasa.wfrp_master.common.core.domain.identifiers.CharacterId
 import cz.muni.fi.rpg.model.domain.talents.Talent
 import cz.muni.fi.rpg.model.domain.talents.TalentRepository
 import kotlinx.coroutines.Dispatchers

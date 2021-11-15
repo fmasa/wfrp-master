@@ -1,6 +1,6 @@
 package cz.muni.fi.rpg.model.domain.invitation
 
-import cz.frantisekmasa.wfrp_master.core.domain.party.Invitation
+import cz.frantisekmasa.wfrp_master.common.core.domain.party.Invitation
 
 interface InvitationProcessor {
     /**

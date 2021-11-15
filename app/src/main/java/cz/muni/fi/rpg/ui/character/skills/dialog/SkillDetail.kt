@@ -15,11 +15,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import cz.frantisekmasa.wfrp_master.core.ui.buttons.CloseButton
-import cz.frantisekmasa.wfrp_master.core.ui.primitives.NumberPicker
-import cz.frantisekmasa.wfrp_master.core.ui.primitives.SingleLineTextValue
-import cz.frantisekmasa.wfrp_master.core.ui.primitives.Spacing
-import cz.frantisekmasa.wfrp_master.core.ui.scaffolding.SubheadBar
+import cz.frantisekmasa.wfrp_master.common.core.domain.localizedName
+import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.NumberPicker
+import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.SingleLineTextValue
+import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
+import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.SubheadBar
+import cz.frantisekmasa.wfrp_master.common.core.ui.buttons.CloseButton
 import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.model.domain.skills.Skill
 
@@ -47,7 +48,7 @@ fun SkillDetail(
             Column(Modifier.padding(Spacing.bodyPadding)) {
                 SingleLineTextValue(
                     R.string.label_skill_characteristic,
-                    stringResource(skill.characteristic.getNameId()),
+                    skill.characteristic.localizedName,
                 )
 
                 SingleLineTextValue(

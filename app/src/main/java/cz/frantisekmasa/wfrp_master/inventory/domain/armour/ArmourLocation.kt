@@ -1,17 +1,16 @@
 package cz.frantisekmasa.wfrp_master.inventory.domain.armour
 
 import android.os.Parcelable
-import androidx.annotation.StringRes
-import cz.frantisekmasa.wfrp_master.core.domain.NamedEnum
-import cz.muni.fi.rpg.R
+import cz.frantisekmasa.wfrp_master.common.core.domain.NamedEnum
+import cz.frantisekmasa.wfrp_master.common.localization.Strings
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
-enum class ArmourLocation(@StringRes override val nameRes: Int) : NamedEnum, Parcelable {
-    HEAD(R.string.armor_head),
-    BODY(R.string.armor_body),
-    LEFT_ARM(R.string.armor_left_arm),
-    RIGHT_ARM(R.string.armor_right_arm),
-    LEFT_LEG(R.string.armor_left_leg),
-    RIGHT_LEG(R.string.armor_right_leg),
+enum class ArmourLocation(override val nameResolver: (strings: Strings) -> String) : NamedEnum, Parcelable {
+    HEAD({ it.armourHead }),
+    BODY({ it.armourBody }),
+    LEFT_ARM({ it.armourLeftArm }),
+    RIGHT_ARM({ it.armourRightArm }),
+    LEFT_LEG({ it.armourLeftLeg }),
+    RIGHT_LEG({ it.armourRightLeg }),
 }

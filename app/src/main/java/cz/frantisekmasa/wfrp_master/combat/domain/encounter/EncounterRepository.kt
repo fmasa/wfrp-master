@@ -1,8 +1,8 @@
 package cz.frantisekmasa.wfrp_master.combat.domain.encounter
 
 import arrow.core.Either
-import cz.frantisekmasa.wfrp_master.core.domain.identifiers.EncounterId
-import cz.frantisekmasa.wfrp_master.core.domain.party.PartyId
+import cz.frantisekmasa.wfrp_master.common.core.domain.identifiers.EncounterId
+import cz.frantisekmasa.wfrp_master.common.core.domain.party.PartyId
 import kotlinx.coroutines.flow.Flow
 
 interface EncounterRepository {

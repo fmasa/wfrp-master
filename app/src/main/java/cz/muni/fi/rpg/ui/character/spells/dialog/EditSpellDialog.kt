@@ -2,8 +2,8 @@ package cz.muni.fi.rpg.ui.character.spells.dialog
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
-import cz.frantisekmasa.wfrp_master.core.ui.dialogs.FullScreenDialog
-import cz.frantisekmasa.wfrp_master.core.ui.flow.collectWithLifecycle
+import cz.frantisekmasa.wfrp_master.common.core.ui.dialogs.FullScreenDialog
+import cz.frantisekmasa.wfrp_master.common.core.ui.flow.collectWithLifecycle
 import cz.muni.fi.rpg.viewModels.SpellsViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

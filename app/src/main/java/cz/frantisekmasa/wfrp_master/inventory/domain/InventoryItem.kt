@@ -1,7 +1,7 @@
 package cz.frantisekmasa.wfrp_master.inventory.domain
 
-import cz.frantisekmasa.wfrp_master.core.domain.character.CharacterItem
-import cz.frantisekmasa.wfrp_master.core.utils.duplicateName
+import cz.frantisekmasa.wfrp_master.common.core.domain.character.CharacterItem
+import cz.frantisekmasa.wfrp_master.common.core.utils.duplicateName
 import kotlinx.parcelize.Parcelize
 import kotlinx.serialization.Contextual
 import kotlinx.serialization.Serializable

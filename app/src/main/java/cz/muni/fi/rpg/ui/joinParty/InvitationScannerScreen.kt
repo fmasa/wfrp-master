@@ -33,11 +33,11 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import com.google.accompanist.permissions.PermissionState
 import com.google.accompanist.permissions.rememberPermissionState
-import cz.frantisekmasa.wfrp_master.core.domain.party.Invitation
-import cz.frantisekmasa.wfrp_master.core.ui.buttons.BackButton
-import cz.frantisekmasa.wfrp_master.core.ui.primitives.HorizontalLine
-import cz.frantisekmasa.wfrp_master.core.ui.primitives.Spacing
-import cz.frantisekmasa.wfrp_master.core.ui.scaffolding.SubheadBar
+import cz.frantisekmasa.wfrp_master.common.core.domain.party.Invitation
+import cz.frantisekmasa.wfrp_master.common.core.ui.buttons.BackButton
+import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.HorizontalLine
+import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
+import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.SubheadBar
 import cz.frantisekmasa.wfrp_master.navigation.Route
 import cz.frantisekmasa.wfrp_master.navigation.Routing
 import cz.muni.fi.rpg.R

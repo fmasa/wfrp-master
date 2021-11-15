@@ -1,9 +1,9 @@
 package cz.frantisekmasa.wfrp_master.compendium.domain
 
 import android.os.Parcelable
-import cz.frantisekmasa.wfrp_master.core.common.requireMaxLength
-import cz.frantisekmasa.wfrp_master.core.domain.Characteristic
-import cz.frantisekmasa.wfrp_master.core.domain.compendium.CompendiumItem
+import cz.frantisekmasa.wfrp_master.common.core.common.requireMaxLength
+import cz.frantisekmasa.wfrp_master.common.core.domain.Characteristic
+import cz.frantisekmasa.wfrp_master.common.core.domain.compendium.CompendiumItem
 import kotlinx.parcelize.Parcelize
 import kotlinx.serialization.Contextual
 import kotlinx.serialization.Serializable

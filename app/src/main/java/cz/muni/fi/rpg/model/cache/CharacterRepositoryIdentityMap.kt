@@ -1,10 +1,10 @@
 package cz.muni.fi.rpg.model.cache
 
 import arrow.core.Either
-import cz.frantisekmasa.wfrp_master.core.domain.character.Character
-import cz.frantisekmasa.wfrp_master.core.domain.character.CharacterNotFound
-import cz.frantisekmasa.wfrp_master.core.domain.character.CharacterRepository
-import cz.frantisekmasa.wfrp_master.core.domain.identifiers.CharacterId
+import cz.frantisekmasa.wfrp_master.common.core.domain.character.Character
+import cz.frantisekmasa.wfrp_master.common.core.domain.character.CharacterNotFound
+import cz.frantisekmasa.wfrp_master.common.core.domain.character.CharacterRepository
+import cz.frantisekmasa.wfrp_master.common.core.domain.identifiers.CharacterId
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow

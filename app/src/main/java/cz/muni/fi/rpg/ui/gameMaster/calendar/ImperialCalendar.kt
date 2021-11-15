@@ -41,7 +41,7 @@ import androidx.compose.ui.text.intl.Locale
 import androidx.compose.ui.text.toUpperCase
 import androidx.compose.ui.unit.dp
 import androidx.core.os.bundleOf
-import cz.frantisekmasa.wfrp_master.core.domain.time.ImperialDate
+import cz.frantisekmasa.wfrp_master.common.core.domain.time.ImperialDate
 import cz.muni.fi.rpg.R
 import kotlinx.parcelize.Parcelize
 

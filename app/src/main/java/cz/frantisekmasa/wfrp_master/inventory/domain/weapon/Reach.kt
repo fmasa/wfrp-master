@@ -1,18 +1,17 @@
 package cz.frantisekmasa.wfrp_master.inventory.domain.weapon
 
 import android.os.Parcelable
-import androidx.annotation.StringRes
-import cz.frantisekmasa.wfrp_master.core.domain.NamedEnum
-import cz.muni.fi.rpg.R
+import cz.frantisekmasa.wfrp_master.common.core.domain.NamedEnum
+import cz.frantisekmasa.wfrp_master.common.localization.Strings
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
-enum class Reach(@StringRes override val nameRes: Int) : NamedEnum, Parcelable {
-    PERSONAL(R.string.weapon_reach_personal),
-    VERY_SHORT(R.string.weapon_reach_very_short),
-    SHORT(R.string.weapon_reach_short),
-    AVERAGE(R.string.weapon_reach_average),
-    LONG(R.string.weapon_reach_long),
-    VERY_LONG(R.string.weapon_reach_very_long),
-    MASSIVE(R.string.weapon_reach_massive),
+enum class Reach(override val nameResolver: (strings: Strings) -> String) : NamedEnum, Parcelable {
+    PERSONAL({ it.weapons.reach.personal }),
+    VERY_SHORT({ it.weapons.reach.veryShort }),
+    SHORT({ it.weapons.reach.short }),
+    AVERAGE({ it.weapons.reach.average }),
+    LONG({ it.weapons.reach.long }),
+    VERY_LONG({ it.weapons.reach.veryLong }),
+    MASSIVE({ it.weapons.reach.massive }),
 }

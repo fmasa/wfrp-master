@@ -30,10 +30,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
-import cz.frantisekmasa.wfrp_master.core.ui.primitives.Spacing
-import cz.frantisekmasa.wfrp_master.core.ui.primitives.VisualOnlyIconDescription
-import cz.frantisekmasa.wfrp_master.core.ui.viewinterop.LocalActivity
-import cz.frantisekmasa.wfrp_master.core.viewModel.providePremiumViewModel
+import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
+import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.VisualOnlyIconDescription
+import cz.frantisekmasa.wfrp_master.common.core.ui.viewinterop.LocalActivity
+import cz.frantisekmasa.wfrp_master.common.core.viewModel.providePremiumViewModel
 import cz.frantisekmasa.wfrp_master.navigation.Route
 import cz.frantisekmasa.wfrp_master.navigation.navigate
 import cz.muni.fi.rpg.R

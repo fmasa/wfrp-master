@@ -1,14 +1,11 @@
-import org.jetbrains.kotlin.konan.properties.Properties
-import org.jetbrains.kotlin.konan.properties.loadProperties
-
 plugins {
     id("com.android.application")
-    id("kotlin-android")
+    kotlin("android")
     id("kotlin-parcelize")
     id("com.google.gms.google-services")
-    id("kotlin-kapt")
     id("com.google.firebase.crashlytics")
     kotlin("plugin.serialization")
+    id("org.jetbrains.compose")
     // id("com.google.firebase.firebase-perf")
 }
 
@@ -23,28 +20,6 @@ android {
         versionName = System.getenv("SUPPLY_VERSION_NAME") ?: "dev"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-
-        //
-        // Firestore emulator setup
-        //
-        val properties = if (File("local.properties").exists())
-            loadProperties("local.properties")
-        else Properties()
-
-        buildConfigField(
-            "String",
-            "FUNCTIONS_EMULATOR_URL",
-            "\"${properties.getOrDefault("dev.functionsEmulatorUrl", "")}\""
-        )
-
-        buildConfigField(
-            "String",
-            "FIRESTORE_EMULATOR_URL",
-            "\"${properties.getOrDefault("dev.firestoreEmulatorUrl", "")}\""
-        )
-        //
-        // End of Firestore Emulator setup
-        //
     }
 
     signingConfigs {
@@ -94,14 +69,6 @@ android {
         }
     }
 
-    buildFeatures {
-        compose = true
-    }
-
-    composeOptions {
-        kotlinCompilerExtensionVersion = Versions.compose
-    }
-
     compileOptions {
         // Allow use of Java 8 APIs on older Android versions
         isCoreLibraryDesugaringEnabled = true
@@ -128,6 +95,7 @@ android {
 }
 
 dependencies {
+    implementation(project(":common"))
     implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar"))))
     // Allow use of Java 8 APIs on older Android versions
     coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:1.1.5")
@@ -164,9 +132,6 @@ dependencies {
     // Navigation
     api("androidx.navigation:navigation-compose:2.4.0-beta02")
 
-    // Basic Kotlin stuff
-    api("org.jetbrains.kotlin:kotlin-stdlib:${Versions.kotlin}")
-
     // Basic Android stuff
     api("androidx.core:core-ktx:1.5.0")
     api("androidx.fragment:fragment-ktx:1.3.5")
@@ -178,30 +143,19 @@ dependencies {
     api("androidx.activity:activity-compose:1.3.0-beta02")
     api("androidx.lifecycle:lifecycle-viewmodel-compose:2.4.0")
 
-    // Koin
-    api("io.insert-koin:koin-android:3.1.2")
-
-    // Coil - image library
-    implementation("io.coil-kt:coil-compose:1.3.2")
-
     // Firebase-related dependencies
     api(platform("com.google.firebase:firebase-bom:28.4.2"))
+    api("com.google.firebase:firebase-firestore-ktx")
     api("com.google.firebase:firebase-analytics-ktx")
     api("com.google.firebase:firebase-auth-ktx")
-    api("com.google.firebase:firebase-firestore-ktx")
-    api("com.google.firebase:firebase-crashlytics")
     api("com.google.firebase:firebase-dynamic-links-ktx")
     api("com.google.firebase:firebase-functions-ktx")
     api("androidx.work:work-runtime-ktx:2.7.0")
-
-    // Logging
-    api("io.github.aakira:napier:2.1.0")
 
     // Coroutines
     api("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.2")
     api("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.5.2")
     api("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.3.5")
-    api("androidx.lifecycle:lifecycle-runtime-ktx:2.4.0")
 
     api("io.arrow-kt:arrow-core:0.10.4")
 
@@ -210,17 +164,6 @@ dependencies {
 
     // JSON encoding
     api("org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.0")
-
-    // Premium
-    // TODO: Make implementation only
-    api("com.revenuecat.purchases:purchases:4.0.2")
-
-    // Ads
-    api("com.google.android.gms:play-services-ads:20.4.0")
-
-    // Shared Preferences DataStore
-    implementation("androidx.datastore:datastore-preferences:1.0.0")
-    implementation("com.google.firebase:firebase-auth-ktx:21.0.1")
 
     // HTTP Client
     val ktorVersion = "1.6.0"

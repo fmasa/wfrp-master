@@ -8,8 +8,8 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.intl.Locale
 import androidx.compose.ui.text.toUpperCase
-import cz.frantisekmasa.wfrp_master.core.ui.viewinterop.LocalActivity
-import cz.frantisekmasa.wfrp_master.core.viewModel.providePremiumViewModel
+import cz.frantisekmasa.wfrp_master.common.core.ui.viewinterop.LocalActivity
+import cz.frantisekmasa.wfrp_master.common.core.viewModel.providePremiumViewModel
 import cz.muni.fi.rpg.R
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

@@ -12,13 +12,14 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import cz.frantisekmasa.wfrp_master.core.domain.Stats
-import cz.frantisekmasa.wfrp_master.core.ui.buttons.CardButton
-import cz.frantisekmasa.wfrp_master.core.ui.flow.collectWithLifecycle
-import cz.frantisekmasa.wfrp_master.core.ui.primitives.CardContainer
-import cz.frantisekmasa.wfrp_master.core.ui.primitives.CardItem
-import cz.frantisekmasa.wfrp_master.core.ui.primitives.ContextMenu
-import cz.frantisekmasa.wfrp_master.core.ui.primitives.EmptyUI
+import cz.frantisekmasa.wfrp_master.common.core.domain.Stats
+import cz.frantisekmasa.wfrp_master.common.core.ui.buttons.CardButton
+import cz.frantisekmasa.wfrp_master.common.core.ui.flow.collectWithLifecycle
+import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.CardContainer
+import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.CardItem
+import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.ContextMenu
+import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.EmptyUI
+import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.ItemIcon
 import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.model.domain.skills.Skill
 import cz.muni.fi.rpg.ui.character.skills.dialog.AddSkillDialog
@@ -93,7 +94,7 @@ private fun SkillItem(
     CardItem(
         skill.name,
         skill.description,
-        skill.characteristic.getIconId(),
+        icon = { ItemIcon(skill.characteristic.getIcon(), ItemIcon.Size.Small) } ,
         onClick = onClick,
         listOf(ContextMenu.Item(stringResource(R.string.remove), onClick = { onRemove() })),
         badge = { TestNumber(skill, characteristics) }

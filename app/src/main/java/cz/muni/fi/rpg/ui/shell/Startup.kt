@@ -7,11 +7,11 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
-import cz.frantisekmasa.wfrp_master.core.auth.LocalUser
-import cz.frantisekmasa.wfrp_master.core.auth.UserId
-import cz.frantisekmasa.wfrp_master.core.ui.flow.collectWithLifecycle
-import cz.frantisekmasa.wfrp_master.core.viewModel.providePremiumViewModel
-import cz.frantisekmasa.wfrp_master.core.viewModel.provideSettingsViewModel
+import cz.frantisekmasa.wfrp_master.common.core.auth.LocalUser
+import cz.frantisekmasa.wfrp_master.common.core.auth.UserId
+import cz.frantisekmasa.wfrp_master.common.core.ui.flow.collectWithLifecycle
+import cz.frantisekmasa.wfrp_master.common.core.viewModel.providePremiumViewModel
+import cz.frantisekmasa.wfrp_master.common.core.viewModel.provideSettingsViewModel
 import cz.muni.fi.rpg.ui.startup.StartupScreen
 import cz.muni.fi.rpg.viewModels.provideAuthenticationViewModel
 import kotlinx.coroutines.Dispatchers

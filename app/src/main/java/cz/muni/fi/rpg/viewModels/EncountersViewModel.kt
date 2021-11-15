@@ -7,8 +7,8 @@ import com.google.firebase.analytics.ktx.logEvent
 import com.google.firebase.ktx.Firebase
 import cz.frantisekmasa.wfrp_master.combat.domain.encounter.Encounter
 import cz.frantisekmasa.wfrp_master.combat.domain.encounter.EncounterRepository
-import cz.frantisekmasa.wfrp_master.core.domain.identifiers.EncounterId
-import cz.frantisekmasa.wfrp_master.core.domain.party.PartyId
+import cz.frantisekmasa.wfrp_master.common.core.domain.identifiers.EncounterId
+import cz.frantisekmasa.wfrp_master.common.core.domain.party.PartyId
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async

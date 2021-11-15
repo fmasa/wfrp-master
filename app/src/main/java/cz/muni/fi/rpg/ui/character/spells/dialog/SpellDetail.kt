@@ -20,10 +20,10 @@ import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import cz.frantisekmasa.wfrp_master.core.ui.buttons.CloseButton
-import cz.frantisekmasa.wfrp_master.core.ui.primitives.SingleLineTextValue
-import cz.frantisekmasa.wfrp_master.core.ui.primitives.Spacing
-import cz.frantisekmasa.wfrp_master.core.ui.scaffolding.SubheadBar
+import cz.frantisekmasa.wfrp_master.common.core.ui.buttons.CloseButton
+import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.SingleLineTextValue
+import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
+import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.SubheadBar
 import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.model.domain.spells.Spell
 import cz.muni.fi.rpg.ui.common.composables.Theme

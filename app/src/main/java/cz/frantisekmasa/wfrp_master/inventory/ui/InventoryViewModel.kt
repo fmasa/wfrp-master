@@ -2,12 +2,12 @@ package cz.frantisekmasa.wfrp_master.inventory.ui
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import cz.frantisekmasa.wfrp_master.core.domain.Money
-import cz.frantisekmasa.wfrp_master.core.domain.character.CharacterFeatureRepository
-import cz.frantisekmasa.wfrp_master.core.domain.character.CharacterRepository
-import cz.frantisekmasa.wfrp_master.core.domain.character.NotEnoughMoney
-import cz.frantisekmasa.wfrp_master.core.domain.identifiers.CharacterId
-import cz.frantisekmasa.wfrp_master.core.utils.right
+import cz.frantisekmasa.wfrp_master.common.core.domain.Money
+import cz.frantisekmasa.wfrp_master.common.core.domain.character.CharacterFeatureRepository
+import cz.frantisekmasa.wfrp_master.common.core.domain.character.CharacterRepository
+import cz.frantisekmasa.wfrp_master.common.core.domain.character.NotEnoughMoney
+import cz.frantisekmasa.wfrp_master.common.core.domain.identifiers.CharacterId
+import cz.frantisekmasa.wfrp_master.common.core.utils.right
 import cz.frantisekmasa.wfrp_master.inventory.domain.Armor
 import cz.frantisekmasa.wfrp_master.inventory.domain.Encumbrance
 import cz.frantisekmasa.wfrp_master.inventory.domain.InventoryItem

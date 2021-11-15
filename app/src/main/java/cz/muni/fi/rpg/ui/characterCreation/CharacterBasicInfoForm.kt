@@ -14,18 +14,19 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import cz.frantisekmasa.wfrp_master.core.domain.character.Character
-import cz.frantisekmasa.wfrp_master.core.domain.character.Race
-import cz.frantisekmasa.wfrp_master.core.domain.character.SocialStatus
-import cz.frantisekmasa.wfrp_master.core.ui.forms.ChipList
-import cz.frantisekmasa.wfrp_master.core.ui.forms.FormData
-import cz.frantisekmasa.wfrp_master.core.ui.forms.InputValue
-import cz.frantisekmasa.wfrp_master.core.ui.forms.Rules
-import cz.frantisekmasa.wfrp_master.core.ui.forms.SelectBox
-import cz.frantisekmasa.wfrp_master.core.ui.forms.SelectBoxLabel
-import cz.frantisekmasa.wfrp_master.core.ui.forms.TextInput
-import cz.frantisekmasa.wfrp_master.core.ui.forms.inputValue
-import cz.frantisekmasa.wfrp_master.core.ui.primitives.NumberPicker
+import cz.frantisekmasa.wfrp_master.common.core.domain.character.Character
+import cz.frantisekmasa.wfrp_master.common.core.domain.character.Race
+import cz.frantisekmasa.wfrp_master.common.core.domain.character.SocialStatus
+import cz.frantisekmasa.wfrp_master.common.core.domain.localizedName
+import cz.frantisekmasa.wfrp_master.common.core.ui.forms.ChipList
+import cz.frantisekmasa.wfrp_master.common.core.ui.forms.FormData
+import cz.frantisekmasa.wfrp_master.common.core.ui.forms.InputValue
+import cz.frantisekmasa.wfrp_master.common.core.ui.forms.Rules
+import cz.frantisekmasa.wfrp_master.common.core.ui.forms.SelectBox
+import cz.frantisekmasa.wfrp_master.common.core.ui.forms.SelectBoxLabel
+import cz.frantisekmasa.wfrp_master.common.core.ui.forms.TextInput
+import cz.frantisekmasa.wfrp_master.common.core.ui.forms.inputValue
+import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.NumberPicker
 import cz.muni.fi.rpg.R
 
 object CharacterBasicInfoForm {
@@ -89,7 +90,7 @@ fun CharacterBasicInfoForm(
         ChipList(
             label = stringResource(R.string.label_race),
             modifier = Modifier.padding(top = 8.dp),
-            items = Race.values().map { it to stringResource(it.getReadableNameId()) },
+            items = Race.values().map { it to it.localizedName },
             value = data.race.value,
             onValueChange = { data.race.value = it },
         )

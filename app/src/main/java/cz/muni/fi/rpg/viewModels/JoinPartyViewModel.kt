@@ -3,9 +3,9 @@ package cz.muni.fi.rpg.viewModels
 import androidx.compose.runtime.Composable
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
-import cz.frantisekmasa.wfrp_master.core.domain.party.Invitation
-import cz.frantisekmasa.wfrp_master.core.domain.party.Party
-import cz.frantisekmasa.wfrp_master.core.domain.party.PartyRepository
+import cz.frantisekmasa.wfrp_master.common.core.domain.party.Invitation
+import cz.frantisekmasa.wfrp_master.common.core.domain.party.Party
+import cz.frantisekmasa.wfrp_master.common.core.domain.party.PartyRepository
 import cz.muni.fi.rpg.model.domain.invitation.InvitationProcessor
 import io.github.aakira.napier.Napier
 import kotlinx.coroutines.Dispatchers

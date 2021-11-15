@@ -1,7 +1,7 @@
 package cz.frantisekmasa.wfrp_master.combat.domain.encounter
 
-import cz.frantisekmasa.wfrp_master.core.domain.identifiers.EncounterId
-import cz.frantisekmasa.wfrp_master.core.domain.identifiers.NpcId
+import cz.frantisekmasa.wfrp_master.common.core.domain.identifiers.EncounterId
+import cz.frantisekmasa.wfrp_master.common.core.domain.identifiers.NpcId
 import kotlinx.coroutines.flow.Flow
 
 interface NpcRepository {

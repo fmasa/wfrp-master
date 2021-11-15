@@ -22,19 +22,19 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import cz.frantisekmasa.wfrp_master.common.core.domain.character.Character
+import cz.frantisekmasa.wfrp_master.common.core.shared.vectorResource
+import cz.frantisekmasa.wfrp_master.common.core.ui.flow.collectWithLifecycle
+import cz.frantisekmasa.wfrp_master.common.core.ui.forms.SelectBox
+import cz.frantisekmasa.wfrp_master.common.core.ui.forms.SelectBoxToggle
+import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.FullScreenProgress
+import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
+import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.VisualOnlyIconDescription
+import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.TopBarAction
 import cz.frantisekmasa.wfrp_master.compendium.domain.Skill
-import cz.frantisekmasa.wfrp_master.core.domain.character.Character
-import cz.frantisekmasa.wfrp_master.core.ui.buttons.CloseButton
-import cz.frantisekmasa.wfrp_master.core.ui.flow.collectWithLifecycle
-import cz.frantisekmasa.wfrp_master.core.ui.forms.SelectBox
-import cz.frantisekmasa.wfrp_master.core.ui.forms.SelectBoxToggle
-import cz.frantisekmasa.wfrp_master.core.ui.primitives.FullScreenProgress
-import cz.frantisekmasa.wfrp_master.core.ui.primitives.Spacing
-import cz.frantisekmasa.wfrp_master.core.ui.primitives.VisualOnlyIconDescription
-import cz.frantisekmasa.wfrp_master.core.ui.scaffolding.TopBarAction
+import cz.frantisekmasa.wfrp_master.common.core.ui.buttons.CloseButton
 import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.viewModels.SkillTestViewModel
 
@@ -97,7 +97,7 @@ internal fun OptionsForm(
                 onClick = onNewSkillPickingRequest,
             ) {
                 Icon(
-                    painterResource(selectedSkill.characteristic.getIconId()),
+                    vectorResource(selectedSkill.characteristic.getIcon()),
                     VisualOnlyIconDescription, // TODO: Add characteristic-derived description
                     Modifier.width(24.dp)
                 )

@@ -2,7 +2,7 @@ package cz.muni.fi.rpg.model.domain.functions
 
 import android.util.Base64
 import com.google.firebase.functions.FirebaseFunctions
-import cz.frantisekmasa.wfrp_master.core.domain.identifiers.CharacterId
+import cz.frantisekmasa.wfrp_master.common.core.domain.identifiers.CharacterId
 import cz.muni.fi.rpg.model.domain.CharacterAvatarChanger
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.tasks.await

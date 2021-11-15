@@ -1,6 +1,6 @@
 package cz.muni.fi.rpg.model.domain
 
-import cz.frantisekmasa.wfrp_master.core.domain.identifiers.CharacterId
+import cz.frantisekmasa.wfrp_master.common.core.domain.identifiers.CharacterId
 import java.io.InputStream
 
 interface CharacterAvatarChanger {

@@ -10,11 +10,11 @@ import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import cz.frantisekmasa.wfrp_master.core.ui.buttons.CloseButton
-import cz.frantisekmasa.wfrp_master.core.ui.dialogs.FullScreenDialog
-import cz.frantisekmasa.wfrp_master.core.ui.flow.collectWithLifecycle
-import cz.frantisekmasa.wfrp_master.core.ui.primitives.SingleLineTextValue
-import cz.frantisekmasa.wfrp_master.core.ui.primitives.Spacing
+import cz.frantisekmasa.wfrp_master.common.core.ui.buttons.CloseButton
+import cz.frantisekmasa.wfrp_master.common.core.ui.dialogs.FullScreenDialog
+import cz.frantisekmasa.wfrp_master.common.core.ui.flow.collectWithLifecycle
+import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.SingleLineTextValue
+import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
 import cz.frantisekmasa.wfrp_master.religion.domain.Blessing
 import cz.muni.fi.rpg.R
 import java.util.UUID

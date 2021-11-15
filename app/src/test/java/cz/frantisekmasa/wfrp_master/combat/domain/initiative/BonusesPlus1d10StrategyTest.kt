@@ -1,6 +1,6 @@
 package cz.frantisekmasa.wfrp_master.combat.domain.initiative
 
-import cz.frantisekmasa.wfrp_master.core.domain.Stats
+import cz.frantisekmasa.wfrp_master.common.core.domain.Stats
 import org.junit.Assert.assertSame
 import org.junit.Assert.assertTrue
 import org.junit.Test

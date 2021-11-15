@@ -1,7 +1,5 @@
 package cz.frantisekmasa.wfrp_master.compendium.domain.importer
 
-import arrow.core.extensions.list.foldable.exists
-import arrow.core.extensions.list.functorFilter.filter
 import com.github.h0tk3y.betterParse.grammar.parseToEnd
 import com.lowagie.text.pdf.PdfReader
 import com.lowagie.text.pdf.parser.PdfTextExtractor
@@ -221,7 +219,7 @@ class RulebookCompendiumImporter(rulebookPdf: InputStream) :
 
     private fun String.trimStrings(substrings: List<String>): String {
         var text = this
-        while (substrings.exists { text.startsWith(it, ignoreCase = true) }) {
+        while (substrings.any { text.startsWith(it, ignoreCase = true) }) {
             substrings.forEach {
                 if (text.startsWith(it, ignoreCase = true)) {
                     text = text.substring(it.length)
@@ -229,7 +227,7 @@ class RulebookCompendiumImporter(rulebookPdf: InputStream) :
             }
         }
 
-        while (substrings.exists { text.endsWith(it, ignoreCase = true) }) {
+        while (substrings.any { text.endsWith(it, ignoreCase = true) }) {
             substrings.forEach {
                 if (text.endsWith(it, ignoreCase = true)) {
                     text = text.substring(0, text.length - it.length)

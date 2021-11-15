@@ -1,6 +1,6 @@
 package cz.muni.fi.rpg.ui.gameMaster.encounters
 
-import cz.frantisekmasa.wfrp_master.core.domain.identifiers.NpcId
+import cz.frantisekmasa.wfrp_master.common.core.domain.identifiers.NpcId
 
 data class NpcListItem(
     val id: NpcId,

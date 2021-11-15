@@ -16,9 +16,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.intl.Locale
 import androidx.compose.ui.text.toUpperCase
-import cz.frantisekmasa.wfrp_master.core.domain.party.Party
-import cz.frantisekmasa.wfrp_master.core.ui.primitives.Spacing
-import cz.frantisekmasa.wfrp_master.core.ui.primitives.longToast
+import cz.frantisekmasa.wfrp_master.common.core.domain.party.Party
+import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
+import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.longToast
 import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.viewModels.PartyListViewModel
 import kotlinx.coroutines.Dispatchers

@@ -14,8 +14,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import cz.frantisekmasa.wfrp_master.core.domain.Money
-import cz.frantisekmasa.wfrp_master.core.ui.primitives.VisualOnlyIconDescription
+import cz.frantisekmasa.wfrp_master.common.core.domain.Money
+import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.VisualOnlyIconDescription
 import cz.muni.fi.rpg.R
 
 @Composable

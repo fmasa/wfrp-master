@@ -18,13 +18,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.key
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import cz.frantisekmasa.wfrp_master.common.core.ui.flow.collectWithLifecycle
+import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.EmptyUI
+import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.FullScreenProgress
+import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.ItemIcon
+import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
 import cz.frantisekmasa.wfrp_master.compendium.domain.Skill
-import cz.frantisekmasa.wfrp_master.core.ui.buttons.CloseButton
-import cz.frantisekmasa.wfrp_master.core.ui.flow.collectWithLifecycle
-import cz.frantisekmasa.wfrp_master.core.ui.primitives.EmptyUI
-import cz.frantisekmasa.wfrp_master.core.ui.primitives.FullScreenProgress
-import cz.frantisekmasa.wfrp_master.core.ui.primitives.ItemIcon
-import cz.frantisekmasa.wfrp_master.core.ui.primitives.Spacing
+import cz.frantisekmasa.wfrp_master.common.core.ui.buttons.CloseButton
 import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.viewModels.SkillsViewModel
 
@@ -67,7 +67,7 @@ internal fun CompendiumSkillChooser(
                             key(skill.id) {
                                 ListItem(
                                     modifier = Modifier.clickable(onClick = { onSkillSelected(skill) }),
-                                    icon = { ItemIcon(skill.characteristic.getIconId(), ItemIcon.Size.Small) },
+                                    icon = { ItemIcon(skill.characteristic.getIcon(), ItemIcon.Size.Small) },
                                     text = { Text(skill.name) }
                                 )
                             }

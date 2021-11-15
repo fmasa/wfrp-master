@@ -14,14 +14,14 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import cz.frantisekmasa.wfrp_master.compendium.domain.Talent
-import cz.frantisekmasa.wfrp_master.core.ui.dialogs.DialogState
-import cz.frantisekmasa.wfrp_master.core.ui.forms.InputValue
-import cz.frantisekmasa.wfrp_master.core.ui.forms.Rules
-import cz.frantisekmasa.wfrp_master.core.ui.forms.TextInput
-import cz.frantisekmasa.wfrp_master.core.ui.forms.inputValue
-import cz.frantisekmasa.wfrp_master.core.ui.primitives.EmptyUI
-import cz.frantisekmasa.wfrp_master.core.ui.primitives.ItemIcon
-import cz.frantisekmasa.wfrp_master.core.ui.primitives.Spacing
+import cz.frantisekmasa.wfrp_master.common.core.ui.dialogs.DialogState
+import cz.frantisekmasa.wfrp_master.common.core.ui.forms.InputValue
+import cz.frantisekmasa.wfrp_master.common.core.ui.forms.Rules
+import cz.frantisekmasa.wfrp_master.common.core.ui.forms.TextInput
+import cz.frantisekmasa.wfrp_master.common.core.ui.forms.inputValue
+import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.EmptyUI
+import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.ItemIcon
+import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
 import cz.muni.fi.rpg.R
 import java.util.UUID
 

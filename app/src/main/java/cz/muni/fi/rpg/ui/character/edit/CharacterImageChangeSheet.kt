@@ -20,10 +20,10 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import cz.frantisekmasa.wfrp_master.core.domain.character.Character
-import cz.frantisekmasa.wfrp_master.core.domain.identifiers.CharacterId
-import cz.frantisekmasa.wfrp_master.core.ui.components.CharacterAvatar
-import cz.frantisekmasa.wfrp_master.core.ui.primitives.ItemIcon
+import cz.frantisekmasa.wfrp_master.common.core.domain.character.Character
+import cz.frantisekmasa.wfrp_master.common.core.domain.identifiers.CharacterId
+import cz.frantisekmasa.wfrp_master.common.core.ui.components.CharacterAvatar
+import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.ItemIcon
 import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.model.domain.CharacterAvatarChanger
 import io.github.aakira.napier.Napier

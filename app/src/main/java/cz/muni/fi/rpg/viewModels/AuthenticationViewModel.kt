@@ -11,9 +11,9 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthUserCollisionException
 import com.google.firebase.auth.GoogleAuthProvider
-import cz.frantisekmasa.wfrp_master.core.auth.User
-import cz.frantisekmasa.wfrp_master.core.logging.Reporter
-import cz.frantisekmasa.wfrp_master.core.ui.viewinterop.LocalActivity
+import cz.frantisekmasa.wfrp_master.common.core.auth.User
+import cz.frantisekmasa.wfrp_master.common.core.logging.Reporter
+import cz.frantisekmasa.wfrp_master.common.core.ui.viewinterop.LocalActivity
 import cz.muni.fi.rpg.R
 import io.github.aakira.napier.Napier
 import kotlinx.coroutines.Dispatchers

@@ -1,7 +1,7 @@
 package cz.frantisekmasa.wfrp_master.combat.domain.initiative
 
-import cz.frantisekmasa.wfrp_master.core.domain.Stats
-import cz.frantisekmasa.wfrp_master.core.domain.rolls.Dice
+import cz.frantisekmasa.wfrp_master.common.core.domain.Stats
+import cz.frantisekmasa.wfrp_master.common.core.domain.rolls.Dice
 import kotlin.random.Random
 
 internal class BonusesPlus1d10Strategy(random: Random) : InitiativeStrategy {

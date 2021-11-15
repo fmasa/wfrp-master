@@ -1,7 +1,7 @@
 package cz.frantisekmasa.wfrp_master.inventory.domain.weapon
 
 import android.os.Parcelable
-import cz.frantisekmasa.wfrp_master.core.domain.Expression
+import cz.frantisekmasa.wfrp_master.common.core.domain.Expression
 import kotlinx.parcelize.Parcelize
 import kotlinx.serialization.Serializable
 

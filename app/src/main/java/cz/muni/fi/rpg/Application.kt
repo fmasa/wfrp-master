@@ -1,8 +1,7 @@
 package cz.muni.fi.rpg
 
-import com.google.firebase.crashlytics.FirebaseCrashlytics
-import cz.frantisekmasa.wfrp_master.core.logging.CrashlyticsAntilog
-import cz.frantisekmasa.wfrp_master.core.logging.KoinNapierLogger
+import cz.frantisekmasa.wfrp_master.common.core.logging.ErrorReportingAntilog
+import cz.frantisekmasa.wfrp_master.common.core.logging.KoinNapierLogger
 import cz.muni.fi.rpg.di.appModule
 import io.github.aakira.napier.DebugAntilog
 import io.github.aakira.napier.Napier
@@ -26,7 +25,7 @@ class Application : BaseApplication() {
         Napier.base(
             if (BuildConfig.DEBUG)
                 DebugAntilog()
-            else CrashlyticsAntilog(FirebaseCrashlytics.getInstance())
+            else ErrorReportingAntilog()
         )
     }
 }

@@ -11,10 +11,10 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import cz.frantisekmasa.wfrp_master.core.domain.party.Party
-import cz.frantisekmasa.wfrp_master.core.domain.party.settings.InitiativeStrategy
-import cz.frantisekmasa.wfrp_master.core.ui.dialogs.SelectionDialog
-import cz.frantisekmasa.wfrp_master.core.utils.launchLogged
+import cz.frantisekmasa.wfrp_master.common.core.domain.party.Party
+import cz.frantisekmasa.wfrp_master.common.core.domain.party.settings.InitiativeStrategy
+import cz.frantisekmasa.wfrp_master.common.core.ui.dialogs.SelectionDialog
+import cz.frantisekmasa.wfrp_master.common.core.utils.launchLogged
 import cz.muni.fi.rpg.R
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext

@@ -33,11 +33,11 @@ import androidx.compose.ui.unit.dp
 import com.google.firebase.analytics.ktx.analytics
 import com.google.firebase.ktx.Firebase
 import cz.frantisekmasa.wfrp_master.compendium.domain.importer.RulebookCompendiumImporter
-import cz.frantisekmasa.wfrp_master.core.ui.buttons.BackButton
-import cz.frantisekmasa.wfrp_master.core.ui.flow.collectWithLifecycle
-import cz.frantisekmasa.wfrp_master.core.ui.scaffolding.Subtitle
-import cz.frantisekmasa.wfrp_master.core.ui.viewinterop.LocalActivity
-import cz.frantisekmasa.wfrp_master.core.viewModel.viewModel
+import cz.frantisekmasa.wfrp_master.common.core.ui.buttons.BackButton
+import cz.frantisekmasa.wfrp_master.common.core.ui.flow.collectWithLifecycle
+import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.Subtitle
+import cz.frantisekmasa.wfrp_master.common.core.ui.viewinterop.LocalActivity
+import cz.frantisekmasa.wfrp_master.common.core.viewModel.viewModel
 import cz.frantisekmasa.wfrp_master.navigation.Route
 import cz.frantisekmasa.wfrp_master.navigation.Routing
 import cz.muni.fi.rpg.R

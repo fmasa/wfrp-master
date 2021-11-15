@@ -4,13 +4,15 @@ buildscript {
         mavenCentral()
         maven("https://plugins.gradle.org/m2/")
         maven("https://kotlin.bintray.com/kotlinx")
+        maven("https://maven.pkg.jetbrains.space/public/p/compose/dev")
     }
 
     dependencies {
         classpath("com.android.tools.build:gradle:${Versions.agp}")
-        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:${Versions.kotlin}")
+        classpath("org.jetbrains.compose:compose-gradle-plugin:1.0.0")
 
-        classpath("org.jetbrains.kotlin:kotlin-serialization:${Versions.kotlin}")
+        classpath(kotlin("gradle-plugin", Versions.kotlin))
+        classpath(kotlin("serialization", Versions.kotlin))
 
         // Firebase-related dependencies
         classpath("com.google.gms:google-services:4.3.8")

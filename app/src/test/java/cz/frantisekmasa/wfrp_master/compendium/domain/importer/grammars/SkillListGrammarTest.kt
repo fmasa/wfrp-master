@@ -1,8 +1,8 @@
 package cz.frantisekmasa.wfrp_master.compendium.domain.importer.grammars
 
 import com.github.h0tk3y.betterParse.grammar.parseToEnd
+import cz.frantisekmasa.wfrp_master.common.core.domain.Characteristic
 import cz.frantisekmasa.wfrp_master.compendium.domain.Skill
-import cz.frantisekmasa.wfrp_master.core.domain.Characteristic
 import junit.framework.TestCase
 
 class SkillListGrammarTest : TestCase() {

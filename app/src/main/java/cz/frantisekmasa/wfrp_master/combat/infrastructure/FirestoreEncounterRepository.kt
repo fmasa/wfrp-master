@@ -7,12 +7,12 @@ import com.google.firebase.firestore.SetOptions
 import cz.frantisekmasa.wfrp_master.combat.domain.encounter.Encounter
 import cz.frantisekmasa.wfrp_master.combat.domain.encounter.EncounterNotFound
 import cz.frantisekmasa.wfrp_master.combat.domain.encounter.EncounterRepository
-import cz.frantisekmasa.wfrp_master.core.domain.identifiers.EncounterId
-import cz.frantisekmasa.wfrp_master.core.domain.party.PartyId
-import cz.frantisekmasa.wfrp_master.core.firestore.AggregateMapper
-import cz.frantisekmasa.wfrp_master.core.firestore.COLLECTION_PARTIES
-import cz.frantisekmasa.wfrp_master.core.firestore.documentFlow
-import cz.frantisekmasa.wfrp_master.core.firestore.queryFlow
+import cz.frantisekmasa.wfrp_master.common.core.domain.identifiers.EncounterId
+import cz.frantisekmasa.wfrp_master.common.core.domain.party.PartyId
+import cz.frantisekmasa.wfrp_master.common.core.firestore.AggregateMapper
+import cz.frantisekmasa.wfrp_master.common.core.firestore.COLLECTION_PARTIES
+import cz.frantisekmasa.wfrp_master.common.core.firestore.documentFlow
+import cz.frantisekmasa.wfrp_master.common.core.firestore.queryFlow
 import kotlinx.coroutines.tasks.await
 
 /* internal */ class FirestoreEncounterRepository(

@@ -1,6 +1,5 @@
 package cz.frantisekmasa.wfrp_master.inventory.ui
 
-import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.Column
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
@@ -10,21 +9,22 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.snapshots.SnapshotStateMap
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
-import cz.frantisekmasa.wfrp_master.core.domain.NamedEnum
-import cz.frantisekmasa.wfrp_master.core.ui.components.FormDialog
-import cz.frantisekmasa.wfrp_master.core.ui.dialogs.FullScreenDialog
-import cz.frantisekmasa.wfrp_master.core.ui.forms.CheckboxWithText
-import cz.frantisekmasa.wfrp_master.core.ui.forms.ErrorMessage
-import cz.frantisekmasa.wfrp_master.core.ui.forms.Filter
-import cz.frantisekmasa.wfrp_master.core.ui.forms.HydratedFormData
-import cz.frantisekmasa.wfrp_master.core.ui.forms.InputLabel
-import cz.frantisekmasa.wfrp_master.core.ui.forms.InputValue
-import cz.frantisekmasa.wfrp_master.core.ui.forms.Rule
-import cz.frantisekmasa.wfrp_master.core.ui.forms.Rules
-import cz.frantisekmasa.wfrp_master.core.ui.forms.SelectBox
-import cz.frantisekmasa.wfrp_master.core.ui.forms.TextInput
-import cz.frantisekmasa.wfrp_master.core.ui.forms.inputValue
-import cz.frantisekmasa.wfrp_master.core.ui.primitives.NumberPicker
+import cz.frantisekmasa.wfrp_master.common.core.domain.NamedEnum
+import cz.frantisekmasa.wfrp_master.common.core.domain.localizedName
+import cz.frantisekmasa.wfrp_master.common.core.ui.components.FormDialog
+import cz.frantisekmasa.wfrp_master.common.core.ui.dialogs.FullScreenDialog
+import cz.frantisekmasa.wfrp_master.common.core.ui.forms.CheckboxWithText
+import cz.frantisekmasa.wfrp_master.common.core.ui.forms.ErrorMessage
+import cz.frantisekmasa.wfrp_master.common.core.ui.forms.Filter
+import cz.frantisekmasa.wfrp_master.common.core.ui.forms.HydratedFormData
+import cz.frantisekmasa.wfrp_master.common.core.ui.forms.InputLabel
+import cz.frantisekmasa.wfrp_master.common.core.ui.forms.InputValue
+import cz.frantisekmasa.wfrp_master.common.core.ui.forms.Rule
+import cz.frantisekmasa.wfrp_master.common.core.ui.forms.Rules
+import cz.frantisekmasa.wfrp_master.common.core.ui.forms.SelectBox
+import cz.frantisekmasa.wfrp_master.common.core.ui.forms.TextInput
+import cz.frantisekmasa.wfrp_master.common.core.ui.forms.inputValue
+import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.NumberPicker
 import cz.frantisekmasa.wfrp_master.inventory.domain.Encumbrance
 import cz.frantisekmasa.wfrp_master.inventory.domain.InventoryItem
 import cz.frantisekmasa.wfrp_master.inventory.domain.InventoryItemId
@@ -41,6 +41,7 @@ import cz.frantisekmasa.wfrp_master.inventory.domain.weapon.WeaponEquip
 import cz.frantisekmasa.wfrp_master.inventory.domain.weapon.WeaponFlaw
 import cz.frantisekmasa.wfrp_master.inventory.domain.weapon.WeaponQuality
 import cz.frantisekmasa.wfrp_master.inventory.domain.weapon.WeaponRangeExpression
+import cz.frantisekmasa.wfrp_master.common.localization.Strings
 import cz.muni.fi.rpg.R
 import java.util.UUID
 import kotlin.math.max
@@ -120,7 +121,7 @@ private fun TrappingTypeForm(formData: TrappingTypeFormData, validate: Boolean) 
             )
             CheckboxList(
                 items = RangedWeaponGroup.values(),
-                text = { stringResource(it.nameRes) },
+                text = { it.localizedName },
                 selected = formData.ammunitionWeaponGroups,
             )
             DamageInput(formData, validate)
@@ -204,7 +205,7 @@ private fun ArmourLocationsPickers(formData: TrappingTypeFormData, validate: Boo
 
     CheckboxList(
         items = ArmourLocation.values(),
-        text = { stringResource(it.nameRes) },
+        text = { it.localizedName },
         selected = selectedParts,
     )
 
@@ -254,7 +255,7 @@ private fun WeaponQualitiesPicker(formData: TrappingTypeFormData) {
         InputLabel(stringResource(R.string.label_weapon_qualities))
         WeaponQuality.values().forEach { quality ->
             CheckboxWithText(
-                text = stringResource(quality.nameRes),
+                text = quality.localizedName,
                 checked = values.containsKey(quality),
                 onCheckedChange = { checked ->
                     if (checked) {
@@ -287,7 +288,7 @@ private fun WeaponFlawsPicker(formData: TrappingTypeFormData) {
         InputLabel(stringResource(R.string.label_weapon_flaws))
         WeaponFlaw.values().forEach { flaw ->
             CheckboxWithText(
-                text = stringResource(flaw.nameRes),
+                text = flaw.localizedName,
                 checked = values.containsKey(flaw),
                 onCheckedChange = { checked ->
                     if (checked) {
@@ -516,11 +517,11 @@ private class TrappingTypeFormData(
     }
 }
 
-private enum class TrappingTypeOption(@StringRes override val nameRes: Int) : NamedEnum {
-    AMMUNITION(R.string.trapping_type_ammunition),
-    ARMOUR(R.string.trapping_type_armour),
-    CONTAINER(R.string.trapping_type_container),
-    MELEE_WEAPON(R.string.trapping_type_melee_weapon),
-    MISCELLANEOUS(R.string.trapping_type_miscellaneous),
-    RANGED_WEAPON(R.string.trapping_type_ranged_weapon),
+private enum class TrappingTypeOption(override val nameResolver: (strings: Strings) -> String) : NamedEnum {
+    AMMUNITION({ it.trappings.types.ammunition }),
+    ARMOUR({ it.trappings.types.armour }),
+    CONTAINER({ it.trappings.types.container }),
+    MELEE_WEAPON({ it.trappings.types.meleeWeapon }),
+    MISCELLANEOUS({ it.trappings.types.miscellaneous }),
+    RANGED_WEAPON({ it.trappings.types.rangedWeapon }),
 }

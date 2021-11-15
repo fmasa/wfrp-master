@@ -7,11 +7,11 @@ import com.google.firebase.firestore.SetOptions
 import cz.frantisekmasa.wfrp_master.combat.domain.encounter.CombatantNotFound
 import cz.frantisekmasa.wfrp_master.combat.domain.encounter.Npc
 import cz.frantisekmasa.wfrp_master.combat.domain.encounter.NpcRepository
-import cz.frantisekmasa.wfrp_master.core.domain.identifiers.EncounterId
-import cz.frantisekmasa.wfrp_master.core.domain.identifiers.NpcId
-import cz.frantisekmasa.wfrp_master.core.firestore.AggregateMapper
-import cz.frantisekmasa.wfrp_master.core.firestore.COLLECTION_PARTIES
-import cz.frantisekmasa.wfrp_master.core.firestore.queryFlow
+import cz.frantisekmasa.wfrp_master.common.core.domain.identifiers.EncounterId
+import cz.frantisekmasa.wfrp_master.common.core.domain.identifiers.NpcId
+import cz.frantisekmasa.wfrp_master.common.core.firestore.AggregateMapper
+import cz.frantisekmasa.wfrp_master.common.core.firestore.COLLECTION_PARTIES
+import cz.frantisekmasa.wfrp_master.common.core.firestore.queryFlow
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.tasks.await
 

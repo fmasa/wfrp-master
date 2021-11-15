@@ -13,11 +13,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import cz.frantisekmasa.wfrp_master.core.ui.buttons.CardButton
-import cz.frantisekmasa.wfrp_master.core.ui.buttons.CloseButton
-import cz.frantisekmasa.wfrp_master.core.ui.primitives.CardContainer
-import cz.frantisekmasa.wfrp_master.core.ui.primitives.SingleLineTextValue
-import cz.frantisekmasa.wfrp_master.core.ui.primitives.Spacing
+import cz.frantisekmasa.wfrp_master.common.core.domain.localizedName
+import cz.frantisekmasa.wfrp_master.common.core.ui.buttons.CardButton
+import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.CardContainer
+import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.SingleLineTextValue
+import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
+import cz.frantisekmasa.wfrp_master.common.core.ui.buttons.CloseButton
 import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.ui.common.composables.CardTitle
 
@@ -93,7 +94,7 @@ private fun TestResultCard(
 
                 SingleLineTextValue(
                     R.string.item_dramatic_result,
-                    stringResource(testResult.dramaticResult.labelResource)
+                    testResult.dramaticResult.localizedName,
                 )
 
                 CardButton(R.string.button_test_reroll, onClick = onRerollRequest)

@@ -12,11 +12,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import cz.frantisekmasa.wfrp_master.core.domain.character.Character
-import cz.frantisekmasa.wfrp_master.core.domain.identifiers.CharacterId
-import cz.frantisekmasa.wfrp_master.core.ui.primitives.NumberPicker
-import cz.frantisekmasa.wfrp_master.core.ui.primitives.TopPanel
-import cz.frantisekmasa.wfrp_master.core.viewModel.getViewModel
+import cz.frantisekmasa.wfrp_master.common.core.domain.character.Character
+import cz.frantisekmasa.wfrp_master.common.core.domain.identifiers.CharacterId
+import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.NumberPicker
+import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.TopPanel
+import cz.frantisekmasa.wfrp_master.common.core.viewModel.getViewModel
 import cz.frantisekmasa.wfrp_master.religion.ui.blessings.BlessingsCard
 import cz.frantisekmasa.wfrp_master.religion.ui.miracles.MiraclesCard
 import cz.muni.fi.rpg.R

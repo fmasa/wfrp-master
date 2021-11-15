@@ -19,10 +19,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import cz.frantisekmasa.wfrp_master.core.ui.primitives.CardContainer
-import cz.frantisekmasa.wfrp_master.core.ui.primitives.CardTitle
-import cz.frantisekmasa.wfrp_master.core.ui.primitives.NumberPicker
-import cz.frantisekmasa.wfrp_master.core.ui.primitives.VisualOnlyIconDescription
+import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.CardContainer
+import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.CardTitle
+import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.NumberPicker
+import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.VisualOnlyIconDescription
 import cz.frantisekmasa.wfrp_master.inventory.domain.Armor
 import cz.frantisekmasa.wfrp_master.inventory.ui.InventoryViewModel.EquippedArmour
 import cz.muni.fi.rpg.R

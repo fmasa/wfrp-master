@@ -35,27 +35,28 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
-import cz.frantisekmasa.wfrp_master.core.domain.Characteristic
-import cz.frantisekmasa.wfrp_master.core.domain.Expression
-import cz.frantisekmasa.wfrp_master.core.domain.Stats
-import cz.frantisekmasa.wfrp_master.core.domain.character.Character
-import cz.frantisekmasa.wfrp_master.core.domain.character.Points
-import cz.frantisekmasa.wfrp_master.core.domain.character.Points.PointPool
-import cz.frantisekmasa.wfrp_master.core.domain.identifiers.CharacterId
-import cz.frantisekmasa.wfrp_master.core.domain.party.Party
-import cz.frantisekmasa.wfrp_master.core.media.rememberSoundPlayer
-import cz.frantisekmasa.wfrp_master.core.ui.components.Breakpoint
-import cz.frantisekmasa.wfrp_master.core.ui.components.CharacterAvatar
-import cz.frantisekmasa.wfrp_master.core.ui.components.ColumnSize.FullWidth
-import cz.frantisekmasa.wfrp_master.core.ui.components.ColumnSize.HalfWidth
-import cz.frantisekmasa.wfrp_master.core.ui.components.Container
-import cz.frantisekmasa.wfrp_master.core.ui.components.LocalBreakpoint
-import cz.frantisekmasa.wfrp_master.core.ui.dialogs.FullScreenDialog
-import cz.frantisekmasa.wfrp_master.core.ui.primitives.ItemIcon
-import cz.frantisekmasa.wfrp_master.core.ui.primitives.NumberPicker
-import cz.frantisekmasa.wfrp_master.core.ui.primitives.Spacing
-import cz.frantisekmasa.wfrp_master.core.ui.primitives.TopPanel
-import cz.frantisekmasa.wfrp_master.core.viewModel.viewModel
+import cz.frantisekmasa.wfrp_master.common.core.domain.Characteristic
+import cz.frantisekmasa.wfrp_master.common.core.domain.Expression
+import cz.frantisekmasa.wfrp_master.common.core.domain.Stats
+import cz.frantisekmasa.wfrp_master.common.core.domain.character.Character
+import cz.frantisekmasa.wfrp_master.common.core.domain.character.Points
+import cz.frantisekmasa.wfrp_master.common.core.domain.character.Points.PointPool
+import cz.frantisekmasa.wfrp_master.common.core.domain.identifiers.CharacterId
+import cz.frantisekmasa.wfrp_master.common.core.domain.localizedName
+import cz.frantisekmasa.wfrp_master.common.core.domain.party.Party
+import cz.frantisekmasa.wfrp_master.common.core.media.rememberSoundPlayer
+import cz.frantisekmasa.wfrp_master.common.core.ui.components.Breakpoint
+import cz.frantisekmasa.wfrp_master.common.core.ui.components.CharacterAvatar
+import cz.frantisekmasa.wfrp_master.common.core.ui.components.ColumnSize.FullWidth
+import cz.frantisekmasa.wfrp_master.common.core.ui.components.ColumnSize.HalfWidth
+import cz.frantisekmasa.wfrp_master.common.core.ui.components.Container
+import cz.frantisekmasa.wfrp_master.common.core.ui.components.LocalBreakpoint
+import cz.frantisekmasa.wfrp_master.common.core.ui.dialogs.FullScreenDialog
+import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.ItemIcon
+import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.NumberPicker
+import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
+import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.TopPanel
+import cz.frantisekmasa.wfrp_master.common.core.viewModel.viewModel
 import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.ui.character.dialogs.ExperiencePointsDialog
 import cz.muni.fi.rpg.ui.common.composables.AmbitionsCard
@@ -208,7 +209,7 @@ private fun CharacterTopPanel(character: Character, points: Points, onUpdate: (P
                         Column(Modifier.padding(start = Spacing.medium)) {
                             Text(character.getName(), fontWeight = FontWeight.Bold)
                             Text(
-                                stringResource(character.getRace().getReadableNameId()) +
+                                character.getRace().localizedName +
                                     " " +
                                     character.getCareer(),
                                 style = MaterialTheme.typography.caption
@@ -299,7 +300,7 @@ private fun PointsRow(points: Points, update: (Points) -> Unit) {
                     style = MaterialTheme.typography.h6
                 )
                 Text(
-                    stringResource(pool.nameRes),
+                    pool.localizedName,
                     style = MaterialTheme.typography.caption,
                 )
             }
@@ -307,7 +308,7 @@ private fun PointsRow(points: Points, update: (Points) -> Unit) {
             if (dialogVisible) {
                 PointsDialog(onDismissRequest = { dialogVisible = false }) {
                     NumberPicker(
-                        label = stringResource(pool.nameRes),
+                        label = pool.localizedName,
                         value = value,
                         onIncrement = { points.modify(pool, +1).onSuccess(update) },
                         onDecrement = { points.modify(pool, -1).onSuccess(update) }
@@ -413,7 +414,7 @@ private fun CareerSection(character: Character) {
         Text(character.getCareer(), fontWeight = FontWeight.Bold)
         CompositionLocalProvider(LocalContentAlpha provides ContentAlpha.medium) {
             Text(
-                "${character.getSocialClass()} · ${stringResource(status.tier.nameRes)} ${status.standing}",
+                "${character.getSocialClass()} · ${status.tier.localizedName} ${status.standing}",
                 style = MaterialTheme.typography.caption
             )
         }

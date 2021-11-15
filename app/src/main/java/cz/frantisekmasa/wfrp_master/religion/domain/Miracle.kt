@@ -1,7 +1,7 @@
 package cz.frantisekmasa.wfrp_master.religion.domain
 
-import cz.frantisekmasa.wfrp_master.core.common.requireMaxLength
-import cz.frantisekmasa.wfrp_master.core.domain.character.CharacterItem
+import cz.frantisekmasa.wfrp_master.common.core.common.requireMaxLength
+import cz.frantisekmasa.wfrp_master.common.core.domain.character.CharacterItem
 import kotlinx.parcelize.Parcelize
 import kotlinx.serialization.Contextual
 import kotlinx.serialization.Serializable

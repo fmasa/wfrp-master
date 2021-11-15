@@ -9,7 +9,7 @@ import com.github.h0tk3y.betterParse.combinators.zeroOrMore
 import com.github.h0tk3y.betterParse.grammar.Grammar
 import com.github.h0tk3y.betterParse.lexer.regexToken
 import cz.frantisekmasa.wfrp_master.compendium.domain.Skill
-import cz.frantisekmasa.wfrp_master.core.domain.Characteristic
+import cz.frantisekmasa.wfrp_master.common.core.domain.Characteristic
 import org.intellij.lang.annotations.Language
 import java.util.UUID
 

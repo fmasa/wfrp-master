@@ -22,11 +22,11 @@ import androidx.compose.ui.text.capitalize
 import androidx.compose.ui.text.intl.Locale
 import androidx.compose.ui.text.toLowerCase
 import androidx.compose.ui.unit.dp
-import cz.frantisekmasa.wfrp_master.core.domain.character.Character
-import cz.frantisekmasa.wfrp_master.core.domain.character.Condition
-import cz.frantisekmasa.wfrp_master.core.domain.character.CurrentConditions
-import cz.frantisekmasa.wfrp_master.core.ui.primitives.NumberPicker
-import cz.frantisekmasa.wfrp_master.core.ui.primitives.Spacing
+import cz.frantisekmasa.wfrp_master.common.core.domain.character.Character
+import cz.frantisekmasa.wfrp_master.common.core.domain.character.Condition
+import cz.frantisekmasa.wfrp_master.common.core.domain.character.CurrentConditions
+import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.NumberPicker
+import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
 import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.viewModels.CharacterViewModel
 import kotlinx.coroutines.Dispatchers

@@ -1,7 +1,7 @@
 package cz.frantisekmasa.wfrp_master.inventory.domain
 
 import android.os.Parcelable
-import cz.frantisekmasa.wfrp_master.core.domain.Stats
+import cz.frantisekmasa.wfrp_master.common.core.domain.Stats
 import kotlinx.parcelize.Parcelize
 import kotlinx.serialization.Serializable
 import java.text.DecimalFormat

@@ -8,10 +8,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.sp
-import cz.frantisekmasa.wfrp_master.core.media.LocalSoundEnabled
-import cz.frantisekmasa.wfrp_master.core.ui.flow.collectWithLifecycle
-import cz.frantisekmasa.wfrp_master.core.ui.theme.SystemBarsChangingEffect
-import cz.frantisekmasa.wfrp_master.core.viewModel.provideSettingsViewModel
+import cz.frantisekmasa.wfrp_master.common.core.media.LocalSoundEnabled
+import cz.frantisekmasa.wfrp_master.common.core.ui.flow.collectWithLifecycle
+import cz.frantisekmasa.wfrp_master.common.core.ui.theme.SystemBarsChangingEffect
+import cz.frantisekmasa.wfrp_master.common.core.viewModel.provideSettingsViewModel
 
 class Theme {
     class FixedColors(

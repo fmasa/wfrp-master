@@ -1,10 +1,10 @@
 package cz.frantisekmasa.wfrp_master.religion
 
 import cz.frantisekmasa.wfrp_master.compendium.infrastructure.FirestoreCompendium
-import cz.frantisekmasa.wfrp_master.core.domain.character.CharacterItemRepository
-import cz.frantisekmasa.wfrp_master.core.domain.identifiers.CharacterId
-import cz.frantisekmasa.wfrp_master.core.firestore.repositories.FirestoreCharacterItemRepository
-import cz.frantisekmasa.wfrp_master.core.firestore.serialization.serializationAggregateMapper
+import cz.frantisekmasa.wfrp_master.common.core.domain.character.CharacterItemRepository
+import cz.frantisekmasa.wfrp_master.common.core.domain.identifiers.CharacterId
+import cz.frantisekmasa.wfrp_master.common.core.firestore.repositories.FirestoreCharacterItemRepository
+import cz.frantisekmasa.wfrp_master.common.core.firestore.serialization.serializationAggregateMapper
 import cz.frantisekmasa.wfrp_master.religion.domain.Blessing
 import cz.frantisekmasa.wfrp_master.religion.domain.Miracle
 import cz.frantisekmasa.wfrp_master.religion.ui.blessings.BlessingsViewModel

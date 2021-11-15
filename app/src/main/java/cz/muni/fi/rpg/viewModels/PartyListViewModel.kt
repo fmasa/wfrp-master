@@ -4,10 +4,10 @@ import androidx.lifecycle.ViewModel
 import com.google.firebase.analytics.ktx.analytics
 import com.google.firebase.analytics.ktx.logEvent
 import com.google.firebase.ktx.Firebase
-import cz.frantisekmasa.wfrp_master.core.auth.UserId
-import cz.frantisekmasa.wfrp_master.core.domain.party.Party
-import cz.frantisekmasa.wfrp_master.core.domain.party.PartyId
-import cz.frantisekmasa.wfrp_master.core.domain.party.PartyRepository
+import cz.frantisekmasa.wfrp_master.common.core.auth.UserId
+import cz.frantisekmasa.wfrp_master.common.core.domain.party.Party
+import cz.frantisekmasa.wfrp_master.common.core.domain.party.PartyId
+import cz.frantisekmasa.wfrp_master.common.core.domain.party.PartyRepository
 import cz.muni.fi.rpg.model.domain.common.CouldNotConnectToBackend
 import io.github.aakira.napier.Napier
 import kotlinx.coroutines.flow.Flow
