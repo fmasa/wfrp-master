@@ -128,7 +128,7 @@ fun CharacterBasicInfoForm(
                 NumberPicker(
                     value = data.socialStanding.value,
                     onIncrement = { data.socialStanding.value++ },
-                    onDecrement = { data.socialStanding.value = maxOf(0, data.socialStanding.value) },
+                    onDecrement = { data.socialStanding.value = maxOf(0, data.socialStanding.value - 1) },
                 )
             }
         }
