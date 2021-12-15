@@ -27,6 +27,7 @@ import cz.frantisekmasa.wfrp_master.common.core.auth.LocalUser
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.Invitation
 import cz.frantisekmasa.wfrp_master.common.core.ui.buttons.PrimaryButton
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.FullScreenProgress
+import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
 import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.model.domain.invitation.AlreadyInParty
 import cz.muni.fi.rpg.model.domain.invitation.InvalidInvitation
@@ -73,7 +74,7 @@ fun InvitationConfirmation(
         val context = LocalContext.current
 
         PrimaryButton(
-            R.string.title_joinParty,
+            LocalStrings.current.parties.buttonJoin,
             onClick = {
                 processingInvitation = true
 

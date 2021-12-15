@@ -54,6 +54,7 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.OptionsAction
 import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.Subtitle
 import cz.frantisekmasa.wfrp_master.common.core.viewModel.PartyViewModel
 import cz.frantisekmasa.wfrp_master.common.core.viewModel.viewModel
+import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
 import cz.frantisekmasa.wfrp_master.navigation.Route
 import cz.frantisekmasa.wfrp_master.navigation.Routing
 import cz.muni.fi.rpg.R
@@ -276,7 +277,7 @@ private fun CombatantsCard(
                 Modifier.fillMaxWidth(),
                 contentAlignment = Alignment.TopCenter
             ) {
-                PrimaryButton(R.string.title_npc_add, onClick = onCreateRequest)
+                PrimaryButton(LocalStrings.current.npcs.buttonAddNpc, onClick = onCreateRequest)
             }
         }
     }

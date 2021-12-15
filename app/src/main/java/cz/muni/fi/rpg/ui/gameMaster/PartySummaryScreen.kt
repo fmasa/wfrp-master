@@ -32,7 +32,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.unit.dp
-import cz.frantisekmasa.wfrp_master.compendium.ui.CompendiumViewModel
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.Character
 import cz.frantisekmasa.wfrp_master.common.core.domain.identifiers.CharacterId
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.Invitation
@@ -47,6 +46,8 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.EmptyUI
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.ItemIcon
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
 import cz.frantisekmasa.wfrp_master.common.core.viewModel.viewModel
+import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
+import cz.frantisekmasa.wfrp_master.compendium.ui.CompendiumViewModel
 import cz.frantisekmasa.wfrp_master.navigation.Route
 import cz.frantisekmasa.wfrp_master.navigation.Routing
 import cz.muni.fi.rpg.R
@@ -221,12 +222,15 @@ private fun PlayersCard(
                 horizontalArrangement = Arrangement.spacedBy(4.dp, Alignment.CenterHorizontally),
                 modifier = Modifier.fillMaxWidth(),
             ) {
-                PrimaryButton(R.string.button_create, onClick = { onCharacterCreateRequest(null) })
+                PrimaryButton(
+                    LocalStrings.current.commonUi.buttonCreate,
+                    onClick = { onCharacterCreateRequest(null) },
+                )
 
                 val party = viewModel.party.collectWithLifecycle(null).value
 
                 PrimaryButton(
-                    R.string.button_invite,
+                    LocalStrings.current.parties.buttonInvite,
                     enabled = party !== null,
                     onClick = { party?.let { onInvitationDialogRequest(party.getInvitation()) } },
                 )

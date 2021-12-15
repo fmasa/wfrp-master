@@ -35,6 +35,9 @@ data class Strings(
     val trappings: TrappingStrings = TrappingStrings(),
     val weapons: WeaponStrings = WeaponStrings(),
 
+    val parties: PartyStrings = PartyStrings(),
+    val npcs: NpcStrings = NpcStrings(),
+
     val commonUi: CommonUiStrings = CommonUiStrings(),
     val validation: ValidationStrings = ValidationStrings(),
     /*
@@ -62,9 +65,15 @@ data class CommonUiStrings(
     val labelOpenDrawer: String = "Open navigation drawer",
     val labelOpenContextMenu: String = "Open context menu",
     val labelPreviousScreen: String = "Return to previous screen",
+    val buttonCreate: String = "Create",
     val buttonSave: String = "Save",
     val decrement: String = "Decrement value",
     val increment: String = "Increment value",
+)
+
+data class PartyStrings(
+    val buttonInvite: String = "Invite",
+    val buttonJoin: String = "Join party",
 )
 
 data class ValidationStrings(
@@ -169,4 +178,8 @@ data class RaceStrings(
     val halfling: String = "Halfling",
     val human: String = "Human",
     val gnome: String = "Gnome",
+)
+
+data class NpcStrings(
+    val buttonAddNpc: String = "New NPC",
 )
