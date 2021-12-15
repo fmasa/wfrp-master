@@ -82,16 +82,6 @@ fun CardTitle(text: String, @DrawableRes iconRes: Int? = null) {
 }
 
 @Composable
-fun MultiLineTextValue(@StringRes labelRes: Int, value: String) {
-    if (value.isBlank()) return
-
-    Column {
-        Text(stringResource(labelRes), fontWeight = FontWeight.Bold)
-        Text(value)
-    }
-}
-
-@Composable
 fun SingleLineTextValue(@StringRes labelRes: Int, value: AnnotatedString) {
     if (value.isBlank()) return
 
