@@ -14,6 +14,8 @@ import androidx.compose.material.ListItem
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Add
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -156,7 +158,7 @@ private fun Menu(
     FloatingActionsMenu(
         state = state,
         onToggleRequest = { onStateChangeRequest(it) },
-        iconRes = R.drawable.ic_add,
+        icon = Icons.Rounded.Add,
     ) {
         ExtendedFloatingActionButton(
             icon = { Icon(painterResource(R.drawable.ic_camera), VisualOnlyIconDescription) },

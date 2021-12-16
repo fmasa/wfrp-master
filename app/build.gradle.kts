@@ -137,7 +137,6 @@ dependencies {
     api("androidx.fragment:fragment-ktx:1.3.5")
 
     // Jetpack Compose
-    api("androidx.compose.ui:ui:${Versions.compose}")
     api("androidx.compose.material:material:${Versions.compose}")
     api("androidx.compose.ui:ui-tooling:${Versions.compose}")
     api("androidx.activity:activity-compose:1.3.0-beta02")

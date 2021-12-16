@@ -26,6 +26,7 @@ kotlin {
         named("commonMain") {
             dependencies {
                 api(compose.runtime)
+                api(compose.ui)
                 api(compose.foundation)
                 api(compose.material)
                 api(compose.materialIconsExtended)

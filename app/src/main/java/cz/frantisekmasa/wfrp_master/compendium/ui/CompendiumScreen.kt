@@ -15,13 +15,14 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Add
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Dp
 import cz.frantisekmasa.wfrp_master.common.core.domain.compendium.CompendiumItem
@@ -106,7 +107,7 @@ fun <T : CompendiumItem<T>> CompendiumTab(
         floatingActionButton = {
             FloatingActionButton(onClick = { dialogState.value = DialogState.Opened(null) }) {
                 Icon(
-                    painterResource(R.drawable.ic_add),
+                    Icons.Rounded.Add,
                     stringResource(R.string.icon_add_compendium_item),
                 )
             }

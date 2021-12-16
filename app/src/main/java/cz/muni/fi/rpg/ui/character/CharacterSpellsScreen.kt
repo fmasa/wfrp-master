@@ -12,6 +12,8 @@ import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Icon
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Add
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -50,7 +52,7 @@ internal fun CharacterSpellsScreen(
         floatingActionButton = {
             FloatingActionButton(onClick = { showAddSpellDialog = true }) {
                 Icon(
-                    painterResource(R.drawable.ic_add),
+                    Icons.Rounded.Add,
                     stringResource(R.string.icon_add_spell),
                 )
             }

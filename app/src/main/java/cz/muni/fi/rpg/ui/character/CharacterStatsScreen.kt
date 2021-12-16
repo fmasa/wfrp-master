@@ -56,6 +56,7 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.ItemIcon
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.NumberPicker
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.TopPanel
+import cz.frantisekmasa.wfrp_master.common.core.ui.vectorResource
 import cz.frantisekmasa.wfrp_master.common.core.viewModel.viewModel
 import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.ui.character.dialogs.ExperiencePointsDialog
@@ -116,7 +117,7 @@ internal fun CharacterCharacteristicsScreen(
             FloatingActionsMenu(
                 state = menuState,
                 onToggleRequest = { menuState = it },
-                iconRes = R.drawable.ic_dice_roll,
+                icon = vectorResource(R.drawable.ic_dice_roll),
             ) {
                 for (dice in listOf("1d100", "1d10")) {
                     ExtendedFloatingActionButton(
