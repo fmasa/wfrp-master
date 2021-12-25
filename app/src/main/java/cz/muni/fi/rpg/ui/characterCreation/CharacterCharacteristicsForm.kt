@@ -21,7 +21,6 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.forms.Rules
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.TextInput
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.inputValue
 import cz.muni.fi.rpg.R
-import cz.muni.fi.rpg.ui.common.chunk
 
 object CharacterCharacteristicsForm {
     @Stable
@@ -142,7 +141,7 @@ fun CharacterCharacteristicsForm(
     )
 
     Column(verticalArrangement = Arrangement.spacedBy(20.dp)) {
-        for (rowCharacteristics in characteristics.chunk(2)) {
+        for (rowCharacteristics in characteristics.chunked(2)) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.spacedBy(20.dp),

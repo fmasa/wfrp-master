@@ -47,7 +47,6 @@ import cz.frantisekmasa.wfrp_master.inventory.domain.Armor
 import cz.frantisekmasa.wfrp_master.navigation.Route
 import cz.frantisekmasa.wfrp_master.navigation.Routing
 import cz.muni.fi.rpg.R
-import cz.muni.fi.rpg.ui.common.chunk
 import cz.muni.fi.rpg.ui.common.composables.FormInputHorizontalPadding
 import cz.muni.fi.rpg.ui.common.composables.FormInputVerticalPadding
 import cz.muni.fi.rpg.viewModels.EncounterDetailViewModel
@@ -410,7 +409,7 @@ private fun CharacteristicsSegment(data: CharacteristicsFormData, validate: Bool
     )
 
     Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-        for (rowCharacteristics in characteristics.chunk(characteristics.size / 2)) {
+        for (rowCharacteristics in characteristics.chunked(characteristics.size / 2)) {
             Row(
                 horizontalArrangement = Arrangement.spacedBy(8.dp),
                 modifier = Modifier.fillMaxWidth(),
