@@ -4,7 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.painter.Painter
 
 @Composable
-fun vectorResource(drawable: Resources.Drawable): Painter = platformVectorResource(drawable.path)
+fun drawableResource(drawable: Resources.Drawable): Painter = platformDrawableResource(drawable.path)
 
 @Composable
-expect fun platformVectorResource(drawablePath: String): Painter
+expect fun platformDrawableResource(drawablePath: String): Painter

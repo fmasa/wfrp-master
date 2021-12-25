@@ -22,6 +22,9 @@ import androidx.compose.material.LocalContentColor
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.TextButton
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.ArrowBackIos
+import androidx.compose.material.icons.rounded.ArrowForwardIos
 import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
@@ -34,7 +37,6 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.intl.Locale
@@ -72,8 +74,9 @@ fun ImperialCalendar(date: ImperialDate, onDateChange: (ImperialDate) -> Unit) {
                         }
                     ) {
                         Icon(
-                            painterResource(R.drawable.ic_caret_left),
+                            Icons.Rounded.ArrowBackIos,
                             stringResource(R.string.icon_previous_years),
+                            tint = MaterialTheme.colors.primaryVariant
                         )
                     }
 
@@ -88,16 +91,18 @@ fun ImperialCalendar(date: ImperialDate, onDateChange: (ImperialDate) -> Unit) {
                         }
                     ) {
                         Icon(
-                            painterResource(R.drawable.ic_caret_right),
+                            Icons.Rounded.ArrowForwardIos,
                             stringResource(R.string.icon_next_years),
+                            tint = MaterialTheme.colors.primaryVariant
                         )
                     }
                 }
                 ActiveScreen.DAYS_OF_MONTH -> {
                     IconButton(onClick = { activeMonth = activeMonth.previousMonth() }) {
                         Icon(
-                            painterResource(R.drawable.ic_caret_left),
+                            Icons.Rounded.ArrowBackIos,
                             stringResource(R.string.icon_previous_month),
+                            tint = MaterialTheme.colors.primaryVariant
                         )
                     }
 
@@ -109,8 +114,9 @@ fun ImperialCalendar(date: ImperialDate, onDateChange: (ImperialDate) -> Unit) {
 
                     IconButton(onClick = { activeMonth = activeMonth.nextMonth() }) {
                         Icon(
-                            painterResource(R.drawable.ic_caret_right),
+                            Icons.Rounded.ArrowForwardIos,
                             stringResource(R.string.icon_next_month),
+                            tint = MaterialTheme.colors.primaryVariant
                         )
                     }
                 }

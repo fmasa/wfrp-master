@@ -1,6 +1,5 @@
 package cz.frantisekmasa.wfrp_master.inventory.ui
 
-import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -16,9 +15,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import cz.frantisekmasa.wfrp_master.common.core.shared.Resources
+import cz.frantisekmasa.wfrp_master.common.core.shared.drawableResource
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.CardContainer
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.CardTitle
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.NumberPicker
@@ -39,7 +39,7 @@ internal fun ArmorCard(armor: EquippedArmour, onChange: (Armor) -> Unit) {
 
         Row(modifier = modifier) {
             ArmorPart(
-                iconRes = R.drawable.ic_armor_shield,
+                icon = Resources.Drawable.ArmorShield,
                 nameRes = R.string.armor_shield,
                 base = armor.armourFromItems.shield,
                 points = armor.legacyArmour.shield,
@@ -47,7 +47,7 @@ internal fun ArmorCard(armor: EquippedArmour, onChange: (Armor) -> Unit) {
                 modifier = Modifier.weight(1f),
             )
             ArmorPart(
-                iconRes = R.drawable.ic_armor_head,
+                icon = Resources.Drawable.ArmorHead,
                 nameRes = R.string.armor_head,
                 base = armor.armourFromItems.head,
                 points = armor.legacyArmour.head,
@@ -60,7 +60,7 @@ internal fun ArmorCard(armor: EquippedArmour, onChange: (Armor) -> Unit) {
 
         Row(modifier = modifier) {
             ArmorPart(
-                iconRes = R.drawable.ic_armor_arm_right,
+                icon = Resources.Drawable.ArmorArmRight,
                 nameRes = R.string.armor_right_arm,
                 base = armor.armourFromItems.rightArm,
                 points = armor.legacyArmour.rightArm,
@@ -70,7 +70,7 @@ internal fun ArmorCard(armor: EquippedArmour, onChange: (Armor) -> Unit) {
             )
 
             ArmorPart(
-                iconRes = R.drawable.ic_armor_chest,
+                icon = Resources.Drawable.ArmorChest,
                 nameRes = R.string.armor_body,
                 base = armor.armourFromItems.body,
                 points = armor.legacyArmour.body,
@@ -80,7 +80,7 @@ internal fun ArmorCard(armor: EquippedArmour, onChange: (Armor) -> Unit) {
             )
 
             ArmorPart(
-                iconRes = R.drawable.ic_armor_arm_left,
+                icon = Resources.Drawable.ArmorArmLeft,
                 nameRes = R.string.armor_left_arm,
                 base = armor.armourFromItems.leftArm,
                 points = armor.legacyArmour.leftArm,
@@ -95,7 +95,7 @@ internal fun ArmorCard(armor: EquippedArmour, onChange: (Armor) -> Unit) {
             modifier = modifier
         ) {
             ArmorPart(
-                iconRes = R.drawable.ic_armor_leg_right,
+                icon = Resources.Drawable.ArmorLegRight,
                 nameRes = R.string.armor_right_leg,
                 base = armor.armourFromItems.rightLeg,
                 points = armor.legacyArmour.rightLeg,
@@ -104,7 +104,7 @@ internal fun ArmorCard(armor: EquippedArmour, onChange: (Armor) -> Unit) {
             )
 
             ArmorPart(
-                iconRes = R.drawable.ic_armor_leg_left,
+                icon = Resources.Drawable.ArmorLegLeft,
                 nameRes = R.string.armor_left_leg,
                 base = armor.armourFromItems.leftLeg,
                 points = armor.legacyArmour.leftLeg,
@@ -117,7 +117,7 @@ internal fun ArmorCard(armor: EquippedArmour, onChange: (Armor) -> Unit) {
 
 @Composable
 private fun ArmorPart(
-    @DrawableRes iconRes: Int,
+    icon: Resources.Drawable,
     @StringRes nameRes: Int,
     points: Int,
     base: Int,
@@ -126,7 +126,7 @@ private fun ArmorPart(
     onChange: (Int) -> Unit,
 ) {
     Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = modifier) {
-        Icon(painterResource(iconRes), VisualOnlyIconDescription)
+        Icon(drawableResource(icon), VisualOnlyIconDescription)
         NumberPicker(
             value = base + points,
             onIncrement = {

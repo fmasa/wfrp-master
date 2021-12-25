@@ -55,8 +55,8 @@ fun CardContainer(
 }
 
 @Composable
-fun CardTitle(@StringRes textRes: Int, @DrawableRes iconRes: Int? = null) {
-    CardTitle(stringResource(textRes), iconRes)
+fun CardTitle(@StringRes textRes: Int) {
+    CardTitle(stringResource(textRes))
 }
 
 @Composable

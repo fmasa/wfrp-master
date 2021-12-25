@@ -25,7 +25,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.Character
-import cz.frantisekmasa.wfrp_master.common.core.shared.vectorResource
+import cz.frantisekmasa.wfrp_master.common.core.shared.drawableResource
 import cz.frantisekmasa.wfrp_master.common.core.ui.flow.collectWithLifecycle
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.SelectBox
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.SelectBoxToggle
@@ -97,7 +97,7 @@ internal fun OptionsForm(
                 onClick = onNewSkillPickingRequest,
             ) {
                 Icon(
-                    vectorResource(selectedSkill.characteristic.getIcon()),
+                    drawableResource(selectedSkill.characteristic.getIcon()),
                     VisualOnlyIconDescription, // TODO: Add characteristic-derived description
                     Modifier.width(24.dp)
                 )

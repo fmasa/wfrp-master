@@ -11,6 +11,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import cz.frantisekmasa.wfrp_master.common.core.shared.Resources
 import cz.frantisekmasa.wfrp_master.common.core.ui.buttons.CardButton
 import cz.frantisekmasa.wfrp_master.common.core.ui.flow.collectWithLifecycle
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.CardContainer
@@ -18,6 +19,7 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.CardItem
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.CardTitle
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.ContextMenu.Item
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.EmptyUI
+import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.ItemIcon
 import cz.frantisekmasa.wfrp_master.religion.domain.Miracle
 import cz.muni.fi.rpg.R
 import kotlinx.coroutines.launch
@@ -39,7 +41,7 @@ internal fun MiraclesCard(viewModel: MiraclesViewModel) {
             if (miracles.isEmpty()) {
                 EmptyUI(
                     R.string.no_miracles,
-                    R.drawable.ic_pray,
+                    Resources.Drawable.Miracle,
                     size = EmptyUI.Size.Small
                 )
             } else {
@@ -85,7 +87,7 @@ private fun MiracleItem(
     CardItem(
         miracle.name,
         miracle.effect,
-        R.drawable.ic_pray,
+        { ItemIcon(Resources.Drawable.Miracle, ItemIcon.Size.Small) },
         onClick = onClick,
         listOf(Item(stringResource(R.string.button_remove), onClick = { onRemove() })),
     )

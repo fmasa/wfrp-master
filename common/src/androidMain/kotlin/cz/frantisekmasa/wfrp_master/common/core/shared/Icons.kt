@@ -10,7 +10,7 @@ import androidx.compose.ui.res.painterResource
 import cz.frantisekmasa.wfrp_master.common.R
 
 @Composable
-actual fun platformVectorResource(drawablePath: String): Painter {
+actual fun platformDrawableResource(drawablePath: String): Painter {
     return painterResource(rememberDrawableId(drawablePath))
 }
 

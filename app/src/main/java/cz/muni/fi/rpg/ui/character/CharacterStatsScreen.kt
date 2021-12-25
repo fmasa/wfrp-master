@@ -20,6 +20,8 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Group
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
@@ -45,6 +47,8 @@ import cz.frantisekmasa.wfrp_master.common.core.domain.identifiers.CharacterId
 import cz.frantisekmasa.wfrp_master.common.core.domain.localizedName
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.Party
 import cz.frantisekmasa.wfrp_master.common.core.media.rememberSoundPlayer
+import cz.frantisekmasa.wfrp_master.common.core.shared.Resources
+import cz.frantisekmasa.wfrp_master.common.core.shared.drawableResource
 import cz.frantisekmasa.wfrp_master.common.core.ui.components.Breakpoint
 import cz.frantisekmasa.wfrp_master.common.core.ui.components.CharacterAvatar
 import cz.frantisekmasa.wfrp_master.common.core.ui.components.ColumnSize.FullWidth
@@ -56,7 +60,6 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.ItemIcon
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.NumberPicker
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.TopPanel
-import cz.frantisekmasa.wfrp_master.common.core.ui.vectorResource
 import cz.frantisekmasa.wfrp_master.common.core.viewModel.viewModel
 import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.ui.character.dialogs.ExperiencePointsDialog
@@ -117,7 +120,7 @@ internal fun CharacterCharacteristicsScreen(
             FloatingActionsMenu(
                 state = menuState,
                 onToggleRequest = { menuState = it },
-                icon = vectorResource(R.drawable.ic_dice_roll),
+                icon = drawableResource(Resources.Drawable.DiceRoll)
             ) {
                 for (dice in listOf("1d100", "1d10")) {
                     ExtendedFloatingActionButton(
@@ -181,7 +184,7 @@ internal fun CharacterCharacteristicsScreen(
                     AmbitionsCard(
                         titleRes = R.string.title_party_ambitions,
                         ambitions = party.getAmbitions(),
-                        titleIconRes = R.drawable.ic_group,
+                        titleIcon = Icons.Rounded.Group,
                         onSave = null,
                     )
                 }

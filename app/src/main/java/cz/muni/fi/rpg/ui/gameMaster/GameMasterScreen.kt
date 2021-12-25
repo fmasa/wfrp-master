@@ -8,10 +8,11 @@ import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Settings
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import cz.frantisekmasa.wfrp_master.combat.ui.ActiveCombatBanner
 import cz.frantisekmasa.wfrp_master.common.core.ads.BannerAd
@@ -43,7 +44,7 @@ fun GameMasterScreen(routing: Routing<Route.GameMaster>) {
                 navigationIcon = { HamburgerButton() },
                 actions = {
                     IconAction(
-                        painterResource(R.drawable.ic_settings),
+                        Icons.Rounded.Settings,
                         stringResource(R.string.title_party_settings),
                         onClick = {
                             if (party == null) {

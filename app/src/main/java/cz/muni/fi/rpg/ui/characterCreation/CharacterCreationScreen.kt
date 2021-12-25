@@ -27,6 +27,9 @@ import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.material.TextButton
 import androidx.compose.material.TopAppBar
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.ArrowBackIos
+import androidx.compose.material.icons.rounded.ArrowForwardIos
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -34,7 +37,6 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.intl.Locale
 import androidx.compose.ui.text.toUpperCase
@@ -189,7 +191,9 @@ private fun BottomBar(
                     },
                 ) {
                     Icon(
-                        painterResource(R.drawable.ic_caret_left), VisualOnlyIconDescription
+                        Icons.Rounded.ArrowBackIos,
+                        VisualOnlyIconDescription,
+                        tint = MaterialTheme.colors.primaryVariant,
                     )
                     Text(
                         stringResource(steps[currentStepIndex - 1].labelRes)
@@ -257,6 +261,10 @@ private fun NextButton(
 ) {
     TextButton(modifier = modifier, onClick = onClick) {
         Text(stringResource(label).toUpperCase(Locale.current))
-        Icon(painterResource(R.drawable.ic_caret_right), VisualOnlyIconDescription)
+        Icon(
+            Icons.Rounded.ArrowForwardIos,
+            VisualOnlyIconDescription,
+            tint = MaterialTheme.colors.primaryVariant,
+        )
     }
 }

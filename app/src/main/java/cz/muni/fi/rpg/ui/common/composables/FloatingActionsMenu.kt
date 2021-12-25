@@ -17,7 +17,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.graphicsLayer
-import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import cz.muni.fi.rpg.R
@@ -38,7 +38,7 @@ private const val animationLengthMillis = 200
 fun FloatingActionsMenu(
     state: MenuState,
     onToggleRequest: (MenuState) -> Unit,
-    icon: ImageVector,
+    icon: Painter,
     subButtons: @Composable ColumnScope.() -> Unit
 ) {
     val transition = updateTransition(state)

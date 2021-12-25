@@ -18,6 +18,8 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.ProvideTextStyle
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Group
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -27,7 +29,6 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontStyle
@@ -36,6 +37,8 @@ import cz.frantisekmasa.wfrp_master.common.core.domain.character.Character
 import cz.frantisekmasa.wfrp_master.common.core.domain.identifiers.CharacterId
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.Invitation
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.PartyId
+import cz.frantisekmasa.wfrp_master.common.core.shared.Resources
+import cz.frantisekmasa.wfrp_master.common.core.shared.drawableResource
 import cz.frantisekmasa.wfrp_master.common.core.ui.buttons.PrimaryButton
 import cz.frantisekmasa.wfrp_master.common.core.ui.components.CharacterAvatar
 import cz.frantisekmasa.wfrp_master.common.core.ui.flow.collectWithLifecycle
@@ -84,7 +87,7 @@ internal fun PartySummaryScreen(
         floatingActionButton = {
             FloatingActionButton(onClick = { skillTestDialogVisible = true }) {
                 Icon(
-                    painterResource(R.drawable.ic_dice_roll),
+                    drawableResource(Resources.Drawable.DiceRoll),
                     stringResource(R.string.icon_hidden_skill_test),
                 )
             }
@@ -200,7 +203,7 @@ private fun PlayersCard(
                 players.isEmpty() -> {
                     EmptyUI(
                         textId = R.string.no_characters_in_party_prompt,
-                        drawableResourceId = R.drawable.ic_group,
+                        icon = Icons.Rounded.Group,
                         size = EmptyUI.Size.Small,
                     )
                 }

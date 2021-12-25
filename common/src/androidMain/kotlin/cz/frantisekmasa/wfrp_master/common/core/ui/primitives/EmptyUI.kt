@@ -1,6 +1,5 @@
 package cz.frantisekmasa.wfrp_master.common.core.ui.primitives
 
-import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
@@ -16,11 +15,15 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import cz.frantisekmasa.wfrp_master.common.core.shared.Resources
+import cz.frantisekmasa.wfrp_master.common.core.shared.drawableResource
 
 object EmptyUI {
     enum class Size {
@@ -57,7 +60,27 @@ object EmptyUI {
 @Composable
 fun EmptyUI(
     @StringRes textId: Int,
-    @DrawableRes drawableResourceId: Int,
+    icon: Resources.Drawable,
+    @StringRes subTextId: Int? = null,
+    size: EmptyUI.Size = EmptyUI.Size.Large
+) {
+    EmptyUI(textId, drawableResource(icon), subTextId, size)
+}
+
+@Composable
+fun EmptyUI(
+    @StringRes textId: Int,
+    icon: ImageVector,
+    @StringRes subTextId: Int? = null,
+    size: EmptyUI.Size = EmptyUI.Size.Large
+) {
+    EmptyUI(textId, rememberVectorPainter(icon), subTextId, size)
+}
+
+@Composable
+fun EmptyUI(
+    @StringRes textId: Int,
+    iconPainter: Painter,
     @StringRes subTextId: Int? = null,
     size: EmptyUI.Size = EmptyUI.Size.Large
 ) {
@@ -70,7 +93,7 @@ fun EmptyUI(
         }
 
         Image(
-            painterResource(drawableResourceId),
+            iconPainter,
             contentDescription = VisualOnlyIconDescription,
             modifier = size.modifier,
             colorFilter = ColorFilter.tint(disabledColor),

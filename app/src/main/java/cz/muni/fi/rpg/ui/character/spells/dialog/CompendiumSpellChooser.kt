@@ -22,6 +22,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import cz.frantisekmasa.wfrp_master.common.core.shared.Resources
 import cz.frantisekmasa.wfrp_master.common.core.ui.buttons.CloseButton
 import cz.frantisekmasa.wfrp_master.common.core.ui.flow.collectWithLifecycle
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.EmptyUI
@@ -64,7 +65,7 @@ internal fun CompendiumSpellChooser(
             Box(Modifier.weight(1f)) {
                 if (compendiumSpells.isEmpty()) {
                     EmptyUI(
-                        drawableResourceId = R.drawable.ic_spells,
+                        icon = Resources.Drawable.Spell,
                         textId = R.string.no_spells_in_compendium,
                         subTextId = if (totalCompendiumSpellCount == 0)
                             R.string.no_spells_in_compendium_sub_text_player
@@ -99,7 +100,7 @@ internal fun CompendiumSpellChooser(
                                         }
                                     }
                                 ),
-                                icon = { ItemIcon(R.drawable.ic_spells, ItemIcon.Size.Small) },
+                                icon = { ItemIcon(Resources.Drawable.Spell, ItemIcon.Size.Small) },
                                 text = { Text(spell.name) }
                             )
                         }

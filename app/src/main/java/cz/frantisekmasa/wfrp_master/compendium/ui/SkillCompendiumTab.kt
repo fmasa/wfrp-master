@@ -21,6 +21,7 @@ import androidx.compose.ui.unit.dp
 import cz.frantisekmasa.wfrp_master.compendium.domain.Skill
 import cz.frantisekmasa.wfrp_master.common.core.domain.Characteristic
 import cz.frantisekmasa.wfrp_master.common.core.domain.compendium.CompendiumItem
+import cz.frantisekmasa.wfrp_master.common.core.shared.Resources
 import cz.frantisekmasa.wfrp_master.common.core.ui.dialogs.DialogState
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.CheckboxWithText
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.ChipList
@@ -44,7 +45,7 @@ fun SkillCompendiumTab(viewModel: CompendiumViewModel, width: Dp) {
             EmptyUI(
                 textId = R.string.no_skills_in_compendium,
                 subTextId = R.string.no_skills_in_compendium_sub_text,
-                drawableResourceId = R.drawable.ic_skills
+                icon = Resources.Drawable.Skill,
             )
         },
         remover = viewModel::remove,

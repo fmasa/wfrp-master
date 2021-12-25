@@ -27,7 +27,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.intl.Locale
@@ -38,6 +37,8 @@ import androidx.compose.ui.window.Dialog
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.firebase.auth.FirebaseAuthUserCollisionException
 import cz.frantisekmasa.wfrp_master.common.core.auth.LocalUser
+import cz.frantisekmasa.wfrp_master.common.core.shared.Resources
+import cz.frantisekmasa.wfrp_master.common.core.shared.drawableResource
 import cz.frantisekmasa.wfrp_master.common.core.ui.dialogs.DialogProgress
 import cz.frantisekmasa.wfrp_master.common.core.ui.dialogs.DialogTitle
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.CardContainer
@@ -138,7 +139,7 @@ fun SignInCard(viewModel: SettingsViewModel, routing: Routing<Route.Settings>) {
                         horizontalArrangement = Arrangement.spacedBy(4.dp)
                     ) {
                         Image(
-                            painterResource(R.drawable.googleg_standard_color_18),
+                            drawableResource(Resources.Drawable.GoogleLogo),
                             VisualOnlyIconDescription,
                         )
                         Text("Sign-in")

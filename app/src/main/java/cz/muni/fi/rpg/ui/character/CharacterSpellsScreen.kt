@@ -25,10 +25,13 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import cz.frantisekmasa.wfrp_master.common.core.domain.identifiers.CharacterId
+import cz.frantisekmasa.wfrp_master.common.core.shared.Resources
+import cz.frantisekmasa.wfrp_master.common.core.shared.drawableResource
 import cz.frantisekmasa.wfrp_master.common.core.ui.flow.collectWithLifecycle
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.CardItem
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.ContextMenu
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.EmptyUI
+import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.ItemIcon
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
 import cz.frantisekmasa.wfrp_master.common.core.viewModel.viewModel
 import cz.muni.fi.rpg.R
@@ -77,7 +80,7 @@ private fun MainContainer(viewModel: SpellsViewModel) {
         EmptyUI(
             textId = R.string.no_spells,
             subTextId = R.string.no_spells_sub_text,
-            drawableResourceId = R.drawable.ic_spells
+            icon = Resources.Drawable.Spell,
         )
         return
     }
@@ -108,7 +111,7 @@ private fun SpellItem(spell: Spell, onClick: () -> Unit, onRemove: () -> Unit) {
     CardItem(
         name = spell.name,
         description = spell.effect,
-        iconRes = R.drawable.ic_spells,
+        icon = { ItemIcon(Resources.Drawable.Spell, ItemIcon.Size.Small) },
         onClick = onClick,
         contextMenuItems = listOf(ContextMenu.Item(stringResource(R.string.remove), onRemove)),
         badge = {
@@ -126,7 +129,7 @@ private fun SpellItem(spell: Spell, onClick: () -> Unit, onRemove: () -> Unit) {
 
                 if (spell.memorized) {
                     Icon(
-                        painterResource(R.drawable.ic_brain),
+                        drawableResource(Resources.Drawable.MemorizeSpell),
                         stringResource(R.string.spell_memorized),
                         Modifier.size(16.dp),
                     )

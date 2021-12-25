@@ -1,6 +1,5 @@
 package cz.frantisekmasa.wfrp_master.common.core.ui.primitives
 
-import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.height
@@ -12,13 +11,15 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import coil.compose.rememberImagePainter
 import coil.transform.CircleCropTransformation
 import cz.frantisekmasa.wfrp_master.common.core.shared.Resources
-import cz.frantisekmasa.wfrp_master.common.core.shared.vectorResource
+import cz.frantisekmasa.wfrp_master.common.core.shared.drawableResource
 
 object ItemIcon {
     enum class Size {
@@ -43,22 +44,6 @@ object ItemIcon {
 }
 
 @Composable
-fun ItemIcon(@DrawableRes drawableResource: Int, size: ItemIcon.Size = ItemIcon.Size.Small) {
-    val backgroundColor = MaterialTheme.colors.onSurface.copy(alpha = ContentAlpha.medium)
-
-    Image(
-        painterResource(drawableResource),
-        VisualOnlyIconDescription, // TODO: Provide mechanism to specify what does this image means, such as: ("Character's image", "Strength-based skill", etc.)
-        colorFilter = ColorFilter.tint(MaterialTheme.colors.surface),
-        modifier = Modifier
-            .background(backgroundColor, CircleShape)
-            .padding(size.padding)
-            .width(size.dimensions)
-            .height(size.dimensions)
-    )
-}
-
-@Composable
 fun ItemIcon(url: String, size: ItemIcon.Size = ItemIcon.Size.Small) {
     val backgroundColor = MaterialTheme.colors.onSurface.copy(alpha = ContentAlpha.medium)
 
@@ -78,10 +63,20 @@ fun ItemIcon(url: String, size: ItemIcon.Size = ItemIcon.Size.Small) {
 
 @Composable
 fun ItemIcon(drawable: Resources.Drawable, size: ItemIcon.Size = ItemIcon.Size.Small) {
+    ItemIcon(drawableResource(drawable), size)
+}
+
+@Composable
+fun ItemIcon(icon: ImageVector, size: ItemIcon.Size = ItemIcon.Size.Small) {
+    ItemIcon(rememberVectorPainter(icon), size)
+}
+
+@Composable
+private fun ItemIcon(painter: Painter, size: ItemIcon.Size) {
     val backgroundColor = MaterialTheme.colors.onSurface.copy(alpha = ContentAlpha.medium)
 
     Image(
-        vectorResource(drawable),
+        painter,
         VisualOnlyIconDescription, // TODO: Provide mechanism to specify what does this image means, such as: ("Character's image", "Strength-based skill", etc.)
         colorFilter = ColorFilter.tint(MaterialTheme.colors.surface),
         modifier = Modifier
@@ -91,4 +86,5 @@ fun ItemIcon(drawable: Resources.Drawable, size: ItemIcon.Size = ItemIcon.Size.S
             .height(size.dimensions)
     )
 }
+
 

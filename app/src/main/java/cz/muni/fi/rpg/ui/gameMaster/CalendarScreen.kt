@@ -15,6 +15,8 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.material.TextButton
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.NightsStay
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -24,7 +26,6 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
@@ -155,7 +156,7 @@ private fun Date(viewModel: GameMasterViewModel, date: ImperialDate) {
 
     Row(verticalAlignment = Alignment.CenterVertically) {
         Icon(
-            painterResource(R.drawable.ic_moon),
+            Icons.Rounded.NightsStay,
             VisualOnlyIconDescription,
             Modifier.padding(end = 4.dp),
         )

@@ -1,6 +1,5 @@
 package cz.muni.fi.rpg.ui.common.composables
 
-import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
@@ -15,27 +14,34 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.VisualOnlyIconDescription
 
 @Composable
-fun CardTitle(@StringRes textRes: Int, @DrawableRes iconRes: Int? = null) {
-    CardTitle(stringResource(textRes), iconRes)
+fun CardTitle(@StringRes textRes: Int, icon: ImageVector? = null) {
+    CardTitle(stringResource(textRes), icon)
 }
 
 @Composable
-fun CardTitle(text: String, @DrawableRes iconRes: Int? = null) {
+fun CardTitle(text: String, icon: ImageVector? = null) {
+    CardTitle(text, icon?.let { rememberVectorPainter(it) })
+}
+
+@Composable
+private fun CardTitle(text: String, painter: Painter?) {
     Row(
         horizontalArrangement = Arrangement.Center,
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier.fillMaxWidth()
     ) {
-        if (iconRes != null) {
+        if (painter != null) {
             Image(
-                painterResource(iconRes),
+                painter,
                 VisualOnlyIconDescription,
                 Modifier.padding(end = 4.dp)
                     .width(24.dp)

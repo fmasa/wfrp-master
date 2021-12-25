@@ -15,6 +15,8 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Share
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
@@ -91,7 +93,7 @@ internal fun InvitationDialog(invitation: Invitation, onDismissRequest: () -> Un
                             startInvitationSendingIntent(context, invitation, sharingOptions.link)
                         },
                     ) {
-                        Icon(painterResource(R.drawable.ic_share), VisualOnlyIconDescription)
+                        Icon(Icons.Rounded.Share, VisualOnlyIconDescription)
                         Text(stringResource(R.string.share_link).toUpperCase(Locale.current))
                     }
                 }

@@ -2,7 +2,6 @@ package cz.muni.fi.rpg.ui.shell
 
 import android.content.Intent
 import android.net.Uri
-import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -19,17 +18,26 @@ import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.contentColorFor
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.BugReport
+import androidx.compose.material.icons.rounded.Info
+import androidx.compose.material.icons.rounded.Policy
+import androidx.compose.material.icons.rounded.Redeem
+import androidx.compose.material.icons.rounded.Settings
+import androidx.compose.material.icons.rounded.Star
 import androidx.compose.material.primarySurface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import cz.frantisekmasa.wfrp_master.common.core.shared.Resources
+import cz.frantisekmasa.wfrp_master.common.core.shared.drawableResource
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.VisualOnlyIconDescription
 import cz.frantisekmasa.wfrp_master.common.core.ui.viewinterop.LocalActivity
@@ -51,7 +59,7 @@ fun AppDrawer(drawerState: DrawerState, navController: NavHostController) {
         val coroutineScope = rememberCoroutineScope()
 
         DrawerItem(
-            icon = R.drawable.ic_settings,
+            icon = Icons.Rounded.Settings,
             text = R.string.settings,
             onClick = {
                 coroutineScope.launch { drawerState.close() }
@@ -61,7 +69,7 @@ fun AppDrawer(drawerState: DrawerState, navController: NavHostController) {
 
         val context = LocalContext.current
         DrawerItem(
-            icon = R.drawable.ic_review,
+            icon = Icons.Rounded.Star,
             text = R.string.rate_app,
             onClick = {
                 val intent = Intent(Intent.ACTION_VIEW).apply {
@@ -74,7 +82,7 @@ fun AppDrawer(drawerState: DrawerState, navController: NavHostController) {
         )
 
         DrawerItem(
-            icon = R.drawable.ic_policy,
+            icon = Icons.Rounded.Policy,
             text = R.string.label_privacy_policy,
             onClick = {
                 val urlString = context.getString(R.string.privacy_policy_url)
@@ -87,7 +95,7 @@ fun AppDrawer(drawerState: DrawerState, navController: NavHostController) {
         )
 
         DrawerItem(
-            icon = R.drawable.ic_bug_report,
+            icon = Icons.Rounded.BugReport,
             text = R.string.report_issue,
             onClick = {
                 val intent = Intent(Intent.ACTION_SEND).apply {
@@ -104,7 +112,7 @@ fun AppDrawer(drawerState: DrawerState, navController: NavHostController) {
         )
 
         DrawerItem(
-            icon = R.drawable.ic_info,
+            icon = Icons.Rounded.Info,
             text = R.string.about,
             onClick = {
                 coroutineScope.launch { drawerState.close() }
@@ -125,7 +133,7 @@ private fun PremiumItem() {
     }
 
     DrawerItem(
-        icon = R.drawable.ic_premium,
+        icon = Icons.Rounded.Redeem,
         text = R.string.buy_premium,
         onClick = {
             coroutineScope.launch(Dispatchers.IO) {
@@ -141,7 +149,7 @@ private fun PremiumItem() {
 
 @Composable
 private fun DrawerItem(
-    @DrawableRes icon: Int,
+    icon: ImageVector,
     @StringRes text: Int,
     onClick: () -> Unit,
     modifier: Modifier = Modifier
@@ -155,7 +163,7 @@ private fun DrawerItem(
         horizontalArrangement = Arrangement.spacedBy(Spacing.medium),
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        Icon(painterResource(icon), VisualOnlyIconDescription)
+        Icon(icon, VisualOnlyIconDescription)
         Text(
             stringResource(text),
             style = MaterialTheme.typography.caption.copy(fontWeight = FontWeight.SemiBold),
@@ -179,7 +187,7 @@ private fun DrawerHeader() {
             verticalAlignment = Alignment.CenterVertically,
         ) {
             Image(
-                painterResource(R.drawable.splash_screen_image),
+                drawableResource(Resources.Drawable.SplashScreenIcon),
                 VisualOnlyIconDescription,
                 Modifier.size(80.dp),
             )

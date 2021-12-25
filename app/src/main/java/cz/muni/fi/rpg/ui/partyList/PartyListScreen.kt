@@ -16,6 +16,10 @@ import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Add
+import androidx.compose.material.icons.rounded.Camera
+import androidx.compose.material.icons.rounded.Group
+import androidx.compose.material.icons.rounded.GroupAdd
+import androidx.compose.material.icons.rounded.Redeem
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -23,12 +27,13 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import cz.frantisekmasa.wfrp_master.common.core.auth.LocalUser
 import cz.frantisekmasa.wfrp_master.common.core.domain.identifiers.CharacterId
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.Party
+import cz.frantisekmasa.wfrp_master.common.core.shared.Resources
 import cz.frantisekmasa.wfrp_master.common.core.ui.buttons.HamburgerButton
 import cz.frantisekmasa.wfrp_master.common.core.ui.dialogs.DialogState
 import cz.frantisekmasa.wfrp_master.common.core.ui.flow.collectWithLifecycle
@@ -145,7 +150,7 @@ private fun Menu(
         var premiumPromptVisible by remember { mutableStateOf(false) }
 
         FloatingActionButton(onClick = { premiumPromptVisible = true }) {
-            Icon(painterResource(R.drawable.ic_premium), stringResource(R.string.buy_premium))
+            Icon(Icons.Rounded.Redeem, stringResource(R.string.buy_premium))
         }
 
         if (premiumPromptVisible) {
@@ -158,10 +163,10 @@ private fun Menu(
     FloatingActionsMenu(
         state = state,
         onToggleRequest = { onStateChangeRequest(it) },
-        icon = Icons.Rounded.Add,
+        icon = rememberVectorPainter(Icons.Rounded.Add),
     ) {
         ExtendedFloatingActionButton(
-            icon = { Icon(painterResource(R.drawable.ic_camera), VisualOnlyIconDescription) },
+            icon = { Icon(Icons.Rounded.Camera, VisualOnlyIconDescription) },
             text = { Text(stringResource(R.string.scanCode_title)) },
             onClick = {
                 routing.navigateTo(Route.InvitationScanner)
@@ -170,7 +175,7 @@ private fun Menu(
         )
         ExtendedFloatingActionButton(
             icon = {
-                Icon(painterResource(R.drawable.ic_group_add), VisualOnlyIconDescription)
+                Icon(Icons.Rounded.GroupAdd, VisualOnlyIconDescription)
             },
             text = { Text(stringResource(R.string.assembleParty_title)) },
             onClick = {
@@ -187,7 +192,7 @@ fun PartyItem(party: Party) {
         val playersCount = party.getPlayerCounts()
 
         ListItem(
-            icon = { ItemIcon(R.drawable.ic_group, ItemIcon.Size.Large) },
+            icon = { ItemIcon(Icons.Rounded.Group, ItemIcon.Size.Large) },
             text = { Text(party.getName()) },
             trailing = if (playersCount > 0)
                 ({ Text(stringResource(R.string.players_number, playersCount)) })
@@ -211,7 +216,7 @@ private fun MainContainer(
                 EmptyUI(
                     textId = R.string.no_parties_prompt,
                     subTextId = R.string.no_parties_sub_prompt,
-                    drawableResourceId = R.drawable.ic_rally_the_troops,
+                    icon = Resources.Drawable.PartyNotFound,
                 )
                 return@let
             }

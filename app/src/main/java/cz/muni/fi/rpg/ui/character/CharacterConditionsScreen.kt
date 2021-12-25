@@ -17,7 +17,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.capitalize
 import androidx.compose.ui.text.intl.Locale
 import androidx.compose.ui.text.toLowerCase
@@ -25,9 +24,10 @@ import androidx.compose.ui.unit.dp
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.Character
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.Condition
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.CurrentConditions
+import cz.frantisekmasa.wfrp_master.common.core.shared.Resources
+import cz.frantisekmasa.wfrp_master.common.core.shared.drawableResource
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.NumberPicker
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
-import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.viewModels.CharacterViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -114,21 +114,21 @@ private fun ConditionRow(
 @Composable
 private fun ConditionIcon(condition: Condition) {
     val iconRes = when (condition) {
-        Condition.ABLAZE -> R.drawable.ic_condition_ablaze
-        Condition.BLINDED -> R.drawable.ic_condition_blinded
-        Condition.BROKEN -> R.drawable.ic_condition_broken
-        Condition.DEAFENED -> R.drawable.ic_condition_deafened
-        Condition.ENTANGLED -> R.drawable.ic_condition_entangled
-        Condition.FATIGUED -> R.drawable.ic_condition_fatigued
-        Condition.POISONED -> R.drawable.ic_condition_poisoned
-        Condition.PRONE -> R.drawable.ic_condition_prone
-        Condition.STUNNED -> R.drawable.ic_condition_stunned
-        Condition.SURPRISED -> R.drawable.ic_condition_surprised
-        Condition.UNCONSCIOUS -> R.drawable.ic_condition_unconscious
-        Condition.BLEEDING -> R.drawable.ic_condition_bleeding
+        Condition.ABLAZE -> Resources.Drawable.ConditionAblaze
+        Condition.BLINDED -> Resources.Drawable.ConditionBlinded
+        Condition.BROKEN -> Resources.Drawable.ConditionBroken
+        Condition.DEAFENED -> Resources.Drawable.ConditionDeafened
+        Condition.ENTANGLED -> Resources.Drawable.ConditionEntangled
+        Condition.FATIGUED -> Resources.Drawable.ConditionFatigued
+        Condition.POISONED -> Resources.Drawable.ConditionPoisoned
+        Condition.PRONE -> Resources.Drawable.ConditionProne
+        Condition.STUNNED -> Resources.Drawable.ConditionStunned
+        Condition.SURPRISED -> Resources.Drawable.ConditionSurprised
+        Condition.UNCONSCIOUS -> Resources.Drawable.ConditionUnconscious
+        Condition.BLEEDING -> Resources.Drawable.ConditionBleeding
     }
     Image(
-        painterResource(iconRes),
+        drawableResource(iconRes),
         conditionName(condition),
         Modifier.size(28.dp)
     )

@@ -22,6 +22,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import cz.frantisekmasa.wfrp_master.common.core.shared.Resources
 import cz.frantisekmasa.wfrp_master.common.core.ui.buttons.CloseButton
 import cz.frantisekmasa.wfrp_master.common.core.ui.flow.collectWithLifecycle
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.EmptyUI
@@ -62,7 +63,7 @@ internal fun CompendiumBlessingChooser(
             Box(Modifier.weight(1f)) {
                 if (compendiumBlessings.isEmpty()) {
                     EmptyUI(
-                        drawableResourceId = R.drawable.ic_pray,
+                        icon = Resources.Drawable.Blessing,
                         textId = R.string.no_blessings_in_compendium,
                         subTextId = if (totalCompendiumBlessingCount == 0)
                             R.string.no_items_in_compendium_sub_text_player else
@@ -87,7 +88,7 @@ internal fun CompendiumBlessingChooser(
                                         }
                                     }
                                 ),
-                                icon = { ItemIcon(R.drawable.ic_spells, ItemIcon.Size.Small) },
+                                icon = { ItemIcon(Resources.Drawable.Spell, ItemIcon.Size.Small) },
                                 text = { Text(blessing.name) }
                             )
                         }

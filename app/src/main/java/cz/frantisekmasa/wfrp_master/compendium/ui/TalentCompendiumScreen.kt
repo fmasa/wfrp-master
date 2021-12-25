@@ -13,7 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import cz.frantisekmasa.wfrp_master.compendium.domain.Talent
+import cz.frantisekmasa.wfrp_master.common.core.shared.Resources
 import cz.frantisekmasa.wfrp_master.common.core.ui.dialogs.DialogState
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.InputValue
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.Rules
@@ -22,6 +22,7 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.forms.inputValue
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.EmptyUI
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.ItemIcon
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
+import cz.frantisekmasa.wfrp_master.compendium.domain.Talent
 import cz.muni.fi.rpg.R
 import java.util.UUID
 
@@ -33,7 +34,7 @@ fun TalentCompendiumTab(viewModel: CompendiumViewModel, width: Dp) {
             EmptyUI(
                 textId = R.string.no_talents_in_compendium,
                 subTextId = R.string.no_talents_in_compendium_sub_text,
-                drawableResourceId = R.drawable.ic_skills
+                icon = Resources.Drawable.Skill,
             )
         },
         remover = viewModel::remove,
@@ -42,7 +43,7 @@ fun TalentCompendiumTab(viewModel: CompendiumViewModel, width: Dp) {
         width = width,
     ) { talent ->
         ListItem(
-            icon = { ItemIcon(R.drawable.ic_skills) },
+            icon = { ItemIcon(Resources.Drawable.Skill) },
             text = { Text(talent.name) }
         )
         Divider()

@@ -18,6 +18,8 @@ import androidx.compose.material.Scaffold
 import androidx.compose.material.Switch
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Redeem
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
@@ -94,7 +96,7 @@ private fun BuyPremiumButton(viewModel: PremiumViewModel) {
                 viewModel.purchasePremium(activity)
             }
         },
-        icon = { Icon(painterResource(R.drawable.ic_premium), VisualOnlyIconDescription) },
+        icon = { Icon(Icons.Rounded.Redeem, VisualOnlyIconDescription) },
         text = { Text(stringResource(R.string.buy_premium)) },
     )
 }

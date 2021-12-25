@@ -31,6 +31,9 @@ import androidx.compose.material.SwipeableDefaults
 import androidx.compose.material.Text
 import androidx.compose.material.TextButton
 import androidx.compose.material.TopAppBar
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.ArrowBack
+import androidx.compose.material.icons.rounded.ArrowForward
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
@@ -50,6 +53,7 @@ import androidx.compose.ui.unit.dp
 import cz.frantisekmasa.wfrp_master.combat.domain.encounter.Wounds
 import cz.frantisekmasa.wfrp_master.common.core.ads.BannerAd
 import cz.frantisekmasa.wfrp_master.common.core.auth.LocalUser
+import cz.frantisekmasa.wfrp_master.common.core.shared.Resources
 import cz.frantisekmasa.wfrp_master.common.core.ui.buttons.BackButton
 import cz.frantisekmasa.wfrp_master.common.core.ui.components.CharacterAvatar
 import cz.frantisekmasa.wfrp_master.common.core.ui.components.CharacteristicsTable
@@ -200,7 +204,7 @@ private fun BottomBar(turn: Int, round: Int, viewModel: CombatViewModel) {
                 },
             ) {
                 Icon(
-                    painterResource(R.drawable.ic_arrow_back),
+                    Icons.Rounded.ArrowBack,
                     stringResource(R.string.icon_previous_turn),
                 )
             }
@@ -213,7 +217,7 @@ private fun BottomBar(turn: Int, round: Int, viewModel: CombatViewModel) {
                 }
             ) {
                 Icon(
-                    painterResource(R.drawable.ic_arrow_forward),
+                    Icons.Rounded.ArrowForward,
                     stringResource(R.string.icon_next_turn),
                 )
             }
@@ -405,7 +409,7 @@ private fun CombatantListItem(
                             CharacterAvatar(combatant.avatarUrl, ItemIcon.Size.Small)
                         }
                         is CombatantItem.Npc -> {
-                            ItemIcon(R.drawable.ic_npc, ItemIcon.Size.Small)
+                            ItemIcon(Resources.Drawable.Npc, ItemIcon.Size.Small)
                         }
                     }
                 },

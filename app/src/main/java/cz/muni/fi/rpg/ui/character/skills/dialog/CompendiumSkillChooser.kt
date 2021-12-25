@@ -18,6 +18,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.key
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import cz.frantisekmasa.wfrp_master.common.core.shared.Resources
 import cz.frantisekmasa.wfrp_master.common.core.ui.flow.collectWithLifecycle
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.EmptyUI
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.FullScreenProgress
@@ -55,7 +56,7 @@ internal fun CompendiumSkillChooser(
             Box(Modifier.weight(1f)) {
                 if (compendiumSkills.isEmpty()) {
                     EmptyUI(
-                        drawableResourceId = R.drawable.ic_skills,
+                        icon = Resources.Drawable.Skill,
                         textId = R.string.no_skills_in_compendium,
                         subTextId = if (totalCompendiumSkillCount == 0)
                             R.string.no_skills_in_compendium_sub_text_player

@@ -23,10 +23,11 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import cz.frantisekmasa.wfrp_master.common.core.domain.identifiers.CharacterId
+import cz.frantisekmasa.wfrp_master.common.core.shared.Resources
+import cz.frantisekmasa.wfrp_master.common.core.shared.drawableResource
 import cz.frantisekmasa.wfrp_master.common.core.ui.buttons.CardButton
 import cz.frantisekmasa.wfrp_master.common.core.ui.dialogs.DialogState
 import cz.frantisekmasa.wfrp_master.common.core.ui.flow.collectWithLifecycle
@@ -35,6 +36,7 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.CardItem
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.CardTitle
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.ContextMenu
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.EmptyUI
+import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.ItemIcon
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.TopPanel
 import cz.frantisekmasa.wfrp_master.common.core.viewModel.viewModel
@@ -136,7 +138,7 @@ private fun CharacterEncumbrance(viewModel: InventoryViewModel, modifier: Modifi
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Icon(
-            painterResource(R.drawable.ic_encumbrance),
+            drawableResource(Resources.Drawable.TrappingEncumbrance),
             stringResource(R.string.icon_total_encumbrance),
             Modifier.size(18.dp),
         )
@@ -163,7 +165,7 @@ private fun InventoryItemsCard(
             if (items.isEmpty()) {
                 EmptyUI(
                     R.string.no_inventory_item_prompt,
-                    R.drawable.ic_container,
+                    Resources.Drawable.TrappingContainer,
                     size = EmptyUI.Size.Small
                 )
             } else {
@@ -192,7 +194,7 @@ private fun InventoryItemList(
             CardItem(
                 name = item.name,
                 description = item.description,
-                iconRes = trappingIcon(item.trappingType),
+                icon = { ItemIcon(trappingIcon(item.trappingType), ItemIcon.Size.Small) },
                 onClick = { onClick(item) },
                 contextMenuItems = listOf(
                     ContextMenu.Item(
@@ -217,7 +219,7 @@ private fun InventoryItemList(
                                 horizontalArrangement = Arrangement.spacedBy(Spacing.tiny)
                             ) {
                                 Icon(
-                                    painterResource(R.drawable.ic_encumbrance),
+                                    drawableResource(Resources.Drawable.TrappingEncumbrance),
                                     stringResource(R.string.icon_item_encumbrance),
                                     Modifier.size(Spacing.medium),
                                 )
@@ -233,10 +235,10 @@ private fun InventoryItemList(
 
 @Composable
 private fun trappingIcon(trappingType: TrappingType?) = when (trappingType) {
-    is TrappingType.Ammunition -> R.drawable.ic_ammunition
-    is TrappingType.Armour -> R.drawable.ic_armor_chest
-    is TrappingType.MeleeWeapon -> R.drawable.ic_weapon_skill
-    is TrappingType.Container -> R.drawable.ic_container
-    is TrappingType.RangedWeapon -> R.drawable.ic_ballistic_skill
-    null -> R.drawable.ic_miscellaneous
+    is TrappingType.Ammunition -> Resources.Drawable.TrappingAmmunition
+    is TrappingType.Armour -> Resources.Drawable.ArmorChest
+    is TrappingType.MeleeWeapon -> Resources.Drawable.WeaponSkill
+    is TrappingType.Container -> Resources.Drawable.TrappingContainer
+    is TrappingType.RangedWeapon -> Resources.Drawable.BallisticSkill
+    null -> Resources.Drawable.TrappingMiscellaneous
 }

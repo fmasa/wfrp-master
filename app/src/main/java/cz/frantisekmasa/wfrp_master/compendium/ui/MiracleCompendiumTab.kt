@@ -13,6 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import cz.frantisekmasa.wfrp_master.common.core.shared.Resources
 import cz.frantisekmasa.wfrp_master.compendium.domain.Miracle
 import cz.frantisekmasa.wfrp_master.common.core.ui.dialogs.DialogState
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.InputValue
@@ -33,7 +34,7 @@ fun MiracleCompendiumTab(viewModel: CompendiumViewModel, width: Dp) {
             EmptyUI(
                 textId = R.string.no_miracles_in_compendium,
                 subTextId = R.string.no_miracles_in_compendium_sub_text,
-                drawableResourceId = R.drawable.ic_pray
+                icon = Resources.Drawable.Miracle
             )
         },
         remover = viewModel::remove,
@@ -42,7 +43,7 @@ fun MiracleCompendiumTab(viewModel: CompendiumViewModel, width: Dp) {
         width = width,
     ) { miracle ->
         ListItem(
-            icon = { ItemIcon(R.drawable.ic_pray) },
+            icon = { ItemIcon(Resources.Drawable.Miracle) },
             text = { Text(miracle.name) }
         )
         Divider()

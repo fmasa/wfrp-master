@@ -17,13 +17,14 @@ import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import cz.frantisekmasa.wfrp_master.compendium.domain.Talent
+import cz.frantisekmasa.wfrp_master.common.core.shared.Resources
 import cz.frantisekmasa.wfrp_master.common.core.ui.buttons.CloseButton
 import cz.frantisekmasa.wfrp_master.common.core.ui.flow.collectWithLifecycle
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.EmptyUI
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.FullScreenProgress
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.ItemIcon
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
+import cz.frantisekmasa.wfrp_master.compendium.domain.Talent
 import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.viewModels.TalentsViewModel
 
@@ -54,7 +55,7 @@ internal fun CompendiumTalentChooser(
             Box(Modifier.weight(1f)) {
                 if (compendiumTalents.isEmpty()) {
                     EmptyUI(
-                        drawableResourceId = R.drawable.ic_skills,
+                        icon = Resources.Drawable.Skill,
                         textId = R.string.no_talents_in_compendium,
                         subTextId = if (totalCompendiumTalentCount == 0)
                             R.string.no_talents_in_compendium_sub_text_player
@@ -65,7 +66,7 @@ internal fun CompendiumTalentChooser(
                         items(compendiumTalents) { talent ->
                             ListItem(
                                 modifier = Modifier.clickable(onClick = { onTalentSelected(talent) }),
-                                icon = { ItemIcon(R.drawable.ic_skills, ItemIcon.Size.Small) },
+                                icon = { ItemIcon(Resources.Drawable.Skill, ItemIcon.Size.Small) },
                                 text = { Text(talent.name) }
                             )
                         }

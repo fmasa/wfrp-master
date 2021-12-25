@@ -8,11 +8,12 @@ import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Edit
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import cz.frantisekmasa.wfrp_master.combat.ui.ActiveCombatBanner
 import cz.frantisekmasa.wfrp_master.common.core.ads.BannerAd
@@ -72,7 +73,7 @@ fun CharacterDetailScreen(routing: Routing<Route.CharacterDetail>) {
                 },
                 actions = {
                     IconAction(
-                        painterResource(R.drawable.ic_edit),
+                        Icons.Rounded.Edit,
                         stringResource(R.string.icon_edit_character),
                         onClick = { routing.navigateTo(Route.CharacterEdit(characterId)) },
                     )

@@ -13,6 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import cz.frantisekmasa.wfrp_master.common.core.domain.Stats
+import cz.frantisekmasa.wfrp_master.common.core.shared.Resources
 import cz.frantisekmasa.wfrp_master.common.core.ui.buttons.CardButton
 import cz.frantisekmasa.wfrp_master.common.core.ui.flow.collectWithLifecycle
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.CardContainer
@@ -46,7 +47,7 @@ internal fun SkillsCard(
             if (skills.isEmpty()) {
                 EmptyUI(
                     R.string.no_skills,
-                    R.drawable.ic_skills,
+                    Resources.Drawable.Skill,
                     size = EmptyUI.Size.Small
                 )
             } else {

@@ -11,11 +11,13 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import cz.frantisekmasa.wfrp_master.common.core.shared.Resources
 import cz.frantisekmasa.wfrp_master.common.core.ui.buttons.CardButton
 import cz.frantisekmasa.wfrp_master.common.core.ui.flow.collectWithLifecycle
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.CardContainer
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.CardItem
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.ContextMenu
+import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.ItemIcon
 import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.model.domain.talents.Talent
 import cz.muni.fi.rpg.ui.character.talents.dialog.AddTalentDialog
@@ -79,7 +81,7 @@ private fun TalentItem(talent: Talent, onClick: () -> Unit, onRemove: () -> Unit
     CardItem(
         name = talent.name,
         description = talent.description,
-        iconRes = R.drawable.ic_skills,
+        icon = { ItemIcon(Resources.Drawable.Skill, ItemIcon.Size.Small) },
         onClick = onClick,
         contextMenuItems = listOf(
             ContextMenu.Item(stringResource(R.string.remove), onClick = { onRemove() })
