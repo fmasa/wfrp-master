@@ -1,9 +1,6 @@
 package cz.frantisekmasa.wfrp_master.common.core.ui.forms
 
-import android.annotation.SuppressLint
-import androidx.annotation.StringRes
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.res.stringResource
 import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
 
 class Rules(private vararg val rules: Rule) : Rule {
@@ -71,21 +68,6 @@ private data class CallbackRule(
 ) : Rule {
     override fun errorMessage(value: String) = if (validate(value)) null else errorMessage
 }
-
-@SuppressLint("ComposableNaming")
-@Composable
-@Deprecated(
-    "Use version with string errorMessage",
-    ReplaceWith(
-        "rule(stringResource(errorMessageResource), validate,)",
-        "androidx.compose.ui.res.stringResource"
-    )
-)
-fun Rule(@StringRes errorMessageResource: Int, validate: (String) -> Boolean): Rule = rule(
-    stringResource(errorMessageResource),
-    validate,
-)
-
 
 @Composable
 fun rule(errorMessage: String, validate: (String) -> Boolean): Rule = CallbackRule(

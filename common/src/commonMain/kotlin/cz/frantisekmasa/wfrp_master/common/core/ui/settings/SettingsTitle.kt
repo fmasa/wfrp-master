@@ -1,4 +1,4 @@
-package cz.frantisekmasa.wfrp_master.common.core.ui.components.settings
+package cz.frantisekmasa.wfrp_master.common.core.ui.settings
 
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.MaterialTheme

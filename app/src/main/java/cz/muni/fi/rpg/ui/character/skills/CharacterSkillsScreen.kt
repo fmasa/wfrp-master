@@ -8,10 +8,10 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import cz.frantisekmasa.wfrp_master.common.core.domain.identifiers.CharacterId
-import cz.frantisekmasa.wfrp_master.common.core.ui.components.Breakpoint
-import cz.frantisekmasa.wfrp_master.common.core.ui.components.ColumnSize.FullWidth
-import cz.frantisekmasa.wfrp_master.common.core.ui.components.ColumnSize.HalfWidth
-import cz.frantisekmasa.wfrp_master.common.core.ui.components.Container
+import cz.frantisekmasa.wfrp_master.common.core.ui.responsive.Breakpoint
+import cz.frantisekmasa.wfrp_master.common.core.ui.responsive.ColumnSize.FullWidth
+import cz.frantisekmasa.wfrp_master.common.core.ui.responsive.ColumnSize.HalfWidth
+import cz.frantisekmasa.wfrp_master.common.core.ui.responsive.Container
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
 import cz.frantisekmasa.wfrp_master.common.core.viewModel.viewModel
 import cz.muni.fi.rpg.ui.character.talents.TalentsCard

@@ -15,11 +15,11 @@ import androidx.compose.ui.unit.dp
 import cz.frantisekmasa.wfrp_master.common.core.domain.localizedName
 import cz.frantisekmasa.wfrp_master.common.core.ui.buttons.CardButton
 import cz.frantisekmasa.wfrp_master.common.core.ui.buttons.CloseButton
-import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.CardContainer
-import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.SingleLineTextValue
+import cz.frantisekmasa.wfrp_master.common.core.ui.cards.CardContainer
+import cz.frantisekmasa.wfrp_master.common.core.ui.text.SingleLineTextValue
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
 import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
-import cz.muni.fi.rpg.ui.common.composables.CardTitle
+import cz.frantisekmasa.wfrp_master.common.core.ui.cards.CardTitle
 
 @Composable
 internal fun TestResultScreen(

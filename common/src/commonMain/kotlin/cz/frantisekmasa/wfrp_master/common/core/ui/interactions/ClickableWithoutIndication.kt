@@ -1,4 +1,4 @@
-package cz.frantisekmasa.wfrp_master.common.core.ui.primitives
+package cz.frantisekmasa.wfrp_master.common.core.ui.interactions
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource

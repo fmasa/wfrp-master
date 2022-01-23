@@ -2,7 +2,7 @@ package cz.frantisekmasa.wfrp_master.religion.ui.miracles
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
-import cz.frantisekmasa.wfrp_master.common.core.ui.components.FormDialog
+import cz.frantisekmasa.wfrp_master.common.core.ui.forms.FormDialog
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.HydratedFormData
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.InputValue
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.Rules

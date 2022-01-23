@@ -17,8 +17,8 @@ import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import cz.frantisekmasa.wfrp_master.common.core.utils.moveItem
 import kotlinx.coroutines.launch
-import java.util.Collections
 import kotlin.math.roundToInt
 
 /**
@@ -157,13 +157,3 @@ private fun calculateYCoordinateOfDraggedItem(
     return draggedItemYOffset.value.roundToInt() + placeableHeights.take(draggedItemIndex).sum()
 }
 
-private fun <T> List<T>.moveItem(sourceIndex: Int, targetIndex: Int): List<T> {
-    return toMutableList()
-        .apply {
-            if (sourceIndex <= targetIndex) {
-                Collections.rotate(subList(sourceIndex, targetIndex + 1), -1)
-            } else {
-                Collections.rotate(subList(targetIndex, sourceIndex + 1), 1)
-            }
-        }
-}

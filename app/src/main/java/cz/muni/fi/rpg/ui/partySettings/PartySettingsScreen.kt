@@ -9,8 +9,8 @@ import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import cz.frantisekmasa.wfrp_master.common.core.ui.buttons.BackButton
-import cz.frantisekmasa.wfrp_master.common.core.ui.components.settings.SettingsCard
-import cz.frantisekmasa.wfrp_master.common.core.ui.components.settings.SettingsTitle
+import cz.frantisekmasa.wfrp_master.common.core.ui.settings.SettingsCard
+import cz.frantisekmasa.wfrp_master.common.core.ui.settings.SettingsTitle
 import cz.frantisekmasa.wfrp_master.common.core.ui.flow.collectWithLifecycle
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.FullScreenProgress
 import cz.frantisekmasa.wfrp_master.common.core.viewModel.viewModel

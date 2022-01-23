@@ -1,4 +1,4 @@
-package cz.frantisekmasa.wfrp_master.common.core.ui.components
+package cz.frantisekmasa.wfrp_master.common.core.ui.responsive
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.BoxWithConstraints

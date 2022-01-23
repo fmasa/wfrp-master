@@ -53,13 +53,13 @@ import cz.frantisekmasa.wfrp_master.common.core.ads.BannerAd
 import cz.frantisekmasa.wfrp_master.common.core.auth.LocalUser
 import cz.frantisekmasa.wfrp_master.common.core.shared.Resources
 import cz.frantisekmasa.wfrp_master.common.core.ui.buttons.BackButton
-import cz.frantisekmasa.wfrp_master.common.core.ui.components.CharacterAvatar
-import cz.frantisekmasa.wfrp_master.common.core.ui.components.CharacteristicsTable
+import cz.frantisekmasa.wfrp_master.common.core.ui.CharacterAvatar
+import cz.frantisekmasa.wfrp_master.common.core.ui.CharacteristicsTable
 import cz.frantisekmasa.wfrp_master.common.core.ui.flow.collectWithLifecycle
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.DraggableListFor
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.FullScreenProgress
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.ItemIcon
-import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.NumberPicker
+import cz.frantisekmasa.wfrp_master.common.core.ui.forms.NumberPicker
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
 import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.OptionsAction
 import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.Subtitle

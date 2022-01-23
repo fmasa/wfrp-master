@@ -1,9 +1,7 @@
-package cz.frantisekmasa.wfrp_master.common.core.ui.primitives
+package cz.frantisekmasa.wfrp_master.common.core.ui.menu
 
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Box
-import androidx.compose.material.DropdownMenu
-import androidx.compose.material.DropdownMenuItem
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -12,14 +10,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.ContextMenu
 import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
-
-object ContextMenu {
-    data class Item(
-        val text: String,
-        val onClick: () -> Unit
-    )
-}
 
 @Composable
 fun WithContextMenu(

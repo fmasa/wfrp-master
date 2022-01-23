@@ -1,9 +1,7 @@
 package cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding
 
-import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.material.ContentAlpha
-import androidx.compose.material.DropdownMenu
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.LocalContentColor
@@ -21,11 +19,10 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.intl.Locale
 import androidx.compose.ui.text.toUpperCase
+import cz.frantisekmasa.wfrp_master.common.core.ui.menu.DropdownMenu
 import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
 
 @Composable
@@ -47,22 +44,6 @@ fun TopBarAction(
 }
 
 @Composable
-@Deprecated("Use version text instead")
-fun TopBarAction(
-    modifier: Modifier = Modifier,
-    enabled: Boolean = true,
-    onClick: () -> Unit,
-    @StringRes textRes: Int,
-) {
-    TopBarAction(
-        modifier = modifier,
-        enabled = enabled,
-        onClick = onClick,
-        text = stringResource(textRes)
-    )
-}
-
-@Composable
 fun OptionsAction(content: @Composable ColumnScope.() -> Unit) {
     var contextMenuExpanded by remember { mutableStateOf(false) }
 
@@ -76,13 +57,6 @@ fun OptionsAction(content: @Composable ColumnScope.() -> Unit) {
         expanded = contextMenuExpanded, onDismissRequest = { contextMenuExpanded = false },
         content = content,
     )
-}
-
-@Composable
-fun IconAction(painter: Painter, description: String, onClick: () -> Unit) {
-    IconButton(onClick = onClick) {
-        Icon(painter, description, tint = contentColorFor(MaterialTheme.colors.primarySurface))
-    }
 }
 
 @Composable

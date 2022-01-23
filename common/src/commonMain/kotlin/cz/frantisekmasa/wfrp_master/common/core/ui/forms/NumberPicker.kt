@@ -1,4 +1,4 @@
-package cz.frantisekmasa.wfrp_master.common.core.ui.primitives
+package cz.frantisekmasa.wfrp_master.common.core.ui.forms
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column

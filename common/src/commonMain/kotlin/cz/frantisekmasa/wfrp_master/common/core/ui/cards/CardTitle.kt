@@ -1,6 +1,5 @@
-package cz.muni.fi.rpg.ui.common.composables
+package cz.frantisekmasa.wfrp_master.common.core.ui.cards
 
-import androidx.annotation.StringRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
@@ -17,15 +16,9 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.VisualOnlyIconDescription
-
-@Composable
-fun CardTitle(@StringRes textRes: Int, icon: ImageVector? = null) {
-    CardTitle(stringResource(textRes), icon)
-}
 
 @Composable
 fun CardTitle(text: String, icon: ImageVector? = null) {

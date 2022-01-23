@@ -1,10 +1,11 @@
-package cz.frantisekmasa.wfrp_master.common.core.ui.primitives
+package cz.frantisekmasa.wfrp_master.common.core.ui.cards
 
-import androidx.annotation.DrawableRes
 import androidx.compose.material.Divider
 import androidx.compose.material.ListItem
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.ContextMenu
+import cz.frantisekmasa.wfrp_master.common.core.ui.menu.WithContextMenu
 
 @Composable
 fun CardItem(

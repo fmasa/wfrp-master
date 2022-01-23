@@ -13,15 +13,15 @@ import androidx.compose.ui.unit.dp
 import cz.frantisekmasa.wfrp_master.common.core.shared.Resources
 import cz.frantisekmasa.wfrp_master.common.core.ui.buttons.CardButton
 import cz.frantisekmasa.wfrp_master.common.core.ui.flow.collectWithLifecycle
-import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.CardContainer
-import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.CardItem
+import cz.frantisekmasa.wfrp_master.common.core.ui.cards.CardContainer
+import cz.frantisekmasa.wfrp_master.common.core.ui.cards.CardItem
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.ContextMenu
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.ItemIcon
 import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
 import cz.muni.fi.rpg.model.domain.talents.Talent
 import cz.muni.fi.rpg.ui.character.talents.dialog.AddTalentDialog
 import cz.muni.fi.rpg.ui.character.talents.dialog.EditTalentDialog
-import cz.muni.fi.rpg.ui.common.composables.CardTitle
+import cz.frantisekmasa.wfrp_master.common.core.ui.cards.CardTitle
 import cz.muni.fi.rpg.viewModels.TalentsViewModel
 import java.util.UUID
 

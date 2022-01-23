@@ -12,7 +12,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.clickableWithoutIndication
+import cz.frantisekmasa.wfrp_master.common.core.ui.interactions.clickableWithoutIndication
 
 @Composable
 fun CheckboxWithText(

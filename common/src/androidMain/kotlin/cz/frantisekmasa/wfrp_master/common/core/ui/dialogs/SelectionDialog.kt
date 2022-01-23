@@ -25,8 +25,8 @@ import androidx.compose.ui.text.intl.Locale
 import androidx.compose.ui.text.toUpperCase
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
+import cz.frantisekmasa.wfrp_master.common.core.ui.interactions.clickableWithoutIndication
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
-import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.clickableWithoutIndication
 import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
 
 @Composable

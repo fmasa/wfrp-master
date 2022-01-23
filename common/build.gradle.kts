@@ -23,7 +23,7 @@ kotlin {
         }
 
         val ktorVersion = "1.6.7"
-        named("commonMain") {
+        val commonMain by getting {
             dependencies {
                 api(compose.runtime)
                 api(compose.ui)
@@ -55,7 +55,14 @@ kotlin {
                 api("io.github.aakira:napier:2.1.0")
             }
         }
-        named("androidMain") {
+
+        val commonTest by getting {
+            dependencies {
+                implementation(kotlin("test"))
+            }
+        }
+
+        val androidMain by getting {
             dependencies {
                 api("androidx.appcompat:appcompat:1.3.1")
                 api("androidx.core:core-ktx:1.3.1")
@@ -87,6 +94,15 @@ kotlin {
                 // Premium
                 // TODO: Make implementation only
                 api("com.revenuecat.purchases:purchases:4.0.2")
+            }
+        }
+
+        val androidTest by getting {
+            dependsOn(commonTest)
+            dependencies {
+                dependsOn(sourceSets.getByName("commonTest"))
+                implementation(kotlin("test-junit"))
+                runtimeOnly("org.junit.jupiter:junit-jupiter-engine:5.6.0")
             }
         }
     }

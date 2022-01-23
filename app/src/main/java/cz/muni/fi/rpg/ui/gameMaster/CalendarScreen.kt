@@ -37,7 +37,7 @@ import cz.frantisekmasa.wfrp_master.common.core.domain.time.DateTime
 import cz.frantisekmasa.wfrp_master.common.core.domain.time.ImperialDate
 import cz.frantisekmasa.wfrp_master.common.core.domain.time.MannsliebPhase
 import cz.frantisekmasa.wfrp_master.common.core.domain.time.YearSeason
-import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.CardContainer
+import cz.frantisekmasa.wfrp_master.common.core.ui.cards.CardContainer
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.VisualOnlyIconDescription
 import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
 import cz.muni.fi.rpg.ui.gameMaster.calendar.ImperialCalendar
