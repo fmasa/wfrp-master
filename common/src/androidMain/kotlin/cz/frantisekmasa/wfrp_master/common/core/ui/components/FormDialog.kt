@@ -1,6 +1,5 @@
 package cz.frantisekmasa.wfrp_master.common.core.ui.components
 
-import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
@@ -16,7 +15,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
 import cz.frantisekmasa.wfrp_master.common.core.ui.buttons.CloseButton
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.HydratedFormData
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.FullScreenProgress
@@ -28,7 +26,7 @@ import kotlinx.coroutines.withContext
 
 @Composable
 fun <T> FormDialog(
-    @StringRes title: Int,
+    title: String,
     onDismissRequest: () -> Unit,
     formData: HydratedFormData<T>,
     onSave: suspend (T) -> Unit,
@@ -41,7 +39,7 @@ fun <T> FormDialog(
         topBar = {
             TopAppBar(
                 navigationIcon = { CloseButton(onDismissRequest) },
-                title = { Text(stringResource(title)) },
+                title = { Text(title) },
                 actions = {
                     val coroutineScope = rememberCoroutineScope()
 

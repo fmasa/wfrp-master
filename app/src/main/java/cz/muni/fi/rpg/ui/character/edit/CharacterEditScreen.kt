@@ -20,7 +20,6 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -39,9 +38,9 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
 import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.SaveAction
 import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.Subtitle
 import cz.frantisekmasa.wfrp_master.common.core.viewModel.viewModel
+import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
 import cz.frantisekmasa.wfrp_master.navigation.Route
 import cz.frantisekmasa.wfrp_master.navigation.Routing
-import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.ui.characterCreation.CharacterBasicInfoForm
 import cz.muni.fi.rpg.ui.characterCreation.CharacterCharacteristicsForm
 import cz.muni.fi.rpg.viewModels.CharacterViewModel
@@ -161,7 +160,7 @@ private fun CharacterEditMainUI(
     HorizontalLine()
 
     Text(
-        stringResource(R.string.title_character_characteristics),
+        LocalStrings.current.character.titleCharacteristics,
         style = MaterialTheme.typography.h6,
         textAlign = TextAlign.Center,
         modifier = Modifier
@@ -174,9 +173,11 @@ private fun CharacterEditMainUI(
 
 @Composable
 private fun MaxWoundsSegment(data: CharacterEditScreen.WoundsData, validate: Boolean) {
+    val strings = LocalStrings.current.points
+
     Column(Modifier.padding(top = 20.dp)) {
         TextInput(
-            label = stringResource(R.string.label_max_wounds),
+            label = strings.maxWounds,
             modifier = Modifier
                 .fillMaxWidth(0.3f)
                 .padding(bottom = 12.dp),
@@ -187,7 +188,7 @@ private fun MaxWoundsSegment(data: CharacterEditScreen.WoundsData, validate: Boo
         )
 
         CheckboxWithText(
-            text = stringResource(R.string.title_checkbox_hardy),
+            text = strings.labelHardy,
             checked = data.hardyTalent.value,
             onCheckedChange = { data.hardyTalent.value = it }
         )
@@ -206,7 +207,7 @@ private fun CharacterEditTopBar(
         title = {
             Column {
                 Text(title)
-                Subtitle(stringResource(R.string.subtitle_edit_character))
+                Subtitle(LocalStrings.current.character.titleEdit)
             }
         },
         actions = {

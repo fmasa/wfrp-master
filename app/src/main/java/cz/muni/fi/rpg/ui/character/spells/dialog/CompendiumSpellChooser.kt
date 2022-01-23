@@ -21,7 +21,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
 import cz.frantisekmasa.wfrp_master.common.core.shared.Resources
 import cz.frantisekmasa.wfrp_master.common.core.ui.buttons.CloseButton
 import cz.frantisekmasa.wfrp_master.common.core.ui.flow.collectWithLifecycle
@@ -29,7 +28,7 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.EmptyUI
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.FullScreenProgress
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.ItemIcon
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
-import cz.muni.fi.rpg.R
+import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
 import cz.muni.fi.rpg.model.domain.spells.Spell
 import cz.muni.fi.rpg.viewModels.SpellsViewModel
 import kotlinx.coroutines.Dispatchers
@@ -44,11 +43,13 @@ internal fun CompendiumSpellChooser(
     onCustomSpellRequest: () -> Unit,
     onDismissRequest: () -> Unit,
 ) {
+    val strings = LocalStrings.current.spells
+
     Scaffold(
         topBar = {
             TopAppBar(
                 navigationIcon = { CloseButton(onDismissRequest) },
-                title = { Text(stringResource(R.string.title_choose_compendium_spell)) },
+                title = { Text(strings.titleChooseCompendiumSpell) },
             )
         }
     ) {
@@ -64,12 +65,14 @@ internal fun CompendiumSpellChooser(
         Column(Modifier.fillMaxSize()) {
             Box(Modifier.weight(1f)) {
                 if (compendiumSpells.isEmpty()) {
+
                     EmptyUI(
                         icon = Resources.Drawable.Spell,
-                        textId = R.string.no_spells_in_compendium,
-                        subTextId = if (totalCompendiumSpellCount == 0)
-                            R.string.no_spells_in_compendium_sub_text_player
-                        else null,
+                        text = strings.messages.noSpellsInCompendium,
+                        subText = when (totalCompendiumSpellCount) {
+                            0 -> strings.messages.noSpellsInCompendium
+                            else -> null
+                        },
                     )
                 } else {
                     val coroutineScope = rememberCoroutineScope()
@@ -114,7 +117,7 @@ internal fun CompendiumSpellChooser(
                     .padding(Spacing.bodyPadding),
                 onClick = onCustomSpellRequest,
             ) {
-                Text(stringResource(R.string.button_add_non_compendium_spell))
+                Text(strings.buttonAddNonCompendium)
             }
         }
     }

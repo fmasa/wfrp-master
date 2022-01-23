@@ -1,6 +1,5 @@
 package cz.frantisekmasa.wfrp_master.combat.ui
 
-import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -26,6 +25,7 @@ import androidx.compose.material.ModalBottomSheetLayout
 import androidx.compose.material.ModalBottomSheetState
 import androidx.compose.material.ModalBottomSheetValue
 import androidx.compose.material.Scaffold
+import androidx.compose.material.SnackbarHostState
 import androidx.compose.material.Surface
 import androidx.compose.material.SwipeableDefaults
 import androidx.compose.material.Text
@@ -34,7 +34,9 @@ import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowBack
 import androidx.compose.material.icons.rounded.ArrowForward
+import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -43,12 +45,8 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.intl.Locale
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.toUpperCase
 import androidx.compose.ui.unit.dp
 import cz.frantisekmasa.wfrp_master.combat.domain.encounter.Wounds
 import cz.frantisekmasa.wfrp_master.common.core.ads.BannerAd
@@ -66,6 +64,7 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
 import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.OptionsAction
 import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.Subtitle
 import cz.frantisekmasa.wfrp_master.common.core.viewModel.viewModel
+import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
 import cz.frantisekmasa.wfrp_master.navigation.Route
 import cz.frantisekmasa.wfrp_master.navigation.Routing
 import cz.muni.fi.rpg.R
@@ -78,8 +77,9 @@ import org.koin.core.parameter.parametersOf
 @Composable
 fun ActiveCombatScreen(routing: Routing<Route.ActiveCombat>) {
     val viewModel: CombatViewModel by viewModel { parametersOf(routing.route.partyId) }
+    val scaffoldState = rememberScaffoldState()
 
-    AutoCloseOnEndedCombat(viewModel, routing)
+    AutoCloseOnEndedCombat(scaffoldState.snackbarHostState, viewModel, routing)
 
     val coroutineScope = rememberCoroutineScope()
 
@@ -116,14 +116,17 @@ fun ActiveCombatScreen(routing: Routing<Route.ActiveCombat>) {
         },
     ) {
         Column {
+            val strings = LocalStrings.current
+
             Scaffold(
+                scaffoldState = scaffoldState,
                 modifier = Modifier.weight(1f),
                 topBar = {
                     TopAppBar(
                         navigationIcon = { BackButton(onClick = { routing.pop() }) },
                         title = {
                             Column {
-                                Text(stringResource(R.string.title_combat))
+                                Text(strings.combat.title)
                                 party?.let { Subtitle(it.getName()) }
                             }
                         },
@@ -134,7 +137,7 @@ fun ActiveCombatScreen(routing: Routing<Route.ActiveCombat>) {
 
                             OptionsAction {
                                 DropdownMenuItem(
-                                    content = { Text(stringResource(R.string.combat_end)) },
+                                    content = { Text(strings.combat.buttonEndCombat) },
                                     onClick = {
                                         coroutineScope.launch(Dispatchers.IO) {
                                             viewModel.endCombat()
@@ -190,6 +193,7 @@ private fun canEditCombatant(userId: String, isGameMaster: Boolean, combatant: C
 @Composable
 private fun BottomBar(turn: Int, round: Int, viewModel: CombatViewModel) {
     val coroutineScope = rememberCoroutineScope()
+    val strings = LocalStrings.current.combat
 
     BottomAppBar(backgroundColor = MaterialTheme.colors.surface) {
         Row(
@@ -205,11 +209,11 @@ private fun BottomBar(turn: Int, round: Int, viewModel: CombatViewModel) {
             ) {
                 Icon(
                     Icons.Rounded.ArrowBack,
-                    stringResource(R.string.icon_previous_turn),
+                    strings.iconPreviousTurn,
                 )
             }
 
-            Text(stringResource(R.string.n_round, round))
+            Text(strings.nthRound(round))
 
             IconButton(
                 onClick = {
@@ -218,7 +222,7 @@ private fun BottomBar(turn: Int, round: Int, viewModel: CombatViewModel) {
             ) {
                 Icon(
                     Icons.Rounded.ArrowForward,
-                    stringResource(R.string.icon_next_turn),
+                    strings.iconNextTurn,
                 )
             }
         }
@@ -238,23 +242,24 @@ private fun rememberNotSavedModalBottomSheetState(): ModalBottomSheetState {
 
 @Composable
 private fun AutoCloseOnEndedCombat(
+    snackbarHostState: SnackbarHostState,
     viewModel: CombatViewModel,
     routing: Routing<Route.ActiveCombat>
 ) {
-    val context = LocalContext.current
     val isCombatActive = viewModel.isCombatActive.collectWithLifecycle(true).value
 
+    val message = LocalStrings.current.combat.messages.noActiveCombat
+
     if (!isCombatActive) {
-        SideEffect {
+        LaunchedEffect(Unit) {
             Napier.d("Closing combat screen")
 
-            Toast.makeText(
-                context,
-                context.getString(R.string.no_active_combat),
-                Toast.LENGTH_SHORT
-            ).show()
+            snackbarHostState.showSnackbar(message)
 
             routing.pop()
+        }
+        val coroutineScope = rememberCoroutineScope()
+        SideEffect {
         }
     }
 }
@@ -323,7 +328,7 @@ private fun CombatantSheet(
                     }
                 )
             },
-            content = { Text(stringResource(R.string.button_detail).toUpperCase(Locale.current)) },
+            content = { Text(LocalStrings.current.commonUi.buttonDetail.uppercase()) },
         )
 
         Row(Modifier.padding(bottom = Spacing.medium)) {
@@ -352,7 +357,7 @@ private fun CombatantWounds(combatant: CombatantItem, viewModel: CombatViewModel
     val wounds = combatant.wounds
 
     NumberPicker(
-        label = stringResource(R.string.label_wounds),
+        label = LocalStrings.current.points.wounds,
         value = wounds.current,
         onIncrement = { updateWounds(wounds.restore(1)) },
         onDecrement = { updateWounds(wounds.lose(1)) },
@@ -371,7 +376,7 @@ private fun CombatantAdvantage(combatant: CombatantItem, viewModel: CombatViewMo
     val advantage = combatant.combatant.advantage
 
     NumberPicker(
-        label = stringResource(R.string.label_advantage),
+        label = LocalStrings.current.combat.labelAdvantage,
         value = advantage,
         onIncrement = { updateAdvantage(advantage + 1) },
         onDecrement = { updateAdvantage(advantage - 1) },

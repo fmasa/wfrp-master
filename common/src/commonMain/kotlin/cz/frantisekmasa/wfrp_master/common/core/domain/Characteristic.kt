@@ -5,16 +5,16 @@ import cz.frantisekmasa.wfrp_master.common.core.shared.Resources
 import cz.frantisekmasa.wfrp_master.common.localization.Strings
 
 enum class Characteristic(override val nameResolver: (strings: Strings) -> String) : NamedEnum {
-    AGILITY({ it.characteristicAgility }),
-    BALLISTIC_SKILL({ it.characteristicBallisticSkill }),
-    DEXTERITY({ it.characteristicDexterity }),
-    INITIATIVE({ it.characteristicFellowship }),
-    INTELLIGENCE({ it.characteristicInitiative }),
-    FELLOWSHIP({ it.characteristicIntelligence }),
-    STRENGTH({ it.characteristicStrength }),
-    TOUGHNESS({ it.characteristicToughness }),
-    WEAPON_SKILL({ it.characteristicWeaponSkill }),
-    WILL_POWER({ it.characteristicWillPower });
+    AGILITY({ it.characteristics.agility }),
+    BALLISTIC_SKILL({ it.characteristics.ballisticSkill }),
+    DEXTERITY({ it.characteristics.dexterity }),
+    INITIATIVE({ it.characteristics.fellowship }),
+    INTELLIGENCE({ it.characteristics.initiative }),
+    FELLOWSHIP({ it.characteristics.intelligence }),
+    STRENGTH({ it.characteristics.strength }),
+    TOUGHNESS({ it.characteristics.toughness }),
+    WEAPON_SKILL({ it.characteristics.weaponSkill }),
+    WILL_POWER({ it.characteristics.willPower });
 
     fun getShortcutName(): String {
         return when (this) {

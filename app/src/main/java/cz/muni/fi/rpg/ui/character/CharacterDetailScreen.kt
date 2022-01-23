@@ -27,6 +27,7 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.tabs.TabPager
 import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.tabs.tab
 import cz.frantisekmasa.wfrp_master.common.core.viewModel.PartyViewModel
 import cz.frantisekmasa.wfrp_master.common.core.viewModel.viewModel
+import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
 import cz.frantisekmasa.wfrp_master.inventory.ui.CharacterTrappingsScreen
 import cz.frantisekmasa.wfrp_master.navigation.Route
 import cz.frantisekmasa.wfrp_master.navigation.Routing
@@ -74,7 +75,7 @@ fun CharacterDetailScreen(routing: Routing<Route.CharacterDetail>) {
                 actions = {
                     IconAction(
                         Icons.Rounded.Edit,
-                        stringResource(R.string.icon_edit_character),
+                        LocalStrings.current.character.titleEdit,
                         onClick = { routing.navigateTo(Route.CharacterEdit(characterId)) },
                     )
                 }
@@ -114,10 +115,12 @@ private fun MainContainer(
             ActiveCombatBanner(partyId = characterId.partyId, routing = routing)
         }
 
+        val strings = LocalStrings.current.character
+
         TabPager(Modifier.weight(1f)) {
             val modifier = Modifier.width(screenWidth)
 
-            tab(R.string.title_character_stats) {
+            tab(strings.tabAttributes) {
                 CharacterCharacteristicsScreen(
                     characterId = characterId,
                     character = character,
@@ -126,7 +129,7 @@ private fun MainContainer(
                 )
             }
 
-            tab(R.string.title_character_conditions) {
+            tab(strings.tabConditions) {
                 CharacterConditionsScreen(
                     character = character,
                     viewModel = viewModel,
@@ -134,7 +137,7 @@ private fun MainContainer(
                 )
             }
 
-            tab(R.string.title_character_skills) {
+            tab(strings.tabSkills) {
                 CharacterSkillsScreen(
                     characterVm = viewModel,
                     modifier = modifier,
@@ -142,14 +145,14 @@ private fun MainContainer(
                 )
             }
 
-            tab(R.string.title_character_spells) {
+            tab(strings.tabSpells) {
                 CharacterSpellsScreen(
                     characterId = characterId,
                     modifier = modifier,
                 )
             }
 
-            tab(R.string.title_character_religion) {
+            tab(strings.tabReligions) {
                 CharacterReligionScreen(
                     characterId = characterId,
                     modifier = modifier,
@@ -158,7 +161,7 @@ private fun MainContainer(
                 )
             }
 
-            tab(R.string.title_character_trappings) {
+            tab(strings.tabTrappings) {
                 CharacterTrappingsScreen(
                     characterId = characterId,
                     modifier = modifier,

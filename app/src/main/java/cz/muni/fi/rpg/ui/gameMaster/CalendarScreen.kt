@@ -26,12 +26,12 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import com.vanpra.composematerialdialogs.MaterialDialog
 import com.vanpra.composematerialdialogs.datetime.time.timepicker
 import com.vanpra.composematerialdialogs.title
+import cz.frantisekmasa.wfrp_master.common.core.domain.localizedName
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.Party
 import cz.frantisekmasa.wfrp_master.common.core.domain.time.DateTime
 import cz.frantisekmasa.wfrp_master.common.core.domain.time.ImperialDate
@@ -39,7 +39,7 @@ import cz.frantisekmasa.wfrp_master.common.core.domain.time.MannsliebPhase
 import cz.frantisekmasa.wfrp_master.common.core.domain.time.YearSeason
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.CardContainer
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.VisualOnlyIconDescription
-import cz.muni.fi.rpg.R
+import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
 import cz.muni.fi.rpg.ui.gameMaster.calendar.ImperialCalendar
 import cz.muni.fi.rpg.viewModels.GameMasterViewModel
 import kotlinx.coroutines.Dispatchers
@@ -83,11 +83,11 @@ private fun Time(viewModel: GameMasterViewModel, time: DateTime.TimeOfDay) {
 
     dialog.build(
         buttons = {
-            positiveButton(stringResource(R.string.button_save))
-            negativeButton(stringResource(R.string.button_cancel))
+            positiveButton(LocalStrings.current.commonUi.buttonSave)
+            negativeButton(LocalStrings.current.commonUi.buttonCancel)
         }
     ) {
-        title(stringResource(R.string.title_select_time))
+        title(LocalStrings.current.calendar.titleSelectTime)
         timepicker(
             LocalTime.of(time.hour, time.minute),
             onTimeChange = { newTime ->
@@ -112,6 +112,7 @@ private fun Time(viewModel: GameMasterViewModel, time: DateTime.TimeOfDay) {
 @Composable
 private fun Date(viewModel: GameMasterViewModel, date: ImperialDate) {
     var dialogVisible by rememberSaveable { mutableStateOf(false) }
+    val strings = LocalStrings.current
 
     if (dialogVisible) {
         Dialog(onDismissRequest = { dialogVisible = false }) {
@@ -140,7 +141,7 @@ private fun Date(viewModel: GameMasterViewModel, date: ImperialDate) {
                                     dialogVisible = false
                                 }
                             }
-                        ) { Text(stringResource(R.string.button_save).uppercase()) }
+                        ) { Text(strings.commonUi.buttonSave.uppercase()) }
                     }
                 }
             }
@@ -160,11 +161,6 @@ private fun Date(viewModel: GameMasterViewModel, date: ImperialDate) {
             VisualOnlyIconDescription,
             Modifier.padding(end = 4.dp),
         )
-        Text(
-            stringResource(
-                R.string.mannslieb_phase,
-                MannsliebPhase.at(date).readableName
-            )
-        )
+        Text(strings.calendar.mannsliebPhase(MannsliebPhase.at(date).localizedName))
     }
 }

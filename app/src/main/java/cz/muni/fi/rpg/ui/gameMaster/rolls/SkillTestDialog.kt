@@ -7,15 +7,14 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.res.stringResource
 import cz.frantisekmasa.wfrp_master.common.core.domain.Expression
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.PartyId
 import cz.frantisekmasa.wfrp_master.common.core.domain.rolls.Dice
 import cz.frantisekmasa.wfrp_master.common.core.domain.rolls.TestResult
 import cz.frantisekmasa.wfrp_master.common.core.ui.dialogs.FullScreenDialog
 import cz.frantisekmasa.wfrp_master.common.core.viewModel.viewModel
+import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
 import cz.frantisekmasa.wfrp_master.compendium.domain.Skill
-import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.viewModels.SkillTestViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
@@ -74,7 +73,7 @@ fun SkillTestDialog(partyId: PartyId, onDismissRequest: () -> Unit) {
             }
             is SkillTestDialogStep.ShowResults -> {
                 TestResultScreen(
-                    testName = stringResource(R.string.title_test, currentStep.testName),
+                    testName = LocalStrings.current.tests.titleTest(currentStep.testName),
                     onDismissRequest = onDismissRequest,
                     results = currentStep.results,
                     onRerollRequest = { step = currentStep.rerollForCharacter(it) }

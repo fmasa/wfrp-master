@@ -12,12 +12,11 @@ import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
 import cz.frantisekmasa.wfrp_master.common.core.ui.buttons.CloseButton
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.NumberPicker
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
 import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.SubheadBar
-import cz.muni.fi.rpg.R
+import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
 import cz.muni.fi.rpg.model.domain.talents.Talent
 
 @Composable
@@ -49,7 +48,7 @@ private fun TimesTakenBar(timesTaken: Int, onTimesTakenChange: (timesTaken: Int)
     SubheadBar {
         Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
             Text(
-                text = stringResource(R.string.label_talent_taken),
+                text = LocalStrings.current.talents.labelTimesTaken,
                 modifier = Modifier.weight(1f),
             )
             NumberPicker(

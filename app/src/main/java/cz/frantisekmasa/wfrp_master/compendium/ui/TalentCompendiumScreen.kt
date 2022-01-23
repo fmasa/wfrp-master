@@ -10,7 +10,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import cz.frantisekmasa.wfrp_master.common.core.shared.Resources
@@ -22,18 +21,20 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.forms.inputValue
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.EmptyUI
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.ItemIcon
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
+import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
 import cz.frantisekmasa.wfrp_master.compendium.domain.Talent
-import cz.muni.fi.rpg.R
 import java.util.UUID
 
 @Composable
 fun TalentCompendiumTab(viewModel: CompendiumViewModel, width: Dp) {
+    val strings = LocalStrings.current.talents.messages
+
     CompendiumTab(
         liveItems = viewModel.talents,
         emptyUI = {
             EmptyUI(
-                textId = R.string.no_talents_in_compendium,
-                subTextId = R.string.no_talents_in_compendium_sub_text,
+                text = strings.noTalentsInCompendium,
+                subText = strings.noTalentsInCompendiumSubtext,
                 icon = Resources.Drawable.Skill,
             )
         },
@@ -90,9 +91,11 @@ private fun TalentDialog(
     val item = dialogStateValue.item
     val formData = TalentFormData.fromTalent(item)
 
+    val strings = LocalStrings.current.talents
+
     CompendiumItemDialog(
         onDismissRequest = { dialogState.value = DialogState.Closed() },
-        title = stringResource(if (item == null) R.string.title_talent_new else R.string.title_talent_edit),
+        title = if (item == null) strings.titleNew else strings.titleEdit,
         formData = formData,
         saver = viewModel::save,
     ) { validate ->
@@ -101,21 +104,21 @@ private fun TalentDialog(
             modifier = Modifier.padding(Spacing.bodyPadding),
         ) {
             TextInput(
-                label = stringResource(R.string.label_name),
+                label = strings.labelName,
                 value = formData.name,
                 validate = validate,
                 maxLength = Talent.NAME_MAX_LENGTH
             )
 
             TextInput(
-                label = stringResource(R.string.label_talent_max_times_taken),
+                label = strings.labelMaxTimesTaken,
                 value = formData.maxTimesTaken,
                 validate = validate,
                 maxLength = Talent.MAX_TIMES_TAKEN_MAX_LENGTH,
             )
 
             TextInput(
-                label = stringResource(R.string.label_description),
+                label = strings.labelDescription,
                 value = formData.description,
                 validate = validate,
                 maxLength = Talent.DESCRIPTION_MAX_LENGTH,

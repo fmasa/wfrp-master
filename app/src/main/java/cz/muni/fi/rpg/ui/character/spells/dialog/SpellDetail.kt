@@ -14,17 +14,17 @@ import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.style.TextDecoration
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import cz.frantisekmasa.wfrp_master.common.core.ui.buttons.CloseButton
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.SingleLineTextValue
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
 import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.SubheadBar
-import cz.muni.fi.rpg.R
+import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
 import cz.muni.fi.rpg.model.domain.spells.Spell
 import cz.muni.fi.rpg.ui.common.composables.Theme
 import java.util.UUID
@@ -46,13 +46,15 @@ fun SpellDetail(
         }
     ) {
         Column(Modifier.verticalScroll(rememberScrollState())) {
+            val strings = LocalStrings.current.spells
+
             SubheadBar {
                 Row(
                     Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
-                    Text(stringResource(R.string.spell_memorized))
+                    Text(strings.labelMemorized)
                     Switch(
                         checked = spell.memorized,
                         onCheckedChange = { onMemorizedChange(it) },
@@ -62,27 +64,26 @@ fun SpellDetail(
 
             Column(Modifier.padding(Spacing.bodyPadding)) {
                 SingleLineTextValue(
-                    R.string.spell_casting_number_shortcut,
-                    with(AnnotatedString.Builder()) {
+                    strings.castingNumberShortcut,
+                    buildAnnotatedString {
                         if (spell.castingNumber != spell.effectiveCastingNumber) {
-                            pushStyle(SpanStyle(textDecoration = TextDecoration.LineThrough))
-                            append(spell.castingNumber.toString())
-                            pop()
+                            withStyle(SpanStyle(textDecoration = TextDecoration.LineThrough)) {
+                                append(spell.castingNumber.toString())
+                            }
 
                             append(" ➔ ")
                         }
 
                         append(spell.effectiveCastingNumber.toString())
-
-                        toAnnotatedString()
                     }
                 )
 
-                SingleLineTextValue(R.string.label_range, spell.range)
 
-                SingleLineTextValue(R.string.label_target, spell.target)
+                SingleLineTextValue(strings.labelRange, spell.range)
 
-                SingleLineTextValue(R.string.label_duration, spell.duration)
+                SingleLineTextValue(strings.labelTarget, spell.target)
+
+                SingleLineTextValue(strings.labelDuration, spell.duration)
 
                 Text(
                     text = spell.effect,

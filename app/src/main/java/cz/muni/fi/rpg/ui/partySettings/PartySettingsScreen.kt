@@ -8,27 +8,27 @@ import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
 import cz.frantisekmasa.wfrp_master.common.core.ui.buttons.BackButton
 import cz.frantisekmasa.wfrp_master.common.core.ui.components.settings.SettingsCard
 import cz.frantisekmasa.wfrp_master.common.core.ui.components.settings.SettingsTitle
 import cz.frantisekmasa.wfrp_master.common.core.ui.flow.collectWithLifecycle
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.FullScreenProgress
 import cz.frantisekmasa.wfrp_master.common.core.viewModel.viewModel
+import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
 import cz.frantisekmasa.wfrp_master.navigation.Route
 import cz.frantisekmasa.wfrp_master.navigation.Routing
-import cz.muni.fi.rpg.R
 import org.koin.core.parameter.parametersOf
 
 @Composable
 fun PartySettingsScreen(routing: Routing<Route.PartySettings>) {
     val viewModel: PartySettingsViewModel by viewModel { parametersOf(routing.route.partyId) }
+    val strings = LocalStrings.current
 
     Scaffold(
         topBar = {
             TopAppBar(
                 navigationIcon = { BackButton(onClick = { routing.pop() }) },
-                title = { Text(stringResource(R.string.title_party_settings)) },
+                title = { Text(strings.parties.titleSettings) },
             )
         },
     ) {
@@ -41,10 +41,10 @@ fun PartySettingsScreen(routing: Routing<Route.PartySettings>) {
 
         Column(Modifier.verticalScroll(rememberScrollState())) {
             SettingsCard {
-                SettingsTitle(R.string.party_section_general)
+                SettingsTitle(strings.parties.titleSettingsGeneral)
                 PartyNameItem(party.getName(), viewModel)
 
-                SettingsTitle(R.string.title_combat)
+                SettingsTitle(strings.combat.title)
                 InitiativeStrategyItem(party, viewModel)
             }
         }

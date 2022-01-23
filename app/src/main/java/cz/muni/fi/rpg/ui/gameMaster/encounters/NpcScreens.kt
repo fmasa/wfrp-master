@@ -23,7 +23,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -43,10 +42,10 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.HorizontalLine
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
 import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.SaveAction
 import cz.frantisekmasa.wfrp_master.common.core.viewModel.viewModel
+import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
 import cz.frantisekmasa.wfrp_master.inventory.domain.Armor
 import cz.frantisekmasa.wfrp_master.navigation.Route
 import cz.frantisekmasa.wfrp_master.navigation.Routing
-import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.ui.common.composables.FormInputHorizontalPadding
 import cz.muni.fi.rpg.ui.common.composables.FormInputVerticalPadding
 import cz.muni.fi.rpg.viewModels.EncounterDetailViewModel
@@ -223,7 +222,7 @@ fun NpcDetailScreen(
     Scaffold(
         topBar = {
             NpcDetailTopBar(
-                title = stringResource(R.string.title_npc),
+                title = LocalStrings.current.npcs.title,
                 onSave = {
                     if (data == null) {
                         return@NpcDetailTopBar
@@ -275,11 +274,12 @@ fun NpcCreationScreen(routing: Routing<Route.NpcCreation>) {
     val data = FormData.empty()
     val validate = remember { mutableStateOf(false) }
     val submitEnabled = remember { mutableStateOf(true) }
+    val strings = LocalStrings.current.npcs
 
     Scaffold(
         topBar = {
             NpcDetailTopBar(
-                title = stringResource(R.string.title_npc_add),
+                strings.titleAdd,
                 onSave = {
                     if (!data.isValid()) {
                         validate.value = true
@@ -321,14 +321,17 @@ private fun MainContainer(data: FormData, validate: Boolean) {
             .padding(Spacing.bodyPadding)
             .padding(bottom = 30.dp)
     ) {
+        val strings = LocalStrings.current
+
         Column(verticalArrangement = Arrangement.spacedBy(FormInputVerticalPadding)) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.spacedBy(FormInputHorizontalPadding)
             ) {
+
                 TextInput(
                     modifier = Modifier.weight(0.7f),
-                    label = stringResource(R.string.label_name),
+                    label = strings.npcs.labelName,
                     value = data.name,
                     maxLength = Npc.NAME_MAX_LENGTH,
                     validate = validate,
@@ -336,7 +339,7 @@ private fun MainContainer(data: FormData, validate: Boolean) {
 
                 TextInput(
                     modifier = Modifier.weight(0.3f),
-                    label = stringResource(R.string.label_wounds),
+                    label = LocalStrings.current.points.wounds,
                     value = data.wounds,
                     keyboardType = KeyboardType.Number,
                     maxLength = 3,
@@ -345,7 +348,7 @@ private fun MainContainer(data: FormData, validate: Boolean) {
             }
 
             TextInput(
-                label = stringResource(R.string.label_description),
+                label = strings.npcs.labelDescription,
                 value = data.note,
                 validate = validate,
                 multiLine = true,
@@ -353,12 +356,12 @@ private fun MainContainer(data: FormData, validate: Boolean) {
 
             Row(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
                 CheckboxWithText(
-                    text = stringResource(R.string.label_enemy),
+                    text = strings.npcs.labelEnemy,
                     checked = data.enemy.value,
                     onCheckedChange = { data.enemy.value = it }
                 )
                 CheckboxWithText(
-                    text = stringResource(R.string.label_alive),
+                    text = strings.npcs.labelAlive,
                     checked = data.alive.value,
                     onCheckedChange = { data.alive.value = it }
                 )
@@ -368,7 +371,7 @@ private fun MainContainer(data: FormData, validate: Boolean) {
         HorizontalLine()
 
         Text(
-            stringResource(R.string.title_character_characteristics),
+            strings.npcs.titleCharacteristics,
             style = MaterialTheme.typography.h6,
             textAlign = TextAlign.Center,
             modifier = Modifier
@@ -381,7 +384,7 @@ private fun MainContainer(data: FormData, validate: Boolean) {
         HorizontalLine()
 
         Text(
-            stringResource(R.string.title_armor),
+            strings.npcs.titleArmour,
             style = MaterialTheme.typography.h6,
             textAlign = TextAlign.Center,
             modifier = Modifier
@@ -432,19 +435,21 @@ private fun CharacteristicsSegment(data: CharacteristicsFormData, validate: Bool
 
 @Composable
 private fun ArmorSegment(data: ArmorFormData, validate: Boolean) {
+    val labels = LocalStrings.current.armour.locations
+
     val rows = listOf(
         listOf(
-            R.string.armor_head to data.head,
-            R.string.armor_body to data.body,
-            R.string.armor_shield to data.shield,
-            0 to null // Empty container
+            labels.head to data.head,
+            labels.body to data.body,
+            labels.shield to data.shield,
+            "" to null // Empty container
         ),
 
         listOf(
-            R.string.armor_left_arm to data.leftArm,
-            R.string.armor_right_arm to data.rightArm,
-            R.string.armor_left_leg to data.leftLeg,
-            R.string.armor_right_leg to data.rightLeg,
+            labels.leftArm to data.leftArm,
+            labels.rightArm to data.rightArm,
+            labels.leftLeg to data.leftLeg,
+            labels.rightLeg to data.rightLeg,
         )
     )
 
@@ -461,7 +466,7 @@ private fun ArmorSegment(data: ArmorFormData, validate: Boolean) {
                     }
 
                     TextInput(
-                        label = stringResource(label),
+                        label = label,
                         value = value,
                         placeholder = "0",
                         keyboardType = KeyboardType.Number,

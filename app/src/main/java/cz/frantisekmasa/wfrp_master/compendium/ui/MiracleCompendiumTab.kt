@@ -10,11 +10,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import cz.frantisekmasa.wfrp_master.common.core.shared.Resources
-import cz.frantisekmasa.wfrp_master.compendium.domain.Miracle
 import cz.frantisekmasa.wfrp_master.common.core.ui.dialogs.DialogState
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.InputValue
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.Rules
@@ -23,7 +21,8 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.forms.inputValue
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.EmptyUI
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.ItemIcon
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
-import cz.muni.fi.rpg.R
+import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
+import cz.frantisekmasa.wfrp_master.compendium.domain.Miracle
 import java.util.UUID
 
 @Composable
@@ -31,9 +30,11 @@ fun MiracleCompendiumTab(viewModel: CompendiumViewModel, width: Dp) {
     CompendiumTab(
         liveItems = viewModel.miracles,
         emptyUI = {
+            val strings = LocalStrings.current.miracles
+
             EmptyUI(
-                textId = R.string.no_miracles_in_compendium,
-                subTextId = R.string.no_miracles_in_compendium_sub_text,
+                text = strings.messages.noMiraclesInCompendium,
+                subText = strings.messages.noMiraclesInCompendiumSubtext,
                 icon = Resources.Drawable.Miracle
             )
         },
@@ -99,9 +100,10 @@ private fun MiracleDialog(
 
     val item = dialogStateValue.item
     val formData = MiracleFormData.fromItem(item)
+    val strings = LocalStrings.current.miracles
 
     CompendiumItemDialog(
-        title = stringResource(if (item == null) R.string.title_miracle_new else R.string.title_miracle_edit),
+        title = if (item == null) strings.titleNew else strings.titleEdit,
         formData = formData,
         saver = viewModel::save,
         onDismissRequest = { dialogState.value = DialogState.Closed() }
@@ -111,42 +113,42 @@ private fun MiracleDialog(
             modifier = Modifier.padding(Spacing.bodyPadding),
         ) {
             TextInput(
-                label = stringResource(R.string.label_name),
+                label = strings.labelName,
                 value = formData.name,
                 validate = validate,
                 maxLength = Miracle.NAME_MAX_LENGTH
             )
 
             TextInput(
-                label = stringResource(R.string.label_miracle_cult_name),
+                label = strings.labelCultName,
                 value = formData.cultName,
                 validate = validate,
                 maxLength = Miracle.CULT_NAME_MAX_LENGTH
             )
 
             TextInput(
-                label = stringResource(R.string.label_range),
+                label = strings.labelRange,
                 value = formData.range,
                 validate = validate,
                 maxLength = Miracle.RANGE_MAX_LENGTH,
             )
 
             TextInput(
-                label = stringResource(R.string.label_target),
+                label = strings.labelTarget,
                 value = formData.target,
                 validate = validate,
                 maxLength = Miracle.TARGET_MAX_LENGTH,
             )
 
             TextInput(
-                label = stringResource(R.string.label_duration),
+                label = strings.labelDuration,
                 value = formData.duration,
                 validate = validate,
                 maxLength = Miracle.DURATION_MAX_LENGTH,
             )
 
             TextInput(
-                label = stringResource(R.string.label_effect),
+                label = strings.labelEffect,
                 value = formData.effect,
                 validate = validate,
                 maxLength = Miracle.EFFECT_MAX_LENGTH,

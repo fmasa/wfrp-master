@@ -63,3 +63,8 @@ fun TabPagerScope.tab(@StringRes name: Int, content: @Composable () -> Unit) = t
     name = { stringResource(name) },
     content = content,
 )
+
+fun TabPagerScope.tab(name: String, content: @Composable () -> Unit) = tab(
+    name = { name },
+    content = content,
+)

@@ -15,10 +15,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import cz.frantisekmasa.wfrp_master.compendium.domain.Skill
 import cz.frantisekmasa.wfrp_master.common.core.domain.Characteristic
 import cz.frantisekmasa.wfrp_master.common.core.domain.compendium.CompendiumItem
 import cz.frantisekmasa.wfrp_master.common.core.shared.Resources
@@ -34,17 +32,20 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.forms.inputValue
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.EmptyUI
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.ItemIcon
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
-import cz.muni.fi.rpg.R
+import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
+import cz.frantisekmasa.wfrp_master.compendium.domain.Skill
 import java.util.UUID
 
 @Composable
 fun SkillCompendiumTab(viewModel: CompendiumViewModel, width: Dp) {
+    val messages = LocalStrings.current.skills.messages
+
     CompendiumTab(
         liveItems = viewModel.skills,
         emptyUI = {
             EmptyUI(
-                textId = R.string.no_skills_in_compendium,
-                subTextId = R.string.no_skills_in_compendium_sub_text,
+                text = messages.noSkillsInCompendium,
+                subText = messages.noSkillsInCompendiumSubtext,
                 icon = Resources.Drawable.Skill,
             )
         },
@@ -107,13 +108,10 @@ private fun SkillDialog(
     }
 
     val formData = SkillFormData.fromItem(dialogStateValue.item)
+    val strings = LocalStrings.current.skills
 
     CompendiumItemDialog(
-        title = stringResource(
-            if (dialogStateValue.item == null)
-                R.string.title_skill_new
-            else R.string.title_skill_edit
-        ),
+        title = if (dialogStateValue.item == null) strings.titleNew else strings.titleEdit,
         formData = formData,
         saver = viewModel::save,
         onDismissRequest = { dialogState.value = DialogState.Closed() }
@@ -123,14 +121,14 @@ private fun SkillDialog(
             modifier = Modifier.padding(Spacing.bodyPadding),
         ) {
             TextInput(
-                label = stringResource(R.string.label_name),
+                label = strings.labelName,
                 value = formData.name,
                 validate = validate,
                 maxLength = Skill.NAME_MAX_LENGTH
             )
 
             TextInput(
-                label = stringResource(R.string.label_description),
+                label = strings.labelDescription,
                 value = formData.description,
                 validate = validate,
                 maxLength = Skill.DESCRIPTION_MAX_LENGTH,
@@ -138,7 +136,7 @@ private fun SkillDialog(
             )
 
             ChipList(
-                label = stringResource(R.string.label_skill_characteristic),
+                label = strings.labelCharacteristic,
                 items = Characteristic.values()
                     .map { it to it.getShortcutName() },
                 value = formData.characteristic.value,
@@ -152,7 +150,7 @@ private fun SkillDialog(
                 contentAlignment = Alignment.TopCenter,
             ) {
                 CheckboxWithText(
-                    text = stringResource(R.string.label_skill_advanced),
+                    text = strings.labelAdvanced,
                     checked = formData.advanced.value,
                     onCheckedChange = { formData.advanced.value = it }
                 )

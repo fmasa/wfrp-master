@@ -1,6 +1,5 @@
 package cz.muni.fi.rpg.ui.settings
 
-import androidx.annotation.StringRes
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
@@ -20,11 +19,10 @@ import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Redeem
+import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import cz.frantisekmasa.wfrp_master.common.core.ui.buttons.BackButton
 import cz.frantisekmasa.wfrp_master.common.core.ui.components.settings.SettingsCard
@@ -37,21 +35,25 @@ import cz.frantisekmasa.wfrp_master.common.core.viewModel.PremiumViewModel
 import cz.frantisekmasa.wfrp_master.common.core.viewModel.SettingsViewModel
 import cz.frantisekmasa.wfrp_master.common.core.viewModel.providePremiumViewModel
 import cz.frantisekmasa.wfrp_master.common.core.viewModel.provideSettingsViewModel
+import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
 import cz.frantisekmasa.wfrp_master.navigation.Route
 import cz.frantisekmasa.wfrp_master.navigation.Routing
-import cz.muni.fi.rpg.R
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 @Composable
 fun SettingsScreen(routing: Routing<Route.Settings>) {
+    val scaffoldState = rememberScaffoldState()
+    val strings = LocalStrings.current.settings
+
     Scaffold(
+        scaffoldState = scaffoldState,
         topBar = {
             TopAppBar(
                 navigationIcon = {
                     BackButton(onClick = { routing.pop() })
                 },
-                title = { Text(stringResource(R.string.settings)) }
+                title = { Text(strings.title) }
             )
         }
     ) {
@@ -64,20 +66,20 @@ fun SettingsScreen(routing: Routing<Route.Settings>) {
         ) {
             val viewModel = provideSettingsViewModel()
 
-            SignInCard(viewModel, routing)
+            SignInCard(scaffoldState.snackbarHostState, viewModel, routing)
 
             SettingsCard {
                 val premiumViewModel = providePremiumViewModel()
                 val premiumActive = premiumViewModel.active == true
 
-                SettingsTitle(R.string.settings_general)
+                SettingsTitle(strings.titleGeneral)
                 SoundCard(viewModel)
                 DarkModeCard(viewModel)
 
                 if (!premiumActive) {
                     PersonalizedAds(viewModel)
 
-                    SettingsTitle(R.string.settings_premium)
+                    SettingsTitle(strings.titlePremium)
                     BuyPremiumButton(premiumViewModel)
                 }
             }
@@ -97,14 +99,14 @@ private fun BuyPremiumButton(viewModel: PremiumViewModel) {
             }
         },
         icon = { Icon(Icons.Rounded.Redeem, VisualOnlyIconDescription) },
-        text = { Text(stringResource(R.string.buy_premium)) },
+        text = { Text(LocalStrings.current.premium.dialogTitle) },
     )
 }
 
 @Composable
 private fun DarkModeCard(viewModel: SettingsViewModel) {
     SwitchItem(
-        name = R.string.settings_dark_mode,
+        name = LocalStrings.current.settings.darkMode,
         value = viewModel.darkMode.collectWithLifecycle(isSystemInDarkTheme()).value,
         onChange = { viewModel.toggleDarkMode(it) },
     )
@@ -113,7 +115,7 @@ private fun DarkModeCard(viewModel: SettingsViewModel) {
 @Composable
 private fun SoundCard(viewModel: SettingsViewModel) {
     SwitchItem(
-        name = R.string.settings_sound,
+        name = LocalStrings.current.settings.sound,
         value = viewModel.soundEnabled.collectWithLifecycle(null).value,
         onChange = { viewModel.toggleSound(it) }
     )
@@ -122,7 +124,7 @@ private fun SoundCard(viewModel: SettingsViewModel) {
 @Composable
 private fun PersonalizedAds(viewModel: SettingsViewModel) {
     SwitchItem(
-        name = R.string.settings_personalized_ads,
+        name = LocalStrings.current.settings.personalizedAds,
         value = viewModel.personalizedAds.collectWithLifecycle(null).value,
         onChange = { viewModel.togglePersonalizedAds(it) },
     )
@@ -130,7 +132,7 @@ private fun PersonalizedAds(viewModel: SettingsViewModel) {
 
 @Composable
 private fun SwitchItem(
-    @StringRes name: Int,
+    name: String,
     value: Boolean?,
     onChange: suspend (newValue: Boolean) -> Unit,
     disabledText: String? = null,
@@ -142,7 +144,7 @@ private fun SwitchItem(
 
     ListItem(
         text = {
-            Text(stringResource(name), color = color)
+            Text(name, color = color)
         },
         secondaryText = disabledText?.let { { Text(disabledText, color = color) } },
         trailing = {

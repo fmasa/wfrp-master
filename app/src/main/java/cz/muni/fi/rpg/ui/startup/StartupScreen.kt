@@ -22,15 +22,13 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import cz.frantisekmasa.wfrp_master.common.core.shared.Resources
 import cz.frantisekmasa.wfrp_master.common.core.shared.drawableResource
 import cz.frantisekmasa.wfrp_master.common.core.ui.flow.collectWithLifecycle
 import cz.frantisekmasa.wfrp_master.common.core.viewModel.provideSettingsViewModel
-import cz.muni.fi.rpg.R
+import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
 import cz.muni.fi.rpg.ui.common.composables.Theme
 import cz.muni.fi.rpg.ui.shell.splashBackground
 import cz.muni.fi.rpg.viewModels.AuthenticationViewModel
@@ -116,11 +114,11 @@ private fun SplashScreen() {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
             Image(
                 drawableResource(Resources.Drawable.SplashScreenIcon),
-                stringResource(R.string.icon_application_logo),
+                LocalStrings.current.about.appName,
                 Modifier.size(140.dp)
             )
             Text(
-                stringResource(R.string.app_name),
+                LocalStrings.current.about.appName,
                 style = MaterialTheme.typography.h6,
                 color = Theme.fixedColors.splashScreenContent,
             )
@@ -130,14 +128,14 @@ private fun SplashScreen() {
 
 @Composable
 private fun AnonymousAuthenticationExplanationDialog(onDismissRequest: () -> Unit) {
+    val strings = LocalStrings.current
+
     AlertDialog(
         onDismissRequest = onDismissRequest,
-        text = {
-            Text(stringResource(R.string.google_sign_in_error))
-        },
+        text = { Text(strings.authentication.startupGoogleSignInFailed) },
         confirmButton = {
             TextButton(onClick = onDismissRequest) {
-                Text(stringResource(android.R.string.ok))
+                Text(strings.commonUi.buttonOk.uppercase())
             }
         }
     )

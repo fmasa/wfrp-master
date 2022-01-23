@@ -20,14 +20,13 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.stringResource
-import cz.frantisekmasa.wfrp_master.compendium.domain.exceptions.CompendiumItemNotFound
 import cz.frantisekmasa.wfrp_master.common.core.ui.buttons.CloseButton
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.FullScreenProgress
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.NumberPicker
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
 import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.SaveAction
-import cz.muni.fi.rpg.R
+import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
+import cz.frantisekmasa.wfrp_master.compendium.domain.exceptions.CompendiumItemNotFound
 import cz.muni.fi.rpg.viewModels.SkillsViewModel
 import io.github.aakira.napier.Napier
 import kotlinx.coroutines.Dispatchers
@@ -45,15 +44,13 @@ internal fun AdvancesForm(
     var saving by remember { mutableStateOf(false) }
     var advances by rememberSaveable { mutableStateOf(1) }
 
+    val strings = LocalStrings.current.skills
+
     Scaffold(
         topBar = {
             TopAppBar(
                 navigationIcon = { CloseButton(onDismissRequest) },
-                title = {
-                    Text(
-                        stringResource(R.string.title_skill_new)
-                    )
-                },
+                title = { Text(strings.titleNew) },
                 actions = {
                     val coroutineScope = rememberCoroutineScope()
                     val context = LocalContext.current
@@ -76,7 +73,7 @@ internal fun AdvancesForm(
                                     withContext(Dispatchers.Main) {
                                         Toast.makeText(
                                             context,
-                                            context.getString(R.string.error_compendium_skill_removed),
+                                            strings.messages.compendiumSkillRemoved,
                                             Toast.LENGTH_SHORT,
                                         ).show()
                                     }
@@ -102,7 +99,7 @@ internal fun AdvancesForm(
         ) {
             Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
                 Text(
-                    text = stringResource(R.string.label_advances),
+                    text = strings.labelAdvances,
                     modifier = Modifier.weight(1f),
                 )
 

@@ -23,7 +23,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Dp
 import cz.frantisekmasa.wfrp_master.common.core.domain.compendium.CompendiumItem
 import cz.frantisekmasa.wfrp_master.common.core.ui.buttons.BackButton
@@ -38,9 +37,9 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.TopBarAction
 import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.tabs.TabPager
 import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.tabs.tab
 import cz.frantisekmasa.wfrp_master.common.core.viewModel.viewModel
+import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
 import cz.frantisekmasa.wfrp_master.navigation.Route
 import cz.frantisekmasa.wfrp_master.navigation.Routing
-import cz.muni.fi.rpg.R
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
@@ -51,13 +50,14 @@ import kotlin.coroutines.EmptyCoroutineContext
 fun CompendiumScreen(routing: Routing<Route.Compendium>) {
     Scaffold(topBar = { TopBar(routing) }) {
         val viewModel: CompendiumViewModel by viewModel { parametersOf(routing.route.partyId) }
+        val strings = LocalStrings.current.compendium
 
         TabPager(Modifier.fillMaxSize()) {
-            tab(R.string.tab_skills) { SkillCompendiumTab(viewModel, screenWidth) }
-            tab(R.string.tab_talents) { TalentCompendiumTab(viewModel, screenWidth) }
-            tab(R.string.tab_spells) { SpellCompendiumTab(viewModel, screenWidth) }
-            tab(R.string.tab_blessings) { BlessingCompendiumTab(viewModel, screenWidth) }
-            tab(R.string.tab_miracles) { MiracleCompendiumTab(viewModel, screenWidth) }
+            tab(strings.tabSkills) { SkillCompendiumTab(viewModel, screenWidth) }
+            tab(strings.tabTalents) { TalentCompendiumTab(viewModel, screenWidth) }
+            tab(strings.tabSpells) { SpellCompendiumTab(viewModel, screenWidth) }
+            tab(strings.tabBlessings) { BlessingCompendiumTab(viewModel, screenWidth) }
+            tab(strings.tabMiracles) { MiracleCompendiumTab(viewModel, screenWidth) }
         }
     }
 }
@@ -67,10 +67,12 @@ private fun TopBar(routing: Routing<Route.Compendium>) {
     val partyId = routing.route.partyId
     val viewModel: CompendiumViewModel by viewModel { parametersOf(partyId) }
 
+    val strings = LocalStrings.current.compendium
+
     TopAppBar(
         title = {
             Column {
-                Text(stringResource(R.string.title_compendium))
+                Text(strings.title)
                 viewModel.party.collectWithLifecycle(null).value?.let {
                     Subtitle(it.getName())
                 }
@@ -79,7 +81,7 @@ private fun TopBar(routing: Routing<Route.Compendium>) {
         navigationIcon = { BackButton(onClick = { routing.pop() }) },
         actions = {
             TopBarAction(
-                textRes = R.string.button_import,
+                text = strings.buttonImport,
                 onClick = { routing.navigateTo(Route.CompendiumImport(partyId)) },
             )
         }
@@ -108,7 +110,7 @@ fun <T : CompendiumItem<T>> CompendiumTab(
             FloatingActionButton(onClick = { dialogState.value = DialogState.Opened(null) }) {
                 Icon(
                     Icons.Rounded.Add,
-                    stringResource(R.string.icon_add_compendium_item),
+                    LocalStrings.current.compendium.iconAddCompendiumItem,
                 )
             }
         }
@@ -130,13 +132,13 @@ fun <T : CompendiumItem<T>> CompendiumTab(
                             WithContextMenu(
                                 items = listOf(
                                     ContextMenu.Item(
-                                        stringResource(R.string.button_duplicate),
+                                        LocalStrings.current.commonUi.buttonDuplicate,
                                         onClick = {
                                             coroutineScope.launch { saver(item.duplicate()) }
                                         }
                                     ),
                                     ContextMenu.Item(
-                                        stringResource(R.string.button_remove),
+                                        LocalStrings.current.commonUi.buttonRemove,
                                         onClick = { coroutineScope.launch { remover(item) } }
                                     ),
                                 ),

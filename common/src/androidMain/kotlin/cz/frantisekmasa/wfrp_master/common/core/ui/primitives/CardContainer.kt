@@ -82,12 +82,12 @@ fun CardTitle(text: String, @DrawableRes iconRes: Int? = null) {
 }
 
 @Composable
-fun SingleLineTextValue(@StringRes labelRes: Int, value: AnnotatedString) {
+fun SingleLineTextValue(label: String, value: AnnotatedString) {
     if (value.isBlank()) return
 
     Row {
         Text(
-            stringResource(labelRes) + ":",
+            "$label:",
             fontWeight = FontWeight.Bold,
             modifier = Modifier.padding(end = Spacing.tiny),
         )
@@ -96,6 +96,6 @@ fun SingleLineTextValue(@StringRes labelRes: Int, value: AnnotatedString) {
 }
 
 @Composable
-fun SingleLineTextValue(@StringRes labelRes: Int, value: String) {
-    SingleLineTextValue(labelRes, AnnotatedString(value))
+fun SingleLineTextValue(label: String, value: String) {
+    SingleLineTextValue(label, AnnotatedString(value))
 }

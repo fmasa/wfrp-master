@@ -24,7 +24,7 @@ import cz.frantisekmasa.wfrp_master.common.core.domain.character.Character
 import cz.frantisekmasa.wfrp_master.common.core.domain.identifiers.CharacterId
 import cz.frantisekmasa.wfrp_master.common.core.ui.components.CharacterAvatar
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.ItemIcon
-import cz.muni.fi.rpg.R
+import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
 import cz.muni.fi.rpg.model.domain.CharacterAvatarChanger
 import io.github.aakira.napier.Napier
 import kotlinx.coroutines.Dispatchers
@@ -59,6 +59,7 @@ fun EditableCharacterAvatar(
 
         val coroutineScope = rememberCoroutineScope()
         val context = LocalContext.current
+        val messages = LocalStrings.current.messages
 
         val fileChooser = rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) {
             coroutineScope.launch(Dispatchers.IO) {
@@ -67,13 +68,13 @@ fun EditableCharacterAvatar(
                     val inputStream = context.contentResolver.openInputStream(it)
 
                     if (inputStream == null) {
-                        snackbarHostState.showSnackbar(context.getString(R.string.error_file_opening_crashed))
+                        snackbarHostState.showSnackbar(messages.couldNotOpenFile)
                         return@launch
                     }
 
                     changer().changeAvatar(characterId, inputStream)
                     processing = false
-                    snackbarHostState.showSnackbar(context.getString(R.string.message_avatar_changed))
+                    snackbarHostState.showSnackbar(messages.avatarChanged)
                 } catch (e: Throwable) {
                     Napier.e(e.toString(), e)
                     processing = false
@@ -95,7 +96,7 @@ fun EditableCharacterAvatar(
                     active = false
                     coroutineScope.launch {
                         changer().removeAvatar(characterId)
-                        snackbarHostState.showSnackbar(context.getString(R.string.message_avatar_removed))
+                        snackbarHostState.showSnackbar(messages.avatarRemoved)
                     }
                 },
             ) {

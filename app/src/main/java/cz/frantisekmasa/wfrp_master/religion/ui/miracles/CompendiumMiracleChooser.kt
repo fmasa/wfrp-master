@@ -21,7 +21,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
 import cz.frantisekmasa.wfrp_master.common.core.shared.Resources
 import cz.frantisekmasa.wfrp_master.common.core.ui.buttons.CloseButton
 import cz.frantisekmasa.wfrp_master.common.core.ui.flow.collectWithLifecycle
@@ -29,8 +28,8 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.EmptyUI
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.FullScreenProgress
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.ItemIcon
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
+import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
 import cz.frantisekmasa.wfrp_master.religion.domain.Miracle
-import cz.muni.fi.rpg.R
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -42,11 +41,13 @@ internal fun CompendiumMiracleChooser(
     onCustomMiracleRequest: () -> Unit,
     onDismissRequest: () -> Unit,
 ) {
+    val strings = LocalStrings.current.miracles
+
     Scaffold(
         topBar = {
             TopAppBar(
                 navigationIcon = { CloseButton(onDismissRequest) },
-                title = { Text(stringResource(R.string.title_choose_compendium_miracle)) },
+                title = { Text(strings.titleChooseCompendiumSpell) },
             )
         }
     ) {
@@ -64,10 +65,11 @@ internal fun CompendiumMiracleChooser(
                 if (compendiumMiracles.isEmpty()) {
                     EmptyUI(
                         icon = Resources.Drawable.Miracle,
-                        textId = R.string.no_miracles_in_compendium,
-                        subTextId = if (totalCompendiumMiracleCount == 0)
-                            R.string.no_items_in_compendium_sub_text_player else
-                            null,
+                        text = strings.messages.noMiraclesInCompendium,
+                        subText = when (totalCompendiumMiracleCount) {
+                            0 -> strings.messages.noMiraclesInCompendiumSubtextPlayer
+                            else -> null
+                        },
                     )
                 } else {
                     val coroutineScope = rememberCoroutineScope()
@@ -102,7 +104,7 @@ internal fun CompendiumMiracleChooser(
                     .padding(Spacing.bodyPadding),
                 onClick = onCustomMiracleRequest,
             ) {
-                Text(stringResource(R.string.button_add_non_compendium_miracle))
+                Text(strings.buttonAddNonCompendium)
             }
         }
     }

@@ -1,6 +1,5 @@
 package cz.frantisekmasa.wfrp_master.combat.ui
 
-import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -21,18 +20,17 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
 import cz.frantisekmasa.wfrp_master.combat.domain.encounter.Npc
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.Character
 import cz.frantisekmasa.wfrp_master.common.core.domain.identifiers.EncounterId
+import cz.frantisekmasa.wfrp_master.common.core.ui.buttons.CloseButton
 import cz.frantisekmasa.wfrp_master.common.core.ui.dialogs.FullScreenDialog
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.CardContainer
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.CardTitle
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
 import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.TopBarAction
 import cz.frantisekmasa.wfrp_master.common.core.viewModel.viewModel
-import cz.frantisekmasa.wfrp_master.common.core.ui.buttons.CloseButton
-import cz.muni.fi.rpg.R
+import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
@@ -66,13 +64,13 @@ fun StartCombatDialog(
             topBar = {
                 TopAppBar(
                     navigationIcon = { CloseButton(onClick = onDismissRequest) },
-                    title = { Text(stringResource(R.string.title_start_combat)) },
+                    title = { Text(LocalStrings.current.combat.titleStartCombat) },
                     actions = {
                         val saving by remember { mutableStateOf(false) }
                         val coroutineScope = rememberCoroutineScope()
 
                         TopBarAction(
-                            textRes = R.string.button_save,
+                            text = LocalStrings.current.commonUi.buttonSave,
                             onClick = {
                                 coroutineScope.launch(Dispatchers.IO) {
                                     viewModel.startCombat(
@@ -98,13 +96,13 @@ fun StartCombatDialog(
                 verticalArrangement = Arrangement.spacedBy(Spacing.small),
             ) {
                 CombatantList(
-                    title = R.string.title_characters,
+                    title = LocalStrings.current.combat.titleCharacterCombatants,
                     items = characters,
                     nameFactory = { it.getName() },
                 )
 
                 CombatantList(
-                    title = R.string.title_npcs,
+                    title = LocalStrings.current.combat.titleNpcCombatants,
                     items = npcs,
                     nameFactory = { it.name },
                 )
@@ -121,7 +119,7 @@ private fun <T> pickCheckedOnes(items: Map<T, Boolean>): List<T> =
 
 @Composable
 private fun <T> CombatantList(
-    @StringRes title: Int,
+    title: String,
     items: MutableMap<T, Boolean>,
     nameFactory: (T) -> String
 ) {

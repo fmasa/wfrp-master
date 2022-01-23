@@ -10,7 +10,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -23,18 +22,20 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.forms.inputValue
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.EmptyUI
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.ItemIcon
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
+import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
 import cz.frantisekmasa.wfrp_master.compendium.domain.Spell
-import cz.muni.fi.rpg.R
 import java.util.UUID
 
 @Composable
 fun SpellCompendiumTab(viewModel: CompendiumViewModel, width: Dp) {
+    val strings = LocalStrings.current.spells.messages
+
     CompendiumTab(
         liveItems = viewModel.spells,
         emptyUI = {
             EmptyUI(
-                textId = R.string.no_spells_in_compendium,
-                subTextId = R.string.no_spells_in_compendium_sub_text,
+                text = strings.noSpellsInCompendium,
+                subText = strings.noSpellsInCompendiumSubtext,
                 icon = Resources.Drawable.Spell
             )
         },
@@ -104,8 +105,10 @@ private fun SpellDialog(
     val item = dialogStateValue.item
     val formData = SpellFormData.fromItem(item)
 
+    val strings = LocalStrings.current.spells
+
     CompendiumItemDialog(
-        title = stringResource(if (item == null) R.string.title_spell_add else R.string.title_spell_edit),
+        title = if (item == null) strings.titleAdd else strings.titleEdit,
         formData = formData,
         saver = viewModel::save,
         onDismissRequest = { dialogState.value = DialogState.Closed() }
@@ -115,42 +118,42 @@ private fun SpellDialog(
             modifier = Modifier.padding(Spacing.bodyPadding),
         ) {
             TextInput(
-                label = stringResource(R.string.label_name),
+                label = strings.labelName,
                 value = formData.name,
                 validate = validate,
                 maxLength = Spell.NAME_MAX_LENGTH
             )
 
             TextInput(
-                label = stringResource(R.string.label_spell_lore),
+                label = strings.labelLore,
                 value = formData.lore,
                 validate = validate,
                 maxLength = Spell.LORE_MAX_LENGTH
             )
 
             TextInput(
-                label = stringResource(R.string.label_range),
+                label = strings.labelRange,
                 value = formData.range,
                 validate = validate,
                 maxLength = Spell.RANGE_MAX_LENGTH,
             )
 
             TextInput(
-                label = stringResource(R.string.label_target),
+                label = strings.labelTarget,
                 value = formData.target,
                 validate = validate,
                 maxLength = Spell.TARGET_MAX_LENGTH,
             )
 
             TextInput(
-                label = stringResource(R.string.label_duration),
+                label = strings.labelDuration,
                 value = formData.duration,
                 validate = validate,
                 maxLength = Spell.DURATION_MAX_LENGTH,
             )
 
             TextInput(
-                label = stringResource(R.string.label_spell_casting_number),
+                label = strings.labelCastingNumber,
                 value = formData.castingNumber,
                 keyboardType = KeyboardType.Number,
                 validate = validate,
@@ -158,7 +161,7 @@ private fun SpellDialog(
             )
 
             TextInput(
-                label = stringResource(R.string.label_effect),
+                label = strings.labelEffect,
                 value = formData.effect,
                 validate = validate,
                 maxLength = Spell.EFFECT_MAX_LENGTH,

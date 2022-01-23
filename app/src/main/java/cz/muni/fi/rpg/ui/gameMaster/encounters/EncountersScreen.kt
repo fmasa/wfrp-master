@@ -32,7 +32,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import cz.frantisekmasa.wfrp_master.combat.domain.encounter.Encounter
@@ -46,7 +45,7 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.VisualOnlyIconDescription
 import cz.frantisekmasa.wfrp_master.common.core.viewModel.PremiumViewModel
 import cz.frantisekmasa.wfrp_master.common.core.viewModel.providePremiumViewModel
-import cz.muni.fi.rpg.R
+import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
 import cz.muni.fi.rpg.ui.common.BuyPremiumPrompt
 import cz.muni.fi.rpg.viewModels.EncountersViewModel
 
@@ -93,12 +92,13 @@ fun EncountersScreen(
 @Composable
 private fun AddEncounterButton(encounterCount: Int, onCreateEncounterRequest: () -> Unit) {
     val premiumViewModel = providePremiumViewModel()
+    val strings = LocalStrings.current
 
     if (encounterCount >= PremiumViewModel.FREE_ENCOUNTER_COUNT && premiumViewModel.active != true) {
         var premiumPromptVisible by remember { mutableStateOf(false) }
 
         FloatingActionButton(onClick = { premiumPromptVisible = true }) {
-            Icon(Icons.Rounded.Redeem, stringResource(R.string.buy_premium))
+            Icon(Icons.Rounded.Redeem, strings.premium.dialogTitle)
         }
 
         if (premiumPromptVisible) {
@@ -109,7 +109,7 @@ private fun AddEncounterButton(encounterCount: Int, onCreateEncounterRequest: ()
     }
 
     FloatingActionButton(onClick = onCreateEncounterRequest) {
-        Icon(Icons.Rounded.Add, stringResource(R.string.icon_add_encounter))
+        Icon(Icons.Rounded.Add, strings.encounters.buttonAdd)
     }
 }
 
@@ -120,9 +120,10 @@ private fun EncounterList(
     onClick: (Encounter) -> Unit
 ) {
     if (encounters.isEmpty()) {
+        val strings = LocalStrings.current.encounters
         EmptyUI(
-            textId = R.string.no_encounters_prompt,
-            subTextId = R.string.no_encounters_sub_prompt,
+            text = strings.messages.noEncounters,
+            subText = strings.messages.noEncountersSubtext,
             icon = Resources.Drawable.Encounter,
         )
 

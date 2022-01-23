@@ -11,13 +11,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import cz.frantisekmasa.wfrp_master.common.core.domain.Money
 import cz.frantisekmasa.wfrp_master.common.core.shared.Resources
 import cz.frantisekmasa.wfrp_master.common.core.shared.drawableResource
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.VisualOnlyIconDescription
-import cz.muni.fi.rpg.R
+import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
 
 @Composable
 fun MoneyBalance(value: Money, modifier: Modifier = Modifier) {
@@ -26,14 +25,16 @@ fun MoneyBalance(value: Money, modifier: Modifier = Modifier) {
         horizontalArrangement = Arrangement.spacedBy(8.dp, Alignment.End)
     ) {
         ProvideTextStyle(MaterialTheme.typography.body1) {
+            val labels = LocalStrings.current.trappings.money
+
             MoneyIcon(colorGold)
-            Text(value.getCrowns().toString() + " " + stringResource(R.string.gold_coins_shortcut))
+            Text("${value.getCrowns()} ${labels.goldCoinsShortcut}")
 
             MoneyIcon(colorSilver)
-            Text(value.getShillings().toString() + " " + stringResource(R.string.silver_shillings_shortcut))
+            Text("${value.getShillings()} ${labels.silverShillingsShortcut}")
 
             MoneyIcon(colorBrass)
-            Text(value.getPennies().toString() + " " + stringResource(R.string.brass_pennies_shortcut))
+            Text("${value.getPennies()} ${labels.brassPenniesShortcut}")
         }
     }
 }

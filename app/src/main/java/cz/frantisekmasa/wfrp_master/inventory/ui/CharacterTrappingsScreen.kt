@@ -23,7 +23,6 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import cz.frantisekmasa.wfrp_master.common.core.domain.identifiers.CharacterId
 import cz.frantisekmasa.wfrp_master.common.core.shared.Resources
@@ -40,10 +39,10 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.ItemIcon
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.TopPanel
 import cz.frantisekmasa.wfrp_master.common.core.viewModel.viewModel
+import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
 import cz.frantisekmasa.wfrp_master.inventory.domain.Encumbrance
 import cz.frantisekmasa.wfrp_master.inventory.domain.InventoryItem
 import cz.frantisekmasa.wfrp_master.inventory.domain.TrappingType
-import cz.muni.fi.rpg.R
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.koin.core.parameter.parametersOf
@@ -139,11 +138,11 @@ private fun CharacterEncumbrance(viewModel: InventoryViewModel, modifier: Modifi
     ) {
         Icon(
             drawableResource(Resources.Drawable.TrappingEncumbrance),
-            stringResource(R.string.icon_total_encumbrance),
+            LocalStrings.current.trappings.iconTotalEncumbrance,
             Modifier.size(18.dp),
         )
         Text(
-            "${total ?: ""} / ${max ?: "?"}",
+            "${total ?: "?"} / ${max ?: "?"}",
             color = if (isOverburdened) MaterialTheme.colors.error else LocalContentColor.current
         )
     }
@@ -159,12 +158,14 @@ private fun InventoryItemsCard(
 ) {
     val items = viewModel.inventory.collectWithLifecycle(null).value ?: return
 
+    val strings = LocalStrings.current.trappings
+
     CardContainer(Modifier.padding(horizontal = 8.dp)) {
         Column(Modifier.padding(horizontal = 8.dp)) {
-            CardTitle(R.string.inventory_items)
+            CardTitle(strings.title)
             if (items.isEmpty()) {
                 EmptyUI(
-                    R.string.no_inventory_item_prompt,
+                    text = strings.messages.noItems,
                     Resources.Drawable.TrappingContainer,
                     size = EmptyUI.Size.Small
                 )
@@ -177,7 +178,7 @@ private fun InventoryItemsCard(
                 )
             }
 
-            CardButton(R.string.title_inventory_add_item, onClick = onNewItemButtonClicked)
+            CardButton(strings.titleAdd, onClick = onNewItemButtonClicked)
         }
     }
 }
@@ -190,6 +191,7 @@ private fun InventoryItemList(
     onDuplicate: (InventoryItem) -> Unit,
 ) {
     Column {
+        val strings = LocalStrings.current
         for (item in items) {
             CardItem(
                 name = item.name,
@@ -198,11 +200,11 @@ private fun InventoryItemList(
                 onClick = { onClick(item) },
                 contextMenuItems = listOf(
                     ContextMenu.Item(
-                        stringResource(R.string.button_duplicate),
+                        strings.commonUi.buttonDuplicate,
                         onClick = { onDuplicate(item) },
                     ),
                     ContextMenu.Item(
-                        stringResource(R.string.button_remove),
+                        strings.commonUi.buttonRemove,
                         onClick = { onRemove(item) }
                     ),
                 ),
@@ -212,15 +214,16 @@ private fun InventoryItemList(
                     if (encumbrance != Encumbrance.Zero) {
                         Column(horizontalAlignment = Alignment.End) {
                             if (item.quantity > 1) {
-                                Text(stringResource(R.string.quantity, item.quantity))
+                                Text("× ${item.quantity}")
                             }
+
                             Row(
                                 verticalAlignment = Alignment.CenterVertically,
                                 horizontalArrangement = Arrangement.spacedBy(Spacing.tiny)
                             ) {
                                 Icon(
                                     drawableResource(Resources.Drawable.TrappingEncumbrance),
-                                    stringResource(R.string.icon_item_encumbrance),
+                                    strings.trappings.iconEncumbrance,
                                     Modifier.size(Spacing.medium),
                                 )
                                 Text(encumbrance.toString())

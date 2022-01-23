@@ -1,7 +1,6 @@
 package cz.muni.fi.rpg.ui.gameMaster.encounters
 
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.res.stringResource
 import cz.frantisekmasa.wfrp_master.combat.domain.encounter.Encounter
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.PartyId
 import cz.frantisekmasa.wfrp_master.common.core.ui.components.FormDialog
@@ -12,7 +11,7 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.forms.Rules
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.TextInput
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.inputValue
 import cz.frantisekmasa.wfrp_master.common.core.viewModel.viewModel
-import cz.muni.fi.rpg.R
+import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
 import cz.muni.fi.rpg.viewModels.EncountersViewModel
 import org.koin.core.parameter.parametersOf
 
@@ -26,11 +25,10 @@ fun EncounterDialog(
 
     FullScreenDialog(onDismissRequest = onDismissRequest) {
         val formData = EncounterDialogFormData.fromEncounter(existingEncounter)
+        val strings = LocalStrings.current.encounters
 
         FormDialog(
-            title = if (existingEncounter != null)
-                R.string.title_encounter_edit
-            else R.string.title_encounter_create,
+            title = if (existingEncounter != null) strings.titleEdit else strings.titleCreate,
             onDismissRequest = onDismissRequest,
             formData = formData,
             onSave = {
@@ -42,14 +40,14 @@ fun EncounterDialog(
             }
         ) { validate ->
             TextInput(
-                label = stringResource(R.string.label_name),
+                label = strings.labelName,
                 value = formData.name,
                 validate = validate,
                 maxLength = Encounter.NAME_MAX_LENGTH,
             )
 
             TextInput(
-                label = stringResource(R.string.label_description),
+                label = strings.labelDescription,
                 value = formData.description,
                 validate = validate,
                 maxLength = Encounter.DESCRIPTION_MAX_LENGTH,

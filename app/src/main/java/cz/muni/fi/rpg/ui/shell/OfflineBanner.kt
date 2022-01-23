@@ -15,12 +15,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import cz.frantisekmasa.wfrp_master.common.core.ui.flow.collectWithLifecycle
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.VisualOnlyIconDescription
-import cz.muni.fi.rpg.R
+import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
 import cz.muni.fi.rpg.viewModels.provideNetworkViewModel
 
 @Composable
@@ -44,7 +43,7 @@ fun NetworkStatusBanner() {
                 VisualOnlyIconDescription,
                 Modifier.size(18.dp),
             )
-            Text(stringResource(R.string.no_internet))
+            Text(LocalStrings.current.messages.noInternet)
         }
     }
 }

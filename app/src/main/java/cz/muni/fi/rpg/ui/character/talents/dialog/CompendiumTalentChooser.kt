@@ -16,7 +16,6 @@ import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
 import cz.frantisekmasa.wfrp_master.common.core.shared.Resources
 import cz.frantisekmasa.wfrp_master.common.core.ui.buttons.CloseButton
 import cz.frantisekmasa.wfrp_master.common.core.ui.flow.collectWithLifecycle
@@ -24,8 +23,8 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.EmptyUI
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.FullScreenProgress
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.ItemIcon
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
+import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
 import cz.frantisekmasa.wfrp_master.compendium.domain.Talent
-import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.viewModels.TalentsViewModel
 
 @Composable
@@ -35,11 +34,13 @@ internal fun CompendiumTalentChooser(
     onCustomTalentRequest: () -> Unit,
     onDismissRequest: () -> Unit,
 ) {
+    val strings = LocalStrings.current.talents
+
     Scaffold(
         topBar = {
             TopAppBar(
                 navigationIcon = { CloseButton(onDismissRequest) },
-                title = { Text(stringResource(R.string.title_choose_compendium_talent)) }
+                title = { Text(strings.titleChooseCompendiumTalent) }
             )
         }
     ) {
@@ -56,10 +57,11 @@ internal fun CompendiumTalentChooser(
                 if (compendiumTalents.isEmpty()) {
                     EmptyUI(
                         icon = Resources.Drawable.Skill,
-                        textId = R.string.no_talents_in_compendium,
-                        subTextId = if (totalCompendiumTalentCount == 0)
-                            R.string.no_talents_in_compendium_sub_text_player
-                        else null,
+                        text = strings.messages.noTalentsInCompendium,
+                        subText = when (totalCompendiumTalentCount) {
+                            0 -> strings.messages.noTalentsInCompendiumSubtextPlayer
+                            else -> null
+                        },
                     )
                 } else {
                     LazyColumn(contentPadding = PaddingValues(Spacing.bodyPadding)) {
@@ -80,7 +82,7 @@ internal fun CompendiumTalentChooser(
                     .padding(Spacing.bodyPadding),
                 onClick = onCustomTalentRequest,
             ) {
-                Text(stringResource(R.string.button_add_non_compendium_talent))
+                Text(strings.buttonAddNonCompendium)
             }
         }
     }

@@ -11,15 +11,14 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.Character
 import cz.frantisekmasa.wfrp_master.common.core.domain.identifiers.CharacterId
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.NumberPicker
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.TopPanel
 import cz.frantisekmasa.wfrp_master.common.core.viewModel.getViewModel
+import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
 import cz.frantisekmasa.wfrp_master.religion.ui.blessings.BlessingsCard
 import cz.frantisekmasa.wfrp_master.religion.ui.miracles.MiraclesCard
-import cz.muni.fi.rpg.R
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.koin.core.parameter.parametersOf
@@ -68,7 +67,7 @@ private fun SinPoints(
             val sinPoints = points.sin
 
             NumberPicker(
-                label = stringResource(R.string.label_sin_points),
+                label = LocalStrings.current.points.labelSinPoints,
                 value = sinPoints,
                 onIncrement = { updateSinPoints(sinPoints + 1) },
                 onDecrement = { updateSinPoints((sinPoints - 1).coerceAtLeast(0)) }

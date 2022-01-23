@@ -21,7 +21,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
 import cz.frantisekmasa.wfrp_master.common.core.shared.Resources
 import cz.frantisekmasa.wfrp_master.common.core.ui.buttons.CloseButton
 import cz.frantisekmasa.wfrp_master.common.core.ui.flow.collectWithLifecycle
@@ -29,8 +28,8 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.EmptyUI
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.FullScreenProgress
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.ItemIcon
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
+import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
 import cz.frantisekmasa.wfrp_master.religion.domain.Blessing
-import cz.muni.fi.rpg.R
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -42,11 +41,13 @@ internal fun CompendiumBlessingChooser(
     onCustomBlessingRequest: () -> Unit,
     onDismissRequest: () -> Unit,
 ) {
+    val strings = LocalStrings.current.blessings
+
     Scaffold(
         topBar = {
             TopAppBar(
                 navigationIcon = { CloseButton(onDismissRequest) },
-                title = { Text(stringResource(R.string.title_choose_compendium_blessing)) },
+                title = { Text(strings.titleChooseCompendiumBlessing) },
             )
         }
     ) {
@@ -64,10 +65,10 @@ internal fun CompendiumBlessingChooser(
                 if (compendiumBlessings.isEmpty()) {
                     EmptyUI(
                         icon = Resources.Drawable.Blessing,
-                        textId = R.string.no_blessings_in_compendium,
-                        subTextId = if (totalCompendiumBlessingCount == 0)
-                            R.string.no_items_in_compendium_sub_text_player else
-                            null,
+                        text = strings.messages.noBlessingsInCompendium,
+                        subText = if (totalCompendiumBlessingCount == 0)
+                           strings.messages.noBlessingsInCompendiumSubtextPlayer
+                        else null,
                     )
                 } else {
                     val coroutineScope = rememberCoroutineScope()
@@ -102,7 +103,7 @@ internal fun CompendiumBlessingChooser(
                     .padding(Spacing.bodyPadding),
                 onClick = onCustomBlessingRequest,
             ) {
-                Text(stringResource(R.string.button_add_non_compendium_blessing))
+                Text(strings.buttonAddNonCompendium)
             }
         }
     }

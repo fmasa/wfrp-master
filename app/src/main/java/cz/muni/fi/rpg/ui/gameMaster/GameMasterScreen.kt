@@ -24,6 +24,7 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.IconAction
 import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.tabs.TabPager
 import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.tabs.tab
 import cz.frantisekmasa.wfrp_master.common.core.viewModel.viewModel
+import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
 import cz.frantisekmasa.wfrp_master.navigation.Route
 import cz.frantisekmasa.wfrp_master.navigation.Routing
 import cz.muni.fi.rpg.R
@@ -36,6 +37,7 @@ import org.koin.core.parameter.parametersOf
 fun GameMasterScreen(routing: Routing<Route.GameMaster>) {
     val viewModel = ViewModel.GameMaster(routing.route.partyId)
     val party = viewModel.party.collectWithLifecycle(null).value
+    val strings = LocalStrings.current.parties
 
     Scaffold(
         topBar = {
@@ -45,7 +47,7 @@ fun GameMasterScreen(routing: Routing<Route.GameMaster>) {
                 actions = {
                     IconAction(
                         Icons.Rounded.Settings,
-                        stringResource(R.string.title_party_settings),
+                        strings.titleSettings,
                         onClick = {
                             if (party == null) {
                                 return@IconAction
@@ -75,7 +77,7 @@ fun GameMasterScreen(routing: Routing<Route.GameMaster>) {
             ) {
                 val modifier = Modifier.width(screenWidth)
 
-                tab(R.string.title_characters) {
+                tab(strings.tabCharacters) {
                     PartySummaryScreen(
                         modifier = modifier,
                         partyId = party.id,
@@ -90,7 +92,7 @@ fun GameMasterScreen(routing: Routing<Route.GameMaster>) {
                     )
                 }
 
-                tab(R.string.title_calendar) {
+                tab(strings.tabCalendar) {
                     CalendarScreen(
                         party,
                         modifier = modifier,
@@ -98,7 +100,7 @@ fun GameMasterScreen(routing: Routing<Route.GameMaster>) {
                     )
                 }
 
-                tab(R.string.title_encounters) {
+                tab(strings.tabEncounters) {
                     val encountersViewModel: EncountersViewModel by viewModel { parametersOf(party.id) }
                     EncountersScreen(
                         partyId = party.id,

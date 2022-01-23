@@ -1,10 +1,8 @@
 package cz.muni.fi.rpg.ui.joinParty
 
 import android.content.Context
-import android.text.SpannableStringBuilder
 import android.widget.Toast
 import androidx.annotation.MainThread
-import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -20,15 +18,12 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.core.text.bold
 import cz.frantisekmasa.wfrp_master.common.core.auth.LocalUser
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.Invitation
 import cz.frantisekmasa.wfrp_master.common.core.ui.buttons.PrimaryButton
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.FullScreenProgress
 import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
-import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.model.domain.invitation.AlreadyInParty
 import cz.muni.fi.rpg.model.domain.invitation.InvalidInvitation
 import cz.muni.fi.rpg.viewModels.JoinPartyViewModel
@@ -53,18 +48,15 @@ fun InvitationConfirmation(
         return
     }
 
+    val strings = LocalStrings.current
+
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center,
         modifier = Modifier.fillMaxHeight()
     ) {
         Text(
-            text = SpannableStringBuilder()
-                .append(stringResource(R.string.join_party_dialog_party_name))
-                .append(" ")
-                .bold { append(invitation.partyName) }
-                .append(".")
-                .toString(),
+            text = strings.parties.messages.invitationConfirmation(invitation.partyName),
             style = MaterialTheme.typography.h5,
             textAlign = TextAlign.Center,
             modifier = Modifier.fillMaxWidth()
@@ -74,9 +66,10 @@ fun InvitationConfirmation(
         val context = LocalContext.current
 
         PrimaryButton(
-            LocalStrings.current.parties.buttonJoin,
+            strings.parties.buttonJoin,
             onClick = {
                 processingInvitation = true
+
 
                 coroutineScope.launch {
                     try {
@@ -88,19 +81,19 @@ fun InvitationConfirmation(
                     } catch (e: Throwable) {
                         when (e) {
                             is InvalidInvitation -> {
-                                showError(e, context, R.string.error_invalid_invitation)
+                                showError(e, context, strings.parties.messages.invalidInvitationToken)
                             }
                             is AlreadyInParty -> {
                                 showError(
                                     e,
                                     context,
-                                    R.string.error_already_party_member
+                                    strings.parties.messages.alreadyMember,
                                 )
                             }
                             is CancellationException -> {
                             }
                             else -> {
-                                showError(e, context, R.string.error_unkown)
+                                showError(e, context, strings.messages.errorUnknown)
                                 Napier.e(e.toString(), e)
                             }
                         }
@@ -117,8 +110,8 @@ fun InvitationConfirmation(
 private fun showError(
     e: Throwable,
     context: Context,
-    @StringRes messageRes: Int,
+    message: String,
 ) {
-    Toast.makeText(context, context.getString(messageRes), Toast.LENGTH_SHORT).show()
+    Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
     Napier.i("Invitation processing error: ${e.message}", e)
 }

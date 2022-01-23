@@ -20,8 +20,8 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.flow.collectWithLifecycle
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.SingleLineTextValue
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
 import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.SubheadBar
+import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
 import cz.frantisekmasa.wfrp_master.religion.domain.Miracle
-import cz.muni.fi.rpg.R
 import java.util.UUID
 
 @Composable
@@ -79,9 +79,11 @@ private fun MiracleDetail(
             }
 
             Column(Modifier.padding(Spacing.bodyPadding)) {
-                SingleLineTextValue(R.string.label_range, miracle.range)
-                SingleLineTextValue(R.string.label_target, miracle.target)
-                SingleLineTextValue(R.string.label_duration, miracle.duration)
+                val strings = LocalStrings.current.miracles
+
+                SingleLineTextValue(strings.labelRange, miracle.range)
+                SingleLineTextValue(strings.labelTarget, miracle.target)
+                SingleLineTextValue(strings.labelDuration, miracle.duration)
 
                 Text(miracle.effect, Modifier.padding(top = 8.dp))
             }

@@ -12,7 +12,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.Character
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.Race
@@ -27,7 +26,7 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.forms.SelectBoxLabel
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.TextInput
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.inputValue
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.NumberPicker
-import cz.muni.fi.rpg.R
+import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
 
 object CharacterBasicInfoForm {
     @Stable
@@ -79,16 +78,18 @@ fun CharacterBasicInfoForm(
     data: CharacterBasicInfoForm.Data,
     validate: Boolean,
 ) {
+    val strings = LocalStrings.current.character
+
     Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
         TextInput(
-            label = stringResource(R.string.label_name),
+            label = strings.labelName,
             value = data.name,
             maxLength = Character.NAME_MAX_LENGTH,
             validate = validate,
         )
 
         ChipList(
-            label = stringResource(R.string.label_race),
+            label = strings.labelRace,
             modifier = Modifier.padding(top = 8.dp),
             items = Race.values().map { it to it.localizedName },
             value = data.race.value,
@@ -98,7 +99,7 @@ fun CharacterBasicInfoForm(
         Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
             TextInput(
                 modifier = Modifier.weight(1f),
-                label = stringResource(R.string.label_social_class),
+                label = strings.labelClass,
                 value = data.socialClass,
                 maxLength = Character.SOCIAL_CLASS_MAX_LENGTH,
                 validate = validate,
@@ -106,7 +107,7 @@ fun CharacterBasicInfoForm(
 
             TextInput(
                 modifier = Modifier.weight(1f),
-                label = stringResource(R.string.label_career),
+                label = strings.labelCareer,
                 value = data.career,
                 maxLength = Character.CAREER_MAX_LENGTH,
                 validate = validate,
@@ -114,7 +115,7 @@ fun CharacterBasicInfoForm(
         }
 
         Column {
-            SelectBoxLabel(stringResource(R.string.label_status))
+            SelectBoxLabel(strings.labelStatus)
             Row(
                 Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.spacedBy(8.dp),
@@ -135,21 +136,21 @@ fun CharacterBasicInfoForm(
         }
 
         TextInput(
-            label = stringResource(R.string.label_psychology_input),
+            label = strings.labelPsychology,
             value = data.psychology,
             maxLength = Character.PSYCHOLOGY_MAX_LENGTH,
             validate = validate,
         )
 
         TextInput(
-            label = stringResource(R.string.label_motivation_input),
+            label = strings.labelMotivation,
             value = data.motivation,
             maxLength = Character.MOTIVATION_MAX_LENGTH,
             validate = validate,
         )
 
         TextInput(
-            label = stringResource(R.string.label_character_note_input),
+            label = strings.labelNote,
             value = data.note,
             multiLine = true,
             validate = validate,

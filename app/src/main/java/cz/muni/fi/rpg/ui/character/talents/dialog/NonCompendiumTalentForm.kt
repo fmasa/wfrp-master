@@ -10,7 +10,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
 import cz.frantisekmasa.wfrp_master.common.core.ui.components.FormDialog
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.HydratedFormData
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.InputValue
@@ -18,7 +17,7 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.forms.Rules
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.TextInput
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.inputValue
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.NumberPicker
-import cz.muni.fi.rpg.R
+import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
 import cz.muni.fi.rpg.model.domain.talents.Talent
 import cz.muni.fi.rpg.ui.common.composables.FormInputHorizontalPadding
 import cz.muni.fi.rpg.viewModels.TalentsViewModel
@@ -31,9 +30,10 @@ internal fun NonCompendiumTalentForm(
     onDismissRequest: () -> Unit,
 ) {
     val formData = NonCompendiumTalentFormData.fromTalent(existingTalent)
+    val strings = LocalStrings.current.talents
 
     FormDialog(
-        title = if (existingTalent != null) R.string.title_talent_edit else R.string.title_talent_new,
+        title = if (existingTalent != null) strings.titleEdit else strings.titleNew,
         onDismissRequest = onDismissRequest,
         formData = formData,
         onSave = viewModel::saveTalent,
@@ -45,14 +45,14 @@ internal fun NonCompendiumTalentForm(
         ) {
             TextInput(
                 modifier = Modifier.weight(1f),
-                label = stringResource(R.string.label_name),
+                label = strings.labelName,
                 value = formData.name,
                 validate = validate,
                 maxLength = Talent.NAME_MAX_LENGTH,
             )
 
             NumberPicker(
-                label = stringResource(R.string.label_talent_taken),
+                label = strings.labelTimesTaken,
                 value = formData.taken.value,
                 onIncrement = { formData.taken.value++ },
                 onDecrement = {
@@ -62,7 +62,7 @@ internal fun NonCompendiumTalentForm(
         }
 
         TextInput(
-            label = stringResource(R.string.label_description),
+            label = strings.labelDescription,
             value = formData.description,
             validate = validate,
             multiLine = true,

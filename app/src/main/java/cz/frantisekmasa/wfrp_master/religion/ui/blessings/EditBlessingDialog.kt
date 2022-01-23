@@ -15,8 +15,8 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.dialogs.FullScreenDialog
 import cz.frantisekmasa.wfrp_master.common.core.ui.flow.collectWithLifecycle
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.SingleLineTextValue
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
+import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
 import cz.frantisekmasa.wfrp_master.religion.domain.Blessing
-import cz.muni.fi.rpg.R
 import java.util.UUID
 
 @Composable
@@ -63,9 +63,11 @@ private fun BlessingDetail(
     ) {
         Column(Modifier.verticalScroll(rememberScrollState())) {
             Column(Modifier.padding(Spacing.bodyPadding)) {
-                SingleLineTextValue(R.string.label_range, blessing.range)
-                SingleLineTextValue(R.string.label_target, blessing.target)
-                SingleLineTextValue(R.string.label_duration, blessing.duration)
+                val strings = LocalStrings.current.blessings
+
+                SingleLineTextValue(strings.labelRange, blessing.range)
+                SingleLineTextValue(strings.labelTarget, blessing.target)
+                SingleLineTextValue(strings.labelDuration, blessing.duration)
 
                 Text(blessing.effect, Modifier.padding(top = 8.dp))
             }

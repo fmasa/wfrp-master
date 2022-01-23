@@ -21,8 +21,6 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import cz.frantisekmasa.wfrp_master.common.core.domain.identifiers.CharacterId
 import cz.frantisekmasa.wfrp_master.common.core.shared.Resources
@@ -34,7 +32,7 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.EmptyUI
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.ItemIcon
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
 import cz.frantisekmasa.wfrp_master.common.core.viewModel.viewModel
-import cz.muni.fi.rpg.R
+import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
 import cz.muni.fi.rpg.model.domain.spells.Spell
 import cz.muni.fi.rpg.ui.character.spells.dialog.AddSpellDialog
 import cz.muni.fi.rpg.ui.character.spells.dialog.EditSpellDialog
@@ -56,7 +54,7 @@ internal fun CharacterSpellsScreen(
             FloatingActionButton(onClick = { showAddSpellDialog = true }) {
                 Icon(
                     Icons.Rounded.Add,
-                    stringResource(R.string.icon_add_spell),
+                    LocalStrings.current.spells.titleAdd,
                 )
             }
         }
@@ -77,9 +75,11 @@ private fun MainContainer(viewModel: SpellsViewModel) {
     val spells = viewModel.spells.collectWithLifecycle(null).value ?: return
 
     if (spells.isEmpty()) {
+        val messages = LocalStrings.current.spells.messages
+
         EmptyUI(
-            textId = R.string.no_spells,
-            subTextId = R.string.no_spells_sub_text,
+            text = messages.characterHasNoSpell,
+            subText = messages.characterHasNoSpellSubtext,
             icon = Resources.Drawable.Spell,
         )
         return
@@ -108,19 +108,21 @@ private fun MainContainer(viewModel: SpellsViewModel) {
 
 @Composable
 private fun SpellItem(spell: Spell, onClick: () -> Unit, onRemove: () -> Unit) {
+    val strings = LocalStrings.current.spells
+
     CardItem(
         name = spell.name,
         description = spell.effect,
         icon = { ItemIcon(Resources.Drawable.Spell, ItemIcon.Size.Small) },
         onClick = onClick,
-        contextMenuItems = listOf(ContextMenu.Item(stringResource(R.string.remove), onRemove)),
+        contextMenuItems = listOf(ContextMenu.Item(LocalStrings.current.commonUi.buttonRemove, onRemove)),
         badge = {
             Column(
                 verticalArrangement = Arrangement.spacedBy(Spacing.tiny),
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 Row {
-                    Text(stringResource(R.string.spell_casting_number_shortcut))
+                    Text(strings.castingNumberShortcut)
                     Text(
                         spell.effectiveCastingNumber.toString(),
                         Modifier.padding(start = Spacing.tiny),
@@ -130,7 +132,7 @@ private fun SpellItem(spell: Spell, onClick: () -> Unit, onRemove: () -> Unit) {
                 if (spell.memorized) {
                     Icon(
                         drawableResource(Resources.Drawable.MemorizeSpell),
-                        stringResource(R.string.spell_memorized),
+                        strings.labelMemorized,
                         Modifier.size(16.dp),
                     )
                 }

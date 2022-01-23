@@ -23,14 +23,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.runtime.toMutableStateMap
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import cz.frantisekmasa.wfrp_master.compendium.domain.Blessing
-import cz.frantisekmasa.wfrp_master.compendium.domain.Miracle
-import cz.frantisekmasa.wfrp_master.compendium.domain.Skill
-import cz.frantisekmasa.wfrp_master.compendium.domain.Spell
-import cz.frantisekmasa.wfrp_master.compendium.domain.Talent
 import cz.frantisekmasa.wfrp_master.common.core.domain.compendium.CompendiumItem
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.PartyId
 import cz.frantisekmasa.wfrp_master.common.core.ui.buttons.CloseButton
@@ -39,7 +33,12 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.flow.collectWithLifecycle
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.FullScreenProgress
 import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.TopBarAction
 import cz.frantisekmasa.wfrp_master.common.core.viewModel.viewModel
-import cz.muni.fi.rpg.R
+import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
+import cz.frantisekmasa.wfrp_master.compendium.domain.Blessing
+import cz.frantisekmasa.wfrp_master.compendium.domain.Miracle
+import cz.frantisekmasa.wfrp_master.compendium.domain.Skill
+import cz.frantisekmasa.wfrp_master.compendium.domain.Spell
+import cz.frantisekmasa.wfrp_master.compendium.domain.Talent
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
@@ -78,10 +77,12 @@ private fun ImportedItemsPicker(
     val viewModel: CompendiumViewModel by viewModel { parametersOf(partyId) }
     var screen by remember(state) { mutableStateOf(ItemsScreen.SKILLS) }
 
+    val strings = LocalStrings.current.compendium
+
     when (screen) {
         ItemsScreen.SKILLS -> {
             ItemPicker(
-                label = stringResource(R.string.rulebook_import_pick_skills),
+                label = strings.pickPromptSkills,
                 items = state.skills,
                 onSave = viewModel::saveMultipleSkills,
                 onContinue = { screen = ItemsScreen.TALENTS },
@@ -91,7 +92,7 @@ private fun ImportedItemsPicker(
         }
         ItemsScreen.TALENTS -> {
             ItemPicker(
-                label = stringResource(R.string.rulebook_import_pick_talents),
+                label =  strings.pickPromptTalents,
                 items = state.talents,
                 onSave = viewModel::saveMultipleTalents,
                 onContinue = { screen = ItemsScreen.SPELLS },
@@ -101,7 +102,7 @@ private fun ImportedItemsPicker(
         }
         ItemsScreen.SPELLS -> {
             ItemPicker(
-                label = stringResource(R.string.rulebook_import_pick_spells),
+                label =  strings.pickPromptSpells,
                 items = state.spells,
                 onSave = viewModel::saveMultipleSpells,
                 onContinue = { screen = ItemsScreen.BLESSINGS },
@@ -111,7 +112,7 @@ private fun ImportedItemsPicker(
         }
         ItemsScreen.BLESSINGS -> {
             ItemPicker(
-                label = stringResource(R.string.rulebook_import_pick_blessings),
+                label =  strings.pickPromptBlessings,
                 items = state.blessings,
                 onSave = viewModel::saveMultipleBlessings,
                 onContinue = { screen = ItemsScreen.MIRACLES },
@@ -121,7 +122,7 @@ private fun ImportedItemsPicker(
         }
         ItemsScreen.MIRACLES -> {
             ItemPicker(
-                label = stringResource(R.string.rulebook_import_pick_miracles),
+                label =  strings.pickPromptMiracles,
                 items = state.miracles,
                 onSave = viewModel::saveMultipleMiracles,
                 onContinue = onComplete,
@@ -148,7 +149,7 @@ private fun <T : CompendiumItem<T>> ItemPicker(
             topBar = {
                 TopAppBar(
                     navigationIcon = { CloseButton(onClose) },
-                    title = { Text(stringResource(R.string.title_importing_rulebook)) }
+                    title = { Text(LocalStrings.current.compendium.titleImportDialog) }
                 )
             },
             content = { FullScreenProgress() }
@@ -168,15 +169,20 @@ private fun <T : CompendiumItem<T>> ItemPicker(
     var saving by remember { mutableStateOf(false) }
     val isLoading = saving
 
+    val strings = LocalStrings.current
+
     Scaffold(
         topBar = {
             TopAppBar(
                 navigationIcon = { CloseButton(onClick = onClose) },
-                title = { Text(stringResource(R.string.title_importing_rulebook)) },
+                title = { Text(strings.compendium.titleImportDialog) },
                 actions = {
                     val coroutineScope = rememberCoroutineScope()
                     TopBarAction(
-                        textRes = if (atLeastOneSelected) R.string.button_save else R.string.button_skip,
+                        text = when {
+                            atLeastOneSelected -> strings.commonUi.buttonSave
+                            else -> strings.commonUi.buttonSkip
+                        },
                         enabled = !isLoading,
                         onClick = {
                             coroutineScope.launch {
@@ -226,7 +232,7 @@ private fun <T : CompendiumItem<T>> ItemPicker(
                             ),
                             text = { Text(item.name) },
                             secondaryText = if (existingItemNames.contains(item.name)) {
-                                { Text(stringResource(R.string.item_with_name_exists)) }
+                                { Text(strings.compendium.messages.itemAlreadyExists) }
                             } else null
                         )
                     }

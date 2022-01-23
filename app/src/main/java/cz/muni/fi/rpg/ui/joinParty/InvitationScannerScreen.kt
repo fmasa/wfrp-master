@@ -29,7 +29,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import com.google.accompanist.permissions.PermissionState
 import com.google.accompanist.permissions.rememberPermissionState
@@ -38,9 +37,9 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.buttons.BackButton
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.HorizontalLine
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
 import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.SubheadBar
+import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
 import cz.frantisekmasa.wfrp_master.navigation.Route
 import cz.frantisekmasa.wfrp_master.navigation.Routing
-import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.viewModels.JoinPartyViewModel
 import cz.muni.fi.rpg.viewModels.provideJoinPartyViewModel
 import kotlinx.coroutines.launch
@@ -50,7 +49,7 @@ fun InvitationScannerScreen(routing: Routing<Route>) {
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text(stringResource(R.string.title_joinParty)) },
+                title = { Text(LocalStrings.current.parties.titleJoin) },
                 navigationIcon = {
                     BackButton(onClick = { routing.pop() })
                 },
@@ -92,7 +91,7 @@ private fun Scanner(viewModel: JoinPartyViewModel, onSuccessfulScan: (Invitation
 
     when {
         camera.hasPermission -> {
-            SubheadBar(stringResource(R.string.qr_scan_prompt))
+            SubheadBar(LocalStrings.current.parties.messages.qrCodeScanningPrompt)
             QrCodeScanner(
                 modifier = Modifier.fillMaxSize(),
                 onSuccessfulScan = { qrCodeData ->
@@ -115,15 +114,17 @@ private fun PermissionRequestScreen(camera: PermissionState) {
             SideEffect { camera.launchPermissionRequest() }
         }
 
+        val strings = LocalStrings.current.permissions
+
         Text(
-            stringResource(R.string.camera_permission_required),
+            strings.cameraRequired,
             style = MaterialTheme.typography.h6,
         )
 
         Rationale()
 
         TextButton(onClick = { camera.launchPermissionRequest() }) {
-            Text(stringResource(R.string.button_request_permission).uppercase())
+            Text(strings.buttonRequestPermission.uppercase())
         }
 
         Alternative()
@@ -133,13 +134,15 @@ private fun PermissionRequestScreen(camera: PermissionState) {
 @Composable
 private fun PermissionDeniedScreen() {
     ScreenBody {
-        Text(stringResource(R.string.camera_permission_denied), style = MaterialTheme.typography.h6)
+        val strings = LocalStrings.current.permissions
+
+        Text(strings.cameraDenied, style = MaterialTheme.typography.h6)
         Rationale()
-        Text(stringResource(R.string.camera_permission_instructions), textAlign = TextAlign.Center)
+        Text(strings.messages.settingsScreenInstructions, textAlign = TextAlign.Center)
 
         val context = LocalContext.current
         TextButton(onClick = { context.openApplicationSettings() }) {
-            Text(stringResource(R.string.button_open_settings).uppercase())
+            Text(strings.buttonOpenSettings.uppercase())
         }
 
         Alternative()
@@ -161,7 +164,7 @@ private inline fun ScreenBody(content: @Composable ColumnScope.() -> Unit) {
 @Composable
 private fun Rationale() {
     Text(
-        stringResource(R.string.camera_permission_rationale),
+        LocalStrings.current.permissions.messages.cameraPermissionRationale,
         textAlign = TextAlign.Center,
     )
 }
@@ -172,7 +175,7 @@ private fun Alternative() {
     HorizontalLine()
 
     Text(
-        stringResource(R.string.camera_permission_alternative),
+        LocalStrings.current.parties.messages.invitationLinkAlternative,
         modifier = Modifier.padding(top = Spacing.mediumLarge),
         textAlign = TextAlign.Center,
     )

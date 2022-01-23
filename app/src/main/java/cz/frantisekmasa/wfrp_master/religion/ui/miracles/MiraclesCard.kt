@@ -9,7 +9,6 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import cz.frantisekmasa.wfrp_master.common.core.shared.Resources
 import cz.frantisekmasa.wfrp_master.common.core.ui.buttons.CardButton
@@ -20,8 +19,8 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.CardTitle
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.ContextMenu.Item
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.EmptyUI
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.ItemIcon
+import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
 import cz.frantisekmasa.wfrp_master.religion.domain.Miracle
-import cz.muni.fi.rpg.R
 import kotlinx.coroutines.launch
 import java.util.UUID
 
@@ -36,11 +35,13 @@ internal fun MiraclesCard(viewModel: MiraclesViewModel) {
             .padding(bottom = 8.dp)
     ) {
         Column(Modifier.padding(horizontal = 6.dp)) {
-            CardTitle(R.string.title_character_miracles)
+            val strings = LocalStrings.current.miracles
+
+            CardTitle(strings.title)
 
             if (miracles.isEmpty()) {
                 EmptyUI(
-                    R.string.no_miracles,
+                    strings.messages.characterHasNoMiracles,
                     Resources.Drawable.Miracle,
                     size = EmptyUI.Size.Small
                 )
@@ -66,7 +67,7 @@ internal fun MiraclesCard(viewModel: MiraclesViewModel) {
 
             var showAddMiracleDialog by rememberSaveable { mutableStateOf(false) }
 
-            CardButton(R.string.title_miracle_add, onClick = { showAddMiracleDialog = true })
+            CardButton(strings.titleAdd, onClick = { showAddMiracleDialog = true })
 
             if (showAddMiracleDialog) {
                 AddMiracleDialog(
@@ -89,6 +90,11 @@ private fun MiracleItem(
         miracle.effect,
         { ItemIcon(Resources.Drawable.Miracle, ItemIcon.Size.Small) },
         onClick = onClick,
-        listOf(Item(stringResource(R.string.button_remove), onClick = { onRemove() })),
+        listOf(
+            Item(
+                LocalStrings.current.commonUi.buttonRemove,
+                onClick = { onRemove() },
+            )
+        ),
     )
 }

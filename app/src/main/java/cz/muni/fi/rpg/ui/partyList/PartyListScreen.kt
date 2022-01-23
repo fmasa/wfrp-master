@@ -20,6 +20,7 @@ import androidx.compose.material.icons.rounded.Camera
 import androidx.compose.material.icons.rounded.Group
 import androidx.compose.material.icons.rounded.GroupAdd
 import androidx.compose.material.icons.rounded.Redeem
+import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -28,7 +29,6 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import cz.frantisekmasa.wfrp_master.common.core.auth.LocalUser
 import cz.frantisekmasa.wfrp_master.common.core.domain.identifiers.CharacterId
@@ -46,9 +46,9 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.WithContextMenu
 import cz.frantisekmasa.wfrp_master.common.core.viewModel.PremiumViewModel
 import cz.frantisekmasa.wfrp_master.common.core.viewModel.providePremiumViewModel
 import cz.frantisekmasa.wfrp_master.common.core.viewModel.viewModel
+import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
 import cz.frantisekmasa.wfrp_master.navigation.Route
 import cz.frantisekmasa.wfrp_master.navigation.Routing
-import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.ui.common.BuyPremiumPrompt
 import cz.muni.fi.rpg.ui.common.composables.FloatingActionsMenu
 import cz.muni.fi.rpg.ui.common.composables.MenuState
@@ -74,10 +74,13 @@ fun PartyListScreen(routing: Routing<Route.PartyList>) {
         )
     }
 
+    val scaffoldState = rememberScaffoldState()
+
     Scaffold(
+        scaffoldState = scaffoldState,
         topBar = {
             TopAppBar(
-                title = { Text("Parties") },
+                title = { Text(LocalStrings.current.parties.titleParties) },
                 navigationIcon = { HamburgerButton() }
             )
         },
@@ -106,6 +109,7 @@ fun PartyListScreen(routing: Routing<Route.PartyList>) {
 
         removePartyDialogState.IfOpened { party ->
             RemovePartyDialog(
+                scaffoldState.snackbarHostState,
                 party,
                 viewModel,
                 onDismissRequest = { removePartyDialogState = DialogState.Closed() },
@@ -145,12 +149,13 @@ private fun Menu(
     partyCount: Int
 ) {
     val premiumViewModel = providePremiumViewModel()
+    val strings = LocalStrings.current
 
     if (partyCount >= PremiumViewModel.FREE_PARTY_COUNT && premiumViewModel.active != true) {
         var premiumPromptVisible by remember { mutableStateOf(false) }
 
         FloatingActionButton(onClick = { premiumPromptVisible = true }) {
-            Icon(Icons.Rounded.Redeem, stringResource(R.string.buy_premium))
+            Icon(Icons.Rounded.Redeem, strings.premium.dialogTitle)
         }
 
         if (premiumPromptVisible) {
@@ -167,7 +172,7 @@ private fun Menu(
     ) {
         ExtendedFloatingActionButton(
             icon = { Icon(Icons.Rounded.Camera, VisualOnlyIconDescription) },
-            text = { Text(stringResource(R.string.scanCode_title)) },
+            text = { Text(strings.parties.titleJoinViaQrCode) },
             onClick = {
                 routing.navigateTo(Route.InvitationScanner)
                 onStateChangeRequest(MenuState.COLLAPSED)
@@ -177,7 +182,7 @@ private fun Menu(
             icon = {
                 Icon(Icons.Rounded.GroupAdd, VisualOnlyIconDescription)
             },
-            text = { Text(stringResource(R.string.assembleParty_title)) },
+            text = { Text(strings.parties.titleCreateParty) },
             onClick = {
                 onCreatePartyRequest()
                 onStateChangeRequest(MenuState.COLLAPSED)
@@ -195,7 +200,7 @@ fun PartyItem(party: Party) {
             icon = { ItemIcon(Icons.Rounded.Group, ItemIcon.Size.Large) },
             text = { Text(party.getName()) },
             trailing = if (playersCount > 0)
-                ({ Text(stringResource(R.string.players_number, playersCount)) })
+                ({ Text(LocalStrings.current.parties.numberOfPlayers(playersCount)) })
             else null,
         )
         Divider()
@@ -213,9 +218,11 @@ private fun MainContainer(
     Box(modifier) {
         parties?.let {
             if (it.isEmpty()) {
+                val messages = LocalStrings.current.parties.messages
+
                 EmptyUI(
-                    textId = R.string.no_parties_prompt,
-                    subTextId = R.string.no_parties_sub_prompt,
+                    text = messages.noParties,
+                    subText = messages.noPartiesSubtext,
                     icon = Resources.Drawable.PartyNotFound,
                 )
                 return@let
@@ -245,17 +252,18 @@ fun PartyList(
         items(parties) { party ->
             val isGameMaster =
                 LocalUser.current.id == party.gameMasterId || party.gameMasterId == null
+            val strings = LocalStrings.current
 
             WithContextMenu(
                 onClick = { onClick(party) },
                 items = listOf(
                     if (isGameMaster)
                         ContextMenu.Item(
-                            stringResource(R.string.remove),
+                            strings.commonUi.buttonRemove,
                             onClick = { onRemove(party) },
                         )
                     else ContextMenu.Item(
-                        stringResource(R.string.button_leave),
+                        strings.parties.buttonLeave,
                         onClick = { onLeaveRequest(party) },
                     )
                 )

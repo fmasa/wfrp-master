@@ -69,9 +69,9 @@ data class Points(
     }
 
     enum class PointPool(override val nameResolver: (strings: Strings) -> String) : NamedEnum {
-        FATE({ it.labelFatePoints }),
-        FORTUNE({ it.labelFortunePoints }),
-        RESILIENCE({ it.labelResiliencePoints }),
-        RESOLVE({ it.labelResolvePoints }),
+        FATE({ it.points.fate }),
+        FORTUNE({ it.points.fortune }),
+        RESILIENCE({ it.points.resilience }),
+        RESOLVE({ it.points.resolve }),
     }
 }

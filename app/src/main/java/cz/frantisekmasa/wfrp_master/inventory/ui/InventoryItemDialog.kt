@@ -7,7 +7,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.snapshots.SnapshotStateMap
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import cz.frantisekmasa.wfrp_master.common.core.domain.NamedEnum
 import cz.frantisekmasa.wfrp_master.common.core.domain.localizedName
@@ -19,12 +18,14 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.forms.Filter
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.HydratedFormData
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.InputLabel
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.InputValue
-import cz.frantisekmasa.wfrp_master.common.core.ui.forms.Rule
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.Rules
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.SelectBox
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.TextInput
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.inputValue
+import cz.frantisekmasa.wfrp_master.common.core.ui.forms.rule
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.NumberPicker
+import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
+import cz.frantisekmasa.wfrp_master.common.localization.Strings
 import cz.frantisekmasa.wfrp_master.inventory.domain.Encumbrance
 import cz.frantisekmasa.wfrp_master.inventory.domain.InventoryItem
 import cz.frantisekmasa.wfrp_master.inventory.domain.InventoryItemId
@@ -41,8 +42,6 @@ import cz.frantisekmasa.wfrp_master.inventory.domain.weapon.WeaponEquip
 import cz.frantisekmasa.wfrp_master.inventory.domain.weapon.WeaponFlaw
 import cz.frantisekmasa.wfrp_master.inventory.domain.weapon.WeaponQuality
 import cz.frantisekmasa.wfrp_master.inventory.domain.weapon.WeaponRangeExpression
-import cz.frantisekmasa.wfrp_master.common.localization.Strings
-import cz.muni.fi.rpg.R
 import java.util.UUID
 import kotlin.math.max
 
@@ -54,31 +53,30 @@ internal fun InventoryItemDialog(
 ) {
     FullScreenDialog(onDismissRequest = onDismissRequest) {
         val formData = InventoryItemFormData.fromItem(existingItem)
+        val strings = LocalStrings.current.trappings
 
         FormDialog(
-            title = if (existingItem != null)
-                R.string.title_inventory_item_edit
-            else R.string.title_inventory_item_add,
+            title = if (existingItem != null) strings.titleEdit else strings.titleAdd,
             onDismissRequest = onDismissRequest,
             formData = formData,
             onSave = viewModel::saveInventoryItem,
         ) { validate ->
             TextInput(
-                label = stringResource(R.string.label_name),
+                label = strings.labelName,
                 value = formData.name,
                 validate = validate,
                 maxLength = InventoryItem.NAME_MAX_LENGTH,
             )
 
             TextInput(
-                label = stringResource(R.string.inventory_item_quantity),
+                label = strings.labelQuantity,
                 value = formData.quantity,
                 validate = validate,
                 keyboardType = KeyboardType.Number,
             )
 
             TextInput(
-                label = stringResource(R.string.inventory_item_encumbrance),
+                label = strings.labelEncumbrancePerUnit,
                 value = formData.encumbrance,
                 maxLength = 8,
                 validate = validate,
@@ -87,7 +85,7 @@ internal fun InventoryItemDialog(
             )
 
             TextInput(
-                label = stringResource(R.string.label_description),
+                label = strings.labelDescription,
                 value = formData.description,
                 validate = validate,
                 maxLength = InventoryItem.DESCRIPTION_MAX_LENGTH,
@@ -103,8 +101,10 @@ internal fun InventoryItemDialog(
 
 @Composable
 private fun TrappingTypeForm(formData: TrappingTypeFormData, validate: Boolean) {
+    val strings = LocalStrings.current
+
     SelectBox(
-        label = stringResource(R.string.label_trapping_type),
+        label = strings.trappings.labelType,
         value = formData.type.value,
         onValueChange = { formData.type.value = it },
         items = remember { TrappingTypeOption.values() },
@@ -114,10 +114,10 @@ private fun TrappingTypeForm(formData: TrappingTypeFormData, validate: Boolean) 
     val exhaustive = when (formData.type.value) {
         TrappingTypeOption.AMMUNITION -> {
             TextInput(
-                label = stringResource(R.string.label_range),
+                label = strings.weapons.labelRange,
                 value = formData.ammunitionRange,
                 validate = validate,
-                helperText = stringResource(R.string.helper_ammunition_range),
+                helperText = strings.weapons.helperAmmunitionRange,
             )
             CheckboxList(
                 items = RangedWeaponGroup.values(),
@@ -130,14 +130,14 @@ private fun TrappingTypeForm(formData: TrappingTypeFormData, validate: Boolean) 
         }
         TrappingTypeOption.ARMOUR -> {
             SelectBox(
-                label = stringResource(R.string.label_armour_type),
+                label = strings.armour.labelType,
                 value = formData.armourType.value,
                 onValueChange = { formData.armourType.value = it },
                 items = remember { ArmourType.values() },
             )
             ArmourLocationsPickers(formData, validate)
             TextInput(
-                label = stringResource(R.string.label_armour_points),
+                label = strings.armour.labelArmourPoints,
                 value = formData.armourPoints,
                 validate = validate,
             )
@@ -145,20 +145,20 @@ private fun TrappingTypeForm(formData: TrappingTypeFormData, validate: Boolean) 
         }
         TrappingTypeOption.CONTAINER -> {
             TextInput(
-                label = stringResource(R.string.label_carries),
+                label = strings.trappings.labelCarries,
                 value = formData.carries,
                 validate = validate,
             )
         }
         TrappingTypeOption.MELEE_WEAPON -> {
             SelectBox(
-                label = stringResource(R.string.label_weapon_group),
+                label = strings.weapons.labelGroup,
                 value = formData.meleeWeaponGroup.value,
                 onValueChange = { formData.meleeWeaponGroup.value = it },
                 items = remember { MeleeWeaponGroup.values() },
             )
             SelectBox(
-                label = stringResource(R.string.label_reach),
+                label = strings.weapons.labelReach,
                 value = formData.weaponReach.value,
                 onValueChange = { formData.weaponReach.value = it },
                 items = remember { Reach.values() },
@@ -169,15 +169,15 @@ private fun TrappingTypeForm(formData: TrappingTypeFormData, validate: Boolean) 
         }
         TrappingTypeOption.RANGED_WEAPON -> {
             SelectBox(
-                label = stringResource(R.string.label_weapon_group),
+                label = strings.weapons.labelGroup,
                 value = formData.rangedWeaponGroup.value,
                 onValueChange = { formData.rangedWeaponGroup.value = it },
                 items = remember { RangedWeaponGroup.values() },
             )
             TextInput(
-                label = stringResource(R.string.label_range),
+                label = strings.weapons.labelRange,
                 value = formData.weaponRange,
-                helperText = stringResource(R.string.helper_weapon_range),
+                helperText = strings.weapons.helperRange,
                 validate = validate,
             )
             DamageInput(formData, validate)
@@ -191,7 +191,7 @@ private fun TrappingTypeForm(formData: TrappingTypeFormData, validate: Boolean) 
 @Composable
 private fun WornCheckbox(formData: TrappingTypeFormData) {
     CheckboxWithText(
-        text = stringResource(R.string.label_worn),
+        text = LocalStrings.current.trappings.labelWorn,
         checked = formData.worn.value,
         onCheckedChange = { formData.worn.value = it }
     )
@@ -200,8 +200,9 @@ private fun WornCheckbox(formData: TrappingTypeFormData) {
 @Composable
 private fun ArmourLocationsPickers(formData: TrappingTypeFormData, validate: Boolean) {
     val selectedParts = formData.armourLocations
+    val strings = LocalStrings.current.armour
 
-    InputLabel(stringResource(R.string.label_armour_locations))
+    InputLabel(strings.labelLocations)
 
     CheckboxList(
         items = ArmourLocation.values(),
@@ -210,7 +211,7 @@ private fun ArmourLocationsPickers(formData: TrappingTypeFormData, validate: Boo
     )
 
     if (validate && selectedParts.value.isEmpty()) {
-        ErrorMessage(stringResource(R.string.error_armour_location_required))
+        ErrorMessage(strings.messages.atLeastOneLocationRequired)
     }
 }
 
@@ -239,10 +240,12 @@ private fun <T> CheckboxList(
 
 @Composable
 private fun DamageInput(formData: TrappingTypeFormData, validate: Boolean) {
+    val strings = LocalStrings.current.weapons
+
     TextInput(
-        label = stringResource(R.string.label_damage),
+        label = strings.labelDamage,
         value = formData.damage,
-        helperText = stringResource(R.string.helper_damage),
+        helperText = strings.helperDamage,
         validate = validate,
     )
 }
@@ -252,7 +255,7 @@ private fun WeaponQualitiesPicker(formData: TrappingTypeFormData) {
     val values = formData.weaponQualities
 
     Column {
-        InputLabel(stringResource(R.string.label_weapon_qualities))
+        InputLabel(LocalStrings.current.weapons.labelQualities)
         WeaponQuality.values().forEach { quality ->
             CheckboxWithText(
                 text = quality.localizedName,
@@ -285,7 +288,7 @@ private fun WeaponFlawsPicker(formData: TrappingTypeFormData) {
     val values = formData.weaponFlaws
 
     Column {
-        InputLabel(stringResource(R.string.label_weapon_flaws))
+        InputLabel(LocalStrings.current.weapons.labelFlaws)
         WeaponFlaw.values().forEach { flaw ->
             CheckboxWithText(
                 text = flaw.localizedName,
@@ -478,39 +481,43 @@ private class TrappingTypeFormData(
             weaponRange: WeaponRangeExpression? = null,
             weaponReach: Reach = Reach.AVERAGE,
             worn: Boolean = false,
-        ) = TrappingTypeFormData(
-            type = rememberSaveable { mutableStateOf(type) },
-            armourLocations = rememberSaveable { mutableStateOf(armourLocations) },
-            armourPoints = inputValue(
-                armourPoints?.value?.toString() ?: "",
-                Rules.NonNegativeInteger(),
-            ),
-            ammunitionRange = inputValue(
-                ammunitionRange?.value ?: "",
-                Rules.NotBlank(),
-                Rule(R.string.error_invalid_expression, AmmunitionRangeExpression::isValid)
-            ),
-            ammunitionWeaponGroups = rememberSaveable { mutableStateOf(ammunitionWeaponGroups) },
-            armourType = rememberSaveable { mutableStateOf(armourType) },
-            carries = inputValue(carries?.toString() ?: "", Rules.NonNegativeInteger()),
-            damage = inputValue(
-                damage?.value ?: "",
-                Rules.NotBlank(),
-                Rule(R.string.error_invalid_expression, DamageExpression::isValid),
-            ),
-            meleeWeaponGroup = rememberSaveable { mutableStateOf(meleeWeaponGroup) },
-            rangedWeaponGroup = rememberSaveable { mutableStateOf(rangedWeaponGroup) },
-            weaponEquipped = rememberSaveable { mutableStateOf(weaponEquipped) },
-            weaponFlaws = remember { stateMapFrom(weaponFlaws) },
-            weaponQualities = remember { stateMapFrom(weaponQualities) },
-            weaponRange = inputValue(
-                weaponRange?.value ?: "",
-                Rules.NotBlank(),
-                Rule(R.string.error_invalid_expression, WeaponRangeExpression::isValid),
-            ),
-            weaponReach = rememberSaveable { mutableStateOf(weaponReach) },
-            worn = rememberSaveable { mutableStateOf(worn) },
-        )
+        ): TrappingTypeFormData {
+            val invalidExpressionMessage = LocalStrings.current.validation.invalidExpression
+
+            return TrappingTypeFormData(
+                type = rememberSaveable { mutableStateOf(type) },
+                armourLocations = rememberSaveable { mutableStateOf(armourLocations) },
+                armourPoints = inputValue(
+                    armourPoints?.value?.toString() ?: "",
+                    Rules.NonNegativeInteger(),
+                ),
+                ammunitionRange = inputValue(
+                    ammunitionRange?.value ?: "",
+                    Rules.NotBlank(),
+                    rule(invalidExpressionMessage, AmmunitionRangeExpression::isValid)
+                ),
+                ammunitionWeaponGroups = rememberSaveable { mutableStateOf(ammunitionWeaponGroups) },
+                armourType = rememberSaveable { mutableStateOf(armourType) },
+                carries = inputValue(carries?.toString() ?: "", Rules.NonNegativeInteger()),
+                damage = inputValue(
+                    damage?.value ?: "",
+                    Rules.NotBlank(),
+                    rule(invalidExpressionMessage, DamageExpression::isValid),
+                ),
+                meleeWeaponGroup = rememberSaveable { mutableStateOf(meleeWeaponGroup) },
+                rangedWeaponGroup = rememberSaveable { mutableStateOf(rangedWeaponGroup) },
+                weaponEquipped = rememberSaveable { mutableStateOf(weaponEquipped) },
+                weaponFlaws = remember { stateMapFrom(weaponFlaws) },
+                weaponQualities = remember { stateMapFrom(weaponQualities) },
+                weaponRange = inputValue(
+                    weaponRange?.value ?: "",
+                    Rules.NotBlank(),
+                    rule(invalidExpressionMessage, WeaponRangeExpression::isValid),
+                ),
+                weaponReach = rememberSaveable { mutableStateOf(weaponReach) },
+                worn = rememberSaveable { mutableStateOf(worn) },
+            )
+        }
 
         private fun <K, V> stateMapFrom(map: Map<K, V>) =
             SnapshotStateMap<K, V>().apply { putAll(map) }

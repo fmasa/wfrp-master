@@ -10,7 +10,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import cz.frantisekmasa.wfrp_master.common.core.domain.Stats
 import cz.frantisekmasa.wfrp_master.common.core.shared.Resources
@@ -21,7 +20,7 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.CardItem
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.ContextMenu
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.EmptyUI
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.ItemIcon
-import cz.muni.fi.rpg.R
+import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
 import cz.muni.fi.rpg.model.domain.skills.Skill
 import cz.muni.fi.rpg.ui.character.skills.dialog.AddSkillDialog
 import cz.muni.fi.rpg.ui.character.skills.dialog.EditSkillDialog
@@ -42,12 +41,14 @@ internal fun SkillsCard(
 
     CardContainer(Modifier.padding(horizontal = 8.dp).padding(bottom = 8.dp)) {
         Column(Modifier.padding(horizontal = 6.dp)) {
-            CardTitle(R.string.title_character_skills)
+            val strings = LocalStrings.current.skills
+
+            CardTitle(strings.titleSkills)
 
             if (skills.isEmpty()) {
                 EmptyUI(
-                    R.string.no_skills,
-                    Resources.Drawable.Skill,
+                    text = strings.messages.characterHasNoSkills,
+                    icon = Resources.Drawable.Skill,
                     size = EmptyUI.Size.Small
                 )
             } else {
@@ -73,7 +74,7 @@ internal fun SkillsCard(
 
             var showAddSkillDialog by rememberSaveable { mutableStateOf(false) }
 
-            CardButton(R.string.title_addSkill, onClick = { showAddSkillDialog = true })
+            CardButton(strings.titleAdd, onClick = { showAddSkillDialog = true })
 
             if (showAddSkillDialog) {
                 AddSkillDialog(
@@ -97,7 +98,7 @@ private fun SkillItem(
         skill.description,
         icon = { ItemIcon(skill.characteristic.getIcon(), ItemIcon.Size.Small) } ,
         onClick = onClick,
-        listOf(ContextMenu.Item(stringResource(R.string.remove), onClick = { onRemove() })),
+        listOf(ContextMenu.Item(LocalStrings.current.commonUi.buttonRemove, onClick = { onRemove() })),
         badge = { TestNumber(skill, characteristics) }
     )
 }
@@ -107,7 +108,7 @@ private fun TestNumber(skill: Skill, characteristics: Stats) {
     val testNumber = skill.advances + skill.characteristic.characteristicValue(characteristics)
 
     Row {
-        Text(stringResource(R.string.skill_test_number_shortcut))
+        Text(LocalStrings.current.skills.testNumberShortcut)
         Text(testNumber.toString(), Modifier.padding(start = 4.dp))
     }
 }

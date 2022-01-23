@@ -36,7 +36,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import cz.frantisekmasa.wfrp_master.combat.domain.encounter.Encounter
 import cz.frantisekmasa.wfrp_master.combat.ui.StartCombatDialog
@@ -61,7 +60,6 @@ import cz.frantisekmasa.wfrp_master.common.core.viewModel.viewModel
 import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
 import cz.frantisekmasa.wfrp_master.navigation.Route
 import cz.frantisekmasa.wfrp_master.navigation.Routing
-import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.ui.common.composables.CardTitle
 import cz.muni.fi.rpg.viewModels.EncounterDetailViewModel
 import kotlinx.coroutines.Dispatchers
@@ -118,7 +116,7 @@ fun EncounterDetailScreen(routing: Routing<Route.EncounterDetail>) {
                         Modifier.width(24.dp),
                     )
                 },
-                text = { Text(stringResource(R.string.title_start_combat)) },
+                text = { Text(LocalStrings.current.combat.titleStartCombat) },
                 onClick = { startCombatDialogVisible = true },
             )
         },
@@ -159,10 +157,12 @@ private fun TopAppBarActions(
         )
     }
 
+    val strings = LocalStrings.current
+
     IconButton(onClick = { editDialogOpened = true }) {
         Icon(
             Icons.Rounded.Edit,
-            stringResource(R.string.title_encounter_edit),
+            strings.encounters.titleEdit,
             tint = contentColorFor(MaterialTheme.colors.primarySurface),
         )
     }
@@ -171,18 +171,18 @@ private fun TopAppBarActions(
         DropdownMenuItem(
             onClick = {
                 AlertDialog.Builder(context)
-                    .setMessage(R.string.question_remove_encounter)
-                    .setPositiveButton(R.string.remove) { _, _ ->
+                    .setMessage(strings.encounters.messages.removalConfirmation)
+                    .setPositiveButton(strings.commonUi.buttonRemove) { _, _ ->
                         coroutineScope.launch(Dispatchers.IO) {
                             viewModel.remove()
                             withContext(Dispatchers.Main) { routing.pop() }
                         }
-                    }.setNegativeButton(R.string.button_cancel, null)
+                    }.setNegativeButton(strings.commonUi.buttonCancel, null)
                     .create()
                     .show()
             }
         ) {
-            Text(stringResource(R.string.remove))
+            Text(LocalStrings.current.commonUi.buttonRemove)
         }
     }
 }
@@ -203,7 +203,7 @@ private fun MainContainer(
             .padding(top = 6.dp, bottom = Spacing.bottomPaddingUnderFab),
     ) {
         DescriptionCard(viewModel)
-        CombatantsCard(
+        NpcsCard(
             viewModel,
             onCreateRequest = { routing.navigateTo(Route.NpcCreation(encounterId)) },
             onEditRequest = { routing.navigateTo(Route.NpcDetail(it)) },
@@ -220,7 +220,7 @@ private fun DescriptionCard(viewModel: EncounterDetailViewModel) {
             .fillMaxWidth()
             .padding(horizontal = 8.dp)
     ) {
-        CardTitle(R.string.title_description)
+        CardTitle(LocalStrings.current.encounters.titleDescription)
 
         val encounter = viewModel.encounter.collectWithLifecycle(null).value
 
@@ -236,7 +236,7 @@ private fun DescriptionCard(viewModel: EncounterDetailViewModel) {
 }
 
 @Composable
-private fun CombatantsCard(
+private fun NpcsCard(
     viewModel: EncounterDetailViewModel,
     onCreateRequest: () -> Unit,
     onEditRequest: (NpcId) -> Unit,
@@ -248,7 +248,9 @@ private fun CombatantsCard(
             .fillMaxWidth()
             .padding(8.dp)
     ) {
-        CardTitle(R.string.title_npcs)
+        val strings = LocalStrings.current.npcs
+
+        CardTitle(strings.titlePlural)
 
         val npcs = viewModel.npcs.collectWithLifecycle(null).value
 
@@ -264,7 +266,7 @@ private fun CombatantsCard(
 
             if (npcs.isEmpty()) {
                 EmptyUI(
-                    textId = R.string.no_npcs_prompt,
+                    text = strings.messages.noNpcs,
                     icon = Resources.Drawable.Npc,
                     size = EmptyUI.Size.Small,
                 )
@@ -311,11 +313,11 @@ private fun NpcList(
                 onClick = { onEditRequest(npc.id) },
                 contextMenuItems = listOf(
                     ContextMenu.Item(
-                        text = stringResource(R.string.button_duplicate),
+                        text = LocalStrings.current.commonUi.buttonDuplicate,
                         onClick = { onDuplicateRequest(npc.id) },
                     ),
                     ContextMenu.Item(
-                        text = stringResource(R.string.remove),
+                        text = LocalStrings.current.commonUi.buttonRemove,
                         onClick = { onRemoveRequest(npc.id) },
                     ),
                 ),

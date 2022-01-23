@@ -1,6 +1,5 @@
 package cz.frantisekmasa.wfrp_master.inventory.ui
 
-import androidx.annotation.StringRes
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -24,7 +23,6 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
@@ -39,7 +37,7 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.forms.inputValue
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
 import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.SaveAction
 import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.SubheadBar
-import cz.muni.fi.rpg.R
+import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -59,14 +57,16 @@ fun TransactionDialog(
         var validate by remember { mutableStateOf(false) }
         var errorMessage: String? by remember { mutableStateOf(null) }
 
+        val strings = LocalStrings.current.trappings.money
+
         Scaffold(
             topBar = {
                 TopAppBar(
-                    title = { Text(stringResource(R.string.title_transaction)) },
+                    title = { Text(strings.titleNewTransaction) },
                     navigationIcon = { CloseButton(onClick = onDismissRequest) },
                     actions = {
                         val coroutineScope = rememberCoroutineScope()
-                        val notEnoughMoneyMessage = stringResource(R.string.not_enough_money)
+                        val notEnoughMoneyMessage = strings.messages.notEnoughMoney
                         var saving by remember { mutableStateOf(false) }
 
                         SaveAction(
@@ -118,7 +118,7 @@ fun TransactionDialog(
                     }
                 ) {
                     Row(horizontalArrangement = Arrangement.spacedBy(Spacing.small)) {
-                        Text(stringResource(R.string.money_balance) + ":", fontWeight = FontWeight.SemiBold)
+                        Text("${strings.balance}:", fontWeight = FontWeight.SemiBold)
                         MoneyBalance(balance)
                     }
                 }
@@ -139,13 +139,13 @@ fun TransactionDialog(
                         RadioButtonWithText(
                             selected = operation == Operation.ADD,
                             onClick = { operation = Operation.ADD },
-                            text = stringResource(R.string.money_add),
+                            text = strings.add,
                         )
 
                         RadioButtonWithText(
                             selected = operation == Operation.SUBTRACT,
                             onClick = { operation = Operation.SUBTRACT },
-                            text = stringResource(R.string.money_subtract),
+                            text = strings.subtract,
                         )
                     }
 
@@ -153,9 +153,9 @@ fun TransactionDialog(
                         Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.spacedBy(Spacing.medium),
                     ) {
-                        CoinInput(crowns, R.string.label_crowns, validate)
-                        CoinInput(shillings, R.string.label_shillings, validate)
-                        CoinInput(pennies, R.string.label_pennies, validate)
+                        CoinInput(crowns, strings.crowns, validate)
+                        CoinInput(shillings, strings.shillings, validate)
+                        CoinInput(pennies, strings.pennies, validate)
                     }
 
                     errorMessage?.let {
@@ -173,10 +173,10 @@ fun TransactionDialog(
 }
 
 @Composable
-private fun RowScope.CoinInput(value: InputValue, @StringRes labelRes: Int, validate: Boolean) {
+private fun RowScope.CoinInput(value: InputValue, label: String, validate: Boolean) {
     TextInput(
         modifier = Modifier.weight(1f),
-        label = stringResource(labelRes),
+        label = label,
         value = value,
         validate = validate,
         keyboardType = KeyboardType.Number,

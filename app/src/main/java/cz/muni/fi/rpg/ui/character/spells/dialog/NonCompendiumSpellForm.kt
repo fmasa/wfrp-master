@@ -9,7 +9,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import cz.frantisekmasa.wfrp_master.common.core.ui.components.FormDialog
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.CheckboxWithText
@@ -19,7 +18,7 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.forms.Rules
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.TextInput
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.inputValue
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
-import cz.muni.fi.rpg.R
+import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
 import cz.muni.fi.rpg.model.domain.spells.Spell
 import cz.muni.fi.rpg.viewModels.SpellsViewModel
 import java.util.UUID
@@ -31,15 +30,16 @@ internal fun NonCompendiumSpellForm(
     onDismissRequest: () -> Unit,
 ) {
     val formData = NonCompendiumSpellFormData.fromSpell(existingSpell)
+    val strings = LocalStrings.current.spells
 
     FormDialog(
-        title = if (existingSpell != null) R.string.title_spell_edit else R.string.title_spell_new,
+        title = if (existingSpell != null) strings.titleEdit else strings.titleEdit,
         onDismissRequest = onDismissRequest,
         formData = formData,
         onSave = viewModel::saveSpell,
     ) { validate ->
         TextInput(
-            label = stringResource(R.string.label_name),
+            label = strings.labelName,
             value = formData.name,
             validate = validate,
             maxLength = Spell.NAME_MAX_LENGTH
@@ -52,35 +52,35 @@ internal fun NonCompendiumSpellForm(
             contentAlignment = Alignment.Center
         ) {
             CheckboxWithText(
-                stringResource(R.string.spell_memorized),
+                strings.labelMemorized,
                 checked = formData.memorized.value,
                 onCheckedChange = { formData.memorized.value = it },
             )
         }
 
         TextInput(
-            label = stringResource(R.string.label_range),
+            label = strings.labelRange,
             value = formData.range,
             validate = validate,
             maxLength = Spell.RANGE_MAX_LENGTH,
         )
 
         TextInput(
-            label = stringResource(R.string.label_target),
+            label = strings.labelTarget,
             value = formData.target,
             validate = validate,
             maxLength = Spell.TARGET_MAX_LENGTH,
         )
 
         TextInput(
-            label = stringResource(R.string.label_duration),
+            label = strings.labelDuration,
             value = formData.duration,
             validate = validate,
             maxLength = Spell.DURATION_MAX_LENGTH,
         )
 
         TextInput(
-            label = stringResource(R.string.label_spell_casting_number),
+            label = strings.labelCastingNumber,
             value = formData.castingNumber,
             keyboardType = KeyboardType.Number,
             validate = validate,
@@ -88,7 +88,7 @@ internal fun NonCompendiumSpellForm(
         )
 
         TextInput(
-            label = stringResource(R.string.label_effect),
+            label = strings.labelEffect,
             value = formData.effect,
             validate = validate,
             maxLength = Spell.EFFECT_MAX_LENGTH,

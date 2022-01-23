@@ -2,15 +2,14 @@ package cz.frantisekmasa.wfrp_master.religion.ui.blessings
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
-import androidx.compose.ui.res.stringResource
 import cz.frantisekmasa.wfrp_master.common.core.ui.components.FormDialog
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.HydratedFormData
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.InputValue
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.Rules
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.TextInput
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.inputValue
+import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
 import cz.frantisekmasa.wfrp_master.religion.domain.Blessing
-import cz.muni.fi.rpg.R
 import java.util.UUID
 
 @Composable
@@ -21,42 +20,44 @@ internal fun NonCompendiumBlessingForm(
 ) {
     val formData = NonCompendiumBlessingFormData.fromBlessing(existingBlessing)
 
+    val strings = LocalStrings.current.blessings
+
     FormDialog(
-        title = if (existingBlessing != null) R.string.title_blessing_new else R.string.title_blessing_edit,
+        title = if (existingBlessing != null) strings.titleNew else strings.titleEdit,
         onDismissRequest = onDismissRequest,
         formData = formData,
         onSave = viewModel::saveItem,
     ) { validate ->
         TextInput(
-            label = stringResource(R.string.label_name),
+            label = strings.labelName,
             value = formData.name,
             validate = validate,
             maxLength = cz.frantisekmasa.wfrp_master.compendium.domain.Blessing.NAME_MAX_LENGTH
         )
 
         TextInput(
-            label = stringResource(R.string.label_range),
+            label = strings.labelRange,
             value = formData.range,
             validate = validate,
             maxLength = cz.frantisekmasa.wfrp_master.compendium.domain.Blessing.RANGE_MAX_LENGTH,
         )
 
         TextInput(
-            label = stringResource(R.string.label_target),
+            label = strings.labelTarget,
             value = formData.target,
             validate = validate,
             maxLength = cz.frantisekmasa.wfrp_master.compendium.domain.Blessing.TARGET_MAX_LENGTH,
         )
 
         TextInput(
-            label = stringResource(R.string.label_duration),
+            label = strings.labelDuration,
             value = formData.duration,
             validate = validate,
             maxLength = cz.frantisekmasa.wfrp_master.compendium.domain.Blessing.DURATION_MAX_LENGTH,
         )
 
         TextInput(
-            label = stringResource(R.string.label_effect),
+            label = strings.labelEffect,
             value = formData.effect,
             validate = validate,
             maxLength = cz.frantisekmasa.wfrp_master.compendium.domain.Blessing.EFFECT_MAX_LENGTH,

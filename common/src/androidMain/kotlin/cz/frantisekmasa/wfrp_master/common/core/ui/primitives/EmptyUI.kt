@@ -1,6 +1,5 @@
 package cz.frantisekmasa.wfrp_master.common.core.ui.primitives
 
-import androidx.annotation.StringRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -18,7 +17,6 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -59,33 +57,32 @@ object EmptyUI {
 
 @Composable
 fun EmptyUI(
-    @StringRes textId: Int,
+    text: String,
     icon: Resources.Drawable,
-    @StringRes subTextId: Int? = null,
+    subText: String? = null,
     size: EmptyUI.Size = EmptyUI.Size.Large
 ) {
-    EmptyUI(textId, drawableResource(icon), subTextId, size)
+    EmptyUI(text, drawableResource(icon), subText, size)
 }
 
 @Composable
 fun EmptyUI(
-    @StringRes textId: Int,
+    text: String,
     icon: ImageVector,
-    @StringRes subTextId: Int? = null,
+    subText: String? = null,
     size: EmptyUI.Size = EmptyUI.Size.Large
 ) {
-    EmptyUI(textId, rememberVectorPainter(icon), subTextId, size)
+    EmptyUI(text, rememberVectorPainter(icon), subText, size)
 }
 
 @Composable
 fun EmptyUI(
-    @StringRes textId: Int,
+    text: String,
     iconPainter: Painter,
-    @StringRes subTextId: Int? = null,
+    subText: String? = null,
     size: EmptyUI.Size = EmptyUI.Size.Large
 ) {
     val disabledColor = MaterialTheme.colors.onSurface.copy(ContentAlpha.disabled)
-    val text = stringResource(textId)
 
     Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.fillMaxWidth()) {
         if (size == EmptyUI.Size.Large) {
@@ -101,12 +98,8 @@ fun EmptyUI(
 
         Text(text, style = size.textStyle)
 
-        subTextId?.let {
-            Text(
-                stringResource(subTextId),
-                textAlign = TextAlign.Center,
-                color = disabledColor,
-            )
+        subText?.let {
+            Text(it, textAlign = TextAlign.Center, color = disabledColor)
         }
     }
 }

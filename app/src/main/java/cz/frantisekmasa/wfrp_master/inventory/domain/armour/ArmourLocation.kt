@@ -7,10 +7,10 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 enum class ArmourLocation(override val nameResolver: (strings: Strings) -> String) : NamedEnum, Parcelable {
-    HEAD({ it.armourHead }),
-    BODY({ it.armourBody }),
-    LEFT_ARM({ it.armourLeftArm }),
-    RIGHT_ARM({ it.armourRightArm }),
-    LEFT_LEG({ it.armourLeftLeg }),
-    RIGHT_LEG({ it.armourRightLeg }),
+    HEAD({ it.armour.locations.head }),
+    BODY({ it.armour.locations.body }),
+    LEFT_ARM({ it.armour.locations.leftArm }),
+    RIGHT_ARM({ it.armour.locations.rightArm }),
+    LEFT_LEG({ it.armour.locations.leftLeg }),
+    RIGHT_LEG({ it.armour.locations.rightLeg }),
 }

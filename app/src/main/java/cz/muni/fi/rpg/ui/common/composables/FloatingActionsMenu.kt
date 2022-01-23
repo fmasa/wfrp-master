@@ -18,9 +18,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.painter.Painter
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import cz.muni.fi.rpg.R
+import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
 
 enum class MenuState {
     COLLAPSED,
@@ -82,7 +81,7 @@ fun FloatingActionsMenu(
         ) {
             Icon(
                 icon,
-                stringResource(R.string.icon_toggle_fab_menu),
+                LocalStrings.current.commonUi.iconToggleFabMenu,
                 modifier = Modifier.graphicsLayer(rotationZ = iconRotation),
             )
         }

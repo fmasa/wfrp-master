@@ -10,7 +10,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import cz.frantisekmasa.wfrp_master.common.core.shared.Resources
@@ -22,18 +21,21 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.forms.inputValue
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.EmptyUI
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.ItemIcon
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
+import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
 import cz.frantisekmasa.wfrp_master.compendium.domain.Blessing
 import cz.muni.fi.rpg.R
 import java.util.UUID
 
 @Composable
 fun BlessingCompendiumTab(viewModel: CompendiumViewModel, width: Dp) {
+    val messages = LocalStrings.current.blessings.messages
+
     CompendiumTab(
         liveItems = viewModel.blessings,
         emptyUI = {
             EmptyUI(
-                textId = R.string.no_blessings_in_compendium,
-                subTextId = R.string.no_blessings_in_compendium_sub_text,
+                text = messages.noBlessingsInCompendium,
+                subText = messages.noBlessingsInCompendiumSubtext,
                 icon = Resources.Drawable.Blessing
             )
         },
@@ -96,9 +98,10 @@ private fun BlessingDialog(
 
     val item = dialogStateValue.item
     val formData = BlessingFormData.fromItem(item)
+    val strings = LocalStrings.current.blessings
 
     CompendiumItemDialog(
-        title = stringResource(if (item == null) R.string.title_blessing_new else R.string.title_blessing_edit),
+        title = if (item == null) strings.titleNew else strings.titleEdit,
         formData = formData,
         saver = viewModel::save,
         onDismissRequest = { dialogState.value = DialogState.Closed() }
@@ -108,35 +111,35 @@ private fun BlessingDialog(
             modifier = Modifier.padding(Spacing.bodyPadding),
         ) {
             TextInput(
-                label = stringResource(R.string.label_name),
+                label = strings.labelName,
                 value = formData.name,
                 validate = validate,
                 maxLength = Blessing.NAME_MAX_LENGTH
             )
 
             TextInput(
-                label = stringResource(R.string.label_range),
+                label = strings.labelRange,
                 value = formData.range,
                 validate = validate,
                 maxLength = Blessing.RANGE_MAX_LENGTH,
             )
 
             TextInput(
-                label = stringResource(R.string.label_target),
+                label = strings.labelTarget,
                 value = formData.target,
                 validate = validate,
                 maxLength = Blessing.TARGET_MAX_LENGTH,
             )
 
             TextInput(
-                label = stringResource(R.string.label_duration),
+                label = strings.labelDuration,
                 value = formData.duration,
                 validate = validate,
                 maxLength = Blessing.DURATION_MAX_LENGTH,
             )
 
             TextInput(
-                label = stringResource(R.string.label_effect),
+                label = strings.labelEffect,
                 value = formData.effect,
                 validate = validate,
                 maxLength = Blessing.EFFECT_MAX_LENGTH,

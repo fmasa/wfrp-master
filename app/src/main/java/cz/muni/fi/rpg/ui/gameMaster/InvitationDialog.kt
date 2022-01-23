@@ -23,11 +23,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.intl.Locale
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.toUpperCase
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.ktx.analytics
 import com.google.firebase.analytics.ktx.logEvent
@@ -42,8 +38,8 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.flow.collectWithLifecycle
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.FullScreenProgress
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.VisualOnlyIconDescription
+import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
 import cz.frantisekmasa.wfrp_master.navigation.Route
-import cz.muni.fi.rpg.R
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -55,12 +51,14 @@ import org.koin.core.context.GlobalContext
 
 @Composable
 internal fun InvitationDialog(invitation: Invitation, onDismissRequest: () -> Unit) {
+    val strings = LocalStrings.current
+
     FullScreenDialog(onDismissRequest = onDismissRequest) {
         Scaffold(
             topBar = {
                 TopAppBar(
                     navigationIcon = { CloseButton(onClick = onDismissRequest) },
-                    title = { Text(stringResource(R.string.title_invite_players))},
+                    title = { Text(strings.parties.titleInvitePlayers)},
                 )
             }
         ) {
@@ -79,7 +77,7 @@ internal fun InvitationDialog(invitation: Invitation, onDismissRequest: () -> Un
                     val context = LocalContext.current
 
                     Text(
-                        stringResource(R.string.invitation_code_description),
+                        strings.parties.messages.qrCodeDescription,
                         modifier = Modifier.fillMaxWidth(),
                         textAlign = TextAlign.Center,
                         style = MaterialTheme.typography.caption,
@@ -94,7 +92,7 @@ internal fun InvitationDialog(invitation: Invitation, onDismissRequest: () -> Un
                         },
                     ) {
                         Icon(Icons.Rounded.Share, VisualOnlyIconDescription)
-                        Text(stringResource(R.string.share_link).toUpperCase(Locale.current))
+                        Text(strings.parties.buttonShareLink.uppercase())
                     }
                 }
             }

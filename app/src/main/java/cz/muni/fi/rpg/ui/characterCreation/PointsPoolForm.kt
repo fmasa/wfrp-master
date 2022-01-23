@@ -1,6 +1,5 @@
 package cz.muni.fi.rpg.ui.characterCreation
 
-import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
@@ -8,7 +7,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Stable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.Points
@@ -17,7 +15,7 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.forms.InputValue
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.Rules
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.TextInput
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.inputValue
-import cz.muni.fi.rpg.R
+import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
 
 object PointsPoolForm {
 
@@ -60,23 +58,24 @@ object PointsPoolForm {
 
 @Composable
 fun PointsPoolForm(data: PointsPoolForm.Data, validate: Boolean) {
+    val labels = LocalStrings.current.points
     Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(16.dp)) {
-        PointInput(data.maxWounds, R.string.label_max_wounds, validate, null)
-        PointInput(data.fatePoints, R.string.label_fate_points, validate, "0")
-        PointInput(data.resiliencePoints, R.string.label_resilience, validate, "0")
+        PointInput(data.maxWounds, labels.maxWounds, validate, null)
+        PointInput(data.fatePoints, labels.fate, validate, "0")
+        PointInput(data.resiliencePoints, labels.resilience, validate, "0")
     }
 }
 
 @Composable
 private fun RowScope.PointInput(
     value: InputValue,
-    @StringRes labelRes: Int,
+    label: String,
     validate: Boolean,
     placeholder: String?,
 ) {
     TextInput(
         modifier = Modifier.weight(1f),
-        label = stringResource(labelRes),
+        label = label,
         value = value,
         validate = validate,
         placeholder = placeholder,

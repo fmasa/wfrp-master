@@ -10,16 +10,15 @@ import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import cz.frantisekmasa.wfrp_master.common.core.domain.localizedName
 import cz.frantisekmasa.wfrp_master.common.core.ui.buttons.CardButton
+import cz.frantisekmasa.wfrp_master.common.core.ui.buttons.CloseButton
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.CardContainer
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.SingleLineTextValue
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
-import cz.frantisekmasa.wfrp_master.common.core.ui.buttons.CloseButton
-import cz.muni.fi.rpg.R
+import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
 import cz.muni.fi.rpg.ui.common.composables.CardTitle
 
 @Composable
@@ -56,10 +55,12 @@ private fun TestResultCard(
     CardContainer(Modifier.fillMaxWidth(), bodyPadding = PaddingValues(start = 8.dp, end = 8.dp)) {
         CardTitle(result.characterName)
 
+        val strings = LocalStrings.current
+
         when (val roll = result.roll) {
             Roll.CharacterDoesNotHaveAdvances -> {
                 Text(
-                    stringResource(R.string.error_needs_skill_advance),
+                    LocalStrings.current.tests.cannotTestAgainstUnknownAdvancedSkill,
                     Modifier.fillMaxWidth(),
                     textAlign = TextAlign.Center,
                 )
@@ -73,31 +74,27 @@ private fun TestResultCard(
                 val testResult = roll.result
 
                 SingleLineTextValue(
-                    R.string.item_roll,
-                    stringResource(
-                        R.string.item_roll_value,
-                        testResult.rollValue,
-                        testResult.testedValue.toString()
-                    ).let {
+                    strings.tests.roll,
+                    strings.tests.rollLabel(testResult.rollValue, testResult.testedValue).let {
                         when {
-                            testResult.isFumble -> it + " (" + stringResource(R.string.item_fumble) + ")"
-                            testResult.isCritical -> it + " (" + stringResource(R.string.item_critical) + ")"
+                            testResult.isFumble -> "$it (${strings.tests.fumble})"
+                            testResult.isCritical -> "$it (${strings.tests.critical})"
                             else -> it
                         }
                     }
                 )
 
                 SingleLineTextValue(
-                    R.string.item_success_level,
+                    strings.tests.successLevelShortcut,
                     testResult.successLevelText,
                 )
 
                 SingleLineTextValue(
-                    R.string.item_dramatic_result,
+                    strings.tests.labelDramaticResult,
                     testResult.dramaticResult.localizedName,
                 )
 
-                CardButton(R.string.button_test_reroll, onClick = onRerollRequest)
+                CardButton(strings.tests.buttonReroll, onClick = onRerollRequest)
             }
             is Roll.Generic -> {
                 Text(
@@ -113,7 +110,7 @@ private fun TestResultCard(
                     modifier = Modifier.fillMaxWidth(),
                 )
 
-                CardButton(R.string.button_test_reroll, onClick = onRerollRequest)
+                CardButton(strings.tests.buttonReroll, onClick = onRerollRequest)
             }
         }
     }

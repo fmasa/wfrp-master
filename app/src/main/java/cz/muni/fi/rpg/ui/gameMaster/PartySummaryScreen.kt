@@ -1,6 +1,5 @@
 package cz.muni.fi.rpg.ui.gameMaster
 
-import androidx.annotation.StringRes
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -29,7 +28,6 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.unit.dp
@@ -53,7 +51,6 @@ import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
 import cz.frantisekmasa.wfrp_master.compendium.ui.CompendiumViewModel
 import cz.frantisekmasa.wfrp_master.navigation.Route
 import cz.frantisekmasa.wfrp_master.navigation.Routing
-import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.ui.common.composables.AmbitionsCard
 import cz.muni.fi.rpg.ui.common.composables.CardTitle
 import cz.muni.fi.rpg.ui.gameMaster.adapter.Player
@@ -82,13 +79,15 @@ internal fun PartySummaryScreen(
         )
     }
 
+    val strings = LocalStrings.current
+
     Scaffold(
         modifier,
         floatingActionButton = {
             FloatingActionButton(onClick = { skillTestDialogVisible = true }) {
                 Icon(
                     drawableResource(Resources.Drawable.DiceRoll),
-                    stringResource(R.string.icon_hidden_skill_test),
+                    strings.tests.buttonHiddenSkillTest,
                 )
             }
         }
@@ -128,7 +127,7 @@ internal fun PartySummaryScreen(
 
             AmbitionsCard(
                 modifier = Modifier.padding(horizontal = 8.dp),
-                titleRes = R.string.title_party_ambitions,
+                title = strings.ambition.titlePartyAmbitions,
                 ambitions = party.getAmbitions(),
                 onSave = { viewModel.updatePartyAmbitions(it) },
             )
@@ -144,14 +143,15 @@ internal fun PartySummaryScreen(
                         .fillMaxWidth()
                         .padding(horizontal = 8.dp)
                 ) {
-                    CardTitle(R.string.title_compendium)
+                    val strings = LocalStrings.current.compendium
+                    CardTitle(strings.title)
 
                     val compendium: CompendiumViewModel by viewModel { parametersOf(partyId) }
 
                     Row {
-                        CompendiumSummary(R.string.title_character_skills, compendium.skills)
-                        CompendiumSummary(R.string.title_character_talents, compendium.talents)
-                        CompendiumSummary(R.string.title_character_spells, compendium.spells)
+                        CompendiumSummary(strings.tabSkills, compendium.skills)
+                        CompendiumSummary(strings.tabTalents, compendium.talents)
+                        CompendiumSummary(strings.tabSpells, compendium.spells)
                     }
                 }
             }
@@ -161,7 +161,7 @@ internal fun PartySummaryScreen(
 
 @Composable
 private fun <T> RowScope.CompendiumSummary(
-    @StringRes text: Int,
+    text: String,
     itemsCount: Flow<List<T>>,
 ) {
     Column(Modifier.weight(1f), horizontalAlignment = Alignment.CenterHorizontally) {
@@ -169,7 +169,7 @@ private fun <T> RowScope.CompendiumSummary(
             itemsCount.collectWithLifecycle(null).value?.size?.toString() ?: "?",
             style = MaterialTheme.typography.h6
         )
-        Text(stringResource(text))
+        Text(text)
     }
 }
 
@@ -187,8 +187,9 @@ private fun PlayersCard(
             .padding(8.dp)
     ) {
         Column(Modifier.fillMaxWidth()) {
+            val strings = LocalStrings.current.parties
 
-            CardTitle(R.string.title_characters)
+            CardTitle(strings.titleCharacters)
 
             val players = viewModel.players.collectWithLifecycle(null).value
 
@@ -202,7 +203,7 @@ private fun PlayersCard(
                 }
                 players.isEmpty() -> {
                     EmptyUI(
-                        textId = R.string.no_characters_in_party_prompt,
+                        text = strings.messages.noCharactersInParty,
                         icon = Icons.Rounded.Group,
                         size = EmptyUI.Size.Small,
                     )
@@ -249,12 +250,13 @@ private fun PlayerItem(
     onCharacterCreateRequest: (userId: String) -> Unit,
     onRemoveCharacter: (Character) -> Unit
 ) {
+    val strings = LocalStrings.current
 
     when (player) {
         is Player.UserWithoutCharacter -> {
             ProvideTextStyle(TextStyle.Default.copy(fontStyle = FontStyle.Italic)) {
                 CardItem(
-                    name = stringResource(R.string.waiting_for_character),
+                    name = strings.parties.messages.waitingForPlayerCharacter,
                     icon = { CharacterAvatar(null, ItemIcon.Size.Small) },
                     onClick = { onCharacterCreateRequest(player.userId) },
                     contextMenuItems = emptyList(),
@@ -270,7 +272,7 @@ private fun PlayerItem(
                 onClick = { onCharacterOpenRequest(character) },
                 contextMenuItems = if (character.userId == null)
                     listOf(
-                        ContextMenu.Item(stringResource(R.string.remove)) {
+                        ContextMenu.Item(strings.commonUi.buttonRemove) {
                             onRemoveCharacter(character)
                         }
                     )

@@ -13,6 +13,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.OutlinedButton
+import androidx.compose.material.SnackbarHostState
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.material.TextButton
@@ -27,11 +28,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.intl.Locale
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.toUpperCase
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import com.google.android.gms.auth.api.signin.GoogleSignIn
@@ -45,11 +43,10 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.CardContainer
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.CardTitle
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.VisualOnlyIconDescription
-import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.shortToast
 import cz.frantisekmasa.wfrp_master.common.core.viewModel.SettingsViewModel
+import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
 import cz.frantisekmasa.wfrp_master.navigation.Route
 import cz.frantisekmasa.wfrp_master.navigation.Routing
-import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.viewModels.AuthenticationViewModel
 import cz.muni.fi.rpg.viewModels.provideAuthenticationViewModel
 import io.github.aakira.napier.Napier
@@ -60,7 +57,11 @@ import kotlinx.coroutines.withContext
 import kotlinx.parcelize.Parcelize
 
 @Composable
-fun SignInCard(viewModel: SettingsViewModel, routing: Routing<Route.Settings>) {
+fun SignInCard(
+    snackbarHostState: SnackbarHostState,
+    viewModel: SettingsViewModel,
+    routing: Routing<Route.Settings>
+) {
     val authViewModel = provideAuthenticationViewModel()
 
     val contract = remember(authViewModel) { authViewModel.googleSignInContract() }
@@ -71,6 +72,7 @@ fun SignInCard(viewModel: SettingsViewModel, routing: Routing<Route.Settings>) {
 
     pendingSingInConfirmation?.let {
         ConfirmSignInDialog(
+            snackbarHostState,
             it.idToken,
             viewModel,
             authViewModel,
@@ -78,6 +80,8 @@ fun SignInCard(viewModel: SettingsViewModel, routing: Routing<Route.Settings>) {
             onDismissRequest = { pendingSingInConfirmation = null },
         )
     }
+
+    val strings = LocalStrings.current
 
     val launcher = rememberLauncherForActivityResult(contract) { result ->
         coroutineScope.launch(Dispatchers.IO) {
@@ -120,15 +124,16 @@ fun SignInCard(viewModel: SettingsViewModel, routing: Routing<Route.Settings>) {
                 .padding(horizontal = 8.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            CardTitle(R.string.title_account)
+            CardTitle(strings.settings.titleAccount)
 
             val email = LocalUser.current.email
+
             if (email != null) {
-                Text(stringResource(R.string.signed_in_as))
+                Text(strings.authentication.messages.signedInAs)
                 Text(email)
             } else {
                 Text(
-                    stringResource(R.string.not_signed_in_description),
+                    strings.authentication.messages.notSignedInDescription,
                     textAlign = TextAlign.Center,
                     modifier = Modifier.padding(bottom = 8.dp)
                 )
@@ -142,7 +147,7 @@ fun SignInCard(viewModel: SettingsViewModel, routing: Routing<Route.Settings>) {
                             drawableResource(Resources.Drawable.GoogleLogo),
                             VisualOnlyIconDescription,
                         )
-                        Text("Sign-in")
+                        Text(strings.authentication.buttonSignIn)
                     }
                 }
             }
@@ -152,6 +157,7 @@ fun SignInCard(viewModel: SettingsViewModel, routing: Routing<Route.Settings>) {
 
 @Composable
 fun ConfirmSignInDialog(
+    snackbarHostState: SnackbarHostState,
     idToken: String,
     viewModel: SettingsViewModel,
     authViewModel: AuthenticationViewModel,
@@ -172,6 +178,8 @@ fun ConfirmSignInDialog(
 
     Dialog(onDismissRequest = onDismissRequest) {
         Surface(shape = MaterialTheme.shapes.medium) {
+            val strings = LocalStrings.current
+
             Column {
                 Column(
                     Modifier
@@ -179,17 +187,16 @@ fun ConfirmSignInDialog(
                         .padding(Spacing.bodyPadding),
                     verticalArrangement = Arrangement.spacedBy(Spacing.small),
                 ) {
-                    DialogTitle(stringResource(R.string.title_duplicate_account))
+                    DialogTitle(strings.authentication.messages.duplicateAccount)
 
                     if (loading) {
                         DialogProgress()
                     } else {
-                        Text(stringResource(R.string.google_account_collision))
-                        Text(stringResource(R.string.google_account_collision_line_2))
+                        Text(strings.authentication.messages.googleAccountCollision)
 
                         if (partyNames!!.isNotEmpty()) {
                             Column {
-                                Text(stringResource(R.string.lose_access_to_parties))
+                                Text(strings.authentication.messages.loseAccessToParties)
                                 Text(partyNames!!.joinToString("\n"), fontWeight = FontWeight.SemiBold)
                             }
                         }
@@ -203,10 +210,10 @@ fun ConfirmSignInDialog(
                         .padding(bottom = Spacing.small, end = Spacing.small),
                 ) {
                     TextButton(enabled = !loading, onClick = onDismissRequest) {
-                        Text(stringResource(R.string.button_cancel).toUpperCase(Locale.current))
+                        Text(strings.commonUi.buttonCancel.uppercase())
                     }
 
-                    val context = LocalContext.current
+                    val messages = strings.messages
 
                     TextButton(
                         enabled = !loading,
@@ -216,7 +223,9 @@ fun ConfirmSignInDialog(
                                 try {
                                     authViewModel.signInWithGoogleToken(idToken).let { success ->
                                         if (!success) {
-                                            shortToast(context, R.string.google_sign_in_failed)
+                                            snackbarHostState.showSnackbar(
+                                                messages.authenticationGoogleSignInFailed,
+                                            )
                                         }
                                     }
                                 } catch (e: Throwable) {
@@ -231,7 +240,7 @@ fun ConfirmSignInDialog(
                             }
                         }
                     ) {
-                        Text(stringResource(R.string.button_sign_in).toUpperCase(Locale.current))
+                        Text(strings.authentication.buttonSignIn.uppercase())
                     }
                 }
             }

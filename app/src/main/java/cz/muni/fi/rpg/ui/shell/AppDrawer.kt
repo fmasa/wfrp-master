@@ -2,7 +2,6 @@ package cz.muni.fi.rpg.ui.shell
 
 import android.content.Intent
 import android.net.Uri
-import androidx.annotation.StringRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -32,7 +31,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
@@ -42,9 +40,9 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.VisualOnlyIconDescription
 import cz.frantisekmasa.wfrp_master.common.core.ui.viewinterop.LocalActivity
 import cz.frantisekmasa.wfrp_master.common.core.viewModel.providePremiumViewModel
+import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
 import cz.frantisekmasa.wfrp_master.navigation.Route
 import cz.frantisekmasa.wfrp_master.navigation.navigate
-import cz.muni.fi.rpg.R
 import io.github.aakira.napier.Napier
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -57,10 +55,11 @@ fun AppDrawer(drawerState: DrawerState, navController: NavHostController) {
         PremiumItem()
 
         val coroutineScope = rememberCoroutineScope()
+        val strings = LocalStrings.current
 
         DrawerItem(
             icon = Icons.Rounded.Settings,
-            text = R.string.settings,
+            text = strings.settings.title,
             onClick = {
                 coroutineScope.launch { drawerState.close() }
                 navController.navigate(Route.Settings) { launchSingleTop = true }
@@ -70,10 +69,10 @@ fun AppDrawer(drawerState: DrawerState, navController: NavHostController) {
         val context = LocalContext.current
         DrawerItem(
             icon = Icons.Rounded.Star,
-            text = R.string.rate_app,
+            text = strings.drawer.rateApp,
             onClick = {
                 val intent = Intent(Intent.ACTION_VIEW).apply {
-                    data = Uri.parse(context.getString(R.string.store_listing_url))
+                    data = Uri.parse(strings.contact.googlePlayUrl)
                     setPackage("com.android.vending")
                 }
 
@@ -83,12 +82,12 @@ fun AppDrawer(drawerState: DrawerState, navController: NavHostController) {
 
         DrawerItem(
             icon = Icons.Rounded.Policy,
-            text = R.string.label_privacy_policy,
+            text = strings.drawer.privacyPolicy,
             onClick = {
-                val urlString = context.getString(R.string.privacy_policy_url)
-                val intent = Intent(Intent.ACTION_VIEW, Uri.parse(urlString)).apply {
-                    addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                }
+                val intent = Intent(Intent.ACTION_VIEW, Uri.parse(strings.contact.privacyPolicyUrl))
+                    .apply {
+                        addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                    }
 
                 context.startActivity(intent)
             }
@@ -96,15 +95,15 @@ fun AppDrawer(drawerState: DrawerState, navController: NavHostController) {
 
         DrawerItem(
             icon = Icons.Rounded.BugReport,
-            text = R.string.report_issue,
+            text = strings.drawer.reportIssue,
             onClick = {
                 val intent = Intent(Intent.ACTION_SEND).apply {
                     type = "plain/text"
                     putExtra(
                         Intent.EXTRA_EMAIL,
-                        arrayOf(context.getString(R.string.issue_email_address))
+                        arrayOf(strings.contact.emailAddress)
                     )
-                    putExtra(Intent.EXTRA_SUBJECT, context.getString(R.string.issue_email_subject))
+                    putExtra(Intent.EXTRA_SUBJECT, strings.contact.bugReportEmailSubject)
                 }
 
                 context.startActivity(Intent.createChooser(intent, ""))
@@ -113,7 +112,7 @@ fun AppDrawer(drawerState: DrawerState, navController: NavHostController) {
 
         DrawerItem(
             icon = Icons.Rounded.Info,
-            text = R.string.about,
+            text = strings.about.title,
             onClick = {
                 coroutineScope.launch { drawerState.close() }
                 navController.navigate(Route.About) { launchSingleTop = true }
@@ -134,7 +133,7 @@ private fun PremiumItem() {
 
     DrawerItem(
         icon = Icons.Rounded.Redeem,
-        text = R.string.buy_premium,
+        text = LocalStrings.current.premium.dialogTitle,
         onClick = {
             coroutineScope.launch(Dispatchers.IO) {
                 val result = premiumViewModel.purchasePremium(activity)
@@ -150,7 +149,7 @@ private fun PremiumItem() {
 @Composable
 private fun DrawerItem(
     icon: ImageVector,
-    @StringRes text: Int,
+    text: String,
     onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -165,7 +164,7 @@ private fun DrawerItem(
     ) {
         Icon(icon, VisualOnlyIconDescription)
         Text(
-            stringResource(text),
+            text,
             style = MaterialTheme.typography.caption.copy(fontWeight = FontWeight.SemiBold),
         )
     }
@@ -192,7 +191,7 @@ private fun DrawerHeader() {
                 Modifier.size(80.dp),
             )
             Text(
-                stringResource(R.string.app_name),
+                LocalStrings.current.about.appName,
                 style = MaterialTheme.typography.h6,
                 color = contentColorFor(MaterialTheme.colors.primarySurface),
             )

@@ -25,22 +25,19 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.intl.Locale
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.toUpperCase
 import androidx.compose.ui.unit.dp
 import com.google.firebase.analytics.ktx.analytics
 import com.google.firebase.ktx.Firebase
-import cz.frantisekmasa.wfrp_master.compendium.domain.importer.RulebookCompendiumImporter
 import cz.frantisekmasa.wfrp_master.common.core.ui.buttons.BackButton
 import cz.frantisekmasa.wfrp_master.common.core.ui.flow.collectWithLifecycle
 import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.Subtitle
 import cz.frantisekmasa.wfrp_master.common.core.ui.viewinterop.LocalActivity
 import cz.frantisekmasa.wfrp_master.common.core.viewModel.viewModel
+import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
+import cz.frantisekmasa.wfrp_master.compendium.domain.importer.RulebookCompendiumImporter
 import cz.frantisekmasa.wfrp_master.navigation.Route
 import cz.frantisekmasa.wfrp_master.navigation.Routing
-import cz.muni.fi.rpg.R
 import io.github.aakira.napier.Napier
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
@@ -62,7 +59,7 @@ private fun TopBar(routing: Routing<Route.CompendiumImport>) {
     TopAppBar(
         title = {
             Column {
-                Text(stringResource(R.string.title_compendium_import))
+                Text(LocalStrings.current.compendium.titleImportCompendium)
                 viewModel.party.collectWithLifecycle(null).value?.let {
                     Subtitle(it.getName())
                 }
@@ -76,6 +73,7 @@ private fun TopBar(routing: Routing<Route.CompendiumImport>) {
 private fun MainContainer(routing: Routing<Route.CompendiumImport>) {
     val context = LocalContext.current
     val coroutineScope = rememberCoroutineScope()
+    val strings = LocalStrings.current.compendium
 
     var importState by remember { mutableStateOf<ImportDialogState?>(null) }
 
@@ -118,8 +116,8 @@ private fun MainContainer(routing: Routing<Route.CompendiumImport>) {
                             Toast.makeText(
                                 context,
                                 when (e) {
-                                    is OutOfMemoryError -> R.string.error_import_not_enough_memory
-                                    else -> R.string.error_import_failed
+                                    is OutOfMemoryError -> strings.messages.outOfMemory
+                                    else -> strings.messages.importFailed
                                 },
                                 Toast.LENGTH_LONG
                             ).show()
@@ -139,28 +137,29 @@ private fun MainContainer(routing: Routing<Route.CompendiumImport>) {
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         val activity = LocalActivity.current
-        val storeUrl = stringResource(R.string.rulebook_store_url)
 
         Text(
-            "Import compendium from official WFRP rulebook.",
+            strings.importPrompt,
             textAlign = TextAlign.Center,
         )
 
         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
             Button(onClick = { fileChooser.launch("application/pdf") }) {
-                Text(stringResource(R.string.import_rulebook).toUpperCase(Locale.current))
+                Text(strings.buttonImportRulebook.uppercase())
             }
             OutlinedButton(
                 onClick = {
-                    activity.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(storeUrl)))
+                    activity.startActivity(
+                        Intent(Intent.ACTION_VIEW, Uri.parse(strings.rulebookStoreLink))
+                    )
                 },
             ) {
-                Text(stringResource(R.string.button_buy).toUpperCase(Locale.current))
+                Text(strings.buttonBuy.uppercase())
             }
         }
 
         Text(
-            "The file is not saved anywhere and never leaves your device.",
+            strings.assurance,
             color = MaterialTheme.colors.onSurface.copy(alpha = ContentAlpha.medium),
             textAlign = TextAlign.Center,
             style = MaterialTheme.typography.body2

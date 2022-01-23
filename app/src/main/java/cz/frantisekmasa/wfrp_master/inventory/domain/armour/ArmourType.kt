@@ -7,9 +7,9 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 enum class ArmourType(override val nameResolver: (strings: Strings) -> String) : NamedEnum, Parcelable {
-    SOFT_LEATHER({ it.armourTypeSoftLeather }),
-    BOILED_LEATHER({ it.armourTypeBoiledLeather }),
-    MAIL({ it.armourTypeMail }),
-    PLATE({ it.armourTypePlate }),
-    OTHER({ it.armourTypeOther }),
+    SOFT_LEATHER({ it.armour.types.softLeather }),
+    BOILED_LEATHER({ it.armour.types.boiledLeather }),
+    MAIL({ it.armour.types.mail }),
+    PLATE({ it.armour.types.plate }),
+    OTHER({ it.armour.types.other }),
 }

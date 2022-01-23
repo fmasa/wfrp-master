@@ -52,13 +52,13 @@ data class TestResult(
         val successLevelRange: IntRange,
         override val nameResolver: (strings: Strings) -> String,
     ): NamedEnum {
-        ASTOUNDING_SUCCESS(6..Int.MAX_VALUE, { it.testResultAstoundingSuccess }),
-        IMPRESSIVE_SUCCESS(4..5, { it.testResultImpressiveSuccess }),
-        SUCCESS(2..3, { it.testResultSuccess }),
-        MARGINAL_SUCCESS(0..1, { it.testResultMarginalSuccess }),
-        MARGINAL_FAILURE(-1..0, { it.testResultMarginalFailure }),
-        FAILURE(-3..-2, { it.testResultFailure }),
-        IMPRESSIVE_FAILURE(-5..-4, { it.testResultImpressiveFailure }),
-        ASTOUNDING_FAILURE(Int.MIN_VALUE..-6, { it.testResultAstoundingFailure }),
+        ASTOUNDING_SUCCESS(6..Int.MAX_VALUE, { it.tests.results.astoundingSuccess }),
+        IMPRESSIVE_SUCCESS(4..5, { it.tests.results.impressiveSuccess }),
+        SUCCESS(2..3, { it.tests.results.success }),
+        MARGINAL_SUCCESS(0..1, { it.tests.results.marginalSuccess }),
+        MARGINAL_FAILURE(-1..0, { it.tests.results.marginalFailure }),
+        FAILURE(-3..-2, { it.tests.results.failure }),
+        IMPRESSIVE_FAILURE(-5..-4, { it.tests.results.impressiveFailure }),
+        ASTOUNDING_FAILURE(Int.MIN_VALUE..-6, { it.tests.results.astoundingFailure }),
     }
 }

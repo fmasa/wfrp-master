@@ -2,15 +2,14 @@ package cz.frantisekmasa.wfrp_master.religion.ui.miracles
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
-import androidx.compose.ui.res.stringResource
 import cz.frantisekmasa.wfrp_master.common.core.ui.components.FormDialog
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.HydratedFormData
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.InputValue
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.Rules
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.TextInput
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.inputValue
+import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
 import cz.frantisekmasa.wfrp_master.religion.domain.Miracle
-import cz.muni.fi.rpg.R
 import java.util.UUID
 import cz.frantisekmasa.wfrp_master.compendium.domain.Miracle.Companion as CompendiumMiracle
 
@@ -21,50 +20,51 @@ internal fun NonCompendiumMiracleForm(
     onDismissRequest: () -> Unit,
 ) {
     val formData = NonCompendiumMiracleFormData.fromMiracle(existingMiracle)
+    val strings = LocalStrings.current.miracles
 
     FormDialog(
-        title = if (existingMiracle != null) R.string.title_miracle_new else R.string.title_miracle_edit,
+        title = if (existingMiracle != null) strings.titleNew else strings.titleEdit,
         onDismissRequest = onDismissRequest,
         formData = formData,
         onSave = viewModel::saveItem,
     ) { validate ->
         TextInput(
-            label = stringResource(R.string.label_name),
+            label = strings.labelName,
             value = formData.name,
             validate = validate,
             maxLength = CompendiumMiracle.NAME_MAX_LENGTH
         )
 
         TextInput(
-            label = stringResource(R.string.label_miracle_cult_name),
+            label = strings.labelCultName,
             value = formData.cultName,
             validate = validate,
             maxLength = CompendiumMiracle.CULT_NAME_MAX_LENGTH
         )
 
         TextInput(
-            label = stringResource(R.string.label_range),
+            label = strings.labelRange,
             value = formData.range,
             validate = validate,
             maxLength = CompendiumMiracle.RANGE_MAX_LENGTH,
         )
 
         TextInput(
-            label = stringResource(R.string.label_target),
+            label = strings.labelTarget,
             value = formData.target,
             validate = validate,
             maxLength = CompendiumMiracle.TARGET_MAX_LENGTH,
         )
 
         TextInput(
-            label = stringResource(R.string.label_duration),
+            label = strings.labelDuration,
             value = formData.duration,
             validate = validate,
             maxLength = CompendiumMiracle.DURATION_MAX_LENGTH,
         )
 
         TextInput(
-            label = stringResource(R.string.label_effect),
+            label = strings.labelEffect,
             value = formData.effect,
             validate = validate,
             maxLength = CompendiumMiracle.EFFECT_MAX_LENGTH,
