@@ -1,7 +1,7 @@
 package cz.frantisekmasa.wfrp_master.common.core.domain.party.settings
 
-import android.os.Parcelable
-import kotlinx.parcelize.Parcelize
+import cz.frantisekmasa.wfrp_master.common.core.shared.Parcelable
+import cz.frantisekmasa.wfrp_master.common.core.shared.Parcelize
 import kotlinx.serialization.Serializable
 
 @Parcelize
