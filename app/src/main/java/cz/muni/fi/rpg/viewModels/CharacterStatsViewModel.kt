@@ -1,10 +1,10 @@
 package cz.muni.fi.rpg.viewModels
 
 import androidx.lifecycle.ViewModel
-import cz.frantisekmasa.wfrp_master.core.domain.Ambitions
-import cz.frantisekmasa.wfrp_master.core.domain.character.CharacterRepository
-import cz.frantisekmasa.wfrp_master.core.domain.character.Points
-import cz.frantisekmasa.wfrp_master.core.domain.identifiers.CharacterId
+import cz.frantisekmasa.wfrp_master.common.core.domain.Ambitions
+import cz.frantisekmasa.wfrp_master.common.core.domain.character.CharacterRepository
+import cz.frantisekmasa.wfrp_master.common.core.domain.character.Points
+import cz.frantisekmasa.wfrp_master.common.core.domain.identifiers.CharacterId
 
 class CharacterStatsViewModel(
     private val characterId: CharacterId,

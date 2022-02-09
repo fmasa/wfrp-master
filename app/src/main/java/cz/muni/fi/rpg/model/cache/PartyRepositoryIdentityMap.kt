@@ -1,10 +1,10 @@
 package cz.muni.fi.rpg.model.cache
 
 import arrow.core.Either
-import cz.frantisekmasa.wfrp_master.core.domain.party.Party
-import cz.frantisekmasa.wfrp_master.core.domain.party.PartyId
-import cz.frantisekmasa.wfrp_master.core.domain.party.PartyNotFound
-import cz.frantisekmasa.wfrp_master.core.domain.party.PartyRepository
+import cz.frantisekmasa.wfrp_master.common.core.domain.party.Party
+import cz.frantisekmasa.wfrp_master.common.core.domain.party.PartyId
+import cz.frantisekmasa.wfrp_master.common.core.domain.party.PartyNotFound
+import cz.frantisekmasa.wfrp_master.common.core.domain.party.PartyRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow

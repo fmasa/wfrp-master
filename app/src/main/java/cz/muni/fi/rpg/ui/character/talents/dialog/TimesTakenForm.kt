@@ -1,6 +1,5 @@
 package cz.muni.fi.rpg.ui.character.talents.dialog
 
-import android.widget.Toast
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -20,20 +19,20 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.stringResource
+import cz.frantisekmasa.wfrp_master.common.core.ui.buttons.CloseButton
+import cz.frantisekmasa.wfrp_master.common.core.ui.forms.NumberPicker
+import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.FullScreenProgress
+import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
+import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.LocalPersistentSnackbarHolder
+import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.SaveAction
+import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
 import cz.frantisekmasa.wfrp_master.compendium.domain.exceptions.CompendiumItemNotFound
-import cz.frantisekmasa.wfrp_master.core.ui.buttons.CloseButton
-import cz.frantisekmasa.wfrp_master.core.ui.primitives.FullScreenProgress
-import cz.frantisekmasa.wfrp_master.core.ui.primitives.NumberPicker
-import cz.frantisekmasa.wfrp_master.core.ui.primitives.Spacing
-import cz.frantisekmasa.wfrp_master.core.ui.scaffolding.SaveAction
-import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.model.domain.talents.Talent
 import cz.muni.fi.rpg.viewModels.TalentsViewModel
+import io.github.aakira.napier.Napier
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import timber.log.Timber
 import java.util.UUID
 
 @Composable
@@ -46,22 +45,19 @@ internal fun TimesTakenForm(
     var saving by remember { mutableStateOf(false) }
     var timesTaken by rememberSaveable { mutableStateOf(existingTalent?.taken ?: 1) }
 
+    val strings = LocalStrings.current.talents
+    val snackbarHolder = LocalPersistentSnackbarHolder.current
+
     Scaffold(
         topBar = {
             TopAppBar(
                 navigationIcon = { CloseButton(onDismissRequest) },
                 title = {
-                    Text(
-                        stringResource(
-                            if (existingTalent != null)
-                                R.string.title_talent_edit else
-                                R.string.title_talent_new
-                        )
-                    )
+                    Text(if (existingTalent != null) strings.titleEdit else strings.titleEdit)
                 },
                 actions = {
                     val coroutineScope = rememberCoroutineScope()
-                    val context = LocalContext.current
+                    LocalContext.current
 
                     SaveAction(
                         enabled = !saving,
@@ -76,15 +72,11 @@ internal fun TimesTakenForm(
                                         timesTaken = timesTaken,
                                     )
                                 } catch (e: CompendiumItemNotFound) {
-                                    Timber.d(e)
+                                    Napier.d(e.toString(), e)
 
-                                    withContext(Dispatchers.Main) {
-                                        Toast.makeText(
-                                            context,
-                                            context.getString(R.string.error_compendium_talent_removed),
-                                            Toast.LENGTH_SHORT,
-                                        ).show()
-                                    }
+                                    snackbarHolder.showSnackbar(
+                                        strings.messages.compendiumTalentRemoved
+                                    )
                                 } finally {
                                     withContext(Dispatchers.Main) { onDismissRequest() }
                                 }
@@ -107,7 +99,7 @@ internal fun TimesTakenForm(
         ) {
             Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
                 Text(
-                    text = stringResource(R.string.label_talent_taken),
+                    text = strings.labelTimesTaken,
                     modifier = Modifier.weight(1f),
                 )
                 NumberPicker(

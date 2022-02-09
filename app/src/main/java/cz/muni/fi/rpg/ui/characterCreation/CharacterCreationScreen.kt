@@ -1,6 +1,5 @@
 package cz.muni.fi.rpg.ui.characterCreation
 
-import androidx.annotation.StringRes
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedContentScope.SlideDirection
 import androidx.compose.animation.core.snap
@@ -27,6 +26,9 @@ import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.material.TextButton
 import androidx.compose.material.TopAppBar
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.ArrowBackIos
+import androidx.compose.material.icons.rounded.ArrowForwardIos
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -34,21 +36,16 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.intl.Locale
-import androidx.compose.ui.text.toUpperCase
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
-import cz.frantisekmasa.wfrp_master.core.ui.buttons.BackButton
-import cz.frantisekmasa.wfrp_master.core.ui.forms.FormData
-import cz.frantisekmasa.wfrp_master.core.ui.forms.HydratedFormData
-import cz.frantisekmasa.wfrp_master.core.ui.primitives.VisualOnlyIconDescription
-import cz.frantisekmasa.wfrp_master.core.ui.scaffolding.SubheadBar
-import cz.frantisekmasa.wfrp_master.core.viewModel.viewModel
+import cz.frantisekmasa.wfrp_master.common.core.ui.buttons.BackButton
+import cz.frantisekmasa.wfrp_master.common.core.ui.forms.FormData
+import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.VisualOnlyIconDescription
+import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.SubheadBar
+import cz.frantisekmasa.wfrp_master.common.core.viewModel.viewModel
+import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
 import cz.frantisekmasa.wfrp_master.navigation.Route
 import cz.frantisekmasa.wfrp_master.navigation.Routing
-import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.viewModels.CharacterCreationViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -66,7 +63,7 @@ fun CharacterCreationScreen(routing: Routing<Route.CharacterCreation>) {
         topBar = {
             TopAppBar(
                 title = {
-                    Text(stringResource(R.string.title_characterCreation))
+                    Text(LocalStrings.current.characterCreation.title)
                 },
                 navigationIcon = { BackButton(onClick = { routing.pop() }) }
             )
@@ -105,14 +102,16 @@ private fun MainContainer(routing: Routing<Route.CharacterCreation>) {
         }
     }
 
+    val labels = LocalStrings.current.characterCreation
+
     val steps = listOf(
-        WizardStep(R.string.title_character_creation_info, basicInfo) {
+        WizardStep(labels.stepBasicInfo, basicInfo) {
             CharacterBasicInfoForm(it, validate = validate.value)
         },
-        WizardStep(R.string.title_character_stats, characteristics) {
+        WizardStep(labels.stepAttributes, characteristics) {
             CharacterCharacteristicsForm(it, validate = validate.value)
         },
-        WizardStep(R.string.title_character_creation_points, points) {
+        WizardStep(labels.stepPointPools, points) {
             PointsPoolForm(it, validate = validate.value)
         }
     )
@@ -124,13 +123,13 @@ private fun MainContainer(routing: Routing<Route.CharacterCreation>) {
                 .background(MaterialTheme.colors.background)
                 .verticalScroll(rememberScrollState())
         ) {
-            SubheadBar(stringResource(steps[currentStepIndex.value].labelRes))
+            SubheadBar(steps[currentStepIndex.value].label)
 
             AnimatedContent(
                 targetState = currentStepIndex.value,
                 transitionSpec = {
                     if (initialState == targetState) {
-                        fadeIn(0f, snap()) with fadeOut(0f, snap())
+                        fadeIn(snap(), 0f) with fadeOut(snap(), 0f)
                     } else {
                         val direction = if (targetState > initialState)
                             SlideDirection.Start
@@ -190,11 +189,12 @@ private fun BottomBar(
                     },
                 ) {
                     Icon(
-                        painterResource(R.drawable.ic_caret_left), VisualOnlyIconDescription
+                        Icons.Rounded.ArrowBackIos,
+                        VisualOnlyIconDescription,
+                        tint = MaterialTheme.colors.primaryVariant,
                     )
                     Text(
-                        stringResource(steps[currentStepIndex - 1].labelRes)
-                            .toUpperCase(Locale.current),
+                        steps[currentStepIndex - 1].label.uppercase(),
                         color = MaterialTheme.colors.onSurface,
                     )
                 }
@@ -210,7 +210,8 @@ private fun BottomBar(
                     }
 
                     NextButton(
-                        R.string.button_finish, buttonModifier,
+                        LocalStrings.current.commonUi.buttonFinish,
+                        buttonModifier,
                         onClick = {
                             if (!currentStep.data.isValid()) {
                                 onChange(currentStepIndex, true)
@@ -223,7 +224,7 @@ private fun BottomBar(
                 }
             } else {
                 NextButton(
-                    steps[currentStepIndex + 1].labelRes,
+                    steps[currentStepIndex + 1].label.uppercase(),
                     modifier = buttonModifier.align(Alignment.TopEnd),
                     onClick = {
                         if (!currentStep.data.isValid()) {
@@ -240,7 +241,7 @@ private fun BottomBar(
 }
 
 private data class WizardStep<T : FormData>(
-    @StringRes val labelRes: Int,
+    val label: String,
     val data: T,
     val form: @Composable (T) -> Unit,
 ) {
@@ -252,12 +253,16 @@ private data class WizardStep<T : FormData>(
 
 @Composable
 private fun NextButton(
-    @StringRes label: Int,
+    label: String,
     modifier: Modifier,
     onClick: () -> Unit,
 ) {
     TextButton(modifier = modifier, onClick = onClick) {
-        Text(stringResource(label).toUpperCase(Locale.current))
-        Icon(painterResource(R.drawable.ic_caret_right), VisualOnlyIconDescription)
+        Text(label.uppercase())
+        Icon(
+            Icons.Rounded.ArrowForwardIos,
+            VisualOnlyIconDescription,
+            tint = MaterialTheme.colors.primaryVariant,
+        )
     }
 }

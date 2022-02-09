@@ -10,12 +10,12 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
-import cz.frantisekmasa.wfrp_master.core.domain.party.Party
-import cz.frantisekmasa.wfrp_master.core.domain.party.settings.InitiativeStrategy
-import cz.frantisekmasa.wfrp_master.core.ui.dialogs.SelectionDialog
-import cz.frantisekmasa.wfrp_master.core.utils.launchLogged
-import cz.muni.fi.rpg.R
+import cz.frantisekmasa.wfrp_master.common.core.domain.localizedName
+import cz.frantisekmasa.wfrp_master.common.core.domain.party.Party
+import cz.frantisekmasa.wfrp_master.common.core.domain.party.settings.InitiativeStrategy
+import cz.frantisekmasa.wfrp_master.common.core.ui.dialogs.SelectionDialog
+import cz.frantisekmasa.wfrp_master.common.core.utils.launchLogged
+import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
@@ -43,8 +43,8 @@ internal fun InitiativeStrategyItem(
     }
 
     ListItem(
-        text = { Text(stringResource(R.string.initiative_rules)) },
-        secondaryText = { Text(strategyLabel(strategy)) },
+        text = { Text(LocalStrings.current.combat.initiativeStrategyConfigOption) },
+        secondaryText = { Text(strategy.localizedName) },
         modifier = Modifier.clickable {
             dialogVisible = true
         }
@@ -58,22 +58,13 @@ private fun InitiativeStrategyDialog(
     onDismissRequest: () -> Unit
 ) {
     SelectionDialog(
-        title = "Select Initiative rules",
+        title = LocalStrings.current.combat.initiativeStrategyPrompt,
         items = InitiativeStrategy.values().toList(),
         selected = selected,
         onDismissRequest = onDismissRequest,
         onSelect = onSelect
     ) { strategy ->
-        Text(strategyLabel(strategy))
+        Text(strategy.localizedName)
     }
 }
 
-@Composable
-private fun strategyLabel(strategy: InitiativeStrategy) = stringResource(
-    when (strategy) {
-        InitiativeStrategy.INITIATIVE_CHARACTERISTIC -> R.string.initiative_initiative_characteristic
-        InitiativeStrategy.INITIATIVE_TEST -> R.string.initiative_initiative_test
-        InitiativeStrategy.INITIATIVE_PLUS_1D10 -> R.string.initiative_initiative_plus_1d10
-        InitiativeStrategy.BONUSES_PLUS_1D10 -> R.string.initiative_bonuses_plus_1d10
-    }
-)

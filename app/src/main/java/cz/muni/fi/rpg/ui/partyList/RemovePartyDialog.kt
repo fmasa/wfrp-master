@@ -3,6 +3,7 @@ package cz.muni.fi.rpg.ui.partyList
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.material.AlertDialog
+import androidx.compose.material.SnackbarDuration
 import androidx.compose.material.Text
 import androidx.compose.material.TextButton
 import androidx.compose.runtime.Composable
@@ -11,33 +12,35 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.intl.Locale
-import androidx.compose.ui.text.toUpperCase
-import cz.frantisekmasa.wfrp_master.core.domain.party.Party
-import cz.frantisekmasa.wfrp_master.core.ui.primitives.Spacing
-import cz.frantisekmasa.wfrp_master.core.ui.primitives.longToast
-import cz.muni.fi.rpg.R
+import cz.frantisekmasa.wfrp_master.common.core.domain.party.Party
+import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
+import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.LocalPersistentSnackbarHolder
+import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
 import cz.muni.fi.rpg.viewModels.PartyListViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 @Composable
-fun RemovePartyDialog(party: Party, viewModel: PartyListViewModel, onDismissRequest: () -> Unit) {
+fun RemovePartyDialog(
+    party: Party,
+    viewModel: PartyListViewModel,
+    onDismissRequest: () -> Unit
+) {
     var removing by remember { mutableStateOf(false) }
 
     AlertDialog(
         onDismissRequest = onDismissRequest,
         text = {
+            val messages = LocalStrings.current.parties.messages
+
             Column(verticalArrangement = Arrangement.spacedBy(Spacing.medium)) {
-                Text(stringResource(R.string.party_remove_confirmation))
+                Text(messages.removalConfirmation)
 
                 if (party.getPlayerCounts() > 0) {
                     Text(
-                        stringResource(R.string.party_remove_multiple_members),
+                        messages.membersWillLoseAccess,
                         fontWeight = FontWeight.Bold,
                     )
                 }
@@ -48,12 +51,13 @@ fun RemovePartyDialog(party: Party, viewModel: PartyListViewModel, onDismissRequ
                 enabled = !removing,
                 onClick = onDismissRequest
             ) {
-                Text(stringResource(R.string.button_cancel).toUpperCase(Locale.current))
+                Text(LocalStrings.current.commonUi.buttonCancel.uppercase())
             }
         },
         confirmButton = {
             val coroutineScope = rememberCoroutineScope()
-            val context = LocalContext.current
+            val messages = LocalStrings.current.messages
+            val snackbarHolder = LocalPersistentSnackbarHolder.current
 
             TextButton(
                 enabled = !removing,
@@ -64,12 +68,15 @@ fun RemovePartyDialog(party: Party, viewModel: PartyListViewModel, onDismissRequ
 
                         withContext(Dispatchers.Main) {
                             onDismissRequest()
-                            longToast(context, R.string.message_party_removed)
+                            snackbarHolder.showSnackbar(
+                                messages.partyRemoved,
+                                duration = SnackbarDuration.Long,
+                            )
                         }
                     }
                 },
             ) {
-                Text(stringResource(R.string.button_remove).toUpperCase(Locale.current))
+                Text(LocalStrings.current.commonUi.buttonRemove.uppercase())
             }
         }
     )

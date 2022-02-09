@@ -5,12 +5,9 @@ import androidx.compose.material.Text
 import androidx.compose.material.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.intl.Locale
-import androidx.compose.ui.text.toUpperCase
-import cz.frantisekmasa.wfrp_master.core.ui.viewinterop.LocalActivity
-import cz.frantisekmasa.wfrp_master.core.viewModel.providePremiumViewModel
-import cz.muni.fi.rpg.R
+import cz.frantisekmasa.wfrp_master.common.core.ui.viewinterop.LocalActivity
+import cz.frantisekmasa.wfrp_master.common.core.viewModel.providePremiumViewModel
+import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
@@ -20,15 +17,17 @@ fun BuyPremiumPrompt(onDismissRequest: () -> Unit) {
     val viewModel = providePremiumViewModel()
     val coroutineScope = rememberCoroutineScope()
 
+    val strings = LocalStrings.current
+
     AlertDialog(
-        title = { Text(stringResource(R.string.buy_premium)) },
+        title = { Text(strings.premium.dialogTitle) },
         onDismissRequest = onDismissRequest,
         text = {
-            Text(stringResource(R.string.premium_prompt))
+            Text(strings.premium.prompt)
         },
         dismissButton = {
             TextButton(onClick = onDismissRequest) {
-                Text(stringResource(R.string.button_cancel).toUpperCase(Locale.current))
+                Text(strings.commonUi.buttonCancel.uppercase())
             }
         },
         confirmButton = {
@@ -39,7 +38,7 @@ fun BuyPremiumPrompt(onDismissRequest: () -> Unit) {
                     }
                 },
             ) {
-                Text(stringResource(R.string.button_upgrade))
+                Text(strings.premium.buttonUpgrade.uppercase())
             }
         }
     )

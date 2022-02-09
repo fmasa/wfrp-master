@@ -1,9 +1,9 @@
 package cz.muni.fi.rpg.ui.character.talents.dialog
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.rememberCoroutineScope
-import cz.frantisekmasa.wfrp_master.core.ui.dialogs.FullScreenDialog
+import cz.frantisekmasa.wfrp_master.common.core.ui.dialogs.FullScreenDialog
+import cz.frantisekmasa.wfrp_master.common.core.ui.flow.collectWithLifecycle
 import cz.muni.fi.rpg.viewModels.TalentsViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -16,7 +16,9 @@ fun EditTalentDialog(
     onDismissRequest: () -> Unit
 ) {
     val talent =
-        viewModel.talents.observeAsState().value?.firstOrNull { it.id == talentId } ?: return
+        viewModel.talents.collectWithLifecycle(null)
+            .value
+            ?.firstOrNull { it.id == talentId } ?: return
 
     FullScreenDialog(onDismissRequest = onDismissRequest) {
         if (talent.compendiumId != null) {

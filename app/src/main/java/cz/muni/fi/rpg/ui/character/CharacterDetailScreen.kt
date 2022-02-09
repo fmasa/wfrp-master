@@ -8,24 +8,26 @@ import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Edit
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import cz.frantisekmasa.wfrp_master.combat.ui.ActiveCombatBanner
-import cz.frantisekmasa.wfrp_master.core.ads.BannerAd
-import cz.frantisekmasa.wfrp_master.core.domain.character.Character
-import cz.frantisekmasa.wfrp_master.core.domain.party.Party
-import cz.frantisekmasa.wfrp_master.core.ui.buttons.HamburgerButton
-import cz.frantisekmasa.wfrp_master.core.ui.scaffolding.IconAction
-import cz.frantisekmasa.wfrp_master.core.ui.scaffolding.Subtitle
-import cz.frantisekmasa.wfrp_master.core.ui.scaffolding.tabs.TabPager
-import cz.frantisekmasa.wfrp_master.core.ui.scaffolding.tabs.tab
-import cz.frantisekmasa.wfrp_master.core.viewModel.PartyViewModel
-import cz.frantisekmasa.wfrp_master.core.viewModel.viewModel
+import cz.frantisekmasa.wfrp_master.common.core.ads.BannerAd
+import cz.frantisekmasa.wfrp_master.common.core.domain.character.Character
+import cz.frantisekmasa.wfrp_master.common.core.domain.party.Party
+import cz.frantisekmasa.wfrp_master.common.core.ui.buttons.HamburgerButton
+import cz.frantisekmasa.wfrp_master.common.core.ui.flow.collectWithLifecycle
+import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.IconAction
+import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.Subtitle
+import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.tabs.TabPager
+import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.tabs.tab
+import cz.frantisekmasa.wfrp_master.common.core.viewModel.PartyViewModel
+import cz.frantisekmasa.wfrp_master.common.core.viewModel.viewModel
+import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
 import cz.frantisekmasa.wfrp_master.inventory.ui.CharacterTrappingsScreen
 import cz.frantisekmasa.wfrp_master.navigation.Route
 import cz.frantisekmasa.wfrp_master.navigation.Routing
@@ -44,8 +46,8 @@ fun CharacterDetailScreen(routing: Routing<Route.CharacterDetail>) {
     val viewModel: CharacterViewModel by viewModel { parametersOf(characterId) }
     val partyViewModel: PartyViewModel by viewModel { parametersOf(characterId.partyId) }
 
-    val character = viewModel.character.observeAsState().value
-    val party = partyViewModel.party.observeAsState().value
+    val character = viewModel.character.collectWithLifecycle(null).value
+    val party = partyViewModel.party.collectWithLifecycle(null).value
 
     LaunchedEffect(routing.route.characterId) {
         withContext(Dispatchers.IO) {
@@ -72,8 +74,8 @@ fun CharacterDetailScreen(routing: Routing<Route.CharacterDetail>) {
                 },
                 actions = {
                     IconAction(
-                        painterResource(R.drawable.ic_edit),
-                        stringResource(R.string.icon_edit_character),
+                        Icons.Rounded.Edit,
+                        LocalStrings.current.character.titleEdit,
                         onClick = { routing.navigateTo(Route.CharacterEdit(characterId)) },
                     )
                 }
@@ -113,10 +115,12 @@ private fun MainContainer(
             ActiveCombatBanner(partyId = characterId.partyId, routing = routing)
         }
 
+        val strings = LocalStrings.current.character
+
         TabPager(Modifier.weight(1f)) {
             val modifier = Modifier.width(screenWidth)
 
-            tab(R.string.title_character_stats) {
+            tab(strings.tabAttributes) {
                 CharacterCharacteristicsScreen(
                     characterId = characterId,
                     character = character,
@@ -125,7 +129,7 @@ private fun MainContainer(
                 )
             }
 
-            tab(R.string.title_character_conditions) {
+            tab(strings.tabConditions) {
                 CharacterConditionsScreen(
                     character = character,
                     viewModel = viewModel,
@@ -133,7 +137,7 @@ private fun MainContainer(
                 )
             }
 
-            tab(R.string.title_character_skills) {
+            tab(strings.tabSkills) {
                 CharacterSkillsScreen(
                     characterVm = viewModel,
                     modifier = modifier,
@@ -141,14 +145,14 @@ private fun MainContainer(
                 )
             }
 
-            tab(R.string.title_character_spells) {
+            tab(strings.tabSpells) {
                 CharacterSpellsScreen(
                     characterId = characterId,
                     modifier = modifier,
                 )
             }
 
-            tab(R.string.title_character_religion) {
+            tab(strings.tabReligions) {
                 CharacterReligionScreen(
                     characterId = characterId,
                     modifier = modifier,
@@ -157,7 +161,7 @@ private fun MainContainer(
                 )
             }
 
-            tab(R.string.title_character_trappings) {
+            tab(strings.tabTrappings) {
                 CharacterTrappingsScreen(
                     characterId = characterId,
                     modifier = modifier,

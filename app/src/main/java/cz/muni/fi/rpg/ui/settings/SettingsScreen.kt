@@ -1,6 +1,5 @@
 package cz.muni.fi.rpg.ui.settings
 
-import androidx.annotation.StringRes
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
@@ -18,38 +17,40 @@ import androidx.compose.material.Scaffold
 import androidx.compose.material.Switch
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Redeem
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import cz.frantisekmasa.wfrp_master.core.ui.buttons.BackButton
-import cz.frantisekmasa.wfrp_master.core.ui.components.settings.SettingsCard
-import cz.frantisekmasa.wfrp_master.core.ui.components.settings.SettingsTitle
-import cz.frantisekmasa.wfrp_master.core.ui.primitives.Spacing
-import cz.frantisekmasa.wfrp_master.core.ui.primitives.VisualOnlyIconDescription
-import cz.frantisekmasa.wfrp_master.core.ui.viewinterop.LocalActivity
-import cz.frantisekmasa.wfrp_master.core.viewModel.PremiumViewModel
-import cz.frantisekmasa.wfrp_master.core.viewModel.SettingsViewModel
-import cz.frantisekmasa.wfrp_master.core.viewModel.providePremiumViewModel
-import cz.frantisekmasa.wfrp_master.core.viewModel.provideSettingsViewModel
+import cz.frantisekmasa.wfrp_master.common.core.ui.buttons.BackButton
+import cz.frantisekmasa.wfrp_master.common.core.ui.flow.collectWithLifecycle
+import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
+import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.VisualOnlyIconDescription
+import cz.frantisekmasa.wfrp_master.common.core.ui.settings.SettingsCard
+import cz.frantisekmasa.wfrp_master.common.core.ui.settings.SettingsTitle
+import cz.frantisekmasa.wfrp_master.common.core.ui.viewinterop.LocalActivity
+import cz.frantisekmasa.wfrp_master.common.core.viewModel.PremiumViewModel
+import cz.frantisekmasa.wfrp_master.common.core.viewModel.SettingsViewModel
+import cz.frantisekmasa.wfrp_master.common.core.viewModel.providePremiumViewModel
+import cz.frantisekmasa.wfrp_master.common.core.viewModel.provideSettingsViewModel
+import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
 import cz.frantisekmasa.wfrp_master.navigation.Route
 import cz.frantisekmasa.wfrp_master.navigation.Routing
-import cz.muni.fi.rpg.R
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 @Composable
 fun SettingsScreen(routing: Routing<Route.Settings>) {
+    val strings = LocalStrings.current.settings
+
     Scaffold(
         topBar = {
             TopAppBar(
                 navigationIcon = {
                     BackButton(onClick = { routing.pop() })
                 },
-                title = { Text(stringResource(R.string.settings)) }
+                title = { Text(strings.title) }
             )
         }
     ) {
@@ -68,14 +69,14 @@ fun SettingsScreen(routing: Routing<Route.Settings>) {
                 val premiumViewModel = providePremiumViewModel()
                 val premiumActive = premiumViewModel.active == true
 
-                SettingsTitle(R.string.settings_general)
+                SettingsTitle(strings.titleGeneral)
                 SoundCard(viewModel)
                 DarkModeCard(viewModel)
 
                 if (!premiumActive) {
                     PersonalizedAds(viewModel)
 
-                    SettingsTitle(R.string.settings_premium)
+                    SettingsTitle(strings.titlePremium)
                     BuyPremiumButton(premiumViewModel)
                 }
             }
@@ -94,16 +95,16 @@ private fun BuyPremiumButton(viewModel: PremiumViewModel) {
                 viewModel.purchasePremium(activity)
             }
         },
-        icon = { Icon(painterResource(R.drawable.ic_premium), VisualOnlyIconDescription) },
-        text = { Text(stringResource(R.string.buy_premium)) },
+        icon = { Icon(Icons.Rounded.Redeem, VisualOnlyIconDescription) },
+        text = { Text(LocalStrings.current.premium.dialogTitle) },
     )
 }
 
 @Composable
 private fun DarkModeCard(viewModel: SettingsViewModel) {
     SwitchItem(
-        name = R.string.settings_dark_mode,
-        value = viewModel.darkMode.value ?: isSystemInDarkTheme(),
+        name = LocalStrings.current.settings.darkMode,
+        value = viewModel.darkMode.collectWithLifecycle(isSystemInDarkTheme()).value,
         onChange = { viewModel.toggleDarkMode(it) },
     )
 }
@@ -111,8 +112,8 @@ private fun DarkModeCard(viewModel: SettingsViewModel) {
 @Composable
 private fun SoundCard(viewModel: SettingsViewModel) {
     SwitchItem(
-        name = R.string.settings_sound,
-        value = viewModel.soundEnabled.observeAsState().value,
+        name = LocalStrings.current.settings.sound,
+        value = viewModel.soundEnabled.collectWithLifecycle(null).value,
         onChange = { viewModel.toggleSound(it) }
     )
 }
@@ -120,15 +121,15 @@ private fun SoundCard(viewModel: SettingsViewModel) {
 @Composable
 private fun PersonalizedAds(viewModel: SettingsViewModel) {
     SwitchItem(
-        name = R.string.settings_personalized_ads,
-        value = viewModel.personalizedAds.observeAsState().value,
+        name = LocalStrings.current.settings.personalizedAds,
+        value = viewModel.personalizedAds.collectWithLifecycle(null).value,
         onChange = { viewModel.togglePersonalizedAds(it) },
     )
 }
 
 @Composable
 private fun SwitchItem(
-    @StringRes name: Int,
+    name: String,
     value: Boolean?,
     onChange: suspend (newValue: Boolean) -> Unit,
     disabledText: String? = null,
@@ -140,7 +141,7 @@ private fun SwitchItem(
 
     ListItem(
         text = {
-            Text(stringResource(name), color = color)
+            Text(name, color = color)
         },
         secondaryText = disabledText?.let { { Text(disabledText, color = color) } },
         trailing = {

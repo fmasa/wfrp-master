@@ -16,16 +16,16 @@ import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.key
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
+import cz.frantisekmasa.wfrp_master.common.core.shared.Resources
+import cz.frantisekmasa.wfrp_master.common.core.ui.buttons.CloseButton
+import cz.frantisekmasa.wfrp_master.common.core.ui.flow.collectWithLifecycle
+import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.EmptyUI
+import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.FullScreenProgress
+import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.ItemIcon
+import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
+import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
 import cz.frantisekmasa.wfrp_master.compendium.domain.Skill
-import cz.frantisekmasa.wfrp_master.core.ui.buttons.CloseButton
-import cz.frantisekmasa.wfrp_master.core.ui.primitives.EmptyUI
-import cz.frantisekmasa.wfrp_master.core.ui.primitives.FullScreenProgress
-import cz.frantisekmasa.wfrp_master.core.ui.primitives.ItemIcon
-import cz.frantisekmasa.wfrp_master.core.ui.primitives.Spacing
-import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.viewModels.SkillsViewModel
 
 @Composable
@@ -35,16 +35,18 @@ internal fun CompendiumSkillChooser(
     onCustomSkillRequest: () -> Unit,
     onDismissRequest: () -> Unit,
 ) {
+    val strings = LocalStrings.current.skills
+
     Scaffold(
         topBar = {
             TopAppBar(
                 navigationIcon = { CloseButton(onDismissRequest) },
-                title = { Text(stringResource(R.string.title_choose_compendium_skill)) },
+                title = { Text(strings.titleChooseCompendiumSkill) },
             )
         }
     ) {
-        val compendiumSkills = viewModel.notUsedSkillsFromCompendium.observeAsState().value
-        val totalCompendiumSkillCount = viewModel.compendiumSkillsCount.observeAsState().value
+        val compendiumSkills = viewModel.notUsedSkillsFromCompendium.collectWithLifecycle(null).value
+        val totalCompendiumSkillCount = viewModel.compendiumSkillsCount.collectWithLifecycle(null).value
 
         if (compendiumSkills == null || totalCompendiumSkillCount == null) {
             FullScreenProgress()
@@ -55,11 +57,12 @@ internal fun CompendiumSkillChooser(
             Box(Modifier.weight(1f)) {
                 if (compendiumSkills.isEmpty()) {
                     EmptyUI(
-                        drawableResourceId = R.drawable.ic_skills,
-                        textId = R.string.no_skills_in_compendium,
-                        subTextId = if (totalCompendiumSkillCount == 0)
-                            R.string.no_skills_in_compendium_sub_text_player
-                        else null,
+                        icon = Resources.Drawable.Skill,
+                        text = strings.messages.noSkillsInCompendium,
+                        subText = when (totalCompendiumSkillCount) {
+                            0 -> strings.messages.noSkillsInCompendiumSubtextPlayer
+                            else -> null
+                        },
                     )
                 } else {
                     LazyColumn(contentPadding = PaddingValues(Spacing.bodyPadding)) {
@@ -67,7 +70,7 @@ internal fun CompendiumSkillChooser(
                             key(skill.id) {
                                 ListItem(
                                     modifier = Modifier.clickable(onClick = { onSkillSelected(skill) }),
-                                    icon = { ItemIcon(skill.characteristic.getIconId(), ItemIcon.Size.Small) },
+                                    icon = { ItemIcon(skill.characteristic.getIcon(), ItemIcon.Size.Small) },
                                     text = { Text(skill.name) }
                                 )
                             }
@@ -82,7 +85,7 @@ internal fun CompendiumSkillChooser(
                     .padding(Spacing.bodyPadding),
                 onClick = onCustomSkillRequest,
             ) {
-                Text(stringResource(R.string.button_add_non_compendium_skill))
+                Text(strings.buttonAddNonCompendium)
             }
         }
     }

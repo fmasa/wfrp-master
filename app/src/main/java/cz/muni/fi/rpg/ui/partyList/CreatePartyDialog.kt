@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Scaffold
+import androidx.compose.material.SnackbarDuration
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.Composable
@@ -14,26 +15,24 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.stringResource
-import cz.frantisekmasa.wfrp_master.core.auth.LocalUser
-import cz.frantisekmasa.wfrp_master.core.domain.party.Party
-import cz.frantisekmasa.wfrp_master.core.domain.party.PartyId
-import cz.frantisekmasa.wfrp_master.core.ui.buttons.CloseButton
-import cz.frantisekmasa.wfrp_master.core.ui.dialogs.FullScreenDialog
-import cz.frantisekmasa.wfrp_master.core.ui.forms.Rules
-import cz.frantisekmasa.wfrp_master.core.ui.forms.TextInput
-import cz.frantisekmasa.wfrp_master.core.ui.forms.inputValue
-import cz.frantisekmasa.wfrp_master.core.ui.primitives.Spacing
-import cz.frantisekmasa.wfrp_master.core.ui.primitives.longToast
-import cz.frantisekmasa.wfrp_master.core.ui.scaffolding.SaveAction
-import cz.muni.fi.rpg.R
+import cz.frantisekmasa.wfrp_master.common.core.auth.LocalUser
+import cz.frantisekmasa.wfrp_master.common.core.domain.party.Party
+import cz.frantisekmasa.wfrp_master.common.core.domain.party.PartyId
+import cz.frantisekmasa.wfrp_master.common.core.ui.buttons.CloseButton
+import cz.frantisekmasa.wfrp_master.common.core.ui.dialogs.FullScreenDialog
+import cz.frantisekmasa.wfrp_master.common.core.ui.forms.Rules
+import cz.frantisekmasa.wfrp_master.common.core.ui.forms.TextInput
+import cz.frantisekmasa.wfrp_master.common.core.ui.forms.inputValue
+import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
+import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.LocalPersistentSnackbarHolder
+import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.SaveAction
+import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
 import cz.muni.fi.rpg.model.domain.common.CouldNotConnectToBackend
 import cz.muni.fi.rpg.viewModels.PartyListViewModel
+import io.github.aakira.napier.Napier
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import timber.log.Timber
 
 @Composable
 fun CreatePartyDialog(
@@ -45,19 +44,22 @@ fun CreatePartyDialog(
     FullScreenDialog(onDismissRequest = onDismissRequest) {
         var validate by remember { mutableStateOf(false) }
         val partyName = inputValue("", Rules.NotBlank())
+        val strings = LocalStrings.current.parties
 
         Scaffold(
             topBar = {
                 val coroutineScope = rememberCoroutineScope()
-                val context = LocalContext.current
+                val messages = LocalStrings.current.messages
                 val userId = LocalUser.current.id
 
                 var saving by remember { mutableStateOf(false) }
 
                 TopAppBar(
                     navigationIcon = { CloseButton(onClick = onDismissRequest) },
-                    title = { Text(stringResource(R.string.assembleParty_title)) },
+                    title = { Text(strings.titleCreateParty) },
                     actions = {
+                        val snackbarHolder = LocalPersistentSnackbarHolder.current
+
                         SaveAction(
                             enabled = !saving,
                             onClick = {
@@ -74,11 +76,18 @@ fun CreatePartyDialog(
 
                                         withContext(Dispatchers.Main) { onSuccess(partyId) }
                                     } catch (e: CouldNotConnectToBackend) {
-                                        Timber.i(e, "User could not assemble party, because (s)he is offline")
-                                        longToast(context, R.string.error_party_creation_no_connection)
+                                        Napier.i("User could not assemble party, because (s)he is offline", e)
+
+                                        snackbarHolder.showSnackbar(
+                                            messages.partyCreateErrorNoConnection,
+                                            duration = SnackbarDuration.Long,
+                                        )
                                     } catch (e: Throwable) {
-                                        longToast(context, R.string.error_unkown)
-                                        Timber.e(e)
+                                        snackbarHolder.showSnackbar(
+                                            messages.errorUnknown,
+                                            duration = SnackbarDuration.Long,
+                                        )
+                                        Napier.e(e.toString(), e)
                                     }
 
                                     saving = false
@@ -95,7 +104,7 @@ fun CreatePartyDialog(
                     .padding(Spacing.bodyPadding),
             ) {
                 TextInput(
-                    label = stringResource(R.string.label_party_name),
+                    label = strings.labelName,
                     value = partyName,
                     validate = validate,
                     maxLength = Party.NAME_MAX_LENGTH,

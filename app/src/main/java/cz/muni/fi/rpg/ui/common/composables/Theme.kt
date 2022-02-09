@@ -6,12 +6,12 @@ import androidx.compose.material.darkColors
 import androidx.compose.material.lightColors
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.sp
-import cz.frantisekmasa.wfrp_master.core.media.LocalSoundEnabled
-import cz.frantisekmasa.wfrp_master.core.ui.theme.SystemBarsChangingEffect
-import cz.frantisekmasa.wfrp_master.core.viewModel.provideSettingsViewModel
+import cz.frantisekmasa.wfrp_master.common.core.media.LocalSoundEnabled
+import cz.frantisekmasa.wfrp_master.common.core.ui.flow.collectWithLifecycle
+import cz.frantisekmasa.wfrp_master.common.core.ui.theme.SystemBarsChangingEffect
+import cz.frantisekmasa.wfrp_master.common.core.viewModel.provideSettingsViewModel
 
 class Theme {
     class FixedColors(
@@ -61,8 +61,8 @@ class Theme {
 @Composable
 fun Theme(content: @Composable () -> Unit) {
     val viewModel = provideSettingsViewModel()
-    val darkMode = viewModel.darkMode.observeAsState().value ?: isSystemInDarkTheme()
-    val soundEnabled = viewModel.soundEnabled.observeAsState().value ?: false
+    val darkMode = viewModel.darkMode.collectWithLifecycle(null).value ?: isSystemInDarkTheme()
+    val soundEnabled = viewModel.soundEnabled.collectWithLifecycle(null).value ?: false
 
     MaterialTheme(
         colors = if (darkMode) Theme.darkColors() else Theme.lightColors(),

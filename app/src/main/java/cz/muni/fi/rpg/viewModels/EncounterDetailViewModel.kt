@@ -1,29 +1,28 @@
 package cz.muni.fi.rpg.viewModels
 
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import cz.frantisekmasa.wfrp_master.combat.domain.encounter.Encounter
 import cz.frantisekmasa.wfrp_master.combat.domain.encounter.EncounterRepository
 import cz.frantisekmasa.wfrp_master.combat.domain.encounter.Npc
 import cz.frantisekmasa.wfrp_master.combat.domain.encounter.NpcRepository
 import cz.frantisekmasa.wfrp_master.combat.domain.encounter.Wounds
-import cz.frantisekmasa.wfrp_master.core.domain.Stats
-import cz.frantisekmasa.wfrp_master.core.domain.identifiers.EncounterId
-import cz.frantisekmasa.wfrp_master.core.domain.identifiers.NpcId
-import cz.frantisekmasa.wfrp_master.core.domain.party.PartyRepository
-import cz.frantisekmasa.wfrp_master.core.utils.mapItems
-import cz.frantisekmasa.wfrp_master.core.utils.right
+import cz.frantisekmasa.wfrp_master.common.core.domain.Stats
+import cz.frantisekmasa.wfrp_master.common.core.domain.identifiers.EncounterId
+import cz.frantisekmasa.wfrp_master.common.core.domain.identifiers.NpcId
+import cz.frantisekmasa.wfrp_master.common.core.domain.party.PartyRepository
+import cz.frantisekmasa.wfrp_master.common.core.utils.mapItems
+import cz.frantisekmasa.wfrp_master.common.core.utils.right
 import cz.frantisekmasa.wfrp_master.inventory.domain.Armor
 import cz.muni.fi.rpg.ui.gameMaster.encounters.NpcListItem
+import io.github.aakira.napier.Napier
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import timber.log.Timber
 import java.util.UUID
 import kotlin.math.min
 
@@ -33,12 +32,11 @@ class EncounterDetailViewModel(
     private val npcRepository: NpcRepository,
     private val parties: PartyRepository,
 ) : ViewModel() {
-    val encounter: LiveData<Encounter> = encounters.getLive(encounterId).right().asLiveData()
-    val npcs: LiveData<List<NpcListItem>> = npcRepository
+    val encounter: Flow<Encounter> = encounters.getLive(encounterId).right()
+    val npcs: Flow<List<NpcListItem>> = npcRepository
         .findByEncounter(encounterId)
         .mapItems { NpcListItem(NpcId(encounterId, it.id), it.name, it.alive) }
         .distinctUntilChanged()
-        .asLiveData()
 
     suspend fun remove() {
         val party = parties.get(encounterId.partyId)
@@ -127,7 +125,7 @@ class EncounterDetailViewModel(
                 val npc = npcRepository.get(npcId)
                 withContext(Dispatchers.Main) { flow.value = npc }
             } catch (e: Throwable) {
-                Timber.e(e)
+                Napier.e(e.toString(), e)
                 throw e
             }
         }

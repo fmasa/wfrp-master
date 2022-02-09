@@ -22,6 +22,9 @@ import androidx.compose.material.LocalContentColor
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.TextButton
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.ArrowBackIos
+import androidx.compose.material.icons.rounded.ArrowForwardIos
 import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
@@ -34,15 +37,13 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.intl.Locale
 import androidx.compose.ui.text.toUpperCase
 import androidx.compose.ui.unit.dp
 import androidx.core.os.bundleOf
-import cz.frantisekmasa.wfrp_master.core.domain.time.ImperialDate
-import cz.muni.fi.rpg.R
+import cz.frantisekmasa.wfrp_master.common.core.domain.time.ImperialDate
+import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
 import kotlinx.parcelize.Parcelize
 
 @Composable
@@ -56,6 +57,8 @@ fun ImperialCalendar(date: ImperialDate, onDateChange: (ImperialDate) -> Unit) {
 
             mutableStateOf(firstYear until firstYear + size)
         }
+
+        val strings = LocalStrings.current.calendar
 
         Row(
             Modifier.fillMaxWidth(),
@@ -72,8 +75,9 @@ fun ImperialCalendar(date: ImperialDate, onDateChange: (ImperialDate) -> Unit) {
                         }
                     ) {
                         Icon(
-                            painterResource(R.drawable.ic_caret_left),
-                            stringResource(R.string.icon_previous_years),
+                            Icons.Rounded.ArrowBackIos,
+                            strings.iconPreviousYears,
+                            tint = MaterialTheme.colors.primaryVariant
                         )
                     }
 
@@ -88,16 +92,18 @@ fun ImperialCalendar(date: ImperialDate, onDateChange: (ImperialDate) -> Unit) {
                         }
                     ) {
                         Icon(
-                            painterResource(R.drawable.ic_caret_right),
-                            stringResource(R.string.icon_next_years),
+                            Icons.Rounded.ArrowForwardIos,
+                            strings.iconNextYears,
+                            tint = MaterialTheme.colors.primaryVariant
                         )
                     }
                 }
                 ActiveScreen.DAYS_OF_MONTH -> {
                     IconButton(onClick = { activeMonth = activeMonth.previousMonth() }) {
                         Icon(
-                            painterResource(R.drawable.ic_caret_left),
-                            stringResource(R.string.icon_previous_month),
+                            Icons.Rounded.ArrowBackIos,
+                            strings.iconPreviousMonth,
+                            tint = MaterialTheme.colors.primaryVariant
                         )
                     }
 
@@ -109,8 +115,9 @@ fun ImperialCalendar(date: ImperialDate, onDateChange: (ImperialDate) -> Unit) {
 
                     IconButton(onClick = { activeMonth = activeMonth.nextMonth() }) {
                         Icon(
-                            painterResource(R.drawable.ic_caret_right),
-                            stringResource(R.string.icon_next_month),
+                            Icons.Rounded.ArrowForwardIos,
+                            strings.iconNextMonth,
+                            tint = MaterialTheme.colors.primaryVariant
                         )
                     }
                 }

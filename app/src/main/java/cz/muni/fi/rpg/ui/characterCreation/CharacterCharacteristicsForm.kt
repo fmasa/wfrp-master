@@ -1,6 +1,5 @@
 package cz.muni.fi.rpg.ui.characterCreation
 
-import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -10,18 +9,16 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Stable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
-import cz.frantisekmasa.wfrp_master.core.domain.Stats
-import cz.frantisekmasa.wfrp_master.core.domain.character.Character
-import cz.frantisekmasa.wfrp_master.core.ui.forms.HydratedFormData
-import cz.frantisekmasa.wfrp_master.core.ui.forms.InputValue
-import cz.frantisekmasa.wfrp_master.core.ui.forms.Rules
-import cz.frantisekmasa.wfrp_master.core.ui.forms.TextInput
-import cz.frantisekmasa.wfrp_master.core.ui.forms.inputValue
-import cz.muni.fi.rpg.R
-import cz.muni.fi.rpg.ui.common.chunk
+import cz.frantisekmasa.wfrp_master.common.core.domain.Stats
+import cz.frantisekmasa.wfrp_master.common.core.domain.character.Character
+import cz.frantisekmasa.wfrp_master.common.core.ui.forms.HydratedFormData
+import cz.frantisekmasa.wfrp_master.common.core.ui.forms.InputValue
+import cz.frantisekmasa.wfrp_master.common.core.ui.forms.Rules
+import cz.frantisekmasa.wfrp_master.common.core.ui.forms.TextInput
+import cz.frantisekmasa.wfrp_master.common.core.ui.forms.inputValue
+import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
 
 object CharacterCharacteristicsForm {
     @Stable
@@ -128,28 +125,30 @@ fun CharacterCharacteristicsForm(
     data: CharacterCharacteristicsForm.Data,
     validate: Boolean,
 ) {
+    val labels = LocalStrings.current.characteristics
+
     val characteristics = listOf(
-        R.string.label_weapon_skill to data.weaponSkill,
-        R.string.label_ballistic_skill to data.ballisticSkill,
-        R.string.label_strength to data.strength,
-        R.string.label_toughness to data.toughness,
-        R.string.label_initiative to data.initiative,
-        R.string.label_agility to data.agility,
-        R.string.label_dexterity to data.dexterity,
-        R.string.label_intelligence to data.intelligence,
-        R.string.label_will_power to data.willPower,
-        R.string.label_fellowship to data.fellowship,
+        labels.weaponSkill to data.weaponSkill,
+        labels.ballisticSkill to data.ballisticSkill,
+        labels.strength to data.strength,
+        labels.toughness to data.toughness,
+        labels.initiative to data.initiative,
+        labels.agility to data.agility,
+        labels.dexterity to data.dexterity,
+        labels.intelligence to data.intelligence,
+        labels.willPower to data.willPower,
+        labels.fellowship to data.fellowship,
     )
 
     Column(verticalArrangement = Arrangement.spacedBy(20.dp)) {
-        for (rowCharacteristics in characteristics.chunk(2)) {
+        for (rowCharacteristics in characteristics.chunked(2)) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.spacedBy(20.dp),
             ) {
-                for ((labelRes, baseAndAdvances) in rowCharacteristics) {
+                for ((label, baseAndAdvances) in rowCharacteristics) {
                     CharacteristicInputs(
-                        labelRes = labelRes,
+                        label = label,
                         validate = validate,
                         modifier = Modifier.weight(1f),
                         baseAndAdvances = baseAndAdvances,
@@ -162,13 +161,13 @@ fun CharacterCharacteristicsForm(
 
 @Composable
 private fun CharacteristicInputs(
-    @StringRes labelRes: Int,
+    label: String,
     validate: Boolean,
     modifier: Modifier,
     baseAndAdvances: Pair<InputValue, InputValue>
 ) {
     Column(modifier) {
-        Text(stringResource(labelRes), Modifier.align(Alignment.CenterHorizontally))
+        Text(label, Modifier.align(Alignment.CenterHorizontally))
 
         Row(
             Modifier.fillMaxWidth(),
@@ -177,10 +176,11 @@ private fun CharacteristicInputs(
         ) {
             val base = baseAndAdvances.first
             val advances = baseAndAdvances.second
+            val strings = LocalStrings.current.character
 
             TextInput(
                 modifier = Modifier.weight(1f),
-                label = stringResource(R.string.label_base),
+                label = strings.labelCharacteristicBase,
                 keyboardType = KeyboardType.Number,
                 value = base,
                 horizontalAlignment = Alignment.CenterHorizontally,
@@ -191,7 +191,7 @@ private fun CharacteristicInputs(
 
             TextInput(
                 modifier = Modifier.weight(1f),
-                label = stringResource(R.string.label_advances),
+                label = strings.labelCharacteristicAdvances,
                 keyboardType = KeyboardType.Number,
                 value = advances,
                 horizontalAlignment = Alignment.CenterHorizontally,

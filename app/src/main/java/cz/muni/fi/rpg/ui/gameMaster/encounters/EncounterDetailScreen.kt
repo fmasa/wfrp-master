@@ -23,11 +23,12 @@ import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.material.contentColorFor
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Edit
 import androidx.compose.material.primarySurface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -35,29 +36,31 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import cz.frantisekmasa.wfrp_master.combat.domain.encounter.Encounter
 import cz.frantisekmasa.wfrp_master.combat.ui.StartCombatDialog
-import cz.frantisekmasa.wfrp_master.core.domain.identifiers.NpcId
-import cz.frantisekmasa.wfrp_master.core.domain.party.PartyId
-import cz.frantisekmasa.wfrp_master.core.ui.buttons.BackButton
-import cz.frantisekmasa.wfrp_master.core.ui.buttons.PrimaryButton
-import cz.frantisekmasa.wfrp_master.core.ui.primitives.CardContainer
-import cz.frantisekmasa.wfrp_master.core.ui.primitives.CardItem
-import cz.frantisekmasa.wfrp_master.core.ui.primitives.ContextMenu
-import cz.frantisekmasa.wfrp_master.core.ui.primitives.EmptyUI
-import cz.frantisekmasa.wfrp_master.core.ui.primitives.Spacing
-import cz.frantisekmasa.wfrp_master.core.ui.primitives.VisualOnlyIconDescription
-import cz.frantisekmasa.wfrp_master.core.ui.scaffolding.OptionsAction
-import cz.frantisekmasa.wfrp_master.core.ui.scaffolding.Subtitle
-import cz.frantisekmasa.wfrp_master.core.viewModel.PartyViewModel
-import cz.frantisekmasa.wfrp_master.core.viewModel.viewModel
+import cz.frantisekmasa.wfrp_master.common.core.domain.identifiers.NpcId
+import cz.frantisekmasa.wfrp_master.common.core.domain.party.PartyId
+import cz.frantisekmasa.wfrp_master.common.core.shared.Resources
+import cz.frantisekmasa.wfrp_master.common.core.shared.drawableResource
+import cz.frantisekmasa.wfrp_master.common.core.ui.buttons.BackButton
+import cz.frantisekmasa.wfrp_master.common.core.ui.buttons.PrimaryButton
+import cz.frantisekmasa.wfrp_master.common.core.ui.flow.collectWithLifecycle
+import cz.frantisekmasa.wfrp_master.common.core.ui.cards.CardContainer
+import cz.frantisekmasa.wfrp_master.common.core.ui.cards.CardItem
+import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.ContextMenu
+import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.EmptyUI
+import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.ItemIcon
+import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
+import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.VisualOnlyIconDescription
+import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.OptionsAction
+import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.Subtitle
+import cz.frantisekmasa.wfrp_master.common.core.viewModel.PartyViewModel
+import cz.frantisekmasa.wfrp_master.common.core.viewModel.viewModel
+import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
 import cz.frantisekmasa.wfrp_master.navigation.Route
 import cz.frantisekmasa.wfrp_master.navigation.Routing
-import cz.muni.fi.rpg.R
-import cz.muni.fi.rpg.ui.common.composables.CardTitle
+import cz.frantisekmasa.wfrp_master.common.core.ui.cards.CardTitle
 import cz.muni.fi.rpg.viewModels.EncounterDetailViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -75,7 +78,7 @@ fun EncounterDetailScreen(routing: Routing<Route.EncounterDetail>) {
     Scaffold(
         topBar = {
             val partyId = encounterId.partyId
-            val encounter = viewModel.encounter.observeAsState().value
+            val encounter = viewModel.encounter.collectWithLifecycle(null).value
 
             TopAppBar(
                 title = {
@@ -83,7 +86,7 @@ fun EncounterDetailScreen(routing: Routing<Route.EncounterDetail>) {
                         encounter?.let { Text(it.name) }
 
                         val partyViewModel: PartyViewModel by viewModel { parametersOf(partyId) }
-                        partyViewModel.party.observeAsState().value?.let {
+                        partyViewModel.party.collectWithLifecycle(null).value?.let {
                             Subtitle(it.getName())
                         }
                     }
@@ -108,12 +111,12 @@ fun EncounterDetailScreen(routing: Routing<Route.EncounterDetail>) {
             ExtendedFloatingActionButton(
                 icon = {
                     Icon(
-                        painterResource(R.drawable.ic_encounter),
+                        drawableResource(Resources.Drawable.Encounter),
                         VisualOnlyIconDescription,
                         Modifier.width(24.dp),
                     )
                 },
-                text = { Text(stringResource(R.string.title_start_combat)) },
+                text = { Text(LocalStrings.current.combat.titleStartCombat) },
                 onClick = { startCombatDialogVisible = true },
             )
         },
@@ -154,10 +157,12 @@ private fun TopAppBarActions(
         )
     }
 
+    val strings = LocalStrings.current
+
     IconButton(onClick = { editDialogOpened = true }) {
         Icon(
-            painterResource(R.drawable.ic_edit),
-            stringResource(R.string.title_encounter_edit),
+            Icons.Rounded.Edit,
+            strings.encounters.titleEdit,
             tint = contentColorFor(MaterialTheme.colors.primarySurface),
         )
     }
@@ -166,18 +171,18 @@ private fun TopAppBarActions(
         DropdownMenuItem(
             onClick = {
                 AlertDialog.Builder(context)
-                    .setMessage(R.string.question_remove_encounter)
-                    .setPositiveButton(R.string.remove) { _, _ ->
+                    .setMessage(strings.encounters.messages.removalConfirmation)
+                    .setPositiveButton(strings.commonUi.buttonRemove) { _, _ ->
                         coroutineScope.launch(Dispatchers.IO) {
                             viewModel.remove()
                             withContext(Dispatchers.Main) { routing.pop() }
                         }
-                    }.setNegativeButton(R.string.button_cancel, null)
+                    }.setNegativeButton(strings.commonUi.buttonCancel, null)
                     .create()
                     .show()
             }
         ) {
-            Text(stringResource(R.string.remove))
+            Text(LocalStrings.current.commonUi.buttonRemove)
         }
     }
 }
@@ -198,7 +203,7 @@ private fun MainContainer(
             .padding(top = 6.dp, bottom = Spacing.bottomPaddingUnderFab),
     ) {
         DescriptionCard(viewModel)
-        CombatantsCard(
+        NpcsCard(
             viewModel,
             onCreateRequest = { routing.navigateTo(Route.NpcCreation(encounterId)) },
             onEditRequest = { routing.navigateTo(Route.NpcDetail(it)) },
@@ -215,9 +220,9 @@ private fun DescriptionCard(viewModel: EncounterDetailViewModel) {
             .fillMaxWidth()
             .padding(horizontal = 8.dp)
     ) {
-        CardTitle(R.string.title_description)
+        CardTitle(LocalStrings.current.encounters.titleDescription)
 
-        val encounter = viewModel.encounter.observeAsState().value
+        val encounter = viewModel.encounter.collectWithLifecycle(null).value
 
         if (encounter == null) {
             Box(Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
@@ -231,7 +236,7 @@ private fun DescriptionCard(viewModel: EncounterDetailViewModel) {
 }
 
 @Composable
-private fun CombatantsCard(
+private fun NpcsCard(
     viewModel: EncounterDetailViewModel,
     onCreateRequest: () -> Unit,
     onEditRequest: (NpcId) -> Unit,
@@ -243,9 +248,11 @@ private fun CombatantsCard(
             .fillMaxWidth()
             .padding(8.dp)
     ) {
-        CardTitle(R.string.title_npcs)
+        val strings = LocalStrings.current.npcs
 
-        val npcs = viewModel.npcs.observeAsState().value
+        CardTitle(strings.titlePlural)
+
+        val npcs = viewModel.npcs.collectWithLifecycle(null).value
 
         if (npcs == null) {
             Box(Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
@@ -259,8 +266,8 @@ private fun CombatantsCard(
 
             if (npcs.isEmpty()) {
                 EmptyUI(
-                    textId = R.string.no_npcs_prompt,
-                    drawableResourceId = R.drawable.ic_npc,
+                    text = strings.messages.noNpcs,
+                    icon = Resources.Drawable.Npc,
                     size = EmptyUI.Size.Small,
                 )
             } else {
@@ -276,7 +283,7 @@ private fun CombatantsCard(
                 Modifier.fillMaxWidth(),
                 contentAlignment = Alignment.TopCenter
             ) {
-                PrimaryButton(R.string.title_npc_add, onClick = onCreateRequest)
+                PrimaryButton(LocalStrings.current.npcs.buttonAddNpc, onClick = onCreateRequest)
             }
         }
     }
@@ -295,15 +302,22 @@ private fun NpcList(
         CompositionLocalProvider(LocalContentAlpha provides alpha) {
             CardItem(
                 name = npc.name,
-                iconRes = if (npc.alive) R.drawable.ic_npc else R.drawable.ic_dead,
+                icon = {
+                    ItemIcon(
+                        if (npc.alive)
+                            Resources.Drawable.Npc
+                        else Resources.Drawable.Dead,
+                        ItemIcon.Size.Small
+                    )
+                },
                 onClick = { onEditRequest(npc.id) },
                 contextMenuItems = listOf(
                     ContextMenu.Item(
-                        text = stringResource(R.string.button_duplicate),
+                        text = LocalStrings.current.commonUi.buttonDuplicate,
                         onClick = { onDuplicateRequest(npc.id) },
                     ),
                     ContextMenu.Item(
-                        text = stringResource(R.string.remove),
+                        text = LocalStrings.current.commonUi.buttonRemove,
                         onClick = { onRemoveRequest(npc.id) },
                     ),
                 ),

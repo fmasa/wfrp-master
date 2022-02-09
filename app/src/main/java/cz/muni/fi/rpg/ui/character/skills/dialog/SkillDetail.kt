@@ -13,14 +13,14 @@ import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import cz.frantisekmasa.wfrp_master.core.ui.buttons.CloseButton
-import cz.frantisekmasa.wfrp_master.core.ui.primitives.NumberPicker
-import cz.frantisekmasa.wfrp_master.core.ui.primitives.SingleLineTextValue
-import cz.frantisekmasa.wfrp_master.core.ui.primitives.Spacing
-import cz.frantisekmasa.wfrp_master.core.ui.scaffolding.SubheadBar
-import cz.muni.fi.rpg.R
+import cz.frantisekmasa.wfrp_master.common.core.domain.localizedName
+import cz.frantisekmasa.wfrp_master.common.core.ui.buttons.CloseButton
+import cz.frantisekmasa.wfrp_master.common.core.ui.forms.NumberPicker
+import cz.frantisekmasa.wfrp_master.common.core.ui.text.SingleLineTextValue
+import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
+import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.SubheadBar
+import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
 import cz.muni.fi.rpg.model.domain.skills.Skill
 
 @Composable
@@ -44,17 +44,17 @@ fun SkillDetail(
                 onAdvancesChange = onAdvancesChange,
             )
 
+            val strings = LocalStrings.current
+
             Column(Modifier.padding(Spacing.bodyPadding)) {
                 SingleLineTextValue(
-                    R.string.label_skill_characteristic,
-                    stringResource(skill.characteristic.getNameId()),
+                    label = strings.skills.labelCharacteristic,
+                    skill.characteristic.localizedName,
                 )
 
                 SingleLineTextValue(
-                    labelRes = R.string.label_skill_advanced,
-                    value = stringResource(
-                        if (skill.advanced) R.string.boolean_yes else R.string.boolean_no
-                    )
+                    label = strings.skills.labelAdvanced,
+                    value = strings.commonUi.boolean(skill.advanced),
                 )
 
                 Text(
@@ -78,7 +78,7 @@ private fun AdvancesBar(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween,
         ) {
-            Text(stringResource(R.string.label_advances))
+            Text(LocalStrings.current.skills.labelAdvances)
             NumberPicker(
                 value = advances,
                 onIncrement = { onAdvancesChange(advances + 1) },

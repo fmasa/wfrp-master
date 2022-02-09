@@ -15,15 +15,14 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
-import cz.frantisekmasa.wfrp_master.core.domain.Ambitions
-import cz.frantisekmasa.wfrp_master.core.ui.buttons.CloseButton
-import cz.frantisekmasa.wfrp_master.core.ui.dialogs.FullScreenDialog
-import cz.frantisekmasa.wfrp_master.core.ui.forms.TextInput
-import cz.frantisekmasa.wfrp_master.core.ui.forms.inputValue
-import cz.frantisekmasa.wfrp_master.core.ui.primitives.Spacing
-import cz.frantisekmasa.wfrp_master.core.ui.scaffolding.SaveAction
-import cz.muni.fi.rpg.R
+import cz.frantisekmasa.wfrp_master.common.core.domain.Ambitions
+import cz.frantisekmasa.wfrp_master.common.core.ui.buttons.CloseButton
+import cz.frantisekmasa.wfrp_master.common.core.ui.dialogs.FullScreenDialog
+import cz.frantisekmasa.wfrp_master.common.core.ui.forms.TextInput
+import cz.frantisekmasa.wfrp_master.common.core.ui.forms.inputValue
+import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
+import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.SaveAction
+import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -75,8 +74,10 @@ fun ChangeAmbitionsDialog(
                     .padding(Spacing.bodyPadding),
                 verticalArrangement = Arrangement.spacedBy(Spacing.small),
             ) {
+                val strings = LocalStrings.current.ambition
+
                 TextInput(
-                    label = stringResource(R.string.label_ambition_short_term),
+                    label = strings.labelShortTerm,
                     value = shortTerm,
                     validate = false,
                     maxLength = Ambitions.MAX_LENGTH,
@@ -84,7 +85,7 @@ fun ChangeAmbitionsDialog(
                 )
 
                 TextInput(
-                    label = stringResource(R.string.label_ambition_long_term),
+                    label = strings.labelLongTerm,
                     value = longTerm,
                     validate = false,
                     maxLength = Ambitions.MAX_LENGTH,

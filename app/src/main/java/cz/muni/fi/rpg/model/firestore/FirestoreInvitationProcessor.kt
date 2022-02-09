@@ -3,11 +3,11 @@ package cz.muni.fi.rpg.model.firestore
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.SetOptions
-import cz.frantisekmasa.wfrp_master.core.auth.UserId
-import cz.frantisekmasa.wfrp_master.core.domain.party.Invitation
-import cz.frantisekmasa.wfrp_master.core.domain.party.PartyId
-import cz.frantisekmasa.wfrp_master.core.domain.party.PartyNotFound
-import cz.frantisekmasa.wfrp_master.core.domain.party.PartyRepository
+import cz.frantisekmasa.wfrp_master.common.core.auth.UserId
+import cz.frantisekmasa.wfrp_master.common.core.domain.party.Invitation
+import cz.frantisekmasa.wfrp_master.common.core.domain.party.PartyId
+import cz.frantisekmasa.wfrp_master.common.core.domain.party.PartyNotFound
+import cz.frantisekmasa.wfrp_master.common.core.domain.party.PartyRepository
 import cz.muni.fi.rpg.model.domain.invitation.AlreadyInParty
 import cz.muni.fi.rpg.model.domain.invitation.InvitationProcessor
 import kotlinx.coroutines.tasks.await

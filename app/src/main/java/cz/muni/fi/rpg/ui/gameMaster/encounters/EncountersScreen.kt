@@ -20,9 +20,11 @@ import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Add
+import androidx.compose.material.icons.rounded.Redeem
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -30,19 +32,20 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import cz.frantisekmasa.wfrp_master.combat.domain.encounter.Encounter
-import cz.frantisekmasa.wfrp_master.core.domain.party.PartyId
-import cz.frantisekmasa.wfrp_master.core.ui.primitives.DraggableListFor
-import cz.frantisekmasa.wfrp_master.core.ui.primitives.EmptyUI
-import cz.frantisekmasa.wfrp_master.core.ui.primitives.Spacing
-import cz.frantisekmasa.wfrp_master.core.ui.primitives.VisualOnlyIconDescription
-import cz.frantisekmasa.wfrp_master.core.viewModel.PremiumViewModel
-import cz.frantisekmasa.wfrp_master.core.viewModel.providePremiumViewModel
-import cz.muni.fi.rpg.R
+import cz.frantisekmasa.wfrp_master.common.core.domain.party.PartyId
+import cz.frantisekmasa.wfrp_master.common.core.shared.Resources
+import cz.frantisekmasa.wfrp_master.common.core.shared.drawableResource
+import cz.frantisekmasa.wfrp_master.common.core.ui.flow.collectWithLifecycle
+import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.DraggableListFor
+import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.EmptyUI
+import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
+import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.VisualOnlyIconDescription
+import cz.frantisekmasa.wfrp_master.common.core.viewModel.PremiumViewModel
+import cz.frantisekmasa.wfrp_master.common.core.viewModel.providePremiumViewModel
+import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
 import cz.muni.fi.rpg.ui.common.BuyPremiumPrompt
 import cz.muni.fi.rpg.viewModels.EncountersViewModel
 
@@ -53,7 +56,7 @@ fun EncountersScreen(
     modifier: Modifier,
     onEncounterClick: (Encounter) -> Unit,
 ) {
-    val encounters = viewModel.encounters.observeAsState().value
+    val encounters = viewModel.encounters.collectWithLifecycle(null).value
 
     if (encounters == null) {
         Box(modifier.fillMaxSize()) {
@@ -89,12 +92,13 @@ fun EncountersScreen(
 @Composable
 private fun AddEncounterButton(encounterCount: Int, onCreateEncounterRequest: () -> Unit) {
     val premiumViewModel = providePremiumViewModel()
+    val strings = LocalStrings.current
 
     if (encounterCount >= PremiumViewModel.FREE_ENCOUNTER_COUNT && premiumViewModel.active != true) {
         var premiumPromptVisible by remember { mutableStateOf(false) }
 
         FloatingActionButton(onClick = { premiumPromptVisible = true }) {
-            Icon(painterResource(R.drawable.ic_premium), stringResource(R.string.buy_premium))
+            Icon(Icons.Rounded.Redeem, strings.premium.dialogTitle)
         }
 
         if (premiumPromptVisible) {
@@ -105,7 +109,7 @@ private fun AddEncounterButton(encounterCount: Int, onCreateEncounterRequest: ()
     }
 
     FloatingActionButton(onClick = onCreateEncounterRequest) {
-        Icon(painterResource(R.drawable.ic_add), stringResource(R.string.icon_add_encounter))
+        Icon(Icons.Rounded.Add, strings.encounters.buttonAdd)
     }
 }
 
@@ -116,16 +120,17 @@ private fun EncounterList(
     onClick: (Encounter) -> Unit
 ) {
     if (encounters.isEmpty()) {
+        val strings = LocalStrings.current.encounters
         EmptyUI(
-            textId = R.string.no_encounters_prompt,
-            subTextId = R.string.no_encounters_sub_prompt,
-            drawableResourceId = R.drawable.ic_encounter
+            text = strings.messages.noEncounters,
+            subText = strings.messages.noEncountersSubtext,
+            icon = Resources.Drawable.Encounter,
         )
 
         return
     }
 
-    val icon = painterResource(R.drawable.ic_encounter)
+    val icon = drawableResource(Resources.Drawable.Encounter)
     val iconSize = 28.dp
 
     Column(

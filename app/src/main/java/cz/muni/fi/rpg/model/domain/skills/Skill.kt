@@ -1,7 +1,7 @@
 package cz.muni.fi.rpg.model.domain.skills
 
-import cz.frantisekmasa.wfrp_master.core.domain.Characteristic
-import cz.frantisekmasa.wfrp_master.core.domain.character.CharacterItem
+import cz.frantisekmasa.wfrp_master.common.core.domain.Characteristic
+import cz.frantisekmasa.wfrp_master.common.core.domain.character.CharacterItem
 import kotlinx.parcelize.Parcelize
 import kotlinx.serialization.Contextual
 import kotlinx.serialization.Serializable

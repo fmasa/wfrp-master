@@ -19,7 +19,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
-import timber.log.Timber
+import io.github.aakira.napier.Napier
 import java.util.concurrent.Executors
 
 @Composable
@@ -84,7 +84,7 @@ internal fun QrCodeScanner(
                                 analysis
                             )
                         } catch (e: Exception) {
-                            Timber.e(e, "Camera binding failed")
+                            Napier.e("Camera binding failed", e)
                         }
                     },
                     ContextCompat.getMainExecutor(context)

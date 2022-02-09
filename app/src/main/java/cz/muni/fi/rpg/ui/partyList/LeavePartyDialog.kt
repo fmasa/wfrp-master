@@ -11,14 +11,11 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.intl.Locale
-import androidx.compose.ui.text.toUpperCase
-import cz.frantisekmasa.wfrp_master.core.auth.LocalUser
-import cz.frantisekmasa.wfrp_master.core.auth.UserId
-import cz.frantisekmasa.wfrp_master.core.domain.party.Party
-import cz.frantisekmasa.wfrp_master.core.ui.primitives.Spacing
-import cz.muni.fi.rpg.R
+import cz.frantisekmasa.wfrp_master.common.core.auth.LocalUser
+import cz.frantisekmasa.wfrp_master.common.core.auth.UserId
+import cz.frantisekmasa.wfrp_master.common.core.domain.party.Party
+import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
+import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
 import cz.muni.fi.rpg.viewModels.PartyListViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -27,12 +24,13 @@ import kotlinx.coroutines.withContext
 @Composable
 fun LeavePartyDialog(party: Party, viewModel: PartyListViewModel, onDismissRequest: () -> Unit) {
     var removing by remember { mutableStateOf(false) }
+    val strings = LocalStrings.current.parties
 
     AlertDialog(
         onDismissRequest = onDismissRequest,
         text = {
             Column(verticalArrangement = Arrangement.spacedBy(Spacing.medium)) {
-                Text(stringResource(R.string.party_leave_confirmation))
+                Text(strings.messages.leaveConfirmation)
             }
         },
         dismissButton = {
@@ -40,7 +38,7 @@ fun LeavePartyDialog(party: Party, viewModel: PartyListViewModel, onDismissReque
                 enabled = !removing,
                 onClick = onDismissRequest
             ) {
-                Text(stringResource(R.string.button_cancel).toUpperCase(Locale.current))
+                Text(LocalStrings.current.commonUi.buttonCancel.uppercase())
             }
         },
         confirmButton = {
@@ -58,7 +56,7 @@ fun LeavePartyDialog(party: Party, viewModel: PartyListViewModel, onDismissReque
                     }
                 },
             ) {
-                Text(stringResource(R.string.button_leave).toUpperCase(Locale.current))
+                Text(strings.buttonLeave.uppercase())
             }
         }
     )

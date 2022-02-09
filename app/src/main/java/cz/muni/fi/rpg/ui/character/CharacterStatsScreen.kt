@@ -20,6 +20,8 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Group
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
@@ -31,31 +33,34 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
-import cz.frantisekmasa.wfrp_master.core.domain.Characteristic
-import cz.frantisekmasa.wfrp_master.core.domain.Expression
-import cz.frantisekmasa.wfrp_master.core.domain.Stats
-import cz.frantisekmasa.wfrp_master.core.domain.character.Character
-import cz.frantisekmasa.wfrp_master.core.domain.character.Points
-import cz.frantisekmasa.wfrp_master.core.domain.character.Points.PointPool
-import cz.frantisekmasa.wfrp_master.core.domain.identifiers.CharacterId
-import cz.frantisekmasa.wfrp_master.core.domain.party.Party
-import cz.frantisekmasa.wfrp_master.core.media.rememberSoundPlayer
-import cz.frantisekmasa.wfrp_master.core.ui.components.Breakpoint
-import cz.frantisekmasa.wfrp_master.core.ui.components.CharacterAvatar
-import cz.frantisekmasa.wfrp_master.core.ui.components.ColumnSize.FullWidth
-import cz.frantisekmasa.wfrp_master.core.ui.components.ColumnSize.HalfWidth
-import cz.frantisekmasa.wfrp_master.core.ui.components.Container
-import cz.frantisekmasa.wfrp_master.core.ui.components.LocalBreakpoint
-import cz.frantisekmasa.wfrp_master.core.ui.dialogs.FullScreenDialog
-import cz.frantisekmasa.wfrp_master.core.ui.primitives.ItemIcon
-import cz.frantisekmasa.wfrp_master.core.ui.primitives.NumberPicker
-import cz.frantisekmasa.wfrp_master.core.ui.primitives.Spacing
-import cz.frantisekmasa.wfrp_master.core.ui.primitives.TopPanel
-import cz.frantisekmasa.wfrp_master.core.viewModel.viewModel
+import cz.frantisekmasa.wfrp_master.common.core.domain.Characteristic
+import cz.frantisekmasa.wfrp_master.common.core.domain.Expression
+import cz.frantisekmasa.wfrp_master.common.core.domain.Stats
+import cz.frantisekmasa.wfrp_master.common.core.domain.character.Character
+import cz.frantisekmasa.wfrp_master.common.core.domain.character.Points
+import cz.frantisekmasa.wfrp_master.common.core.domain.character.Points.PointPool
+import cz.frantisekmasa.wfrp_master.common.core.domain.identifiers.CharacterId
+import cz.frantisekmasa.wfrp_master.common.core.domain.localizedName
+import cz.frantisekmasa.wfrp_master.common.core.domain.party.Party
+import cz.frantisekmasa.wfrp_master.common.core.media.rememberSoundPlayer
+import cz.frantisekmasa.wfrp_master.common.core.shared.Resources
+import cz.frantisekmasa.wfrp_master.common.core.shared.drawableResource
+import cz.frantisekmasa.wfrp_master.common.core.ui.responsive.Breakpoint
+import cz.frantisekmasa.wfrp_master.common.core.ui.CharacterAvatar
+import cz.frantisekmasa.wfrp_master.common.core.ui.responsive.ColumnSize.FullWidth
+import cz.frantisekmasa.wfrp_master.common.core.ui.responsive.ColumnSize.HalfWidth
+import cz.frantisekmasa.wfrp_master.common.core.ui.responsive.Container
+import cz.frantisekmasa.wfrp_master.common.core.ui.responsive.LocalBreakpoint
+import cz.frantisekmasa.wfrp_master.common.core.ui.dialogs.FullScreenDialog
+import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.ItemIcon
+import cz.frantisekmasa.wfrp_master.common.core.ui.forms.NumberPicker
+import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
+import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.TopPanel
+import cz.frantisekmasa.wfrp_master.common.core.viewModel.viewModel
+import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
 import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.ui.character.dialogs.ExperiencePointsDialog
 import cz.muni.fi.rpg.ui.common.composables.AmbitionsCard
@@ -90,7 +95,7 @@ internal fun CharacterCharacteristicsScreen(
             }
 
             TestResultScreen(
-                testName = stringResource(R.string.title_roll),
+                testName = LocalStrings.current.tests.roll,
                 results = listOf(
                     RollResult(
                         characterId.toString(),
@@ -115,7 +120,7 @@ internal fun CharacterCharacteristicsScreen(
             FloatingActionsMenu(
                 state = menuState,
                 onToggleRequest = { menuState = it },
-                iconRes = R.drawable.ic_dice_roll,
+                icon = drawableResource(Resources.Drawable.DiceRoll)
             ) {
                 for (dice in listOf("1d100", "1d10")) {
                     ExtendedFloatingActionButton(
@@ -161,6 +166,8 @@ internal fun CharacterCharacteristicsScreen(
                 }
             }
 
+            val strings = LocalStrings.current.ambition
+
             Container(
                 Modifier.padding(top = Spacing.tiny),
                 horizontalArrangement = Arrangement.spacedBy(Spacing.gutterSize()),
@@ -169,7 +176,7 @@ internal fun CharacterCharacteristicsScreen(
 
                 column(size) {
                     AmbitionsCard(
-                        titleRes = R.string.title_character_ambitions,
+                        title = strings.titleCharacterAmbitions,
                         ambitions = character.getAmbitions(),
                         onSave = { viewModel.updateCharacterAmbitions(it) },
                     )
@@ -177,9 +184,9 @@ internal fun CharacterCharacteristicsScreen(
 
                 column(size) {
                     AmbitionsCard(
-                        titleRes = R.string.title_party_ambitions,
+                        title = strings.titlePartyAmbitions,
                         ambitions = party.getAmbitions(),
-                        titleIconRes = R.drawable.ic_group,
+                        titleIcon = Icons.Rounded.Group,
                         onSave = null,
                     )
                 }
@@ -208,7 +215,7 @@ private fun CharacterTopPanel(character: Character, points: Points, onUpdate: (P
                         Column(Modifier.padding(start = Spacing.medium)) {
                             Text(character.getName(), fontWeight = FontWeight.Bold)
                             Text(
-                                stringResource(character.getRace().getReadableNameId()) +
+                                character.getRace().localizedName +
                                     " " +
                                     character.getCareer(),
                                 style = MaterialTheme.typography.caption
@@ -228,12 +235,13 @@ private fun CharacterTopPanel(character: Character, points: Points, onUpdate: (P
 @Composable
 private fun WoundsBadge(points: Points, update: (Points) -> Unit) {
     var dialogVisible by remember { mutableStateOf(false) }
+    val strings = LocalStrings.current.points
 
     Button(onClick = { dialogVisible = true }) {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
             Text("${points.wounds} / ${points.maxWounds}")
             Text(
-                stringResource(R.string.label_wounds),
+                strings.wounds,
                 fontWeight = FontWeight.Normal
             )
         }
@@ -247,7 +255,7 @@ private fun WoundsBadge(points: Points, update: (Points) -> Unit) {
         val wounds = points.wounds
 
         NumberPicker(
-            label = stringResource(R.string.label_wounds),
+            label = strings.wounds,
             value = wounds,
             onIncrement = {
                 if (wounds < points.maxWounds) {
@@ -299,7 +307,7 @@ private fun PointsRow(points: Points, update: (Points) -> Unit) {
                     style = MaterialTheme.typography.h6
                 )
                 Text(
-                    stringResource(pool.nameRes),
+                    pool.localizedName,
                     style = MaterialTheme.typography.caption,
                 )
             }
@@ -307,7 +315,7 @@ private fun PointsRow(points: Points, update: (Points) -> Unit) {
             if (dialogVisible) {
                 PointsDialog(onDismissRequest = { dialogVisible = false }) {
                     NumberPicker(
-                        label = stringResource(pool.nameRes),
+                        label = pool.localizedName,
                         value = value,
                         onIncrement = { points.modify(pool, +1).onSuccess(update) },
                         onDecrement = { points.modify(pool, -1).onSuccess(update) }
@@ -391,14 +399,16 @@ private fun ExperiencePointsSection(
             .clickable(onClick = { experiencePointsDialogVisible = true })
             .padding(horizontal = Spacing.large),
     ) {
+        val strings = LocalStrings.current.points
+
         Row(horizontalArrangement = Arrangement.spacedBy(Spacing.tiny)) {
             Text(points.experience.toString(), fontWeight = FontWeight.Bold)
-            Text(stringResource(R.string.xp_points))
+            Text(strings.experience)
         }
 
         CompositionLocalProvider(LocalContentAlpha provides ContentAlpha.medium) {
             Text(
-                stringResource(R.string.xp_points_spent, points.spentExperience),
+                strings.spentExperience(points.spentExperience),
                 style = MaterialTheme.typography.caption,
             )
         }
@@ -413,7 +423,7 @@ private fun CareerSection(character: Character) {
         Text(character.getCareer(), fontWeight = FontWeight.Bold)
         CompositionLocalProvider(LocalContentAlpha provides ContentAlpha.medium) {
             Text(
-                "${character.getSocialClass()} · ${stringResource(status.tier.nameRes)} ${status.standing}",
+                "${character.getSocialClass()} · ${status.tier.localizedName} ${status.standing}",
                 style = MaterialTheme.typography.caption
             )
         }

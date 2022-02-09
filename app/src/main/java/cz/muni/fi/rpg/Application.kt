@@ -1,13 +1,13 @@
 package cz.muni.fi.rpg
 
-import com.google.firebase.crashlytics.FirebaseCrashlytics
-import cz.frantisekmasa.wfrp_master.core.logging.CrashlyticsTree
-import cz.frantisekmasa.wfrp_master.core.logging.KoinTimberLogger
+import cz.frantisekmasa.wfrp_master.common.core.logging.ErrorReportingAntilog
+import cz.frantisekmasa.wfrp_master.common.core.logging.KoinNapierLogger
 import cz.muni.fi.rpg.di.appModule
+import io.github.aakira.napier.DebugAntilog
+import io.github.aakira.napier.Napier
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
 import org.koin.core.logger.Level
-import timber.log.Timber
 import android.app.Application as BaseApplication
 
 class Application : BaseApplication() {
@@ -17,15 +17,15 @@ class Application : BaseApplication() {
         startKoin {
             // declare used Android context
             androidContext(this@Application)
-            logger(KoinTimberLogger(Level.ERROR))
+            logger(KoinNapierLogger(Level.ERROR))
             // declare modules
             modules(appModule)
         }
 
-        Timber.plant(
+        Napier.base(
             if (BuildConfig.DEBUG)
-                Timber.DebugTree()
-            else CrashlyticsTree(FirebaseCrashlytics.getInstance())
+                DebugAntilog()
+            else ErrorReportingAntilog()
         )
     }
 }

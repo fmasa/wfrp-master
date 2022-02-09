@@ -1,6 +1,5 @@
 package cz.muni.fi.rpg.ui.character.dialogs
 
-import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
@@ -16,18 +15,17 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
-import cz.frantisekmasa.wfrp_master.core.domain.character.Points
-import cz.frantisekmasa.wfrp_master.core.ui.buttons.CloseButton
-import cz.frantisekmasa.wfrp_master.core.ui.dialogs.FullScreenDialog
-import cz.frantisekmasa.wfrp_master.core.ui.forms.InputValue
-import cz.frantisekmasa.wfrp_master.core.ui.forms.Rules
-import cz.frantisekmasa.wfrp_master.core.ui.forms.TextInput
-import cz.frantisekmasa.wfrp_master.core.ui.forms.inputValue
-import cz.frantisekmasa.wfrp_master.core.ui.primitives.Spacing
-import cz.frantisekmasa.wfrp_master.core.ui.scaffolding.SaveAction
-import cz.muni.fi.rpg.R
+import cz.frantisekmasa.wfrp_master.common.core.domain.character.Points
+import cz.frantisekmasa.wfrp_master.common.core.ui.buttons.CloseButton
+import cz.frantisekmasa.wfrp_master.common.core.ui.dialogs.FullScreenDialog
+import cz.frantisekmasa.wfrp_master.common.core.ui.forms.InputValue
+import cz.frantisekmasa.wfrp_master.common.core.ui.forms.Rules
+import cz.frantisekmasa.wfrp_master.common.core.ui.forms.TextInput
+import cz.frantisekmasa.wfrp_master.common.core.ui.forms.inputValue
+import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
+import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.SaveAction
+import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -45,11 +43,13 @@ fun ExperiencePointsDialog(
         val coroutineScope = rememberCoroutineScope()
         var validate by remember { mutableStateOf(false) }
 
+        val strings = LocalStrings.current.points
+
         Scaffold(
             topBar = {
                 TopAppBar(
                     navigationIcon = { CloseButton(onClick = onDismissRequest) },
-                    title = { Text(stringResource(R.string.xp_points)) },
+                    title = { Text(strings.experience) },
                     actions = {
                         var saving by remember { mutableStateOf(false) }
                         SaveAction(
@@ -85,17 +85,17 @@ fun ExperiencePointsDialog(
                     .padding(Spacing.bodyPadding),
                 verticalArrangement = Arrangement.spacedBy(Spacing.small)
             ) {
-                PointInput(spentPoints, R.string.label_xp_spent, validate)
-                PointInput(currentPoints, R.string.label_xp_current, validate)
+                PointInput(spentPoints, strings.labelSpentExperience, validate)
+                PointInput(currentPoints, strings.labelCurrentExperience, validate)
             }
         }
     }
 }
 
 @Composable
-private fun PointInput(value: InputValue, @StringRes labelRes: Int, validate: Boolean) {
+private fun PointInput(value: InputValue, label: String, validate: Boolean) {
     TextInput(
-        label = stringResource(labelRes),
+        label = label,
         value = value,
         validate = validate,
         keyboardType = KeyboardType.Number,

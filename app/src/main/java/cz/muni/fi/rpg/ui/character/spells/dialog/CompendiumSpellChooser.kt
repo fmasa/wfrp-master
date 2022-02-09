@@ -16,19 +16,19 @@ import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
-import cz.frantisekmasa.wfrp_master.core.ui.buttons.CloseButton
-import cz.frantisekmasa.wfrp_master.core.ui.primitives.EmptyUI
-import cz.frantisekmasa.wfrp_master.core.ui.primitives.FullScreenProgress
-import cz.frantisekmasa.wfrp_master.core.ui.primitives.ItemIcon
-import cz.frantisekmasa.wfrp_master.core.ui.primitives.Spacing
-import cz.muni.fi.rpg.R
+import cz.frantisekmasa.wfrp_master.common.core.shared.Resources
+import cz.frantisekmasa.wfrp_master.common.core.ui.buttons.CloseButton
+import cz.frantisekmasa.wfrp_master.common.core.ui.flow.collectWithLifecycle
+import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.EmptyUI
+import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.FullScreenProgress
+import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.ItemIcon
+import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
+import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
 import cz.muni.fi.rpg.model.domain.spells.Spell
 import cz.muni.fi.rpg.viewModels.SpellsViewModel
 import kotlinx.coroutines.Dispatchers
@@ -43,16 +43,18 @@ internal fun CompendiumSpellChooser(
     onCustomSpellRequest: () -> Unit,
     onDismissRequest: () -> Unit,
 ) {
+    val strings = LocalStrings.current.spells
+
     Scaffold(
         topBar = {
             TopAppBar(
                 navigationIcon = { CloseButton(onDismissRequest) },
-                title = { Text(stringResource(R.string.title_choose_compendium_spell)) },
+                title = { Text(strings.titleChooseCompendiumSpell) },
             )
         }
     ) {
-        val compendiumSpells = viewModel.notUsedSpellsFromCompendium.observeAsState().value
-        val totalCompendiumSpellCount = viewModel.compendiumSpellsCount.observeAsState().value
+        val compendiumSpells = viewModel.notUsedSpellsFromCompendium.collectWithLifecycle(null).value
+        val totalCompendiumSpellCount = viewModel.compendiumSpellsCount.collectWithLifecycle(null).value
         var saving by remember { mutableStateOf(false) }
 
         if (compendiumSpells == null || totalCompendiumSpellCount == null || saving) {
@@ -63,12 +65,14 @@ internal fun CompendiumSpellChooser(
         Column(Modifier.fillMaxSize()) {
             Box(Modifier.weight(1f)) {
                 if (compendiumSpells.isEmpty()) {
+
                     EmptyUI(
-                        drawableResourceId = R.drawable.ic_spells,
-                        textId = R.string.no_spells_in_compendium,
-                        subTextId = if (totalCompendiumSpellCount == 0)
-                            R.string.no_spells_in_compendium_sub_text_player
-                        else null,
+                        icon = Resources.Drawable.Spell,
+                        text = strings.messages.noSpellsInCompendium,
+                        subText = when (totalCompendiumSpellCount) {
+                            0 -> strings.messages.noSpellsInCompendium
+                            else -> null
+                        },
                     )
                 } else {
                     val coroutineScope = rememberCoroutineScope()
@@ -99,7 +103,7 @@ internal fun CompendiumSpellChooser(
                                         }
                                     }
                                 ),
-                                icon = { ItemIcon(R.drawable.ic_spells, ItemIcon.Size.Small) },
+                                icon = { ItemIcon(Resources.Drawable.Spell, ItemIcon.Size.Small) },
                                 text = { Text(spell.name) }
                             )
                         }
@@ -113,7 +117,7 @@ internal fun CompendiumSpellChooser(
                     .padding(Spacing.bodyPadding),
                 onClick = onCustomSpellRequest,
             ) {
-                Text(stringResource(R.string.button_add_non_compendium_spell))
+                Text(strings.buttonAddNonCompendium)
             }
         }
     }

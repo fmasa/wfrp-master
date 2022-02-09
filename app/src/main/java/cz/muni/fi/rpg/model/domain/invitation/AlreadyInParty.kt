@@ -1,6 +1,6 @@
 package cz.muni.fi.rpg.model.domain.invitation
 
-import cz.frantisekmasa.wfrp_master.core.domain.party.PartyId
+import cz.frantisekmasa.wfrp_master.common.core.domain.party.PartyId
 import java.lang.Exception
 
 class AlreadyInParty(userId: String, partyId: PartyId) :

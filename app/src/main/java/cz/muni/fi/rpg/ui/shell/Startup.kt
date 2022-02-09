@@ -3,15 +3,15 @@ package cz.muni.fi.rpg.ui.shell
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
-import cz.frantisekmasa.wfrp_master.core.auth.LocalUser
-import cz.frantisekmasa.wfrp_master.core.auth.UserId
-import cz.frantisekmasa.wfrp_master.core.viewModel.providePremiumViewModel
-import cz.frantisekmasa.wfrp_master.core.viewModel.provideSettingsViewModel
+import cz.frantisekmasa.wfrp_master.common.core.auth.LocalUser
+import cz.frantisekmasa.wfrp_master.common.core.auth.UserId
+import cz.frantisekmasa.wfrp_master.common.core.ui.flow.collectWithLifecycle
+import cz.frantisekmasa.wfrp_master.common.core.viewModel.providePremiumViewModel
+import cz.frantisekmasa.wfrp_master.common.core.viewModel.provideSettingsViewModel
 import cz.muni.fi.rpg.ui.startup.StartupScreen
 import cz.muni.fi.rpg.viewModels.provideAuthenticationViewModel
 import kotlinx.coroutines.Dispatchers
@@ -23,7 +23,7 @@ fun Startup(content: @Composable () -> Unit) {
     val settings = provideSettingsViewModel()
     val premiumViewModel = providePremiumViewModel()
 
-    val user = auth.user.collectAsState().value
+    val user = auth.user.collectWithLifecycle().value
     val premiumActive = premiumViewModel.active
     var adsInitialized by rememberSaveable { mutableStateOf(false) }
 

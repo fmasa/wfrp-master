@@ -9,7 +9,7 @@ import com.google.zxing.PlanarYUVLuminanceSource
 import com.google.zxing.ReaderException
 import com.google.zxing.common.HybridBinarizer
 import com.google.zxing.qrcode.QRCodeReader
-import timber.log.Timber
+import io.github.aakira.napier.Napier
 
 class QrCodeScannerAnalyser(
     private val onQrCodesDetected: (qrCodeData: String) -> Unit
@@ -27,12 +27,12 @@ class QrCodeScannerAnalyser(
             image.cropRect
 
             if (image.format != ImageFormat.YUV_420_888) {
-                Timber.e("Unknown image format")
+                Napier.e("Unknown image format")
                 return
             }
 
             if (image.planes.size != 3) {
-                Timber.e("Invalid number of image planes (${image.planes.size})")
+                Napier.e("Invalid number of image planes (${image.planes.size})")
                 return
             }
 
@@ -41,7 +41,7 @@ class QrCodeScannerAnalyser(
             val bytes = ByteArray(buffer.capacity())
             buffer.get(bytes)
 
-            Timber.d("Creating bitmap for image (${image.width}x${image.height})")
+            Napier.d("Creating bitmap for image (${image.width}x${image.height})")
 
             val binaryBitmap = BinaryBitmap(
                 HybridBinarizer(
@@ -61,7 +61,7 @@ class QrCodeScannerAnalyser(
             val result = reader.decode(binaryBitmap)
             onQrCodesDetected(result.text)
         } catch (e: ReaderException) {
-            Timber.d(e)
+            Napier.d(e.toString(), e)
         } finally {
             imageProxy.close()
         }

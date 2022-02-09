@@ -13,6 +13,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.OutlinedButton
+import androidx.compose.material.SnackbarDuration
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.material.TextButton
@@ -27,39 +28,40 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.intl.Locale
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.toUpperCase
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.firebase.auth.FirebaseAuthUserCollisionException
-import cz.frantisekmasa.wfrp_master.core.auth.LocalUser
-import cz.frantisekmasa.wfrp_master.core.ui.dialogs.DialogProgress
-import cz.frantisekmasa.wfrp_master.core.ui.dialogs.DialogTitle
-import cz.frantisekmasa.wfrp_master.core.ui.primitives.CardContainer
-import cz.frantisekmasa.wfrp_master.core.ui.primitives.CardTitle
-import cz.frantisekmasa.wfrp_master.core.ui.primitives.Spacing
-import cz.frantisekmasa.wfrp_master.core.ui.primitives.VisualOnlyIconDescription
-import cz.frantisekmasa.wfrp_master.core.ui.primitives.shortToast
-import cz.frantisekmasa.wfrp_master.core.viewModel.SettingsViewModel
+import cz.frantisekmasa.wfrp_master.common.core.auth.LocalUser
+import cz.frantisekmasa.wfrp_master.common.core.shared.Resources
+import cz.frantisekmasa.wfrp_master.common.core.shared.drawableResource
+import cz.frantisekmasa.wfrp_master.common.core.ui.cards.CardContainer
+import cz.frantisekmasa.wfrp_master.common.core.ui.cards.CardTitle
+import cz.frantisekmasa.wfrp_master.common.core.ui.dialogs.DialogProgress
+import cz.frantisekmasa.wfrp_master.common.core.ui.dialogs.DialogTitle
+import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
+import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.VisualOnlyIconDescription
+import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.LocalPersistentSnackbarHolder
+import cz.frantisekmasa.wfrp_master.common.core.viewModel.SettingsViewModel
+import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
 import cz.frantisekmasa.wfrp_master.navigation.Route
 import cz.frantisekmasa.wfrp_master.navigation.Routing
-import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.viewModels.AuthenticationViewModel
 import cz.muni.fi.rpg.viewModels.provideAuthenticationViewModel
+import io.github.aakira.napier.Napier
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
 import kotlinx.parcelize.Parcelize
-import timber.log.Timber
 
 @Composable
-fun SignInCard(viewModel: SettingsViewModel, routing: Routing<Route.Settings>) {
+fun SignInCard(
+    viewModel: SettingsViewModel,
+    routing: Routing<Route.Settings>
+) {
     val authViewModel = provideAuthenticationViewModel()
 
     val contract = remember(authViewModel) { authViewModel.googleSignInContract() }
@@ -78,6 +80,8 @@ fun SignInCard(viewModel: SettingsViewModel, routing: Routing<Route.Settings>) {
         )
     }
 
+    val strings = LocalStrings.current
+
     val launcher = rememberLauncherForActivityResult(contract) { result ->
         coroutineScope.launch(Dispatchers.IO) {
             try {
@@ -87,16 +91,16 @@ fun SignInCard(viewModel: SettingsViewModel, routing: Routing<Route.Settings>) {
                         try {
                             authViewModel.linkAccountToGoogle(idToken)
                         } catch (e: FirebaseAuthUserCollisionException) {
-                            Timber.d(
+                            Napier.d(
+                                "Account \"${e.email}\" is already associated with another account",
                                 e,
-                                "Account \"${e.email}\" is already associated with another account"
                             )
 
                             pendingSingInConfirmation = PendingSingInConfirmation(idToken)
                         }
                     }
             } catch (e: Throwable) {
-                Timber.e(e, "Google sign-in failed")
+                Napier.e("Google sign-in failed", e)
                 withContext(Dispatchers.Main) {
                     Toast.makeText(
                         context,
@@ -119,15 +123,16 @@ fun SignInCard(viewModel: SettingsViewModel, routing: Routing<Route.Settings>) {
                 .padding(horizontal = 8.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            CardTitle(R.string.title_account)
+            CardTitle(strings.settings.titleAccount)
 
             val email = LocalUser.current.email
+
             if (email != null) {
-                Text(stringResource(R.string.signed_in_as))
+                Text(strings.authentication.messages.signedInAs)
                 Text(email)
             } else {
                 Text(
-                    stringResource(R.string.not_signed_in_description),
+                    strings.authentication.messages.notSignedInDescription,
                     textAlign = TextAlign.Center,
                     modifier = Modifier.padding(bottom = 8.dp)
                 )
@@ -138,10 +143,10 @@ fun SignInCard(viewModel: SettingsViewModel, routing: Routing<Route.Settings>) {
                         horizontalArrangement = Arrangement.spacedBy(4.dp)
                     ) {
                         Image(
-                            painterResource(R.drawable.googleg_standard_color_18),
+                            drawableResource(Resources.Drawable.GoogleLogo),
                             VisualOnlyIconDescription,
                         )
-                        Text("Sign-in")
+                        Text(strings.authentication.buttonSignIn)
                     }
                 }
             }
@@ -171,6 +176,8 @@ fun ConfirmSignInDialog(
 
     Dialog(onDismissRequest = onDismissRequest) {
         Surface(shape = MaterialTheme.shapes.medium) {
+            val strings = LocalStrings.current
+
             Column {
                 Column(
                     Modifier
@@ -178,17 +185,16 @@ fun ConfirmSignInDialog(
                         .padding(Spacing.bodyPadding),
                     verticalArrangement = Arrangement.spacedBy(Spacing.small),
                 ) {
-                    DialogTitle(stringResource(R.string.title_duplicate_account))
+                    DialogTitle(strings.authentication.messages.duplicateAccount)
 
                     if (loading) {
                         DialogProgress()
                     } else {
-                        Text(stringResource(R.string.google_account_collision))
-                        Text(stringResource(R.string.google_account_collision_line_2))
+                        Text(strings.authentication.messages.googleAccountCollision)
 
                         if (partyNames!!.isNotEmpty()) {
                             Column {
-                                Text(stringResource(R.string.lose_access_to_parties))
+                                Text(strings.authentication.messages.loseAccessToParties)
                                 Text(partyNames!!.joinToString("\n"), fontWeight = FontWeight.SemiBold)
                             }
                         }
@@ -202,10 +208,11 @@ fun ConfirmSignInDialog(
                         .padding(bottom = Spacing.small, end = Spacing.small),
                 ) {
                     TextButton(enabled = !loading, onClick = onDismissRequest) {
-                        Text(stringResource(R.string.button_cancel).toUpperCase(Locale.current))
+                        Text(strings.commonUi.buttonCancel.uppercase())
                     }
 
-                    val context = LocalContext.current
+                    val messages = strings.messages
+                    val snackbarHolder = LocalPersistentSnackbarHolder.current
 
                     TextButton(
                         enabled = !loading,
@@ -215,11 +222,14 @@ fun ConfirmSignInDialog(
                                 try {
                                     authViewModel.signInWithGoogleToken(idToken).let { success ->
                                         if (!success) {
-                                            shortToast(context, R.string.google_sign_in_failed)
+                                            snackbarHolder.showSnackbar(
+                                                messages.authenticationGoogleSignInFailed,
+                                                SnackbarDuration.Short,
+                                            )
                                         }
                                     }
                                 } catch (e: Throwable) {
-                                    Timber.e(e)
+                                    Napier.e(e.toString(), e)
                                     throw e
                                 }
 
@@ -230,7 +240,7 @@ fun ConfirmSignInDialog(
                             }
                         }
                     ) {
-                        Text(stringResource(R.string.button_sign_in).toUpperCase(Locale.current))
+                        Text(strings.authentication.buttonSignIn.uppercase())
                     }
                 }
             }

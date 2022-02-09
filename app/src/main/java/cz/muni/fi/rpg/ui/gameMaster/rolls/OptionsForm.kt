@@ -17,26 +17,26 @@ import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import cz.frantisekmasa.wfrp_master.common.core.domain.character.Character
+import cz.frantisekmasa.wfrp_master.common.core.shared.drawableResource
+import cz.frantisekmasa.wfrp_master.common.core.ui.buttons.CloseButton
+import cz.frantisekmasa.wfrp_master.common.core.ui.flow.collectWithLifecycle
+import cz.frantisekmasa.wfrp_master.common.core.ui.forms.SelectBox
+import cz.frantisekmasa.wfrp_master.common.core.ui.forms.SelectBoxToggle
+import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.FullScreenProgress
+import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
+import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.VisualOnlyIconDescription
+import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.TopBarAction
+import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
 import cz.frantisekmasa.wfrp_master.compendium.domain.Skill
-import cz.frantisekmasa.wfrp_master.core.domain.character.Character
-import cz.frantisekmasa.wfrp_master.core.ui.buttons.CloseButton
-import cz.frantisekmasa.wfrp_master.core.ui.forms.SelectBox
-import cz.frantisekmasa.wfrp_master.core.ui.forms.SelectBoxToggle
-import cz.frantisekmasa.wfrp_master.core.ui.primitives.FullScreenProgress
-import cz.frantisekmasa.wfrp_master.core.ui.primitives.Spacing
-import cz.frantisekmasa.wfrp_master.core.ui.primitives.VisualOnlyIconDescription
-import cz.frantisekmasa.wfrp_master.core.ui.scaffolding.TopBarAction
-import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.viewModels.SkillTestViewModel
+import kotlin.math.absoluteValue
 
 @Composable
 internal fun OptionsForm(
@@ -46,7 +46,7 @@ internal fun OptionsForm(
     onNewSkillPickingRequest: () -> Unit,
     onExecute: (characters: Set<Character>, testModifier: Int) -> Unit,
 ) {
-    val characters = viewModel.characters.observeAsState().value
+    val characters = viewModel.characters.collectWithLifecycle(null).value
     val characterIds = characters?.map { it.id }?.toSet()
 
     var executing by remember { mutableStateOf(false) }
@@ -56,14 +56,16 @@ internal fun OptionsForm(
         mutableStateOf(characterIds ?: emptySet())
     }
 
+    val strings = LocalStrings.current.tests
+
     Scaffold(
         topBar = {
             TopAppBar(
                 navigationIcon = { CloseButton(onClick = onDismissRequest) },
-                title = { Text(stringResource(R.string.title_skill_test)) },
+                title = { Text(strings.titleSkillTest) },
                 actions = {
                     TopBarAction(
-                        textRes = R.string.button_test_execute,
+                        text = strings.buttonExecute,
                         enabled = !executing && (selectedCharacterIds.isNotEmpty()),
                         onClick = {
                             val charactersById =
@@ -93,11 +95,11 @@ internal fun OptionsForm(
             verticalArrangement = Arrangement.spacedBy(Spacing.small),
         ) {
             SelectBoxToggle(
-                label = stringResource(R.string.label_skill),
+                label = strings.labelSkill,
                 onClick = onNewSkillPickingRequest,
             ) {
                 Icon(
-                    painterResource(selectedSkill.characteristic.getIconId()),
+                    drawableResource(selectedSkill.characteristic.getIcon()),
                     VisualOnlyIconDescription, // TODO: Add characteristic-derived description
                     Modifier.width(24.dp)
                 )
@@ -105,7 +107,7 @@ internal fun OptionsForm(
             }
 
             SelectBox(
-                label = stringResource(R.string.label_difficulty),
+                label = strings.labelDifficulty,
                 value = difficulty,
                 onValueChange = { difficulty = it },
                 items = difficultyOptions()
@@ -134,7 +136,7 @@ private fun CharacterList(
 ) {
     Column(Modifier.fillMaxWidth()) {
         Text(
-            stringResource(R.string.title_characters),
+            LocalStrings.current.parties.titleCharacters,
             style = MaterialTheme.typography.body2,
         )
 
@@ -165,16 +167,24 @@ private fun CharacterList(
 }
 
 @Composable
-private fun difficultyOptions() =
-    listOf(
-        60 to R.string.difficulty_very_easy,
-        40 to R.string.difficulty_easy,
-        20 to R.string.difficulty_average,
-        0 to R.string.difficulty_challenging,
-        -10 to R.string.difficulty_difficult,
-        -20 to R.string.difficulty_hard,
-        -30 to R.string.difficulty_very_hard,
-    ).map { (modifier, labelRes) ->
-        modifier to stringResource(labelRes) +
-            " (" + (if (modifier < 0) "" else "+") + modifier + ")"
+private fun difficultyOptions(): List<Pair<Int, String>> {
+    val labels = LocalStrings.current.tests.difficulties
+
+    return listOf(
+        60 to labels.veryEasy,
+        40 to labels.easy,
+        20 to labels.average,
+        0 to labels.challenging,
+        -10 to labels.difficult,
+        -20 to labels.hard,
+        -30 to labels.veryHard,
+    ).map { (modifier, label) ->
+        modifier to "$label (${modifier.signSymbol}${modifier.absoluteValue})"
     }
+}
+
+private val Int.signSymbol get() = when {
+    this < 0 -> "-"
+    else -> "+"
+}
+

@@ -8,21 +8,23 @@ import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Settings
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import cz.frantisekmasa.wfrp_master.combat.ui.ActiveCombatBanner
-import cz.frantisekmasa.wfrp_master.core.ads.BannerAd
-import cz.frantisekmasa.wfrp_master.core.domain.identifiers.CharacterId
-import cz.frantisekmasa.wfrp_master.core.domain.identifiers.EncounterId
-import cz.frantisekmasa.wfrp_master.core.ui.buttons.HamburgerButton
-import cz.frantisekmasa.wfrp_master.core.ui.scaffolding.IconAction
-import cz.frantisekmasa.wfrp_master.core.ui.scaffolding.tabs.TabPager
-import cz.frantisekmasa.wfrp_master.core.ui.scaffolding.tabs.tab
-import cz.frantisekmasa.wfrp_master.core.viewModel.viewModel
+import cz.frantisekmasa.wfrp_master.common.core.ads.BannerAd
+import cz.frantisekmasa.wfrp_master.common.core.domain.identifiers.CharacterId
+import cz.frantisekmasa.wfrp_master.common.core.domain.identifiers.EncounterId
+import cz.frantisekmasa.wfrp_master.common.core.ui.buttons.HamburgerButton
+import cz.frantisekmasa.wfrp_master.common.core.ui.flow.collectWithLifecycle
+import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.IconAction
+import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.tabs.TabPager
+import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.tabs.tab
+import cz.frantisekmasa.wfrp_master.common.core.viewModel.viewModel
+import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
 import cz.frantisekmasa.wfrp_master.navigation.Route
 import cz.frantisekmasa.wfrp_master.navigation.Routing
 import cz.muni.fi.rpg.R
@@ -34,7 +36,8 @@ import org.koin.core.parameter.parametersOf
 @Composable
 fun GameMasterScreen(routing: Routing<Route.GameMaster>) {
     val viewModel = ViewModel.GameMaster(routing.route.partyId)
-    val party = viewModel.party.observeAsState().value
+    val party = viewModel.party.collectWithLifecycle(null).value
+    val strings = LocalStrings.current.parties
 
     Scaffold(
         topBar = {
@@ -43,8 +46,8 @@ fun GameMasterScreen(routing: Routing<Route.GameMaster>) {
                 navigationIcon = { HamburgerButton() },
                 actions = {
                     IconAction(
-                        painterResource(R.drawable.ic_settings),
-                        stringResource(R.string.title_party_settings),
+                        Icons.Rounded.Settings,
+                        strings.titleSettings,
                         onClick = {
                             if (party == null) {
                                 return@IconAction
@@ -74,7 +77,7 @@ fun GameMasterScreen(routing: Routing<Route.GameMaster>) {
             ) {
                 val modifier = Modifier.width(screenWidth)
 
-                tab(R.string.title_characters) {
+                tab(strings.tabCharacters) {
                     PartySummaryScreen(
                         modifier = modifier,
                         partyId = party.id,
@@ -89,7 +92,7 @@ fun GameMasterScreen(routing: Routing<Route.GameMaster>) {
                     )
                 }
 
-                tab(R.string.title_calendar) {
+                tab(strings.tabCalendar) {
                     CalendarScreen(
                         party,
                         modifier = modifier,
@@ -97,7 +100,7 @@ fun GameMasterScreen(routing: Routing<Route.GameMaster>) {
                     )
                 }
 
-                tab(R.string.title_encounters) {
+                tab(strings.tabEncounters) {
                     val encountersViewModel: EncountersViewModel by viewModel { parametersOf(party.id) }
                     EncountersScreen(
                         partyId = party.id,

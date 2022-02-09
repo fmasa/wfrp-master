@@ -12,7 +12,6 @@ import androidx.compose.material.Text
 import androidx.compose.material.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableStateOf
@@ -23,28 +22,29 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.google.android.gms.auth.api.signin.GoogleSignIn
-import cz.frantisekmasa.wfrp_master.core.viewModel.provideSettingsViewModel
-import cz.muni.fi.rpg.R
+import cz.frantisekmasa.wfrp_master.common.core.shared.Resources
+import cz.frantisekmasa.wfrp_master.common.core.shared.drawableResource
+import cz.frantisekmasa.wfrp_master.common.core.ui.flow.collectWithLifecycle
+import cz.frantisekmasa.wfrp_master.common.core.viewModel.provideSettingsViewModel
+import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
 import cz.muni.fi.rpg.ui.common.composables.Theme
 import cz.muni.fi.rpg.ui.shell.splashBackground
 import cz.muni.fi.rpg.viewModels.AuthenticationViewModel
+import io.github.aakira.napier.Napier
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
-import timber.log.Timber
 
 @Composable
 fun StartupScreen(viewModel: AuthenticationViewModel) {
     SplashScreen()
 
-    val authenticated = viewModel.authenticated.collectAsState().value
+    val authenticated by viewModel.authenticated.collectWithLifecycle()
 
-    Timber.d("Authenticated: $authenticated")
+    Napier.d("Authenticated: $authenticated")
 
     if (authenticated != false) {
         // We could not determine whether user is logged in yet or there is delay between
@@ -73,7 +73,7 @@ fun StartupScreen(viewModel: AuthenticationViewModel) {
     val googleSignInLauncher = key(contract, coroutineScope) {
         rememberLauncherForActivityResult(contract) { result ->
             if (result.resultCode == 0) {
-                Timber.d("Google Sign-In dialog was dismissed")
+                Napier.d("Google Sign-In dialog was dismissed")
                 showAnonymousAuthenticationDialog = true
                 return@rememberLauncherForActivityResult
             }
@@ -113,12 +113,12 @@ private fun SplashScreen() {
     ) {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
             Image(
-                painterResource(R.drawable.splash_screen_image),
-                stringResource(R.string.icon_application_logo),
+                drawableResource(Resources.Drawable.SplashScreenIcon),
+                LocalStrings.current.about.appName,
                 Modifier.size(140.dp)
             )
             Text(
-                stringResource(R.string.app_name),
+                LocalStrings.current.about.appName,
                 style = MaterialTheme.typography.h6,
                 color = Theme.fixedColors.splashScreenContent,
             )
@@ -128,14 +128,14 @@ private fun SplashScreen() {
 
 @Composable
 private fun AnonymousAuthenticationExplanationDialog(onDismissRequest: () -> Unit) {
+    val strings = LocalStrings.current
+
     AlertDialog(
         onDismissRequest = onDismissRequest,
-        text = {
-            Text(stringResource(R.string.google_sign_in_error))
-        },
+        text = { Text(strings.authentication.startupGoogleSignInFailed) },
         confirmButton = {
             TextButton(onClick = onDismissRequest) {
-                Text(stringResource(android.R.string.ok))
+                Text(strings.commonUi.buttonOk.uppercase())
             }
         }
     )

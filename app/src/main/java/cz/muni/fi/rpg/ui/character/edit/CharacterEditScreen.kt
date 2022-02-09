@@ -14,34 +14,33 @@ import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.Stable
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import cz.frantisekmasa.wfrp_master.core.domain.character.Character
-import cz.frantisekmasa.wfrp_master.core.domain.character.SocialStatus
-import cz.frantisekmasa.wfrp_master.core.ui.buttons.BackButton
-import cz.frantisekmasa.wfrp_master.core.ui.forms.CheckboxWithText
-import cz.frantisekmasa.wfrp_master.core.ui.forms.InputValue
-import cz.frantisekmasa.wfrp_master.core.ui.forms.Rules
-import cz.frantisekmasa.wfrp_master.core.ui.forms.TextInput
-import cz.frantisekmasa.wfrp_master.core.ui.forms.inputValue
-import cz.frantisekmasa.wfrp_master.core.ui.primitives.FullScreenProgress
-import cz.frantisekmasa.wfrp_master.core.ui.primitives.HorizontalLine
-import cz.frantisekmasa.wfrp_master.core.ui.primitives.Spacing
-import cz.frantisekmasa.wfrp_master.core.ui.scaffolding.SaveAction
-import cz.frantisekmasa.wfrp_master.core.ui.scaffolding.Subtitle
-import cz.frantisekmasa.wfrp_master.core.viewModel.viewModel
+import cz.frantisekmasa.wfrp_master.common.core.domain.character.Character
+import cz.frantisekmasa.wfrp_master.common.core.domain.character.SocialStatus
+import cz.frantisekmasa.wfrp_master.common.core.ui.buttons.BackButton
+import cz.frantisekmasa.wfrp_master.common.core.ui.flow.collectWithLifecycle
+import cz.frantisekmasa.wfrp_master.common.core.ui.forms.CheckboxWithText
+import cz.frantisekmasa.wfrp_master.common.core.ui.forms.InputValue
+import cz.frantisekmasa.wfrp_master.common.core.ui.forms.Rules
+import cz.frantisekmasa.wfrp_master.common.core.ui.forms.TextInput
+import cz.frantisekmasa.wfrp_master.common.core.ui.forms.inputValue
+import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.FullScreenProgress
+import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.HorizontalLine
+import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
+import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.SaveAction
+import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.Subtitle
+import cz.frantisekmasa.wfrp_master.common.core.viewModel.viewModel
+import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
 import cz.frantisekmasa.wfrp_master.navigation.Route
 import cz.frantisekmasa.wfrp_master.navigation.Routing
-import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.ui.characterCreation.CharacterBasicInfoForm
 import cz.muni.fi.rpg.ui.characterCreation.CharacterCharacteristicsForm
 import cz.muni.fi.rpg.viewModels.CharacterViewModel
@@ -95,7 +94,7 @@ fun CharacterEditScreen(routing: Routing<Route.CharacterEdit>) {
     val viewModel: CharacterViewModel by viewModel { parametersOf(routing.route.characterId) }
     val coroutineScope = rememberCoroutineScope()
 
-    val character = viewModel.character.observeAsState().value
+    val character = viewModel.character.collectWithLifecycle(null).value
 
     if (character == null) {
         FullScreenProgress()
@@ -106,10 +105,7 @@ fun CharacterEditScreen(routing: Routing<Route.CharacterEdit>) {
     val formData = character.let { CharacterEditScreen.FormData.fromCharacter(it) }
     val validate = remember { mutableStateOf(true) }
 
-    val scaffoldState = rememberScaffoldState()
-
     Scaffold(
-        scaffoldState = scaffoldState,
         topBar = {
             CharacterEditTopBar(
                 character.getName(),
@@ -139,7 +135,6 @@ fun CharacterEditScreen(routing: Routing<Route.CharacterEdit>) {
                 EditableCharacterAvatar(
                     routing.route.characterId,
                     character,
-                    scaffoldState.snackbarHostState,
                     Modifier.align(Alignment.CenterHorizontally)
                 )
                 CharacterEditMainUI(formData, validate.value)
@@ -161,7 +156,7 @@ private fun CharacterEditMainUI(
     HorizontalLine()
 
     Text(
-        stringResource(R.string.title_character_characteristics),
+        LocalStrings.current.character.titleCharacteristics,
         style = MaterialTheme.typography.h6,
         textAlign = TextAlign.Center,
         modifier = Modifier
@@ -174,9 +169,11 @@ private fun CharacterEditMainUI(
 
 @Composable
 private fun MaxWoundsSegment(data: CharacterEditScreen.WoundsData, validate: Boolean) {
+    val strings = LocalStrings.current.points
+
     Column(Modifier.padding(top = 20.dp)) {
         TextInput(
-            label = stringResource(R.string.label_max_wounds),
+            label = strings.maxWounds,
             modifier = Modifier
                 .fillMaxWidth(0.3f)
                 .padding(bottom = 12.dp),
@@ -187,7 +184,7 @@ private fun MaxWoundsSegment(data: CharacterEditScreen.WoundsData, validate: Boo
         )
 
         CheckboxWithText(
-            text = stringResource(R.string.title_checkbox_hardy),
+            text = strings.labelHardy,
             checked = data.hardyTalent.value,
             onCheckedChange = { data.hardyTalent.value = it }
         )
@@ -206,7 +203,7 @@ private fun CharacterEditTopBar(
         title = {
             Column {
                 Text(title)
-                Subtitle(stringResource(R.string.subtitle_edit_character))
+                Subtitle(LocalStrings.current.character.titleEdit)
             }
         },
         actions = {
