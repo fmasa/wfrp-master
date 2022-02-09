@@ -163,7 +163,3 @@ value class ImperialDate(
         )
     }
 }
-
-private class ImperialDateSerializer {
-
-}
