@@ -2,8 +2,12 @@ package cz.muni.fi.rpg.ui.shell
 
 import androidx.activity.OnBackPressedCallback
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.material.DrawerValue
 import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.Scaffold
+import androidx.compose.material.SnackbarHostState
+import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.DisposableEffect
@@ -13,6 +17,8 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.navigation.NavHostController
 import cz.frantisekmasa.wfrp_master.common.core.ui.buttons.LocalHamburgerButtonHandler
+import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.LocalPersistentSnackbarHolder
+import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.PersistentSnackbarHolder
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -20,7 +26,7 @@ import kotlinx.coroutines.withContext
 
 @Composable
 @ExperimentalMaterialApi
-fun DrawerShell(navController: NavHostController, bodyContent: @Composable () -> Unit) {
+fun DrawerShell(navController: NavHostController, bodyContent: @Composable (PaddingValues) -> Unit) {
     val drawerState = rememberDrawerState(DrawerValue.Closed)
 
     DrawerBackPressHandler(drawerState)
@@ -34,9 +40,20 @@ fun DrawerShell(navController: NavHostController, bodyContent: @Composable () ->
         },
         bodyContent = {
             val coroutineScope = rememberCoroutineScope()
+            val snackbarHostState = remember { SnackbarHostState() }
+            val persistentSnackbarHolder = remember(coroutineScope, snackbarHostState) {
+                PersistentSnackbarHolder(coroutineScope, snackbarHostState)
+            }
+
             CompositionLocalProvider(
                 LocalHamburgerButtonHandler provides { coroutineScope.launch { drawerState.open() } },
-                content = bodyContent,
+                LocalPersistentSnackbarHolder provides persistentSnackbarHolder,
+                content = {
+                    Scaffold(
+                        scaffoldState = rememberScaffoldState(snackbarHostState = snackbarHostState),
+                        content = bodyContent,
+                    )
+                },
             )
         },
     )

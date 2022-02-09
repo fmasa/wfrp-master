@@ -25,7 +25,6 @@ import androidx.compose.material.ModalBottomSheetLayout
 import androidx.compose.material.ModalBottomSheetState
 import androidx.compose.material.ModalBottomSheetValue
 import androidx.compose.material.Scaffold
-import androidx.compose.material.SnackbarHostState
 import androidx.compose.material.Surface
 import androidx.compose.material.SwipeableDefaults
 import androidx.compose.material.Text
@@ -34,7 +33,6 @@ import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowBack
 import androidx.compose.material.icons.rounded.ArrowForward
-import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.SideEffect
@@ -52,15 +50,16 @@ import cz.frantisekmasa.wfrp_master.combat.domain.encounter.Wounds
 import cz.frantisekmasa.wfrp_master.common.core.ads.BannerAd
 import cz.frantisekmasa.wfrp_master.common.core.auth.LocalUser
 import cz.frantisekmasa.wfrp_master.common.core.shared.Resources
-import cz.frantisekmasa.wfrp_master.common.core.ui.buttons.BackButton
 import cz.frantisekmasa.wfrp_master.common.core.ui.CharacterAvatar
 import cz.frantisekmasa.wfrp_master.common.core.ui.CharacteristicsTable
+import cz.frantisekmasa.wfrp_master.common.core.ui.buttons.BackButton
 import cz.frantisekmasa.wfrp_master.common.core.ui.flow.collectWithLifecycle
+import cz.frantisekmasa.wfrp_master.common.core.ui.forms.NumberPicker
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.DraggableListFor
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.FullScreenProgress
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.ItemIcon
-import cz.frantisekmasa.wfrp_master.common.core.ui.forms.NumberPicker
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
+import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.LocalPersistentSnackbarHolder
 import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.OptionsAction
 import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.Subtitle
 import cz.frantisekmasa.wfrp_master.common.core.viewModel.viewModel
@@ -77,9 +76,8 @@ import org.koin.core.parameter.parametersOf
 @Composable
 fun ActiveCombatScreen(routing: Routing<Route.ActiveCombat>) {
     val viewModel: CombatViewModel by viewModel { parametersOf(routing.route.partyId) }
-    val scaffoldState = rememberScaffoldState()
 
-    AutoCloseOnEndedCombat(scaffoldState.snackbarHostState, viewModel, routing)
+    AutoCloseOnEndedCombat(viewModel, routing)
 
     val coroutineScope = rememberCoroutineScope()
 
@@ -119,7 +117,6 @@ fun ActiveCombatScreen(routing: Routing<Route.ActiveCombat>) {
             val strings = LocalStrings.current
 
             Scaffold(
-                scaffoldState = scaffoldState,
                 modifier = Modifier.weight(1f),
                 topBar = {
                     TopAppBar(
@@ -242,13 +239,12 @@ private fun rememberNotSavedModalBottomSheetState(): ModalBottomSheetState {
 
 @Composable
 private fun AutoCloseOnEndedCombat(
-    snackbarHostState: SnackbarHostState,
     viewModel: CombatViewModel,
     routing: Routing<Route.ActiveCombat>
 ) {
     val isCombatActive = viewModel.isCombatActive.collectWithLifecycle(true).value
-
     val message = LocalStrings.current.combat.messages.noActiveCombat
+    val snackbarHostState = LocalPersistentSnackbarHolder.current
 
     if (!isCombatActive) {
         LaunchedEffect(Unit) {

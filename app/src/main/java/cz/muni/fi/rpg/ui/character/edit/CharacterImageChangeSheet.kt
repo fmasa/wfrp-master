@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.DropdownMenu
 import androidx.compose.material.DropdownMenuItem
-import androidx.compose.material.SnackbarHostState
 import androidx.compose.material.Text
 import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.runtime.Composable
@@ -24,6 +23,7 @@ import cz.frantisekmasa.wfrp_master.common.core.domain.character.Character
 import cz.frantisekmasa.wfrp_master.common.core.domain.identifiers.CharacterId
 import cz.frantisekmasa.wfrp_master.common.core.ui.CharacterAvatar
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.ItemIcon
+import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.LocalPersistentSnackbarHolder
 import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
 import cz.muni.fi.rpg.model.domain.CharacterAvatarChanger
 import io.github.aakira.napier.Napier
@@ -35,7 +35,6 @@ import org.koin.core.context.GlobalContext
 fun EditableCharacterAvatar(
     characterId: CharacterId,
     character: Character,
-    snackbarHostState: SnackbarHostState,
     modifier: Modifier = Modifier
 ) {
     var active by remember { mutableStateOf(false) }
@@ -60,6 +59,7 @@ fun EditableCharacterAvatar(
         val coroutineScope = rememberCoroutineScope()
         val context = LocalContext.current
         val messages = LocalStrings.current.messages
+        val snackbarHolder = LocalPersistentSnackbarHolder.current
 
         val fileChooser = rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) {
             coroutineScope.launch(Dispatchers.IO) {
@@ -68,13 +68,13 @@ fun EditableCharacterAvatar(
                     val inputStream = context.contentResolver.openInputStream(it)
 
                     if (inputStream == null) {
-                        snackbarHostState.showSnackbar(messages.couldNotOpenFile)
+                        snackbarHolder.showSnackbar(messages.couldNotOpenFile)
                         return@launch
                     }
 
                     changer().changeAvatar(characterId, inputStream)
                     processing = false
-                    snackbarHostState.showSnackbar(messages.avatarChanged)
+                    snackbarHolder.showSnackbar(messages.avatarChanged)
                 } catch (e: Throwable) {
                     Napier.e(e.toString(), e)
                     processing = false
@@ -96,7 +96,7 @@ fun EditableCharacterAvatar(
                     active = false
                     coroutineScope.launch {
                         changer().removeAvatar(characterId)
-                        snackbarHostState.showSnackbar(messages.avatarRemoved)
+                        snackbarHolder.showSnackbar(messages.avatarRemoved)
                     }
                 },
             ) {

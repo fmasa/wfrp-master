@@ -4,7 +4,6 @@ import androidx.compose.material.Scaffold
 import androidx.compose.material.SnackbarDuration
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
-import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -16,6 +15,7 @@ import cz.frantisekmasa.wfrp_master.common.core.domain.party.Invitation
 import cz.frantisekmasa.wfrp_master.common.core.ui.buttons.BackButton
 import cz.frantisekmasa.wfrp_master.common.core.ui.flow.collectWithLifecycle
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.FullScreenProgress
+import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.LocalPersistentSnackbarHolder
 import cz.frantisekmasa.wfrp_master.common.core.viewModel.PremiumViewModel
 import cz.frantisekmasa.wfrp_master.common.core.viewModel.providePremiumViewModel
 import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
@@ -28,10 +28,8 @@ import kotlinx.coroutines.withContext
 
 @Composable
 fun InvitationLinkScreen(routing: Routing<Route.InvitationLink>) {
-    val scaffoldState = rememberScaffoldState()
     val strings = LocalStrings.current
     Scaffold(
-        scaffoldState = scaffoldState,
         topBar = {
             TopAppBar(
                 navigationIcon = { BackButton(onClick = { routing.pop() }) },
@@ -60,6 +58,8 @@ fun InvitationLinkScreen(routing: Routing<Route.InvitationLink>) {
 
         var invitation: Invitation? by remember { mutableStateOf(null) }
 
+        val snackbarHolder = LocalPersistentSnackbarHolder.current
+
         LaunchedEffect(invitationJson) {
             withContext(Dispatchers.Default) {
                 val loadedInvitation = viewModel.deserializeInvitationJson(invitationJson)
@@ -67,7 +67,7 @@ fun InvitationLinkScreen(routing: Routing<Route.InvitationLink>) {
                 if (loadedInvitation != null) {
                     invitation = loadedInvitation
                 } else {
-                    scaffoldState.snackbarHostState.showSnackbar(
+                    snackbarHolder.showSnackbar(
                         strings.messages.invitationErrorInvitationInvalid,
                         duration = SnackbarDuration.Long,
                     )

@@ -105,10 +105,7 @@ fun CharacterEditScreen(routing: Routing<Route.CharacterEdit>) {
     val formData = character.let { CharacterEditScreen.FormData.fromCharacter(it) }
     val validate = remember { mutableStateOf(true) }
 
-    val scaffoldState = rememberScaffoldState()
-
     Scaffold(
-        scaffoldState = scaffoldState,
         topBar = {
             CharacterEditTopBar(
                 character.getName(),
@@ -138,7 +135,6 @@ fun CharacterEditScreen(routing: Routing<Route.CharacterEdit>) {
                 EditableCharacterAvatar(
                     routing.route.characterId,
                     character,
-                    scaffoldState.snackbarHostState,
                     Modifier.align(Alignment.CenterHorizontally)
                 )
                 CharacterEditMainUI(formData, validate.value)

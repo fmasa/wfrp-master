@@ -8,7 +8,6 @@ import androidx.compose.material.Scaffold
 import androidx.compose.material.SnackbarDuration
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
-import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -25,6 +24,7 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.forms.Rules
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.TextInput
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.inputValue
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
+import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.LocalPersistentSnackbarHolder
 import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.SaveAction
 import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
 import cz.muni.fi.rpg.model.domain.common.CouldNotConnectToBackend
@@ -46,10 +46,7 @@ fun CreatePartyDialog(
         val partyName = inputValue("", Rules.NotBlank())
         val strings = LocalStrings.current.parties
 
-        val scaffoldState = rememberScaffoldState()
-
         Scaffold(
-            scaffoldState = scaffoldState,
             topBar = {
                 val coroutineScope = rememberCoroutineScope()
                 val messages = LocalStrings.current.messages
@@ -61,6 +58,8 @@ fun CreatePartyDialog(
                     navigationIcon = { CloseButton(onClick = onDismissRequest) },
                     title = { Text(strings.titleCreateParty) },
                     actions = {
+                        val snackbarHolder = LocalPersistentSnackbarHolder.current
+
                         SaveAction(
                             enabled = !saving,
                             onClick = {
@@ -79,12 +78,12 @@ fun CreatePartyDialog(
                                     } catch (e: CouldNotConnectToBackend) {
                                         Napier.i("User could not assemble party, because (s)he is offline", e)
 
-                                        scaffoldState.snackbarHostState.showSnackbar(
+                                        snackbarHolder.showSnackbar(
                                             messages.partyCreateErrorNoConnection,
                                             duration = SnackbarDuration.Long,
                                         )
                                     } catch (e: Throwable) {
-                                        scaffoldState.snackbarHostState.showSnackbar(
+                                        snackbarHolder.showSnackbar(
                                             messages.errorUnknown,
                                             duration = SnackbarDuration.Long,
                                         )

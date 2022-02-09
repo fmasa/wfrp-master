@@ -9,7 +9,6 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
-import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -21,9 +20,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import cz.frantisekmasa.wfrp_master.common.core.ui.buttons.CloseButton
-import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.FullScreenProgress
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.NumberPicker
+import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.FullScreenProgress
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
+import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.LocalPersistentSnackbarHolder
 import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.SaveAction
 import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
 import cz.frantisekmasa.wfrp_master.compendium.domain.exceptions.CompendiumItemNotFound
@@ -46,10 +46,9 @@ internal fun TimesTakenForm(
     var timesTaken by rememberSaveable { mutableStateOf(existingTalent?.taken ?: 1) }
 
     val strings = LocalStrings.current.talents
-    val scaffoldState = rememberScaffoldState()
+    val snackbarHolder = LocalPersistentSnackbarHolder.current
 
     Scaffold(
-        scaffoldState = scaffoldState,
         topBar = {
             TopAppBar(
                 navigationIcon = { CloseButton(onDismissRequest) },
@@ -75,7 +74,7 @@ internal fun TimesTakenForm(
                                 } catch (e: CompendiumItemNotFound) {
                                     Napier.d(e.toString(), e)
 
-                                    scaffoldState.snackbarHostState.showSnackbar(
+                                    snackbarHolder.showSnackbar(
                                         strings.messages.compendiumTalentRemoved
                                     )
                                 } finally {

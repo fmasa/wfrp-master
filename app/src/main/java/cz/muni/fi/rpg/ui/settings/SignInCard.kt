@@ -13,7 +13,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.OutlinedButton
-import androidx.compose.material.SnackbarHostState
+import androidx.compose.material.SnackbarDuration
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.material.TextButton
@@ -37,12 +37,13 @@ import com.google.firebase.auth.FirebaseAuthUserCollisionException
 import cz.frantisekmasa.wfrp_master.common.core.auth.LocalUser
 import cz.frantisekmasa.wfrp_master.common.core.shared.Resources
 import cz.frantisekmasa.wfrp_master.common.core.shared.drawableResource
-import cz.frantisekmasa.wfrp_master.common.core.ui.dialogs.DialogProgress
-import cz.frantisekmasa.wfrp_master.common.core.ui.dialogs.DialogTitle
 import cz.frantisekmasa.wfrp_master.common.core.ui.cards.CardContainer
 import cz.frantisekmasa.wfrp_master.common.core.ui.cards.CardTitle
+import cz.frantisekmasa.wfrp_master.common.core.ui.dialogs.DialogProgress
+import cz.frantisekmasa.wfrp_master.common.core.ui.dialogs.DialogTitle
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.VisualOnlyIconDescription
+import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.LocalPersistentSnackbarHolder
 import cz.frantisekmasa.wfrp_master.common.core.viewModel.SettingsViewModel
 import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
 import cz.frantisekmasa.wfrp_master.navigation.Route
@@ -58,7 +59,6 @@ import kotlinx.parcelize.Parcelize
 
 @Composable
 fun SignInCard(
-    snackbarHostState: SnackbarHostState,
     viewModel: SettingsViewModel,
     routing: Routing<Route.Settings>
 ) {
@@ -72,7 +72,6 @@ fun SignInCard(
 
     pendingSingInConfirmation?.let {
         ConfirmSignInDialog(
-            snackbarHostState,
             it.idToken,
             viewModel,
             authViewModel,
@@ -157,7 +156,6 @@ fun SignInCard(
 
 @Composable
 fun ConfirmSignInDialog(
-    snackbarHostState: SnackbarHostState,
     idToken: String,
     viewModel: SettingsViewModel,
     authViewModel: AuthenticationViewModel,
@@ -214,6 +212,7 @@ fun ConfirmSignInDialog(
                     }
 
                     val messages = strings.messages
+                    val snackbarHolder = LocalPersistentSnackbarHolder.current
 
                     TextButton(
                         enabled = !loading,
@@ -223,8 +222,9 @@ fun ConfirmSignInDialog(
                                 try {
                                     authViewModel.signInWithGoogleToken(idToken).let { success ->
                                         if (!success) {
-                                            snackbarHostState.showSnackbar(
+                                            snackbarHolder.showSnackbar(
                                                 messages.authenticationGoogleSignInFailed,
+                                                SnackbarDuration.Short,
                                             )
                                         }
                                     }

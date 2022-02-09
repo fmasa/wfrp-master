@@ -8,7 +8,6 @@ import androidx.compose.material.Scaffold
 import androidx.compose.material.SnackbarDuration
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
-import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -23,6 +22,7 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.forms.Rules
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.TextInput
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.inputValue
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
+import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.LocalPersistentSnackbarHolder
 import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.SaveAction
 import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
 import cz.muni.fi.rpg.model.domain.common.CouldNotConnectToBackend
@@ -42,11 +42,9 @@ fun RenamePartyDialog(
         var validate by remember { mutableStateOf(false) }
         val newName = inputValue(currentName, Rules.NotBlank())
 
-        val scaffoldState = rememberScaffoldState()
         val strings = LocalStrings.current.parties
 
         Scaffold(
-            scaffoldState = scaffoldState,
             topBar = {
                 val coroutineScope = rememberCoroutineScope()
 
@@ -57,6 +55,7 @@ fun RenamePartyDialog(
                     title = { Text(strings.titleRename) },
                     actions = {
                         val messages = LocalStrings.current.messages
+                        val snackbarHolder = LocalPersistentSnackbarHolder.current
 
                         SaveAction(
                             enabled = !saving,
@@ -71,7 +70,7 @@ fun RenamePartyDialog(
                                 coroutineScope.launch(Dispatchers.IO) {
                                     try {
                                         viewModel.renameParty(newName.value)
-                                        scaffoldState.snackbarHostState.showSnackbar(
+                                        snackbarHolder.showSnackbar(
                                             messages.partyUpdated,
                                             duration = SnackbarDuration.Long,
                                         )
@@ -86,12 +85,12 @@ fun RenamePartyDialog(
                                             "User could not rename party, because (s)he is offline",
                                             e,
                                         )
-                                        scaffoldState.snackbarHostState.showSnackbar(
+                                        snackbarHolder.showSnackbar(
                                             messages.partyUpdateErrorNoConnection,
                                             duration = SnackbarDuration.Long,
                                         )
                                     } catch (e: Throwable) {
-                                        scaffoldState.snackbarHostState.showSnackbar(
+                                        snackbarHolder.showSnackbar(
                                             messages.errorUnknown,
                                             duration = SnackbarDuration.Long,
                                         )

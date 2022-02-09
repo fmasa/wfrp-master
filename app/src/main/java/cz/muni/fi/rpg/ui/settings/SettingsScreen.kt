@@ -19,17 +19,16 @@ import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Redeem
-import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import cz.frantisekmasa.wfrp_master.common.core.ui.buttons.BackButton
-import cz.frantisekmasa.wfrp_master.common.core.ui.settings.SettingsCard
-import cz.frantisekmasa.wfrp_master.common.core.ui.settings.SettingsTitle
 import cz.frantisekmasa.wfrp_master.common.core.ui.flow.collectWithLifecycle
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.VisualOnlyIconDescription
+import cz.frantisekmasa.wfrp_master.common.core.ui.settings.SettingsCard
+import cz.frantisekmasa.wfrp_master.common.core.ui.settings.SettingsTitle
 import cz.frantisekmasa.wfrp_master.common.core.ui.viewinterop.LocalActivity
 import cz.frantisekmasa.wfrp_master.common.core.viewModel.PremiumViewModel
 import cz.frantisekmasa.wfrp_master.common.core.viewModel.SettingsViewModel
@@ -43,11 +42,9 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun SettingsScreen(routing: Routing<Route.Settings>) {
-    val scaffoldState = rememberScaffoldState()
     val strings = LocalStrings.current.settings
 
     Scaffold(
-        scaffoldState = scaffoldState,
         topBar = {
             TopAppBar(
                 navigationIcon = {
@@ -66,7 +63,7 @@ fun SettingsScreen(routing: Routing<Route.Settings>) {
         ) {
             val viewModel = provideSettingsViewModel()
 
-            SignInCard(scaffoldState.snackbarHostState, viewModel, routing)
+            SignInCard(viewModel, routing)
 
             SettingsCard {
                 val premiumViewModel = providePremiumViewModel()
