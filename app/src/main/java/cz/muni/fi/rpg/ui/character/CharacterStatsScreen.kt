@@ -185,7 +185,7 @@ internal fun CharacterCharacteristicsScreen(
                 column(size) {
                     AmbitionsCard(
                         title = strings.titlePartyAmbitions,
-                        ambitions = party.getAmbitions(),
+                        ambitions = party.ambitions,
                         titleIcon = Icons.Rounded.Group,
                         onSave = null,
                     )

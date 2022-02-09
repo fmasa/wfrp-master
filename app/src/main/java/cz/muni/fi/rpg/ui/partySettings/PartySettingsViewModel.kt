@@ -15,18 +15,12 @@ class PartySettingsViewModel(
     val party: Flow<Party> = parties.getLive(partyId).right()
 
     suspend fun updateSettings(change: (Settings) -> Settings) {
-        val party = parties.get(partyId)
-
-        party.updateSettings(change(party.getSettings()))
-
-        parties.save(party)
+        parties.update(partyId) {
+            it.updateSettings(change(it.settings))
+        }
     }
 
     suspend fun renameParty(newName: String) {
-        val party = parties.get(partyId)
-
-        party.rename(newName)
-
-        parties.save(party)
+        parties.update(partyId) { it.rename(newName) }
     }
 }

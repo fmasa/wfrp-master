@@ -30,7 +30,7 @@ fun ActiveCombatBanner(partyId: PartyId, routing: Routing<*>) {
     partyViewModel.party
         .collectWithLifecycle(null)
         .value
-        ?.getActiveCombat() ?: return
+        ?.activeCombat ?: return
 
     Surface(elevation = 8.dp) {
         Row(

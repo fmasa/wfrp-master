@@ -39,11 +39,10 @@ class EncounterDetailViewModel(
         .distinctUntilChanged()
 
     suspend fun remove() {
-        val party = parties.get(encounterId.partyId)
-
-        if (party.getActiveCombat()?.encounterId == encounterId.encounterId) {
-            party.endCombat()
-            parties.save(party)
+        parties.update(encounterId.partyId) { party ->
+            if (party.activeCombat?.encounterId == encounterId.encounterId)
+                party.endCombat()
+            else party
         }
 
         encounters.remove(encounterId)
@@ -134,22 +133,15 @@ class EncounterDetailViewModel(
     }
 
     fun removeNpc(npcId: NpcId) = viewModelScope.launch(Dispatchers.IO) {
-        val party = parties.get(encounterId.partyId)
+        parties.update(encounterId.partyId) { party ->
+            val combat = party.activeCombat
+                ?: return@update party // Skip update
 
-        party.getActiveCombat()?.let { combat ->
-            val updatedCombat = combat.removeNpc(npcId)
-
-            if (updatedCombat == combat) {
-                return@let
+            when (val updatedCombat = combat.removeNpc(npcId)) {
+                null -> party.endCombat()
+                combat -> party
+                else -> party.updateCombat(updatedCombat)
             }
-
-            if (updatedCombat == null) {
-                party.endCombat()
-            } else {
-                party.updateCombat(updatedCombat)
-            }
-
-            parties.save(party)
         }
 
         npcRepository.remove(npcId)

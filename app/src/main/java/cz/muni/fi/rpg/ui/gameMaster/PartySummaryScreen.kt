@@ -128,7 +128,7 @@ internal fun PartySummaryScreen(
             AmbitionsCard(
                 modifier = Modifier.padding(horizontal = 8.dp),
                 title = strings.ambition.titlePartyAmbitions,
-                ambitions = party.getAmbitions(),
+                ambitions = party.ambitions,
                 onSave = { viewModel.updatePartyAmbitions(it) },
             )
 

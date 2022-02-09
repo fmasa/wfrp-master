@@ -61,7 +61,7 @@ private fun TopBar(routing: Routing<Route.CompendiumImport>) {
             Column {
                 Text(LocalStrings.current.compendium.titleImportCompendium)
                 viewModel.party.collectWithLifecycle(null).value?.let {
-                    Subtitle(it.getName())
+                    Subtitle(it.name)
                 }
             }
         },

@@ -1,5 +1,6 @@
 package cz.frantisekmasa.wfrp_master.common.core.domain.party
 
+import androidx.compose.runtime.Immutable
 import com.benasher44.uuid.uuid4
 import cz.frantisekmasa.wfrp_master.common.core.auth.UserId
 import cz.frantisekmasa.wfrp_master.common.core.domain.Ambitions
@@ -15,25 +16,26 @@ import kotlinx.serialization.Serializable
 
 @Parcelize
 @Serializable
+@Immutable
 data class Party(
     val id: PartyId,
-    private var name: String,
+    val name: String,
     val gameMasterId: String?, // Remove support for single-player parties in 1.14
-    private var users: Set<String>,
-    private var archived: Boolean = false,
-    private var ambitions: Ambitions = Ambitions("", ""),
-    private var time: DateTime = DateTime(
+    private val users: Set<String>,
+    private val archived: Boolean = false,
+    val ambitions: Ambitions = Ambitions("", ""),
+    val time: DateTime = DateTime(
         ImperialDate.of(ImperialDate.StandaloneDay.HEXENSTAG, 2512),
         DateTime.TimeOfDay(12, 0)
     ),
-    private var activeCombat: Combat? = null,
-    private var settings: Settings = Settings()
+    val activeCombat: Combat? = null,
+    val settings: Settings = Settings(),
+    private val accessCode: String = uuid4().toString()
 ) : Parcelable {
     companion object {
         const val NAME_MAX_LENGTH = 50
     }
 
-    private val accessCode = uuid4().toString()
 
     init {
         require(gameMasterId == null || gameMasterId in users)
@@ -41,69 +43,42 @@ data class Party(
         require(name.length <= NAME_MAX_LENGTH) { "Party name is too long" }
     }
 
-    fun getPlayerCounts(): Int = users.size - 1
+    val playersCount: Int get() = users.size - 1
 
-    fun updateAmbitions(ambitions: Ambitions) {
-        this.ambitions = ambitions
-    }
+    val players: List<UserId> get() =
+        users.filter { it != gameMasterId }
+            .map(UserId::fromString)
 
-    fun rename(name: String) {
-        this.name = name
-    }
 
-    fun getName(): String {
-        return name
-    }
+    fun updateAmbitions(ambitions: Ambitions) = copy(ambitions = ambitions)
 
-    fun archive() {
-        archived = true
-    }
+    fun rename(name: String) = copy(name = name)
 
-    fun startCombat(encounterId: EncounterId, combatants: List<Combatant>) {
+    fun archive() = copy(archived = true)
+
+    fun startCombat(encounterId: EncounterId, combatants: List<Combatant>) = copy(
         activeCombat = Combat(encounterId.encounterId, combatants)
-    }
+    )
 
-    fun updateCombat(combat: Combat) {
+    fun updateCombat(combat: Combat): Party {
         val activeCombat = activeCombat
 
         require(activeCombat != null && combat.encounterId == activeCombat.encounterId)
 
-        this.activeCombat = combat
+        return copy(activeCombat = combat)
     }
 
-    fun updateSettings(settings: Settings) {
-        this.settings = settings
-    }
+    fun updateSettings(settings: Settings) = copy(settings = settings)
 
-    fun endCombat() {
-        activeCombat = null
-    }
-
-    fun hasActiveCombat(): Boolean {
-        return activeCombat != null
-    }
-
-    fun getSettings(): Settings = settings
-
-    fun getActiveCombat(): Combat? = activeCombat
-
-    fun getAmbitions() = ambitions
-
-    fun getTime() = time
+    fun endCombat() = copy(activeCombat = null)
 
     fun getInvitation() = Invitation(id, name, accessCode)
 
-    fun changeTime(time: DateTime) {
-        this.time = time
-    }
+    fun changeTime(time: DateTime) = copy(time = time)
 
-    fun leave(userId: UserId) {
+    fun leave(userId: UserId) = copy(
         users = users.filter { it != userId.toString() }.toSet()
-    }
+    )
 
     fun isMember(userId: UserId): Boolean = users.contains(userId.toString())
-
-    fun getPlayers(): List<UserId> =
-        users.filter { it != gameMasterId }
-            .map(UserId::fromString)
 }

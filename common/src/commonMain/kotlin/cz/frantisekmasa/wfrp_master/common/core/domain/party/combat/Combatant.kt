@@ -1,5 +1,6 @@
 package cz.frantisekmasa.wfrp_master.common.core.domain.party.combat
 
+import androidx.compose.runtime.Immutable
 import cz.frantisekmasa.wfrp_master.common.core.domain.identifiers.NpcId
 import cz.frantisekmasa.wfrp_master.common.core.shared.Parcelable
 import cz.frantisekmasa.wfrp_master.common.core.shared.Parcelize
@@ -8,6 +9,7 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.JsonClassDiscriminator
 
 @Serializable
+@Immutable
 @JsonClassDiscriminator("@type")
 sealed class Combatant : Parcelable {
     abstract val advantage: Int
@@ -24,6 +26,7 @@ sealed class Combatant : Parcelable {
     @Parcelize
     @Serializable
     @SerialName("character")
+    @Immutable
     data class Character(
         val characterId: String,
         override val initiative: Int,
@@ -36,6 +39,7 @@ sealed class Combatant : Parcelable {
     @Parcelize
     @Serializable
     @SerialName("npc")
+    @Immutable
     data class Npc(
         val npcId: NpcId,
         override val initiative: Int,

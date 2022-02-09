@@ -21,11 +21,7 @@ class PartyListViewModel(
     }
 
     suspend fun archive(partyId: PartyId) {
-        val party = parties.get(partyId)
-
-        party.archive()
-
-        parties.save(party)
+        parties.update(partyId) { it.archive() }
     }
 
     /**
@@ -51,10 +47,6 @@ class PartyListViewModel(
     }
 
     suspend fun leaveParty(partyId: PartyId, userId: UserId) {
-        val party = parties.get(partyId)
-
-        party.leave(userId)
-
-        parties.save(party)
+        parties.update(partyId) { it.leave(userId) }
     }
 }

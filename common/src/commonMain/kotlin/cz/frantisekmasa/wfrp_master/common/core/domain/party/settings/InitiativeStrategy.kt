@@ -1,8 +1,10 @@
 package cz.frantisekmasa.wfrp_master.common.core.domain.party.settings
 
+import androidx.compose.runtime.Immutable
 import cz.frantisekmasa.wfrp_master.common.core.domain.NamedEnum
 import cz.frantisekmasa.wfrp_master.common.localization.Strings
 
+@Immutable
 enum class InitiativeStrategy(
     override val nameResolver: (strings: Strings) -> String
 ): NamedEnum {

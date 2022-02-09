@@ -42,7 +42,7 @@ fun PartySettingsScreen(routing: Routing<Route.PartySettings>) {
         Column(Modifier.verticalScroll(rememberScrollState())) {
             SettingsCard {
                 SettingsTitle(strings.parties.titleSettingsGeneral)
-                PartyNameItem(party.getName(), viewModel)
+                PartyNameItem(party.name, viewModel)
 
                 SettingsTitle(strings.combat.title)
                 InitiativeStrategyItem(party, viewModel)

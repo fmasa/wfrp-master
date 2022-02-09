@@ -38,7 +38,7 @@ fun RemovePartyDialog(
             Column(verticalArrangement = Arrangement.spacedBy(Spacing.medium)) {
                 Text(messages.removalConfirmation)
 
-                if (party.getPlayerCounts() > 0) {
+                if (party.playersCount > 0) {
                     Text(
                         messages.membersWillLoseAccess,
                         fontWeight = FontWeight.Bold,

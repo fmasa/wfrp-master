@@ -189,11 +189,11 @@ private fun Menu(
 @Composable
 fun PartyItem(party: Party) {
     Column {
-        val playersCount = party.getPlayerCounts()
+        val playersCount = party.playersCount
 
         ListItem(
             icon = { ItemIcon(Icons.Rounded.Group, ItemIcon.Size.Large) },
-            text = { Text(party.getName()) },
+            text = { Text(party.name) },
             trailing = if (playersCount > 0)
                 ({ Text(LocalStrings.current.parties.numberOfPlayers(playersCount)) })
             else null,

@@ -69,7 +69,7 @@ fun CharacterDetailScreen(routing: Routing<Route.CharacterDetail>) {
                 title = {
                     Column {
                         character?.let { Text(it.getName()) }
-                        party?.let { Subtitle(it.getName()) }
+                        party?.let { Subtitle(it.name) }
                     }
                 },
                 actions = {

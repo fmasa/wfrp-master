@@ -1,5 +1,6 @@
 package cz.frantisekmasa.wfrp_master.common.core.domain.time
 
+import androidx.compose.runtime.Immutable
 import cz.frantisekmasa.wfrp_master.common.core.shared.Parcelable
 import cz.frantisekmasa.wfrp_master.common.core.shared.Parcelize
 import kotlinx.serialization.SerialName
@@ -7,6 +8,7 @@ import kotlinx.serialization.Serializable
 
 @Parcelize
 @Serializable
+@Immutable
 data class DateTime(
     @SerialName("imperialDay")
     val date: ImperialDate,
@@ -25,6 +27,7 @@ data class DateTime(
         get() = TimeOfDay(minutes / 60, minutes % 60)
 
     @Parcelize
+    @Immutable
     data class TimeOfDay(val hour: Int, val minute: Int) : Parcelable {
         fun format() = hour.toString().padStart(2, '0') + ":" + minute.toString().padStart(2, '0')
 

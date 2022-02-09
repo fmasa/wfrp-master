@@ -29,7 +29,7 @@ class GameMasterViewModel(
     val players: Flow<List<Player>?> =
         party.filterNotNull().combineTransform(characterRepository.inParty(partyId)) { party, characters ->
             val players = characters.map { Player.ExistingCharacter(it) }
-            val usersWithoutCharacter = party.getPlayers()
+            val usersWithoutCharacter = party.players
                 .filter { userId -> players.none { it.character.userId == userId.toString() } }
                 .map { Player.UserWithoutCharacter(it.toString()) }
 
@@ -45,18 +45,14 @@ class GameMasterViewModel(
     }
 
     suspend fun changeTime(change: (DateTime) -> DateTime) {
-        val party = parties.get(partyId)
-
-        party.changeTime(change(party.getTime()))
-
-        parties.save(party)
+        parties.update(partyId) {
+            it.changeTime(change(it.time))
+        }
     }
 
     suspend fun updatePartyAmbitions(ambitions: Ambitions) {
-        val party = parties.get(partyId)
-
-        party.updateAmbitions(ambitions)
-
-        parties.save(party)
+        parties.update(partyId) {
+            it.updateAmbitions(ambitions)
+        }
     }
 }
