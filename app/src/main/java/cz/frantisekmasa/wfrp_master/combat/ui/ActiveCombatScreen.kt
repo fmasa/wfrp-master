@@ -124,7 +124,7 @@ fun ActiveCombatScreen(routing: Routing<Route.ActiveCombat>) {
                         title = {
                             Column {
                                 Text(strings.combat.title)
-                                party?.let { Subtitle(it.getName()) }
+                                party?.let { Subtitle(it.name) }
                             }
                         },
                         actions = {

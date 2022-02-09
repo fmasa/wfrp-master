@@ -68,8 +68,8 @@ fun CharacterDetailScreen(routing: Routing<Route.CharacterDetail>) {
                 navigationIcon = { HamburgerButton() },
                 title = {
                     Column {
-                        character?.let { Text(it.getName()) }
-                        party?.let { Subtitle(it.getName()) }
+                        character?.let { Text(it.name) }
+                        party?.let { Subtitle(it.name) }
                     }
                 },
                 actions = {

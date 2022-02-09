@@ -1,5 +1,6 @@
 package cz.muni.fi.rpg.model.domain.skills
 
+import androidx.compose.runtime.Immutable
 import cz.frantisekmasa.wfrp_master.common.core.domain.Characteristic
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.CharacterItem
 import kotlinx.parcelize.Parcelize
@@ -9,6 +10,7 @@ import java.util.UUID
 
 @Parcelize
 @Serializable
+@Immutable
 data class Skill(
     @Contextual override val id: UUID,
     @Contextual override val compendiumId: UUID? = null,

@@ -1,6 +1,7 @@
 package cz.frantisekmasa.wfrp_master.inventory.domain
 
 import android.os.Parcelable
+import androidx.compose.runtime.Immutable
 import cz.frantisekmasa.wfrp_master.inventory.domain.armour.ArmourLocation
 import cz.frantisekmasa.wfrp_master.inventory.domain.armour.ArmourPoints
 import cz.frantisekmasa.wfrp_master.inventory.domain.armour.ArmourType
@@ -22,6 +23,7 @@ typealias Rating = Int
 
 @Serializable
 @JsonClassDiscriminator("kind")
+@Immutable
 sealed class TrappingType : Parcelable {
     interface WearableTrapping {
         val worn: Boolean
@@ -30,6 +32,7 @@ sealed class TrappingType : Parcelable {
     @Parcelize
     @Serializable
     @SerialName("MELEE_WEAPON")
+    @Immutable
     data class MeleeWeapon(
         val group: MeleeWeaponGroup,
         val reach: Reach,
@@ -42,6 +45,7 @@ sealed class TrappingType : Parcelable {
     @Parcelize
     @Serializable
     @SerialName("RANGED_WEAPON")
+    @Immutable
     data class RangedWeapon(
         val group: RangedWeaponGroup,
         val range: WeaponRangeExpression,
@@ -54,6 +58,7 @@ sealed class TrappingType : Parcelable {
     @Parcelize
     @Serializable
     @SerialName("AMMUNITION")
+    @Immutable
     data class Ammunition(
         val weaponGroups: Set<RangedWeaponGroup>,
         val range: AmmunitionRangeExpression,
@@ -65,6 +70,7 @@ sealed class TrappingType : Parcelable {
     @Parcelize
     @Serializable
     @SerialName("ARMOUR")
+    @Immutable
     data class Armour(
         val locations: Set<ArmourLocation>,
         val type: ArmourType,
@@ -75,6 +81,7 @@ sealed class TrappingType : Parcelable {
     @Parcelize
     @Serializable
     @SerialName("CONTAINER")
+    @Immutable
     data class Container(
         val carries: Encumbrance,
         override val worn: Boolean,

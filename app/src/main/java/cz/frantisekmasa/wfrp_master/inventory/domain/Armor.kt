@@ -1,12 +1,14 @@
 package cz.frantisekmasa.wfrp_master.inventory.domain
 
 import android.os.Parcelable
+import androidx.compose.runtime.Immutable
 import cz.frantisekmasa.wfrp_master.inventory.domain.armour.ArmourLocation
 import kotlinx.parcelize.Parcelize
 import kotlinx.serialization.Serializable
 
 @Parcelize
 @Serializable
+@Immutable
 data class Armor(
     val head: Int = 0,
     val body: Int = 0,

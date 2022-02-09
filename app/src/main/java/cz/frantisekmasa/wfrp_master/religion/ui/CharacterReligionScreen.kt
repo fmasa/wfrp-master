@@ -28,7 +28,7 @@ fun CharacterReligionScreen(
     modifier: Modifier = Modifier,
     characterId: CharacterId,
     character: Character,
-    updateCharacter: suspend ((Character) -> Unit) -> Unit,
+    updateCharacter: suspend ((Character) -> Character) -> Unit,
 ) {
     Column(
         modifier
@@ -45,14 +45,14 @@ fun CharacterReligionScreen(
 @Composable
 private fun SinPoints(
     character: Character,
-    updateCharacter: suspend ((Character) -> Unit) -> Unit,
+    updateCharacter: suspend ((Character) -> Character) -> Unit,
 ) {
     TopPanel {
         Row(
             horizontalArrangement = Arrangement.Center,
             modifier = Modifier.fillMaxWidth()
         ) {
-            val points = character.getPoints()
+            val points = character.points
             val coroutineScope = rememberCoroutineScope()
             val updateSinPoints = { sinPoints: Int ->
                 if (sinPoints != points.sin) {

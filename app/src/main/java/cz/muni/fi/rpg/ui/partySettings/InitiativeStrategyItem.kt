@@ -24,7 +24,7 @@ internal fun InitiativeStrategyItem(
     party: Party,
     viewModel: PartySettingsViewModel,
 ) {
-    val strategy = party.getSettings().initiativeStrategy
+    val strategy = party.settings.initiativeStrategy
 
     val coroutineScope = rememberCoroutineScope()
     var dialogVisible by remember { mutableStateOf(false) }

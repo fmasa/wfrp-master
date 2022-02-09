@@ -1,10 +1,12 @@
 package cz.frantisekmasa.wfrp_master.common.core.domain.character
 
+import androidx.compose.runtime.Immutable
 import cz.frantisekmasa.wfrp_master.common.core.domain.NamedEnum
 import cz.frantisekmasa.wfrp_master.common.localization.Strings
 import kotlinx.serialization.Serializable
 
 @Serializable
+@Immutable
 data class SocialStatus(
     val tier: Tier,
     val standing: Int,

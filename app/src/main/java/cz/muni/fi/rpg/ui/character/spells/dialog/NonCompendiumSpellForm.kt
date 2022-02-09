@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.Stable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
@@ -97,6 +98,7 @@ internal fun NonCompendiumSpellForm(
     }
 }
 
+@Stable
 private class NonCompendiumSpellFormData(
     val id: UUID,
     val name: InputValue,

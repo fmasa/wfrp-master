@@ -39,6 +39,15 @@ import kotlinx.coroutines.tasks.await
         }
     }
 
+    override suspend fun update(id: PartyId, mutator: (Party) -> Party) {
+        val party = get(id)
+        val updatedParty = mutator(party)
+
+        if (updatedParty != party) {
+            save(updatedParty)
+        }
+    }
+
     override suspend fun get(id: PartyId): Party {
         try {
             val party = parties.document(id.toString()).get(Source.SERVER).await()

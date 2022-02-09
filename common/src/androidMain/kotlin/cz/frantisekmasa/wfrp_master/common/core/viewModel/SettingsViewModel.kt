@@ -47,7 +47,7 @@ class SettingsViewModel(
     }
 
     suspend fun getPartyNames(userId: String): List<String> {
-        return parties.forUser(userId).map { it.getName() }
+        return parties.forUser(userId).map { it.name }
     }
 
     suspend fun toggleDarkMode(enabled: Boolean) {

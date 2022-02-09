@@ -1,9 +1,11 @@
 package cz.frantisekmasa.wfrp_master.common.core.domain
 
+import androidx.compose.runtime.Immutable
 import kotlinx.serialization.Serializable
 import kotlin.math.min
 
 @Serializable
+@Immutable
 data class Money(private val pennies: Int) : Comparable<Money> {
     companion object {
         private const val SHILLINGS_IN_CROWNS = 20

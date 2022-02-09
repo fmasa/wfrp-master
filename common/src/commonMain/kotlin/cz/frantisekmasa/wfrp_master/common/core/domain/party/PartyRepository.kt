@@ -14,6 +14,11 @@ interface PartyRepository {
     /**
      * @throws PartyNotFound
      */
+    suspend fun update(id: PartyId, mutator: (Party) -> Party)
+
+    /**
+     * @throws PartyNotFound
+     */
     suspend fun get(id: PartyId): Party
 
     fun getLive(id: PartyId): Flow<Either<PartyNotFound, Party>>

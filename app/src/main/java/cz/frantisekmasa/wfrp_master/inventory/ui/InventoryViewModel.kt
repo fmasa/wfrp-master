@@ -1,5 +1,6 @@
 package cz.frantisekmasa.wfrp_master.inventory.ui
 
+import androidx.compose.runtime.Immutable
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import cz.frantisekmasa.wfrp_master.common.core.domain.Money
@@ -30,7 +31,7 @@ class InventoryViewModel(
     val inventory: Flow<List<InventoryItem>> = inventoryItems.findAllForCharacter(characterId)
 
     val maxEncumbrance: Flow<Encumbrance> =
-        character.map { Encumbrance.maximumForCharacter(it.getCharacteristics()) }
+        character.map { Encumbrance.maximumForCharacter(it.characteristics) }
 
     val totalEncumbrance: Flow<Encumbrance?> = inventory
         .map { items -> items.map { it.effectiveEncumbrance }.sum() }
@@ -46,18 +47,18 @@ class InventoryViewModel(
                 )
             }
 
+    @Immutable
     data class EquippedArmour(
         val armourFromItems: Armor,
         val legacyArmour: Armor,
     )
 
-    val money: Flow<Money> = character.map { it.getMoney() }
+    val money: Flow<Money> = character.map { it.money }
 
     suspend fun addMoney(amount: Money) {
         val character = characters.get(characterId)
         try {
-            character.addMoney(amount)
-            characters.save(characterId.partyId, character)
+            characters.save(characterId.partyId, character.addMoney(amount))
         } catch (e: IllegalArgumentException) {
         }
     }
@@ -67,8 +68,7 @@ class InventoryViewModel(
      */
     suspend fun subtractMoney(amount: Money) {
         val character = characters.get(characterId)
-        character.subtractMoney(amount)
-        characters.save(characterId.partyId, character)
+        characters.save(characterId.partyId, character.subtractMoney(amount))
     }
 
     suspend fun saveInventoryItem(inventoryItem: InventoryItem) {

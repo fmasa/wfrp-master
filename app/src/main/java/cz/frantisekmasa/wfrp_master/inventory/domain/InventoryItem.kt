@@ -1,5 +1,6 @@
 package cz.frantisekmasa.wfrp_master.inventory.domain
 
+import androidx.compose.runtime.Immutable
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.CharacterItem
 import cz.frantisekmasa.wfrp_master.common.core.utils.duplicateName
 import kotlinx.parcelize.Parcelize
@@ -11,6 +12,7 @@ typealias InventoryItemId = UUID
 
 @Parcelize
 @Serializable
+@Immutable
 /* internal */ data class InventoryItem(
     @Contextual override val id: InventoryItemId,
     val name: String,

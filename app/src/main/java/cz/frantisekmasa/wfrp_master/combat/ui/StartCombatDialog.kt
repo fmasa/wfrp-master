@@ -98,7 +98,7 @@ fun StartCombatDialog(
                 CombatantList(
                     title = LocalStrings.current.combat.titleCharacterCombatants,
                     items = characters,
-                    nameFactory = { it.getName() },
+                    nameFactory = { it.name },
                 )
 
                 CombatantList(

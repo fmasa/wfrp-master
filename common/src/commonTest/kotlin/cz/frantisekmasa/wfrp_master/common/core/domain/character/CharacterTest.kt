@@ -22,28 +22,27 @@ class CharacterTest {
         points = Points(0, 4, 4, 5, 5, 0, 0, 0, 0, 0, 0)
     )
 
-    private fun characterWithHardy() = character().apply {
+    private fun characterWithHardy() = with(character()) {
         update(
-            name = getName(),
-            career = getCareer(),
-            socialClass = getSocialClass(),
+            name = name,
+            career = career,
+            socialClass = socialClass,
             race = Race.DWARF,
             status = SocialStatus(SocialStatus.Tier.BRASS, 2),
-            characteristicsBase = getCharacteristicsBase(),
-            characteristicsAdvances = getCharacteristicsAdvances(),
-            maxWounds = getPoints().maxWounds,
-            psychology = getPsychology(),
-            motivation = getMotivation(),
-            note = getNote(),
-            hardyTalent = true,
+            characteristicsBase = characteristicsBase,
+            characteristicsAdvances = characteristicsAdvances,
+            maxWounds = points.maxWounds,
+            psychology = psychology,
+            motivation = motivation,
+            note = note,
+            hasHardyTalent = true,
         )
     }
 
     @Test
     fun `throws exception when trying to subtract more money than character has`() {
         val character = character()
-
-        character.addMoney(Money.pennies(15))
+            .addMoney(Money.pennies(15))
 
         assertFailsWith(NotEnoughMoney::class) {
             character.subtractMoney(Money.pennies(16))
@@ -53,14 +52,14 @@ class CharacterTest {
     @Test
     fun `money are added to current balance`() {
         val character = character()
-        val startingMoney = character.getMoney()
-
-        character.addMoney(Money.crowns(1))
-        character.addMoney(Money.shillings(10))
+        val startingMoney = character.money
 
         assertEquals(
             startingMoney + Money.crowns(1) + Money.shillings(10),
-            character.getMoney()
+            character
+                .addMoney(Money.crowns(1))
+                .addMoney(Money.shillings(10))
+                .money
         )
     }
 
@@ -69,7 +68,7 @@ class CharacterTest {
         val character = characterWithHardy()
 
         assertFailsWith(IllegalArgumentException::class) {
-            character.updatePoints(character.getPoints().copy(hardyWoundsBonus = 5))
+            character.updatePoints(character.points.copy(hardyWoundsBonus = 5))
         }
     }
 
@@ -78,7 +77,7 @@ class CharacterTest {
         val character = character()
 
         assertFailsWith(IllegalArgumentException::class) {
-            character.updatePoints(character.getPoints().copy(hardyWoundsBonus = 5))
+            character.updatePoints(character.points.copy(hardyWoundsBonus = 5))
         }
     }
 

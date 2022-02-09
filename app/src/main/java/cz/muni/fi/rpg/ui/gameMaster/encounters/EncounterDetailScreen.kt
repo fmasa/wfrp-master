@@ -87,7 +87,7 @@ fun EncounterDetailScreen(routing: Routing<Route.EncounterDetail>) {
 
                         val partyViewModel: PartyViewModel by viewModel { parametersOf(partyId) }
                         partyViewModel.party.collectWithLifecycle(null).value?.let {
-                            Subtitle(it.getName())
+                            Subtitle(it.name)
                         }
                     }
                 },

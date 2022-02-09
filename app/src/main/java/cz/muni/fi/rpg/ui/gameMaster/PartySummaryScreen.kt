@@ -128,7 +128,7 @@ internal fun PartySummaryScreen(
             AmbitionsCard(
                 modifier = Modifier.padding(horizontal = 8.dp),
                 title = strings.ambition.titlePartyAmbitions,
-                ambitions = party.getAmbitions(),
+                ambitions = party.ambitions,
                 onSave = { viewModel.updatePartyAmbitions(it) },
             )
 
@@ -267,8 +267,8 @@ private fun PlayerItem(
             val character = player.character
 
             CardItem(
-                name = character.getName(),
-                icon = { CharacterAvatar(character.getAvatarUrl(), ItemIcon.Size.Small) },
+                name = character.name,
+                icon = { CharacterAvatar(character.avatarUrl, ItemIcon.Size.Small) },
                 onClick = { onCharacterOpenRequest(character) },
                 contextMenuItems = if (character.userId == null)
                     listOf(

@@ -2,6 +2,7 @@ package cz.muni.fi.rpg.ui.gameMaster.rolls
 
 import android.os.Parcelable
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.rememberCoroutineScope
@@ -55,7 +56,7 @@ fun SkillTestDialog(partyId: PartyId, onDismissRequest: () -> Unit) {
 
                                     RollResult(
                                         characterId = it.id,
-                                        characterName = it.getName(),
+                                        characterName = it.name,
                                         roll = if (testResult != null)
                                             Roll.Test(currentStep.selectedSkill.name, testResult)
                                         else Roll.CharacterDoesNotHaveAdvances,
@@ -102,6 +103,7 @@ private sealed class SkillTestDialogStep : Parcelable {
 }
 
 @Parcelize
+@Immutable
 internal data class RollResult(
     val characterId: String,
     val characterName: String,
@@ -110,10 +112,12 @@ internal data class RollResult(
     fun reroll() = copy(roll = roll.reroll())
 }
 
+@Immutable
 internal sealed class Roll : Parcelable {
     abstract fun reroll(): Roll
 
     @Parcelize
+    @Immutable
     data class Generic(
         val expression: Expression,
         val rolledValue: Int,
@@ -122,6 +126,7 @@ internal sealed class Roll : Parcelable {
     }
 
     @Parcelize
+    @Immutable
     data class Test(
         val testName: String,
         val result: TestResult
@@ -134,6 +139,7 @@ internal sealed class Roll : Parcelable {
     }
 
     @Parcelize
+    @Immutable
     object CharacterDoesNotHaveAdvances : Roll() {
         override fun reroll() = this
     }

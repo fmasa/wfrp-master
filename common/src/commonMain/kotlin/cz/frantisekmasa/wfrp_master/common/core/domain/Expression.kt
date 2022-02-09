@@ -1,5 +1,6 @@
 package cz.frantisekmasa.wfrp_master.common.core.domain
 
+import androidx.compose.runtime.Immutable
 import com.github.h0tk3y.betterParse.combinators.leftAssociative
 import com.github.h0tk3y.betterParse.combinators.or
 import com.github.h0tk3y.betterParse.combinators.skip
@@ -18,6 +19,7 @@ import cz.frantisekmasa.wfrp_master.common.core.shared.Parcelize
 
 class InvalidExpression(cause: Throwable?) : Exception(cause)
 
+@Immutable
 interface Expression : Parcelable {
     companion object {
         fun fromString(text: String, constants: Map<String, Int> = emptyMap()): Expression =
@@ -37,6 +39,7 @@ interface Expression : Parcelable {
 }
 
 @Parcelize
+@Immutable
 private data class DiceRoll(private val sides: Int) : Expression {
     override fun evaluate() = Dice(sides).roll()
     override fun isDeterministic() = false
@@ -44,6 +47,7 @@ private data class DiceRoll(private val sides: Int) : Expression {
 }
 
 @Parcelize
+@Immutable
 private data class Multiplication(
     private val a: Expression,
     private val b: Expression,
@@ -54,6 +58,7 @@ private data class Multiplication(
 }
 
 @Parcelize
+@Immutable
 private data class Division(
     private val dividend: Expression,
     private val divisor: Expression,
@@ -73,6 +78,7 @@ private data class Division(
 }
 
 @Parcelize
+@Immutable
 private data class Addition(
     private val a: Expression,
     private val b: Expression,
@@ -83,6 +89,7 @@ private data class Addition(
 }
 
 @Parcelize
+@Immutable
 private data class Subtraction(
     private val a: Expression,
     private val b: Expression,
@@ -93,6 +100,7 @@ private data class Subtraction(
 }
 
 @Parcelize
+@Immutable
 private data class IntegerLiteral(private val value: Int) : Expression {
     override fun evaluate() = value
     override fun isDeterministic() = true

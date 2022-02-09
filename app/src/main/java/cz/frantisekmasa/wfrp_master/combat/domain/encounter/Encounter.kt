@@ -1,10 +1,12 @@
 package cz.frantisekmasa.wfrp_master.combat.domain.encounter
 
+import androidx.compose.runtime.Immutable
 import kotlinx.serialization.Contextual
 import kotlinx.serialization.Serializable
 import java.util.UUID
 
 @Serializable
+@Immutable
 data class Encounter(
     @Contextual val id: UUID,
     val name: String,

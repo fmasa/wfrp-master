@@ -33,7 +33,7 @@ class SkillTestViewModel(
             compendiumSkill.id
         )
 
-        return basicTestedValue(compendiumSkill, skill, character.getCharacteristics())
+        return basicTestedValue(compendiumSkill, skill, character.characteristics)
             ?.let {
                 TestResult(
                     rollValue = Dice(100).roll(),

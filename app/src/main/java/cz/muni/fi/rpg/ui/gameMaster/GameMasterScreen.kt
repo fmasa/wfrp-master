@@ -42,7 +42,7 @@ fun GameMasterScreen(routing: Routing<Route.GameMaster>) {
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { party?.let { Text(it.getName()) } },
+                title = { party?.let { Text(it.name) } },
                 navigationIcon = { HamburgerButton() },
                 actions = {
                     IconAction(

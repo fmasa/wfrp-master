@@ -1,6 +1,7 @@
 package cz.frantisekmasa.wfrp_master.religion.ui.blessings
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Stable
 import androidx.compose.runtime.remember
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.FormDialog
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.HydratedFormData
@@ -66,6 +67,7 @@ internal fun NonCompendiumBlessingForm(
     }
 }
 
+@Stable
 private data class NonCompendiumBlessingFormData(
     val id: UUID,
     val name: InputValue,

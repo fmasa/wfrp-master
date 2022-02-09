@@ -8,6 +8,7 @@ import androidx.compose.material.ListItem
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.Stable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.Dp
@@ -51,6 +52,7 @@ fun TalentCompendiumTab(viewModel: CompendiumViewModel, width: Dp) {
     }
 }
 
+@Stable
 private data class TalentFormData(
     val id: UUID,
     val name: InputValue,

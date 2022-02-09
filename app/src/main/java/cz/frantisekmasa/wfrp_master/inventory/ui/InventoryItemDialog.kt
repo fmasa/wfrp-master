@@ -3,6 +3,7 @@ package cz.frantisekmasa.wfrp_master.inventory.ui
 import androidx.compose.foundation.layout.Column
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.Stable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -316,6 +317,7 @@ private fun WeaponFlawsPicker(formData: TrappingTypeFormData) {
     }
 }
 
+@Stable
 private class InventoryItemFormData(
     val id: InventoryItemId,
     val name: InputValue,

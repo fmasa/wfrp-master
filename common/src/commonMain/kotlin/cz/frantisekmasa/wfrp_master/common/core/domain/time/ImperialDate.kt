@@ -1,5 +1,6 @@
 package cz.frantisekmasa.wfrp_master.common.core.domain.time
 
+import androidx.compose.runtime.Immutable
 import arrow.core.Either
 import cz.frantisekmasa.wfrp_master.common.core.shared.Parcelable
 import cz.frantisekmasa.wfrp_master.common.core.shared.Parcelize
@@ -9,6 +10,7 @@ import kotlin.jvm.JvmInline
 @JvmInline
 @Serializable
 @Parcelize
+@Immutable
 value class ImperialDate(
     private val imperialDay: Int
 ) : Comparable<ImperialDate>, Parcelable {
@@ -17,6 +19,7 @@ value class ImperialDate(
         require(imperialDay >= 0)
     }
 
+    @Immutable
     enum class DayOfWeek(val readableName: String) {
         WELLENTAG("Wellentag"),
         AUBENTAG("Aubentag"),
@@ -28,6 +31,7 @@ value class ImperialDate(
         FESTAG("Festag"),
     }
 
+    @Immutable
     enum class Month(
         val readableName: String,
         val standaloneDayAtTheBeginning: StandaloneDay? = null
@@ -52,6 +56,7 @@ value class ImperialDate(
             }
     }
 
+    @Immutable
     enum class StandaloneDay(val readableName: String) {
         HEXENSTAG("Hexenstag"),
         MITTERFRUHL("Mitterfruhl"),
@@ -157,8 +162,4 @@ value class ImperialDate(
             { "${it.first} ${it.second.readableName}, ${dayOfWeek?.readableName}, $year" }
         )
     }
-}
-
-private class ImperialDateSerializer {
-
 }

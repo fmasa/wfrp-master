@@ -1,6 +1,7 @@
 package cz.frantisekmasa.wfrp_master.inventory.domain
 
 import android.os.Parcelable
+import androidx.compose.runtime.Immutable
 import cz.frantisekmasa.wfrp_master.common.core.domain.Stats
 import kotlinx.parcelize.Parcelize
 import kotlinx.serialization.Serializable
@@ -9,6 +10,7 @@ import java.text.DecimalFormat
 @Parcelize
 @JvmInline
 @Serializable
+@Immutable
 value class Encumbrance(private val value: Double) : Parcelable {
     companion object {
         val One: Encumbrance = Encumbrance(1.0)

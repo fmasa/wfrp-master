@@ -43,7 +43,7 @@ internal fun CharacterConditionsScreen(
 ) {
     val coroutineScope = rememberCoroutineScope()
 
-    val conditions = character.getConditions()
+    val conditions = character.conditions
     val updateConditions = { transformation: ConditionTransformation ->
         val newConditions = transformation(conditions)
 

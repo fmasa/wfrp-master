@@ -1,5 +1,6 @@
 package cz.frantisekmasa.wfrp_master.combat.ui
 
+import androidx.compose.runtime.Immutable
 import cz.frantisekmasa.wfrp_master.combat.domain.encounter.Wounds
 import cz.frantisekmasa.wfrp_master.common.core.domain.Stats
 import cz.frantisekmasa.wfrp_master.common.core.domain.identifiers.CharacterId
@@ -8,6 +9,7 @@ import cz.frantisekmasa.wfrp_master.common.core.domain.party.combat.Combatant
 import cz.frantisekmasa.wfrp_master.combat.domain.encounter.Npc as NpcEntity
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.Character as CharacterEntity
 
+@Immutable
 sealed class CombatantItem {
     abstract val combatant: Combatant
     abstract val name: String
@@ -16,6 +18,7 @@ sealed class CombatantItem {
 
     fun areSameEntity(other: CombatantItem): Boolean = combatant.areSameEntity(other.combatant)
 
+    @Immutable
     data class Character(
         val characterId: CharacterId,
         private val character: CharacterEntity,
@@ -26,23 +29,19 @@ sealed class CombatantItem {
             get() = character.userId
 
         val avatarUrl: String?
-            get() = character.getAvatarUrl()
+            get() = character.avatarUrl
 
         override val name
-            get() = character.getName()
+            get() = character.name
 
         override val characteristics
-            get() = character.getCharacteristics()
+            get() = character.characteristics
 
         override val wounds
-            get() = character.getPoints().let {
-                Wounds(
-                    current = it.wounds,
-                    max = it.maxWounds,
-                )
-            }
+            get() = character.points.let { Wounds(current = it.wounds, max = it.maxWounds) }
     }
 
+    @Immutable
     data class Npc(
         val npcId: NpcId,
         private val npc: NpcEntity,

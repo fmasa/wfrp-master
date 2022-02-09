@@ -1,11 +1,13 @@
 package cz.frantisekmasa.wfrp_master.common.core.domain.rolls
 
+import androidx.compose.runtime.Immutable
 import cz.frantisekmasa.wfrp_master.common.core.domain.NamedEnum
 import cz.frantisekmasa.wfrp_master.common.core.shared.Parcelable
 import cz.frantisekmasa.wfrp_master.common.core.shared.Parcelize
 import cz.frantisekmasa.wfrp_master.common.localization.Strings
 
 @Parcelize
+@Immutable
 data class TestResult(
     val rollValue: Int,
     val testedValue: Int,
@@ -48,6 +50,7 @@ data class TestResult(
 
     private fun rollsDouble() = rollValue == 100 || rollValue % 11 == 0 // 100 is rolled as 00, thus special treatment
 
+    @Immutable
     enum class DramaticResult(
         val successLevelRange: IntRange,
         override val nameResolver: (strings: Strings) -> String,

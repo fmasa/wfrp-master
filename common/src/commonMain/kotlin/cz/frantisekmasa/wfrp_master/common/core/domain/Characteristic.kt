@@ -1,9 +1,11 @@
 package cz.frantisekmasa.wfrp_master.common.core.domain
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Immutable
 import cz.frantisekmasa.wfrp_master.common.core.shared.Resources
 import cz.frantisekmasa.wfrp_master.common.localization.Strings
 
+@Immutable
 enum class Characteristic(override val nameResolver: (strings: Strings) -> String) : NamedEnum {
     AGILITY({ it.characteristics.agility }),
     BALLISTIC_SKILL({ it.characteristics.ballisticSkill }),

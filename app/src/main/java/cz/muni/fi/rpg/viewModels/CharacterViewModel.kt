@@ -15,12 +15,10 @@ class CharacterViewModel(
 
     val character: Flow<Character> = characters.getLive(characterId).right()
 
-    suspend fun update(change: (Character) -> Unit) {
+    suspend fun update(change: (Character) -> Character) {
         val character = characters.get(characterId)
 
-        change(character)
-
-        characters.save(characterId.partyId, character)
+        characters.save(characterId.partyId, change(character))
     }
 
     suspend fun characterExists(): Boolean {

@@ -1,11 +1,13 @@
 package cz.frantisekmasa.wfrp_master.inventory.domain.weapon
 
 import android.os.Parcelable
+import androidx.compose.runtime.Immutable
 import cz.frantisekmasa.wfrp_master.common.core.domain.NamedEnum
 import cz.frantisekmasa.wfrp_master.common.localization.Strings
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
+@Immutable
 enum class RangedWeaponGroup(
     override val nameResolver: (strings: Strings) -> String,
     val needsAmmo: Boolean = true

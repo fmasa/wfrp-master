@@ -53,7 +53,7 @@ internal fun CalendarScreen(
     viewModel: GameMasterViewModel,
     modifier: Modifier,
 ) {
-    val dateTime = party.getTime()
+    val dateTime = party.time
 
     Column(
         modifier
