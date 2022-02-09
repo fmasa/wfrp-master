@@ -1,6 +1,7 @@
 package cz.frantisekmasa.wfrp_master.compendium.domain
 
 import android.os.Parcelable
+import androidx.compose.runtime.Immutable
 import cz.frantisekmasa.wfrp_master.common.core.common.requireMaxLength
 import cz.frantisekmasa.wfrp_master.common.core.domain.Characteristic
 import cz.frantisekmasa.wfrp_master.common.core.domain.compendium.CompendiumItem
@@ -11,6 +12,7 @@ import java.util.UUID
 
 @Parcelize
 @Serializable
+@Immutable
 data class Skill(
     @Contextual override val id: UUID,
     override val name: String,

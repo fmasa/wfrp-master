@@ -1,8 +1,10 @@
 package cz.frantisekmasa.wfrp_master.common.core.domain
 
+import androidx.compose.runtime.Immutable
 import kotlinx.serialization.Serializable
 
 @Serializable
+@Immutable
 data class Stats(
     val weaponSkill: Int,
     val dexterity: Int,

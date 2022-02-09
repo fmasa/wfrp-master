@@ -1,5 +1,6 @@
 package cz.frantisekmasa.wfrp_master.compendium.domain
 
+import androidx.compose.runtime.Immutable
 import cz.frantisekmasa.wfrp_master.common.core.domain.compendium.CompendiumItem
 import kotlinx.parcelize.Parcelize
 import kotlinx.serialization.Contextual
@@ -8,6 +9,7 @@ import java.util.UUID
 
 @Parcelize
 @Serializable
+@Immutable
 data class Spell(
     @Contextual override val id: UUID,
     override val name: String,

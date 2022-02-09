@@ -1,5 +1,6 @@
 package cz.frantisekmasa.wfrp_master.combat.domain.encounter
 
+import androidx.compose.runtime.Immutable
 import cz.frantisekmasa.wfrp_master.common.core.domain.Stats
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.CurrentConditions
 import cz.frantisekmasa.wfrp_master.common.core.utils.duplicateName
@@ -9,6 +10,7 @@ import kotlinx.serialization.Serializable
 import java.util.UUID
 
 @Serializable
+@Immutable
 data class Npc(
     @Contextual val id: UUID,
     val name: String,

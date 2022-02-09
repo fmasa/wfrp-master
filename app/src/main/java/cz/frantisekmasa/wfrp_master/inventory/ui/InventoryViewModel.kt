@@ -1,5 +1,6 @@
 package cz.frantisekmasa.wfrp_master.inventory.ui
 
+import androidx.compose.runtime.Immutable
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import cz.frantisekmasa.wfrp_master.common.core.domain.Money
@@ -46,6 +47,7 @@ class InventoryViewModel(
                 )
             }
 
+    @Immutable
     data class EquippedArmour(
         val armourFromItems: Armor,
         val legacyArmour: Armor,

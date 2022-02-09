@@ -10,6 +10,7 @@ import androidx.compose.material.ListItem
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.Stable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -64,6 +65,7 @@ fun SkillCompendiumTab(viewModel: CompendiumViewModel, width: Dp) {
 
 interface CompendiumItemFormData<T : CompendiumItem<T>> : HydratedFormData<T>
 
+@Stable
 private data class SkillFormData(
     val id: UUID,
     val name: InputValue,

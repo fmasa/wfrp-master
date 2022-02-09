@@ -244,7 +244,10 @@ private fun <T : CompendiumItem<T>> ItemPicker(
 
 @Immutable
 internal sealed class ImportDialogState {
+    @Immutable
     object LoadingItems : ImportDialogState()
+
+    @Immutable
     data class PickingItemsToImport(
         val skills: List<Skill>,
         val talents: List<Talent>,
@@ -254,6 +257,7 @@ internal sealed class ImportDialogState {
     ) : ImportDialogState()
 }
 
+@Immutable
 private enum class ItemsScreen {
     SKILLS,
     TALENTS,

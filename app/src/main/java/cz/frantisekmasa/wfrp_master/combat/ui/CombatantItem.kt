@@ -1,5 +1,6 @@
 package cz.frantisekmasa.wfrp_master.combat.ui
 
+import androidx.compose.runtime.Immutable
 import cz.frantisekmasa.wfrp_master.combat.domain.encounter.Wounds
 import cz.frantisekmasa.wfrp_master.common.core.domain.Stats
 import cz.frantisekmasa.wfrp_master.common.core.domain.identifiers.CharacterId
@@ -43,6 +44,7 @@ sealed class CombatantItem {
             }
     }
 
+    @Immutable
     data class Npc(
         val npcId: NpcId,
         private val npc: NpcEntity,

@@ -1,8 +1,10 @@
 package cz.frantisekmasa.wfrp_master.common.core.domain.character
 
+import androidx.compose.runtime.Immutable
 import kotlinx.serialization.Serializable
 
 @Serializable
+@Immutable
 class CurrentConditions private constructor(private val conditions: Map<Condition, Int>) {
     companion object {
         fun none() = CurrentConditions(emptyMap())

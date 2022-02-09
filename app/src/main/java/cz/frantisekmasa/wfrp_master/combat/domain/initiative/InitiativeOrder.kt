@@ -1,5 +1,8 @@
 package cz.frantisekmasa.wfrp_master.combat.domain.initiative
 
+import androidx.compose.runtime.Immutable
+
+@Immutable
 data class InitiativeOrder(private val comparableValues: List<Int>) : Comparable<InitiativeOrder> {
     init {
         require(comparableValues.isNotEmpty()) { "There must be at least one comparable value" }

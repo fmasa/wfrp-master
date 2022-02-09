@@ -1,5 +1,6 @@
 package cz.frantisekmasa.wfrp_master.compendium.domain
 
+import androidx.compose.runtime.Immutable
 import cz.frantisekmasa.wfrp_master.common.core.common.requireMaxLength
 import cz.frantisekmasa.wfrp_master.common.core.domain.compendium.CompendiumItem
 import kotlinx.parcelize.Parcelize
@@ -9,6 +10,7 @@ import java.util.UUID
 
 @Parcelize
 @Serializable
+@Immutable
 data class Blessing(
     @Contextual override val id: UUID,
     override val name: String,

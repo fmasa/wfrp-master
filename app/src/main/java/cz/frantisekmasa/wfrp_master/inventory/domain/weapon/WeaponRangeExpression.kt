@@ -1,6 +1,7 @@
 package cz.frantisekmasa.wfrp_master.inventory.domain.weapon
 
 import android.os.Parcelable
+import androidx.compose.runtime.Immutable
 import cz.frantisekmasa.wfrp_master.common.core.domain.Expression
 import kotlinx.parcelize.Parcelize
 import kotlinx.serialization.Serializable
@@ -8,6 +9,7 @@ import kotlinx.serialization.Serializable
 @JvmInline
 @Parcelize
 @Serializable
+@Immutable
 value class WeaponRangeExpression(val value: String) : Parcelable {
     init {
         require(

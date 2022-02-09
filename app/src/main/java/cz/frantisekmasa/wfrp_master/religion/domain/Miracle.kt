@@ -1,5 +1,6 @@
 package cz.frantisekmasa.wfrp_master.religion.domain
 
+import androidx.compose.runtime.Immutable
 import cz.frantisekmasa.wfrp_master.common.core.common.requireMaxLength
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.CharacterItem
 import kotlinx.parcelize.Parcelize
@@ -10,6 +11,7 @@ import cz.frantisekmasa.wfrp_master.compendium.domain.Miracle as CompendiumMirac
 
 @Parcelize
 @Serializable
+@Immutable
 internal data class Miracle(
     @Contextual override val id: UUID,
     @Contextual override val compendiumId: UUID?,

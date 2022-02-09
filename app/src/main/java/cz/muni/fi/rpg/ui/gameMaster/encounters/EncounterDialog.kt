@@ -1,10 +1,11 @@
 package cz.muni.fi.rpg.ui.gameMaster.encounters
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Stable
 import cz.frantisekmasa.wfrp_master.combat.domain.encounter.Encounter
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.PartyId
-import cz.frantisekmasa.wfrp_master.common.core.ui.forms.FormDialog
 import cz.frantisekmasa.wfrp_master.common.core.ui.dialogs.FullScreenDialog
+import cz.frantisekmasa.wfrp_master.common.core.ui.forms.FormDialog
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.HydratedFormData
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.InputValue
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.Rules
@@ -57,6 +58,7 @@ fun EncounterDialog(
     }
 }
 
+@Stable
 private class EncounterDialogFormData(
     val name: InputValue,
     val description: InputValue,
