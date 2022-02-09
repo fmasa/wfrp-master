@@ -39,9 +39,7 @@ class GameMasterViewModel(
     suspend fun archiveCharacter(id: CharacterId) {
         val character = characterRepository.get(id)
 
-        character.archive()
-
-        characterRepository.save(id.partyId, character)
+        characterRepository.save(id.partyId, character.archive())
     }
 
     suspend fun changeTime(change: (DateTime) -> DateTime) {

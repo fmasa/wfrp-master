@@ -20,12 +20,12 @@ import cz.frantisekmasa.wfrp_master.common.core.domain.localizedName
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.ChipList
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.FormData
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.InputValue
+import cz.frantisekmasa.wfrp_master.common.core.ui.forms.NumberPicker
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.Rules
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.SelectBox
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.SelectBoxLabel
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.TextInput
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.inputValue
-import cz.frantisekmasa.wfrp_master.common.core.ui.forms.NumberPicker
 import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
 
 object CharacterBasicInfoForm {
@@ -50,18 +50,18 @@ object CharacterBasicInfoForm {
 
             @Composable
             private fun fromDefaults(character: Character?) = Data(
-                name = inputValue(character?.getName() ?: "", Rules.NotBlank()),
-                socialClass = inputValue(character?.getSocialClass() ?: "", Rules.NotBlank()),
-                career = inputValue(character?.getCareer() ?: "", Rules.NotBlank()),
-                race = rememberSaveable { mutableStateOf(character?.getRace() ?: Race.HUMAN) },
-                psychology = inputValue(character?.getPsychology() ?: ""),
-                motivation = inputValue(character?.getMotivation() ?: ""),
-                note = inputValue(character?.getNote() ?: ""),
+                name = inputValue(character?.name ?: "", Rules.NotBlank()),
+                socialClass = inputValue(character?.socialClass ?: "", Rules.NotBlank()),
+                career = inputValue(character?.career ?: "", Rules.NotBlank()),
+                race = rememberSaveable { mutableStateOf(character?.race ?: Race.HUMAN) },
+                psychology = inputValue(character?.psychology ?: ""),
+                motivation = inputValue(character?.motivation ?: ""),
+                note = inputValue(character?.note ?: ""),
                 socialTier = rememberSaveable {
-                    mutableStateOf(character?.getStatus()?.tier ?: SocialStatus.Tier.BRASS)
+                    mutableStateOf(character?.status?.tier ?: SocialStatus.Tier.BRASS)
                 },
                 socialStanding = rememberSaveable {
-                    mutableStateOf(character?.getStatus()?.standing ?: 0)
+                    mutableStateOf(character?.status?.standing ?: 0)
                 },
             )
         }

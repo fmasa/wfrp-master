@@ -48,16 +48,16 @@ import cz.frantisekmasa.wfrp_master.common.core.domain.party.Party
 import cz.frantisekmasa.wfrp_master.common.core.media.rememberSoundPlayer
 import cz.frantisekmasa.wfrp_master.common.core.shared.Resources
 import cz.frantisekmasa.wfrp_master.common.core.shared.drawableResource
-import cz.frantisekmasa.wfrp_master.common.core.ui.responsive.Breakpoint
 import cz.frantisekmasa.wfrp_master.common.core.ui.CharacterAvatar
+import cz.frantisekmasa.wfrp_master.common.core.ui.dialogs.FullScreenDialog
+import cz.frantisekmasa.wfrp_master.common.core.ui.forms.NumberPicker
+import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.ItemIcon
+import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
+import cz.frantisekmasa.wfrp_master.common.core.ui.responsive.Breakpoint
 import cz.frantisekmasa.wfrp_master.common.core.ui.responsive.ColumnSize.FullWidth
 import cz.frantisekmasa.wfrp_master.common.core.ui.responsive.ColumnSize.HalfWidth
 import cz.frantisekmasa.wfrp_master.common.core.ui.responsive.Container
 import cz.frantisekmasa.wfrp_master.common.core.ui.responsive.LocalBreakpoint
-import cz.frantisekmasa.wfrp_master.common.core.ui.dialogs.FullScreenDialog
-import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.ItemIcon
-import cz.frantisekmasa.wfrp_master.common.core.ui.forms.NumberPicker
-import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
 import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.TopPanel
 import cz.frantisekmasa.wfrp_master.common.core.viewModel.viewModel
 import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
@@ -99,7 +99,7 @@ internal fun CharacterCharacteristicsScreen(
                 results = listOf(
                     RollResult(
                         characterId.toString(),
-                        character.getName(),
+                        character.name,
                         currentRoll,
                     )
                 ),
@@ -141,7 +141,7 @@ internal fun CharacterCharacteristicsScreen(
                 .verticalScroll(rememberScrollState())
                 .padding(bottom = Spacing.bottomPaddingUnderFab),
         ) {
-            val points = character.getPoints()
+            val points = character.points
 
             val coroutineScope = rememberCoroutineScope()
 
@@ -151,7 +151,7 @@ internal fun CharacterCharacteristicsScreen(
                 onUpdate = { coroutineScope.launch(Dispatchers.IO) { viewModel.updatePoints(it) } }
             )
 
-            CharacteristicsCard(character.getCharacteristics())
+            CharacteristicsCard(character.characteristics)
 
             CardRow(Modifier.padding(top = Spacing.small)) {
                 Box(Modifier.weight(1f), contentAlignment = Alignment.TopCenter) {
@@ -177,7 +177,7 @@ internal fun CharacterCharacteristicsScreen(
                 column(size) {
                     AmbitionsCard(
                         title = strings.titleCharacterAmbitions,
-                        ambitions = character.getAmbitions(),
+                        ambitions = character.ambitions,
                         onSave = { viewModel.updateCharacterAmbitions(it) },
                     )
                 }
@@ -211,13 +211,13 @@ private fun CharacterTopPanel(character: Character, points: Points, onUpdate: (P
                     horizontalArrangement = Arrangement.SpaceBetween,
                 ) {
                     Row {
-                        CharacterAvatar(character.getAvatarUrl(), ItemIcon.Size.Large)
+                        CharacterAvatar(character.avatarUrl, ItemIcon.Size.Large)
                         Column(Modifier.padding(start = Spacing.medium)) {
-                            Text(character.getName(), fontWeight = FontWeight.Bold)
+                            Text(character.name, fontWeight = FontWeight.Bold)
                             Text(
-                                character.getRace().localizedName +
+                                character.race.localizedName +
                                     " " +
-                                    character.getCareer(),
+                                    character.career,
                                 style = MaterialTheme.typography.caption
                             )
                         }
@@ -417,13 +417,13 @@ private fun ExperiencePointsSection(
 
 @Composable
 private fun CareerSection(character: Character) {
-    val status = character.getStatus()
+    val status = character.status
 
     Column {
-        Text(character.getCareer(), fontWeight = FontWeight.Bold)
+        Text(character.career, fontWeight = FontWeight.Bold)
         CompositionLocalProvider(LocalContentAlpha provides ContentAlpha.medium) {
             Text(
-                "${character.getSocialClass()} · ${status.tier.localizedName} ${status.standing}",
+                "${character.socialClass} · ${status.tier.localizedName} ${status.standing}",
                 style = MaterialTheme.typography.caption
             )
         }

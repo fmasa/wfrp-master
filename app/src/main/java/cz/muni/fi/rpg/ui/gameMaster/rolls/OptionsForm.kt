@@ -160,7 +160,7 @@ private fun CharacterList(
                     value = selectedCharacterIds.contains(character.id),
                     onValueChange = onValueChange,
                 ),
-                text = { Text(character.getName()) }
+                text = { Text(character.name) }
             )
         }
     }

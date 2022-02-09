@@ -63,7 +63,7 @@ import kotlinx.coroutines.tasks.await
         queryFlow(
             characters(partyId),
             mapper
-        ).map { parties -> parties.filter { !it.isArchived() } }
+        ).map { parties -> parties.filter { !it.isArchived } }
 
     private fun characters(partyId: PartyId) =
         parties.document(partyId.toString()).collection(COLLECTION_CHARACTERS)

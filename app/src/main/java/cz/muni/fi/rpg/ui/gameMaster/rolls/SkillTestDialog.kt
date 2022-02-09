@@ -56,7 +56,7 @@ fun SkillTestDialog(partyId: PartyId, onDismissRequest: () -> Unit) {
 
                                     RollResult(
                                         characterId = it.id,
-                                        characterName = it.getName(),
+                                        characterName = it.name,
                                         roll = if (testResult != null)
                                             Roll.Test(currentStep.selectedSkill.name, testResult)
                                         else Roll.CharacterDoesNotHaveAdvances,

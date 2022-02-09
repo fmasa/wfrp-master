@@ -10,7 +10,6 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
-import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.Stable
@@ -78,10 +77,10 @@ private object CharacterEditScreen {
             fun fromCharacter(character: Character) =
                 WoundsData(
                     maxWounds = inputValue(
-                        character.getPoints().maxWounds.toString(),
+                        character.points.maxWounds.toString(),
                         Rules.PositiveInteger(),
                     ),
-                    hardyTalent = rememberSaveable { mutableStateOf(character.hasHardyTalent()) }
+                    hardyTalent = rememberSaveable { mutableStateOf(character.hasHardyTalent) }
                 )
         }
 
@@ -108,7 +107,7 @@ fun CharacterEditScreen(routing: Routing<Route.CharacterEdit>) {
     Scaffold(
         topBar = {
             CharacterEditTopBar(
-                character.getName(),
+                character.name,
                 onSave = {
                     if (formData.isValid()) {
                         submitEnabled.value = false
@@ -234,7 +233,7 @@ private suspend fun updateCharacter(
             characteristicsBase = characteristics.base,
             characteristicsAdvances = characteristics.advances,
             maxWounds = formData.wounds.maxWounds.value.toInt(),
-            hardyTalent = formData.wounds.hardyTalent.value,
+            hasHardyTalent = formData.wounds.hardyTalent.value,
         )
     }
 }

@@ -37,8 +37,8 @@ object CharacterCharacteristicsForm {
         companion object {
             @Composable
             fun fromCharacter(character: Character?): Data {
-                val base = character?.getCharacteristicsBase()
-                val advances = character?.getCharacteristicsAdvances()
+                val base = character?.characteristicsBase
+                val advances = character?.characteristicsAdvances
 
                 return Data(
                     weaponSkill = toPair(base, advances) { it.weaponSkill },

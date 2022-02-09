@@ -42,7 +42,7 @@ fun EditableCharacterAvatar(
 
     Box(modifier, Alignment.Center) {
         CharacterAvatar(
-            character.getAvatarUrl(),
+            character.avatarUrl,
             ItemIcon.Size.XLarge,
             Modifier
                 .clickable(

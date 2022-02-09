@@ -14,10 +14,10 @@ import androidx.compose.ui.unit.dp
 import cz.frantisekmasa.wfrp_master.common.core.domain.Stats
 import cz.frantisekmasa.wfrp_master.common.core.shared.Resources
 import cz.frantisekmasa.wfrp_master.common.core.ui.buttons.CardButton
-import cz.frantisekmasa.wfrp_master.common.core.ui.cards.CardTitle
-import cz.frantisekmasa.wfrp_master.common.core.ui.flow.collectWithLifecycle
 import cz.frantisekmasa.wfrp_master.common.core.ui.cards.CardContainer
 import cz.frantisekmasa.wfrp_master.common.core.ui.cards.CardItem
+import cz.frantisekmasa.wfrp_master.common.core.ui.cards.CardTitle
+import cz.frantisekmasa.wfrp_master.common.core.ui.flow.collectWithLifecycle
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.ContextMenu
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.EmptyUI
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.ItemIcon
@@ -37,7 +37,7 @@ internal fun SkillsCard(
 ) {
     val skills = skillsVm.skills.collectWithLifecycle(null).value ?: return
     val characteristics = characterVm.character
-        .collectWithLifecycle(null).value?.getCharacteristics() ?: return
+        .collectWithLifecycle(null).value?.characteristics ?: return
 
     CardContainer(Modifier.padding(horizontal = 8.dp).padding(bottom = 8.dp)) {
         Column(Modifier.padding(horizontal = 6.dp)) {

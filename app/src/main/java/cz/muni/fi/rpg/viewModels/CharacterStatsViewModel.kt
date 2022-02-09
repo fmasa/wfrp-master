@@ -13,15 +13,12 @@ class CharacterStatsViewModel(
     suspend fun updatePoints(points: Points) {
         val character = characters.get(characterId)
 
-        character.updatePoints(points)
-        characters.save(characterId.partyId, character)
+        characters.save(characterId.partyId, character.updatePoints(points))
     }
 
     suspend fun updateCharacterAmbitions(ambitions: Ambitions) {
         val character = characters.get(characterId)
 
-        character.updateAmbitions(ambitions)
-
-        characters.save(characterId.partyId, character)
+        characters.save(characterId.partyId, character.updateAmbitions(ambitions))
     }
 }

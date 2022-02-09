@@ -78,7 +78,7 @@ class CombatViewModel(
         npcs: List<Npc>
     ) {
         val combatants =
-            characters.map { it.getCharacteristics() to Combatant.Character(it.id, 1) } +
+            characters.map { it.characteristics to Combatant.Character(it.id, 1) } +
                 npcs.map { it.stats to Combatant.Npc(NpcId(encounterId, it.id), 1) }
 
         parties.update(partyId) {
@@ -184,15 +184,13 @@ class CombatViewModel(
         when (combatant) {
             is CombatantItem.Character -> {
                 val character = characters.get(combatant.characterId)
-                val points = character.getPoints()
+                val points = character.points
 
                 if (points.wounds == wounds.current) {
                     return
                 }
 
-                character.updatePoints(points.copy(wounds = wounds.current))
-
-                characters.save(partyId, character)
+                characters.save(partyId, character.updatePoints(points.copy(wounds = wounds.current)))
             }
             is CombatantItem.Npc -> {
                 val npc = npcs.get(combatant.npcId)
