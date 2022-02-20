@@ -8,6 +8,7 @@ import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Stable
+import androidx.compose.runtime.key
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import cz.frantisekmasa.wfrp_master.common.core.shared.Resources
@@ -29,49 +30,67 @@ fun InventoryItemList(
     onDuplicate: (InventoryItem) -> Unit,
 ) {
     Column {
-        val strings = LocalStrings.current
         for (item in items) {
-            CardItem(
-                name = item.name,
-                description = item.description,
-                icon = { ItemIcon(trappingIcon(item.trappingType), ItemIcon.Size.Small) },
-                onClick = { onClick(item) },
-                contextMenuItems = listOf(
-                    ContextMenu.Item(
-                        strings.commonUi.buttonDuplicate,
-                        onClick = { onDuplicate(item) },
-                    ),
-                    ContextMenu.Item(
-                        strings.commonUi.buttonRemove,
-                        onClick = { onRemove(item) }
-                    ),
-                ),
-                badge = {
-                    val encumbrance = item.effectiveEncumbrance
-
-                    if (encumbrance != Encumbrance.Zero) {
-                        Column(horizontalAlignment = Alignment.End) {
-                            if (item.quantity > 1) {
-                                Text("× ${item.quantity}")
-                            }
-
-                            Row(
-                                verticalAlignment = Alignment.CenterVertically,
-                                horizontalArrangement = Arrangement.spacedBy(Spacing.tiny)
-                            ) {
-                                Icon(
-                                    drawableResource(Resources.Drawable.TrappingEncumbrance),
-                                    strings.trappings.iconEncumbrance,
-                                    Modifier.size(Spacing.medium),
-                                )
-                                Text(encumbrance.toString())
-                            }
-                        }
-                    }
-                }
-            )
+            key(item.id) {
+                TrappingItem(
+                    trapping = item,
+                    onClick = { onClick(item) },
+                    onRemove = { onRemove(item) },
+                    onDuplicate = { onDuplicate(item) },
+                )
+            }
         }
     }
+}
+
+@Composable
+private fun TrappingItem(
+    trapping: InventoryItem,
+    onClick: () -> Unit,
+    onDuplicate: () -> Unit,
+    onRemove: () -> Unit,
+) {
+    val strings = LocalStrings.current
+
+    CardItem(
+        name = trapping.name,
+        description = trapping.description,
+        icon = { ItemIcon(trappingIcon(trapping.trappingType), ItemIcon.Size.Small) },
+        onClick = onClick,
+        contextMenuItems = listOf(
+            ContextMenu.Item(
+                strings.commonUi.buttonDuplicate,
+                onClick = onDuplicate,
+            ),
+            ContextMenu.Item(
+                strings.commonUi.buttonRemove,
+                onClick = onRemove,
+            ),
+        ),
+        badge = {
+            val encumbrance = trapping.effectiveEncumbrance
+
+            if (encumbrance != Encumbrance.Zero) {
+                Column(horizontalAlignment = Alignment.End) {
+                    if (trapping.quantity > 1) {
+                        Text("× ${trapping.quantity}")
+                    }
+
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(Spacing.tiny)
+                    ) {
+                        Icon(
+                            drawableResource(Resources.Drawable.TrappingEncumbrance),
+                            strings.trappings.iconEncumbrance,
+                            Modifier.size(Spacing.medium),
+                        )
+                        Text(encumbrance.toString())
+                    }
+                }
+            }
+        }
+    )
 }
 
 @Composable
