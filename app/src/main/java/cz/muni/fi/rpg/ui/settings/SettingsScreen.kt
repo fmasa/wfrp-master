@@ -104,7 +104,7 @@ private fun BuyPremiumButton(viewModel: PremiumViewModel) {
 private fun DarkModeCard(viewModel: SettingsViewModel) {
     SwitchItem(
         name = LocalStrings.current.settings.darkMode,
-        value = viewModel.darkMode.collectWithLifecycle(isSystemInDarkTheme()).value,
+        value = viewModel.darkMode.collectWithLifecycle(null).value ?: isSystemInDarkTheme(),
         onChange = { viewModel.toggleDarkMode(it) },
     )
 }
@@ -113,7 +113,7 @@ private fun DarkModeCard(viewModel: SettingsViewModel) {
 private fun SoundCard(viewModel: SettingsViewModel) {
     SwitchItem(
         name = LocalStrings.current.settings.sound,
-        value = viewModel.soundEnabled.collectWithLifecycle(null).value,
+        value = viewModel.soundEnabled.collectWithLifecycle(null).value ?: false,
         onChange = { viewModel.toggleSound(it) }
     )
 }
