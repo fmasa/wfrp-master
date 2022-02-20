@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Stable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import cz.frantisekmasa.wfrp_master.common.core.shared.Resources
@@ -74,6 +75,7 @@ fun InventoryItemList(
 }
 
 @Composable
+@Stable
 private fun trappingIcon(trappingType: TrappingType?) = when (trappingType) {
     is TrappingType.Ammunition -> Resources.Drawable.TrappingAmmunition
     is TrappingType.Armour -> Resources.Drawable.ArmorChest
