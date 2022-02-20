@@ -1,5 +1,7 @@
 -keep class com.revenuecat.purchases.** { *; }
 
+-keep class cz.frantisekmasa.wfrp_master.**.R$drawable { *; }
+
 # Optional dependency used for PDF reader when reading encrypted PDFs
 -dontnote com.lowagie.bouncycastle.*
 
