@@ -88,9 +88,13 @@ private fun MainContainer(routing: Routing<Route.CompendiumImport>) {
 
     val fileChooser = rememberLauncherForActivityResult(
         ActivityResultContracts.GetContent(),
-        onResult = {
+        onResult = { uri ->
+            if (uri == null) {
+                return@rememberLauncherForActivityResult
+            }
+
             coroutineScope.launch(Dispatchers.IO) {
-                context.contentResolver.openInputStream(it)?.use { inputStream ->
+                context.contentResolver.openInputStream(uri)?.use { inputStream ->
                     try {
                         importState = ImportDialogState.LoadingItems
 

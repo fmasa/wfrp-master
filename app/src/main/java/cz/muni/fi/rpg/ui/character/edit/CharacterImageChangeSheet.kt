@@ -61,11 +61,15 @@ fun EditableCharacterAvatar(
         val messages = LocalStrings.current.messages
         val snackbarHolder = LocalPersistentSnackbarHolder.current
 
-        val fileChooser = rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) {
+        val fileChooser = rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) { uri ->
+            if (uri == null) {
+                return@rememberLauncherForActivityResult
+            }
+
             coroutineScope.launch(Dispatchers.IO) {
                 try {
                     processing = true
-                    val inputStream = context.contentResolver.openInputStream(it)
+                    val inputStream = context.contentResolver.openInputStream(uri)
 
                     if (inputStream == null) {
                         snackbarHolder.showSnackbar(messages.couldNotOpenFile)
