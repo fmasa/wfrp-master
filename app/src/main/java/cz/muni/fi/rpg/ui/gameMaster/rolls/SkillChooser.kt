@@ -54,7 +54,7 @@ internal fun SkillChooser(
                 contentPadding = PaddingValues(Spacing.bodyPadding),
                 modifier = Modifier.clipToBounds(),
             ) {
-                items(skills) { skill ->
+                items(skills, key = { it.id }) { skill ->
                     ListItem(
                         modifier = Modifier.clickable(onClick = { onSkillSelected(skill) }),
                         icon = { ItemIcon(skill.characteristic.getIcon(), ItemIcon.Size.Small) },

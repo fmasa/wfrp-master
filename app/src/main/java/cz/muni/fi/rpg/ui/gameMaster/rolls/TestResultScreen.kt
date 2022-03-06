@@ -16,10 +16,10 @@ import cz.frantisekmasa.wfrp_master.common.core.domain.localizedName
 import cz.frantisekmasa.wfrp_master.common.core.ui.buttons.CardButton
 import cz.frantisekmasa.wfrp_master.common.core.ui.buttons.CloseButton
 import cz.frantisekmasa.wfrp_master.common.core.ui.cards.CardContainer
-import cz.frantisekmasa.wfrp_master.common.core.ui.text.SingleLineTextValue
-import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
-import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
 import cz.frantisekmasa.wfrp_master.common.core.ui.cards.CardTitle
+import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
+import cz.frantisekmasa.wfrp_master.common.core.ui.text.SingleLineTextValue
+import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
 
 @Composable
 internal fun TestResultScreen(
@@ -37,7 +37,7 @@ internal fun TestResultScreen(
         },
     ) {
         LazyColumn(contentPadding = PaddingValues(Spacing.bodyPadding)) {
-            items(results) { result ->
+            items(results, key = { it.characterId }) { result ->
                 TestResultCard(
                     result = result,
                     onRerollRequest = { onRerollRequest(result.characterId) }

@@ -75,7 +75,7 @@ internal fun CompendiumMiracleChooser(
                     val coroutineScope = rememberCoroutineScope()
 
                     LazyColumn(contentPadding = PaddingValues(Spacing.bodyPadding)) {
-                        items(compendiumMiracles) { miracle ->
+                        items(compendiumMiracles, key = { it.id }) { miracle ->
                             ListItem(
                                 modifier = Modifier.clickable(
                                     onClick = {

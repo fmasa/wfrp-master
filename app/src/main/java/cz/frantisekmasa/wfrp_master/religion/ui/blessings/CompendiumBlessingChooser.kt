@@ -74,7 +74,7 @@ internal fun CompendiumBlessingChooser(
                     val coroutineScope = rememberCoroutineScope()
 
                     LazyColumn(contentPadding = PaddingValues(Spacing.bodyPadding)) {
-                        items(compendiumBlessings) { blessing ->
+                        items(compendiumBlessings, key = { it.id }) { blessing ->
                             ListItem(
                                 modifier = Modifier.clickable(
                                     onClick = {
