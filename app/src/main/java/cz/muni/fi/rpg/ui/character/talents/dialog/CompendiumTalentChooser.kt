@@ -65,7 +65,7 @@ internal fun CompendiumTalentChooser(
                     )
                 } else {
                     LazyColumn(contentPadding = PaddingValues(Spacing.bodyPadding)) {
-                        items(compendiumTalents) { talent ->
+                        items(compendiumTalents, key = { it.id }) { talent ->
                             ListItem(
                                 modifier = Modifier.clickable(onClick = { onTalentSelected(talent) }),
                                 icon = { ItemIcon(Resources.Drawable.Skill, ItemIcon.Size.Small) },

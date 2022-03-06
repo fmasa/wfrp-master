@@ -128,7 +128,7 @@ fun <T : CompendiumItem<T>> CompendiumTab(
                 items.isEmpty() -> emptyUI()
                 else -> {
                     LazyColumn(contentPadding = PaddingValues(bottom = Spacing.bottomPaddingUnderFab)) {
-                        items(items) { item ->
+                        items(items, key = { it.id }) { item ->
                             WithContextMenu(
                                 items = listOf(
                                     ContextMenu.Item(

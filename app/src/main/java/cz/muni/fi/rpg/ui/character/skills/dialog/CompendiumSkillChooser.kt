@@ -66,7 +66,7 @@ internal fun CompendiumSkillChooser(
                     )
                 } else {
                     LazyColumn(contentPadding = PaddingValues(Spacing.bodyPadding)) {
-                        items(compendiumSkills) { skill ->
+                        items(compendiumSkills, key = { it.id }) { skill ->
                             key(skill.id) {
                                 ListItem(
                                     modifier = Modifier.clickable(onClick = { onSkillSelected(skill) }),

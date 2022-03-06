@@ -244,7 +244,7 @@ fun PartyList(
         Modifier.fillMaxHeight(),
         contentPadding = PaddingValues(top = 12.dp, bottom = Spacing.bottomPaddingUnderFab)
     ) {
-        items(parties) { party ->
+        items(parties, key = { it.id }) { party ->
             val isGameMaster =
                 LocalUser.current.id == party.gameMasterId || party.gameMasterId == null
             val strings = LocalStrings.current

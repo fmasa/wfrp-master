@@ -28,21 +28,16 @@ import cz.frantisekmasa.wfrp_master.common.core.domain.identifiers.CharacterId
 import cz.frantisekmasa.wfrp_master.common.core.shared.Resources
 import cz.frantisekmasa.wfrp_master.common.core.shared.drawableResource
 import cz.frantisekmasa.wfrp_master.common.core.ui.buttons.CardButton
+import cz.frantisekmasa.wfrp_master.common.core.ui.cards.CardContainer
+import cz.frantisekmasa.wfrp_master.common.core.ui.cards.CardTitle
 import cz.frantisekmasa.wfrp_master.common.core.ui.dialogs.DialogState
 import cz.frantisekmasa.wfrp_master.common.core.ui.flow.collectWithLifecycle
-import cz.frantisekmasa.wfrp_master.common.core.ui.cards.CardContainer
-import cz.frantisekmasa.wfrp_master.common.core.ui.cards.CardItem
-import cz.frantisekmasa.wfrp_master.common.core.ui.cards.CardTitle
-import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.ContextMenu
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.EmptyUI
-import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.ItemIcon
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
 import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.TopPanel
 import cz.frantisekmasa.wfrp_master.common.core.viewModel.viewModel
 import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
-import cz.frantisekmasa.wfrp_master.inventory.domain.Encumbrance
 import cz.frantisekmasa.wfrp_master.inventory.domain.InventoryItem
-import cz.frantisekmasa.wfrp_master.inventory.domain.TrappingType
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.koin.core.parameter.parametersOf
@@ -183,65 +178,3 @@ private fun InventoryItemsCard(
     }
 }
 
-@Composable
-private fun InventoryItemList(
-    items: List<InventoryItem>,
-    onClick: (InventoryItem) -> Unit,
-    onRemove: (InventoryItem) -> Unit,
-    onDuplicate: (InventoryItem) -> Unit,
-) {
-    Column {
-        val strings = LocalStrings.current
-        for (item in items) {
-            CardItem(
-                name = item.name,
-                description = item.description,
-                icon = { ItemIcon(trappingIcon(item.trappingType), ItemIcon.Size.Small) },
-                onClick = { onClick(item) },
-                contextMenuItems = listOf(
-                    ContextMenu.Item(
-                        strings.commonUi.buttonDuplicate,
-                        onClick = { onDuplicate(item) },
-                    ),
-                    ContextMenu.Item(
-                        strings.commonUi.buttonRemove,
-                        onClick = { onRemove(item) }
-                    ),
-                ),
-                badge = {
-                    val encumbrance = item.effectiveEncumbrance
-
-                    if (encumbrance != Encumbrance.Zero) {
-                        Column(horizontalAlignment = Alignment.End) {
-                            if (item.quantity > 1) {
-                                Text("× ${item.quantity}")
-                            }
-
-                            Row(
-                                verticalAlignment = Alignment.CenterVertically,
-                                horizontalArrangement = Arrangement.spacedBy(Spacing.tiny)
-                            ) {
-                                Icon(
-                                    drawableResource(Resources.Drawable.TrappingEncumbrance),
-                                    strings.trappings.iconEncumbrance,
-                                    Modifier.size(Spacing.medium),
-                                )
-                                Text(encumbrance.toString())
-                            }
-                        }
-                    }
-                }
-            )
-        }
-    }
-}
-
-@Composable
-private fun trappingIcon(trappingType: TrappingType?) = when (trappingType) {
-    is TrappingType.Ammunition -> Resources.Drawable.TrappingAmmunition
-    is TrappingType.Armour -> Resources.Drawable.ArmorChest
-    is TrappingType.MeleeWeapon -> Resources.Drawable.WeaponSkill
-    is TrappingType.Container -> Resources.Drawable.TrappingContainer
-    is TrappingType.RangedWeapon -> Resources.Drawable.BallisticSkill
-    null -> Resources.Drawable.TrappingMiscellaneous
-}

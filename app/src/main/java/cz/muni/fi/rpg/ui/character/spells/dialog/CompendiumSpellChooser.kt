@@ -78,7 +78,7 @@ internal fun CompendiumSpellChooser(
                     val coroutineScope = rememberCoroutineScope()
 
                     LazyColumn(contentPadding = PaddingValues(Spacing.bodyPadding)) {
-                        items(compendiumSpells) { spell ->
+                        items(compendiumSpells, key = { it.id }) { spell ->
                             ListItem(
                                 modifier = Modifier.clickable(
                                     onClick = {
