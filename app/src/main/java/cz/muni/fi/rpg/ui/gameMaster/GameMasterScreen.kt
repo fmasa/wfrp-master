@@ -13,9 +13,7 @@ import androidx.compose.material.icons.rounded.Settings
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
 import cz.frantisekmasa.wfrp_master.combat.ui.ActiveCombatBanner
-import cz.frantisekmasa.wfrp_master.common.core.ads.BannerAd
 import cz.frantisekmasa.wfrp_master.common.core.domain.identifiers.CharacterId
 import cz.frantisekmasa.wfrp_master.common.core.domain.identifiers.EncounterId
 import cz.frantisekmasa.wfrp_master.common.core.ui.buttons.HamburgerButton
@@ -27,7 +25,6 @@ import cz.frantisekmasa.wfrp_master.common.core.viewModel.viewModel
 import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
 import cz.frantisekmasa.wfrp_master.navigation.Route
 import cz.frantisekmasa.wfrp_master.navigation.Routing
-import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.ui.common.composables.ViewModel
 import cz.muni.fi.rpg.ui.gameMaster.encounters.EncountersScreen
 import cz.muni.fi.rpg.viewModels.EncountersViewModel
@@ -112,8 +109,6 @@ fun GameMasterScreen(routing: Routing<Route.GameMaster>) {
                     )
                 }
             }
-
-            BannerAd(stringResource(R.string.game_master_ad_unit_id))
         }
     }
 }

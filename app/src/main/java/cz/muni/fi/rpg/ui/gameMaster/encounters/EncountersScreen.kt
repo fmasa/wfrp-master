@@ -22,11 +22,9 @@ import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Add
-import androidx.compose.material.icons.rounded.Redeem
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -43,10 +41,7 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.DraggableListFor
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.EmptyUI
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.VisualOnlyIconDescription
-import cz.frantisekmasa.wfrp_master.common.core.viewModel.PremiumViewModel
-import cz.frantisekmasa.wfrp_master.common.core.viewModel.providePremiumViewModel
 import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
-import cz.muni.fi.rpg.ui.common.BuyPremiumPrompt
 import cz.muni.fi.rpg.viewModels.EncountersViewModel
 
 @Composable
@@ -71,7 +66,6 @@ fun EncountersScreen(
         modifier = modifier,
         floatingActionButton = {
             AddEncounterButton(
-                encounterCount = encounters.size,
                 onCreateEncounterRequest = { createDialogOpened = true },
             )
         }
@@ -90,26 +84,9 @@ fun EncountersScreen(
 }
 
 @Composable
-private fun AddEncounterButton(encounterCount: Int, onCreateEncounterRequest: () -> Unit) {
-    val premiumViewModel = providePremiumViewModel()
-    val strings = LocalStrings.current
-
-    if (encounterCount >= PremiumViewModel.FREE_ENCOUNTER_COUNT && premiumViewModel.active != true) {
-        var premiumPromptVisible by remember { mutableStateOf(false) }
-
-        FloatingActionButton(onClick = { premiumPromptVisible = true }) {
-            Icon(Icons.Rounded.Redeem, strings.premium.dialogTitle)
-        }
-
-        if (premiumPromptVisible) {
-            BuyPremiumPrompt(onDismissRequest = { premiumPromptVisible = false })
-        }
-
-        return
-    }
-
+private fun AddEncounterButton(onCreateEncounterRequest: () -> Unit) {
     FloatingActionButton(onClick = onCreateEncounterRequest) {
-        Icon(Icons.Rounded.Add, strings.encounters.buttonAdd)
+        Icon(Icons.Rounded.Add, LocalStrings.current.encounters.buttonAdd)
     }
 }
 

@@ -8,7 +8,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Divider
 import androidx.compose.material.ExtendedFloatingActionButton
-import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Icon
 import androidx.compose.material.ListItem
 import androidx.compose.material.Scaffold
@@ -19,7 +18,6 @@ import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material.icons.rounded.Camera
 import androidx.compose.material.icons.rounded.Group
 import androidx.compose.material.icons.rounded.GroupAdd
-import androidx.compose.material.icons.rounded.Redeem
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -42,13 +40,10 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.EmptyUI
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.ItemIcon
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.VisualOnlyIconDescription
-import cz.frantisekmasa.wfrp_master.common.core.viewModel.PremiumViewModel
-import cz.frantisekmasa.wfrp_master.common.core.viewModel.providePremiumViewModel
 import cz.frantisekmasa.wfrp_master.common.core.viewModel.viewModel
 import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
 import cz.frantisekmasa.wfrp_master.navigation.Route
 import cz.frantisekmasa.wfrp_master.navigation.Routing
-import cz.muni.fi.rpg.ui.common.BuyPremiumPrompt
 import cz.muni.fi.rpg.ui.common.composables.FloatingActionsMenu
 import cz.muni.fi.rpg.ui.common.composables.MenuState
 import cz.muni.fi.rpg.viewModels.PartyListViewModel
@@ -91,7 +86,6 @@ fun PartyListScreen(routing: Routing<Route.PartyList>) {
                 routing = routing,
                 onStateChangeRequest = { menuState = it },
                 onCreatePartyRequest = { createPartyDialogVisible = true },
-                partyCount = parties.size
             )
         }
     ) {
@@ -141,24 +135,8 @@ private fun Menu(
     routing: Routing<Route.PartyList>,
     onStateChangeRequest: (MenuState) -> Unit,
     onCreatePartyRequest: () -> Unit,
-    partyCount: Int
 ) {
-    val premiumViewModel = providePremiumViewModel()
     val strings = LocalStrings.current
-
-    if (partyCount >= PremiumViewModel.FREE_PARTY_COUNT && premiumViewModel.active != true) {
-        var premiumPromptVisible by remember { mutableStateOf(false) }
-
-        FloatingActionButton(onClick = { premiumPromptVisible = true }) {
-            Icon(Icons.Rounded.Redeem, strings.premium.dialogTitle)
-        }
-
-        if (premiumPromptVisible) {
-            BuyPremiumPrompt(onDismissRequest = { premiumPromptVisible = false })
-        }
-
-        return
-    }
 
     FloatingActionsMenu(
         state = state,

@@ -86,13 +86,6 @@ kotlin {
 
                 // Coil - image library
                 implementation("io.coil-kt:coil-compose:1.3.2")
-
-                // Ads
-                api("com.google.android.gms:play-services-ads:20.4.0")
-
-                // Premium
-                // TODO: Make implementation only
-                api("com.revenuecat.purchases:purchases:4.0.2")
             }
         }
 

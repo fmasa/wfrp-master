@@ -6,15 +6,7 @@ import cz.frantisekmasa.wfrp_master.combat.domain.encounter.NpcRepository
 import cz.frantisekmasa.wfrp_master.combat.infrastructure.FirestoreEncounterRepository
 import cz.frantisekmasa.wfrp_master.combat.infrastructure.FirestoreNpcRepository
 import cz.frantisekmasa.wfrp_master.combat.ui.CombatViewModel
-import cz.frantisekmasa.wfrp_master.compendium.domain.Blessing
-import cz.frantisekmasa.wfrp_master.compendium.domain.Miracle
-import cz.frantisekmasa.wfrp_master.compendium.infrastructure.FirestoreCompendium
-import cz.frantisekmasa.wfrp_master.compendium.ui.CompendiumViewModel
 import cz.frantisekmasa.wfrp_master.common.core.CoreModule
-import cz.frantisekmasa.wfrp_master.common.core.ads.AdManager
-import cz.frantisekmasa.wfrp_master.common.core.ads.AdViewModel
-import cz.frantisekmasa.wfrp_master.common.core.ads.AdmobLocationProvider
-import cz.frantisekmasa.wfrp_master.common.core.ads.LocationProvider
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.CharacterItem
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.CharacterItemRepository
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.CharacterRepository
@@ -27,8 +19,11 @@ import cz.frantisekmasa.wfrp_master.common.core.firestore.repositories.Firestore
 import cz.frantisekmasa.wfrp_master.common.core.firestore.repositories.FirestorePartyRepository
 import cz.frantisekmasa.wfrp_master.common.core.firestore.serialization.serializationAggregateMapper
 import cz.frantisekmasa.wfrp_master.common.core.viewModel.PartyViewModel
-import cz.frantisekmasa.wfrp_master.common.core.viewModel.PremiumViewModel
 import cz.frantisekmasa.wfrp_master.common.core.viewModel.SettingsViewModel
+import cz.frantisekmasa.wfrp_master.compendium.domain.Blessing
+import cz.frantisekmasa.wfrp_master.compendium.domain.Miracle
+import cz.frantisekmasa.wfrp_master.compendium.infrastructure.FirestoreCompendium
+import cz.frantisekmasa.wfrp_master.compendium.ui.CompendiumViewModel
 import cz.frantisekmasa.wfrp_master.inventory.InventoryModule
 import cz.frantisekmasa.wfrp_master.religion.COLLECTION_COMPENDIUM_BLESSINGS
 import cz.frantisekmasa.wfrp_master.religion.COLLECTION_COMPENDIUM_MIRACLES
@@ -123,7 +118,6 @@ val appModule =
 
             single<InvitationProcessor> { FirestoreInvitationProcessor(get(), get()) }
 
-            single<LocationProvider> { AdmobLocationProvider() }
             single {
                 Purchases.configure(get(), "TGwuwqSQDUkhhYUtPGLdWilEzpOosKVU").apply {
                     Purchases.debugLogsEnabled = BuildConfig.DEBUG
@@ -147,8 +141,6 @@ val appModule =
 
             single<EncounterRepository> { FirestoreEncounterRepository(get(), serializationAggregateMapper()) }
             single<NpcRepository> { FirestoreNpcRepository(get(), serializationAggregateMapper()) }
-
-            single { AdManager(get()) }
 
             single<CharacterAvatarChanger> { CloudFunctionCharacterAvatarChanger(get()) }
 
@@ -180,8 +172,6 @@ val appModule =
             viewModel { JoinPartyViewModel(get(), get(), get()) }
             viewModel { PartyListViewModel(get()) }
             viewModel { SettingsViewModel(get(), get(), get(), get()) }
-            viewModel { PremiumViewModel(get()) }
-            viewModel { AdViewModel(get()) }
             viewModel { (partyId: PartyId) -> CharacterCreationViewModel(partyId, get()) }
             viewModel { (partyId: PartyId) ->
                 CompendiumViewModel(

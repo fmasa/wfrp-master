@@ -14,9 +14,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
 import cz.frantisekmasa.wfrp_master.combat.ui.ActiveCombatBanner
-import cz.frantisekmasa.wfrp_master.common.core.ads.BannerAd
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.Character
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.Party
 import cz.frantisekmasa.wfrp_master.common.core.ui.buttons.HamburgerButton
@@ -32,7 +30,6 @@ import cz.frantisekmasa.wfrp_master.inventory.ui.CharacterTrappingsScreen
 import cz.frantisekmasa.wfrp_master.navigation.Route
 import cz.frantisekmasa.wfrp_master.navigation.Routing
 import cz.frantisekmasa.wfrp_master.religion.ui.CharacterReligionScreen
-import cz.muni.fi.rpg.R
 import cz.muni.fi.rpg.ui.character.skills.CharacterSkillsScreen
 import cz.muni.fi.rpg.viewModels.CharacterViewModel
 import kotlinx.coroutines.Dispatchers
@@ -168,7 +165,5 @@ private fun MainContainer(
                 )
             }
         }
-
-        BannerAd(stringResource(R.string.character_ad_unit_id))
     }
 }

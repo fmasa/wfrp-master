@@ -16,12 +16,9 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.buttons.BackButton
 import cz.frantisekmasa.wfrp_master.common.core.ui.flow.collectWithLifecycle
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.FullScreenProgress
 import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.LocalPersistentSnackbarHolder
-import cz.frantisekmasa.wfrp_master.common.core.viewModel.PremiumViewModel
-import cz.frantisekmasa.wfrp_master.common.core.viewModel.providePremiumViewModel
 import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
 import cz.frantisekmasa.wfrp_master.navigation.Route
 import cz.frantisekmasa.wfrp_master.navigation.Routing
-import cz.muni.fi.rpg.ui.common.BuyPremiumPrompt
 import cz.muni.fi.rpg.viewModels.provideJoinPartyViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -39,7 +36,6 @@ fun InvitationLinkScreen(routing: Routing<Route.InvitationLink>) {
     ) {
         val invitationJson = routing.route.invitationJson
         val viewModel = provideJoinPartyViewModel()
-        val premiumViewModel = providePremiumViewModel()
 
         val userId = LocalUser.current.id
         val parties = remember { viewModel.userParties(userId) }
@@ -48,11 +44,6 @@ fun InvitationLinkScreen(routing: Routing<Route.InvitationLink>) {
 
         if (parties == null) {
             FullScreenProgress()
-            return@Scaffold
-        }
-
-        if (parties.size >= PremiumViewModel.FREE_PARTY_COUNT && premiumViewModel.active != true) {
-            BuyPremiumPrompt(onDismissRequest = { routing.pop() })
             return@Scaffold
         }
 

@@ -47,7 +47,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import cz.frantisekmasa.wfrp_master.combat.domain.encounter.Wounds
-import cz.frantisekmasa.wfrp_master.common.core.ads.BannerAd
 import cz.frantisekmasa.wfrp_master.common.core.auth.LocalUser
 import cz.frantisekmasa.wfrp_master.common.core.shared.Resources
 import cz.frantisekmasa.wfrp_master.common.core.ui.CharacterAvatar
@@ -178,8 +177,6 @@ fun ActiveCombatScreen(routing: Routing<Route.ActiveCombat>) {
                     }
                 }
             }
-
-            BannerAd(stringResource(R.string.combat_ad_unit_id))
         }
     }
 }

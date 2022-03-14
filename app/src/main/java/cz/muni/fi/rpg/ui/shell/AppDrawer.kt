@@ -12,7 +12,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.material.Divider
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
@@ -21,7 +20,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.BugReport
 import androidx.compose.material.icons.rounded.Info
 import androidx.compose.material.icons.rounded.Policy
-import androidx.compose.material.icons.rounded.Redeem
 import androidx.compose.material.icons.rounded.Settings
 import androidx.compose.material.icons.rounded.Star
 import androidx.compose.material.primarySurface
@@ -38,13 +36,9 @@ import cz.frantisekmasa.wfrp_master.common.core.shared.Resources
 import cz.frantisekmasa.wfrp_master.common.core.shared.drawableResource
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.VisualOnlyIconDescription
-import cz.frantisekmasa.wfrp_master.common.core.ui.viewinterop.LocalActivity
-import cz.frantisekmasa.wfrp_master.common.core.viewModel.providePremiumViewModel
 import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
 import cz.frantisekmasa.wfrp_master.navigation.Route
 import cz.frantisekmasa.wfrp_master.navigation.navigate
-import io.github.aakira.napier.Napier
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 @Composable
@@ -52,8 +46,6 @@ fun AppDrawer(drawerState: DrawerState, navController: NavHostController) {
     DrawerHeader()
 
     Column(Modifier.fillMaxSize()) {
-        PremiumItem()
-
         val coroutineScope = rememberCoroutineScope()
         val strings = LocalStrings.current
 
@@ -119,31 +111,6 @@ fun AppDrawer(drawerState: DrawerState, navController: NavHostController) {
             },
         )
     }
-}
-
-@Composable
-private fun PremiumItem() {
-    val premiumViewModel = providePremiumViewModel()
-    val coroutineScope = rememberCoroutineScope()
-    val activity = LocalActivity.current
-
-    if (premiumViewModel.active == true) {
-        return
-    }
-
-    DrawerItem(
-        icon = Icons.Rounded.Redeem,
-        text = LocalStrings.current.premium.dialogTitle,
-        onClick = {
-            coroutineScope.launch(Dispatchers.IO) {
-                val result = premiumViewModel.purchasePremium(activity)
-                Napier.d(result.toString())
-            }
-        },
-        modifier = Modifier.padding(bottom = Spacing.tiny),
-    )
-
-    Divider()
 }
 
 @Composable
