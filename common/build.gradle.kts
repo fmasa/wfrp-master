@@ -32,6 +32,8 @@ kotlin {
                 api(compose.material)
                 api(compose.materialIconsExtended)
 
+                api(project(":common:firebase"))
+
                 implementation("io.ktor:ktor-client-core:$ktorVersion")
                 implementation("io.ktor:ktor-client-serialization:$ktorVersion")
 
@@ -53,7 +55,7 @@ kotlin {
                 api("org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.0")
 
                 // Logging
-                api("io.github.aakira:napier:2.1.0")
+                api("io.github.aakira:napier:${Versions.napier}")
             }
         }
 
@@ -73,10 +75,6 @@ kotlin {
                 api("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.3.5")
 
                 api("io.insert-koin:koin-android:$koinVersion")
-                api("com.google.firebase:firebase-auth-ktx:21.0.1")
-                api("com.google.firebase:firebase-crashlytics-ktx:18.2.4")
-                api("com.google.firebase:firebase-firestore-ktx:24.0.0")
-                api("com.google.firebase:firebase-analytics-ktx:20.0.1")
 
                 api("androidx.lifecycle:lifecycle-viewmodel-compose:2.4.0")
                 api("androidx.lifecycle:lifecycle-runtime-ktx:2.4.0")

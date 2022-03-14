@@ -7,6 +7,8 @@ object Versions {
     val compose = loadPropertyFromResources(versionsFile, "composeVersion")
     val kotlin = loadPropertyFromResources(versionsFile, "kotlinVersion")
 
+    val napier = loadPropertyFromResources(versionsFile, "napierVersion")
+
     object Android {
         val minSdk = loadPropertyFromResources(versionsFile, "androidMinSdk").toInt()
         val compileSdk = loadPropertyFromResources(versionsFile, "androidCompileSdk").toInt()
