@@ -27,10 +27,11 @@ kotlin {
         }
         named("androidMain") {
             dependencies {
-                api("com.google.firebase:firebase-auth-ktx:21.0.2")
+                api("com.google.firebase:firebase-auth-ktx:21.0.3")
                 api("com.google.firebase:firebase-crashlytics-ktx:18.2.9")
-                api("com.google.firebase:firebase-firestore-ktx:24.0.2")
-                api("com.google.firebase:firebase-analytics-ktx:20.1.0")
+                api("com.google.firebase:firebase-firestore-ktx:24.1.0")
+                api("com.google.firebase:firebase-analytics-ktx:20.1.2")
+                api("com.google.firebase:firebase-functions-ktx:20.0.2")
                 api("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.6.0")
             }
         }

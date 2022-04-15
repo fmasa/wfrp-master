@@ -6,4 +6,6 @@ expect object Reporter {
     fun log(message: String)
 
     fun recordThrowable(throwable: Throwable)
+
+    fun recordEvent(name: String, parameters: Map<String, String>)
 }

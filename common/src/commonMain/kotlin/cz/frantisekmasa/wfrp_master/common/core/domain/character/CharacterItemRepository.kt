@@ -1,8 +1,8 @@
 package cz.frantisekmasa.wfrp_master.common.core.domain.character
 
+import com.benasher44.uuid.Uuid
 import cz.frantisekmasa.wfrp_master.common.core.domain.identifiers.CharacterId
 import kotlinx.coroutines.flow.Flow
-import java.util.UUID
 
 /**
  * @see [CharacterItem]
@@ -17,7 +17,7 @@ interface CharacterItemRepository<T : CharacterItem> {
      * Removes given skill item character's skill list
      * or does nothing if given item is not associated to user
      */
-    suspend fun remove(characterId: CharacterId, itemId: UUID)
+    suspend fun remove(characterId: CharacterId, itemId: Uuid)
 
     /**
      * Inserts item to character's item list or updates it if it already exists

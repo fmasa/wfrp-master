@@ -1,8 +1,8 @@
 package cz.frantisekmasa.wfrp_master.common.core.domain.compendium
 
+import com.benasher44.uuid.Uuid
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.PartyId
 import kotlinx.coroutines.flow.Flow
-import java.util.UUID
 
 interface Compendium<T : CompendiumItem<T>> {
 
@@ -11,7 +11,7 @@ interface Compendium<T : CompendiumItem<T>> {
     /**
      * @throws CompendiumItemNotFound
      */
-    suspend fun getItem(partyId: PartyId, itemId: UUID): T
+    suspend fun getItem(partyId: PartyId, itemId: Uuid): T
 
     /**
      * Updates item if it exists and creates it if it doesn't

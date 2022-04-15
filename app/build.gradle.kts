@@ -100,8 +100,6 @@ dependencies {
     // Allow use of Java 8 APIs on older Android versions
     coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:1.1.5")
 
-    implementation("com.google.android.gms:play-services-auth:19.0.0")
-
     // Permission management
     implementation("com.google.accompanist:accompanist-permissions:0.20.0")
 
@@ -118,20 +116,6 @@ dependencies {
     androidTestImplementation("androidx.test.espresso:espresso-core:3.3.0")
     testImplementation("org.mockito:mockito-core:2.7.22")
 
-    // Time picker
-    implementation("io.github.vanpra.compose-material-dialogs:datetime:0.5.1")
-
-    // Checking network access
-    implementation("com.github.pwittchen:reactivenetwork-rx2:3.0.8")
-    api("org.jetbrains.kotlinx:kotlinx-coroutines-rx2:1.4.2")
-
-    // Tools for Rulebook PDF parsing
-    implementation("com.github.librepdf:openpdf:1.3.25")
-    implementation("com.github.andob:android-awt:1.0.0")
-
-    // Navigation
-    api("androidx.navigation:navigation-compose:2.5.0-alpha03")
-
     // Basic Android stuff
     api("androidx.core:core-ktx:1.5.0")
     api("androidx.fragment:fragment-ktx:1.3.5")
@@ -139,7 +123,6 @@ dependencies {
     // Jetpack Compose
     api("androidx.compose.material:material:${Versions.compose}")
     api("androidx.compose.ui:ui-tooling:${Versions.compose}")
-    api("androidx.activity:activity-compose:1.5.0-alpha03")
     api("androidx.lifecycle:lifecycle-viewmodel-compose:2.4.1")
 
     // Firebase-related dependencies

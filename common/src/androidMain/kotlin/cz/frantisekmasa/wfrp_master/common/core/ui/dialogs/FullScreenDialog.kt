@@ -5,7 +5,7 @@ import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 
 @Composable
-fun FullScreenDialog(
+actual fun FullScreenDialog(
     onDismissRequest: () -> Unit,
     content: @Composable () -> Unit
 ) {

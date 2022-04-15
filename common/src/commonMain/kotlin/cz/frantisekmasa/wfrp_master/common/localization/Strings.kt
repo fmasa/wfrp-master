@@ -80,6 +80,8 @@ data class AmbitionMessageStrings(
 @Immutable
 data class AuthenticationString(
     val buttonSignIn: String = "Sign in",
+    val labelEmail: String = "Email",
+    val labelPassword: String = "Password",
     val messages: AuthenticationMessageStrings = AuthenticationMessageStrings(),
     val startupGoogleSignInFailed: String = """
         We could not sign you in via Google.
@@ -90,6 +92,10 @@ data class AuthenticationString(
 @Immutable
 data class AuthenticationMessageStrings(
     val duplicateAccount: String = "Existing account found",
+    val emailNotFound: String = "Email not found",
+    val invalidEmail: String = "Invalid email",
+    val invalidPassword: String = "Invalid password",
+    val unknownError: String = "Unknown error occurred",
     val googleAccountCollision: String = """
         There is already different WFRP Master account associated with given Google account.",
         Do you want to sign in to that account instead?
@@ -117,12 +123,13 @@ data class MessageStrings(
     val avatarRemoved: String = "Avatar was removed",
     val couldNotOpenFile: String = "Could not open file",
     val errorUnknown: String = "Unknown error occurred",
-    val invitationErrorInvitationInvalid: String = "Invitation token is not valid",
+    val invitationErrorInvitationInvalid: String = "Invitation link is not valid",
     val noInternet: String = "No internet connection",
     val partyRemoved: String = "Party was removed",
     val partyCreateErrorNoConnection: String = "You need to be connected to internet to create parties",
     val partyUpdated: String = "Party was updated",
     val partyUpdateErrorNoConnection: String = "You need to be connected to internet to update party",
+    val nonDesktopFeature: String = "This feature is currently not available for Desktop version. We plan to introduce it in future versions.",
 )
 
 @Immutable
@@ -418,6 +425,7 @@ data class PartyMessageStrings(
     val removalConfirmation: String = "Do you really want to remove this party?",
     val waitingForPlayerCharacter: String = "Waiting for player to create character",
     val qrCodeDescription: String = "Players can scan this QR code in their apps",
+    val invitationUrlDescription: String = "Players can open this URL on their devices to gain access",
     val qrCodeScanningPrompt: String = "Scan the code provided by your GM",
     val cameraPermissionRequired: String = "Camera permission required",
     val invalidInvitationToken: String = "Invitation token is not valid",

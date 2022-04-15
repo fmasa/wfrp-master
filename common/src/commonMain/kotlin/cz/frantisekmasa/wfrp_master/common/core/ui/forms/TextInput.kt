@@ -26,6 +26,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
 
@@ -65,6 +66,7 @@ fun TextInput(
     multiLine: Boolean = false,
     placeholder: String? = null,
     horizontalAlignment: Alignment.Horizontal = Alignment.Start,
+    visualTransformation: VisualTransformation = VisualTransformation.None,
     filters: List<Filter> = emptyList(),
 ) {
     TextInput(
@@ -81,6 +83,7 @@ fun TextInput(
         filters = filters,
         modifier = modifier,
         rules = value.rules,
+        visualTransformation = visualTransformation,
     )
 }
 
@@ -97,6 +100,7 @@ private fun TextInput(
     multiLine: Boolean = false,
     placeholder: String? = null,
     horizontalAlignment: Alignment.Horizontal = Alignment.Start,
+    visualTransformation: VisualTransformation = VisualTransformation.None,
     rules: Rules = Rules.NoRules,
     filters: List<Filter> = emptyList(),
 ) {
@@ -140,6 +144,7 @@ private fun TextInput(
                     keyboardOptions = KeyboardOptions.Default.copy(keyboardType = keyboardType),
                     textStyle = textStyle.copy(color = textColor),
                     singleLine = !multiLine,
+                    visualTransformation = visualTransformation,
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(Spacing.medium)

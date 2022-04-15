@@ -6,13 +6,15 @@ import androidx.compose.runtime.CompositionLocalProvider
 import cz.frantisekmasa.wfrp_master.common.core.ui.theme.LocalSystemUiController
 import cz.frantisekmasa.wfrp_master.common.core.ui.theme.rememberSystemUiController
 import cz.frantisekmasa.wfrp_master.common.core.ui.viewinterop.LocalActivity
+import cz.frantisekmasa.wfrp_master.common.network.LocalConnectivityChecker
+import cz.frantisekmasa.wfrp_master.common.network.ReactiveNetworkConnectivityChecker
 
 @Composable
 fun ProvideActivity(activity: AppCompatActivity, content: @Composable () -> Unit) {
     CompositionLocalProvider(
         LocalActivity provides activity,
         LocalSystemUiController provides rememberSystemUiController(activity.window),
-        LocalOnBackPressedDispatcher provides activity.onBackPressedDispatcher,
+        LocalConnectivityChecker provides ReactiveNetworkConnectivityChecker(activity),
         content = content,
     )
 }
