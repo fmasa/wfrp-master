@@ -4,6 +4,7 @@ import androidx.compose.runtime.Immutable
 import cz.frantisekmasa.wfrp_master.common.core.domain.Ambitions
 import cz.frantisekmasa.wfrp_master.common.core.domain.Money
 import cz.frantisekmasa.wfrp_master.common.core.domain.Stats
+import cz.frantisekmasa.wfrp_master.common.encounters.domain.Wounds
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -33,6 +34,7 @@ data class Character(
 ) {
 
     val characteristics: Stats get() = characteristicsBase + characteristicsAdvances
+    val wounds: Wounds get() = Wounds(points.wounds, points.maxWounds + points.hardyWoundsBonus)
 
     init {
         require(listOf(name, userId, career).all { it?.isNotBlank() ?: true })
