@@ -26,6 +26,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 
 val LocalAuthenticationManager = staticCompositionLocalOf { AuthenticationManager(Firebase.auth) }
+val LocalWebClientId = staticCompositionLocalOf<String> { error("LocalWebTokenId was not set") }
 
 class AuthenticationManager(private val auth: FirebaseAuth) {
     val coroutineScope = CoroutineScope(Dispatchers.Default)
@@ -103,11 +104,11 @@ class AuthenticationManager(private val auth: FirebaseAuth) {
         user.linkWithCredential(GoogleAuthProvider.getCredential(idToken, null)).await()
     }
 
-    fun googleSignInContract(): ActivityResultContract<Int?, IntentResult> {
+    fun googleSignInContract(webClientId: String): ActivityResultContract<Int?, IntentResult> {
         return object : ActivityResultContract<Int?, IntentResult>() {
 
             override fun createIntent(context: Context, requestCode: Int?) =
-                getGoogleSignInIntent(context)
+                getGoogleSignInIntent(context, webClientId)
 
             override fun parseResult(resultCode: Int, intent: Intent?): IntentResult {
                 Napier.d(resultCode.toString())
@@ -116,15 +117,17 @@ class AuthenticationManager(private val auth: FirebaseAuth) {
         }
     }
 
-    fun getGoogleSignInIntent(context: Context) = googleClient(context).signInIntent
+    private fun getGoogleSignInIntent(context: Context, webClientId: String): Intent {
+        return googleClient(context, webClientId).signInIntent
+    }
 
-    suspend fun attemptToRestoreExistingGoogleSignIn(context: Context): Boolean {
-        val googleToken = obtainGoogleToken(context)
+    suspend fun attemptToRestoreExistingGoogleSignIn(context: Context, webClientId: String): Boolean {
+        val googleToken = obtainGoogleToken(context, webClientId)
 
         return googleToken != null && signInWithGoogleToken(googleToken)
     }
 
-    suspend fun obtainGoogleToken(context: Context): String? {
+    private suspend fun obtainGoogleToken(context: Context, webClientId: String): String? {
         val lastAccount = GoogleSignIn.getLastSignedInAccount(context)
 
         if (lastAccount != null) {
@@ -132,7 +135,7 @@ class AuthenticationManager(private val auth: FirebaseAuth) {
         }
 
         return try {
-            googleClient(context).silentSignIn().await().idToken
+            googleClient(context, webClientId).silentSignIn().await().idToken
         } catch (e: Throwable) {
             Napier.e(e.toString(), e)
 
@@ -160,10 +163,10 @@ class AuthenticationManager(private val auth: FirebaseAuth) {
 
     fun getUserId() = auth.currentUser?.uid ?: error("User is not authenticated")
 
-    private fun googleClient(context: Context) = GoogleSignIn.getClient(
+    private fun googleClient(context: Context, webClientId: String) = GoogleSignIn.getClient(
         context,
         GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-            //.requestIdToken(context.getString(R.string.default_web_client_id))
+            .requestIdToken(webClientId)
             .requestEmail()
             .build()
     )

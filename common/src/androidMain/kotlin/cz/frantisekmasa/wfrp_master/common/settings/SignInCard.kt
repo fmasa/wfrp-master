@@ -39,6 +39,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthUserCollisionException
 import cz.frantisekmasa.wfrp_master.common.auth.AuthenticationManager
 import cz.frantisekmasa.wfrp_master.common.auth.LocalAuthenticationManager
+import cz.frantisekmasa.wfrp_master.common.auth.LocalWebClientId
 import cz.frantisekmasa.wfrp_master.common.core.auth.LocalUser
 import cz.frantisekmasa.wfrp_master.common.core.shared.Resources
 import cz.frantisekmasa.wfrp_master.common.core.shared.drawableResource
@@ -61,7 +62,8 @@ import kotlinx.parcelize.Parcelize
 @Composable
 actual fun SignInCard(settingsScreenModel: SettingsScreenModel) {
     val authManager = LocalAuthenticationManager.current
-    val contract = remember(authManager) { authManager.googleSignInContract() }
+    val webClientId = LocalWebClientId.current
+    val contract = remember(authManager) { authManager.googleSignInContract(webClientId) }
     val context = LocalContext.current
     val coroutineScope = rememberCoroutineScope()
 
