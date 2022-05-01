@@ -267,6 +267,7 @@ data class CharacteristicStrings(
 
 @Immutable
 data class PointStrings(
+    val autoMaxWoundsPlaceholder: String = "Auto",
     val corruption: String = "Corruption",
     val experience: String = "XP",
     val fate: String = "Fate",

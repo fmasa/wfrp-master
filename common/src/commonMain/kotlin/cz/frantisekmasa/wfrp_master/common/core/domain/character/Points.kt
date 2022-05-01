@@ -11,23 +11,22 @@ data class Points(
     val fate: Int,
     val fortune: Int,
     val wounds: Int,
-    val maxWounds: Int,
+    val maxWounds: Int?,
     val resilience: Int,
     val resolve: Int,
     val sin: Int,
     val experience: Int,
     val spentExperience: Int = 0,
-    val hardyWoundsBonus: Int
+    @Deprecated("Hardy is calculated from stats automatically")
+    val hardyWoundsBonus: Int = 0
 ) {
     init {
         require(corruption >= 0)
         require(fate >= 0)
         require(resilience >= 0)
-        require(wounds in 0..(maxWounds + hardyWoundsBonus))
-        require(maxWounds > 0)
+        require(maxWounds == null || maxWounds >= 0)
         require(experience >= 0)
         require(spentExperience >= 0)
-        require(hardyWoundsBonus >= 0)
     }
 
     fun withMaxWounds(newMaxWounds: Int, hardyWoundsBonus: Int) = copy(

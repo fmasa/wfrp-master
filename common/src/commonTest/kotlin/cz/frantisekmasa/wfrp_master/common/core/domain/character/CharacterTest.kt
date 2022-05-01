@@ -22,23 +22,6 @@ class CharacterTest {
         points = Points(0, 4, 4, 5, 5, 0, 0, 0, 0, 0, 0)
     )
 
-    private fun characterWithHardy() = with(character()) {
-        update(
-            name = name,
-            career = career,
-            socialClass = socialClass,
-            race = Race.DWARF,
-            status = SocialStatus(SocialStatus.Tier.BRASS, 2),
-            characteristicsBase = characteristicsBase,
-            characteristicsAdvances = characteristicsAdvances,
-            maxWounds = points.maxWounds,
-            psychology = psychology,
-            motivation = motivation,
-            note = note,
-            hasHardyTalent = true,
-        )
-    }
-
     @Test
     fun `throws exception when trying to subtract more money than character has`() {
         val character = character()
@@ -61,32 +44,5 @@ class CharacterTest {
                 .addMoney(Money.shillings(10))
                 .money
         )
-    }
-
-    @Test
-    fun `cannot update points with wounds bonus not matching toughness bonus when hardy talent is enabled`() {
-        val character = characterWithHardy()
-
-        assertFailsWith(IllegalArgumentException::class) {
-            character.updatePoints(character.points.copy(hardyWoundsBonus = 5))
-        }
-    }
-
-    @Test
-    fun `cannot update points with non-zero wounds bonus when hardy talent is not enabled`() {
-        val character = character()
-
-        assertFailsWith(IllegalArgumentException::class) {
-            character.updatePoints(character.points.copy(hardyWoundsBonus = 5))
-        }
-    }
-
-    @Test
-    fun `current wounds are coerced to max wounds when max wounds are reduced below current wounds`() {
-        val points = Points(0, 1, 1, 14, 12, 1, 1, 1, 1, 2, 2)
-
-        val updatedPoints = points.withMaxWounds(4, 2)
-
-        assertSame(6, updatedPoints.wounds)
     }
 }

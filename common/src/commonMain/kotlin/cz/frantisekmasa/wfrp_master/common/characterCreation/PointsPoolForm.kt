@@ -29,7 +29,7 @@ object PointsPoolForm {
         companion object {
             @Composable
             fun empty() = Data(
-                maxWounds = inputValue("", Rules.PositiveInteger()),
+                maxWounds = inputValue("", Rules.IfNotBlank(Rules.PositiveInteger())),
                 fatePoints = inputValue("", Rules.IfNotBlank(Rules(Rules.NonNegativeInteger()))),
                 resiliencePoints = inputValue(
                     "",
@@ -45,25 +45,24 @@ object PointsPoolForm {
             corruption = 0,
             fate = toValue(fatePoints.value),
             fortune = toValue(fatePoints.value),
-            wounds = toValue(maxWounds.value),
-            maxWounds = toValue(maxWounds.value),
+            wounds = 0,
+            maxWounds = maxWounds.value.toIntOrNull(),
             resilience = toValue(resiliencePoints.value),
             resolve = toValue(resiliencePoints.value),
             sin = 0,
             experience = 0,
             spentExperience = 0,
-            hardyWoundsBonus = 0,
         )
     }
 }
 
 @Composable
 fun PointsPoolForm(data: PointsPoolForm.Data, validate: Boolean) {
-    val labels = LocalStrings.current.points
+    val strings = LocalStrings.current.points
     Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(16.dp)) {
-        PointInput(data.maxWounds, labels.maxWounds, validate, null)
-        PointInput(data.fatePoints, labels.fate, validate, "0")
-        PointInput(data.resiliencePoints, labels.resilience, validate, "0")
+        PointInput(data.maxWounds, strings.maxWounds, validate, strings.autoMaxWoundsPlaceholder)
+        PointInput(data.fatePoints, strings.fate, validate, "0")
+        PointInput(data.resiliencePoints, strings.resilience, validate, "0")
     }
 }
 
