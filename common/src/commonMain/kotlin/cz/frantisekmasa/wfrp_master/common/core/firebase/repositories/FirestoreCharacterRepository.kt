@@ -53,10 +53,13 @@ class FirestoreCharacterRepository(
         characters(characterId.partyId)
             .document(characterId.id)
             .snapshots
-            .map { snapshot ->
-                snapshot.fold(
-                    { mapper.fromDocumentSnapshot(it).right() },
-                    { CharacterNotFound(characterId, it).left() },
+            .map {
+                it.fold(
+                    { snapshot ->
+                        snapshot.data?.let(mapper::fromDocumentData)?.right()
+                            ?: CharacterNotFound(characterId).left()
+                    },
+                    { error -> CharacterNotFound(characterId, error).left() },
                 )
             }
 
