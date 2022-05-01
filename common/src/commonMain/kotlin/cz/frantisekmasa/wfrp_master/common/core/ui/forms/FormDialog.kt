@@ -51,10 +51,13 @@ fun <T> FormDialog(
                                 return@SaveAction
                             }
 
-                            coroutineScope.launch(Dispatchers.IO) {
-                                saving = true
-                                onSave(formData.toValue())
-                                withContext(Dispatchers.Main) { onDismissRequest() }
+                            coroutineScope.launch {
+                                withContext(Dispatchers.IO) {
+                                    saving = true
+                                    onSave(formData.toValue())
+                                }
+
+                                onDismissRequest()
                             }
                         }
                     )

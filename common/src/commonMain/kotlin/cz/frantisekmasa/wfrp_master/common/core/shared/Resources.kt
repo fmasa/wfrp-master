@@ -64,4 +64,8 @@ object Resources {
         // Raster images
         GoogleLogo("drawable/google_logo.png"),
     }
+
+    enum class Sound(val path: String) {
+        DiceRoll("raw/roll_sound.wav")
+    }
 }

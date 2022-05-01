@@ -1,11 +1,9 @@
 package cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.tabs
 
-import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Dp
 import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.Pager
 import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.rememberPagerState
@@ -58,11 +56,6 @@ private class TabCollector(override val screenWidth: Dp) : TabPagerScope {
         _tabContents += content
     }
 }
-
-fun TabPagerScope.tab(@StringRes name: Int, content: @Composable () -> Unit) = tab(
-    name = { stringResource(name) },
-    content = content,
-)
 
 fun TabPagerScope.tab(name: String, content: @Composable () -> Unit) = tab(
     name = { name },

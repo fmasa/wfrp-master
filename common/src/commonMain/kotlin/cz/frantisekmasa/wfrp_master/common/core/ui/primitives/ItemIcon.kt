@@ -9,7 +9,9 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.ContentAlpha
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.State
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -48,16 +50,18 @@ fun ItemIcon(url: String, size: ItemIcon.Size = ItemIcon.Size.Small) {
     val dimensions = size.dimensions + size.padding * 2
 
     Image(
-        rememberCircleImagePainter(url),
+        rememberImagePainter(url).value,
         VisualOnlyIconDescription, // TODO: Provide mechanism to specify what does this image means, such as: ("Character's image", "Strength-based skill", etc.)
         modifier = Modifier
+            .clip(CircleShape)
             .background(backgroundColor, CircleShape)
             .width(dimensions)
             .height(dimensions)
     )
 }
 
-internal expect fun rememberCircleImagePainter(url: String): Painter
+@Composable
+internal expect fun rememberImagePainter(url: String): State<Painter>
 
 @Composable
 fun ItemIcon(drawable: Resources.Drawable, size: ItemIcon.Size = ItemIcon.Size.Small) {

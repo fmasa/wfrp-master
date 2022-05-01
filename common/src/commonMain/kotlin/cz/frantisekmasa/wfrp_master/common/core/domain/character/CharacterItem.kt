@@ -1,9 +1,9 @@
 package cz.frantisekmasa.wfrp_master.common.core.domain.character
 
-import android.os.Parcelable
-import java.util.UUID
+import com.benasher44.uuid.Uuid
+import cz.frantisekmasa.wfrp_master.common.core.shared.Parcelable
 
 interface CharacterItem : Parcelable {
-    val id: UUID
-    val compendiumId: UUID?
+    val id: Uuid
+    val compendiumId: Uuid?
 }
