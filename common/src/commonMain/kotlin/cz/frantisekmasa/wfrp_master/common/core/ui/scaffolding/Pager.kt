@@ -58,8 +58,9 @@ class PagerState(
 fun rememberPagerState(
     screenWidth: Int,
     screenCount: Int,
+    initialPage: Int,
 ): PagerState {
-    val swipeableState = key(screenWidth, screenCount) { rememberSwipeableState(0) }
+    val swipeableState = key(screenWidth, screenCount) { rememberSwipeableState(initialPage) }
     val coroutineScope = rememberCoroutineScope()
 
     return remember(coroutineScope, swipeableState) {
