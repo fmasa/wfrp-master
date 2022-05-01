@@ -16,6 +16,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import cz.frantisekmasa.wfrp_master.common.auth.LocalAuthenticationManager
+import cz.frantisekmasa.wfrp_master.common.auth.LocalWebClientId
 import cz.frantisekmasa.wfrp_master.common.core.shared.SettingsStorage
 import cz.frantisekmasa.wfrp_master.common.core.ui.flow.collectWithLifecycle
 import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
@@ -64,7 +65,8 @@ fun StartupScreen() {
     }
 
     val context = LocalContext.current
-    val contract = remember(authenticationManager) { authenticationManager.googleSignInContract() }
+    val webClientId = LocalWebClientId.current
+    val contract = remember(authenticationManager, webClientId) { authenticationManager.googleSignInContract(webClientId) }
     val googleSignInLauncher = key(contract, coroutineScope) {
         rememberLauncherForActivityResult(contract) { result ->
             if (result.resultCode == 0) {
@@ -89,7 +91,7 @@ fun StartupScreen() {
     LaunchedEffect(null) {
         withContext(Dispatchers.Default) {
             // If user signed in via Google before, try to sign in him directly
-            if (authenticationManager.attemptToRestoreExistingGoogleSignIn(context)) {
+            if (authenticationManager.attemptToRestoreExistingGoogleSignIn(context, webClientId)) {
                 return@withContext
             }
 
