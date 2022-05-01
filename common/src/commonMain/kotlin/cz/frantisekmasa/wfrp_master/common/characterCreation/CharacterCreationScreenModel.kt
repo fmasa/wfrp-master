@@ -49,7 +49,7 @@ class CharacterCreationScreenModel(
                         psychology = info.psychology.value,
                         motivation = info.motivation.value,
                         note = info.note.value,
-                    )
+                    ).refreshWounds()
                 )
 
                 Reporter.recordEvent(

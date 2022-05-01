@@ -419,7 +419,7 @@ service cloud.firestore {
                     && points.corruption is int
                     && points.fate is int
                     && points.fortune is int
-                    && points.maxWounds is int
+                    && (points.maxWounds == null || points.maxWounds is int)
                     && points.resilience is int
                     && points.resolve is int
                     && points.sin is int

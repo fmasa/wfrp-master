@@ -1,6 +1,7 @@
 package cz.frantisekmasa.wfrp_master.common.core.domain.character
 
 import cz.frantisekmasa.wfrp_master.common.core.domain.NamedEnum
+import cz.frantisekmasa.wfrp_master.common.core.domain.Size
 import cz.frantisekmasa.wfrp_master.common.localization.Strings
 
 enum class Race(override val nameResolver: (strings: Strings) -> String) : NamedEnum {
@@ -9,5 +10,10 @@ enum class Race(override val nameResolver: (strings: Strings) -> String) : Named
     DWARF({ it.races.dwarf }),
     WOOD_ELF({ it.races.woodElf }),
     HALFLING({ it.races.halfling }),
-    GNOME({ it.races.gnome })
+    GNOME({ it.races.gnome });
+
+    val size: Size get() = when(this) {
+        HALFLING, GNOME -> Size.SMALL
+        else -> Size.AVERAGE
+    }
 }

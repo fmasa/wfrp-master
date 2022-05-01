@@ -37,7 +37,7 @@ sealed class CombatantItem {
             get() = character.characteristics
 
         override val wounds
-            get() = character.points.let { Wounds(current = it.wounds, max = it.maxWounds) }
+            get() = character.wounds
     }
 
     @Immutable

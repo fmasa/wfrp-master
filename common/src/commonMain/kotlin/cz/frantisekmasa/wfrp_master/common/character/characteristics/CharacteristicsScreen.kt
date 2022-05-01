@@ -220,7 +220,7 @@ private fun CharacterTopPanel(character: Character, points: Points, onUpdate: (P
                         }
                     }
 
-                    WoundsBadge(points, update = onUpdate)
+                    WoundsBadge(character, points, update = onUpdate)
                 }
             }
 
@@ -230,13 +230,14 @@ private fun CharacterTopPanel(character: Character, points: Points, onUpdate: (P
 }
 
 @Composable
-private fun WoundsBadge(points: Points, update: (Points) -> Unit) {
+private fun WoundsBadge(character: Character, points: Points, update: (Points) -> Unit) {
     var dialogVisible by remember { mutableStateOf(false) }
     val strings = LocalStrings.current.points
+    val wounds = character.wounds
 
     Button(onClick = { dialogVisible = true }) {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
-            Text("${points.wounds} / ${points.maxWounds}")
+            Text("${wounds.current} / ${wounds.max}")
             Text(
                 strings.wounds,
                 fontWeight = FontWeight.Normal
@@ -249,19 +250,17 @@ private fun WoundsBadge(points: Points, update: (Points) -> Unit) {
     }
 
     PointsDialog(onDismissRequest = { dialogVisible = false }) {
-        val wounds = points.wounds
-
         NumberPicker(
             label = strings.wounds,
-            value = wounds,
+            value = wounds.current,
             onIncrement = {
-                if (wounds < points.maxWounds) {
-                    update(points.copy(wounds = wounds + 1))
+                if (wounds.current < character.wounds.max) {
+                    update(points.copy(wounds = wounds.current + 1))
                 }
             },
             onDecrement = {
-                if (wounds > 0) {
-                    update(points.copy(wounds = wounds - 1))
+                if (wounds.current > 0) {
+                    update(points.copy(wounds = wounds.current - 1))
                 }
             }
         )

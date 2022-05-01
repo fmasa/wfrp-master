@@ -4,6 +4,7 @@ import androidx.compose.runtime.Immutable
 import cz.frantisekmasa.wfrp_master.common.core.domain.Ambitions
 import cz.frantisekmasa.wfrp_master.common.core.domain.Money
 import cz.frantisekmasa.wfrp_master.common.core.domain.Stats
+import cz.frantisekmasa.wfrp_master.common.encounters.domain.Wounds
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -33,6 +34,7 @@ data class Character(
 ) {
 
     val characteristics: Stats get() = characteristicsBase + characteristicsAdvances
+    val wounds: Wounds get() = Wounds(points.wounds, calculateMaxWounds(race, points))
 
     init {
         require(listOf(name, userId, career).all { it?.isNotBlank() ?: true })
@@ -44,10 +46,18 @@ data class Character(
         require(mutation.length <= MUTATION_MAX_LENGTH) { "Mutation is too long" }
         require(note.length <= NOTE_MAX_LENGTH) { "Note is too long" }
         require(!isArchived || userId == null) { "Only non-user-characters can be archived" }
-        require(
-            (!hasHardyTalent && points.hardyWoundsBonus == 0) ||
-                (hasHardyTalent && points.hardyWoundsBonus == characteristics.toughnessBonus)
-        ) { "Hardy talent and wounds bonus are wrong" }
+
+        val maxWounds = calculateMaxWounds(race, points)
+        require(points.wounds <= maxWounds) { "Wounds (${points.wounds} are greater than max Wounds ($maxWounds)" }
+    }
+
+    private fun calculateMaxWounds(race: Race, points: Points): Int {
+        val characteristics = characteristics
+        val baseWounds = points.maxWounds ?: Wounds.calculateMax(race.size, characteristics)
+
+        return if (hasHardyTalent) // TODO: Support multiple Hardy that is multiple times taken
+            baseWounds + characteristics.toughnessBonus
+        else baseWounds
     }
 
     fun update(
@@ -58,12 +68,14 @@ data class Character(
         race: Race,
         characteristicsBase: Stats,
         characteristicsAdvances: Stats,
-        maxWounds: Int,
+        maxWounds: Int?,
         psychology: String,
         motivation: String,
         note: String,
         hasHardyTalent: Boolean
     ): Character {
+        val newPoints = points.copy(maxWounds = points.maxWounds)
+
         return copy(
             name = name,
             career = career,
@@ -72,9 +84,8 @@ data class Character(
             race = race,
             characteristicsBase = characteristicsBase,
             characteristicsAdvances = characteristicsAdvances,
-            points = points.withMaxWounds(
-                newMaxWounds = maxWounds,
-                hardyWoundsBonus = if (hasHardyTalent) characteristics.toughnessBonus else 0
+            points = newPoints.copy(
+                wounds = wounds.current.coerceAtMost(maxWounds ?: calculateMaxWounds(race, newPoints))
             ),
             psychology = psychology,
             motivation = motivation,
@@ -96,6 +107,8 @@ data class Character(
             throw NotEnoughMoney(amount, e)
         }
     }
+
+    fun refreshWounds(): Character = copy(points = points.copy(wounds = calculateMaxWounds(race, points)))
 
     fun updatePoints(newPoints: Points) = copy(points = newPoints)
 

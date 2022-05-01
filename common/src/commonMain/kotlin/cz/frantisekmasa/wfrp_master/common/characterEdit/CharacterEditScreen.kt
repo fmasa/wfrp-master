@@ -48,7 +48,6 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.Subtitle
 import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 
 class CharacterEditScreen(
@@ -136,14 +135,14 @@ class CharacterEditScreen(
             fun fromCharacter(character: Character) =
                 WoundsData(
                     maxWounds = inputValue(
-                        character.points.maxWounds.toString(),
-                        Rules.PositiveInteger(),
+                        character.points.maxWounds?.toString() ?: "",
+                        Rules.IfNotBlank(Rules.PositiveInteger()),
                     ),
                     hardyTalent = rememberSaveable { mutableStateOf(character.hasHardyTalent) }
                 )
         }
 
-        fun isValid() = maxWounds.value.toIntOrNull()?.let { it > 0 } ?: false
+        fun isValid() = maxWounds.value.toIntOrNull()?.let { it > 0 } ?: true
     }
 }
 
@@ -187,6 +186,7 @@ private fun MaxWoundsSegment(data: CharacterEditScreen.WoundsData, validate: Boo
             maxLength = 3,
             keyboardType = KeyboardType.Number,
             validate = validate,
+            placeholder = strings.autoMaxWoundsPlaceholder,
         )
 
         CheckboxWithText(
@@ -238,7 +238,7 @@ private suspend fun updateCharacter(
             note = formData.basicInfo.note.value,
             characteristicsBase = characteristics.base,
             characteristicsAdvances = characteristics.advances,
-            maxWounds = formData.wounds.maxWounds.value.toInt(),
+            maxWounds = formData.wounds.maxWounds.value.toIntOrNull(),
             hasHardyTalent = formData.wounds.hardyTalent.value,
         )
     }
