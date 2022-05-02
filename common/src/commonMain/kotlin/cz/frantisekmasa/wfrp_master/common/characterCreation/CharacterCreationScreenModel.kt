@@ -25,7 +25,7 @@ class CharacterCreationScreenModel(
         characteristicsData: CharacterCharacteristicsForm.Data,
         points: PointsPoolForm.Data,
     ): CharacterId {
-        val characterId = CharacterId(partyId, userId?.toString() ?: UUID.randomUUID().toString())
+        val characterId = CharacterId(partyId, UUID.randomUUID().toString())
 
         return withContext(Dispatchers.IO) {
             try {

@@ -1,5 +1,6 @@
 package cz.frantisekmasa.wfrp_master.common
 
+import cz.frantisekmasa.wfrp_master.common.character.CharacterPickerScreenModel
 import cz.frantisekmasa.wfrp_master.common.character.CharacterScreenModel
 import cz.frantisekmasa.wfrp_master.common.character.characteristics.CharacteristicsScreenModel
 import cz.frantisekmasa.wfrp_master.common.character.religion.blessings.BlessingsScreenModel
@@ -150,6 +151,7 @@ val appModule = DI.Module("Common") {
             instance()
         )
     }
+    bindFactory { partyId: PartyId -> CharacterPickerScreenModel(partyId, instance()) }
     bindFactory { partyId: PartyId -> EncountersScreenModel(partyId, instance()) }
     bindFactory { partyId: PartyId -> PartyScreenModel(partyId, instance()) }
     bindFactory { encounterId: EncounterId ->

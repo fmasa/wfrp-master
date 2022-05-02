@@ -13,6 +13,7 @@ import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material.icons.rounded.ArrowDropDown
 import androidx.compose.material.icons.rounded.Edit
 import androidx.compose.runtime.Composable
@@ -138,40 +139,22 @@ data class CharacterDetailScreen(
         screenModel: CharacterScreenModel,
         currentTab: Int,
     ) {
-        if (party.gameMasterId == null || party.gameMasterId == LocalUser.current.id) {
+        val characterPickerScreenModel: CharacterPickerScreenModel = rememberScreenModel(arg = party.id)
+        val userId = UserId(LocalUser.current.id)
+        val isGameMaster = party.gameMasterId == null || party.gameMasterId == userId.toString()
+        val canAddCharacters = !isGameMaster
+
+        val allCharacters = remember {
+            if(isGameMaster)
+                screenModel.allCharacters
+            else characterPickerScreenModel.allUserCharacters(userId)
+        }.collectWithLifecycle(null).value
+
+        if (allCharacters != null && (allCharacters.isNotEmpty() || canAddCharacters)) {
             var dropdownOpened by remember { mutableStateOf(false) }
-            val allCharacters = screenModel.allCharacters.collectWithLifecycle(emptyList()).value
 
-            DropdownMenu(
-                dropdownOpened,
-                onDismissRequest = { dropdownOpened = false }
-            ) {
-                val navigator = LocalNavigator.currentOrThrow
-
-                allCharacters.forEach { otherCharacter ->
-                    key(otherCharacter.id) {
-                       DropdownMenuItem(
-                           onClick = {
-                               if (otherCharacter.id != character.id) {
-                                   navigator.replace(
-                                       CharacterDetailScreen(
-                                           characterId = CharacterId(party.id, otherCharacter.id),
-                                           comingFromCombat = comingFromCombat,
-                                           initialTab = currentTab,
-                                       )
-                                   )
-                               } else {
-                                   dropdownOpened = false
-                               }
-                         },
-                       ) {
-                           Text(otherCharacter.name)
-                       }
-                    }
-                }
-            }
             Row(
-                modifier = if (allCharacters.size > 1)
+                modifier = if (allCharacters.size > 1 || canAddCharacters)
                     Modifier.clickable { dropdownOpened = true }
                 else Modifier,
                 verticalAlignment = Alignment.CenterVertically,
@@ -181,10 +164,49 @@ data class CharacterDetailScreen(
                     Subtitle(party.name)
                 }
 
-                if (allCharacters.size > 1) {
+                if (allCharacters.size > 1 || canAddCharacters) {
                     Icon(Icons.Rounded.ArrowDropDown, null, Modifier.size(36.dp))
                 }
             }
+
+            DropdownMenu(
+                dropdownOpened,
+                onDismissRequest = { dropdownOpened = false }
+            ) {
+                val navigator = LocalNavigator.currentOrThrow
+
+                allCharacters.forEach { otherCharacter ->
+                    key(otherCharacter.id) {
+                        DropdownMenuItem(
+                            onClick = {
+                                if (otherCharacter.id != character.id) {
+                                    navigator.replace(
+                                        CharacterDetailScreen(
+                                            characterId = CharacterId(party.id, otherCharacter.id),
+                                            comingFromCombat = comingFromCombat,
+                                            initialTab = currentTab,
+                                        )
+                                    )
+                                } else {
+                                    dropdownOpened = false
+                                }
+                            },
+                        ) {
+                            Text(otherCharacter.name)
+                        }
+                    }
+                }
+
+                if (canAddCharacters) {
+                    DropdownMenuItem(
+                        onClick = { navigator.push(CharacterCreationScreen(party.id, userId)) }
+                    ) {
+                        Icon(Icons.Rounded.Add, null, modifier = Modifier.size(24.dp))
+                        Text(LocalStrings.current.character.buttonAdd)
+                    }
+                }
+            }
+
         } else {
             Column {
                 Text(character.name)

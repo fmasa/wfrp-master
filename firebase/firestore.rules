@@ -170,9 +170,8 @@ service cloud.firestore {
                 }
             }
 
-            match /characters/{userId} {
+            match /characters/{characterId} {
                 allow create: if hasAccessToParty()
-                                && (userId == request.auth.uid || isGameMaster())
                                 && isValidCharacter(request.resource.data);
                 allow update: if canEditCharacter()
                               && isValidCharacter(request.resource.data);
@@ -198,7 +197,7 @@ service cloud.firestore {
                     }
 
                     function containerExists(containerId) {
-                        let container = get(/databases/$(database)/documents/parties/$(partyId)/characters/$(userId)/inventory/$(containerId));
+                        let container = get(/databases/$(database)/documents/parties/$(partyId)/characters/$(characterId)/inventory/$(containerId));
 
                         return container.data.type != null && container.data.type.kind == "CONTAINER";
                     }
@@ -344,9 +343,15 @@ service cloud.firestore {
                         && money.pennies is int && money.pennies >= 0;
                 }
 
+                function isCharacterOwner() {
+                    let character = get(/databases/$(database)/documents/parties/$(partyId)/characters/$(characterId)).data;
+
+                    return request.auth != null && request.auth.uid == character.userId;
+                }
+
                 function canEditCharacter() {
                     return hasAccessToParty()
-                        && (isGameMaster() || request.auth.uid == userId);
+                        && (isGameMaster() || isCharacterOwner());
                 }
 
                 function isValidCharacter(character) {
@@ -373,9 +378,11 @@ service cloud.firestore {
                             "avatarUrl",
                             "archived"
                         ].hasAll(character.keys())
-                        && (character.userId == userId || character.id == userId)
-                        && (character.id == character.userId || (character.userId == null && isValidUuid(character.id)))
-                        && ((character.userId == null && isGameMaster()) || character.userId in get(/databases/$(database)/documents/parties/$(partyId)).data.users)
+                        && character.id == characterId
+                        && (
+                            (character.userId != null && character.userId == request.auth.uid) ||
+                            (isGameMaster() && (character.userId == null || character.userId in get(/databases/$(database)/documents/parties/$(partyId)).data.users))
+                        )
                         && character.name is string && isNotBlank(character.name) && character.name.size() <= 50
                         && character.career is string && isNotBlank(character.career) && character.career.size() <= 50
                         && character.psychology is string && character.psychology.size() <= 200
