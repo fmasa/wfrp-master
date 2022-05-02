@@ -30,11 +30,10 @@ import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
-import cz.frantisekmasa.wfrp_master.common.character.CharacterDetailScreen
+import cz.frantisekmasa.wfrp_master.common.character.CharacterPickerScreen
 import cz.frantisekmasa.wfrp_master.common.core.LocalStaticConfiguration
 import cz.frantisekmasa.wfrp_master.common.core.auth.LocalUser
 import cz.frantisekmasa.wfrp_master.common.core.config.Platform
-import cz.frantisekmasa.wfrp_master.common.core.domain.identifiers.CharacterId
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.Party
 import cz.frantisekmasa.wfrp_master.common.core.shared.Resources
 import cz.frantisekmasa.wfrp_master.common.core.ui.buttons.HamburgerButton
@@ -131,7 +130,7 @@ object PartyListScreen : Screen {
                     if (it.gameMasterId == userId) {
                         navigator.push(GameMasterScreen(it.id))
                     } else {
-                        navigator.push(CharacterDetailScreen(CharacterId(it.id, userId)))
+                        navigator.push(CharacterPickerScreen(it.id))
                     }
                 },
                 onRemove = { removePartyDialogState = DialogState.Opened(it) },

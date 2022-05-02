@@ -4,8 +4,8 @@ import androidx.compose.material.Divider
 import androidx.compose.material.ListItem
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.ContextMenu
 import cz.frantisekmasa.wfrp_master.common.core.ui.menu.WithContextMenu
+import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.ContextMenu
 
 @Composable
 fun CardItem(
@@ -13,7 +13,7 @@ fun CardItem(
     description: String = "",
     icon: @Composable () -> Unit,
     onClick: () -> Unit,
-    contextMenuItems: List<ContextMenu.Item>,
+    contextMenuItems: List<ContextMenu.Item> = emptyList(),
     badge: @Composable () -> Unit = {},
 ) {
     WithContextMenu(

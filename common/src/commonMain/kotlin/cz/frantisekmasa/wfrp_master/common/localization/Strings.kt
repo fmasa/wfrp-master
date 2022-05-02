@@ -230,6 +230,7 @@ data class BlessingMessageStrings(
 
 @Immutable
 data class CharacterStrings(
+    val buttonAdd: String = "Add Character",
     val labelCareer: String = "Career",
     val labelCharacteristicAdvances: String = "Advances",
     val labelCharacteristicBase: String = "Base",
@@ -249,6 +250,7 @@ data class CharacterStrings(
     val tabSpells: String = "Spells",
     val tabTrappings: String = "Trappings",
     val titleCharacteristics: String = "Characteristics",
+    val titleSelectCharacter: String = "Select Character",
 )
 
 @Immutable

@@ -3,6 +3,7 @@ package cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.tabs
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.Dp
 import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.Pager
@@ -12,6 +13,8 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.rememberPagerStat
 fun TabPager(
     modifier: Modifier = Modifier,
     fullWidthTabs: Boolean = false,
+    initialPage: Int = 0,
+    onPageChange: ((Int) -> Unit)? = null,
     tabs: TabPagerScope.() -> Unit
 ) {
     BoxWithConstraints(modifier) {
@@ -21,7 +24,16 @@ fun TabPager(
         val pagerState = rememberPagerState(
             screenWidth = constraints.maxWidth,
             screenCount = scope.tabContents.size,
+            initialPage = initialPage,
         )
+
+        if (onPageChange !== null) {
+            val currentPage = pagerState.swipeableState.currentValue
+
+            LaunchedEffect(onPageChange, currentPage) {
+                onPageChange(currentPage)
+            }
+        }
 
         Column {
             TabRow(

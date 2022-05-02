@@ -8,7 +8,6 @@ import cz.frantisekmasa.wfrp_master.common.core.domain.character.CharacterReposi
 import cz.frantisekmasa.wfrp_master.common.core.domain.identifiers.CharacterId
 import cz.frantisekmasa.wfrp_master.common.core.utils.right
 import kotlinx.coroutines.flow.Flow
-import java.io.InputStream
 
 class CharacterScreenModel(
     private val characterId: CharacterId,
@@ -17,6 +16,7 @@ class CharacterScreenModel(
 ) : ScreenModel {
 
     val character: Flow<Character> = characters.getLive(characterId).right()
+    val allCharacters: Flow<List<Character>> = characters.inParty(characterId.partyId)
 
     suspend fun update(change: (Character) -> Character) {
         val character = characters.get(characterId)
