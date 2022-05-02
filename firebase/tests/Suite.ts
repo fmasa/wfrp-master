@@ -63,6 +63,7 @@ export abstract class Suite {
 
     protected validCharacter(userId: string): Character {
         return {
+            id: userId,
             name: "Sigmar",
             userId: userId,
             career: "God",

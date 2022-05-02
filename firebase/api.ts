@@ -60,7 +60,7 @@ export interface Stats {
 }
 
 export interface Character {
-    id?: string,
+    id: string,
     name: string,
     userId: string | null,
     career: string,
