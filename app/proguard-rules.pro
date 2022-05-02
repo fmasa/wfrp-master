@@ -34,3 +34,6 @@
 -keepclasseswithmembers class cz.muni.fi.rpg.** {
     kotlinx.serialization.KSerializer serializer(...);
 }
+
+# Kodein
+-keepattributes Signature
