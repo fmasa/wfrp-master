@@ -151,6 +151,7 @@ private fun TrappingTypeForm(formData: TrappingTypeFormData, validate: Boolean) 
                 value = formData.carries,
                 validate = validate,
             )
+            WornCheckbox(formData)
         }
         TrappingTypeOption.MELEE_WEAPON -> {
             SelectBox(
