@@ -21,6 +21,7 @@ const validParty = () => ({
 
 function validCharacter (userId: string) {
     return {
+        id: userId,
         name: "Sigmar",
         userId: userId,
         career: "God",
