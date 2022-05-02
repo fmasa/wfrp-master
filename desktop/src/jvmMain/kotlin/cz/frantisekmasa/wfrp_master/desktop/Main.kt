@@ -2,6 +2,7 @@ package cz.frantisekmasa.wfrp_master.desktop
 
 import androidx.compose.material.DrawerValue
 import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.rememberDrawerState
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.window.Window
@@ -19,7 +20,6 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.responsive.ScreenWithBreakpoi
 import cz.frantisekmasa.wfrp_master.common.core.ui.theme.Theme
 import cz.frantisekmasa.wfrp_master.common.partyList.PartyListScreen
 import cz.frantisekmasa.wfrp_master.common.shell.DrawerShell
-import cz.frantisekmasa.wfrp_master.common.shell.rememberDrawerState
 import cz.frantisekmasa.wfrp_master.desktop.interop.DesktopEmailInitiator
 import cz.frantisekmasa.wfrp_master.desktop.interop.DesktopUrlOpener
 import cz.frantisekmasa.wfrp_master.desktop.interop.NativeFileChooser
