@@ -154,6 +154,7 @@ private fun TrappingTypeForm(formData: TrappingTypeFormData, validate: Boolean) 
             WornCheckbox(formData)
         }
         TrappingTypeOption.MELEE_WEAPON -> {
+            WeaponEquipSelect(formData)
             SelectBox(
                 label = strings.weapons.labelGroup,
                 value = formData.meleeWeaponGroup.value,
@@ -171,6 +172,7 @@ private fun TrappingTypeForm(formData: TrappingTypeFormData, validate: Boolean) 
             WeaponFlawsPicker(formData)
         }
         TrappingTypeOption.RANGED_WEAPON -> {
+            WeaponEquipSelect(formData)
             SelectBox(
                 label = strings.weapons.labelGroup,
                 value = formData.rangedWeaponGroup.value,
@@ -189,6 +191,19 @@ private fun TrappingTypeForm(formData: TrappingTypeFormData, validate: Boolean) 
         }
         TrappingTypeOption.MISCELLANEOUS -> {}
     }
+}
+
+@Composable
+private fun WeaponEquipSelect(formData: TrappingTypeFormData) {
+    val strings = LocalStrings.current
+
+    SelectBox(
+        label = strings.weapons.labelEquip,
+        value = formData.weaponEquipped.value,
+        onValueChange = { formData.weaponEquipped.value = it },
+        items = listOf(null to strings.weapons.equip.notEquipped) +
+            WeaponEquip.values().map { it to it.localizedName }
+    )
 }
 
 @Composable

@@ -485,6 +485,7 @@ data class ValidationStrings(
 
 @Immutable
 data class WeaponStrings(
+    val equip: WeaponEquipStrings = WeaponEquipStrings(),
     val flaws: WeaponFlawStrings = WeaponFlawStrings(),
     val helperDamage: String = "Allowed operators: +,-,/,*,(,) and variables: SB",
     val helperRange: String = "Allowed operators: +,-,/,*,(,) and variables: SB",
@@ -495,10 +496,19 @@ data class WeaponStrings(
     val labelQualities: String = "Weapon Qualities",
     val labelRange: String = "Range",
     val labelReach: String = "Reach",
+    val labelEquip: String = "Equipped",
     val meleeGroups: MeleeWeaponGroupStrings = MeleeWeaponGroupStrings(),
     val qualities: WeaponQualityStrings = WeaponQualityStrings(),
     val rangedGroups: RangedWeaponGroupStrings = RangedWeaponGroupStrings(),
     val reach: WeaponReachStrings = WeaponReachStrings(),
+)
+
+@Immutable
+data class WeaponEquipStrings(
+    val primaryHand: String = "Primary hand",
+    val offHand: String = "Off-hand",
+    val bothHands: String = "Both hands",
+    val notEquipped: String = "Not equipped",
 )
 
 @Immutable
