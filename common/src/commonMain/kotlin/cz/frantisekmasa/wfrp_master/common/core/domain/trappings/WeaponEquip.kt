@@ -9,4 +9,5 @@ import cz.frantisekmasa.wfrp_master.common.core.shared.Parcelize
 enum class WeaponEquip : Parcelable {
     PRIMARY_HAND,
     OFF_HAND,
+    BOTH_HANDS,
 }
