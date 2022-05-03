@@ -39,7 +39,19 @@ data class Armour(
         const val MAX_VALUE = 99
 
         fun fromItems(items: List<InventoryItem>): Armour =
-            items.asSequence()
+            fromArmourPieces(items) + fromWornShields(items)
+
+        private fun fromWornShields(items: List<InventoryItem>): Armour {
+            return items.asSequence()
+                .map(InventoryItem::trappingType)
+                .filterIsInstance<TrappingType.MeleeWeapon>()
+                .filter { it.equipped != null }
+                .sumOf { it.qualities[WeaponQuality.SHIELD] ?: 0 }
+                .let { Armour(shield = it) }
+        }
+
+        private fun fromArmourPieces(items: List<InventoryItem>): Armour {
+            return items.asSequence()
                 .map(InventoryItem::trappingType)
                 .filterIsInstance<TrappingType.Armour>()
                 .filter { it.worn }
@@ -53,5 +65,6 @@ data class Armour(
                         rightLeg = if (ArmourLocation.RIGHT_LEG in it.locations) it.points.value else 0,
                     )
                 }.fold(Armour()) { a, b -> a + b }
+        }
     }
 }
