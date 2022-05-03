@@ -78,6 +78,7 @@ class SerializationAggregateMapper<T : Any>(
     companion object {
         private val json = Json {
             encodeDefaults = true
+            ignoreUnknownKeys = true
             serializersModule = SerializersModule {
                 contextual(UuidSerializer())
             }
