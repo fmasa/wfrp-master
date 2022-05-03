@@ -14,7 +14,7 @@ import kotlin.jvm.JvmInline
 @Serializable
 @Parcelize
 @Immutable
-value class     PartyId(@Contextual private val value: Uuid) : Parcelable {
+value class PartyId(@Contextual private val value: Uuid) : Parcelable {
     companion object {
         fun fromString(id: String): PartyId = PartyId(uuidFrom(id))
         fun generate(): PartyId = PartyId(uuid4())

@@ -2,7 +2,9 @@ package cz.frantisekmasa.wfrp_master.common.shell
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.material.DrawerState
 import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.ModalDrawer
 import androidx.compose.material.Scaffold
 import androidx.compose.material.SnackbarHostState
 import androidx.compose.material.rememberScaffoldState
@@ -18,14 +20,14 @@ import kotlinx.coroutines.launch
 @Composable
 @ExperimentalMaterialApi
 fun DrawerShell(drawerState: DrawerState, bodyContent: @Composable (PaddingValues) -> Unit) {
-    ModalDrawerLayoutWithFixedDrawerWidth(
+    ModalDrawer(
         drawerState = drawerState,
         drawerContent = {
             Column {
                 AppDrawer(drawerState)
             }
         },
-        bodyContent = {
+        content = {
             val coroutineScope = rememberCoroutineScope()
             val snackbarHostState = remember { SnackbarHostState() }
             val persistentSnackbarHolder = remember(coroutineScope, snackbarHostState) {

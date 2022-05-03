@@ -4,6 +4,7 @@ import android.net.Uri
 import androidx.compose.foundation.layout.Column
 import androidx.compose.material.DrawerValue
 import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -17,7 +18,6 @@ import cz.frantisekmasa.wfrp_master.common.invitation.InvitationLinkScreen
 import cz.frantisekmasa.wfrp_master.common.partyList.PartyListScreen
 import cz.frantisekmasa.wfrp_master.common.shell.DrawerShell
 import cz.frantisekmasa.wfrp_master.common.shell.NetworkStatusBanner
-import cz.frantisekmasa.wfrp_master.common.shell.rememberDrawerState
 import cz.muni.fi.rpg.ui.shell.ProvideDIContainer
 import cz.muni.fi.rpg.ui.shell.Startup
 import io.ktor.http.Url

@@ -191,7 +191,7 @@ private fun InputValue.toIntValue(): Int = value.toIntOrNull() ?: 0
 
 @Composable
 private fun RadioButtonWithText(text: String, selected: Boolean, onClick: () -> Unit) {
-    Row(horizontalArrangement = Arrangement.spacedBy(Spacing.tiny)) {
+    Row(horizontalArrangement = Arrangement.spacedBy(Spacing.tiny), verticalAlignment = Alignment.CenterVertically) {
         RadioButton(selected = selected, onClick = onClick)
         Text(text)
     }
