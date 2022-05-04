@@ -66,7 +66,7 @@ import cz.frantisekmasa.wfrp_master.common.partyList.PartyListScreen
 data class CharacterDetailScreen(
     private val characterId: CharacterId,
     private val comingFromCombat: Boolean = false,
-    private val initialTab: Int = 0,
+    private val initialTab: CharacterTab = CharacterTab.values().first(),
 ) : Screen {
 
     override val key = "parties/${characterId}"
@@ -121,7 +121,7 @@ data class CharacterDetailScreen(
         party: Party,
         character: Character,
         screenModel: CharacterScreenModel,
-        currentTab: Int,
+        currentTab: CharacterTab,
     ) {
         val characterPickerScreenModel: CharacterPickerScreenModel = rememberScreenModel(arg = party.id)
         val userId = UserId(LocalUser.current.id)
@@ -204,7 +204,7 @@ data class CharacterDetailScreen(
         character: Character?,
         party: Party?,
         screenModel: CharacterScreenModel,
-        onTabChange: (Int) -> Unit,
+        onTabChange: (CharacterTab) -> Unit,
     ) {
         if (character == null || party == null) {
             Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
@@ -236,14 +236,16 @@ data class CharacterDetailScreen(
                 ActiveCombatBanner(party)
             }
 
+            val allTabs = remember { CharacterTab.values() }
+
             TabPager(
                 Modifier.weight(1f),
-                initialPage = initialTab,
-                onPageChange = onTabChange,
+                initialPage = initialTab.ordinal,
+                onPageChange = { onTabChange(allTabs[it]) },
             ) {
                 val modifier = Modifier.width(screenWidth)
 
-                CharacterTab.values().forEach {
+                allTabs.forEach {
                     tab(it, character, party, modifier, screenModel)
                 }
             }
