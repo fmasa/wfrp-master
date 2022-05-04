@@ -34,7 +34,6 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
 import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 
 @Composable
@@ -92,7 +91,7 @@ internal fun CompendiumBlessingChooser(
                                         }
                                     }
                                 ),
-                                icon = { ItemIcon(Resources.Drawable.Spell, ItemIcon.Size.Small) },
+                                icon = { ItemIcon(Resources.Drawable.Blessing, ItemIcon.Size.Small) },
                                 text = { Text(blessing.name) }
                             )
                         }

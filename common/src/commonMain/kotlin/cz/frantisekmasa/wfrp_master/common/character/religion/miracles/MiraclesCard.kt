@@ -22,7 +22,6 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.cards.CardTitle
 import cz.frantisekmasa.wfrp_master.common.core.ui.flow.collectWithLifecycle
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.ContextMenu
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.EmptyUI
-import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.ItemIcon
 import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
 import kotlinx.coroutines.launch
 
@@ -89,11 +88,9 @@ private fun MiracleItem(
     onRemove: () -> Unit,
 ) {
     CardItem(
-        miracle.name,
-        miracle.effect,
-        { ItemIcon(Resources.Drawable.Miracle, ItemIcon.Size.Small) },
+        name = miracle.name,
         onClick = onClick,
-        listOf(
+        contextMenuItems = listOf(
             ContextMenu.Item(
                 LocalStrings.current.commonUi.buttonRemove,
                 onClick = { onRemove() },

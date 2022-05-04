@@ -25,7 +25,6 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.cards.CardTitle
 import cz.frantisekmasa.wfrp_master.common.core.ui.flow.collectWithLifecycle
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.ContextMenu
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.EmptyUI
-import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.ItemIcon
 import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
 
 
@@ -95,10 +94,10 @@ private fun SkillItem(
 ) {
     CardItem(
         skill.name,
-        skill.description,
-        icon = { ItemIcon(skill.characteristic.getIcon(), ItemIcon.Size.Small) } ,
         onClick = onClick,
-        listOf(ContextMenu.Item(LocalStrings.current.commonUi.buttonRemove, onClick = { onRemove() })),
+        contextMenuItems = listOf(
+            ContextMenu.Item(LocalStrings.current.commonUi.buttonRemove, onClick = { onRemove() })
+        ),
         badge = { TestNumber(skill, characteristics) }
     )
 }
@@ -108,7 +107,6 @@ private fun TestNumber(skill: Skill, characteristics: Stats) {
     val testNumber = skill.advances + skill.characteristic.characteristicValue(characteristics)
 
     Row {
-        Text(LocalStrings.current.skills.testNumberShortcut)
         Text(testNumber.toString(), Modifier.padding(start = 4.dp))
     }
 }

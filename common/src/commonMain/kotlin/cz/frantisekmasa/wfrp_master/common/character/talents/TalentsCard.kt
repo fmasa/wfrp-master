@@ -14,14 +14,12 @@ import com.benasher44.uuid.Uuid
 import cz.frantisekmasa.wfrp_master.common.character.talents.dialog.AddTalentDialog
 import cz.frantisekmasa.wfrp_master.common.character.talents.dialog.EditTalentDialog
 import cz.frantisekmasa.wfrp_master.common.core.domain.talents.Talent
-import cz.frantisekmasa.wfrp_master.common.core.shared.Resources
 import cz.frantisekmasa.wfrp_master.common.core.ui.buttons.CardButton
 import cz.frantisekmasa.wfrp_master.common.core.ui.cards.CardContainer
 import cz.frantisekmasa.wfrp_master.common.core.ui.cards.CardItem
 import cz.frantisekmasa.wfrp_master.common.core.ui.cards.CardTitle
 import cz.frantisekmasa.wfrp_master.common.core.ui.flow.collectWithLifecycle
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.ContextMenu
-import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.ItemIcon
 import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
 
 
@@ -81,8 +79,6 @@ internal fun TalentsCard(
 private fun TalentItem(talent: Talent, onClick: () -> Unit, onRemove: () -> Unit) {
     CardItem(
         name = talent.name,
-        description = talent.description,
-        icon = { ItemIcon(Resources.Drawable.Skill, ItemIcon.Size.Small) },
         onClick = onClick,
         contextMenuItems = listOf(
             ContextMenu.Item(LocalStrings.current.commonUi.buttonRemove, onClick = { onRemove() })
