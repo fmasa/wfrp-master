@@ -11,11 +11,6 @@ class Rules(private vararg val rules: Rule) : Rule {
         fun NotBlank() = rule(LocalStrings.current.validation.notBlank) { it.isNotBlank() }
 
         @Composable
-        fun NonNegativeNumber() = rule(LocalStrings.current.validation.nonNegative) {
-            it.toDoubleOrNull() != null && it.toDouble() >= 0
-        }
-
-        @Composable
         fun PositiveInteger() = rule(LocalStrings.current.validation.positiveInteger) {
             it.toIntOrNull() != null && it.toInt() > 0
         }

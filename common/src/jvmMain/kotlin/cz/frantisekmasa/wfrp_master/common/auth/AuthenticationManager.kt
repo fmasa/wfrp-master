@@ -142,9 +142,6 @@ class AuthenticationManager(
         val returnSecureToken: Boolean = true,
     )
 
-    sealed interface SignInResult {
-    }
-
     companion object {
         private val REFRESH_TOKEN = stringSettingsKey("firebase_refresh_token")
         private const val API_KEY = "AIzaSyDO4Y4wWcY4HdYcsp8zcLMpMjwUJ_9q3Fw"

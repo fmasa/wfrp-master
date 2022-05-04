@@ -43,12 +43,6 @@ actual class SettingsKey<T>(
     val get: (Preferences) -> T?
 )
 
-
-data class BooleanSettingsKey(
-    val name: String
-)
-
-
 actual fun booleanSettingsKey(name: String): SettingsKey<Boolean> = SettingsKey(
     get = { if (name in it.keys()) it.getBoolean(name, false) else null },
     set = { preferences, value -> preferences.putBoolean(name, value) },
