@@ -11,7 +11,7 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.ContextMenu
 fun CardItem(
     name: String,
     description: String = "",
-    icon: @Composable () -> Unit,
+    icon: (@Composable () -> Unit)? = null,
     onClick: () -> Unit,
     contextMenuItems: List<ContextMenu.Item> = emptyList(),
     badge: @Composable () -> Unit = {},

@@ -32,7 +32,6 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.cards.CardItem
 import cz.frantisekmasa.wfrp_master.common.core.ui.flow.collectWithLifecycle
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.ContextMenu
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.EmptyUI
-import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.ItemIcon
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
 import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
 
@@ -108,8 +107,6 @@ private fun SpellItem(spell: Spell, onClick: () -> Unit, onRemove: () -> Unit) {
 
     CardItem(
         name = spell.name,
-        description = spell.effect,
-        icon = { ItemIcon(Resources.Drawable.Spell, ItemIcon.Size.Small) },
         onClick = onClick,
         contextMenuItems = listOf(ContextMenu.Item(LocalStrings.current.commonUi.buttonRemove, onRemove)),
         badge = {

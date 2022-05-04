@@ -664,7 +664,6 @@ data class SkillStrings(
     val labelDescription: String = "Description (optional)",
     val labelName: String = "Name",
     val messages: SkillMessageStrings = SkillMessageStrings(),
-    val testNumberShortcut: String = "TN",
     val titleAdd: String = "Add Skill",
     val titleChooseCompendiumSkill: String = "Choose Compendium skill…",
     val titleEdit: String = "Edit Skill",
