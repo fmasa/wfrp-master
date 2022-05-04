@@ -279,7 +279,7 @@ data class CharacterDetailScreen(
                     )
                 }
 
-                tab(strings.tabSkills) {
+                tab(strings.tabSkillsAndTalents) {
                     SkillsScreen(
                         screenModel = screenModel,
                         skillsScreenModel = rememberScreenModel(arg = characterId),
