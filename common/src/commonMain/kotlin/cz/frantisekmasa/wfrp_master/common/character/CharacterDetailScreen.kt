@@ -44,7 +44,9 @@ import cz.frantisekmasa.wfrp_master.common.core.auth.LocalUser
 import cz.frantisekmasa.wfrp_master.common.core.auth.UserId
 import cz.frantisekmasa.wfrp_master.common.core.config.Platform
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.Character
+import cz.frantisekmasa.wfrp_master.common.core.domain.character.CharacterTab
 import cz.frantisekmasa.wfrp_master.common.core.domain.identifiers.CharacterId
+import cz.frantisekmasa.wfrp_master.common.core.domain.localizedName
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.Party
 import cz.frantisekmasa.wfrp_master.common.core.ui.buttons.HamburgerButton
 import cz.frantisekmasa.wfrp_master.common.core.ui.flow.collectWithLifecycle
@@ -55,7 +57,7 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.Breadcrumbs
 import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.IconAction
 import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.Subtitle
 import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.tabs.TabPager
-import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.tabs.tab
+import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.tabs.TabPagerScope
 import cz.frantisekmasa.wfrp_master.common.gameMaster.GameMasterScreen
 import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
 import cz.frantisekmasa.wfrp_master.common.partyList.PartyListScreen
@@ -234,8 +236,6 @@ data class CharacterDetailScreen(
                 ActiveCombatBanner(party)
             }
 
-            val strings = LocalStrings.current.character
-
             TabPager(
                 Modifier.weight(1f),
                 initialPage = initialTab,
@@ -243,25 +243,39 @@ data class CharacterDetailScreen(
             ) {
                 val modifier = Modifier.width(screenWidth)
 
-                tab(strings.tabAttributes) {
+                CharacterTab.values().forEach {
+                    tab(it, character, party, modifier, screenModel)
+                }
+            }
+        }
+    }
+
+    private fun TabPagerScope.tab(
+        tab: CharacterTab,
+        character: Character,
+        party: Party,
+        modifier: Modifier,
+        screenModel: CharacterScreenModel,
+    ) {
+        tab(name = { tab.localizedName }) {
+            when (tab) {
+                CharacterTab.ATTRIBUTES -> {
                     CharacteristicsScreen(
-                        characterId = characterId,
                         character = character,
-                        party = party,
-                        modifier = modifier,
                         screenModel = rememberScreenModel(arg = characterId),
+                        modifier = modifier,
+                        characterId = characterId,
+                        party = party,
                     )
                 }
-
-                tab(strings.tabConditions) {
+                CharacterTab.CONDITIONS -> {
                     ConditionsScreen(
                         character = character,
                         screenModel = screenModel,
                         modifier = modifier,
                     )
                 }
-
-                tab(strings.tabSkillsAndTalents) {
+                CharacterTab.SKILLS_AND_TALENTS -> {
                     SkillsScreen(
                         screenModel = screenModel,
                         skillsScreenModel = rememberScreenModel(arg = characterId),
@@ -269,15 +283,13 @@ data class CharacterDetailScreen(
                         modifier = modifier,
                     )
                 }
-
-                tab(strings.tabSpells) {
+                CharacterTab.SPELLS -> {
                     CharacterSpellsScreen(
                         screenModel = rememberScreenModel(arg = characterId),
                         modifier = modifier,
                     )
                 }
-
-                tab(strings.tabReligions) {
+                CharacterTab.RELIGION -> {
                     ReligionScreen(
                         modifier = modifier,
                         character = character,
@@ -286,8 +298,7 @@ data class CharacterDetailScreen(
                         miraclesScreenModel = rememberScreenModel(arg = characterId)
                     )
                 }
-
-                tab(strings.tabTrappings) {
+                CharacterTab.TRAPPINGS -> {
                     TrappingsScreen(
                         characterId = characterId,
                         screenModel = rememberScreenModel(arg = characterId),
@@ -297,4 +308,5 @@ data class CharacterDetailScreen(
             }
         }
     }
+
 }
