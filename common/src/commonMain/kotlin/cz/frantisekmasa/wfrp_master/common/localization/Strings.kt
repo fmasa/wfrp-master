@@ -246,7 +246,7 @@ data class CharacterStrings(
     val tabAttributes: String = "Attributes",
     val tabConditions: String = "Conditions",
     val tabReligions: String = "Religion",
-    val tabSkills: String = "Skills",
+    val tabSkillsAndTalents: String = "Skills & Talents",
     val tabSpells: String = "Spells",
     val tabTrappings: String = "Trappings",
     val titleCharacteristics: String = "Characteristics",
