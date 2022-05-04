@@ -91,7 +91,7 @@ internal fun CompendiumMiracleChooser(
                                         }
                                     }
                                 ),
-                                icon = { ItemIcon(Resources.Drawable.Spell, ItemIcon.Size.Small) },
+                                icon = { ItemIcon(Resources.Drawable.Miracle, ItemIcon.Size.Small) },
                                 text = { Text(miracle.name) }
                             )
                         }
