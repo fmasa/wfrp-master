@@ -41,6 +41,7 @@ class YearSeasonTest {
         )
     }
 
+    @Test
     fun testWinterBounds() {
         assertSame(
             YearSeason.WINTER,

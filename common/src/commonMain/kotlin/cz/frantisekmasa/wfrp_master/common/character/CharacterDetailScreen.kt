@@ -17,7 +17,6 @@ import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material.icons.rounded.ArrowDropDown
 import androidx.compose.material.icons.rounded.Edit
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableStateOf
@@ -47,7 +46,6 @@ import cz.frantisekmasa.wfrp_master.common.core.config.Platform
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.Character
 import cz.frantisekmasa.wfrp_master.common.core.domain.identifiers.CharacterId
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.Party
-import cz.frantisekmasa.wfrp_master.common.core.shared.IO
 import cz.frantisekmasa.wfrp_master.common.core.ui.buttons.HamburgerButton
 import cz.frantisekmasa.wfrp_master.common.core.ui.flow.collectWithLifecycle
 import cz.frantisekmasa.wfrp_master.common.core.ui.menu.DropdownMenu
@@ -61,8 +59,6 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.tabs.tab
 import cz.frantisekmasa.wfrp_master.common.gameMaster.GameMasterScreen
 import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
 import cz.frantisekmasa.wfrp_master.common.partyList.PartyListScreen
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
 
 
 data class CharacterDetailScreen(
@@ -84,20 +80,6 @@ data class CharacterDetailScreen(
         val navigator = LocalNavigator.currentOrThrow
 
         var currentTab by rememberSaveable { mutableStateOf(initialTab) }
-
-        LaunchedEffect(characterId) {
-            withContext(Dispatchers.IO) {
-                if (!screenModel.characterExists()) {
-                    navigator.replace(
-                        CharacterCreationScreen(
-                            characterId.partyId,
-                            // TODO: Improve type-safety
-                            UserId(characterId.id)
-                        )
-                    )
-                }
-            }
-        }
 
         Scaffold(
             topBar = {

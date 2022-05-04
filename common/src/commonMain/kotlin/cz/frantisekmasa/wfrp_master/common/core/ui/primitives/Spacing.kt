@@ -23,11 +23,6 @@ object Spacing {
     )
 
     @Stable
-    fun responsiveBodyPadding(): Dp {
-        return large
-    }
-
-    @Stable
     fun gutterSize(): Dp {
         return large
     }

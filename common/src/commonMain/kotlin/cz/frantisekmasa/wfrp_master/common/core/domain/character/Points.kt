@@ -29,23 +29,10 @@ data class Points(
         require(spentExperience >= 0)
     }
 
-    fun withMaxWounds(newMaxWounds: Int, hardyWoundsBonus: Int) = copy(
-        maxWounds = newMaxWounds,
-        hardyWoundsBonus = hardyWoundsBonus,
-        wounds = min(hardyWoundsBonus + newMaxWounds, wounds)
-    )
-
     fun withFate(newFate: Int) = copy(
         fate = newFate,
         fortune = min(fortune, newFate)
     )
-
-    fun withResilience(newResilience: Int) = copy(
-        resilience = newResilience,
-        resolve = min(resolve, newResilience)
-    )
-
-    fun isHeavilyWounded() = wounds < 2
 
     fun modify(pool: PointPool, value: Int): Result<Points> {
         return runCatching {

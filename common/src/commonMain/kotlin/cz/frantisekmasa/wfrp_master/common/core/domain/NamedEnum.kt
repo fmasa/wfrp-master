@@ -9,4 +9,3 @@ interface NamedEnum {
 }
 
 val NamedEnum.localizedName: String @Composable get() = nameResolver(LocalStrings.current)
-val NamedEnum.nameRes: Int get() = error("Use nameResolver or name val instead")
