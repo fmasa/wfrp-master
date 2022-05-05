@@ -45,6 +45,7 @@ kotlin {
                 val voyagerVersion = "1.0.0-beta16"
                 api("cafe.adriel.voyager:voyager-navigator:$voyagerVersion")
                 api("cafe.adriel.voyager:voyager-koin:$voyagerVersion")
+                api("cafe.adriel.voyager:voyager-transitions:$voyagerVersion")
 
 
                 implementation("com.github.librepdf:openpdf:1.3.25")
