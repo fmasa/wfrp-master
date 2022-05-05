@@ -37,6 +37,8 @@ data class CharacterEditScreen(
     private val section: Section? = null,
 ) : Screen {
 
+    override val key = "parties/${characterId.partyId}/character/${characterId.id}/$section"
+
     enum class Section {
         EXPERIENCE,
         BASICS,
