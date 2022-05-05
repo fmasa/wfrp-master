@@ -9,8 +9,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import cafe.adriel.voyager.core.screen.Screen
-import cafe.adriel.voyager.navigator.CurrentScreen
 import cafe.adriel.voyager.navigator.Navigator
+import cafe.adriel.voyager.transitions.SlideTransition
 import cz.frantisekmasa.wfrp_master.common.core.ui.responsive.ScreenWithBreakpoints
 import cz.frantisekmasa.wfrp_master.common.core.ui.theme.Theme
 import cz.frantisekmasa.wfrp_master.common.core.ui.viewinterop.LocalActivity
@@ -46,9 +46,9 @@ fun WfrpMasterApp() {
 
                                 true
                             }
-                        ) {
+                        ) { navigator ->
                             DrawerShell(drawerState) {
-                                CurrentScreen()
+                                SlideTransition(navigator)
                             }
                         }
                     }
