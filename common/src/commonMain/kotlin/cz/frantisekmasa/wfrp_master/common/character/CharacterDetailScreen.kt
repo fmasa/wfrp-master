@@ -138,13 +138,14 @@ data class CharacterDetailScreen(
         screenModel: CharacterScreenModel,
         currentTab: CharacterTab?,
     ) {
-        val characterPickerScreenModel: CharacterPickerScreenModel = rememberScreenModel(arg = party.id)
+        val characterPickerScreenModel: CharacterPickerScreenModel =
+            rememberScreenModel(arg = party.id)
         val userId = UserId(LocalUser.current.id)
         val isGameMaster = party.gameMasterId == null || party.gameMasterId == userId.toString()
         val canAddCharacters = !isGameMaster
 
         val allCharacters = remember {
-            if(isGameMaster)
+            if (isGameMaster)
                 screenModel.allCharacters
             else characterPickerScreenModel.allUserCharacters(userId)
         }.collectWithLifecycle(null).value
@@ -183,7 +184,8 @@ data class CharacterDetailScreen(
                                         CharacterDetailScreen(
                                             characterId = CharacterId(party.id, otherCharacter.id),
                                             comingFromCombat = comingFromCombat,
-                                            initialTab = currentTab ?: CharacterTab.values().first(),
+                                            initialTab = currentTab ?: CharacterTab.values()
+                                                .first(),
                                         )
                                     )
                                 } else {
@@ -257,7 +259,7 @@ data class CharacterDetailScreen(
 
                 LaunchedEffect(Unit) {
                     navigator.push(
-                        CharacterEditScreen(characterId, CharacterEditScreen.Section.TABS)
+                        CharacterEditScreen(characterId, CharacterEditScreen.Section.VISIBLE_TABS)
                     )
                 }
                 return@Column
@@ -265,7 +267,9 @@ data class CharacterDetailScreen(
 
             TabPager(
                 Modifier.weight(1f),
-                initialPage = initialTab.ordinal,
+                initialPage = remember(tabs) {
+                    tabs.indices.firstOrNull { tabs[it] == initialTab } ?: 0
+                },
                 onPageChange = { onTabChange(tabs[it]) },
             ) {
                 val modifier = Modifier.width(screenWidth)
@@ -340,7 +344,7 @@ data class CharacterDetailScreen(
 
 @Composable
 private fun SkeletonScaffold() {
-    Scaffold(topBar = { TopAppBar {  } }) {
+    Scaffold(topBar = { TopAppBar { } }) {
         FullScreenProgress()
     }
 }

@@ -42,7 +42,7 @@ data class CharacterEditScreen(
         BASICS,
         CAREER,
         CHARACTERISTICS,
-        TABS,
+        VISIBLE_TABS,
         WELL_BEING,
         WOUNDS,
     }
@@ -65,8 +65,7 @@ data class CharacterEditScreen(
                 Section.CHARACTERISTICS -> CharacteristicsSection(character, screenModel)
                 Section.WELL_BEING -> WellBeingSection(character, screenModel)
                 Section.WOUNDS -> MaxWoundsSection(character, screenModel)
-                Section.TABS -> {
-                }
+                Section.VISIBLE_TABS -> VisibleTabsSection(character, screenModel)
             }
 
             return
@@ -148,9 +147,14 @@ data class CharacterEditScreen(
                         secondaryText = {
                             val tabs = remember { CharacterTab.values().toSet() }
 
-                            Text(strings.character.tabsVisible(tabs.size, tabs.size))
+                            Text(
+                                strings.character.tabsVisible(
+                                    tabs.size - character.hiddenTabs.size,
+                                    tabs.size,
+                                )
+                            )
                         },
-                        modifier = Modifier.clickable { openSection(Section.TABS) },
+                        modifier = Modifier.clickable { openSection(Section.VISIBLE_TABS) },
                     )
                 }
             }

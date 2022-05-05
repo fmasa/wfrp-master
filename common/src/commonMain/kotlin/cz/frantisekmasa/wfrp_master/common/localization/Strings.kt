@@ -233,6 +233,7 @@ data class CharacterStrings(
     val buttonAdd: String = "Add Character",
     val buttonChangeAvatar: String = "Change Avatar",
     val buttonRemoveAvatar: String = "Remove Avatar",
+    val errorVisibleTabRequired: String = "At least one character tab must be visible",
     val labelCareer: String = "Career",
     val labelCharacteristicAdvances: String = "Advances",
     val labelCharacteristicBase: String = "Base",
