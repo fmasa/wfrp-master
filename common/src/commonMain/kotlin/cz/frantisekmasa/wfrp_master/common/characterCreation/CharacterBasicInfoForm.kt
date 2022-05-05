@@ -115,6 +115,7 @@ fun CharacterBasicInfoForm(
             )
         }
 
+        // TODO: Turn into component that can be reused in Edit UI
         Column {
             SelectBoxLabel(strings.labelStatus)
             Row(

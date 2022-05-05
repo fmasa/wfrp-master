@@ -2,6 +2,7 @@ package cz.frantisekmasa.wfrp_master.common.core.ui.forms
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -15,7 +16,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import cafe.adriel.voyager.navigator.LocalNavigator
+import cafe.adriel.voyager.navigator.currentOrThrow
 import cz.frantisekmasa.wfrp_master.common.core.shared.IO
+import cz.frantisekmasa.wfrp_master.common.core.ui.buttons.BackButton
 import cz.frantisekmasa.wfrp_master.common.core.ui.buttons.CloseButton
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.FullScreenProgress
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
@@ -30,7 +34,48 @@ fun <T> FormDialog(
     onDismissRequest: () -> Unit,
     formData: HydratedFormData<T>,
     onSave: suspend (T) -> Unit,
-    content: @Composable (validate: Boolean) -> Unit,
+    content: @Composable ColumnScope.(validate: Boolean) -> Unit,
+) {
+    FullScreenForm(
+        title = title,
+        navigationIcon = { CloseButton(onDismissRequest) },
+        formData = formData,
+        onSave = {
+            onSave(it)
+            onDismissRequest()
+        },
+        content = content,
+    )
+}
+
+@Composable
+fun <T> FormScreen(
+    title: String,
+    formData: HydratedFormData<T>,
+    onSave: suspend (T) -> Unit,
+    content: @Composable ColumnScope.(validate: Boolean) -> Unit,
+) {
+    val navigator = LocalNavigator.currentOrThrow
+
+    FullScreenForm(
+        title = title,
+        navigationIcon = { BackButton() },
+        formData = formData,
+        onSave = {
+            onSave(it)
+            navigator.pop()
+        },
+        content = content,
+    )
+}
+
+@Composable
+private fun <T> FullScreenForm(
+    title: String,
+    navigationIcon: @Composable () -> Unit,
+    formData: HydratedFormData<T>,
+    onSave: suspend (T) -> Unit,
+    content: @Composable ColumnScope.(validate: Boolean) -> Unit,
 ) {
     var saving by remember { mutableStateOf(false) }
     var validate by remember { mutableStateOf(false) }
@@ -38,7 +83,7 @@ fun <T> FormDialog(
     Scaffold(
         topBar = {
             TopAppBar(
-                navigationIcon = { CloseButton(onDismissRequest) },
+                navigationIcon = navigationIcon,
                 title = { Text(title) },
                 actions = {
                     val coroutineScope = rememberCoroutineScope()
@@ -56,8 +101,6 @@ fun <T> FormDialog(
                                     saving = true
                                     onSave(formData.toValue())
                                 }
-
-                                onDismissRequest()
                             }
                         }
                     )

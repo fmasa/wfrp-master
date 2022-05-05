@@ -231,6 +231,9 @@ data class BlessingMessageStrings(
 @Immutable
 data class CharacterStrings(
     val buttonAdd: String = "Add Character",
+    val buttonChangeAvatar: String = "Change Avatar",
+    val buttonRemoveAvatar: String = "Remove Avatar",
+    val errorVisibleTabRequired: String = "At least one character tab must be visible",
     val labelCareer: String = "Career",
     val labelCharacteristicAdvances: String = "Advances",
     val labelCharacteristicBase: String = "Base",
@@ -242,15 +245,30 @@ data class CharacterStrings(
     val labelRace: String = "Race",
     val labelStatus: String = "Status",
     val motivation: String = "Motivation",
-    val titleEdit: String = "Edit Character",
+    val secondaryTextBasics: String = "Name, Race, Motivation",
+    val secondaryTextCareer: String = "Career, Class, Social status",
+    val secondaryTextExperience: String = "XP, Ambitions",
+    val secondaryTextWellBeing: String = "Corruption, Injuries, Diseases, Psychology",
+    val secondaryTextWounds: String = "Max Wounds, Hardy talent advances",
+    val tabsVisible: (visible: Int, total: Int) -> String = { visible, total ->
+        "$visible of $total tabs visible"
+    },
     val tabAttributes: String = "Attributes",
     val tabConditions: String = "Conditions",
     val tabReligions: String = "Religion",
     val tabSkillsAndTalents: String = "Skills & Talents",
     val tabSpells: String = "Spells",
     val tabTrappings: String = "Trappings",
+    val titleBasics: String = "Basics",
+    val titleCareer: String = "Career",
     val titleCharacteristics: String = "Characteristics",
+    val titleEdit: String = "Edit Character",
+    val titleExperience: String = "Experience",
+    val titleGeneralSettings: String = "General",
     val titleSelectCharacter: String = "Select Character",
+    val titleUiSettings: String = "UI settings",
+    val titleVisibleTabs: String = "Visible tabs",
+    val titleWellBeing: String = "Well-being",
 )
 
 @Immutable
@@ -270,7 +288,7 @@ data class CharacteristicStrings(
 @Immutable
 data class PointStrings(
     val autoMaxWoundsPlaceholder: String = "Auto",
-    val corruption: String = "Corruption",
+    val corruption: String = "Corruption points",
     val experience: String = "XP",
     val fate: String = "Fate",
     val fortune: String = "Fortune",
