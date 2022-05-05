@@ -11,8 +11,8 @@ import androidx.compose.ui.Modifier
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
 
 @Composable
-fun SettingsCard(content: @Composable ColumnScope.() -> Unit) {
-    Box(Modifier.padding(bottom = Spacing.medium)) {
+fun SettingsCard(modifier: Modifier = Modifier, content: @Composable ColumnScope.() -> Unit) {
+    Box(modifier.padding(bottom = Spacing.medium)) {
         Card(shape = MaterialTheme.shapes.large) {
             Column {
                 content()

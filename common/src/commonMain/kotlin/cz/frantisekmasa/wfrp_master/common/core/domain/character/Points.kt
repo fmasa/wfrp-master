@@ -45,6 +45,14 @@ data class Points(
         }
     }
 
+    fun coerceWoundsAtMost(maxWounds: Int): Points {
+        if (wounds <= maxWounds) {
+            return this
+        }
+
+        return copy(wounds = maxWounds)
+    }
+
     fun get(pool: PointPool): Int {
         return when (pool) {
             PointPool.FATE -> fate

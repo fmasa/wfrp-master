@@ -1,9 +1,12 @@
 package cz.frantisekmasa.wfrp_master.common.characterEdit
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.CircularProgressIndicator
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.runtime.Composable
@@ -42,6 +45,7 @@ fun EditableCharacterAvatar(
             character.avatarUrl,
             ItemIcon.Size.XLarge,
             Modifier
+                .background(MaterialTheme.colors.surface, CircleShape)
                 .clickable(
                     interactionSource = remember { MutableInteractionSource() },
                     indication = rememberRipple(bounded = false),
