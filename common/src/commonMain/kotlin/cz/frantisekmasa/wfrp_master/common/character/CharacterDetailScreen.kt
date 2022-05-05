@@ -17,6 +17,7 @@ import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material.icons.rounded.ArrowDropDown
 import androidx.compose.material.icons.rounded.Edit
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableStateOf
@@ -52,6 +53,7 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.buttons.HamburgerButton
 import cz.frantisekmasa.wfrp_master.common.core.ui.flow.collectWithLifecycle
 import cz.frantisekmasa.wfrp_master.common.core.ui.menu.DropdownMenu
 import cz.frantisekmasa.wfrp_master.common.core.ui.menu.DropdownMenuItem
+import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.FullScreenProgress
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.rememberScreenModel
 import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.Breadcrumbs
 import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.IconAction
@@ -81,21 +83,33 @@ data class CharacterDetailScreen(
 
         val navigator = LocalNavigator.currentOrThrow
 
-        var currentTab by rememberSaveable { mutableStateOf(initialTab) }
+        if (party == null || character == null) {
+            SkeletonScaffold()
+            return
+        }
+
+        val hiddenTabs = character.hiddenTabs
+        val tabs = remember(hiddenTabs) { CharacterTab.values().filterNot { it in hiddenTabs } }
+
+        var currentTab by rememberSaveable(tabs) {
+            mutableStateOf(
+                if (initialTab in tabs)
+                    initialTab
+                else tabs.firstOrNull()
+            )
+        }
 
         Scaffold(
             topBar = {
                 TopAppBar(
                     navigationIcon = { HamburgerButton() },
                     title = {
-                        if (character != null && party != null) {
-                            CharacterTitle(
-                                party = party,
-                                character = character,
-                                screenModel = screenModel,
-                                currentTab = currentTab,
-                            )
-                        }
+                        CharacterTitle(
+                            party = party,
+                            character = character,
+                            screenModel = screenModel,
+                            currentTab = currentTab,
+                        )
                     },
                     actions = {
                         IconAction(
@@ -111,7 +125,8 @@ data class CharacterDetailScreen(
                 character = character,
                 party = party,
                 screenModel = screenModel,
-                onTabChange = { currentTab = it }
+                tabs = tabs,
+                onTabChange = { currentTab = it },
             )
         }
     }
@@ -121,7 +136,7 @@ data class CharacterDetailScreen(
         party: Party,
         character: Character,
         screenModel: CharacterScreenModel,
-        currentTab: CharacterTab,
+        currentTab: CharacterTab?,
     ) {
         val characterPickerScreenModel: CharacterPickerScreenModel = rememberScreenModel(arg = party.id)
         val userId = UserId(LocalUser.current.id)
@@ -168,7 +183,7 @@ data class CharacterDetailScreen(
                                         CharacterDetailScreen(
                                             characterId = CharacterId(party.id, otherCharacter.id),
                                             comingFromCombat = comingFromCombat,
-                                            initialTab = currentTab,
+                                            initialTab = currentTab ?: CharacterTab.values().first(),
                                         )
                                     )
                                 } else {
@@ -204,6 +219,7 @@ data class CharacterDetailScreen(
         character: Character?,
         party: Party?,
         screenModel: CharacterScreenModel,
+        tabs: List<CharacterTab>,
         onTabChange: (CharacterTab) -> Unit,
     ) {
         if (character == null || party == null) {
@@ -236,16 +252,25 @@ data class CharacterDetailScreen(
                 ActiveCombatBanner(party)
             }
 
-            val allTabs = remember { CharacterTab.values() }
+            if (tabs.isEmpty()) {
+                val navigator = LocalNavigator.currentOrThrow
+
+                LaunchedEffect(Unit) {
+                    navigator.push(
+                        CharacterEditScreen(characterId, CharacterEditScreen.Section.TABS)
+                    )
+                }
+                return@Column
+            }
 
             TabPager(
                 Modifier.weight(1f),
                 initialPage = initialTab.ordinal,
-                onPageChange = { onTabChange(allTabs[it]) },
+                onPageChange = { onTabChange(tabs[it]) },
             ) {
                 val modifier = Modifier.width(screenWidth)
 
-                allTabs.forEach {
+                tabs.forEach {
                     tab(it, character, party, modifier, screenModel)
                 }
             }
@@ -311,4 +336,11 @@ data class CharacterDetailScreen(
         }
     }
 
+}
+
+@Composable
+private fun SkeletonScaffold() {
+    Scaffold(topBar = { TopAppBar {  } }) {
+        FullScreenProgress()
+    }
 }

@@ -31,6 +31,7 @@ data class Character(
     val avatarUrl: String? = null,
     val id: String = userId ?: error("Either ID or UserId must be present"), // TODO: Remove this fallback in 1.14
     val money: Money = Money.zero(),
+    val hiddenTabs: Set<CharacterTab> = emptySet(),
 ) {
 
     val characteristics: Stats get() = characteristicsBase + characteristicsAdvances
@@ -96,6 +97,8 @@ data class Character(
     }
 
     fun addMoney(amount: Money) = copy(money = money + amount)
+
+    fun updateHiddenTabs(hiddenTabs: Set<CharacterTab>) = copy(hiddenTabs = hiddenTabs)
 
     /**
      * @throws NotEnoughMoney

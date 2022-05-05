@@ -470,6 +470,12 @@ class Parties extends Suite {
 
         // Invalid ambition field type
         await firebase.assertFails(character.set({...data, ambitions: {shortTerm: "foo", longTerm: 1}}));
+
+        // Unknown hidden tabs
+        await firebase.assertFails(character.set({...data, hiddenTabs: ["UNKNOWN_TAB"]}));
+
+        // Duplicate hidden tabs
+        await firebase.assertFails(character.set({...data, hiddenTabs: ["ATTRIBUTES", "ATTRIBUTES"]}));
     }
 
     @test
@@ -538,6 +544,7 @@ class Parties extends Suite {
         await firebase.assertSucceeds(
             document.update("points", {...this.validCharacter(userId).points, hardyWoundsBonus: 3})
         );
+        await firebase.assertSucceeds(document.update("hiddenTabs", ["ATTRIBUTES"]))
     }
 
     @test

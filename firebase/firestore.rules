@@ -375,6 +375,7 @@ service cloud.firestore {
                             "hardyTalent",
                             "conditions",
                             "hardyTalent",
+                            "hiddenTabs",
                             "avatarUrl",
                             "archived"
                         ].hasAll(character.keys())
@@ -397,6 +398,19 @@ service cloud.firestore {
                         && areAmbitionsValid(character.ambitions)
                         && character.note is string && character.note.size() <= 400
                         && character.hardyTalent is bool
+                        && (! ("hiddenTabs" in character) ||
+                            (character.hiddenTabs is list &&
+                             character.hiddenTabs.toSet().size() == character.hiddenTabs.size() &&
+                                 [
+                                    "ATTRIBUTES",
+                                    "CONDITIONS",
+                                    "SKILLS_AND_TALENTS",
+                                    "SPELLS",
+                                    "RELIGION",
+                                    "TRAPPINGS"
+                                ].hasAll(character.hiddenTabs)
+                            )
+                        )
                         && (! ("avatarUrl" in character) || character.avatarUrl is string || character.avatarUrl == null)
                         && (! ("archived" in character) || (character.archived is bool && (!character.archived || character.userId == null)))
                         && (! ("conditions" in character) || areValidConditions(character.conditions))
