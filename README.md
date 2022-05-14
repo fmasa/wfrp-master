@@ -2,6 +2,8 @@
 
 ## Development
 
+Development is done using Android Studio 2021.2.1+.
+
 This application heavily uses the Firebase Firestore. The best way to work on this project is to
  start your own Firestore emulator and use it instead of production database.
 
