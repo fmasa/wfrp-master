@@ -30,9 +30,11 @@ open class FirestoreCharacterItemRepository<T : CharacterItem>(
     }
 
     override suspend fun save(characterId: CharacterId, item: T) {
+        val data = mapper.toDocumentData(item)
+
         itemCollection(characterId)
             .document(item.id.toString())
-            .set(mapper.toDocumentData(item), SetOptions.MERGE)
+            .set(data, SetOptions.mergeFields(data.keys))
     }
 
     protected fun itemCollection(characterId: CharacterId) =

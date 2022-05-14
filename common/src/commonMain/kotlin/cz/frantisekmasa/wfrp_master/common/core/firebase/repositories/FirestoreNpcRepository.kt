@@ -39,10 +39,12 @@ import kotlinx.coroutines.flow.Flow
 
         firestore.runTransaction { transaction ->
             npcs.forEach { npc ->
+                val data = mapper.toDocumentData(npc)
+
                 transaction.set(
                     collection.document(npc.id.toString()),
-                    mapper.toDocumentData(npc),
-                    SetOptions.MERGE
+                    data,
+                    SetOptions.mergeFields(data.keys),
                 )
             }
         }

@@ -28,7 +28,7 @@ class FirestoreCharacterFeatureRepository<T : Any>(
         val data = mapper.toDocumentData(feature)
 
         Napier.d("Saving $documentId for character $characterId to firestore")
-        document(characterId).set(data, SetOptions.MERGE)
+        document(characterId).set(data, SetOptions.mergeFields(data.keys))
     }
 
     override fun getLive(characterId: CharacterId) =

@@ -29,7 +29,11 @@ class FirestorePartyRepository(
         Napier.d("Saving party $data to firestore")
         try {
             firestore.runTransaction { transaction ->
-                transaction.set(parties.document(party.id.toString()), data, SetOptions.MERGE)
+                transaction.set(
+                    parties.document(party.id.toString()),
+                    data,
+                    SetOptions.mergeFields(data.keys),
+                )
             }
         } catch (e: FirestoreException) {
             if (e.isUnavailable) {

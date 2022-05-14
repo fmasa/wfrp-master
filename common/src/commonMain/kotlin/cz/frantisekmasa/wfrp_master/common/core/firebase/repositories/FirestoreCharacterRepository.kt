@@ -30,7 +30,7 @@ class FirestoreCharacterRepository(
         Napier.d("Saving character $data in party $partyId to firestore")
         characters(partyId)
             .document(character.id)
-            .set(data, SetOptions.MERGE)
+            .set(data, SetOptions.mergeFields(data.keys))
     }
 
     override suspend fun get(characterId: CharacterId): Character {
