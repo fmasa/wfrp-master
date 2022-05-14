@@ -31,7 +31,7 @@ class FirestoreInvitationProcessor(
                         )
                     )
                 ),
-                SetOptions.MERGE
+                SetOptions.mergeFields(listOf("invitations"))
             )
 
         firestore.collection("parties")

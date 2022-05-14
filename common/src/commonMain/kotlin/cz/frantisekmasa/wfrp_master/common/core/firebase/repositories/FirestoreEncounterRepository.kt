@@ -62,10 +62,12 @@ class FirestoreEncounterRepository(
     override suspend fun save(partyId: PartyId, vararg encounters: Encounter) {
         firestore.runTransaction { transaction ->
             encounters.forEach { encounter ->
+                val data = mapper.toDocumentData(encounter)
+
                 transaction.set(
                     encounters(partyId).document(encounter.id.toString()),
-                    mapper.toDocumentData(encounter),
-                    SetOptions.MERGE
+                    data,
+                    SetOptions.mergeFields(data.keys),
                 )
             }
         }

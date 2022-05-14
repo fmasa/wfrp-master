@@ -58,7 +58,7 @@ class FirestoreCompendium<T : CompendiumItem<T>>(
                 transaction.set(
                     collection(partyId).document(id.toString()),
                     data,
-                    SetOptions.MERGE
+                    SetOptions.mergeFields(data.keys)
                 )
             }
         }
