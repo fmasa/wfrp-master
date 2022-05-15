@@ -173,8 +173,8 @@ data class ArmourStrings(
     val labelArmourPoints: String = "Armour Points (APs)",
     val labelType: String = "Armour Type",
     val labelLocations: String = "Locations",
-    val locations: ArmourLocationStrings = ArmourLocationStrings(),
     val messages: ArmourMessageStrings = ArmourMessageStrings(),
+    val shield: String = "Shield",
     val title: String = "Armour",
     val types: ArmourTypeStrings = ArmourTypeStrings(),
 )
@@ -182,17 +182,6 @@ data class ArmourStrings(
 @Immutable
 data class ArmourMessageStrings(
     val atLeastOneLocationRequired: String = "At least one location is required",
-)
-
-@Immutable
-data class ArmourLocationStrings(
-    val shield: String = "Shield",
-    val leftLeg: String = "Left Leg",
-    val rightLeg: String = "Right Leg",
-    val leftArm: String = "Left Arm",
-    val rightArm: String = "Right Arm",
-    val body: String = "Body",
-    val head: String = "Head",
 )
 
 @Immutable
@@ -349,6 +338,7 @@ data class CommonUiStrings(
 data class CombatStrings(
     val buttonEndCombat: String = "End combat",
     val iconNextTurn: String = "Next turn",
+    val hitLocations: HitLocationStrings = HitLocationStrings(),
     val iconPreviousTurn: String = "Previous turn",
     val initiativeStrategyConfigOption: String = "Initiative rules",
     val initiativeStrategyPrompt: String = "Select Initiative rules",
@@ -366,6 +356,16 @@ data class CombatStrings(
 data class CombatMessageStrings(
     val combatInProgress: String = "Combat is in progress",
     val noActiveCombat: String = "There is no active combat",
+)
+
+@Immutable
+data class HitLocationStrings(
+    val leftLeg: String = "Left Leg",
+    val rightLeg: String = "Right Leg",
+    val leftArm: String = "Left Arm",
+    val rightArm: String = "Right Arm",
+    val body: String = "Body",
+    val head: String = "Head",
 )
 
 @Immutable

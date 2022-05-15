@@ -40,7 +40,7 @@ internal fun ArmourCard(Armour: TrappingsScreenModel.EquippedArmour, onChange: (
         Row(modifier = modifier) {
             ArmourPart(
                 icon = Resources.Drawable.ArmorShield,
-                name = strings.locations.shield,
+                name = strings.shield,
                 base = Armour.armourFromItems.shield,
                 points = Armour.legacyArmour.shield,
                 onChange = { change { copy(shield = it) } },
@@ -48,7 +48,7 @@ internal fun ArmourCard(Armour: TrappingsScreenModel.EquippedArmour, onChange: (
             )
             ArmourPart(
                 icon = Resources.Drawable.ArmorHead,
-                name = strings.locations.head,
+                name = LocalStrings.current.combat.hitLocations.head,
                 base = Armour.armourFromItems.head,
                 points = Armour.legacyArmour.head,
                 rollRange = 1..9,
@@ -61,7 +61,7 @@ internal fun ArmourCard(Armour: TrappingsScreenModel.EquippedArmour, onChange: (
         Row(modifier = modifier) {
             ArmourPart(
                 icon = Resources.Drawable.ArmorArmRight,
-                name = strings.locations.rightArm,
+                name = LocalStrings.current.combat.hitLocations.rightArm,
                 base = Armour.armourFromItems.rightArm,
                 points = Armour.legacyArmour.rightArm,
                 rollRange = 25..44,
@@ -71,7 +71,7 @@ internal fun ArmourCard(Armour: TrappingsScreenModel.EquippedArmour, onChange: (
 
             ArmourPart(
                 icon = Resources.Drawable.ArmorChest,
-                name = strings.locations.body,
+                name = LocalStrings.current.combat.hitLocations.body,
                 base = Armour.armourFromItems.body,
                 points = Armour.legacyArmour.body,
                 rollRange = 45..79,
@@ -81,7 +81,7 @@ internal fun ArmourCard(Armour: TrappingsScreenModel.EquippedArmour, onChange: (
 
             ArmourPart(
                 icon = Resources.Drawable.ArmorArmLeft,
-                name = strings.locations.leftArm,
+                name = LocalStrings.current.combat.hitLocations.leftArm,
                 base = Armour.armourFromItems.leftArm,
                 points = Armour.legacyArmour.leftArm,
                 rollRange = 10..24,
@@ -96,7 +96,7 @@ internal fun ArmourCard(Armour: TrappingsScreenModel.EquippedArmour, onChange: (
         ) {
             ArmourPart(
                 icon = Resources.Drawable.ArmorLegRight,
-                name = strings.locations.rightLeg,
+                name = LocalStrings.current.combat.hitLocations.rightLeg,
                 base = Armour.armourFromItems.rightLeg,
                 points = Armour.legacyArmour.rightLeg,
                 rollRange = 90..100,
@@ -105,7 +105,7 @@ internal fun ArmourCard(Armour: TrappingsScreenModel.EquippedArmour, onChange: (
 
             ArmourPart(
                 icon = Resources.Drawable.ArmorLegLeft,
-                name = strings.locations.leftLeg,
+                name = LocalStrings.current.combat.hitLocations.leftLeg,
                 base = Armour.armourFromItems.leftLeg,
                 points = Armour.legacyArmour.leftLeg,
                 rollRange = 80..89,

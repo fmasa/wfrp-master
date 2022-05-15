@@ -13,7 +13,7 @@ import com.benasher44.uuid.uuid4
 import cz.frantisekmasa.wfrp_master.common.core.domain.NamedEnum
 import cz.frantisekmasa.wfrp_master.common.core.domain.localizedName
 import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.AmmunitionRangeExpression
-import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.ArmourLocation
+import cz.frantisekmasa.wfrp_master.common.core.domain.HitLocation
 import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.ArmourPoints
 import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.ArmourType
 import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.DamageExpression
@@ -223,7 +223,7 @@ private fun ArmourLocationsPickers(formData: TrappingTypeFormData, validate: Boo
     InputLabel(strings.labelLocations)
 
     CheckboxList(
-        items = ArmourLocation.values(),
+        items = HitLocation.values(),
         text = { it.localizedName },
         selected = selectedParts,
     )
@@ -373,7 +373,7 @@ private class TrappingTypeFormData(
     val ammunitionRange: InputValue,
     val ammunitionWeaponGroups: MutableState<Set<RangedWeaponGroup>>,
     val armourPoints: InputValue,
-    val armourLocations: MutableState<Set<ArmourLocation>>,
+    val armourLocations: MutableState<Set<HitLocation>>,
     val armourType: MutableState<ArmourType>,
     val carries: InputValue,
     val damage: InputValue,
@@ -487,7 +487,7 @@ private class TrappingTypeFormData(
             type: TrappingTypeOption,
             ammunitionRange: AmmunitionRangeExpression? = null,
             ammunitionWeaponGroups: Set<RangedWeaponGroup> = emptySet(),
-            armourLocations: Set<ArmourLocation> = emptySet(),
+            armourLocations: Set<HitLocation> = emptySet(),
             armourPoints: ArmourPoints? = null,
             armourType: ArmourType = ArmourType.SOFT_LEATHER,
             carries: Encumbrance? = null,

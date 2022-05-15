@@ -1,6 +1,7 @@
 package cz.frantisekmasa.wfrp_master.common.core.domain.trappings
 
 import androidx.compose.runtime.Immutable
+import cz.frantisekmasa.wfrp_master.common.core.domain.HitLocation
 import cz.frantisekmasa.wfrp_master.common.core.shared.Parcelable
 import cz.frantisekmasa.wfrp_master.common.core.shared.Parcelize
 import kotlinx.serialization.Serializable
@@ -57,12 +58,12 @@ data class Armour(
                 .filter { it.worn }
                 .map {
                     Armour(
-                        head = if (ArmourLocation.HEAD in it.locations) it.points.value else 0,
-                        body = if (ArmourLocation.BODY in it.locations) it.points.value else 0,
-                        leftArm = if (ArmourLocation.LEFT_ARM in it.locations) it.points.value else 0,
-                        rightArm = if (ArmourLocation.RIGHT_ARM in it.locations) it.points.value else 0,
-                        leftLeg = if (ArmourLocation.LEFT_LEG in it.locations) it.points.value else 0,
-                        rightLeg = if (ArmourLocation.RIGHT_LEG in it.locations) it.points.value else 0,
+                        head = if (HitLocation.HEAD in it.locations) it.points.value else 0,
+                        body = if (HitLocation.BODY in it.locations) it.points.value else 0,
+                        leftArm = if (HitLocation.LEFT_ARM in it.locations) it.points.value else 0,
+                        rightArm = if (HitLocation.RIGHT_ARM in it.locations) it.points.value else 0,
+                        leftLeg = if (HitLocation.LEFT_LEG in it.locations) it.points.value else 0,
+                        rightLeg = if (HitLocation.RIGHT_LEG in it.locations) it.points.value else 0,
                     )
                 }.fold(Armour()) { a, b -> a + b }
         }

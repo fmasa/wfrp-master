@@ -153,13 +153,13 @@ private fun CharacteristicsSegment(data: CharacteristicsFormData, validate: Bool
 
 @Composable
 private fun ArmorSegment(data: ArmorFormData, validate: Boolean) {
-    val labels = LocalStrings.current.armour.locations
+    val labels = LocalStrings.current.combat.hitLocations
 
     val rows = listOf(
         listOf(
             labels.head to data.head,
             labels.body to data.body,
-            labels.shield to data.shield,
+            LocalStrings.current.armour.shield to data.shield,
             "" to null // Empty container
         ),
 

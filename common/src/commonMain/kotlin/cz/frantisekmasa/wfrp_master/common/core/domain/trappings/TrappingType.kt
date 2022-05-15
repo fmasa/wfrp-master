@@ -1,6 +1,7 @@
 package cz.frantisekmasa.wfrp_master.common.core.domain.trappings
 
 import androidx.compose.runtime.Immutable
+import cz.frantisekmasa.wfrp_master.common.core.domain.HitLocation
 import cz.frantisekmasa.wfrp_master.common.core.shared.Parcelable
 import cz.frantisekmasa.wfrp_master.common.core.shared.Parcelize
 import kotlinx.serialization.SerialName
@@ -61,7 +62,7 @@ sealed class TrappingType : Parcelable {
     @SerialName("ARMOUR")
     @Immutable
     data class Armour(
-        val locations: Set<ArmourLocation>,
+        val locations: Set<HitLocation>,
         val type: ArmourType,
         val points: ArmourPoints,
         override val worn: Boolean,
