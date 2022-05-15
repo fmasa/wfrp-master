@@ -1,8 +1,6 @@
 package cz.frantisekmasa.wfrp_master.common.core.domain.trappings
 
 import androidx.compose.runtime.Immutable
-import cz.frantisekmasa.wfrp_master.common.core.domain.NamedEnum
-import cz.frantisekmasa.wfrp_master.common.core.shared.Parcelable
 import cz.frantisekmasa.wfrp_master.common.core.shared.Parcelize
 import cz.frantisekmasa.wfrp_master.common.localization.Strings
 
@@ -10,8 +8,8 @@ import cz.frantisekmasa.wfrp_master.common.localization.Strings
 @Immutable
 enum class WeaponQuality(
     override val nameResolver: (strings: Strings) -> String,
-    val hasRating: Boolean = false,
-) : NamedEnum, Parcelable {
+    override val hasRating: Boolean = false,
+) : Quality {
     ACCURATE({ it.weapons.qualities.accurate }),
     BLACKPOWDER({ it.weapons.qualities.blackpowder }),
     BLAST({ it.weapons.qualities.blast }, hasRating = true),

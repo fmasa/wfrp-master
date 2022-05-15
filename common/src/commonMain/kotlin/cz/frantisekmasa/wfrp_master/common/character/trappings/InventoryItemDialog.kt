@@ -10,11 +10,13 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.snapshots.SnapshotStateMap
 import androidx.compose.ui.text.input.KeyboardType
 import com.benasher44.uuid.uuid4
+import cz.frantisekmasa.wfrp_master.common.core.domain.HitLocation
 import cz.frantisekmasa.wfrp_master.common.core.domain.NamedEnum
 import cz.frantisekmasa.wfrp_master.common.core.domain.localizedName
 import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.AmmunitionRangeExpression
-import cz.frantisekmasa.wfrp_master.common.core.domain.HitLocation
+import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.ArmourFlaw
 import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.ArmourPoints
+import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.ArmourQuality
 import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.ArmourType
 import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.DamageExpression
 import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.Encumbrance
@@ -23,6 +25,7 @@ import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.InventoryItemId
 import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.MeleeWeaponGroup
 import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.RangedWeaponGroup
 import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.Reach
+import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.TrappingFeature
 import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.TrappingType
 import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.WeaponEquip
 import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.WeaponFlaw
@@ -144,6 +147,16 @@ private fun TrappingTypeForm(formData: TrappingTypeFormData, validate: Boolean) 
                 validate = validate,
             )
             WornCheckbox(formData)
+            TrappingFeaturePicker(
+                strings.armour.labelQualities,
+                ArmourQuality.values(),
+                formData.armourQualities,
+            )
+            TrappingFeaturePicker(
+                strings.armour.labelFlaws,
+                ArmourFlaw.values(),
+                formData.armourFlaws,
+            )
         }
         TrappingTypeOption.CONTAINER -> {
             TextInput(
@@ -268,13 +281,34 @@ private fun DamageInput(formData: TrappingTypeFormData, validate: Boolean) {
     )
 }
 
+
 @Composable
 private fun WeaponQualitiesPicker(formData: TrappingTypeFormData) {
-    val values = formData.weaponQualities
+    TrappingFeaturePicker(
+        LocalStrings.current.weapons.labelQualities,
+        WeaponQuality.values(),
+        formData.weaponQualities
+    )
+}
 
+@Composable
+private fun WeaponFlawsPicker(formData: TrappingTypeFormData) {
+    TrappingFeaturePicker(
+        LocalStrings.current.weapons.labelFlaws,
+        WeaponFlaw.values(),
+        formData.weaponFlaws
+    )
+}
+
+@Composable
+private fun <T : TrappingFeature> TrappingFeaturePicker(
+    label: String,
+    options: Array<T>,
+    values: SnapshotStateMap<T, Int>
+) {
     Column {
-        InputLabel(LocalStrings.current.weapons.labelQualities)
-        WeaponQuality.values().forEach { quality ->
+        InputLabel(label)
+        options.forEach { quality ->
             CheckboxWithText(
                 text = quality.localizedName,
                 checked = values.containsKey(quality),
@@ -293,39 +327,6 @@ private fun WeaponQualitiesPicker(formData: TrappingTypeFormData) {
                             value = rating,
                             onIncrement = { values[quality] = rating + 1 },
                             onDecrement = { values[quality] = (rating - 1).coerceAtLeast(1) },
-                        )
-                    }
-                }
-            )
-        }
-    }
-}
-
-@Composable
-private fun WeaponFlawsPicker(formData: TrappingTypeFormData) {
-    val values = formData.weaponFlaws
-
-    Column {
-        InputLabel(LocalStrings.current.weapons.labelFlaws)
-        WeaponFlaw.values().forEach { flaw ->
-            CheckboxWithText(
-                text = flaw.localizedName,
-                checked = values.containsKey(flaw),
-                onCheckedChange = { checked ->
-                    if (checked) {
-                        values[flaw] = 1
-                    } else {
-                        values.remove(flaw)
-                    }
-                },
-                badge = {
-                    val rating = values[flaw]
-
-                    if (rating != null && flaw.hasRating) {
-                        NumberPicker(
-                            value = rating,
-                            onIncrement = { values[flaw] = rating + 1 },
-                            onDecrement = { values[flaw] = (rating - 1).coerceAtLeast(1) },
                         )
                     }
                 }
@@ -375,6 +376,8 @@ private class TrappingTypeFormData(
     val armourPoints: InputValue,
     val armourLocations: MutableState<Set<HitLocation>>,
     val armourType: MutableState<ArmourType>,
+    val armourQualities: SnapshotStateMap<ArmourQuality, Int>,
+    val armourFlaws: SnapshotStateMap<ArmourFlaw, Int>,
     val carries: InputValue,
     val damage: InputValue,
     val meleeWeaponGroup: MutableState<MeleeWeaponGroup>,
@@ -412,6 +415,8 @@ private class TrappingTypeFormData(
             points = ArmourPoints(armourPoints.toInt()),
             type = armourType.value,
             worn = worn.value,
+            qualities = armourQualities.toMap(),
+            flaws = armourFlaws.toMap(),
         )
         TrappingTypeOption.CONTAINER -> TrappingType.Container(
             carries = Encumbrance(carries.toDouble()),
@@ -454,6 +459,8 @@ private class TrappingTypeFormData(
                     armourType = type.type,
                     armourLocations = type.locations,
                     armourPoints = type.points,
+                    armourQualities = type.qualities,
+                    armourFlaws = type.flaws,
                     worn = type.worn,
                 )
                 is TrappingType.Container -> fromDefaults(
@@ -490,6 +497,8 @@ private class TrappingTypeFormData(
             armourLocations: Set<HitLocation> = emptySet(),
             armourPoints: ArmourPoints? = null,
             armourType: ArmourType = ArmourType.SOFT_LEATHER,
+            armourQualities: Map<ArmourQuality, Int> = emptyMap(),
+            armourFlaws: Map<ArmourFlaw, Int> = emptyMap(),
             carries: Encumbrance? = null,
             damage: DamageExpression? = null,
             meleeWeaponGroup: MeleeWeaponGroup = MeleeWeaponGroup.BASIC,
@@ -510,6 +519,8 @@ private class TrappingTypeFormData(
                     armourPoints?.value?.toString() ?: "",
                     Rules.NonNegativeInteger(),
                 ),
+                armourQualities = remember { stateMapFrom(armourQualities) },
+                armourFlaws = remember { stateMapFrom(armourFlaws) },
                 ammunitionRange = inputValue(
                     ammunitionRange?.value ?: "",
                     Rules.NotBlank(),

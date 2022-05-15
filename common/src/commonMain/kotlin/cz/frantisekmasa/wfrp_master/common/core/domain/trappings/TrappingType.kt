@@ -65,6 +65,8 @@ sealed class TrappingType : Parcelable {
         val locations: Set<HitLocation>,
         val type: ArmourType,
         val points: ArmourPoints,
+        val qualities: Map<ArmourQuality, Rating> = emptyMap(),
+        val flaws: Map<ArmourFlaw, Rating> = emptyMap(),
         override val worn: Boolean,
     ) : TrappingType(), WearableTrapping
 

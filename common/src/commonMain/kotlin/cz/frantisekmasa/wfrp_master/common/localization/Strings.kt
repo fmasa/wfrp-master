@@ -170,18 +170,34 @@ data class EncounterMessageStrings(
 
 @Immutable
 data class ArmourStrings(
+    val flaws: ArmourFlawStrings = ArmourFlawStrings(),
     val labelArmourPoints: String = "Armour Points (APs)",
-    val labelType: String = "Armour Type",
+    val labelFlaws: String = "Armour Flaws",
     val labelLocations: String = "Locations",
+    val labelQualities: String = "Armour Qualities",
+    val labelType: String = "Armour Type",
     val messages: ArmourMessageStrings = ArmourMessageStrings(),
+    val qualities: ArmourQualityStrings = ArmourQualityStrings(),
     val shield: String = "Shield",
     val title: String = "Armour",
     val types: ArmourTypeStrings = ArmourTypeStrings(),
 )
 
 @Immutable
+data class ArmourFlawStrings(
+    val partial: String = "Partial",
+    val weakpoints: String = "Weakpoints",
+)
+
+@Immutable
 data class ArmourMessageStrings(
     val atLeastOneLocationRequired: String = "At least one location is required",
+)
+
+@Immutable
+data class ArmourQualityStrings(
+    val flexible: String = "Flexible",
+    val impenetrable: String = "Impenetrable",
 )
 
 @Immutable
