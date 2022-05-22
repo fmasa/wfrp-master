@@ -5,10 +5,14 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import cz.frantisekmasa.wfrp_master.common.character.CompendiumItemChooser
 import cz.frantisekmasa.wfrp_master.common.character.religion.blessings.BlessingsScreenModel
+import cz.frantisekmasa.wfrp_master.common.core.domain.religion.Blessing
 import cz.frantisekmasa.wfrp_master.common.core.shared.Parcelable
 import cz.frantisekmasa.wfrp_master.common.core.shared.Parcelize
+import cz.frantisekmasa.wfrp_master.common.core.shared.Resources
 import cz.frantisekmasa.wfrp_master.common.core.ui.dialogs.FullScreenDialog
+import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
 
 
 @Composable
@@ -26,13 +30,17 @@ internal fun AddBlessingDialog(screenModel: BlessingsScreenModel, onDismissReque
     ) {
         when (state) {
             ChoosingCompendiumMiracle ->
-                CompendiumBlessingChooser(
+                CompendiumItemChooser(
                     screenModel = screenModel,
-                    onComplete = onDismissRequest,
-                    onCustomBlessingRequest = { state = FillingInCustomMiracle },
+                    title = LocalStrings.current.blessings.titleChooseCompendiumBlessing,
                     onDismissRequest = onDismissRequest,
+                    icon = { Resources.Drawable.Blessing },
+                    onSelect = { screenModel.saveItem(Blessing.fromCompendium(it)) },
+                    onCustomItemRequest = { state = FillingInCustomBlessing },
+                    customItemButtonText = LocalStrings.current.blessings.buttonAddNonCompendium,
+                    emptyUiIcon = Resources.Drawable.Blessing,
                 )
-            is FillingInCustomMiracle -> NonCompendiumBlessingForm(
+            is FillingInCustomBlessing -> NonCompendiumBlessingForm(
                 screenModel = screenModel,
                 existingBlessing = null,
                 onDismissRequest = onDismissRequest,
@@ -47,4 +55,4 @@ private sealed class AddMiracleDialogState : Parcelable
 private object ChoosingCompendiumMiracle : AddMiracleDialogState()
 
 @Parcelize
-private object FillingInCustomMiracle : AddMiracleDialogState()
+private object FillingInCustomBlessing : AddMiracleDialogState()

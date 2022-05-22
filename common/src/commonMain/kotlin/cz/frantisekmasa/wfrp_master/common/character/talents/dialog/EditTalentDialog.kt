@@ -17,7 +17,7 @@ fun EditTalentDialog(
     onDismissRequest: () -> Unit
 ) {
     val talent =
-        screenModel.talents.collectWithLifecycle(null)
+        screenModel.items.collectWithLifecycle(null)
             .value
             ?.firstOrNull { it.id == talentId } ?: return
 

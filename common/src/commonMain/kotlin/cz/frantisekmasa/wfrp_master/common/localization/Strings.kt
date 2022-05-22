@@ -433,6 +433,8 @@ data class CompendiumMessageStrings(
     val outOfMemory: String = "PDF import failed. Not enough available RAM on device.",
     val importFailed: String = "PDF import failed. Check that you provided valid rulebook PDF.",
     val itemAlreadyExists: String = "Item already exists",
+    val noItems: String = "No items in compendium",
+    val noItemsInCompendiumSubtextPlayer: String = "Your GM has to add them first.",
 )
 
 @Immutable
@@ -669,7 +671,7 @@ data class MiracleStrings(
     val labelRange: String = "Range",
     val labelTarget: String = "Target",
     val title: String = "Miracles",
-    val titleChooseCompendiumSpell: String = "Choose Compendium spell…",
+    val titleChooseCompendiumMiracle: String = "Choose Compendium miracle…",
     val titleAdd: String = "Add Miracle",
     val titleNew: String = "New Miracle",
     val titleEdit: String = "Edit Miracle",

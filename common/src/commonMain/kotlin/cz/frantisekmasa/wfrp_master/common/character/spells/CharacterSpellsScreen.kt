@@ -67,7 +67,7 @@ fun CharacterSpellsScreen(
 
 @Composable
 private fun MainContainer(screenModel: SpellsScreenModel) {
-    val spells = screenModel.spells.collectWithLifecycle(null).value ?: return
+    val spells = screenModel.items.collectWithLifecycle(null).value ?: return
 
     if (spells.isEmpty()) {
         val messages = LocalStrings.current.spells.messages

@@ -2,10 +2,12 @@ package cz.frantisekmasa.wfrp_master.common.core.domain.spells
 
 import androidx.compose.runtime.Immutable
 import com.benasher44.uuid.Uuid
+import com.benasher44.uuid.uuid4
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.CharacterItem
 import cz.frantisekmasa.wfrp_master.common.core.shared.Parcelize
 import kotlinx.serialization.Contextual
 import kotlinx.serialization.Serializable
+import cz.frantisekmasa.wfrp_master.common.compendium.domain.Spell as CompendiumSpell
 
 
 @Parcelize
@@ -22,13 +24,7 @@ data class Spell(
     val effect: String,
     val memorized: Boolean = true, // TODO: Remove default value and migrate stored data
 ) : CharacterItem {
-    companion object {
-        const val NAME_MAX_LENGTH = 50
-        const val RANGE_MAX_LENGTH = 50
-        const val TARGET_MAX_LENGTH = 50
-        const val DURATION_MAX_LENGTH = 50
-        const val EFFECT_MAX_LENGTH = 1000
-    }
+
 
     val effectiveCastingNumber: Int get() = if (memorized) castingNumber else castingNumber * 2
 
@@ -39,5 +35,27 @@ data class Spell(
         require(target.length <= TARGET_MAX_LENGTH) { "Target must be shorter than $TARGET_MAX_LENGTH" }
         require(duration.length <= DURATION_MAX_LENGTH) { "Duration must be shorter than $DURATION_MAX_LENGTH" }
         require(effect.length <= EFFECT_MAX_LENGTH) { "Effect must be shorter than $EFFECT_MAX_LENGTH" }
+    }
+
+    companion object {
+        const val NAME_MAX_LENGTH = 50
+        const val RANGE_MAX_LENGTH = 50
+        const val TARGET_MAX_LENGTH = 50
+        const val DURATION_MAX_LENGTH = 50
+        const val EFFECT_MAX_LENGTH = 1000
+
+        fun fromCompendium(spell: CompendiumSpell): Spell {
+            return Spell(
+                id = uuid4(),
+                compendiumId = spell.id,
+                name = spell.name,
+                range = spell.range,
+                target = spell.target,
+                duration = spell.duration,
+                castingNumber = spell.castingNumber,
+                effect = spell.effect,
+                memorized = false,
+            )
+        }
     }
 }

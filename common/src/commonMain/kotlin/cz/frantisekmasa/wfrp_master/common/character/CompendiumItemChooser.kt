@@ -1,4 +1,4 @@
-package cz.frantisekmasa.wfrp_master.common.character.spells.dialog
+package cz.frantisekmasa.wfrp_master.common.character
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -21,9 +21,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import com.benasher44.uuid.uuid4
-import cz.frantisekmasa.wfrp_master.common.character.spells.SpellsScreenModel
-import cz.frantisekmasa.wfrp_master.common.core.domain.spells.Spell
+import cz.frantisekmasa.wfrp_master.common.core.CharacterItemScreenModel
+import cz.frantisekmasa.wfrp_master.common.core.domain.character.CharacterItem
+import cz.frantisekmasa.wfrp_master.common.core.domain.compendium.CompendiumItem
 import cz.frantisekmasa.wfrp_master.common.core.shared.IO
 import cz.frantisekmasa.wfrp_master.common.core.shared.Resources
 import cz.frantisekmasa.wfrp_master.common.core.ui.buttons.CloseButton
@@ -35,78 +35,63 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
 import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 
 @Composable
-internal fun CompendiumSpellChooser(
-    screenModel: SpellsScreenModel,
-    onComplete: () -> Unit,
-    onCustomSpellRequest: () -> Unit,
+internal fun <A : CharacterItem, B : CompendiumItem<B>> CompendiumItemChooser(
+    title: String,
+    icon: @Composable (B) -> Resources.Drawable,
+    screenModel: CharacterItemScreenModel<A, B>,
+    onSelect: suspend (B) -> Unit,
+    onCustomItemRequest: () -> Unit,
     onDismissRequest: () -> Unit,
+    customItemButtonText: String,
+    emptyUiIcon: Resources.Drawable,
 ) {
-    val strings = LocalStrings.current.spells
-
     Scaffold(
         topBar = {
             TopAppBar(
                 navigationIcon = { CloseButton(onDismissRequest) },
-                title = { Text(strings.titleChooseCompendiumSpell) },
+                title = { Text(title) },
             )
         }
     ) {
-        val compendiumSpells = screenModel.notUsedSpellsFromCompendium.collectWithLifecycle(null).value
-        val totalCompendiumSpellCount = screenModel.compendiumSpellsCount.collectWithLifecycle(null).value
+        val compendiumItems =
+            screenModel.notUsedItemsFromCompendium.collectWithLifecycle(null).value
+        val totalCompendiumItemCount =
+            screenModel.compendiumItemsCount.collectWithLifecycle(null).value
         var saving by remember { mutableStateOf(false) }
 
-        if (compendiumSpells == null || totalCompendiumSpellCount == null || saving) {
+        if (compendiumItems == null || totalCompendiumItemCount == null || saving) {
             FullScreenProgress()
             return@Scaffold
         }
 
         Column(Modifier.fillMaxSize()) {
             Box(Modifier.weight(1f)) {
-                if (compendiumSpells.isEmpty()) {
-
+                if (compendiumItems.isEmpty()) {
                     EmptyUI(
-                        icon = Resources.Drawable.Spell,
-                        text = strings.messages.noSpellsInCompendium,
-                        subText = when (totalCompendiumSpellCount) {
-                            0 -> strings.messages.noSpellsInCompendium
-                            else -> null
-                        },
+                        icon = emptyUiIcon,
+                        text = LocalStrings.current.compendium.messages.noItems,
+                        subText = if (totalCompendiumItemCount == 0)
+                            LocalStrings.current.compendium.messages.noItemsInCompendiumSubtextPlayer
+                        else null,
                     )
                 } else {
                     val coroutineScope = rememberCoroutineScope()
 
                     LazyColumn(contentPadding = PaddingValues(Spacing.bodyPadding)) {
-                        items(compendiumSpells, key = { it.id }) { spell ->
+                        items(compendiumItems, key = { it.id }) { item ->
                             ListItem(
                                 modifier = Modifier.clickable(
                                     onClick = {
                                         saving = false
 
-                                        coroutineScope.launch(Dispatchers.IO) {
-                                            screenModel.saveSpell(
-                                                Spell(
-                                                    id = uuid4(),
-                                                    compendiumId = spell.id,
-                                                    name = spell.name,
-                                                    range = spell.range,
-                                                    target = spell.target,
-                                                    duration = spell.duration,
-                                                    castingNumber = spell.castingNumber,
-                                                    effect = spell.effect,
-                                                    memorized = false,
-                                                )
-                                            )
-
-                                            onComplete()
-                                        }
+                                        coroutineScope.launch(Dispatchers.IO) { onSelect(item) }
                                     }
                                 ),
-                                icon = { ItemIcon(Resources.Drawable.Spell, ItemIcon.Size.Small) },
-                                text = { Text(spell.name) }
+                                icon = { ItemIcon(icon(item), ItemIcon.Size.Small) },
+                                text = { Text(item.name) }
                             )
                         }
                     }
@@ -117,9 +102,9 @@ internal fun CompendiumSpellChooser(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(Spacing.bodyPadding),
-                onClick = onCustomSpellRequest,
+                onClick = onCustomItemRequest,
             ) {
-                Text(strings.buttonAddNonCompendium)
+                Text(customItemButtonText)
             }
         }
     }

@@ -6,10 +6,13 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import com.benasher44.uuid.Uuid
+import cz.frantisekmasa.wfrp_master.common.character.CompendiumItemChooser
 import cz.frantisekmasa.wfrp_master.common.character.skills.SkillsScreenModel
 import cz.frantisekmasa.wfrp_master.common.core.shared.Parcelable
 import cz.frantisekmasa.wfrp_master.common.core.shared.Parcelize
+import cz.frantisekmasa.wfrp_master.common.core.shared.Resources
 import cz.frantisekmasa.wfrp_master.common.core.ui.dialogs.FullScreenDialog
+import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
 
 @Composable
 fun AddSkillDialog(screenModel: SkillsScreenModel, onDismissRequest: () -> Unit) {
@@ -26,11 +29,15 @@ fun AddSkillDialog(screenModel: SkillsScreenModel, onDismissRequest: () -> Unit)
     ) {
         when (val currentState = state) {
             ChoosingCompendiumSkill ->
-                CompendiumSkillChooser(
+                CompendiumItemChooser(
                     screenModel = screenModel,
-                    onSkillSelected = { state = FillingInAdvances(it.id, it.advanced) },
-                    onCustomSkillRequest = { state = FillingInCustomSkill },
+                    title = LocalStrings.current.skills.titleChooseCompendiumSkill,
                     onDismissRequest = onDismissRequest,
+                    icon = { it.characteristic.getIcon() },
+                    onSelect = { state = FillingInAdvances(it.id, it.advanced) },
+                    onCustomItemRequest = { state = FillingInCustomSkill },
+                    customItemButtonText = LocalStrings.current.skills.buttonAddNonCompendium,
+                    emptyUiIcon = Resources.Drawable.Skill,
                 )
             is FillingInAdvances ->
                 AdvancesForm(
