@@ -50,6 +50,7 @@ import cz.frantisekmasa.wfrp_master.common.core.firebase.repositories.FirestoreN
 import cz.frantisekmasa.wfrp_master.common.core.firebase.repositories.FirestorePartyRepository
 import cz.frantisekmasa.wfrp_master.common.core.firebase.repositories.FirestoreSkillRepository
 import cz.frantisekmasa.wfrp_master.common.core.serialization.UuidSerializer
+import cz.frantisekmasa.wfrp_master.common.core.tips.DismissedUserTipsHolder
 import cz.frantisekmasa.wfrp_master.common.encounters.EncounterDetailScreenModel
 import cz.frantisekmasa.wfrp_master.common.encounters.EncountersScreenModel
 import cz.frantisekmasa.wfrp_master.common.encounters.domain.EncounterRepository
@@ -107,6 +108,8 @@ val appModule = DI.Module("Common") {
     bindSingleton<Compendium<Miracle>> {
         FirestoreCompendium(Schema.Compendium.Miracles, instance(), mapper())
     }
+
+    bindSingleton { DismissedUserTipsHolder(instance()) }
 
     bindSingleton<InvitationProcessor> { FirestoreInvitationProcessor(instance(), instance()) }
     bindSingleton<SkillRepository> { FirestoreSkillRepository(instance(), mapper()) }

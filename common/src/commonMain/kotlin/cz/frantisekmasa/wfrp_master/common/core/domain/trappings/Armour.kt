@@ -28,6 +28,11 @@ data class Armour(
     }
 
     @Stable
+    fun isZero(): Boolean {
+        return shield == 0 && HitLocation.values().all { armourPoints(it).value == 0 }
+    }
+
+    @Stable
     fun armourPoints(location: HitLocation) = ArmourPoints(
         when (location) {
             HitLocation.HEAD -> head

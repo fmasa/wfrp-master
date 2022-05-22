@@ -17,11 +17,13 @@ import org.kodein.di.instance
 class Theme {
     class FixedColors(
         val splashScreenContent: Color,
+        val warning: Color,
     )
 
     companion object {
         val fixedColors = FixedColors(
             splashScreenContent = Color(234, 234, 234),
+            warning = Color(255, 214, 154),
         )
 
         @Composable

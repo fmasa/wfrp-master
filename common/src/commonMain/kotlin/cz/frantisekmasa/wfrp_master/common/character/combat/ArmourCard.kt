@@ -35,6 +35,8 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.cards.CardContainer
 import cz.frantisekmasa.wfrp_master.common.core.ui.cards.CardTitle
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.Chip
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
+import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.UserTip
+import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.UserTipCard
 import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
 
 @Composable
@@ -44,6 +46,8 @@ fun ArmourCard(
     toughnessBonus: UInt,
     onTrappingClick: (InventoryItem) -> Unit,
 ) {
+    UserTipCard(UserTip.ARMOUR_TRAPPINGS, Modifier.padding(horizontal = 8.dp))
+
     CardContainer(
         Modifier
             .padding(horizontal = 8.dp)

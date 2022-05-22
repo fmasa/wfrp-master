@@ -181,6 +181,9 @@ data class ArmourStrings(
     val points: (ArmourPoints) -> String = { "${it.value} AP" },
     val qualities: ArmourQualityStrings = ArmourQualityStrings(),
     val shield: String = "Shield",
+    val tipTrappings: String = "Armour is auto-calculated from worn armour trappings.",
+    val tipDeprecatedLegacyArmour: String =
+        "Manual armour will be removed in next versions in favor of auto-calculated armour from worn trappings.",
     val title: String = "Armour",
     val types: ArmourTypeStrings = ArmourTypeStrings(),
 )
@@ -346,8 +349,10 @@ data class CommonUiStrings(
     val buttonCancel: String = "Cancel",
     val buttonCreate: String = "Create",
     val buttonDetail: String = "Detail",
+    val buttonDismiss: String = "Dismiss",
     val buttonDuplicate: String = "Duplicate",
     val buttonFinish: String = "Finish",
+    val buttonKeep: String = "Keep",
     val buttonOpen: String = "Open",
     val buttonOk: String = "Ok",
     val buttonRemove: String = "Remove",
@@ -361,6 +366,7 @@ data class CommonUiStrings(
     val decrement: String = "Decrement value",
     val increment: String = "Increment value",
     val iconToggleFabMenu: String = "Toggle menu",
+    val dismissTipConfirmation: String = "Do you really want to dismiss this tip?",
 )
 
 @Immutable

@@ -5,6 +5,7 @@ import cz.frantisekmasa.wfrp_master.common.core.domain.party.PartyRepository
 import cz.frantisekmasa.wfrp_master.common.core.shared.SettingsKey
 import cz.frantisekmasa.wfrp_master.common.core.shared.SettingsStorage
 import cz.frantisekmasa.wfrp_master.common.core.shared.booleanSettingsKey
+import cz.frantisekmasa.wfrp_master.common.core.shared.edit
 import kotlinx.coroutines.flow.Flow
 
 class SettingsScreenModel(
