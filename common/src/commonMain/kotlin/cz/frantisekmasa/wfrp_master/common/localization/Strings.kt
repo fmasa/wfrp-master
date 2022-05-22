@@ -6,6 +6,7 @@ import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
+import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.ArmourPoints
 
 @Immutable
 data class Strings(
@@ -170,13 +171,27 @@ data class EncounterMessageStrings(
 
 @Immutable
 data class ArmourStrings(
-    val labelArmourPoints: String = "Armour Points (APs)",
-    val labelType: String = "Armour Type",
+    val flaws: ArmourFlawStrings = ArmourFlawStrings(),
+    val labelArmourPoints: String = "Armour Points (AP)",
+    val labelFlaws: String = "Armour Flaws",
     val labelLocations: String = "Locations",
-    val locations: ArmourLocationStrings = ArmourLocationStrings(),
+    val labelQualities: String = "Armour Qualities",
+    val labelType: String = "Armour Type",
     val messages: ArmourMessageStrings = ArmourMessageStrings(),
+    val points: (ArmourPoints) -> String = { "${it.value} AP" },
+    val qualities: ArmourQualityStrings = ArmourQualityStrings(),
+    val shield: String = "Shield",
+    val tipTrappings: String = "Armour is auto-calculated from worn armour trappings.",
+    val tipDeprecatedLegacyArmour: String =
+        "Manual armour will be removed in next versions in favor of auto-calculated armour from worn trappings.",
     val title: String = "Armour",
     val types: ArmourTypeStrings = ArmourTypeStrings(),
+)
+
+@Immutable
+data class ArmourFlawStrings(
+    val partial: String = "Partial",
+    val weakpoints: String = "Weakpoints",
 )
 
 @Immutable
@@ -185,14 +200,9 @@ data class ArmourMessageStrings(
 )
 
 @Immutable
-data class ArmourLocationStrings(
-    val shield: String = "Shield",
-    val leftLeg: String = "Left Leg",
-    val rightLeg: String = "Right Leg",
-    val leftArm: String = "Left Arm",
-    val rightArm: String = "Right Arm",
-    val body: String = "Body",
-    val head: String = "Head",
+data class ArmourQualityStrings(
+    val flexible: String = "Flexible",
+    val impenetrable: String = "Impenetrable",
 )
 
 @Immutable
@@ -245,6 +255,7 @@ data class CharacterStrings(
     val labelRace: String = "Race",
     val labelStatus: String = "Status",
     val motivation: String = "Motivation",
+    val messages: CharacterMessageStrings = CharacterMessageStrings(),
     val secondaryTextBasics: String = "Name, Race, Motivation",
     val secondaryTextCareer: String = "Career, Class, Social status",
     val secondaryTextExperience: String = "XP, Ambitions",
@@ -254,6 +265,7 @@ data class CharacterStrings(
         "$visible of $total tabs visible"
     },
     val tabAttributes: String = "Attributes",
+    val tabCombat: String = "Combat",
     val tabConditions: String = "Conditions",
     val tabReligions: String = "Religion",
     val tabSkillsAndTalents: String = "Skills & Talents",
@@ -269,6 +281,7 @@ data class CharacterStrings(
     val titleUiSettings: String = "UI settings",
     val titleVisibleTabs: String = "Visible tabs",
     val titleWellBeing: String = "Well-being",
+    val titleWeapons: String = "Weapons",
 )
 
 @Immutable
@@ -281,8 +294,16 @@ data class CharacteristicStrings(
     val intelligence: String = "Intelligence",
     val strength: String = "Strength",
     val toughness: String = "Toughness",
+    val toughnessBonusShortcut: String = "TB",
     val weaponSkill: String = "Weapon Skill",
     val willPower: String = "Will Power",
+)
+
+
+@Immutable
+data class CharacterMessageStrings(
+    val noEquippedWeapons: String = "No equipped weapons",
+    val noEquippedWeaponsSubText: String = "Character does not have any Weapon trappings equipped",
 )
 
 @Immutable
@@ -328,8 +349,10 @@ data class CommonUiStrings(
     val buttonCancel: String = "Cancel",
     val buttonCreate: String = "Create",
     val buttonDetail: String = "Detail",
+    val buttonDismiss: String = "Dismiss",
     val buttonDuplicate: String = "Duplicate",
     val buttonFinish: String = "Finish",
+    val buttonKeep: String = "Keep",
     val buttonOpen: String = "Open",
     val buttonOk: String = "Ok",
     val buttonRemove: String = "Remove",
@@ -343,12 +366,14 @@ data class CommonUiStrings(
     val decrement: String = "Decrement value",
     val increment: String = "Increment value",
     val iconToggleFabMenu: String = "Toggle menu",
+    val dismissTipConfirmation: String = "Do you really want to dismiss this tip?",
 )
 
 @Immutable
 data class CombatStrings(
     val buttonEndCombat: String = "End combat",
     val iconNextTurn: String = "Next turn",
+    val hitLocations: HitLocationStrings = HitLocationStrings(),
     val iconPreviousTurn: String = "Previous turn",
     val initiativeStrategyConfigOption: String = "Initiative rules",
     val initiativeStrategyPrompt: String = "Select Initiative rules",
@@ -366,6 +391,16 @@ data class CombatStrings(
 data class CombatMessageStrings(
     val combatInProgress: String = "Combat is in progress",
     val noActiveCombat: String = "There is no active combat",
+)
+
+@Immutable
+data class HitLocationStrings(
+    val leftLeg: String = "Left Leg",
+    val rightLeg: String = "Right Leg",
+    val leftArm: String = "Left Arm",
+    val rightArm: String = "Right Arm",
+    val body: String = "Body",
+    val head: String = "Head",
 )
 
 @Immutable
@@ -485,6 +520,7 @@ data class ValidationStrings(
 
 @Immutable
 data class WeaponStrings(
+    val equip: WeaponEquipStrings = WeaponEquipStrings(),
     val flaws: WeaponFlawStrings = WeaponFlawStrings(),
     val helperDamage: String = "Allowed operators: +,-,/,*,(,) and variables: SB",
     val helperRange: String = "Allowed operators: +,-,/,*,(,) and variables: SB",
@@ -495,10 +531,19 @@ data class WeaponStrings(
     val labelQualities: String = "Weapon Qualities",
     val labelRange: String = "Range",
     val labelReach: String = "Reach",
+    val labelEquip: String = "Equipped",
     val meleeGroups: MeleeWeaponGroupStrings = MeleeWeaponGroupStrings(),
     val qualities: WeaponQualityStrings = WeaponQualityStrings(),
     val rangedGroups: RangedWeaponGroupStrings = RangedWeaponGroupStrings(),
     val reach: WeaponReachStrings = WeaponReachStrings(),
+)
+
+@Immutable
+data class WeaponEquipStrings(
+    val primaryHand: String = "Primary hand",
+    val offHand: String = "Off-hand",
+    val bothHands: String = "Both hands",
+    val notEquipped: String = "Not equipped",
 )
 
 @Immutable

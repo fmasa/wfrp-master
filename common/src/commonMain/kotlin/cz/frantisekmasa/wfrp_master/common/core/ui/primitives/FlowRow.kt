@@ -1,14 +1,23 @@
 package cz.frantisekmasa.wfrp_master.common.core.ui.primitives
 
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.layout.Placeable
 import androidx.compose.ui.unit.Dp
 import kotlin.math.max
 
 @Composable
-fun FlowRow(verticalSpacing: Dp, horizontalSpacing: Dp, content: @Composable () -> Unit) {
-    Layout(content = content) { measurables, constraints ->
+fun FlowRow(
+    modifier: Modifier = Modifier,
+    verticalSpacing: Dp,
+    horizontalSpacing: Dp,
+    content: @Composable () -> Unit,
+) {
+    Layout(
+        modifier = modifier,
+        content = content
+    ) { measurables, constraints ->
         val placeables = measurables.map { it.measure(constraints) }
         val rows = mutableListOf<Row>()
         val horizontalSpacingPx = horizontalSpacing.roundToPx()

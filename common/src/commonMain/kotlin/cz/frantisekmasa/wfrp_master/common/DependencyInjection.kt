@@ -3,6 +3,7 @@ package cz.frantisekmasa.wfrp_master.common
 import cz.frantisekmasa.wfrp_master.common.character.CharacterPickerScreenModel
 import cz.frantisekmasa.wfrp_master.common.character.CharacterScreenModel
 import cz.frantisekmasa.wfrp_master.common.character.characteristics.CharacteristicsScreenModel
+import cz.frantisekmasa.wfrp_master.common.character.combat.CharacterCombatScreenModel
 import cz.frantisekmasa.wfrp_master.common.character.religion.blessings.BlessingsScreenModel
 import cz.frantisekmasa.wfrp_master.common.character.religion.miracles.MiraclesScreenModel
 import cz.frantisekmasa.wfrp_master.common.character.skills.SkillsScreenModel
@@ -49,6 +50,7 @@ import cz.frantisekmasa.wfrp_master.common.core.firebase.repositories.FirestoreN
 import cz.frantisekmasa.wfrp_master.common.core.firebase.repositories.FirestorePartyRepository
 import cz.frantisekmasa.wfrp_master.common.core.firebase.repositories.FirestoreSkillRepository
 import cz.frantisekmasa.wfrp_master.common.core.serialization.UuidSerializer
+import cz.frantisekmasa.wfrp_master.common.core.tips.DismissedUserTipsHolder
 import cz.frantisekmasa.wfrp_master.common.encounters.EncounterDetailScreenModel
 import cz.frantisekmasa.wfrp_master.common.encounters.EncountersScreenModel
 import cz.frantisekmasa.wfrp_master.common.encounters.domain.EncounterRepository
@@ -107,6 +109,8 @@ val appModule = DI.Module("Common") {
         FirestoreCompendium(Schema.Compendium.Miracles, instance(), mapper())
     }
 
+    bindSingleton { DismissedUserTipsHolder(instance()) }
+
     bindSingleton<InvitationProcessor> { FirestoreInvitationProcessor(instance(), instance()) }
     bindSingleton<SkillRepository> { FirestoreSkillRepository(instance(), mapper()) }
     bindSingleton<TalentRepository> { characterItemRepository(Schema.Character.Talents) }
@@ -143,6 +147,10 @@ val appModule = DI.Module("Common") {
     /**
      * ViewModels
      */
+
+    bindFactory { characterId: CharacterId ->
+        CharacterCombatScreenModel(characterId, instance(), instance(), instance())
+    }
     bindFactory { characterId: CharacterId -> CharacteristicsScreenModel(characterId, instance()) }
     bindFactory { characterId: CharacterId ->
         CharacterScreenModel(

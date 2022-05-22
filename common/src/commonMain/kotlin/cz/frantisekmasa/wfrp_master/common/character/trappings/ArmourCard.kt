@@ -21,14 +21,29 @@ import cz.frantisekmasa.wfrp_master.common.core.shared.drawableResource
 import cz.frantisekmasa.wfrp_master.common.core.ui.cards.CardContainer
 import cz.frantisekmasa.wfrp_master.common.core.ui.cards.CardTitle
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.NumberPicker
+import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.UserTip
+import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.UserTipCard
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.VisualOnlyIconDescription
 import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
 
 
 @Composable
-internal fun ArmourCard(Armour: TrappingsScreenModel.EquippedArmour, onChange: (Armour) -> Unit) {
+internal fun ArmourCard(armour: TrappingsScreenModel.EquippedArmour, onChange: (Armour) -> Unit) {
+    val hasLegacyArmour = !armour.legacyArmour.isZero()
+
+    UserTipCard(
+        if (hasLegacyArmour)
+            UserTip.DEPRECATED_LEGACY_ARMOUR
+        else UserTip.ARMOUR_TRAPPINGS,
+        Modifier.padding(horizontal = 8.dp),
+    )
+
+    if (!hasLegacyArmour) {
+        return
+    }
+
     val change = { mutation: Armour.() -> Armour ->
-        onChange(with(Armour.legacyArmour, mutation))
+        onChange(with(armour.legacyArmour, mutation))
     }
 
     val strings = LocalStrings.current.armour
@@ -40,17 +55,17 @@ internal fun ArmourCard(Armour: TrappingsScreenModel.EquippedArmour, onChange: (
         Row(modifier = modifier) {
             ArmourPart(
                 icon = Resources.Drawable.ArmorShield,
-                name = strings.locations.shield,
-                base = Armour.armourFromItems.shield,
-                points = Armour.legacyArmour.shield,
+                name = strings.shield,
+                base = armour.armourFromItems.shield,
+                points = armour.legacyArmour.shield,
                 onChange = { change { copy(shield = it) } },
                 modifier = Modifier.weight(1f),
             )
             ArmourPart(
                 icon = Resources.Drawable.ArmorHead,
-                name = strings.locations.head,
-                base = Armour.armourFromItems.head,
-                points = Armour.legacyArmour.head,
+                name = LocalStrings.current.combat.hitLocations.head,
+                base = armour.armourFromItems.head,
+                points = armour.legacyArmour.head,
                 rollRange = 1..9,
                 onChange = { change { copy(head = it) } },
                 modifier = Modifier.weight(1f),
@@ -61,9 +76,9 @@ internal fun ArmourCard(Armour: TrappingsScreenModel.EquippedArmour, onChange: (
         Row(modifier = modifier) {
             ArmourPart(
                 icon = Resources.Drawable.ArmorArmRight,
-                name = strings.locations.rightArm,
-                base = Armour.armourFromItems.rightArm,
-                points = Armour.legacyArmour.rightArm,
+                name = LocalStrings.current.combat.hitLocations.rightArm,
+                base = armour.armourFromItems.rightArm,
+                points = armour.legacyArmour.rightArm,
                 rollRange = 25..44,
                 onChange = { change { copy(rightArm = it) } },
                 modifier = Modifier.weight(1f),
@@ -71,9 +86,9 @@ internal fun ArmourCard(Armour: TrappingsScreenModel.EquippedArmour, onChange: (
 
             ArmourPart(
                 icon = Resources.Drawable.ArmorChest,
-                name = strings.locations.body,
-                base = Armour.armourFromItems.body,
-                points = Armour.legacyArmour.body,
+                name = LocalStrings.current.combat.hitLocations.body,
+                base = armour.armourFromItems.body,
+                points = armour.legacyArmour.body,
                 rollRange = 45..79,
                 onChange = { change { copy(body = it) } },
                 modifier = Modifier.weight(1f),
@@ -81,9 +96,9 @@ internal fun ArmourCard(Armour: TrappingsScreenModel.EquippedArmour, onChange: (
 
             ArmourPart(
                 icon = Resources.Drawable.ArmorArmLeft,
-                name = strings.locations.leftArm,
-                base = Armour.armourFromItems.leftArm,
-                points = Armour.legacyArmour.leftArm,
+                name = LocalStrings.current.combat.hitLocations.leftArm,
+                base = armour.armourFromItems.leftArm,
+                points = armour.legacyArmour.leftArm,
                 rollRange = 10..24,
                 onChange = { change { copy(leftArm = it) } },
                 modifier = Modifier.weight(1f),
@@ -96,18 +111,18 @@ internal fun ArmourCard(Armour: TrappingsScreenModel.EquippedArmour, onChange: (
         ) {
             ArmourPart(
                 icon = Resources.Drawable.ArmorLegRight,
-                name = strings.locations.rightLeg,
-                base = Armour.armourFromItems.rightLeg,
-                points = Armour.legacyArmour.rightLeg,
+                name = LocalStrings.current.combat.hitLocations.rightLeg,
+                base = armour.armourFromItems.rightLeg,
+                points = armour.legacyArmour.rightLeg,
                 rollRange = 90..100,
                 onChange = { change { copy(rightLeg = it) } },
             )
 
             ArmourPart(
                 icon = Resources.Drawable.ArmorLegLeft,
-                name = strings.locations.leftLeg,
-                base = Armour.armourFromItems.leftLeg,
-                points = Armour.legacyArmour.leftLeg,
+                name = LocalStrings.current.combat.hitLocations.leftLeg,
+                base = armour.armourFromItems.leftLeg,
+                points = armour.legacyArmour.leftLeg,
                 rollRange = 80..89,
                 onChange = { change { copy(leftLeg = it) } },
             )

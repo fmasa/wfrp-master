@@ -1,6 +1,8 @@
 package cz.frantisekmasa.wfrp_master.common.core.domain.trappings
 
 import androidx.compose.runtime.Immutable
+import androidx.compose.runtime.Stable
+import cz.frantisekmasa.wfrp_master.common.core.domain.HitLocation
 import cz.frantisekmasa.wfrp_master.common.core.shared.Parcelable
 import cz.frantisekmasa.wfrp_master.common.core.shared.Parcelize
 import kotlinx.serialization.Serializable
@@ -25,6 +27,23 @@ data class Armour(
         }
     }
 
+    @Stable
+    fun isZero(): Boolean {
+        return shield == 0 && HitLocation.values().all { armourPoints(it).value == 0 }
+    }
+
+    @Stable
+    fun armourPoints(location: HitLocation) = ArmourPoints(
+        when (location) {
+            HitLocation.HEAD -> head
+            HitLocation.BODY -> body
+            HitLocation.LEFT_ARM -> leftArm
+            HitLocation.RIGHT_ARM -> rightArm
+            HitLocation.LEFT_LEG -> leftLeg
+            HitLocation.RIGHT_LEG -> rightLeg
+        }
+    )
+
     operator fun plus(other: Armour): Armour = Armour(
         head = (head + other.head).coerceAtMost(99),
         body = (body + other.body).coerceAtMost(99),
@@ -39,19 +58,32 @@ data class Armour(
         const val MAX_VALUE = 99
 
         fun fromItems(items: List<InventoryItem>): Armour =
-            items.asSequence()
+            fromArmourPieces(items) + fromWornShields(items)
+
+        private fun fromWornShields(items: List<InventoryItem>): Armour {
+            return items.asSequence()
+                .map(InventoryItem::trappingType)
+                .filterIsInstance<TrappingType.MeleeWeapon>()
+                .filter { it.equipped != null }
+                .sumOf { it.qualities[WeaponQuality.SHIELD] ?: 0 }
+                .let { Armour(shield = it) }
+        }
+
+        private fun fromArmourPieces(items: List<InventoryItem>): Armour {
+            return items.asSequence()
                 .map(InventoryItem::trappingType)
                 .filterIsInstance<TrappingType.Armour>()
                 .filter { it.worn }
                 .map {
                     Armour(
-                        head = if (ArmourLocation.HEAD in it.locations) it.points.value else 0,
-                        body = if (ArmourLocation.BODY in it.locations) it.points.value else 0,
-                        leftArm = if (ArmourLocation.LEFT_ARM in it.locations) it.points.value else 0,
-                        rightArm = if (ArmourLocation.RIGHT_ARM in it.locations) it.points.value else 0,
-                        leftLeg = if (ArmourLocation.LEFT_LEG in it.locations) it.points.value else 0,
-                        rightLeg = if (ArmourLocation.RIGHT_LEG in it.locations) it.points.value else 0,
+                        head = if (HitLocation.HEAD in it.locations) it.points.value else 0,
+                        body = if (HitLocation.BODY in it.locations) it.points.value else 0,
+                        leftArm = if (HitLocation.LEFT_ARM in it.locations) it.points.value else 0,
+                        rightArm = if (HitLocation.RIGHT_ARM in it.locations) it.points.value else 0,
+                        leftLeg = if (HitLocation.LEFT_LEG in it.locations) it.points.value else 0,
+                        rightLeg = if (HitLocation.RIGHT_LEG in it.locations) it.points.value else 0,
                     )
                 }.fold(Armour()) { a, b -> a + b }
+        }
     }
 }

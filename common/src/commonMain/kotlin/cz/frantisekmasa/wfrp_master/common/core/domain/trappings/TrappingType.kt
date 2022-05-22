@@ -1,6 +1,7 @@
 package cz.frantisekmasa.wfrp_master.common.core.domain.trappings
 
 import androidx.compose.runtime.Immutable
+import cz.frantisekmasa.wfrp_master.common.core.domain.HitLocation
 import cz.frantisekmasa.wfrp_master.common.core.shared.Parcelable
 import cz.frantisekmasa.wfrp_master.common.core.shared.Parcelize
 import kotlinx.serialization.SerialName
@@ -18,6 +19,13 @@ sealed class TrappingType : Parcelable {
         val worn: Boolean
     }
 
+    sealed class Weapon: TrappingType() {
+        abstract val damage: DamageExpression
+        abstract val qualities: Map<WeaponQuality, Rating>
+        abstract val flaws: Map<WeaponFlaw, Rating>
+        abstract val equipped: WeaponEquip?
+    }
+
     @Parcelize
     @Serializable
     @SerialName("MELEE_WEAPON")
@@ -25,11 +33,11 @@ sealed class TrappingType : Parcelable {
     data class MeleeWeapon(
         val group: MeleeWeaponGroup,
         val reach: Reach,
-        val damage: DamageExpression,
-        val qualities: Map<WeaponQuality, Rating>,
-        val flaws: Map<WeaponFlaw, Rating>,
-        val equipped: WeaponEquip?,
-    ) : TrappingType()
+        override val damage: DamageExpression,
+        override val qualities: Map<WeaponQuality, Rating>,
+        override val flaws: Map<WeaponFlaw, Rating>,
+        override val equipped: WeaponEquip?,
+    ) : Weapon()
 
     @Parcelize
     @Serializable
@@ -38,11 +46,11 @@ sealed class TrappingType : Parcelable {
     data class RangedWeapon(
         val group: RangedWeaponGroup,
         val range: WeaponRangeExpression,
-        val damage: DamageExpression,
-        val qualities: Map<WeaponQuality, Rating>,
-        val flaws: Map<WeaponFlaw, Rating>,
-        val equipped: WeaponEquip?,
-    ) : TrappingType()
+        override val damage: DamageExpression,
+        override val qualities: Map<WeaponQuality, Rating>,
+        override val flaws: Map<WeaponFlaw, Rating>,
+        override val equipped: WeaponEquip?,
+    ) : Weapon()
 
     @Parcelize
     @Serializable
@@ -61,9 +69,11 @@ sealed class TrappingType : Parcelable {
     @SerialName("ARMOUR")
     @Immutable
     data class Armour(
-        val locations: Set<ArmourLocation>,
+        val locations: Set<HitLocation>,
         val type: ArmourType,
         val points: ArmourPoints,
+        val qualities: Map<ArmourQuality, Rating> = emptyMap(),
+        val flaws: Map<ArmourFlaw, Rating> = emptyMap(),
         override val worn: Boolean,
     ) : TrappingType(), WearableTrapping
 

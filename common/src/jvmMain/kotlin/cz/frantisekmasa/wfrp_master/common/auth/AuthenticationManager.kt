@@ -3,6 +3,7 @@ package cz.frantisekmasa.wfrp_master.common.auth
 import cz.frantisekmasa.wfrp_master.common.FirebaseTokenHolder
 import cz.frantisekmasa.wfrp_master.common.core.auth.User
 import cz.frantisekmasa.wfrp_master.common.core.shared.SettingsStorage
+import cz.frantisekmasa.wfrp_master.common.core.shared.edit
 import cz.frantisekmasa.wfrp_master.common.core.shared.stringSettingsKey
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
