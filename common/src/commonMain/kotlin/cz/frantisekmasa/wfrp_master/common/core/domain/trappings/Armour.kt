@@ -1,6 +1,7 @@
 package cz.frantisekmasa.wfrp_master.common.core.domain.trappings
 
 import androidx.compose.runtime.Immutable
+import androidx.compose.runtime.Stable
 import cz.frantisekmasa.wfrp_master.common.core.domain.HitLocation
 import cz.frantisekmasa.wfrp_master.common.core.shared.Parcelable
 import cz.frantisekmasa.wfrp_master.common.core.shared.Parcelize
@@ -25,6 +26,18 @@ data class Armour(
             require(it in 0..99)
         }
     }
+
+    @Stable
+    fun armourPoints(location: HitLocation) = ArmourPoints(
+        when (location) {
+            HitLocation.HEAD -> head
+            HitLocation.BODY -> body
+            HitLocation.LEFT_ARM -> leftArm
+            HitLocation.RIGHT_ARM -> rightArm
+            HitLocation.LEFT_LEG -> leftLeg
+            HitLocation.RIGHT_LEG -> rightLeg
+        }
+    )
 
     operator fun plus(other: Armour): Armour = Armour(
         head = (head + other.head).coerceAtMost(99),

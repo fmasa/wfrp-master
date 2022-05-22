@@ -31,6 +31,7 @@ import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import cz.frantisekmasa.wfrp_master.common.character.characteristics.CharacteristicsScreen
+import cz.frantisekmasa.wfrp_master.common.character.combat.CharacterCombatScreen
 import cz.frantisekmasa.wfrp_master.common.character.conditions.ConditionsScreen
 import cz.frantisekmasa.wfrp_master.common.character.religion.ReligionScreen
 import cz.frantisekmasa.wfrp_master.common.character.skills.SkillsScreen
@@ -297,6 +298,13 @@ data class CharacterDetailScreen(
                         modifier = modifier,
                         characterId = characterId,
                         party = party,
+                    )
+                }
+                CharacterTab.COMBAT -> {
+                    CharacterCombatScreen(
+                        screenModel = rememberScreenModel(arg = characterId),
+                        trappingsScreenModel = rememberScreenModel(arg = characterId),
+                        modifier = modifier,
                     )
                 }
                 CharacterTab.CONDITIONS -> {

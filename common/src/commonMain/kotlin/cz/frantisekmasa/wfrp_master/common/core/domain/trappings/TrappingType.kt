@@ -19,6 +19,13 @@ sealed class TrappingType : Parcelable {
         val worn: Boolean
     }
 
+    sealed class Weapon: TrappingType() {
+        abstract val damage: DamageExpression
+        abstract val qualities: Map<WeaponQuality, Rating>
+        abstract val flaws: Map<WeaponFlaw, Rating>
+        abstract val equipped: WeaponEquip?
+    }
+
     @Parcelize
     @Serializable
     @SerialName("MELEE_WEAPON")
@@ -26,11 +33,11 @@ sealed class TrappingType : Parcelable {
     data class MeleeWeapon(
         val group: MeleeWeaponGroup,
         val reach: Reach,
-        val damage: DamageExpression,
-        val qualities: Map<WeaponQuality, Rating>,
-        val flaws: Map<WeaponFlaw, Rating>,
-        val equipped: WeaponEquip?,
-    ) : TrappingType()
+        override val damage: DamageExpression,
+        override val qualities: Map<WeaponQuality, Rating>,
+        override val flaws: Map<WeaponFlaw, Rating>,
+        override val equipped: WeaponEquip?,
+    ) : Weapon()
 
     @Parcelize
     @Serializable
@@ -39,11 +46,11 @@ sealed class TrappingType : Parcelable {
     data class RangedWeapon(
         val group: RangedWeaponGroup,
         val range: WeaponRangeExpression,
-        val damage: DamageExpression,
-        val qualities: Map<WeaponQuality, Rating>,
-        val flaws: Map<WeaponFlaw, Rating>,
-        val equipped: WeaponEquip?,
-    ) : TrappingType()
+        override val damage: DamageExpression,
+        override val qualities: Map<WeaponQuality, Rating>,
+        override val flaws: Map<WeaponFlaw, Rating>,
+        override val equipped: WeaponEquip?,
+    ) : Weapon()
 
     @Parcelize
     @Serializable

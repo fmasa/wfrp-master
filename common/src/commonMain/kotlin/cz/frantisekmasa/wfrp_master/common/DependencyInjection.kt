@@ -3,6 +3,7 @@ package cz.frantisekmasa.wfrp_master.common
 import cz.frantisekmasa.wfrp_master.common.character.CharacterPickerScreenModel
 import cz.frantisekmasa.wfrp_master.common.character.CharacterScreenModel
 import cz.frantisekmasa.wfrp_master.common.character.characteristics.CharacteristicsScreenModel
+import cz.frantisekmasa.wfrp_master.common.character.combat.CharacterCombatScreenModel
 import cz.frantisekmasa.wfrp_master.common.character.religion.blessings.BlessingsScreenModel
 import cz.frantisekmasa.wfrp_master.common.character.religion.miracles.MiraclesScreenModel
 import cz.frantisekmasa.wfrp_master.common.character.skills.SkillsScreenModel
@@ -143,6 +144,10 @@ val appModule = DI.Module("Common") {
     /**
      * ViewModels
      */
+
+    bindFactory { characterId: CharacterId ->
+        CharacterCombatScreenModel(characterId, instance(), instance(), instance())
+    }
     bindFactory { characterId: CharacterId -> CharacteristicsScreenModel(characterId, instance()) }
     bindFactory { characterId: CharacterId ->
         CharacterScreenModel(

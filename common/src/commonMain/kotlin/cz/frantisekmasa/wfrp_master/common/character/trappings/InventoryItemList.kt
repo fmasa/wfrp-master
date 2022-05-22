@@ -95,7 +95,7 @@ private fun TrappingItem(
 
 @Composable
 @Stable
-private fun trappingIcon(trappingType: TrappingType?) = when (trappingType) {
+fun trappingIcon(trappingType: TrappingType?) = when (trappingType) {
     is TrappingType.Ammunition -> Resources.Drawable.TrappingAmmunition
     is TrappingType.Armour -> Resources.Drawable.ArmorChest
     is TrappingType.MeleeWeapon -> Resources.Drawable.WeaponSkill

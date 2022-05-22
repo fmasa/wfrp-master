@@ -15,5 +15,14 @@ enum class HitLocation(
     LEFT_ARM({ it.combat.hitLocations.leftArm }),
     RIGHT_ARM({ it.combat.hitLocations.rightArm }),
     LEFT_LEG({ it.combat.hitLocations.leftLeg }),
-    RIGHT_LEG({ it.combat.hitLocations.rightLeg }),
+    RIGHT_LEG({ it.combat.hitLocations.rightLeg });
+
+    val rollRange: IntRange get() = when(this) {
+        HEAD -> 1..9
+        LEFT_ARM -> 10..24
+        RIGHT_ARM -> 25..44
+        BODY -> 45..79
+        LEFT_LEG -> 80..89
+        RIGHT_LEG -> 90..100
+    }
 }

@@ -6,6 +6,7 @@ import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
+import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.ArmourPoints
 
 @Immutable
 data class Strings(
@@ -171,12 +172,13 @@ data class EncounterMessageStrings(
 @Immutable
 data class ArmourStrings(
     val flaws: ArmourFlawStrings = ArmourFlawStrings(),
-    val labelArmourPoints: String = "Armour Points (APs)",
+    val labelArmourPoints: String = "Armour Points (AP)",
     val labelFlaws: String = "Armour Flaws",
     val labelLocations: String = "Locations",
     val labelQualities: String = "Armour Qualities",
     val labelType: String = "Armour Type",
     val messages: ArmourMessageStrings = ArmourMessageStrings(),
+    val points: (ArmourPoints) -> String = { "${it.value} AP" },
     val qualities: ArmourQualityStrings = ArmourQualityStrings(),
     val shield: String = "Shield",
     val title: String = "Armour",
@@ -250,6 +252,7 @@ data class CharacterStrings(
     val labelRace: String = "Race",
     val labelStatus: String = "Status",
     val motivation: String = "Motivation",
+    val messages: CharacterMessageStrings = CharacterMessageStrings(),
     val secondaryTextBasics: String = "Name, Race, Motivation",
     val secondaryTextCareer: String = "Career, Class, Social status",
     val secondaryTextExperience: String = "XP, Ambitions",
@@ -259,6 +262,7 @@ data class CharacterStrings(
         "$visible of $total tabs visible"
     },
     val tabAttributes: String = "Attributes",
+    val tabCombat: String = "Combat",
     val tabConditions: String = "Conditions",
     val tabReligions: String = "Religion",
     val tabSkillsAndTalents: String = "Skills & Talents",
@@ -274,6 +278,7 @@ data class CharacterStrings(
     val titleUiSettings: String = "UI settings",
     val titleVisibleTabs: String = "Visible tabs",
     val titleWellBeing: String = "Well-being",
+    val titleWeapons: String = "Weapons",
 )
 
 @Immutable
@@ -286,8 +291,16 @@ data class CharacteristicStrings(
     val intelligence: String = "Intelligence",
     val strength: String = "Strength",
     val toughness: String = "Toughness",
+    val toughnessBonusShortcut: String = "TB",
     val weaponSkill: String = "Weapon Skill",
     val willPower: String = "Will Power",
+)
+
+
+@Immutable
+data class CharacterMessageStrings(
+    val noEquippedWeapons: String = "No equipped weapons",
+    val noEquippedWeaponsSubText: String = "Character does not have any Weapon trappings equipped",
 )
 
 @Immutable
