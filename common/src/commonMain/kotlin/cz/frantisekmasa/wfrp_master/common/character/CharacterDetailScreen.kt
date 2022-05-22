@@ -14,8 +14,8 @@ import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Add
-import androidx.compose.material.icons.rounded.ArrowDropDown
 import androidx.compose.material.icons.rounded.Edit
+import androidx.compose.material.icons.rounded.ExpandMore
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -166,7 +166,7 @@ data class CharacterDetailScreen(
                 }
 
                 if (allCharacters.size > 1 || canAddCharacters) {
-                    Icon(Icons.Rounded.ArrowDropDown, null, Modifier.size(36.dp))
+                    Icon(Icons.Rounded.ExpandMore, null)
                 }
             }
 
