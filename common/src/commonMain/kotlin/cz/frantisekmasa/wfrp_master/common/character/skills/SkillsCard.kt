@@ -34,7 +34,7 @@ internal fun SkillsCard(
     skillsScreenModel: SkillsScreenModel,
     onRemove: (Skill) -> Unit,
 ) {
-    val skills = skillsScreenModel.skills.collectWithLifecycle(null).value ?: return
+    val skills = skillsScreenModel.items.collectWithLifecycle(null).value ?: return
     val characteristics = characterScreenModel.character
         .collectWithLifecycle(null).value?.characteristics ?: return
 

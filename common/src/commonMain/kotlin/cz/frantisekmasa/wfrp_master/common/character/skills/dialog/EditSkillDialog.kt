@@ -16,7 +16,7 @@ fun EditSkillDialog(
     skillId: Uuid,
     onDismissRequest: () -> Unit
 ) {
-    val skill = screenModel.skills.collectWithLifecycle(null).value?.firstOrNull { it.id == skillId } ?: return
+    val skill = screenModel.items.collectWithLifecycle(null).value?.firstOrNull { it.id == skillId } ?: return
 
     FullScreenDialog(onDismissRequest = onDismissRequest) {
         if (skill.compendiumId != null) {

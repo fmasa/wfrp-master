@@ -5,8 +5,12 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import cz.frantisekmasa.wfrp_master.common.character.CompendiumItemChooser
 import cz.frantisekmasa.wfrp_master.common.character.spells.SpellsScreenModel
+import cz.frantisekmasa.wfrp_master.common.core.domain.spells.Spell
+import cz.frantisekmasa.wfrp_master.common.core.shared.Resources
 import cz.frantisekmasa.wfrp_master.common.core.ui.dialogs.FullScreenDialog
+import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
 
 @Composable
 fun AddSpellDialog(screenModel: SpellsScreenModel, onDismissRequest: () -> Unit) {
@@ -23,11 +27,15 @@ fun AddSpellDialog(screenModel: SpellsScreenModel, onDismissRequest: () -> Unit)
     ) {
         when (state) {
             AddSpellDialogState.ChoosingCompendiumSpell ->
-                CompendiumSpellChooser(
+                CompendiumItemChooser(
                     screenModel = screenModel,
-                    onComplete = onDismissRequest,
-                    onCustomSpellRequest = { state = AddSpellDialogState.FillingInCustomSpell },
+                    title = LocalStrings.current.spells.titleChooseCompendiumSpell,
                     onDismissRequest = onDismissRequest,
+                    icon = { Resources.Drawable.Spell },
+                    onSelect = { screenModel.saveItem(Spell.fromCompendium(it)) },
+                    onCustomItemRequest = { state = AddSpellDialogState.FillingInCustomSpell },
+                    customItemButtonText = LocalStrings.current.spells.buttonAddNonCompendium,
+                    emptyUiIcon = Resources.Drawable.Spell,
                 )
             AddSpellDialogState.FillingInCustomSpell -> NonCompendiumSpellForm(
                 screenModel = screenModel,

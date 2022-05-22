@@ -28,7 +28,7 @@ internal fun TalentsCard(
     screenModel: TalentsScreenModel,
     onRemove: (Talent) -> Unit,
 ) {
-    val talents = screenModel.talents.collectWithLifecycle(null).value ?: return
+    val talents = screenModel.items.collectWithLifecycle(null).value ?: return
 
     CardContainer(Modifier.padding(horizontal = 8.dp).padding(bottom = 8.dp)) {
         Column(Modifier.padding(horizontal = 6.dp)) {

@@ -17,7 +17,7 @@ fun EditSpellDialog(
     spellId: Uuid,
     onDismissRequest: () -> Unit
 ) {
-    val spell = screenModel.spells.collectWithLifecycle(null)
+    val spell = screenModel.items.collectWithLifecycle(null)
         .value
         ?.firstOrNull { it.id == spellId } ?: return
 
