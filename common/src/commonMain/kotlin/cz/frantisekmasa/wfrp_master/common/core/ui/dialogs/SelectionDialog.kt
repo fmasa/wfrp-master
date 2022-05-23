@@ -1,11 +1,9 @@
 package cz.frantisekmasa.wfrp_master.common.core.ui.dialogs
 
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -23,7 +21,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.intl.Locale
 import androidx.compose.ui.text.toUpperCase
-import androidx.compose.ui.unit.dp
 import cz.frantisekmasa.wfrp_master.common.core.ui.interactions.clickableWithoutIndication
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
 import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
@@ -42,28 +39,22 @@ fun <T> SelectionDialog(
             var currentItem by remember { mutableStateOf(selected) }
 
             Column {
-                Box(
-                    modifier = Modifier
-                        .height(64.dp)
-                        .padding(horizontal = Spacing.extraLarge),
-                    contentAlignment = Alignment.CenterStart
-                ) {
-                    Text(
-                        title,
-                        Modifier.fillMaxWidth(),
-                        style = MaterialTheme.typography.h6,
-                    )
-                }
+                Text(
+                    title,
+                    Modifier.fillMaxWidth()
+                        .padding(
+                            horizontal = Spacing.extraLarge,
+                            vertical = Spacing.large,
+                        ),
+                    style = MaterialTheme.typography.h6,
+                )
 
-                LazyColumn(
-                    verticalArrangement = Arrangement.spacedBy(Spacing.extraLarge)
-                ) {
+                LazyColumn {
                     items(items) { item ->
                         Row(
                             modifier = Modifier
-                                .padding(horizontal = Spacing.extraLarge)
+                                .padding(horizontal = Spacing.medium)
                                 .clickableWithoutIndication { currentItem = item },
-                            horizontalArrangement = Arrangement.spacedBy(Spacing.extraLarge),
                             verticalAlignment = Alignment.CenterVertically,
                         ) {
                             RadioButton(
@@ -79,7 +70,7 @@ fun <T> SelectionDialog(
                 Row(
                     Modifier
                         .fillMaxWidth()
-                        .padding(top = Spacing.medium, bottom = Spacing.small, end = Spacing.small),
+                        .padding(horizontal = Spacing.small, vertical = Spacing.tiny),
                     horizontalArrangement = Arrangement.End,
                 ) {
                     TextButton(onClick = { onSelect(currentItem) }) {
