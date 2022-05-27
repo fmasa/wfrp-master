@@ -79,7 +79,10 @@ private data class SpellFormData(
             range = inputValue(item?.range ?: ""),
             target = inputValue(item?.target ?: ""),
             duration = inputValue(item?.duration ?: ""),
-            castingNumber = inputValue(item?.castingNumber?.toString() ?: "0", Rules.PositiveInteger()),
+            castingNumber = inputValue(
+                item?.castingNumber?.toString() ?: "0",
+                Rules.NonNegativeInteger(),
+            ),
             effect = inputValue(item?.effect ?: ""),
         )
     }

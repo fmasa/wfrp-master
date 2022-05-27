@@ -122,7 +122,7 @@ private class NonCompendiumSpellFormData(
             duration = inputValue(item?.duration ?: ""),
             castingNumber = inputValue(
                 item?.castingNumber?.toString() ?: "",
-                Rules.PositiveInteger(),
+                Rules.NonNegativeInteger(),
             ),
             effect = inputValue(item?.effect ?: ""),
         )
