@@ -20,13 +20,15 @@ data class Spell(
     val range: String,
     val target: String,
     val duration: String,
-    val castingNumber: Int,
+    val castingNumber: UInt,
     val effect: String,
     val memorized: Boolean = true, // TODO: Remove default value and migrate stored data
 ) : CharacterItem {
 
 
-    val effectiveCastingNumber: Int get() = if (memorized) castingNumber else castingNumber * 2
+    val effectiveCastingNumber: UInt get() = if (memorized)
+        castingNumber
+    else castingNumber * 2.toUInt()
 
     init {
         require(name.isNotBlank()) { "Name must not be blank" }

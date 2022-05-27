@@ -94,7 +94,7 @@ private data class SpellFormData(
         range = range.value,
         target = target.value,
         duration = duration.value,
-        castingNumber = castingNumber.value.toInt(),
+        castingNumber = castingNumber.value.toUInt(),
         effect = effect.value,
     )
 

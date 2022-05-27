@@ -17,7 +17,7 @@ data class Spell(
     val range: String,
     val target: String,
     val duration: String,
-    val castingNumber: Int,
+    val castingNumber: UInt,
     val effect: String,
     val lore: String,
 ) : CompendiumItem<Spell>() {
