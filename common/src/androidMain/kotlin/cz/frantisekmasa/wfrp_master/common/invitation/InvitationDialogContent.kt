@@ -12,6 +12,7 @@ import androidx.compose.material.icons.rounded.Share
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
@@ -31,7 +32,7 @@ import kotlinx.coroutines.withContext
 
 @Composable
 actual fun InvitationDialogContent(invitation: Invitation, screenModel: InvitationScreenModel) {
-    val (sharingOptions, setSharingOptions) = mutableStateOf<SharingOptions?>(null)
+    val (sharingOptions, setSharingOptions) = remember { mutableStateOf<SharingOptions?>(null) }
 
     LaunchedEffect(invitation) {
         setSharingOptions(buildSharingOptions(invitation, screenModel))
