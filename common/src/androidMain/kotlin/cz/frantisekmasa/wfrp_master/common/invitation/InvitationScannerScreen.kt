@@ -77,7 +77,7 @@ actual class InvitationScannerScreen : Screen {
                             invitation,
                             screenModel,
                             onSuccess = { navigator.pop() },
-                            onError = { setInvitation(invitation) },
+                            onError = { setInvitation(null) },
                         )
                     }
                     else -> {
