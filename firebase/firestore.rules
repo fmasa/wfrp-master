@@ -390,7 +390,7 @@ service cloud.firestore {
                         && character.motivation is string && character.motivation.size() <= 200
                         && character.mutation is string && character.mutation.size() <= 200
                         && character.socialClass is string && isNotBlank(character.socialClass) && character.socialClass.size() <= 50
-                        && character.race is string && character.race in ["HUMAN", "HIGH_ELF", "DWARF", "HALFLING", "WOOD_ELF", "GNOME"]
+                        && character.race is string && character.race in ["HUMAN", "HIGH_ELF", "DWARF", "HALFLING", "WOOD_ELF", "GNOME", "OGRE"]
                         && arePointsValid(character.points)
                         && areStatsValid(character.characteristicsBase)
                         && areStatsValid(character.characteristicsAdvances)

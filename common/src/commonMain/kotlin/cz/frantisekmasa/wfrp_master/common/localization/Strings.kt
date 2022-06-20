@@ -718,6 +718,7 @@ data class RaceStrings(
     val halfling: String = "Halfling",
     val human: String = "Human",
     val gnome: String = "Gnome",
+    val ogre: String = "Ogre",
 )
 
 @Immutable
