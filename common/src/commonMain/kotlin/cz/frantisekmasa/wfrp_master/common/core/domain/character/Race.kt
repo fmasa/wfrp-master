@@ -10,10 +10,12 @@ enum class Race(override val nameResolver: (strings: Strings) -> String) : Named
     DWARF({ it.races.dwarf }),
     WOOD_ELF({ it.races.woodElf }),
     HALFLING({ it.races.halfling }),
-    GNOME({ it.races.gnome });
+    GNOME({ it.races.gnome }),
+    OGRE({ it.races.ogre });
 
     val size: Size get() = when(this) {
         HALFLING, GNOME -> Size.SMALL
+        OGRE -> Size.LARGE
         else -> Size.AVERAGE
     }
 }
