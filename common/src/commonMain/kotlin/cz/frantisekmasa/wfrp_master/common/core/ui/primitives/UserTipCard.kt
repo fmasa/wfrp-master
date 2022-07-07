@@ -105,5 +105,4 @@ fun UserTipCard(tip: UserTip, modifier: Modifier = Modifier) {
 
 enum class UserTip(override val nameResolver: (strings: Strings) -> String) : NamedEnum {
     ARMOUR_TRAPPINGS({ it.armour.tipTrappings }),
-    DEPRECATED_LEGACY_ARMOUR({ it.armour.tipDeprecatedLegacyArmour }),
 }
