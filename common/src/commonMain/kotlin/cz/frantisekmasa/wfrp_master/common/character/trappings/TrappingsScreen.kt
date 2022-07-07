@@ -36,6 +36,8 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.dialogs.DialogState
 import cz.frantisekmasa.wfrp_master.common.core.ui.flow.collectWithLifecycle
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.EmptyUI
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
+import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.UserTip
+import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.UserTipCard
 import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.TopPanel
 import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
 import kotlinx.coroutines.Dispatchers
@@ -82,9 +84,7 @@ fun TrappingsScreen(
             }
         }
 
-        screenModel.armor.collectWithLifecycle(null).value?.let { armor ->
-            ArmourCard(armor, onChange = { screenModel.updateArmor(it) })
-        }
+        UserTipCard(UserTip.ARMOUR_TRAPPINGS, Modifier.padding(horizontal = 8.dp))
 
         var inventoryItemDialogState: DialogState<InventoryItem?> by remember {
             mutableStateOf(DialogState.Closed())

@@ -22,11 +22,9 @@ import cz.frantisekmasa.wfrp_master.common.core.PartyScreenModel
 import cz.frantisekmasa.wfrp_master.common.core.cache.CharacterRepositoryIdentityMap
 import cz.frantisekmasa.wfrp_master.common.core.cache.PartyRepositoryIdentityMap
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.CharacterAvatarChanger
-import cz.frantisekmasa.wfrp_master.common.core.domain.character.CharacterFeatureRepository
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.CharacterItem
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.CharacterItemRepository
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.CharacterRepository
-import cz.frantisekmasa.wfrp_master.common.core.domain.character.Feature
 import cz.frantisekmasa.wfrp_master.common.core.domain.compendium.Compendium
 import cz.frantisekmasa.wfrp_master.common.core.domain.compendium.FirestoreCompendium
 import cz.frantisekmasa.wfrp_master.common.core.domain.identifiers.CharacterId
@@ -38,11 +36,9 @@ import cz.frantisekmasa.wfrp_master.common.core.domain.religion.MiracleRepositor
 import cz.frantisekmasa.wfrp_master.common.core.domain.skills.SkillRepository
 import cz.frantisekmasa.wfrp_master.common.core.domain.spells.SpellRepository
 import cz.frantisekmasa.wfrp_master.common.core.domain.talents.TalentRepository
-import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.Armour
 import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.InventoryItemRepository
 import cz.frantisekmasa.wfrp_master.common.core.firebase.Schema
 import cz.frantisekmasa.wfrp_master.common.core.firebase.functions.CloudFunctionCharacterAvatarChanger
-import cz.frantisekmasa.wfrp_master.common.core.firebase.repositories.FirestoreCharacterFeatureRepository
 import cz.frantisekmasa.wfrp_master.common.core.firebase.repositories.FirestoreCharacterItemRepository
 import cz.frantisekmasa.wfrp_master.common.core.firebase.repositories.FirestoreCharacterRepository
 import cz.frantisekmasa.wfrp_master.common.core.firebase.repositories.FirestoreEncounterRepository
@@ -74,7 +70,6 @@ import org.kodein.di.bindSingleton
 import org.kodein.di.instance
 import kotlin.random.Random
 import cz.frantisekmasa.wfrp_master.common.core.firebase.serializationAggregateMapper as mapper
-
 
 
 val appModule = DI.Module("Common") {
@@ -131,17 +126,8 @@ val appModule = DI.Module("Common") {
 
     bindSingleton<CharacterAvatarChanger> { CloudFunctionCharacterAvatarChanger(instance()) }
 
-    bindSingleton<CharacterFeatureRepository<Armour>> {
-        FirestoreCharacterFeatureRepository(
-            Feature.ARMOR,
-            instance(),
-            Armour(),
-            mapper(),
-        )
-    }
-
     bindFactory { characterId: CharacterId ->
-        TrappingsScreenModel(characterId, instance(), instance(), instance())
+        TrappingsScreenModel(characterId, instance(), instance())
     }
 
     /**
@@ -149,7 +135,7 @@ val appModule = DI.Module("Common") {
      */
 
     bindFactory { characterId: CharacterId ->
-        CharacterCombatScreenModel(characterId, instance(), instance(), instance())
+        CharacterCombatScreenModel(characterId, instance(), instance())
     }
     bindFactory { characterId: CharacterId -> CharacteristicsScreenModel(characterId, instance()) }
     bindFactory { characterId: CharacterId ->

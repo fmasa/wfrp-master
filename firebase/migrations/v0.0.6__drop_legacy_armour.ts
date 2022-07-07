@@ -11,9 +11,7 @@ const ARMOUR_PARTS = {
 };
 
 export async function migrate({firestore}: { firestore: firebase.firestore.Firestore }): Promise<void> {
-    const characters = await firestore.collection("parties").doc("bbc08a6e-38dd-48de-8608-0e5461c5d190")
-    .collection("characters").get();
-    //const characters = await firestore.collectionGroup("characters").get();
+    const characters = await firestore.collectionGroup("characters").get();
 
     for (const document of characters.docs) {
         const character = document.data();
