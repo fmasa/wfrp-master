@@ -4,7 +4,6 @@ import androidx.compose.runtime.Immutable
 import cafe.adriel.voyager.core.model.ScreenModel
 import cz.frantisekmasa.wfrp_master.common.core.domain.Damage
 import cz.frantisekmasa.wfrp_master.common.core.domain.HitLocation
-import cz.frantisekmasa.wfrp_master.common.core.domain.character.CharacterFeatureRepository
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.CharacterRepository
 import cz.frantisekmasa.wfrp_master.common.core.domain.identifiers.CharacterId
 import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.Armour
@@ -22,7 +21,6 @@ class CharacterCombatScreenModel(
     characterId: CharacterId,
     trappingRepository: InventoryItemRepository,
     characterRepository: CharacterRepository,
-    armorRepository: CharacterFeatureRepository<Armour>,
 ) : ScreenModel {
     private val trappingsFlow = trappingRepository.findAllForCharacter(characterId)
     private val characterFlow = characterRepository.getLive(characterId)
@@ -50,13 +48,7 @@ class CharacterCombatScreenModel(
                     .toList()
             }
 
-    private val legacyArmourFlow = armorRepository
-        .getLive(characterId)
-        .right()
-
-    val armour: Flow<Armour> = legacyArmourFlow.combine(trappingsFlow) { armour, items ->
-        armour + Armour.fromItems(items)
-    }
+    val armour: Flow<Armour> = trappingsFlow.map { items -> Armour.fromItems(items) }
 
     val armourPieces: Flow<Map<HitLocation, List<WornArmourPiece>>> = trappingsFlow.map { trappings ->
         val locations = mutableMapOf<HitLocation, MutableList<WornArmourPiece>>()
