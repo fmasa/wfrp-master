@@ -182,8 +182,6 @@ data class ArmourStrings(
     val qualities: ArmourQualityStrings = ArmourQualityStrings(),
     val shield: String = "Shield",
     val tipTrappings: String = "Armour is auto-calculated from worn armour trappings.",
-    val tipDeprecatedLegacyArmour: String =
-        "Manual armour will be removed in next versions in favor of auto-calculated armour from worn trappings.",
     val title: String = "Armour",
     val types: ArmourTypeStrings = ArmourTypeStrings(),
 )
