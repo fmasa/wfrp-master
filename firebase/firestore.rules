@@ -199,7 +199,7 @@ service cloud.firestore {
                     function containerExists(containerId) {
                         let container = get(/databases/$(database)/documents/parties/$(partyId)/characters/$(characterId)/inventory/$(containerId));
 
-                        return container.data.type != null && container.data.type.kind == "CONTAINER";
+                        return container.data.trappingType != null && container.data.trappingType.kind == "CONTAINER";
                     }
                 }
 
