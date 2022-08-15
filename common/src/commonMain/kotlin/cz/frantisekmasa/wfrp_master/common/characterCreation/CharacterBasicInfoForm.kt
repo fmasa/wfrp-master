@@ -35,7 +35,7 @@ object CharacterBasicInfoForm {
         val name: InputValue,
         val socialClass: InputValue,
         val career: InputValue,
-        val race: MutableState<Race>,
+        val race: MutableState<Race?>,
         val psychology: InputValue,
         val motivation: InputValue,
         val note: InputValue,
@@ -54,7 +54,9 @@ object CharacterBasicInfoForm {
                 name = inputValue(character?.name ?: "", Rules.NotBlank()),
                 socialClass = inputValue(character?.socialClass ?: "", Rules.NotBlank()),
                 career = inputValue(character?.career ?: "", Rules.NotBlank()),
-                race = rememberSaveable { mutableStateOf(character?.race ?: Race.HUMAN) },
+                race = rememberSaveable {
+                    mutableStateOf(if (character == null) Race.HUMAN else character.race)
+                },
                 psychology = inputValue(character?.psychology ?: ""),
                 motivation = inputValue(character?.motivation ?: ""),
                 note = inputValue(character?.note ?: ""),
@@ -92,7 +94,7 @@ fun CharacterBasicInfoForm(
         ChipList(
             label = strings.labelRace,
             modifier = Modifier.padding(top = 8.dp),
-            items = Race.values().map { it to it.localizedName },
+            items = raceOptions(),
             value = data.race.value,
             onValueChange = { data.race.value = it },
         )
@@ -158,4 +160,11 @@ fun CharacterBasicInfoForm(
             validate = validate,
         )
     }
+}
+
+@Composable
+@Stable
+fun raceOptions(): List<Pair<Race?, String>> {
+    return Race.values().map { it to it.localizedName } +
+        listOf(null to LocalStrings.current.races.custom)
 }

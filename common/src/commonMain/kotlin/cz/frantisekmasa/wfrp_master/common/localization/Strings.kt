@@ -710,6 +710,7 @@ data class PermissionMessageStrings(
 
 @Immutable
 data class RaceStrings(
+    val custom: String = "Custom",
     val dwarf: String = "Dwarf",
     val highElf : String = "High Elf",
     val woodElf : String = "Wood Elf",

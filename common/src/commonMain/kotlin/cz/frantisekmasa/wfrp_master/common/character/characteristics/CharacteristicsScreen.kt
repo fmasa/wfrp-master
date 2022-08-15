@@ -212,10 +212,9 @@ private fun CharacterTopPanel(character: Character, points: Points, onUpdate: (P
                         Column(Modifier.padding(start = Spacing.medium)) {
                             Text(character.name, fontWeight = FontWeight.Bold)
                             Text(
-                                character.race.localizedName +
-                                    " " +
-                                    character.career,
-                                style = MaterialTheme.typography.caption
+                                (character.race?.let { "${it.localizedName} " } ?: "") +
+                                character.career,
+                            style = MaterialTheme.typography.caption
                             )
                         }
                     }

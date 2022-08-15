@@ -3,6 +3,7 @@ package cz.frantisekmasa.wfrp_master.common.core.domain.character
 import androidx.compose.runtime.Immutable
 import cz.frantisekmasa.wfrp_master.common.core.domain.Ambitions
 import cz.frantisekmasa.wfrp_master.common.core.domain.Money
+import cz.frantisekmasa.wfrp_master.common.core.domain.Size
 import cz.frantisekmasa.wfrp_master.common.core.domain.Stats
 import cz.frantisekmasa.wfrp_master.common.encounters.domain.Wounds
 import kotlinx.serialization.SerialName
@@ -20,7 +21,7 @@ data class Character(
     val status: SocialStatus = SocialStatus(SocialStatus.Tier.BRASS, 0),
     val psychology: String,
     val motivation: String,
-    val race: Race,
+    val race: Race?,
     val characteristicsBase: Stats,
     val characteristicsAdvances: Stats,
     val points: Points,
@@ -74,7 +75,7 @@ data class Character(
         status = status,
     )
 
-    fun updateBasics(name: String, race: Race, motivation: String) = copy(
+    fun updateBasics(name: String, race: Race?, motivation: String) = copy(
         name = name,
         race = race,
         motivation = motivation,
@@ -137,12 +138,13 @@ data class Character(
         const val NOTE_MAX_LENGTH = 400
 
         private fun calculateMaxWounds(
-            race: Race,
+            race: Race?,
             points: Points,
             hasHardyTalent: Boolean,
             characteristics: Stats,
         ): Int {
-            val baseWounds = points.maxWounds ?: Wounds.calculateMax(race.size, characteristics)
+            val baseWounds = points.maxWounds
+                ?: Wounds.calculateMax(race?.size ?: Size.AVERAGE, characteristics)
 
             return if (hasHardyTalent) // TODO: Support multiple Hardy that is multiple times taken
                 baseWounds + characteristics.toughnessBonus
