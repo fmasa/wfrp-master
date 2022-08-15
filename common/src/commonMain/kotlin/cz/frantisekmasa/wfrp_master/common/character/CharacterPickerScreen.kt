@@ -15,6 +15,7 @@ import cafe.adriel.voyager.navigator.currentOrThrow
 import cz.frantisekmasa.wfrp_master.common.characterCreation.CharacterCreationScreen
 import cz.frantisekmasa.wfrp_master.common.core.auth.LocalUser
 import cz.frantisekmasa.wfrp_master.common.core.auth.UserId
+import cz.frantisekmasa.wfrp_master.common.core.domain.character.CharacterType
 import cz.frantisekmasa.wfrp_master.common.core.domain.identifiers.CharacterId
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.PartyId
 import cz.frantisekmasa.wfrp_master.common.core.ui.CharacterAvatar
@@ -47,7 +48,9 @@ data class CharacterPickerScreen(
 
         LaunchedEffect(characters) {
             when {
-                characters.isEmpty() -> navigator.replace(CharacterCreationScreen(partyId, userId))
+                characters.isEmpty() -> navigator.replace(
+                    CharacterCreationScreen(partyId, CharacterType.PLAYER_CHARACTER, userId)
+                )
                 characters.size == 1 -> navigator.replace(
                     CharacterDetailScreen(
                         CharacterId(partyId, characters.first().id)

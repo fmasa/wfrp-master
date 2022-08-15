@@ -365,6 +365,7 @@ data class CommonUiStrings(
     val increment: String = "Increment value",
     val iconToggleFabMenu: String = "Toggle menu",
     val dismissTipConfirmation: String = "Do you really want to dismiss this tip?",
+    val search: String = "Search",
 )
 
 @Immutable
@@ -453,9 +454,9 @@ data class PartyStrings(
     val labelName: String = "Party Name",
     val messages: PartyMessageStrings = PartyMessageStrings(),
     val numberOfPlayers: (players: Int) -> String = { "$it players" },
-    val tabCalendar: String = "Calendar",
     val tabCharacters: String = "Characters",
     val tabEncounters: String = "Encounters",
+    val tabWorld: String = "World",
     val titleCreateParty: String = "Create Party",
     val titleCharacters: String = "Characters",
     val titleInvitePlayers: String = "Invite players…",
@@ -782,6 +783,7 @@ data class NpcStrings(
     val labelEnemy: String = "Enemy",
     val labelName: String = "Name",
     val messages: NpcMessages = NpcMessages(),
+    val searchPlaceholder: String = "Search in NPCs…",
     val title: String = "NPC",
     val titlePlural: String = "NPCs",
     val titleAdd: String = "New NPC",
@@ -791,7 +793,10 @@ data class NpcStrings(
 
 @Immutable
 data class NpcMessages(
-    val noNpcs: String = "There are no NPCs yet. Add first one.",
+    val noNpcs: String = "No NPCs",
+    val noNpcsSubtext: String = "There are no NPCs yet. Add first one.",
+    val noNpcsSearched: String = "No NPCs found",
+    val noNpcsSearchedSubtext: String = "Consider changing the search phrase",
 )
 
 @Immutable

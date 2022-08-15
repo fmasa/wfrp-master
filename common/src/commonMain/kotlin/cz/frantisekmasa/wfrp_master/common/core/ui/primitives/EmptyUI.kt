@@ -6,11 +6,13 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.ContentAlpha
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Stable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
@@ -19,9 +21,11 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import cz.frantisekmasa.wfrp_master.common.core.shared.Resources
 import cz.frantisekmasa.wfrp_master.common.core.shared.drawableResource
+import androidx.compose.ui.geometry.Size as ComposeSize
 
 object EmptyUI {
     enum class Size {
@@ -37,21 +41,26 @@ object EmptyUI {
          */
         Large;
 
-        val modifier: Modifier
-            get() = when (this) {
-                Small ->
-                    Modifier
-                        .width(60.dp)
-                        .padding(top = 16.dp)
-                Large -> Modifier.width(64.dp)
-            }
-
         val textStyle: TextStyle
             @Composable
             get() = when (this) {
                 Small -> MaterialTheme.typography.subtitle1
                 Large -> MaterialTheme.typography.h6
             }
+
+        @Stable
+        fun modifier(intrinsicSize: ComposeSize): Modifier = when (this) {
+            Small -> Modifier.iconSize(60.dp, intrinsicSize).padding(top = 16.dp)
+            Large -> Modifier.iconSize(64.dp, intrinsicSize)
+        }
+
+        private fun Modifier.iconSize(width: Dp, intrinsicSize: ComposeSize): Modifier {
+            if (intrinsicSize.width == intrinsicSize.height) {
+                return size(width)
+            }
+
+            return width(width)
+        }
     }
 }
 
@@ -92,7 +101,7 @@ fun EmptyUI(
         Image(
             iconPainter,
             contentDescription = VisualOnlyIconDescription,
-            modifier = size.modifier,
+            modifier = size.modifier(iconPainter.intrinsicSize),
             colorFilter = ColorFilter.tint(disabledColor),
         )
 

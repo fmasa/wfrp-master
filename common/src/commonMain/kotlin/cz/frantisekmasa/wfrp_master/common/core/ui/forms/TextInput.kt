@@ -19,8 +19,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.Stable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -175,14 +177,10 @@ private fun TextInput(
 
 @Stable
 class InputValue(
-    private val state: MutableState<String>,
+    state: MutableState<String>,
     internal val rules: Rules,
 ) {
-    var value: String
-        set(value) {
-            state.value = value
-        }
-        get() = state.value
+    var value: String by state
 
     fun isValid() = rules.errorMessage(value) == null
 

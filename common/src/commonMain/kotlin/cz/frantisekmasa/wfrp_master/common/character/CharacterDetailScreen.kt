@@ -47,6 +47,7 @@ import cz.frantisekmasa.wfrp_master.common.core.auth.UserId
 import cz.frantisekmasa.wfrp_master.common.core.config.Platform
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.Character
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.CharacterTab
+import cz.frantisekmasa.wfrp_master.common.core.domain.character.CharacterType
 import cz.frantisekmasa.wfrp_master.common.core.domain.identifiers.CharacterId
 import cz.frantisekmasa.wfrp_master.common.core.domain.localizedName
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.Party
@@ -201,7 +202,15 @@ data class CharacterDetailScreen(
 
                 if (canAddCharacters) {
                     DropdownMenuItem(
-                        onClick = { navigator.push(CharacterCreationScreen(party.id, userId)) }
+                        onClick = {
+                            navigator.push(
+                                CharacterCreationScreen(
+                                    party.id,
+                                    CharacterType.PLAYER_CHARACTER,
+                                    userId,
+                                )
+                            )
+                        }
                     ) {
                         Icon(Icons.Rounded.Add, null, modifier = Modifier.size(24.dp))
                         Text(LocalStrings.current.character.buttonAdd)

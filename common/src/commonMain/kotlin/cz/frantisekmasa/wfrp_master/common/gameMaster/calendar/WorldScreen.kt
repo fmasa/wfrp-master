@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Icon
+import androidx.compose.material.ListItem
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
@@ -28,49 +29,76 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import cafe.adriel.voyager.navigator.LocalNavigator
+import cafe.adriel.voyager.navigator.currentOrThrow
+import cz.frantisekmasa.wfrp_master.common.characterCreation.CharacterCreationScreen
+import cz.frantisekmasa.wfrp_master.common.core.domain.character.CharacterType
 import cz.frantisekmasa.wfrp_master.common.core.domain.localizedName
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.Party
+import cz.frantisekmasa.wfrp_master.common.core.domain.party.PartyId
 import cz.frantisekmasa.wfrp_master.common.core.domain.time.DateTime
 import cz.frantisekmasa.wfrp_master.common.core.domain.time.ImperialDate
 import cz.frantisekmasa.wfrp_master.common.core.domain.time.MannsliebPhase
 import cz.frantisekmasa.wfrp_master.common.core.domain.time.YearSeason
 import cz.frantisekmasa.wfrp_master.common.core.shared.IO
+import cz.frantisekmasa.wfrp_master.common.core.shared.Resources
 import cz.frantisekmasa.wfrp_master.common.core.ui.cards.CardContainer
 import cz.frantisekmasa.wfrp_master.common.core.ui.dialogs.Dialog
+import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.ItemIcon
+import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.VisualOnlyIconDescription
 import cz.frantisekmasa.wfrp_master.common.core.ui.timePicker
 import cz.frantisekmasa.wfrp_master.common.gameMaster.GameMasterScreenModel
 import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
+import cz.frantisekmasa.wfrp_master.common.npcs.NpcsScreen
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.time.LocalTime
 
 @Composable
-internal fun CalendarScreen(
+internal fun WorldScreen(
     party: Party,
     screenModel: GameMasterScreenModel,
     modifier: Modifier,
 ) {
-    val dateTime = party.time
-
     Column(
         modifier
             .background(MaterialTheme.colors.background)
             .verticalScroll(rememberScrollState())
             .padding(top = 6.dp)
+            .padding(horizontal = Spacing.small)
     ) {
-        CardContainer(Modifier.padding(horizontal = 8.dp)) {
-            Column(Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
-                Time(
-                    screenModel = screenModel,
-                    time = dateTime.time,
-                )
-                Date(
-                    screenModel = screenModel,
-                    date = dateTime.date,
-                )
-            }
+        CalendarCard(screenModel, party.time)
+        NpcsCard(party.id)
+    }
+}
+
+@Composable
+private fun CalendarCard(screenModel: GameMasterScreenModel, dateTime: DateTime) {
+    CardContainer {
+        Column(Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
+            Time(
+                screenModel = screenModel,
+                time = dateTime.time,
+            )
+            Date(
+                screenModel = screenModel,
+                date = dateTime.date,
+            )
         }
+    }
+}
+
+@Composable
+private fun NpcsCard(partyId: PartyId) {
+    CardContainer {
+        val navigator = LocalNavigator.currentOrThrow
+
+        ListItem(
+            modifier = Modifier.clickable { navigator.push(NpcsScreen(partyId)) },
+            icon = { ItemIcon(Resources.Drawable.Npc) },
+            text = { Text(LocalStrings.current.npcs.titlePlural) },
+        )
     }
 }
 

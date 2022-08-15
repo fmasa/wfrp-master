@@ -21,6 +21,7 @@ import cz.frantisekmasa.wfrp_master.common.characterCreation.CharacterCreationSc
 import cz.frantisekmasa.wfrp_master.common.combat.ActiveCombatBanner
 import cz.frantisekmasa.wfrp_master.common.core.LocalStaticConfiguration
 import cz.frantisekmasa.wfrp_master.common.core.config.Platform
+import cz.frantisekmasa.wfrp_master.common.core.domain.character.CharacterType
 import cz.frantisekmasa.wfrp_master.common.core.domain.identifiers.CharacterId
 import cz.frantisekmasa.wfrp_master.common.core.domain.identifiers.EncounterId
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.PartyId
@@ -33,7 +34,7 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.tabs.TabPager
 import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.tabs.tab
 import cz.frantisekmasa.wfrp_master.common.encounters.EncounterDetailScreen
 import cz.frantisekmasa.wfrp_master.common.encounters.EncountersScreen
-import cz.frantisekmasa.wfrp_master.common.gameMaster.calendar.CalendarScreen
+import cz.frantisekmasa.wfrp_master.common.gameMaster.calendar.WorldScreen
 import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
 import cz.frantisekmasa.wfrp_master.common.partyList.PartyListScreen
 import cz.frantisekmasa.wfrp_master.common.partySettings.PartySettingsScreen
@@ -93,7 +94,6 @@ class GameMasterScreen(
 
                 TabPager(
                     modifier = Modifier.weight(1f),
-                    fullWidthTabs = true,
                 ) {
                     val modifier = Modifier.width(screenWidth)
 
@@ -108,13 +108,19 @@ class GameMasterScreen(
                                 navigator.push(CharacterDetailScreen(CharacterId(party.id, it.id)))
                             },
                             onCharacterCreateRequest = {
-                                navigator.push(CharacterCreationScreen(partyId, it))
+                                navigator.push(
+                                    CharacterCreationScreen(
+                                        partyId,
+                                        CharacterType.PLAYER_CHARACTER,
+                                        it,
+                                    )
+                                )
                             },
                         )
                     }
 
-                    tab(strings.tabCalendar) {
-                        CalendarScreen(
+                    tab(strings.tabWorld) {
+                        WorldScreen(
                             party,
                             modifier = modifier,
                             screenModel = screenModel,

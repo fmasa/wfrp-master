@@ -26,7 +26,6 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
-import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
@@ -236,7 +235,7 @@ fun PartyList(
 ) {
     LazyColumn(
         Modifier.fillMaxHeight(),
-        contentPadding = PaddingValues(top = 12.dp, bottom = Spacing.bottomPaddingUnderFab)
+        contentPadding = PaddingValues(top = Spacing.medium, bottom = Spacing.bottomPaddingUnderFab),
     ) {
         items(parties, key = { it.id }) { party ->
             val isGameMaster =
