@@ -357,6 +357,7 @@ service cloud.firestore {
                 function isValidCharacter(character) {
                     return [
                             "id",
+                            "type",
                             "name",
                             "career",
                             "socialClass",
@@ -384,6 +385,7 @@ service cloud.firestore {
                             (character.userId != null && character.userId == request.auth.uid) ||
                             (isGameMaster() && (character.userId == null || character.userId in get(/databases/$(database)/documents/parties/$(partyId)).data.users))
                         )
+                        && (! ("type" in character) || character.type in ["PLAYER_CHARACTER", "NPC"])
                         && character.name is string && isNotBlank(character.name) && character.name.size() <= 50
                         && character.career is string && isNotBlank(character.career) && character.career.size() <= 50
                         && character.psychology is string && character.psychology.size() <= 200

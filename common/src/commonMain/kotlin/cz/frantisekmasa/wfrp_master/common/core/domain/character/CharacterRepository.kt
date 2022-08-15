@@ -17,5 +17,5 @@ interface CharacterRepository {
 
     suspend fun hasCharacterInParty(userId: String, partyId: PartyId): Boolean
 
-    fun inParty(partyId: PartyId): Flow<List<Character>>
+    fun inParty(partyId: PartyId, type: CharacterType): Flow<List<Character>>
 }

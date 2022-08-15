@@ -8,6 +8,7 @@ import cz.frantisekmasa.wfrp_master.common.combat.domain.initiative.InitiativeTe
 import cz.frantisekmasa.wfrp_master.common.core.domain.Stats
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.Character
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.CharacterRepository
+import cz.frantisekmasa.wfrp_master.common.core.domain.character.CharacterType
 import cz.frantisekmasa.wfrp_master.common.core.domain.identifiers.CharacterId
 import cz.frantisekmasa.wfrp_master.common.core.domain.identifiers.EncounterId
 import cz.frantisekmasa.wfrp_master.common.core.domain.identifiers.NpcId
@@ -70,7 +71,8 @@ class CombatScreenModel(
     suspend fun loadNpcsFromEncounter(encounterId: EncounterId): List<Npc> =
         npcs.findByEncounter(encounterId).first()
 
-    suspend fun loadCharacters(): List<Character> = characters.inParty(partyId).first()
+    suspend fun loadCharacters(): List<Character> =
+        characters.inParty(partyId, CharacterType.PLAYER_CHARACTER).first()
 
     suspend fun startCombat(
         encounterId: EncounterId,
@@ -99,7 +101,7 @@ class CombatScreenModel(
         val npcsFlow = activeEncounterId.transform { emitAll(npcs.findByEncounter(it)) }
 
         val charactersFlow = characters
-            .inParty(partyId)
+            .inParty(partyId, CharacterType.PLAYER_CHARACTER)
             .distinctUntilChanged()
 
         val combatantsFlow = party

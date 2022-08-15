@@ -12,6 +12,7 @@ import kotlinx.serialization.Serializable
 @Immutable
 data class Character(
     val id: String,
+    val type: CharacterType = CharacterType.PLAYER_CHARACTER,
     val name: String,
     val userId: String?,
     val career: String,
@@ -38,6 +39,9 @@ data class Character(
     val wounds: Wounds get() = Wounds(points.wounds, calculateMaxWounds(race, points, hasHardyTalent, characteristics))
 
     init {
+        require(userId == null || type == CharacterType.PLAYER_CHARACTER) {
+            "Only Player Characters can have associated user"
+        }
         require(listOf(name, userId, career).all { it?.isNotBlank() ?: true })
         require(name.length <= NAME_MAX_LENGTH) { "Character name is too long" }
         require(career.length <= CAREER_MAX_LENGTH) { "Career is too long" }
