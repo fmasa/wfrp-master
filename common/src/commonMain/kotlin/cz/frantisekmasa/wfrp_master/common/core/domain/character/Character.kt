@@ -11,6 +11,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 @Immutable
 data class Character(
+    val id: String,
     val name: String,
     val userId: String?,
     val career: String,
@@ -29,7 +30,6 @@ data class Character(
     @SerialName("hardyTalent") val hasHardyTalent: Boolean = false,
     @SerialName("archived") val isArchived: Boolean = false,
     val avatarUrl: String? = null,
-    val id: String = userId ?: error("Either ID or UserId must be present"), // TODO: Remove this fallback in 1.14
     val money: Money = Money.zero(),
     val hiddenTabs: Set<CharacterTab> = emptySet(),
 ) {
