@@ -31,8 +31,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
-import cz.frantisekmasa.wfrp_master.common.characterCreation.CharacterCreationScreen
-import cz.frantisekmasa.wfrp_master.common.core.domain.character.CharacterType
 import cz.frantisekmasa.wfrp_master.common.core.domain.localizedName
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.Party
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.PartyId
@@ -48,6 +46,7 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.ItemIcon
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.VisualOnlyIconDescription
 import cz.frantisekmasa.wfrp_master.common.core.ui.timePicker
+import cz.frantisekmasa.wfrp_master.common.encounters.EncountersScreen
 import cz.frantisekmasa.wfrp_master.common.gameMaster.GameMasterScreenModel
 import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
 import cz.frantisekmasa.wfrp_master.common.npcs.NpcsScreen
@@ -69,7 +68,7 @@ internal fun WorldScreen(
             .padding(horizontal = Spacing.small)
     ) {
         CalendarCard(screenModel, party.time)
-        NpcsCard(party.id)
+        NavigationCard(party.id)
     }
 }
 
@@ -90,7 +89,7 @@ private fun CalendarCard(screenModel: GameMasterScreenModel, dateTime: DateTime)
 }
 
 @Composable
-private fun NpcsCard(partyId: PartyId) {
+private fun NavigationCard(partyId: PartyId) {
     CardContainer {
         val navigator = LocalNavigator.currentOrThrow
 
@@ -98,6 +97,12 @@ private fun NpcsCard(partyId: PartyId) {
             modifier = Modifier.clickable { navigator.push(NpcsScreen(partyId)) },
             icon = { ItemIcon(Resources.Drawable.Npc) },
             text = { Text(LocalStrings.current.npcs.titlePlural) },
+        )
+
+        ListItem(
+            modifier = Modifier.clickable { navigator.push(EncountersScreen(partyId)) },
+            icon = { ItemIcon(Resources.Drawable.Encounter) },
+            text = { Text(LocalStrings.current.encounters.title) },
         )
     }
 }
