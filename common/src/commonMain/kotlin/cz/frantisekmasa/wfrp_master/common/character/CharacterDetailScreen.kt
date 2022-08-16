@@ -33,6 +33,7 @@ import cafe.adriel.voyager.navigator.currentOrThrow
 import cz.frantisekmasa.wfrp_master.common.character.characteristics.CharacteristicsScreen
 import cz.frantisekmasa.wfrp_master.common.character.combat.CharacterCombatScreen
 import cz.frantisekmasa.wfrp_master.common.character.conditions.ConditionsScreen
+import cz.frantisekmasa.wfrp_master.common.character.notes.NotesScreen
 import cz.frantisekmasa.wfrp_master.common.character.religion.ReligionScreen
 import cz.frantisekmasa.wfrp_master.common.character.skills.SkillsScreen
 import cz.frantisekmasa.wfrp_master.common.character.spells.CharacterSpellsScreen
@@ -350,6 +351,14 @@ data class CharacterDetailScreen(
                     TrappingsScreen(
                         characterId = characterId,
                         screenModel = rememberScreenModel(arg = characterId),
+                        modifier = modifier,
+                    )
+                }
+                CharacterTab.NOTES -> {
+                    NotesScreen(
+                        character = character,
+                        screenModel = screenModel,
+                        party = party,
                         modifier = modifier,
                     )
                 }
