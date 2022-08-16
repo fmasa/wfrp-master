@@ -31,6 +31,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import cz.frantisekmasa.wfrp_master.common.core.domain.Characteristic
 import cz.frantisekmasa.wfrp_master.common.core.domain.Expression
 import cz.frantisekmasa.wfrp_master.common.core.domain.Stats
@@ -177,19 +178,31 @@ private fun CharacterTopPanel(character: Character, points: Points, onUpdate: (P
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.SpaceBetween,
                 ) {
-                    Row {
-                        CharacterAvatar(character.avatarUrl, ItemIcon.Size.Large)
-                        Column(Modifier.padding(start = Spacing.medium)) {
-                            Text(character.name, fontWeight = FontWeight.Bold)
-                            Text(
-                                (character.race?.let { "${it.localizedName} " } ?: "") +
-                                character.career,
-                            style = MaterialTheme.typography.caption
-                            )
-                        }
-                    }
+                    CharacterAvatar(
+                        character.avatarUrl,
+                        ItemIcon.Size.XLarge,
+                    )
 
-                    WoundsBadge(character, points, update = onUpdate)
+                    Column(
+                        Modifier.padding(start = Spacing.medium),
+                        horizontalAlignment = Alignment.End,
+                    ) {
+                        Text(
+                            character.name,
+                            style = MaterialTheme.typography.h6,
+                            softWrap = false,
+                            overflow = TextOverflow.Ellipsis,
+                        )
+                        Text(
+                            (character.race?.let { "${it.localizedName} " } ?: "")+
+                                character.career,
+                            style = MaterialTheme.typography.caption,
+                            softWrap = false,
+                            overflow = TextOverflow.Ellipsis,
+                        )
+
+                        WoundsBadge(character, points, update = onUpdate)
+                    }
                 }
             }
 
@@ -205,13 +218,12 @@ private fun WoundsBadge(character: Character, points: Points, update: (Points) -
     val wounds = character.wounds
 
     Button(onClick = { dialogVisible = true }) {
-        Column(horizontalAlignment = Alignment.CenterHorizontally) {
-            Text("${wounds.current} / ${wounds.max}")
-            Text(
-                strings.wounds,
-                fontWeight = FontWeight.Normal
-            )
-        }
+        Text("${wounds.current} / ${wounds.max}")
+        Text(
+            strings.wounds,
+            fontWeight = FontWeight.Normal,
+            modifier = Modifier.padding(start = Spacing.small)
+        )
     }
 
     if (!dialogVisible) {
