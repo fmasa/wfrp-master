@@ -16,6 +16,7 @@ import androidx.compose.ui.Modifier
 import cz.frantisekmasa.wfrp_master.common.ambitions.AmbitionsCard
 import cz.frantisekmasa.wfrp_master.common.character.CharacterScreenModel
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.Character
+import cz.frantisekmasa.wfrp_master.common.core.domain.character.CharacterType
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.Party
 import cz.frantisekmasa.wfrp_master.common.core.ui.cards.CardTitle
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.CardRow
@@ -40,8 +41,6 @@ fun NotesScreen(
                 .verticalScroll(rememberScrollState())
                 .padding(bottom = Spacing.bottomPaddingUnderFab),
         ) {
-            val strings = LocalStrings.current.ambition
-
             CardRow {
                 Column {
                     CardTitle(LocalStrings.current.character.note)
@@ -49,33 +48,42 @@ fun NotesScreen(
                 }
             }
 
-            Container(
-                Modifier.padding(top = Spacing.tiny),
-                horizontalArrangement = Arrangement.spacedBy(Spacing.gutterSize()),
-            ) {
-                val size = if (breakpoint > Breakpoint.XSmall)
-                    ColumnSize.HalfWidth
-                else ColumnSize.FullWidth
-
-                column(size) {
-                    AmbitionsCard(
-                        title = strings.titleCharacterAmbitions,
-                        ambitions = character.ambitions,
-                        onSave = { ambitions ->
-                            screenModel.update { it.updateAmbitions(ambitions) }
-                        },
-                    )
-                }
-
-                column(size) {
-                    AmbitionsCard(
-                        title = strings.titlePartyAmbitions,
-                        ambitions = party.ambitions,
-                        titleIcon = Icons.Rounded.Group,
-                        onSave = null,
-                    )
-                }
+            if (character.type == CharacterType.PLAYER_CHARACTER) {
+                AmbitionsContainer(character, party, screenModel)
             }
+        }
+    }
+}
+
+@Composable
+private fun AmbitionsContainer(character: Character, party: Party, screenModel: CharacterScreenModel) {
+    val strings = LocalStrings.current.ambition
+
+    Container(
+        Modifier.padding(top = Spacing.tiny),
+        horizontalArrangement = Arrangement.spacedBy(Spacing.gutterSize()),
+    ) {
+        val size = if (breakpoint > Breakpoint.XSmall)
+            ColumnSize.HalfWidth
+        else ColumnSize.FullWidth
+
+        column(size) {
+            AmbitionsCard(
+                title = strings.titleCharacterAmbitions,
+                ambitions = character.ambitions,
+                onSave = { ambitions ->
+                    screenModel.update { it.updateAmbitions(ambitions) }
+                },
+            )
+        }
+
+        column(size) {
+            AmbitionsCard(
+                title = strings.titlePartyAmbitions,
+                ambitions = party.ambitions,
+                titleIcon = Icons.Rounded.Group,
+                onSave = null,
+            )
         }
     }
 }
