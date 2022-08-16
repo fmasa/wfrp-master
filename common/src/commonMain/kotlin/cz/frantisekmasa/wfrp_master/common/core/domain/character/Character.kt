@@ -75,10 +75,11 @@ data class Character(
         status = status,
     )
 
-    fun updateBasics(name: String, race: Race?, motivation: String) = copy(
+    fun updateBasics(name: String, race: Race?, motivation: String, note: String) = copy(
         name = name,
         race = race,
         motivation = motivation,
+        note = note,
         points = points.coerceWoundsAtMost(
             calculateMaxWounds(race, points, hasHardyTalent, characteristics)
         )

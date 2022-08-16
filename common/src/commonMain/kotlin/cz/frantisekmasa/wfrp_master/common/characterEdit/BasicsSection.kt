@@ -35,6 +35,7 @@ fun BasicsSection(character: Character, screenModel: CharacterScreenModel) {
                     name = it.name,
                     race = it.race,
                     motivation = it.motivation,
+                    note = it.note,
                 )
             }
         }
@@ -59,6 +60,15 @@ fun BasicsSection(character: Character, screenModel: CharacterScreenModel) {
             value = data.motivation,
             maxLength = Character.MOTIVATION_MAX_LENGTH,
             validate = validate,
+            multiLine = true,
+        )
+
+        TextInput(
+            label = strings.labelNote,
+            value = data.note,
+            maxLength = Character.NOTE_MAX_LENGTH,
+            validate = validate,
+            multiLine = true,
         )
     }
 }
@@ -67,6 +77,7 @@ private data class BasicFormData(
     val name: InputValue,
     val race: MutableState<Race?>,
     val motivation: InputValue,
+    val note: InputValue,
 ) : HydratedFormData<BasicData> {
     override fun isValid(): Boolean {
         return listOf(name, motivation).all { it.isValid() }
@@ -76,6 +87,7 @@ private data class BasicFormData(
         name = name.value,
         race = race.value,
         motivation = motivation.value,
+        note = note.value,
     )
 
     companion object {
@@ -84,6 +96,7 @@ private data class BasicFormData(
             name = inputValue(character.name, Rules.NotBlank()),
             race = rememberSaveable(character.id) { mutableStateOf(character.race) },
             motivation = inputValue(character.motivation),
+            note = inputValue(character.note),
         )
     }
 }
@@ -93,4 +106,5 @@ private data class BasicData(
     val name: String,
     val race: Race?,
     val motivation: String,
+    val note: String,
 )
