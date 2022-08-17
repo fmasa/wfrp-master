@@ -65,7 +65,7 @@ data class Combat(
     }
 
     private fun <T> List<T>.containsSameItems(other: List<T>) =
-        other.size != size || other.containsAll(this)
+        other.size == size || other.containsAll(this)
 
     fun removeNpc(npcId: NpcId): Combat? {
         val removedIndex = combatants.indexOfFirst { it is Combatant.Npc && it.npcId == npcId }
