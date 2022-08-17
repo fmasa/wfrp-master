@@ -43,6 +43,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
@@ -436,7 +437,14 @@ class ActiveCombatScreen(
                             }
                         }
                     },
-                    text = { Text(combatant.name) }
+                    text = { Text(combatant.name) },
+                    trailing = {
+                        val advantage = combatant.combatant.advantage
+
+                        if (advantage > 0) {
+                            Text("$advantage A", fontWeight = FontWeight.Bold)
+                        }
+                    }
                 )
             }
         }
