@@ -31,13 +31,13 @@ sealed class CombatantItem {
             get() = character.avatarUrl
 
         override val name
-            get() = character.name
+            get() = combatant.name ?: character.name
 
         override val characteristics
             get() = character.characteristics
 
         override val wounds
-            get() = character.wounds
+            get() = combatant.wounds ?: character.wounds
     }
 
     @Immutable
@@ -47,12 +47,12 @@ sealed class CombatantItem {
         override val combatant: Combatant.Npc,
     ) : CombatantItem() {
         override val name
-            get() = npc.name
+            get() = combatant.name ?: npc.name
 
         override val characteristics
             get() = npc.stats
 
         override val wounds
-            get() = npc.wounds
+            get() = combatant.wounds ?: npc.wounds
     }
 }

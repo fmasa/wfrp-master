@@ -1,5 +1,6 @@
 package cz.frantisekmasa.wfrp_master.common.core.domain.combat
 
+import com.benasher44.uuid.uuid4
 import cz.frantisekmasa.wfrp_master.common.core.domain.identifiers.EncounterId
 import cz.frantisekmasa.wfrp_master.common.core.domain.identifiers.NpcId
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.PartyId
@@ -18,9 +19,9 @@ class CombatTest {
     private val combat = Combat(
         encounterId = encounterId.encounterId,
         combatants = listOf(
-            Combatant.Npc(npcId1, initiative = 10, advantage = 0),
-            Combatant.Character(characterId = "foo", initiative = 10, advantage = 0),
-            Combatant.Npc(npcId2, initiative = 10, advantage = 0),
+            Combatant.Npc(npcId1, initiative = 10, advantage = 0, id = uuid4()),
+            Combatant.Character(characterId = "foo", initiative = 10, advantage = 0, id = uuid4()),
+            Combatant.Npc(npcId2, initiative = 10, advantage = 0, id = uuid4()),
         )
     )
 

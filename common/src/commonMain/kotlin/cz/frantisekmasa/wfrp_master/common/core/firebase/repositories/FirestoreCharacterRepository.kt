@@ -72,10 +72,10 @@ class FirestoreCharacterRepository(
             .isNotEmpty()
     }
 
-    override fun inParty(partyId: PartyId, type: CharacterType): Flow<List<Character>> {
+    override fun inParty(partyId: PartyId, types: Set<CharacterType>): Flow<List<Character>> {
         return characters(partyId)
             .documents(mapper)
-            .map { characters -> characters.filter { it.type == type && !it.isArchived } }
+            .map { characters -> characters.filter { it.type in types && !it.isArchived } }
     }
 
     private fun characters(partyId: PartyId) =

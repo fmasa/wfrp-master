@@ -1,6 +1,7 @@
 package cz.frantisekmasa.wfrp_master.common.encounters.domain
 
 import androidx.compose.runtime.Immutable
+import cz.frantisekmasa.wfrp_master.common.core.domain.character.LocalCharacterId
 import kotlinx.serialization.Contextual
 import kotlinx.serialization.Serializable
 import java.util.UUID
@@ -14,6 +15,7 @@ data class Encounter(
     val position: Int,
     @Suppress("unused") // This will be introduced in UI in future
     val completed: Boolean = false,
+    val characters: Map<LocalCharacterId, Int> = emptyMap(),
 ) {
     companion object {
         const val NAME_MAX_LENGTH = 100
@@ -31,6 +33,14 @@ data class Encounter(
         return copy(
             name = name,
             description = description
+        )
+    }
+
+    fun withCharacterCount(characterId: LocalCharacterId, count: Int): Encounter {
+        return copy(
+            characters = if (count < 1)
+                characters - characterId
+            else characters + mapOf(characterId to count)
         )
     }
 

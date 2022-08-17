@@ -150,7 +150,7 @@ val appModule = DI.Module("Common") {
     bindFactory { partyId: PartyId -> EncountersScreenModel(partyId, instance()) }
     bindFactory { partyId: PartyId -> PartyScreenModel(partyId, instance()) }
     bindFactory { encounterId: EncounterId ->
-        EncounterDetailScreenModel(encounterId, instance(), instance(), instance())
+        EncounterDetailScreenModel(encounterId, instance(), instance(), instance(), instance())
     }
     bindFactory { characterId: CharacterId ->
         SkillsScreenModel(characterId, instance(), instance())

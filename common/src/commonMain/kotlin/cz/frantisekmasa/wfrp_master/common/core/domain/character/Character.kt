@@ -9,10 +9,12 @@ import cz.frantisekmasa.wfrp_master.common.encounters.domain.Wounds
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
+typealias LocalCharacterId = String
+
 @Serializable
 @Immutable
 data class Character(
-    val id: String,
+    val id: LocalCharacterId,
     val type: CharacterType = CharacterType.PLAYER_CHARACTER,
     val name: String,
     val userId: String?,

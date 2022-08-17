@@ -161,12 +161,13 @@ service cloud.firestore {
 
                 function isValidEncounter(encounter) {
                     return encounter is map
-                        && encounter.keys().toSet() == ["id", "name", "description", "position", "completed"].toSet()
+                        && ["id", "name", "description", "position", "completed", "characters"].hasAll(encounter.keys())
                         && encounter.id is string && encounter.id == encounterId
                         && encounter.name is string && isNotBlank(encounter.name) && encounter.name.size() <= 100
                         && encounter.description is string && encounter.description.size() <= 1000
                         && encounter.position is int && encounter.position >= 0
-                        && encounter.completed is bool;
+                        && encounter.completed is bool
+                        && (! ("characters" in encounter) || encounter.characters is map);
                 }
             }
 

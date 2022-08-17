@@ -131,6 +131,8 @@ data class MessageStrings(
     val partyUpdated: String = "Party was updated",
     val partyUpdateErrorNoConnection: String = "You need to be connected to internet to update party",
     val nonDesktopFeature: String = "This feature is currently not available for Desktop version. We plan to introduce it in future versions.",
+    val searchNotFound: String = "No results",
+    val searchNotFoundSubtext: String = "Consider changing the search phrase.",
 )
 
 @Immutable
@@ -779,8 +781,9 @@ data class SpellMessageStrings(
 
 @Immutable
 data class NpcStrings(
-    val buttonAddNpc: String = "New NPC",
+    val buttonAddNpc: String = "Add NPC",
     val labelAlive: String = "Alive",
+    val labelCount: String = "Count",
     val labelDescription: String = "Description (Optional)",
     val labelEnemy: String = "Enemy",
     val labelName: String = "Name",
@@ -788,7 +791,7 @@ data class NpcStrings(
     val searchPlaceholder: String = "Search in NPCs…",
     val title: String = "NPC",
     val titlePlural: String = "NPCs",
-    val titleAdd: String = "New NPC",
+    val titleAdd: String = "Add NPC",
     val titleCharacteristics: String = "Characteristics",
     val titleArmour: String = "Armour",
 )
