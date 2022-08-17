@@ -2,7 +2,10 @@ package cz.frantisekmasa.wfrp_master.common.core.domain
 
 import androidx.compose.runtime.Immutable
 import com.github.h0tk3y.betterParse.combinators.leftAssociative
+import com.github.h0tk3y.betterParse.combinators.map
+import com.github.h0tk3y.betterParse.combinators.optional
 import com.github.h0tk3y.betterParse.combinators.or
+import com.github.h0tk3y.betterParse.combinators.separated
 import com.github.h0tk3y.betterParse.combinators.skip
 import com.github.h0tk3y.betterParse.combinators.times
 import com.github.h0tk3y.betterParse.combinators.use
@@ -107,10 +110,28 @@ private data class IntegerLiteral(private val value: Int) : Expression {
     override fun toString(): String = "$value"
 }
 
+@Parcelize
+@Immutable
+private data class MaxFunction(private val expressions: List<Expression>) : Expression {
+    override fun evaluate(): Int = expressions.maxOf { it.evaluate() }
+
+    override fun isDeterministic(): Boolean = expressions.all { it.isDeterministic() }
+}
+
+@Parcelize
+@Immutable
+private data class MinFunction(private val expressions: List<Expression>) : Expression {
+    override fun evaluate(): Int = expressions.minOf { it.evaluate() }
+
+    override fun isDeterministic(): Boolean = expressions.all { it.isDeterministic() }
+}
+
 private class RollExpressionGrammar(val constants: Map<String, Int>) : Grammar<Expression>() {
     @Suppress("unused")
     val whitespace by regexToken("\\s+", ignore = true)
     val dice by regexToken("[0-9]+d[1-9][0-9]*")
+    val maxFunctionName by regexToken(Regex("MAX", RegexOption.IGNORE_CASE))
+    val minFunctionName by regexToken(Regex("MIN", RegexOption.IGNORE_CASE))
     val constant by regexToken(constants.keys.sortedByDescending { it.length }.joinToString("|"))
     val integer by regexToken("([1-9][0-9]*)|0")
     val multiply by literalToken("*")
@@ -119,16 +140,41 @@ private class RollExpressionGrammar(val constants: Map<String, Int>) : Grammar<E
     val minus by literalToken("-")
     val leftParenthesis by literalToken("(")
     val rightParenthesis by literalToken(")")
+    val comma by literalToken(",")
 
     private val diceTerm by dice use {
         val (multiplier, sides) = text.split('d')
         Multiplication(IntegerLiteral(multiplier.toInt()), DiceRoll(sides.toInt()))
     }
 
+
     val term by diceTerm or
         (integer use { IntegerLiteral(text.toInt()) }) or
         (constant use { IntegerLiteral(constants.getValue(text)) }) or
+        (
+            skip(maxFunctionName) *
+                skip(leftParenthesis) *
+                skip(optional(whitespace)) *
+                separated(
+                    skip(optional(whitespace)) *
+                        parser(this::rootParser) *
+                        skip(optional(whitespace)),
+                    comma,
+                ).map { MaxFunction(it.terms) } *
+                skip(rightParenthesis)) or
+        (
+            skip(minFunctionName) *
+                skip(leftParenthesis) *
+                skip(optional(whitespace)) *
+                separated(
+                    skip(optional(whitespace)) *
+                        parser(this::rootParser) *
+                        skip(optional(whitespace)),
+                    comma,
+                ).map { MinFunction(it.terms) } *
+                skip(rightParenthesis)) or
         (skip(leftParenthesis) * parser(this::rootParser) * skip(rightParenthesis))
+
 
     val multiplicationOrDivision by leftAssociative(term, multiply or divide) { l, operator, r ->
         if (operator.type == multiply) Multiplication(l, r) else Division(l, r)
