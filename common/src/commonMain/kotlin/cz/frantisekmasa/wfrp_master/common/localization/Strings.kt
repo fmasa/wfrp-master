@@ -768,6 +768,7 @@ data class SpellStrings(
     val titleChooseCompendiumSpell: String = "Choose Compendium spell…",
     val titleEdit: String = "Edit Spell",
     val titleNew: String = "New Spell",
+    val titleSpells: String = "Spells",
 )
 
 @Immutable

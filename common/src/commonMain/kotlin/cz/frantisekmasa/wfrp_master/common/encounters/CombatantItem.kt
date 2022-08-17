@@ -38,6 +38,8 @@ sealed class CombatantItem {
 
         override val wounds
             get() = combatant.wounds ?: character.wounds
+
+        val note: String get() = character.note
     }
 
     @Immutable

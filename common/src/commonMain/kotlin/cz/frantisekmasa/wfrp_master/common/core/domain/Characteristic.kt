@@ -2,6 +2,7 @@ package cz.frantisekmasa.wfrp_master.common.core.domain
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
+import androidx.compose.runtime.Stable
 import cz.frantisekmasa.wfrp_master.common.core.shared.Resources
 import cz.frantisekmasa.wfrp_master.common.localization.Strings
 
@@ -18,6 +19,7 @@ enum class Characteristic(override val nameResolver: (strings: Strings) -> Strin
     WEAPON_SKILL({ it.characteristics.weaponSkill }),
     WILL_POWER({ it.characteristics.willPower });
 
+    @Stable
     fun getShortcutName(): String {
         return when (this) {
             AGILITY -> "Ag"

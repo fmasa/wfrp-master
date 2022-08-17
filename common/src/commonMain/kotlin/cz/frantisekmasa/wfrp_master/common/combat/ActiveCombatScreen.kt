@@ -16,6 +16,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.BottomAppBar
 import androidx.compose.material.ContentAlpha
+import androidx.compose.material.Divider
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.ListItem
@@ -27,21 +28,21 @@ import androidx.compose.material.Scaffold
 import androidx.compose.material.Surface
 import androidx.compose.material.SwipeableDefaults
 import androidx.compose.material.Text
-import androidx.compose.material.TextButton
 import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowBack
 import androidx.compose.material.icons.rounded.ArrowForward
+import androidx.compose.material.icons.rounded.OpenInNew
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
@@ -52,7 +53,8 @@ import cz.frantisekmasa.wfrp_master.common.core.domain.party.PartyId
 import cz.frantisekmasa.wfrp_master.common.core.shared.IO
 import cz.frantisekmasa.wfrp_master.common.core.shared.Resources
 import cz.frantisekmasa.wfrp_master.common.core.ui.CharacterAvatar
-import cz.frantisekmasa.wfrp_master.common.core.ui.CharacteristicsTable
+import cz.frantisekmasa.wfrp_master.common.core.ui.StatBlock
+import cz.frantisekmasa.wfrp_master.common.core.ui.StatBlockData
 import cz.frantisekmasa.wfrp_master.common.core.ui.buttons.BackButton
 import cz.frantisekmasa.wfrp_master.common.core.ui.flow.collectWithLifecycle
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.NumberPicker
@@ -73,6 +75,7 @@ import io.github.aakira.napier.Napier
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class ActiveCombatScreen(
     private val partyId: PartyId,
@@ -301,33 +304,52 @@ class ActiveCombatScreen(
         Column(
             Modifier
                 .verticalScroll(rememberScrollState())
-                .padding(Spacing.bodyPadding),
+                .padding(Spacing.large),
             verticalArrangement = Arrangement.spacedBy(Spacing.small),
         ) {
-            Text(
-                combatant.name,
-                modifier = Modifier.fillMaxWidth(),
-                style = MaterialTheme.typography.h6,
-                textAlign = TextAlign.Center
-            )
-
             val navigator = LocalNavigator.currentOrThrow
 
-            TextButton(
-                modifier = Modifier.align(Alignment.CenterHorizontally),
-                onClick = {
-                    navigator.push(
-                        when (combatant) {
-                            is CombatantItem.Npc -> NpcDetailScreen(combatant.npcId)
-                            is CombatantItem.Character -> CharacterDetailScreen(
-                                combatant.characterId,
-                                comingFromCombat = true,
-                            )
-                        }
+            Row(
+                Modifier.align(Alignment.CenterHorizontally),
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                Text(
+                    combatant.name,
+                    style = MaterialTheme.typography.h6,
+                )
+
+                IconButton(
+                    onClick = {
+                        navigator.push(
+                            when (combatant) {
+                                is CombatantItem.Npc -> NpcDetailScreen(combatant.npcId)
+                                is CombatantItem.Character -> CharacterDetailScreen(
+                                    combatant.characterId,
+                                    comingFromCombat = true,
+                                )
+                            }
+                        )
+                    },
+                ) {
+                    Icon(
+                        Icons.Rounded.OpenInNew,
+                        LocalStrings.current.commonUi.buttonDetail,
+                        tint = MaterialTheme.colors.primary
                     )
-                },
-                content = { Text(LocalStrings.current.commonUi.buttonDetail.uppercase()) },
-            )
+                }
+            }
+
+            var statBlockData: StatBlockData? by rememberSaveable { mutableStateOf(null) }
+
+            StatBlock(combatant.characteristics, statBlockData)
+
+            LaunchedEffect(combatant.combatant.id) {
+                withContext(Dispatchers.IO) {
+                    statBlockData = viewModel.getStatBlockData(combatant)
+                }
+            }
+
+            Divider()
 
             Row(Modifier.padding(bottom = Spacing.medium)) {
                 Box(Modifier.weight(1f), contentAlignment = Alignment.TopCenter) {
@@ -338,8 +360,6 @@ class ActiveCombatScreen(
                     CombatantAdvantage(combatant, viewModel)
                 }
             }
-
-            CharacteristicsTable(combatant.characteristics)
         }
     }
 

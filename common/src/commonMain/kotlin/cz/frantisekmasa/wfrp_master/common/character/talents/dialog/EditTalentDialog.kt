@@ -1,12 +1,20 @@
 package cz.frantisekmasa.wfrp_master.common.character.talents.dialog
 
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
 import com.benasher44.uuid.Uuid
 import cz.frantisekmasa.wfrp_master.common.character.talents.TalentsScreenModel
 import cz.frantisekmasa.wfrp_master.common.core.shared.IO
 import cz.frantisekmasa.wfrp_master.common.core.ui.dialogs.FullScreenDialog
 import cz.frantisekmasa.wfrp_master.common.core.ui.flow.collectWithLifecycle
+import cz.frantisekmasa.wfrp_master.common.core.ui.forms.NumberPicker
+import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.SubheadBar
+import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
@@ -28,17 +36,40 @@ fun EditTalentDialog(
             TalentDetail(
                 talent = talent,
                 onDismissRequest = onDismissRequest,
-                onTimesTakenChange = { timesTaken ->
-                    coroutineScope.launch(Dispatchers.IO) {
-                        screenModel.saveTalent(talent.copy(taken = timesTaken))
+                subheadBar = {
+                    TimesTakenBar(talent.taken) { timesTaken ->
+                        coroutineScope.launch(Dispatchers.IO) {
+                            screenModel.saveTalent(talent.copy(taken = timesTaken))
+                        }
                     }
-                }
+                },
             )
         } else {
             NonCompendiumTalentForm(
                 screenModel = screenModel,
                 existingTalent = talent,
                 onDismissRequest = onDismissRequest,
+            )
+        }
+    }
+}
+
+@Composable
+private fun TimesTakenBar(timesTaken: Int, onTimesTakenChange: (timesTaken: Int) -> Unit) {
+    SubheadBar {
+        Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
+            Text(
+                text = LocalStrings.current.talents.labelTimesTaken,
+                modifier = Modifier.weight(1f),
+            )
+            NumberPicker(
+                value = timesTaken,
+                onIncrement = { onTimesTakenChange(timesTaken + 1) },
+                onDecrement = {
+                    if (timesTaken > 1) {
+                        onTimesTakenChange(timesTaken - 1)
+                    }
+                }
             )
         }
     }

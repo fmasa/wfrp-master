@@ -20,13 +20,21 @@ import cz.frantisekmasa.wfrp_master.common.core.domain.party.PartyRepository
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.combat.Combat
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.combat.Combatant
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.settings.InitiativeStrategy
+import cz.frantisekmasa.wfrp_master.common.core.domain.religion.BlessingRepository
+import cz.frantisekmasa.wfrp_master.common.core.domain.religion.MiracleRepository
+import cz.frantisekmasa.wfrp_master.common.core.domain.skills.SkillRepository
+import cz.frantisekmasa.wfrp_master.common.core.domain.spells.SpellRepository
+import cz.frantisekmasa.wfrp_master.common.core.domain.talents.TalentRepository
 import cz.frantisekmasa.wfrp_master.common.core.logging.Reporter
+import cz.frantisekmasa.wfrp_master.common.core.ui.StatBlockData
 import cz.frantisekmasa.wfrp_master.common.core.utils.right
 import cz.frantisekmasa.wfrp_master.common.encounters.CombatantItem
 import cz.frantisekmasa.wfrp_master.common.encounters.domain.Npc
 import cz.frantisekmasa.wfrp_master.common.encounters.domain.NpcRepository
 import cz.frantisekmasa.wfrp_master.common.encounters.domain.Wounds
 import io.github.aakira.napier.Napier
+import kotlinx.coroutines.async
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -46,6 +54,11 @@ class CombatScreenModel(
     private val parties: PartyRepository,
     private val npcs: NpcRepository,
     private val characters: CharacterRepository,
+    private val skills: SkillRepository,
+    private val talents: TalentRepository,
+    private val spells: SpellRepository,
+    private val blessings: BlessingRepository,
+    private val miracles: MiracleRepository,
 ) : ScreenModel {
 
     val party: Flow<Party> = parties.getLive(partyId).right()
@@ -78,6 +91,38 @@ class CombatScreenModel(
 
     suspend fun loadNpcs(): List<Character> =
         characters.inParty(partyId, CharacterType.NPC).first()
+
+    suspend fun getStatBlockData(combatant: CombatantItem): StatBlockData {
+        if (combatant !is CombatantItem.Character) {
+            return StatBlockData(
+                "",
+                emptyList(),
+                emptyList(),
+                emptyList(),
+                emptyList(),
+                emptyList(),
+            )
+        }
+
+        val characterId = combatant.characterId
+
+        return coroutineScope {
+            val skillsDeferred = async { skills.findAllForCharacter(characterId).first() }
+            val talentsDeferred = async { talents.findAllForCharacter(characterId).first() }
+            val spellsDeferred = async { spells.findAllForCharacter(characterId).first() }
+            val blessingsDeferred = async { blessings.findAllForCharacter(characterId).first() }
+            val miraclesDeferred = async { miracles.findAllForCharacter(characterId).first() }
+
+            StatBlockData(
+                combatant.note,
+                skillsDeferred.await(),
+                talentsDeferred.await(),
+                spellsDeferred.await(),
+                blessingsDeferred.await(),
+                miraclesDeferred.await(),
+            )
+        }
+    }
 
     suspend fun startCombat(
         encounterId: Uuid,
