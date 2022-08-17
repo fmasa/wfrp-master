@@ -55,6 +55,7 @@ import cz.frantisekmasa.wfrp_master.common.gameMaster.GameMasterScreenModel
 import cz.frantisekmasa.wfrp_master.common.invitation.InvitationScreenModel
 import cz.frantisekmasa.wfrp_master.common.invitation.domain.FirestoreInvitationProcessor
 import cz.frantisekmasa.wfrp_master.common.invitation.domain.InvitationProcessor
+import cz.frantisekmasa.wfrp_master.common.npcs.NpcsScreenModel
 import cz.frantisekmasa.wfrp_master.common.partyList.PartyListScreenModel
 import cz.frantisekmasa.wfrp_master.common.partySettings.PartySettingsScreenModel
 import cz.frantisekmasa.wfrp_master.common.settings.SettingsScreenModel
@@ -149,7 +150,7 @@ val appModule = DI.Module("Common") {
     bindFactory { partyId: PartyId -> EncountersScreenModel(partyId, instance()) }
     bindFactory { partyId: PartyId -> PartyScreenModel(partyId, instance()) }
     bindFactory { encounterId: EncounterId ->
-        EncounterDetailScreenModel(encounterId, instance(), instance(), instance())
+        EncounterDetailScreenModel(encounterId, instance(), instance(), instance(), instance())
     }
     bindFactory { characterId: CharacterId ->
         SkillsScreenModel(characterId, instance(), instance())
@@ -182,6 +183,7 @@ val appModule = DI.Module("Common") {
         )
     }
     bindFactory { partyId: PartyId -> GameMasterScreenModel(partyId, instance(), instance()) }
+    bindFactory { partyId: PartyId -> NpcsScreenModel(partyId, instance()) }
     bindFactory { partyId: PartyId ->
         SkillTestScreenModel(partyId, instance(), instance(), instance())
     }

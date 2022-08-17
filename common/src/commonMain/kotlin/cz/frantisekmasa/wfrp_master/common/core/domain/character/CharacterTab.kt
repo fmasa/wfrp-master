@@ -11,4 +11,5 @@ enum class CharacterTab(override val nameResolver: (strings: Strings) -> String)
     SPELLS({ it.character.tabSpells }),
     RELIGION({ it.character.tabReligions }),
     TRAPPINGS({ it.character.tabTrappings }),
+    NOTES({ it.character.tabNotes }),
 }

@@ -43,6 +43,7 @@ import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import cz.frantisekmasa.wfrp_master.common.character.CharacterDetailScreen
 import cz.frantisekmasa.wfrp_master.common.core.auth.UserId
+import cz.frantisekmasa.wfrp_master.common.core.domain.character.CharacterType
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.PartyId
 import cz.frantisekmasa.wfrp_master.common.core.shared.IO
 import cz.frantisekmasa.wfrp_master.common.core.ui.buttons.BackButton
@@ -53,7 +54,6 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.SubheadBar
 import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 private enum class FormState {
     EDITED_BY_USER,
@@ -62,6 +62,7 @@ private enum class FormState {
 
 class CharacterCreationScreen(
     val partyId: PartyId,
+    val type: CharacterType,
     val userId: UserId?,
 ) : Screen {
     @Composable
@@ -74,13 +75,13 @@ class CharacterCreationScreen(
                 )
             }
         ) {
-            MainContainer(partyId, userId)
+            MainContainer(partyId, type, userId)
         }
     }
 }
 
 @Composable
-private fun Screen.MainContainer(partyId: PartyId, userId: UserId?) {
+private fun Screen.MainContainer(partyId: PartyId, type: CharacterType, userId: UserId?) {
     val screenModel: CharacterCreationScreenModel = rememberScreenModel(arg = partyId)
     val coroutineScope = rememberCoroutineScope()
 
@@ -98,6 +99,7 @@ private fun Screen.MainContainer(partyId: PartyId, userId: UserId?) {
         coroutineScope.launch(Dispatchers.IO) {
             val characterId = screenModel.createCharacter(
                 userId,
+                type,
                 basicInfo,
                 characteristics,
                 points

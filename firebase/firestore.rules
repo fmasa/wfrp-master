@@ -161,12 +161,13 @@ service cloud.firestore {
 
                 function isValidEncounter(encounter) {
                     return encounter is map
-                        && encounter.keys().toSet() == ["id", "name", "description", "position", "completed"].toSet()
+                        && ["id", "name", "description", "position", "completed", "characters"].hasAll(encounter.keys())
                         && encounter.id is string && encounter.id == encounterId
                         && encounter.name is string && isNotBlank(encounter.name) && encounter.name.size() <= 100
                         && encounter.description is string && encounter.description.size() <= 1000
                         && encounter.position is int && encounter.position >= 0
-                        && encounter.completed is bool;
+                        && encounter.completed is bool
+                        && (! ("characters" in encounter) || encounter.characters is map);
                 }
             }
 
@@ -357,6 +358,7 @@ service cloud.firestore {
                 function isValidCharacter(character) {
                     return [
                             "id",
+                            "type",
                             "name",
                             "career",
                             "socialClass",
@@ -384,13 +386,14 @@ service cloud.firestore {
                             (character.userId != null && character.userId == request.auth.uid) ||
                             (isGameMaster() && (character.userId == null || character.userId in get(/databases/$(database)/documents/parties/$(partyId)).data.users))
                         )
+                        && (! ("type" in character) || character.type in ["PLAYER_CHARACTER", "NPC"])
                         && character.name is string && isNotBlank(character.name) && character.name.size() <= 50
                         && character.career is string && isNotBlank(character.career) && character.career.size() <= 50
                         && character.psychology is string && character.psychology.size() <= 200
                         && character.motivation is string && character.motivation.size() <= 200
                         && character.mutation is string && character.mutation.size() <= 200
                         && character.socialClass is string && isNotBlank(character.socialClass) && character.socialClass.size() <= 50
-                        && character.race is string && character.race in ["HUMAN", "HIGH_ELF", "DWARF", "HALFLING", "WOOD_ELF", "GNOME", "OGRE"]
+                        && (character.race == null || (character.race is string && character.race in ["HUMAN", "HIGH_ELF", "DWARF", "HALFLING", "WOOD_ELF", "GNOME", "OGRE"]))
                         && arePointsValid(character.points)
                         && areStatsValid(character.characteristicsBase)
                         && areStatsValid(character.characteristicsAdvances)

@@ -1,6 +1,8 @@
 package cz.frantisekmasa.wfrp_master.common.combat
 
 import cafe.adriel.voyager.core.model.ScreenModel
+import com.benasher44.uuid.Uuid
+import com.benasher44.uuid.uuid4
 import cz.frantisekmasa.wfrp_master.common.combat.domain.initiative.BonusesPlus1d10Strategy
 import cz.frantisekmasa.wfrp_master.common.combat.domain.initiative.InitiativeCharacteristicStrategy
 import cz.frantisekmasa.wfrp_master.common.combat.domain.initiative.InitiativePlus1d10Strategy
@@ -8,6 +10,7 @@ import cz.frantisekmasa.wfrp_master.common.combat.domain.initiative.InitiativeTe
 import cz.frantisekmasa.wfrp_master.common.core.domain.Stats
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.Character
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.CharacterRepository
+import cz.frantisekmasa.wfrp_master.common.core.domain.character.CharacterType
 import cz.frantisekmasa.wfrp_master.common.core.domain.identifiers.CharacterId
 import cz.frantisekmasa.wfrp_master.common.core.domain.identifiers.EncounterId
 import cz.frantisekmasa.wfrp_master.common.core.domain.identifiers.NpcId
@@ -67,22 +70,59 @@ class CombatScreenModel(
         .mapLatest { it.getRound() }
         .distinctUntilChanged()
 
-    suspend fun loadNpcsFromEncounter(encounterId: EncounterId): List<Npc> =
-        npcs.findByEncounter(encounterId).first()
+    suspend fun loadNpcsFromEncounter(encounterId: Uuid): List<Npc> =
+        npcs.findByEncounter(EncounterId(partyId, encounterId)).first()
 
-    suspend fun loadCharacters(): List<Character> = characters.inParty(partyId).first()
+    suspend fun loadCharacters(): List<Character> =
+        characters.inParty(partyId, CharacterType.PLAYER_CHARACTER).first()
+
+    suspend fun loadNpcs(): List<Character> =
+        characters.inParty(partyId, CharacterType.NPC).first()
 
     suspend fun startCombat(
-        encounterId: EncounterId,
+        encounterId: Uuid,
         characters: List<Character>,
-        npcs: List<Npc>
+        npcs: List<Npc>,
+        npcCharacters: Map<Character, Int>,
     ) {
+        val globalEncounterId = EncounterId(partyId, encounterId)
         val combatants =
-            characters.map { it.characteristics to Combatant.Character(it.id, 1) } +
-                npcs.map { it.stats to Combatant.Npc(NpcId(encounterId, it.id), 1) }
+            characters.map {
+                it.characteristics to Combatant.Character(
+                    id = uuid4(),
+                    characterId = it.id,
+                    initiative = 1,
+                )
+            } +
+                npcs.map {
+                    it.stats to Combatant.Npc(
+                        id = uuid4(),
+                        npcId = NpcId(globalEncounterId, it.id),
+                        initiative = 1,
+                    )
+                } +
+                npcCharacters.flatMap { (character, count) ->
+                    if (count == 1)
+                        listOf(
+                            character.characteristics to Combatant.Character(
+                                id = uuid4(),
+                                characterId = character.id,
+                                initiative = 1,
+                            )
+                        )
+                    else (1..count).map { index ->
+                        character.characteristics to Combatant.Character(
+                            id = uuid4(),
+                            characterId = character.id,
+                            initiative = 1,
+                            wounds = character.wounds,
+                            name = "${character.name} ($index)",
+                        )
+                    }
+                }
 
         parties.update(partyId) {
-            it.startCombat(encounterId, rollInitiativeForCombatants(it, combatants))
+            it.startCombat(globalEncounterId, rollInitiativeForCombatants(it, combatants))
         }
 
         Reporter.recordEvent("combat_started", mapOf("partyId" to partyId.toString()))
@@ -99,7 +139,7 @@ class CombatScreenModel(
         val npcsFlow = activeEncounterId.transform { emitAll(npcs.findByEncounter(it)) }
 
         val charactersFlow = characters
-            .inParty(partyId)
+            .inParty(partyId, CharacterType.values().toSet())
             .distinctUntilChanged()
 
         val combatantsFlow = party
@@ -179,6 +219,11 @@ class CombatScreenModel(
             .combine(third) { (a, b), c -> transform(a, b, c) }
 
     suspend fun updateWounds(combatant: CombatantItem, wounds: Wounds) {
+        if (combatant.combatant.wounds != null) {
+            // Wounds are combatant specific (there may be multiple combatants of same character)
+            updateCombat { it.updateCombatant(combatant.combatant.withWounds(wounds)) }
+        }
+
         when (combatant) {
             is CombatantItem.Character -> {
                 val character = characters.get(combatant.characterId)

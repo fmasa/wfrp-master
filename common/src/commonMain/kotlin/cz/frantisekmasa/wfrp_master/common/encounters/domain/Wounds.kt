@@ -3,16 +3,19 @@ package cz.frantisekmasa.wfrp_master.common.encounters.domain
 import androidx.compose.runtime.Immutable
 import cz.frantisekmasa.wfrp_master.common.core.domain.Size
 import cz.frantisekmasa.wfrp_master.common.core.domain.Stats
+import cz.frantisekmasa.wfrp_master.common.core.shared.Parcelable
+import cz.frantisekmasa.wfrp_master.common.core.shared.Parcelize
 import kotlinx.serialization.Serializable
 import kotlin.math.max
 import kotlin.math.min
 
 @Serializable
 @Immutable
+@Parcelize
 data class Wounds(
     val current: Int,
     val max: Int
-) {
+) : Parcelable {
     fun restore(restored: Int): Wounds = copy(current = min(max, current + restored))
     fun lose(lost: Int): Wounds = copy(current = max(0, current - lost))
 

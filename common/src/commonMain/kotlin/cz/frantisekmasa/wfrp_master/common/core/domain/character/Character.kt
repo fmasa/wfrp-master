@@ -3,14 +3,19 @@ package cz.frantisekmasa.wfrp_master.common.core.domain.character
 import androidx.compose.runtime.Immutable
 import cz.frantisekmasa.wfrp_master.common.core.domain.Ambitions
 import cz.frantisekmasa.wfrp_master.common.core.domain.Money
+import cz.frantisekmasa.wfrp_master.common.core.domain.Size
 import cz.frantisekmasa.wfrp_master.common.core.domain.Stats
 import cz.frantisekmasa.wfrp_master.common.encounters.domain.Wounds
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
+typealias LocalCharacterId = String
+
 @Serializable
 @Immutable
 data class Character(
+    val id: LocalCharacterId,
+    val type: CharacterType = CharacterType.PLAYER_CHARACTER,
     val name: String,
     val userId: String?,
     val career: String,
@@ -18,7 +23,7 @@ data class Character(
     val status: SocialStatus = SocialStatus(SocialStatus.Tier.BRASS, 0),
     val psychology: String,
     val motivation: String,
-    val race: Race,
+    val race: Race?,
     val characteristicsBase: Stats,
     val characteristicsAdvances: Stats,
     val points: Points,
@@ -29,7 +34,6 @@ data class Character(
     @SerialName("hardyTalent") val hasHardyTalent: Boolean = false,
     @SerialName("archived") val isArchived: Boolean = false,
     val avatarUrl: String? = null,
-    val id: String = userId ?: error("Either ID or UserId must be present"), // TODO: Remove this fallback in 1.14
     val money: Money = Money.zero(),
     val hiddenTabs: Set<CharacterTab> = emptySet(),
 ) {
@@ -38,6 +42,9 @@ data class Character(
     val wounds: Wounds get() = Wounds(points.wounds, calculateMaxWounds(race, points, hasHardyTalent, characteristics))
 
     init {
+        require(userId == null || type == CharacterType.PLAYER_CHARACTER) {
+            "Only Player Characters can have associated user"
+        }
         require(listOf(name, userId, career).all { it?.isNotBlank() ?: true })
         require(name.length <= NAME_MAX_LENGTH) { "Character name is too long" }
         require(career.length <= CAREER_MAX_LENGTH) { "Career is too long" }
@@ -70,10 +77,11 @@ data class Character(
         status = status,
     )
 
-    fun updateBasics(name: String, race: Race, motivation: String) = copy(
+    fun updateBasics(name: String, race: Race?, motivation: String, note: String) = copy(
         name = name,
         race = race,
         motivation = motivation,
+        note = note,
         points = points.coerceWoundsAtMost(
             calculateMaxWounds(race, points, hasHardyTalent, characteristics)
         )
@@ -133,12 +141,13 @@ data class Character(
         const val NOTE_MAX_LENGTH = 400
 
         private fun calculateMaxWounds(
-            race: Race,
+            race: Race?,
             points: Points,
             hasHardyTalent: Boolean,
             characteristics: Stats,
         ): Int {
-            val baseWounds = points.maxWounds ?: Wounds.calculateMax(race.size, characteristics)
+            val baseWounds = points.maxWounds
+                ?: Wounds.calculateMax(race?.size ?: Size.AVERAGE, characteristics)
 
             return if (hasHardyTalent) // TODO: Support multiple Hardy that is multiple times taken
                 baseWounds + characteristics.toughnessBonus

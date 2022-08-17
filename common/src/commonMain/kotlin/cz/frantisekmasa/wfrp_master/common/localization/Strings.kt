@@ -131,6 +131,8 @@ data class MessageStrings(
     val partyUpdated: String = "Party was updated",
     val partyUpdateErrorNoConnection: String = "You need to be connected to internet to update party",
     val nonDesktopFeature: String = "This feature is currently not available for Desktop version. We plan to introduce it in future versions.",
+    val searchNotFound: String = "No results",
+    val searchNotFoundSubtext: String = "Consider changing the search phrase.",
 )
 
 @Immutable
@@ -157,6 +159,7 @@ data class EncounterStrings(
     val labelName: String = "Name",
     val labelDescription: String = "Description (Optional)",
     val messages: EncounterMessageStrings = EncounterMessageStrings(),
+    val title: String = "Encounters",
     val titleCreate: String = "Create Encounter",
     val titleDescription: String = "Description",
     val titleEdit: String = "Edit Encounter",
@@ -249,6 +252,7 @@ data class CharacterStrings(
     val labelMotivation: String = "Motivation (Optional)",
     val labelName: String = "Name",
     val labelNote: String = "Additional notes (Optional)",
+    val note: String = "Additional notes",
     val labelPsychology: String = "Psychology (Optional)",
     val labelRace: String = "Race",
     val labelStatus: String = "Status",
@@ -265,6 +269,7 @@ data class CharacterStrings(
     val tabAttributes: String = "Attributes",
     val tabCombat: String = "Combat",
     val tabConditions: String = "Conditions",
+    val tabNotes: String = "Notes",
     val tabReligions: String = "Religion",
     val tabSkillsAndTalents: String = "Skills & Talents",
     val tabSpells: String = "Spells",
@@ -365,6 +370,7 @@ data class CommonUiStrings(
     val increment: String = "Increment value",
     val iconToggleFabMenu: String = "Toggle menu",
     val dismissTipConfirmation: String = "Do you really want to dismiss this tip?",
+    val search: String = "Search",
 )
 
 @Immutable
@@ -453,9 +459,8 @@ data class PartyStrings(
     val labelName: String = "Party Name",
     val messages: PartyMessageStrings = PartyMessageStrings(),
     val numberOfPlayers: (players: Int) -> String = { "$it players" },
-    val tabCalendar: String = "Calendar",
     val tabCharacters: String = "Characters",
-    val tabEncounters: String = "Encounters",
+    val tabWorld: String = "World",
     val titleCreateParty: String = "Create Party",
     val titleCharacters: String = "Characters",
     val titleInvitePlayers: String = "Invite players…",
@@ -710,6 +715,7 @@ data class PermissionMessageStrings(
 
 @Immutable
 data class RaceStrings(
+    val custom: String = "Custom",
     val dwarf: String = "Dwarf",
     val highElf : String = "High Elf",
     val woodElf : String = "Wood Elf",
@@ -775,22 +781,27 @@ data class SpellMessageStrings(
 
 @Immutable
 data class NpcStrings(
-    val buttonAddNpc: String = "New NPC",
+    val buttonAddNpc: String = "Add NPC",
     val labelAlive: String = "Alive",
+    val labelCount: String = "Count",
     val labelDescription: String = "Description (Optional)",
     val labelEnemy: String = "Enemy",
     val labelName: String = "Name",
     val messages: NpcMessages = NpcMessages(),
+    val searchPlaceholder: String = "Search in NPCs…",
     val title: String = "NPC",
     val titlePlural: String = "NPCs",
-    val titleAdd: String = "New NPC",
+    val titleAdd: String = "Add NPC",
     val titleCharacteristics: String = "Characteristics",
     val titleArmour: String = "Armour",
 )
 
 @Immutable
 data class NpcMessages(
-    val noNpcs: String = "There are no NPCs yet. Add first one.",
+    val noNpcs: String = "No NPCs",
+    val noNpcsSubtext: String = "There are no NPCs yet. Add first one.",
+    val noNpcsSearched: String = "No NPCs found",
+    val noNpcsSearchedSubtext: String = "Consider changing the search phrase",
 )
 
 @Immutable

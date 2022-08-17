@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
@@ -20,8 +19,6 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.Group
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
@@ -34,8 +31,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.dp
-import cz.frantisekmasa.wfrp_master.common.ambitions.AmbitionsCard
+import androidx.compose.ui.text.style.TextOverflow
 import cz.frantisekmasa.wfrp_master.common.core.domain.Characteristic
 import cz.frantisekmasa.wfrp_master.common.core.domain.Expression
 import cz.frantisekmasa.wfrp_master.common.core.domain.Stats
@@ -53,6 +49,7 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.CharacterAvatar
 import cz.frantisekmasa.wfrp_master.common.core.ui.dialogs.Dialog
 import cz.frantisekmasa.wfrp_master.common.core.ui.dialogs.FullScreenDialog
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.NumberPicker
+import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.CardRow
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.FloatingActionsMenu
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.ItemIcon
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.MenuState
@@ -162,32 +159,6 @@ internal fun CharacteristicsScreen(
                     )
                 }
             }
-
-            val strings = LocalStrings.current.ambition
-
-            Container(
-                Modifier.padding(top = Spacing.tiny),
-                horizontalArrangement = Arrangement.spacedBy(Spacing.gutterSize()),
-            ) {
-                val size = if (breakpoint > Breakpoint.XSmall) HalfWidth else FullWidth
-
-                column(size) {
-                    AmbitionsCard(
-                        title = strings.titleCharacterAmbitions,
-                        ambitions = character.ambitions,
-                        onSave = { screenModel.updateCharacterAmbitions(it) },
-                    )
-                }
-
-                column(size) {
-                    AmbitionsCard(
-                        title = strings.titlePartyAmbitions,
-                        ambitions = party.ambitions,
-                        titleIcon = Icons.Rounded.Group,
-                        onSave = null,
-                    )
-                }
-            }
         }
     }
 }
@@ -207,20 +178,31 @@ private fun CharacterTopPanel(character: Character, points: Points, onUpdate: (P
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.SpaceBetween,
                 ) {
-                    Row {
-                        CharacterAvatar(character.avatarUrl, ItemIcon.Size.Large)
-                        Column(Modifier.padding(start = Spacing.medium)) {
-                            Text(character.name, fontWeight = FontWeight.Bold)
-                            Text(
-                                character.race.localizedName +
-                                    " " +
-                                    character.career,
-                                style = MaterialTheme.typography.caption
-                            )
-                        }
-                    }
+                    CharacterAvatar(
+                        character.avatarUrl,
+                        ItemIcon.Size.XLarge,
+                    )
 
-                    WoundsBadge(character, points, update = onUpdate)
+                    Column(
+                        Modifier.padding(start = Spacing.medium),
+                        horizontalAlignment = Alignment.End,
+                    ) {
+                        Text(
+                            character.name,
+                            style = MaterialTheme.typography.h6,
+                            softWrap = false,
+                            overflow = TextOverflow.Ellipsis,
+                        )
+                        Text(
+                            (character.race?.let { "${it.localizedName} " } ?: "")+
+                                character.career,
+                            style = MaterialTheme.typography.caption,
+                            softWrap = false,
+                            overflow = TextOverflow.Ellipsis,
+                        )
+
+                        WoundsBadge(character, points, update = onUpdate)
+                    }
                 }
             }
 
@@ -236,13 +218,12 @@ private fun WoundsBadge(character: Character, points: Points, update: (Points) -
     val wounds = character.wounds
 
     Button(onClick = { dialogVisible = true }) {
-        Column(horizontalAlignment = Alignment.CenterHorizontally) {
-            Text("${wounds.current} / ${wounds.max}")
-            Text(
-                strings.wounds,
-                fontWeight = FontWeight.Normal
-            )
-        }
+        Text("${wounds.current} / ${wounds.max}")
+        Text(
+            strings.wounds,
+            fontWeight = FontWeight.Normal,
+            modifier = Modifier.padding(start = Spacing.small)
+        )
     }
 
     if (!dialogVisible) {
@@ -319,16 +300,6 @@ private fun PointsRow(points: Points, update: (Points) -> Unit) {
                 }
             }
         }
-    }
-}
-
-@Composable
-private fun CardRow(modifier: Modifier = Modifier, content: @Composable RowScope.() -> Unit) {
-    Surface(modifier = modifier, elevation = 2.dp) {
-        Row(
-            Modifier.padding(horizontal = Spacing.large, vertical = Spacing.large),
-            content = content,
-        )
     }
 }
 

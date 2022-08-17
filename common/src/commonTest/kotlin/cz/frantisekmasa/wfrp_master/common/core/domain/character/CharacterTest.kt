@@ -1,14 +1,15 @@
 package cz.frantisekmasa.wfrp_master.common.core.domain.character
 
+import com.benasher44.uuid.uuid4
 import cz.frantisekmasa.wfrp_master.common.core.domain.Money
 import cz.frantisekmasa.wfrp_master.common.core.domain.Stats
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
-import kotlin.test.assertSame
 
 class CharacterTest {
     private fun character() = Character(
+        id = uuid4().toString(),
         name = "Bilbo",
         userId = "123",
         career = "Writer",

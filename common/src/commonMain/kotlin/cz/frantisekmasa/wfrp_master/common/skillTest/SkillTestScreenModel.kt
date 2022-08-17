@@ -4,6 +4,7 @@ import cafe.adriel.voyager.core.model.ScreenModel
 import cz.frantisekmasa.wfrp_master.common.core.domain.Stats
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.Character
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.CharacterRepository
+import cz.frantisekmasa.wfrp_master.common.core.domain.character.CharacterType
 import cz.frantisekmasa.wfrp_master.common.core.domain.compendium.Compendium
 import cz.frantisekmasa.wfrp_master.common.core.domain.identifiers.CharacterId
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.PartyId
@@ -20,7 +21,7 @@ class SkillTestScreenModel(
     characterRepository: CharacterRepository,
     private val characterSkills: SkillRepository,
 ) : ScreenModel {
-    val characters: Flow<List<Character>> = characterRepository.inParty(partyId)
+    val characters: Flow<List<Character>> = characterRepository.inParty(partyId, CharacterType.PLAYER_CHARACTER)
     val skills: Flow<List<CompendiumSkill>> = skillCompendium.liveForParty(partyId)
 
     suspend fun performSkillTest(

@@ -3,6 +3,7 @@ package cz.frantisekmasa.wfrp_master.common.gameMaster
 import cafe.adriel.voyager.core.model.ScreenModel
 import cz.frantisekmasa.wfrp_master.common.core.domain.Ambitions
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.CharacterRepository
+import cz.frantisekmasa.wfrp_master.common.core.domain.character.CharacterType
 import cz.frantisekmasa.wfrp_master.common.core.domain.identifiers.CharacterId
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.Party
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.PartyId
@@ -22,12 +23,14 @@ class GameMasterScreenModel(
 
     val party: Flow<Party> = parties.getLive(partyId).right()
 
+    private val playerCharacters = characterRepository.inParty(partyId, CharacterType.PLAYER_CHARACTER)
+
     /**
      * Returns LiveData which emits either CharacterId of players current character or NULL if user
      * didn't create character yet
      */
     val players: Flow<List<Player>?> =
-        party.filterNotNull().combineTransform(characterRepository.inParty(partyId)) { party, characters ->
+        party.filterNotNull().combineTransform(playerCharacters) { party, characters ->
             val players = characters.map { Player.ExistingCharacter(it) }
             val usersWithoutCharacter = party.players
                 .filter { userId -> players.none { it.character.userId == userId.toString() } }
