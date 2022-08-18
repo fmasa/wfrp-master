@@ -52,6 +52,7 @@ import cafe.adriel.voyager.navigator.currentOrThrow
 import cz.frantisekmasa.wfrp_master.common.character.CharacterDetailScreen
 import cz.frantisekmasa.wfrp_master.common.core.auth.LocalUser
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.PartyId
+import cz.frantisekmasa.wfrp_master.common.core.domain.party.combat.Advantage
 import cz.frantisekmasa.wfrp_master.common.core.shared.IO
 import cz.frantisekmasa.wfrp_master.common.core.shared.Resources
 import cz.frantisekmasa.wfrp_master.common.core.ui.CharacterAvatar
@@ -310,7 +311,7 @@ class ActiveCombatScreen(
     private fun CombatantSheet(
         combatant: CombatantItem,
         viewModel: CombatScreenModel,
-        advantageCap: Int,
+        advantageCap: Advantage,
     ) {
         Column(
             Modifier
@@ -397,10 +398,10 @@ class ActiveCombatScreen(
     private fun CombatantAdvantage(
         combatant: CombatantItem,
         viewModel: CombatScreenModel,
-        advantageCap: Int,
+        advantageCap: Advantage,
     ) {
         val coroutineScope = rememberCoroutineScope()
-        val updateAdvantage = { advantage: Int ->
+        val updateAdvantage = { advantage: Advantage ->
             coroutineScope.launch(Dispatchers.IO) {
                 viewModel.updateAdvantage(combatant.combatant, advantage)
             }
@@ -410,9 +411,9 @@ class ActiveCombatScreen(
 
         NumberPicker(
             label = LocalStrings.current.combat.labelAdvantage,
-            value = advantage,
-            onIncrement = { updateAdvantage((advantage + 1).coerceAtMost(advantageCap)) },
-            onDecrement = { updateAdvantage(advantage - 1) },
+            value = advantage.value.toInt(),
+            onIncrement = { updateAdvantage(advantage.inc().coerceAtMost(advantageCap)) },
+            onDecrement = { updateAdvantage(advantage.dec()) },
         )
     }
 
@@ -455,7 +456,7 @@ class ActiveCombatScreen(
                     trailing = {
                         val advantage = combatant.combatant.advantage
 
-                        if (advantage > 0) {
+                        if (advantage > Advantage.ZERO) {
                             Text("$advantage A", fontWeight = FontWeight.Bold)
                         }
                     }
