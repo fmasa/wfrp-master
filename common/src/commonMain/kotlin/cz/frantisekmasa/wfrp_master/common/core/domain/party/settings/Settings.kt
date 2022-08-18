@@ -5,6 +5,7 @@ import cz.frantisekmasa.wfrp_master.common.core.common.requireMaxLength
 import cz.frantisekmasa.wfrp_master.common.core.domain.Characteristic
 import cz.frantisekmasa.wfrp_master.common.core.domain.Expression
 import cz.frantisekmasa.wfrp_master.common.core.domain.Stats
+import cz.frantisekmasa.wfrp_master.common.core.domain.party.combat.Advantage
 import cz.frantisekmasa.wfrp_master.common.core.shared.Parcelable
 import cz.frantisekmasa.wfrp_master.common.core.shared.Parcelize
 import kotlinx.serialization.Serializable
@@ -31,12 +32,17 @@ value class AdvantageCapExpression(val value: String) : Parcelable {
         ) { "Advantage expression must be deterministic" }
     }
 
-    fun calculate(characteristics: Stats): Int {
+    fun calculate(characteristics: Stats): Advantage {
         if (value == "") {
-            return Int.MAX_VALUE
+            return Advantage(UInt.MAX_VALUE)
         }
 
-        return Expression.fromString(value, constantsFrom(characteristics)).evaluate()
+        return Advantage(
+            Expression.fromString(value, constantsFrom(characteristics))
+                .evaluate()
+                .coerceAtLeast(0)
+                .toUInt()
+        )
     }
 
     companion object {

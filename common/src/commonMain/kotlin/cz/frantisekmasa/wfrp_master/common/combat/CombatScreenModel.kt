@@ -17,6 +17,7 @@ import cz.frantisekmasa.wfrp_master.common.core.domain.identifiers.NpcId
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.Party
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.PartyId
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.PartyRepository
+import cz.frantisekmasa.wfrp_master.common.core.domain.party.combat.Advantage
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.combat.Combat
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.combat.Combatant
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.settings.InitiativeStrategy
@@ -44,7 +45,6 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.mapLatest
 import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.coroutines.flow.transform
-import kotlin.math.max
 import kotlin.random.Random
 
 
@@ -292,15 +292,13 @@ class CombatScreenModel(
         }
     }
 
-    suspend fun updateAdvantage(combatant: Combatant, advantage: Int) {
-        val newAdvantage = max(0, advantage)
-
-        if (newAdvantage == combatant.advantage) {
+    suspend fun updateAdvantage(combatant: Combatant, advantage: Advantage) {
+        if (advantage == combatant.advantage) {
             return
         }
 
         updateCombat { combat ->
-            combat.updateCombatant(combatant.withAdvantage(newAdvantage))
+            combat.updateCombatant(combatant.withAdvantage(advantage))
         }
     }
 }

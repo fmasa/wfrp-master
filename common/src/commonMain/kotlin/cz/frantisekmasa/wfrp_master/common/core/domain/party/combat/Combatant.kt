@@ -16,12 +16,12 @@ import kotlinx.serialization.json.JsonClassDiscriminator
 @JsonClassDiscriminator("@type")
 sealed class Combatant : Parcelable {
     abstract val id: Uuid?
-    abstract val advantage: Int
+    abstract val advantage: Advantage
     abstract val initiative: Int
     abstract val name: String?
     abstract val wounds: Wounds?
 
-    abstract fun withAdvantage(advantage: Int): Combatant
+    abstract fun withAdvantage(advantage: Advantage): Combatant
     abstract fun withInitiative(initiative: Int): Combatant
     abstract fun withWounds(wounds: Wounds): Combatant
 
@@ -44,9 +44,9 @@ sealed class Combatant : Parcelable {
         override val initiative: Int,
         override val name: String? = null,
         override val wounds: Wounds? = null,
-        override val advantage: Int = 0,
+        override val advantage: Advantage = Advantage.ZERO,
     ) : Combatant() {
-        override fun withAdvantage(advantage: Int): Character = copy(advantage = advantage)
+        override fun withAdvantage(advantage: Advantage): Character = copy(advantage = advantage)
         override fun withInitiative(initiative: Int): Character = copy(initiative = initiative)
         override fun withWounds(wounds: Wounds) = copy(wounds = wounds)
     }
@@ -61,9 +61,9 @@ sealed class Combatant : Parcelable {
         override val initiative: Int,
         override val name: String? = null,
         override val wounds: Wounds? = null,
-        override val advantage: Int = 0
+        override val advantage: Advantage = Advantage.ZERO
     ) : Combatant() {
-        override fun withAdvantage(advantage: Int): Npc = copy(advantage = advantage)
+        override fun withAdvantage(advantage: Advantage): Npc = copy(advantage = advantage)
         override fun withInitiative(initiative: Int): Npc = copy(initiative = initiative)
         override fun withWounds(wounds: Wounds) = copy(wounds = wounds)
     }
