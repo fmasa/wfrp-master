@@ -451,7 +451,7 @@ data class InitiativeStrategyStrings(
     val initiativeCharacteristic: String = "Initiative, then Agility",
     val initiativeTest: String = "Opposed Initiative Test",
     val initiativePlus1d10: String = "Initiative + 1d10",
-    val bonusesPlus1d10: String = "IB + AgiB + 1d10",
+    val bonusesPlus1d10: String = "IB + AgB + 1d10",
 )
 
 @Immutable
