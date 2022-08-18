@@ -122,7 +122,9 @@ private fun TrappingTypeForm(formData: TrappingTypeFormData, validate: Boolean) 
                 label = strings.weapons.labelRange,
                 value = formData.ammunitionRange,
                 validate = validate,
-                helperText = strings.weapons.helperAmmunitionRange,
+                helperText = LocalStrings.current.commonUi.expressionHelper(
+                    remember { AmmunitionRangeExpression.Constant.values().map { it.value } }
+                ),
             )
             CheckboxList(
                 items = RangedWeaponGroup.values(),
@@ -195,7 +197,9 @@ private fun TrappingTypeForm(formData: TrappingTypeFormData, validate: Boolean) 
             TextInput(
                 label = strings.weapons.labelRange,
                 value = formData.weaponRange,
-                helperText = strings.weapons.helperRange,
+                helperText = LocalStrings.current.commonUi.expressionHelper(
+                    remember { WeaponRangeExpression.Constant.values().map { it.value } }
+                ),
                 validate = validate,
             )
             DamageInput(formData, validate)
@@ -276,7 +280,9 @@ private fun DamageInput(formData: TrappingTypeFormData, validate: Boolean) {
     TextInput(
         label = strings.labelDamage,
         value = formData.damage,
-        helperText = strings.helperDamage,
+        helperText = LocalStrings.current.commonUi.expressionHelper(
+            remember { DamageExpression.Constant.values().map { it.value } }
+        ),
         validate = validate,
     )
 }

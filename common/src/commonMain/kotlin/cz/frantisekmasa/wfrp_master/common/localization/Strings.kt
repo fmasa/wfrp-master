@@ -532,9 +532,6 @@ data class ValidationStrings(
 data class WeaponStrings(
     val equip: WeaponEquipStrings = WeaponEquipStrings(),
     val flaws: WeaponFlawStrings = WeaponFlawStrings(),
-    val helperDamage: String = "Allowed operators: +,-,/,*,(,) and variables: SB",
-    val helperRange: String = "Allowed operators: +,-,/,*,(,) and variables: SB",
-    val helperAmmunitionRange: String = "Allowed operators: +,-,/,*,(,) and variables: WeaponDamage",
     val labelDamage: String = "Damage",
     val labelFlaws: String = "Weapon Flaws",
     val labelGroup: String = "Weapon Group",
