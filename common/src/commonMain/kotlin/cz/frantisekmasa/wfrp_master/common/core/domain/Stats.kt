@@ -65,4 +65,10 @@ data class Stats(
         Characteristic.WEAPON_SKILL -> weaponSkill
         Characteristic.WILL_POWER -> willPower
     }
+
+    fun getBonus(characteristic: Characteristic): Int = get(characteristic) / 10
+
+    companion object {
+        val ZERO = Stats(0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+    }
 }

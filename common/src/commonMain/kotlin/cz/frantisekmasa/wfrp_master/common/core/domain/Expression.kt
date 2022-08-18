@@ -132,7 +132,12 @@ private class RollExpressionGrammar(val constants: Map<String, Int>) : Grammar<E
     val dice by regexToken("[0-9]+d[1-9][0-9]*")
     val maxFunctionName by regexToken(Regex("MAX", RegexOption.IGNORE_CASE))
     val minFunctionName by regexToken(Regex("MIN", RegexOption.IGNORE_CASE))
-    val constant by regexToken(constants.keys.sortedByDescending { it.length }.joinToString("|"))
+    val constant by regexToken(
+        Regex(
+            constants.keys.sortedByDescending { it.length }.joinToString("|"),
+            RegexOption.IGNORE_CASE,
+        )
+    )
     val integer by regexToken("([1-9][0-9]*)|0")
     val multiply by literalToken("*")
     val divide by literalToken("/")

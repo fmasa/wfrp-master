@@ -371,10 +371,15 @@ data class CommonUiStrings(
     val iconToggleFabMenu: String = "Toggle menu",
     val dismissTipConfirmation: String = "Do you really want to dismiss this tip?",
     val search: String = "Search",
+    val expressionHelper: (variables: List<String>) -> String = {
+        "Allowed operators: +,-,/,*,(,), MIN(...), MAX(...) and variables: " + it.joinToString(", ")
+    }
 )
 
 @Immutable
 data class CombatStrings(
+    val advantageCap: String = "Advantage Cap",
+    val advantageUnlimited: String = "Unlimited",
     val buttonEndCombat: String = "End combat",
     val iconNextTurn: String = "Next turn",
     val hitLocations: HitLocationStrings = HitLocationStrings(),

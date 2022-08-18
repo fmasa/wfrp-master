@@ -35,6 +35,7 @@ import androidx.compose.material.icons.rounded.ArrowForward
 import androidx.compose.material.icons.rounded.OpenInNew
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -106,6 +107,10 @@ class ActiveCombatScreen(
                 }
 
                 openedCombatant?.let { combatant ->
+                    if (party == null) {
+                        return@let
+                    }
+
                     /*
                  There are two things happening
                  1. We always need fresh version of given combatant,
@@ -117,7 +122,11 @@ class ActiveCombatScreen(
                     val freshCombatant =
                         combatants?.firstOrNull { it.areSameEntity(combatant) } ?: return@let
 
-                    CombatantSheet(freshCombatant, viewModel)
+                    val advantageCap by derivedStateOf {
+                        party.settings.advantageCap.calculate(freshCombatant.characteristics)
+                    }
+
+                    CombatantSheet(freshCombatant, viewModel, advantageCap)
                 }
             },
         ) {
@@ -300,7 +309,8 @@ class ActiveCombatScreen(
     @Composable
     private fun CombatantSheet(
         combatant: CombatantItem,
-        viewModel: CombatScreenModel
+        viewModel: CombatScreenModel,
+        advantageCap: Int,
     ) {
         Column(
             Modifier
@@ -358,7 +368,7 @@ class ActiveCombatScreen(
                 }
 
                 Box(Modifier.weight(1f), contentAlignment = Alignment.TopCenter) {
-                    CombatantAdvantage(combatant, viewModel)
+                    CombatantAdvantage(combatant, viewModel, advantageCap)
                 }
             }
         }
@@ -384,7 +394,11 @@ class ActiveCombatScreen(
     }
 
     @Composable
-    private fun CombatantAdvantage(combatant: CombatantItem, viewModel: CombatScreenModel) {
+    private fun CombatantAdvantage(
+        combatant: CombatantItem,
+        viewModel: CombatScreenModel,
+        advantageCap: Int,
+    ) {
         val coroutineScope = rememberCoroutineScope()
         val updateAdvantage = { advantage: Int ->
             coroutineScope.launch(Dispatchers.IO) {
@@ -397,7 +411,7 @@ class ActiveCombatScreen(
         NumberPicker(
             label = LocalStrings.current.combat.labelAdvantage,
             value = advantage,
-            onIncrement = { updateAdvantage(advantage + 1) },
+            onIncrement = { updateAdvantage((advantage + 1).coerceAtMost(advantageCap)) },
             onDecrement = { updateAdvantage(advantage - 1) },
         )
     }
