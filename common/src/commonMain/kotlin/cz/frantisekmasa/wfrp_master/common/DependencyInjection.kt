@@ -188,7 +188,18 @@ val appModule = DI.Module("Common") {
         SkillTestScreenModel(partyId, instance(), instance(), instance())
     }
     bindFactory { partyId: PartyId ->
-        CombatScreenModel(partyId, Random, instance(), instance(), instance())
+        CombatScreenModel(
+            partyId,
+            Random,
+            instance(),
+            instance(),
+            instance(),
+            instance(),
+            instance(),
+            instance(),
+            instance(),
+            instance(),
+        )
     }
     bindFactory { partyId: PartyId -> PartySettingsScreenModel(partyId, instance()) }
 }

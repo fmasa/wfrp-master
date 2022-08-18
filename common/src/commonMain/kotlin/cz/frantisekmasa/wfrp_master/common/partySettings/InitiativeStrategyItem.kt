@@ -18,7 +18,6 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.dialogs.SelectionDialog
 import cz.frantisekmasa.wfrp_master.common.core.utils.launchLogged
 import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
 
 @Composable
 internal fun InitiativeStrategyItem(

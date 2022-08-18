@@ -371,10 +371,15 @@ data class CommonUiStrings(
     val iconToggleFabMenu: String = "Toggle menu",
     val dismissTipConfirmation: String = "Do you really want to dismiss this tip?",
     val search: String = "Search",
+    val expressionHelper: (variables: List<String>) -> String = {
+        "Allowed operators: +,-,/,*,(,), MIN(...), MAX(...) and variables: " + it.joinToString(", ")
+    }
 )
 
 @Immutable
 data class CombatStrings(
+    val advantageCap: String = "Advantage Cap",
+    val advantageUnlimited: String = "Unlimited",
     val buttonEndCombat: String = "End combat",
     val iconNextTurn: String = "Next turn",
     val hitLocations: HitLocationStrings = HitLocationStrings(),
@@ -446,7 +451,7 @@ data class InitiativeStrategyStrings(
     val initiativeCharacteristic: String = "Initiative, then Agility",
     val initiativeTest: String = "Opposed Initiative Test",
     val initiativePlus1d10: String = "Initiative + 1d10",
-    val bonusesPlus1d10: String = "IB + AgiB + 1d10",
+    val bonusesPlus1d10: String = "IB + AgB + 1d10",
 )
 
 @Immutable
@@ -527,9 +532,6 @@ data class ValidationStrings(
 data class WeaponStrings(
     val equip: WeaponEquipStrings = WeaponEquipStrings(),
     val flaws: WeaponFlawStrings = WeaponFlawStrings(),
-    val helperDamage: String = "Allowed operators: +,-,/,*,(,) and variables: SB",
-    val helperRange: String = "Allowed operators: +,-,/,*,(,) and variables: SB",
-    val helperAmmunitionRange: String = "Allowed operators: +,-,/,*,(,) and variables: WeaponDamage",
     val labelDamage: String = "Damage",
     val labelFlaws: String = "Weapon Flaws",
     val labelGroup: String = "Weapon Group",
@@ -768,6 +770,7 @@ data class SpellStrings(
     val titleChooseCompendiumSpell: String = "Choose Compendium spell…",
     val titleEdit: String = "Edit Spell",
     val titleNew: String = "New Spell",
+    val titleSpells: String = "Spells",
 )
 
 @Immutable

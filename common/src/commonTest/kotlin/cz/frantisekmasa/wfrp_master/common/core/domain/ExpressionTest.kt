@@ -43,6 +43,18 @@ class ExpressionTest {
     }
 
     @Test
+    fun `MAX function`() {
+        assertSame(20, "MAX(10, 1 + 1, 10 * 2)".evaluate())
+        assertSame(20, "Max(10, 1 + 1, 10 * 2)".evaluate())
+    }
+
+    @Test
+    fun `MIN function`() {
+        assertSame(2, "MIN(10, 1 + 1, 10 * 2)".evaluate())
+        assertSame(2, "Min(10, 1 + 1, 10 * 2)".evaluate())
+    }
+
+    @Test
     fun `invalid expression throws`() {
         // Mismatched parentheses
         assertThrowsExpressionError("(1 + 1")
@@ -55,6 +67,8 @@ class ExpressionTest {
         assertThrowsExpressionError("1d0")
         assertThrowsExpressionError("1d-1")
         assertThrowsExpressionError("1dd")
+        assertThrowsExpressionError("MIN()")
+        assertThrowsExpressionError("MAX()")
     }
 
     private fun assertThrowsExpressionError(expression: String) {

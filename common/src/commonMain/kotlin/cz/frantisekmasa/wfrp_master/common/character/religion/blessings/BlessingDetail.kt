@@ -1,4 +1,4 @@
-package cz.frantisekmasa.wfrp_master.common.character.skills.dialog
+package cz.frantisekmasa.wfrp_master.common.character.religion.blessings
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
@@ -10,47 +10,36 @@ import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import cz.frantisekmasa.wfrp_master.common.core.domain.localizedName
-import cz.frantisekmasa.wfrp_master.common.core.domain.skills.Skill
+import cz.frantisekmasa.wfrp_master.common.core.domain.religion.Blessing
 import cz.frantisekmasa.wfrp_master.common.core.ui.buttons.CloseButton
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
 import cz.frantisekmasa.wfrp_master.common.core.ui.text.SingleLineTextValue
 import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
 
 @Composable
-fun SkillDetail(
-    skill: Skill,
+fun BlessingDetail(
+    blessing: Blessing,
     onDismissRequest: () -> Unit,
-    subheadBar: @Composable () -> Unit = {},
 ) {
     Scaffold(
         topBar = {
             TopAppBar(
-                navigationIcon = { CloseButton(onDismissRequest) },
-                title = { Text(skill.name) },
+                navigationIcon = {
+                    CloseButton(onClick = onDismissRequest)
+                },
+                title = { Text(blessing.name) },
             )
         }
     ) {
         Column(Modifier.verticalScroll(rememberScrollState())) {
-            subheadBar()
-
-            val strings = LocalStrings.current
-
             Column(Modifier.padding(Spacing.bodyPadding)) {
-                SingleLineTextValue(
-                    label = strings.skills.labelCharacteristic,
-                    skill.characteristic.localizedName,
-                )
+                val strings = LocalStrings.current.blessings
 
-                SingleLineTextValue(
-                    label = strings.skills.labelAdvanced,
-                    value = strings.commonUi.boolean(skill.advanced),
-                )
+                SingleLineTextValue(strings.labelRange, blessing.range)
+                SingleLineTextValue(strings.labelTarget, blessing.target)
+                SingleLineTextValue(strings.labelDuration, blessing.duration)
 
-                Text(
-                    text = skill.description,
-                    modifier = Modifier.padding(top = 8.dp),
-                )
+                Text(blessing.effect, Modifier.padding(top = 8.dp))
             }
         }
     }
