@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Stable
@@ -182,7 +183,7 @@ private fun CharacteristicInputs(
             TextInput(
                 modifier = Modifier.weight(1f),
                 label = strings.labelCharacteristicBase,
-                keyboardType = KeyboardType.Number,
+                keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
                 value = base,
                 horizontalAlignment = Alignment.CenterHorizontally,
                 validate = validate,
@@ -193,7 +194,7 @@ private fun CharacteristicInputs(
             TextInput(
                 modifier = Modifier.weight(1f),
                 label = strings.labelCharacteristicAdvances,
-                keyboardType = KeyboardType.Number,
+                keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
                 value = advances,
                 horizontalAlignment = Alignment.CenterHorizontally,
                 validate = validate,

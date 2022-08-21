@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
@@ -97,6 +98,6 @@ private fun PointInput(value: InputValue, label: String, validate: Boolean) {
         label = label,
         value = value,
         validate = validate,
-        keyboardType = KeyboardType.Number,
+        keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
     )
 }

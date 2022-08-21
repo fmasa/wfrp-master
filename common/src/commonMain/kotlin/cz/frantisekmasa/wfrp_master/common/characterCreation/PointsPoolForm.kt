@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Stable
 import androidx.compose.ui.Modifier
@@ -80,7 +81,7 @@ private fun RowScope.PointInput(
         validate = validate,
         placeholder = placeholder,
         maxLength = 2,
-        keyboardType = KeyboardType.Number,
+        keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
     )
 }
 

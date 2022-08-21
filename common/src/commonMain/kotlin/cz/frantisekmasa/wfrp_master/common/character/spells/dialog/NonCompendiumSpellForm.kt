@@ -3,6 +3,7 @@ package cz.frantisekmasa.wfrp_master.common.character.spells.dialog
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.Stable
@@ -85,7 +86,7 @@ internal fun NonCompendiumSpellForm(
         TextInput(
             label = strings.labelCastingNumber,
             value = formData.castingNumber,
-            keyboardType = KeyboardType.Number,
+            keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
             validate = validate,
             maxLength = 2,
         )
