@@ -4,12 +4,16 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Stable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusDirection
+import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import cz.frantisekmasa.wfrp_master.common.core.domain.Stats
@@ -180,10 +184,20 @@ private fun CharacteristicInputs(
             val advances = baseAndAdvances.second
             val strings = LocalStrings.current.character
 
+            val focusManager = LocalFocusManager.current
+            val keyboardOptions = KeyboardOptions.Default.copy(
+                keyboardType = KeyboardType.Number,
+                imeAction = ImeAction.Next,
+            )
+            val keyboardActions = KeyboardActions(
+                onNext = { focusManager.moveFocus(FocusDirection.Next) }
+            )
+
             TextInput(
                 modifier = Modifier.weight(1f),
                 label = strings.labelCharacteristicBase,
-                keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
+                keyboardOptions = keyboardOptions,
+                keyboardActions = keyboardActions,
                 value = base,
                 horizontalAlignment = Alignment.CenterHorizontally,
                 validate = validate,
@@ -194,7 +208,8 @@ private fun CharacteristicInputs(
             TextInput(
                 modifier = Modifier.weight(1f),
                 label = strings.labelCharacteristicAdvances,
-                keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
+                keyboardOptions = keyboardOptions,
+                keyboardActions = keyboardActions,
                 value = advances,
                 horizontalAlignment = Alignment.CenterHorizontally,
                 validate = validate,
