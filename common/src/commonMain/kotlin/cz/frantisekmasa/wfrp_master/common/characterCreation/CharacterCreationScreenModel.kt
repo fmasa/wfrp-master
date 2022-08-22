@@ -41,6 +41,7 @@ class CharacterCreationScreenModel(
                         id = characterId.id,
                         type = type,
                         name = info.name.value,
+                        publicName = info.publicName.value.takeIf { it.isNotBlank() },
                         userId = userId?.toString(),
                         career = info.career.value,
                         socialClass = info.socialClass.value,

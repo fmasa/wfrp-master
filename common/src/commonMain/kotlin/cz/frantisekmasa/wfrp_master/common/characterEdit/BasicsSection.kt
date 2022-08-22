@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.Stable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
@@ -11,6 +12,7 @@ import androidx.compose.ui.unit.dp
 import cz.frantisekmasa.wfrp_master.common.character.CharacterScreenModel
 import cz.frantisekmasa.wfrp_master.common.characterCreation.raceOptions
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.Character
+import cz.frantisekmasa.wfrp_master.common.core.domain.character.CharacterType
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.Race
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.ChipList
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.FormScreen
@@ -36,6 +38,7 @@ fun BasicsSection(character: Character, screenModel: CharacterScreenModel) {
                     race = it.race,
                     motivation = it.motivation,
                     note = it.note,
+                    publicName = it.publicName,
                 )
             }
         }
@@ -46,6 +49,15 @@ fun BasicsSection(character: Character, screenModel: CharacterScreenModel) {
             maxLength = Character.NAME_MAX_LENGTH,
             validate = validate,
         )
+
+        if (character.type == CharacterType.NPC) {
+            TextInput(
+                label = strings.labelPublicName,
+                value = data.publicName,
+                maxLength = Character.NAME_MAX_LENGTH,
+                validate = validate,
+            )
+        }
 
         ChipList(
             label = strings.labelRace,
@@ -73,8 +85,10 @@ fun BasicsSection(character: Character, screenModel: CharacterScreenModel) {
     }
 }
 
+@Stable
 private data class BasicFormData(
     val name: InputValue,
+    val publicName: InputValue,
     val race: MutableState<Race?>,
     val motivation: InputValue,
     val note: InputValue,
@@ -85,6 +99,7 @@ private data class BasicFormData(
 
     override fun toValue() = BasicData(
         name = name.value,
+        publicName = publicName.value.takeIf { it.isNotBlank() },
         race = race.value,
         motivation = motivation.value,
         note = note.value,
@@ -94,6 +109,7 @@ private data class BasicFormData(
         @Composable
         fun fromCharacter(character: Character) = BasicFormData(
             name = inputValue(character.name, Rules.NotBlank()),
+            publicName = inputValue(character.publicName ?: "", Rules.NotBlank()),
             race = rememberSaveable(character.id) { mutableStateOf(character.race) },
             motivation = inputValue(character.motivation),
             note = inputValue(character.note),
@@ -104,6 +120,7 @@ private data class BasicFormData(
 @Immutable
 private data class BasicData(
     val name: String,
+    val publicName: String?,
     val race: Race?,
     val motivation: String,
     val note: String,

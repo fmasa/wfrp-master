@@ -14,6 +14,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.Character
+import cz.frantisekmasa.wfrp_master.common.core.domain.character.CharacterType
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.Race
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.SocialStatus
 import cz.frantisekmasa.wfrp_master.common.core.domain.localizedName
@@ -32,7 +33,9 @@ import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
 object CharacterBasicInfoForm {
     @Stable
     class Data(
+        val characterType: CharacterType,
         val name: InputValue,
+        val publicName: InputValue,
         val socialClass: InputValue,
         val career: InputValue,
         val race: MutableState<Race?>,
@@ -44,14 +47,13 @@ object CharacterBasicInfoForm {
     ) : FormData {
         companion object {
             @Composable
-            fun empty() = fromDefaults(null)
+            fun empty(characterType: CharacterType) = fromDefaults(null, characterType)
 
             @Composable
-            fun fromCharacter(character: Character) = fromDefaults(character)
-
-            @Composable
-            private fun fromDefaults(character: Character?) = Data(
+            private fun fromDefaults(character: Character?, characterType: CharacterType) = Data(
+                characterType = characterType,
                 name = inputValue(character?.name ?: "", Rules.NotBlank()),
+                publicName = inputValue(character?.publicName ?: ""),
                 socialClass = inputValue(character?.socialClass ?: "", Rules.NotBlank()),
                 career = inputValue(character?.career ?: "", Rules.NotBlank()),
                 race = rememberSaveable {
@@ -90,6 +92,15 @@ fun CharacterBasicInfoForm(
             maxLength = Character.NAME_MAX_LENGTH,
             validate = validate,
         )
+
+        if (data.characterType == CharacterType.NPC) {
+            TextInput(
+                label = strings.labelPublicName,
+                value = data.publicName,
+                maxLength = Character.NAME_MAX_LENGTH,
+                validate = validate,
+            )
+        }
 
         ChipList(
             label = strings.labelRace,
