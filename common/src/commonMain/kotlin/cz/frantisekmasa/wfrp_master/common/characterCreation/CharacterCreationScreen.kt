@@ -89,7 +89,7 @@ private fun Screen.MainContainer(partyId: PartyId, type: CharacterType, userId: 
     val currentStepIndex = rememberSaveable { mutableStateOf(0) }
     val formState = rememberSaveable { mutableStateOf(FormState.EDITED_BY_USER) }
 
-    val basicInfo = CharacterBasicInfoForm.Data.empty()
+    val basicInfo = CharacterBasicInfoForm.Data.empty(type)
     val characteristics = CharacterCharacteristicsForm.Data.fromCharacter(null)
     val points = PointsPoolForm.Data.empty()
 

@@ -151,6 +151,7 @@ class CombatScreenModel(
                         listOf(
                             character.characteristics to Combatant.Character(
                                 id = uuid4(),
+                                name = character.publicName,
                                 characterId = character.id,
                                 initiative = 1,
                             )
@@ -161,7 +162,7 @@ class CombatScreenModel(
                             characterId = character.id,
                             initiative = 1,
                             wounds = character.wounds,
-                            name = "${character.name} ($index)",
+                            name = "${character.publicName ?: character.name} ($index)",
                         )
                     }
                 }

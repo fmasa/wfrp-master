@@ -254,6 +254,7 @@ data class CharacterStrings(
     val labelNote: String = "Additional notes (Optional)",
     val note: String = "Additional notes",
     val labelPsychology: String = "Psychology (Optional)",
+    val labelPublicName: String = "Name visible to players",
     val labelRace: String = "Race",
     val labelStatus: String = "Status",
     val motivation: String = "Motivation",

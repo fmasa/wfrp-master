@@ -360,6 +360,7 @@ service cloud.firestore {
                             "id",
                             "type",
                             "name",
+                            "publicName",
                             "career",
                             "socialClass",
                             "status",
@@ -388,6 +389,7 @@ service cloud.firestore {
                         )
                         && (! ("type" in character) || character.type in ["PLAYER_CHARACTER", "NPC"])
                         && character.name is string && isNotBlank(character.name) && character.name.size() <= 50
+                        && (! ("publicName" in character) || character.publicName == null || (character.publicName is string && isNotBlank(character.publicName) && character.publicName.size() <= 50))
                         && character.career is string && isNotBlank(character.career) && character.career.size() <= 50
                         && character.psychology is string && character.psychology.size() <= 200
                         && character.motivation is string && character.motivation.size() <= 200

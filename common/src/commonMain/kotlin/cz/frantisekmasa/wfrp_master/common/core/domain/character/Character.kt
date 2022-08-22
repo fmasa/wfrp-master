@@ -1,6 +1,7 @@
 package cz.frantisekmasa.wfrp_master.common.core.domain.character
 
 import androidx.compose.runtime.Immutable
+import cz.frantisekmasa.wfrp_master.common.core.common.requireMaxLength
 import cz.frantisekmasa.wfrp_master.common.core.domain.Ambitions
 import cz.frantisekmasa.wfrp_master.common.core.domain.Money
 import cz.frantisekmasa.wfrp_master.common.core.domain.Size
@@ -17,6 +18,7 @@ data class Character(
     val id: LocalCharacterId,
     val type: CharacterType = CharacterType.PLAYER_CHARACTER,
     val name: String,
+    val publicName: String? = null,
     val userId: String?,
     val career: String,
     val socialClass: String,
@@ -44,6 +46,12 @@ data class Character(
     init {
         require(userId == null || type == CharacterType.PLAYER_CHARACTER) {
             "Only Player Characters can have associated user"
+        }
+        require(publicName == null || publicName.isNotBlank()) { "Public name cannot be blank" }
+        publicName?.requireMaxLength(NAME_MAX_LENGTH, "publicName")
+        require(publicName == null || publicName.isNotBlank()) { "Public name cannot be blank" }
+        require(publicName == null || type == CharacterType.NPC) {
+            "Only NPC can have a public name"
         }
         require(listOf(name, userId, career).all { it?.isNotBlank() ?: true })
         require(name.length <= NAME_MAX_LENGTH) { "Character name is too long" }
@@ -77,8 +85,15 @@ data class Character(
         status = status,
     )
 
-    fun updateBasics(name: String, race: Race?, motivation: String, note: String) = copy(
+    fun updateBasics(
+        name: String,
+        publicName: String?,
+        race: Race?,
+        motivation: String,
+        note: String
+    ) = copy(
         name = name,
+        publicName = publicName,
         race = race,
         motivation = motivation,
         note = note,
