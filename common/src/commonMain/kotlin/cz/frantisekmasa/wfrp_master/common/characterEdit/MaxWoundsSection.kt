@@ -3,6 +3,7 @@ package cz.frantisekmasa.wfrp_master.common.characterEdit
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
@@ -42,7 +43,7 @@ fun MaxWoundsSection(character: Character, screenModel: CharacterScreenModel) {
                     .padding(bottom = 12.dp),
                 value = formData.maxWounds,
                 maxLength = 3,
-                keyboardType = KeyboardType.Number,
+                keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
                 validate = validate,
                 placeholder = strings.autoMaxWoundsPlaceholder,
             )

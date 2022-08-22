@@ -3,6 +3,7 @@ package cz.frantisekmasa.wfrp_master.common.compendium.tabs
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Divider
 import androidx.compose.material.ListItem
 import androidx.compose.material.Text
@@ -166,7 +167,7 @@ private fun SpellDialog(
             TextInput(
                 label = strings.labelCastingNumber,
                 value = formData.castingNumber,
-                keyboardType = KeyboardType.Number,
+                keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
                 validate = validate,
                 maxLength = 2,
             )

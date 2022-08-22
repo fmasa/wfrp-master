@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.ContentAlpha
 import androidx.compose.material.LocalContentAlpha
@@ -27,7 +28,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
-import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
@@ -63,7 +63,8 @@ fun TextInput(
     modifier: Modifier = Modifier,
     label: String? = null,
     helperText: String? = null,
-    keyboardType: KeyboardType = KeyboardType.Text,
+    keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
+    keyboardActions: KeyboardActions = KeyboardActions.Default,
     maxLength: Int = Int.MAX_VALUE,
     multiLine: Boolean = false,
     placeholder: String? = null,
@@ -77,7 +78,8 @@ fun TextInput(
         label = label,
         helperText = helperText,
         validate = validate,
-        keyboardType = keyboardType,
+        keyboardActions = keyboardActions,
+        keyboardOptions = keyboardOptions,
         maxLength = maxLength,
         multiLine = multiLine,
         placeholder = placeholder,
@@ -97,7 +99,8 @@ private fun TextInput(
     modifier: Modifier = Modifier,
     label: String? = null,
     helperText: String? = null,
-    keyboardType: KeyboardType = KeyboardType.Text,
+    keyboardOptions: KeyboardOptions,
+    keyboardActions: KeyboardActions,
     maxLength: Int = Int.MAX_VALUE,
     multiLine: Boolean = false,
     placeholder: String? = null,
@@ -143,7 +146,8 @@ private fun TextInput(
                         }
                     },
                     cursorBrush = SolidColor(textColor),
-                    keyboardOptions = KeyboardOptions.Default.copy(keyboardType = keyboardType),
+                    keyboardOptions = keyboardOptions,
+                    keyboardActions = keyboardActions,
                     textStyle = textStyle.copy(color = textColor),
                     singleLine = !multiLine,
                     visualTransformation = visualTransformation,

@@ -1,6 +1,7 @@
 package cz.frantisekmasa.wfrp_master.common.character.trappings
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.Stable
@@ -77,7 +78,7 @@ internal fun InventoryItemDialog(
                 label = strings.labelQuantity,
                 value = formData.quantity,
                 validate = validate,
-                keyboardType = KeyboardType.Number,
+                keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
             )
 
             TextInput(
@@ -85,7 +86,7 @@ internal fun InventoryItemDialog(
                 value = formData.encumbrance,
                 maxLength = 8,
                 validate = validate,
-                keyboardType = KeyboardType.Number,
+                keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
                 filters = listOf(Filter.DigitsAndDotSymbolsOnly),
             )
 

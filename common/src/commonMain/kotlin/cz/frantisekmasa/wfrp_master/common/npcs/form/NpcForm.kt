@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
@@ -59,7 +60,7 @@ fun NpcForm(data: FormData, validate: Boolean) {
                     modifier = Modifier.weight(0.3f),
                     label = LocalStrings.current.points.wounds,
                     value = data.wounds,
-                    keyboardType = KeyboardType.Number,
+                    keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
                     maxLength = 3,
                     validate = validate,
                 )
@@ -140,7 +141,7 @@ private fun CharacteristicsSegment(data: CharacteristicsFormData, validate: Bool
                         label = characteristic.getShortcutName(),
                         value = value,
                         placeholder = "0",
-                        keyboardType = KeyboardType.Number,
+                        keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
                         validate = validate,
                         maxLength = 3,
                         modifier = Modifier.weight(1f),
@@ -187,7 +188,7 @@ private fun ArmorSegment(data: ArmorFormData, validate: Boolean) {
                         label = label,
                         value = value,
                         placeholder = "0",
-                        keyboardType = KeyboardType.Number,
+                        keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
                         validate = validate,
                         maxLength = 3,
                         modifier = Modifier.weight(1f),

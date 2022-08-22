@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.RadioButton
@@ -179,7 +180,7 @@ private fun RowScope.CoinInput(value: InputValue, label: String, validate: Boole
         label = label,
         value = value,
         validate = validate,
-        keyboardType = KeyboardType.Number,
+        keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
         maxLength = 4,
         placeholder = "0",
     )
