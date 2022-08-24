@@ -416,6 +416,7 @@ data class HitLocationStrings(
 @Immutable
 data class CompendiumStrings(
     val assurance: String = "The file is not saved anywhere and never leaves your device.",
+    val searchPlaceholder: String = "Search items",
     val buttonBuy: String = "Buy",
     val buttonImport: String = "Import",
     val buttonImportRulebook: String = "Import rulebook PDF",

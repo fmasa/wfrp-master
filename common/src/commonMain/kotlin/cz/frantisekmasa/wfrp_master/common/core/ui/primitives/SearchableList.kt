@@ -48,6 +48,7 @@ object SearchableList {
 
 @Composable
 fun <T : Any> SearchableList(
+    modifier: Modifier = Modifier,
     data: SearchableList.Data<T>,
     searchableValue: (T) -> String,
     navigationIcon: @Composable () -> Unit,
@@ -63,6 +64,7 @@ fun <T : Any> SearchableList(
     var searchActive by rememberSaveable { mutableStateOf(false) }
 
     Scaffold(
+        modifier = modifier,
         topBar = {
             val searchVisible by derivedStateOf { searchActive || searchedValue != "" }
             val colors = textFieldColors()
