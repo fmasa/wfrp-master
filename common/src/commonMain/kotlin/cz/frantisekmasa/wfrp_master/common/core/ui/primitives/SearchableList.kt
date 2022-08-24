@@ -65,6 +65,7 @@ fun <T : Any> SearchableList(
     Scaffold(
         topBar = {
             val searchVisible by derivedStateOf { searchActive || searchedValue != "" }
+            val colors = textFieldColors()
 
             TopAppBar(
                 navigationIcon = navigationIcon,
@@ -72,7 +73,7 @@ fun <T : Any> SearchableList(
                     if (searchVisible) {
                         ProvideTextStyle(MaterialTheme.typography.body1) {
                             TextField(
-                                colors = textFieldColors(),
+                                colors = colors,
                                 value = searchedValue,
                                 onValueChange = { searchedValue = it },
                                 singleLine = true,
@@ -97,6 +98,7 @@ fun <T : Any> SearchableList(
                         IconAction(
                             Icons.Rounded.Close,
                             LocalStrings.current.commonUi.buttonDismiss,
+                            tint = colors.placeholderColor(true).value,
                             onClick = {
                                 searchedValue = ""
                                 searchActive = false
