@@ -19,6 +19,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.intl.Locale
 import androidx.compose.ui.text.toUpperCase
@@ -60,8 +61,17 @@ fun OptionsAction(content: @Composable ColumnScope.() -> Unit) {
 }
 
 @Composable
-fun IconAction(icon: ImageVector, description: String, onClick: () -> Unit) {
+fun IconAction(
+    icon: ImageVector,
+    description: String,
+    onClick: () -> Unit,
+    tint: Color = contentColorFor(MaterialTheme.colors.primarySurface),
+) {
     IconButton(onClick = onClick) {
-        Icon(icon, description, tint = contentColorFor(MaterialTheme.colors.primarySurface))
+        Icon(
+            icon,
+            description,
+            tint = tint,
+        )
     }
 }
