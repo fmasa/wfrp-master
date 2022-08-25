@@ -1,4 +1,4 @@
-# D&D Master
+# WFRP Master
 
 ## Development
 
