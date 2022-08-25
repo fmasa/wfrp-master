@@ -1,4 +1,4 @@
-# D&D Master
+# WFRP Master
 
 ## Development
 
@@ -16,3 +16,12 @@ There are just a few steps:
 
 \* You may need to expose port 8080 on your machine. Both your Android device and your host must be on same network,
 or you need to use software such as [ngrok](https://ngrok.com/). 
+
+## Attribution
+
+This application is unofficial companion app and as such is not affiliated, associated, authorized,
+endorsed by, or in any way way affiliated with GW or Cubicle7.
+
+This app uses third-party content such as icons or sounds, I care about proper attribution
+in these cases. If you think that your content is used in the app without attribution,
+please [raise an Issue](https://gitlab.com/fmasa/wfrp-master/-/issues/new), so I can fix it.
