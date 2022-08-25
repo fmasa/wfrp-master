@@ -76,6 +76,8 @@ kotlin {
 
                 // Logging
                 api("io.github.aakira:napier:${Versions.napier}")
+
+                implementation("com.halilibo.compose-richtext:richtext-commonmark:0.13.0")
             }
         }
 

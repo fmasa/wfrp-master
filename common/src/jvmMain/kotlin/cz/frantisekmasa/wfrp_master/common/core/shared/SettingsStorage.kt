@@ -67,7 +67,7 @@ actual fun stringSetKey(name: String): SettingsKey<Set<String>> = SettingsKey(
     },
 )
 
-fun stringSettingsKey(name: String): SettingsKey<String> = SettingsKey(
+actual fun stringKey(name: String): SettingsKey<String> = SettingsKey(
     get = { if (name in it.keys()) it.get(name, "") else null },
     set = { preferences, value -> preferences.put(name, value) },
 )
