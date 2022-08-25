@@ -1,7 +1,10 @@
 image: circleci/android:api-30-node
 
+include:
+    - template: Security/Secret-Detection.gitlab-ci.yml
+
 stages:
-    - check
+    - test
     - build
     - publish
 
@@ -23,19 +26,19 @@ before_script:
 
 Unit tests:
     extends: .gradle
-    stage: check
+    stage: test
     script:
         - ./gradlew --no-daemon --parallel testDebugUnitTest
 
 Lint:
     extends: .gradle
-    stage: check
+    stage: test
     script:
         - ./gradlew --no-daemon --parallel testDebugUnitTest
 
 Test Firestore rules:
     extends: .nodejs
-    stage: check
+    stage: test
     script:
         - yarn install
         - yarn test
