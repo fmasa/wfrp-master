@@ -119,9 +119,6 @@ jobs:
     runs-on: ubuntu-22.04
     container: timbru31/java-node:11-jdk-erbium
     environment: production
-    env:
-      GOOGLE_APPLICATION_CREDENTIALS_CONTENT: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}
-      FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
     steps:
       - uses: actions/checkout@v2
       - name: Get yarn cache directory path
@@ -137,8 +134,10 @@ jobs:
             ${{ runner.os }}-yarn-
 
       - run: yarn install
-      - run: echo "$GOOGLE_APPLICATION_CREDENTIALS_CONTENT" > google.json
-      - run: echo "GOOGLE_APPLICATION_CREDENTIALS=$(pwd)/google.json" >> $GITHUB_ENV
+      - id: auth
+        uses: google-github-actions/auth@v0
+        with:
+          credentials_json: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS_BASE64 }}
       - run: yarn firebase deploy
 
   firestore-migrations:
@@ -148,9 +147,6 @@ jobs:
     runs-on: ubuntu-22.04
     container: timbru31/java-node:11-jdk-erbium
     environment: production
-    env:
-      GOOGLE_APPLICATION_CREDENTIALS_CONTENT: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}
-      FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
     steps:
       - uses: actions/checkout@v2
       - name: Get yarn cache directory path
@@ -166,6 +162,8 @@ jobs:
 
       - run: yarn install
       - run: yarn tsc
-      - run: echo "$GOOGLE_APPLICATION_CREDENTIALS_CONTENT" > google.json
-      - run: echo "GOOGLE_APPLICATION_CREDENTIALS=$(pwd)/google.json" >> $GITHUB_ENV
+      - id: auth
+        uses: google-github-actions/auth@v0
+        with:
+          credentials_json: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS_BASE64 }}
       - run: yarn fireway migrate --path firebase-build/migrations
