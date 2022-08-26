@@ -79,8 +79,9 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-gradle-
       - run: echo "$KEYSTORE_FILE_BASE64" | base64 -d > app/.keystore
-      - run: "export SUPPLY_VERSION_CODE=$((950 + $GITHUB_RUN_NUMBER)) && echo $SUPPLY_VERSION_CODE"
-      - run: export SUPPLY_VERSION_NAME=$(.github/workflows/version.sh) && echo $SUPPLY_VERSION_NAME
+      - run: echo "SUPPLY_VERSION_CODE=$((950 + $GITHUB_RUN_NUMBER))" >> $GITHUB_ENV
+      - run: echo "SUPPLY_VERSION_NAME=$(.github/workflows/version.sh)" >> $SUPPLY_VERSION_NAME
+      - run: 'echo "version code: $SUPPLY_VERSION_CODE, version name: $SUPPLY_VERSION_NAME"'
       - run: ./gradlew bundleRelease
       - run: mv app/build/outputs/bundle/release/app-release.aab .
       - name: Upload bundle
@@ -119,7 +120,7 @@ jobs:
     container: timbru31/java-node:11-jdk-erbium
     environment: production
     env:
-      GOOGLE_APPLICATION_CREDENTIALS: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}
+      GOOGLE_APPLICATION_CREDENTIALS_CONTENT: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}
     steps:
       - uses: actions/checkout@v2
       - name: Get yarn cache directory path
@@ -135,6 +136,8 @@ jobs:
             ${{ runner.os }}-yarn-
 
       - run: yarn install
+      - run: echo "$GOOGLE_APPLICATION_CREDENTIALS_CONTENT" > google.json
+      - run: echo "GOOGLE_APPLICATION_CREDENTIALS=$(pwd)/google.json" >> $GITHUB_ENV
       - run: yarn firebase deploy
 
   firestore-migrations:
@@ -145,13 +148,12 @@ jobs:
     container: timbru31/java-node:11-jdk-erbium
     environment: production
     env:
-      GOOGLE_APPLICATION_CREDENTIALS: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}
+      GOOGLE_APPLICATION_CREDENTIALS_CONTENT: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}
     steps:
       - uses: actions/checkout@v2
       - name: Get yarn cache directory path
         id: yarn-cache-dir-path
         run: echo "::set-output name=dir::$(yarn cache dir)"
-
       - uses: actions/cache@v3
         id: yarn-cache
         with:
@@ -162,4 +164,6 @@ jobs:
 
       - run: yarn install
       - run: yarn tsc
+      - run: echo "$GOOGLE_APPLICATION_CREDENTIALS_CONTENT" > google.json
+      - run: echo "GOOGLE_APPLICATION_CREDENTIALS=$(pwd)/google.json" >> $GITHUB_ENV
       - run: yarn fireway migrate --path firebase-build/migrations
