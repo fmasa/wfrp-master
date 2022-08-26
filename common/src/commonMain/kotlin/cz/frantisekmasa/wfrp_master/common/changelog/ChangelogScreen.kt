@@ -112,12 +112,12 @@ object ChangelogScreen : Screen {
                                 TextButton(
                                     onClick = {
                                         urlOpener.open(
-                                            "https://gitlab.com/fmasa/wfrp-master/-/releases/",
+                                            "https://github.com/fmasa/wfrp-master/releases",
                                             isGooglePlayLink = false
                                         )
                                     }
                                 ) {
-                                    Text(LocalStrings.current.changelog.gitlabButton.uppercase())
+                                    Text(LocalStrings.current.changelog.githubButton.uppercase())
                                 }
                             }
                         }

@@ -24,4 +24,4 @@ endorsed by, or in any way way affiliated with GW or Cubicle7.
 
 This app uses third-party content such as icons or sounds, I care about proper attribution
 in these cases. If you think that your content is used in the app without attribution,
-please [raise an Issue](https://gitlab.com/fmasa/wfrp-master/-/issues/new), so I can fix it.
+please [raise an Issue](https://github.com/fmasa/wfrp-master/issues/new), so I can fix it.
