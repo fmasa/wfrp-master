@@ -80,7 +80,7 @@ jobs:
             ${{ runner.os }}-gradle-
       - run: echo "$KEYSTORE_FILE_BASE64" | base64 -d > app/.keystore
       - run: echo "SUPPLY_VERSION_CODE=$((950 + $GITHUB_RUN_NUMBER))" >> $GITHUB_ENV
-      - run: echo "SUPPLY_VERSION_NAME=$(.github/workflows/version.sh)" >> $SUPPLY_VERSION_NAME
+      - run: echo "SUPPLY_VERSION_NAME=$(.github/workflows/version.sh)" >> $GITHUB_ENV
       - run: 'echo "version code: $SUPPLY_VERSION_CODE, version name: $SUPPLY_VERSION_NAME"'
       - run: ./gradlew bundleRelease
       - run: mv app/build/outputs/bundle/release/app-release.aab .
@@ -121,6 +121,7 @@ jobs:
     environment: production
     env:
       GOOGLE_APPLICATION_CREDENTIALS_CONTENT: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}
+      FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
     steps:
       - uses: actions/checkout@v2
       - name: Get yarn cache directory path
@@ -149,6 +150,7 @@ jobs:
     environment: production
     env:
       GOOGLE_APPLICATION_CREDENTIALS_CONTENT: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}
+      FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
     steps:
       - uses: actions/checkout@v2
       - name: Get yarn cache directory path
