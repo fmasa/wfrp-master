@@ -4,7 +4,7 @@ import cz.frantisekmasa.wfrp_master.common.FirebaseTokenHolder
 import cz.frantisekmasa.wfrp_master.common.core.auth.User
 import cz.frantisekmasa.wfrp_master.common.core.shared.SettingsStorage
 import cz.frantisekmasa.wfrp_master.common.core.shared.edit
-import cz.frantisekmasa.wfrp_master.common.core.shared.stringSettingsKey
+import cz.frantisekmasa.wfrp_master.common.core.shared.stringKey
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.post
@@ -144,7 +144,7 @@ class AuthenticationManager(
     )
 
     companion object {
-        private val REFRESH_TOKEN = stringSettingsKey("firebase_refresh_token")
+        private val REFRESH_TOKEN = stringKey("firebase_refresh_token")
         private const val API_KEY = "AIzaSyDO4Y4wWcY4HdYcsp8zcLMpMjwUJ_9q3Fw"
     }
 }

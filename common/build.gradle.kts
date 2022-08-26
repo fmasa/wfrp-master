@@ -76,6 +76,16 @@ kotlin {
 
                 // Logging
                 api("io.github.aakira:napier:${Versions.napier}")
+
+                // HTTP client
+                implementation("io.ktor:ktor-client-content-negotiation:$ktorVersion")
+                implementation("io.ktor:ktor-serialization-kotlinx-json:$ktorVersion")
+                api("io.ktor:ktor-client-cio:$ktorVersion")
+
+                val richtextVersion = "0.13.0"
+                implementation("com.halilibo.compose-richtext:richtext-commonmark:$richtextVersion")
+                implementation("com.halilibo.compose-richtext:richtext-ui-material:$richtextVersion")
+                implementation("io.github.z4kn4fein:semver:1.3.3")
             }
         }
 
@@ -98,7 +108,6 @@ kotlin {
 
                 api("androidx.appcompat:appcompat:1.3.1")
                 api("androidx.core:core-ktx:1.3.1")
-                implementation("io.ktor:ktor-client-cio:$ktorVersion")
 
 
                 api("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.3.5")
@@ -122,7 +131,7 @@ kotlin {
                 api("com.google.firebase:firebase-functions-ktx:20.0.1")
 
                 // Coil - image library
-                implementation("io.coil-kt:coil-compose:1.3.2")
+                implementation("io.coil-kt:coil-compose:2.0.0")
 
                 // Time picker
                 implementation("io.github.vanpra.compose-material-dialogs:datetime:0.5.1")
@@ -148,10 +157,6 @@ kotlin {
             dependencies {
                 implementation(compose.desktop.common)
                 implementation(compose.desktop.currentOs)
-
-                implementation("io.ktor:ktor-client-content-negotiation:$ktorVersion")
-                implementation("io.ktor:ktor-serialization-kotlinx-json:$ktorVersion")
-                implementation("io.ktor:ktor-client-cio:$ktorVersion")
 
                 implementation("com.soywiz.korlibs.korau:korau:2.2.0")
             }

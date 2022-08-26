@@ -6,6 +6,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.sp
+import com.halilibo.richtext.ui.material.SetupMaterialRichText
 import cz.frantisekmasa.wfrp_master.common.core.shared.LocalSoundEnabled
 import cz.frantisekmasa.wfrp_master.common.core.shared.SettingsStorage
 import cz.frantisekmasa.wfrp_master.common.core.ui.flow.collectWithLifecycle
@@ -18,12 +19,15 @@ class Theme {
     class FixedColors(
         val splashScreenContent: Color,
         val warning: Color,
+        // TODO: Use this for primaryVariant
+        val accent: Color,
     )
 
     companion object {
         val fixedColors = FixedColors(
             splashScreenContent = Color(234, 234, 234),
             warning = Color(255, 214, 154),
+            accent = Color(83, 109, 254),
         )
 
         @Composable
@@ -74,7 +78,9 @@ fun Theme(content: @Composable () -> Unit) {
     ) {
         SystemBarsChangingEffect()
         CompositionLocalProvider(LocalSoundEnabled provides soundEnabled) {
-            content()
+            SetupMaterialRichText {
+                content()
+            }
         }
     }
 }

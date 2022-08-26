@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
+import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.core.stringSetPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import kotlinx.coroutines.flow.Flow
@@ -29,3 +30,4 @@ actual typealias SettingsKey<T> = Preferences.Key<T>
 
 actual fun booleanSettingsKey(name: String): SettingsKey<Boolean> = booleanPreferencesKey(name)
 actual fun stringSetKey(name: String): SettingsKey<Set<String>> = stringSetPreferencesKey(name)
+actual fun stringKey(name: String): SettingsKey<String> = stringPreferencesKey(name)

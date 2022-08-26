@@ -20,6 +20,7 @@ data class Strings(
     val authentication: AuthenticationString = AuthenticationString(),
     val blessings: BlessingStrings = BlessingStrings(),
     val calendar: CalendarStrings = CalendarStrings(),
+    val changelog: ChangelogStrings = ChangelogStrings(),
     val combat: CombatStrings = CombatStrings(),
     val commonUi: CommonUiStrings = CommonUiStrings(),
     val compendium: CompendiumStrings = CompendiumStrings(),
@@ -337,6 +338,13 @@ data class CalendarStrings(
     val moonPhases: MoonPhaseStrings = MoonPhaseStrings(),
     val mannsliebPhase: (String) -> String = { "Mannslieb phase: $it" },
     val titleSelectTime: String = "Select Time",
+)
+
+@Immutable
+data class ChangelogStrings(
+    val title: String = "Changelog",
+    val couldNotLoad: String = "Changelog could not be loaded",
+    val gitlabButton: String = "See rest on Gitlab",
 )
 
 @Immutable

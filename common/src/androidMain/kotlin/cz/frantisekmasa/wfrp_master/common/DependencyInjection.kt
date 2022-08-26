@@ -10,9 +10,13 @@ import com.google.firebase.ktx.Firebase
 import cz.frantisekmasa.wfrp_master.common.core.shared.SettingsStorage
 import cz.frantisekmasa.wfrp_master.common.firebase.firestore.Firestore
 import cz.frantisekmasa.wfrp_master.common.firebase.functions.CloudFunctions
+import io.ktor.client.engine.HttpClientEngine
+import io.ktor.client.engine.cio.CIO
 import org.kodein.di.DI
 import org.kodein.di.bindSingleton
 import org.kodein.di.instance
+
+actual val ktorEngine: HttpClientEngine get() = CIO.create()
 
 actual val platformModule = DI.Module("android") {
     bindSingleton { SettingsStorage(instance()) }

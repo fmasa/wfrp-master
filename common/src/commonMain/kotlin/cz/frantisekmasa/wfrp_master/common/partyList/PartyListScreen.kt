@@ -29,6 +29,8 @@ import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
+import cz.frantisekmasa.wfrp_master.common.changelog.ChangelogAction
+import cz.frantisekmasa.wfrp_master.common.changelog.ChangelogScreen
 import cz.frantisekmasa.wfrp_master.common.character.CharacterPickerScreen
 import cz.frantisekmasa.wfrp_master.common.core.LocalStaticConfiguration
 import cz.frantisekmasa.wfrp_master.common.core.auth.LocalUser
@@ -80,7 +82,15 @@ object PartyListScreen : Screen {
             topBar = {
                 TopAppBar(
                     title = { Text(LocalStrings.current.parties.titleParties) },
-                    navigationIcon = { HamburgerButton() }
+                    navigationIcon = { HamburgerButton() },
+                    actions = {
+                        val navigator = LocalNavigator.currentOrThrow
+
+                        ChangelogAction(
+                            rememberScreenModel(),
+                            onClick = { navigator.push(ChangelogScreen) },
+                        )
+                    }
                 )
             },
             modifier = Modifier.fillMaxHeight(),

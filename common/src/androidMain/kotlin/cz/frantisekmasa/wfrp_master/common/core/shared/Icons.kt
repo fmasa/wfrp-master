@@ -6,8 +6,8 @@ package cz.frantisekmasa.wfrp_master.common.core.shared
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import cz.frantisekmasa.wfrp_master.common.R
 
 @Composable
 actual fun platformDrawableResource(drawablePath: String): Painter {
@@ -15,10 +15,13 @@ actual fun platformDrawableResource(drawablePath: String): Painter {
 }
 
 @Composable
-private fun rememberDrawableId(drawablePath: String): Int = remember {
-    val imageName = drawablePath.substringAfterLast("/").substringBeforeLast(".")
-    val drawableClass = R.drawable::class.java
-    val field = drawableClass.getDeclaredField(imageName)
+private fun rememberDrawableId(drawablePath: String): Int {
+    val context = LocalContext.current
 
-    field.get(drawableClass) as Int
+    return remember {
+        val resources = context.resources
+        val imageName = drawablePath.substringAfterLast("/").substringBeforeLast(".")
+
+        resources.getIdentifier(imageName, "drawable", context.packageName)
+    }
 }

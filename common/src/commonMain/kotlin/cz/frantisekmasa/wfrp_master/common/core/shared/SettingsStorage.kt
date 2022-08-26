@@ -20,3 +20,4 @@ expect class SettingsKey<T>
 
 expect fun booleanSettingsKey(name: String): SettingsKey<Boolean>
 expect fun stringSetKey(name: String): SettingsKey<Set<String>>
+expect fun stringKey(name: String): SettingsKey<String>
