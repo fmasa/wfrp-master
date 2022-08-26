@@ -1,0 +1,165 @@
+name: main
+
+on:
+  push:
+    tags:
+      - '*'
+    branches:
+      - master
+  pull_request:
+
+jobs:
+  firestore-tests:
+    name: Test Firestore rules
+    runs-on: ubuntu-22.04
+    container: timbru31/java-node:11-jdk-erbium
+    steps:
+      - uses: actions/checkout@v2
+      - name: Get yarn cache directory path
+        id: yarn-cache-dir-path
+        run: echo "::set-output name=dir::$(yarn cache dir)"
+
+      - uses: actions/cache@v3
+        id: yarn-cache
+        with:
+          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-yarn-
+
+      - run: yarn install
+      - run: yarn test
+
+  unit-tests:
+    name: Unit tests
+    runs-on: ubuntu-22.04
+    container: alvrme/alpine-android:android-30-jdk11
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/cache@v3
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+      - run: ./gradlew --no-daemon --parallel testDebugUnitTest
+
+  checks-passed:
+    name: Wait for all checks
+    needs:
+      - unit-tests
+      - firestore-tests
+    runs-on: ubuntu-20.04
+    container:
+      image: fmasa/lebeda:7.4-ci
+    steps:
+      - run: "true"
+
+  build-bundle:
+    name: Build release bundle
+    if: github.ref == 'refs/heads/master' || github.ref_type == 'tag'
+    needs: [checks-passed]
+    runs-on: ubuntu-22.04
+    container: alvrme/alpine-android:android-30-jdk11
+    environment: production
+    env:
+      KEYSTORE_FILE_BASE64: ${{ secrets.KEYSTORE_FILE_BASE64 }}
+      KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
+      KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/cache@v3
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+      - run: echo "$KEYSTORE_FILE_BASE64" | base64 -d > app/.keystore
+      - run: "export SUPPLY_VERSION_CODE=$((950 + $GITHUB_RUN_NUMBER)) && echo $SUPPLY_VERSION_CODE"
+      - run: export SUPPLY_VERSION_NAME=$(.github/workflows/version.sh) && echo $SUPPLY_VERSION_NAME
+      - run: ./gradlew bundleRelease
+      - run: mv app/build/outputs/bundle/release/app-release.aab .
+      - name: Upload bundle
+        uses: actions/upload-artifact@v3
+        with:
+          name: bundle
+          path: app-release.aab
+          retention-days: 1
+
+  google-play:
+    name: "Publish to Google Play"
+    if: github.ref == 'refs/heads/master' || github.ref_type == 'tag'
+    needs: [build-bundle]
+    runs-on: ubuntu-22.04
+    container: ruby:2.7.2-alpine3.12
+    environment: production
+    env:
+      PLAY_STORE_TRACK: internal
+      PLAY_STORE_JSON_FILE: ${{ secrets.PLAY_STORE_JSON_FILE }}
+    steps:
+      - uses: actions/checkout@v2
+      - name: Download a single artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: bundle
+      - run: apk add build-base
+      - run: echo "$PLAY_STORE_JSON_FILE" > fastlane/play_store_credentials.json
+      - run: bundle install -j $(nproc)
+      - run: bundle exec fastlane deploy
+
+  firestore-deploy:
+    name: "Firestore deploy"
+    if: github.ref == 'refs/heads/master' || github.ref_type == 'tag'
+    needs: [checks-passed]
+    runs-on: ubuntu-22.04
+    container: timbru31/java-node:11-jdk-erbium
+    environment: production
+    env:
+      GOOGLE_APPLICATION_CREDENTIALS: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}
+    steps:
+      - uses: actions/checkout@v2
+      - name: Get yarn cache directory path
+        id: yarn-cache-dir-path
+        run: echo "::set-output name=dir::$(yarn cache dir)"
+
+      - uses: actions/cache@v3
+        id: yarn-cache
+        with:
+          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-yarn-
+
+      - run: yarn install
+      - run: yarn firebase deploy
+
+  firestore-migrations:
+    name: "Firestore migrations"
+    if: github.ref == 'refs/heads/master' || github.ref_type == 'tag'
+    needs: [checks-passed]
+    runs-on: ubuntu-22.04
+    container: timbru31/java-node:11-jdk-erbium
+    environment: production
+    env:
+      GOOGLE_APPLICATION_CREDENTIALS: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}
+    steps:
+      - uses: actions/checkout@v2
+      - name: Get yarn cache directory path
+        id: yarn-cache-dir-path
+        run: echo "::set-output name=dir::$(yarn cache dir)"
+
+      - uses: actions/cache@v3
+        id: yarn-cache
+        with:
+          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-yarn-
+
+      - run: yarn install
+      - run: yarn tsc
+      - run: yarn fireway migrate --path firebase-build/migrations
