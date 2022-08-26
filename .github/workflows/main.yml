@@ -112,8 +112,8 @@ jobs:
       - run: bundle install -j $(nproc)
       - run: bundle exec fastlane deploy
 
-  firestore-deploy:
-    name: "Firestore deploy"
+  firebase-deploy:
+    name: "Firebase deploy"
     if: github.ref == 'refs/heads/master' || github.ref_type == 'tag'
     needs: [checks-passed]
     runs-on: ubuntu-22.04
