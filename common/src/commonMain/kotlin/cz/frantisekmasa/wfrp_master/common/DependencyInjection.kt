@@ -1,5 +1,6 @@
 package cz.frantisekmasa.wfrp_master.common
 
+import cz.frantisekmasa.wfrp_master.common.changelog.ChangelogScreenModel
 import cz.frantisekmasa.wfrp_master.common.character.CharacterPickerScreenModel
 import cz.frantisekmasa.wfrp_master.common.character.CharacterScreenModel
 import cz.frantisekmasa.wfrp_master.common.character.characteristics.CharacteristicsScreenModel
@@ -60,6 +61,11 @@ import cz.frantisekmasa.wfrp_master.common.partyList.PartyListScreenModel
 import cz.frantisekmasa.wfrp_master.common.partySettings.PartySettingsScreenModel
 import cz.frantisekmasa.wfrp_master.common.settings.SettingsScreenModel
 import cz.frantisekmasa.wfrp_master.common.skillTest.SkillTestScreenModel
+import io.ktor.client.HttpClient
+import io.ktor.client.engine.HttpClientEngine
+import io.ktor.client.plugins.cache.HttpCache
+import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
+import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.modules.SerializersModule
 import kotlinx.serialization.modules.contextual
@@ -202,6 +208,20 @@ val appModule = DI.Module("Common") {
         )
     }
     bindFactory { partyId: PartyId -> PartySettingsScreenModel(partyId, instance()) }
+
+    bindProvider {
+        ChangelogScreenModel(
+            HttpClient(ktorEngine) {
+                install(HttpCache)
+                install(ContentNegotiation) {
+                    json(Json {
+                        ignoreUnknownKeys = true
+                        encodeDefaults = true
+                    })
+                }
+            }
+        )
+    }
 }
 
 private inline fun <reified T : CharacterItem> DirectDI.characterItemRepository(
@@ -213,4 +233,5 @@ private inline fun <reified T : CharacterItem> DirectDI.characterItemRepository(
     )
 }
 
+internal expect val ktorEngine: HttpClientEngine
 internal expect val platformModule: DI.Module
