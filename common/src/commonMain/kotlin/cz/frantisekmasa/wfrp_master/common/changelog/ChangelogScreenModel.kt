@@ -16,12 +16,12 @@ class ChangelogScreenModel(
 
     suspend fun loadReleases(): List<Release>? {
         return try {
-            http.get("https://gitlab.com/api/v4/projects/17038644/releases")
-                .body<List<GitlabRelease>>()
+            http.get("https://api.github.com/repos/fmasa/wfrp-master/releases?per_page=100")
+                .body<List<GithubRelease>>()
                 .map {
                     Release(
                         name = it.name,
-                        description = it.description,
+                        description = it.body,
                     )
                 }
         } catch (e: Exception) {
@@ -31,9 +31,9 @@ class ChangelogScreenModel(
     }
 
     @Serializable
-    private data class GitlabRelease(
+    private data class GithubRelease(
         val name: String,
-        val description: String,
+        val body: String,
     )
 
     @Immutable

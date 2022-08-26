@@ -344,7 +344,7 @@ data class CalendarStrings(
 data class ChangelogStrings(
     val title: String = "Changelog",
     val couldNotLoad: String = "Changelog could not be loaded",
-    val gitlabButton: String = "See rest on Gitlab",
+    val githubButton: String = "See rest on GitHub",
 )
 
 @Immutable
