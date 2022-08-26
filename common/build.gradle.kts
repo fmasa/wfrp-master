@@ -124,7 +124,7 @@ kotlin {
                 api("com.google.firebase:firebase-functions-ktx:20.0.1")
 
                 // Coil - image library
-                implementation("io.coil-kt:coil-compose:1.3.2")
+                implementation("io.coil-kt:coil-compose:2.0.0")
 
                 // Time picker
                 implementation("io.github.vanpra.compose-material-dialogs:datetime:0.5.1")

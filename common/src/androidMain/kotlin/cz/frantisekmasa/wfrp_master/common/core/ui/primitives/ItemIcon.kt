@@ -6,15 +6,20 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.ui.graphics.painter.Painter
-import coil.compose.rememberImagePainter
+import androidx.compose.ui.platform.LocalContext
+import coil.compose.rememberAsyncImagePainter
+import coil.request.ImageRequest
 import coil.transform.CircleCropTransformation
 
 
 @Composable
 internal actual fun rememberImagePainter(url: String): State<Painter> {
-    val painter = rememberImagePainter(url) {
-        transformations(CircleCropTransformation())
-    }
+    val painter = rememberAsyncImagePainter(
+        ImageRequest.Builder(LocalContext.current)
+            .data(url)
+            .transformations(CircleCropTransformation())
+            .build()
+    )
 
     return derivedStateOf { painter }
 }
