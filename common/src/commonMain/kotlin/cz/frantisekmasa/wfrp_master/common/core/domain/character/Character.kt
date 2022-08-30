@@ -96,6 +96,40 @@ data class Character(
         )
     }
 
+    fun changeSize(size: Size?): Character {
+        return copy(
+            size = size,
+            points = points.copy(
+                wounds = points.wounds.coerceAtMost(
+                    calculateMaxWounds(
+                        size ?: race?.size,
+                        points,
+                        hasHardyTalent,
+                        woundsModifiers,
+                        characteristics
+                    )
+                )
+            )
+        )
+    }
+
+    fun modifyWounds(woundsModifiers: WoundsModifiers): Character {
+        return copy(
+            woundsModifiers = woundsModifiers,
+            points = points.copy(
+                wounds = points.wounds.coerceAtMost(
+                    calculateMaxWounds(
+                        size ?: race?.size,
+                        points,
+                        hasHardyTalent,
+                        woundsModifiers,
+                        characteristics
+                    )
+                )
+            )
+        )
+    }
+
     fun updateCareer(careerName: String, socialClass: String, status: SocialStatus) = copy(
         career = careerName,
         socialClass = socialClass,

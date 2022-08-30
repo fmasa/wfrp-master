@@ -9,6 +9,7 @@ import cz.frantisekmasa.wfrp_master.common.core.firebase.Schema
 import cz.frantisekmasa.wfrp_master.common.core.firebase.documents
 import cz.frantisekmasa.wfrp_master.common.firebase.firestore.Firestore
 import cz.frantisekmasa.wfrp_master.common.firebase.firestore.SetOptions
+import cz.frantisekmasa.wfrp_master.common.firebase.firestore.Transaction
 import kotlinx.coroutines.flow.Flow
 
 
@@ -29,12 +30,30 @@ open class FirestoreCharacterItemRepository<T : CharacterItem>(
             .delete()
     }
 
+    override fun remove(transaction: Transaction, characterId: CharacterId, itemId: Uuid) {
+        transaction.delete(itemCollection(characterId).document(itemId.toString()))
+    }
+
     override suspend fun save(characterId: CharacterId, item: T) {
         val data = mapper.toDocumentData(item)
 
         itemCollection(characterId)
             .document(item.id.toString())
             .set(data, SetOptions.mergeFields(data.keys))
+    }
+
+    override fun save(
+        transaction: Transaction,
+        characterId: CharacterId,
+        item: T
+    ) {
+        val data = mapper.toDocumentData(item)
+
+        transaction.set(
+            itemCollection(characterId).document(item.id.toString()),
+            data,
+            SetOptions.mergeFields(data.keys),
+        )
     }
 
     protected fun itemCollection(characterId: CharacterId) =

@@ -14,6 +14,7 @@ import cz.frantisekmasa.wfrp_master.common.core.firebase.documents
 import cz.frantisekmasa.wfrp_master.common.firebase.firestore.Firestore
 import cz.frantisekmasa.wfrp_master.common.firebase.firestore.FirestoreException
 import cz.frantisekmasa.wfrp_master.common.firebase.firestore.SetOptions
+import cz.frantisekmasa.wfrp_master.common.firebase.firestore.Transaction
 import io.github.aakira.napier.Napier
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -32,6 +33,22 @@ class FirestoreCharacterRepository(
         characters(partyId)
             .document(character.id)
             .set(data, SetOptions.mergeFields(data.keys))
+    }
+
+    override fun save(
+        transaction: Transaction,
+        partyId: PartyId,
+        character: Character
+    ) {
+        val data = mapper.toDocumentData(character)
+
+        Napier.d("Saving character $data in party $partyId to firestore")
+
+        transaction.set(
+            characters(partyId).document(character.id),
+            data,
+            SetOptions.mergeFields(data.keys),
+        )
     }
 
     override suspend fun get(characterId: CharacterId): Character {

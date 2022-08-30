@@ -5,6 +5,7 @@ import cz.frantisekmasa.wfrp_master.common.character.CharacterPickerScreenModel
 import cz.frantisekmasa.wfrp_master.common.character.CharacterScreenModel
 import cz.frantisekmasa.wfrp_master.common.character.characteristics.CharacteristicsScreenModel
 import cz.frantisekmasa.wfrp_master.common.character.combat.CharacterCombatScreenModel
+import cz.frantisekmasa.wfrp_master.common.character.effects.TraitEffectFactory
 import cz.frantisekmasa.wfrp_master.common.character.religion.blessings.BlessingsScreenModel
 import cz.frantisekmasa.wfrp_master.common.character.religion.miracles.MiraclesScreenModel
 import cz.frantisekmasa.wfrp_master.common.character.skills.SkillsScreenModel
@@ -182,8 +183,9 @@ val appModule = DI.Module("Common") {
         BlessingsScreenModel(characterId, instance(), instance())
     }
 
+    bindSingleton { TraitEffectFactory() }
     bindFactory { characterId: CharacterId ->
-        TraitsScreenModel(characterId, instance(), instance())
+        TraitsScreenModel(characterId, instance(), instance(), instance(), instance(), instance())
     }
     bindProvider { InvitationScreenModel(instance(), instance(), instance()) }
     bindProvider { PartyListScreenModel(instance()) }
