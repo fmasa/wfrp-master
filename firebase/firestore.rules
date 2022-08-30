@@ -414,7 +414,8 @@ service cloud.firestore {
                             "hardyTalent",
                             "hiddenTabs",
                             "avatarUrl",
-                            "archived"
+                            "archived",
+                            "woundsModifiers"
                         ].hasAll(character.keys())
                         && character.id == characterId
                         && (
@@ -470,6 +471,12 @@ service cloud.firestore {
                             character.status is map && character.status.keys().toSet() == ["tier", "standing"].toSet()
                                 && character.status.tier in ["BRASS", "SILVER", "GOLD"]
                                 && character.status.standing is int && character.status.standing >= 0
+                        )
+                        && ! ("woundsModifiers" in character) || (
+                            character.woundsModifiers is map &&
+                            character.woundsModifiers.keys().toSet() == ["afterMultiplier", "extraToughnessBonusMultiplier"].toSet() &&
+                            character.woundsModifiers.afterMultiplier is int &&
+                            character.woundsModifiers.extraToughnessBonusMultiplier is int
                         );
                 }
             }
