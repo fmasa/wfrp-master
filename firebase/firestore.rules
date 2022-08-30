@@ -111,6 +111,20 @@ service cloud.firestore {
                         && miracle.cultName is string && miracle.cultName.size() <= 50;
                 }
             }
+
+            match /traits/{traitId} {
+                allow read: if hasAccessToParty();
+                allow create: if isGameMaster() && isValidTrait(request.resource.data);
+                allow update: if isGameMaster() && isValidTrait(request.resource.data);
+                allow delete: if isGameMaster();
+
+                function isValidTrait(trait) {
+                    return trait.keys().toSet() == ["id", "name", "specifications", "description"].toSet()
+                           && trait.id is string && trait.id == traitId && isValidUuid(trait.id)
+                           && trait.name is string && isNotBlank(trait.name) && trait.name.size() <= 50
+                           && trait.description is string && trait.description.size() <= 3000;
+                }
+            }
             // End of Compendium
 
             match /encounters/{encounterId} {
@@ -259,6 +273,25 @@ service cloud.firestore {
                     }
                 }
 
+                match /traits/{traitId} {
+                    allow read: if hasAccessToParty();
+                    allow create: if canEditCharacter() && isValidTrait(request.resource.data);
+                    allow update: if canEditCharacter() && isValidTrait(request.resource.data);
+                    allow delete: if canEditCharacter();
+                    function isValidTrait(trait) {
+                        return trait.keys().toSet() == ["id", "name", "specificationValues", "description", "compendiumId"].toSet()
+                               && trait.id is string && trait.id == traitId && isValidUuid(trait.id)
+                               && trait.name is string && isNotBlank(trait.name) && trait.name.size() <= 50
+                               && trait.description is string && trait.description.size() <= 3000
+                               && (! ("compendiumId" in trait)
+                                   || (
+                            trait.compendiumId == null
+                                        || (trait.compendiumId is string && exists(/databases/$(database)/documents/parties/$(partyId)/traits/$(trait.compendiumId)))
+                                )
+                              );
+                    }
+                }
+
                 match /spells/{spellId} {
                     allow read: if hasAccessToParty();
                     allow create: if canEditCharacter() && isValidSpell(request.resource.data);
@@ -362,6 +395,7 @@ service cloud.firestore {
                             "name",
                             "publicName",
                             "career",
+                            "size",
                             "socialClass",
                             "status",
                             "points",
@@ -380,7 +414,8 @@ service cloud.firestore {
                             "hardyTalent",
                             "hiddenTabs",
                             "avatarUrl",
-                            "archived"
+                            "archived",
+                            "woundsModifiers"
                         ].hasAll(character.keys())
                         && character.id == characterId
                         && (
@@ -416,6 +451,19 @@ service cloud.firestore {
                                 ].hasAll(character.hiddenTabs)
                             )
                         )
+                        && (! ("size" in character) || character.size == null || (
+                            character.size is string
+                                && character.size in [
+                                    "TINY",
+                                    "LITTLE",
+                                    "SMALL",
+                                    "AVERAGE",
+                                    "LARGE",
+                                    "ENORMOUS",
+                                    "MONSTROUS"
+                                ]
+                            )
+                        )
                         && (! ("avatarUrl" in character) || character.avatarUrl is string || character.avatarUrl == null)
                         && (! ("archived" in character) || (character.archived is bool && (!character.archived || character.userId == null)))
                         && (! ("conditions" in character) || areValidConditions(character.conditions))
@@ -423,6 +471,12 @@ service cloud.firestore {
                             character.status is map && character.status.keys().toSet() == ["tier", "standing"].toSet()
                                 && character.status.tier in ["BRASS", "SILVER", "GOLD"]
                                 && character.status.standing is int && character.status.standing >= 0
+                        )
+                        && ! ("woundsModifiers" in character) || (
+                            character.woundsModifiers is map &&
+                            character.woundsModifiers.keys().toSet() == ["afterMultiplier", "extraToughnessBonusMultiplier"].toSet() &&
+                            character.woundsModifiers.afterMultiplier is int &&
+                            character.woundsModifiers.extraToughnessBonusMultiplier is int
                         );
                 }
             }

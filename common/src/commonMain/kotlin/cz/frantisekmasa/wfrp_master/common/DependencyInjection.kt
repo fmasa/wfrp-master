@@ -5,11 +5,13 @@ import cz.frantisekmasa.wfrp_master.common.character.CharacterPickerScreenModel
 import cz.frantisekmasa.wfrp_master.common.character.CharacterScreenModel
 import cz.frantisekmasa.wfrp_master.common.character.characteristics.CharacteristicsScreenModel
 import cz.frantisekmasa.wfrp_master.common.character.combat.CharacterCombatScreenModel
+import cz.frantisekmasa.wfrp_master.common.character.effects.TraitEffectFactory
 import cz.frantisekmasa.wfrp_master.common.character.religion.blessings.BlessingsScreenModel
 import cz.frantisekmasa.wfrp_master.common.character.religion.miracles.MiraclesScreenModel
 import cz.frantisekmasa.wfrp_master.common.character.skills.SkillsScreenModel
 import cz.frantisekmasa.wfrp_master.common.character.spells.SpellsScreenModel
 import cz.frantisekmasa.wfrp_master.common.character.talents.TalentsScreenModel
+import cz.frantisekmasa.wfrp_master.common.character.traits.TraitsScreenModel
 import cz.frantisekmasa.wfrp_master.common.character.trappings.TrappingsScreenModel
 import cz.frantisekmasa.wfrp_master.common.characterCreation.CharacterCreationScreenModel
 import cz.frantisekmasa.wfrp_master.common.combat.CombatScreenModel
@@ -19,6 +21,7 @@ import cz.frantisekmasa.wfrp_master.common.compendium.domain.Miracle
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.Skill
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.Spell
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.Talent
+import cz.frantisekmasa.wfrp_master.common.compendium.domain.Trait
 import cz.frantisekmasa.wfrp_master.common.core.PartyScreenModel
 import cz.frantisekmasa.wfrp_master.common.core.cache.CharacterRepositoryIdentityMap
 import cz.frantisekmasa.wfrp_master.common.core.cache.PartyRepositoryIdentityMap
@@ -37,6 +40,7 @@ import cz.frantisekmasa.wfrp_master.common.core.domain.religion.MiracleRepositor
 import cz.frantisekmasa.wfrp_master.common.core.domain.skills.SkillRepository
 import cz.frantisekmasa.wfrp_master.common.core.domain.spells.SpellRepository
 import cz.frantisekmasa.wfrp_master.common.core.domain.talents.TalentRepository
+import cz.frantisekmasa.wfrp_master.common.core.domain.traits.TraitRepository
 import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.InventoryItemRepository
 import cz.frantisekmasa.wfrp_master.common.core.firebase.Schema
 import cz.frantisekmasa.wfrp_master.common.core.firebase.functions.CloudFunctionCharacterAvatarChanger
@@ -111,6 +115,10 @@ val appModule = DI.Module("Common") {
         FirestoreCompendium(Schema.Compendium.Miracles, instance(), mapper())
     }
 
+    bindSingleton<Compendium<Trait>> {
+        FirestoreCompendium(Schema.Compendium.Traits, instance(), mapper())
+    }
+
     bindSingleton { DismissedUserTipsHolder(instance()) }
 
     bindSingleton<InvitationProcessor> { FirestoreInvitationProcessor(instance(), instance()) }
@@ -120,6 +128,7 @@ val appModule = DI.Module("Common") {
     bindSingleton<BlessingRepository> { characterItemRepository(Schema.Character.Blessings) }
     bindSingleton<MiracleRepository> { characterItemRepository(Schema.Character.Miracles) }
     bindSingleton<InventoryItemRepository> { characterItemRepository(Schema.Character.InventoryItems) }
+    bindSingleton<TraitRepository> { characterItemRepository(Schema.Character.Traits) }
 
     bindSingleton<CharacterRepository> {
         CharacterRepositoryIdentityMap(10, FirestoreCharacterRepository(instance(), mapper()))
@@ -173,6 +182,11 @@ val appModule = DI.Module("Common") {
     bindFactory { characterId: CharacterId ->
         BlessingsScreenModel(characterId, instance(), instance())
     }
+
+    bindSingleton { TraitEffectFactory() }
+    bindFactory { characterId: CharacterId ->
+        TraitsScreenModel(characterId, instance(), instance(), instance(), instance(), instance())
+    }
     bindProvider { InvitationScreenModel(instance(), instance(), instance()) }
     bindProvider { PartyListScreenModel(instance()) }
     bindProvider { SettingsScreenModel(instance(), instance()) }
@@ -180,6 +194,7 @@ val appModule = DI.Module("Common") {
     bindFactory { partyId: PartyId ->
         CompendiumScreenModel(
             partyId,
+            instance(),
             instance(),
             instance(),
             instance(),
@@ -197,6 +212,7 @@ val appModule = DI.Module("Common") {
         CombatScreenModel(
             partyId,
             Random,
+            instance(),
             instance(),
             instance(),
             instance(),

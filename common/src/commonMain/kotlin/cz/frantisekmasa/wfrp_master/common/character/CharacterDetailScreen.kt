@@ -329,6 +329,7 @@ data class CharacterDetailScreen(
                         screenModel = screenModel,
                         skillsScreenModel = rememberScreenModel(arg = characterId),
                         talentsScreenModel = rememberScreenModel(arg = characterId),
+                        traitsScreenModel = rememberScreenModel(arg = characterId),
                         modifier = modifier,
                     )
                 }

@@ -26,6 +26,7 @@ import cz.frantisekmasa.wfrp_master.common.core.domain.religion.MiracleRepositor
 import cz.frantisekmasa.wfrp_master.common.core.domain.skills.SkillRepository
 import cz.frantisekmasa.wfrp_master.common.core.domain.spells.SpellRepository
 import cz.frantisekmasa.wfrp_master.common.core.domain.talents.TalentRepository
+import cz.frantisekmasa.wfrp_master.common.core.domain.traits.TraitRepository
 import cz.frantisekmasa.wfrp_master.common.core.logging.Reporter
 import cz.frantisekmasa.wfrp_master.common.core.ui.StatBlockData
 import cz.frantisekmasa.wfrp_master.common.core.utils.right
@@ -59,6 +60,7 @@ class CombatScreenModel(
     private val spells: SpellRepository,
     private val blessings: BlessingRepository,
     private val miracles: MiracleRepository,
+    private val traits: TraitRepository,
 ) : ScreenModel {
 
     val party: Flow<Party> = parties.getLive(partyId).right()
@@ -101,6 +103,7 @@ class CombatScreenModel(
                 emptyList(),
                 emptyList(),
                 emptyList(),
+                emptyList(),
             )
         }
 
@@ -112,6 +115,7 @@ class CombatScreenModel(
             val spellsDeferred = async { spells.findAllForCharacter(characterId).first() }
             val blessingsDeferred = async { blessings.findAllForCharacter(characterId).first() }
             val miraclesDeferred = async { miracles.findAllForCharacter(characterId).first() }
+            val traitsDeferred = async { traits.findAllForCharacter(characterId).first() }
 
             StatBlockData(
                 combatant.note,
@@ -120,6 +124,7 @@ class CombatScreenModel(
                 spellsDeferred.await(),
                 blessingsDeferred.await(),
                 miraclesDeferred.await(),
+                traitsDeferred.await(),
             )
         }
     }

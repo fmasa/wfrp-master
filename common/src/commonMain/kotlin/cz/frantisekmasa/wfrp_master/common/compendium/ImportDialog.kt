@@ -29,6 +29,7 @@ import cz.frantisekmasa.wfrp_master.common.compendium.domain.Miracle
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.Skill
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.Spell
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.Talent
+import cz.frantisekmasa.wfrp_master.common.compendium.domain.Trait
 import cz.frantisekmasa.wfrp_master.common.core.domain.compendium.CompendiumItem
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.PartyId
 import cz.frantisekmasa.wfrp_master.common.core.shared.IO
@@ -126,9 +127,19 @@ private fun ImportedItemsPicker(
                 label =  strings.pickPromptMiracles,
                 items = state.miracles,
                 onSave = screenModel::saveMultipleMiracles,
-                onContinue = onComplete,
+                onContinue = { screen = ItemsScreen.TRAITS },
                 onClose = onDismissRequest,
                 existingItems = screenModel.miracles,
+            )
+        }
+        ItemsScreen.TRAITS -> {
+            ItemPicker(
+                label =  strings.pickPromptTraits,
+                items = state.traits,
+                onSave = screenModel::saveMultipleTraits,
+                onContinue = onComplete,
+                onClose = onDismissRequest,
+                existingItems = screenModel.traits,
             )
         }
     }
@@ -255,6 +266,7 @@ internal sealed class ImportDialogState {
         val spells: List<Spell>,
         val blessings: List<Blessing>,
         val miracles: List<Miracle>,
+        val traits: List<Trait>,
     ) : ImportDialogState()
 }
 
@@ -264,5 +276,6 @@ private enum class ItemsScreen {
     TALENTS,
     SPELLS,
     BLESSINGS,
-    MIRACLES
+    MIRACLES,
+    TRAITS,
 }

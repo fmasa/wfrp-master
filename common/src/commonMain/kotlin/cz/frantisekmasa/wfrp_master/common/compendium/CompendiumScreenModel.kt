@@ -6,6 +6,7 @@ import cz.frantisekmasa.wfrp_master.common.compendium.domain.Miracle
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.Skill
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.Spell
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.Talent
+import cz.frantisekmasa.wfrp_master.common.compendium.domain.Trait
 import cz.frantisekmasa.wfrp_master.common.core.domain.compendium.Compendium
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.Party
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.PartyId
@@ -21,6 +22,7 @@ class CompendiumScreenModel(
     private val spellCompendium: Compendium<Spell>,
     private val blessingCompendium: Compendium<Blessing>,
     private val miracleCompendium: Compendium<Miracle>,
+    private val traitCompendium: Compendium<Trait>,
     parties: PartyRepository,
 ) : ScreenModel {
 
@@ -30,6 +32,7 @@ class CompendiumScreenModel(
     val spells: Flow<List<Spell>> = spellCompendium.liveForParty(partyId)
     val blessings: Flow<List<Blessing>> = blessingCompendium.liveForParty(partyId)
     val miracles: Flow<List<Miracle>> = miracleCompendium.liveForParty(partyId)
+    val traits: Flow<List<Trait>> = traitCompendium.liveForParty(partyId)
 
     suspend fun save(skill: Skill) {
         skillCompendium.saveItems(partyId, skill)
@@ -89,5 +92,17 @@ class CompendiumScreenModel(
 
     suspend fun saveMultipleMiracles(miracles: List<Miracle>) {
         miracleCompendium.saveItems(partyId, *miracles.toTypedArray())
+    }
+
+    suspend fun save(trait: Trait) {
+        traitCompendium.saveItems(partyId, trait)
+    }
+
+
+    suspend fun saveMultipleTraits(traits: List<Trait>) {
+        traitCompendium.saveItems(partyId, *traits.toTypedArray())
+    }
+    suspend fun remove(trait: Trait) {
+        traitCompendium.remove(partyId, trait)
     }
 }

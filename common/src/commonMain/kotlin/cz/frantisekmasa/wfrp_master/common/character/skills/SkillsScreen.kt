@@ -10,6 +10,8 @@ import androidx.compose.ui.Modifier
 import cz.frantisekmasa.wfrp_master.common.character.CharacterScreenModel
 import cz.frantisekmasa.wfrp_master.common.character.talents.TalentsCard
 import cz.frantisekmasa.wfrp_master.common.character.talents.TalentsScreenModel
+import cz.frantisekmasa.wfrp_master.common.character.traits.TraitsCard
+import cz.frantisekmasa.wfrp_master.common.character.traits.TraitsScreenModel
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
 import cz.frantisekmasa.wfrp_master.common.core.ui.responsive.Breakpoint
 import cz.frantisekmasa.wfrp_master.common.core.ui.responsive.ColumnSize
@@ -22,6 +24,7 @@ fun SkillsScreen(
     screenModel: CharacterScreenModel,
     skillsScreenModel: SkillsScreenModel,
     talentsScreenModel: TalentsScreenModel,
+    traitsScreenModel: TraitsScreenModel,
 ) {
     Container(
         modifier
@@ -44,6 +47,11 @@ fun SkillsScreen(
             TalentsCard(
                 talentsScreenModel,
                 onRemove = { talentsScreenModel.removeTalent(it) },
+            )
+
+            TraitsCard(
+                traitsScreenModel,
+                onRemove = { traitsScreenModel.removeTrait(it) },
             )
         }
     }

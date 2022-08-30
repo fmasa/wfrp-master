@@ -43,6 +43,7 @@ data class Strings(
     val spells: SpellStrings = SpellStrings(),
     val tests: TestStrings = TestStrings(),
     val talents: TalentStrings = TalentStrings(),
+    val traits: TraitStrings = TraitStrings(),
     val trappings: TrappingStrings = TrappingStrings(),
     val validation: ValidationStrings = ValidationStrings(),
     val weapons: WeaponStrings = WeaponStrings(),
@@ -436,12 +437,14 @@ data class CompendiumStrings(
     val pickPromptSpells: String = "Select which spells you want to import.",
     val pickPromptBlessings: String = "Select which blessings you want to import.",
     val pickPromptMiracles: String = "Select which miracles you want to import.",
+    val pickPromptTraits: String = "Select which traits you want to import.",
     val rulebookStoreLink: String = "https://www.drivethrurpg.com/product/248284/Warhammer-Fantasy-Roleplay-Fourth-Edition-Rulebook?affiliate_id=2708720",
     val tabBlessings: String = "Blessings",
     val tabMiracles: String = "Miracles",
     val tabSkills: String = "Skills",
     val tabSpells: String = "Spells",
     val tabTalents: String = "Talents",
+    val tabTraits: String = "Traits",
     val title: String = "Compendium",
     val titleImportCompendium: String = "Import Compendium",
     val titleImportDialog: String = "Importing Rulebook…",
@@ -881,6 +884,28 @@ data class TestResultStrings(
     val failure: String = "Failure",
     val impressiveFailure : String = "Impressive Failure",
     val astoundingFailure : String = "Astounding Failure",
+)
+
+@Immutable
+data class TraitStrings(
+    val labelDescription: String = "Description",
+    val labelName: String = "Name",
+    val labelSpecifications: String = "Specifications",
+    val messages: TraitMessageStrings = TraitMessageStrings(),
+    val specificationsHelper: String = "Comma separated list of Specifications",
+    val titleChooseCompendiumTrait: String = "Choose Compendium trait…",
+    val titleAdd: String = "Add Trait",
+    val titleNew: String = "New Trait",
+    val titleEdit: String = "Edit Trait",
+    val titleTraits: String = "Traits",
+) {
+}
+
+@Immutable
+data class TraitMessageStrings(
+    val noTraitsInCompendium: String = "No traits",
+    val noTraitsInCompendiumSubtext: String = "There are no traits in your compendium yet.",
+    val compendiumTraitRemoved: String = "Compendium trait was removed in the meantime",
 )
 
 @Immutable

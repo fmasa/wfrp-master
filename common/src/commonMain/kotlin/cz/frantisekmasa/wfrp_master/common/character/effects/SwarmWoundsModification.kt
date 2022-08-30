@@ -1,0 +1,44 @@
+package cz.frantisekmasa.wfrp_master.common.character.effects
+
+import cz.frantisekmasa.wfrp_master.common.core.domain.character.Character
+
+class SwarmWoundsModification: CharacterEffect {
+    override fun apply(character: Character, otherEffects: List<CharacterEffect>): Character {
+        if (otherEffects.any { it is SwarmWoundsModification }) {
+            return character // This effect does not stack
+        }
+
+        val modifiers = character.woundsModifiers
+
+        return character.modifyWounds(
+            modifiers.copy(
+                afterMultiplier = modifiers.afterMultiplier * 5.toUInt(),
+            )
+        )
+    }
+
+    override fun revert(character: Character, otherEffects: List<CharacterEffect>): Character {
+        if (otherEffects.any { it is SwarmWoundsModification }) {
+            return character // This effect does not stack
+        }
+
+        val modifiers = character.woundsModifiers
+
+        return character.modifyWounds(
+            modifiers.copy(
+                afterMultiplier = modifiers.afterMultiplier / 5.toUInt(),
+            )
+        )
+    }
+
+    companion object {
+        fun fromTraitNameOrNull(name: String): SwarmWoundsModification? {
+            if (name.equals("swarm", ignoreCase = true)) {
+                return SwarmWoundsModification()
+            }
+
+            return null
+        }
+    }
+
+}

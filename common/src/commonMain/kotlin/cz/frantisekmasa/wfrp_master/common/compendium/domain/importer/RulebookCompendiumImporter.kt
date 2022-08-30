@@ -8,6 +8,7 @@ import cz.frantisekmasa.wfrp_master.common.compendium.domain.Miracle
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.Skill
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.Spell
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.Talent
+import cz.frantisekmasa.wfrp_master.common.compendium.domain.Trait
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.grammars.BlessingListGrammar
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.grammars.MiracleListGrammar
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.grammars.SkillListGrammar
@@ -107,6 +108,10 @@ class RulebookCompendiumImporter(rulebookPdf: InputStream) :
             Napier.e(e.toString(), e)
             throw e
         }
+    }
+
+    override suspend fun importTraits(): List<Trait> {
+        return RulebookTraitImporter.importTraits(reader).toList()
     }
 
     private fun splitMiraclesByCult(text: String): Sequence<Pair<String, String>> {

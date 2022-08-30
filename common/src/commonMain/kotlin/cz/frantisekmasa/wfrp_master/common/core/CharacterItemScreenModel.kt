@@ -22,7 +22,7 @@ abstract class CharacterItemScreenModel<
     private val compendium: Compendium<TCompendiumItem>,
 ) : ScreenModel {
 
-    private val compendiumItems by lazy { compendium.liveForParty(characterId.partyId) }
+    val compendiumItems by lazy { compendium.liveForParty(characterId.partyId) }
 
     val items: Flow<List<TItem>> = repository.findAllForCharacter(characterId)
 

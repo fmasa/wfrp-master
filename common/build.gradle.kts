@@ -86,6 +86,8 @@ kotlin {
                 implementation("com.halilibo.compose-richtext:richtext-commonmark:$richtextVersion")
                 implementation("com.halilibo.compose-richtext:richtext-ui-material:$richtextVersion")
                 implementation("io.github.z4kn4fein:semver:1.3.3")
+
+                implementation("org.jsoup:jsoup:1.15.3")
             }
         }
 

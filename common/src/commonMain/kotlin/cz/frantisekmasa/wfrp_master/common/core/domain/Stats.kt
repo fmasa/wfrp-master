@@ -53,6 +53,19 @@ data class Stats(
         fellowship = fellowship + other.fellowship
     )
 
+    operator fun minus(other: Stats) = Stats(
+        weaponSkill = (weaponSkill - other.weaponSkill).coerceAtLeast(0),
+        dexterity = (dexterity - other.dexterity).coerceAtLeast(0),
+        ballisticSkill = (ballisticSkill - other.ballisticSkill).coerceAtLeast(0),
+        strength = (strength - other.strength).coerceAtLeast(0),
+        toughness = (toughness - other.toughness).coerceAtLeast(0),
+        agility = (agility - other.agility).coerceAtLeast(0),
+        intelligence = (intelligence - other.intelligence).coerceAtLeast(0),
+        initiative = (initiative - other.initiative).coerceAtLeast(0),
+        willPower = (willPower - other.willPower).coerceAtLeast(0),
+        fellowship = (fellowship - other.fellowship).coerceAtLeast(0),
+    )
+
     fun get(characteristic: Characteristic): Int = when (characteristic) {
         Characteristic.AGILITY -> agility
         Characteristic.BALLISTIC_SKILL -> ballisticSkill

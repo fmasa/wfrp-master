@@ -40,6 +40,7 @@ import cz.frantisekmasa.wfrp_master.common.character.religion.miracles.MiracleDe
 import cz.frantisekmasa.wfrp_master.common.character.skills.dialog.SkillDetail
 import cz.frantisekmasa.wfrp_master.common.character.spells.dialog.SpellDetail
 import cz.frantisekmasa.wfrp_master.common.character.talents.dialog.TalentDetail
+import cz.frantisekmasa.wfrp_master.common.character.traits.TraitDetail
 import cz.frantisekmasa.wfrp_master.common.core.domain.Characteristic
 import cz.frantisekmasa.wfrp_master.common.core.domain.Stats
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.CharacterItem
@@ -48,6 +49,7 @@ import cz.frantisekmasa.wfrp_master.common.core.domain.religion.Miracle
 import cz.frantisekmasa.wfrp_master.common.core.domain.skills.Skill
 import cz.frantisekmasa.wfrp_master.common.core.domain.spells.Spell
 import cz.frantisekmasa.wfrp_master.common.core.domain.talents.Talent
+import cz.frantisekmasa.wfrp_master.common.core.domain.traits.Trait
 import cz.frantisekmasa.wfrp_master.common.core.shared.Parcelable
 import cz.frantisekmasa.wfrp_master.common.core.shared.Parcelize
 import cz.frantisekmasa.wfrp_master.common.core.ui.dialogs.FullScreenDialog
@@ -64,6 +66,7 @@ data class StatBlockData(
     val spells: List<Spell>,
     val blessings: List<Blessing>,
     val miracles: List<Miracle>,
+    val traits: List<Trait>,
 ) : Parcelable
 
 @Composable
@@ -79,6 +82,13 @@ fun StatBlock(
         }
         return
     }
+
+    CharacterItemList(
+        title = LocalStrings.current.skills.titleSkills,
+        items = data.traits,
+        value = { it.evaluatedName },
+        detail = { trait, onDismissRequest -> TraitDetail(trait, onDismissRequest) },
+    )
 
     CharacterItemList(
         title = LocalStrings.current.skills.titleSkills,

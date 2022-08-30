@@ -37,9 +37,9 @@ internal fun <A : CharacterItem, B : CompendiumItem<B>> CompendiumItemChooser(
     icon: @Composable (B) -> Resources.Drawable,
     screenModel: CharacterItemScreenModel<A, B>,
     onSelect: suspend (B) -> Unit,
-    onCustomItemRequest: () -> Unit,
+    onCustomItemRequest: (() -> Unit)? = null,
     onDismissRequest: () -> Unit,
-    customItemButtonText: String,
+    customItemButtonText: String = "",
     emptyUiIcon: Resources.Drawable,
 ) {
     val compendiumItems =
@@ -85,14 +85,16 @@ internal fun <A : CharacterItem, B : CompendiumItem<B>> CompendiumItemChooser(
             )
         }
 
-        Surface(elevation = 8.dp) {
-            OutlinedButton(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(Spacing.bodyPadding),
-                onClick = onCustomItemRequest,
-            ) {
-                Text(customItemButtonText)
+        if (onCustomItemRequest != null && customItemButtonText != "") {
+            Surface(elevation = 8.dp) {
+                OutlinedButton(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(Spacing.bodyPadding),
+                    onClick = onCustomItemRequest,
+                ) {
+                    Text(customItemButtonText)
+                }
             }
         }
     }

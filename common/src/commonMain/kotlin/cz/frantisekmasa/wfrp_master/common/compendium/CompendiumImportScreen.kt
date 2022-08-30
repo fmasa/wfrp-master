@@ -96,6 +96,7 @@ class CompendiumImportScreen(
                 val spells = async { importer.importSpells() }
                 val blessings = async { importer.importBlessings() }
                 val miracles = async { importer.importMiracles() }
+                val traits = async { importer.importTraits() }
 
                 importState = ImportDialogState.PickingItemsToImport(
                     skills.await(),
@@ -103,6 +104,7 @@ class CompendiumImportScreen(
                     spells.await(),
                     blessings.await(),
                     miracles.await(),
+                    traits.await(),
                 )
             }.onFailure {
                 Napier.e(it.toString(), it)
