@@ -111,6 +111,20 @@ service cloud.firestore {
                         && miracle.cultName is string && miracle.cultName.size() <= 50;
                 }
             }
+
+            match /traits/{traitId} {
+                allow read: if hasAccessToParty();
+                allow create: if isGameMaster() && isValidTrait(request.resource.data);
+                allow update: if isGameMaster() && isValidTrait(request.resource.data);
+                allow delete: if isGameMaster();
+
+                function isValidTrait(trait) {
+                    return trait.keys().toSet() == ["id", "name", "specifications", "description"].toSet()
+                           && trait.id is string && trait.id == traitId && isValidUuid(trait.id)
+                           && trait.name is string && isNotBlank(trait.name) && trait.name.size() <= 50
+                           && trait.description is string && trait.description.size() <= 3000;
+                }
+            }
             // End of Compendium
 
             match /encounters/{encounterId} {

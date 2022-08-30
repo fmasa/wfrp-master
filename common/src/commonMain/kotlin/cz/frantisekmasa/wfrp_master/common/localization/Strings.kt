@@ -43,6 +43,7 @@ data class Strings(
     val spells: SpellStrings = SpellStrings(),
     val tests: TestStrings = TestStrings(),
     val talents: TalentStrings = TalentStrings(),
+    val traits: TraitStrings = TraitStrings(),
     val trappings: TrappingStrings = TrappingStrings(),
     val validation: ValidationStrings = ValidationStrings(),
     val weapons: WeaponStrings = WeaponStrings(),
@@ -442,6 +443,7 @@ data class CompendiumStrings(
     val tabSkills: String = "Skills",
     val tabSpells: String = "Spells",
     val tabTalents: String = "Talents",
+    val tabTraits: String = "Traits",
     val title: String = "Compendium",
     val titleImportCompendium: String = "Import Compendium",
     val titleImportDialog: String = "Importing Rulebook…",
@@ -881,6 +883,23 @@ data class TestResultStrings(
     val failure: String = "Failure",
     val impressiveFailure : String = "Impressive Failure",
     val astoundingFailure : String = "Astounding Failure",
+)
+
+@Immutable
+data class TraitStrings(
+    val labelDescription: String = "Description",
+    val labelName: String = "Name",
+    val labelSpecifications: String = "Specifications",
+    val messages: TraitMessageStrings = TraitMessageStrings(),
+    val specificationsHelper: String = "Comma separated list of Specifications",
+    val titleNew: String = "New Trait",
+    val titleEdit: String = "Edit Trait",
+)
+
+@Immutable
+data class TraitMessageStrings(
+    val noTraitsInCompendium: String = "No traits",
+    val noTraitsInCompendiumSubtext: String = "There are no traits in your compendium yet.",
 )
 
 @Immutable

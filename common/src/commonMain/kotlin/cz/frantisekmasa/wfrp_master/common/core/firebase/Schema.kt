@@ -29,5 +29,6 @@ object Schema {
         const val Skills = "skills"
         const val Spells = "spells"
         const val Talents = "talents"
+        const val Traits = "traits"
     }
 }

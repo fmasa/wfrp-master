@@ -32,6 +32,7 @@ import cz.frantisekmasa.wfrp_master.common.compendium.tabs.MiracleCompendiumTab
 import cz.frantisekmasa.wfrp_master.common.compendium.tabs.SkillCompendiumTab
 import cz.frantisekmasa.wfrp_master.common.compendium.tabs.SpellCompendiumTab
 import cz.frantisekmasa.wfrp_master.common.compendium.tabs.TalentCompendiumTab
+import cz.frantisekmasa.wfrp_master.common.compendium.tabs.TraitCompendiumTab
 import cz.frantisekmasa.wfrp_master.common.core.domain.compendium.CompendiumItem
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.PartyId
 import cz.frantisekmasa.wfrp_master.common.core.shared.IO
@@ -69,6 +70,7 @@ class CompendiumScreen(
                 tab(strings.tabSpells) { SpellCompendiumTab(screenModel, screenWidth) }
                 tab(strings.tabBlessings) { BlessingCompendiumTab(screenModel, screenWidth) }
                 tab(strings.tabMiracles) { MiracleCompendiumTab(screenModel, screenWidth) }
+                tab(strings.tabTraits) { TraitCompendiumTab(screenModel, screenWidth) }
             }
         }
     }

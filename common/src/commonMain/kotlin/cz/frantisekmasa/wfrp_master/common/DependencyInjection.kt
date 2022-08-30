@@ -19,6 +19,7 @@ import cz.frantisekmasa.wfrp_master.common.compendium.domain.Miracle
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.Skill
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.Spell
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.Talent
+import cz.frantisekmasa.wfrp_master.common.compendium.domain.Trait
 import cz.frantisekmasa.wfrp_master.common.core.PartyScreenModel
 import cz.frantisekmasa.wfrp_master.common.core.cache.CharacterRepositoryIdentityMap
 import cz.frantisekmasa.wfrp_master.common.core.cache.PartyRepositoryIdentityMap
@@ -111,6 +112,10 @@ val appModule = DI.Module("Common") {
         FirestoreCompendium(Schema.Compendium.Miracles, instance(), mapper())
     }
 
+    bindSingleton<Compendium<Trait>> {
+        FirestoreCompendium(Schema.Compendium.Traits, instance(), mapper())
+    }
+
     bindSingleton { DismissedUserTipsHolder(instance()) }
 
     bindSingleton<InvitationProcessor> { FirestoreInvitationProcessor(instance(), instance()) }
@@ -180,6 +185,7 @@ val appModule = DI.Module("Common") {
     bindFactory { partyId: PartyId ->
         CompendiumScreenModel(
             partyId,
+            instance(),
             instance(),
             instance(),
             instance(),

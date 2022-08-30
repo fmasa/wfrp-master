@@ -30,7 +30,8 @@ object Resources {
         Miracle("drawable/ic_pray.xml"),
         Skill("drawable/ic_skills.xml"),
         Spell("drawable/ic_spells.xml"),
-        Talent("darawable/ic_skills.xml"),
+        Talent("drawable/ic_skills.xml"),
+        Trait("drawable/ic_traits.xml"),
 
         // Conditions
         ConditionAblaze("drawable/ic_condition_ablaze.xml"),
