@@ -38,10 +38,14 @@ data class Character(
     val avatarUrl: String? = null,
     val money: Money = Money.zero(),
     val hiddenTabs: Set<CharacterTab> = emptySet(),
+    val size: Size? = null,
 ) {
 
     val characteristics: Stats get() = characteristicsBase + characteristicsAdvances
-    val wounds: Wounds get() = Wounds(points.wounds, calculateMaxWounds(race, points, hasHardyTalent, characteristics))
+    val wounds: Wounds get() = Wounds(
+        points.wounds,
+        calculateMaxWounds(size ?: race?.size, points, hasHardyTalent, characteristics),
+    )
 
     init {
         require(userId == null || type == CharacterType.PLAYER_CHARACTER) {
@@ -63,7 +67,12 @@ data class Character(
         require(note.length <= NOTE_MAX_LENGTH) { "Note is too long" }
         require(!isArchived || userId == null) { "Only non-user-characters can be archived" }
 
-        val maxWounds = calculateMaxWounds(race, points, hasHardyTalent, characteristics)
+        val maxWounds = calculateMaxWounds(
+            size ?: race?.size,
+            points,
+            hasHardyTalent,
+            characteristics,
+        )
         require(points.wounds <= maxWounds) { "Wounds (${points.wounds} are greater than max Wounds ($maxWounds)" }
     }
 
@@ -73,7 +82,7 @@ data class Character(
             characteristicsAdvances = advances,
             points = points.copy(
                 wounds = points.wounds.coerceAtMost(
-                    calculateMaxWounds(race, points, hasHardyTalent, base + advances)
+                    calculateMaxWounds(size ?: race?.size, points, hasHardyTalent, base + advances)
                 )
             )
         )
@@ -98,7 +107,7 @@ data class Character(
         motivation = motivation,
         note = note,
         points = points.coerceWoundsAtMost(
-            calculateMaxWounds(race, points, hasHardyTalent, characteristics)
+            calculateMaxWounds(size ?: race?.size, points, hasHardyTalent, characteristics)
         )
     )
 
@@ -107,7 +116,7 @@ data class Character(
         return copy(
             hasHardyTalent = hasHardyTalent,
             points = newPoints.coerceWoundsAtMost(
-                calculateMaxWounds(race, newPoints, hasHardyTalent, characteristics)
+                calculateMaxWounds(size ?: race?.size, newPoints, hasHardyTalent, characteristics)
             ),
         )
     }
@@ -156,13 +165,13 @@ data class Character(
         const val NOTE_MAX_LENGTH = 400
 
         private fun calculateMaxWounds(
-            race: Race?,
+            size: Size?,
             points: Points,
             hasHardyTalent: Boolean,
             characteristics: Stats,
         ): Int {
             val baseWounds = points.maxWounds
-                ?: Wounds.calculateMax(race?.size ?: Size.AVERAGE, characteristics)
+                ?: Wounds.calculateMax(size ?: Size.AVERAGE, characteristics)
 
             return if (hasHardyTalent) // TODO: Support multiple Hardy that is multiple times taken
                 baseWounds + characteristics.toughnessBonus

@@ -395,6 +395,7 @@ service cloud.firestore {
                             "name",
                             "publicName",
                             "career",
+                            "size",
                             "socialClass",
                             "status",
                             "points",
@@ -447,6 +448,19 @@ service cloud.firestore {
                                     "RELIGION",
                                     "TRAPPINGS"
                                 ].hasAll(character.hiddenTabs)
+                            )
+                        )
+                        && (! ("size" in character) || character.size == null || (
+                            character.size is string
+                                && character.size in [
+                                    "TINY",
+                                    "LITTLE",
+                                    "SMALL",
+                                    "AVERAGE",
+                                    "LARGE",
+                                    "ENORMOUS",
+                                    "MONSTROUS"
+                                ]
                             )
                         )
                         && (! ("avatarUrl" in character) || character.avatarUrl is string || character.avatarUrl == null)
