@@ -437,6 +437,7 @@ data class CompendiumStrings(
     val pickPromptSpells: String = "Select which spells you want to import.",
     val pickPromptBlessings: String = "Select which blessings you want to import.",
     val pickPromptMiracles: String = "Select which miracles you want to import.",
+    val pickPromptTraits: String = "Select which traits you want to import.",
     val rulebookStoreLink: String = "https://www.drivethrurpg.com/product/248284/Warhammer-Fantasy-Roleplay-Fourth-Edition-Rulebook?affiliate_id=2708720",
     val tabBlessings: String = "Blessings",
     val tabMiracles: String = "Miracles",

@@ -98,6 +98,10 @@ class CompendiumScreenModel(
         traitCompendium.saveItems(partyId, trait)
     }
 
+
+    suspend fun saveMultipleTraits(traits: List<Trait>) {
+        traitCompendium.saveItems(partyId, *traits.toTypedArray())
+    }
     suspend fun remove(trait: Trait) {
         traitCompendium.remove(partyId, trait)
     }
