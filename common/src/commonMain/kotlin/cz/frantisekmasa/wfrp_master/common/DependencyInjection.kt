@@ -175,7 +175,7 @@ val appModule = DI.Module("Common") {
         SpellsScreenModel(characterId, instance(), instance())
     }
     bindFactory { characterId: CharacterId ->
-        TalentsScreenModel(characterId, instance(), instance())
+        TalentsScreenModel(characterId, instance(), instance(), instance())
     }
     bindFactory { characterId: CharacterId ->
         MiraclesScreenModel(characterId, instance(), instance())
@@ -185,7 +185,7 @@ val appModule = DI.Module("Common") {
     }
 
     bindSingleton { EffectFactory() }
-    bindSingleton { EffectManager(instance(), instance(), instance(), instance()) }
+    bindSingleton { EffectManager(instance(), instance(), instance(), instance(), instance()) }
     bindFactory { characterId: CharacterId ->
         TraitsScreenModel(characterId, instance(), instance(), instance())
     }

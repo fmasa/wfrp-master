@@ -3,6 +3,7 @@ package cz.frantisekmasa.wfrp_master.common.character.effects
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.Character
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.CharacterRepository
 import cz.frantisekmasa.wfrp_master.common.core.domain.identifiers.CharacterId
+import cz.frantisekmasa.wfrp_master.common.core.domain.talents.TalentRepository
 import cz.frantisekmasa.wfrp_master.common.core.domain.traits.TraitRepository
 import cz.frantisekmasa.wfrp_master.common.core.shared.IO
 import cz.frantisekmasa.wfrp_master.common.firebase.firestore.Firestore
@@ -14,6 +15,7 @@ import kotlinx.coroutines.flow.first
 class EffectManager(
     private val characters: CharacterRepository,
     private val traits: TraitRepository,
+    private val talents: TalentRepository,
     private val effectFactory: EffectFactory,
     private val firestore: Firestore,
 ) {
@@ -47,6 +49,9 @@ class EffectManager(
                 is EffectSource.Trait -> {
                     traits.save(transaction, characterId, source.trait)
                 }
+                is EffectSource.Talent -> {
+                    talents.save(transaction, characterId, source.talent)
+                }
             }
         }
     }
@@ -74,13 +79,19 @@ class EffectManager(
                 is EffectSource.Trait -> {
                     traits.remove(transaction, characterId, source.trait.id)
                 }
+                is EffectSource.Talent -> {
+                    talents.remove(transaction, characterId, source.talent.id)
+                }
             }
         }
     }
 
-    private suspend fun effectSources(characterId: CharacterId): List<EffectSource> {
-        return traits.findAllForCharacter(characterId).first()
-            .map { EffectSource.Trait(it) }
+    private suspend fun effectSources(characterId: CharacterId): List<EffectSource> = coroutineScope {
+        val traits = async(Dispatchers.IO) { traits.findAllForCharacter(characterId).first() }
+        val talents = async(Dispatchers.IO) { talents.findAllForCharacter(characterId).first() }
+
+        traits.await().map { EffectSource.Trait(it) } +
+            talents.await().map { EffectSource.Talent(it) }
     }
 
     private fun Character.apply(
