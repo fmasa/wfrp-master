@@ -65,6 +65,7 @@ fun <T : Any> SearchableList(
 
     Scaffold(
         modifier = modifier,
+        floatingActionButton = floatingActionButton ?: {},
         topBar = {
             val searchVisible by derivedStateOf { searchActive || searchedValue != "" }
             val colors = textFieldColors()
