@@ -2,6 +2,8 @@ package cz.frantisekmasa.wfrp_master.common.character.talents
 
 import cafe.adriel.voyager.core.model.coroutineScope
 import com.benasher44.uuid.Uuid
+import cz.frantisekmasa.wfrp_master.common.character.effects.EffectManager
+import cz.frantisekmasa.wfrp_master.common.character.effects.EffectSource
 import cz.frantisekmasa.wfrp_master.common.core.CharacterItemScreenModel
 import cz.frantisekmasa.wfrp_master.common.core.domain.compendium.Compendium
 import cz.frantisekmasa.wfrp_master.common.core.domain.identifiers.CharacterId
@@ -16,12 +18,15 @@ class TalentsScreenModel(
     private val characterId: CharacterId,
     private val talentRepository: TalentRepository,
     private val compendium: Compendium<CompendiumTalent>,
+    private val effectManager: EffectManager,
 ) : CharacterItemScreenModel<Talent, CompendiumTalent>(characterId, talentRepository, compendium) {
 
-    suspend fun saveTalent(talent: Talent) = talentRepository.save(characterId, talent)
+    suspend fun saveTalent(talent: Talent) {
+        effectManager.saveEffectSource(characterId, EffectSource.Talent(talent))
+    }
 
     fun removeTalent(talent: Talent) = coroutineScope.launch(Dispatchers.IO) {
-        talentRepository.remove(characterId, talent.id)
+        effectManager.removeEffectSource(characterId, EffectSource.Talent(talent))
     }
 
     suspend fun saveCompendiumTalent(talentId: Uuid, compendiumTalentId: Uuid, timesTaken: Int) {
@@ -30,8 +35,7 @@ class TalentsScreenModel(
             itemId = compendiumTalentId,
         )
 
-        talentRepository.save(
-            characterId,
+        saveTalent(
             Talent(
                 id = talentId,
                 compendiumId = compendiumTalent.id,

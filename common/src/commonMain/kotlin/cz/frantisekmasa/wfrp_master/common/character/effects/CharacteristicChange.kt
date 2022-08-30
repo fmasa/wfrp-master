@@ -107,5 +107,91 @@ open class CharacteristicChange(
 
             return null
         }
+
+        fun fromTalentNameOrNull(name: String): CharacteristicChange? {
+            val cleanName = name.lowercase()
+
+            if (cleanName == "savvy") {
+                return CharacteristicChange(
+                    plus = Stats.ZERO.copy(
+                        intelligence = 5,
+                    ),
+                )
+            }
+
+            if (cleanName == "suave") {
+                return CharacteristicChange(
+                    plus = Stats.ZERO.copy(
+                        fellowship = 5,
+                    ),
+                )
+            }
+
+            if (cleanName == "marksman") {
+                return CharacteristicChange(
+                    plus = Stats.ZERO.copy(
+                        ballisticSkill = 5,
+                    ),
+                )
+            }
+
+            if (cleanName == "very strong") {
+                return CharacteristicChange(
+                    plus = Stats.ZERO.copy(
+                        strength = 5,
+                    ),
+                )
+            }
+
+            if (cleanName == "sharp") {
+                return CharacteristicChange(
+                    plus = Stats.ZERO.copy(
+                        initiative = 5,
+                    ),
+                )
+            }
+
+            if (cleanName == "lightning reflexes") {
+                return CharacteristicChange(
+                    plus = Stats.ZERO.copy(
+                        agility = 5,
+                    ),
+                )
+            }
+
+            if (cleanName == "coolheaded") {
+                return CharacteristicChange(
+                    plus = Stats.ZERO.copy(
+                        willPower = 5,
+                    ),
+                )
+            }
+
+            if (cleanName == "very resilient") {
+                return CharacteristicChange(
+                    plus = Stats.ZERO.copy(
+                        toughness = 5,
+                    ),
+                )
+            }
+
+            if (cleanName == "nimble fingered") {
+                return CharacteristicChange(
+                    plus = Stats.ZERO.copy(
+                        dexterity = 5,
+                    ),
+                )
+            }
+
+            if (cleanName == "warrior born") {
+                return CharacteristicChange(
+                    plus = Stats.ZERO.copy(
+                        weaponSkill = 5,
+                    ),
+                )
+            }
+
+            return null
+        }
     }
 }

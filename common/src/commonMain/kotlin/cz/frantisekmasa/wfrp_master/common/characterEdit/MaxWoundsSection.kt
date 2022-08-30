@@ -20,6 +20,8 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.forms.InputValue
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.Rules
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.TextInput
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.inputValue
+import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.UserTip
+import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.UserTipCard
 import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
 
 
@@ -47,6 +49,10 @@ fun MaxWoundsSection(character: Character, screenModel: CharacterScreenModel) {
                 validate = validate,
                 placeholder = strings.autoMaxWoundsPlaceholder,
             )
+
+            if (formData.hardyTalent.value) {
+                UserTipCard(UserTip.HARDY_TALENTS)
+            }
 
             CheckboxWithText(
                 text = strings.labelHardy,
