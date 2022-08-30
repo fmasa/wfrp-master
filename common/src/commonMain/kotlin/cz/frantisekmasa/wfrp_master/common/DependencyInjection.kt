@@ -218,6 +218,7 @@ val appModule = DI.Module("Common") {
             instance(),
             instance(),
             instance(),
+            instance(),
         )
     }
     bindFactory { partyId: PartyId -> PartySettingsScreenModel(partyId, instance()) }
