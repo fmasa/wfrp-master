@@ -828,6 +828,8 @@ data class TalentStrings(
     val labelMaxTimesTaken: String = "Max",
     val labelTimesTaken: String = "Times taken",
     val messages: TalentMessageStrings = TalentMessageStrings(),
+    val tipHardyTalentCheckbox: String = "Hardy checkbox will be removed in the future.\n" +
+        "Add Talent called \"Hardy\" and delete manual Max. Wounds value instead.",
     val titleChooseCompendiumTalent: String = "Choose Compendium talent…",
     val titleAdd: String = "Add Talent",
     val titleNew: String = "New Talent",

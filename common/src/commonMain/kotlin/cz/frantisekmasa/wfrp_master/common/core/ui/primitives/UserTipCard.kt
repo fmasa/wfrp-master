@@ -105,4 +105,5 @@ fun UserTipCard(tip: UserTip, modifier: Modifier = Modifier) {
 
 enum class UserTip(override val nameResolver: (strings: Strings) -> String) : NamedEnum {
     ARMOUR_TRAPPINGS({ it.armour.tipTrappings }),
+    HARDY_TALENTS({ it.talents.tipHardyTalentCheckbox })
 }
