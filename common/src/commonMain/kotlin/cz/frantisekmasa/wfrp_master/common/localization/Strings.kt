@@ -893,14 +893,19 @@ data class TraitStrings(
     val labelSpecifications: String = "Specifications",
     val messages: TraitMessageStrings = TraitMessageStrings(),
     val specificationsHelper: String = "Comma separated list of Specifications",
+    val titleChooseCompendiumTrait: String = "Choose Compendium trait…",
+    val titleAdd: String = "Add Trait",
     val titleNew: String = "New Trait",
     val titleEdit: String = "Edit Trait",
-)
+    val titleTraits: String = "Traits",
+) {
+}
 
 @Immutable
 data class TraitMessageStrings(
     val noTraitsInCompendium: String = "No traits",
     val noTraitsInCompendiumSubtext: String = "There are no traits in your compendium yet.",
+    val compendiumTraitRemoved: String = "Compendium trait was removed in the meantime",
 )
 
 @Immutable

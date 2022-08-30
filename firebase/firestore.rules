@@ -273,6 +273,25 @@ service cloud.firestore {
                     }
                 }
 
+                match /traits/{traitId} {
+                    allow read: if hasAccessToParty();
+                    allow create: if canEditCharacter() && isValidTrait(request.resource.data);
+                    allow update: if canEditCharacter() && isValidTrait(request.resource.data);
+                    allow delete: if canEditCharacter();
+                    function isValidTrait(trait) {
+                        return trait.keys().toSet() == ["id", "name", "specificationValues", "description", "compendiumId"].toSet()
+                               && trait.id is string && trait.id == traitId && isValidUuid(trait.id)
+                               && trait.name is string && isNotBlank(trait.name) && trait.name.size() <= 50
+                               && trait.description is string && trait.description.size() <= 3000
+                               && (! ("compendiumId" in trait)
+                                   || (
+                            trait.compendiumId == null
+                                        || (trait.compendiumId is string && exists(/databases/$(database)/documents/parties/$(partyId)/traits/$(trait.compendiumId)))
+                                )
+                              );
+                    }
+                }
+
                 match /spells/{spellId} {
                     allow read: if hasAccessToParty();
                     allow create: if canEditCharacter() && isValidSpell(request.resource.data);

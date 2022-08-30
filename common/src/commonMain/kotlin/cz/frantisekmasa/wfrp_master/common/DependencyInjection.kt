@@ -10,6 +10,7 @@ import cz.frantisekmasa.wfrp_master.common.character.religion.miracles.MiraclesS
 import cz.frantisekmasa.wfrp_master.common.character.skills.SkillsScreenModel
 import cz.frantisekmasa.wfrp_master.common.character.spells.SpellsScreenModel
 import cz.frantisekmasa.wfrp_master.common.character.talents.TalentsScreenModel
+import cz.frantisekmasa.wfrp_master.common.character.traits.TraitsScreenModel
 import cz.frantisekmasa.wfrp_master.common.character.trappings.TrappingsScreenModel
 import cz.frantisekmasa.wfrp_master.common.characterCreation.CharacterCreationScreenModel
 import cz.frantisekmasa.wfrp_master.common.combat.CombatScreenModel
@@ -38,6 +39,7 @@ import cz.frantisekmasa.wfrp_master.common.core.domain.religion.MiracleRepositor
 import cz.frantisekmasa.wfrp_master.common.core.domain.skills.SkillRepository
 import cz.frantisekmasa.wfrp_master.common.core.domain.spells.SpellRepository
 import cz.frantisekmasa.wfrp_master.common.core.domain.talents.TalentRepository
+import cz.frantisekmasa.wfrp_master.common.core.domain.traits.TraitRepository
 import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.InventoryItemRepository
 import cz.frantisekmasa.wfrp_master.common.core.firebase.Schema
 import cz.frantisekmasa.wfrp_master.common.core.firebase.functions.CloudFunctionCharacterAvatarChanger
@@ -125,6 +127,7 @@ val appModule = DI.Module("Common") {
     bindSingleton<BlessingRepository> { characterItemRepository(Schema.Character.Blessings) }
     bindSingleton<MiracleRepository> { characterItemRepository(Schema.Character.Miracles) }
     bindSingleton<InventoryItemRepository> { characterItemRepository(Schema.Character.InventoryItems) }
+    bindSingleton<TraitRepository> { characterItemRepository(Schema.Character.Traits) }
 
     bindSingleton<CharacterRepository> {
         CharacterRepositoryIdentityMap(10, FirestoreCharacterRepository(instance(), mapper()))
@@ -177,6 +180,10 @@ val appModule = DI.Module("Common") {
     }
     bindFactory { characterId: CharacterId ->
         BlessingsScreenModel(characterId, instance(), instance())
+    }
+
+    bindFactory { characterId: CharacterId ->
+        TraitsScreenModel(characterId, instance(), instance())
     }
     bindProvider { InvitationScreenModel(instance(), instance(), instance()) }
     bindProvider { PartyListScreenModel(instance()) }
