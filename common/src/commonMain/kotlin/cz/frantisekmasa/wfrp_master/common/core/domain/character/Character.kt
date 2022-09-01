@@ -233,6 +233,8 @@ data class Character(
                 if (hasHardyTalent) {
                     return manualMaxWounds + tb
                 }
+
+                return manualMaxWounds
             }
 
             val baseWounds = Wounds.calculateMax(size ?: Size.AVERAGE, characteristics)
