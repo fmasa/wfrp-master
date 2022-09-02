@@ -26,11 +26,11 @@ class CharacterCombatScreenModel(
     private val characterFlow = characterRepository.getLive(characterId)
         .right()
     private val strengthBonusFlow = characterFlow
-        .map { it.characteristics.strengthBonus.toUInt() }
+        .map { it.characteristics.strengthBonus }
         .distinctUntilChanged()
 
-    val toughnessBonus: Flow<UInt> = characterFlow
-        .map { it.characteristics.toughnessBonus.toUInt() }
+    val toughnessBonus: Flow<Int> = characterFlow
+        .map { it.characteristics.toughnessBonus }
         .distinctUntilChanged()
 
     val equippedWeapons: Flow<List<Pair<WeaponEquip, List<EquippedWeapon>>>> =
@@ -95,7 +95,7 @@ class CharacterCombatScreenModel(
 
     private fun equippedWeaponOrNull(
         trapping: InventoryItem,
-        strengthBonus: UInt
+        strengthBonus: Int
     ): EquippedWeapon? {
         val type = trapping.trappingType
 
@@ -111,7 +111,7 @@ class CharacterCombatScreenModel(
             equip = equip,
             damage = type.damage.calculate(
                 strengthBonus = strengthBonus,
-                successLevels = 0.toUInt(),
+                successLevels = 0,
             )
         )
     }

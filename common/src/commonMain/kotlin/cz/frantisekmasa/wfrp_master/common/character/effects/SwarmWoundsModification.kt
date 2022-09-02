@@ -12,7 +12,7 @@ class SwarmWoundsModification: CharacterEffect {
 
         return character.modifyWounds(
             modifiers.copy(
-                afterMultiplier = modifiers.afterMultiplier * 5.toUInt(),
+                afterMultiplier = modifiers.afterMultiplier * 5,
             )
         )
     }
@@ -26,7 +26,7 @@ class SwarmWoundsModification: CharacterEffect {
 
         return character.modifyWounds(
             modifiers.copy(
-                afterMultiplier = modifiers.afterMultiplier / 5.toUInt(),
+                afterMultiplier = modifiers.afterMultiplier / 5,
             )
         )
     }

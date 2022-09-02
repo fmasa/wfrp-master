@@ -33,7 +33,7 @@ class SpellListGrammar(private val loreName: String) : Grammar<List<Spell>>() {
         Spell(
             id = UUID.randomUUID(),
             name = cleanupName(parts[0]),
-            castingNumber = parts[1].toUInt(),
+            castingNumber = parts[1].toInt(),
             range = extractTextValue(range),
             target = extractTextValue(target),
             duration = extractTextValue(duration),

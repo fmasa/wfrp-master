@@ -17,7 +17,7 @@ data class Spell(
     val range: String,
     val target: String,
     val duration: String,
-    val castingNumber: UInt,
+    val castingNumber: Int,
     val effect: String,
     val lore: String,
 ) : CompendiumItem<Spell>() {
@@ -32,6 +32,7 @@ data class Spell(
 
     init {
         require(name.isNotBlank()) { "Name must not be blank" }
+        require(castingNumber >= 0) { "Casting number cannot be negative" }
         require(name.length <= NAME_MAX_LENGTH) { "Name must be shorter than $NAME_MAX_LENGTH" }
         require(range.length <= RANGE_MAX_LENGTH) { "Range must be shorter than $RANGE_MAX_LENGTH" }
         require(target.length <= TARGET_MAX_LENGTH) { "Target must be shorter than $TARGET_MAX_LENGTH" }
