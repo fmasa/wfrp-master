@@ -10,9 +10,10 @@ import kotlinx.serialization.Serializable
 @Immutable
 data class WoundsModifiers(
     val afterMultiplier: UInt = 1.toUInt(),
-    val extraToughnessBonusMultiplier: UInt = 0.toUInt(),
+    val extraToughnessBonusMultiplier: Int = 0,
 ) : Parcelable {
     init {
+        require(extraToughnessBonusMultiplier >= 0)
         require(afterMultiplier >= 1.toUInt())
     }
 }
