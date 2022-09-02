@@ -136,7 +136,7 @@ private class NonCompendiumSpellFormData(
         range = range.value,
         target = target.value,
         duration = duration.value,
-        castingNumber = castingNumber.value.toUInt(),
+        castingNumber = castingNumber.value.toInt(),
         effect = effect.value,
     )
 

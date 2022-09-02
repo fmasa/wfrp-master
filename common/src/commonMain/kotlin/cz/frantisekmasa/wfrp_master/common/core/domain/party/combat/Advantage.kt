@@ -7,7 +7,11 @@ import kotlin.jvm.JvmInline
 @JvmInline
 @Immutable
 @Serializable
-value class Advantage(val value: UInt): Comparable<Advantage> {
+value class Advantage(val value: Int): Comparable<Advantage> {
+
+    init {
+        require(value >= 0) { "Advantage cannot be negative" }
+    }
 
     operator fun inc(): Advantage = Advantage(value.inc())
 
@@ -23,6 +27,6 @@ value class Advantage(val value: UInt): Comparable<Advantage> {
     override fun toString(): String = value.toString()
 
     companion object {
-        val ZERO = Advantage((0).toUInt())
+        val ZERO = Advantage(0)
     }
 }

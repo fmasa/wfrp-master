@@ -43,7 +43,7 @@ import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
 fun ArmourCard(
     armour: Armour,
     armourPieces: Map<HitLocation, List<WornArmourPiece>>,
-    toughnessBonus: UInt,
+    toughnessBonus: Int,
     onTrappingClick: (InventoryItem) -> Unit,
 ) {
     UserTipCard(UserTip.ARMOUR_TRAPPINGS, Modifier.padding(horizontal = 8.dp))
@@ -71,7 +71,7 @@ fun ArmourCard(
                     LocalStrings.current.characteristics.toughnessBonusShortcut,
                     Modifier.padding(end = Spacing.medium),
                 )
-                Points(toughnessBonus.toInt())
+                Points(toughnessBonus)
             }
 
             Row(

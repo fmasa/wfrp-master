@@ -56,7 +56,7 @@ class SpellListGrammarTest {
                 Spell(
                     id = result[0].id,
                     name = "Push ’em",
-                    castingNumber = 6.toUInt(),
+                    castingNumber = 6,
                     range = "You",
                     target = "You",
                     duration = "Instant",
@@ -73,7 +73,7 @@ class SpellListGrammarTest {
                 Spell(
                     id = result[1].id,
                     name = "Teleport",
-                    castingNumber = 5.toUInt(),
+                    castingNumber = 5,
                     range = "You",
                     target = "You",
                     duration = "Instant",
@@ -88,7 +88,7 @@ class SpellListGrammarTest {
                 Spell(
                     id = result[2].id,
                     name = "Terrifying",
-                    castingNumber = 7.toUInt(),
+                    castingNumber = 7,
                     range = "You",
                     target = "You",
                     duration = "Willpower Bonus Rounds",
@@ -98,7 +98,7 @@ class SpellListGrammarTest {
                 Spell(
                     id = result[3].id,
                     name = "Ward",
-                    castingNumber = 5.toUInt(),
+                    castingNumber = 5,
                     range = "You",
                     target = "You",
                     duration = "Willpower Bonus Rounds",

@@ -34,14 +34,13 @@ value class AdvantageCapExpression(val value: String) : Parcelable {
 
     fun calculate(characteristics: Stats): Advantage {
         if (value == "") {
-            return Advantage(UInt.MAX_VALUE)
+            return Advantage(Int.MAX_VALUE)
         }
 
         return Advantage(
             Expression.fromString(value, constantsFrom(characteristics))
                 .evaluate()
                 .coerceAtLeast(0)
-                .toUInt()
         )
     }
 

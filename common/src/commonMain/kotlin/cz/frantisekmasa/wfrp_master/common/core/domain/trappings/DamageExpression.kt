@@ -28,13 +28,13 @@ value class DamageExpression(val value: String) : Parcelable {
         STRENGTH_BONUS("SB")
     }
 
-    fun calculate(strengthBonus: UInt, successLevels: UInt): Damage {
+    fun calculate(strengthBonus: Int, successLevels: Int): Damage {
         val damage = Expression.fromString(
             value,
-            mapOf(Constant.STRENGTH_BONUS.value to strengthBonus.toInt()),
+            mapOf(Constant.STRENGTH_BONUS.value to strengthBonus),
         ).evaluate()
 
-        return Damage(damage.toUInt() + successLevels)
+        return Damage(damage + successLevels)
     }
 
     companion object {
