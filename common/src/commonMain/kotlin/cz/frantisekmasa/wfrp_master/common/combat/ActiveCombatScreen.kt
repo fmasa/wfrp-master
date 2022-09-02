@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -15,6 +16,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.BottomAppBar
+import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.ContentAlpha
 import androidx.compose.material.Divider
 import androidx.compose.material.Icon
@@ -67,14 +69,12 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.FullScreenProgress
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.ItemIcon
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.rememberScreenModel
-import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.LocalPersistentSnackbarHolder
 import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.OptionsAction
 import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.Subtitle
 import cz.frantisekmasa.wfrp_master.common.encounters.CombatantItem
 import cz.frantisekmasa.wfrp_master.common.encounters.domain.Wounds
 import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
 import cz.frantisekmasa.wfrp_master.common.npcs.NpcDetailScreen
-import io.github.aakira.napier.Napier
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -86,8 +86,6 @@ class ActiveCombatScreen(
     @Composable
     override fun Content() {
         val viewModel: CombatScreenModel = rememberScreenModel(arg = partyId)
-
-        AutoCloseOnEndedCombat(viewModel)
 
         val coroutineScope = rememberCoroutineScope()
 
@@ -151,11 +149,14 @@ class ActiveCombatScreen(
                                 }
 
                                 OptionsAction {
+                                    val navigator = LocalNavigator.currentOrThrow
+
                                     DropdownMenuItem(
                                         content = { Text(strings.combat.buttonEndCombat) },
                                         onClick = {
                                             coroutineScope.launch(Dispatchers.IO) {
                                                 viewModel.endCombat()
+                                                navigator.pop()
                                             }
                                         }
                                     )
@@ -169,6 +170,15 @@ class ActiveCombatScreen(
 
                     if (combatants == null || round == null || turn == null || party == null) {
                         FullScreenProgress()
+                        Box(
+                            modifier = Modifier.fillMaxSize(),
+                            contentAlignment = Alignment.Center,
+                        ) {
+                            Column {
+                                CircularProgressIndicator()
+                                Text(LocalStrings.current.combat.messages.waitingForCombat)
+                            }
+                        }
                         return@Scaffold
                     }
 
@@ -250,25 +260,6 @@ class ActiveCombatScreen(
                 animationSpec = SwipeableDefaults.AnimationSpec,
                 confirmStateChange = { true },
             )
-        }
-    }
-
-    @Composable
-    private fun AutoCloseOnEndedCombat(screenModel: CombatScreenModel) {
-        val isCombatActive = screenModel.isCombatActive.collectWithLifecycle(true).value
-        val message = LocalStrings.current.combat.messages.noActiveCombat
-        val snackbarHostState = LocalPersistentSnackbarHolder.current
-
-        if (!isCombatActive) {
-            val navigator = LocalNavigator.currentOrThrow
-
-            LaunchedEffect(Unit) {
-                Napier.d("Closing combat screen")
-
-                snackbarHostState.showSnackbar(message)
-
-                navigator.pop()
-            }
         }
     }
 
