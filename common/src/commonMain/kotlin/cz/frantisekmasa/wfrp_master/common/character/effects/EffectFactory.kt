@@ -16,7 +16,7 @@ class EffectFactory {
                 val name = item.talent.name.trim()
 
                 listOfNotNull(
-                    HardyWoundsModification.fromTalentOrNull(name, item.talent.taken.toUInt()),
+                    HardyWoundsModification.fromTalentOrNull(name, item.talent.taken),
                     CharacteristicChange.fromTalentNameOrNull(name),
                 )
             }
