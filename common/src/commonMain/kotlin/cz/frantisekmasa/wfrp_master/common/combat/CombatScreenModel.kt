@@ -73,10 +73,6 @@ class CombatScreenModel(
         .mapLatest { EncounterId(partyId, it.encounterId) }
         .distinctUntilChanged()
 
-    val isCombatActive: Flow<Boolean> = party
-        .mapLatest { it.activeCombat != null }
-        .distinctUntilChanged()
-
     val turn: Flow<Int> = combatFlow
         .mapLatest { it.getTurn() }
         .distinctUntilChanged()
