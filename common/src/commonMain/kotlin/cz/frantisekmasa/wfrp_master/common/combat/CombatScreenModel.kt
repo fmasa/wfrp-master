@@ -138,7 +138,7 @@ class CombatScreenModel(
         val globalEncounterId = EncounterId(partyId, encounterId)
         val combatants =
             characters.map {
-                it.characteristics to Combatant.Character(
+                characteristics(it) to Combatant.Character(
                     id = uuid4(),
                     characterId = it.id,
                     initiative = 1,
@@ -152,9 +152,11 @@ class CombatScreenModel(
                     )
                 } +
                 npcCharacters.flatMap { (character, count) ->
+                    val characteristics = characteristics(character)
+
                     if (count == 1)
                         listOf(
-                            character.characteristics to Combatant.Character(
+                            characteristics to Combatant.Character(
                                 id = uuid4(),
                                 name = character.publicName,
                                 characterId = character.id,
@@ -162,7 +164,7 @@ class CombatScreenModel(
                             )
                         )
                     else (1..count).map { index ->
-                        character.characteristics to Combatant.Character(
+                        characteristics to Combatant.Character(
                             id = uuid4(),
                             characterId = character.id,
                             initiative = 1,
@@ -177,6 +179,16 @@ class CombatScreenModel(
         }
 
         Reporter.recordEvent("combat_started", mapOf("partyId" to partyId.toString()))
+    }
+
+    private suspend fun characteristics(character: Character): Stats {
+        val talents = talents.findAllForCharacter(CharacterId(partyId, character.id)).first()
+
+        val initiativeIncrease = talents
+            .filter { it.name.equals("Combat Reflexes", ignoreCase = true) }
+            .sumOf { it.taken } * 10
+
+        return character.characteristics + Stats.ZERO.copy(initiative = initiativeIncrease)
     }
 
     suspend fun previousTurn() = updateCombat { it.previousTurn() }
