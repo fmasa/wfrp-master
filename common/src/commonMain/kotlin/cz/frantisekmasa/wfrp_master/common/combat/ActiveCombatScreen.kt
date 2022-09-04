@@ -454,10 +454,14 @@ class ActiveCombatScreen(
                     },
                     text = { Text(combatant.name) },
                     trailing = {
-                        val advantage = combatant.combatant.advantage
+                        Column(horizontalAlignment = Alignment.End) {
+                            Text("I: ${combatant.combatant.initiative}")
 
-                        if (advantage > Advantage.ZERO) {
-                            Text("$advantage A", fontWeight = FontWeight.Bold)
+                            val advantage = combatant.combatant.advantage
+
+                            if (advantage > Advantage.ZERO) {
+                                Text("A: $advantage", fontWeight = FontWeight.Bold)
+                            }
                         }
                     }
                 )
