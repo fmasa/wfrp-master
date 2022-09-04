@@ -146,7 +146,6 @@ data class CareerLevelDialogData(
         )
     }
 
-
     companion object {
         @Composable
         fun fromCareerLevel(level: Career.Level?) = CareerLevelDialogData(

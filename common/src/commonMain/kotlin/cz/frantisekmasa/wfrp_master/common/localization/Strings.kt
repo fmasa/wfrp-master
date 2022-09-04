@@ -465,6 +465,7 @@ data class CompendiumStrings(
     val iconAddCompendiumItem: String = "Add compendium item",
     val importPrompt: String = "Import compendium from official WFRP rulebook.",
     val messages: CompendiumMessageStrings = CompendiumMessageStrings(),
+    val pickPromptCareers: String = "Select which careers you want to import.",
     val pickPromptSkills: String = "Select which skills you want to import.",
     val pickPromptTalents: String = "Select which talents you want to import.",
     val pickPromptSpells: String = "Select which spells you want to import.",

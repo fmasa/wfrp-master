@@ -41,5 +41,4 @@ fun SocialStatusInput(value: SocialStatus, onValueChange: (SocialStatus) -> Unit
             )
         }
     }
-
 }

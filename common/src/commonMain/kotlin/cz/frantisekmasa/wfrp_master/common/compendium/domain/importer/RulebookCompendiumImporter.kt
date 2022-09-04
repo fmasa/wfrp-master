@@ -4,6 +4,7 @@ import com.github.h0tk3y.betterParse.grammar.parseToEnd
 import com.lowagie.text.pdf.PdfReader
 import com.lowagie.text.pdf.parser.PdfTextExtractor
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.Blessing
+import cz.frantisekmasa.wfrp_master.common.compendium.domain.Career
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.Miracle
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.Skill
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.Spell
@@ -112,6 +113,10 @@ class RulebookCompendiumImporter(rulebookPdf: InputStream) :
 
     override suspend fun importTraits(): List<Trait> {
         return RulebookTraitImporter.importTraits(reader).toList()
+    }
+
+    override suspend fun importCareers(): List<Career> {
+        return RulebookCareerImporter().importCareers(reader).toList()
     }
 
     private fun splitMiraclesByCult(text: String): Sequence<Pair<String, String>> {

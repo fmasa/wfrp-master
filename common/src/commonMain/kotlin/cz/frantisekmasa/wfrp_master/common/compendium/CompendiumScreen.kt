@@ -102,7 +102,6 @@ class CompendiumScreen(
     }
 }
 
-
 @Composable
 fun <T : CompendiumItem<T>> CompendiumTab(
     liveItems: Flow<List<T>>,

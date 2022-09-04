@@ -348,6 +348,5 @@ private fun LevelList(
                 }
             )
         }
-
     }
 }
