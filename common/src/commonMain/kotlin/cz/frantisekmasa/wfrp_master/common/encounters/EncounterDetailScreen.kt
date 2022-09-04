@@ -199,7 +199,11 @@ class EncounterDetailScreen(
                             Text(strings.commonUi.buttonRemove)
                         }
                     },
-                    dismissButton = { dialogOpened = false }
+                    dismissButton = {
+                        TextButton(onClick = { dialogOpened = false }) {
+                            Text(strings.commonUi.buttonCancel)
+                        }
+                    }
                 )
             }
 
