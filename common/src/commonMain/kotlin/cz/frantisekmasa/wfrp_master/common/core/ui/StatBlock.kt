@@ -14,6 +14,8 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.ClickableText
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Divider
+import androidx.compose.material.LocalContentAlpha
+import androidx.compose.material.LocalContentColor
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -175,7 +177,12 @@ private fun <T : CharacterItem> CharacterItemList(
         }
     }
 
-    ClickableText(text) { offset ->
+    ClickableText(
+        text,
+        style = MaterialTheme.typography.body2.copy(
+            color = LocalContentColor.current.copy(alpha = LocalContentAlpha.current),
+        )
+    ) { offset ->
         text.getStringAnnotations(SkillTag, offset, offset)
             .firstOrNull()
             ?.let { range ->
