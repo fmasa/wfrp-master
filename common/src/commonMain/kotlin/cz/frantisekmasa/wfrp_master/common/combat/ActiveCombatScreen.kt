@@ -411,7 +411,7 @@ class ActiveCombatScreen(
 
         NumberPicker(
             label = LocalStrings.current.combat.labelAdvantage,
-            value = advantage.value.toInt(),
+            value = advantage.value,
             onIncrement = { updateAdvantage(advantage.inc().coerceAtMost(advantageCap)) },
             onDecrement = { updateAdvantage(advantage.dec()) },
         )
