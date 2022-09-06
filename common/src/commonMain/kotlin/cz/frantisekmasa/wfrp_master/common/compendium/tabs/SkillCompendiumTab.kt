@@ -41,7 +41,6 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.ItemIcon
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
 import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
 
-
 @Composable
 fun SkillCompendiumTab(screenModel: CompendiumScreenModel, width: Dp) {
     val messages = LocalStrings.current.skills.messages

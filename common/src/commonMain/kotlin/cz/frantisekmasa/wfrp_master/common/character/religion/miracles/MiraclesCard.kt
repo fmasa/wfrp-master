@@ -25,7 +25,6 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.EmptyUI
 import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
 import kotlinx.coroutines.launch
 
-
 @Composable
 internal fun MiraclesCard(screenModel: MiraclesScreenModel) {
     val miracles = screenModel.items.collectWithLifecycle(null).value ?: return

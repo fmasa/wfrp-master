@@ -35,7 +35,6 @@ import io.github.aakira.napier.Napier
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-
 @Composable
 internal fun TimesTakenForm(
     existingTalent: Talent?,

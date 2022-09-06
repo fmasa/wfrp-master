@@ -83,7 +83,6 @@ import org.kodein.di.instance
 import kotlin.random.Random
 import cz.frantisekmasa.wfrp_master.common.core.firebase.serializationAggregateMapper as mapper
 
-
 val appModule = DI.Module("Common") {
     import(platformModule)
 
@@ -232,10 +231,12 @@ val appModule = DI.Module("Common") {
             HttpClient(ktorEngine) {
                 install(HttpCache)
                 install(ContentNegotiation) {
-                    json(Json {
-                        ignoreUnknownKeys = true
-                        encodeDefaults = true
-                    })
+                    json(
+                        Json {
+                            ignoreUnknownKeys = true
+                            encodeDefaults = true
+                        }
+                    )
                 }
             }
         )

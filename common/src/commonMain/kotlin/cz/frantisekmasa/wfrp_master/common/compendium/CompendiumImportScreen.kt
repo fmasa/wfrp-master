@@ -39,7 +39,6 @@ import io.github.aakira.napier.Napier
 import kotlinx.coroutines.async
 import java.lang.OutOfMemoryError
 
-
 class CompendiumImportScreen(
     private val partyId: PartyId,
 ) : Screen {

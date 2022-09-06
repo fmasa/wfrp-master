@@ -82,7 +82,7 @@ import kotlinx.coroutines.withContext
 
 class ActiveCombatScreen(
     private val partyId: PartyId,
-): Screen {
+) : Screen {
     @Composable
     override fun Content() {
         val viewModel: CombatScreenModel = rememberScreenModel(arg = partyId)
@@ -459,5 +459,4 @@ class ActiveCombatScreen(
             }
         }
     }
-
 }

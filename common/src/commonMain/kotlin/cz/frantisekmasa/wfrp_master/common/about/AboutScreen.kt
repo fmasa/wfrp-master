@@ -20,8 +20,7 @@ import cz.frantisekmasa.wfrp_master.common.core.LocalStaticConfiguration
 import cz.frantisekmasa.wfrp_master.common.core.ui.buttons.BackButton
 import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
 
-
-object AboutScreen: Screen {
+object AboutScreen : Screen {
     @Composable
     override fun Content() {
         val strings = LocalStrings.current.about

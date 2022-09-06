@@ -16,7 +16,6 @@ import cz.frantisekmasa.wfrp_master.common.firebase.firestore.Source
 import io.github.aakira.napier.Napier
 import kotlinx.coroutines.flow.map
 
-
 class FirestorePartyRepository(
     private val firestore: Firestore,
     private val mapper: AggregateMapper<Party>
@@ -77,7 +76,6 @@ class FirestorePartyRepository(
                     { PartyNotFound(id, it).left() }
                 )
             }
-
 
     override fun forUserLive(userId: String) = queryForUser(userId).documents(mapper)
 

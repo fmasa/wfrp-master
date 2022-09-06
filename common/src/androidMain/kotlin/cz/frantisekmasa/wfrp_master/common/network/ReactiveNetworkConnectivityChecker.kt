@@ -6,7 +6,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.rx2.asFlow
 
-class ReactiveNetworkConnectivityChecker(private val context: Context): ConnectivityChecker {
+class ReactiveNetworkConnectivityChecker(private val context: Context) : ConnectivityChecker {
     override val availability: Flow<Boolean> by lazy {
         ReactiveNetwork.observeNetworkConnectivity(context)
             .asFlow()

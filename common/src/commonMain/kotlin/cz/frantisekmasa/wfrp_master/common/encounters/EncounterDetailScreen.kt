@@ -350,7 +350,6 @@ class EncounterDetailScreen(
     }
 }
 
-
 @Composable
 private fun NpcCharacterList(
     partyId: PartyId,

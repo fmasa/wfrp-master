@@ -7,7 +7,6 @@ import cz.frantisekmasa.wfrp_master.common.character.religion.miracles.MiraclesS
 import cz.frantisekmasa.wfrp_master.common.core.ui.dialogs.FullScreenDialog
 import cz.frantisekmasa.wfrp_master.common.core.ui.flow.collectWithLifecycle
 
-
 @Composable
 internal fun EditMiracleDialog(
     screenModel: MiraclesScreenModel,

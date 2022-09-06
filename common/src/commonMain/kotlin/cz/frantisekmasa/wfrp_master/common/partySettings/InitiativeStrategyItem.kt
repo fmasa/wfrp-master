@@ -67,4 +67,3 @@ private fun InitiativeStrategyDialog(
         Text(strategy.localizedName)
     }
 }
-

@@ -18,7 +18,6 @@ import cz.frantisekmasa.wfrp_master.common.core.shared.drawableResource
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.VisualOnlyIconDescription
 import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
 
-
 @Composable
 fun MoneyBalance(value: Money, modifier: Modifier = Modifier) {
     Row(

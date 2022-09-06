@@ -52,7 +52,6 @@ fun Breadcrumbs(content: BreadcrumbsScope.() -> Unit) {
     }
 }
 
-
 interface BreadcrumbsScope {
     fun level(label: String, destination: (() -> Screen)? = null)
 }

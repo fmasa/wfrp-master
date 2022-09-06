@@ -19,7 +19,6 @@ class NativeFileChooser(
             isVisible = true
 
             filenameFilter = FilenameFilter { _, fileName -> allowedExtensions(type).any { fileName.endsWith(it) } }
-
         }
 
         val file = dialog.files.firstOrNull()

@@ -30,7 +30,6 @@ import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-
 @Composable
 internal fun <A : CharacterItem, B : CompendiumItem<B>> CompendiumItemChooser(
     title: String,

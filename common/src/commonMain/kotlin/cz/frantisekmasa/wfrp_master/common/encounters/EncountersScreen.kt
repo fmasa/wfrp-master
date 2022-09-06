@@ -92,12 +92,11 @@ class EncountersScreen(
             EncounterList(
                 encounters,
                 screenModel,
-                onClick = { navigator.push(EncounterDetailScreen(EncounterId(partyId, it.id)))},
+                onClick = { navigator.push(EncounterDetailScreen(EncounterId(partyId, it.id))) },
             )
         }
     }
 }
-
 
 @Composable
 private fun AddEncounterButton(onCreateEncounterRequest: () -> Unit) {

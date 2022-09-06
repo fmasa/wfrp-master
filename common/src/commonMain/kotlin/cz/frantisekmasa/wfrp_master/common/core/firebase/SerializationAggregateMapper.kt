@@ -18,7 +18,6 @@ import kotlinx.serialization.modules.SerializersModule
 import kotlinx.serialization.modules.contextual
 import kotlinx.serialization.serializer
 
-
 class SerializationAggregateMapper<T : Any>(
     private val serializer: KSerializer<T>,
 ) : AggregateMapper<T> {
@@ -66,13 +65,15 @@ class SerializationAggregateMapper<T : Any>(
         is JsonArray -> value.map { unwrapJsonElement(it) }
         is JsonObject -> value.mapValues { unwrapJsonElement(it.value) }
         is JsonPrimitive ->
-            (if (value.isString) value.content else
-                value.booleanOrNull ?:
-                value.intOrNull ?:
-                value.floatOrNull ?:
-                value.longOrNull ?:
-                error("Unknown JSON primitive type ${value.content}"))
-        else ->  error("Unknown JSON type $value")
+            (
+                if (value.isString) value.content else
+                    value.booleanOrNull
+                        ?: value.intOrNull
+                        ?: value.floatOrNull
+                        ?: value.longOrNull
+                        ?: error("Unknown JSON primitive type ${value.content}")
+                )
+        else -> error("Unknown JSON type $value")
     }
 
     companion object {

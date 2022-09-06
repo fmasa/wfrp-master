@@ -54,7 +54,6 @@ fun WellBeingSection(character: Character, screenModel: CharacterScreenModel) {
     }
 }
 
-
 @Stable
 private data class WellBeingFormData(
     val corruptionPoints: MutableState<Int>,

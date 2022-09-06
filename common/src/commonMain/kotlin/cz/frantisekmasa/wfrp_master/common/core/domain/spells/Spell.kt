@@ -9,7 +9,6 @@ import kotlinx.serialization.Contextual
 import kotlinx.serialization.Serializable
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.Spell as CompendiumSpell
 
-
 @Parcelize
 @Serializable
 @Immutable
@@ -24,7 +23,6 @@ data class Spell(
     val effect: String,
     val memorized: Boolean = true, // TODO: Remove default value and migrate stored data
 ) : CharacterItem {
-
 
     val effectiveCastingNumber: Int get() = if (memorized)
         castingNumber

@@ -37,7 +37,6 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.TopBarAction
 import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
 import kotlin.math.absoluteValue
 
-
 @Composable
 internal fun OptionsForm(
     screenModel: SkillTestScreenModel,
@@ -187,4 +186,3 @@ private val Int.signSymbol get() = when {
     this < 0 -> "-"
     else -> "+"
 }
-

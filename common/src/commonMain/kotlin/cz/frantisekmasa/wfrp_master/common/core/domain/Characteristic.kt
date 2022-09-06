@@ -49,7 +49,7 @@ enum class Characteristic(override val nameResolver: (strings: Strings) -> Strin
     }
 
     @Composable
-    fun getIcon(): Resources.Drawable = when(this) {
+    fun getIcon(): Resources.Drawable = when (this) {
         AGILITY -> Resources.Drawable.Agility
         BALLISTIC_SKILL -> Resources.Drawable.BallisticSkill
         DEXTERITY -> Resources.Drawable.Dexterity

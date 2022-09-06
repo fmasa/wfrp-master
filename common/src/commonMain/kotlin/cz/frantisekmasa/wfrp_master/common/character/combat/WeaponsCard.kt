@@ -69,13 +69,15 @@ private fun WeaponList(weapons: List<EquippedWeapon>, onTrappingClick: (Inventor
                 icon = { ItemIcon(trappingIcon(equippedWeapon.weapon), ItemIcon.Size.Small) },
                 text = { Text(equippedWeapon.trapping.name) },
                 secondaryText = if (weapon.qualities.isNotEmpty() || weapon.flaws.isNotEmpty())
-                    ({
-                        TrappingFeatureList(
-                            weapon.qualities,
-                            weapon.flaws,
-                            Modifier.fillMaxWidth()
+                    (
+                        {
+                            TrappingFeatureList(
+                                weapon.qualities,
+                                weapon.flaws,
+                                Modifier.fillMaxWidth()
+                            )
+                        }
                         )
-                    })
                 else null,
                 trailing = {
                     Column(horizontalAlignment = Alignment.CenterHorizontally) {
@@ -105,4 +107,3 @@ fun CardSubtitle(text: String) {
         fontWeight = FontWeight.Bold,
     )
 }
-

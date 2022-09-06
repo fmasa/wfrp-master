@@ -13,7 +13,7 @@ enum class Race(override val nameResolver: (strings: Strings) -> String) : Named
     GNOME({ it.races.gnome }),
     OGRE({ it.races.ogre });
 
-    val size: Size get() = when(this) {
+    val size: Size get() = when (this) {
         HALFLING, GNOME -> Size.SMALL
         OGRE -> Size.LARGE
         else -> Size.AVERAGE

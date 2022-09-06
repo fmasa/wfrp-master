@@ -18,7 +18,6 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.dialogs.FullScreenDialog
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
 import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
 
-
 @Composable
 fun InvitationDialog(
     invitation: Invitation,

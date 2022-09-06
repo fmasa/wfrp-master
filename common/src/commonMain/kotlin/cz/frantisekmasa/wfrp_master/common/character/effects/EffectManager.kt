@@ -107,5 +107,4 @@ class EffectManager(
     ): Character {
         return effects.fold(this) { character, effect -> effect.revert(character, otherEffects) }
     }
-
 }

@@ -77,7 +77,7 @@ private data class TraitFormData(
     override fun toValue() = Trait(
         id = id,
         name = name.value,
-        specifications = if(specifications.value == "")
+        specifications = if (specifications.value == "")
             emptySet()
         else description.value
             .split(',')
@@ -140,4 +140,3 @@ private fun TraitDialog(
         }
     }
 }
-

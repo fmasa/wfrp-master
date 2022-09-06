@@ -47,10 +47,10 @@ actual class File(
 
 class AndroidFileChooser(
     private val launcher: ManagedActivityResultLauncher<String, Uri?>
-): FileChooser {
+) : FileChooser {
     override fun open(type: FileType) {
         launcher.launch(
-            when(type) {
+            when (type) {
                 FileType.IMAGE -> "image/*"
                 FileType.PDF -> "application/pdf"
             }

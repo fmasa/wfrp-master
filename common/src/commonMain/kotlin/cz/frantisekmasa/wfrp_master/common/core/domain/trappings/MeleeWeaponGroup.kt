@@ -20,4 +20,3 @@ enum class MeleeWeaponGroup(
     POLEARM({ it.weapons.meleeGroups.polearm }),
     TWO_HANDED({ it.weapons.meleeGroups.twoHanded }),
 }
-

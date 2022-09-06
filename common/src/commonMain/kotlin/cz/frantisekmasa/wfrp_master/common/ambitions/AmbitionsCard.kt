@@ -31,7 +31,6 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.cards.CardTitle
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.VisualOnlyIconDescription
 import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
 
-
 @Composable
 fun AmbitionsCard(
     modifier: Modifier = Modifier,
@@ -66,10 +65,10 @@ fun AmbitionsCard(
         val strings = LocalStrings.current.ambition
 
         for (
-        (label, value) in listOf(
-            strings.labelShortTerm to ambitions.shortTerm,
-            strings.labelLongTerm to ambitions.longTerm
-        )
+            (label, value) in listOf(
+                strings.labelShortTerm to ambitions.shortTerm,
+                strings.labelLongTerm to ambitions.longTerm
+            )
         ) {
             Column(Modifier.padding(top = 4.dp)) {
                 Text(label, fontWeight = FontWeight.Bold)

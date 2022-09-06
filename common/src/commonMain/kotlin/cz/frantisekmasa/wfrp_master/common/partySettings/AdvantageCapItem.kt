@@ -33,7 +33,6 @@ import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-
 @Composable
 fun AdvantageCapItem(party: Party, screenModel: PartySettingsScreenModel) {
     var dialogVisible by remember { mutableStateOf(false) }

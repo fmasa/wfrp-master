@@ -14,7 +14,6 @@ import cz.frantisekmasa.wfrp_master.common.core.shared.Resources
 import cz.frantisekmasa.wfrp_master.common.core.ui.dialogs.FullScreenDialog
 import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
 
-
 @Composable
 internal fun AddBlessingDialog(screenModel: BlessingsScreenModel, onDismissRequest: () -> Unit) {
     var state: AddMiracleDialogState by rememberSaveable { mutableStateOf(ChoosingCompendiumMiracle) }

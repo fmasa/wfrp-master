@@ -18,7 +18,6 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.forms.TextInput
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.inputValue
 import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
 
-
 object PointsPoolForm {
 
     @Stable

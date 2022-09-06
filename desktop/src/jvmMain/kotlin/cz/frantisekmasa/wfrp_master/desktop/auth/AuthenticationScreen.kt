@@ -112,5 +112,4 @@ fun AuthenticationScreen() {
             }
         }
     }
-
 }

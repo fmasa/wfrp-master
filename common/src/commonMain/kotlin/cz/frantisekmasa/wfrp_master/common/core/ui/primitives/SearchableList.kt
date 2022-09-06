@@ -33,7 +33,6 @@ import androidx.compose.ui.graphics.Color
 import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.IconAction
 import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
 
-
 object SearchableList {
     @Immutable
     sealed interface Data<out T> {

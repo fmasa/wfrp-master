@@ -156,4 +156,3 @@ private fun calculateYCoordinateOfDraggedItem(
 
     return draggedItemYOffset.value.roundToInt() + placeableHeights.take(draggedItemIndex).sum()
 }
-

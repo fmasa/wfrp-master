@@ -34,7 +34,6 @@ actual fun rememberPlatformSoundPlayer(sound: Resources.Sound): SoundPlayer {
     }
 }
 
-
 private fun rawResourceId(sound: Resources.Sound): Int {
     val imageName = sound.path.substringAfterLast("/").substringBeforeLast(".")
     val rawResourceClass = R.raw::class.java

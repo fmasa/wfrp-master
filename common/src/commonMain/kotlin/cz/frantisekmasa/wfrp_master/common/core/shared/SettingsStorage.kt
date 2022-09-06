@@ -2,8 +2,8 @@
 
 package cz.frantisekmasa.wfrp_master.common.core.shared
 
-import kotlin.jvm.JvmName
 import kotlinx.coroutines.flow.Flow
+import kotlin.jvm.JvmName
 
 expect class SettingsStorage {
     suspend fun <T> edit(key: SettingsKey<T>, update: (T?) -> T)
@@ -14,7 +14,6 @@ expect class SettingsStorage {
 suspend fun <T> SettingsStorage.edit(key: SettingsKey<T>, value: T) {
     edit(key) { value }
 }
-
 
 expect class SettingsKey<T>
 

@@ -88,5 +88,3 @@ private fun ItemIcon(painter: Painter, size: ItemIcon.Size) {
             .height(size.dimensions)
     )
 }
-
-

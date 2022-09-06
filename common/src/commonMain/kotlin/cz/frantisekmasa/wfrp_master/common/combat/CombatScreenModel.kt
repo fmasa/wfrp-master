@@ -48,7 +48,6 @@ import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.coroutines.flow.transform
 import kotlin.random.Random
 
-
 class CombatScreenModel(
     private val partyId: PartyId,
     private val random: Random,

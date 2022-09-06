@@ -9,7 +9,6 @@ import cz.frantisekmasa.wfrp_master.common.firebase.firestore.Firestore
 import cz.frantisekmasa.wfrp_master.common.firebase.firestore.SetOptions
 import cz.frantisekmasa.wfrp_master.common.firebase.firestore.arrayUnion
 
-
 class FirestoreInvitationProcessor(
     private val firestore: Firestore,
     private val parties: PartyRepository

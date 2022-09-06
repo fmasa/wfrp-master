@@ -20,7 +20,6 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.settings.SettingsCard
 import cz.frantisekmasa.wfrp_master.common.core.ui.settings.SettingsTitle
 import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
 
-
 @Composable
 fun ExperienceSection(character: Character, screenModel: CharacterScreenModel) {
     Scaffold(

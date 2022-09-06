@@ -22,7 +22,7 @@ import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
 
 class PartySettingsScreen(
     private val partyId: PartyId,
-): Screen {
+) : Screen {
     @Composable
     override fun Content() {
         val viewModel: PartySettingsScreenModel = rememberScreenModel(arg = partyId)

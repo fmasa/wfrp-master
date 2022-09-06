@@ -17,21 +17,25 @@ class CloudFunctionCharacterAvatarChanger(
     ) {
         withContext(Dispatchers.IO) {
             functions.getHttpsCallable("changeCharacterAvatar")
-                .call(mapOf(
-                    "partyId" to characterId.partyId.toString(),
-                    "characterId" to characterId.id,
-                    "imageData" to image.encodeBase64(),
-                ))
+                .call(
+                    mapOf(
+                        "partyId" to characterId.partyId.toString(),
+                        "characterId" to characterId.id,
+                        "imageData" to image.encodeBase64(),
+                    )
+                )
         }
     }
 
     override suspend fun removeAvatar(characterId: CharacterId) {
         withContext(Dispatchers.IO) {
             functions.getHttpsCallable("removeCharacterAvatar")
-                .call(mapOf(
-                    "partyId" to characterId.partyId.toString(),
-                    "characterId" to characterId.id,
-                ))
+                .call(
+                    mapOf(
+                        "partyId" to characterId.partyId.toString(),
+                        "characterId" to characterId.id,
+                    )
+                )
         }
     }
 }

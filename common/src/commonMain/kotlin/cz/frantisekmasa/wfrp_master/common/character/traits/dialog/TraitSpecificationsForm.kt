@@ -36,7 +36,6 @@ import io.github.aakira.napier.Napier
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-
 @Composable
 internal fun TraitSpecificationsForm(
     defaultSpecifications: Map<String, String>,

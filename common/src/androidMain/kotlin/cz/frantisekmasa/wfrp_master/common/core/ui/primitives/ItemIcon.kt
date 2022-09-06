@@ -11,7 +11,6 @@ import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
 import coil.transform.CircleCropTransformation
 
-
 @Composable
 internal actual fun rememberImagePainter(url: String): State<Painter> {
     val painter = rememberAsyncImagePainter(

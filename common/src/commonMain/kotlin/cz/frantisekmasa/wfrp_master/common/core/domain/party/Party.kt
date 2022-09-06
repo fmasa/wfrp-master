@@ -36,7 +36,6 @@ data class Party(
         const val NAME_MAX_LENGTH = 50
     }
 
-
     init {
         require(gameMasterId == null || gameMasterId in users)
         require(name.isNotBlank()) { "Party name must not be empty" }
@@ -48,7 +47,6 @@ data class Party(
     val players: List<UserId> get() =
         users.filter { it != gameMasterId }
             .map(UserId::fromString)
-
 
     fun updateAmbitions(ambitions: Ambitions) = copy(ambitions = ambitions)
 

@@ -26,7 +26,6 @@ import cz.frantisekmasa.wfrp_master.desktop.interop.NativeFileChooser
 import kotlinx.coroutines.launch
 import org.kodein.di.compose.withDI
 
-
 @ExperimentalMaterialApi
 fun main() {
     application {

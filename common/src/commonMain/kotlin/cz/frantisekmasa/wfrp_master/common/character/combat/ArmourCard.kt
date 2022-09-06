@@ -86,7 +86,6 @@ fun ArmourCard(
             }
         }
 
-
         val locations = remember { HitLocation.values().sortedBy { it.rollRange.first } }
 
         locations.forEach { location ->
@@ -177,13 +176,15 @@ private fun Location(
                     modifier = Modifier.clickable { onTrappingClick(item.trapping) },
                     text = { Text(item.trapping.name) },
                     secondaryText = if (armour.qualities.isNotEmpty() || armour.flaws.isNotEmpty())
-                        ({
-                            TrappingFeatureList(
-                                armour.qualities,
-                                armour.flaws,
-                                Modifier.fillMaxWidth()
+                        (
+                            {
+                                TrappingFeatureList(
+                                    armour.qualities,
+                                    armour.flaws,
+                                    Modifier.fillMaxWidth()
+                                )
+                            }
                             )
-                        })
                     else null,
                     trailing = {
                         Text(

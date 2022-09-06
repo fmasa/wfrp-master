@@ -17,7 +17,6 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
 
-
 class FirestoreCompendium<T : CompendiumItem<T>>(
     private val collectionName: String,
     private val firestore: Firestore,

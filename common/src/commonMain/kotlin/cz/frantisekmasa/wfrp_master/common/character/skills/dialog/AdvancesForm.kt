@@ -34,8 +34,6 @@ import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
 import io.github.aakira.napier.Napier
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-
 
 @Composable
 internal fun AdvancesForm(

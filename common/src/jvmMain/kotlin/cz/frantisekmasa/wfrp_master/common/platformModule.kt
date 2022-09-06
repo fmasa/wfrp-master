@@ -25,10 +25,12 @@ internal actual val platformModule = DI.Module("jvm") {
         HttpClient(CIO) {
             install(HttpCache)
             install(ContentNegotiation) {
-                json(Json {
-                    ignoreUnknownKeys = true
-                    encodeDefaults = true
-                })
+                json(
+                    Json {
+                        ignoreUnknownKeys = true
+                        encodeDefaults = true
+                    }
+                )
             }
         }
     }

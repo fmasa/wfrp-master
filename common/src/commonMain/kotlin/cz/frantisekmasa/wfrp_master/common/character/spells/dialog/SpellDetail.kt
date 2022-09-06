@@ -20,7 +20,6 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
 import cz.frantisekmasa.wfrp_master.common.core.ui.text.SingleLineTextValue
 import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
 
-
 @Composable
 fun SpellDetail(
     spell: Spell,
@@ -57,7 +56,6 @@ fun SpellDetail(
                         append(spell.effectiveCastingNumber.toString())
                     }
                 )
-
 
                 SingleLineTextValue(strings.labelRange, spell.range)
 

@@ -47,7 +47,6 @@ fun AddTraitDialog(screenModel: TraitsScreenModel, onDismissRequest: () -> Unit)
                     return@FullScreenDialog
                 }
 
-
                 CompendiumItemChooser(
                     screenModel = screenModel,
                     title = LocalStrings.current.traits.titleChooseCompendiumTrait,

@@ -27,7 +27,6 @@ actual open class Query(
         return Query(query.orderBy(field, direction.toNative()))
     }
 
-
     actual enum class Direction(private val native: NativeQuery.Direction) {
         ASCENDING(NativeQuery.Direction.ASCENDING),
         DESCENDING(NativeQuery.Direction.DESCENDING);

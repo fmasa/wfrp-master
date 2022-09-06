@@ -50,7 +50,6 @@ import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
 import cz.frantisekmasa.wfrp_master.common.localization.Strings
 import kotlin.math.max
 
-
 @Composable
 internal fun InventoryItemDialog(
     screenModel: TrappingsScreenModel,
@@ -287,7 +286,6 @@ private fun DamageInput(formData: TrappingTypeFormData, validate: Boolean) {
         validate = validate,
     )
 }
-
 
 @Composable
 private fun WeaponQualitiesPicker(formData: TrappingTypeFormData) {

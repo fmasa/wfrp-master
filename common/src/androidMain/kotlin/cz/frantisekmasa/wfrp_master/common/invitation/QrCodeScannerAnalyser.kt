@@ -11,7 +11,6 @@ import com.google.zxing.common.HybridBinarizer
 import com.google.zxing.qrcode.QRCodeReader
 import io.github.aakira.napier.Napier
 
-
 class QrCodeScannerAnalyser(
     private val onQrCodesDetected: (qrCodeData: String) -> Unit
 ) : ImageAnalysis.Analyzer {

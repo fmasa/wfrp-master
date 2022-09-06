@@ -14,7 +14,6 @@ import cz.frantisekmasa.wfrp_master.common.core.domain.party.PartyRepository
 import cz.frantisekmasa.wfrp_master.common.core.utils.right
 import kotlinx.coroutines.flow.Flow
 
-
 class CompendiumScreenModel(
     private val partyId: PartyId,
     private val skillCompendium: Compendium<Skill>,
@@ -97,7 +96,6 @@ class CompendiumScreenModel(
     suspend fun save(trait: Trait) {
         traitCompendium.saveItems(partyId, trait)
     }
-
 
     suspend fun saveMultipleTraits(traits: List<Trait>) {
         traitCompendium.saveItems(partyId, *traits.toTypedArray())

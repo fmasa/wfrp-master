@@ -22,7 +22,6 @@ import cz.frantisekmasa.wfrp_master.common.npcs.form.FormData
 import cz.frantisekmasa.wfrp_master.common.npcs.form.NpcForm
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 class NpcCreationScreen(
     private val encounterId: EncounterId,
