@@ -199,7 +199,6 @@ private fun ArmorSegment(data: ArmorFormData, validate: Boolean) {
     }
 }
 
-
 @Stable
 class CharacteristicsFormData(
     val weaponSkill: InputValue,

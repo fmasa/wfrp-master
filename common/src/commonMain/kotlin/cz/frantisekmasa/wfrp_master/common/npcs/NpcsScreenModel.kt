@@ -10,7 +10,7 @@ import kotlinx.coroutines.flow.Flow
 class NpcsScreenModel(
     private val partyId: PartyId,
     private val characters: CharacterRepository,
-): ScreenModel {
+) : ScreenModel {
 
     val npcs: Flow<List<Character>> = characters.inParty(partyId, CharacterType.NPC)
 

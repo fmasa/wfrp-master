@@ -38,7 +38,6 @@ kotlin {
     }
 }
 
-
 android {
     compileSdk = Versions.Android.compileSdk
 
@@ -81,4 +80,3 @@ android {
         }
     }
 }
-

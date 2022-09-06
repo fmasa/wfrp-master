@@ -22,7 +22,6 @@ import androidx.core.content.ContextCompat
 import io.github.aakira.napier.Napier
 import java.util.concurrent.Executors
 
-
 @Composable
 internal fun QrCodeScanner(
     onSuccessfulScan: (qrCodeData: String) -> Unit,

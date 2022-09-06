@@ -14,7 +14,6 @@ import cz.frantisekmasa.wfrp_master.common.settings.AppSettings
 import org.kodein.di.compose.localDI
 import org.kodein.di.instance
 
-
 class Theme {
     class FixedColors(
         val splashScreenContent: Color,

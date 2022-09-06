@@ -24,7 +24,6 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.UserTip
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.UserTipCard
 import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
 
-
 @Composable
 fun MaxWoundsSection(character: Character, screenModel: CharacterScreenModel) {
     val formData = WoundsFormData.fromCharacter(character)
@@ -62,7 +61,6 @@ fun MaxWoundsSection(character: Character, screenModel: CharacterScreenModel) {
         }
     }
 }
-
 
 private data class WoundsData(
     val maxWounds: Int?,

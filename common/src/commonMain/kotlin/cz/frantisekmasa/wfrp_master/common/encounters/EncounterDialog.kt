@@ -12,7 +12,6 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.forms.inputValue
 import cz.frantisekmasa.wfrp_master.common.encounters.domain.Encounter
 import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
 
-
 @Composable
 fun EncounterDialog(
     existingEncounter: Encounter?,

@@ -34,7 +34,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-
 typealias ConditionTransformation = (CurrentConditions) -> CurrentConditions
 
 @Composable

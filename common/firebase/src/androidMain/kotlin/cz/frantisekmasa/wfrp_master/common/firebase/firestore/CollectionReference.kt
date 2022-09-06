@@ -2,7 +2,7 @@ package cz.frantisekmasa.wfrp_master.common.firebase.firestore
 
 actual class CollectionReference(
     private val collection: com.google.firebase.firestore.CollectionReference
-): Query(collection) {
+) : Query(collection) {
     actual fun document(documentPath: String): DocumentReference {
         return DocumentReference(collection.document(documentPath))
     }

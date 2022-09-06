@@ -44,7 +44,6 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-
 @Composable
 internal fun ImportDialog(
     screenModel: CompendiumScreenModel,
@@ -94,7 +93,7 @@ private fun ImportedItemsPicker(
         }
         ItemsScreen.TALENTS -> {
             ItemPicker(
-                label =  strings.pickPromptTalents,
+                label = strings.pickPromptTalents,
                 items = state.talents,
                 onSave = screenModel::saveMultipleTalents,
                 onContinue = { screen = ItemsScreen.SPELLS },
@@ -104,7 +103,7 @@ private fun ImportedItemsPicker(
         }
         ItemsScreen.SPELLS -> {
             ItemPicker(
-                label =  strings.pickPromptSpells,
+                label = strings.pickPromptSpells,
                 items = state.spells,
                 onSave = screenModel::saveMultipleSpells,
                 onContinue = { screen = ItemsScreen.BLESSINGS },
@@ -114,7 +113,7 @@ private fun ImportedItemsPicker(
         }
         ItemsScreen.BLESSINGS -> {
             ItemPicker(
-                label =  strings.pickPromptBlessings,
+                label = strings.pickPromptBlessings,
                 items = state.blessings,
                 onSave = screenModel::saveMultipleBlessings,
                 onContinue = { screen = ItemsScreen.MIRACLES },
@@ -124,7 +123,7 @@ private fun ImportedItemsPicker(
         }
         ItemsScreen.MIRACLES -> {
             ItemPicker(
-                label =  strings.pickPromptMiracles,
+                label = strings.pickPromptMiracles,
                 items = state.miracles,
                 onSave = screenModel::saveMultipleMiracles,
                 onContinue = { screen = ItemsScreen.TRAITS },
@@ -134,7 +133,7 @@ private fun ImportedItemsPicker(
         }
         ItemsScreen.TRAITS -> {
             ItemPicker(
-                label =  strings.pickPromptTraits,
+                label = strings.pickPromptTraits,
                 items = state.traits,
                 onSave = screenModel::saveMultipleTraits,
                 onContinue = onComplete,

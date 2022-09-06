@@ -54,7 +54,7 @@ data class TestResult(
     enum class DramaticResult(
         val successLevelRange: IntRange,
         override val nameResolver: (strings: Strings) -> String,
-    ): NamedEnum {
+    ) : NamedEnum {
         ASTOUNDING_SUCCESS(6..Int.MAX_VALUE, { it.tests.results.astoundingSuccess }),
         IMPRESSIVE_SUCCESS(4..5, { it.tests.results.impressiveSuccess }),
         SUCCESS(2..3, { it.tests.results.success }),

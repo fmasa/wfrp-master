@@ -160,7 +160,7 @@ data class Character(
     )
 
     fun updateMaxWounds(maxWounds: Int?, hasHardyTalent: Boolean): Character {
-        val newPoints = points.copy(maxWounds =  maxWounds)
+        val newPoints = points.copy(maxWounds = maxWounds)
         return copy(
             hasHardyTalent = hasHardyTalent,
             points = newPoints.coerceWoundsAtMost(

@@ -19,7 +19,6 @@ import io.github.aakira.napier.Napier
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
-
 class FirestoreCharacterRepository(
     firestore: Firestore,
     private val mapper: AggregateMapper<Character>

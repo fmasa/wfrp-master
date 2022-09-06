@@ -44,7 +44,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlin.coroutines.EmptyCoroutineContext
 
-
 @Composable
 fun TrappingsScreen(
     screenModel: TrappingsScreenModel,
@@ -176,4 +175,3 @@ private fun InventoryItemsCard(
         }
     }
 }
-

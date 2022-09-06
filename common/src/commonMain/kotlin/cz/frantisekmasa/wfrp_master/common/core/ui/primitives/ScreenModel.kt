@@ -8,7 +8,6 @@ import org.kodein.di.compose.localDI
 import org.kodein.di.direct
 import org.kodein.di.provider
 
-
 @Composable
 inline fun <reified T : ScreenModel> Screen.rememberScreenModel(
     tag: Any? = null

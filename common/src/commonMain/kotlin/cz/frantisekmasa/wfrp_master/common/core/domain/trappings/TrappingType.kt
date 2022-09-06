@@ -8,7 +8,6 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.JsonClassDiscriminator
 
-
 typealias Rating = Int
 
 @Serializable
@@ -19,7 +18,7 @@ sealed class TrappingType : Parcelable {
         val worn: Boolean
     }
 
-    sealed class Weapon: TrappingType() {
+    sealed class Weapon : TrappingType() {
         abstract val damage: DamageExpression
         abstract val qualities: Map<WeaponQuality, Rating>
         abstract val flaws: Map<WeaponFlaw, Rating>

@@ -14,7 +14,6 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combineTransform
 import kotlinx.coroutines.flow.filterNotNull
 
-
 class GameMasterScreenModel(
     private val partyId: PartyId,
     private val parties: PartyRepository,

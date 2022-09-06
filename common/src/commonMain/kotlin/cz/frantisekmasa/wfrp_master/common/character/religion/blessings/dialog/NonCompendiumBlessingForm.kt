@@ -16,7 +16,6 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.forms.inputValue
 import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.Blessing.Companion as CompendiumBlessing
 
-
 @Composable
 internal fun NonCompendiumBlessingForm(
     screenModel: BlessingsScreenModel,

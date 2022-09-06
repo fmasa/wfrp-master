@@ -2,7 +2,7 @@ package cz.frantisekmasa.wfrp_master.common.character.effects
 
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.Character
 
-class HardyWoundsModification(private val timesTaken: Int): CharacterEffect {
+class HardyWoundsModification(private val timesTaken: Int) : CharacterEffect {
     init {
         require(timesTaken > 0)
     }
@@ -37,5 +37,4 @@ class HardyWoundsModification(private val timesTaken: Int): CharacterEffect {
             return null
         }
     }
-
 }

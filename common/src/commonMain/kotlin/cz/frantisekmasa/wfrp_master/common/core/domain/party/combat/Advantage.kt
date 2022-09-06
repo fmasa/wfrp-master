@@ -7,7 +7,7 @@ import kotlin.jvm.JvmInline
 @JvmInline
 @Immutable
 @Serializable
-value class Advantage(val value: Int): Comparable<Advantage> {
+value class Advantage(val value: Int) : Comparable<Advantage> {
 
     init {
         require(value >= 0) { "Advantage cannot be negative" }

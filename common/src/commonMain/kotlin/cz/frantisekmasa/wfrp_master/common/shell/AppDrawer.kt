@@ -42,7 +42,6 @@ import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
 import cz.frantisekmasa.wfrp_master.common.settings.SettingsScreen
 import kotlinx.coroutines.launch
 
-
 @Composable
 fun AppDrawer(drawerState: DrawerState) {
     DrawerHeader()

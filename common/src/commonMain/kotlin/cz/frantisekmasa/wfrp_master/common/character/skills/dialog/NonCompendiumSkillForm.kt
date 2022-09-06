@@ -30,7 +30,6 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.forms.inputValue
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
 import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
 
-
 @Composable
 internal fun NonCompendiumSkillForm(
     screenModel: SkillsScreenModel,

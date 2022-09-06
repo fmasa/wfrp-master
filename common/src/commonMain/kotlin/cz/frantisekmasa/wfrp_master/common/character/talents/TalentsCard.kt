@@ -22,7 +22,6 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.flow.collectWithLifecycle
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.ContextMenu
 import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
 
-
 @Composable
 internal fun TalentsCard(
     screenModel: TalentsScreenModel,

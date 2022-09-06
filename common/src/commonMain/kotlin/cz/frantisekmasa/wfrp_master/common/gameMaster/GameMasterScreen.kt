@@ -38,7 +38,7 @@ import cz.frantisekmasa.wfrp_master.common.partySettings.PartySettingsScreen
 
 class GameMasterScreen(
     private val partyId: PartyId,
-): Screen {
+) : Screen {
 
     override val key = "party/$partyId"
 

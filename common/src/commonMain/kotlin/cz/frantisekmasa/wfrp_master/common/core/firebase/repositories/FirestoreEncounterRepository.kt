@@ -1,6 +1,5 @@
 package cz.frantisekmasa.wfrp_master.common.core.firebase.repositories
 
-
 import arrow.core.left
 import arrow.core.right
 import cz.frantisekmasa.wfrp_master.common.core.connectivity.CouldNotConnectToBackend
@@ -57,7 +56,6 @@ class FirestoreEncounterRepository(
                     }
                 )
             }
-
 
     override suspend fun save(partyId: PartyId, vararg encounters: Encounter) {
         firestore.runTransaction { transaction ->

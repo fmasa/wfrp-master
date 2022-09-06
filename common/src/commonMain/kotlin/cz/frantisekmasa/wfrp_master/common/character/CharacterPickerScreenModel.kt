@@ -12,7 +12,7 @@ import kotlinx.coroutines.flow.map
 class CharacterPickerScreenModel(
     private val partyId: PartyId,
     private val characters: CharacterRepository,
-): ScreenModel {
+) : ScreenModel {
     fun allUserCharacters(userId: UserId): Flow<List<Character>> {
         return characters.inParty(partyId, CharacterType.PLAYER_CHARACTER).map {
             it.filter { character ->

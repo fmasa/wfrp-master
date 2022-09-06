@@ -17,7 +17,6 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.responsive.Breakpoint
 import cz.frantisekmasa.wfrp_master.common.core.ui.responsive.ColumnSize
 import cz.frantisekmasa.wfrp_master.common.core.ui.responsive.Container
 
-
 @Composable
 fun SkillsScreen(
     modifier: Modifier = Modifier,

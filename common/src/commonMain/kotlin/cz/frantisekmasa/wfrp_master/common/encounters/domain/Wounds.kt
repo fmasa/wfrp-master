@@ -24,7 +24,7 @@ data class Wounds(
 
         // See rulebook page 341
         fun calculateMax(size: Size, characteristics: Stats): Int = with(characteristics) {
-            when(size) {
+            when (size) {
                 Size.TINY -> 1
                 Size.LITTLE -> toughnessBonus
                 Size.SMALL -> (2 * toughnessBonus) + willPowerBonus

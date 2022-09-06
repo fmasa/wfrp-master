@@ -15,7 +15,6 @@ import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 
-
 class InvitationScreenModel(
     private val invitationProcessor: InvitationProcessor,
     private val serializer: Json,

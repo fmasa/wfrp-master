@@ -20,7 +20,6 @@ interface CharacterItemRepository<T : CharacterItem> {
      */
     suspend fun remove(characterId: CharacterId, itemId: Uuid)
 
-
     /**
      * Removes given skill item character's skill list
      * or does nothing if given item is not associated to user

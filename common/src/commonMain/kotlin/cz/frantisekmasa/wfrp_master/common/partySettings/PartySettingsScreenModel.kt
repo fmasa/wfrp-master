@@ -8,7 +8,6 @@ import cz.frantisekmasa.wfrp_master.common.core.domain.party.settings.Settings
 import cz.frantisekmasa.wfrp_master.common.core.utils.right
 import kotlinx.coroutines.flow.Flow
 
-
 class PartySettingsScreenModel(
     private val partyId: PartyId,
     private val parties: PartyRepository

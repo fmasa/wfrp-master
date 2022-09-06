@@ -67,14 +67,13 @@ import cz.frantisekmasa.wfrp_master.common.gameMaster.GameMasterScreen
 import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
 import cz.frantisekmasa.wfrp_master.common.partyList.PartyListScreen
 
-
 data class CharacterDetailScreen(
     private val characterId: CharacterId,
     private val comingFromCombat: Boolean = false,
     private val initialTab: CharacterTab = CharacterTab.values().first(),
 ) : Screen {
 
-    override val key = "parties/${characterId}"
+    override val key = "parties/$characterId"
 
     @Composable
     override fun Content() {
@@ -218,7 +217,6 @@ data class CharacterDetailScreen(
                     }
                 }
             }
-
         } else {
             Column {
                 Text(character.name)
@@ -366,7 +364,6 @@ data class CharacterDetailScreen(
             }
         }
     }
-
 }
 
 @Composable

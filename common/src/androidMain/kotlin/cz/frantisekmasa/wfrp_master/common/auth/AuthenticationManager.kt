@@ -79,7 +79,7 @@ class AuthenticationManager(private val auth: FirebaseAuth) {
     suspend fun signInWithGoogleToken(idToken: String): Boolean {
         val credential = GoogleAuthProvider.getCredential(idToken, null)
 
-        Napier.d("Authenticated, idToken: ${idToken}")
+        Napier.d("Authenticated, idToken: $idToken")
 
         return try {
             auth.signInWithCredential(credential).await()

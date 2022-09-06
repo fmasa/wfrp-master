@@ -162,7 +162,7 @@ private fun Menu(
         onToggleRequest = { onStateChangeRequest(it) },
         icon = rememberVectorPainter(Icons.Rounded.Add),
     ) {
-        if (LocalStaticConfiguration.current.platform == Platform.Android){
+        if (LocalStaticConfiguration.current.platform == Platform.Android) {
             val navigator = LocalNavigator.currentOrThrow
 
             ExtendedFloatingActionButton(

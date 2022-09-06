@@ -305,7 +305,6 @@ data class CharacteristicStrings(
     val willPower: String = "Will Power",
 )
 
-
 @Immutable
 data class CharacterMessageStrings(
     val noEquippedWeapons: String = "No equipped weapons",
@@ -350,7 +349,7 @@ data class ChangelogStrings(
 
 @Immutable
 data class MoonPhaseStrings(
-    val newMoon: String =    "New moon",
+    val newMoon: String = "New moon",
     val fullMoon: String = "Full moon",
     val waxing: String = "Waxing",
     val waning: String = "Waning",
@@ -732,8 +731,8 @@ data class PermissionMessageStrings(
 data class RaceStrings(
     val custom: String = "Custom",
     val dwarf: String = "Dwarf",
-    val highElf : String = "High Elf",
-    val woodElf : String = "Wood Elf",
+    val highElf: String = "High Elf",
+    val woodElf: String = "Wood Elf",
     val halfling: String = "Halfling",
     val human: String = "Human",
     val gnome: String = "Gnome",
@@ -878,14 +877,14 @@ data class TestDifficultyStrings(
 
 @Immutable
 data class TestResultStrings(
-    val astoundingSuccess : String = "Astounding Success",
-    val impressiveSuccess : String = "Impressive Success",
+    val astoundingSuccess: String = "Astounding Success",
+    val impressiveSuccess: String = "Impressive Success",
     val success: String = "Success",
-    val marginalSuccess : String = "Marginal Success",
-    val marginalFailure : String = "Marginal Failure",
+    val marginalSuccess: String = "Marginal Success",
+    val marginalFailure: String = "Marginal Failure",
     val failure: String = "Failure",
-    val impressiveFailure : String = "Impressive Failure",
-    val astoundingFailure : String = "Astounding Failure",
+    val impressiveFailure: String = "Impressive Failure",
+    val astoundingFailure: String = "Astounding Failure",
 )
 
 @Immutable
@@ -900,8 +899,7 @@ data class TraitStrings(
     val titleNew: String = "New Trait",
     val titleEdit: String = "Edit Trait",
     val titleTraits: String = "Traits",
-) {
-}
+)
 
 @Immutable
 data class TraitMessageStrings(

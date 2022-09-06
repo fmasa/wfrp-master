@@ -8,7 +8,6 @@ import com.vanpra.composematerialdialogs.title
 import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
 import java.time.LocalTime
 
-
 @Composable
 actual fun timePicker(time: LocalTime, onTimeChange: TimePicker.(LocalTime) -> Unit): TimePicker {
     val dialog = remember { MaterialDialog() }
@@ -27,7 +26,7 @@ actual fun timePicker(time: LocalTime, onTimeChange: TimePicker.(LocalTime) -> U
     return timePicker
 }
 
-class VanpraTimePicker(private val dialog: MaterialDialog): TimePicker {
+class VanpraTimePicker(private val dialog: MaterialDialog) : TimePicker {
     override fun show() {
         dialog.show()
     }

@@ -12,7 +12,6 @@ import cz.frantisekmasa.wfrp_master.common.firebase.firestore.SetOptions
 import cz.frantisekmasa.wfrp_master.common.firebase.firestore.Transaction
 import kotlinx.coroutines.flow.Flow
 
-
 open class FirestoreCharacterItemRepository<T : CharacterItem>(
     private val collectionName: String,
     protected val mapper: AggregateMapper<T>,

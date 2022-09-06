@@ -29,7 +29,6 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.settings.SettingsTitle
 import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
 import kotlinx.coroutines.launch
 
-
 object SettingsScreen : Screen {
     @Composable
     override fun Content() {

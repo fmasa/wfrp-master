@@ -2,7 +2,7 @@ package cz.frantisekmasa.wfrp_master.common.character.effects
 
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.Character
 
-class SwarmWoundsModification: CharacterEffect {
+class SwarmWoundsModification : CharacterEffect {
     override fun apply(character: Character, otherEffects: List<CharacterEffect>): Character {
         if (otherEffects.any { it is SwarmWoundsModification }) {
             return character // This effect does not stack
@@ -40,5 +40,4 @@ class SwarmWoundsModification: CharacterEffect {
             return null
         }
     }
-
 }

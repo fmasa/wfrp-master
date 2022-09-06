@@ -244,9 +244,9 @@ private fun DayPicker(
                     val days = 1..numberOfDays
 
                     for (
-                    weekDays in (daysOfPreviousMonth + days).chunked(
-                        daysOfWeek.size
-                    )
+                        weekDays in (daysOfPreviousMonth + days).chunked(
+                            daysOfWeek.size
+                        )
                     ) {
                         Week(
                             weekDays,

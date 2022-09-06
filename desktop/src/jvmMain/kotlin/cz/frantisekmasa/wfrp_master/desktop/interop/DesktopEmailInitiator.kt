@@ -5,7 +5,7 @@ import io.ktor.http.formUrlEncode
 import java.awt.Desktop
 import java.net.URI
 
-object DesktopEmailInitiator: EmailInitiator {
+object DesktopEmailInitiator : EmailInitiator {
     override fun initiateNewEmail(subject: String, recipient: String) {
         if (!Desktop.isDesktopSupported()) {
             return

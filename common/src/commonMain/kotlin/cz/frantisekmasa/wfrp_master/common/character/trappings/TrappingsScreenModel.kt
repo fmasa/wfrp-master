@@ -17,7 +17,6 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 
-
 class TrappingsScreenModel(
     private val characterId: CharacterId,
     private val inventoryItems: InventoryItemRepository,

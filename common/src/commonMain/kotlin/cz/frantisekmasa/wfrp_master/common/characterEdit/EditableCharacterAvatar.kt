@@ -30,7 +30,6 @@ import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
 import io.github.aakira.napier.Napier
 import kotlinx.coroutines.launch
 
-
 @Composable
 fun EditableCharacterAvatar(
     character: Character,

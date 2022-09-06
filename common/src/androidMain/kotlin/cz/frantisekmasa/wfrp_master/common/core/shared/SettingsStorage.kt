@@ -10,10 +10,9 @@ import androidx.datastore.preferences.preferencesDataStore
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
-
 private val Context.settingsDataStore by preferencesDataStore("settings")
 
-actual class SettingsStorage(context: Context, ) {
+actual class SettingsStorage(context: Context,) {
     private val storage = context.settingsDataStore
 
     actual suspend fun <T> edit(key: SettingsKey<T>, update: (T?) -> T) {
@@ -24,7 +23,6 @@ actual class SettingsStorage(context: Context, ) {
         return storage.data.map { it[key] }
     }
 }
-
 
 actual typealias SettingsKey<T> = Preferences.Key<T>
 

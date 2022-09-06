@@ -47,7 +47,6 @@ kotlin {
                 api("cafe.adriel.voyager:voyager-koin:$voyagerVersion")
                 api("cafe.adriel.voyager:voyager-transitions:$voyagerVersion")
 
-
                 implementation("com.github.librepdf:openpdf:1.3.25")
 
                 api(project(":common:firebase"))
@@ -111,7 +110,6 @@ kotlin {
                 api("androidx.appcompat:appcompat:1.3.1")
                 api("androidx.core:core-ktx:1.3.1")
 
-
                 api("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.3.5")
 
                 implementation("org.kodein.di:kodein-di-framework-android-core:$kodeinVersion")
@@ -119,7 +117,6 @@ kotlin {
 
                 api("androidx.lifecycle:lifecycle-viewmodel-compose:2.4.0")
                 api("androidx.lifecycle:lifecycle-runtime-ktx:2.4.0")
-
 
                 // Authentication
                 api("com.google.android.gms:play-services-auth:19.0.0")

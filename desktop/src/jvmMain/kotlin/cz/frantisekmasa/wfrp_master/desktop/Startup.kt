@@ -33,4 +33,3 @@ fun Startup(content: @Composable () -> Unit) {
         )
     }
 }
-

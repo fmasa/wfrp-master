@@ -58,7 +58,6 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.dialogs.FullScreenDialog
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
 import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
 
-
 @Immutable
 @Parcelize
 data class StatBlockData(
@@ -153,7 +152,7 @@ private fun <T : CharacterItem> CharacterItemList(
     var visibleSkill: T? by rememberSaveable { mutableStateOf(null) }
 
     visibleSkill?.let {
-        FullScreenDialog(onDismissRequest = { visibleSkill = null}) {
+        FullScreenDialog(onDismissRequest = { visibleSkill = null }) {
             detail(it) { visibleSkill = null }
         }
     }

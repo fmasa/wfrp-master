@@ -50,5 +50,3 @@ private enum class AddSpellDialogState {
     ChoosingCompendiumSpell,
     FillingInCustomSpell,
 }
-
-

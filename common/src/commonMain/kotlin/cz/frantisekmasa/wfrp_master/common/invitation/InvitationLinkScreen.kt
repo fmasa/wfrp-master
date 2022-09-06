@@ -23,8 +23,6 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.LocalPersistentSn
 import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
 import io.ktor.http.URLBuilder
 import io.ktor.http.Url
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
 
 class InvitationLinkScreen(
     private val url: Url,

@@ -31,7 +31,6 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.settings.SettingsCard
 import cz.frantisekmasa.wfrp_master.common.core.ui.settings.SettingsTitle
 import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
 
-
 data class CharacterEditScreen(
     private val characterId: CharacterId,
     private val section: Section? = null,

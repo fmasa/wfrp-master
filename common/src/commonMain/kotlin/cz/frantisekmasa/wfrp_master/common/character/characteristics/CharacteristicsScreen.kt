@@ -194,7 +194,7 @@ private fun CharacterTopPanel(character: Character, points: Points, onUpdate: (P
                             overflow = TextOverflow.Ellipsis,
                         )
                         Text(
-                            (character.race?.let { "${it.localizedName} " } ?: "")+
+                            (character.race?.let { "${it.localizedName} " } ?: "") +
                                 character.career,
                             style = MaterialTheme.typography.caption,
                             softWrap = false,

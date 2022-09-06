@@ -19,7 +19,6 @@ import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-
 @Composable
 fun EditSpellDialog(
     screenModel: SpellsScreenModel,

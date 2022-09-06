@@ -21,5 +21,3 @@ actual class File(
 ) {
     actual fun readBytes(): ByteArray = stream.readBytes()
 }
-
-

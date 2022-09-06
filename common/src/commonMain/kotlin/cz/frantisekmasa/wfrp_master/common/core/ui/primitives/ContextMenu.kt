@@ -6,4 +6,3 @@ object ContextMenu {
         val onClick: () -> Unit
     )
 }
-

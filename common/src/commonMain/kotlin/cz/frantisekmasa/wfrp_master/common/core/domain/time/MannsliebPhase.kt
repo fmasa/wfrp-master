@@ -4,7 +4,7 @@ import androidx.compose.runtime.Stable
 import cz.frantisekmasa.wfrp_master.common.core.domain.NamedEnum
 import cz.frantisekmasa.wfrp_master.common.localization.Strings
 
-enum class MannsliebPhase(override val nameResolver: (strings: Strings) -> String): NamedEnum {
+enum class MannsliebPhase(override val nameResolver: (strings: Strings) -> String) : NamedEnum {
     NEW_MOON({ it.calendar.moonPhases.newMoon }),
     FULL_MOON({ it.calendar.moonPhases.fullMoon }),
     WAXING({ it.calendar.moonPhases.waxing }),

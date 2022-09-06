@@ -152,7 +152,6 @@ private class RollExpressionGrammar(val constants: Map<String, Int>) : Grammar<E
         Multiplication(IntegerLiteral(multiplier.toInt()), DiceRoll(sides.toInt()))
     }
 
-
     val term by diceTerm or
         (integer use { IntegerLiteral(text.toInt()) }) or
         (constant use { IntegerLiteral(constants.getValue(text)) }) or
@@ -166,7 +165,8 @@ private class RollExpressionGrammar(val constants: Map<String, Int>) : Grammar<E
                         skip(optional(whitespace)),
                     comma,
                 ).map { MaxFunction(it.terms) } *
-                skip(rightParenthesis)) or
+                skip(rightParenthesis)
+            ) or
         (
             skip(minFunctionName) *
                 skip(leftParenthesis) *
@@ -177,9 +177,9 @@ private class RollExpressionGrammar(val constants: Map<String, Int>) : Grammar<E
                         skip(optional(whitespace)),
                     comma,
                 ).map { MinFunction(it.terms) } *
-                skip(rightParenthesis)) or
+                skip(rightParenthesis)
+            ) or
         (skip(leftParenthesis) * parser(this::rootParser) * skip(rightParenthesis))
-
 
     val multiplicationOrDivision by leftAssociative(term, multiply or divide) { l, operator, r ->
         if (operator.type == multiply) Multiplication(l, r) else Division(l, r)

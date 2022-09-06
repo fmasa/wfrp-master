@@ -7,7 +7,7 @@ import cz.frantisekmasa.wfrp_master.common.localization.Strings
 @Immutable
 enum class InitiativeStrategy(
     override val nameResolver: (strings: Strings) -> String
-): NamedEnum {
+) : NamedEnum {
     INITIATIVE_CHARACTERISTIC({ it.combat.initiativeStrategies.initiativeCharacteristic }),
     INITIATIVE_TEST({ it.combat.initiativeStrategies.initiativeTest }),
     INITIATIVE_PLUS_1D10({ it.combat.initiativeStrategies.initiativePlus1d10 }),

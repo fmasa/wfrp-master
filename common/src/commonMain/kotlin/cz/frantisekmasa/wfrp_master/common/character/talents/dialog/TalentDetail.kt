@@ -13,7 +13,6 @@ import cz.frantisekmasa.wfrp_master.common.core.domain.talents.Talent
 import cz.frantisekmasa.wfrp_master.common.core.ui.buttons.CloseButton
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
 
-
 @Composable
 fun TalentDetail(
     talent: Talent,

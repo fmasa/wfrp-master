@@ -5,9 +5,9 @@ import arrow.core.nonEmptyListOf
 import com.benasher44.uuid.uuid4
 import com.lowagie.text.pdf.PdfReader
 import com.lowagie.text.pdf.parser.PdfTextExtractor
+import cz.frantisekmasa.wfrp_master.common.compendium.domain.Trait
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Element
-import cz.frantisekmasa.wfrp_master.common.compendium.domain.Trait
 
 object RulebookTraitImporter {
 
@@ -32,7 +32,7 @@ object RulebookTraitImporter {
 
         data.lineSequence().forEach { line ->
             for (span in Jsoup.parse(line).select("span")) {
-                when(val token = consumeSpan(span)) {
+                when (val token = consumeSpan(span)) {
                     is Token.ParagraphToken -> {
                         if (heading == "") {
                             // This is some text before the first heading
@@ -81,7 +81,7 @@ object RulebookTraitImporter {
         }
 
         // Trailing value in braces
-        Regex("\\((.*)\\)").find(name)?.let { yield(it.groupValues[1])}
+        Regex("\\((.*)\\)").find(name)?.let { yield(it.groupValues[1]) }
     }.toSet()
 
     sealed interface Token {
@@ -135,5 +135,4 @@ object RulebookTraitImporter {
 
         return null
     }
-
 }
