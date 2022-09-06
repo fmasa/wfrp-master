@@ -46,11 +46,28 @@ jobs:
             ${{ runner.os }}-gradle-
       - run: ./gradlew --no-daemon --parallel testDebugUnitTest
 
+  ktlint:
+    name: Code style (ktlint)
+    runs-on: ubuntu-22.04
+    container: alvrme/alpine-android:android-30-jdk11
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/cache@v3
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+      - run: ./gradlew --no-daemon --parallel ktlintCheck
+
   checks-passed:
     name: Wait for all checks
     needs:
       - unit-tests
       - firestore-tests
+      - ktlint
     runs-on: ubuntu-20.04
     container:
       image: fmasa/lebeda:7.4-ci
