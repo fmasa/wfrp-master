@@ -31,5 +31,6 @@ object Schema {
         const val Spells = "spells"
         const val Talents = "talents"
         const val Traits = "traits"
+        const val Careers = "careers"
     }
 }

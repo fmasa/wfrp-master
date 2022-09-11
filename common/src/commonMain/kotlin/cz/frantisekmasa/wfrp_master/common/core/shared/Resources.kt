@@ -32,6 +32,7 @@ object Resources {
         Spell("drawable/ic_spells.xml"),
         Talent("drawable/ic_skills.xml"),
         Trait("drawable/ic_traits.xml"),
+        Career("drawable/ic_skills.xml"), // TODO: Change the icon
 
         // Conditions
         ConditionAblaze("drawable/ic_condition_ablaze.xml"),

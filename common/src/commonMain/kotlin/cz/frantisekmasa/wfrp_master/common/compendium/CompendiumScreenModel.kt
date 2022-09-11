@@ -2,6 +2,7 @@ package cz.frantisekmasa.wfrp_master.common.compendium
 
 import cafe.adriel.voyager.core.model.ScreenModel
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.Blessing
+import cz.frantisekmasa.wfrp_master.common.compendium.domain.Career
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.Miracle
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.Skill
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.Spell
@@ -16,6 +17,7 @@ import kotlinx.coroutines.flow.Flow
 
 class CompendiumScreenModel(
     private val partyId: PartyId,
+    private val careerCompendium: Compendium<Career>,
     private val skillCompendium: Compendium<Skill>,
     private val talentsCompendium: Compendium<Talent>,
     private val spellCompendium: Compendium<Spell>,
@@ -26,6 +28,7 @@ class CompendiumScreenModel(
 ) : ScreenModel {
 
     val party: Flow<Party> = parties.getLive(partyId).right()
+    val careers: Flow<List<Career>> = careerCompendium.liveForParty(partyId)
     val skills: Flow<List<Skill>> = skillCompendium.liveForParty(partyId)
     val talents: Flow<List<Talent>> = talentsCompendium.liveForParty(partyId)
     val spells: Flow<List<Spell>> = spellCompendium.liveForParty(partyId)
@@ -100,7 +103,20 @@ class CompendiumScreenModel(
     suspend fun saveMultipleTraits(traits: List<Trait>) {
         traitCompendium.saveItems(partyId, *traits.toTypedArray())
     }
+
     suspend fun remove(trait: Trait) {
         traitCompendium.remove(partyId, trait)
+    }
+
+    suspend fun save(career: Career) {
+        saveMultipleCareers(listOf(career))
+    }
+
+    suspend fun saveMultipleCareers(careers: List<Career>) {
+        careerCompendium.saveItems(partyId, *careers.toTypedArray())
+    }
+
+    suspend fun remove(career: Career) {
+        careerCompendium.remove(partyId, career)
     }
 }
