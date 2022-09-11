@@ -28,18 +28,7 @@ service cloud.firestore {
                         && skill.name is string && isNotBlank(skill.name) && skill.name.size() <= 50
                         && skill.description is string && skill.description.size() <= 2000
                         && skill.advanced is bool
-                        && skill.characteristic in [
-                            "AGILITY",
-                            "BALLISTIC_SKILL",
-                            "DEXTERITY",
-                            "INITIATIVE",
-                            "INTELLIGENCE",
-                            "FELLOWSHIP",
-                            "STRENGTH",
-                            "TOUGHNESS",
-                            "WILL_POWER",
-                            "WEAPON_SKILL"
-                        ]
+                        && skill.characteristic in validCharacteristics();
                 }
             }
 
@@ -123,6 +112,39 @@ service cloud.firestore {
                            && trait.id is string && trait.id == traitId && isValidUuid(trait.id)
                            && trait.name is string && isNotBlank(trait.name) && trait.name.size() <= 50
                            && trait.description is string && trait.description.size() <= 3000;
+                }
+            }
+
+
+            match /careers/{careerId} {
+                allow read: if hasAccessToParty();
+                allow create: if isGameMaster() && isValidCareer(request.resource.data);
+                allow update: if isGameMaster() && isValidCareer(request.resource.data);
+                allow delete: if isGameMaster();
+
+                function isValidCareer(career) {
+                    return career.keys().toSet() == ["id", "name", "description", "socialClass", "races", "levels"].toSet()
+                        && career.id is string && career.id == careerId && isValidUuid(career.id)
+                        && career.name is string && isNotBlank(career.name) && career.name.size() <= 50
+                        && career.description is string && career.description.size() <= 3000
+                        && career.socialClass is string && isValidSocialClass(career.socialClass)
+                        && career.races is list
+                            && career.races.toSet().size() == career.races.size() // There are no duplicates
+                            && validRaces().hasAll(career.races)
+                        && career.levels is list;
+                }
+
+                function isValidSocialClass(socialClass) {
+                    return socialClass in [
+                        "ACADEMICS",
+                        "BURGHERS",
+                        "COURTIERS",
+                        "PEASANTS",
+                        "RANGERS",
+                        "RIVERFOLK",
+                        "ROGUES",
+                        "WARRIORS",
+                    ];
                 }
             }
             // End of Compendium
@@ -430,7 +452,7 @@ service cloud.firestore {
                         && character.motivation is string && character.motivation.size() <= 200
                         && character.mutation is string && character.mutation.size() <= 200
                         && character.socialClass is string && isNotBlank(character.socialClass) && character.socialClass.size() <= 50
-                        && (character.race == null || (character.race is string && character.race in ["HUMAN", "HIGH_ELF", "DWARF", "HALFLING", "WOOD_ELF", "GNOME", "OGRE"]))
+                        && (character.race == null || (character.race is string && character.race in validRaces()))
                         && arePointsValid(character.points)
                         && areStatsValid(character.characteristicsBase)
                         && areStatsValid(character.characteristicsAdvances)
@@ -712,5 +734,24 @@ service cloud.firestore {
     //
     function isNotBlank(value) {
         return value.replace('\\s', '') != ""
+    }
+
+    function validRaces() {
+        return ["HUMAN", "HIGH_ELF", "DWARF", "HALFLING", "WOOD_ELF", "GNOME", "OGRE"];
+    }
+
+    function validCharacteristics() {
+        return [
+           "AGILITY",
+           "BALLISTIC_SKILL",
+           "DEXTERITY",
+           "INITIATIVE",
+           "INTELLIGENCE",
+           "FELLOWSHIP",
+           "STRENGTH",
+           "TOUGHNESS",
+           "WILL_POWER",
+           "WEAPON_SKILL"
+       ];
     }
 }
