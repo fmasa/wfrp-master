@@ -33,6 +33,7 @@ import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.WeaponFlaw
 import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.WeaponQuality
 import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.WeaponRangeExpression
 import cz.frantisekmasa.wfrp_master.common.core.ui.dialogs.FullScreenDialog
+import cz.frantisekmasa.wfrp_master.common.core.ui.forms.CheckboxList
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.CheckboxWithText
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.ErrorMessage
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.Filter
@@ -247,29 +248,6 @@ private fun ArmourLocationsPickers(formData: TrappingTypeFormData, validate: Boo
 
     if (validate && selectedParts.value.isEmpty()) {
         ErrorMessage(strings.messages.atLeastOneLocationRequired)
-    }
-}
-
-@Composable
-private fun <T> CheckboxList(
-    items: Array<T>,
-    text: @Composable (T) -> String,
-    selected: MutableState<Set<T>>,
-) {
-    Column {
-        items.forEach { item ->
-            CheckboxWithText(
-                text = text(item),
-                checked = item in selected.value,
-                onCheckedChange = { checked ->
-                    if (checked) {
-                        selected.value += item
-                    } else {
-                        selected.value -= item
-                    }
-                }
-            )
-        }
     }
 }
 
