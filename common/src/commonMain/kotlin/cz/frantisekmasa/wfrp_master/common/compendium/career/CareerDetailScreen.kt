@@ -39,7 +39,10 @@ import com.benasher44.uuid.Uuid
 import com.halilibo.richtext.markdown.Markdown
 import com.halilibo.richtext.ui.RichText
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.Career
+import cz.frantisekmasa.wfrp_master.common.core.PartyScreenModel
+import cz.frantisekmasa.wfrp_master.common.core.auth.LocalUser
 import cz.frantisekmasa.wfrp_master.common.core.domain.localizedName
+import cz.frantisekmasa.wfrp_master.common.core.domain.party.Party
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.PartyId
 import cz.frantisekmasa.wfrp_master.common.core.shared.IO
 import cz.frantisekmasa.wfrp_master.common.core.shared.Parcelable
@@ -71,12 +74,15 @@ class CareerDetailScreen(
     @Composable
     override fun Content() {
         val screenModel: CareerScreenModel = rememberScreenModel()
+        val partyScreenModel: PartyScreenModel = rememberScreenModel(arg = partyId)
+
+        val party = partyScreenModel.party.collectWithLifecycle(null).value
 
         val career = remember { screenModel.getCareer(partyId, careerId) }
             .collectWithLifecycle(null)
             .value
 
-        if (career == null) {
+        if (career == null || party == null) {
             FullScreenProgress()
             return
         }
@@ -92,7 +98,7 @@ class CareerDetailScreen(
                     navigator.pop()
                 }
             }
-            is Either.Right -> Detail(career.value, screenModel)
+            is Either.Right -> Detail(career.value, party, screenModel)
         }
     }
 
@@ -108,13 +114,15 @@ class CareerDetailScreen(
     }
 
     @Composable
-    private fun Detail(career: Career, screenModel: CareerScreenModel) {
+    private fun Detail(career: Career, party: Party, screenModel: CareerScreenModel) {
         val strings = LocalStrings.current.careers
         val (dialogState, setDialogState) = remember {
             mutableStateOf<LevelDialogState>(
                 LevelDialogState.Closed
             )
         }
+
+        val isGameMaster = LocalUser.current.id == party.gameMasterId
 
         when (dialogState) {
             LevelDialogState.Closed -> {}
@@ -168,17 +176,21 @@ class CareerDetailScreen(
                             )
                         }
 
-                        IconAction(
-                            Icons.Rounded.Edit,
-                            LocalStrings.current.careers.titleEditCareer,
-                            onClick = { editDialogOpened = true }
-                        )
+                        if (isGameMaster) {
+                            IconAction(
+                                Icons.Rounded.Edit,
+                                LocalStrings.current.careers.titleEditCareer,
+                                onClick = { editDialogOpened = true }
+                            )
+                        }
                     }
                 )
             },
             floatingActionButton = {
-                FloatingActionButton(onClick = { setDialogState(LevelDialogState.AddLevel) }) {
-                    Icon(Icons.Rounded.Add, strings.titleAddLevel)
+                if (isGameMaster) {
+                    FloatingActionButton(onClick = { setDialogState(LevelDialogState.AddLevel) }) {
+                        Icon(Icons.Rounded.Add, strings.titleAddLevel)
+                    }
                 }
             }
         ) {
@@ -222,7 +234,8 @@ class CareerDetailScreen(
                         },
                         onClick = {
                             setDialogState(LevelDialogState.EditLevel(it))
-                        }
+                        },
+                        isGameMaster = isGameMaster,
                     )
                 }
             }
@@ -235,6 +248,7 @@ private fun LevelList(
     levels: List<Career.Level>,
     onClick: (Career.Level) -> Unit,
     onReorder: (List<Career.Level>) -> Unit,
+    isGameMaster: Boolean,
 ) {
     if (levels.isEmpty()) {
         EmptyUI(
@@ -247,13 +261,15 @@ private fun LevelList(
 
     DraggableListFor(
         items = levels,
-        onReorder = onReorder
+        onReorder = if (isGameMaster) onReorder else ({}),
     ) { levelIndex, level, isDragged ->
+        val modifier = Modifier.fillMaxWidth()
+
         Card(
             elevation = if (isDragged) 6.dp else 2.dp,
-            modifier = Modifier
-                .fillMaxWidth()
-                .clickable { onClick(level) }
+            modifier = if (isGameMaster)
+                modifier.clickable { onClick(level) }
+            else modifier
         ) {
             ListItem(
                 modifier = Modifier.padding(Spacing.medium),

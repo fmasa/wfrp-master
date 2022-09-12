@@ -22,6 +22,7 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.Stable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -32,6 +33,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
+import cafe.adriel.voyager.navigator.LocalNavigator
+import cafe.adriel.voyager.navigator.currentOrThrow
+import cz.frantisekmasa.wfrp_master.common.character.CharacterScreenModel
+import cz.frantisekmasa.wfrp_master.common.compendium.career.CareerDetailScreen
 import cz.frantisekmasa.wfrp_master.common.core.domain.Characteristic
 import cz.frantisekmasa.wfrp_master.common.core.domain.Expression
 import cz.frantisekmasa.wfrp_master.common.core.domain.Stats
@@ -41,6 +46,7 @@ import cz.frantisekmasa.wfrp_master.common.core.domain.character.Points.PointPoo
 import cz.frantisekmasa.wfrp_master.common.core.domain.identifiers.CharacterId
 import cz.frantisekmasa.wfrp_master.common.core.domain.localizedName
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.Party
+import cz.frantisekmasa.wfrp_master.common.core.domain.party.PartyId
 import cz.frantisekmasa.wfrp_master.common.core.shared.IO
 import cz.frantisekmasa.wfrp_master.common.core.shared.Resources
 import cz.frantisekmasa.wfrp_master.common.core.shared.drawableResource
@@ -48,9 +54,11 @@ import cz.frantisekmasa.wfrp_master.common.core.shared.rememberSoundPlayer
 import cz.frantisekmasa.wfrp_master.common.core.ui.CharacterAvatar
 import cz.frantisekmasa.wfrp_master.common.core.ui.dialogs.Dialog
 import cz.frantisekmasa.wfrp_master.common.core.ui.dialogs.FullScreenDialog
+import cz.frantisekmasa.wfrp_master.common.core.ui.flow.collectWithLifecycle
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.NumberPicker
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.CardRow
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.FloatingActionsMenu
+import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.FullScreenProgress
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.ItemIcon
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.MenuState
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
@@ -65,11 +73,13 @@ import cz.frantisekmasa.wfrp_master.common.skillTest.Roll
 import cz.frantisekmasa.wfrp_master.common.skillTest.RollResult
 import cz.frantisekmasa.wfrp_master.common.skillTest.TestResultScreen
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 
 @Composable
 internal fun CharacteristicsScreen(
     screenModel: CharacteristicsScreenModel,
+    characterScreenModel: CharacterScreenModel,
     characterId: CharacterId,
     character: Character,
     party: Party,
@@ -130,6 +140,15 @@ internal fun CharacteristicsScreen(
             }
         }
     ) {
+        val currentCareer = remember {
+            characterScreenModel.career.map { CareerState.Loaded(it) }
+        }.collectWithLifecycle(CareerState.Loading).value
+
+        if (currentCareer !is CareerState.Loaded) {
+            FullScreenProgress()
+            return@Scaffold
+        }
+
         Column(
             Modifier
                 .verticalScroll(rememberScrollState())
@@ -141,6 +160,7 @@ internal fun CharacteristicsScreen(
 
             CharacterTopPanel(
                 character,
+                career = currentCareer.career,
                 points,
                 onUpdate = { coroutineScope.launch(Dispatchers.IO) { screenModel.updatePoints(it) } }
             )
@@ -149,7 +169,7 @@ internal fun CharacteristicsScreen(
 
             CardRow(Modifier.padding(top = Spacing.small)) {
                 Box(Modifier.weight(1f), contentAlignment = Alignment.TopCenter) {
-                    CareerSection(character)
+                    CareerSection(currentCareer.career, character, party.id)
                 }
 
                 Box(Modifier.weight(1f), contentAlignment = Alignment.TopCenter) {
@@ -163,8 +183,18 @@ internal fun CharacteristicsScreen(
     }
 }
 
+private sealed interface CareerState {
+    data class Loaded(val career: CharacterScreenModel.CurrentCareer?)
+    object Loading : CareerState
+}
+
 @Composable
-private fun CharacterTopPanel(character: Character, points: Points, onUpdate: (Points) -> Unit) {
+private fun CharacterTopPanel(
+    character: Character,
+    career: CharacterScreenModel.CurrentCareer?,
+    points: Points,
+    onUpdate: (Points) -> Unit,
+) {
     TopPanel {
         Container(
             Modifier.padding(vertical = Spacing.large, horizontal = Spacing.extraLarge),
@@ -195,7 +225,7 @@ private fun CharacterTopPanel(character: Character, points: Points, onUpdate: (P
                         )
                         Text(
                             (character.race?.let { "${it.localizedName} " } ?: "") +
-                                character.career,
+                                careerName(career, character),
                             style = MaterialTheme.typography.caption,
                             softWrap = false,
                             overflow = TextOverflow.Ellipsis,
@@ -209,6 +239,15 @@ private fun CharacterTopPanel(character: Character, points: Points, onUpdate: (P
             column(size) { PointsRow(points, update = onUpdate) }
         }
     }
+}
+
+@Stable
+private fun careerName(career: CharacterScreenModel.CurrentCareer?, character: Character): String {
+    if (career == null) {
+        return character.career
+    }
+
+    return career.level.name
 }
 
 @Composable
@@ -383,14 +422,26 @@ private fun ExperiencePointsSection(
 }
 
 @Composable
-private fun CareerSection(character: Character) {
+private fun CareerSection(
+    career: CharacterScreenModel.CurrentCareer?,
+    character: Character,
+    partyId: PartyId,
+) {
     val status = character.status
+    val careerName = career?.level?.name ?: character.career
+    val socialClass = career?.career?.socialClass?.localizedName ?: character.socialClass
 
-    Column {
-        Text(character.career, fontWeight = FontWeight.Bold)
+    val navigator = LocalNavigator.currentOrThrow
+
+    Column(
+        if (career != null)
+            Modifier.clickable { navigator.push(CareerDetailScreen(partyId, career.career.id)) }
+        else Modifier
+    ) {
+        Text(careerName, fontWeight = FontWeight.Bold)
         CompositionLocalProvider(LocalContentAlpha provides ContentAlpha.medium) {
             Text(
-                "${character.socialClass} · ${status.tier.localizedName} ${status.standing}",
+                "$socialClass · ${status.tier.localizedName} ${status.standing}",
                 style = MaterialTheme.typography.caption
             )
         }

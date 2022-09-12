@@ -437,7 +437,8 @@ service cloud.firestore {
                             "hiddenTabs",
                             "avatarUrl",
                             "archived",
-                            "woundsModifiers"
+                            "woundsModifiers",
+                            "compendiumCareer"
                         ].hasAll(character.keys())
                         && character.id == characterId
                         && (
@@ -447,11 +448,11 @@ service cloud.firestore {
                         && (! ("type" in character) || character.type in ["PLAYER_CHARACTER", "NPC"])
                         && character.name is string && isNotBlank(character.name) && character.name.size() <= 50
                         && (! ("publicName" in character) || character.publicName == null || (character.publicName is string && isNotBlank(character.publicName) && character.publicName.size() <= 50))
-                        && character.career is string && isNotBlank(character.career) && character.career.size() <= 50
+                        && character.career is string && character.career.size() <= 50
                         && character.psychology is string && character.psychology.size() <= 200
                         && character.motivation is string && character.motivation.size() <= 200
                         && character.mutation is string && character.mutation.size() <= 200
-                        && character.socialClass is string && isNotBlank(character.socialClass) && character.socialClass.size() <= 50
+                        && character.socialClass is string && character.socialClass.size() <= 50
                         && (character.race == null || (character.race is string && character.race in validRaces()))
                         && arePointsValid(character.points)
                         && areStatsValid(character.characteristicsBase)
@@ -499,7 +500,13 @@ service cloud.firestore {
                             character.woundsModifiers.keys().toSet() == ["afterMultiplier", "extraToughnessBonusMultiplier"].toSet() &&
                             character.woundsModifiers.afterMultiplier is int &&
                             character.woundsModifiers.extraToughnessBonusMultiplier is int
-                        );
+                        )
+                        && (! ("compendiumCareer" in character) || character.compendiumCareer == null || (
+                            character.compendiumCareer is map &&
+                            character.compendiumCareer.keys().toSet() == ["careerId", "levelId"].toSet() &&
+                            character.compendiumCareer.careerId is string && isValidUuid(character.compendiumCareer.careerId) &&
+                            character.compendiumCareer.levelId is string && isValidUuid(character.compendiumCareer.levelId)
+                        ));
                 }
             }
 

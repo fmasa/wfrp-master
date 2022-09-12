@@ -303,6 +303,7 @@ data class CharacterDetailScreen(
                     CharacteristicsScreen(
                         character = character,
                         screenModel = rememberScreenModel(arg = characterId),
+                        characterScreenModel = screenModel,
                         modifier = modifier,
                         characterId = characterId,
                         party = party,

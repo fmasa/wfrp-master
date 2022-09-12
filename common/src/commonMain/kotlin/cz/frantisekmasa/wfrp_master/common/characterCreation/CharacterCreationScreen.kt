@@ -30,6 +30,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowBackIos
 import androidx.compose.material.icons.rounded.ArrowForwardIos
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -42,18 +43,21 @@ import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import cz.frantisekmasa.wfrp_master.common.character.CharacterDetailScreen
+import cz.frantisekmasa.wfrp_master.common.compendium.domain.Career
 import cz.frantisekmasa.wfrp_master.common.core.auth.UserId
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.CharacterType
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.PartyId
 import cz.frantisekmasa.wfrp_master.common.core.shared.IO
 import cz.frantisekmasa.wfrp_master.common.core.ui.buttons.BackButton
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.FormData
+import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.FullScreenProgress
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.VisualOnlyIconDescription
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.rememberScreenModel
 import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.SubheadBar
 import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 private enum class FormState {
     EDITED_BY_USER,
@@ -85,11 +89,26 @@ private fun Screen.MainContainer(partyId: PartyId, type: CharacterType, userId: 
     val screenModel: CharacterCreationScreenModel = rememberScreenModel(arg = partyId)
     val coroutineScope = rememberCoroutineScope()
 
+    val (careers, setCareers) = rememberSaveable {
+        mutableStateOf<List<Career>?>(null)
+    }
+
+    LaunchedEffect(Unit) {
+        withContext(Dispatchers.IO) {
+            setCareers(screenModel.getCareers())
+        }
+    }
+
+    if (careers == null) {
+        FullScreenProgress()
+        return
+    }
+
     val validate = remember { mutableStateOf(false) }
     val currentStepIndex = rememberSaveable { mutableStateOf(0) }
     val formState = rememberSaveable { mutableStateOf(FormState.EDITED_BY_USER) }
 
-    val basicInfo = CharacterBasicInfoForm.Data.empty(type)
+    val basicInfo = CharacterBasicInfoForm.Data.empty(type, careers)
     val characteristics = CharacterCharacteristicsForm.Data.fromCharacter(null)
     val points = PointsPoolForm.Data.empty()
 
