@@ -1,12 +1,16 @@
 package cz.frantisekmasa.wfrp_master.common.core.domain.character
 
 import androidx.compose.runtime.Immutable
+import com.benasher44.uuid.Uuid
 import cz.frantisekmasa.wfrp_master.common.core.common.requireMaxLength
 import cz.frantisekmasa.wfrp_master.common.core.domain.Ambitions
 import cz.frantisekmasa.wfrp_master.common.core.domain.Money
 import cz.frantisekmasa.wfrp_master.common.core.domain.Size
 import cz.frantisekmasa.wfrp_master.common.core.domain.Stats
+import cz.frantisekmasa.wfrp_master.common.core.shared.Parcelable
+import cz.frantisekmasa.wfrp_master.common.core.shared.Parcelize
 import cz.frantisekmasa.wfrp_master.common.encounters.domain.Wounds
+import kotlinx.serialization.Contextual
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -21,6 +25,7 @@ data class Character(
     val publicName: String? = null,
     val userId: String?,
     val career: String,
+    val compendiumCareer: CompendiumCareer? = null,
     val socialClass: String,
     val status: SocialStatus = SocialStatus(SocialStatus.Tier.BRASS, 0),
     val psychology: String,
@@ -58,7 +63,7 @@ data class Character(
         require(publicName == null || type == CharacterType.NPC) {
             "Only NPC can have a public name"
         }
-        require(listOf(name, userId, career).all { it?.isNotBlank() ?: true })
+        require(listOf(name, userId).all { it?.isNotBlank() ?: true })
         require(name.length <= NAME_MAX_LENGTH) { "Character name is too long" }
         require(career.length <= CAREER_MAX_LENGTH) { "Career is too long" }
         require(socialClass.length <= SOCIAL_CLASS_MAX_LENGTH) { "Social class is too long" }
@@ -77,6 +82,13 @@ data class Character(
         )
         require(points.wounds <= maxWounds) { "Wounds (${points.wounds} are greater than max Wounds ($maxWounds)" }
     }
+
+    @Parcelize
+    @Serializable
+    data class CompendiumCareer(
+        @Contextual val careerId: Uuid,
+        @Contextual val levelId: Uuid,
+    ) : Parcelable
 
     fun updateCharacteristics(base: Stats, advances: Stats): Character {
         return copy(
@@ -130,10 +142,16 @@ data class Character(
         )
     }
 
-    fun updateCareer(careerName: String, socialClass: String, status: SocialStatus) = copy(
+    fun updateCareer(
+        careerName: String,
+        socialClass: String,
+        status: SocialStatus,
+        compendiumCareer: CompendiumCareer?,
+    ) = copy(
         career = careerName,
         socialClass = socialClass,
         status = status,
+        compendiumCareer = compendiumCareer,
     )
 
     fun updateBasics(

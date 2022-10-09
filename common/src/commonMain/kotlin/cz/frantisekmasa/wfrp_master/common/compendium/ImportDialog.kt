@@ -25,6 +25,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.Blessing
+import cz.frantisekmasa.wfrp_master.common.compendium.domain.Career
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.Miracle
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.Skill
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.Spell
@@ -136,9 +137,19 @@ private fun ImportedItemsPicker(
                 label = strings.pickPromptTraits,
                 items = state.traits,
                 onSave = screenModel::saveMultipleTraits,
-                onContinue = onComplete,
+                onContinue = { screen = ItemsScreen.CAREERS },
                 onClose = onDismissRequest,
                 existingItems = screenModel.traits,
+            )
+        }
+        ItemsScreen.CAREERS -> {
+            ItemPicker(
+                label = strings.pickPromptCareers,
+                items = state.careers,
+                onSave = screenModel::saveMultipleCareers,
+                onContinue = onComplete,
+                onClose = onDismissRequest,
+                existingItems = screenModel.careers,
             )
         }
     }
@@ -266,6 +277,7 @@ internal sealed class ImportDialogState {
         val blessings: List<Blessing>,
         val miracles: List<Miracle>,
         val traits: List<Trait>,
+        val careers: List<Career>,
     ) : ImportDialogState()
 }
 
@@ -277,4 +289,5 @@ private enum class ItemsScreen {
     BLESSINGS,
     MIRACLES,
     TRAITS,
+    CAREERS,
 }

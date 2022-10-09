@@ -1,5 +1,8 @@
 package cz.frantisekmasa.wfrp_master.common.core.domain.compendium
 
+import arrow.core.Either
+import arrow.core.left
+import arrow.core.right
 import com.benasher44.uuid.Uuid
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.exceptions.CompendiumItemNotFound
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.PartyId
@@ -16,6 +19,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 
 class FirestoreCompendium<T : CompendiumItem<T>>(
     private val collectionName: String,
@@ -42,6 +46,20 @@ class FirestoreCompendium<T : CompendiumItem<T>>(
                 e
             )
         }
+    }
+
+    override fun getLive(partyId: PartyId, itemId: Uuid): Flow<Either<CompendiumItemNotFound, T>> {
+        return collection(partyId).document(itemId.toString())
+            .snapshots
+            .map {
+                it.fold(
+                    { snapshot ->
+                        snapshot.data?.let(mapper::fromDocumentData)?.right()
+                            ?: CompendiumItemNotFound(null).left()
+                    },
+                    { error -> CompendiumItemNotFound(null, error).left() },
+                )
+            }
     }
 
     override suspend fun saveItems(partyId: PartyId, vararg items: T) {

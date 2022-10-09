@@ -49,6 +49,31 @@ interface Spell {
     lore: string;
 }
 
+interface Career {
+    id: string;
+    name: string;
+    description: string;
+    socialClass: string;
+    races: string[];
+    levels: [
+        CareerLevel,
+        CareerLevel,
+        CareerLevel,
+        CareerLevel,
+    ]
+}
+
+interface CareerLevel {
+    name: string;
+    upgradableCharacteristics: string[];
+    skillIds: string[];
+    talentIds: string[];
+    status: {
+        tier: string,
+        standing: number,
+    }
+}
+
 abstract class CompendiumTest<TItem extends { id: string }> extends Suite {
 
     protected abstract collectionName: string
@@ -285,6 +310,64 @@ class SpellCompendiumTest extends CompendiumTest<Spell> {
                 castingNumber: 0,
                 effect: "Your staff blinks with bright white light which blinds target for 1d10 minutes",
                 lore: "Petty spells",
+            }
+        ]
+    }
+}
+@suite
+class CareerCompendiumTest extends CompendiumTest<Career> {
+    protected collectionName = "careers";
+
+    protected validItems(): Career[] {
+        return [
+            {
+                id: uuid(),
+                name: "Rat catcher",
+                description: "Rat catchers catch rats. Duh!",
+                socialClass: "PEASANTS",
+                races: ["HUMAN"],
+                levels: [
+                    {
+                        name: "Level 1",
+                        upgradableCharacteristics: ["WILL_POWER", "DEXTERITY"],
+                        skillIds: [uuid(), uuid()],
+                        talentIds: [uuid(), uuid()],
+                        status: {
+                            tier: "BRASS",
+                            standing: 1,
+                        },
+                    },
+                    {
+                        name: "Level 2",
+                        upgradableCharacteristics: ["WEAPON_SKILL", "INITIATIVE"],
+                        skillIds: [uuid(), uuid()],
+                        talentIds: [uuid(), uuid()],
+                        status: {
+                            tier: "BRASS",
+                            standing: 1,
+                        },
+                    },
+                    {
+                        name: "Level 3",
+                        upgradableCharacteristics: ["BALLISTIC_SKILL", "INTELLIGENCE", "WILL_POWER"],
+                        skillIds: [uuid(), uuid()],
+                        talentIds: [uuid(), uuid()],
+                        status: {
+                            tier: "BRASS",
+                            standing: 1,
+                        },
+                    },
+                    {
+                        name: "Level 4",
+                        upgradableCharacteristics: ["FELLOWSHIP", "STRENGTH", "TOUGHNESS"],
+                        skillIds: [uuid(), uuid()],
+                        talentIds: [uuid(), uuid()],
+                        status: {
+                            tier: "BRASS",
+                            standing: 1,
+                        },
+                    }
+                ]
             }
         ]
     }

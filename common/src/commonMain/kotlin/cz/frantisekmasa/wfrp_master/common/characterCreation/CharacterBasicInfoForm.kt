@@ -10,21 +10,21 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import cz.frantisekmasa.wfrp_master.common.compendium.domain.Career
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.Character
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.CharacterType
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.Race
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.SocialStatus
 import cz.frantisekmasa.wfrp_master.common.core.domain.localizedName
+import cz.frantisekmasa.wfrp_master.common.core.ui.forms.CareerSelectBox
+import cz.frantisekmasa.wfrp_master.common.core.ui.forms.CheckboxWithText
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.ChipList
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.FormData
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.InputValue
-import cz.frantisekmasa.wfrp_master.common.core.ui.forms.NumberPicker
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.Rules
-import cz.frantisekmasa.wfrp_master.common.core.ui.forms.SelectBox
-import cz.frantisekmasa.wfrp_master.common.core.ui.forms.SelectBoxLabel
+import cz.frantisekmasa.wfrp_master.common.core.ui.forms.SocialStatusInput
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.TextInput
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.inputValue
 import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
@@ -37,43 +37,52 @@ object CharacterBasicInfoForm {
         val publicName: InputValue,
         val socialClass: InputValue,
         val career: InputValue,
+        val customCareer: MutableState<Boolean>,
+        val compendiumCareer: MutableState<Character.CompendiumCareer?>,
         val race: MutableState<Race?>,
         val psychology: InputValue,
         val motivation: InputValue,
         val note: InputValue,
-        val socialTier: MutableState<SocialStatus.Tier>,
-        val socialStanding: MutableState<Int>,
+        val status: MutableState<SocialStatus>,
+        val careers: List<Career>,
     ) : FormData {
         companion object {
             @Composable
-            fun empty(characterType: CharacterType) = fromDefaults(null, characterType)
+            fun empty(characterType: CharacterType, careers: List<Career>): Data {
+                return fromDefaults(null, characterType, careers)
+            }
 
             @Composable
-            private fun fromDefaults(character: Character?, characterType: CharacterType) = Data(
+            private fun fromDefaults(character: Character?, characterType: CharacterType, careers: List<Career>) = Data(
                 characterType = characterType,
                 name = inputValue(character?.name ?: "", Rules.NotBlank()),
                 publicName = inputValue(character?.publicName ?: ""),
-                socialClass = inputValue(character?.socialClass ?: "", Rules.NotBlank()),
-                career = inputValue(character?.career ?: "", Rules.NotBlank()),
+                socialClass = inputValue(character?.socialClass ?: ""),
+                career = inputValue(character?.career ?: ""),
                 race = rememberSaveable {
                     mutableStateOf(if (character == null) Race.HUMAN else character.race)
                 },
                 psychology = inputValue(character?.psychology ?: ""),
                 motivation = inputValue(character?.motivation ?: ""),
                 note = inputValue(character?.note ?: ""),
-                socialTier = rememberSaveable {
-                    mutableStateOf(character?.status?.tier ?: SocialStatus.Tier.BRASS)
+                customCareer = rememberSaveable {
+                    mutableStateOf(character != null && character.career != "")
                 },
-                socialStanding = rememberSaveable {
-                    mutableStateOf(character?.status?.standing ?: 0)
+                compendiumCareer = rememberSaveable {
+                    mutableStateOf(character?.compendiumCareer)
                 },
+                status = rememberSaveable {
+                    mutableStateOf(
+                        character?.status
+                            ?: SocialStatus(SocialStatus.Tier.BRASS, 0)
+                    )
+                },
+                careers = careers,
             )
         }
 
         override fun isValid(): Boolean =
-            name.value.isNotBlank() &&
-                socialClass.value.isNotBlank() &&
-                career.value.isNotBlank()
+            name.value.isNotBlank() && (customCareer.value || compendiumCareer.value != null)
     }
 }
 
@@ -109,44 +118,42 @@ fun CharacterBasicInfoForm(
             onValueChange = { data.race.value = it },
         )
 
-        Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-            TextInput(
-                modifier = Modifier.weight(1f),
-                label = strings.labelClass,
-                value = data.socialClass,
-                maxLength = Character.SOCIAL_CLASS_MAX_LENGTH,
-                validate = validate,
-            )
+        CheckboxWithText(
+            strings.labelCustomCareer,
+            checked = data.customCareer.value,
+            onCheckedChange = { data.customCareer.value = !data.customCareer.value },
+        )
 
-            TextInput(
-                modifier = Modifier.weight(1f),
-                label = strings.labelCareer,
-                value = data.career,
-                maxLength = Character.CAREER_MAX_LENGTH,
-                validate = validate,
-            )
-        }
-
-        // TODO: Turn into component that can be reused in Edit UI
-        Column {
-            SelectBoxLabel(strings.labelStatus)
-            Row(
-                Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(8.dp),
-                verticalAlignment = Alignment.CenterVertically,
-            ) {
-                SelectBox(
-                    value = data.socialTier.value,
-                    onValueChange = { data.socialTier.value = it },
-                    items = SocialStatus.Tier.values(),
-                    modifier = Modifier.fillMaxWidth(0.6f),
+        if (data.customCareer.value) {
+            Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                TextInput(
+                    modifier = Modifier.weight(1f),
+                    label = strings.labelClass,
+                    value = data.socialClass,
+                    maxLength = Character.SOCIAL_CLASS_MAX_LENGTH,
+                    validate = validate,
                 )
-                NumberPicker(
-                    value = data.socialStanding.value,
-                    onIncrement = { data.socialStanding.value++ },
-                    onDecrement = { data.socialStanding.value = maxOf(0, data.socialStanding.value - 1) },
+
+                TextInput(
+                    modifier = Modifier.weight(1f),
+                    label = strings.labelCareer,
+                    value = data.career,
+                    maxLength = Character.CAREER_MAX_LENGTH,
+                    validate = validate,
                 )
             }
+
+            SocialStatusInput(
+                value = data.status.value,
+                onValueChange = { data.status.value = it },
+            )
+        } else {
+            CareerSelectBox(
+                careers = data.careers,
+                value = data.compendiumCareer.value,
+                onValueChange = { data.compendiumCareer.value = it },
+                validate = validate,
+            )
         }
 
         TextInput(

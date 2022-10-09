@@ -20,6 +20,7 @@ data class Strings(
     val authentication: AuthenticationString = AuthenticationString(),
     val blessings: BlessingStrings = BlessingStrings(),
     val calendar: CalendarStrings = CalendarStrings(),
+    val careers: CareerStrings = CareerStrings(),
     val changelog: ChangelogStrings = ChangelogStrings(),
     val combat: CombatStrings = CombatStrings(),
     val commonUi: CommonUiStrings = CommonUiStrings(),
@@ -41,6 +42,7 @@ data class Strings(
     val settings: SettingsStrings = SettingsStrings(),
     val skills: SkillStrings = SkillStrings(),
     val spells: SpellStrings = SpellStrings(),
+    val socialClasses: SocialClassStrings = SocialClassStrings(),
     val tests: TestStrings = TestStrings(),
     val talents: TalentStrings = TalentStrings(),
     val traits: TraitStrings = TraitStrings(),
@@ -242,6 +244,38 @@ data class BlessingMessageStrings(
 )
 
 @Immutable
+data class CareerStrings(
+    val labelName: String = "Name",
+    val labelCharacteristics: String = "Characteristics",
+    val labelDescription: String = "Description (Optional)",
+    val labelRaces: String = "Races",
+    val labelSkills: String = "Other Skills",
+    val labelIncomeSkills: String = "Income Skills",
+    val labelTalents: String = "Talents",
+    val labelTrappings: String = "Trappings",
+    val labelSocialClass: String = "Social class",
+    val tabDetail: String = "Detail",
+    val tabLevels: String = "Levels",
+    val titleAddLevel: String = "Add Level",
+    val titleEditCareer: String = "Edit Career",
+    val titleEditLevel: String = "Edit Level",
+    val titleNewCareer: String = "New Career…",
+    val messages: CareerMessageStrings = CareerMessageStrings(),
+    val commaSeparatedSkillsHelper: String = "Comma separated list of Skills",
+    val commaSeparatedTalentsHelper: String = "Comma separated list of Talents",
+    val commaSeparatedTrappingsHelper: String = "Comma separated list of Trappings",
+)
+
+@Immutable
+data class CareerMessageStrings(
+    val noCareersInCompendium: String = "No careers",
+    val noCareersInCompendiumSubtext: String = "There are no careers in your compendium yet.",
+    val notFound: String = "Career not found",
+    val noLevel: String = "No career levels",
+    val noLevelSubtext: String = "Create at least one level\nto let Characters use this career.",
+)
+
+@Immutable
 data class CharacterStrings(
     val buttonAdd: String = "Add Character",
     val buttonChangeAvatar: String = "Change Avatar",
@@ -251,6 +285,7 @@ data class CharacterStrings(
     val labelCharacteristicAdvances: String = "Advances",
     val labelCharacteristicBase: String = "Base",
     val labelClass: String = "Class",
+    val labelCustomCareer: String = "Custom Career",
     val labelMotivation: String = "Motivation (Optional)",
     val labelName: String = "Name",
     val labelNote: String = "Additional notes (Optional)",
@@ -377,6 +412,7 @@ data class CommonUiStrings(
     val labelPreviousScreen: String = "Return to previous screen",
     val decrement: String = "Decrement value",
     val increment: String = "Increment value",
+    val itemNone: String = "None",
     val iconToggleFabMenu: String = "Toggle menu",
     val dismissTipConfirmation: String = "Do you really want to dismiss this tip?",
     val search: String = "Search",
@@ -431,6 +467,7 @@ data class CompendiumStrings(
     val iconAddCompendiumItem: String = "Add compendium item",
     val importPrompt: String = "Import compendium from official WFRP rulebook.",
     val messages: CompendiumMessageStrings = CompendiumMessageStrings(),
+    val pickPromptCareers: String = "Select which careers you want to import.",
     val pickPromptSkills: String = "Select which skills you want to import.",
     val pickPromptTalents: String = "Select which talents you want to import.",
     val pickPromptSpells: String = "Select which spells you want to import.",
@@ -439,6 +476,7 @@ data class CompendiumStrings(
     val pickPromptTraits: String = "Select which traits you want to import.",
     val rulebookStoreLink: String = "https://www.drivethrurpg.com/product/248284/Warhammer-Fantasy-Roleplay-Fourth-Edition-Rulebook?affiliate_id=2708720",
     val tabBlessings: String = "Blessings",
+    val tabCareers: String = "Careers",
     val tabMiracles: String = "Miracles",
     val tabSkills: String = "Skills",
     val tabSpells: String = "Spells",
@@ -763,6 +801,17 @@ data class SkillMessageStrings(
     val noSkillsInCompendium: String = "No skills",
     val noSkillsInCompendiumSubtext: String = "There are no skills in your compendium yet.",
     val noSkillsInCompendiumSubtextPlayer: String = "Your GM has to add them first.",
+)
+
+data class SocialClassStrings(
+    val academics: String = "Academics",
+    val burghers: String = "Burghers",
+    val courtiers: String = "Courtiers",
+    val peasants: String = "Peasants",
+    val rangers: String = "Rangers",
+    val riverfolk: String = "Riverfolk",
+    val rogues: String = "Rogues",
+    val warriors: String = "Warriors",
 )
 
 @Immutable

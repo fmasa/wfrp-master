@@ -17,7 +17,9 @@ import cz.frantisekmasa.wfrp_master.common.character.trappings.TrappingsScreenMo
 import cz.frantisekmasa.wfrp_master.common.characterCreation.CharacterCreationScreenModel
 import cz.frantisekmasa.wfrp_master.common.combat.CombatScreenModel
 import cz.frantisekmasa.wfrp_master.common.compendium.CompendiumScreenModel
+import cz.frantisekmasa.wfrp_master.common.compendium.career.CareerScreenModel
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.Blessing
+import cz.frantisekmasa.wfrp_master.common.compendium.domain.Career
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.Miracle
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.Skill
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.Spell
@@ -119,6 +121,10 @@ val appModule = DI.Module("Common") {
         FirestoreCompendium(Schema.Compendium.Traits, instance(), mapper())
     }
 
+    bindSingleton<Compendium<Career>> {
+        FirestoreCompendium(Schema.Compendium.Careers, instance(), mapper())
+    }
+
     bindSingleton { DismissedUserTipsHolder(instance()) }
 
     bindSingleton<InvitationProcessor> { FirestoreInvitationProcessor(instance(), instance()) }
@@ -158,7 +164,8 @@ val appModule = DI.Module("Common") {
         CharacterScreenModel(
             characterId,
             instance(),
-            instance()
+            instance(),
+            instance(),
         )
     }
     bindFactory { partyId: PartyId -> CharacterPickerScreenModel(partyId, instance()) }
@@ -182,6 +189,7 @@ val appModule = DI.Module("Common") {
     bindFactory { characterId: CharacterId ->
         BlessingsScreenModel(characterId, instance(), instance())
     }
+    bindSingleton { CareerScreenModel(instance()) }
 
     bindSingleton { EffectFactory() }
     bindSingleton { EffectManager(instance(), instance(), instance(), instance(), instance()) }
@@ -191,10 +199,11 @@ val appModule = DI.Module("Common") {
     bindProvider { InvitationScreenModel(instance(), instance(), instance()) }
     bindProvider { PartyListScreenModel(instance()) }
     bindProvider { SettingsScreenModel(instance(), instance()) }
-    bindFactory { partyId: PartyId -> CharacterCreationScreenModel(partyId, instance()) }
+    bindFactory { partyId: PartyId -> CharacterCreationScreenModel(partyId, instance(), instance()) }
     bindFactory { partyId: PartyId ->
         CompendiumScreenModel(
             partyId,
+            instance(),
             instance(),
             instance(),
             instance(),

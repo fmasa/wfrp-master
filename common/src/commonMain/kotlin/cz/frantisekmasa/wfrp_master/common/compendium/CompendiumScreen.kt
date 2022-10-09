@@ -27,6 +27,7 @@ import androidx.compose.ui.unit.Dp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
+import cz.frantisekmasa.wfrp_master.common.compendium.career.CareerCompendiumTab
 import cz.frantisekmasa.wfrp_master.common.compendium.tabs.BlessingCompendiumTab
 import cz.frantisekmasa.wfrp_master.common.compendium.tabs.MiracleCompendiumTab
 import cz.frantisekmasa.wfrp_master.common.compendium.tabs.SkillCompendiumTab
@@ -71,6 +72,7 @@ class CompendiumScreen(
                 tab(strings.tabBlessings) { BlessingCompendiumTab(screenModel, screenWidth) }
                 tab(strings.tabMiracles) { MiracleCompendiumTab(screenModel, screenWidth) }
                 tab(strings.tabTraits) { TraitCompendiumTab(screenModel, screenWidth) }
+                tab(strings.tabCareers) { CareerCompendiumTab(partyId, screenModel, screenWidth) }
             }
         }
     }
@@ -105,21 +107,18 @@ fun <T : CompendiumItem<T>> CompendiumTab(
     liveItems: Flow<List<T>>,
     width: Dp,
     emptyUI: @Composable () -> Unit,
-    dialog: @Composable (MutableState<DialogState<T?>>) -> Unit,
+    onClick: (T) -> Unit,
     remover: suspend (T) -> Unit,
     saver: suspend (T) -> Unit,
+    onNewItemRequest: () -> Unit,
     itemContent: @Composable LazyItemScope.(T) -> Unit,
 ) {
-    val dialogState = remember { mutableStateOf<DialogState<T?>>(DialogState.Closed()) }
-
-    dialog(dialogState)
-
     Scaffold(
         modifier = Modifier
             .width(width)
             .fillMaxHeight(),
         floatingActionButton = {
-            FloatingActionButton(onClick = { dialogState.value = DialogState.Opened(null) }) {
+            FloatingActionButton(onClick = onNewItemRequest) {
                 Icon(
                     Icons.Rounded.Add,
                     LocalStrings.current.compendium.iconAddCompendiumItem,
@@ -154,7 +153,7 @@ fun <T : CompendiumItem<T>> CompendiumTab(
                                         onClick = { coroutineScope.launch { remover(item) } }
                                     ),
                                 ),
-                                onClick = { dialogState.value = DialogState.Opened(item) },
+                                onClick = { onClick(item) },
                             ) {
                                 itemContent(item)
                             }
@@ -164,4 +163,30 @@ fun <T : CompendiumItem<T>> CompendiumTab(
             }
         }
     }
+}
+
+@Composable
+fun <T : CompendiumItem<T>> CompendiumTab(
+    liveItems: Flow<List<T>>,
+    width: Dp,
+    emptyUI: @Composable () -> Unit,
+    dialog: @Composable (MutableState<DialogState<T?>>) -> Unit,
+    remover: suspend (T) -> Unit,
+    saver: suspend (T) -> Unit,
+    itemContent: @Composable LazyItemScope.(T) -> Unit,
+) {
+    val dialogState = remember { mutableStateOf<DialogState<T?>>(DialogState.Closed()) }
+
+    dialog(dialogState)
+
+    CompendiumTab(
+        liveItems = liveItems,
+        width = width,
+        emptyUI = emptyUI,
+        onClick = { dialogState.value = DialogState.Opened(it) },
+        onNewItemRequest = { dialogState.value = DialogState.Opened(null) },
+        remover = remover,
+        saver = saver,
+        itemContent = itemContent,
+    )
 }
