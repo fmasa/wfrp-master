@@ -1,13 +1,16 @@
 package cz.frantisekmasa.wfrp_master.common.core.domain.party.combat
 
 import androidx.compose.runtime.Immutable
+import cz.frantisekmasa.wfrp_master.common.core.shared.Parcelable
+import cz.frantisekmasa.wfrp_master.common.core.shared.Parcelize
 import kotlinx.serialization.Serializable
 import kotlin.jvm.JvmInline
 
 @JvmInline
 @Immutable
+@Parcelize
 @Serializable
-value class Advantage(val value: Int) : Comparable<Advantage> {
+value class Advantage(val value: Int) : Comparable<Advantage>, Parcelable {
 
     init {
         require(value >= 0) { "Advantage cannot be negative" }
