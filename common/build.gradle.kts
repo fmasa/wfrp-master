@@ -1,4 +1,4 @@
-import org.jetbrains.compose.compose
+
 import org.jetbrains.kotlin.konan.properties.Properties
 import org.jetbrains.kotlin.konan.properties.loadProperties
 
@@ -115,7 +115,7 @@ kotlin {
                 implementation("org.kodein.di:kodein-di-framework-android-core:$kodeinVersion")
                 api("io.insert-koin:koin-android:$koinVersion")
 
-                api("androidx.lifecycle:lifecycle-viewmodel-compose:2.4.0")
+                api("androidx.lifecycle:lifecycle-viewmodel-compose:2.5.1")
                 api("androidx.lifecycle:lifecycle-runtime-ktx:2.4.0")
 
                 // Authentication

@@ -158,7 +158,7 @@ fun <T : Any> SearchableList(
                         else Spacing.medium,
                     ),
                 ) {
-                    items(filteredItems, key = key, itemContent)
+                    items(filteredItems, key = key, itemContent = itemContent)
                 }
             }
         }

@@ -122,7 +122,7 @@ dependencies {
     // Jetpack Compose
     api("androidx.compose.material:material:${Versions.compose}")
     api("androidx.compose.ui:ui-tooling:${Versions.compose}")
-    api("androidx.lifecycle:lifecycle-viewmodel-compose:2.4.1")
+    api("androidx.lifecycle:lifecycle-viewmodel-compose:2.5.1")
 
     // Firebase-related dependencies
     api(platform("com.google.firebase:firebase-bom:28.4.2"))
