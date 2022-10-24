@@ -18,6 +18,7 @@ import androidx.compose.material.contentColorFor
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.BugReport
 import androidx.compose.material.icons.rounded.Info
+import androidx.compose.material.icons.rounded.MenuBook
 import androidx.compose.material.icons.rounded.Policy
 import androidx.compose.material.icons.rounded.Settings
 import androidx.compose.material.icons.rounded.Star
@@ -64,6 +65,17 @@ fun AppDrawer(drawerState: DrawerState) {
         )
 
         val urlOpener = rememberUrlOpener()
+
+        DrawerItem(
+            icon = Icons.Rounded.MenuBook,
+            text = strings.drawer.wiki,
+            onClick = {
+                urlOpener.open(
+                    "https://github.com/fmasa/wfrp-master/wiki",
+                    isGooglePlayLink = false,
+                )
+            }
+        )
 
         DrawerItem(
             icon = Icons.Rounded.Star,
