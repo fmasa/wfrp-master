@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Button
 import androidx.compose.material.ContentAlpha
 import androidx.compose.material.MaterialTheme
@@ -31,12 +32,14 @@ import cz.frantisekmasa.wfrp_master.common.core.shared.rememberFileChooser
 import cz.frantisekmasa.wfrp_master.common.core.shared.rememberUrlOpener
 import cz.frantisekmasa.wfrp_master.common.core.ui.buttons.BackButton
 import cz.frantisekmasa.wfrp_master.common.core.ui.flow.collectWithLifecycle
+import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.rememberScreenModel
 import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.LocalPersistentSnackbarHolder
 import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.Subtitle
 import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
 import io.github.aakira.napier.Napier
 import kotlinx.coroutines.async
+import kotlinx.coroutines.coroutineScope
 import java.lang.OutOfMemoryError
 
 class CompendiumImportScreen(
@@ -86,27 +89,29 @@ class CompendiumImportScreen(
         val snackbarHolder = LocalPersistentSnackbarHolder.current
         val fileChooser = rememberFileChooser { result ->
             result.mapCatching { file ->
-                importState = ImportDialogState.LoadingItems
+                coroutineScope {
+                    importState = ImportDialogState.LoadingItems
 
-                val importer = RulebookCompendiumImporter(file.stream)
+                    val importer = RulebookCompendiumImporter(file.stream)
 
-                val skills = async { importer.importSkills() }
-                val talents = async { importer.importTalents() }
-                val spells = async { importer.importSpells() }
-                val blessings = async { importer.importBlessings() }
-                val miracles = async { importer.importMiracles() }
-                val traits = async { importer.importTraits() }
-                val careers = async { importer.importCareers() }
+                    val skills = async { importer.importSkills() }
+                    val talents = async { importer.importTalents() }
+                    val spells = async { importer.importSpells() }
+                    val blessings = async { importer.importBlessings() }
+                    val miracles = async { importer.importMiracles() }
+                    val traits = async { importer.importTraits() }
+                    val careers = async { importer.importCareers() }
 
-                importState = ImportDialogState.PickingItemsToImport(
-                    skills.await(),
-                    talents.await(),
-                    spells.await(),
-                    blessings.await(),
-                    miracles.await(),
-                    traits.await(),
-                    careers.await(),
-                )
+                    importState = ImportDialogState.PickingItemsToImport(
+                        skills.await(),
+                        talents.await(),
+                        spells.await(),
+                        blessings.await(),
+                        miracles.await(),
+                        traits.await(),
+                        careers.await(),
+                    )
+                }
             }.onFailure {
                 Napier.e(it.toString(), it)
 
@@ -123,7 +128,7 @@ class CompendiumImportScreen(
         }
 
         Column(
-            modifier = Modifier.fillMaxSize(),
+            modifier = Modifier.fillMaxSize().padding(Spacing.bodyPadding),
             verticalArrangement = Arrangement.spacedBy(20.dp, Alignment.CenterVertically),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {

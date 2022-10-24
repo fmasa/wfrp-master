@@ -466,7 +466,12 @@ data class CompendiumStrings(
     val buttonImport: String = "Import",
     val buttonImportRulebook: String = "Import rulebook PDF",
     val iconAddCompendiumItem: String = "Add compendium item",
-    val importPrompt: String = "Import compendium from official WFRP rulebook.",
+    val importPrompt: AnnotatedString = buildAnnotatedString {
+        append("Import compendium from official WFRP Rulebook PDF.")
+        withStyle(SpanStyle(fontWeight = FontWeight.SemiBold)) {
+            append("Only the latest version of English Rulebook is supported.")
+        }
+    },
     val messages: CompendiumMessageStrings = CompendiumMessageStrings(),
     val pickPromptCareers: String = "Select which careers you want to import.",
     val pickPromptSkills: String = "Select which skills you want to import.",
