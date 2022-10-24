@@ -39,6 +39,7 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.Subtitle
 import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
 import io.github.aakira.napier.Napier
 import kotlinx.coroutines.async
+import kotlinx.coroutines.coroutineScope
 import java.lang.OutOfMemoryError
 
 class CompendiumImportScreen(
@@ -88,27 +89,29 @@ class CompendiumImportScreen(
         val snackbarHolder = LocalPersistentSnackbarHolder.current
         val fileChooser = rememberFileChooser { result ->
             result.mapCatching { file ->
-                importState = ImportDialogState.LoadingItems
+                coroutineScope {
+                    importState = ImportDialogState.LoadingItems
 
-                val importer = RulebookCompendiumImporter(file.stream)
+                    val importer = RulebookCompendiumImporter(file.stream)
 
-                val skills = async { importer.importSkills() }
-                val talents = async { importer.importTalents() }
-                val spells = async { importer.importSpells() }
-                val blessings = async { importer.importBlessings() }
-                val miracles = async { importer.importMiracles() }
-                val traits = async { importer.importTraits() }
-                val careers = async { importer.importCareers() }
+                    val skills = async { importer.importSkills() }
+                    val talents = async { importer.importTalents() }
+                    val spells = async { importer.importSpells() }
+                    val blessings = async { importer.importBlessings() }
+                    val miracles = async { importer.importMiracles() }
+                    val traits = async { importer.importTraits() }
+                    val careers = async { importer.importCareers() }
 
-                importState = ImportDialogState.PickingItemsToImport(
-                    skills.await(),
-                    talents.await(),
-                    spells.await(),
-                    blessings.await(),
-                    miracles.await(),
-                    traits.await(),
-                    careers.await(),
-                )
+                    importState = ImportDialogState.PickingItemsToImport(
+                        skills.await(),
+                        talents.await(),
+                        spells.await(),
+                        blessings.await(),
+                        miracles.await(),
+                        traits.await(),
+                        careers.await(),
+                    )
+                }
             }.onFailure {
                 Napier.e(it.toString(), it)
 
