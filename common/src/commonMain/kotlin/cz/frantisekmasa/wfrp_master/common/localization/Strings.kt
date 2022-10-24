@@ -155,6 +155,7 @@ data class DrawerStrings(
     val privacyPolicy: String = "Privacy Policy",
     val rateApp: String = "Rate the App",
     val reportIssue: String = "Report an Issue",
+    val wiki: String = "Wiki",
 )
 
 @Immutable
