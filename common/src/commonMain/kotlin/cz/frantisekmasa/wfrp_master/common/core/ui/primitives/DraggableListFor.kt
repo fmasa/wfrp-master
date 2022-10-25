@@ -47,7 +47,7 @@ fun <T> DraggableListFor(
         content = {
             items.forEachIndexed { index, item ->
                 Box(
-                    Modifier.pointerInput(placeableHeights, itemSpacingPx, coroutineScope) {
+                    Modifier.pointerInput(placeableHeights, itemSpacingPx, coroutineScope, items) {
                         detectDragGesturesAfterLongPress(
                             onDragStart = {
                                 coroutineScope.launch { dragY.snapTo(0f) }
