@@ -221,7 +221,7 @@ private fun <T : CompendiumItem<T>> ItemPicker(
                                         onSave(
                                             items
                                                 .asSequence()
-                                                .filter { selectedItems.contains(it.id) }
+                                                .filter { selectedItems[it.id] == true }
                                                 .map {
                                                     val existingItem = existingItemsByName[it.name]
 
