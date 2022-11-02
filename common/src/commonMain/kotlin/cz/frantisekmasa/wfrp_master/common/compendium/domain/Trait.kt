@@ -27,6 +27,8 @@ data class Trait(
         require(description.length <= DESCRIPTION_MAX_LENGTH) { "Maximum allowed description length is $DESCRIPTION_MAX_LENGTH" }
     }
 
+    override fun replace(original: Trait) = copy(id = original.id)
+
     override fun duplicate() = copy(id = uuid4(), name = duplicateName())
 
     companion object {

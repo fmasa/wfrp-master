@@ -33,6 +33,19 @@ data class Career(
         require(races.isNotEmpty())
     }
 
+    override fun replace(original: Career): Career {
+        val originalLevelsByName = original.levels.associateBy { it.name }
+
+        return copy(
+            id = original.id,
+            levels = levels.map {
+                val originalLevel = originalLevelsByName[it.name]
+
+                if (originalLevel != null) it.copy(id = originalLevel.id) else it
+            }
+        )
+    }
+
     override fun duplicate(): Career = copy(name = duplicateName())
 
     @Parcelize

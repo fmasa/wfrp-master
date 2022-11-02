@@ -110,6 +110,7 @@ class CompendiumImportScreen(
                         miracles.await(),
                         traits.await(),
                         careers.await(),
+                        replaceExistingByDefault = false,
                     )
                 }
             }.onFailure {

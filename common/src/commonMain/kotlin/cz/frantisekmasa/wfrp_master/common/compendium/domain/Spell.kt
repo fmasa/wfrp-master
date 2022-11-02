@@ -41,5 +41,7 @@ data class Spell(
         require(lore.length <= LORE_MAX_LENGTH) { "LORE must be shorter than $LORE_MAX_LENGTH" }
     }
 
+    override fun replace(original: Spell) = copy(id = original.id)
+
     override fun duplicate() = copy(id = uuid4(), name = duplicateName())
 }

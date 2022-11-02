@@ -31,5 +31,7 @@ data class Skill(
         description.requireMaxLength(DESCRIPTION_MAX_LENGTH, "description")
     }
 
+    override fun replace(original: Skill) = copy(id = original.id)
+
     override fun duplicate() = copy(id = uuid4(), name = duplicateName())
 }

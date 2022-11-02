@@ -36,5 +36,7 @@ data class Blessing(
         effect.requireMaxLength(EFFECT_MAX_LENGTH, "effect")
     }
 
+    override fun replace(original: Blessing) = copy(id = original.id)
+
     override fun duplicate() = copy(id = uuid4(), name = duplicateName())
 }

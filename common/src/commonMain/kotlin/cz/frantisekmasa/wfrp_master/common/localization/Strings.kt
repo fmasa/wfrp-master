@@ -500,6 +500,7 @@ data class CompendiumMessageStrings(
     val itemAlreadyExists: String = "Item already exists",
     val noItems: String = "No items in compendium",
     val noItemsInCompendiumSubtextPlayer: String = "Your GM has to add them first.",
+    val willReplaceExistingItem: String = "Will replace existing item",
 )
 
 @Immutable

@@ -39,5 +39,7 @@ data class Miracle(
         cultName.requireMaxLength(CULT_NAME_MAX_LENGTH, "cultName")
     }
 
+    override fun replace(original: Miracle) = copy(id = original.id)
+
     override fun duplicate() = copy(id = uuid4(), name = duplicateName())
 }
