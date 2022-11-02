@@ -123,6 +123,7 @@ class CareerDetailScreen(
         }
 
         val isGameMaster = LocalUser.current.id == party.gameMasterId
+        val levelNames = remember(career) { career.levels.map { it.name }.toSet() }
 
         when (dialogState) {
             LevelDialogState.Closed -> {}
@@ -132,6 +133,7 @@ class CareerDetailScreen(
                     existingLevel = null,
                     onSave = { screenModel.saveLevel(partyId, career.id, it) },
                     onDismissRequest = { setDialogState(LevelDialogState.Closed) },
+                    existingLevelNames = levelNames,
                 )
             }
             is LevelDialogState.EditLevel -> {
@@ -140,6 +142,7 @@ class CareerDetailScreen(
                     existingLevel = dialogState.level,
                     onSave = { screenModel.saveLevel(partyId, career.id, it) },
                     onDismissRequest = { setDialogState(LevelDialogState.Closed) },
+                    existingLevelNames = levelNames - dialogState.level.name,
                 )
             }
         }

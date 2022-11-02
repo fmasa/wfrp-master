@@ -274,6 +274,7 @@ data class CareerMessageStrings(
     val notFound: String = "Career not found",
     val noLevel: String = "No career levels",
     val noLevelSubtext: String = "Create at least one level\nto let Characters use this career.",
+    val levelWithNameExists: String = "Career level with same name already exists",
 )
 
 @Immutable

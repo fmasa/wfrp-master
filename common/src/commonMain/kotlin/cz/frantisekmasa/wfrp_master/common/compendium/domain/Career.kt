@@ -31,6 +31,9 @@ data class Career(
         require(name.isNotBlank() && name.length <= NAME_MAX_LENGTH)
         require(description.length <= DESCRIPTION_MAX_LENGTH)
         require(races.isNotEmpty())
+        require(levels.map { it.name }.toSet().size == levels.size) {
+            "Duplicate name for Career level"
+        }
     }
 
     override fun replace(original: Career): Career {
