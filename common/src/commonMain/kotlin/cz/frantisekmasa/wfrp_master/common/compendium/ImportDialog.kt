@@ -33,7 +33,6 @@ import cz.frantisekmasa.wfrp_master.common.compendium.domain.Talent
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.Trait
 import cz.frantisekmasa.wfrp_master.common.core.domain.compendium.CompendiumItem
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.PartyId
-import cz.frantisekmasa.wfrp_master.common.core.shared.IO
 import cz.frantisekmasa.wfrp_master.common.core.ui.buttons.CloseButton
 import cz.frantisekmasa.wfrp_master.common.core.ui.dialogs.FullScreenDialog
 import cz.frantisekmasa.wfrp_master.common.core.ui.flow.collectWithLifecycle
@@ -61,7 +60,6 @@ internal fun ImportDialog(
             is ImportDialogState.PickingItemsToImport -> ImportedItemsPicker(
                 screenModel = screenModel,
                 state = state,
-                partyId = partyId,
                 onDismissRequest = onDismissRequest,
                 onComplete = onComplete,
             )
@@ -72,7 +70,6 @@ internal fun ImportDialog(
 @Composable
 private fun ImportedItemsPicker(
     screenModel: CompendiumScreenModel,
-    partyId: PartyId,
     state: ImportDialogState.PickingItemsToImport,
     onDismissRequest: () -> Unit,
     onComplete: () -> Unit,
@@ -90,6 +87,7 @@ private fun ImportedItemsPicker(
                 onContinue = { screen = ItemsScreen.TALENTS },
                 onClose = onDismissRequest,
                 existingItems = screenModel.skills,
+                replaceExistingByDefault = state.replaceExistingByDefault,
             )
         }
         ItemsScreen.TALENTS -> {
@@ -100,6 +98,7 @@ private fun ImportedItemsPicker(
                 onContinue = { screen = ItemsScreen.SPELLS },
                 onClose = onDismissRequest,
                 existingItems = screenModel.talents,
+                replaceExistingByDefault = state.replaceExistingByDefault,
             )
         }
         ItemsScreen.SPELLS -> {
@@ -110,6 +109,7 @@ private fun ImportedItemsPicker(
                 onContinue = { screen = ItemsScreen.BLESSINGS },
                 onClose = onDismissRequest,
                 existingItems = screenModel.spells,
+                replaceExistingByDefault = state.replaceExistingByDefault,
             )
         }
         ItemsScreen.BLESSINGS -> {
@@ -120,6 +120,7 @@ private fun ImportedItemsPicker(
                 onContinue = { screen = ItemsScreen.MIRACLES },
                 onClose = onDismissRequest,
                 existingItems = screenModel.blessings,
+                replaceExistingByDefault = state.replaceExistingByDefault,
             )
         }
         ItemsScreen.MIRACLES -> {
@@ -130,6 +131,7 @@ private fun ImportedItemsPicker(
                 onContinue = { screen = ItemsScreen.TRAITS },
                 onClose = onDismissRequest,
                 existingItems = screenModel.miracles,
+                replaceExistingByDefault = state.replaceExistingByDefault,
             )
         }
         ItemsScreen.TRAITS -> {
@@ -140,6 +142,7 @@ private fun ImportedItemsPicker(
                 onContinue = { screen = ItemsScreen.CAREERS },
                 onClose = onDismissRequest,
                 existingItems = screenModel.traits,
+                replaceExistingByDefault = state.replaceExistingByDefault,
             )
         }
         ItemsScreen.CAREERS -> {
@@ -150,6 +153,7 @@ private fun ImportedItemsPicker(
                 onContinue = onComplete,
                 onClose = onDismissRequest,
                 existingItems = screenModel.careers,
+                replaceExistingByDefault = state.replaceExistingByDefault,
             )
         }
     }
@@ -163,6 +167,7 @@ private fun <T : CompendiumItem<T>> ItemPicker(
     onContinue: () -> Unit,
     existingItems: Flow<List<T>>,
     items: List<T>,
+    replaceExistingByDefault: Boolean,
 ) {
     val existingItemsList = existingItems.collectWithLifecycle(null).value
 
@@ -179,12 +184,13 @@ private fun <T : CompendiumItem<T>> ItemPicker(
         return
     }
 
-    val existingItemNames = remember(existingItemsList) {
-        existingItemsList.map { it.name }.toHashSet()
+    val existingItemsByName = remember(existingItemsList) {
+        existingItemsList.associateBy { it.name }
     }
 
-    val selectedItems = remember(items, existingItemNames) {
-        items.map { it.id to !existingItemNames.contains(it.name) }.toMutableStateMap()
+    val selectedItems = remember(items, existingItemsByName, replaceExistingByDefault) {
+        items.map { it.id to (replaceExistingByDefault || it.name !in existingItemsByName) }
+            .toMutableStateMap()
     }
     val atLeastOneSelected = selectedItems.containsValue(true)
 
@@ -212,7 +218,20 @@ private fun <T : CompendiumItem<T>> ItemPicker(
 
                                 if (atLeastOneSelected) {
                                     withContext(Dispatchers.IO) {
-                                        onSave(items.filter { selectedItems.contains(it.id) })
+                                        onSave(
+                                            items
+                                                .asSequence()
+                                                .filter { selectedItems[it.id] == true }
+                                                .map {
+                                                    val existingItem = existingItemsByName[it.name]
+
+                                                    if (existingItem != null)
+                                                        it.replace(existingItem)
+                                                    else it
+                                                }
+                                                .distinctBy { it.id }
+                                                .toList()
+                                        )
                                     }
                                 }
 
@@ -253,8 +272,14 @@ private fun <T : CompendiumItem<T>> ItemPicker(
                                 onValueChange = { selectedItems[item.id] = it },
                             ),
                             text = { Text(item.name) },
-                            secondaryText = if (existingItemNames.contains(item.name)) {
-                                { Text(strings.compendium.messages.itemAlreadyExists) }
+                            secondaryText = if (item.name in existingItemsByName) {
+                                {
+                                    Text(
+                                        if (selectedItems[item.id] == true)
+                                            strings.compendium.messages.willReplaceExistingItem
+                                        else strings.compendium.messages.itemAlreadyExists
+                                    )
+                                }
                             } else null
                         )
                     }
@@ -265,7 +290,7 @@ private fun <T : CompendiumItem<T>> ItemPicker(
 }
 
 @Immutable
-internal sealed class ImportDialogState {
+sealed class ImportDialogState {
     @Immutable
     object LoadingItems : ImportDialogState()
 
@@ -278,6 +303,7 @@ internal sealed class ImportDialogState {
         val miracles: List<Miracle>,
         val traits: List<Trait>,
         val careers: List<Career>,
+        val replaceExistingByDefault: Boolean,
     ) : ImportDialogState()
 }
 

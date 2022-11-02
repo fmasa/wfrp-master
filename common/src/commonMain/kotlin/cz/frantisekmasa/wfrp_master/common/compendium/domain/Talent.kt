@@ -30,5 +30,7 @@ data class Talent(
         require(maxTimesTaken.length <= MAX_TIMES_TAKEN_MAX_LENGTH) { "Maximum length of is $MAX_TIMES_TAKEN_MAX_LENGTH" }
     }
 
+    override fun replace(original: Talent) = copy(id = original.id)
+
     override fun duplicate() = copy(id = uuid4(), name = duplicateName())
 }

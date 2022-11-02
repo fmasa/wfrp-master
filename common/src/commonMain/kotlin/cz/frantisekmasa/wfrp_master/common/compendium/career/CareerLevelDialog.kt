@@ -17,6 +17,7 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.forms.FormDialog
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.HydratedFormData
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.InputLabel
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.InputValue
+import cz.frantisekmasa.wfrp_master.common.core.ui.forms.Rule
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.Rules
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.SocialStatusInput
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.TextInput
@@ -27,10 +28,11 @@ import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
 fun CareerLevelDialog(
     title: String,
     existingLevel: Career.Level?,
+    existingLevelNames: Set<String>,
     onSave: suspend (Career.Level) -> Unit,
     onDismissRequest: () -> Unit,
 ) {
-    val data = CareerLevelDialogData.fromCareerLevel(existingLevel)
+    val data = CareerLevelDialogData.fromCareerLevel(existingLevel, existingLevelNames)
 
     FullScreenDialog(onDismissRequest = onDismissRequest) {
         FormDialog(
@@ -137,7 +139,7 @@ data class CareerLevelDialogData(
 
         return Career.Level(
             id = id ?: uuid4(),
-            name = name.value,
+            name = name.value.trim(),
             status = status.value,
             skills = incomeSkills + nonIncomeSkills,
             talents = talents.commaSeparatedValues(),
@@ -148,33 +150,44 @@ data class CareerLevelDialogData(
 
     companion object {
         @Composable
-        fun fromCareerLevel(level: Career.Level?) = CareerLevelDialogData(
-            id = level?.id,
-            name = inputValue(level?.name ?: "", Rules.NotBlank()),
-            status = rememberSaveable(level) {
-                mutableStateOf(
-                    level?.status ?: SocialStatus(SocialStatus.Tier.BRASS, 0)
+        fun fromCareerLevel(level: Career.Level?, existingLevelNames: Set<String>): CareerLevelDialogData {
+            val strings = LocalStrings.current.careers.messages
+            return CareerLevelDialogData(
+                id = level?.id,
+                name = inputValue(
+                    level?.name ?: "",
+                    Rules.NotBlank(),
+                    Rule {
+                        if (it.trim() in existingLevelNames)
+                            strings.levelWithNameExists
+                        else null
+                    }
+                ),
+                status = rememberSaveable(level) {
+                    mutableStateOf(
+                        level?.status ?: SocialStatus(SocialStatus.Tier.BRASS, 0)
+                    )
+                },
+                characteristics = rememberSaveable(level) {
+                    mutableStateOf(level?.characteristics ?: emptySet())
+                },
+                incomeSkills = inputValue(
+                    level?.skills
+                        ?.filter { it.isIncomeSkill }
+                        ?.joinToString(", ") { it.expression } ?: ""
+                ),
+                skills = inputValue(
+                    level?.skills
+                        ?.filterNot { it.isIncomeSkill }
+                        ?.joinToString(", ") { it.expression } ?: ""
+                ),
+                talents = inputValue(
+                    level?.talents?.joinToString(", ") ?: ""
+                ),
+                trappings = inputValue(
+                    level?.trappings?.joinToString(", ") ?: ""
                 )
-            },
-            characteristics = rememberSaveable(level) {
-                mutableStateOf(level?.characteristics ?: emptySet())
-            },
-            incomeSkills = inputValue(
-                level?.skills
-                    ?.filter { it.isIncomeSkill }
-                    ?.joinToString(", ") { it.expression } ?: ""
-            ),
-            skills = inputValue(
-                level?.skills
-                    ?.filterNot { it.isIncomeSkill }
-                    ?.joinToString(", ") { it.expression } ?: ""
-            ),
-            talents = inputValue(
-                level?.talents?.joinToString(", ") ?: ""
-            ),
-            trappings = inputValue(
-                level?.trappings?.joinToString(", ") ?: ""
             )
-        )
+        }
     }
 }

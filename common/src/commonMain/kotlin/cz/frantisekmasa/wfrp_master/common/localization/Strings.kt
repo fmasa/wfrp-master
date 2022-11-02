@@ -274,6 +274,7 @@ data class CareerMessageStrings(
     val notFound: String = "Career not found",
     val noLevel: String = "No career levels",
     val noLevelSubtext: String = "Create at least one level\nto let Characters use this career.",
+    val levelWithNameExists: String = "Career level with same name already exists",
 )
 
 @Immutable
@@ -464,13 +465,25 @@ data class CompendiumStrings(
     val searchPlaceholder: String = "Search items",
     val buttonBuy: String = "Buy",
     val buttonImport: String = "Import",
+    val buttonImportFromRulebook: String = "Import from Rulebook",
+    val buttonImportFile: String = "Import file",
     val buttonImportRulebook: String = "Import rulebook PDF",
+    val buttonExport: String = "Save Export",
+    val buttonExportFile: String = "Export file",
     val iconAddCompendiumItem: String = "Add compendium item",
-    val importPrompt: AnnotatedString = buildAnnotatedString {
+    val rulebookImportPrompt: AnnotatedString = buildAnnotatedString {
         append("Import compendium from official WFRP Rulebook PDF.")
         withStyle(SpanStyle(fontWeight = FontWeight.SemiBold)) {
             append("Only the latest version of English Rulebook is supported.")
         }
+    },
+    val jsonImportPrompt: AnnotatedString = buildAnnotatedString {
+        append("Import compendium previously exported from WFRP Master.\n")
+        withStyle(SpanStyle(fontWeight = FontWeight.SemiBold)) {
+            append("The export format is not set in stone yet!\n")
+        }
+        append("so while exports from the same version of WFRP Master will work,")
+        append("exports from previous versions may not work properly.")
     },
     val messages: CompendiumMessageStrings = CompendiumMessageStrings(),
     val pickPromptCareers: String = "Select which careers you want to import.",
@@ -490,16 +503,20 @@ data class CompendiumStrings(
     val tabTraits: String = "Traits",
     val title: String = "Compendium",
     val titleImportCompendium: String = "Import Compendium",
+    val titleExportCompendium: String = "Export Compendium",
     val titleImportDialog: String = "Importing Rulebook…",
 )
 
 @Immutable
 data class CompendiumMessageStrings(
+    val exportFailed: String = "JSON export failed.",
     val outOfMemory: String = "PDF import failed. Not enough available RAM on device.",
-    val importFailed: String = "PDF import failed. Check that you provided valid rulebook PDF.",
+    val rulebookImportFailed: String = "PDF import failed. Check that you provided valid rulebook PDF.",
+    val jsonImportFailed: String = "JSON import failed. Check that you provided valid WFRP Master export.",
     val itemAlreadyExists: String = "Item already exists",
     val noItems: String = "No items in compendium",
     val noItemsInCompendiumSubtextPlayer: String = "Your GM has to add them first.",
+    val willReplaceExistingItem: String = "Will replace existing item",
 )
 
 @Immutable

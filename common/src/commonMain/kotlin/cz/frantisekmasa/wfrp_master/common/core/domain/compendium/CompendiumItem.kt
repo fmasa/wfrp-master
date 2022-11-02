@@ -10,5 +10,7 @@ abstract class CompendiumItem<T : CompendiumItem<T>> : Parcelable {
 
     abstract fun duplicate(): T
 
+    abstract fun replace(original: T): T
+
     protected fun duplicateName(): String = duplicateName(name)
 }

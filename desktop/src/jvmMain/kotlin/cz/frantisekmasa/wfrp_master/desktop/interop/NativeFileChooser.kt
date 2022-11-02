@@ -1,9 +1,9 @@
 package cz.frantisekmasa.wfrp_master.desktop.interop
 
-import cz.frantisekmasa.wfrp_master.common.core.shared.File
 import cz.frantisekmasa.wfrp_master.common.core.shared.FileChooseListener
 import cz.frantisekmasa.wfrp_master.common.core.shared.FileChooser
 import cz.frantisekmasa.wfrp_master.common.core.shared.FileType
+import cz.frantisekmasa.wfrp_master.common.core.shared.ReadableFile
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import java.awt.FileDialog
@@ -27,7 +27,7 @@ class NativeFileChooser(
             onFileChoose(
                 when (file) {
                     null -> Result.failure(Exception("File not selected"))
-                    else -> Result.success(File(file.inputStream()))
+                    else -> Result.success(ReadableFile(file.inputStream()))
                 }
             )
         }
@@ -36,5 +36,6 @@ class NativeFileChooser(
     private fun allowedExtensions(fileType: FileType): List<String> = when (fileType) {
         FileType.PDF -> listOf(".pdf")
         FileType.IMAGE -> listOf(".jpg", ".jpeg", ".png", ".gif")
+        FileType.JSON -> listOf(".json")
     }
 }
