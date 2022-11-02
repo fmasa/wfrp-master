@@ -11,6 +11,9 @@ import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
+import com.halilibo.richtext.markdown.Markdown
+import com.halilibo.richtext.ui.RichText
 import cz.frantisekmasa.wfrp_master.common.core.domain.traits.Trait
 import cz.frantisekmasa.wfrp_master.common.core.ui.buttons.CloseButton
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
@@ -32,7 +35,9 @@ fun TraitDetail(
     ) {
         Column(Modifier.verticalScroll(rememberScrollState())) {
             Column(Modifier.padding(Spacing.bodyPadding)) {
-                Text(trait.description)
+                RichText(Modifier.padding(top = 8.dp)) {
+                    Markdown(trait.description)
+                }
             }
         }
     }

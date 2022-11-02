@@ -9,6 +9,8 @@ import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import com.halilibo.richtext.markdown.Markdown
+import com.halilibo.richtext.ui.RichText
 import cz.frantisekmasa.wfrp_master.common.core.domain.talents.Talent
 import cz.frantisekmasa.wfrp_master.common.core.ui.buttons.CloseButton
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
@@ -30,8 +32,8 @@ fun TalentDetail(
         Column(Modifier.verticalScroll(rememberScrollState())) {
             subheadBar()
 
-            Column(Modifier.padding(Spacing.bodyPadding)) {
-                Text(talent.description)
+            RichText(Modifier.padding(Spacing.bodyPadding)) {
+                Markdown(talent.description)
             }
         }
     }
