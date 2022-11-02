@@ -36,17 +36,17 @@ import cz.frantisekmasa.wfrp_master.common.compendium.tabs.TalentCompendiumTab
 import cz.frantisekmasa.wfrp_master.common.compendium.tabs.TraitCompendiumTab
 import cz.frantisekmasa.wfrp_master.common.core.domain.compendium.CompendiumItem
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.PartyId
-import cz.frantisekmasa.wfrp_master.common.core.shared.IO
 import cz.frantisekmasa.wfrp_master.common.core.ui.buttons.BackButton
 import cz.frantisekmasa.wfrp_master.common.core.ui.dialogs.DialogState
 import cz.frantisekmasa.wfrp_master.common.core.ui.flow.collectWithLifecycle
+import cz.frantisekmasa.wfrp_master.common.core.ui.menu.DropdownMenuItem
 import cz.frantisekmasa.wfrp_master.common.core.ui.menu.WithContextMenu
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.ContextMenu
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.FullScreenProgress
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.rememberScreenModel
+import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.OptionsAction
 import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.Subtitle
-import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.TopBarAction
 import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.tabs.TabPager
 import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.tabs.tab
 import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
@@ -93,10 +93,25 @@ class CompendiumScreen(
             },
             navigationIcon = { BackButton() },
             actions = {
-                TopBarAction(
-                    text = strings.buttonImport,
-                    onClick = { navigator.push(CompendiumImportScreen(partyId)) }
-                )
+                OptionsAction {
+                    DropdownMenuItem(
+                        onClick = { navigator.push(RulebookCompendiumImportScreen(partyId)) }
+                    ) {
+                        Text(strings.buttonImportFromRulebook)
+                    }
+
+                    DropdownMenuItem(
+                        onClick = { navigator.push(JsonCompendiumImportScreen(partyId)) }
+                    ) {
+                        Text(strings.buttonImportFile)
+                    }
+
+                    DropdownMenuItem(
+                        onClick = { navigator.push(JsonCompendiumExportScreen(partyId)) }
+                    ) {
+                        Text(strings.buttonExportFile)
+                    }
+                }
             }
         )
     }

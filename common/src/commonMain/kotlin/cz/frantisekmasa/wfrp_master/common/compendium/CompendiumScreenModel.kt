@@ -8,12 +8,25 @@ import cz.frantisekmasa.wfrp_master.common.compendium.domain.Skill
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.Spell
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.Talent
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.Trait
+import cz.frantisekmasa.wfrp_master.common.compendium.import.BlessingImport
+import cz.frantisekmasa.wfrp_master.common.compendium.import.CareerImport
+import cz.frantisekmasa.wfrp_master.common.compendium.import.CompendiumBundle
+import cz.frantisekmasa.wfrp_master.common.compendium.import.MiracleImport
+import cz.frantisekmasa.wfrp_master.common.compendium.import.SkillImport
+import cz.frantisekmasa.wfrp_master.common.compendium.import.SpellImport
+import cz.frantisekmasa.wfrp_master.common.compendium.import.TalentImport
+import cz.frantisekmasa.wfrp_master.common.compendium.import.TraitImport
 import cz.frantisekmasa.wfrp_master.common.core.domain.compendium.Compendium
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.Party
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.PartyId
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.PartyRepository
 import cz.frantisekmasa.wfrp_master.common.core.utils.right
+import kotlinx.coroutines.async
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.first
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.serializer
 
 class CompendiumScreenModel(
     private val partyId: PartyId,
@@ -118,5 +131,35 @@ class CompendiumScreenModel(
 
     suspend fun remove(career: Career) {
         careerCompendium.remove(partyId, career)
+    }
+
+    suspend fun buildExportJson(): String {
+        return coroutineScope {
+            val skills = async { skills.first().map(SkillImport::fromSkill) }
+            val talents = async { talents.first().map(TalentImport::fromTalent) }
+            val spells = async { spells.first().map(SpellImport::fromSpell) }
+            val blessings = async { blessings.first().map(BlessingImport::fromBlessing) }
+            val miracles = async { miracles.first().map(MiracleImport::fromMiracle) }
+            val traits = async { traits.first().map(TraitImport::fromTrait) }
+            val careers = async { careers.first().map(CareerImport::fromCareer) }
+
+            val bundle = CompendiumBundle(
+                skills = skills.await(),
+                talents = talents.await(),
+                spells = spells.await(),
+                blessings = blessings.await(),
+                miracles = miracles.await(),
+                traits = traits.await(),
+                careers = careers.await(),
+            )
+
+            json.encodeToString(serializer(), bundle)
+        }
+    }
+
+    companion object {
+        private val json = Json {
+            encodeDefaults = true
+        }
     }
 }

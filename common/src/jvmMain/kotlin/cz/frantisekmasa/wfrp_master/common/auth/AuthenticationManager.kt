@@ -60,7 +60,7 @@ class AuthenticationManager(
         @SerialName("refresh_token")
         val refreshToken: String,
         @SerialName("grant_type")
-        val grantType: String = "refresh_token",
+        val grantType: String,
     )
 
     @Serializable

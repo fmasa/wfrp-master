@@ -18,11 +18,8 @@ data class Trait(
     val description: String,
 ) : CompendiumItem<Trait>() {
     init {
-        if (description.length > DESCRIPTION_MAX_LENGTH) {
-            println(description)
-        }
         require(specifications.all { name.contains(it) })
-        require(name.isNotEmpty())
+        require(name.isNotBlank())
         require(name.length <= NAME_MAX_LENGTH) { "Maximum allowed name length is $NAME_MAX_LENGTH" }
         require(description.length <= DESCRIPTION_MAX_LENGTH) { "Maximum allowed description length is $DESCRIPTION_MAX_LENGTH" }
     }

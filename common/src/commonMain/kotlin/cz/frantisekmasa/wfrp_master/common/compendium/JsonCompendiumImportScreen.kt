@@ -2,15 +2,12 @@ package cz.frantisekmasa.wfrp_master.common.compendium
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Button
 import androidx.compose.material.ContentAlpha
 import androidx.compose.material.MaterialTheme
-import androidx.compose.material.OutlinedButton
 import androidx.compose.material.Scaffold
-import androidx.compose.material.SnackbarDuration
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.Composable
@@ -25,24 +22,19 @@ import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
-import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.RulebookCompendiumImporter
+import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.JsonCompendiumImporter
+import cz.frantisekmasa.wfrp_master.common.core.domain.ExceptionWithUserMessage
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.PartyId
 import cz.frantisekmasa.wfrp_master.common.core.shared.FileType
-import cz.frantisekmasa.wfrp_master.common.core.shared.rememberFileChooser
-import cz.frantisekmasa.wfrp_master.common.core.shared.rememberUrlOpener
 import cz.frantisekmasa.wfrp_master.common.core.ui.buttons.BackButton
 import cz.frantisekmasa.wfrp_master.common.core.ui.flow.collectWithLifecycle
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.rememberScreenModel
-import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.LocalPersistentSnackbarHolder
 import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.Subtitle
 import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
-import io.github.aakira.napier.Napier
-import kotlinx.coroutines.async
-import kotlinx.coroutines.coroutineScope
 import java.lang.OutOfMemoryError
 
-class CompendiumImportScreen(
+class JsonCompendiumImportScreen(
     private val partyId: PartyId,
 ) : Screen {
     @Composable
@@ -86,47 +78,17 @@ class CompendiumImportScreen(
             )
         }
 
-        val snackbarHolder = LocalPersistentSnackbarHolder.current
-        val fileChooser = rememberFileChooser { result ->
-            result.mapCatching { file ->
-                coroutineScope {
-                    importState = ImportDialogState.LoadingItems
-
-                    val importer = RulebookCompendiumImporter(file.stream)
-
-                    val skills = async { importer.importSkills() }
-                    val talents = async { importer.importTalents() }
-                    val spells = async { importer.importSpells() }
-                    val blessings = async { importer.importBlessings() }
-                    val miracles = async { importer.importMiracles() }
-                    val traits = async { importer.importTraits() }
-                    val careers = async { importer.importCareers() }
-
-                    importState = ImportDialogState.PickingItemsToImport(
-                        skills.await(),
-                        talents.await(),
-                        spells.await(),
-                        blessings.await(),
-                        miracles.await(),
-                        traits.await(),
-                        careers.await(),
-                        replaceExistingByDefault = false,
-                    )
+        val fileChooser = ImportFileChooser(
+            onStateChange = { importState = it },
+            importerFactory = { JsonCompendiumImporter(it.stream) },
+            errorMessageFactory = {
+                when (it) {
+                    is ExceptionWithUserMessage -> it.message ?: strings.messages.jsonImportFailed
+                    is OutOfMemoryError -> strings.messages.outOfMemory
+                    else -> strings.messages.jsonImportFailed
                 }
-            }.onFailure {
-                Napier.e(it.toString(), it)
-
-                snackbarHolder.showSnackbar(
-                    when (it) {
-                        is OutOfMemoryError -> strings.messages.outOfMemory
-                        else -> strings.messages.importFailed
-                    },
-                    SnackbarDuration.Long,
-                )
-
-                importState = null
             }
-        }
+        )
 
         Column(
             modifier = Modifier.fillMaxSize().padding(Spacing.bodyPadding),
@@ -134,24 +96,12 @@ class CompendiumImportScreen(
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             Text(
-                strings.importPrompt,
+                strings.jsonImportPrompt,
                 textAlign = TextAlign.Center,
             )
 
-            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                Button(onClick = { fileChooser.open(FileType.PDF) }) {
-                    Text(strings.buttonImportRulebook.uppercase())
-                }
-
-                val urlOpener = rememberUrlOpener()
-
-                OutlinedButton(
-                    onClick = {
-                        urlOpener.open(strings.rulebookStoreLink, isGooglePlayLink = false)
-                    }
-                ) {
-                    Text(strings.buttonBuy.uppercase())
-                }
+            Button(onClick = { fileChooser.open(FileType.JSON) }) {
+                Text(strings.buttonImport.uppercase())
             }
 
             Text(

@@ -290,7 +290,7 @@ private fun <T : CompendiumItem<T>> ItemPicker(
 }
 
 @Immutable
-internal sealed class ImportDialogState {
+sealed class ImportDialogState {
     @Immutable
     object LoadingItems : ImportDialogState()
 

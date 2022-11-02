@@ -76,5 +76,9 @@ data class Career(
     data class Skill(
         val expression: String,
         val isIncomeSkill: Boolean,
-    ) : Parcelable
+    ) : Parcelable {
+        init {
+            require(expression.isNotBlank())
+        }
+    }
 }
