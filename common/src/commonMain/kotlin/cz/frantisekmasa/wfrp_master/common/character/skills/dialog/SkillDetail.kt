@@ -10,6 +10,8 @@ import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.halilibo.richtext.markdown.Markdown
+import com.halilibo.richtext.ui.RichText
 import cz.frantisekmasa.wfrp_master.common.core.domain.localizedName
 import cz.frantisekmasa.wfrp_master.common.core.domain.skills.Skill
 import cz.frantisekmasa.wfrp_master.common.core.ui.buttons.CloseButton
@@ -47,10 +49,9 @@ fun SkillDetail(
                     value = strings.commonUi.boolean(skill.advanced),
                 )
 
-                Text(
-                    text = skill.description,
-                    modifier = Modifier.padding(top = 8.dp),
-                )
+                RichText(Modifier.padding(top = 8.dp)) {
+                    Markdown(skill.description)
+                }
             }
         }
     }

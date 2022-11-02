@@ -14,6 +14,8 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
+import com.halilibo.richtext.markdown.Markdown
+import com.halilibo.richtext.ui.RichText
 import cz.frantisekmasa.wfrp_master.common.core.domain.spells.Spell
 import cz.frantisekmasa.wfrp_master.common.core.ui.buttons.CloseButton
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
@@ -63,10 +65,9 @@ fun SpellDetail(
 
                 SingleLineTextValue(strings.labelDuration, spell.duration)
 
-                Text(
-                    text = spell.effect,
-                    modifier = Modifier.padding(top = 8.dp),
-                )
+                RichText(Modifier.padding(top = 8.dp)) {
+                    Markdown(spell.effect)
+                }
             }
         }
     }

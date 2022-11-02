@@ -10,6 +10,8 @@ import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.halilibo.richtext.markdown.Markdown
+import com.halilibo.richtext.ui.RichText
 import cz.frantisekmasa.wfrp_master.common.core.domain.religion.Blessing
 import cz.frantisekmasa.wfrp_master.common.core.ui.buttons.CloseButton
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
@@ -39,7 +41,9 @@ fun BlessingDetail(
                 SingleLineTextValue(strings.labelTarget, blessing.target)
                 SingleLineTextValue(strings.labelDuration, blessing.duration)
 
-                Text(blessing.effect, Modifier.padding(top = 8.dp))
+                RichText(Modifier.padding(top = 8.dp)) {
+                    Markdown(blessing.effect)
+                }
             }
         }
     }

@@ -14,6 +14,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.halilibo.richtext.markdown.Markdown
+import com.halilibo.richtext.ui.RichText
 import cz.frantisekmasa.wfrp_master.common.core.domain.religion.Miracle
 import cz.frantisekmasa.wfrp_master.common.core.ui.buttons.CloseButton
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
@@ -54,7 +56,9 @@ fun MiracleDetail(
                 SingleLineTextValue(strings.labelTarget, miracle.target)
                 SingleLineTextValue(strings.labelDuration, miracle.duration)
 
-                Text(miracle.effect, Modifier.padding(top = 8.dp))
+                RichText(Modifier.padding(top = 8.dp)) {
+                    Markdown(miracle.effect)
+                }
             }
         }
     }
