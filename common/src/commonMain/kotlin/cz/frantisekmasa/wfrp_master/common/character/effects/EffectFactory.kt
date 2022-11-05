@@ -10,6 +10,7 @@ class EffectFactory {
                     SizeChange.fromTraitNameOrNull(name),
                     CharacteristicChange.fromTraitNameOrNull(name),
                     SwarmWoundsModification.fromTraitNameOrNull(name),
+                    ConstructWoundsModification.fromTraitNameOrNull(name),
                 )
             }
             is EffectSource.Talent -> {

@@ -11,6 +11,7 @@ import kotlinx.serialization.Serializable
 data class WoundsModifiers(
     val afterMultiplier: Int = 1,
     val extraToughnessBonusMultiplier: Int = 0,
+    val isConstruct: Boolean = false,
 ) : Parcelable {
     init {
         require(extraToughnessBonusMultiplier >= 0)

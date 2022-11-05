@@ -497,9 +497,14 @@ service cloud.firestore {
                         )
                         && ! ("woundsModifiers" in character) || (
                             character.woundsModifiers is map &&
-                            character.woundsModifiers.keys().toSet() == ["afterMultiplier", "extraToughnessBonusMultiplier"].toSet() &&
+                            [
+                                "afterMultiplier",
+                                "extraToughnessBonusMultiplier",
+                                "isConstruct"
+                            ].hasAll(character.woundsModifiers.keys()) &&
                             character.woundsModifiers.afterMultiplier is int &&
-                            character.woundsModifiers.extraToughnessBonusMultiplier is int
+                            character.woundsModifiers.extraToughnessBonusMultiplier is int &&
+                            (! ("isConstruct" in character.woundsModifiers) || character.woundsModifiers.isConstruct is bool)
                         )
                         && (! ("compendiumCareer" in character) || character.compendiumCareer == null || (
                             character.compendiumCareer is map &&

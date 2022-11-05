@@ -244,24 +244,31 @@ data class Character(
             characteristics: Stats,
         ): Int {
             val manualMaxWounds = points.maxWounds
-            val tb = characteristics.toughnessBonus
+            val toughnessBonus = characteristics.toughnessBonus
 
             if (manualMaxWounds != null) {
                 // TODO: Remove support for hasHardyTalent flag
                 if (hasHardyTalent) {
-                    return manualMaxWounds + tb
+                    return manualMaxWounds + toughnessBonus
                 }
 
                 return manualMaxWounds
             }
 
-            val baseWounds = Wounds.calculateMax(size ?: Size.AVERAGE, characteristics)
+            val baseWounds = Wounds.calculateMax(
+                size = size ?: Size.AVERAGE,
+                toughnessBonus = toughnessBonus,
+                strengthBonus = characteristics.strengthBonus,
+                willPowerBonus = if (modifiers.isConstruct)
+                    characteristics.strengthBonus
+                else characteristics.willPowerBonus
+            )
             return (
                 baseWounds +
-                    modifiers.extraToughnessBonusMultiplier.toInt() * tb +
-                    (if (hasHardyTalent) tb else 0)
+                    modifiers.extraToughnessBonusMultiplier * toughnessBonus +
+                    (if (hasHardyTalent) toughnessBonus else 0)
                 ) *
-                modifiers.afterMultiplier.toInt()
+                modifiers.afterMultiplier
         }
     }
 }
