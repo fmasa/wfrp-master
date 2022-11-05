@@ -265,10 +265,10 @@ data class Character(
             )
             return (
                 baseWounds +
-                    modifiers.extraToughnessBonusMultiplier.toInt() * toughnessBonus +
+                    modifiers.extraToughnessBonusMultiplier * toughnessBonus +
                     (if (hasHardyTalent) toughnessBonus else 0)
                 ) *
-                modifiers.afterMultiplier.toInt()
+                modifiers.afterMultiplier
         }
     }
 }
