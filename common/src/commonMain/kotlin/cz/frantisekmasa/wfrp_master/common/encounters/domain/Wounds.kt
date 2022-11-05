@@ -2,7 +2,6 @@ package cz.frantisekmasa.wfrp_master.common.encounters.domain
 
 import androidx.compose.runtime.Immutable
 import cz.frantisekmasa.wfrp_master.common.core.domain.Size
-import cz.frantisekmasa.wfrp_master.common.core.domain.Stats
 import cz.frantisekmasa.wfrp_master.common.core.shared.Parcelable
 import cz.frantisekmasa.wfrp_master.common.core.shared.Parcelize
 import kotlinx.serialization.Serializable
@@ -23,8 +22,13 @@ data class Wounds(
         fun fromMax(max: Int) = Wounds(max, max)
 
         // See rulebook page 341
-        fun calculateMax(size: Size, characteristics: Stats): Int = with(characteristics) {
-            when (size) {
+        fun calculateMax(
+            size: Size,
+            toughnessBonus: Int,
+            strengthBonus: Int,
+            willPowerBonus: Int,
+        ): Int {
+            return when (size) {
                 Size.TINY -> 1
                 Size.LITTLE -> toughnessBonus
                 Size.SMALL -> (2 * toughnessBonus) + willPowerBonus
