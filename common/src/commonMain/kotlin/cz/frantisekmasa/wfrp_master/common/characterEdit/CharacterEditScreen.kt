@@ -4,12 +4,17 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.ListItem
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.zIndex
@@ -23,13 +28,17 @@ import cz.frantisekmasa.wfrp_master.common.core.domain.identifiers.CharacterId
 import cz.frantisekmasa.wfrp_master.common.core.ui.buttons.BackButton
 import cz.frantisekmasa.wfrp_master.common.core.ui.flow.collectWithLifecycle
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.FullScreenProgress
+import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.HorizontalLine
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.ItemIcon
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.rememberScreenModel
+import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.LocalPersistentSnackbarHolder
 import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.Subtitle
 import cz.frantisekmasa.wfrp_master.common.core.ui.settings.SettingsCard
 import cz.frantisekmasa.wfrp_master.common.core.ui.settings.SettingsTitle
+import cz.frantisekmasa.wfrp_master.common.gameMaster.GameMasterScreen
 import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
+import cz.frantisekmasa.wfrp_master.common.partyList.PartyListScreen
 
 data class CharacterEditScreen(
     private val characterId: CharacterId,
@@ -75,7 +84,7 @@ data class CharacterEditScreen(
         Scaffold(
             topBar = { TopBar(character.name) }
         ) {
-            Column {
+            Column(Modifier.verticalScroll(rememberScrollState())) {
                 EditableCharacterAvatar(
                     screenModel = screenModel,
                     character = character,
@@ -156,6 +165,33 @@ data class CharacterEditScreen(
                             )
                         },
                         modifier = Modifier.clickable { openSection(Section.VISIBLE_TABS) },
+                    )
+
+                    HorizontalLine()
+
+                    val snackbarHolder = LocalPersistentSnackbarHolder.current
+                    var removalDialogOpened by remember { mutableStateOf(false) }
+
+                    if (removalDialogOpened) {
+                        CharacterRemovalDialog(
+                            character = character,
+                            onDismissRequest = { removalDialogOpened = false },
+                            onConfirmation = {
+                                screenModel.archive()
+                                snackbarHolder.showSnackbar(
+                                    strings.character.messages.characterRemoved,
+                                )
+                                navigator.popUntil {
+                                    it is GameMasterScreen || it == PartyListScreen
+                                }
+                            },
+                        )
+                    }
+
+                    ListItem(
+                        text = { Text(strings.character.titleRemoval) },
+                        secondaryText = { Text(strings.character.secondaryTextRemoval) },
+                        modifier = Modifier.clickable { removalDialogOpened = true },
                     )
                 }
             }

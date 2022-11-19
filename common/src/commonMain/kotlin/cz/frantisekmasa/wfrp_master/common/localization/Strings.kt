@@ -303,6 +303,7 @@ data class CharacterStrings(
     val secondaryTextExperience: String = "XP, Ambitions",
     val secondaryTextWellBeing: String = "Corruption, Injuries, Diseases, Psychology",
     val secondaryTextWounds: String = "Max Wounds, Hardy talent advances",
+    val secondaryTextRemoval: String = "Permanently remove the Character",
     val tabsVisible: (visible: Int, total: Int) -> String = { visible, total ->
         "$visible of $total tabs visible"
     },
@@ -320,6 +321,7 @@ data class CharacterStrings(
     val titleEdit: String = "Edit Character",
     val titleExperience: String = "Experience",
     val titleGeneralSettings: String = "General",
+    val titleRemoval: String = "Remove Character",
     val titleSelectCharacter: String = "Select Character",
     val titleUiSettings: String = "UI settings",
     val titleVisibleTabs: String = "Visible tabs",
@@ -344,6 +346,7 @@ data class CharacteristicStrings(
 
 @Immutable
 data class CharacterMessageStrings(
+    val characterRemoved: String = "Character has been removed.",
     val noEquippedWeapons: String = "No equipped weapons",
     val noEquippedWeaponsSubText: String = "Character does not have any Weapon trappings equipped",
     val removalDialogText: (characterName: String) -> AnnotatedString = { characterName ->

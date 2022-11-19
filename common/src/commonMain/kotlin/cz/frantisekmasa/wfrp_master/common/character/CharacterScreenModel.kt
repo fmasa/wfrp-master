@@ -60,6 +60,13 @@ class CharacterScreenModel(
         }
     }
 
+    suspend fun archive() {
+        // TODO: Remove this character from combat (see [Combat::removeNpc()])
+        val character = characters.get(characterId)
+
+        characters.save(characterId.partyId, character.archive())
+    }
+
     suspend fun changeAvatar(image: ByteArray) {
         avatarChanger.changeAvatar(characterId, image)
     }
