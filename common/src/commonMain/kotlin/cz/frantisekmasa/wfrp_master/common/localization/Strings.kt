@@ -346,6 +346,13 @@ data class CharacteristicStrings(
 data class CharacterMessageStrings(
     val noEquippedWeapons: String = "No equipped weapons",
     val noEquippedWeaponsSubText: String = "Character does not have any Weapon trappings equipped",
+    val removalDialogText: (characterName: String) -> AnnotatedString = { characterName ->
+        buildAnnotatedString {
+            append("Do you really want to permanently remove ")
+            withStyle(SpanStyle(fontWeight = FontWeight.Bold)) { append(characterName) }
+            append("?")
+        }
+    }
 )
 
 @Immutable
