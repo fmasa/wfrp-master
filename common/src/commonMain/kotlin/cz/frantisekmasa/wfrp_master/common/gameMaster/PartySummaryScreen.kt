@@ -276,13 +276,11 @@ private fun PlayerItem(
                 name = character.name,
                 icon = { CharacterAvatar(character.avatarUrl, ItemIcon.Size.Small) },
                 onClick = { onCharacterOpenRequest(character) },
-                contextMenuItems = if (character.userId == null)
-                    listOf(
-                        ContextMenu.Item(strings.commonUi.buttonRemove) {
-                            onRemoveCharacter(character)
-                        }
-                    )
-                else emptyList()
+                contextMenuItems = listOf(
+                    ContextMenu.Item(strings.commonUi.buttonRemove) {
+                        onRemoveCharacter(character)
+                    }
+                )
             )
         }
     }

@@ -71,7 +71,6 @@ data class Character(
         require(motivation.length <= MOTIVATION_MAX_LENGTH) { "Motivation is too long" }
         require(mutation.length <= MUTATION_MAX_LENGTH) { "Mutation is too long" }
         require(note.length <= NOTE_MAX_LENGTH) { "Note is too long" }
-        require(!isArchived || userId == null) { "Only non-user-characters can be archived" }
 
         val maxWounds = calculateMaxWounds(
             size ?: race?.size,
@@ -225,7 +224,10 @@ data class Character(
 
     fun updateConditions(newConditions: CurrentConditions) = copy(conditions = newConditions)
 
-    fun archive() = copy(isArchived = true)
+    fun archive() = copy(
+        isArchived = true,
+        userId = null,
+    )
 
     companion object {
         const val NAME_MAX_LENGTH = 50
