@@ -23,7 +23,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -35,6 +34,7 @@ import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import cz.frantisekmasa.wfrp_master.common.ambitions.AmbitionsCard
+import cz.frantisekmasa.wfrp_master.common.characterEdit.CharacterRemovalDialog
 import cz.frantisekmasa.wfrp_master.common.compendium.CompendiumScreen
 import cz.frantisekmasa.wfrp_master.common.compendium.CompendiumScreenModel
 import cz.frantisekmasa.wfrp_master.common.core.auth.UserId
@@ -42,7 +42,6 @@ import cz.frantisekmasa.wfrp_master.common.core.domain.character.Character
 import cz.frantisekmasa.wfrp_master.common.core.domain.identifiers.CharacterId
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.Invitation
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.PartyId
-import cz.frantisekmasa.wfrp_master.common.core.shared.IO
 import cz.frantisekmasa.wfrp_master.common.core.shared.Resources
 import cz.frantisekmasa.wfrp_master.common.core.shared.drawableResource
 import cz.frantisekmasa.wfrp_master.common.core.ui.CharacterAvatar
@@ -59,9 +58,7 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.rememberScreenMode
 import cz.frantisekmasa.wfrp_master.common.invitation.InvitationDialog
 import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
 import cz.frantisekmasa.wfrp_master.common.skillTest.SkillTestDialog
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.launch
 
 @Composable
 internal fun Screen.PartySummaryScreen(
@@ -112,18 +109,23 @@ internal fun Screen.PartySummaryScreen(
                 )
             }
 
-            val coroutineScope = rememberCoroutineScope()
+            val (removedCharacter, setRemovedCharacter) = remember { mutableStateOf<Character?>(null) }
+
+            if (removedCharacter != null) {
+                CharacterRemovalDialog(
+                    character = removedCharacter,
+                    onDismissRequest = { setRemovedCharacter(null) },
+                    onConfirmation = {
+                        screenModel.archiveCharacter(CharacterId(partyId, removedCharacter.id))
+                    },
+                )
+            }
 
             PlayersCard(
                 screenModel,
                 onCharacterOpenRequest = onCharacterOpenRequest,
                 onCharacterCreateRequest = onCharacterCreateRequest,
-                onRemoveCharacter = {
-                    // TODO: Remove this character from combat (see [Combat::removeNpc()])
-                    coroutineScope.launch(Dispatchers.IO) {
-                        screenModel.archiveCharacter(CharacterId(partyId, it.id))
-                    }
-                },
+                onRemoveCharacter = { setRemovedCharacter(it) },
                 onInvitationDialogRequest = { invitationDialogVisible = true },
             )
 
@@ -274,13 +276,11 @@ private fun PlayerItem(
                 name = character.name,
                 icon = { CharacterAvatar(character.avatarUrl, ItemIcon.Size.Small) },
                 onClick = { onCharacterOpenRequest(character) },
-                contextMenuItems = if (character.userId == null)
-                    listOf(
-                        ContextMenu.Item(strings.commonUi.buttonRemove) {
-                            onRemoveCharacter(character)
-                        }
-                    )
-                else emptyList()
+                contextMenuItems = listOf(
+                    ContextMenu.Item(strings.commonUi.buttonRemove) {
+                        onRemoveCharacter(character)
+                    }
+                )
             )
         }
     }

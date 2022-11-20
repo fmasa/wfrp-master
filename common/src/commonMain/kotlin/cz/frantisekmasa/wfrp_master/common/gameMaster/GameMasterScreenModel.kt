@@ -39,6 +39,7 @@ class GameMasterScreenModel(
         }
 
     suspend fun archiveCharacter(id: CharacterId) {
+        // TODO: Remove this character from combat (see [Combat::removeNpc()])
         val character = characterRepository.get(id)
 
         characterRepository.save(id.partyId, character.archive())
