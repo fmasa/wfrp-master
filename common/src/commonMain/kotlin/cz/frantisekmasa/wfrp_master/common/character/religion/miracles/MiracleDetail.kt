@@ -39,26 +39,45 @@ fun MiracleDetail(
         }
     ) {
         Column(Modifier.verticalScroll(rememberScrollState())) {
-            SubheadBar {
-                Row(
-                    Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically,
-                ) {
-                    Text(miracle.cultName)
-                }
+            MiracleDetailBody(
+                cultName = miracle.cultName,
+                range = miracle.range,
+                target = miracle.target,
+                duration = miracle.duration,
+                effect = miracle.effect,
+            )
+        }
+    }
+}
+
+@Composable
+fun MiracleDetailBody(
+    cultName: String,
+    range: String,
+    target: String,
+    duration: String,
+    effect: String,
+) {
+    Column {
+        SubheadBar {
+            Row(
+                Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                Text(cultName)
             }
+        }
 
-            Column(Modifier.padding(Spacing.bodyPadding)) {
-                val strings = LocalStrings.current.miracles
+        Column(Modifier.padding(Spacing.bodyPadding)) {
+            val strings = LocalStrings.current.miracles
 
-                SingleLineTextValue(strings.labelRange, miracle.range)
-                SingleLineTextValue(strings.labelTarget, miracle.target)
-                SingleLineTextValue(strings.labelDuration, miracle.duration)
+            SingleLineTextValue(strings.labelRange, range)
+            SingleLineTextValue(strings.labelTarget, target)
+            SingleLineTextValue(strings.labelDuration, duration)
 
-                RichText(Modifier.padding(top = 8.dp)) {
-                    Markdown(miracle.effect)
-                }
+            RichText(Modifier.padding(top = 8.dp)) {
+                Markdown(effect)
             }
         }
     }

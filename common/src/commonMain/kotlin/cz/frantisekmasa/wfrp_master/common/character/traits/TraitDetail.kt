@@ -17,6 +17,8 @@ import com.halilibo.richtext.ui.RichText
 import cz.frantisekmasa.wfrp_master.common.core.domain.traits.Trait
 import cz.frantisekmasa.wfrp_master.common.core.ui.buttons.CloseButton
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
+import cz.frantisekmasa.wfrp_master.common.core.ui.text.SingleLineTextValue
+import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
 
 @Composable
 fun TraitDetail(
@@ -34,11 +36,31 @@ fun TraitDetail(
         }
     ) {
         Column(Modifier.verticalScroll(rememberScrollState())) {
-            Column(Modifier.padding(Spacing.bodyPadding)) {
-                RichText(Modifier.padding(top = 8.dp)) {
-                    Markdown(trait.description)
-                }
-            }
+            TraitDetailBody(
+                specifications = trait.specificationValues.keys,
+                description = trait.description,
+            )
+        }
+    }
+}
+
+@Composable
+fun TraitDetailBody(
+    specifications: Set<String>,
+    description: String,
+) {
+    Column(Modifier.padding(Spacing.bodyPadding)) {
+        if (specifications.isNotEmpty()) {
+            SingleLineTextValue(
+                label = LocalStrings.current.traits.labelSpecifications,
+                value = remember(specifications) {
+                    specifications.sorted().joinToString(", ")
+                },
+            )
+        }
+
+        RichText(Modifier.padding(top = 8.dp)) {
+            Markdown(description)
         }
     }
 }

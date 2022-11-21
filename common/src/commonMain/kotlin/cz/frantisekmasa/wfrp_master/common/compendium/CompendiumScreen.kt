@@ -27,13 +27,13 @@ import androidx.compose.ui.unit.Dp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
+import cz.frantisekmasa.wfrp_master.common.compendium.blessing.BlessingCompendiumTab
 import cz.frantisekmasa.wfrp_master.common.compendium.career.CareerCompendiumTab
-import cz.frantisekmasa.wfrp_master.common.compendium.tabs.BlessingCompendiumTab
-import cz.frantisekmasa.wfrp_master.common.compendium.tabs.MiracleCompendiumTab
-import cz.frantisekmasa.wfrp_master.common.compendium.tabs.SkillCompendiumTab
-import cz.frantisekmasa.wfrp_master.common.compendium.tabs.SpellCompendiumTab
-import cz.frantisekmasa.wfrp_master.common.compendium.tabs.TalentCompendiumTab
-import cz.frantisekmasa.wfrp_master.common.compendium.tabs.TraitCompendiumTab
+import cz.frantisekmasa.wfrp_master.common.compendium.miracle.MiracleCompendiumTab
+import cz.frantisekmasa.wfrp_master.common.compendium.skill.SkillCompendiumTab
+import cz.frantisekmasa.wfrp_master.common.compendium.spell.SpellCompendiumTab
+import cz.frantisekmasa.wfrp_master.common.compendium.talent.TalentCompendiumTab
+import cz.frantisekmasa.wfrp_master.common.compendium.trait.TraitCompendiumTab
 import cz.frantisekmasa.wfrp_master.common.core.domain.compendium.CompendiumItem
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.PartyId
 import cz.frantisekmasa.wfrp_master.common.core.ui.buttons.BackButton
@@ -66,12 +66,12 @@ class CompendiumScreen(
             val strings = LocalStrings.current.compendium
 
             TabPager(Modifier.fillMaxSize()) {
-                tab(strings.tabSkills) { SkillCompendiumTab(screenModel, screenWidth) }
-                tab(strings.tabTalents) { TalentCompendiumTab(screenModel, screenWidth) }
-                tab(strings.tabSpells) { SpellCompendiumTab(screenModel, screenWidth) }
-                tab(strings.tabBlessings) { BlessingCompendiumTab(screenModel, screenWidth) }
-                tab(strings.tabMiracles) { MiracleCompendiumTab(screenModel, screenWidth) }
-                tab(strings.tabTraits) { TraitCompendiumTab(screenModel, screenWidth) }
+                tab(strings.tabSkills) { SkillCompendiumTab(partyId, screenModel, screenWidth) }
+                tab(strings.tabTalents) { TalentCompendiumTab(partyId, screenModel, screenWidth) }
+                tab(strings.tabSpells) { SpellCompendiumTab(partyId, screenModel, screenWidth) }
+                tab(strings.tabBlessings) { BlessingCompendiumTab(partyId, screenModel, screenWidth) }
+                tab(strings.tabMiracles) { MiracleCompendiumTab(partyId, screenModel, screenWidth) }
+                tab(strings.tabTraits) { TraitCompendiumTab(partyId, screenModel, screenWidth) }
                 tab(strings.tabCareers) { CareerCompendiumTab(partyId, screenModel, screenWidth) }
             }
         }

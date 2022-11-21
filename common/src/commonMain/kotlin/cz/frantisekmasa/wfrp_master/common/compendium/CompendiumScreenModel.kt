@@ -1,6 +1,8 @@
 package cz.frantisekmasa.wfrp_master.common.compendium
 
+import arrow.core.Either
 import cafe.adriel.voyager.core.model.ScreenModel
+import com.benasher44.uuid.Uuid
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.Blessing
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.Career
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.Miracle
@@ -8,6 +10,7 @@ import cz.frantisekmasa.wfrp_master.common.compendium.domain.Skill
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.Spell
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.Talent
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.Trait
+import cz.frantisekmasa.wfrp_master.common.compendium.domain.exceptions.CompendiumItemNotFound
 import cz.frantisekmasa.wfrp_master.common.compendium.import.BlessingImport
 import cz.frantisekmasa.wfrp_master.common.compendium.import.CareerImport
 import cz.frantisekmasa.wfrp_master.common.compendium.import.CompendiumBundle
@@ -48,6 +51,30 @@ class CompendiumScreenModel(
     val blessings: Flow<List<Blessing>> = blessingCompendium.liveForParty(partyId)
     val miracles: Flow<List<Miracle>> = miracleCompendium.liveForParty(partyId)
     val traits: Flow<List<Trait>> = traitCompendium.liveForParty(partyId)
+
+    fun getBlessing(blessingId: Uuid): Flow<Either<CompendiumItemNotFound, Blessing>> {
+        return blessingCompendium.getLive(partyId, blessingId)
+    }
+
+    fun getSkill(skillId: Uuid): Flow<Either<CompendiumItemNotFound, Skill>> {
+        return skillCompendium.getLive(partyId, skillId)
+    }
+
+    fun getMiracle(miracleId: Uuid): Flow<Either<CompendiumItemNotFound, Miracle>> {
+        return miracleCompendium.getLive(partyId, miracleId)
+    }
+
+    fun getSpell(spellId: Uuid): Flow<Either<CompendiumItemNotFound, Spell>> {
+        return spellCompendium.getLive(partyId, spellId)
+    }
+
+    fun getTalent(talentId: Uuid): Flow<Either<CompendiumItemNotFound, Talent>> {
+        return talentsCompendium.getLive(partyId, talentId)
+    }
+
+    fun getTrait(traitId: Uuid): Flow<Either<CompendiumItemNotFound, Trait>> {
+        return traitCompendium.getLive(partyId, traitId)
+    }
 
     suspend fun save(skill: Skill) {
         skillCompendium.saveItems(partyId, skill)

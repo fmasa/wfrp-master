@@ -34,17 +34,32 @@ fun BlessingDetail(
         }
     ) {
         Column(Modifier.verticalScroll(rememberScrollState())) {
-            Column(Modifier.padding(Spacing.bodyPadding)) {
-                val strings = LocalStrings.current.blessings
+            BlessingDetailBody(
+                range = blessing.range,
+                target = blessing.target,
+                duration = blessing.duration,
+                effect = blessing.effect,
+            )
+        }
+    }
+}
 
-                SingleLineTextValue(strings.labelRange, blessing.range)
-                SingleLineTextValue(strings.labelTarget, blessing.target)
-                SingleLineTextValue(strings.labelDuration, blessing.duration)
+@Composable
+fun BlessingDetailBody(
+    range: String,
+    target: String,
+    duration: String,
+    effect: String,
+) {
+    Column(Modifier.padding(Spacing.bodyPadding)) {
+        val strings = LocalStrings.current.blessings
 
-                RichText(Modifier.padding(top = 8.dp)) {
-                    Markdown(blessing.effect)
-                }
-            }
+        SingleLineTextValue(strings.labelRange, range)
+        SingleLineTextValue(strings.labelTarget, target)
+        SingleLineTextValue(strings.labelDuration, duration)
+
+        RichText(Modifier.padding(top = 8.dp)) {
+            Markdown(effect)
         }
     }
 }

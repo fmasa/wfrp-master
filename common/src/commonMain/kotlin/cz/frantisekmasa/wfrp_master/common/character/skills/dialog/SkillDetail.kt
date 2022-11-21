@@ -12,6 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.halilibo.richtext.markdown.Markdown
 import com.halilibo.richtext.ui.RichText
+import cz.frantisekmasa.wfrp_master.common.core.domain.Characteristic
 import cz.frantisekmasa.wfrp_master.common.core.domain.localizedName
 import cz.frantisekmasa.wfrp_master.common.core.domain.skills.Skill
 import cz.frantisekmasa.wfrp_master.common.core.ui.buttons.CloseButton
@@ -35,24 +36,37 @@ fun SkillDetail(
     ) {
         Column(Modifier.verticalScroll(rememberScrollState())) {
             subheadBar()
+        }
 
-            val strings = LocalStrings.current
+        SkillDetailBody(
+            characteristic = skill.characteristic,
+            advanced = skill.advanced,
+            description = skill.description,
+        )
+    }
+}
 
-            Column(Modifier.padding(Spacing.bodyPadding)) {
-                SingleLineTextValue(
-                    label = strings.skills.labelCharacteristic,
-                    skill.characteristic.localizedName,
-                )
+@Composable
+fun SkillDetailBody(
+    characteristic: Characteristic,
+    advanced: Boolean,
+    description: String,
+) {
+    Column(Modifier.padding(Spacing.bodyPadding)) {
+        val strings = LocalStrings.current
 
-                SingleLineTextValue(
-                    label = strings.skills.labelAdvanced,
-                    value = strings.commonUi.boolean(skill.advanced),
-                )
+        SingleLineTextValue(
+            label = strings.skills.labelCharacteristic,
+            characteristic.localizedName,
+        )
 
-                RichText(Modifier.padding(top = 8.dp)) {
-                    Markdown(skill.description)
-                }
-            }
+        SingleLineTextValue(
+            label = strings.skills.labelAdvanced,
+            value = strings.commonUi.boolean(advanced),
+        )
+
+        RichText(Modifier.padding(top = 8.dp)) {
+            Markdown(description)
         }
     }
 }

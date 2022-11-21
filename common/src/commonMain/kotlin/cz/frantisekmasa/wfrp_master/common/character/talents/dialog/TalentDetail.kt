@@ -14,6 +14,8 @@ import com.halilibo.richtext.ui.RichText
 import cz.frantisekmasa.wfrp_master.common.core.domain.talents.Talent
 import cz.frantisekmasa.wfrp_master.common.core.ui.buttons.CloseButton
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
+import cz.frantisekmasa.wfrp_master.common.core.ui.text.SingleLineTextValue
+import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
 
 @Composable
 fun TalentDetail(
@@ -32,9 +34,29 @@ fun TalentDetail(
         Column(Modifier.verticalScroll(rememberScrollState())) {
             subheadBar()
 
-            RichText(Modifier.padding(Spacing.bodyPadding)) {
-                Markdown(talent.description)
-            }
+            TalentDetailBody(
+                maxTimesTaken = null,
+                description = talent.description,
+            )
+        }
+    }
+}
+
+@Composable
+fun TalentDetailBody(
+    maxTimesTaken: String?,
+    description: String,
+) {
+    Column(Modifier.padding(Spacing.bodyPadding)) {
+        if (maxTimesTaken != null) {
+            SingleLineTextValue(
+                label = LocalStrings.current.talents.labelMaxTimesTaken,
+                value = maxTimesTaken,
+            )
+        }
+
+        RichText {
+            Markdown(description)
         }
     }
 }

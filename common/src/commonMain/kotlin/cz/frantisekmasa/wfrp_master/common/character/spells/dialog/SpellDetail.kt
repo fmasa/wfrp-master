@@ -41,34 +41,53 @@ fun SpellDetail(
         Column(Modifier.verticalScroll(rememberScrollState())) {
             subheadBar()
 
-            val strings = LocalStrings.current.spells
+            SpellDetailBody(
+                castingNumber = spell.castingNumber,
+                effectiveCastingNumber = spell.effectiveCastingNumber,
+                range = spell.range,
+                target = spell.target,
+                duration = spell.duration,
+                effect = spell.effect,
+            )
+        }
+    }
+}
 
-            Column(Modifier.padding(Spacing.bodyPadding)) {
-                SingleLineTextValue(
-                    strings.castingNumberShortcut,
-                    buildAnnotatedString {
-                        if (spell.castingNumber != spell.effectiveCastingNumber) {
-                            withStyle(SpanStyle(textDecoration = TextDecoration.LineThrough)) {
-                                append(spell.castingNumber.toString())
-                            }
+@Composable
+fun SpellDetailBody(
+    castingNumber: Int,
+    effectiveCastingNumber: Int,
+    range: String,
+    target: String,
+    duration: String,
+    effect: String,
+) {
+    val strings = LocalStrings.current.spells
 
-                            append(" ➔ ")
-                        }
-
-                        append(spell.effectiveCastingNumber.toString())
+    Column(Modifier.padding(Spacing.bodyPadding)) {
+        SingleLineTextValue(
+            strings.castingNumberShortcut,
+            buildAnnotatedString {
+                if (castingNumber != effectiveCastingNumber) {
+                    withStyle(SpanStyle(textDecoration = TextDecoration.LineThrough)) {
+                        append(castingNumber.toString())
                     }
-                )
 
-                SingleLineTextValue(strings.labelRange, spell.range)
-
-                SingleLineTextValue(strings.labelTarget, spell.target)
-
-                SingleLineTextValue(strings.labelDuration, spell.duration)
-
-                RichText(Modifier.padding(top = 8.dp)) {
-                    Markdown(spell.effect)
+                    append(" ➔ ")
                 }
+
+                append(effectiveCastingNumber.toString())
             }
+        )
+
+        SingleLineTextValue(strings.labelRange, range)
+
+        SingleLineTextValue(strings.labelTarget, target)
+
+        SingleLineTextValue(strings.labelDuration, duration)
+
+        RichText(Modifier.padding(top = 8.dp)) {
+            Markdown(effect)
         }
     }
 }
