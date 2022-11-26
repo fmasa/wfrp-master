@@ -193,6 +193,10 @@ class CombatScreenModel(
     suspend fun reorderCombatants(combatants: List<Combatant>) =
         updateCombat { it.reorderCombatants(combatants) }
 
+    suspend fun removeCombatant(combatantId: Uuid) {
+        updateCombat { it.removeCombatant(combatantId) }
+    }
+
     fun combatants(): Flow<List<CombatantItem>> {
         val npcsFlow = activeEncounterId.transform { emitAll(npcs.findByEncounter(it)) }
 
@@ -256,7 +260,7 @@ class CombatScreenModel(
         InitiativeStrategy.BONUSES_PLUS_1D10 -> BonusesPlus1d10Strategy(random)
     }
 
-    private suspend fun updateCombat(update: (Combat) -> Combat) = parties.update(partyId) { party ->
+    private suspend fun updateCombat(update: (Combat) -> Combat?) = parties.update(partyId) { party ->
         val combat = party.activeCombat
 
         if (combat == null) {
@@ -264,7 +268,11 @@ class CombatScreenModel(
             return@update party
         }
 
-        party.updateCombat(update(combat))
+        val updatedCombat = update(combat)
+
+        if (updatedCombat == null)
+            party.endCombat()
+        else party.updateCombat(updatedCombat)
     }
 
     private fun <T1, T2, T3, R> combineFlows(

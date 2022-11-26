@@ -1,6 +1,7 @@
 package cz.frantisekmasa.wfrp_master.common.core.domain.party.combat
 
 import androidx.compose.runtime.Immutable
+import com.benasher44.uuid.Uuid
 import cz.frantisekmasa.wfrp_master.common.core.domain.identifiers.NpcId
 import cz.frantisekmasa.wfrp_master.common.core.shared.Parcelable
 import cz.frantisekmasa.wfrp_master.common.core.shared.Parcelize
@@ -67,8 +68,16 @@ data class Combat(
     private fun <T> List<T>.containsSameItems(other: List<T>) =
         other.size == size || other.containsAll(this)
 
+    fun removeCombatant(id: Uuid): Combat? {
+        return removeFirstCombatant { it.id == id }
+    }
+
     fun removeNpc(npcId: NpcId): Combat? {
-        val removedIndex = combatants.indexOfFirst { it is Combatant.Npc && it.npcId == npcId }
+        return removeFirstCombatant { it is Combatant.Npc && it.npcId == npcId }
+    }
+
+    private fun removeFirstCombatant(predicate: (Combatant) -> Boolean): Combat? {
+        val removedIndex = combatants.indexOfFirst(predicate)
 
         if (removedIndex == -1) {
             return this

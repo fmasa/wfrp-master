@@ -439,6 +439,7 @@ data class CombatStrings(
     val advantageCap: String = "Advantage Cap",
     val advantageUnlimited: String = "Unlimited",
     val buttonEndCombat: String = "End combat",
+    val buttonRemoveCombatant: String = "Remove from combat",
     val iconNextTurn: String = "Next turn",
     val hitLocations: HitLocationStrings = HitLocationStrings(),
     val iconPreviousTurn: String = "Previous turn",

@@ -24,21 +24,21 @@ import androidx.compose.material.IconButton
 import androidx.compose.material.ListItem
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.ModalBottomSheetLayout
-import androidx.compose.material.ModalBottomSheetState
 import androidx.compose.material.ModalBottomSheetValue
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Surface
-import androidx.compose.material.SwipeableDefaults
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.rounded.ArrowBack
 import androidx.compose.material.icons.rounded.ArrowForward
-import androidx.compose.material.icons.rounded.OpenInNew
+import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -61,8 +61,10 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.CharacterAvatar
 import cz.frantisekmasa.wfrp_master.common.core.ui.StatBlock
 import cz.frantisekmasa.wfrp_master.common.core.ui.StatBlockData
 import cz.frantisekmasa.wfrp_master.common.core.ui.buttons.BackButton
+import cz.frantisekmasa.wfrp_master.common.core.ui.dialogs.DialogProgress
 import cz.frantisekmasa.wfrp_master.common.core.ui.flow.collectWithLifecycle
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.NumberPicker
+import cz.frantisekmasa.wfrp_master.common.core.ui.menu.DropdownMenu
 import cz.frantisekmasa.wfrp_master.common.core.ui.menu.DropdownMenuItem
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.DraggableListFor
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.FullScreenProgress
@@ -88,45 +90,70 @@ class ActiveCombatScreen(
         val viewModel: CombatScreenModel = rememberScreenModel(arg = partyId)
 
         val coroutineScope = rememberCoroutineScope()
+        val navigator = LocalNavigator.currentOrThrow
 
         val party = viewModel.party.collectWithLifecycle(null).value
         val combatants = remember { viewModel.combatants() }.collectWithLifecycle(null).value
         val isGameMaster = LocalUser.current.id == party?.gameMasterId
 
-        var openedCombatant by remember { mutableStateOf<CombatantItem?>(null) }
-        val bottomSheetState = rememberNotSavedModalBottomSheetState()
+        val (openedCombatant, setOpenedCombatant) = remember { mutableStateOf<CombatantItem?>(null) }
+        val freshCombatant = if (openedCombatant != null)
+            combatants?.firstOrNull { it.areSameEntity(openedCombatant) }
+        else null
+
+        val bottomSheetState = rememberModalBottomSheetState(
+            ModalBottomSheetValue.Hidden,
+            skipHalfExpanded = true,
+        )
 
         ModalBottomSheetLayout(
             sheetState = bottomSheetState,
             sheetShape = MaterialTheme.shapes.small,
             sheetContent = {
-                if (!bottomSheetState.isVisible) {
-                    Box(Modifier.height(1.dp))
+                Box(Modifier.height(1.dp))
+
+                if (openedCombatant == null) {
+                    DialogProgress()
                     return@ModalBottomSheetLayout
                 }
 
-                openedCombatant?.let { combatant ->
-                    if (party == null) {
-                        return@let
-                    }
+                if (party == null || freshCombatant == null) {
+                    return@ModalBottomSheetLayout
+                }
 
-                    /*
-                 There are two things happening
+                /*
+                 There are two things happening:
                  1. We always need fresh version of given combatant,
                     because user may have edited combatant, i.e. by changing her advantage.
                     So we cannot used value from saved mutable state.
                  2. We have to show sheet only if fresh combatant is in the collection,
                     because she may have been removed from combat.
                  */
-                    val freshCombatant =
-                        combatants?.firstOrNull { it.areSameEntity(combatant) } ?: return@let
 
-                    val advantageCap by derivedStateOf {
-                        party.settings.advantageCap.calculate(freshCombatant.characteristics)
-                    }
-
-                    CombatantSheet(freshCombatant, viewModel, advantageCap)
+                val advantageCap by derivedStateOf {
+                    party.settings.advantageCap.calculate(freshCombatant.characteristics)
                 }
+
+                val combatantId = freshCombatant.combatant.id
+                CombatantSheet(
+                    freshCombatant,
+                    viewModel,
+                    advantageCap,
+                    onRemoveRequest = combatantId?.let {
+                        {
+                            coroutineScope.launch {
+                                if (combatants?.size == 1) {
+                                    viewModel.endCombat()
+                                    navigator.pop()
+                                } else {
+                                    viewModel.removeCombatant(combatantId)
+                                    setOpenedCombatant(null)
+                                    bottomSheetState.hide()
+                                }
+                            }
+                        }
+                    }
+                )
             },
         ) {
             Column {
@@ -149,8 +176,6 @@ class ActiveCombatScreen(
                                 }
 
                                 OptionsAction {
-                                    val navigator = LocalNavigator.currentOrThrow
-
                                     DropdownMenuItem(
                                         content = { Text(strings.combat.buttonEndCombat) },
                                         onClick = {
@@ -188,17 +213,19 @@ class ActiveCombatScreen(
                                 .weight(1f)
                                 .verticalScroll(rememberScrollState())
                         ) {
-                            CombatantList(
-                                coroutineScope = coroutineScope,
-                                combatants = combatants,
-                                viewModel = viewModel,
-                                turn = turn,
-                                isGameMaster = isGameMaster,
-                                onCombatantClicked = {
-                                    openedCombatant = it
-                                    coroutineScope.launch { bottomSheetState.show() }
-                                }
-                            )
+                            key(combatants) {
+                                CombatantList(
+                                    coroutineScope = coroutineScope,
+                                    combatants = combatants,
+                                    viewModel = viewModel,
+                                    turn = turn,
+                                    isGameMaster = isGameMaster,
+                                    onCombatantClicked = {
+                                        setOpenedCombatant(it)
+                                        coroutineScope.launch { bottomSheetState.show() }
+                                    },
+                                )
+                            }
                         }
 
                         if (isGameMaster) {
@@ -253,17 +280,6 @@ class ActiveCombatScreen(
     }
 
     @Composable
-    private fun rememberNotSavedModalBottomSheetState(): ModalBottomSheetState {
-        return remember {
-            ModalBottomSheetState(
-                initialValue = ModalBottomSheetValue.Hidden,
-                animationSpec = SwipeableDefaults.AnimationSpec,
-                confirmStateChange = { true },
-            )
-        }
-    }
-
-    @Composable
     private fun CombatantList(
         coroutineScope: CoroutineScope,
         combatants: List<CombatantItem>,
@@ -303,6 +319,7 @@ class ActiveCombatScreen(
         combatant: CombatantItem,
         viewModel: CombatScreenModel,
         advantageCap: Advantage,
+        onRemoveRequest: (() -> Unit)?,
     ) {
         Column(
             Modifier
@@ -311,18 +328,14 @@ class ActiveCombatScreen(
             verticalArrangement = Arrangement.spacedBy(Spacing.small),
         ) {
             val navigator = LocalNavigator.currentOrThrow
-
             Row(
-                Modifier.align(Alignment.CenterHorizontally),
+                modifier = Modifier.align(Alignment.CenterHorizontally),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 Text(
                     combatant.name,
                     style = MaterialTheme.typography.h6,
-                )
-
-                IconButton(
-                    onClick = {
+                    modifier = Modifier.clickable {
                         navigator.push(
                             when (combatant) {
                                 is CombatantItem.Npc -> NpcDetailScreen(combatant.npcId)
@@ -332,13 +345,27 @@ class ActiveCombatScreen(
                                 )
                             }
                         )
-                    },
-                ) {
-                    Icon(
-                        Icons.Rounded.OpenInNew,
-                        LocalStrings.current.commonUi.buttonDetail,
-                        tint = MaterialTheme.colors.primary
-                    )
+                    }
+                )
+
+                if (onRemoveRequest != null) {
+                    var contextMenuExpanded by remember { mutableStateOf(false) }
+                    Box {
+                        IconButton(onClick = { contextMenuExpanded = true }) {
+                            Icon(
+                                Icons.Filled.MoreVert,
+                                LocalStrings.current.commonUi.labelOpenContextMenu,
+                            )
+                        }
+                        DropdownMenu(
+                            expanded = contextMenuExpanded,
+                            onDismissRequest = { contextMenuExpanded = false },
+                        ) {
+                            DropdownMenuItem(onClick = onRemoveRequest) {
+                                Text(LocalStrings.current.combat.buttonRemoveCombatant)
+                            }
+                        }
+                    }
                 }
             }
 
