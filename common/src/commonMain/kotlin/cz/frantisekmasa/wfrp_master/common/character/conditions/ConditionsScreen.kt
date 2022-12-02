@@ -20,6 +20,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.capitalize
 import androidx.compose.ui.text.intl.Locale
 import androidx.compose.ui.text.toLowerCase
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import cz.frantisekmasa.wfrp_master.common.character.CharacterScreenModel
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.Character
@@ -34,8 +35,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-typealias ConditionTransformation = (CurrentConditions) -> CurrentConditions
-
 @Composable
 fun ConditionsScreen(
     character: Character,
@@ -43,20 +42,29 @@ fun ConditionsScreen(
     modifier: Modifier = Modifier
 ) {
     val coroutineScope = rememberCoroutineScope()
-
     val conditions = character.conditions
-    val updateConditions = { transformation: ConditionTransformation ->
-        val newConditions = transformation(conditions)
 
-        if (newConditions != conditions) {
-            coroutineScope.launch {
-                withContext(Dispatchers.IO) {
-                    screenModel.update { it.updateConditions(newConditions) }
+    ConditionsForm(
+        modifier = modifier,
+        conditions = conditions,
+        onUpdate = { newConditions ->
+            if (newConditions != conditions) {
+                coroutineScope.launch {
+                    withContext(Dispatchers.IO) {
+                        screenModel.update { it.updateConditions(newConditions) }
+                    }
                 }
             }
         }
-    }
+    )
+}
 
+@Composable
+fun ConditionsForm(
+    conditions: CurrentConditions,
+    onUpdate: (CurrentConditions) -> Unit,
+    modifier: Modifier = Modifier,
+) {
     Column(
         modifier
             .background(MaterialTheme.colors.surface)
@@ -64,7 +72,7 @@ fun ConditionsScreen(
             .padding(top = Spacing.small)
     ) {
         Condition.values().forEach { condition ->
-            ConditionRow(condition, conditions.count(condition), updateConditions)
+            ConditionRow(condition, conditions, onUpdate)
             Divider()
         }
     }
@@ -73,8 +81,8 @@ fun ConditionsScreen(
 @Composable
 private fun ConditionRow(
     condition: Condition,
-    count: Int,
-    update: (ConditionTransformation) -> Unit
+    state: CurrentConditions,
+    update: (CurrentConditions) -> Unit
 ) {
     Row(
         Modifier
@@ -91,21 +99,24 @@ private fun ConditionRow(
                 .padding(start = 8.dp),
         )
 
+        val count = state.count(condition)
+
         if (condition.isStackable()) {
             NumberPicker(
                 value = count,
-                onIncrement = { update { it.addConditions(condition) } },
-                onDecrement = { update { it.removeCondition(condition) } }
+                onIncrement = { update(state.addConditions(condition)) },
+                onDecrement = { update(state.removeCondition(condition)) },
             )
         } else {
             Switch(
                 modifier = Modifier.padding(vertical = 8.dp, horizontal = 24.dp),
                 checked = count != 0,
                 onCheckedChange = { checked ->
-                    update {
-                        if (checked) it.addConditions(condition)
-                        else it.removeCondition(condition)
-                    }
+                    update(
+                        if (checked)
+                            state.addConditions(condition)
+                        else state.removeCondition(condition)
+                    )
                 }
             )
         }
@@ -113,7 +124,7 @@ private fun ConditionRow(
 }
 
 @Composable
-private fun ConditionIcon(condition: Condition) {
+fun ConditionIcon(condition: Condition, size: Dp = 28.dp) {
     val iconRes = when (condition) {
         Condition.ABLAZE -> Resources.Drawable.ConditionAblaze
         Condition.BLINDED -> Resources.Drawable.ConditionBlinded
@@ -131,7 +142,7 @@ private fun ConditionIcon(condition: Condition) {
     Image(
         drawableResource(iconRes),
         conditionName(condition),
-        Modifier.size(28.dp)
+        Modifier.size(size)
     )
 }
 

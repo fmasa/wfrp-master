@@ -172,7 +172,7 @@ private fun NpcCharacterList(items: MutableMap<Character, Int>) {
                     NumberPicker(
                         value = count,
                         onIncrement = { items[character] = count + 1 },
-                        onDecrement = { items[character] = (count + 1).coerceAtLeast(0) },
+                        onDecrement = { items[character] = (count - 1).coerceAtLeast(0) },
                     )
                 },
             )

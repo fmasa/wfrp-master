@@ -439,6 +439,7 @@ data class CombatStrings(
     val advantageCap: String = "Advantage Cap",
     val advantageUnlimited: String = "Unlimited",
     val buttonEndCombat: String = "End combat",
+    val buttonRemoveCombatant: String = "Remove from combat",
     val iconNextTurn: String = "Next turn",
     val hitLocations: HitLocationStrings = HitLocationStrings(),
     val iconPreviousTurn: String = "Previous turn",
@@ -457,6 +458,7 @@ data class CombatStrings(
 @Immutable
 data class CombatMessageStrings(
     val combatInProgress: String = "Combat is in progress",
+    val noConditions: String = "No Conditions",
     val waitingForCombat: String = "Waiting for Combat…",
 )
 

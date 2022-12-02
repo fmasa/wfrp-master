@@ -1,14 +1,23 @@
 package cz.frantisekmasa.wfrp_master.common.core.domain.character
 
 import androidx.compose.runtime.Immutable
+import androidx.compose.runtime.Stable
+import cz.frantisekmasa.wfrp_master.common.core.shared.Parcelable
+import cz.frantisekmasa.wfrp_master.common.core.shared.Parcelize
 import kotlinx.serialization.Serializable
 
 @Serializable
 @Immutable
-class CurrentConditions private constructor(private val conditions: Map<Condition, Int>) {
+@Parcelize
+class CurrentConditions private constructor(
+    private val conditions: Map<Condition, Int>
+) : Parcelable {
     companion object {
         fun none() = CurrentConditions(emptyMap())
     }
+
+    @Stable
+    fun areEmpty(): Boolean = conditions.isEmpty()
 
     fun addConditions(vararg conditions: Condition) =
         conditions.fold(this) { acc, condition ->
@@ -29,7 +38,16 @@ class CurrentConditions private constructor(private val conditions: Map<Conditio
         }
     fun count(condition: Condition) = conditions.getOrElse(condition, { 0 })
 
+    @Stable
     fun toMap() = conditions
+
+    @Stable
+    fun toList(): List<Pair<Condition, Int>> {
+        return conditions.asSequence()
+            .sortedBy { it.key }
+            .map { it.toPair() }
+            .toList()
+    }
 
     private fun withCondition(condition: Condition, count: Int) = CurrentConditions(
         mapOf(
