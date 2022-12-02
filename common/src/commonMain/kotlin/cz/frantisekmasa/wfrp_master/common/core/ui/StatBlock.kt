@@ -85,7 +85,7 @@ fun StatBlock(
     }
 
     CharacterItemList(
-        title = LocalStrings.current.skills.titleSkills,
+        title = LocalStrings.current.traits.titleTraits,
         items = data.traits,
         value = { it.evaluatedName },
         detail = { trait, onDismissRequest -> TraitDetail(trait, onDismissRequest) },
@@ -124,7 +124,7 @@ fun StatBlock(
     )
 
     CharacterItemList(
-        title = LocalStrings.current.blessings.title,
+        title = LocalStrings.current.miracles.title,
         items = data.miracles,
         value = { it.name },
         detail = { miracle, onDismissRequest -> MiracleDetail(miracle, onDismissRequest) },
