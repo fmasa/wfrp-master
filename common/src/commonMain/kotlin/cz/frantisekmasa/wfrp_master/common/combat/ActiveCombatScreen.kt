@@ -13,7 +13,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.wrapContentWidth
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -55,6 +55,7 @@ import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import cz.frantisekmasa.wfrp_master.common.character.CharacterDetailScreen
+import cz.frantisekmasa.wfrp_master.common.character.conditions.ConditionIcon
 import cz.frantisekmasa.wfrp_master.common.core.auth.LocalUser
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.PartyId
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.combat.Advantage
@@ -66,17 +67,16 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.StatBlockData
 import cz.frantisekmasa.wfrp_master.common.core.ui.buttons.BackButton
 import cz.frantisekmasa.wfrp_master.common.core.ui.dialogs.DialogProgress
 import cz.frantisekmasa.wfrp_master.common.core.ui.flow.collectWithLifecycle
-import cz.frantisekmasa.wfrp_master.common.core.ui.forms.Colors
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.NumberPicker
 import cz.frantisekmasa.wfrp_master.common.core.ui.menu.DropdownMenu
 import cz.frantisekmasa.wfrp_master.common.core.ui.menu.DropdownMenuItem
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.DraggableListFor
+import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.FlowRow
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.ItemIcon
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.rememberScreenModel
 import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.OptionsAction
 import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.Subtitle
-import cz.frantisekmasa.wfrp_master.common.core.ui.theme.Theme
 import cz.frantisekmasa.wfrp_master.common.encounters.CombatantItem
 import cz.frantisekmasa.wfrp_master.common.encounters.domain.Wounds
 import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
@@ -376,6 +376,12 @@ class ActiveCombatScreen(
                 }
             }
 
+            ConditionsBox(
+                modifier = Modifier.padding(bottom = Spacing.small),
+                combatant = combatant,
+                screenModel = viewModel,
+            )
+
             var statBlockData: StatBlockData? by rememberSaveable { mutableStateOf(null) }
 
             StatBlock(combatant.characteristics, statBlockData)
@@ -467,38 +473,99 @@ class ActiveCombatScreen(
                         .width(Spacing.small)
                 )
 
-                ListItem(
-                    icon = {
-                        when (combatant) {
-                            is CombatantItem.Character -> {
-                                CharacterAvatar(combatant.avatarUrl, ItemIcon.Size.Small)
+                Column {
+                    ListItem(
+                        icon = {
+                            when (combatant) {
+                                is CombatantItem.Character -> {
+                                    CharacterAvatar(combatant.avatarUrl, ItemIcon.Size.Small)
+                                }
+                                is CombatantItem.Npc -> {
+                                    ItemIcon(Resources.Drawable.Npc, ItemIcon.Size.Small)
+                                }
                             }
-                            is CombatantItem.Npc -> {
-                                ItemIcon(Resources.Drawable.Npc, ItemIcon.Size.Small)
+                        },
+                        text = {
+                            Column {
+                                Text(combatant.name)
+
+                                if (isGameMaster) {
+                                    WoundsBar(combatant.wounds.current, combatant.wounds.max)
+                                }
+                            }
+                        },
+                        trailing = {
+                            Column(horizontalAlignment = Alignment.End) {
+                                Text("I: ${combatant.combatant.initiative}")
+
+                                val advantage = combatant.combatant.advantage
+
+                                if (advantage > Advantage.ZERO) {
+                                    Text("A: $advantage", fontWeight = FontWeight.Bold)
+                                }
                             }
                         }
-                    },
-                    text = {
-                        Column {
-                            Text(combatant.name)
+                    )
 
-                            if (isGameMaster) {
-                                WoundsBar(combatant.wounds.current, combatant.wounds.max)
-                            }
-                        }
-                    },
-                    trailing = {
-                        Column(horizontalAlignment = Alignment.End) {
-                            Text("I: ${combatant.combatant.initiative}")
-
-                            val advantage = combatant.combatant.advantage
-
-                            if (advantage > Advantage.ZERO) {
-                                Text("A: $advantage", fontWeight = FontWeight.Bold)
+                    val conditions = combatant.conditions
+                    Row(
+                        modifier = Modifier
+                            .padding(bottom = Spacing.small)
+                            .padding(horizontal = Spacing.medium)
+                            .fillMaxWidth(),
+                        horizontalArrangement = Arrangement.spacedBy(
+                            Spacing.small,
+                            Alignment.End,
+                        )
+                    ) {
+                        val conditionsList by derivedStateOf { conditions.toList() }
+                        conditionsList.forEach { (condition, count) ->
+                            key(condition, count) {
+                                repeat(count) { ConditionIcon(condition, size = 20.dp) }
                             }
                         }
                     }
-                )
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun ConditionsBox(
+    modifier: Modifier,
+    combatant: CombatantItem,
+    screenModel: CombatScreenModel,
+) {
+    var conditionsDialogOpened by remember { mutableStateOf(false) }
+
+    if (conditionsDialogOpened) {
+        ConditionsDialog(
+            combatantItem = combatant,
+            screenModel = screenModel,
+            onDismissRequest = { conditionsDialogOpened = false },
+        )
+    }
+
+    Box(
+        modifier = modifier.clickable { conditionsDialogOpened = true }
+            .fillMaxWidth(),
+        contentAlignment = Alignment.Center,
+    ) {
+
+        val conditions = combatant.conditions
+
+        if (conditions.areEmpty()) {
+            Text(LocalStrings.current.combat.messages.noConditions)
+        } else {
+            FlowRow(verticalSpacing = Spacing.small, horizontalSpacing = Spacing.small) {
+                conditions.toList().forEach { (condition, count) ->
+                    repeat(count) { index ->
+                        key(condition, index) {
+                            ConditionIcon(condition, size = 28.dp)
+                        }
+                    }
+                }
             }
         }
     }
@@ -511,7 +578,7 @@ private fun WoundsBar(current: Int, max: Int) {
     }
 
     Row {
-        Text("$current/$max", style= MaterialTheme.typography.caption)
+        Text("$current/$max", style = MaterialTheme.typography.caption)
 
         Surface(
             shape = RoundedCornerShape(2.dp),
@@ -528,7 +595,8 @@ private fun WoundsBar(current: Int, max: Int) {
                         .background(
                             if (MaterialTheme.colors.isLight)
                                 Color(76, 175, 80)
-                            else Color(129, 199, 132))
+                            else Color(129, 199, 132)
+                        )
                         .height(4.dp)
                 )
             }

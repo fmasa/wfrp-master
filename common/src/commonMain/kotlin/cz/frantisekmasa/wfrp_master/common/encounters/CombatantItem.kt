@@ -2,6 +2,7 @@ package cz.frantisekmasa.wfrp_master.common.encounters
 
 import androidx.compose.runtime.Immutable
 import cz.frantisekmasa.wfrp_master.common.core.domain.Stats
+import cz.frantisekmasa.wfrp_master.common.core.domain.character.CurrentConditions
 import cz.frantisekmasa.wfrp_master.common.core.domain.identifiers.CharacterId
 import cz.frantisekmasa.wfrp_master.common.core.domain.identifiers.NpcId
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.combat.Combatant
@@ -14,6 +15,7 @@ sealed class CombatantItem {
     abstract val name: String
     abstract val characteristics: Stats
     abstract val wounds: Wounds
+    abstract val conditions: CurrentConditions
 
     fun areSameEntity(other: CombatantItem): Boolean = combatant.areSameEntity(other.combatant)
 
@@ -39,6 +41,9 @@ sealed class CombatantItem {
         override val wounds
             get() = combatant.wounds ?: character.wounds
 
+        override val conditions: CurrentConditions
+            get() = combatant.conditions ?: character.conditions
+
         val note: String get() = character.note
     }
 
@@ -56,5 +61,8 @@ sealed class CombatantItem {
 
         override val wounds
             get() = combatant.wounds ?: npc.wounds
+
+        override val conditions: CurrentConditions
+            get() = combatant.conditions
     }
 }

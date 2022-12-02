@@ -11,6 +11,7 @@ import cz.frantisekmasa.wfrp_master.common.core.domain.Stats
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.Character
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.CharacterRepository
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.CharacterType
+import cz.frantisekmasa.wfrp_master.common.core.domain.character.CurrentConditions
 import cz.frantisekmasa.wfrp_master.common.core.domain.identifiers.CharacterId
 import cz.frantisekmasa.wfrp_master.common.core.domain.identifiers.EncounterId
 import cz.frantisekmasa.wfrp_master.common.core.domain.identifiers.NpcId
@@ -164,6 +165,7 @@ class CombatScreenModel(
                             characterId = character.id,
                             initiative = 1,
                             wounds = character.wounds,
+                            conditions = character.conditions,
                             name = "${character.publicName ?: character.name} ($index)",
                         )
                     }
@@ -309,6 +311,29 @@ class CombatScreenModel(
                 }
 
                 npcs.save(combatant.npcId.encounterId, npc.updateCurrentWounds(wounds.current))
+            }
+        }
+    }
+
+    suspend fun updateConditions(combatant: CombatantItem, conditions: CurrentConditions) {
+        if (combatant.combatant.conditions != null) {
+            // Conditions are combatant specific (there may be multiple combatants of same character)
+            updateCombat { it.updateCombatant(combatant.combatant.withConditions(conditions)) }
+            return
+        }
+
+        when (combatant) {
+            is CombatantItem.Character -> {
+                val character = characters.get(combatant.characterId)
+
+                if (character.conditions == conditions) {
+                    return
+                }
+
+                characters.save(partyId, character.updateConditions(conditions))
+            }
+            is CombatantItem.Npc -> {
+                // NPC do not have conditions, so this must have been handled as combatant specific
             }
         }
     }

@@ -2,6 +2,7 @@ package cz.frantisekmasa.wfrp_master.common.core.domain.party.combat
 
 import androidx.compose.runtime.Immutable
 import com.benasher44.uuid.Uuid
+import cz.frantisekmasa.wfrp_master.common.core.domain.character.CurrentConditions
 import cz.frantisekmasa.wfrp_master.common.core.domain.identifiers.NpcId
 import cz.frantisekmasa.wfrp_master.common.core.shared.Parcelable
 import cz.frantisekmasa.wfrp_master.common.core.shared.Parcelize
@@ -20,10 +21,12 @@ sealed class Combatant : Parcelable {
     abstract val initiative: Int
     abstract val name: String?
     abstract val wounds: Wounds?
+    abstract val conditions: CurrentConditions?
 
     abstract fun withAdvantage(advantage: Advantage): Combatant
     abstract fun withInitiative(initiative: Int): Combatant
     abstract fun withWounds(wounds: Wounds): Combatant
+    abstract fun withConditions(conditions: CurrentConditions): Combatant
 
     fun areSameEntity(other: Combatant): Boolean {
         if (id != null || other.id != null) {
@@ -45,10 +48,12 @@ sealed class Combatant : Parcelable {
         override val name: String? = null,
         override val wounds: Wounds? = null,
         override val advantage: Advantage = Advantage.ZERO,
+        override val conditions: CurrentConditions? = null,
     ) : Combatant() {
         override fun withAdvantage(advantage: Advantage): Character = copy(advantage = advantage)
         override fun withInitiative(initiative: Int): Character = copy(initiative = initiative)
         override fun withWounds(wounds: Wounds) = copy(wounds = wounds)
+        override fun withConditions(conditions: CurrentConditions) = copy(conditions = conditions)
     }
 
     @Parcelize
@@ -61,10 +66,12 @@ sealed class Combatant : Parcelable {
         override val initiative: Int,
         override val name: String? = null,
         override val wounds: Wounds? = null,
-        override val advantage: Advantage = Advantage.ZERO
+        override val advantage: Advantage = Advantage.ZERO,
+        override val conditions: CurrentConditions = CurrentConditions.none(),
     ) : Combatant() {
         override fun withAdvantage(advantage: Advantage): Npc = copy(advantage = advantage)
         override fun withInitiative(initiative: Int): Npc = copy(initiative = initiative)
         override fun withWounds(wounds: Wounds) = copy(wounds = wounds)
+        override fun withConditions(conditions: CurrentConditions) = copy(conditions = conditions)
     }
 }
