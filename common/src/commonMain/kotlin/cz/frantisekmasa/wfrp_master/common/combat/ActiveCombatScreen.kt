@@ -13,7 +13,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.BottomAppBar
 import androidx.compose.material.CircularProgressIndicator
@@ -46,6 +48,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
@@ -63,6 +66,7 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.StatBlockData
 import cz.frantisekmasa.wfrp_master.common.core.ui.buttons.BackButton
 import cz.frantisekmasa.wfrp_master.common.core.ui.dialogs.DialogProgress
 import cz.frantisekmasa.wfrp_master.common.core.ui.flow.collectWithLifecycle
+import cz.frantisekmasa.wfrp_master.common.core.ui.forms.Colors
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.NumberPicker
 import cz.frantisekmasa.wfrp_master.common.core.ui.menu.DropdownMenu
 import cz.frantisekmasa.wfrp_master.common.core.ui.menu.DropdownMenuItem
@@ -72,6 +76,7 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.rememberScreenModel
 import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.OptionsAction
 import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.Subtitle
+import cz.frantisekmasa.wfrp_master.common.core.ui.theme.Theme
 import cz.frantisekmasa.wfrp_master.common.encounters.CombatantItem
 import cz.frantisekmasa.wfrp_master.common.encounters.domain.Wounds
 import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
@@ -304,6 +309,7 @@ class ActiveCombatScreen(
             CombatantListItem(
                 onTurn = index == turn - 1,
                 combatant,
+                isGameMaster = isGameMaster,
                 isDragged = isDragged,
                 modifier = when {
                     canEditCombatant(userId, isGameMaster, combatant) -> Modifier.clickable {
@@ -441,6 +447,7 @@ class ActiveCombatScreen(
         onTurn: Boolean,
         combatant: CombatantItem,
         isDragged: Boolean,
+        isGameMaster: Boolean,
         modifier: Modifier
     ) {
         Surface(
@@ -471,7 +478,15 @@ class ActiveCombatScreen(
                             }
                         }
                     },
-                    text = { Text(combatant.name) },
+                    text = {
+                        Column {
+                            Text(combatant.name)
+
+                            if (isGameMaster) {
+                                WoundsBar(combatant.wounds.current, combatant.wounds.max)
+                            }
+                        }
+                    },
                     trailing = {
                         Column(horizontalAlignment = Alignment.End) {
                             Text("I: ${combatant.combatant.initiative}")
@@ -483,6 +498,38 @@ class ActiveCombatScreen(
                             }
                         }
                     }
+                )
+            }
+        }
+    }
+}
+
+@Composable
+private fun WoundsBar(current: Int, max: Int) {
+    if (max == 0) {
+        return
+    }
+
+    Row {
+        Text("$current/$max", style= MaterialTheme.typography.caption)
+
+        Surface(
+            shape = RoundedCornerShape(2.dp),
+            modifier = Modifier
+                .padding(top = Spacing.small, start = Spacing.tiny)
+                .fillMaxWidth()
+        ) {
+            Box(
+                Modifier.fillMaxWidth()
+                    .background(Color(183, 28, 28))
+            ) {
+                Box(
+                    Modifier.fillMaxWidth(current.toFloat() / max)
+                        .background(
+                            if (MaterialTheme.colors.isLight)
+                                Color(76, 175, 80)
+                            else Color(129, 199, 132))
+                        .height(4.dp)
                 )
             }
         }
