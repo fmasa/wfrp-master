@@ -290,6 +290,7 @@ class CombatScreenModel(
         if (combatant.combatant.wounds != null) {
             // Wounds are combatant specific (there may be multiple combatants of same character)
             updateCombat { it.updateCombatant(combatant.combatant.withWounds(wounds)) }
+            return
         }
 
         when (combatant) {
