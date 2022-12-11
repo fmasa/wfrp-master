@@ -63,15 +63,16 @@ class RulebookLexer {
     }
 
     companion object {
-        private val factories = listOf<Pair<String, (String) -> Token>>(
-            "height: 1.57%" to Token::HeadingPart,
-            "height: 1.31%" to Token::SubHeadingPart,
-            "height: 1.21%" to Token::ItalicsPart,
-            "height: 1.18%" to Token::NormalPart,
-            "height: 1.11%" to Token::BodyCellPart,
-            "height: 1.27%" to Token::TableHeading,
-            "height: 1.16%" to Token::BoxHeader,
-            "height: 1.01%" to Token::BoxHeader,
+        // Note: Non-english locales may use commas instead of decimal points
+        private val factories = listOf<Pair<Regex, (String) -> Token>>(
+            Regex("height: 1[.,]57%") to Token::HeadingPart,
+            Regex("height: 1[.,]31%") to Token::SubHeadingPart,
+            Regex("height: 1[.,]21%") to Token::ItalicsPart,
+            Regex("height: 1[.,]18%") to Token::NormalPart,
+            Regex("height: 1[.,]11%") to Token::BodyCellPart,
+            Regex("height: 1[.,]27%") to Token::TableHeading,
+            Regex("height: 1[.,]16%") to Token::BoxHeader,
+            Regex("height: 1[.,]01%") to Token::BoxHeader,
         )
     }
 }
