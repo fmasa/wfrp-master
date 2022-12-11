@@ -47,7 +47,7 @@ fun MiracleCompendiumTab(partyId: PartyId, screenModel: CompendiumScreenModel, w
         remover = screenModel::remove,
         saver = screenModel::save,
         onClick = { navigator.push(MiracleDetailScreen(partyId, it.id)) },
-        onNewItemRequest = { },
+        onNewItemRequest = { newMiracleDialogOpened = true },
         width = width,
     ) { miracle ->
         ListItem(
