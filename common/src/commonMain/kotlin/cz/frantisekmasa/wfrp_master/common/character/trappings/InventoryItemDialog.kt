@@ -95,6 +95,7 @@ internal fun InventoryItemDialog(
                 value = formData.description,
                 validate = validate,
                 maxLength = InventoryItem.DESCRIPTION_MAX_LENGTH,
+                multiLine = true,
             )
 
             TrappingTypeForm(
