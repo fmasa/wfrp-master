@@ -143,6 +143,18 @@ class ActiveCombatScreen(
                     freshCombatant,
                     viewModel,
                     advantageCap,
+                    onDetailOpenRequest = {
+                        navigator.push(
+                            when (freshCombatant) {
+                                is CombatantItem.Npc -> NpcDetailScreen(freshCombatant.npcId)
+                                is CombatantItem.Character -> CharacterDetailScreen(
+                                    freshCombatant.characterId,
+                                    comingFromCombat = true,
+                                )
+                            }
+                        )
+                        coroutineScope.launch { bottomSheetState.hide() }
+                    },
                     onRemoveRequest = combatantId?.let {
                         {
                             coroutineScope.launch {
@@ -327,6 +339,7 @@ class ActiveCombatScreen(
         viewModel: CombatScreenModel,
         advantageCap: Advantage,
         onRemoveRequest: (() -> Unit)?,
+        onDetailOpenRequest: () -> Unit,
     ) {
         Column(
             Modifier
@@ -342,17 +355,7 @@ class ActiveCombatScreen(
                 Text(
                     combatant.name,
                     style = MaterialTheme.typography.h6,
-                    modifier = Modifier.clickable {
-                        navigator.push(
-                            when (combatant) {
-                                is CombatantItem.Npc -> NpcDetailScreen(combatant.npcId)
-                                is CombatantItem.Character -> CharacterDetailScreen(
-                                    combatant.characterId,
-                                    comingFromCombat = true,
-                                )
-                            }
-                        )
-                    }
+                    modifier = Modifier.clickable(onClick = onDetailOpenRequest)
                 )
 
                 if (onRemoveRequest != null) {
