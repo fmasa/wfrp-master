@@ -10,6 +10,10 @@
  </a>
 </p>
 
+## User documentation
+
+For both players and GMs there is a [documentation](https://github.com/fmasa/wfrp-master/wiki) for various features and mechanics used in the app. 
+
 ## Development
 
 Development is done using Android Studio 2021.2.1+.
