@@ -36,13 +36,13 @@ fun SkillDetail(
     ) {
         Column(Modifier.verticalScroll(rememberScrollState())) {
             subheadBar()
-        }
 
-        SkillDetailBody(
-            characteristic = skill.characteristic,
-            advanced = skill.advanced,
-            description = skill.description,
-        )
+            SkillDetailBody(
+                characteristic = skill.characteristic,
+                advanced = skill.advanced,
+                description = skill.description,
+            )
+        }
     }
 }
 
