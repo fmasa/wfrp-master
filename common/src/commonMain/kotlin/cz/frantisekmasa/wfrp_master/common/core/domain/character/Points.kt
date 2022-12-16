@@ -21,6 +21,7 @@ data class Points(
     val hardyWoundsBonus: Int = 0
 ) {
     init {
+        // TODO: Ensure fortune & resolve is not negative
         require(corruption >= 0)
         require(fate >= 0)
         require(resilience >= 0)
@@ -38,9 +39,9 @@ data class Points(
         return runCatching {
             when (pool) {
                 PointPool.FATE -> copy(fate = fate + value)
-                PointPool.FORTUNE -> copy(fortune = fortune + value)
+                PointPool.FORTUNE -> copy(fortune = (fortune + value).coerceAtLeast(0))
                 PointPool.RESILIENCE -> copy(resilience = resilience + value)
-                PointPool.RESOLVE -> copy(resolve = resolve + value)
+                PointPool.RESOLVE -> copy(resolve = (resolve + value).coerceAtLeast(0))
             }
         }
     }
