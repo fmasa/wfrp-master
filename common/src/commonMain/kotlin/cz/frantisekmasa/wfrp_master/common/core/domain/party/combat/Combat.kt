@@ -17,7 +17,8 @@ data class Combat(
     val encounterId: UUID,
     private var combatants: List<Combatant>,
     private val turn: Int = 1,
-    private val round: Int = 1
+    private val round: Int = 1,
+    private val groupAdvantage: GroupAdvantage = GroupAdvantage(Advantage.ZERO, Advantage.ZERO),
 ) : Parcelable {
 
     init {

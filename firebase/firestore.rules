@@ -667,12 +667,26 @@ service cloud.firestore {
 
             function isValidCombat(combat) {
                 return combat is map
-                    && combat.keys().toSet() == ["encounterId", "combatants", "turn", "round"].toSet()
+                    && [
+                       "encounterId",
+                       "combatants",
+                       "turn",
+                       "round",
+                       "groupAdvantage",
+                    ].toSet().hasAll(combat.keys())
                     && isValidUuid(combat.encounterId)
                     && combat.combatants is list
                     && combat.turn is int && combat.turn > 0 && combat.turn <= combat.combatants.size()
                     && combat.round is int && combat.round > 0
+                    && (! ("groupAdvantage" in combat) || isValidAdvantagePool(combat.groupAdvantage))
                     && exists(/databases/$(database)/documents/parties/$(partyId)/encounters/$(combat.encounterId))
+            }
+
+            function isValidAdvantagePool(pool) {
+                return pool is map
+                    && pool.keys().toSet() == ["allies", "enemies"].toSet()
+                    && pool.allies is int && pool.allies >= 0
+                    && pool.enemies is int && pool.enemies >= 0;
             }
 
             function invitation(party) {
