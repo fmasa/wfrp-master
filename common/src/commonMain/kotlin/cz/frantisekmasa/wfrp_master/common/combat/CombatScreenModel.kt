@@ -21,6 +21,7 @@ import cz.frantisekmasa.wfrp_master.common.core.domain.party.PartyRepository
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.combat.Advantage
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.combat.Combat
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.combat.Combatant
+import cz.frantisekmasa.wfrp_master.common.core.domain.party.combat.GroupAdvantage
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.settings.InitiativeStrategy
 import cz.frantisekmasa.wfrp_master.common.core.domain.religion.BlessingRepository
 import cz.frantisekmasa.wfrp_master.common.core.domain.religion.MiracleRepository
@@ -79,6 +80,10 @@ class CombatScreenModel(
 
     val round: Flow<Int> = combatFlow
         .mapLatest { it.getRound() }
+        .distinctUntilChanged()
+
+    val groupAdvantage: Flow<GroupAdvantage> = combatFlow
+        .mapLatest { it.groupAdvantage }
         .distinctUntilChanged()
 
     suspend fun loadNpcsFromEncounter(encounterId: Uuid): List<Npc> =
@@ -347,5 +352,9 @@ class CombatScreenModel(
         updateCombat { combat ->
             combat.updateCombatant(combatant.withAdvantage(advantage))
         }
+    }
+
+    suspend fun updateGroupAdvantage(groupAdvantage: GroupAdvantage) {
+        updateCombat { it.updateGroupAdvantage(groupAdvantage) }
     }
 }

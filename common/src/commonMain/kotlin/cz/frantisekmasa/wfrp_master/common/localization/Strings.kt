@@ -450,6 +450,8 @@ data class CombatStrings(
     val initiativeStrategyPrompt: String = "Select Initiative rules",
     val initiativeStrategies: InitiativeStrategyStrings = InitiativeStrategyStrings(),
     val labelAdvantage: String = "Advantage",
+    val labelAllies: String = "Allies",
+    val labelEnemies: String = "Enemies",
     val messages: CombatMessageStrings = CombatMessageStrings(),
     val nthRound: (round: Int) -> String = { "Round $it" },
     val title: String = "Combat",
