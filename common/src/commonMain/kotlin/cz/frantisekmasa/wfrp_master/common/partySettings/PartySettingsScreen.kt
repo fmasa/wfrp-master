@@ -52,7 +52,8 @@ class PartySettingsScreen(
 
                     SettingsTitle(strings.combat.title)
                     InitiativeStrategyItem(party, viewModel)
-                    AdvantageCapItem(party, viewModel)
+                    AdvantageSystemItem(party.settings, viewModel)
+                    AdvantageCapItem(party.settings, viewModel)
                 }
             }
         }

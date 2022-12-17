@@ -16,6 +16,7 @@ import kotlin.jvm.JvmInline
 @Immutable
 data class Settings(
     val initiativeStrategy: InitiativeStrategy = InitiativeStrategy.INITIATIVE_CHARACTERISTIC,
+    val advantageSystem: AdvantageSystem = AdvantageSystem.CORE_RULEBOOK,
     val advantageCap: AdvantageCapExpression = AdvantageCapExpression(""),
 ) : Parcelable
 

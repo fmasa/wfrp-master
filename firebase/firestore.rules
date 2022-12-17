@@ -655,14 +655,18 @@ service cloud.firestore {
 
             function areValidSettings(settings) {
                 return settings is map
-                    && ["initiativeStrategy", "advantageCap"].toSet().hasAll(settings.keys())
+                    && ["initiativeStrategy", "advantageCap", "advantageSystem"].toSet().hasAll(settings.keys())
                     && settings.initiativeStrategy in [
                         "INITIATIVE_CHARACTERISTIC",
                         "INITIATIVE_TEST",
                         "INITIATIVE_PLUS_1D10",
                         "BONUSES_PLUS_1D10"
                     ] &&
-                    (! ("advantageCap" in settings) || (settings.advantageCap is string && settings.advantageCap.size() <= 100));
+                    (! ("advantageCap" in settings) || (settings.advantageCap is string && settings.advantageCap.size() <= 100))
+                    && ! ("advantageSystem" in settings) || settings.advantageSystem in [
+                        "CORE_RULEBOOK",
+                        "GROUP_ADVANTAGE",
+                    ];
             }
 
             function isValidCombat(combat) {

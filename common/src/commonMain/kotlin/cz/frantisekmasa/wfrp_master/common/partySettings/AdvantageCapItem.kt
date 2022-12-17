@@ -5,11 +5,14 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.ContentAlpha
 import androidx.compose.material.ListItem
+import androidx.compose.material.LocalContentAlpha
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -19,8 +22,9 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontStyle
 import cz.frantisekmasa.wfrp_master.common.core.domain.Stats
-import cz.frantisekmasa.wfrp_master.common.core.domain.party.Party
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.settings.AdvantageCapExpression
+import cz.frantisekmasa.wfrp_master.common.core.domain.party.settings.AdvantageSystem
+import cz.frantisekmasa.wfrp_master.common.core.domain.party.settings.Settings
 import cz.frantisekmasa.wfrp_master.common.core.shared.IO
 import cz.frantisekmasa.wfrp_master.common.core.ui.buttons.CloseButton
 import cz.frantisekmasa.wfrp_master.common.core.ui.dialogs.FullScreenDialog
@@ -34,12 +38,27 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 @Composable
-fun AdvantageCapItem(party: Party, screenModel: PartySettingsScreenModel) {
+fun AdvantageCapItem(settings: Settings, screenModel: PartySettingsScreenModel) {
+    val title = LocalStrings.current.combat.advantageCap
+
+    if (settings.advantageSystem == AdvantageSystem.GROUP_ADVANTAGE) {
+        ListItem(
+            text = { Disabled { Text(title) } },
+            secondaryText = {
+                Disabled {
+                    Text(LocalStrings.current.combat.messages.doesNotApplyToGroupAdvantage)
+                }
+            }
+        )
+
+        return
+    }
+
     var dialogVisible by remember { mutableStateOf(false) }
-    val expression by derivedStateOf { party.settings.advantageCap }
+    val expression by derivedStateOf { settings.advantageCap }
 
     ListItem(
-        text = { Text(LocalStrings.current.combat.advantageCap) },
+        text = { Text(title) },
         secondaryText = {
             if (expression.value == "") {
                 Text(LocalStrings.current.combat.advantageUnlimited, fontStyle = FontStyle.Italic)
@@ -56,6 +75,13 @@ fun AdvantageCapItem(party: Party, screenModel: PartySettingsScreenModel) {
             viewModel = screenModel,
             onDismissRequest = { dialogVisible = false },
         )
+    }
+}
+
+@Composable
+private inline fun Disabled(crossinline content: @Composable () -> Unit) {
+    CompositionLocalProvider(LocalContentAlpha provides ContentAlpha.disabled) {
+        content()
     }
 }
 
