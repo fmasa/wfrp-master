@@ -1,6 +1,7 @@
 package cz.frantisekmasa.wfrp_master.common.core.domain.trappings
 
 import androidx.compose.runtime.Immutable
+import androidx.compose.runtime.Stable
 import cz.frantisekmasa.wfrp_master.common.core.domain.Damage
 import cz.frantisekmasa.wfrp_master.common.core.domain.Expression
 import cz.frantisekmasa.wfrp_master.common.core.shared.Parcelable
@@ -28,6 +29,7 @@ value class DamageExpression(val value: String) : Parcelable {
         STRENGTH_BONUS("SB")
     }
 
+    @Stable
     fun calculate(strengthBonus: Int, successLevels: Int): Damage {
         val damage = Expression.fromString(
             value,

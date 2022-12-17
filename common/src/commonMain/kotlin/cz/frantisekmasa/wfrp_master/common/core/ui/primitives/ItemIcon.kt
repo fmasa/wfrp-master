@@ -12,6 +12,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -64,23 +65,31 @@ fun ItemIcon(url: String, size: ItemIcon.Size = ItemIcon.Size.Small) {
 internal expect fun rememberImagePainter(url: String): State<Painter>
 
 @Composable
-fun ItemIcon(drawable: Resources.Drawable, size: ItemIcon.Size = ItemIcon.Size.Small) {
-    ItemIcon(drawableResource(drawable), size)
+fun ItemIcon(
+    drawable: Resources.Drawable,
+    size: ItemIcon.Size = ItemIcon.Size.Small,
+    tint: Color = defaultTint(),
+    backgroundColor: Color = defaultBackgroundColor(),
+) {
+    ItemIcon(drawableResource(drawable), size, backgroundColor, tint)
 }
 
 @Composable
-fun ItemIcon(icon: ImageVector, size: ItemIcon.Size = ItemIcon.Size.Small) {
-    ItemIcon(rememberVectorPainter(icon), size)
+fun ItemIcon(
+    icon: ImageVector,
+    size: ItemIcon.Size = ItemIcon.Size.Small,
+    backgroundColor: Color = defaultBackgroundColor(),
+    tint: Color = defaultTint(),
+) {
+    ItemIcon(rememberVectorPainter(icon), size, backgroundColor, tint)
 }
 
 @Composable
-private fun ItemIcon(painter: Painter, size: ItemIcon.Size) {
-    val backgroundColor = MaterialTheme.colors.onSurface.copy(alpha = ContentAlpha.medium)
-
+private fun ItemIcon(painter: Painter, size: ItemIcon.Size, backgroundColor: Color, tint: Color) {
     Image(
         painter,
         VisualOnlyIconDescription, // TODO: Provide mechanism to specify what does this image means, such as: ("Character's image", "Strength-based skill", etc.)
-        colorFilter = ColorFilter.tint(MaterialTheme.colors.surface),
+        colorFilter = ColorFilter.tint(tint),
         modifier = Modifier
             .background(backgroundColor, CircleShape)
             .padding(size.padding)
@@ -88,3 +97,10 @@ private fun ItemIcon(painter: Painter, size: ItemIcon.Size) {
             .height(size.dimensions)
     )
 }
+
+@Composable
+private fun defaultBackgroundColor() =
+    MaterialTheme.colors.onSurface.copy(alpha = ContentAlpha.medium)
+
+@Composable
+private fun defaultTint(): Color = MaterialTheme.colors.surface

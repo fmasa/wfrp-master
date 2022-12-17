@@ -311,8 +311,8 @@ data class CharacterDetailScreen(
                 }
                 CharacterTab.COMBAT -> {
                     CharacterCombatScreen(
+                        characterId = characterId,
                         screenModel = rememberScreenModel(arg = characterId),
-                        trappingsScreenModel = rememberScreenModel(arg = characterId),
                         modifier = modifier,
                     )
                 }

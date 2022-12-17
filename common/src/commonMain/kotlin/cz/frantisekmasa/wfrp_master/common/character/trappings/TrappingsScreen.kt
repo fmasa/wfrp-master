@@ -17,13 +17,14 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import cafe.adriel.voyager.navigator.LocalNavigator
+import cafe.adriel.voyager.navigator.currentOrThrow
 import cz.frantisekmasa.wfrp_master.common.core.domain.identifiers.CharacterId
 import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.InventoryItem
 import cz.frantisekmasa.wfrp_master.common.core.shared.IO
@@ -32,7 +33,6 @@ import cz.frantisekmasa.wfrp_master.common.core.shared.drawableResource
 import cz.frantisekmasa.wfrp_master.common.core.ui.buttons.CardButton
 import cz.frantisekmasa.wfrp_master.common.core.ui.cards.CardContainer
 import cz.frantisekmasa.wfrp_master.common.core.ui.cards.CardTitle
-import cz.frantisekmasa.wfrp_master.common.core.ui.dialogs.DialogState
 import cz.frantisekmasa.wfrp_master.common.core.ui.flow.collectWithLifecycle
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.EmptyUI
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
@@ -85,32 +85,26 @@ fun TrappingsScreen(
 
         UserTipCard(UserTip.ARMOUR_TRAPPINGS, Modifier.padding(horizontal = 8.dp))
 
-        var inventoryItemDialogState: DialogState<InventoryItem?> by remember {
-            mutableStateOf(DialogState.Closed())
-        }
+        var newTrappingDialogOpened by rememberSaveable { mutableStateOf(false) }
 
-        val dialogState = inventoryItemDialogState
-
-        if (dialogState is DialogState.Opened) {
+        if (newTrappingDialogOpened) {
             InventoryItemDialog(
-                screenModel = screenModel,
-                existingItem = dialogState.item,
-                onDismissRequest = { inventoryItemDialogState = DialogState.Closed() }
+                onSaveRequest = screenModel::saveInventoryItem,
+                defaultContainerId = null,
+                existingItem = null,
+                onDismissRequest = { newTrappingDialogOpened = false }
             )
         }
 
         val coroutineScope = rememberCoroutineScope { EmptyCoroutineContext + Dispatchers.IO }
+        val navigator = LocalNavigator.currentOrThrow
 
         InventoryItemsCard(
             screenModel,
-            onClick = {
-                inventoryItemDialogState = DialogState.Opened(it)
-            },
+            onClick = { navigator.push(TrappingDetailScreen(characterId, it.id)) },
             onRemove = { screenModel.removeInventoryItem(it) },
             onDuplicate = { coroutineScope.launch { screenModel.saveInventoryItem(it.duplicate()) } },
-            onNewItemButtonClicked = {
-                inventoryItemDialogState = DialogState.Opened(null)
-            },
+            onNewItemButtonClicked = { newTrappingDialogOpened = true },
         )
 
         Spacer(Modifier.padding(bottom = 20.dp))
