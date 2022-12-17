@@ -587,21 +587,24 @@ class ActiveCombatScreen(
                         }
                     )
 
-                    val conditions = combatant.conditions
-                    Row(
-                        modifier = Modifier
-                            .padding(bottom = Spacing.small)
-                            .padding(horizontal = Spacing.medium)
-                            .fillMaxWidth(),
-                        horizontalArrangement = Arrangement.spacedBy(
-                            Spacing.small,
-                            Alignment.End,
-                        )
-                    ) {
-                        val conditionsList by derivedStateOf { conditions.toList() }
-                        conditionsList.forEach { (condition, count) ->
-                            key(condition, count) {
-                                repeat(count) { ConditionIcon(condition, size = 20.dp) }
+                    val conditions by derivedStateOf { combatant.conditions }
+
+                    if (!conditions.areEmpty()) {
+                        Row(
+                            modifier = Modifier
+                                .padding(bottom = Spacing.small)
+                                .padding(horizontal = Spacing.medium)
+                                .fillMaxWidth(),
+                            horizontalArrangement = Arrangement.spacedBy(
+                                Spacing.small,
+                                Alignment.End,
+                            )
+                        ) {
+                            val conditionsList by derivedStateOf { conditions.toList() }
+                            conditionsList.forEach { (condition, count) ->
+                                key(condition, count) {
+                                    repeat(count) { ConditionIcon(condition, size = 20.dp) }
+                                }
                             }
                         }
                     }
