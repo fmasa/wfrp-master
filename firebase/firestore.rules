@@ -655,24 +655,42 @@ service cloud.firestore {
 
             function areValidSettings(settings) {
                 return settings is map
-                    && ["initiativeStrategy", "advantageCap"].toSet().hasAll(settings.keys())
+                    && ["initiativeStrategy", "advantageCap", "advantageSystem"].toSet().hasAll(settings.keys())
                     && settings.initiativeStrategy in [
                         "INITIATIVE_CHARACTERISTIC",
                         "INITIATIVE_TEST",
                         "INITIATIVE_PLUS_1D10",
                         "BONUSES_PLUS_1D10"
                     ] &&
-                    (! ("advantageCap" in settings) || (settings.advantageCap is string && settings.advantageCap.size() <= 100));
+                    (! ("advantageCap" in settings) || (settings.advantageCap is string && settings.advantageCap.size() <= 100))
+                    && ! ("advantageSystem" in settings) || settings.advantageSystem in [
+                        "CORE_RULEBOOK",
+                        "GROUP_ADVANTAGE",
+                    ];
             }
 
             function isValidCombat(combat) {
                 return combat is map
-                    && combat.keys().toSet() == ["encounterId", "combatants", "turn", "round"].toSet()
+                    && [
+                       "encounterId",
+                       "combatants",
+                       "turn",
+                       "round",
+                       "groupAdvantage",
+                    ].toSet().hasAll(combat.keys())
                     && isValidUuid(combat.encounterId)
                     && combat.combatants is list
                     && combat.turn is int && combat.turn > 0 && combat.turn <= combat.combatants.size()
                     && combat.round is int && combat.round > 0
+                    && (! ("groupAdvantage" in combat) || isValidAdvantagePool(combat.groupAdvantage))
                     && exists(/databases/$(database)/documents/parties/$(partyId)/encounters/$(combat.encounterId))
+            }
+
+            function isValidAdvantagePool(pool) {
+                return pool is map
+                    && pool.keys().toSet() == ["allies", "enemies"].toSet()
+                    && pool.allies is int && pool.allies >= 0
+                    && pool.enemies is int && pool.enemies >= 0;
             }
 
             function invitation(party) {

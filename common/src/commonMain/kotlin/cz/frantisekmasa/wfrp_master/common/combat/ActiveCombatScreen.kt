@@ -13,7 +13,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -59,7 +58,8 @@ import cz.frantisekmasa.wfrp_master.common.character.conditions.ConditionIcon
 import cz.frantisekmasa.wfrp_master.common.core.auth.LocalUser
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.PartyId
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.combat.Advantage
-import cz.frantisekmasa.wfrp_master.common.core.shared.IO
+import cz.frantisekmasa.wfrp_master.common.core.domain.party.combat.GroupAdvantage
+import cz.frantisekmasa.wfrp_master.common.core.domain.party.settings.AdvantageSystem
 import cz.frantisekmasa.wfrp_master.common.core.shared.Resources
 import cz.frantisekmasa.wfrp_master.common.core.ui.CharacterAvatar
 import cz.frantisekmasa.wfrp_master.common.core.ui.StatBlock
@@ -110,6 +110,10 @@ class ActiveCombatScreen(
             skipHalfExpanded = true,
         )
 
+        val isGroupAdvantageSystemEnabled by derivedStateOf {
+            party?.settings?.advantageSystem == AdvantageSystem.GROUP_ADVANTAGE
+        }
+
         ModalBottomSheetLayout(
             sheetState = bottomSheetState,
             sheetShape = MaterialTheme.shapes.small,
@@ -140,9 +144,10 @@ class ActiveCombatScreen(
 
                 val combatantId = freshCombatant.combatant.id
                 CombatantSheet(
-                    freshCombatant,
-                    viewModel,
-                    advantageCap,
+                    combatant = freshCombatant,
+                    viewModel = viewModel,
+                    advantageCap = advantageCap,
+                    isGroupAdvantageSystemEnabled = isGroupAdvantageSystemEnabled,
                     onDetailOpenRequest = {
                         navigator.push(
                             when (freshCombatant) {
@@ -208,8 +213,15 @@ class ActiveCombatScreen(
                 ) {
                     val round = viewModel.round.collectWithLifecycle(null).value
                     val turn = viewModel.turn.collectWithLifecycle(null).value
+                    val groupAdvantage = viewModel.groupAdvantage.collectWithLifecycle(null).value
 
-                    if (combatants == null || round == null || turn == null || party == null) {
+                    if (
+                        combatants == null ||
+                        round == null ||
+                        turn == null ||
+                        party == null ||
+                        groupAdvantage == null
+                    ) {
                         Box(
                             modifier = Modifier.fillMaxSize(),
                             contentAlignment = Alignment.Center,
@@ -246,6 +258,10 @@ class ActiveCombatScreen(
                             }
                         }
 
+                        if (isGroupAdvantageSystemEnabled) {
+                            GroupAdvantageBar(groupAdvantage, viewModel)
+                        }
+
                         if (isGameMaster) {
                             BottomBar(turn, round, viewModel)
                         }
@@ -257,6 +273,65 @@ class ActiveCombatScreen(
 
     private fun canEditCombatant(userId: String, isGameMaster: Boolean, combatant: CombatantItem) =
         isGameMaster || (combatant is CombatantItem.Character && combatant.userId == userId)
+
+    @Composable
+    private fun GroupAdvantageBar(
+        groupAdvantage: GroupAdvantage,
+        screenModel: CombatScreenModel,
+    ) {
+        Surface(elevation = 2.dp) {
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                modifier = Modifier.padding(top = Spacing.small),
+            ) {
+                Text(
+                    LocalStrings.current.combat.labelAdvantage,
+                    fontWeight = FontWeight.Bold,
+                )
+
+                Row {
+                    val coroutineScope = rememberCoroutineScope()
+                    val update = { groupAdvantage: GroupAdvantage ->
+                        coroutineScope.launch(Dispatchers.IO) {
+                            screenModel.updateGroupAdvantage(groupAdvantage)
+                        }
+                    }
+
+                    val strings = LocalStrings.current.combat
+
+                    AdvantagePicker(
+                        label = strings.labelAllies,
+                        value = groupAdvantage.allies,
+                        onChange = { update(groupAdvantage.copy(allies = it)) },
+                        modifier = Modifier.weight(1f),
+                    )
+
+                    AdvantagePicker(
+                        label = strings.labelEnemies,
+                        value = groupAdvantage.enemies,
+                        onChange = { update(groupAdvantage.copy(enemies = it)) },
+                        modifier = Modifier.weight(1f),
+                    )
+                }
+            }
+        }
+    }
+
+    @Composable
+    private fun AdvantagePicker(
+        label: String,
+        value: Advantage,
+        onChange: (Advantage) -> Unit,
+        modifier: Modifier = Modifier,
+    ) {
+        NumberPicker(
+            label = label,
+            value = value.value,
+            onIncrement = { onChange(value.inc()) },
+            onDecrement = { onChange(value.dec()) },
+            modifier = modifier,
+        )
+    }
 
     @Composable
     private fun BottomBar(turn: Int, round: Int, viewModel: CombatScreenModel) {
@@ -337,6 +412,7 @@ class ActiveCombatScreen(
     private fun CombatantSheet(
         combatant: CombatantItem,
         viewModel: CombatScreenModel,
+        isGroupAdvantageSystemEnabled: Boolean,
         advantageCap: Advantage,
         onRemoveRequest: (() -> Unit)?,
         onDetailOpenRequest: () -> Unit,
@@ -402,8 +478,10 @@ class ActiveCombatScreen(
                     CombatantWounds(combatant, viewModel)
                 }
 
-                Box(Modifier.weight(1f), contentAlignment = Alignment.TopCenter) {
-                    CombatantAdvantage(combatant, viewModel, advantageCap)
+                if (!isGroupAdvantageSystemEnabled) {
+                    Box(Modifier.weight(1f), contentAlignment = Alignment.TopCenter) {
+                        CombatantAdvantage(combatant, viewModel, advantageCap)
+                    }
                 }
             }
         }
@@ -443,11 +521,10 @@ class ActiveCombatScreen(
 
         val advantage = combatant.combatant.advantage
 
-        NumberPicker(
+        AdvantagePicker(
             label = LocalStrings.current.combat.labelAdvantage,
-            value = advantage.value,
-            onIncrement = { updateAdvantage(advantage.inc().coerceAtMost(advantageCap)) },
-            onDecrement = { updateAdvantage(advantage.dec()) },
+            value = advantage,
+            onChange = { updateAdvantage(it.coerceAtMost(advantageCap)) }
         )
     }
 

@@ -438,6 +438,9 @@ data class CommonUiStrings(
 data class CombatStrings(
     val advantageCap: String = "Advantage Cap",
     val advantageUnlimited: String = "Unlimited",
+    val advantageSystemConfigOption: String = "Advantage rules",
+    val advantageSystemPrompt: String = "Select Advantage rules",
+    val advantageSystems: AdvantageSystemStrings = AdvantageSystemStrings(),
     val buttonEndCombat: String = "End combat",
     val buttonRemoveCombatant: String = "Remove from combat",
     val iconNextTurn: String = "Next turn",
@@ -447,6 +450,8 @@ data class CombatStrings(
     val initiativeStrategyPrompt: String = "Select Initiative rules",
     val initiativeStrategies: InitiativeStrategyStrings = InitiativeStrategyStrings(),
     val labelAdvantage: String = "Advantage",
+    val labelAllies: String = "Allies",
+    val labelEnemies: String = "Enemies",
     val messages: CombatMessageStrings = CombatMessageStrings(),
     val nthRound: (round: Int) -> String = { "Round $it" },
     val title: String = "Combat",
@@ -456,10 +461,17 @@ data class CombatStrings(
 )
 
 @Immutable
+data class AdvantageSystemStrings(
+    val groupAdvantage: String = "Group Advantage (Up in Arms)",
+    val coreRulebook: String = "Default (Core Rulebook)",
+)
+
+@Immutable
 data class CombatMessageStrings(
     val combatInProgress: String = "Combat is in progress",
     val noConditions: String = "No Conditions",
     val waitingForCombat: String = "Waiting for Combat…",
+    val doesNotApplyToGroupAdvantage: String = "Does not apply to Group Advantage",
 )
 
 @Immutable

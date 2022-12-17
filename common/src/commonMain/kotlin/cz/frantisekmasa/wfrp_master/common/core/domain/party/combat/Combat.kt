@@ -17,7 +17,8 @@ data class Combat(
     val encounterId: UUID,
     private var combatants: List<Combatant>,
     private val turn: Int = 1,
-    private val round: Int = 1
+    private val round: Int = 1,
+    val groupAdvantage: GroupAdvantage = GroupAdvantage(Advantage.ZERO, Advantage.ZERO),
 ) : Parcelable {
 
     init {
@@ -98,5 +99,9 @@ data class Combat(
                 else -> turn // Active combatant is before NPC
             }
         )
+    }
+
+    fun updateGroupAdvantage(groupAdvantage: GroupAdvantage): Combat {
+        return copy(groupAdvantage = groupAdvantage)
     }
 }
