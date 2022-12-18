@@ -9,7 +9,7 @@ import cz.frantisekmasa.wfrp_master.common.core.shared.Resources
 @Stable
 fun trappingIcon(trappingType: TrappingType?) = when (trappingType) {
     is TrappingType.Ammunition -> Resources.Drawable.TrappingAmmunition
-    is TrappingType.Armour -> Resources.Drawable.ArmorChest
+    is TrappingType.Armour -> Resources.Drawable.Armour
     is TrappingType.MeleeWeapon -> Resources.Drawable.WeaponSkill
     is TrappingType.Container -> Resources.Drawable.TrappingContainer
     is TrappingType.RangedWeapon -> Resources.Drawable.BallisticSkill
