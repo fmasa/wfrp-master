@@ -17,7 +17,7 @@ value class DamageExpression(val value: String) : Parcelable {
     init {
         require(
             Expression.fromString(
-                value,
+                if (value.startsWith('+')) value.substring(1) else value,
                 Constant.values()
                     .map { it.value to 1 }
                     .toMap()
