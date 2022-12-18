@@ -52,20 +52,21 @@ import cz.frantisekmasa.wfrp_master.common.localization.Strings
 import kotlin.math.max
 
 @Composable
-internal fun InventoryItemDialog(
-    screenModel: TrappingsScreenModel,
+fun InventoryItemDialog(
+    onSaveRequest: suspend (InventoryItem) -> Unit,
     existingItem: InventoryItem?,
+    defaultContainerId: InventoryItemId?,
     onDismissRequest: () -> Unit,
 ) {
     FullScreenDialog(onDismissRequest = onDismissRequest) {
-        val formData = InventoryItemFormData.fromItem(existingItem)
+        val formData = InventoryItemFormData.fromItem(existingItem, defaultContainerId)
         val strings = LocalStrings.current.trappings
 
         FormDialog(
             title = if (existingItem != null) strings.titleEdit else strings.titleAdd,
             onDismissRequest = onDismissRequest,
             formData = formData,
-            onSave = screenModel::saveInventoryItem,
+            onSave = onSaveRequest,
         ) { validate ->
             TextInput(
                 label = strings.labelName,
@@ -322,6 +323,7 @@ private fun <T : TrappingFeature> TrappingFeaturePicker(
 @Stable
 private class InventoryItemFormData(
     val id: InventoryItemId,
+    val containerId: InventoryItemId?,
     val name: InputValue,
     val encumbrance: InputValue,
     val quantity: InputValue,
@@ -331,24 +333,36 @@ private class InventoryItemFormData(
     override fun isValid() =
         listOf(name, encumbrance, quantity, description).all { it.isValid() } && type.isValid()
 
-    override fun toValue() = InventoryItem(
-        id = id,
-        name = name.value,
-        description = description.value,
-        quantity = max(1, quantity.toInt()),
-        encumbrance = Encumbrance(encumbrance.toDouble()),
-        trappingType = type.toValue(),
-    )
+    override fun toValue(): InventoryItem {
+        val trappingType = type.toValue()
+
+        return InventoryItem(
+            id = id,
+            name = name.value,
+            description = description.value,
+            quantity = max(1, quantity.toInt()),
+            encumbrance = Encumbrance(encumbrance.toDouble()),
+            trappingType = type.toValue(),
+            containerId = if (
+                (trappingType is TrappingType.Weapon && trappingType.equipped != null) ||
+                (trappingType is TrappingType.WearableTrapping && trappingType.worn)
+            ) null else containerId,
+        )
+    }
 
     companion object {
         @Composable
-        fun fromItem(item: InventoryItem?) = InventoryItemFormData(
+        fun fromItem(
+            item: InventoryItem?,
+            defaultContainerId: InventoryItemId?,
+        ) = InventoryItemFormData(
             id = remember(item) { item?.id ?: uuid4() },
             name = inputValue(item?.name ?: "", Rules.NotBlank()),
             encumbrance = inputValue(item?.encumbrance?.toString() ?: "0"),
             quantity = inputValue(item?.quantity?.toString() ?: "1"),
             description = inputValue(item?.description ?: ""),
-            type = TrappingTypeFormData.fromTrappingType(item?.trappingType)
+            type = TrappingTypeFormData.fromTrappingType(item?.trappingType),
+            containerId = item?.containerId ?: defaultContainerId
         )
     }
 }
@@ -392,7 +406,7 @@ private class TrappingTypeFormData(
             range = AmmunitionRangeExpression(ammunitionRange.value),
             qualities = weaponQualities.toMap(),
             flaws = weaponFlaws.toMap(),
-            damage = DamageExpression(damage.value),
+            damage = DamageExpression(damage.value.trim()),
         )
         TrappingTypeOption.ARMOUR -> TrappingType.Armour(
             locations = armourLocations.value,
@@ -409,7 +423,7 @@ private class TrappingTypeFormData(
         TrappingTypeOption.MELEE_WEAPON -> TrappingType.MeleeWeapon(
             group = meleeWeaponGroup.value,
             reach = weaponReach.value,
-            damage = DamageExpression(damage.value),
+            damage = DamageExpression(damage.value.trim()),
             qualities = weaponQualities.toMap(),
             flaws = weaponFlaws.toMap(),
             equipped = weaponEquipped.value,
@@ -417,7 +431,7 @@ private class TrappingTypeFormData(
         TrappingTypeOption.RANGED_WEAPON -> TrappingType.RangedWeapon(
             group = rangedWeaponGroup.value,
             range = WeaponRangeExpression(weaponRange.value),
-            damage = DamageExpression(damage.value),
+            damage = DamageExpression(damage.value.trim()),
             qualities = weaponQualities.toMap(),
             flaws = weaponFlaws.toMap(),
             equipped = weaponEquipped.value,

@@ -15,6 +15,7 @@ import androidx.compose.material.LocalContentColor
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -24,6 +25,9 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import cafe.adriel.voyager.navigator.LocalNavigator
+import cafe.adriel.voyager.navigator.currentOrThrow
+import cz.frantisekmasa.wfrp_master.common.character.trappings.TrappingsScreenModel.Trapping
 import cz.frantisekmasa.wfrp_master.common.core.domain.identifiers.CharacterId
 import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.InventoryItem
 import cz.frantisekmasa.wfrp_master.common.core.shared.IO
@@ -32,7 +36,6 @@ import cz.frantisekmasa.wfrp_master.common.core.shared.drawableResource
 import cz.frantisekmasa.wfrp_master.common.core.ui.buttons.CardButton
 import cz.frantisekmasa.wfrp_master.common.core.ui.cards.CardContainer
 import cz.frantisekmasa.wfrp_master.common.core.ui.cards.CardTitle
-import cz.frantisekmasa.wfrp_master.common.core.ui.dialogs.DialogState
 import cz.frantisekmasa.wfrp_master.common.core.ui.flow.collectWithLifecycle
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.EmptyUI
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
@@ -41,6 +44,7 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.UserTipCard
 import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.TopPanel
 import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import kotlin.coroutines.EmptyCoroutineContext
 
@@ -85,32 +89,47 @@ fun TrappingsScreen(
 
         UserTipCard(UserTip.ARMOUR_TRAPPINGS, Modifier.padding(horizontal = 8.dp))
 
-        var inventoryItemDialogState: DialogState<InventoryItem?> by remember {
-            mutableStateOf(DialogState.Closed())
+        var newTrappingDialogOpened by rememberSaveable { mutableStateOf(false) }
+
+        if (newTrappingDialogOpened) {
+            InventoryItemDialog(
+                onSaveRequest = screenModel::saveInventoryItem,
+                defaultContainerId = null,
+                existingItem = null,
+                onDismissRequest = { newTrappingDialogOpened = false }
+            )
         }
 
-        val dialogState = inventoryItemDialogState
+        val trappings = screenModel.inventory.collectWithLifecycle(null).value
+            ?: return@Column
 
-        if (dialogState is DialogState.Opened) {
-            InventoryItemDialog(
-                screenModel = screenModel,
-                existingItem = dialogState.item,
-                onDismissRequest = { inventoryItemDialogState = DialogState.Closed() }
+        var addToContainerDialogTrapping: InventoryItem?
+            by remember { mutableStateOf(null) }
+
+        addToContainerDialogTrapping?.let { trapping ->
+            val containers by derivedStateOf {
+                trappings.filter { it.item.id != trapping.id && it is Trapping.Container }
+            }
+
+            ChooseTrappingDialog(
+                title = LocalStrings.current.trappings.titleSelectContainer,
+                trappings = containers,
+                onSelected = { screenModel.addToContainer(trapping, it.item) },
+                emptyUiText = LocalStrings.current.trappings.messages.noContainersFound,
+                onDismissRequest = { addToContainerDialogTrapping = null },
             )
         }
 
         val coroutineScope = rememberCoroutineScope { EmptyCoroutineContext + Dispatchers.IO }
+        val navigator = LocalNavigator.currentOrThrow
 
         InventoryItemsCard(
-            screenModel,
-            onClick = {
-                inventoryItemDialogState = DialogState.Opened(it)
-            },
+            trappings = trappings,
+            onClick = { navigator.push(TrappingDetailScreen(characterId, it.id)) },
             onRemove = { screenModel.removeInventoryItem(it) },
             onDuplicate = { coroutineScope.launch { screenModel.saveInventoryItem(it.duplicate()) } },
-            onNewItemButtonClicked = {
-                inventoryItemDialogState = DialogState.Opened(null)
-            },
+            onNewItemButtonClicked = { newTrappingDialogOpened = true },
+            onAddToContainerRequest = { addToContainerDialogTrapping = it },
         )
 
         Spacer(Modifier.padding(bottom = 20.dp))
@@ -143,20 +162,19 @@ private fun CharacterEncumbrance(screenModel: TrappingsScreenModel, modifier: Mo
 
 @Composable
 private fun InventoryItemsCard(
-    screenModel: TrappingsScreenModel,
+    trappings: List<Trapping>,
     onClick: (InventoryItem) -> Unit,
     onRemove: (InventoryItem) -> Unit,
     onDuplicate: (InventoryItem) -> Unit,
     onNewItemButtonClicked: () -> Unit,
+    onAddToContainerRequest: (InventoryItem) -> Unit,
 ) {
-    val items = screenModel.inventory.collectWithLifecycle(null).value ?: return
-
     val strings = LocalStrings.current.trappings
 
     CardContainer(Modifier.padding(horizontal = 8.dp)) {
         Column(Modifier.padding(horizontal = 8.dp)) {
             CardTitle(strings.title)
-            if (items.isEmpty()) {
+            if (trappings.isEmpty()) {
                 EmptyUI(
                     text = strings.messages.noItems,
                     Resources.Drawable.TrappingContainer,
@@ -164,10 +182,11 @@ private fun InventoryItemsCard(
                 )
             } else {
                 InventoryItemList(
-                    items,
+                    trappings,
                     onClick = onClick,
                     onRemove = onRemove,
-                    onDuplicate = onDuplicate
+                    onDuplicate = onDuplicate,
+                    onAddToContainerRequest = onAddToContainerRequest,
                 )
             }
 

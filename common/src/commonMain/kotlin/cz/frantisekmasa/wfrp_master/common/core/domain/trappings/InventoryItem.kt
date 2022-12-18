@@ -1,6 +1,7 @@
 package cz.frantisekmasa.wfrp_master.common.core.domain.trappings
 
 import androidx.compose.runtime.Immutable
+import androidx.compose.runtime.Stable
 import com.benasher44.uuid.Uuid
 import com.benasher44.uuid.uuid4
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.CharacterItem
@@ -32,26 +33,43 @@ data class InventoryItem(
     // TODO: Add support for Trappings compendium
     override val compendiumId: Uuid? get() = null
 
+    @Stable
     val effectiveEncumbrance: Encumbrance get() {
-        val type = trappingType
-
         if (containerId != null) {
             // Encumbrance of items carried in a container are ignored, see rulebook page 301
             return Encumbrance.Zero
         }
 
+        val type = trappingType
+
         if (type != null && type is TrappingType.WearableTrapping && type.worn) {
             // See rulebook page 293
-            return encumbrance * quantity - Encumbrance.One
+            return totalEncumbrance - Encumbrance.One
         }
 
-        return encumbrance * quantity
+        return totalEncumbrance
     }
+
+    val totalEncumbrance: Encumbrance get() = encumbrance * quantity
 
     fun duplicate(): InventoryItem = copy(
         id = uuid4(),
         name = duplicateName(name),
     )
+
+    fun addToContainer(containerId: InventoryItemId): InventoryItem {
+        return when (trappingType) {
+            is TrappingType.WearableTrapping -> copy(
+                trappingType = trappingType.takeOff(),
+                containerId = containerId,
+            )
+            is TrappingType.Weapon -> copy(
+                trappingType = trappingType.unequip(),
+                containerId = containerId,
+            )
+            else -> copy(containerId = containerId)
+        }
+    }
 
     init {
         require(name.isNotBlank()) { "Inventory item must have non-blank name" }

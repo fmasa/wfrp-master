@@ -26,7 +26,10 @@ fun <Q : Quality, F : Flaw> TrappingFeatureList(
 
         Text(
             remember(qualities, flaws) {
-                (translate(qualities, strings).sorted() + translate(flaws, strings).sorted())
+                (
+                    translateFeatures(qualities, strings).sorted() +
+                        translateFeatures(flaws, strings).sorted()
+                    )
                     .joinToString(", ")
             },
             modifier = modifier,
@@ -35,7 +38,7 @@ fun <Q : Quality, F : Flaw> TrappingFeatureList(
     }
 }
 
-private fun <T : TrappingFeature> translate(
+fun <T : TrappingFeature> translateFeatures(
     features: Map<T, Rating>,
     strings: Strings,
 ): List<String> {

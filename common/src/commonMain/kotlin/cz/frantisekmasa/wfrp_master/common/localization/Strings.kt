@@ -634,6 +634,7 @@ data class WeaponStrings(
     val labelDamage: String = "Damage",
     val labelFlaws: String = "Weapon Flaws",
     val labelGroup: String = "Weapon Group",
+    val labelGroups: String = "Weapon Groups",
     val labelQualities: String = "Weapon Qualities",
     val labelRange: String = "Range",
     val labelReach: String = "Reach",
@@ -723,26 +724,46 @@ data class WeaponReachStrings(
 
 @Immutable
 data class TrappingStrings(
+    val buttonCreateNew: String = "Create new Trapping",
+    val buttonSelectExisting: String = "Select existing Trapping",
+    val buttonMoveToContainer: String = "Move to Container",
+    val buttonTakeOut: String = "Take out",
     val iconEncumbrance: String = "Trapping encumbrance",
     val iconTotalEncumbrance: String = "Total encumbrance of character (current encumbrance / total encumbrance)",
     val labelCarries: String = "Carries",
+    val labelFlaws: String = "Flaws",
     val labelName: String = "Name",
+    val labelQualities: String = "Qualities",
     val labelQuantity: String = "Quantity",
     val labelDescription: String = "Description (optional)",
     val labelEncumbrancePerUnit: String = "Encumbrance (per unit)",
+    val labelEncumbranceTotal: String = "Encumbrance (total)",
     val labelWorn: String = "Worn",
     val labelType: String = "Trapping type",
     val messages: TrappingMessageStrings = TrappingMessageStrings(),
     val money: MoneyStrings = MoneyStrings(),
+    val none: String = "None",
+    val searchPlaceholder: String = "Search in trappings…",
+    val takeOut: String = "Take out",
     val title: String = "Trappings",
     val titleAdd: String = "Add trapping",
     val titleEdit: String = "Edit trapping",
+    val titleEquipWeapon: String = "Equip Weapon",
+    val titleSelectContainer: String = "Select Container",
+    val titleSelectTrapping: String = "Select Trapping",
+    val titleStoredTrappings: String = "Stored Trappings",
     val types: TrappingTypeStrings = TrappingTypeStrings(),
 )
 
 @Immutable
 data class TrappingMessageStrings(
     val noItems: String = "There is no trapping in your inventory.",
+    val trappingNotFound: String = "Trapping does not exist",
+    val noItemsInContainer: String = "There are no trappings in this container.",
+    val noTrappingsToAdd: String = "There are no trappings to add to container.",
+    val noContainersFound: String = "There are no available containers.",
+    val cannotStoreTrappingsInContainerStoredInContainer: String =
+        "Trappings cannot be stored in Container that is itself stored in a Container."
 )
 
 @Immutable

@@ -9,7 +9,6 @@ import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
 import com.halilibo.richtext.markdown.Markdown
 import com.halilibo.richtext.ui.RichText
 import cz.frantisekmasa.wfrp_master.common.core.domain.Characteristic
@@ -65,7 +64,7 @@ fun SkillDetailBody(
             value = strings.commonUi.boolean(advanced),
         )
 
-        RichText(Modifier.padding(top = 8.dp)) {
+        RichText(Modifier.padding(top = Spacing.small)) {
             Markdown(description)
         }
     }

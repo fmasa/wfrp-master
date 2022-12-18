@@ -149,7 +149,7 @@ val appModule = DI.Module("Common") {
     bindSingleton<CharacterAvatarChanger> { CloudFunctionCharacterAvatarChanger(instance()) }
 
     bindFactory { characterId: CharacterId ->
-        TrappingsScreenModel(characterId, instance(), instance())
+        TrappingsScreenModel(characterId, instance(), instance(), instance())
     }
 
     /**

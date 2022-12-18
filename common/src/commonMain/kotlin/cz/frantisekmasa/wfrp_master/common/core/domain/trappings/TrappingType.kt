@@ -14,8 +14,11 @@ typealias Rating = Int
 @JsonClassDiscriminator("kind")
 @Immutable
 sealed class TrappingType : Parcelable {
-    interface WearableTrapping {
-        val worn: Boolean
+    sealed class WearableTrapping : TrappingType() {
+        abstract val worn: Boolean
+
+        abstract fun takeOff(): WearableTrapping
+        abstract fun takeOn(): WearableTrapping
     }
 
     sealed class Weapon : TrappingType() {
@@ -23,6 +26,9 @@ sealed class TrappingType : Parcelable {
         abstract val qualities: Map<WeaponQuality, Rating>
         abstract val flaws: Map<WeaponFlaw, Rating>
         abstract val equipped: WeaponEquip?
+
+        abstract fun equip(equip: WeaponEquip): Weapon
+        abstract fun unequip(): Weapon
     }
 
     @Parcelize
@@ -36,7 +42,10 @@ sealed class TrappingType : Parcelable {
         override val qualities: Map<WeaponQuality, Rating>,
         override val flaws: Map<WeaponFlaw, Rating>,
         override val equipped: WeaponEquip?,
-    ) : Weapon()
+    ) : Weapon() {
+        override fun equip(equip: WeaponEquip): MeleeWeapon = copy(equipped = equip)
+        override fun unequip(): MeleeWeapon = copy(equipped = null)
+    }
 
     @Parcelize
     @Serializable
@@ -49,7 +58,10 @@ sealed class TrappingType : Parcelable {
         override val qualities: Map<WeaponQuality, Rating>,
         override val flaws: Map<WeaponFlaw, Rating>,
         override val equipped: WeaponEquip?,
-    ) : Weapon()
+    ) : Weapon() {
+        override fun equip(equip: WeaponEquip): RangedWeapon = copy(equipped = equip)
+        override fun unequip(): RangedWeapon = copy(equipped = null)
+    }
 
     @Parcelize
     @Serializable
@@ -74,7 +86,11 @@ sealed class TrappingType : Parcelable {
         val qualities: Map<ArmourQuality, Rating> = emptyMap(),
         val flaws: Map<ArmourFlaw, Rating> = emptyMap(),
         override val worn: Boolean,
-    ) : TrappingType(), WearableTrapping
+    ) : WearableTrapping() {
+
+        override fun takeOff(): Armour = copy(worn = false)
+        override fun takeOn(): Armour = copy(worn = true)
+    }
 
     @Parcelize
     @Serializable
@@ -83,5 +99,9 @@ sealed class TrappingType : Parcelable {
     data class Container(
         val carries: Encumbrance,
         override val worn: Boolean,
-    ) : TrappingType(), WearableTrapping
+    ) : WearableTrapping() {
+
+        override fun takeOff(): Container = copy(worn = false)
+        override fun takeOn(): Container = copy(worn = true)
+    }
 }
