@@ -7,21 +7,27 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.InventoryItem
+import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.TrappingType
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
 import cz.frantisekmasa.wfrp_master.common.core.ui.text.SingleLineTextValue
 import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
 
 @Composable
-fun SimpleTrappingDetail(
+fun ClothingOrAccessoryDetail(
     trapping: InventoryItem,
-    trappingType: String,
+    clothingOrAccessory: TrappingType.ClothingOrAccessory,
     onSaveRequest: suspend (InventoryItem) -> Unit,
 ) {
     Column(Modifier.verticalScroll(rememberScrollState())) {
-        QuantityBar(trapping, onSaveRequest)
+        WornBar(trapping, clothingOrAccessory, onSaveRequest)
 
         Column(Modifier.padding(Spacing.bodyPadding)) {
-            SingleLineTextValue(LocalStrings.current.trappings.labelType, trappingType)
+            val strings = LocalStrings.current
+
+            SingleLineTextValue(
+                strings.trappings.labelType,
+                strings.trappings.types.clothingOrAccessory,
+            )
 
             EncumbranceBox(trapping)
 

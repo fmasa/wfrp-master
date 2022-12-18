@@ -49,12 +49,18 @@ object Resources {
         ConditionUnconscious("drawable/ic_condition_unconscious.xml"),
 
         // Trappings
+        TrappingArmour("drawable/ic_armour.xml"),
         TrappingAmmunition("drawable/ic_ammunition.xml"),
+        TrappingBookOrDocument("drawable/ic_book_or_document.xml"),
+        TrappingClothingOrAccessory("drawable/ic_clothing_or_accessory.xml"),
         TrappingCoins("drawable/ic_coins.xml"),
+        TrappingDrugOrPoison("drawable/ic_drug_or_poison.xml"),
         TrappingContainer("drawable/ic_container.xml"),
+        TrappingFoodOrDrink("drawable/ic_food_or_drink.xml"),
+        TrappingHerbOrDraught("drawable/ic_herb_or_draught.xml"),
         TrappingMiscellaneous("drawable/ic_miscellaneous.xml"),
         TrappingEncumbrance("drawable/ic_encumbrance.xml"),
-        Armour("drawable/ic_armour.xml"),
+        TrappingTool("drawable/ic_tool.xml"),
 
         // Raster images
         GoogleLogo("drawable/google_logo.png"),

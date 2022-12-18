@@ -44,7 +44,9 @@ inline fun <reified T : NamedEnum> SelectBox(
             label = label,
             value = value,
             onValueChange = onValueChange,
-            items = remember(items) { items.map { it to it.nameResolver(strings) } }
+            items = remember(items) {
+                items.map { it to it.nameResolver(strings) }.sortedBy { it.second }
+            }
         )
     }
 }

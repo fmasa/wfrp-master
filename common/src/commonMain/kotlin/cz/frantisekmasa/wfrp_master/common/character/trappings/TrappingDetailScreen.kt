@@ -15,10 +15,11 @@ import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import cz.frantisekmasa.wfrp_master.common.character.trappings.detail.AmmunitionDetail
 import cz.frantisekmasa.wfrp_master.common.character.trappings.detail.ArmourDetail
+import cz.frantisekmasa.wfrp_master.common.character.trappings.detail.ClothingOrAccessoryDetail
 import cz.frantisekmasa.wfrp_master.common.character.trappings.detail.ContainerDetail
 import cz.frantisekmasa.wfrp_master.common.character.trappings.detail.MeleeWeaponDetail
-import cz.frantisekmasa.wfrp_master.common.character.trappings.detail.MiscellaneousTrappingDetail
 import cz.frantisekmasa.wfrp_master.common.character.trappings.detail.RangedWeaponDetail
+import cz.frantisekmasa.wfrp_master.common.character.trappings.detail.SimpleTrappingDetail
 import cz.frantisekmasa.wfrp_master.common.core.domain.identifiers.CharacterId
 import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.InventoryItem
 import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.InventoryItemId
@@ -120,6 +121,13 @@ private fun TrappingDetail(
                     onSaveRequest = screenModel::saveInventoryItem,
                 )
             }
+            TrappingType.BookOrDocument -> {
+                SimpleTrappingDetail(
+                    trapping = trapping,
+                    trappingType = LocalStrings.current.trappings.types.bookOrDocument,
+                    onSaveRequest = screenModel::saveInventoryItem,
+                )
+            }
             is TrappingType.Container -> {
                 ContainerDetail(
                     trapping = trapping,
@@ -132,6 +140,34 @@ private fun TrappingDetail(
                     onAddToContainerRequest = {
                         screenModel.addToContainer(trapping = it, container = trapping)
                     }
+                )
+            }
+            is TrappingType.ClothingOrAccessory -> {
+                ClothingOrAccessoryDetail(
+                    trapping = trapping,
+                    clothingOrAccessory = type,
+                    onSaveRequest = screenModel::saveInventoryItem,
+                )
+            }
+            TrappingType.DrugOrPoison -> {
+                SimpleTrappingDetail(
+                    trapping = trapping,
+                    trappingType = LocalStrings.current.trappings.types.drugOrPoison,
+                    onSaveRequest = screenModel::saveInventoryItem,
+                )
+            }
+            TrappingType.FoodOrDrink -> {
+                SimpleTrappingDetail(
+                    trapping = trapping,
+                    trappingType = LocalStrings.current.trappings.types.foodOrDrink,
+                    onSaveRequest = screenModel::saveInventoryItem,
+                )
+            }
+            TrappingType.HerbOrDraught -> {
+                SimpleTrappingDetail(
+                    trapping = trapping,
+                    trappingType = LocalStrings.current.trappings.types.herbOrDraught,
+                    onSaveRequest = screenModel::saveInventoryItem,
                 )
             }
             is TrappingType.MeleeWeapon -> {
@@ -151,8 +187,30 @@ private fun TrappingDetail(
                 )
             }
             null -> {
-                MiscellaneousTrappingDetail(
+                SimpleTrappingDetail(
                     trapping = trapping,
+                    trappingType = LocalStrings.current.trappings.types.miscellaneous,
+                    onSaveRequest = screenModel::saveInventoryItem,
+                )
+            }
+            TrappingType.SpellIngredient -> {
+                SimpleTrappingDetail(
+                    trapping = trapping,
+                    trappingType = LocalStrings.current.trappings.types.spellIngredient,
+                    onSaveRequest = screenModel::saveInventoryItem,
+                )
+            }
+            TrappingType.ToolOrKit -> {
+                SimpleTrappingDetail(
+                    trapping = trapping,
+                    trappingType = LocalStrings.current.trappings.types.toolOrKit,
+                    onSaveRequest = screenModel::saveInventoryItem,
+                )
+            }
+            TrappingType.TradeTools -> {
+                SimpleTrappingDetail(
+                    trapping = trapping,
+                    trappingType = LocalStrings.current.trappings.types.tradeTools,
                     onSaveRequest = screenModel::saveInventoryItem,
                 )
             }
