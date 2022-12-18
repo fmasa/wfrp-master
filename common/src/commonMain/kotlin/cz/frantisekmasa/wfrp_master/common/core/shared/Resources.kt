@@ -54,15 +54,7 @@ object Resources {
         TrappingContainer("drawable/ic_container.xml"),
         TrappingMiscellaneous("drawable/ic_miscellaneous.xml"),
         TrappingEncumbrance("drawable/ic_encumbrance.xml"),
-
-        // Armor
-        ArmorArmLeft("drawable/ic_armor_arm_left.xml"),
-        ArmorArmRight("drawable/ic_armor_arm_right.xml"),
-        ArmorChest("drawable/ic_armor_chest.xml"),
-        ArmorHead("drawable/ic_armor_head.xml"),
-        ArmorLegLeft("drawable/ic_armor_leg_left.xml"),
-        ArmorLegRight("drawable/ic_armor_leg_right.xml"),
-        ArmorShield("drawable/ic_armor_shield.xml"),
+        Armour("drawable/ic_armour.xml"),
 
         // Raster images
         GoogleLogo("drawable/google_logo.png"),
