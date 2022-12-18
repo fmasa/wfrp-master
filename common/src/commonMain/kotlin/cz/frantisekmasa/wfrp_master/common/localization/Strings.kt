@@ -726,6 +726,7 @@ data class WeaponReachStrings(
 data class TrappingStrings(
     val buttonCreateNew: String = "Create new Trapping",
     val buttonSelectExisting: String = "Select existing Trapping",
+    val buttonMoveToContainer: String = "Move to Container",
     val buttonTakeOut: String = "Take out",
     val iconEncumbrance: String = "Trapping encumbrance",
     val iconTotalEncumbrance: String = "Total encumbrance of character (current encumbrance / total encumbrance)",
@@ -748,6 +749,7 @@ data class TrappingStrings(
     val titleAdd: String = "Add trapping",
     val titleEdit: String = "Edit trapping",
     val titleEquipWeapon: String = "Equip Weapon",
+    val titleSelectContainer: String = "Select Container",
     val titleSelectTrapping: String = "Select Trapping",
     val titleStoredTrappings: String = "Stored Trappings",
     val types: TrappingTypeStrings = TrappingTypeStrings(),
@@ -759,6 +761,7 @@ data class TrappingMessageStrings(
     val trappingNotFound: String = "Trapping does not exist",
     val noItemsInContainer: String = "There are no trappings in this container.",
     val noTrappingsToAdd: String = "There are no trappings to add to container.",
+    val noContainersFound: String = "There are no available containers.",
     val cannotStoreTrappingsInContainerStoredInContainer: String =
         "Trappings cannot be stored in Container that is itself stored in a Container."
 )

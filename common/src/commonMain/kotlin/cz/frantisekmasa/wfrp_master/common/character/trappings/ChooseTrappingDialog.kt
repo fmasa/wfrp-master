@@ -19,6 +19,7 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun ChooseTrappingDialog(
+    title: String,
     trappings: List<TrappingsScreenModel.Trapping>,
     onSelected: suspend (TrappingsScreenModel.Trapping) -> Unit,
     emptyUiText: String,
@@ -33,7 +34,7 @@ fun ChooseTrappingDialog(
             key = { it.item.id },
             searchableValue = { it.item.name },
             navigationIcon = { CloseButton(onDismissRequest) },
-            title = LocalStrings.current.trappings.titleSelectTrapping,
+            title = title,
             searchPlaceholder = LocalStrings.current.trappings.searchPlaceholder,
             emptyUi = {
                 EmptyUI(

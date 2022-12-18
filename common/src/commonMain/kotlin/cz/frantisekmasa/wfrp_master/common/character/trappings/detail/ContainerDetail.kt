@@ -86,6 +86,7 @@ fun ContainerDetail(
         }
 
         ChooseTrappingDialog(
+            title = LocalStrings.current.trappings.titleSelectTrapping,
             trappings = trappingsToAdd,
             onSelected = { onAddToContainerRequest(it.item) },
             emptyUiText = LocalStrings.current.trappings.messages.noTrappingsToAdd,
