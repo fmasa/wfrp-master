@@ -438,7 +438,8 @@ service cloud.firestore {
                             "avatarUrl",
                             "archived",
                             "woundsModifiers",
-                            "compendiumCareer"
+                            "compendiumCareer",
+                            "encumbranceBonus"
                         ].hasAll(character.keys())
                         && character.id == characterId
                         && (
@@ -511,7 +512,10 @@ service cloud.firestore {
                             character.compendiumCareer.keys().toSet() == ["careerId", "levelId"].toSet() &&
                             character.compendiumCareer.careerId is string && isValidUuid(character.compendiumCareer.careerId) &&
                             character.compendiumCareer.levelId is string && isValidUuid(character.compendiumCareer.levelId)
-                        ));
+                        ))
+                        && (! ("encumbranceBonus" in character) ||
+                            (character.encumbranceBonus is number && character.encumbranceBonus >= 0)
+                    );
                 }
             }
 

@@ -55,7 +55,7 @@ class TrappingsScreenModel(
         .distinctUntilChanged()
 
     val maxEncumbrance: Flow<Encumbrance> = character
-        .map { Encumbrance.maximumForCharacter(it.characteristics) }
+        .map { it.maxEncumbrance }
         .distinctUntilChanged()
 
     val totalEncumbrance: Flow<Encumbrance?> =
