@@ -815,10 +815,18 @@ data class MiracleMessageStrings(
 data class TrappingTypeStrings(
     val ammunition: String = "Ammunition",
     val armour: String = "Armour",
-    val container: String = "Container",
-    val meleeWeapon: String = "Melee Weapon",
+    val bookOrDocument: String = "Books and Documents",
+    val clothingOrAccessory: String = "Clothing and Accessories",
+    val container: String = "Containers",
+    val drugOrPoison: String = "Drugs and Poisons",
+    val foodOrDrink: String = "Food and Drink",
+    val herbOrDraught: String = "Herbs and Draughts",
+    val meleeWeapon: String = "Melee Weapons",
     val miscellaneous: String = "Miscellaneous",
-    val rangedWeapon: String = "Ranged Weapon",
+    val rangedWeapon: String = "Ranged Weapons",
+    val spellIngredient: String = "Spell Ingredients",
+    val toolOrKit: String = "Tools and Kits",
+    val tradeTools: String = "Trade tools",
 )
 
 @Immutable

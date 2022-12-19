@@ -104,4 +104,49 @@ sealed class TrappingType : Parcelable {
         override fun takeOff(): Container = copy(worn = false)
         override fun takeOn(): Container = copy(worn = true)
     }
+
+    @Parcelize
+    @Serializable
+    @SerialName("CLOTHING_OR_ACCESSORY")
+    data class ClothingOrAccessory(
+        override val worn: Boolean,
+    ) : WearableTrapping() {
+        override fun takeOff(): ClothingOrAccessory = copy(worn = false)
+        override fun takeOn(): ClothingOrAccessory = copy(worn = true)
+    }
+
+    @Parcelize
+    @Serializable
+    @SerialName("FOOD_OR_DRINK")
+    object FoodOrDrink : TrappingType()
+
+    @Parcelize
+    @Serializable
+    @SerialName("TOOL_OR_KIT")
+    object ToolOrKit : TrappingType()
+
+    @Parcelize
+    @Serializable
+    @SerialName("BOOKS_OR_DOCUMENT")
+    object BookOrDocument : TrappingType()
+
+    @Parcelize
+    @Serializable
+    @SerialName("TRADE_TOOLS")
+    object TradeTools : TrappingType()
+
+    @Parcelize
+    @Serializable
+    @SerialName("DRUG_OR_POISON")
+    object DrugOrPoison : TrappingType()
+
+    @Parcelize
+    @Serializable
+    @SerialName("HERB_OR_DRAUGHT")
+    object HerbOrDraught : TrappingType()
+
+    @Parcelize
+    @Serializable
+    @SerialName("SPELL_INGREDIENT")
+    object SpellIngredient : TrappingType()
 }
