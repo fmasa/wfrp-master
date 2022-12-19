@@ -7,6 +7,7 @@ import cz.frantisekmasa.wfrp_master.common.core.domain.Ambitions
 import cz.frantisekmasa.wfrp_master.common.core.domain.Money
 import cz.frantisekmasa.wfrp_master.common.core.domain.Size
 import cz.frantisekmasa.wfrp_master.common.core.domain.Stats
+import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.Encumbrance
 import cz.frantisekmasa.wfrp_master.common.core.shared.Parcelable
 import cz.frantisekmasa.wfrp_master.common.core.shared.Parcelize
 import cz.frantisekmasa.wfrp_master.common.encounters.domain.Wounds
@@ -40,6 +41,7 @@ data class Character(
     val note: String = "",
     @SerialName("hardyTalent") val hasHardyTalent: Boolean = false,
     val woundsModifiers: WoundsModifiers = WoundsModifiers(),
+    val encumbranceBonus: Encumbrance = Encumbrance.Zero,
     @SerialName("archived") val isArchived: Boolean = false,
     val avatarUrl: String? = null,
     val money: Money = Money.zero(),
@@ -52,6 +54,9 @@ data class Character(
         points.wounds,
         calculateMaxWounds(size ?: race?.size, points, hasHardyTalent, woundsModifiers, characteristics),
     )
+
+    val maxEncumbrance: Encumbrance
+        get() = Encumbrance.maximumForCharacter(characteristics) + encumbranceBonus
 
     init {
         require(userId == null || type == CharacterType.PLAYER_CHARACTER) {
@@ -139,6 +144,10 @@ data class Character(
                 )
             )
         )
+    }
+
+    fun modifyEncumbranceBonus(bonus: Encumbrance): Character {
+        return copy(encumbranceBonus = bonus)
     }
 
     fun updateCareer(

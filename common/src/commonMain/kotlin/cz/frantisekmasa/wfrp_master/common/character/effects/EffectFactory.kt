@@ -19,6 +19,7 @@ class EffectFactory {
                 listOfNotNull(
                     HardyWoundsModification.fromTalentOrNull(name, item.talent.taken),
                     CharacteristicChange.fromTalentNameOrNull(name),
+                    AdditionalEncumbrance.fromTalentOrNull(name, item.talent.taken),
                 )
             }
         }
