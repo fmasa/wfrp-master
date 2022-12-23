@@ -259,7 +259,11 @@ class ActiveCombatScreen(
                         }
 
                         if (isGroupAdvantageSystemEnabled) {
-                            GroupAdvantageBar(groupAdvantage, viewModel)
+                            GroupAdvantageBar(
+                                groupAdvantage = groupAdvantage,
+                                isGameMaster = isGameMaster,
+                                screenModel = viewModel,
+                            )
                         }
 
                         if (isGameMaster) {
@@ -277,6 +281,7 @@ class ActiveCombatScreen(
     @Composable
     private fun GroupAdvantageBar(
         groupAdvantage: GroupAdvantage,
+        isGameMaster: Boolean,
         screenModel: CombatScreenModel,
     ) {
         Surface(elevation = 2.dp) {
@@ -289,31 +294,65 @@ class ActiveCombatScreen(
                     fontWeight = FontWeight.Bold,
                 )
 
+                val strings = LocalStrings.current.combat
+
                 Row {
-                    val coroutineScope = rememberCoroutineScope()
-                    val update = { groupAdvantage: GroupAdvantage ->
-                        coroutineScope.launch(Dispatchers.IO) {
-                            screenModel.updateGroupAdvantage(groupAdvantage)
+                    if (isGameMaster) {
+                        val coroutineScope = rememberCoroutineScope()
+                        val update = { groupAdvantage: GroupAdvantage ->
+                            coroutineScope.launch(Dispatchers.IO) {
+                                screenModel.updateGroupAdvantage(groupAdvantage)
+                            }
                         }
+
+                        AdvantagePicker(
+                            label = strings.labelAllies,
+                            value = groupAdvantage.allies,
+                            onChange = { update(groupAdvantage.copy(allies = it)) },
+                            modifier = Modifier.weight(1f),
+                        )
+
+                        AdvantagePicker(
+                            label = strings.labelEnemies,
+                            value = groupAdvantage.enemies,
+                            onChange = { update(groupAdvantage.copy(enemies = it)) },
+                            modifier = Modifier.weight(1f),
+                        )
+                    } else {
+                        AdvantageValue(
+                            label = strings.labelAllies,
+                            value = groupAdvantage.allies,
+                            modifier = Modifier.weight(1f),
+                        )
+
+                        AdvantageValue(
+                            label = strings.labelEnemies,
+                            value = groupAdvantage.enemies,
+                            modifier = Modifier.weight(1f),
+                        )
                     }
-
-                    val strings = LocalStrings.current.combat
-
-                    AdvantagePicker(
-                        label = strings.labelAllies,
-                        value = groupAdvantage.allies,
-                        onChange = { update(groupAdvantage.copy(allies = it)) },
-                        modifier = Modifier.weight(1f),
-                    )
-
-                    AdvantagePicker(
-                        label = strings.labelEnemies,
-                        value = groupAdvantage.enemies,
-                        onChange = { update(groupAdvantage.copy(enemies = it)) },
-                        modifier = Modifier.weight(1f),
-                    )
                 }
             }
+        }
+    }
+
+    @Composable
+    private fun AdvantageValue(
+        label: String,
+        value: Advantage,
+        modifier: Modifier,
+    ) {
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            modifier = modifier
+                .padding(vertical = 4.dp)
+                .then(modifier)
+        ) {
+            Text(label, style = MaterialTheme.typography.subtitle1)
+            Text(
+                text = value.toString(),
+                style = MaterialTheme.typography.h5,
+            )
         }
     }
 
