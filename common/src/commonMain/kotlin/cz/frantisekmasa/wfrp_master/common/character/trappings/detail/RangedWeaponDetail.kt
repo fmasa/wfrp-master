@@ -34,7 +34,7 @@ fun RangedWeaponDetail(
 
             SingleLineTextValue(
                 strings.trappings.labelType,
-                strings.trappings.types.meleeWeapon,
+                strings.trappings.types.rangedWeapon,
             )
 
             EncumbranceBox(trapping)
