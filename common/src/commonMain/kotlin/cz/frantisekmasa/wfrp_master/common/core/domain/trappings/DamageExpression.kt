@@ -26,7 +26,7 @@ value class DamageExpression(val value: String) : Parcelable {
 
     @Stable
     fun calculate(strengthBonus: Int, successLevels: Int): Damage {
-        val damage = expression(value, strengthBonus)
+        val damage = expression(value, strengthBonus).calculate()
 
         return Damage(damage + successLevels)
     }
