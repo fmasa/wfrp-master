@@ -16,12 +16,7 @@ import kotlin.jvm.JvmInline
 value class DamageExpression(val value: String) : Parcelable {
     init {
         require(
-            Expression.fromString(
-                if (value.startsWith('+')) value.substring(1) else value,
-                Constant.values()
-                    .map { it.value to 1 }
-                    .toMap()
-            ).isDeterministic()
+            expression(value, strengthBonus = 1).isDeterministic()
         ) { "Yards expression must be deterministic" }
     }
 
@@ -31,15 +26,21 @@ value class DamageExpression(val value: String) : Parcelable {
 
     @Stable
     fun calculate(strengthBonus: Int, successLevels: Int): Damage {
-        val damage = Expression.fromString(
-            value,
-            mapOf(Constant.STRENGTH_BONUS.value to strengthBonus),
-        ).evaluate()
+        val damage = expression(value, strengthBonus)
 
         return Damage(damage + successLevels)
     }
 
     companion object {
+        private fun expression(
+            value: String,
+            strengthBonus: Int,
+        ): Expression {
+            return Expression.fromString(
+                if (value.startsWith('+')) value.substring(1) else value,
+                mapOf(Constant.STRENGTH_BONUS.value to strengthBonus),
+            )
+        }
         fun isValid(value: String) = runCatching { DamageExpression(value) }.isSuccess
     }
 }
