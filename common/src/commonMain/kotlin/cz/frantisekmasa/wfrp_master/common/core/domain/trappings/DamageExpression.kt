@@ -26,7 +26,7 @@ value class DamageExpression(val value: String) : Parcelable {
 
     @Stable
     fun calculate(strengthBonus: Int, successLevels: Int): Damage {
-        val damage = expression(value, strengthBonus).calculate()
+        val damage = expression(value, strengthBonus).evaluate()
 
         return Damage(damage + successLevels)
     }
@@ -41,6 +41,7 @@ value class DamageExpression(val value: String) : Parcelable {
                 mapOf(Constant.STRENGTH_BONUS.value to strengthBonus),
             )
         }
+
         fun isValid(value: String) = runCatching { DamageExpression(value) }.isSuccess
     }
 }
