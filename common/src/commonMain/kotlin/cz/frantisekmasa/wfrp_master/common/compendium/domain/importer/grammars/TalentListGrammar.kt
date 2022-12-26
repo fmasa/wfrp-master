@@ -12,13 +12,13 @@ import java.util.UUID
 
 object TalentListGrammar : Grammar<List<Talent>>() {
     @Language("RegExp")
-    private val talentNameWithMaxRegex = "\\n*([a-zA-Z -’]+)\\nMax: ([a-zA-Z0-9 ]+)"
+    private val talentNameWithMaxRegex = "\\n*([a-zA-Z -’]+)\\nMax(imum)?: ([a-záA-Z0-9 \\[\\],()+\\-–—:;‘’…/!%=×&]+)"
     private val talentName by regexToken(talentNameWithMaxRegex)
 
     private val sentence by regexToken("((?!($talentNameWithMaxRegex))[a-záA-Z0-9 \\[\\],\\n()+\\-–—:;‘’…/!%=×&])+?[.…?\n]+")
 
     private val talent by talentName * oneOrMore(sentence) map { (nameWithRegex, descriptionSentences) ->
-        val (name, maxTimesTaken) =
+        val (name, _, maxTimesTaken) =
             talentNameWithMaxRegex.toRegex()
                 .matchEntire(nameWithRegex.text)
                 ?.destructured
