@@ -18,7 +18,6 @@ import com.benasher44.uuid.Uuid
 import com.benasher44.uuid.uuid4
 import cz.frantisekmasa.wfrp_master.common.compendium.CompendiumItemDialog
 import cz.frantisekmasa.wfrp_master.common.compendium.CompendiumItemFormData
-import cz.frantisekmasa.wfrp_master.common.compendium.CompendiumScreenModel
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.Skill
 import cz.frantisekmasa.wfrp_master.common.core.domain.Characteristic
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.CheckboxWithText
@@ -35,7 +34,7 @@ import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
 fun SkillDialog(
     skill: Skill?,
     onDismissRequest: () -> Unit,
-    screenModel: CompendiumScreenModel,
+    screenModel: SkillCompendiumScreenModel,
 ) {
     val formData = SkillFormData.fromItem(skill)
     val strings = LocalStrings.current.skills
@@ -43,7 +42,7 @@ fun SkillDialog(
     CompendiumItemDialog(
         title = if (skill == null) strings.titleNew else strings.titleEdit,
         formData = formData,
-        saver = screenModel::save,
+        saver = if (skill == null) screenModel::createNew else screenModel::update,
         onDismissRequest = onDismissRequest,
     ) { validate ->
         Column(

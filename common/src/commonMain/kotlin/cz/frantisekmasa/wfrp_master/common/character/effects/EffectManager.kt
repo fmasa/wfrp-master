@@ -6,7 +6,6 @@ import cz.frantisekmasa.wfrp_master.common.core.domain.identifiers.CharacterId
 import cz.frantisekmasa.wfrp_master.common.core.domain.talents.TalentRepository
 import cz.frantisekmasa.wfrp_master.common.core.domain.traits.TraitRepository
 import cz.frantisekmasa.wfrp_master.common.core.shared.IO
-import cz.frantisekmasa.wfrp_master.common.firebase.firestore.Firestore
 import cz.frantisekmasa.wfrp_master.common.firebase.firestore.Transaction
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
@@ -17,10 +16,10 @@ class EffectManager(
     private val characters: CharacterRepository,
     private val traits: TraitRepository,
     private val talents: TalentRepository,
-    private val firestore: Firestore,
 ) {
 
     suspend fun saveEffectSource(
+        transaction: Transaction,
         characterId: CharacterId,
         source: EffectSource,
     ): Unit = coroutineScope {
@@ -31,7 +30,7 @@ class EffectManager(
 
         if (source.effects == (previousSourceVersion?.effects ?: emptyList<CharacterEffect>())) {
             // Fast path, no need to load other effect sources and update character
-            firestore.runTransaction { transaction -> saveSource(transaction, characterId, source) }
+            saveSource(transaction, characterId, source)
             return@coroutineScope
         }
 
@@ -47,13 +46,11 @@ class EffectManager(
         val newEffects = source.effects
         updatedCharacter = updatedCharacter.apply(newEffects, otherEffects)
 
-        firestore.runTransaction { transaction ->
-            if (updatedCharacter != character) {
-                characters.save(transaction, characterId.partyId, updatedCharacter)
-            }
-
-            saveSource(transaction, characterId, source)
+        if (updatedCharacter != character) {
+            characters.save(transaction, characterId.partyId, updatedCharacter)
         }
+
+        saveSource(transaction, characterId, source)
     }
 
     private fun saveSource(
@@ -72,6 +69,7 @@ class EffectManager(
     }
 
     suspend fun removeEffectSource(
+        transaction: Transaction,
         characterId: CharacterId,
         source: EffectSource,
     ): Unit = coroutineScope {
@@ -85,18 +83,16 @@ class EffectManager(
         val character = characterDeferred.await()
         val updatedCharacter = character.revert(source.effects, otherEffects)
 
-        firestore.runTransaction { transaction ->
-            if (updatedCharacter != character) {
-                characters.save(transaction, characterId.partyId, updatedCharacter)
-            }
+        if (updatedCharacter != character) {
+            characters.save(transaction, characterId.partyId, updatedCharacter)
+        }
 
-            when (source) {
-                is EffectSource.Trait -> {
-                    traits.remove(transaction, characterId, source.trait.id)
-                }
-                is EffectSource.Talent -> {
-                    talents.remove(transaction, characterId, source.talent.id)
-                }
+        when (source) {
+            is EffectSource.Trait -> {
+                traits.remove(transaction, characterId, source.trait.id)
+            }
+            is EffectSource.Talent -> {
+                talents.remove(transaction, characterId, source.talent.id)
             }
         }
     }

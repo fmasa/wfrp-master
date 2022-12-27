@@ -15,10 +15,9 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import cz.frantisekmasa.wfrp_master.common.compendium.domain.CompendiumItem
 import cz.frantisekmasa.wfrp_master.common.core.CharacterItemScreenModel
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.CharacterItem
-import cz.frantisekmasa.wfrp_master.common.core.domain.compendium.CompendiumItem
-import cz.frantisekmasa.wfrp_master.common.core.shared.IO
 import cz.frantisekmasa.wfrp_master.common.core.shared.Resources
 import cz.frantisekmasa.wfrp_master.common.core.ui.buttons.CloseButton
 import cz.frantisekmasa.wfrp_master.common.core.ui.flow.collectWithLifecycle
@@ -31,7 +30,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 @Composable
-internal fun <A : CharacterItem, B : CompendiumItem<B>> CompendiumItemChooser(
+internal fun <A : CharacterItem<A, B>, B : CompendiumItem<B>> CompendiumItemChooser(
     title: String,
     icon: @Composable (B) -> Resources.Drawable,
     screenModel: CharacterItemScreenModel<A, B>,

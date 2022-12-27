@@ -2,6 +2,7 @@ package cz.frantisekmasa.wfrp_master.common.core.firebase.repositories
 
 import arrow.core.left
 import arrow.core.right
+import com.benasher44.uuid.Uuid
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.Character
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.CharacterNotFound
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.CharacterRepository
@@ -86,6 +87,18 @@ class FirestoreCharacterRepository(
             .get()
             .documents
             .isNotEmpty()
+    }
+
+    override suspend fun findByCompendiumCareer(
+        partyId: PartyId,
+        careerId: Uuid,
+    ): List<Character> {
+        return characters(partyId)
+            .whereEqualTo("compendiumCareer.careerId", careerId.toString())
+            .get()
+            .documents
+            .mapNotNull { it.data }
+            .map(mapper::fromDocumentData)
     }
 
     override fun inParty(partyId: PartyId, types: Set<CharacterType>): Flow<List<Character>> {

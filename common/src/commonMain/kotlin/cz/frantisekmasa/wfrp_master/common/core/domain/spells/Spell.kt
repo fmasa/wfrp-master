@@ -22,7 +22,7 @@ data class Spell(
     val castingNumber: Int,
     val effect: String,
     val memorized: Boolean = true, // TODO: Remove default value and migrate stored data
-) : CharacterItem {
+) : CharacterItem<Spell, CompendiumSpell> {
 
     val effectiveCastingNumber: Int get() = if (memorized)
         castingNumber
@@ -37,6 +37,20 @@ data class Spell(
         require(duration.length <= DURATION_MAX_LENGTH) { "Duration must be shorter than $DURATION_MAX_LENGTH" }
         require(effect.length <= EFFECT_MAX_LENGTH) { "Effect must be shorter than $EFFECT_MAX_LENGTH" }
     }
+
+    override fun updateFromCompendium(compendiumItem: CompendiumSpell): Spell {
+        return copy(
+            compendiumId = compendiumItem.id,
+            name = compendiumItem.name,
+            range = compendiumItem.range,
+            target = compendiumItem.target,
+            duration = compendiumItem.duration,
+            castingNumber = compendiumItem.castingNumber,
+            effect = compendiumItem.effect,
+        )
+    }
+
+    override fun unlinkFromCompendium() = copy(compendiumId = null)
 
     companion object {
         const val NAME_MAX_LENGTH = 50

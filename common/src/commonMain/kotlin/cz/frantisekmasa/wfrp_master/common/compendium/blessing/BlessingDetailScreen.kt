@@ -6,7 +6,7 @@ import com.benasher44.uuid.Uuid
 import cz.frantisekmasa.wfrp_master.common.character.religion.blessings.BlessingDetailBody
 import cz.frantisekmasa.wfrp_master.common.compendium.CompendiumItemDetailScreen
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.PartyId
-
+import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.rememberScreenModel
 class BlessingDetailScreen(
     private val partyId: PartyId,
     private val blessingId: Uuid,
@@ -14,9 +14,11 @@ class BlessingDetailScreen(
 
     @Composable
     override fun Content() {
+        val screenModel: BlessingCompendiumScreenModel = rememberScreenModel(arg = partyId)
+
         CompendiumItemDetailScreen(
-            partyId = partyId,
-            item = { it.getBlessing(blessingId) },
+            id = blessingId,
+            screenModel = screenModel,
             detail = {
                 BlessingDetailBody(
                     range = it.range,
@@ -25,7 +27,7 @@ class BlessingDetailScreen(
                     effect = it.effect,
                 )
             }
-        ) { item, screenModel, onDismissRequest ->
+        ) { item, onDismissRequest ->
             BlessingDialog(
                 blessing = item,
                 onDismissRequest = onDismissRequest,

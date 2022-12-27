@@ -139,7 +139,7 @@ fun StatBlock(
 private const val SkillTag = "[skill]"
 
 @Composable
-private fun <T : CharacterItem> CharacterItemList(
+private fun <T : CharacterItem<T, *>> CharacterItemList(
     title: String,
     items: List<T>,
     value: (T) -> String,

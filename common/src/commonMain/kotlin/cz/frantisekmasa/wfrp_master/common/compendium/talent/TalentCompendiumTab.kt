@@ -11,7 +11,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.unit.Dp
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
-import cz.frantisekmasa.wfrp_master.common.compendium.CompendiumScreenModel
 import cz.frantisekmasa.wfrp_master.common.compendium.CompendiumTab
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.PartyId
 import cz.frantisekmasa.wfrp_master.common.core.shared.Resources
@@ -20,7 +19,7 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.ItemIcon
 import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
 
 @Composable
-fun TalentCompendiumTab(partyId: PartyId, screenModel: CompendiumScreenModel, width: Dp) {
+fun TalentCompendiumTab(partyId: PartyId, screenModel: TalentCompendiumScreenModel, width: Dp) {
     var newTalentDialogOpened by rememberSaveable { mutableStateOf(false) }
 
     if (newTalentDialogOpened) {
@@ -34,7 +33,7 @@ fun TalentCompendiumTab(partyId: PartyId, screenModel: CompendiumScreenModel, wi
     val navigator = LocalNavigator.currentOrThrow
 
     CompendiumTab(
-        liveItems = screenModel.talents,
+        liveItems = screenModel.items,
         emptyUI = {
             val messages = LocalStrings.current.talents.messages
             EmptyUI(
@@ -44,7 +43,7 @@ fun TalentCompendiumTab(partyId: PartyId, screenModel: CompendiumScreenModel, wi
             )
         },
         remover = screenModel::remove,
-        saver = screenModel::save,
+        newItemSaver = screenModel::createNew,
         onClick = { navigator.push(TalentDetailScreen(partyId, it.id)) },
         onNewItemRequest = { newTalentDialogOpened = true },
         width = width,

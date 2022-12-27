@@ -24,7 +24,7 @@ data class InventoryItem(
     val encumbrance: Encumbrance = Encumbrance.Zero,
     @Contextual val containerId: InventoryItemId? = null,
     val trappingType: TrappingType? = null,
-) : CharacterItem {
+) : CharacterItem<InventoryItem, Nothing> {
     companion object {
         const val NAME_MAX_LENGTH = 50
         const val DESCRIPTION_MAX_LENGTH = 200
@@ -51,6 +51,12 @@ data class InventoryItem(
     }
 
     val totalEncumbrance: Encumbrance get() = encumbrance * quantity
+
+    override fun updateFromCompendium(compendiumItem: Nothing): InventoryItem {
+        error("TODO: Add support for Trappings compendium")
+    }
+
+    override fun unlinkFromCompendium() = this
 
     fun duplicate(): InventoryItem = copy(
         id = uuid4(),

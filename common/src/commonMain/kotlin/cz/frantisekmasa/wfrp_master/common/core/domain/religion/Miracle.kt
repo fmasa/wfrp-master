@@ -22,7 +22,8 @@ data class Miracle(
     val duration: String,
     val effect: String,
     val cultName: String,
-) : CharacterItem {
+) : CharacterItem<Miracle, CompendiumMiracle> {
+
     init {
         require(name.isNotBlank()) { "Name must not be blank" }
         name.requireMaxLength(CompendiumMiracle.NAME_MAX_LENGTH, "name")
@@ -32,6 +33,19 @@ data class Miracle(
         effect.requireMaxLength(CompendiumMiracle.EFFECT_MAX_LENGTH, "effect")
         cultName.requireMaxLength(CompendiumMiracle.CULT_NAME_MAX_LENGTH, "cultName")
     }
+
+    override fun updateFromCompendium(compendiumItem: CompendiumMiracle): Miracle {
+        return copy(
+            name = compendiumItem.name,
+            range = compendiumItem.range,
+            target = compendiumItem.target,
+            duration = compendiumItem.duration,
+            effect = compendiumItem.effect,
+            cultName = compendiumItem.cultName,
+        )
+    }
+
+    override fun unlinkFromCompendium() = copy(compendiumId = null)
 
     companion object {
         fun fromCompendium(miracle: CompendiumMiracle): Miracle = Miracle(

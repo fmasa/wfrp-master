@@ -8,11 +8,11 @@ import cz.frantisekmasa.wfrp_master.common.character.effects.CharacteristicChang
 import cz.frantisekmasa.wfrp_master.common.character.effects.ConstructWoundsModification
 import cz.frantisekmasa.wfrp_master.common.character.effects.SizeChange
 import cz.frantisekmasa.wfrp_master.common.character.effects.SwarmWoundsModification
-import cz.frantisekmasa.wfrp_master.common.compendium.domain.Trait
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.CharacterItem
 import cz.frantisekmasa.wfrp_master.common.core.shared.Parcelize
 import kotlinx.serialization.Contextual
 import kotlinx.serialization.Serializable
+import cz.frantisekmasa.wfrp_master.common.compendium.domain.Trait as CompendiumTrait
 
 @Parcelize
 @Serializable
@@ -23,7 +23,7 @@ data class Trait(
     val name: String,
     val specificationValues: Map<String, String>,
     val description: String,
-) : CharacterItem {
+) : CharacterItem<Trait, CompendiumTrait> {
 
     @Stable
     val evaluatedName get(): String = specificationValues
@@ -42,13 +42,30 @@ data class Trait(
         )
     }
 
+    override fun updateFromCompendium(compendiumItem: CompendiumTrait): Trait {
+        if (compendiumItem.specifications != specificationValues.keys) {
+            return this // TODO: Unlink from compendium item
+        }
+
+        return copy(
+            name = compendiumItem.name,
+            description = compendiumItem.description,
+        )
+    }
+
+    override fun unlinkFromCompendium() = this // TODO: Unlink from compendium item
+
     init {
-        if (description.length > Trait.DESCRIPTION_MAX_LENGTH) {
+        if (description.length > CompendiumTrait.DESCRIPTION_MAX_LENGTH) {
             println(description)
         }
         require(specificationValues.keys.all { name.contains(it) })
         require(name.isNotEmpty())
-        require(name.length <= Trait.NAME_MAX_LENGTH) { "Maximum allowed name length is ${Trait.NAME_MAX_LENGTH}" }
-        require(description.length <= Trait.DESCRIPTION_MAX_LENGTH) { "Maximum allowed description length is ${Trait.DESCRIPTION_MAX_LENGTH}" }
+        require(name.length <= CompendiumTrait.NAME_MAX_LENGTH) {
+            "Maximum allowed name length is ${CompendiumTrait.NAME_MAX_LENGTH}"
+        }
+        require(description.length <= CompendiumTrait.DESCRIPTION_MAX_LENGTH) {
+            "Maximum allowed description length is ${CompendiumTrait.DESCRIPTION_MAX_LENGTH}"
+        }
     }
 }

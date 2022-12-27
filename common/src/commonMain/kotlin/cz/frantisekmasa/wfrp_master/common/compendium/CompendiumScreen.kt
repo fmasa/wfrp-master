@@ -29,12 +29,13 @@ import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import cz.frantisekmasa.wfrp_master.common.compendium.blessing.BlessingCompendiumTab
 import cz.frantisekmasa.wfrp_master.common.compendium.career.CareerCompendiumTab
+import cz.frantisekmasa.wfrp_master.common.compendium.domain.CompendiumItem
 import cz.frantisekmasa.wfrp_master.common.compendium.miracle.MiracleCompendiumTab
 import cz.frantisekmasa.wfrp_master.common.compendium.skill.SkillCompendiumTab
 import cz.frantisekmasa.wfrp_master.common.compendium.spell.SpellCompendiumTab
 import cz.frantisekmasa.wfrp_master.common.compendium.talent.TalentCompendiumTab
 import cz.frantisekmasa.wfrp_master.common.compendium.trait.TraitCompendiumTab
-import cz.frantisekmasa.wfrp_master.common.core.domain.compendium.CompendiumItem
+import cz.frantisekmasa.wfrp_master.common.core.PartyScreenModel
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.PartyId
 import cz.frantisekmasa.wfrp_master.common.core.ui.buttons.BackButton
 import cz.frantisekmasa.wfrp_master.common.core.ui.dialogs.DialogState
@@ -61,24 +62,38 @@ class CompendiumScreen(
 
     @Composable
     override fun Content() {
-        val screenModel: CompendiumScreenModel = rememberScreenModel(arg = partyId)
+        val screenModel: PartyScreenModel = rememberScreenModel(arg = partyId)
         Scaffold(topBar = { TopBar(screenModel) }) {
             val strings = LocalStrings.current.compendium
 
             TabPager(Modifier.fillMaxSize()) {
-                tab(strings.tabSkills) { SkillCompendiumTab(partyId, screenModel, screenWidth) }
-                tab(strings.tabTalents) { TalentCompendiumTab(partyId, screenModel, screenWidth) }
-                tab(strings.tabSpells) { SpellCompendiumTab(partyId, screenModel, screenWidth) }
-                tab(strings.tabBlessings) { BlessingCompendiumTab(partyId, screenModel, screenWidth) }
-                tab(strings.tabMiracles) { MiracleCompendiumTab(partyId, screenModel, screenWidth) }
-                tab(strings.tabTraits) { TraitCompendiumTab(partyId, screenModel, screenWidth) }
-                tab(strings.tabCareers) { CareerCompendiumTab(partyId, screenModel, screenWidth) }
+                tab(strings.tabSkills) {
+                    SkillCompendiumTab(partyId, rememberScreenModel(arg = partyId), screenWidth)
+                }
+                tab(strings.tabTalents) {
+                    TalentCompendiumTab(partyId, rememberScreenModel(arg = partyId), screenWidth)
+                }
+                tab(strings.tabSpells) {
+                    SpellCompendiumTab(partyId, rememberScreenModel(arg = partyId), screenWidth)
+                }
+                tab(strings.tabBlessings) {
+                    BlessingCompendiumTab(partyId, rememberScreenModel(arg = partyId), screenWidth)
+                }
+                tab(strings.tabMiracles) {
+                    MiracleCompendiumTab(partyId, rememberScreenModel(arg = partyId), screenWidth)
+                }
+                tab(strings.tabTraits) {
+                    TraitCompendiumTab(partyId, rememberScreenModel(arg = partyId), screenWidth)
+                }
+                tab(strings.tabCareers) {
+                    CareerCompendiumTab(partyId, rememberScreenModel(arg = partyId), screenWidth)
+                }
             }
         }
     }
 
     @Composable
-    private fun TopBar(screenModel: CompendiumScreenModel) {
+    private fun TopBar(screenModel: PartyScreenModel) {
         val strings = LocalStrings.current.compendium
         val navigator = LocalNavigator.currentOrThrow
 
@@ -124,7 +139,7 @@ fun <T : CompendiumItem<T>> CompendiumTab(
     emptyUI: @Composable () -> Unit,
     onClick: (T) -> Unit,
     remover: suspend (T) -> Unit,
-    saver: suspend (T) -> Unit,
+    newItemSaver: suspend (T) -> Unit,
     onNewItemRequest: () -> Unit,
     itemContent: @Composable LazyItemScope.(T) -> Unit,
 ) {
@@ -160,7 +175,7 @@ fun <T : CompendiumItem<T>> CompendiumTab(
                                     ContextMenu.Item(
                                         LocalStrings.current.commonUi.buttonDuplicate,
                                         onClick = {
-                                            coroutineScope.launch { saver(item.duplicate()) }
+                                            coroutineScope.launch { newItemSaver(item.duplicate()) }
                                         }
                                     ),
                                     ContextMenu.Item(
@@ -201,7 +216,7 @@ fun <T : CompendiumItem<T>> CompendiumTab(
         onClick = { dialogState.value = DialogState.Opened(it) },
         onNewItemRequest = { dialogState.value = DialogState.Opened(null) },
         remover = remover,
-        saver = saver,
+        newItemSaver = saver,
         itemContent = itemContent,
     )
 }

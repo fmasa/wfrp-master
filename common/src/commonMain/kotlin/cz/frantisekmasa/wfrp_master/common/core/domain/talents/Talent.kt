@@ -12,7 +12,7 @@ import cz.frantisekmasa.wfrp_master.common.core.domain.character.CharacterItem
 import cz.frantisekmasa.wfrp_master.common.core.shared.Parcelize
 import kotlinx.serialization.Contextual
 import kotlinx.serialization.Serializable
-import cz.frantisekmasa.wfrp_master.common.compendium.domain.Talent.Companion as CompendiumTalent
+import cz.frantisekmasa.wfrp_master.common.compendium.domain.Talent as CompendiumTalent
 
 @Parcelize
 @Serializable
@@ -24,7 +24,7 @@ data class Talent(
     val tests: String = "", // TODO: Remove default value in 3.0
     val description: String,
     val taken: Int
-) : CharacterItem {
+) : CharacterItem<Talent, CompendiumTalent> {
 
     @Stable
     override val effects: List<CharacterEffect> get() {
@@ -36,6 +36,16 @@ data class Talent(
             AdditionalEncumbrance.fromTalentOrNull(name, taken),
         )
     }
+
+    override fun updateFromCompendium(compendiumItem: CompendiumTalent): Talent {
+        return copy(
+            name = compendiumItem.name,
+            tests = compendiumItem.tests,
+            description = compendiumItem.description,
+        )
+    }
+
+    override fun unlinkFromCompendium() = copy(compendiumId = null)
 
     init {
         require(name.isNotEmpty())

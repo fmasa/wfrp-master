@@ -4,7 +4,6 @@ import androidx.compose.runtime.Immutable
 import com.benasher44.uuid.Uuid
 import com.benasher44.uuid.uuid4
 import cz.frantisekmasa.wfrp_master.common.core.common.requireMaxLength
-import cz.frantisekmasa.wfrp_master.common.core.domain.compendium.CompendiumItem
 import cz.frantisekmasa.wfrp_master.common.core.shared.Parcelize
 import kotlinx.serialization.Contextual
 import kotlinx.serialization.Serializable

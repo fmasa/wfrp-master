@@ -35,7 +35,7 @@ class JsonCompendiumExportScreen(
 ) : Screen {
     @Composable
     override fun Content() {
-        val screenModel: CompendiumScreenModel = rememberScreenModel(arg = partyId)
+        val screenModel: CompendiumExportScreenModel = rememberScreenModel(arg = partyId)
         val party = screenModel.party.collectWithLifecycle(null).value
 
         if (party == null) {
@@ -62,7 +62,7 @@ class JsonCompendiumExportScreen(
     }
 
     @Composable
-    private fun MainContainer(partyName: String, screenModel: CompendiumScreenModel) {
+    private fun MainContainer(partyName: String, screenModel: CompendiumExportScreenModel) {
         val strings = LocalStrings.current.compendium
         val snackbarHolder = LocalPersistentSnackbarHolder.current
         var exporting by remember { mutableStateOf(false) }

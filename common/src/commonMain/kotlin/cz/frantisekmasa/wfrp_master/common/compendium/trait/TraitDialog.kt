@@ -12,7 +12,6 @@ import com.benasher44.uuid.Uuid
 import com.benasher44.uuid.uuid4
 import cz.frantisekmasa.wfrp_master.common.compendium.CompendiumItemDialog
 import cz.frantisekmasa.wfrp_master.common.compendium.CompendiumItemFormData
-import cz.frantisekmasa.wfrp_master.common.compendium.CompendiumScreenModel
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.Trait
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.InputValue
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.Rules
@@ -25,7 +24,7 @@ import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
 fun TraitDialog(
     trait: Trait?,
     onDismissRequest: () -> Unit,
-    screenModel: CompendiumScreenModel
+    screenModel: TraitCompendiumScreenModel,
 ) {
     val strings = LocalStrings.current.traits
     val formData = TraitFormData.fromTrait(trait)
@@ -34,7 +33,7 @@ fun TraitDialog(
         onDismissRequest = onDismissRequest,
         title = if (trait == null) strings.titleNew else strings.titleEdit,
         formData = formData,
-        saver = screenModel::save,
+        saver = if (trait == null) screenModel::createNew else screenModel::update,
     ) { validate ->
         Column(
             verticalArrangement = Arrangement.spacedBy(12.dp),

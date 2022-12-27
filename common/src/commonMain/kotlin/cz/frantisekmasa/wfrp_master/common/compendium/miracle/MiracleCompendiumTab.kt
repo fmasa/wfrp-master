@@ -11,7 +11,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.unit.Dp
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
-import cz.frantisekmasa.wfrp_master.common.compendium.CompendiumScreenModel
 import cz.frantisekmasa.wfrp_master.common.compendium.CompendiumTab
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.PartyId
 import cz.frantisekmasa.wfrp_master.common.core.shared.Resources
@@ -20,7 +19,7 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.ItemIcon
 import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
 
 @Composable
-fun MiracleCompendiumTab(partyId: PartyId, screenModel: CompendiumScreenModel, width: Dp) {
+fun MiracleCompendiumTab(partyId: PartyId, screenModel: MiracleCompendiumScreenModel, width: Dp) {
     var newMiracleDialogOpened by rememberSaveable { mutableStateOf(false) }
 
     if (newMiracleDialogOpened) {
@@ -34,7 +33,7 @@ fun MiracleCompendiumTab(partyId: PartyId, screenModel: CompendiumScreenModel, w
     val navigator = LocalNavigator.currentOrThrow
 
     CompendiumTab(
-        liveItems = screenModel.miracles,
+        liveItems = screenModel.items,
         emptyUI = {
             val strings = LocalStrings.current.miracles
 
@@ -45,7 +44,7 @@ fun MiracleCompendiumTab(partyId: PartyId, screenModel: CompendiumScreenModel, w
             )
         },
         remover = screenModel::remove,
-        saver = screenModel::save,
+        newItemSaver = screenModel::createNew,
         onClick = { navigator.push(MiracleDetailScreen(partyId, it.id)) },
         onNewItemRequest = { newMiracleDialogOpened = true },
         width = width,

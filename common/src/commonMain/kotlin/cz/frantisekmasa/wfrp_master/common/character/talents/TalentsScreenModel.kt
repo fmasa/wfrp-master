@@ -10,6 +10,7 @@ import cz.frantisekmasa.wfrp_master.common.core.domain.identifiers.CharacterId
 import cz.frantisekmasa.wfrp_master.common.core.domain.talents.Talent
 import cz.frantisekmasa.wfrp_master.common.core.domain.talents.TalentRepository
 import cz.frantisekmasa.wfrp_master.common.core.shared.IO
+import cz.frantisekmasa.wfrp_master.common.firebase.firestore.Firestore
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.Talent as CompendiumTalent
@@ -19,14 +20,19 @@ class TalentsScreenModel(
     private val talentRepository: TalentRepository,
     private val compendium: Compendium<CompendiumTalent>,
     private val effectManager: EffectManager,
+    private val firestore: Firestore,
 ) : CharacterItemScreenModel<Talent, CompendiumTalent>(characterId, talentRepository, compendium) {
 
     suspend fun saveTalent(talent: Talent) {
-        effectManager.saveEffectSource(characterId, EffectSource.Talent(talent))
+        firestore.runTransaction { transaction ->
+            effectManager.saveEffectSource(transaction, characterId, EffectSource.Talent(talent))
+        }
     }
 
     fun removeTalent(talent: Talent) = coroutineScope.launch(Dispatchers.IO) {
-        effectManager.removeEffectSource(characterId, EffectSource.Talent(talent))
+        firestore.runTransaction { transaction ->
+            effectManager.removeEffectSource(transaction, characterId, EffectSource.Talent(talent))
+        }
     }
 
     suspend fun saveCompendiumTalent(talentId: Uuid, compendiumTalentId: Uuid, timesTaken: Int) {

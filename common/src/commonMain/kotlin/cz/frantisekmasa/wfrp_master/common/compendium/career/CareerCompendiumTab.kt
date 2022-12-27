@@ -12,7 +12,6 @@ import androidx.compose.ui.unit.Dp
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import com.benasher44.uuid.uuid4
-import cz.frantisekmasa.wfrp_master.common.compendium.CompendiumScreenModel
 import cz.frantisekmasa.wfrp_master.common.compendium.CompendiumTab
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.Career
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.PartyId
@@ -22,7 +21,7 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.ItemIcon
 import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
 
 @Composable
-fun CareerCompendiumTab(partyId: PartyId, screenModel: CompendiumScreenModel, width: Dp) {
+fun CareerCompendiumTab(partyId: PartyId, screenModel: CareerCompendiumScreenModel, width: Dp) {
     val strings = LocalStrings.current.careers.messages
     val navigator = LocalNavigator.currentOrThrow
 
@@ -34,7 +33,7 @@ fun CareerCompendiumTab(partyId: PartyId, screenModel: CompendiumScreenModel, wi
             existingCareer = null,
             onSave = {
                 val id = uuid4()
-                screenModel.save(
+                screenModel.createNew(
                     Career(
                         id = id,
                         name = it.name,
@@ -61,7 +60,7 @@ fun CareerCompendiumTab(partyId: PartyId, screenModel: CompendiumScreenModel, wi
             )
         },
         remover = screenModel::remove,
-        saver = screenModel::save,
+        newItemSaver = screenModel::createNew,
         onNewItemRequest = { newCareerDialogOpened = true },
         onClick = { navigator.push(CareerDetailScreen(partyId, it.id)) },
         width = width,

@@ -11,7 +11,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.unit.Dp
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
-import cz.frantisekmasa.wfrp_master.common.compendium.CompendiumScreenModel
 import cz.frantisekmasa.wfrp_master.common.compendium.CompendiumTab
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.PartyId
 import cz.frantisekmasa.wfrp_master.common.core.shared.Resources
@@ -20,7 +19,11 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.ItemIcon
 import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
 
 @Composable
-fun TraitCompendiumTab(partyId: PartyId, screenModel: CompendiumScreenModel, width: Dp) {
+fun TraitCompendiumTab(
+    partyId: PartyId,
+    screenModel: TraitCompendiumScreenModel,
+    width: Dp,
+) {
     var newTraitDialogOpened by rememberSaveable { mutableStateOf(false) }
 
     if (newTraitDialogOpened) {
@@ -34,7 +37,7 @@ fun TraitCompendiumTab(partyId: PartyId, screenModel: CompendiumScreenModel, wid
     val navigator = LocalNavigator.currentOrThrow
 
     CompendiumTab(
-        liveItems = screenModel.traits,
+        liveItems = screenModel.items,
         emptyUI = {
             val messages = LocalStrings.current.traits.messages
             EmptyUI(
@@ -44,7 +47,7 @@ fun TraitCompendiumTab(partyId: PartyId, screenModel: CompendiumScreenModel, wid
             )
         },
         remover = screenModel::remove,
-        saver = screenModel::save,
+        newItemSaver = screenModel::createNew,
         onClick = { navigator.push(TraitDetailScreen(partyId, it.id)) },
         onNewItemRequest = { newTraitDialogOpened = true },
         width = width,

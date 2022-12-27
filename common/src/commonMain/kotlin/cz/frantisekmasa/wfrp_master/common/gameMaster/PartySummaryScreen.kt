@@ -36,7 +36,7 @@ import cafe.adriel.voyager.navigator.currentOrThrow
 import cz.frantisekmasa.wfrp_master.common.ambitions.AmbitionsCard
 import cz.frantisekmasa.wfrp_master.common.characterEdit.CharacterRemovalDialog
 import cz.frantisekmasa.wfrp_master.common.compendium.CompendiumScreen
-import cz.frantisekmasa.wfrp_master.common.compendium.CompendiumScreenModel
+import cz.frantisekmasa.wfrp_master.common.compendium.CompendiumExportScreenModel
 import cz.frantisekmasa.wfrp_master.common.core.auth.UserId
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.Character
 import cz.frantisekmasa.wfrp_master.common.core.domain.identifiers.CharacterId
@@ -152,7 +152,7 @@ internal fun Screen.PartySummaryScreen(
                     val strings = LocalStrings.current.compendium
                     CardTitle(strings.title)
 
-                    val compendium: CompendiumScreenModel = rememberScreenModel(arg = partyId)
+                    val compendium: CompendiumExportScreenModel = rememberScreenModel(arg = partyId)
 
                     Row {
                         CompendiumSummary(strings.tabSkills, compendium.skills)

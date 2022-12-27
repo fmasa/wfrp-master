@@ -10,6 +10,7 @@ import cz.frantisekmasa.wfrp_master.common.core.domain.identifiers.CharacterId
 import cz.frantisekmasa.wfrp_master.common.core.domain.traits.Trait
 import cz.frantisekmasa.wfrp_master.common.core.domain.traits.TraitRepository
 import cz.frantisekmasa.wfrp_master.common.core.shared.IO
+import cz.frantisekmasa.wfrp_master.common.firebase.firestore.Firestore
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.Trait as CompendiumTrait
@@ -19,14 +20,19 @@ class TraitsScreenModel(
     traitRepository: TraitRepository,
     private val compendium: Compendium<CompendiumTrait>,
     private val effectManager: EffectManager,
+    private val firestore: Firestore,
 ) : CharacterItemScreenModel<Trait, CompendiumTrait>(characterId, traitRepository, compendium) {
 
     fun removeTrait(trait: Trait) = coroutineScope.launch(Dispatchers.IO) {
-        effectManager.removeEffectSource(characterId, EffectSource.Trait(trait))
+        firestore.runTransaction { transaction ->
+            effectManager.removeEffectSource(transaction, characterId, EffectSource.Trait(trait))
+        }
     }
 
     suspend fun saveTrait(trait: Trait) {
-        effectManager.saveEffectSource(characterId, EffectSource.Trait(trait))
+        firestore.runTransaction { transaction ->
+            effectManager.saveEffectSource(transaction, characterId, EffectSource.Trait(trait))
+        }
     }
 
     suspend fun saveCompendiumTrait(
