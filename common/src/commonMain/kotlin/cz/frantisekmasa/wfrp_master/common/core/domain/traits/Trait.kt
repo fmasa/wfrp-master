@@ -3,6 +3,11 @@ package cz.frantisekmasa.wfrp_master.common.core.domain.traits
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.Stable
 import com.benasher44.uuid.Uuid
+import cz.frantisekmasa.wfrp_master.common.character.effects.CharacterEffect
+import cz.frantisekmasa.wfrp_master.common.character.effects.CharacteristicChange
+import cz.frantisekmasa.wfrp_master.common.character.effects.ConstructWoundsModification
+import cz.frantisekmasa.wfrp_master.common.character.effects.SizeChange
+import cz.frantisekmasa.wfrp_master.common.character.effects.SwarmWoundsModification
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.Trait
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.CharacterItem
 import cz.frantisekmasa.wfrp_master.common.core.shared.Parcelize
@@ -24,6 +29,18 @@ data class Trait(
     val evaluatedName get(): String = specificationValues
         .toList()
         .fold(name) { name, (search, replacement) -> name.replace(search, replacement) }
+
+    @Stable
+    override val effects: List<CharacterEffect> get() {
+        val name = evaluatedName.trim()
+
+        return listOfNotNull(
+            SizeChange.fromTraitNameOrNull(name),
+            CharacteristicChange.fromTraitNameOrNull(name),
+            SwarmWoundsModification.fromTraitNameOrNull(name),
+            ConstructWoundsModification.fromTraitNameOrNull(name),
+        )
+    }
 
     init {
         if (description.length > Trait.DESCRIPTION_MAX_LENGTH) {

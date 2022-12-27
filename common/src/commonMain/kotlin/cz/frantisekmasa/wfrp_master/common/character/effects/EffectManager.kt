@@ -16,7 +16,6 @@ class EffectManager(
     private val characters: CharacterRepository,
     private val traits: TraitRepository,
     private val talents: TalentRepository,
-    private val effectFactory: EffectFactory,
     private val firestore: Firestore,
 ) {
 
@@ -30,14 +29,14 @@ class EffectManager(
         val previousSourceVersion = effectSources.firstOrNull { it.id == source.id }
         val otherEffects = effectSources
             .filter { it.id != source.id }
-            .flatMap { effectFactory.getEffects(it) }
+            .flatMap { it.effects }
 
         val character = characterDeferred.await()
         var updatedCharacter = if (previousSourceVersion != null)
-            character.revert(effectFactory.getEffects(previousSourceVersion), otherEffects)
+            character.revert(previousSourceVersion.effects, otherEffects)
         else character
 
-        val newEffects = effectFactory.getEffects(source)
+        val newEffects = source.effects
         updatedCharacter = updatedCharacter.apply(newEffects, otherEffects)
 
         firestore.runTransaction { transaction ->
@@ -65,10 +64,10 @@ class EffectManager(
         val effectSources = effectSources(characterId)
         val otherEffects = effectSources
             .filter { it.id != source.id }
-            .flatMap { effectFactory.getEffects(it) }
+            .flatMap { it.effects }
 
         val character = characterDeferred.await()
-        val updatedCharacter = character.revert(effectFactory.getEffects(source), otherEffects)
+        val updatedCharacter = character.revert(source.effects, otherEffects)
 
         firestore.runTransaction { transaction ->
             if (updatedCharacter != character) {

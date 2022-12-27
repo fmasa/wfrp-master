@@ -1,7 +1,12 @@
 package cz.frantisekmasa.wfrp_master.common.core.domain.talents
 
 import androidx.compose.runtime.Immutable
+import androidx.compose.runtime.Stable
 import com.benasher44.uuid.Uuid
+import cz.frantisekmasa.wfrp_master.common.character.effects.AdditionalEncumbrance
+import cz.frantisekmasa.wfrp_master.common.character.effects.CharacterEffect
+import cz.frantisekmasa.wfrp_master.common.character.effects.CharacteristicChange
+import cz.frantisekmasa.wfrp_master.common.character.effects.HardyWoundsModification
 import cz.frantisekmasa.wfrp_master.common.core.common.requireMaxLength
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.CharacterItem
 import cz.frantisekmasa.wfrp_master.common.core.shared.Parcelize
@@ -20,9 +25,16 @@ data class Talent(
     val description: String,
     val taken: Int
 ) : CharacterItem {
-    companion object {
-        const val NAME_MAX_LENGTH = 50
-        const val DESCRIPTION_MAX_LENGTH = 1500
+
+    @Stable
+    override val effects: List<CharacterEffect> get() {
+        val name = name.trim()
+
+        return listOfNotNull(
+            HardyWoundsModification.fromTalentOrNull(name, taken),
+            CharacteristicChange.fromTalentNameOrNull(name),
+            AdditionalEncumbrance.fromTalentOrNull(name, taken),
+        )
     }
 
     init {
@@ -31,5 +43,10 @@ data class Talent(
         require(description.length <= DESCRIPTION_MAX_LENGTH) { "Maximum allowed description length is $DESCRIPTION_MAX_LENGTH" }
         tests.requireMaxLength(CompendiumTalent.TESTS_MAX_LENGTH, "tests")
         require(taken in 1..999) { "Skill can be taken 1-100x" }
+    }
+
+    companion object {
+        const val NAME_MAX_LENGTH = 50
+        const val DESCRIPTION_MAX_LENGTH = 1500
     }
 }
