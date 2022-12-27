@@ -7,6 +7,7 @@ import cz.frantisekmasa.wfrp_master.common.core.domain.talents.TalentRepository
 import cz.frantisekmasa.wfrp_master.common.core.domain.traits.TraitRepository
 import cz.frantisekmasa.wfrp_master.common.core.shared.IO
 import cz.frantisekmasa.wfrp_master.common.firebase.firestore.Firestore
+import cz.frantisekmasa.wfrp_master.common.firebase.firestore.Transaction
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
@@ -27,6 +28,13 @@ class EffectManager(
 
         val effectSources = effectSources(characterId)
         val previousSourceVersion = effectSources.firstOrNull { it.id == source.id }
+
+        if (source.effects == (previousSourceVersion?.effects ?: emptyList<CharacterEffect>())) {
+            // Fast path, no need to load other effect sources and update character
+            firestore.runTransaction { transaction -> saveSource(transaction, characterId, source) }
+            return@coroutineScope
+        }
+
         val otherEffects = effectSources
             .filter { it.id != source.id }
             .flatMap { it.effects }
@@ -44,13 +52,21 @@ class EffectManager(
                 characters.save(transaction, characterId.partyId, updatedCharacter)
             }
 
-            when (source) {
-                is EffectSource.Trait -> {
-                    traits.save(transaction, characterId, source.trait)
-                }
-                is EffectSource.Talent -> {
-                    talents.save(transaction, characterId, source.talent)
-                }
+            saveSource(transaction, characterId, source)
+        }
+    }
+
+    private fun saveSource(
+        transaction: Transaction,
+        characterId: CharacterId,
+        source: EffectSource,
+    ) {
+        when (source) {
+            is EffectSource.Trait -> {
+                traits.save(transaction, characterId, source.trait)
+            }
+            is EffectSource.Talent -> {
+                talents.save(transaction, characterId, source.talent)
             }
         }
     }
