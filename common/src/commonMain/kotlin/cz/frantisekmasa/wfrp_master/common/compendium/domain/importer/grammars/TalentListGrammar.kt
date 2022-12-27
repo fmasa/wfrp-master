@@ -12,7 +12,8 @@ import java.util.UUID
 
 object TalentListGrammar : Grammar<List<Talent>>() {
     @Language("RegExp")
-    private val talentNameWithMaxRegex = "\\n*([a-zA-Z -’]+)\\nMax(imum)?: ([a-záA-Z0-9 \\[\\],()+\\-–—:;‘’…/!%=×&]+)"
+    private val talentNameWithMaxRegex =
+        "\\n*([a-zA-Z -’]+)\\nMax(imum)?: ([a-záA-Z0-9 \\[\\],()+\\-–—:;‘’…/!%=×&]+)"
     private val talentName by regexToken(talentNameWithMaxRegex)
 
     private val sentence by regexToken("((?!($talentNameWithMaxRegex))[a-záA-Z0-9 \\[\\],\\n()+\\-–—:;‘’…/!%=×&])+?[.…?\n]+")
@@ -24,15 +25,45 @@ object TalentListGrammar : Grammar<List<Talent>>() {
                 ?.destructured
                 ?: error("First two talent lines should have been matched against $talentNameWithMaxRegex")
 
+        val (tests, description) = splitTestsAndDescription(
+            descriptionSentences
+                .joinToString("") { it.text }.trim()
+                .replace(" at\n", " at ")
+        )
+
         Talent(
             id = UUID.randomUUID(),
             name = cleanupName(name),
+            tests = tests,
             maxTimesTaken = maxTimesTaken,
-            description = descriptionSentences.joinToString("") { it.text }.trim(),
+            description = description,
         )
     }
 
+    private val testsLabels = listOf("Tests: ", "Bonus Tests: ")
+
     override val rootParser by skip(oneOrMore(sentence)) * oneOrMore(talent)
+
+    private fun splitTestsAndDescription(text: String): Pair<String, String> {
+        if (testsLabels.none { text.startsWith(it) }) {
+            return Pair("", text)
+        }
+
+        val lines = text.lines()
+        val testLinesCount = if (lines[1].length < 50) 2 else 1
+
+        val tests = lines.slice(0 until testLinesCount).joinToString(" ")
+            .split(':', limit = 2)[1]
+            .trim()
+
+        return Pair(
+            tests,
+            lines
+                .asSequence()
+                .drop(testLinesCount)
+                .joinToString("\n")
+        )
+    }
 
     private fun cleanupName(name: String) =
         name.replace("does. m as T e R Talen T l is T ", "")

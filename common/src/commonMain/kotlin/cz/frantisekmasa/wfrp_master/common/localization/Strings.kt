@@ -949,6 +949,7 @@ data class NpcMessages(
 @Immutable
 data class TalentStrings(
     val buttonAddNonCompendium: String = "…or add non-Compendium talent",
+    val labelTests: String = "Tests",
     val labelDescription: String = "Description (Optional)",
     val labelName: String = "Name",
     val labelMaxTimesTaken: String = "Max",

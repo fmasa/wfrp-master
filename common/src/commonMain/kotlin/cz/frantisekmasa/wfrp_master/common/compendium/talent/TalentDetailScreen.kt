@@ -20,6 +20,7 @@ class TalentDetailScreen(
             detail = {
                 TalentDetailBody(
                     maxTimesTaken = it.maxTimesTaken,
+                    tests = it.tests,
                     description = it.description,
                 )
             }
