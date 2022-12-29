@@ -41,10 +41,6 @@ class CompendiumExportScreenModel(
 ) : ScreenModel {
 
     val party: Flow<Party> = parties.getLive(partyId).right()
-    val skills: Flow<List<Skill>> = skillCompendium.liveForParty(partyId)
-    val talents: Flow<List<Talent>> = talentsCompendium.liveForParty(partyId)
-    val spells: Flow<List<Spell>> = spellCompendium.liveForParty(partyId)
-
 
     suspend fun buildExportJson(): String {
         return coroutineScope {
