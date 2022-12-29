@@ -36,6 +36,7 @@ fun TalentDetail(
 
             TalentDetailBody(
                 maxTimesTaken = null,
+                tests = talent.tests,
                 description = talent.description,
             )
         }
@@ -45,14 +46,16 @@ fun TalentDetail(
 @Composable
 fun TalentDetailBody(
     maxTimesTaken: String?,
+    tests: String,
     description: String,
 ) {
     Column(Modifier.padding(Spacing.bodyPadding)) {
         if (maxTimesTaken != null) {
-            SingleLineTextValue(
-                label = LocalStrings.current.talents.labelMaxTimesTaken,
-                value = maxTimesTaken,
-            )
+            SingleLineTextValue(LocalStrings.current.talents.labelMaxTimesTaken, maxTimesTaken)
+        }
+
+        if (tests.isNotBlank()) {
+            SingleLineTextValue(LocalStrings.current.talents.labelTests, tests)
         }
 
         RichText {

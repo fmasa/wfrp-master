@@ -10,12 +10,14 @@ import kotlinx.serialization.Serializable
 @Immutable
 data class TalentImport(
     val name: String,
+    val associatedTests: String,
     val maxTimesTaken: String,
     val description: String,
 ) {
     init {
         require(name.isNotBlank()) { "Talent name cannot be blank" }
         name.requireMaxLength(Talent.NAME_MAX_LENGTH, "talent name")
+        associatedTests.requireMaxLength(Talent.TESTS_MAX_LENGTH, "associated tests")
         description.requireMaxLength(Talent.DESCRIPTION_MAX_LENGTH, "talent description")
     }
 
@@ -29,6 +31,7 @@ data class TalentImport(
     companion object {
         fun fromTalent(talent: Talent) = TalentImport(
             name = talent.name,
+            associatedTests = talent.tests,
             maxTimesTaken = talent.maxTimesTaken,
             description = talent.description,
         )

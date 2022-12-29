@@ -40,6 +40,7 @@ class TalentsScreenModel(
                 id = talentId,
                 compendiumId = compendiumTalent.id,
                 name = compendiumTalent.name,
+                tests = compendiumTalent.tests,
                 description = compendiumTalent.description,
                 taken = timesTaken,
             )

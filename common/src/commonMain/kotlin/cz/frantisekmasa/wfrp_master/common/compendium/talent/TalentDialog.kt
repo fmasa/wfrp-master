@@ -48,6 +48,13 @@ fun TalentDialog(
             )
 
             TextInput(
+                label = strings.labelTests,
+                value = formData.tests,
+                validate = validate,
+                maxLength = Talent.TESTS_MAX_LENGTH,
+            )
+
+            TextInput(
                 label = strings.labelMaxTimesTaken,
                 value = formData.maxTimesTaken,
                 validate = validate,
@@ -69,6 +76,7 @@ fun TalentDialog(
 private data class TalentFormData(
     val id: Uuid,
     val name: InputValue,
+    val tests: InputValue,
     val maxTimesTaken: InputValue,
     val description: InputValue,
 ) : CompendiumItemFormData<Talent> {
@@ -77,6 +85,7 @@ private data class TalentFormData(
         fun fromTalent(talent: Talent?) = TalentFormData(
             id = remember { talent?.id ?: uuid4() },
             name = inputValue(talent?.name ?: "", Rules.NotBlank()),
+            tests = inputValue(talent?.tests ?: ""),
             maxTimesTaken = inputValue(talent?.maxTimesTaken ?: ""),
             description = inputValue(talent?.description ?: ""),
         )
@@ -85,6 +94,7 @@ private data class TalentFormData(
     override fun toValue() = Talent(
         id = id,
         name = name.value,
+        tests = tests.value.trim(),
         maxTimesTaken = maxTimesTaken.value,
         description = description.value,
     )

@@ -24,6 +24,7 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.forms.TextInput
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.inputValue
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
 import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
+import cz.frantisekmasa.wfrp_master.common.compendium.domain.Talent.Companion as CompendiumTalent
 
 @Composable
 internal fun NonCompendiumTalentForm(
@@ -64,6 +65,13 @@ internal fun NonCompendiumTalentForm(
         }
 
         TextInput(
+            label = strings.labelTests,
+            value = formData.tests,
+            validate = validate,
+            maxLength = CompendiumTalent.TESTS_MAX_LENGTH,
+        )
+
+        TextInput(
             label = strings.labelDescription,
             value = formData.description,
             validate = validate,
@@ -77,6 +85,7 @@ internal fun NonCompendiumTalentForm(
 private class NonCompendiumTalentFormData(
     val id: Uuid,
     val name: InputValue,
+    val tests: InputValue,
     val description: InputValue,
     val taken: MutableState<Int>,
 ) : HydratedFormData<Talent> {
@@ -85,6 +94,7 @@ private class NonCompendiumTalentFormData(
         fun fromTalent(talent: Talent?): NonCompendiumTalentFormData = NonCompendiumTalentFormData(
             id = remember { talent?.id ?: uuid4() },
             name = inputValue(talent?.name ?: "", Rules.NotBlank()),
+            tests = inputValue(talent?.tests ?: ""),
             description = inputValue(talent?.description ?: ""),
             taken = rememberSaveable { mutableStateOf(talent?.taken ?: 1) },
         )
@@ -94,7 +104,8 @@ private class NonCompendiumTalentFormData(
         id = id,
         compendiumId = null,
         name = name.value,
-        description = description.value,
+        tests = tests.value,
+        description = description.value.trim(),
         taken = taken.value,
     )
 
