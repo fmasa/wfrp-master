@@ -18,14 +18,13 @@ import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.grammars.T
 import io.github.aakira.napier.Napier
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import java.io.InputStream
 import java.util.Locale
 
-class RulebookCompendiumImporter(rulebookPdf: InputStream) :
-    CompendiumImporter,
-    CoroutineScope by CoroutineScope(Dispatchers.Default) {
+class RulebookCompendiumImporter(
+    private val reader: PdfReader,
+) : CompendiumImporter, CoroutineScope by CoroutineScope(Dispatchers.Default) {
+
     private val locale = Locale.ENGLISH
-    private val reader = PdfReader(rulebookPdf)
 
     override suspend fun importSkills(): List<Skill> {
         val text = (118..131).joinToString("\n") { getCleanedUpTextFromPage(reader, it) }

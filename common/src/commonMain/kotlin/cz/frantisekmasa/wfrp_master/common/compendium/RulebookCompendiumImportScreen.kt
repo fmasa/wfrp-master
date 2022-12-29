@@ -24,6 +24,7 @@ import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
+import com.lowagie.text.pdf.PdfReader
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.RulebookCompendiumImporter
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.PartyId
 import cz.frantisekmasa.wfrp_master.common.core.shared.FileType
@@ -82,7 +83,7 @@ class RulebookCompendiumImportScreen(
 
         val fileChooser = ImportFileChooser(
             onStateChange = { importState = it },
-            importerFactory = { RulebookCompendiumImporter(it.stream) },
+            importerFactory = { RulebookCompendiumImporter(PdfReader(it.stream)) },
             errorMessageFactory = {
                 when (it) {
                     is OutOfMemoryError -> strings.messages.outOfMemory
