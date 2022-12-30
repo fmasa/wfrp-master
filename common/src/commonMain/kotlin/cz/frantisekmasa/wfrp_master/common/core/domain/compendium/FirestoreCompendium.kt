@@ -4,15 +4,16 @@ import arrow.core.Either
 import arrow.core.left
 import arrow.core.right
 import com.benasher44.uuid.Uuid
+import cz.frantisekmasa.wfrp_master.common.compendium.domain.CompendiumItem
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.exceptions.CompendiumItemNotFound
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.PartyId
 import cz.frantisekmasa.wfrp_master.common.core.firebase.AggregateMapper
 import cz.frantisekmasa.wfrp_master.common.core.firebase.Schema
 import cz.frantisekmasa.wfrp_master.common.core.firebase.documents
-import cz.frantisekmasa.wfrp_master.common.core.shared.IO
 import cz.frantisekmasa.wfrp_master.common.firebase.firestore.Firestore
 import cz.frantisekmasa.wfrp_master.common.firebase.firestore.FirestoreException
 import cz.frantisekmasa.wfrp_master.common.firebase.firestore.SetOptions
+import cz.frantisekmasa.wfrp_master.common.firebase.firestore.Transaction
 import io.github.aakira.napier.Napier
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -81,10 +82,20 @@ class FirestoreCompendium<T : CompendiumItem<T>>(
         }
     }
 
-    override suspend fun remove(partyId: PartyId, item: T) {
-        collection(partyId)
-            .document(item.id.toString())
-            .delete()
+    override fun save(transaction: Transaction, partyId: PartyId, item: T) {
+        val data = mapper.toDocumentData(item)
+
+        transaction.set(
+            collection(partyId).document(item.id.toString()),
+            data,
+            SetOptions.mergeFields(data.keys)
+        )
+    }
+
+    override suspend fun remove(transaction: Transaction, partyId: PartyId, item: T) {
+        transaction.delete(
+            collection(partyId).document(item.id.toString()),
+        )
     }
 
     private fun collection(partyId: PartyId) =

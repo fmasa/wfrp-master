@@ -579,6 +579,7 @@ data class PartyStrings(
 @Immutable
 data class PartyMessageStrings(
     val alreadyMember: String = "You are already member of this party",
+    val compendiumCardMoved: String = "Compendium card has been moved to the World tab.",
     val leaveConfirmation: String = "Do you really want to leave this party?",
     val membersWillLoseAccess: String = "All members will lose access.",
     val noCharactersInParty: String = "No player has joined this party yet.",
@@ -601,7 +602,7 @@ data class PartyMessageStrings(
             withStyle(SpanStyle(fontWeight = FontWeight.Bold)) { append(it) }
             append(".")
         }
-    }
+    },
 )
 
 @Immutable

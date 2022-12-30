@@ -6,6 +6,7 @@ import com.benasher44.uuid.Uuid
 import cz.frantisekmasa.wfrp_master.common.character.religion.miracles.MiracleDetailBody
 import cz.frantisekmasa.wfrp_master.common.compendium.CompendiumItemDetailScreen
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.PartyId
+import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.rememberScreenModel
 
 class MiracleDetailScreen(
     private val partyId: PartyId,
@@ -14,9 +15,11 @@ class MiracleDetailScreen(
 
     @Composable
     override fun Content() {
+        val screenModel: MiracleCompendiumScreenModel = rememberScreenModel(arg = partyId)
+
         CompendiumItemDetailScreen(
-            partyId = partyId,
-            item = { it.getMiracle(miracleId) },
+            id = miracleId,
+            screenModel = screenModel,
             detail = {
                 MiracleDetailBody(
                     cultName = it.cultName,
@@ -26,7 +29,7 @@ class MiracleDetailScreen(
                     effect = it.effect,
                 )
             }
-        ) { item, screenModel, onDismissRequest ->
+        ) { item, onDismissRequest ->
             MiracleDialog(
                 miracle = item,
                 onDismissRequest = onDismissRequest,

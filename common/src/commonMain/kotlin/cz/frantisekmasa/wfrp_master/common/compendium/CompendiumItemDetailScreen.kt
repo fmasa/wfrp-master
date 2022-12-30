@@ -19,28 +19,24 @@ import arrow.core.Either
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
-import cz.frantisekmasa.wfrp_master.common.compendium.domain.exceptions.CompendiumItemNotFound
-import cz.frantisekmasa.wfrp_master.common.core.domain.compendium.CompendiumItem
-import cz.frantisekmasa.wfrp_master.common.core.domain.party.PartyId
+import com.benasher44.uuid.Uuid
+import cz.frantisekmasa.wfrp_master.common.compendium.domain.CompendiumItem
+import cz.frantisekmasa.wfrp_master.common.core.domain.character.CharacterItem
 import cz.frantisekmasa.wfrp_master.common.core.ui.buttons.BackButton
 import cz.frantisekmasa.wfrp_master.common.core.ui.flow.collectWithLifecycle
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.FullScreenProgress
-import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.rememberScreenModel
 import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.IconAction
 import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.LocalPersistentSnackbarHolder
 import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
-import kotlinx.coroutines.flow.Flow
 
 @Composable
-fun <T : CompendiumItem<T>> Screen.CompendiumItemDetailScreen(
-    partyId: PartyId,
-    item: (CompendiumScreenModel) -> Flow<Either<CompendiumItemNotFound, T>>,
-    detail: @Composable (T) -> Unit,
-    editDialog: @Composable (item: T, screenModel: CompendiumScreenModel, onDismissRequest: () -> Unit) -> Unit,
+fun <A : CompendiumItem<A>, B : CharacterItem<B, A>> Screen.CompendiumItemDetailScreen(
+    id: Uuid,
+    screenModel: CompendiumItemScreenModel<A, B>,
+    detail: @Composable (A) -> Unit,
+    editDialog: @Composable (item: A, onDismissRequest: () -> Unit) -> Unit,
 ) {
-    val screenModel: CompendiumScreenModel = rememberScreenModel(arg = partyId)
-
-    val itemOrError = remember { item(screenModel) }
+    val itemOrError = remember { screenModel.get(id) }
         .collectWithLifecycle(null).value
 
     if (itemOrError == null) {
@@ -50,7 +46,7 @@ fun <T : CompendiumItem<T>> Screen.CompendiumItemDetailScreen(
 
     val navigator = LocalNavigator.currentOrThrow
 
-    if (itemOrError !is Either.Right<T>) {
+    if (itemOrError !is Either.Right<A>) {
         val message = LocalStrings.current.compendium.messages.itemDoesNotExist
         val snackbarHolder = LocalPersistentSnackbarHolder.current
 
@@ -64,7 +60,7 @@ fun <T : CompendiumItem<T>> Screen.CompendiumItemDetailScreen(
     var editDialogOpened by remember { mutableStateOf(false) }
 
     if (editDialogOpened) {
-        editDialog(itemOrError.value, screenModel) { editDialogOpened = false }
+        editDialog(itemOrError.value) { editDialogOpened = false }
     }
 
     Scaffold(

@@ -5,7 +5,6 @@ import cz.frantisekmasa.wfrp_master.common.character.CharacterPickerScreenModel
 import cz.frantisekmasa.wfrp_master.common.character.CharacterScreenModel
 import cz.frantisekmasa.wfrp_master.common.character.characteristics.CharacteristicsScreenModel
 import cz.frantisekmasa.wfrp_master.common.character.combat.CharacterCombatScreenModel
-import cz.frantisekmasa.wfrp_master.common.character.effects.EffectFactory
 import cz.frantisekmasa.wfrp_master.common.character.effects.EffectManager
 import cz.frantisekmasa.wfrp_master.common.character.religion.blessings.BlessingsScreenModel
 import cz.frantisekmasa.wfrp_master.common.character.religion.miracles.MiraclesScreenModel
@@ -16,15 +15,22 @@ import cz.frantisekmasa.wfrp_master.common.character.traits.TraitsScreenModel
 import cz.frantisekmasa.wfrp_master.common.character.trappings.TrappingsScreenModel
 import cz.frantisekmasa.wfrp_master.common.characterCreation.CharacterCreationScreenModel
 import cz.frantisekmasa.wfrp_master.common.combat.CombatScreenModel
-import cz.frantisekmasa.wfrp_master.common.compendium.CompendiumScreenModel
-import cz.frantisekmasa.wfrp_master.common.compendium.career.CareerScreenModel
+import cz.frantisekmasa.wfrp_master.common.compendium.CompendiumExportScreenModel
+import cz.frantisekmasa.wfrp_master.common.compendium.blessing.BlessingCompendiumScreenModel
+import cz.frantisekmasa.wfrp_master.common.compendium.career.CareerCompendiumScreenModel
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.Blessing
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.Career
+import cz.frantisekmasa.wfrp_master.common.compendium.domain.CompendiumItem
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.Miracle
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.Skill
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.Spell
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.Talent
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.Trait
+import cz.frantisekmasa.wfrp_master.common.compendium.miracle.MiracleCompendiumScreenModel
+import cz.frantisekmasa.wfrp_master.common.compendium.skill.SkillCompendiumScreenModel
+import cz.frantisekmasa.wfrp_master.common.compendium.spell.SpellCompendiumScreenModel
+import cz.frantisekmasa.wfrp_master.common.compendium.talent.TalentCompendiumScreenModel
+import cz.frantisekmasa.wfrp_master.common.compendium.trait.TraitCompendiumScreenModel
 import cz.frantisekmasa.wfrp_master.common.core.PartyScreenModel
 import cz.frantisekmasa.wfrp_master.common.core.cache.CharacterRepositoryIdentityMap
 import cz.frantisekmasa.wfrp_master.common.core.cache.PartyRepositoryIdentityMap
@@ -181,7 +187,7 @@ val appModule = DI.Module("Common") {
         SpellsScreenModel(characterId, instance(), instance())
     }
     bindFactory { characterId: CharacterId ->
-        TalentsScreenModel(characterId, instance(), instance(), instance())
+        TalentsScreenModel(characterId, instance(), instance(), instance(), instance())
     }
     bindFactory { characterId: CharacterId ->
         MiraclesScreenModel(characterId, instance(), instance())
@@ -189,19 +195,45 @@ val appModule = DI.Module("Common") {
     bindFactory { characterId: CharacterId ->
         BlessingsScreenModel(characterId, instance(), instance())
     }
-    bindSingleton { CareerScreenModel(instance()) }
 
-    bindSingleton { EffectFactory() }
-    bindSingleton { EffectManager(instance(), instance(), instance(), instance(), instance()) }
+    bindFactory { partyId: PartyId ->
+        BlessingCompendiumScreenModel(partyId, instance(), instance(), instance())
+    }
+    bindFactory { partyId: PartyId ->
+        CareerCompendiumScreenModel(partyId, instance(), instance(), instance())
+    }
+    bindFactory { partyId: PartyId ->
+        MiracleCompendiumScreenModel(partyId, instance(), instance(), instance())
+    }
+    bindFactory { partyId: PartyId ->
+        SkillCompendiumScreenModel(partyId, instance(), instance(), instance())
+    }
+    bindFactory { partyId: PartyId ->
+        SpellCompendiumScreenModel(partyId, instance(), instance(), instance())
+    }
+    bindFactory { partyId: PartyId ->
+        TalentCompendiumScreenModel(partyId, instance(), instance(), instance(), instance())
+    }
+    bindFactory { partyId: PartyId ->
+        TraitCompendiumScreenModel(partyId, instance(), instance(), instance(), instance())
+    }
+
+    bindSingleton { EffectManager(instance(), instance(), instance()) }
     bindFactory { characterId: CharacterId ->
-        TraitsScreenModel(characterId, instance(), instance(), instance())
+        TraitsScreenModel(characterId, instance(), instance(), instance(), instance())
     }
     bindProvider { InvitationScreenModel(instance(), instance(), instance()) }
     bindProvider { PartyListScreenModel(instance()) }
     bindProvider { SettingsScreenModel(instance(), instance()) }
-    bindFactory { partyId: PartyId -> CharacterCreationScreenModel(partyId, instance(), instance()) }
     bindFactory { partyId: PartyId ->
-        CompendiumScreenModel(
+        CharacterCreationScreenModel(
+            partyId,
+            instance(),
+            instance()
+        )
+    }
+    bindFactory { partyId: PartyId ->
+        CompendiumExportScreenModel(
             partyId,
             instance(),
             instance(),
@@ -252,7 +284,7 @@ val appModule = DI.Module("Common") {
     }
 }
 
-private inline fun <reified T : CharacterItem> DirectDI.characterItemRepository(
+private inline fun <reified T : CharacterItem<T, C>, C : CompendiumItem<C>> DirectDI.characterItemRepository(
     collectionName: String
 ): CharacterItemRepository<T> {
     return FirestoreCharacterItemRepository(

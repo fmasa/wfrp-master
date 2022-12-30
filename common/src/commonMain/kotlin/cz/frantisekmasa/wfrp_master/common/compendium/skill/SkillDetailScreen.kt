@@ -6,6 +6,7 @@ import com.benasher44.uuid.Uuid
 import cz.frantisekmasa.wfrp_master.common.character.skills.dialog.SkillDetailBody
 import cz.frantisekmasa.wfrp_master.common.compendium.CompendiumItemDetailScreen
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.PartyId
+import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.rememberScreenModel
 
 class SkillDetailScreen(
     private val partyId: PartyId,
@@ -14,9 +15,11 @@ class SkillDetailScreen(
 
     @Composable
     override fun Content() {
+        val screenModel: SkillCompendiumScreenModel = rememberScreenModel(arg = partyId)
+
         CompendiumItemDetailScreen(
-            partyId = partyId,
-            item = { it.getSkill(skillId) },
+            id = skillId,
+            screenModel = screenModel,
             detail = {
                 SkillDetailBody(
                     characteristic = it.characteristic,
@@ -24,7 +27,7 @@ class SkillDetailScreen(
                     description = it.description,
                 )
             }
-        ) { item, screenModel, onDismissRequest ->
+        ) { item, onDismissRequest ->
             SkillDialog(
                 skill = item,
                 onDismissRequest = onDismissRequest,

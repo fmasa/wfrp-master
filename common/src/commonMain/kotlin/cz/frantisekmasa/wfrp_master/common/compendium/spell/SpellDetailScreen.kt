@@ -6,6 +6,7 @@ import com.benasher44.uuid.Uuid
 import cz.frantisekmasa.wfrp_master.common.character.spells.dialog.SpellDetailBody
 import cz.frantisekmasa.wfrp_master.common.compendium.CompendiumItemDetailScreen
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.PartyId
+import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.rememberScreenModel
 
 class SpellDetailScreen(
     private val partyId: PartyId,
@@ -14,9 +15,11 @@ class SpellDetailScreen(
 
     @Composable
     override fun Content() {
+        val screenModel: SpellCompendiumScreenModel = rememberScreenModel(arg = partyId)
+
         CompendiumItemDetailScreen(
-            partyId = partyId,
-            item = { it.getSpell(spellId) },
+            id = spellId,
+            screenModel = screenModel,
             detail = {
                 SpellDetailBody(
                     castingNumber = it.castingNumber,
@@ -27,7 +30,7 @@ class SpellDetailScreen(
                     effect = it.effect,
                 )
             }
-        ) { item, screenModel, onDismissRequest ->
+        ) { item, onDismissRequest ->
             SpellDialog(
                 spell = item,
                 onDismissRequest = onDismissRequest,

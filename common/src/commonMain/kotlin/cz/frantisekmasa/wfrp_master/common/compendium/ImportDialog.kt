@@ -24,31 +24,33 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import cafe.adriel.voyager.core.screen.Screen
+import cz.frantisekmasa.wfrp_master.common.compendium.CompendiumItemScreenModel.ImportAction
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.Blessing
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.Career
+import cz.frantisekmasa.wfrp_master.common.compendium.domain.CompendiumItem
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.Miracle
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.Skill
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.Spell
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.Talent
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.Trait
-import cz.frantisekmasa.wfrp_master.common.core.domain.compendium.CompendiumItem
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.PartyId
 import cz.frantisekmasa.wfrp_master.common.core.ui.buttons.CloseButton
 import cz.frantisekmasa.wfrp_master.common.core.ui.dialogs.FullScreenDialog
 import cz.frantisekmasa.wfrp_master.common.core.ui.flow.collectWithLifecycle
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.FullScreenProgress
+import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.rememberScreenModel
 import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.TopBarAction
 import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 @Composable
 internal fun ImportDialog(
-    screenModel: CompendiumScreenModel,
     state: ImportDialogState,
     partyId: PartyId,
+    screen: Screen,
     onDismissRequest: () -> Unit,
     onComplete: () -> Unit,
 ) {
@@ -58,10 +60,11 @@ internal fun ImportDialog(
                 FullScreenProgress()
             }
             is ImportDialogState.PickingItemsToImport -> ImportedItemsPicker(
-                screenModel = screenModel,
                 state = state,
                 onDismissRequest = onDismissRequest,
                 onComplete = onComplete,
+                partyId = partyId,
+                screen = screen,
             )
         }
     }
@@ -69,24 +72,24 @@ internal fun ImportDialog(
 
 @Composable
 private fun ImportedItemsPicker(
-    screenModel: CompendiumScreenModel,
+    partyId: PartyId,
+    screen: Screen,
     state: ImportDialogState.PickingItemsToImport,
     onDismissRequest: () -> Unit,
     onComplete: () -> Unit,
 ) {
-    var screen by remember(state) { mutableStateOf(ItemsScreen.SKILLS) }
+    var step by remember(state) { mutableStateOf(ItemsScreen.SKILLS) }
 
     val strings = LocalStrings.current.compendium
 
-    when (screen) {
+    when (step) {
         ItemsScreen.SKILLS -> {
             ItemPicker(
                 label = strings.pickPromptSkills,
                 items = state.skills,
-                onSave = screenModel::saveMultipleSkills,
-                onContinue = { screen = ItemsScreen.TALENTS },
+                screenModel = screen.rememberScreenModel(arg = partyId),
+                onContinue = { step = ItemsScreen.TALENTS },
                 onClose = onDismissRequest,
-                existingItems = screenModel.skills,
                 replaceExistingByDefault = state.replaceExistingByDefault,
             )
         }
@@ -94,10 +97,9 @@ private fun ImportedItemsPicker(
             ItemPicker(
                 label = strings.pickPromptTalents,
                 items = state.talents,
-                onSave = screenModel::saveMultipleTalents,
-                onContinue = { screen = ItemsScreen.SPELLS },
+                screenModel = screen.rememberScreenModel(arg = partyId),
+                onContinue = { step = ItemsScreen.SPELLS },
                 onClose = onDismissRequest,
-                existingItems = screenModel.talents,
                 replaceExistingByDefault = state.replaceExistingByDefault,
             )
         }
@@ -105,10 +107,9 @@ private fun ImportedItemsPicker(
             ItemPicker(
                 label = strings.pickPromptSpells,
                 items = state.spells,
-                onSave = screenModel::saveMultipleSpells,
-                onContinue = { screen = ItemsScreen.BLESSINGS },
+                screenModel = screen.rememberScreenModel(arg = partyId),
+                onContinue = { step = ItemsScreen.BLESSINGS },
                 onClose = onDismissRequest,
-                existingItems = screenModel.spells,
                 replaceExistingByDefault = state.replaceExistingByDefault,
             )
         }
@@ -116,10 +117,9 @@ private fun ImportedItemsPicker(
             ItemPicker(
                 label = strings.pickPromptBlessings,
                 items = state.blessings,
-                onSave = screenModel::saveMultipleBlessings,
-                onContinue = { screen = ItemsScreen.MIRACLES },
+                screenModel = screen.rememberScreenModel(arg = partyId),
+                onContinue = { step = ItemsScreen.MIRACLES },
                 onClose = onDismissRequest,
-                existingItems = screenModel.blessings,
                 replaceExistingByDefault = state.replaceExistingByDefault,
             )
         }
@@ -127,10 +127,9 @@ private fun ImportedItemsPicker(
             ItemPicker(
                 label = strings.pickPromptMiracles,
                 items = state.miracles,
-                onSave = screenModel::saveMultipleMiracles,
-                onContinue = { screen = ItemsScreen.TRAITS },
+                screenModel = screen.rememberScreenModel(arg = partyId),
+                onContinue = { step = ItemsScreen.TRAITS },
                 onClose = onDismissRequest,
-                existingItems = screenModel.miracles,
                 replaceExistingByDefault = state.replaceExistingByDefault,
             )
         }
@@ -138,10 +137,9 @@ private fun ImportedItemsPicker(
             ItemPicker(
                 label = strings.pickPromptTraits,
                 items = state.traits,
-                onSave = screenModel::saveMultipleTraits,
-                onContinue = { screen = ItemsScreen.CAREERS },
+                screenModel = screen.rememberScreenModel(arg = partyId),
+                onContinue = { step = ItemsScreen.CAREERS },
                 onClose = onDismissRequest,
-                existingItems = screenModel.traits,
                 replaceExistingByDefault = state.replaceExistingByDefault,
             )
         }
@@ -149,10 +147,9 @@ private fun ImportedItemsPicker(
             ItemPicker(
                 label = strings.pickPromptCareers,
                 items = state.careers,
-                onSave = screenModel::saveMultipleCareers,
+                screenModel = screen.rememberScreenModel(arg = partyId),
                 onContinue = onComplete,
                 onClose = onDismissRequest,
-                existingItems = screenModel.careers,
                 replaceExistingByDefault = state.replaceExistingByDefault,
             )
         }
@@ -162,14 +159,13 @@ private fun ImportedItemsPicker(
 @Composable
 private fun <T : CompendiumItem<T>> ItemPicker(
     label: String,
-    onSave: suspend (items: List<T>) -> Unit,
+    screenModel: CompendiumItemScreenModel<T, *>,
     onClose: () -> Unit,
     onContinue: () -> Unit,
-    existingItems: Flow<List<T>>,
     items: List<T>,
     replaceExistingByDefault: Boolean,
 ) {
-    val existingItemsList = existingItems.collectWithLifecycle(null).value
+    val existingItemsList = screenModel.items.collectWithLifecycle(null).value
 
     if (existingItemsList == null) {
         Scaffold(
@@ -218,7 +214,7 @@ private fun <T : CompendiumItem<T>> ItemPicker(
 
                                 if (atLeastOneSelected) {
                                     withContext(Dispatchers.IO) {
-                                        onSave(
+                                        screenModel.import(
                                             items
                                                 .asSequence()
                                                 .filter { selectedItems[it.id] == true }
@@ -226,11 +222,10 @@ private fun <T : CompendiumItem<T>> ItemPicker(
                                                     val existingItem = existingItemsByName[it.name]
 
                                                     if (existingItem != null)
-                                                        it.replace(existingItem)
-                                                    else it
+                                                        ImportAction.Update(it.replace(existingItem))
+                                                    else ImportAction.CreateNew(it)
                                                 }
-                                                .distinctBy { it.id }
-                                                .toList()
+                                                .distinctBy { it.item.id }
                                         )
                                     }
                                 }

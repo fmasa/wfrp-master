@@ -12,8 +12,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
-import cz.frantisekmasa.wfrp_master.common.core.domain.compendium.CompendiumItem
-import cz.frantisekmasa.wfrp_master.common.core.shared.IO
+import cz.frantisekmasa.wfrp_master.common.compendium.domain.CompendiumItem
 import cz.frantisekmasa.wfrp_master.common.core.ui.buttons.CloseButton
 import cz.frantisekmasa.wfrp_master.common.core.ui.dialogs.DialogProgress
 import cz.frantisekmasa.wfrp_master.common.core.ui.dialogs.FullScreenDialog

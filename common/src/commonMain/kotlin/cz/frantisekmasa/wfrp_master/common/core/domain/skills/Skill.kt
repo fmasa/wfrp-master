@@ -7,6 +7,7 @@ import cz.frantisekmasa.wfrp_master.common.core.domain.character.CharacterItem
 import cz.frantisekmasa.wfrp_master.common.core.shared.Parcelize
 import kotlinx.serialization.Contextual
 import kotlinx.serialization.Serializable
+import cz.frantisekmasa.wfrp_master.common.compendium.domain.Skill as CompendiumSkill
 
 @Parcelize
 @Serializable
@@ -19,17 +20,29 @@ data class Skill(
     val name: String,
     val description: String,
     val advances: Int = 0
-) : CharacterItem {
-    companion object {
-        const val NAME_MAX_LENGTH = 50
-        const val DESCRIPTION_MAX_LENGTH = 2000
-        const val MIN_ADVANCES = 0
-    }
+) : CharacterItem<Skill, CompendiumSkill> {
 
     init {
         require(name.isNotEmpty())
         require(advances >= MIN_ADVANCES)
         require(name.length <= NAME_MAX_LENGTH) { "Maximum allowed name length is $NAME_MAX_LENGTH" }
         require(description.length <= DESCRIPTION_MAX_LENGTH) { "Maximum allowed description length is $DESCRIPTION_MAX_LENGTH" }
+    }
+
+    override fun updateFromCompendium(compendiumItem: CompendiumSkill): Skill {
+        return copy(
+            advanced = compendiumItem.advanced,
+            characteristic = compendiumItem.characteristic,
+            name = compendiumItem.name,
+            description = compendiumItem.description,
+        )
+    }
+
+    override fun unlinkFromCompendium() = copy(compendiumId = null)
+
+    companion object {
+        const val NAME_MAX_LENGTH = 50
+        const val DESCRIPTION_MAX_LENGTH = 2000
+        const val MIN_ADVANCES = 0
     }
 }

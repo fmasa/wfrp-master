@@ -12,7 +12,6 @@ import com.benasher44.uuid.Uuid
 import com.benasher44.uuid.uuid4
 import cz.frantisekmasa.wfrp_master.common.compendium.CompendiumItemDialog
 import cz.frantisekmasa.wfrp_master.common.compendium.CompendiumItemFormData
-import cz.frantisekmasa.wfrp_master.common.compendium.CompendiumScreenModel
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.Blessing
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.InputValue
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.Rules
@@ -24,7 +23,7 @@ import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
 @Composable
 fun BlessingDialog(
     blessing: Blessing?,
-    screenModel: CompendiumScreenModel,
+    screenModel: BlessingCompendiumScreenModel,
     onDismissRequest: () -> Unit,
 ) {
     val formData = BlessingFormData.fromItem(blessing)
@@ -33,7 +32,7 @@ fun BlessingDialog(
     CompendiumItemDialog(
         title = if (blessing == null) strings.titleNew else strings.titleEdit,
         formData = formData,
-        saver = screenModel::save,
+        saver = if (blessing == null) screenModel::createNew else screenModel::update,
         onDismissRequest = onDismissRequest,
     ) { validate ->
         Column(

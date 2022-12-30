@@ -6,6 +6,7 @@ import com.benasher44.uuid.Uuid
 import cz.frantisekmasa.wfrp_master.common.character.talents.dialog.TalentDetailBody
 import cz.frantisekmasa.wfrp_master.common.compendium.CompendiumItemDetailScreen
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.PartyId
+import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.rememberScreenModel
 
 class TalentDetailScreen(
     private val partyId: PartyId,
@@ -14,9 +15,11 @@ class TalentDetailScreen(
 
     @Composable
     override fun Content() {
+        val screenModel: TalentCompendiumScreenModel = rememberScreenModel(arg = partyId)
+
         CompendiumItemDetailScreen(
-            partyId = partyId,
-            item = { it.getTalent(talentId) },
+            id = talentId,
+            screenModel = screenModel,
             detail = {
                 TalentDetailBody(
                     maxTimesTaken = it.maxTimesTaken,
@@ -24,7 +27,7 @@ class TalentDetailScreen(
                     description = it.description,
                 )
             }
-        ) { item, screenModel, onDismissRequest ->
+        ) { item, onDismissRequest ->
             TalentDialog(
                 talent = item,
                 onDismissRequest = onDismissRequest,

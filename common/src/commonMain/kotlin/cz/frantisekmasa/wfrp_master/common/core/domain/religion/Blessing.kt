@@ -8,7 +8,7 @@ import cz.frantisekmasa.wfrp_master.common.core.domain.character.CharacterItem
 import cz.frantisekmasa.wfrp_master.common.core.shared.Parcelize
 import kotlinx.serialization.Contextual
 import kotlinx.serialization.Serializable
-import cz.frantisekmasa.wfrp_master.common.compendium.domain.Blessing.Companion as CompendiumBlessing
+import cz.frantisekmasa.wfrp_master.common.compendium.domain.Blessing as CompendiumBlessing
 
 @Parcelize
 @Serializable
@@ -21,7 +21,8 @@ data class Blessing(
     val target: String,
     val duration: String,
     val effect: String,
-) : CharacterItem {
+) : CharacterItem<Blessing, CompendiumBlessing> {
+
     init {
         require(name.isNotBlank()) { "Name must not be blank" }
         name.requireMaxLength(CompendiumBlessing.NAME_MAX_LENGTH, "name")
@@ -30,6 +31,18 @@ data class Blessing(
         duration.requireMaxLength(CompendiumBlessing.DURATION_MAX_LENGTH, "duration")
         effect.requireMaxLength(CompendiumBlessing.EFFECT_MAX_LENGTH, "effect")
     }
+
+    override fun updateFromCompendium(compendiumItem: CompendiumBlessing): Blessing {
+        return copy(
+            name = compendiumItem.name,
+            range = compendiumItem.range,
+            target = compendiumItem.target,
+            duration = compendiumItem.duration,
+            effect = compendiumItem.effect,
+        )
+    }
+
+    override fun unlinkFromCompendium() = copy(compendiumId = null)
 
     companion object {
         fun fromCompendium(blessing: cz.frantisekmasa.wfrp_master.common.compendium.domain.Blessing): Blessing = Blessing(

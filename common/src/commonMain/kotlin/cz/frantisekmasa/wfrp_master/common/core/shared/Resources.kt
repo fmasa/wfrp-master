@@ -24,6 +24,7 @@ object Resources {
         Npc("drawable/ic_npc.xml"),
         PartyNotFound("drawable/ic_rally_the_troops.xml"),
         SplashScreenIcon("drawable/splash_screen_icon.xml"),
+        Compendium("drawable/ic_compendium.xml"),
 
         // Items
         Blessing("drawable/ic_pray.xml"),

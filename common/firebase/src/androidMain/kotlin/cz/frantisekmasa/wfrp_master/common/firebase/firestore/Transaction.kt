@@ -1,13 +1,13 @@
 package cz.frantisekmasa.wfrp_master.common.firebase.firestore
 
-import com.google.firebase.firestore.Transaction as NativeTransaction
+import com.google.firebase.firestore.WriteBatch as NativeBatch
 
-actual class Transaction(private val transaction: NativeTransaction) {
+actual class Transaction(private val batch: NativeBatch) {
     actual fun set(documentReference: DocumentReference, fields: Map<String, Any?>, options: SetOptions) {
-        transaction.set(documentReference.toNative(), fields, options.toNative())
+        batch.set(documentReference.toNative(), fields, options.toNative())
     }
 
     actual fun delete(documentReference: DocumentReference) {
-        transaction.delete(documentReference.toNative())
+        batch.delete(documentReference.toNative())
     }
 }

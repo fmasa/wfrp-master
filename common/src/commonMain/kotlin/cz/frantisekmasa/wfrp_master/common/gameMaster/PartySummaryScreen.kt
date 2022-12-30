@@ -1,11 +1,10 @@
 package cz.frantisekmasa.wfrp_master.common.gameMaster
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
@@ -16,7 +15,6 @@ import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.ProvideTextStyle
 import androidx.compose.material.Scaffold
-import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Group
 import androidx.compose.runtime.Composable
@@ -31,12 +29,8 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
-import cafe.adriel.voyager.navigator.LocalNavigator
-import cafe.adriel.voyager.navigator.currentOrThrow
 import cz.frantisekmasa.wfrp_master.common.ambitions.AmbitionsCard
 import cz.frantisekmasa.wfrp_master.common.characterEdit.CharacterRemovalDialog
-import cz.frantisekmasa.wfrp_master.common.compendium.CompendiumScreen
-import cz.frantisekmasa.wfrp_master.common.compendium.CompendiumScreenModel
 import cz.frantisekmasa.wfrp_master.common.core.auth.UserId
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.Character
 import cz.frantisekmasa.wfrp_master.common.core.domain.identifiers.CharacterId
@@ -54,11 +48,12 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.ContextMenu
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.EmptyUI
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.ItemIcon
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
+import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.UserTip
+import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.UserTipCard
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.rememberScreenModel
 import cz.frantisekmasa.wfrp_master.common.invitation.InvitationDialog
 import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
 import cz.frantisekmasa.wfrp_master.common.skillTest.SkillTestDialog
-import kotlinx.coroutines.flow.Flow
 
 @Composable
 internal fun Screen.PartySummaryScreen(
@@ -136,46 +131,10 @@ internal fun Screen.PartySummaryScreen(
                 onSave = { screenModel.updatePartyAmbitions(it) },
             )
 
-            val navigator = LocalNavigator.currentOrThrow
-
-            CardContainer(
-                Modifier
-                    .fillMaxWidth()
-                    .padding(8.dp)
-                    .clickable(onClick = { navigator.push(CompendiumScreen(partyId)) })
-            ) {
-                Column(
-                    Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 8.dp)
-                ) {
-                    val strings = LocalStrings.current.compendium
-                    CardTitle(strings.title)
-
-                    val compendium: CompendiumScreenModel = rememberScreenModel(arg = partyId)
-
-                    Row {
-                        CompendiumSummary(strings.tabSkills, compendium.skills)
-                        CompendiumSummary(strings.tabTalents, compendium.talents)
-                        CompendiumSummary(strings.tabSpells, compendium.spells)
-                    }
-                }
+            Box(Modifier.padding(8.dp)) {
+                UserTipCard(UserTip.COMPENDIUM_LINK_MOVED, Modifier.fillMaxWidth())
             }
         }
-    }
-}
-
-@Composable
-private fun <T> RowScope.CompendiumSummary(
-    text: String,
-    itemsCount: Flow<List<T>>,
-) {
-    Column(Modifier.weight(1f), horizontalAlignment = Alignment.CenterHorizontally) {
-        Text(
-            itemsCount.collectWithLifecycle(null).value?.size?.toString() ?: "?",
-            style = MaterialTheme.typography.h6
-        )
-        Text(text)
     }
 }
 

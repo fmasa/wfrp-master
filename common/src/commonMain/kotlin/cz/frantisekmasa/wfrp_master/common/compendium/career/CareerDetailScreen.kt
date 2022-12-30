@@ -73,7 +73,7 @@ class CareerDetailScreen(
 
     @Composable
     override fun Content() {
-        val screenModel: CareerScreenModel = rememberScreenModel()
+        val screenModel: CareerCompendiumScreenModel = rememberScreenModel()
         val partyScreenModel: PartyScreenModel = rememberScreenModel(arg = partyId)
 
         val party = partyScreenModel.party.collectWithLifecycle(null).value
@@ -114,7 +114,7 @@ class CareerDetailScreen(
     }
 
     @Composable
-    private fun Detail(career: Career, party: Party, screenModel: CareerScreenModel) {
+    private fun Detail(career: Career, party: Party, screenModel: CareerCompendiumScreenModel) {
         val strings = LocalStrings.current.careers
         val (dialogState, setDialogState) = remember {
             mutableStateOf<LevelDialogState>(
@@ -131,7 +131,7 @@ class CareerDetailScreen(
                 CareerLevelDialog(
                     title = strings.titleAddLevel,
                     existingLevel = null,
-                    onSave = { screenModel.saveLevel(partyId, career.id, it) },
+                    onSave = { screenModel.saveLevel(career.id, it) },
                     onDismissRequest = { setDialogState(LevelDialogState.Closed) },
                     existingLevelNames = levelNames,
                 )
@@ -140,7 +140,7 @@ class CareerDetailScreen(
                 CareerLevelDialog(
                     title = strings.titleEditLevel,
                     existingLevel = dialogState.level,
-                    onSave = { screenModel.saveLevel(partyId, career.id, it) },
+                    onSave = { screenModel.saveLevel(career.id, it) },
                     onDismissRequest = { setDialogState(LevelDialogState.Closed) },
                     existingLevelNames = levelNames - dialogState.level.name,
                 )
@@ -166,7 +166,6 @@ class CareerDetailScreen(
                                 ),
                                 onSave = {
                                     screenModel.update(
-                                        partyId,
                                         career.copy(
                                             name = it.name,
                                             description = it.description,
@@ -232,7 +231,7 @@ class CareerDetailScreen(
                         career.levels,
                         onReorder = {
                             coroutineScope.launch(Dispatchers.IO) {
-                                screenModel.update(partyId, career.copy(levels = it))
+                                screenModel.update(career.copy(levels = it))
                             }
                         },
                         onClick = {

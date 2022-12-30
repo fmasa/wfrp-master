@@ -23,6 +23,7 @@ import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.JsonCompendiumImporter
+import cz.frantisekmasa.wfrp_master.common.core.PartyScreenModel
 import cz.frantisekmasa.wfrp_master.common.core.domain.ExceptionWithUserMessage
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.PartyId
 import cz.frantisekmasa.wfrp_master.common.core.shared.FileType
@@ -39,19 +40,19 @@ class JsonCompendiumImportScreen(
 ) : Screen {
     @Composable
     override fun Content() {
-        val screenModel: CompendiumScreenModel = rememberScreenModel(arg = partyId)
-        Scaffold(topBar = { TopBar(screenModel) }) {
+        Scaffold(topBar = { TopBar() }) {
             MainContainer()
         }
     }
 
     @Composable
-    private fun TopBar(screenModel: CompendiumScreenModel) {
+    private fun TopBar() {
+        val partyScreenModel: PartyScreenModel = rememberScreenModel(arg = partyId)
         TopAppBar(
             title = {
                 Column {
                     Text(LocalStrings.current.compendium.titleImportCompendium)
-                    screenModel.party.collectWithLifecycle(null).value?.let {
+                    partyScreenModel.party.collectWithLifecycle(null).value?.let {
                         Subtitle(it.name)
                     }
                 }
@@ -72,9 +73,9 @@ class JsonCompendiumImportScreen(
             ImportDialog(
                 state = it,
                 partyId = partyId,
+                screen = this,
                 onDismissRequest = { importState = null },
                 onComplete = navigator::pop,
-                screenModel = rememberScreenModel(arg = partyId)
             )
         }
 

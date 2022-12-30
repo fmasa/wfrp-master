@@ -12,7 +12,6 @@ import com.benasher44.uuid.Uuid
 import com.benasher44.uuid.uuid4
 import cz.frantisekmasa.wfrp_master.common.compendium.CompendiumItemDialog
 import cz.frantisekmasa.wfrp_master.common.compendium.CompendiumItemFormData
-import cz.frantisekmasa.wfrp_master.common.compendium.CompendiumScreenModel
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.Talent
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.InputValue
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.Rules
@@ -25,7 +24,7 @@ import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
 fun TalentDialog(
     talent: Talent?,
     onDismissRequest: () -> Unit,
-    screenModel: CompendiumScreenModel
+    screenModel: TalentCompendiumScreenModel
 ) {
     val formData = TalentFormData.fromTalent(talent)
     val strings = LocalStrings.current.talents
@@ -34,7 +33,7 @@ fun TalentDialog(
         onDismissRequest = onDismissRequest,
         title = if (talent == null) strings.titleNew else strings.titleEdit,
         formData = formData,
-        saver = screenModel::save,
+        saver = if (talent == null) screenModel::createNew else screenModel::update,
     ) { validate ->
         Column(
             verticalArrangement = Arrangement.spacedBy(12.dp),
