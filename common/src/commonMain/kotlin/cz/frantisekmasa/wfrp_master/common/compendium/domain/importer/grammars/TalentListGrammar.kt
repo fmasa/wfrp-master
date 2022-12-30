@@ -40,7 +40,7 @@ object TalentListGrammar : Grammar<List<Talent>>() {
         )
     }
 
-    private val testsLabels = listOf("Tests: ", "Bonus Tests: ")
+    private val testsLabels = listOf("Tests: ", "Bonus Tests: ", "Test: ")
 
     override val rootParser by skip(oneOrMore(sentence)) * oneOrMore(talent)
 
