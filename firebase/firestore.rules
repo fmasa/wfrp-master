@@ -282,7 +282,7 @@ service cloud.firestore {
                     allow delete: if canEditCharacter();
 
                     function isValidTalent(talent) {
-                        return ["id", "name", "description", "taken", "compendiumId"].hasAll(talent.keys())
+                        return ["id", "name", "description", "taken", "compendiumId", "tests"].hasAll(talent.keys())
                             && talent.id is string && talent.id == talentId && isValidUuid(talent.id)
                             && talent.name is string && isNotBlank(talent.name) && talent.name.size() <= 50
                             && talent.description is string && talent.description.size() <= 1500
@@ -292,7 +292,8 @@ service cloud.firestore {
                                     talent.compendiumId == null
                                     || (talent.compendiumId is string && exists(/databases/$(database)/documents/parties/$(partyId)/talents/$(talent.compendiumId)))
                                 )
-                            );
+                            )
+                            && (! ("tests" in talent) || (talent.tests is string && talent.tests.size() <= 200));
                     }
                 }
 
