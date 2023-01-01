@@ -42,7 +42,7 @@ kotlin {
                 api(compose.material)
                 api(compose.materialIconsExtended)
 
-                val voyagerVersion = "1.0.0-beta16"
+                val voyagerVersion = "1.0.0-rc03"
                 api("cafe.adriel.voyager:voyager-navigator:$voyagerVersion")
                 api("cafe.adriel.voyager:voyager-koin:$voyagerVersion")
                 api("cafe.adriel.voyager:voyager-transitions:$voyagerVersion")
