@@ -33,7 +33,7 @@ jobs:
   unit-tests:
     name: Unit tests
     runs-on: ubuntu-22.04
-    container: alvrme/alpine-android:android-30-jdk11
+    container: alvrme/alpine-android:android-33-jdk11
     steps:
       - uses: actions/checkout@v2
       - uses: actions/cache@v3
