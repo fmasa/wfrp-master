@@ -73,7 +73,7 @@ class CareerDetailScreen(
 
     @Composable
     override fun Content() {
-        val screenModel: CareerCompendiumScreenModel = rememberScreenModel()
+        val screenModel: CareerCompendiumScreenModel = rememberScreenModel(arg = partyId)
         val partyScreenModel: PartyScreenModel = rememberScreenModel(arg = partyId)
 
         val party = partyScreenModel.party.collectWithLifecycle(null).value
