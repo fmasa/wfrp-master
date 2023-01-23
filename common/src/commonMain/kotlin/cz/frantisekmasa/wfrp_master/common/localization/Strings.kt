@@ -490,6 +490,9 @@ data class HitLocationStrings(
 data class CompendiumStrings(
     val assurance: String = "The file is not saved anywhere and never leaves your device.",
     val searchPlaceholder: String = "Search items",
+    val bookCoreRulebook: String = "WFRP Core Rulebook",
+    val bookUpInArms: String = "Up in Arms",
+    val bookWindsOfMagic: String = "Winds of Magic",
     val buttonBuy: String = "Buy",
     val buttonImport: String = "Import",
     val buttonImportFromRulebook: String = "Import from Rulebook",

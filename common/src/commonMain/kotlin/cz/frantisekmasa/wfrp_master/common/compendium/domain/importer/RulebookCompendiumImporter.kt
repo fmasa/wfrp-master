@@ -115,7 +115,7 @@ class RulebookCompendiumImporter(
     }
 
     override suspend fun importCareers(): List<Career> {
-        return RulebookCareerImporter().importCareers(reader).toList()
+        return emptyList()
     }
 
     private fun splitMiraclesByCult(text: String): Sequence<Pair<String, String>> {

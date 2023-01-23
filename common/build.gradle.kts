@@ -129,6 +129,8 @@ kotlin {
                 // Firebase functions
                 api("com.google.firebase:firebase-functions-ktx:20.0.1")
 
+                implementation("com.tom-roush:pdfbox-android:2.0.27.0")
+
                 // Coil - image library
                 implementation("io.coil-kt:coil-compose:2.0.0")
 
@@ -158,6 +160,7 @@ kotlin {
                 implementation(compose.desktop.currentOs)
 
                 implementation("com.soywiz.korlibs.korau:korau:2.2.0")
+                implementation("org.apache.pdfbox:pdfbox:2.0.27")
             }
         }
 
