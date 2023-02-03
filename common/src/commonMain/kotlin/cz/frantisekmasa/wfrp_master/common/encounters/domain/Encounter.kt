@@ -13,7 +13,6 @@ data class Encounter(
     val name: String,
     val description: String,
     val position: Int,
-    @Suppress("unused") // This will be introduced in UI in future
     val completed: Boolean = false,
     val characters: Map<LocalCharacterId, Int> = emptyMap(),
 ) {

@@ -1,10 +1,14 @@
 package cz.frantisekmasa.wfrp_master.common.encounters
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
@@ -18,6 +22,7 @@ import androidx.compose.material.IconButton
 import androidx.compose.material.LocalContentAlpha
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
+import androidx.compose.material.Switch
 import androidx.compose.material.Text
 import androidx.compose.material.TextButton
 import androidx.compose.material.TopAppBar
@@ -65,11 +70,13 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.forms.NumberPicker
 import cz.frantisekmasa.wfrp_master.common.core.ui.menu.DropdownMenuItem
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.ContextMenu
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.EmptyUI
+import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.FullScreenProgress
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.ItemIcon
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.VisualOnlyIconDescription
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.rememberScreenModel
 import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.OptionsAction
+import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.SubheadBar
 import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.Subtitle
 import cz.frantisekmasa.wfrp_master.common.encounters.domain.Encounter
 import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
@@ -130,22 +137,25 @@ class EncounterDetailScreen(
                 )
             },
             content = {
-                if (encounter != null) {
-                    MainContainer(encounter, screenModel)
+                if (encounter == null) {
+                    FullScreenProgress()
+                    return@Scaffold
+                }
 
-                    if (startCombatDialogVisible) {
-                        val navigator = LocalNavigator.currentOrThrow
+                MainContainer(encounter, screenModel)
 
-                        StartCombatDialog(
-                            encounter = encounter,
-                            onDismissRequest = { startCombatDialogVisible = false },
-                            screenModel = rememberScreenModel(arg = encounterId.partyId),
-                            onComplete = {
-                                startCombatDialogVisible = false
-                                navigator.push(ActiveCombatScreen(encounterId.partyId))
-                            },
-                        )
-                    }
+                if (startCombatDialogVisible) {
+                    val navigator = LocalNavigator.currentOrThrow
+
+                    StartCombatDialog(
+                        encounter = encounter,
+                        onDismissRequest = { startCombatDialogVisible = false },
+                        screenModel = rememberScreenModel(arg = encounterId.partyId),
+                        onComplete = {
+                            startCombatDialogVisible = false
+                            navigator.push(ActiveCombatScreen(encounterId.partyId))
+                        },
+                    )
                 }
             }
         )
@@ -235,8 +245,28 @@ class EncounterDetailScreen(
                 .fillMaxSize()
                 .background(MaterialTheme.colors.background)
                 .verticalScroll(rememberScrollState())
-                .padding(top = 6.dp, bottom = Spacing.bottomPaddingUnderFab),
+                .padding(bottom = Spacing.bottomPaddingUnderFab),
         ) {
+            SubheadBar {
+                Row(
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier.fillMaxWidth(),
+                ) {
+                    Text(LocalStrings.current.encounters.labelCompleted)
+                    Switch(
+                        checked = encounter.completed,
+                        onCheckedChange = {
+                            coroutineScope.launch(Dispatchers.IO) {
+                                screenModel.updateEncounter(encounter.copy(completed = it))
+                            }
+                        }
+                    )
+                }
+            }
+
+            Spacer(Modifier.height(Spacing.small))
+
             DescriptionCard(screenModel)
 
             val navigator = LocalNavigator.currentOrThrow

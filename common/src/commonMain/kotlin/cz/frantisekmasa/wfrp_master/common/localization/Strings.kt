@@ -161,7 +161,9 @@ data class DrawerStrings(
 @Immutable
 data class EncounterStrings(
     val buttonAdd: String = "Add encounter",
+    val buttonShowCompleted: String = "Show Completed",
     val labelName: String = "Name",
+    val labelCompleted: String = "Completed",
     val labelDescription: String = "Description (Optional)",
     val messages: EncounterMessageStrings = EncounterMessageStrings(),
     val title: String = "Encounters",
