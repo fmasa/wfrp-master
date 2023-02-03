@@ -13,6 +13,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import java.util.UUID
 
@@ -21,7 +23,15 @@ class EncountersScreenModel(
     private val encounterRepository: EncounterRepository
 ) : ScreenModel {
 
-    val encounters: Flow<List<Encounter>> by lazy { encounterRepository.findByParty(partyId) }
+    private val encounters: Flow<List<Encounter>> = encounterRepository.findByParty(partyId)
+
+    val notCompletedEncounters: Flow<List<Encounter>> =
+        encounters.map { items -> items.filter { !it.completed } }
+            .distinctUntilChanged()
+
+    val allEncounters: Flow<List<Encounter>> =
+        encounters.distinctUntilChanged()
+            .map { items -> items.sortedBy { it.name } }
 
     suspend fun createEncounter(name: String, description: String) {
         val encounterId = UUID.randomUUID()
