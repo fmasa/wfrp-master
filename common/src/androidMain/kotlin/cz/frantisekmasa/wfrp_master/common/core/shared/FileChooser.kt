@@ -29,11 +29,13 @@ actual fun rememberFileChooser(
 
             val inputStream = context.contentResolver.openInputStream(uri)
 
-            onFileChoose(
-                if (inputStream == null)
-                    Result.failure(Exception("Could not open input stream"))
-                else Result.success(ReadableFile(inputStream))
-            )
+            inputStream.use {
+                onFileChoose(
+                    if (inputStream == null)
+                        Result.failure(Exception("Could not open input stream"))
+                    else Result.success(ReadableFile(inputStream))
+                )
+            }
         }
     }
 

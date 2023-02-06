@@ -24,12 +24,16 @@ class NativeFileChooser(
         val file = dialog.files.firstOrNull()
 
         coroutineScope.launch {
-            onFileChoose(
-                when (file) {
-                    null -> Result.failure(Exception("File not selected"))
-                    else -> Result.success(ReadableFile(file.inputStream()))
-                }
-            )
+            val inputStream = file?.inputStream()
+
+            inputStream.use {
+                onFileChoose(
+                    when (inputStream) {
+                        null -> Result.failure(Exception("File not selected"))
+                        else -> Result.success(ReadableFile(inputStream))
+                    }
+                )
+            }
         }
     }
 
