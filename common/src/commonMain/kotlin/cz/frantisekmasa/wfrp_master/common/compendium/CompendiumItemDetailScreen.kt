@@ -21,7 +21,6 @@ import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import com.benasher44.uuid.Uuid
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.CompendiumItem
-import cz.frantisekmasa.wfrp_master.common.core.domain.character.CharacterItem
 import cz.frantisekmasa.wfrp_master.common.core.ui.buttons.BackButton
 import cz.frantisekmasa.wfrp_master.common.core.ui.flow.collectWithLifecycle
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.FullScreenProgress
@@ -30,9 +29,9 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.LocalPersistentSn
 import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
 
 @Composable
-fun <A : CompendiumItem<A>, B : CharacterItem<B, A>> Screen.CompendiumItemDetailScreen(
+fun <A : CompendiumItem<A>> Screen.CompendiumItemDetailScreen(
     id: Uuid,
-    screenModel: CompendiumItemScreenModel<A, B>,
+    screenModel: CompendiumItemScreenModel<A>,
     detail: @Composable (A) -> Unit,
     editDialog: @Composable (item: A, onDismissRequest: () -> Unit) -> Unit,
 ) {

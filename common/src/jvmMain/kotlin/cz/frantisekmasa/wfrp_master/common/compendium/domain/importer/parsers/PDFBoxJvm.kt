@@ -1,5 +1,6 @@
 package cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.parsers
 
+import androidx.compose.runtime.Composable
 import org.apache.pdfbox.io.MemoryUsageSetting
 import org.apache.pdfbox.pdmodel.PDDocument
 import org.apache.pdfbox.pdmodel.font.PDFont
@@ -39,4 +40,9 @@ actual fun loadDocument(inputStream: InputStream): Document {
         inputStream,
         MemoryUsageSetting.setupTempFileOnly(),
     )
+}
+
+@Composable
+actual fun pdfBoxInitializer(): () -> Unit {
+    return { } // JVM library does not need initialization
 }

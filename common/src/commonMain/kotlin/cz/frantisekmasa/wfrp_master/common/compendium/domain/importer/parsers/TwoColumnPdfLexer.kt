@@ -1,6 +1,5 @@
 package cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.parsers
 
-import java.io.Writer
 import kotlin.properties.Delegates
 
 /**
@@ -16,7 +15,7 @@ class TwoColumnPdfLexer(
         val stripper = TextStripper()
         stripper.setStartPage(page)
         stripper.setEndPage(page)
-        stripper.writeText(document, Writer.nullWriter())
+        stripper.writeText(document, NullWriter())
 
         return Pair(
             stripper.columns[0].tokens
@@ -104,4 +103,3 @@ class TwoColumnPdfLexer(
         )
     }
 }
-

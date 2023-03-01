@@ -13,6 +13,8 @@ import cz.frantisekmasa.wfrp_master.common.core.domain.SocialClass
 
 object UpInArms : Book, CareerSource, TalentSource {
 
+    override val name = "Up in Arms"
+
     override fun importCareers(document: Document): List<Career> {
         return CareerParser().import(
             document,

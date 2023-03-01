@@ -15,6 +15,7 @@ import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -26,6 +27,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
 import cz.frantisekmasa.wfrp_master.common.compendium.CompendiumItemScreenModel.ImportAction
+import cz.frantisekmasa.wfrp_master.common.compendium.blessing.BlessingCompendiumScreenModel
+import cz.frantisekmasa.wfrp_master.common.compendium.career.CareerCompendiumScreenModel
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.Blessing
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.Career
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.CompendiumItem
@@ -34,6 +37,11 @@ import cz.frantisekmasa.wfrp_master.common.compendium.domain.Skill
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.Spell
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.Talent
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.Trait
+import cz.frantisekmasa.wfrp_master.common.compendium.miracle.MiracleCompendiumScreenModel
+import cz.frantisekmasa.wfrp_master.common.compendium.skill.SkillCompendiumScreenModel
+import cz.frantisekmasa.wfrp_master.common.compendium.spell.SpellCompendiumScreenModel
+import cz.frantisekmasa.wfrp_master.common.compendium.talent.TalentCompendiumScreenModel
+import cz.frantisekmasa.wfrp_master.common.compendium.trait.TraitCompendiumScreenModel
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.PartyId
 import cz.frantisekmasa.wfrp_master.common.core.ui.buttons.CloseButton
 import cz.frantisekmasa.wfrp_master.common.core.ui.dialogs.FullScreenDialog
@@ -78,80 +86,104 @@ private fun ImportedItemsPicker(
     onDismissRequest: () -> Unit,
     onComplete: () -> Unit,
 ) {
-    var step by remember(state) { mutableStateOf(ItemsScreen.SKILLS) }
+    val steps = remember(state) {
+        sequenceOf(
+            ItemsScreen.SKILLS to state.skills.isNotEmpty(),
+            ItemsScreen.TALENTS to state.talents.isNotEmpty(),
+            ItemsScreen.SPELLS to state.spells.isNotEmpty(),
+            ItemsScreen.BLESSINGS to state.blessings.isNotEmpty(),
+            ItemsScreen.MIRACLES to state.miracles.isNotEmpty(),
+            ItemsScreen.TRAITS to state.miracles.isNotEmpty(),
+            ItemsScreen.CAREERS to state.careers.isNotEmpty(),
+        ).filter { it.second }
+            .map { it.first }
+            .toList()
+    }
+    var step by remember(state) { mutableStateOf(steps.firstOrNull() ?: ItemsScreen.SKILLS) }
 
     val strings = LocalStrings.current.compendium
+    val goToNextStep = { current: ItemsScreen ->
+        val index = steps.indexOf(current)
 
-    when (step) {
-        ItemsScreen.SKILLS -> {
-            ItemPicker(
-                label = strings.pickPromptSkills,
-                items = state.skills,
-                screenModel = screen.rememberScreenModel(arg = partyId),
-                onContinue = { step = ItemsScreen.TALENTS },
-                onClose = onDismissRequest,
-                replaceExistingByDefault = state.replaceExistingByDefault,
-            )
+        if (index == -1 || index == steps.lastIndex) {
+            onComplete()
+        } else {
+            step = steps[index + 1]
         }
-        ItemsScreen.TALENTS -> {
-            ItemPicker(
-                label = strings.pickPromptTalents,
-                items = state.talents,
-                screenModel = screen.rememberScreenModel(arg = partyId),
-                onContinue = { step = ItemsScreen.SPELLS },
-                onClose = onDismissRequest,
-                replaceExistingByDefault = state.replaceExistingByDefault,
-            )
-        }
-        ItemsScreen.SPELLS -> {
-            ItemPicker(
-                label = strings.pickPromptSpells,
-                items = state.spells,
-                screenModel = screen.rememberScreenModel(arg = partyId),
-                onContinue = { step = ItemsScreen.BLESSINGS },
-                onClose = onDismissRequest,
-                replaceExistingByDefault = state.replaceExistingByDefault,
-            )
-        }
-        ItemsScreen.BLESSINGS -> {
-            ItemPicker(
-                label = strings.pickPromptBlessings,
-                items = state.blessings,
-                screenModel = screen.rememberScreenModel(arg = partyId),
-                onContinue = { step = ItemsScreen.MIRACLES },
-                onClose = onDismissRequest,
-                replaceExistingByDefault = state.replaceExistingByDefault,
-            )
-        }
-        ItemsScreen.MIRACLES -> {
-            ItemPicker(
-                label = strings.pickPromptMiracles,
-                items = state.miracles,
-                screenModel = screen.rememberScreenModel(arg = partyId),
-                onContinue = { step = ItemsScreen.TRAITS },
-                onClose = onDismissRequest,
-                replaceExistingByDefault = state.replaceExistingByDefault,
-            )
-        }
-        ItemsScreen.TRAITS -> {
-            ItemPicker(
-                label = strings.pickPromptTraits,
-                items = state.traits,
-                screenModel = screen.rememberScreenModel(arg = partyId),
-                onContinue = { step = ItemsScreen.CAREERS },
-                onClose = onDismissRequest,
-                replaceExistingByDefault = state.replaceExistingByDefault,
-            )
-        }
-        ItemsScreen.CAREERS -> {
-            ItemPicker(
-                label = strings.pickPromptCareers,
-                items = state.careers,
-                screenModel = screen.rememberScreenModel(arg = partyId),
-                onContinue = onComplete,
-                onClose = onDismissRequest,
-                replaceExistingByDefault = state.replaceExistingByDefault,
-            )
+    }
+
+    key(step) {
+        when (step) {
+            ItemsScreen.SKILLS -> {
+                ItemPicker(
+                    label = strings.pickPromptSkills,
+                    items = state.skills,
+                    screenModel = screen.rememberScreenModel<PartyId, SkillCompendiumScreenModel>(arg = partyId),
+                    onContinue = { goToNextStep(ItemsScreen.SKILLS) },
+                    onClose = onDismissRequest,
+                    replaceExistingByDefault = state.replaceExistingByDefault,
+                )
+            }
+            ItemsScreen.TALENTS -> {
+                ItemPicker(
+                    label = strings.pickPromptTalents,
+                    items = state.talents,
+                    screenModel = screen.rememberScreenModel<PartyId, TalentCompendiumScreenModel>(arg = partyId),
+                    onContinue = { goToNextStep(ItemsScreen.TALENTS) },
+                    onClose = onDismissRequest,
+                    replaceExistingByDefault = state.replaceExistingByDefault,
+                )
+            }
+            ItemsScreen.SPELLS -> {
+                ItemPicker(
+                    label = strings.pickPromptSpells,
+                    items = state.spells,
+                    screenModel = screen.rememberScreenModel<PartyId, SpellCompendiumScreenModel>(arg = partyId),
+                    onContinue = { goToNextStep(ItemsScreen.SPELLS) },
+                    onClose = onDismissRequest,
+                    replaceExistingByDefault = state.replaceExistingByDefault,
+                )
+            }
+            ItemsScreen.BLESSINGS -> {
+                ItemPicker(
+                    label = strings.pickPromptBlessings,
+                    items = state.blessings,
+                    screenModel = screen.rememberScreenModel<PartyId, BlessingCompendiumScreenModel>(arg = partyId),
+                    onContinue = { goToNextStep(ItemsScreen.BLESSINGS) },
+                    onClose = onDismissRequest,
+                    replaceExistingByDefault = state.replaceExistingByDefault,
+                )
+            }
+            ItemsScreen.MIRACLES -> {
+                ItemPicker(
+                    label = strings.pickPromptMiracles,
+                    items = state.miracles,
+                    screenModel = screen.rememberScreenModel<PartyId, MiracleCompendiumScreenModel>(arg = partyId),
+                    onContinue = { goToNextStep(ItemsScreen.MIRACLES) },
+                    onClose = onDismissRequest,
+                    replaceExistingByDefault = state.replaceExistingByDefault,
+                )
+            }
+            ItemsScreen.TRAITS -> {
+                ItemPicker(
+                    label = strings.pickPromptTraits,
+                    items = state.traits,
+                    screenModel = screen.rememberScreenModel<PartyId, TraitCompendiumScreenModel>(arg = partyId),
+                    onContinue = { goToNextStep(ItemsScreen.TRAITS) },
+                    onClose = onDismissRequest,
+                    replaceExistingByDefault = state.replaceExistingByDefault,
+                )
+            }
+            ItemsScreen.CAREERS -> {
+                ItemPicker(
+                    label = strings.pickPromptCareers,
+                    items = state.careers,
+                    screenModel = screen.rememberScreenModel<PartyId, CareerCompendiumScreenModel>(arg = partyId),
+                    onContinue = { goToNextStep(ItemsScreen.CAREERS) },
+                    onClose = onDismissRequest,
+                    replaceExistingByDefault = state.replaceExistingByDefault,
+                )
+            }
         }
     }
 }
@@ -159,7 +191,7 @@ private fun ImportedItemsPicker(
 @Composable
 private fun <T : CompendiumItem<T>> ItemPicker(
     label: String,
-    screenModel: CompendiumItemScreenModel<T, *>,
+    screenModel: CompendiumItemScreenModel<T>,
     onClose: () -> Unit,
     onContinue: () -> Unit,
     items: List<T>,

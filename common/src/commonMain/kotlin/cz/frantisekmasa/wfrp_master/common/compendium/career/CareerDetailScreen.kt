@@ -78,7 +78,7 @@ class CareerDetailScreen(
 
         val party = partyScreenModel.party.collectWithLifecycle(null).value
 
-        val career = remember { screenModel.getCareer(partyId, careerId) }
+        val career = remember { screenModel.get(careerId) }
             .collectWithLifecycle(null)
             .value
 

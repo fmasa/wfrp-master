@@ -30,7 +30,8 @@ import kotlin.math.abs
 import kotlin.math.max
 import kotlin.math.min
 
-object CoreRulebook : Book,
+object CoreRulebook :
+    Book,
     CareerSource,
     SkillSource,
     TalentSource,
@@ -38,6 +39,8 @@ object CoreRulebook : Book,
     SpellSource,
     BlessingSource,
     MiracleSource {
+
+    override val name: String = "Core Rulebook"
 
     override fun importTalents(document: Document): List<Talent> {
         return TalentParser().import(document, this, (132..147).asSequence())

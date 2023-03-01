@@ -502,9 +502,9 @@ data class CompendiumStrings(
     val buttonExportFile: String = "Export file",
     val iconAddCompendiumItem: String = "Add compendium item",
     val rulebookImportPrompt: AnnotatedString = buildAnnotatedString {
-        append("Import compendium from official WFRP Rulebook PDF.")
+        append("Import compendium from official WFRP Rulebook PDFs.\n")
         withStyle(SpanStyle(fontWeight = FontWeight.SemiBold)) {
-            append("Only the latest version of English Rulebook is supported.")
+            append("Only the latest version of English Rulebooks are supported.")
         }
     },
     val jsonImportPrompt: AnnotatedString = buildAnnotatedString {

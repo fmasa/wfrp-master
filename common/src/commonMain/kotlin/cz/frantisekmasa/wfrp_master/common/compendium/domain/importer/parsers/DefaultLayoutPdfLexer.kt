@@ -1,7 +1,5 @@
 package cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.parsers
 
-import java.io.Writer
-
 /**
  * PDF lexer that determines text position from order in which it's laid in PDF structure.
  * When working with two-page layout, [TwoColumnPdfLexer] should be used instead as that will
@@ -16,7 +14,7 @@ class DefaultLayoutPdfLexer(
         val stripper = TextStripper()
         stripper.setStartPage(page)
         stripper.setEndPage(page)
-        stripper.writeText(document, Writer.nullWriter())
+        stripper.writeText(document, NullWriter())
 
         return stripper.tokens
             .asSequence()
@@ -50,10 +48,12 @@ class DefaultLayoutPdfLexer(
 
                 if (
                     lastPosition == null ||
-                    (!structure.areSameStyle(
-                        lastPosition,
-                        position
-                    ) && position.getUnicode() != " ")
+                    (
+                        !structure.areSameStyle(
+                            lastPosition,
+                            position
+                        ) && position.getUnicode() != " "
+                        )
                 ) {
                     buildToken()
                     lastTextPosition = position

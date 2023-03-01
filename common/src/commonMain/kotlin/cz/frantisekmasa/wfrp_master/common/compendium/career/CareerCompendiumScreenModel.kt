@@ -1,10 +1,8 @@
 package cz.frantisekmasa.wfrp_master.common.compendium.career
 
-import arrow.core.Either
-import cafe.adriel.voyager.core.model.ScreenModel
 import com.benasher44.uuid.Uuid
+import cz.frantisekmasa.wfrp_master.common.compendium.CompendiumItemScreenModel
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.Career
-import cz.frantisekmasa.wfrp_master.common.compendium.domain.exceptions.CompendiumItemNotFound
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.Character
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.CharacterRepository
 import cz.frantisekmasa.wfrp_master.common.core.domain.compendium.Compendium
@@ -16,18 +14,14 @@ import kotlinx.coroutines.flow.Flow
 class CareerCompendiumScreenModel(
     private val partyId: PartyId,
     private val firestore: Firestore,
-    private val compendium: Compendium<Career>,
+    compendium: Compendium<Career>,
     private val characters: CharacterRepository,
-) : ScreenModel {
+) : CompendiumItemScreenModel<Career>(partyId, compendium) {
     val careers: Flow<List<Career>> = compendium.liveForParty(partyId)
 
-    fun getCareer(partyId: PartyId, careerId: Uuid): Flow<Either<CompendiumItemNotFound, Career>> {
-        return compendium.getLive(partyId, careerId)
-    }
-
-    suspend fun createNew(career: Career) {
+    override suspend fun createNew(compendiumItem: Career) {
         firestore.runTransaction { transaction ->
-            compendium.save(transaction, partyId, career)
+            compendium.save(transaction, partyId, compendiumItem)
         }
     }
 
@@ -45,43 +39,23 @@ class CareerCompendiumScreenModel(
         }
     }
 
-    suspend fun deleteLevel(careerId: Uuid, level: Career.Level) {
-        val career = compendium.getItem(partyId, careerId)
-        val charactersWithCareer = characters.findByCompendiumCareer(partyId, careerId)
-
+    override suspend fun update(compendiumItem: Career) {
         firestore.runTransaction { transaction ->
-            compendium.save(transaction, partyId, career)
-
-            charactersWithCareer
-                .asSequence()
-                .filter { it.compendiumCareer?.levelId == level.id }
-                .forEach { character ->
-                    characters.save(
-                        transaction,
-                        partyId,
-                        unlinkCharacterFromCompendiumCareer(character, career),
-                    )
-                }
+            compendium.save(transaction, partyId, compendiumItem)
         }
     }
 
-    suspend fun update(career: Career) {
-        firestore.runTransaction { transaction ->
-            compendium.save(transaction, partyId, career)
-        }
-    }
-
-    suspend fun remove(career: Career) {
-        val charactersWithCareer = characters.findByCompendiumCareer(partyId, career.id)
+    override suspend fun remove(compendiumItem: Career) {
+        val charactersWithCareer = characters.findByCompendiumCareer(partyId, compendiumItem.id)
 
         firestore.runTransaction { transaction ->
-            compendium.remove(transaction, partyId, career)
+            compendium.remove(transaction, partyId, compendiumItem)
 
             charactersWithCareer.forEach { character ->
                 characters.save(
                     transaction,
                     partyId,
-                    unlinkCharacterFromCompendiumCareer(character, career),
+                    unlinkCharacterFromCompendiumCareer(character, compendiumItem),
                 )
             }
         }

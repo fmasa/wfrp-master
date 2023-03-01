@@ -1,5 +1,6 @@
 package cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.parsers
 
+import androidx.compose.runtime.Composable
 import java.io.Closeable
 import java.io.InputStream
 import java.io.Writer
@@ -33,3 +34,6 @@ expect abstract class PdfTextStripper constructor() {
 }
 
 expect fun loadDocument(inputStream: InputStream): Document
+
+@Composable
+expect fun pdfBoxInitializer(): () -> Unit

@@ -1,6 +1,6 @@
 package cz.frantisekmasa.wfrp_master.common.compendium.blessing
 
-import cz.frantisekmasa.wfrp_master.common.compendium.CompendiumItemScreenModel
+import cz.frantisekmasa.wfrp_master.common.compendium.CharacterItemCompendiumItemScreenModel
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.Blessing
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.CharacterItemRepository
 import cz.frantisekmasa.wfrp_master.common.core.domain.compendium.Compendium
@@ -15,7 +15,7 @@ class BlessingCompendiumScreenModel(
     firestore: Firestore,
     compendium: Compendium<Blessing>,
     characterItems: CharacterItemRepository<CharacterBlessing>,
-) : CompendiumItemScreenModel<Blessing, CharacterBlessing>(
+) : CharacterItemCompendiumItemScreenModel<Blessing, CharacterBlessing>(
     partyId,
     firestore,
     compendium,

@@ -49,7 +49,6 @@ class MiracleParser {
                         .filterIsInstance<Token.ParagraphToken>()
             )
 
-
             add(
                 Miracle(
                     id = uuid4(),

@@ -20,7 +20,6 @@ class TalentParser {
 
         stream.dropWhile { it !is Token.Heading3 }
 
-
         while (stream.peek() != null) {
             val name = stream.consumeOneOfType<Token.Heading3>().text.trim()
 

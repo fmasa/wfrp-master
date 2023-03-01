@@ -14,6 +14,8 @@ import cz.frantisekmasa.wfrp_master.common.core.domain.SocialClass
 
 object WindsOfMagic : Book, CareerSource, SpellSource {
 
+    override val name = "Winds of Magic"
+
     override fun importCareers(document: Document): List<Career> {
         return CareerParser().import(
             document,

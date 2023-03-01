@@ -1,5 +1,8 @@
 package cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.parsers
 
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.platform.LocalContext
+import com.tom_roush.pdfbox.android.PDFBoxResourceLoader
 import com.tom_roush.pdfbox.io.MemoryUsageSetting
 import com.tom_roush.pdfbox.pdmodel.PDDocument
 import com.tom_roush.pdfbox.pdmodel.font.PDFont
@@ -38,4 +41,15 @@ actual fun loadDocument(inputStream: InputStream): Document {
         inputStream,
         MemoryUsageSetting.setupTempFileOnly(),
     )
+}
+
+@Composable
+actual fun pdfBoxInitializer(): () -> Unit {
+    val context = LocalContext.current
+
+    return {
+        if (!PDFBoxResourceLoader.isReady()) {
+            PDFBoxResourceLoader.init(context)
+        }
+    }
 }
