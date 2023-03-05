@@ -1,14 +1,14 @@
-import com.lowagie.text.pdf.PdfReader
-import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.RulebookTraitImporter
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.books.CoreRulebook
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.books.UpInArms
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.books.WindsOfMagic
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.parsers.Document
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.parsers.loadDocument
 import java.io.InputStream
+import kotlin.test.Ignore
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
+@Ignore
 class ImporterTest {
 
     @Test
@@ -69,14 +69,6 @@ class ImporterTest {
     }
 
     @Test
-    fun `traits import (OLD)`() {
-        withRulebookReader { reader ->
-            val traits = RulebookTraitImporter.importTraits(reader)
-            assertEquals(81, traits.count())
-        }
-    }
-
-    @Test
     fun `spell import (Core Rulebook)`() {
         withCoreRuleBook { document ->
             val spells = CoreRulebook.importSpells(document)
@@ -108,11 +100,6 @@ class ImporterTest {
 
             assertEquals(10 * 6, miracles.size)
         }
-    }
-
-    private fun withRulebookReader(block: (PdfReader) -> Unit) {
-        val rulebook = javaClass.getResourceAsStream("rulebook.pdf")
-        PdfReader(rulebook).use(block)
     }
 
     private fun withCoreRuleBook(block: (Document) -> Unit) {

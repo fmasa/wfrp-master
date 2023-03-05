@@ -47,8 +47,6 @@ kotlin {
                 api("cafe.adriel.voyager:voyager-koin:$voyagerVersion")
                 api("cafe.adriel.voyager:voyager-transitions:$voyagerVersion")
 
-                implementation("com.github.librepdf:openpdf:1.3.25")
-
                 api(project(":common:firebase"))
 
                 api("io.ktor:ktor-client-core:$ktorVersion")
@@ -148,9 +146,6 @@ kotlin {
                 // Network availability check
                 implementation("com.github.pwittchen:reactivenetwork-rx2:3.0.8")
                 implementation("org.jetbrains.kotlinx:kotlinx-coroutines-rx2:1.4.2")
-
-                // Rulebook parsing
-                implementation("com.github.andob:android-awt:1.0.0")
             }
         }
 
