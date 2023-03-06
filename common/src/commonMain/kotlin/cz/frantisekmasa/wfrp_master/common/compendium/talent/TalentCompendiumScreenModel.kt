@@ -2,7 +2,7 @@ package cz.frantisekmasa.wfrp_master.common.compendium.talent
 
 import cz.frantisekmasa.wfrp_master.common.character.effects.EffectManager
 import cz.frantisekmasa.wfrp_master.common.character.effects.EffectSource
-import cz.frantisekmasa.wfrp_master.common.compendium.CompendiumItemScreenModel
+import cz.frantisekmasa.wfrp_master.common.compendium.CharacterItemCompendiumItemScreenModel
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.Talent
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.CharacterItemRepository
 import cz.frantisekmasa.wfrp_master.common.core.domain.compendium.Compendium
@@ -18,7 +18,7 @@ class TalentCompendiumScreenModel(
     compendium: Compendium<Talent>,
     characterItems: CharacterItemRepository<CharacterTalent>,
     private val effectManager: EffectManager,
-) : CompendiumItemScreenModel<Talent, CharacterTalent>(
+) : CharacterItemCompendiumItemScreenModel<Talent, CharacterTalent>(
     partyId,
     firestore,
     compendium,

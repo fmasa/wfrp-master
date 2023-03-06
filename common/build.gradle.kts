@@ -47,8 +47,6 @@ kotlin {
                 api("cafe.adriel.voyager:voyager-koin:$voyagerVersion")
                 api("cafe.adriel.voyager:voyager-transitions:$voyagerVersion")
 
-                implementation("com.github.librepdf:openpdf:1.3.25")
-
                 api(project(":common:firebase"))
 
                 api("io.ktor:ktor-client-core:$ktorVersion")
@@ -129,6 +127,8 @@ kotlin {
                 // Firebase functions
                 api("com.google.firebase:firebase-functions-ktx:20.0.1")
 
+                implementation("com.tom-roush:pdfbox-android:2.0.27.0")
+
                 // Coil - image library
                 implementation("io.coil-kt:coil-compose:2.0.0")
 
@@ -146,9 +146,6 @@ kotlin {
                 // Network availability check
                 implementation("com.github.pwittchen:reactivenetwork-rx2:3.0.8")
                 implementation("org.jetbrains.kotlinx:kotlinx-coroutines-rx2:1.4.2")
-
-                // Rulebook parsing
-                implementation("com.github.andob:android-awt:1.0.0")
             }
         }
 
@@ -158,6 +155,7 @@ kotlin {
                 implementation(compose.desktop.currentOs)
 
                 implementation("com.soywiz.korlibs.korau:korau:2.2.0")
+                implementation("org.apache.pdfbox:pdfbox:2.0.27")
             }
         }
 

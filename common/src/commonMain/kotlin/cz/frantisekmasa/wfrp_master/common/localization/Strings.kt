@@ -490,6 +490,9 @@ data class HitLocationStrings(
 data class CompendiumStrings(
     val assurance: String = "The file is not saved anywhere and never leaves your device.",
     val searchPlaceholder: String = "Search items",
+    val bookCoreRulebook: String = "WFRP Core Rulebook",
+    val bookUpInArms: String = "Up in Arms",
+    val bookWindsOfMagic: String = "Winds of Magic",
     val buttonBuy: String = "Buy",
     val buttonImport: String = "Import",
     val buttonImportFromRulebook: String = "Import from Rulebook",
@@ -499,9 +502,9 @@ data class CompendiumStrings(
     val buttonExportFile: String = "Export file",
     val iconAddCompendiumItem: String = "Add compendium item",
     val rulebookImportPrompt: AnnotatedString = buildAnnotatedString {
-        append("Import compendium from official WFRP Rulebook PDF.")
+        append("Import compendium from official WFRP Rulebook PDFs.\n")
         withStyle(SpanStyle(fontWeight = FontWeight.SemiBold)) {
-            append("Only the latest version of English Rulebook is supported.")
+            append("Only the latest version of English Rulebooks are supported.")
         }
     },
     val jsonImportPrompt: AnnotatedString = buildAnnotatedString {

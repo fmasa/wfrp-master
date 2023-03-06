@@ -56,9 +56,6 @@ data class Trait(
     override fun unlinkFromCompendium() = this // TODO: Unlink from compendium item
 
     init {
-        if (description.length > CompendiumTrait.DESCRIPTION_MAX_LENGTH) {
-            println(description)
-        }
         require(specificationValues.keys.all { name.contains(it) })
         require(name.isNotEmpty())
         require(name.length <= CompendiumTrait.NAME_MAX_LENGTH) {

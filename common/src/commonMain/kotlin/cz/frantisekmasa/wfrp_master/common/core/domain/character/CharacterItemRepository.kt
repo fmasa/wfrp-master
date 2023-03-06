@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.Flow
 /**
  * @see [CharacterItem]
  */
-interface CharacterItemRepository<T> {
+interface CharacterItemRepository<T> : CharacterCompendiumItemRepository<T> {
     /**
      * Returns flow which emits current list of items for given character
      */
@@ -32,9 +32,9 @@ interface CharacterItemRepository<T> {
      */
     suspend fun save(characterId: CharacterId, item: T)
 
-    fun save(transaction: Transaction, characterId: CharacterId, item: T)
+    override fun save(transaction: Transaction, characterId: CharacterId, item: T)
 
-    suspend fun findByCompendiumId(
+    override suspend fun findByCompendiumId(
         partyId: PartyId,
         compendiumItemId: Uuid,
     ): List<Pair<CharacterId, T>>

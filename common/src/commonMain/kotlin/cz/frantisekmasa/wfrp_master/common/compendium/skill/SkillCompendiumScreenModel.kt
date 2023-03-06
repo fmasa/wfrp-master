@@ -1,6 +1,6 @@
 package cz.frantisekmasa.wfrp_master.common.compendium.skill
 
-import cz.frantisekmasa.wfrp_master.common.compendium.CompendiumItemScreenModel
+import cz.frantisekmasa.wfrp_master.common.compendium.CharacterItemCompendiumItemScreenModel
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.Skill
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.CharacterItemRepository
 import cz.frantisekmasa.wfrp_master.common.core.domain.compendium.Compendium
@@ -15,7 +15,7 @@ class SkillCompendiumScreenModel(
     firestore: Firestore,
     compendium: Compendium<Skill>,
     characterItems: CharacterItemRepository<CharacterSkill>,
-) : CompendiumItemScreenModel<Skill, CharacterSkill>(
+) : CharacterItemCompendiumItemScreenModel<Skill, CharacterSkill>(
     partyId,
     firestore,
     compendium,

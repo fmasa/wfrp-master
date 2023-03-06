@@ -2,7 +2,7 @@ package cz.frantisekmasa.wfrp_master.common.compendium.trait
 
 import cz.frantisekmasa.wfrp_master.common.character.effects.EffectManager
 import cz.frantisekmasa.wfrp_master.common.character.effects.EffectSource
-import cz.frantisekmasa.wfrp_master.common.compendium.CompendiumItemScreenModel
+import cz.frantisekmasa.wfrp_master.common.compendium.CharacterItemCompendiumItemScreenModel
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.Trait
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.CharacterItemRepository
 import cz.frantisekmasa.wfrp_master.common.core.domain.compendium.Compendium
@@ -18,7 +18,7 @@ class TraitCompendiumScreenModel(
     compendium: Compendium<Trait>,
     characterItems: CharacterItemRepository<CharacterTrait>,
     private val effectManager: EffectManager,
-) : CompendiumItemScreenModel<Trait, CharacterTrait>(partyId, firestore, compendium, characterItems) {
+) : CharacterItemCompendiumItemScreenModel<Trait, CharacterTrait>(partyId, firestore, compendium, characterItems) {
 
     override suspend fun saveCharacterItem(
         transaction: Transaction,

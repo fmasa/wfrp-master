@@ -1,6 +1,6 @@
 package cz.frantisekmasa.wfrp_master.common.compendium.miracle
 
-import cz.frantisekmasa.wfrp_master.common.compendium.CompendiumItemScreenModel
+import cz.frantisekmasa.wfrp_master.common.compendium.CharacterItemCompendiumItemScreenModel
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.Miracle
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.CharacterItemRepository
 import cz.frantisekmasa.wfrp_master.common.core.domain.compendium.Compendium
@@ -15,7 +15,7 @@ class MiracleCompendiumScreenModel(
     firestore: Firestore,
     compendium: Compendium<Miracle>,
     characterItems: CharacterItemRepository<CharacterMiracle>,
-) : CompendiumItemScreenModel<Miracle, CharacterMiracle>(
+) : CharacterItemCompendiumItemScreenModel<Miracle, CharacterMiracle>(
     partyId,
     firestore,
     compendium,

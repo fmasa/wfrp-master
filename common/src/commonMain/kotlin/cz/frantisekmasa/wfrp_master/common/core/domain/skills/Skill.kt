@@ -42,7 +42,7 @@ data class Skill(
 
     companion object {
         const val NAME_MAX_LENGTH = 50
-        const val DESCRIPTION_MAX_LENGTH = 2000
+        val DESCRIPTION_MAX_LENGTH get() = CompendiumSkill.DESCRIPTION_MAX_LENGTH
         const val MIN_ADVANCES = 0
     }
 }

@@ -1,6 +1,6 @@
 package cz.frantisekmasa.wfrp_master.common.compendium.spell
 
-import cz.frantisekmasa.wfrp_master.common.compendium.CompendiumItemScreenModel
+import cz.frantisekmasa.wfrp_master.common.compendium.CharacterItemCompendiumItemScreenModel
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.Spell
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.CharacterItemRepository
 import cz.frantisekmasa.wfrp_master.common.core.domain.compendium.Compendium
@@ -15,7 +15,7 @@ class SpellCompendiumScreenModel(
     firestore: Firestore,
     compendium: Compendium<Spell>,
     characterItems: CharacterItemRepository<CharacterSpell>,
-) : CompendiumItemScreenModel<Spell, CharacterSpell>(
+) : CharacterItemCompendiumItemScreenModel<Spell, CharacterSpell>(
     partyId,
     firestore,
     compendium,
