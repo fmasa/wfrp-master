@@ -99,7 +99,7 @@ private fun ItemIcon(painter: Painter, size: ItemIcon.Size, backgroundColor: Col
 }
 
 @Composable
-private fun defaultBackgroundColor() =
+fun defaultBackgroundColor() =
     MaterialTheme.colors.onSurface.copy(alpha = ContentAlpha.medium)
 
 @Composable

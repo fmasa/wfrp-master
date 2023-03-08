@@ -1,61 +1,274 @@
 package cz.frantisekmasa.wfrp_master.common.core.ui.forms
 
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.ListItem
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.OutlinedButton
+import androidx.compose.material.Scaffold
+import androidx.compose.material.Surface
+import androidx.compose.material.Text
+import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import com.benasher44.uuid.Uuid
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.Career
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.Character
+import cz.frantisekmasa.wfrp_master.common.core.domain.character.SocialStatus
+import cz.frantisekmasa.wfrp_master.common.core.shared.Parcelable
+import cz.frantisekmasa.wfrp_master.common.core.shared.Parcelize
+import cz.frantisekmasa.wfrp_master.common.core.shared.Resources
+import cz.frantisekmasa.wfrp_master.common.core.ui.buttons.BackButton
+import cz.frantisekmasa.wfrp_master.common.core.ui.buttons.CloseButton
+import cz.frantisekmasa.wfrp_master.common.core.ui.dialogs.FullScreenDialog
+import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.EmptyUI
+import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.ItemIcon
+import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.SearchableList
+import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
+import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.defaultBackgroundColor
+import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.SaveAction
 import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
+
+sealed interface SelectedCareer : Parcelable {
+
+    @Parcelize
+    data class CompendiumCareer(
+        val value: Character.CompendiumCareer,
+        val socialStatus: SocialStatus,
+    ) : SelectedCareer
+
+    @Parcelize
+    data class NonCompendiumCareer(
+        val careerName: String,
+        val socialClass: String,
+    ) : SelectedCareer
+
+    companion object {
+        val NoCareer = NonCompendiumCareer("", "")
+    }
+}
 
 @Composable
 fun CareerSelectBox(
     careers: List<Career>,
-    value: Character.CompendiumCareer?,
-    onValueChange: (Character.CompendiumCareer?) -> Unit,
-    validate: Boolean,
+    value: SelectedCareer?,
+    onValueChange: (SelectedCareer) -> Unit,
 ) {
-    val none = LocalStrings.current.commonUi.itemNone
-
-    val items = remember(careers, none) {
+    val items = remember(careers) {
         careers
             .flatMap { career -> career.levels.map { it to career } }
             .map { careerLevelName(it.first, it.second) }
             .sortedBy { it.name }
-            .map { it to it.name } + Pair(null, none)
+            .map { it to it.name }
     }
 
     val itemValue by derivedStateOf {
-        items.firstOrNull { (item, _) ->
-            (value == null && item == null) ||
-                (
-                    value != null && item != null &&
-                        item.careerId == value.careerId &&
-                        item.levelId == value.levelId
-                    )
-        }?.first
+        when (value) {
+            is SelectedCareer.CompendiumCareer -> items.firstOrNull { (item, _) ->
+                item.careerId == value.value.careerId && item.levelId == value.value.levelId
+            }?.first?.name
+            SelectedCareer.NoCareer -> null
+            is SelectedCareer.NonCompendiumCareer -> value.careerName.takeIf { it != "" }
+                ?: value.socialClass
+            else -> null
+        }
     }
 
-    SelectBox(
-        label = LocalStrings.current.character.labelCareer,
-        items = items,
-        onValueChange = { selectedValue ->
-            onValueChange(
-                selectedValue?.let {
-                    Character.CompendiumCareer(
-                        careerId = it.careerId,
-                        levelId = it.levelId,
+    var dialogOpened by rememberSaveable { mutableStateOf(false) }
+
+    if (dialogOpened) {
+        CareerChooserDialog(
+            onDismissRequest = { dialogOpened = false },
+            items = items,
+            onChoose = onValueChange,
+            currentValue = value,
+        )
+    }
+
+    Column {
+        SelectBoxLabel(LocalStrings.current.character.labelCareer)
+
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Box(Modifier.weight(1f)) {
+                SelectBoxToggle(
+                    label = null,
+                    onClick = { dialogOpened = true },
+                ) {
+                    Text(itemValue ?: LocalStrings.current.commonUi.itemNone)
+                }
+            }
+
+            if (itemValue != null) {
+                CloseButton(
+                    contentDescription = LocalStrings.current.careers.buttonClearSelectBox,
+                    onClick = {
+                        onValueChange(SelectedCareer.NoCareer)
+                    }
+                )
+            }
+        }
+    }
+}
+
+@Composable
+private fun CareerChooserDialog(
+    items: List<Pair<CareerLevel, String>>,
+    currentValue: SelectedCareer?,
+    onChoose: (SelectedCareer) -> Unit,
+    onDismissRequest: () -> Unit,
+) {
+
+    FullScreenDialog(
+        onDismissRequest = onDismissRequest,
+    ) {
+        var customCareer by rememberSaveable {
+            mutableStateOf(
+                currentValue is SelectedCareer.NonCompendiumCareer &&
+                    currentValue != SelectedCareer.NoCareer
+            )
+        }
+
+        if (customCareer) {
+            NonCompendiumCareerForm(
+                onDismissRequest = onDismissRequest,
+                defaultValue = currentValue as? SelectedCareer.NonCompendiumCareer,
+                onSubmit = {
+                    onChoose(it)
+                    onDismissRequest()
+                }
+            )
+
+            return@FullScreenDialog
+        }
+
+        Column(Modifier.fillMaxSize()) {
+            SearchableList(
+                modifier = Modifier.weight(1f),
+                data = SearchableList.Data.Loaded(items),
+                searchableValue = { it.second },
+                navigationIcon = { CloseButton(onDismissRequest) },
+                title = LocalStrings.current.compendium.tabCareers,
+                searchPlaceholder = LocalStrings.current.careers.searchPlaceholder,
+                emptyUi = {
+                    EmptyUI(
+                        text = LocalStrings.current.characterCreation.messages.noCareersInCompendium,
+                        subText = LocalStrings.current.compendium.messages.noItemsInCompendiumSubtextPlayer,
+                        icon = Resources.Drawable.Career,
+                    )
+                },
+                key = { it.first.levelId },
+            ) { (level, label) ->
+                ListItem(
+                    modifier = Modifier.clickable(
+                        onClick = {
+                            onChoose(
+                                SelectedCareer.CompendiumCareer(
+                                    Character.CompendiumCareer(
+                                        careerId = level.careerId,
+                                        levelId = level.levelId,
+                                    ),
+                                    level.socialStatus,
+                                )
+                            )
+                            onDismissRequest()
+                        }
+                    ),
+                    icon = {
+                        ItemIcon(
+                            Resources.Drawable.Career,
+                            ItemIcon.Size.Small,
+                            backgroundColor = if (
+                                currentValue is SelectedCareer.CompendiumCareer &&
+                                currentValue.value.levelId == level.levelId
+                            ) MaterialTheme.colors.primaryVariant else defaultBackgroundColor()
+                        )
+                    },
+                    text = { Text(label) },
+                )
+            }
+
+            Surface(elevation = 8.dp) {
+                OutlinedButton(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(Spacing.medium),
+                    onClick = { customCareer = true },
+                ) {
+                    Text(LocalStrings.current.character.labelCustomCareer)
+                }
+            }
+        }
+    }
+}
+
+@Composable
+fun NonCompendiumCareerForm(
+    onDismissRequest: () -> Unit,
+    defaultValue: SelectedCareer.NonCompendiumCareer?,
+    onSubmit: (SelectedCareer.NonCompendiumCareer) -> Unit,
+) {
+    val careerName = inputValue(defaultValue?.careerName ?: "")
+    val socialClass = inputValue(defaultValue?.socialClass ?: "")
+
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                title = {
+                    Text(LocalStrings.current.character.labelCareer)
+                },
+                navigationIcon = { BackButton(onDismissRequest) },
+                actions = {
+                    SaveAction(
+                        onClick = {
+                            onSubmit(
+                                SelectedCareer.NonCompendiumCareer(
+                                    careerName = careerName.value,
+                                    socialClass = socialClass.value,
+                                )
+                            )
+                        }
                     )
                 }
             )
-        },
-        value = itemValue,
-    )
+        }
+    ) {
+        Column(
+            Modifier
+                .verticalScroll(rememberScrollState())
+                .padding(Spacing.bodyPadding),
+            verticalArrangement = Arrangement.spacedBy(Spacing.small),
+        ) {
+            TextInput(
+                label = LocalStrings.current.character.labelClass,
+                value = socialClass,
+                maxLength = Character.SOCIAL_CLASS_MAX_LENGTH,
+                validate = true,
+            )
 
-    if (validate && itemValue == null) {
-        ErrorMessage(LocalStrings.current.validation.notBlank)
+            TextInput(
+                label = LocalStrings.current.character.labelCareer,
+                value = careerName,
+                maxLength = Character.CAREER_MAX_LENGTH,
+                validate = true,
+            )
+        }
     }
 }
 
@@ -64,6 +277,7 @@ private data class CareerLevel(
     val levelId: Uuid,
     val careerId: Uuid,
     val name: String,
+    val socialStatus: SocialStatus,
 )
 
 private fun careerLevelName(level: Career.Level, career: Career): CareerLevel {
@@ -72,6 +286,7 @@ private fun careerLevelName(level: Career.Level, career: Career): CareerLevel {
     return CareerLevel(
         careerId = career.id,
         levelId = level.id,
-        name = "${level.name} (${career.name} $levelNumber)"
+        name = "${level.name} (${career.name} $levelNumber)",
+        socialStatus = level.status,
     )
 }

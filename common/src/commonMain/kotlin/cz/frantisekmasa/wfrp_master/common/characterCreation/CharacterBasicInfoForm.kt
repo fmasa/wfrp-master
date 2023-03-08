@@ -2,8 +2,6 @@ package cz.frantisekmasa.wfrp_master.common.characterCreation
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
@@ -19,11 +17,11 @@ import cz.frantisekmasa.wfrp_master.common.core.domain.character.Race
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.SocialStatus
 import cz.frantisekmasa.wfrp_master.common.core.domain.localizedName
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.CareerSelectBox
-import cz.frantisekmasa.wfrp_master.common.core.ui.forms.CheckboxWithText
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.ChipList
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.FormData
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.InputValue
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.Rules
+import cz.frantisekmasa.wfrp_master.common.core.ui.forms.SelectedCareer
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.SocialStatusInput
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.TextInput
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.inputValue
@@ -36,9 +34,7 @@ object CharacterBasicInfoForm {
         val name: InputValue,
         val publicName: InputValue,
         val socialClass: InputValue,
-        val career: InputValue,
-        val customCareer: MutableState<Boolean>,
-        val compendiumCareer: MutableState<Character.CompendiumCareer?>,
+        val career: MutableState<SelectedCareer?>,
         val race: MutableState<Race?>,
         val psychology: InputValue,
         val motivation: InputValue,
@@ -58,19 +54,28 @@ object CharacterBasicInfoForm {
                 name = inputValue(character?.name ?: "", Rules.NotBlank()),
                 publicName = inputValue(character?.publicName ?: ""),
                 socialClass = inputValue(character?.socialClass ?: ""),
-                career = inputValue(character?.career ?: ""),
+                career = rememberSaveable {
+                    mutableStateOf(
+                        character?.let {
+                            val compendiumCareer = character.compendiumCareer
+                            compendiumCareer?.let {
+                                SelectedCareer.CompendiumCareer(
+                                    compendiumCareer,
+                                    character.status,
+                                )
+                            } ?: SelectedCareer.NonCompendiumCareer(
+                                character.career,
+                                character.socialClass,
+                            )
+                        }
+                    )
+                },
                 race = rememberSaveable {
                     mutableStateOf(if (character == null) Race.HUMAN else character.race)
                 },
                 psychology = inputValue(character?.psychology ?: ""),
                 motivation = inputValue(character?.motivation ?: ""),
                 note = inputValue(character?.note ?: ""),
-                customCareer = rememberSaveable {
-                    mutableStateOf(character != null && character.career != "")
-                },
-                compendiumCareer = rememberSaveable {
-                    mutableStateOf(character?.compendiumCareer)
-                },
                 status = rememberSaveable {
                     mutableStateOf(
                         character?.status
@@ -81,8 +86,7 @@ object CharacterBasicInfoForm {
             )
         }
 
-        override fun isValid(): Boolean =
-            name.value.isNotBlank() && (customCareer.value || compendiumCareer.value != null)
+        override fun isValid(): Boolean = name.value.isNotBlank()
     }
 }
 
@@ -118,43 +122,21 @@ fun CharacterBasicInfoForm(
             onValueChange = { data.race.value = it },
         )
 
-        CheckboxWithText(
-            strings.labelCustomCareer,
-            checked = data.customCareer.value,
-            onCheckedChange = { data.customCareer.value = !data.customCareer.value },
+        CareerSelectBox(
+            careers = data.careers,
+            value = data.career.value,
+            onValueChange = {
+                if (it is SelectedCareer.CompendiumCareer && data.career.value != it) {
+                    data.status.value = it.socialStatus
+                }
+                data.career.value = it
+            },
         )
 
-        if (data.customCareer.value) {
-            Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                TextInput(
-                    modifier = Modifier.weight(1f),
-                    label = strings.labelClass,
-                    value = data.socialClass,
-                    maxLength = Character.SOCIAL_CLASS_MAX_LENGTH,
-                    validate = validate,
-                )
-
-                TextInput(
-                    modifier = Modifier.weight(1f),
-                    label = strings.labelCareer,
-                    value = data.career,
-                    maxLength = Character.CAREER_MAX_LENGTH,
-                    validate = validate,
-                )
-            }
-
-            SocialStatusInput(
-                value = data.status.value,
-                onValueChange = { data.status.value = it },
-            )
-        } else {
-            CareerSelectBox(
-                careers = data.careers,
-                value = data.compendiumCareer.value,
-                onValueChange = { data.compendiumCareer.value = it },
-                validate = validate,
-            )
-        }
+        SocialStatusInput(
+            value = data.status.value,
+            onValueChange = { data.status.value = it },
+        )
 
         TextInput(
             label = strings.labelPsychology,
