@@ -248,6 +248,7 @@ data class BlessingMessageStrings(
 
 @Immutable
 data class CareerStrings(
+    val buttonClearSelectBox: String = "Clear Career Select box",
     val labelName: String = "Name",
     val labelCharacteristics: String = "Characteristics",
     val labelDescription: String = "Description (Optional)",
@@ -267,6 +268,7 @@ data class CareerStrings(
     val commaSeparatedSkillsHelper: String = "Comma separated list of Skills",
     val commaSeparatedTalentsHelper: String = "Comma separated list of Talents",
     val commaSeparatedTrappingsHelper: String = "Comma separated list of Trappings",
+    val searchPlaceholder: String = "Search in Careers",
 )
 
 @Immutable
@@ -1048,4 +1050,10 @@ data class CharacterCreationStrings(
     val stepBasicInfo: String = "Basic info",
     val stepPointPools: String = "Point pools",
     val title: String = "Describe your character…",
+    val messages: CharacterCreationMessageStrings = CharacterCreationMessageStrings(),
+)
+
+@Immutable
+data class CharacterCreationMessageStrings(
+    val noCareersInCompendium: String = "No careers",
 )

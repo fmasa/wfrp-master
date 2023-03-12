@@ -8,11 +8,14 @@ import androidx.compose.runtime.Composable
 import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
 
 @Composable
-fun CloseButton(onClick: () -> Unit) {
+fun CloseButton(
+    onClick: () -> Unit,
+    contentDescription: String = LocalStrings.current.commonUi.labelCloseDialog,
+) {
     IconButton(onClick = onClick) {
         Icon(
             Icons.Rounded.Close,
-            LocalStrings.current.commonUi.labelCloseDialog,
+            contentDescription = contentDescription,
         )
     }
 }

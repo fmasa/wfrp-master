@@ -11,7 +11,7 @@ import cz.frantisekmasa.wfrp_master.common.core.domain.compendium.Compendium
 import cz.frantisekmasa.wfrp_master.common.core.domain.identifiers.CharacterId
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.PartyId
 import cz.frantisekmasa.wfrp_master.common.core.logging.Reporter
-import cz.frantisekmasa.wfrp_master.common.core.shared.IO
+import cz.frantisekmasa.wfrp_master.common.core.ui.forms.SelectedCareer
 import io.github.aakira.napier.Napier
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
@@ -41,11 +41,7 @@ class CharacterCreationScreenModel(
                 Napier.d("Creating character")
 
                 val characteristics = characteristicsData.toValue()
-                val customCareer = info.customCareer.value
-                val careerLevel = info.careers
-                    .asSequence()
-                    .flatMap { it.levels }
-                    .firstOrNull { it.id == info.compendiumCareer.value?.levelId }
+                val career = info.career.value
 
                 characters.save(
                     characterId.partyId,
@@ -55,9 +51,9 @@ class CharacterCreationScreenModel(
                         name = info.name.value,
                         publicName = info.publicName.value.takeIf { it.isNotBlank() },
                         userId = userId?.toString(),
-                        career = if (customCareer) info.career.value else "",
-                        socialClass = if (customCareer) info.socialClass.value else "",
-                        status = careerLevel?.status ?: info.status.value,
+                        career = if (career is SelectedCareer.NonCompendiumCareer) career.careerName else "",
+                        socialClass = if (career is SelectedCareer.NonCompendiumCareer) career.socialClass else "",
+                        status = info.status.value,
                         race = info.race.value,
                         characteristicsBase = characteristics.base,
                         characteristicsAdvances = characteristics.advances,
@@ -65,7 +61,7 @@ class CharacterCreationScreenModel(
                         psychology = info.psychology.value,
                         motivation = info.motivation.value,
                         note = info.note.value,
-                        compendiumCareer = if (!customCareer) info.compendiumCareer.value else null,
+                        compendiumCareer = if (career is SelectedCareer.CompendiumCareer) career.value else null,
                     ).refreshWounds()
                 )
 

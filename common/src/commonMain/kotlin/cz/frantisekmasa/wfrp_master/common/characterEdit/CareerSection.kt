@@ -9,15 +9,11 @@ import cz.frantisekmasa.wfrp_master.common.character.CharacterScreenModel
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.Career
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.Character
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.SocialStatus
-import cz.frantisekmasa.wfrp_master.common.core.shared.IO
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.CareerSelectBox
-import cz.frantisekmasa.wfrp_master.common.core.ui.forms.CheckboxWithText
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.FormScreen
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.HydratedFormData
-import cz.frantisekmasa.wfrp_master.common.core.ui.forms.InputValue
+import cz.frantisekmasa.wfrp_master.common.core.ui.forms.SelectedCareer
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.SocialStatusInput
-import cz.frantisekmasa.wfrp_master.common.core.ui.forms.TextInput
-import cz.frantisekmasa.wfrp_master.common.core.ui.forms.inputValue
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.FullScreenProgress
 import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
 import kotlinx.coroutines.Dispatchers
@@ -58,34 +54,16 @@ fun CareerSection(character: Character, screenModel: CharacterScreenModel) {
             return@FormScreen
         }
 
-        CheckboxWithText(
-            strings.labelCustomCareer,
-            checked = data.customCareer.value,
-            onCheckedChange = { data.customCareer.value = !data.customCareer.value },
+        CareerSelectBox(
+            careers = careers,
+            value = data.career.value,
+            onValueChange = {
+                if (it is SelectedCareer.CompendiumCareer && data.career.value != it) {
+                    data.status.value = it.socialStatus
+                }
+                data.career.value = it
+            },
         )
-
-        if (data.customCareer.value) {
-            TextInput(
-                label = strings.labelClass,
-                value = data.socialClass,
-                maxLength = Character.SOCIAL_CLASS_MAX_LENGTH,
-                validate = validate,
-            )
-
-            TextInput(
-                label = strings.labelCareer,
-                value = data.careerName,
-                maxLength = Character.CAREER_MAX_LENGTH,
-                validate = validate,
-            )
-        } else {
-            CareerSelectBox(
-                careers = careers,
-                value = data.compendiumCareer.value,
-                onValueChange = { data.compendiumCareer.value = it },
-                validate = validate,
-            )
-        }
 
         SocialStatusInput(
             value = data.status.value,
@@ -95,31 +73,43 @@ fun CareerSection(character: Character, screenModel: CharacterScreenModel) {
 }
 
 data class CareerFormData(
-    val careerName: InputValue,
-    val socialClass: InputValue,
+    val career: MutableState<SelectedCareer>,
     val status: MutableState<SocialStatus>,
-    val compendiumCareer: MutableState<Character.CompendiumCareer?>,
-    val customCareer: MutableState<Boolean>,
 ) : HydratedFormData<CareerData> {
 
-    override fun isValid(): Boolean = careerName.isValid() &&
-        (customCareer.value || compendiumCareer.value != null)
+    override fun isValid(): Boolean = true
 
-    override fun toValue(): CareerData = CareerData(
-        careerName = if (customCareer.value)careerName.value else "",
-        socialClass = if (customCareer.value) socialClass.value else "",
-        status = status.value,
-        compendiumCareer = if (!customCareer.value) compendiumCareer.value else null
-    )
+    override fun toValue(): CareerData {
+        return when (val career = career.value) {
+            is SelectedCareer.CompendiumCareer -> CareerData(
+                careerName = "",
+                socialClass = "",
+                status = status.value,
+                compendiumCareer = career.value,
+            )
+            is SelectedCareer.NonCompendiumCareer -> CareerData(
+                careerName = career.careerName,
+                socialClass = career.socialClass,
+                status = status.value,
+                compendiumCareer = null,
+            )
+        }
+    }
 
     companion object {
         @Composable
         fun fromCharacter(character: Character) = CareerFormData(
-            careerName = inputValue(character.career),
-            socialClass = inputValue(character.socialClass),
+            career = rememberSaveable(character.id) {
+                mutableStateOf(
+                    character.compendiumCareer?.let {
+                        SelectedCareer.CompendiumCareer(it, character.status)
+                    } ?: SelectedCareer.NonCompendiumCareer(
+                        character.career,
+                        character.socialClass,
+                    )
+                )
+            },
             status = rememberSaveable(character.id) { mutableStateOf(character.status) },
-            compendiumCareer = rememberSaveable(character.id) { mutableStateOf(character.compendiumCareer) },
-            customCareer = rememberSaveable(character.id) { mutableStateOf(character.compendiumCareer == null) },
         )
     }
 }
