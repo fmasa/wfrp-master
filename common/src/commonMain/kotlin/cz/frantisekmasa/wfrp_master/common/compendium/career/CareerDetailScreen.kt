@@ -1,11 +1,14 @@
 package cz.frantisekmasa.wfrp_master.common.compendium.career
 
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Card
 import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Icon
@@ -261,110 +264,112 @@ private fun LevelList(
         return
     }
 
-    DraggableListFor(
-        items = levels,
-        onReorder = if (isGameMaster) onReorder else ({}),
-    ) { levelIndex, level, isDragged ->
-        val modifier = Modifier.fillMaxWidth()
+    Box(Modifier.verticalScroll(rememberScrollState())) {
+        DraggableListFor(
+            items = levels,
+            onReorder = if (isGameMaster) onReorder else ({}),
+        ) { levelIndex, level, isDragged ->
+            val modifier = Modifier.fillMaxWidth()
 
-        Card(
-            elevation = if (isDragged) 6.dp else 2.dp,
-            modifier = if (isGameMaster)
-                modifier.clickable { onClick(level) }
-            else modifier
-        ) {
-            ListItem(
-                modifier = Modifier.padding(Spacing.medium),
-                text = {
-                    Text(
-                        buildAnnotatedString {
-                            withStyle(SpanStyle(fontWeight = FontWeight.Bold)) {
-                                append((levelIndex + 1).toString())
-                                append(". ")
-                                append(level.name)
-                            }
-
-                            append(" — ")
-                            append(level.status.tier.localizedName)
-                            append(' ')
-                            append(level.status.standing.toString())
-                        }
-                    )
-                },
-                secondaryText = {
-                    Column {
+            Card(
+                elevation = if (isDragged) 6.dp else 2.dp,
+                modifier = if (isGameMaster)
+                    modifier.clickable { onClick(level) }
+                else modifier
+            ) {
+                ListItem(
+                    modifier = Modifier.padding(Spacing.medium),
+                    text = {
                         Text(
                             buildAnnotatedString {
                                 withStyle(SpanStyle(fontWeight = FontWeight.Bold)) {
-                                    append(LocalStrings.current.skills.titleSkills)
-                                    append(": ")
+                                    append((levelIndex + 1).toString())
+                                    append(". ")
+                                    append(level.name)
                                 }
 
-                                if (level.skills.isEmpty()) {
-                                    append("—")
-                                }
+                                append(" — ")
+                                append(level.status.tier.localizedName)
+                                append(' ')
+                                append(level.status.standing.toString())
+                            }
+                        )
+                    },
+                    secondaryText = {
+                        Column {
+                            Text(
+                                buildAnnotatedString {
+                                    withStyle(SpanStyle(fontWeight = FontWeight.Bold)) {
+                                        append(LocalStrings.current.skills.titleSkills)
+                                        append(": ")
+                                    }
 
-                                derivedStateOf { level.skills.sortedBy { it.expression.lowercase() } }.value
-                                    .forEachIndexed { index, skill ->
-                                        if (skill.isIncomeSkill) {
-                                            withStyle(SpanStyle(fontStyle = FontStyle.Italic)) {
+                                    if (level.skills.isEmpty()) {
+                                        append("—")
+                                    }
+
+                                    derivedStateOf { level.skills.sortedBy { it.expression.lowercase() } }.value
+                                        .forEachIndexed { index, skill ->
+                                            if (skill.isIncomeSkill) {
+                                                withStyle(SpanStyle(fontStyle = FontStyle.Italic)) {
+                                                    append(skill.expression)
+                                                }
+                                            } else {
                                                 append(skill.expression)
                                             }
-                                        } else {
-                                            append(skill.expression)
-                                        }
 
-                                        if (index != level.skills.lastIndex) {
-                                            append(", ")
+                                            if (index != level.skills.lastIndex) {
+                                                append(", ")
+                                            }
                                         }
+                                }
+                            )
+                            Text(
+                                buildAnnotatedString {
+                                    withStyle(SpanStyle(fontWeight = FontWeight.Bold)) {
+                                        append(LocalStrings.current.talents.titleTalents)
+                                        append(": ")
                                     }
-                            }
-                        )
-                        Text(
-                            buildAnnotatedString {
-                                withStyle(SpanStyle(fontWeight = FontWeight.Bold)) {
-                                    append(LocalStrings.current.talents.titleTalents)
-                                    append(": ")
-                                }
 
-                                if (level.talents.isEmpty()) {
-                                    append("—")
-                                }
+                                    if (level.talents.isEmpty()) {
+                                        append("—")
+                                    }
 
-                                derivedStateOf { level.talents.sortedBy { it.lowercase() } }.value
-                                    .forEachIndexed { index, talent ->
+                                    derivedStateOf { level.talents.sortedBy { it.lowercase() } }.value
+                                        .forEachIndexed { index, talent ->
+                                            append(talent)
+
+                                            if (index != level.talents.lastIndex) {
+                                                append(", ")
+                                            }
+                                        }
+                                }
+                            )
+
+                            Text(
+                                buildAnnotatedString {
+                                    withStyle(SpanStyle(fontWeight = FontWeight.Bold)) {
+                                        append(LocalStrings.current.trappings.title)
+                                        append(": ")
+                                    }
+
+                                    if (level.trappings.isEmpty()) {
+                                        append("—")
+                                    }
+
+                                    level.trappings.forEachIndexed { index, talent ->
                                         append(talent)
 
-                                        if (index != level.talents.lastIndex) {
+                                        if (index != level.trappings.lastIndex) {
                                             append(", ")
                                         }
                                     }
-                            }
-                        )
-
-                        Text(
-                            buildAnnotatedString {
-                                withStyle(SpanStyle(fontWeight = FontWeight.Bold)) {
-                                    append(LocalStrings.current.trappings.title)
-                                    append(": ")
                                 }
-
-                                if (level.trappings.isEmpty()) {
-                                    append("—")
-                                }
-
-                                level.trappings.forEachIndexed { index, talent ->
-                                    append(talent)
-
-                                    if (index != level.trappings.lastIndex) {
-                                        append(", ")
-                                    }
-                                }
-                            }
-                        )
+                            )
+                        }
                     }
-                }
-            )
+                )
+            }
         }
     }
 }
