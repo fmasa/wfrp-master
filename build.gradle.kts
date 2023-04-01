@@ -1,12 +1,4 @@
 buildscript {
-    repositories {
-        google()
-        mavenCentral()
-        maven("https://plugins.gradle.org/m2/")
-        maven("https://kotlin.bintray.com/kotlinx")
-        maven("https://maven.pkg.jetbrains.space/public/p/compose/dev")
-    }
-
     dependencies {
         classpath("com.android.tools.build:gradle:${Versions.agp}")
         classpath("org.jetbrains.compose:compose-gradle-plugin:${Versions.compose}")

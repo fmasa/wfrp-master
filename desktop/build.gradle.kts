@@ -1,10 +1,17 @@
 
-import org.jetbrains.compose.compose
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 
 plugins {
     kotlin("multiplatform") // kotlin("jvm") doesn't work well in IDEA/AndroidStudio (https://github.com/JetBrains/compose-jb/issues/22)
     id("org.jetbrains.compose")
+    id("dev.hydraulic.conveyor") version "1.4"
+}
+
+configurations.all {
+    attributes {
+        // https://github.com/JetBrains/compose-jb/issues/1404#issuecomment-1146894731
+        attribute(Attribute.of("ui", String::class.java), "awt")
+    }
 }
 
 kotlin {
@@ -25,14 +32,22 @@ kotlin {
     }
 }
 
+dependencies {
+    linuxAmd64(compose.desktop.linux_x64)
+    macAmd64(compose.desktop.macos_x64)
+    macAarch64(compose.desktop.macos_arm64)
+    windowsAmd64(compose.desktop.windows_x64)
+}
+
 compose.desktop {
     application {
-        mainClass = "cz.frantisekmasa.wfrp_master.desktop.MainKt"
+        mainClass = "cz.frantisekmasa.wfrp_master.desktop.WfrpMasterApplication"
+        version = System.getenv("APP_VERSION") ?: "1.0.0"
 
         nativeDistributions {
             targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
-            packageName = "WFRP Master"
-            packageVersion = "1.0.0"
+            packageName = "wfrp-master"
+            packageVersion = System.getenv("APP_VERSION") ?: "1.0.0"
 
             windows {
                 menuGroup = "Compose Examples"

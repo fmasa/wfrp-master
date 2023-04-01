@@ -29,41 +29,44 @@ import kotlinx.coroutines.launch
 import org.kodein.di.compose.withDI
 
 @ExperimentalMaterialApi
-fun main() {
-    application {
-        withDI(appModule) {
-            val coroutineScope = rememberCoroutineScope()
+object WfrpMasterApplication {
+    @JvmStatic
+    fun main(args: Array<String>) {
+        application {
+            withDI(appModule) {
+                val coroutineScope = rememberCoroutineScope()
 
-            CompositionLocalProvider(
-                LocalUrlOpener provides DesktopUrlOpener,
-                LocalEmailInitiator provides DesktopEmailInitiator,
-                LocalFileChooserFactory provides { NativeFileChooser(coroutineScope, it) },
-                LocalFileSaverFactory provides { NativeFileSaver(coroutineScope, it) },
-                LocalStaticConfiguration provides StaticConfiguration(
-                    isProduction = true,
-                    version = "dev",
-                    platform = Platform.Desktop,
-                )
-            ) {
-                Window(onCloseRequest = ::exitApplication) {
-                    Theme {
-                        Startup {
-                            ScreenWithBreakpoints {
-                                val drawerState = rememberDrawerState(DrawerValue.Closed)
+                CompositionLocalProvider(
+                    LocalUrlOpener provides DesktopUrlOpener,
+                    LocalEmailInitiator provides DesktopEmailInitiator,
+                    LocalFileChooserFactory provides { NativeFileChooser(coroutineScope, it) },
+                    LocalFileSaverFactory provides { NativeFileSaver(coroutineScope, it) },
+                    LocalStaticConfiguration provides StaticConfiguration(
+                        isProduction = true,
+                        version = "dev",
+                        platform = Platform.Desktop,
+                    )
+                ) {
+                    Window(onCloseRequest = ::exitApplication) {
+                        Theme {
+                            Startup {
+                                ScreenWithBreakpoints {
+                                    val drawerState = rememberDrawerState(DrawerValue.Closed)
 
-                                Navigator(
-                                    screens = listOf(PartyListScreen),
-                                    onBackPressed = {
-                                        if (drawerState.isOpen) {
-                                            coroutineScope.launch { drawerState.close() }
-                                            return@Navigator false
+                                    Navigator(
+                                        screens = listOf(PartyListScreen),
+                                        onBackPressed = {
+                                            if (drawerState.isOpen) {
+                                                coroutineScope.launch { drawerState.close() }
+                                                return@Navigator false
+                                            }
+
+                                            true
                                         }
-
-                                        true
-                                    }
-                                ) {
-                                    DrawerShell(drawerState) {
-                                        CurrentScreen()
+                                    ) {
+                                        DrawerShell(drawerState) {
+                                            CurrentScreen()
+                                        }
                                     }
                                 }
                             }
