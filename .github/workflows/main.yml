@@ -73,6 +73,8 @@ jobs:
       image: fmasa/lebeda:7.4-ci
     steps:
       - run: "true"
+      - run: echo "SUPPLY_VERSION_CODE=$((950 + $GITHUB_RUN_NUMBER))" >> $GITHUB_ENV
+      - run: echo "SUPPLY_VERSION_NAME=$(.github/workflows/version.sh)" >> $GITHUB_ENV
 
   build-bundle:
     name: Build release bundle
@@ -96,8 +98,6 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-gradle-
       - run: echo "$KEYSTORE_FILE_BASE64" | base64 -d > app/.keystore
-      - run: echo "SUPPLY_VERSION_CODE=$((950 + $GITHUB_RUN_NUMBER))" >> $GITHUB_ENV
-      - run: echo "SUPPLY_VERSION_NAME=$(.github/workflows/version.sh)" >> $GITHUB_ENV
       - run: 'echo "version code: $SUPPLY_VERSION_CODE, version name: $SUPPLY_VERSION_NAME"'
       - run: ./gradlew bundleRelease
       - run: mv app/build/outputs/bundle/release/app-release.aab .
