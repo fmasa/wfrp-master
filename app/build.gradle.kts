@@ -91,20 +91,20 @@ dependencies {
     implementation(project(":common"))
     implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar"))))
     // Allow use of Java 8 APIs on older Android versions
-    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:1.1.5")
+    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:1.2.2")
 
     // Testing utilities
-    testImplementation("junit:junit:4.13.1")
-    androidTestImplementation("androidx.test.ext:junit:1.1.2")
-    androidTestImplementation("androidx.test.espresso:espresso-core:3.3.0")
+    testImplementation("junit:junit:4.13.2")
+    androidTestImplementation("androidx.test.ext:junit:1.1.5")
+    androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
     testImplementation("org.mockito:mockito-core:2.7.22")
 
     // Basic Android stuff
-    api("androidx.core:core-ktx:1.5.0")
-    api("androidx.fragment:fragment-ktx:1.3.5")
+    api("androidx.core:core-ktx:1.9.0")
+    api("androidx.fragment:fragment-ktx:1.5.6")
 
     // Coroutines
-    api("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.2")
-    api("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.5.2")
-    api("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.3.5")
+    api("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4")
+    api("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4")
+    api("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.6.4")
 }
