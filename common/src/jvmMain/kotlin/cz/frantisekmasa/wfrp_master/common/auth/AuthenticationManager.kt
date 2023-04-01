@@ -47,7 +47,7 @@ class AuthenticationManager(
     private suspend fun getIdToken(refreshToken: String): String {
         val response: IdTokenResponse = http.post("https://securetoken.googleapis.com/v1/token?key=$API_KEY") {
             contentType(ContentType.Application.Json)
-            setBody(IdTokenRequest(refreshToken, ""))
+            setBody(IdTokenRequest(refreshToken, "refresh_token"))
         }.body()
 
         settings.edit(REFRESH_TOKEN, response.refreshToken)
