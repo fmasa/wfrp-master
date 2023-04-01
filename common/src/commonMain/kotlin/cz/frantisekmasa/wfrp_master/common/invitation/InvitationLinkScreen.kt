@@ -25,7 +25,7 @@ import io.ktor.http.URLBuilder
 import io.ktor.http.Url
 
 class InvitationLinkScreen(
-    private val url: Url,
+    private val url: String,
 ) : Screen {
 
     @Composable
@@ -58,7 +58,7 @@ class InvitationLinkScreen(
             val snackbarHolder = LocalPersistentSnackbarHolder.current
 
             LaunchedEffect(url) {
-                val loadedInvitation = url.parameters[QUERY_PARAMETER]?.let {
+                val loadedInvitation = Url(url).parameters[QUERY_PARAMETER]?.let {
                     screenModel.deserializeInvitation(it)
                 }
 
