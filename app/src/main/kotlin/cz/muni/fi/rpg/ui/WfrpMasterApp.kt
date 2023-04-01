@@ -20,7 +20,6 @@ import cz.frantisekmasa.wfrp_master.common.shell.DrawerShell
 import cz.frantisekmasa.wfrp_master.common.shell.NetworkStatusBanner
 import cz.muni.fi.rpg.ui.shell.ProvideDIContainer
 import cz.muni.fi.rpg.ui.shell.Startup
-import io.ktor.http.Url
 import kotlinx.coroutines.launch
 
 @ExperimentalMaterialApi
@@ -64,7 +63,7 @@ private fun rememberInitialScreens(url: Uri?): List<Screen> {
         listOf(PartyListScreen) +
             when (url) {
                 null -> emptyList()
-                else -> listOf(InvitationLinkScreen(Url(url.toString())))
+                else -> listOf(InvitationLinkScreen(url.toString()))
             }
     }
 }

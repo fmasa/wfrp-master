@@ -19,8 +19,6 @@ kotlin {
     }
 
     sourceSets {
-        val koinVersion = "3.1.2"
-
         all {
             languageSettings.apply {
                 optIn("androidx.compose.material.ExperimentalMaterialApi")
@@ -44,7 +42,6 @@ kotlin {
 
                 val voyagerVersion = "1.0.0-rc04"
                 api("cafe.adriel.voyager:voyager-navigator:$voyagerVersion")
-                api("cafe.adriel.voyager:voyager-koin:$voyagerVersion")
                 api("cafe.adriel.voyager:voyager-transitions:$voyagerVersion")
 
                 api(project(":common:firebase"))
@@ -58,8 +55,6 @@ kotlin {
                 api("org.kodein.di:kodein-di-framework-compose:$kodeinVersion")
                 implementation("org.kodein.di:kodein-di:$kodeinVersion")
 
-                api("io.insert-koin:koin-core:$koinVersion")
-
                 implementation("io.arrow-kt:arrow-core:1.0.1")
 
                 // Parser combinator library (grammars etc.)
@@ -69,7 +64,7 @@ kotlin {
                 implementation("com.benasher44:uuid:0.3.1")
 
                 // JSON encoding
-                api("org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.0")
+                api("org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.2")
 
                 // Logging
                 api("io.github.aakira:napier:${Versions.napier}")
@@ -96,36 +91,31 @@ kotlin {
 
         val androidMain by getting {
             dependencies {
-
-                // Dependency injection
-                api("io.insert-koin:koin-android:$koinVersion")
-
                 // Permission management
                 implementation("com.google.accompanist:accompanist-permissions:0.20.0")
 
-                api("androidx.activity:activity-compose:1.5.0-alpha03")
+                api("androidx.activity:activity-compose:1.7.0")
 
-                api("androidx.appcompat:appcompat:1.3.1")
-                api("androidx.core:core-ktx:1.3.1")
+                api("androidx.appcompat:appcompat:1.6.1")
+                api("androidx.core:core-ktx:1.9.0")
 
-                api("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.3.5")
+                api("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.6.4")
 
                 implementation("org.kodein.di:kodein-di-framework-android-core:$kodeinVersion")
-                api("io.insert-koin:koin-android:$koinVersion")
 
-                api("androidx.lifecycle:lifecycle-viewmodel-compose:2.5.1")
-                api("androidx.lifecycle:lifecycle-runtime-ktx:2.4.0")
+                api("androidx.lifecycle:lifecycle-viewmodel-compose:2.6.1")
+                api("androidx.lifecycle:lifecycle-runtime-ktx:2.6.1")
 
                 // Authentication
-                api("com.google.android.gms:play-services-auth:19.0.0")
-                implementation("com.google.firebase:firebase-auth-ktx:21.0.1")
-                implementation("com.google.firebase:firebase-dynamic-links-ktx:21.0.1")
+                api("com.google.android.gms:play-services-auth:20.4.1")
+                implementation("com.google.firebase:firebase-auth-ktx:21.2.0")
+                implementation("com.google.firebase:firebase-dynamic-links-ktx:21.1.0")
 
                 // Shared Preferences DataStore
                 api("androidx.datastore:datastore-preferences:1.0.0")
 
                 // Firebase functions
-                api("com.google.firebase:firebase-functions-ktx:20.0.1")
+                api("com.google.firebase:firebase-functions-ktx:20.2.2")
 
                 implementation("com.tom-roush:pdfbox-android:2.0.27.0")
 
@@ -138,14 +128,14 @@ kotlin {
                 // QR codes
                 implementation("com.google.zxing:core:3.3.3")
 
-                implementation("androidx.camera:camera-camera2:1.1.0-alpha02")
-                implementation("androidx.camera:camera-core:1.1.0-alpha02")
-                implementation("androidx.camera:camera-lifecycle:1.1.0-alpha02")
-                implementation("androidx.camera:camera-view:1.0.0-alpha22")
+                implementation("androidx.camera:camera-camera2:1.2.2")
+                implementation("androidx.camera:camera-core:1.2.2")
+                implementation("androidx.camera:camera-lifecycle:1.2.2")
+                implementation("androidx.camera:camera-view:1.2.2")
 
                 // Network availability check
                 implementation("com.github.pwittchen:reactivenetwork-rx2:3.0.8")
-                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-rx2:1.4.2")
+                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-rx2:1.6.4")
             }
         }
 
@@ -202,7 +192,7 @@ android {
 
     dependencies {
         // Allow use of Java 8 APIs on older Android versions
-        coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:1.1.5")
+        coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:1.2.2")
     }
 
     compileOptions {
@@ -221,5 +211,5 @@ android {
     }
 }
 dependencies {
-    implementation("com.google.firebase:firebase-crashlytics-ktx:18.2.4")
+    implementation("com.google.firebase:firebase-crashlytics-ktx:18.3.6")
 }

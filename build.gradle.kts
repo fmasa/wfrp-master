@@ -9,7 +9,7 @@ buildscript {
 
     dependencies {
         classpath("com.android.tools.build:gradle:${Versions.agp}")
-        classpath("org.jetbrains.compose:compose-gradle-plugin:1.2.2")
+        classpath("org.jetbrains.compose:compose-gradle-plugin:${Versions.compose}")
 
         classpath(kotlin("gradle-plugin", Versions.kotlin))
         classpath(kotlin("serialization", Versions.kotlin))

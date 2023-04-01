@@ -15,24 +15,24 @@ kotlin {
         named("commonMain") {
             dependencies {
                 implementation("io.github.aakira:napier:${Versions.napier}")
-                api("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.0")
-                api("org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.0")
+                api("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4")
+                api("org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.2")
             }
         }
         named("jvmMain") {
             dependencies {
                 api("com.google.cloud:google-cloud-firestore:3.0.18")
-                api("org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:1.6.0")
+                api("org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:1.6.4")
             }
         }
         named("androidMain") {
             dependencies {
-                api("com.google.firebase:firebase-auth-ktx:21.0.3")
-                api("com.google.firebase:firebase-crashlytics-ktx:18.2.9")
-                api("com.google.firebase:firebase-firestore-ktx:24.1.0")
-                api("com.google.firebase:firebase-analytics-ktx:20.1.2")
-                api("com.google.firebase:firebase-functions-ktx:20.0.2")
-                api("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.6.0")
+                api("com.google.firebase:firebase-auth-ktx:21.2.0")
+                api("com.google.firebase:firebase-crashlytics-ktx:18.3.6")
+                api("com.google.firebase:firebase-firestore-ktx:24.4.5")
+                api("com.google.firebase:firebase-analytics-ktx:21.2.1")
+                api("com.google.firebase:firebase-functions-ktx:20.2.2")
+                api("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.6.4")
             }
         }
     }

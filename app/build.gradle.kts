@@ -80,14 +80,8 @@ android {
         jvmTarget = "1.8"
         freeCompilerArgs = freeCompilerArgs +
             "-Xskip-prerelease-check" +
-            "-Xopt-in=androidx.compose.foundation.layout.ExperimentalLayout" +
-            "-Xopt-in=kotlinx.coroutines.ExperimentalCoroutinesApi" +
             "-Xopt-in=androidx.compose.material.ExperimentalMaterialApi" +
             "-Xopt-in=androidx.compose.animation.ExperimentalAnimationApi" +
-            "-Xopt-in=androidx.compose.animation.ExperimentalFoundationApi" +
-            "-Xopt-in=androidx.compose.foundation.ExperimentalFoundationApi" +
-            "-Xopt-in=kotlinx.serialization.ExperimentalSerializationApi" +
-            "-Xopt-in=com.google.accompanist.permissions.ExperimentalPermissionsApi" +
             "-P" +
             "plugin:androidx.compose.compiler.plugins.kotlin:suppressKotlinVersionCompatibilityCheck=true"
     }
@@ -97,61 +91,20 @@ dependencies {
     implementation(project(":common"))
     implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar"))))
     // Allow use of Java 8 APIs on older Android versions
-    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:1.1.5")
-
-    // Permission management
-    implementation("com.google.accompanist:accompanist-permissions:0.20.0")
-
-    // QR code scanning
-    implementation("com.google.zxing:core:3.3.3")
-    implementation("androidx.camera:camera-camera2:1.1.0-alpha02")
-    implementation("androidx.camera:camera-core:1.1.0-alpha02")
-    implementation("androidx.camera:camera-lifecycle:1.1.0-alpha02")
-    implementation("androidx.camera:camera-view:1.0.0-alpha22")
+    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:1.2.2")
 
     // Testing utilities
-    testImplementation("junit:junit:4.13.1")
-    androidTestImplementation("androidx.test.ext:junit:1.1.2")
-    androidTestImplementation("androidx.test.espresso:espresso-core:3.3.0")
+    testImplementation("junit:junit:4.13.2")
+    androidTestImplementation("androidx.test.ext:junit:1.1.5")
+    androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
     testImplementation("org.mockito:mockito-core:2.7.22")
 
     // Basic Android stuff
-    api("androidx.core:core-ktx:1.5.0")
-    api("androidx.fragment:fragment-ktx:1.3.5")
-
-    // Jetpack Compose
-    api("androidx.compose.material:material:${Versions.compose}")
-    api("androidx.compose.ui:ui-tooling:${Versions.compose}")
-    api("androidx.lifecycle:lifecycle-viewmodel-compose:2.5.1")
-
-    // Firebase-related dependencies
-    api(platform("com.google.firebase:firebase-bom:28.4.2"))
-    api("com.google.firebase:firebase-firestore-ktx")
-    api("com.google.firebase:firebase-analytics-ktx")
-    api("com.google.firebase:firebase-auth-ktx")
-    api("com.google.firebase:firebase-dynamic-links-ktx")
-    api("com.google.firebase:firebase-functions-ktx")
-    api("androidx.work:work-runtime-ktx:2.7.0")
+    api("androidx.core:core-ktx:1.9.0")
+    api("androidx.fragment:fragment-ktx:1.5.6")
 
     // Coroutines
-    api("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.2")
-    api("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.5.2")
-    api("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.3.5")
-
-    api("io.arrow-kt:arrow-core:0.10.4")
-
-    // Parser combinator library (grammars etc.)
-    api("com.github.h0tk3y.betterParse:better-parse:0.4.2")
-
-    // JSON encoding
-    api("org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.0")
-
-    // HTTP Client
-    val ktorVersion = "1.6.0"
-    implementation("io.ktor:ktor-client-core:$ktorVersion")
-    implementation("io.ktor:ktor-client-cio:$ktorVersion")
-    implementation("io.ktor:ktor-client-serialization:$ktorVersion")
-
-    // Firebase Performance
-//    implementation("com.google.firebase:firebase-perf-ktx:20.0.1")
+    api("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4")
+    api("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4")
+    api("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.6.4")
 }
