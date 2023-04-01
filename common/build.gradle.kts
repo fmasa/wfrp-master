@@ -19,8 +19,6 @@ kotlin {
     }
 
     sourceSets {
-        val koinVersion = "3.1.2"
-
         all {
             languageSettings.apply {
                 optIn("androidx.compose.material.ExperimentalMaterialApi")
@@ -44,7 +42,6 @@ kotlin {
 
                 val voyagerVersion = "1.0.0-rc04"
                 api("cafe.adriel.voyager:voyager-navigator:$voyagerVersion")
-                api("cafe.adriel.voyager:voyager-koin:$voyagerVersion")
                 api("cafe.adriel.voyager:voyager-transitions:$voyagerVersion")
 
                 api(project(":common:firebase"))
@@ -57,8 +54,6 @@ kotlin {
                 // Dependency injection 2
                 api("org.kodein.di:kodein-di-framework-compose:$kodeinVersion")
                 implementation("org.kodein.di:kodein-di:$kodeinVersion")
-
-                api("io.insert-koin:koin-core:$koinVersion")
 
                 implementation("io.arrow-kt:arrow-core:1.0.1")
 
@@ -96,10 +91,6 @@ kotlin {
 
         val androidMain by getting {
             dependencies {
-
-                // Dependency injection
-                api("io.insert-koin:koin-android:$koinVersion")
-
                 // Permission management
                 implementation("com.google.accompanist:accompanist-permissions:0.20.0")
 
@@ -111,7 +102,6 @@ kotlin {
                 api("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.3.5")
 
                 implementation("org.kodein.di:kodein-di-framework-android-core:$kodeinVersion")
-                api("io.insert-koin:koin-android:$koinVersion")
 
                 api("androidx.lifecycle:lifecycle-viewmodel-compose:2.5.1")
                 api("androidx.lifecycle:lifecycle-runtime-ktx:2.4.0")
