@@ -94,7 +94,7 @@ kotlin {
                 // Permission management
                 implementation("com.google.accompanist:accompanist-permissions:0.20.0")
 
-                api("androidx.activity:activity-compose:1.5.0-alpha03")
+                api("androidx.activity:activity-compose:1.7.0")
 
                 api("androidx.appcompat:appcompat:1.3.1")
                 api("androidx.core:core-ktx:1.3.1")
@@ -103,7 +103,7 @@ kotlin {
 
                 implementation("org.kodein.di:kodein-di-framework-android-core:$kodeinVersion")
 
-                api("androidx.lifecycle:lifecycle-viewmodel-compose:2.5.1")
+                api("androidx.lifecycle:lifecycle-viewmodel-compose:2.6.1")
                 api("androidx.lifecycle:lifecycle-runtime-ktx:2.4.0")
 
                 // Authentication
