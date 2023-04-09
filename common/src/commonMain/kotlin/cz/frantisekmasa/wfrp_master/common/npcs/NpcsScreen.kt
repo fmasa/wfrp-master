@@ -25,7 +25,6 @@ import cz.frantisekmasa.wfrp_master.common.core.domain.character.Character
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.CharacterType
 import cz.frantisekmasa.wfrp_master.common.core.domain.identifiers.CharacterId
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.PartyId
-import cz.frantisekmasa.wfrp_master.common.core.shared.IO
 import cz.frantisekmasa.wfrp_master.common.core.shared.Resources
 import cz.frantisekmasa.wfrp_master.common.core.ui.CharacterAvatar
 import cz.frantisekmasa.wfrp_master.common.core.ui.buttons.HamburgerButton
@@ -47,7 +46,7 @@ class NpcsScreen(
     @Composable
     override fun Content() {
         val navigator = LocalNavigator.currentOrThrow
-        var removing by remember { mutableStateOf(false) }
+        var processing by remember { mutableStateOf(false) }
 
         val strings = LocalStrings.current
         val screenModel: NpcsScreenModel = rememberScreenModel(arg = partyId)
@@ -55,7 +54,7 @@ class NpcsScreen(
         val (npcToRemove, setNpcToRemove) = remember { mutableStateOf<Character?>(null) }
 
         val data by derivedStateOf {
-            if (removing) {
+            if (processing) {
                 return@derivedStateOf SearchableList.Data.Loading
             }
 
@@ -73,10 +72,10 @@ class NpcsScreen(
                     TextButton(
                         onClick = {
                             coroutineScope.launch(Dispatchers.IO) {
-                                removing = true
+                                processing = true
                                 setNpcToRemove(null)
                                 screenModel.archiveNpc(npcToRemove)
-                                removing = false
+                                processing = false
                             }
                         }
                     ) {
@@ -123,6 +122,16 @@ class NpcsScreen(
                         navigator.push(CharacterDetailScreen(CharacterId(partyId, npc.id)))
                     },
                     items = listOf(
+                        ContextMenu.Item(LocalStrings.current.commonUi.buttonDuplicate) {
+                            coroutineScope.launch(Dispatchers.IO) {
+                                processing = true
+                                try {
+                                    screenModel.duplicate(npc)
+                                } finally {
+                                    processing = false
+                                }
+                            }
+                        },
                         ContextMenu.Item(LocalStrings.current.commonUi.buttonRemove) {
                             setNpcToRemove(npc)
                         }
