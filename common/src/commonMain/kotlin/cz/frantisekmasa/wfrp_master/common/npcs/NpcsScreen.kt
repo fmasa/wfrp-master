@@ -6,6 +6,7 @@ import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Icon
 import androidx.compose.material.ListItem
 import androidx.compose.material.Text
+import androidx.compose.material.TextButton
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Add
 import androidx.compose.runtime.Composable
@@ -20,6 +21,7 @@ import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import cz.frantisekmasa.wfrp_master.common.character.CharacterDetailScreen
 import cz.frantisekmasa.wfrp_master.common.characterCreation.CharacterCreationScreen
+import cz.frantisekmasa.wfrp_master.common.core.domain.character.Character
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.CharacterType
 import cz.frantisekmasa.wfrp_master.common.core.domain.identifiers.CharacterId
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.PartyId
@@ -27,6 +29,7 @@ import cz.frantisekmasa.wfrp_master.common.core.shared.IO
 import cz.frantisekmasa.wfrp_master.common.core.shared.Resources
 import cz.frantisekmasa.wfrp_master.common.core.ui.CharacterAvatar
 import cz.frantisekmasa.wfrp_master.common.core.ui.buttons.HamburgerButton
+import cz.frantisekmasa.wfrp_master.common.core.ui.dialogs.AlertDialog
 import cz.frantisekmasa.wfrp_master.common.core.ui.flow.collectWithLifecycle
 import cz.frantisekmasa.wfrp_master.common.core.ui.menu.WithContextMenu
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.ContextMenu
@@ -49,6 +52,7 @@ class NpcsScreen(
         val strings = LocalStrings.current
         val screenModel: NpcsScreenModel = rememberScreenModel(arg = partyId)
         val npcs by screenModel.npcs.collectWithLifecycle(null)
+        val (npcToRemove, setNpcToRemove) = remember { mutableStateOf<Character?>(null) }
 
         val data by derivedStateOf {
             if (removing) {
@@ -60,6 +64,32 @@ class NpcsScreen(
         }
 
         val coroutineScope = rememberCoroutineScope()
+
+        if (npcToRemove != null) {
+            AlertDialog(
+                onDismissRequest = { setNpcToRemove(null) },
+                text = { Text(LocalStrings.current.npcs.messages.removalConfirmation) },
+                confirmButton = {
+                    TextButton(
+                        onClick = {
+                            coroutineScope.launch(Dispatchers.IO) {
+                                removing = true
+                                setNpcToRemove(null)
+                                screenModel.archiveNpc(npcToRemove)
+                                removing = false
+                            }
+                        }
+                    ) {
+                        Text(LocalStrings.current.commonUi.buttonRemove)
+                    }
+                },
+                dismissButton = {
+                    TextButton(onClick = { setNpcToRemove(null) }) {
+                        Text(LocalStrings.current.commonUi.buttonCancel)
+                    }
+                }
+            )
+        }
 
         SearchableList(
             data = data,
@@ -94,11 +124,7 @@ class NpcsScreen(
                     },
                     items = listOf(
                         ContextMenu.Item(LocalStrings.current.commonUi.buttonRemove) {
-                            coroutineScope.launch(Dispatchers.IO) {
-                                removing = true
-                                screenModel.archiveNpc(npc)
-                                removing = false
-                            }
+                            setNpcToRemove(npc)
                         }
                     )
                 ) {

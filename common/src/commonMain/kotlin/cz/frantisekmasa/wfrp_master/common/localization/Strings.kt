@@ -952,6 +952,7 @@ data class NpcMessages(
     val noNpcsSubtext: String = "There are no NPCs yet. Add first one.",
     val noNpcsSearched: String = "No NPCs found",
     val noNpcsSearchedSubtext: String = "Consider changing the search phrase",
+    val removalConfirmation: String = "Do you really want to permanently remove this NPC?",
 )
 
 @Immutable
