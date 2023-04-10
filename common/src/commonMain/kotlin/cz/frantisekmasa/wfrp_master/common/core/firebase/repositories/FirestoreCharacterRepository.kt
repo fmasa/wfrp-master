@@ -103,6 +103,7 @@ class FirestoreCharacterRepository(
 
     override fun inParty(partyId: PartyId, types: Set<CharacterType>): Flow<List<Character>> {
         return characters(partyId)
+            .orderBy("name")
             .documents(mapper)
             .map { characters -> characters.filter { it.type in types && !it.isArchived } }
     }

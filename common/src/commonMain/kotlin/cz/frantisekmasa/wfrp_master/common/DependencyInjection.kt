@@ -246,7 +246,20 @@ val appModule = DI.Module("Common") {
         )
     }
     bindFactory { partyId: PartyId -> GameMasterScreenModel(partyId, instance(), instance()) }
-    bindFactory { partyId: PartyId -> NpcsScreenModel(partyId, instance()) }
+    bindFactory { partyId: PartyId ->
+        NpcsScreenModel(
+            partyId,
+            instance(),
+            instance(),
+            instance(),
+            instance(),
+            instance(),
+            instance(),
+            instance(),
+            instance(),
+            instance(),
+        )
+    }
     bindFactory { partyId: PartyId ->
         SkillTestScreenModel(partyId, instance(), instance(), instance())
     }
