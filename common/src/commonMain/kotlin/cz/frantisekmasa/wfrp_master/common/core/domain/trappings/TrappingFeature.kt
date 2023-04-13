@@ -5,4 +5,5 @@ import cz.frantisekmasa.wfrp_master.common.core.shared.Parcelable
 
 interface TrappingFeature : NamedEnum, Parcelable {
     val hasRating: Boolean
+    val ratingUnit: String? get() = null
 }

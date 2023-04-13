@@ -44,6 +44,14 @@ fun <T : TrappingFeature> translateFeatures(
 ): List<String> {
     return features.map { (feature, rating) ->
         val name = feature.nameResolver(strings)
-        if (feature.hasRating) "$name $rating" else name
+
+        if (!feature.hasRating) {
+            return@map name
+        }
+
+        val ratingUnit = feature.ratingUnit
+        val formattedRating = if (ratingUnit != null) "($rating$ratingUnit)" else rating.toString()
+
+        "$name $formattedRating"
     }
 }
