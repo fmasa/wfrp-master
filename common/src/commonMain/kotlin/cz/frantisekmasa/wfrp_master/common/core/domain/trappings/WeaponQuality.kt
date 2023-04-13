@@ -9,6 +9,7 @@ import cz.frantisekmasa.wfrp_master.common.localization.Strings
 enum class WeaponQuality(
     override val nameResolver: (strings: Strings) -> String,
     override val hasRating: Boolean = false,
+    override val ratingUnit: String? = null,
 ) : Quality {
     ACCURATE({ it.weapons.qualities.accurate }),
     BLACKPOWDER({ it.weapons.qualities.blackpowder }),
@@ -27,6 +28,9 @@ enum class WeaponQuality(
     PUMMEL({ it.weapons.qualities.pummel }),
     REPEATER({ it.weapons.qualities.repeater }, hasRating = true),
     SHIELD({ it.weapons.qualities.shield }, hasRating = true),
+    SLASH({ it.weapons.qualities.slash }, hasRating = true, ratingUnit = "A"), // Up in Arms
+    SPREAD({ it.weapons.qualities.spread }, hasRating = true), // Up in Arms
+    TRIP({ it.weapons.qualities.trip }), // Up in Arms
     TRAP_BLADE({ it.weapons.qualities.trapBlade }),
     UNBREAKABLE({ it.weapons.qualities.unbreakable }),
     WRAP({ it.weapons.qualities.wrap }),

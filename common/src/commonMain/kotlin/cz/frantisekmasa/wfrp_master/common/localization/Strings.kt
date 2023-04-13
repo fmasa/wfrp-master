@@ -668,6 +668,7 @@ data class WeaponFlawStrings(
     val reload: String = "Reload",
     val slow: String = "Slow",
     val tiring: String = "Tiring",
+    val unbalanced: String = "Unbalanced",
     val undamaging: String = "Undamaging",
 )
 
@@ -702,7 +703,10 @@ data class WeaponQualityStrings(
     val pummel: String = "Pummel",
     val repeater: String = "Repeater",
     val shield: String = "Shield",
+    val slash: String = "Slash",
+    val spread: String = "Spread",
     val trapBlade: String = "Trap Blade",
+    val trip: String = "Trip",
     val unbreakable: String = "Unbreakable",
     val wrap: String = "Wrap",
 )

@@ -15,5 +15,6 @@ enum class WeaponFlaw(
     RELOAD({ it.weapons.flaws.reload }, hasRating = true),
     SLOW({ it.weapons.flaws.slow }),
     TIRING({ it.weapons.flaws.tiring }),
+    UNBALANCED({ it.weapons.flaws.unbalanced }), // Up in Arms
     UNDAMAGING({ it.weapons.flaws.undamaging }),
 }
