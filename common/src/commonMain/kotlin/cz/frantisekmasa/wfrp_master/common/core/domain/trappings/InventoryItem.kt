@@ -25,6 +25,11 @@ data class InventoryItem(
     @Contextual val containerId: InventoryItemId? = null,
     val trappingType: TrappingType? = null,
 ) : CharacterItem<InventoryItem, Nothing> {
+
+    init {
+        require(quantity > 0) { "Quantity must be greater than 0" }
+    }
+
     companion object {
         const val NAME_MAX_LENGTH = 50
         const val DESCRIPTION_MAX_LENGTH = 200
