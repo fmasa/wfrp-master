@@ -41,7 +41,7 @@ fun QuantityBar(
                 value = quantity,
                 onIncrement = { onQuantityChange(trapping.quantity + 1) },
                 onDecrement = {
-                    if (quantity > 0) {
+                    if (quantity > 1) {
                         onQuantityChange(quantity - 1)
                     }
                 }
