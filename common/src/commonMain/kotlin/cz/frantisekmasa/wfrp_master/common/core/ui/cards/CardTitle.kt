@@ -2,7 +2,9 @@ package cz.frantisekmasa.wfrp_master.common.core.ui.cards
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -21,12 +23,24 @@ import androidx.compose.ui.unit.dp
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.VisualOnlyIconDescription
 
 @Composable
-fun CardTitle(text: String, icon: ImageVector? = null) {
-    CardTitle(text, icon?.let { rememberVectorPainter(it) })
+fun CardTitle(
+    text: String,
+    icon: ImageVector? = null,
+    actions: (@Composable () -> Unit)? = null,
+) {
+    CardTitle(
+        text,
+        icon?.let { rememberVectorPainter(it) },
+        actions,
+    )
 }
 
 @Composable
-private fun CardTitle(text: String, painter: Painter?) {
+private fun CardTitle(
+    text: String,
+    painter: Painter?,
+    actions: (@Composable () -> Unit)?,
+) {
     Row(
         horizontalArrangement = Arrangement.Center,
         verticalAlignment = Alignment.CenterVertically,
@@ -42,6 +56,19 @@ private fun CardTitle(text: String, painter: Painter?) {
                 colorFilter = ColorFilter.tint(MaterialTheme.colors.onSurface)
             )
         }
+
+        if (actions != null) {
+            Spacer(Modifier.weight(1f))
+        }
+
         Text(text, style = MaterialTheme.typography.h6, textAlign = TextAlign.Center)
+
+        if (actions != null) {
+            Box(Modifier.weight(1f), contentAlignment = Alignment.CenterEnd) {
+                Box {
+                    actions()
+                }
+            }
+        }
     }
 }

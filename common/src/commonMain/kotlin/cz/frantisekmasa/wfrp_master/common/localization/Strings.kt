@@ -870,6 +870,7 @@ data class RaceStrings(
 @Immutable
 data class SkillStrings(
     val buttonAddNonCompendium: String = "…or add non-Compendium skill",
+    val buttonImportBasicSkills: String = "Import Basic Skills",
     val labelAdvanced: String = "Advanced",
     val labelAdvances: String = "Advances",
     val labelCharacteristic: String = "Characteristic",
@@ -881,6 +882,7 @@ data class SkillStrings(
     val titleEdit: String = "Edit Skill",
     val titleNew: String = "New Skill",
     val titleSkills: String = "Skills",
+    val addBasicSkillsDialogTitle: String = "Add Basic Skills?",
     val titleSelectSkill: String = "Select Skill",
 )
 
@@ -890,7 +892,18 @@ data class SkillMessageStrings(
     val compendiumSkillRemoved: String = "Compendium skill was removed in the meantime",
     val noSkillsInCompendium: String = "No skills",
     val noSkillsInCompendiumSubtext: String = "There are no skills in your compendium yet.",
+    val noBasicSkillsToAdd: String = "There are no additional Basic Skills to add from Compendium.",
     val noSkillsInCompendiumSubtextPlayer: String = "Your GM has to add them first.",
+    val basicSkillsAdded: String = "All Basic Skills were added.",
+    val addBasicSkillsExplanation: (count: Int) -> AnnotatedString = {
+        buildAnnotatedString {
+            append("All Basic Skills (")
+            withStyle(SpanStyle(fontWeight = FontWeight.Bold)) {
+                append(it.toString())
+            }
+            append(") will be added without any Advances.")
+        }
+    },
 )
 
 data class SocialClassStrings(
