@@ -323,6 +323,7 @@ data class CharacterStrings(
     val titleCareer: String = "Career",
     val titleCharacteristics: String = "Characteristics",
     val titleEdit: String = "Edit Character",
+    val titleEditNote: String = "Edit Note",
     val titleExperience: String = "Experience",
     val titleGeneralSettings: String = "General",
     val titleRemoval: String = "Remove Character",
