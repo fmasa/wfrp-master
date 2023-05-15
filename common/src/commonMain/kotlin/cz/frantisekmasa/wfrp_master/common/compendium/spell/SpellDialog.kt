@@ -91,6 +91,7 @@ fun SpellDialog(
                 validate = validate,
                 maxLength = Spell.EFFECT_MAX_LENGTH,
                 multiLine = true,
+                helperText = LocalStrings.current.commonUi.markdownSupportedNote,
             )
         }
     }

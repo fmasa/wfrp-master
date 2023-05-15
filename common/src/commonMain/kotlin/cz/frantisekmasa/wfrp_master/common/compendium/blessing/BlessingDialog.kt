@@ -73,6 +73,7 @@ fun BlessingDialog(
                 validate = validate,
                 maxLength = Blessing.EFFECT_MAX_LENGTH,
                 multiLine = true,
+                helperText = LocalStrings.current.commonUi.markdownSupportedNote,
             )
         }
     }

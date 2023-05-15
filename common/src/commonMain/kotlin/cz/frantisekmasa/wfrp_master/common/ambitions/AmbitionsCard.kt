@@ -1,6 +1,5 @@
 package cz.frantisekmasa.wfrp_master.common.ambitions
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -27,6 +26,7 @@ import cz.frantisekmasa.wfrp_master.common.core.domain.Ambitions
 import cz.frantisekmasa.wfrp_master.common.core.shared.Resources
 import cz.frantisekmasa.wfrp_master.common.core.shared.drawableResource
 import cz.frantisekmasa.wfrp_master.common.core.ui.cards.CardContainer
+import cz.frantisekmasa.wfrp_master.common.core.ui.cards.CardEditButton
 import cz.frantisekmasa.wfrp_master.common.core.ui.cards.CardTitle
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.VisualOnlyIconDescription
 import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
@@ -53,14 +53,16 @@ fun AmbitionsCard(
     CardContainer(
         modifier = Modifier
             .fillMaxWidth()
-            .then(
-                if (onSave != null)
-                    modifier.clickable(onClick = { dialogOpened = true })
-                else modifier
-            ),
+            .then(modifier),
         bodyPadding = PaddingValues(start = 8.dp, end = 8.dp),
     ) {
-        CardTitle(title, titleIcon)
+        CardTitle(
+            title,
+            titleIcon,
+            actions = if (onSave != null)
+                ({ CardEditButton(onClick = { dialogOpened = true }) })
+            else null
+        )
 
         val strings = LocalStrings.current.ambition
 

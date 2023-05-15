@@ -80,6 +80,7 @@ fun MiracleDialog(
                 validate = validate,
                 maxLength = Miracle.EFFECT_MAX_LENGTH,
                 multiLine = true,
+                helperText = LocalStrings.current.commonUi.markdownSupportedNote,
             )
         }
     }

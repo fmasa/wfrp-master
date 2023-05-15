@@ -62,6 +62,7 @@ fun SkillDialog(
                 validate = validate,
                 maxLength = Skill.DESCRIPTION_MAX_LENGTH,
                 multiLine = true,
+                helperText = LocalStrings.current.commonUi.markdownSupportedNote,
             )
 
             ChipList(

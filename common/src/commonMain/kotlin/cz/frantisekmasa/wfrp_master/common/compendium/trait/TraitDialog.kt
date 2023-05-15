@@ -59,6 +59,7 @@ fun TraitDialog(
                 validate = validate,
                 maxLength = Trait.DESCRIPTION_MAX_LENGTH,
                 multiLine = true,
+                helperText = LocalStrings.current.commonUi.markdownSupportedNote,
             )
         }
     }
