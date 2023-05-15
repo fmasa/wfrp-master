@@ -97,6 +97,7 @@ fun InventoryItemDialog(
                 validate = validate,
                 maxLength = InventoryItem.DESCRIPTION_MAX_LENGTH,
                 multiLine = true,
+                helperText = LocalStrings.current.commonUi.markdownSupportedNote,
             )
 
             TrappingTypeForm(

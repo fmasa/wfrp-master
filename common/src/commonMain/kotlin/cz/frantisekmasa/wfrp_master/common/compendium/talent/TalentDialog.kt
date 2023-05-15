@@ -66,6 +66,7 @@ fun TalentDialog(
                 validate = validate,
                 maxLength = Talent.DESCRIPTION_MAX_LENGTH,
                 multiLine = true,
+                helperText = LocalStrings.current.commonUi.markdownSupportedNote,
             )
         }
     }

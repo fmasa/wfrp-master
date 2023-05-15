@@ -73,6 +73,7 @@ fun EditNoteDialog(
                     validate = false,
                     maxLength = Character.NOTE_MAX_LENGTH,
                     multiLine = true,
+                    helperText = LocalStrings.current.commonUi.markdownSupportedNote,
                 )
             }
         }

@@ -428,6 +428,7 @@ data class CommonUiStrings(
     val labelOpenDrawer: String = "Open navigation drawer",
     val labelOpenContextMenu: String = "Open context menu",
     val labelPreviousScreen: String = "Return to previous screen",
+    val markdownSupportedNote: String = "Markdown formatting is supported",
     val decrement: String = "Decrement value",
     val increment: String = "Increment value",
     val itemNone: String = "None",

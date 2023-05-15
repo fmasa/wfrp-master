@@ -53,6 +53,7 @@ fun CareerFormDialog(
                 multiLine = true,
                 validate = validate,
                 maxLength = Career.DESCRIPTION_MAX_LENGTH,
+                helperText = LocalStrings.current.commonUi.markdownSupportedNote,
             )
 
             SelectBox(
