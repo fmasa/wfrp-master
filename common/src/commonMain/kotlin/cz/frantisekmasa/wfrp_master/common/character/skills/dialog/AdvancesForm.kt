@@ -21,10 +21,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import com.benasher44.uuid.Uuid
 import com.benasher44.uuid.uuid4
+import cz.frantisekmasa.wfrp_master.common.character.skills.SkillRating
 import cz.frantisekmasa.wfrp_master.common.character.skills.SkillsScreenModel
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.exceptions.CompendiumItemNotFound
-import cz.frantisekmasa.wfrp_master.common.core.shared.IO
+import cz.frantisekmasa.wfrp_master.common.core.domain.Stats
 import cz.frantisekmasa.wfrp_master.common.core.ui.buttons.CloseButton
+import cz.frantisekmasa.wfrp_master.common.core.ui.flow.collectWithLifecycle
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.NumberPicker
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.FullScreenProgress
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
@@ -38,6 +40,7 @@ import kotlinx.coroutines.launch
 @Composable
 internal fun AdvancesForm(
     compendiumSkillId: Uuid,
+    characteristics: Stats,
     screenModel: SkillsScreenModel,
     isAdvanced: Boolean,
     onDismissRequest: () -> Unit,
@@ -84,7 +87,12 @@ internal fun AdvancesForm(
             )
         }
     ) {
-        if (saving) {
+        val skill = screenModel.compendiumItems
+            .collectWithLifecycle(null)
+            .value
+            ?.firstOrNull { it.id == compendiumSkillId }
+
+        if (saving || skill == null) {
             FullScreenProgress()
             return@Scaffold
         }
@@ -112,6 +120,14 @@ internal fun AdvancesForm(
                     }
                 )
             }
+
+            SkillRating(
+                label = skill.name,
+                value = characteristics.get(skill.characteristic) + advances,
+                modifier = Modifier
+                    .padding(top = Spacing.large)
+                    .align(Alignment.CenterHorizontally),
+            )
         }
     }
 }

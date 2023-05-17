@@ -874,6 +874,7 @@ data class SkillStrings(
     val buttonAddNonCompendium: String = "…or add non-Compendium skill",
     val buttonImportBasicSkills: String = "Import Basic Skills",
     val labelAdvanced: String = "Advanced",
+    val labelRating: String = "Rating",
     val labelAdvances: String = "Advances",
     val labelCharacteristic: String = "Characteristic",
     val labelDescription: String = "Description (optional)",

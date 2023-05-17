@@ -8,6 +8,7 @@ import androidx.compose.runtime.setValue
 import com.benasher44.uuid.Uuid
 import cz.frantisekmasa.wfrp_master.common.character.CompendiumItemChooser
 import cz.frantisekmasa.wfrp_master.common.character.skills.SkillsScreenModel
+import cz.frantisekmasa.wfrp_master.common.core.domain.Stats
 import cz.frantisekmasa.wfrp_master.common.core.shared.Parcelable
 import cz.frantisekmasa.wfrp_master.common.core.shared.Parcelize
 import cz.frantisekmasa.wfrp_master.common.core.shared.Resources
@@ -15,7 +16,11 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.dialogs.FullScreenDialog
 import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
 
 @Composable
-fun AddSkillDialog(screenModel: SkillsScreenModel, onDismissRequest: () -> Unit) {
+fun AddSkillDialog(
+    screenModel: SkillsScreenModel,
+    characteristics: Stats,
+    onDismissRequest: () -> Unit,
+) {
     var state: AddSkillDialogState by rememberSaveable { mutableStateOf(ChoosingCompendiumSkill) }
 
     FullScreenDialog(
@@ -43,12 +48,14 @@ fun AddSkillDialog(screenModel: SkillsScreenModel, onDismissRequest: () -> Unit)
                 AdvancesForm(
                     compendiumSkillId = currentState.compendiumSkillId,
                     screenModel = screenModel,
+                    characteristics = characteristics,
                     isAdvanced = currentState.isAdvanced,
                     onDismissRequest = onDismissRequest,
                 )
             is FillingInCustomSkill -> NonCompendiumSkillForm(
                 screenModel = screenModel,
                 existingSkill = null,
+                characteristics = characteristics,
                 onDismissRequest = onDismissRequest,
             )
         }

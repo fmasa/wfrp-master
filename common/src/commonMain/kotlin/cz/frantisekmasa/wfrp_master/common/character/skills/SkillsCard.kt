@@ -109,6 +109,7 @@ internal fun SkillsCard(
                     EditSkillDialog(
                         screenModel = skillsScreenModel,
                         skillId = skillId,
+                        characteristics = characteristics,
                         onDismissRequest = { editedSkillId = null }
                     )
                 }
@@ -121,6 +122,7 @@ internal fun SkillsCard(
             if (showAddSkillDialog) {
                 AddSkillDialog(
                     screenModel = skillsScreenModel,
+                    characteristics = characteristics,
                     onDismissRequest = { showAddSkillDialog = false }
                 )
             }

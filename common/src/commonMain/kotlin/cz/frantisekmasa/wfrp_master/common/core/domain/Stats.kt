@@ -1,6 +1,7 @@
 package cz.frantisekmasa.wfrp_master.common.core.domain
 
 import androidx.compose.runtime.Immutable
+import androidx.compose.runtime.Stable
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -66,6 +67,7 @@ data class Stats(
         fellowship = (fellowship - other.fellowship).coerceAtLeast(0),
     )
 
+    @Stable
     fun get(characteristic: Characteristic): Int = when (characteristic) {
         Characteristic.AGILITY -> agility
         Characteristic.BALLISTIC_SKILL -> ballisticSkill
