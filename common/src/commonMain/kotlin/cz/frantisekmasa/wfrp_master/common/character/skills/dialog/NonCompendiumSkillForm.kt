@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.Stable
@@ -14,8 +15,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import com.benasher44.uuid.Uuid
 import com.benasher44.uuid.uuid4
+import cz.frantisekmasa.wfrp_master.common.character.skills.SkillRating
 import cz.frantisekmasa.wfrp_master.common.character.skills.SkillsScreenModel
 import cz.frantisekmasa.wfrp_master.common.core.domain.Characteristic
+import cz.frantisekmasa.wfrp_master.common.core.domain.Stats
 import cz.frantisekmasa.wfrp_master.common.core.domain.skills.Skill
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.CheckboxWithText
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.ChipList
@@ -34,6 +37,7 @@ import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
 internal fun NonCompendiumSkillForm(
     screenModel: SkillsScreenModel,
     existingSkill: Skill?,
+    characteristics: Stats,
     onDismissRequest: () -> Unit,
 ) {
     val formData = NonCompendiumSkillFormData.fromSkill(existingSkill)
@@ -94,6 +98,14 @@ internal fun NonCompendiumSkillForm(
                 onCheckedChange = { formData.advanced.value = it },
             )
         }
+
+        SkillRating(
+            label = LocalStrings.current.skills.labelRating,
+            value = characteristics.get(formData.characteristic.value) + formData.advances.value,
+            modifier = Modifier
+                .padding(top = Spacing.extraLarge)
+                .align(Alignment.CenterHorizontally),
+        )
     }
 }
 
