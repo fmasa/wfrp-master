@@ -2,6 +2,8 @@ package cz.frantisekmasa.wfrp_master.common.auth
 
 import cz.frantisekmasa.wfrp_master.common.FirebaseTokenHolder
 import cz.frantisekmasa.wfrp_master.common.core.auth.User
+import cz.frantisekmasa.wfrp_master.common.core.auth.UserId
+import cz.frantisekmasa.wfrp_master.common.core.auth.UserProvider
 import cz.frantisekmasa.wfrp_master.common.core.shared.SettingsStorage
 import cz.frantisekmasa.wfrp_master.common.core.shared.edit
 import cz.frantisekmasa.wfrp_master.common.core.shared.stringKey
@@ -21,8 +23,18 @@ class AuthenticationManager(
     private val http: HttpClient,
     private val tokenHolder: FirebaseTokenHolder,
     private val settings: SettingsStorage,
-) {
+) : UserProvider {
     private val statusFlow = MutableStateFlow<AuthenticationStatus?>(null)
+
+    override val userId: UserId? get() {
+        val status = statusFlow.value
+
+        if (status is AuthenticationStatus.Authenticated) {
+            return UserId(status.user.id)
+        }
+
+        return null
+    }
 
     val status: Flow<AuthenticationStatus?> get() = statusFlow
 

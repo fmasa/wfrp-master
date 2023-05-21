@@ -36,7 +36,7 @@ import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.firebase.auth.FirebaseAuthUserCollisionException
-import cz.frantisekmasa.wfrp_master.common.auth.LocalAuthenticationManager
+import cz.frantisekmasa.wfrp_master.common.auth.AuthenticationManager
 import cz.frantisekmasa.wfrp_master.common.auth.LocalWebClientId
 import cz.frantisekmasa.wfrp_master.common.core.auth.LocalUser
 import cz.frantisekmasa.wfrp_master.common.core.shared.Resources
@@ -56,10 +56,12 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
 import kotlinx.parcelize.Parcelize
+import org.kodein.di.compose.localDI
+import org.kodein.di.instance
 
 @Composable
 actual fun SignInCard(settingsScreenModel: SettingsScreenModel) {
-    val authManager = LocalAuthenticationManager.current
+    val authManager: AuthenticationManager by localDI().instance()
     val webClientId = LocalWebClientId.current
     val contract = remember(authManager) { authManager.googleSignInContract(webClientId) }
     val context = LocalContext.current
@@ -69,6 +71,7 @@ actual fun SignInCard(settingsScreenModel: SettingsScreenModel) {
 
     pendingSingInConfirmation?.let {
         ConfirmSignInDialog(
+            authManager,
             it.idToken,
             settingsScreenModel,
             onDismissRequest = { pendingSingInConfirmation = null },
@@ -151,11 +154,11 @@ actual fun SignInCard(settingsScreenModel: SettingsScreenModel) {
 
 @Composable
 fun ConfirmSignInDialog(
+    authManager: AuthenticationManager,
     idToken: String,
     screenModel: SettingsScreenModel,
     onDismissRequest: () -> Unit,
 ) {
-    val authManager = LocalAuthenticationManager.current
     val coroutineScope = rememberCoroutineScope()
     val userId = LocalUser.current.id
 
