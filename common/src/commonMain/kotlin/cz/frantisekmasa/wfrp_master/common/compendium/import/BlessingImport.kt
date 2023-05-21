@@ -14,6 +14,7 @@ data class BlessingImport(
     val target: String,
     val duration: String,
     val effect: String,
+    val isVisibleToPlayers: Boolean = true,
 ) {
     init {
         require(name.isNotBlank()) { "Blessing name cannot be blank" }
@@ -31,6 +32,7 @@ data class BlessingImport(
         target = target,
         duration = duration,
         effect = effect,
+        isVisibleToPlayers = isVisibleToPlayers,
     )
 
     companion object {
@@ -40,6 +42,7 @@ data class BlessingImport(
             target = blessing.target,
             duration = blessing.duration,
             effect = blessing.effect,
+            isVisibleToPlayers = blessing.isVisibleToPlayers,
         )
     }
 }

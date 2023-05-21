@@ -16,6 +16,7 @@ data class SpellImport(
     val castingNumber: Int,
     val effect: String,
     val lore: String,
+    val isVisibleToPlayers: Boolean = true,
 ) {
     init {
         require(name.isNotBlank()) { "Spell name cannot be blank" }
@@ -37,6 +38,7 @@ data class SpellImport(
         castingNumber = castingNumber,
         effect = effect,
         lore = lore,
+        isVisibleToPlayers = isVisibleToPlayers,
     )
 
     companion object {
@@ -48,6 +50,7 @@ data class SpellImport(
             castingNumber = spell.castingNumber,
             effect = spell.effect,
             lore = spell.lore,
+            isVisibleToPlayers = spell.isVisibleToPlayers,
         )
     }
 }

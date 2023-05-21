@@ -7,6 +7,7 @@ import cz.frantisekmasa.wfrp_master.common.core.utils.duplicateName
 sealed class CompendiumItem<T : CompendiumItem<T>> : Parcelable {
     abstract val id: Uuid
     abstract val name: String
+    abstract val isVisibleToPlayers: Boolean
 
     abstract fun duplicate(): T
 

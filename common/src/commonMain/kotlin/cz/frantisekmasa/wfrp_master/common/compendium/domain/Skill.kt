@@ -18,6 +18,7 @@ data class Skill(
     val description: String,
     val characteristic: Characteristic,
     val advanced: Boolean,
+    override val isVisibleToPlayers: Boolean = true,
 ) : CompendiumItem<Skill>() {
     companion object {
         const val NAME_MAX_LENGTH = 50

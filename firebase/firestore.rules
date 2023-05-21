@@ -2,7 +2,7 @@ rules_version = '2';
 
 service cloud.firestore {
     match /databases/{database}/documents {
-   
+
         match /parties/{party=**} {
             allow read: if request.auth.uid != null
                         && request.auth.uid in resource.data.users;
@@ -23,12 +23,20 @@ service cloud.firestore {
                 allow delete: if isGameMaster();
 
                 function isValidSkill(skill) {
-                    return skill.keys().toSet() == ["id", "name", "description", "advanced", "characteristic"].toSet()
+                    return [
+                       "id",
+                       "name",
+                       "description",
+                       "advanced",
+                       "characteristic",
+                       "isVisibleToPlayers"
+                   ].hasAll(skill.keys())
                         && skill.id is string && skill.id == skillId && isValidUuid(skill.id)
                         && skill.name is string && isNotBlank(skill.name) && skill.name.size() <= 50
                         && skill.description is string && skill.description.size() <= 2500
                         && skill.advanced is bool
-                        && skill.characteristic in validCharacteristics();
+                        && skill.characteristic in validCharacteristics()
+                        && (! ("isVisibleToPlayers" in skill) || skill.isVisibleToPlayers is bool);
                 }
             }
 
@@ -39,12 +47,21 @@ service cloud.firestore {
                 allow delete: if isGameMaster();
 
                 function isValidTalent(talent) {
-                    return ["id", "name", "maxTimesTaken", "description", "tests"].hasAll(talent.keys())
+                    return [
+                       "id",
+                       "name",
+                       "maxTimesTaken",
+                       "description",
+                       "tests",
+                       "isVisibleToPlayers"
+                   ].hasAll(talent.keys())
                         && talent.id is string && talent.id == talentId && isValidUuid(talent.id)
                         && talent.name is string && isNotBlank(talent.name) && talent.name.size() <= 50
                         && talent.maxTimesTaken is string && talent.name.size() <= 100
                         && talent.description is string && talent.description.size() <= 1500
-                        && (! ("tests" in talent) || (talent.tests is string && talent.tests.size() <= 200));
+                        && (! ("tests" in talent) || (talent.tests is string && talent.tests.size() <= 200))
+                        && (! ("isVisibleToPlayers" in talent) || talent.isVisibleToPlayers is bool);
+
                 }
             }
 
@@ -55,7 +72,17 @@ service cloud.firestore {
                 allow delete: if isGameMaster();
 
                 function isValidSpell(spell) {
-                    return spell.keys().toSet() == ["id", "name", "range", "target", "duration", "castingNumber", "effect", "lore"].toSet()
+                    return [
+                       "id",
+                       "name",
+                       "range",
+                       "target",
+                       "duration",
+                       "castingNumber",
+                       "effect",
+                       "lore",
+                       "isVisibleToPlayers"
+                    ].hasAll(spell.keys())
                         && spell.id is string && spell.id == spellId && isValidUuid(spell.id)
                         && spell.name is string && isNotBlank(spell.name) && spell.name.size() <= 50
                         && spell.range is string && spell.range.size() <= 50
@@ -63,7 +90,8 @@ service cloud.firestore {
                         && spell.duration is string && spell.duration.size() <= 50
                         && spell.effect is string && spell.effect.size() <= 1000
                         && spell.castingNumber is int && spell.castingNumber >= 0 && spell.castingNumber <= 99
-                        && spell.lore is string && spell.lore.size() <= 50;
+                        && spell.lore is string && spell.lore.size() <= 50
+                        && (! ("isVisibleToPlayers" in spell) || spell.isVisibleToPlayers is bool);
                 }
             }
 
@@ -74,13 +102,22 @@ service cloud.firestore {
                 allow delete: if isGameMaster();
 
                 function isValidBlessing(blessing) {
-                    return blessing.keys().toSet() == ["id", "name", "range", "target", "duration", "effect"].toSet()
+                    return [
+                       "id",
+                       "name",
+                       "range",
+                       "target",
+                       "duration",
+                       "effect",
+                       "isVisibleToPlayers"
+                   ].hasAll(blessing.keys())
                         && blessing.id is string && blessing.id == blessingId && isValidUuid(blessing.id)
                         && blessing.name is string && isNotBlank(blessing.name) && blessing.name.size() <= 50
                         && blessing.range is string && blessing.range.size() <= 50
                         && blessing.target is string && blessing.target.size() <= 50
                         && blessing.duration is string && blessing.duration.size() <= 50
-                        && blessing.effect is string && blessing.effect.size() <= 1000;
+                        && blessing.effect is string && blessing.effect.size() <= 1000
+                        && (! ("isVisibleToPlayers" in blessing) || blessing.isVisibleToPlayers is bool);
                 }
             }
 
@@ -91,14 +128,24 @@ service cloud.firestore {
                 allow delete: if isGameMaster();
 
                 function isValidMiracle(miracle) {
-                    return miracle.keys().toSet() == ["id", "name", "range", "target", "duration", "effect", "cultName"].toSet()
+                    return [
+                       "id",
+                       "name",
+                       "range",
+                       "target",
+                       "duration",
+                       "effect",
+                       "cultName",
+                       "isVisibleToPlayers"
+                   ].hasAll(miracle.keys())
                         && miracle.id is string && miracle.id == miracleId && isValidUuid(miracle.id)
                         && miracle.name is string && isNotBlank(miracle.name) && miracle.name.size() <= 50
                         && miracle.range is string && miracle.range.size() <= 50
                         && miracle.target is string && miracle.target.size() <= 50
                         && miracle.duration is string && miracle.duration.size() <= 50
                         && miracle.effect is string && miracle.effect.size() <= 1000
-                        && miracle.cultName is string && miracle.cultName.size() <= 50;
+                        && miracle.cultName is string && miracle.cultName.size() <= 50
+                        && (! ("isVisibleToPlayers" in miracle) || miracle.isVisibleToPlayers is bool);
                 }
             }
 
@@ -109,10 +156,17 @@ service cloud.firestore {
                 allow delete: if isGameMaster();
 
                 function isValidTrait(trait) {
-                    return trait.keys().toSet() == ["id", "name", "specifications", "description"].toSet()
-                           && trait.id is string && trait.id == traitId && isValidUuid(trait.id)
-                           && trait.name is string && isNotBlank(trait.name) && trait.name.size() <= 50
-                           && trait.description is string && trait.description.size() <= 3000;
+                    return [
+                        "id",
+                        "name",
+                        "specifications",
+                        "description",
+                        "isVisibleToPlayers"
+                    ].hasAll(trait.keys())
+                        && trait.id is string && trait.id == traitId && isValidUuid(trait.id)
+                        && trait.name is string && isNotBlank(trait.name) && trait.name.size() <= 50
+                        && trait.description is string && trait.description.size() <= 3000
+                        && (! ("isVisibleToPlayers" in trait) || trait.isVisibleToPlayers is bool);
                 }
             }
 
@@ -124,7 +178,15 @@ service cloud.firestore {
                 allow delete: if isGameMaster();
 
                 function isValidCareer(career) {
-                    return career.keys().toSet() == ["id", "name", "description", "socialClass", "races", "levels"].toSet()
+                    return [
+                        "id",
+                        "name",
+                        "description",
+                        "socialClass",
+                        "races",
+                        "levels",
+                        "isVisibleToPlayers"
+                    ].hasAll(career.keys())
                         && career.id is string && career.id == careerId && isValidUuid(career.id)
                         && career.name is string && isNotBlank(career.name) && career.name.size() <= 50
                         && career.description is string && career.description.size() <= 3000
@@ -132,7 +194,8 @@ service cloud.firestore {
                         && career.races is list
                             && career.races.toSet().size() == career.races.size() // There are no duplicates
                             && validRaces().hasAll(career.races)
-                        && career.levels is list;
+                        && career.levels is list
+                        && (! ("isVisibleToPlayers" in career) || career.isVisibleToPlayers is bool);
                 }
 
                 function isValidSocialClass(socialClass) {
@@ -713,7 +776,7 @@ service cloud.firestore {
                 return request.auth != null
                     && (request.auth.uid == party.gameMasterId || (request.auth.uid in party.users && party.gameMasterId == null));
             }
-        
+
             function hasAccessToParty() {
                 return request.auth != null
                     && request.auth.uid in get(/databases/$(database)/documents/parties/$(partyId)).data.users

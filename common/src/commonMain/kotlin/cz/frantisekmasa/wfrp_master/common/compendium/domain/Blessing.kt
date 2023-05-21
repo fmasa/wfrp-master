@@ -18,6 +18,7 @@ data class Blessing(
     val target: String,
     val duration: String,
     val effect: String,
+    override val isVisibleToPlayers: Boolean = true,
 ) : CompendiumItem<Blessing>() {
     companion object {
         const val NAME_MAX_LENGTH = 50

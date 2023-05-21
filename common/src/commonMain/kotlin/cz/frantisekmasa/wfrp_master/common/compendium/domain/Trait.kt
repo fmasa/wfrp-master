@@ -15,6 +15,7 @@ data class Trait(
     override val name: String,
     val specifications: Set<String>,
     val description: String,
+    override val isVisibleToPlayers: Boolean = true,
 ) : CompendiumItem<Trait>() {
     init {
         require(specifications.all { name.contains(it) })

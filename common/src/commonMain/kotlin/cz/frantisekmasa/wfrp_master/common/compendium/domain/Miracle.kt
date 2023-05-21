@@ -19,6 +19,7 @@ data class Miracle(
     val duration: String,
     val effect: String,
     val cultName: String,
+    override val isVisibleToPlayers: Boolean = true,
 ) : CompendiumItem<Miracle>() {
     companion object {
         const val NAME_MAX_LENGTH = 50
