@@ -1,6 +1,7 @@
 package cz.frantisekmasa.wfrp_master.common.core.domain.character
 
 import com.benasher44.uuid.uuid4
+import cz.frantisekmasa.wfrp_master.common.core.auth.UserId
 import cz.frantisekmasa.wfrp_master.common.core.domain.Money
 import cz.frantisekmasa.wfrp_master.common.core.domain.Stats
 import kotlin.test.Test
@@ -11,7 +12,7 @@ class CharacterTest {
     private fun character() = Character(
         id = uuid4().toString(),
         name = "Bilbo",
-        userId = "123",
+        userId = UserId("123"),
         career = "Writer",
         socialClass = "Noble",
         status = SocialStatus(SocialStatus.Tier.GOLD, 2),

@@ -1,6 +1,7 @@
 package cz.frantisekmasa.wfrp_master.common.invitation
 
 import cafe.adriel.voyager.core.model.ScreenModel
+import cz.frantisekmasa.wfrp_master.common.core.auth.UserId
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.Invitation
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.Party
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.PartyRepository
@@ -21,11 +22,11 @@ class InvitationScreenModel(
     private val parties: PartyRepository,
 ) : ScreenModel {
 
-    suspend fun acceptInvitation(userId: String, invitation: Invitation): InvitationProcessingResult {
+    suspend fun acceptInvitation(userId: UserId, invitation: Invitation): InvitationProcessingResult {
         return withContext(Dispatchers.IO) { invitationProcessor.accept(userId, invitation) }
     }
 
-    fun userParties(userId: String): Flow<List<Party>> {
+    fun userParties(userId: UserId): Flow<List<Party>> {
         return parties.forUserLive(userId)
     }
 

@@ -20,8 +20,8 @@ import kotlinx.serialization.Serializable
 data class Party(
     val id: PartyId,
     val name: String,
-    val gameMasterId: String?, // Remove support for single-player parties in 1.14
-    private val users: Set<String>,
+    val gameMasterId: UserId?, // Remove support for single-player parties in 1.14
+    private val users: Set<UserId>,
     private val archived: Boolean = false,
     val ambitions: Ambitions = Ambitions("", ""),
     val time: DateTime = DateTime(
@@ -44,9 +44,7 @@ data class Party(
 
     val playersCount: Int get() = users.size - 1
 
-    val players: List<UserId> get() =
-        users.filter { it != gameMasterId }
-            .map(UserId::fromString)
+    val players: List<UserId> get() = users.filter { it != gameMasterId }
 
     fun updateAmbitions(ambitions: Ambitions) = copy(ambitions = ambitions)
 
@@ -75,8 +73,8 @@ data class Party(
     fun changeTime(time: DateTime) = copy(time = time)
 
     fun leave(userId: UserId) = copy(
-        users = users.filter { it != userId.toString() }.toSet()
+        users = users.filter { it != userId }.toSet()
     )
 
-    fun isMember(userId: UserId): Boolean = users.contains(userId.toString())
+    fun isMember(userId: UserId): Boolean = userId in users
 }

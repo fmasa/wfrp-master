@@ -11,7 +11,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import cz.frantisekmasa.wfrp_master.common.core.auth.LocalUser
-import cz.frantisekmasa.wfrp_master.common.core.auth.UserId
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.Party
 import cz.frantisekmasa.wfrp_master.common.core.shared.IO
 import cz.frantisekmasa.wfrp_master.common.core.ui.dialogs.AlertDialog
@@ -42,7 +41,7 @@ fun LeavePartyDialog(party: Party, screenModel: PartyListScreenModel, onDismissR
         },
         confirmButton = {
             val coroutineScope = rememberCoroutineScope()
-            val userId = UserId.fromString(LocalUser.current.id)
+            val userId = LocalUser.current.id
 
             TextButton(
                 enabled = !removing,

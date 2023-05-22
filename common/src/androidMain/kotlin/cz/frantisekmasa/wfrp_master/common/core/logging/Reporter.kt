@@ -4,12 +4,13 @@ import com.google.firebase.analytics.ktx.analytics
 import com.google.firebase.analytics.ktx.logEvent
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.firebase.ktx.Firebase
+import cz.frantisekmasa.wfrp_master.common.core.auth.UserId
 
 actual object Reporter {
     private val crashlytics by lazy { FirebaseCrashlytics.getInstance() }
 
-    actual fun setUserId(id: String) {
-        crashlytics.setUserId(id)
+    actual fun setUserId(id: UserId) {
+        crashlytics.setUserId(id.toString())
     }
 
     actual fun log(message: String) {

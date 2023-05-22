@@ -32,7 +32,7 @@ class GameMasterScreenModel(
         party.filterNotNull().combineTransform(playerCharacters) { party, characters ->
             val players = characters.map { Player.ExistingCharacter(it) }
             val usersWithoutCharacter = party.players
-                .filter { userId -> players.none { it.character.userId == userId.toString() } }
+                .filter { userId -> players.none { it.character.userId == userId } }
                 .map { Player.UserWithoutCharacter(it.toString()) }
 
             emit(players + usersWithoutCharacter)

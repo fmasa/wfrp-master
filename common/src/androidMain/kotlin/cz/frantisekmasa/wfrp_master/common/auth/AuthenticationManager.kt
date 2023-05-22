@@ -62,12 +62,12 @@ class AuthenticationManager(private val auth: FirebaseAuth) : UserProvider {
         awaitClose { auth.removeAuthStateListener(listener) }
     }.map {
         User(
-            id = it.uid,
+            id = UserId(it.uid),
             email = if (it.email == "") null else it.email
         )
     }.stateIn(coroutineScope, SharingStarted.Eagerly, null)
 
-    override val userId: UserId? get() = user.value?.id?.let(::UserId)
+    override val userId: UserId? get() = user.value?.id
 
     init {
         coroutineScope.launch {

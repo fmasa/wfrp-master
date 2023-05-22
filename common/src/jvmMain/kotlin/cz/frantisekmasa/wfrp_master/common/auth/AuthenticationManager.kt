@@ -30,7 +30,7 @@ class AuthenticationManager(
         val status = statusFlow.value
 
         if (status is AuthenticationStatus.Authenticated) {
-            return UserId(status.user.id)
+            return status.user.id
         }
 
         return null

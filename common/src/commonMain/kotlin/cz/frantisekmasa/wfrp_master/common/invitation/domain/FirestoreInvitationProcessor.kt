@@ -14,13 +14,13 @@ class FirestoreInvitationProcessor(
     private val parties: PartyRepository
 ) : InvitationProcessor {
 
-    override suspend fun accept(userId: String, invitation: Invitation): InvitationProcessingResult {
+    override suspend fun accept(userId: UserId, invitation: Invitation): InvitationProcessingResult {
         if (isAlreadyInParty(userId, invitation.partyId)) {
             return InvitationProcessingResult.AlreadyInParty
         }
 
         firestore.collection("users")
-            .document(userId)
+            .document(userId.toString())
             .set(
                 mapOf(
                     "invitations" to arrayUnion(
@@ -40,9 +40,9 @@ class FirestoreInvitationProcessor(
         return InvitationProcessingResult.Success
     }
 
-    private suspend fun isAlreadyInParty(userId: String, partyId: PartyId): Boolean {
+    private suspend fun isAlreadyInParty(userId: UserId, partyId: PartyId): Boolean {
         return try {
-            parties.get(partyId).isMember(UserId.fromString(userId))
+            parties.get(partyId).isMember(userId)
         } catch (e: PartyNotFound) {
             false
         }

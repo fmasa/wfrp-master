@@ -50,7 +50,7 @@ class CharacterCreationScreenModel(
                         type = type,
                         name = info.name.value,
                         publicName = info.publicName.value.takeIf { it.isNotBlank() },
-                        userId = userId?.toString(),
+                        userId = userId,
                         career = if (career is SelectedCareer.NonCompendiumCareer) career.careerName else "",
                         socialClass = if (career is SelectedCareer.NonCompendiumCareer) career.socialClass else "",
                         status = info.status.value,
