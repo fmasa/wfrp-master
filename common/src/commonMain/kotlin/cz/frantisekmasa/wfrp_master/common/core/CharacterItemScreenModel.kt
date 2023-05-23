@@ -2,13 +2,18 @@ package cz.frantisekmasa.wfrp_master.common.core
 
 import cafe.adriel.voyager.core.model.ScreenModel
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.CompendiumItem
+import cz.frantisekmasa.wfrp_master.common.core.auth.UserProvider
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.CharacterItem
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.CharacterItemRepository
 import cz.frantisekmasa.wfrp_master.common.core.domain.compendium.Compendium
 import cz.frantisekmasa.wfrp_master.common.core.domain.identifiers.CharacterId
+import cz.frantisekmasa.wfrp_master.common.core.domain.party.PartyRepository
+import cz.frantisekmasa.wfrp_master.common.core.utils.right
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.combineTransform
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
 
@@ -19,9 +24,25 @@ abstract class CharacterItemScreenModel<
     private val characterId: CharacterId,
     private val repository: CharacterItemRepository<TItem>,
     private val compendium: Compendium<TCompendiumItem>,
+    private val userProvider: UserProvider,
+    partyRepository: PartyRepository,
 ) : ScreenModel {
 
-    val compendiumItems by lazy { compendium.liveForParty(characterId.partyId) }
+    private val isGameMaster = partyRepository.getLive(characterId.partyId)
+        .right()
+        .map { it.gameMasterId == userProvider.userId }
+        .distinctUntilChanged()
+
+    val compendiumItems: Flow<List<TCompendiumItem>> by lazy {
+        compendium.liveForParty(characterId.partyId)
+            .combine(isGameMaster) { items, isGameMaster ->
+                if (isGameMaster) {
+                    return@combine items
+                }
+
+                return@combine items.filter { it.isVisibleToPlayers }
+            }
+    }
 
     val items: Flow<List<TItem>> = repository.findAllForCharacter(characterId)
 

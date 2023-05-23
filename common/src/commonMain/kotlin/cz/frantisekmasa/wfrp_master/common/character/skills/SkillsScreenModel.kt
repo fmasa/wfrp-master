@@ -4,8 +4,10 @@ import cafe.adriel.voyager.core.model.coroutineScope
 import com.benasher44.uuid.Uuid
 import com.benasher44.uuid.uuid4
 import cz.frantisekmasa.wfrp_master.common.core.CharacterItemScreenModel
+import cz.frantisekmasa.wfrp_master.common.core.auth.UserProvider
 import cz.frantisekmasa.wfrp_master.common.core.domain.compendium.Compendium
 import cz.frantisekmasa.wfrp_master.common.core.domain.identifiers.CharacterId
+import cz.frantisekmasa.wfrp_master.common.core.domain.party.PartyRepository
 import cz.frantisekmasa.wfrp_master.common.core.domain.skills.Skill
 import cz.frantisekmasa.wfrp_master.common.core.domain.skills.SkillRepository
 import io.github.aakira.napier.Napier
@@ -19,7 +21,15 @@ class SkillsScreenModel(
     private val characterId: CharacterId,
     private val skillRepository: SkillRepository,
     private val compendium: Compendium<CompendiumSkill>,
-) : CharacterItemScreenModel<Skill, CompendiumSkill>(characterId, skillRepository, compendium) {
+    userProvider: UserProvider,
+    partyRepository: PartyRepository,
+) : CharacterItemScreenModel<Skill, CompendiumSkill>(
+    characterId,
+    skillRepository,
+    compendium,
+    userProvider,
+    partyRepository,
+) {
 
     suspend fun saveSkill(skill: Skill) = skillRepository.save(characterId, skill)
 

@@ -34,7 +34,6 @@ import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
-import arrow.core.Either
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
@@ -90,19 +89,23 @@ class CareerDetailScreen(
             return
         }
 
-        when (career) {
-            is Either.Left -> {
-                val snackbarHolder = LocalPersistentSnackbarHolder.current
-                val strings = LocalStrings.current
-                val navigator = LocalNavigator.currentOrThrow
+        val careerValue = career.orNull()
+            ?.takeIf { it.isVisibleToPlayers || party.gameMasterId == LocalUser.current.id }
 
-                LaunchedEffect(Unit) {
-                    snackbarHolder.showSnackbar(strings.careers.messages.notFound)
-                    navigator.pop()
-                }
+        val snackbarHolder = LocalPersistentSnackbarHolder.current
+        val strings = LocalStrings.current
+        val navigator = LocalNavigator.currentOrThrow
+
+        if (careerValue == null) {
+            LaunchedEffect(Unit) {
+                snackbarHolder.showSnackbar(strings.careers.messages.notFound)
+                navigator.pop()
             }
-            is Either.Right -> Detail(career.value, party, screenModel)
+
+            return
         }
+
+        Detail(careerValue, party, screenModel)
     }
 
     private sealed class LevelDialogState : Parcelable {

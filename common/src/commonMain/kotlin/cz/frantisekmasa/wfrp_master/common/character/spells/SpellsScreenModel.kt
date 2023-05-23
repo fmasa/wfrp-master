@@ -2,7 +2,9 @@ package cz.frantisekmasa.wfrp_master.common.character.spells
 
 import cafe.adriel.voyager.core.model.coroutineScope
 import cz.frantisekmasa.wfrp_master.common.core.CharacterItemScreenModel
+import cz.frantisekmasa.wfrp_master.common.core.auth.UserProvider
 import cz.frantisekmasa.wfrp_master.common.core.domain.compendium.Compendium
+import cz.frantisekmasa.wfrp_master.common.core.domain.party.PartyRepository
 import cz.frantisekmasa.wfrp_master.common.core.domain.spells.Spell
 import cz.frantisekmasa.wfrp_master.common.core.domain.spells.SpellRepository
 import cz.frantisekmasa.wfrp_master.common.core.shared.IO
@@ -13,8 +15,16 @@ import cz.frantisekmasa.wfrp_master.common.compendium.domain.Spell as Compendium
 class SpellsScreenModel(
     private val characterId: cz.frantisekmasa.wfrp_master.common.core.domain.identifiers.CharacterId,
     private val spellRepository: SpellRepository,
+    userProvider: UserProvider,
+    partyRepository: PartyRepository,
     compendium: Compendium<CompendiumSpell>
-) : CharacterItemScreenModel<Spell, CompendiumSpell>(characterId, spellRepository, compendium) {
+) : CharacterItemScreenModel<Spell, CompendiumSpell>(
+    characterId,
+    spellRepository,
+    compendium,
+    userProvider,
+    partyRepository,
+) {
     suspend fun saveSpell(spell: Spell) {
         spellRepository.save(characterId, spell)
     }
