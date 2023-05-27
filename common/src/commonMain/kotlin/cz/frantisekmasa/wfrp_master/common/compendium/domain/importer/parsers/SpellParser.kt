@@ -90,7 +90,7 @@ class SpellParser(
                         listOf(
                             listOf(Token.NormalPart(effectStart)),
                             stream.consumeUntil { it is Token.Heading },
-                        ).filterIsInstance<Token.ParagraphToken>()
+                        ).flatten().filterIsInstance<Token.ParagraphToken>()
                     ),
                     lore = lore,
                 )
