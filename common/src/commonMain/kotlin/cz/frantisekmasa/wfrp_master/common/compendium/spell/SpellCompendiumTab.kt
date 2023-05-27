@@ -21,16 +21,18 @@ import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
 @Composable
 fun SpellCompendiumTab(partyId: PartyId, screenModel: SpellCompendiumScreenModel, width: Dp) {
     var newSpellDialogOpened by rememberSaveable { mutableStateOf(false) }
+    val navigator = LocalNavigator.currentOrThrow
 
     if (newSpellDialogOpened) {
         SpellDialog(
             spell = null,
-            screenModel = screenModel,
             onDismissRequest = { newSpellDialogOpened = false },
+            onSaveRequest = {
+                screenModel.createNew(it)
+                navigator.push(SpellDetailScreen(partyId, it.id))
+            },
         )
     }
-
-    val navigator = LocalNavigator.currentOrThrow
 
     CompendiumTab(
         liveItems = screenModel.items,

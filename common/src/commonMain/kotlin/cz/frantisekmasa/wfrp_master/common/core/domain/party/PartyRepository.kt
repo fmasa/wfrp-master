@@ -1,6 +1,7 @@
 package cz.frantisekmasa.wfrp_master.common.core.domain.party
 
 import arrow.core.Either
+import cz.frantisekmasa.wfrp_master.common.core.auth.UserId
 import cz.frantisekmasa.wfrp_master.common.core.connectivity.CouldNotConnectToBackend
 import kotlinx.coroutines.flow.Flow
 
@@ -26,7 +27,7 @@ interface PartyRepository {
     /**
      * Creates RecyclerView Adapter with parties that user has access to
      */
-    fun forUserLive(userId: String): Flow<List<Party>>
+    fun forUserLive(userId: UserId): Flow<List<Party>>
 
-    suspend fun forUser(userId: String): List<Party>
+    suspend fun forUser(userId: UserId): List<Party>
 }

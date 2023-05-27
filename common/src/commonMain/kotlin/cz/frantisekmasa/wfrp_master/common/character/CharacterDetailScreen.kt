@@ -44,7 +44,6 @@ import cz.frantisekmasa.wfrp_master.common.combat.ActiveCombatBanner
 import cz.frantisekmasa.wfrp_master.common.core.LocalStaticConfiguration
 import cz.frantisekmasa.wfrp_master.common.core.PartyScreenModel
 import cz.frantisekmasa.wfrp_master.common.core.auth.LocalUser
-import cz.frantisekmasa.wfrp_master.common.core.auth.UserId
 import cz.frantisekmasa.wfrp_master.common.core.config.Platform
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.Character
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.CharacterTab
@@ -142,8 +141,8 @@ data class CharacterDetailScreen(
     ) {
         val characterPickerScreenModel: CharacterPickerScreenModel =
             rememberScreenModel(arg = party.id)
-        val userId = UserId(LocalUser.current.id)
-        val isGameMaster = party.gameMasterId == null || party.gameMasterId == userId.toString()
+        val userId = LocalUser.current.id
+        val isGameMaster = party.gameMasterId == null || party.gameMasterId == userId
         val canAddCharacters = !isGameMaster
 
         val allCharacters = remember {

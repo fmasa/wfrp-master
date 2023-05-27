@@ -14,6 +14,7 @@ data class SkillImport(
     val description: String,
     val characteristic: Characteristic,
     val advanced: Boolean,
+    val isVisibleToPlayers: Boolean = true,
 ) {
     init {
         require(name.isNotBlank()) { "Skill name cannot be blank" }
@@ -27,6 +28,7 @@ data class SkillImport(
         description = description,
         characteristic = characteristic,
         advanced = advanced,
+        isVisibleToPlayers = isVisibleToPlayers,
     )
 
     companion object {
@@ -35,6 +37,7 @@ data class SkillImport(
             description = skill.description,
             characteristic = skill.characteristic,
             advanced = skill.advanced,
+            isVisibleToPlayers = skill.isVisibleToPlayers,
         )
     }
 }

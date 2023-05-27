@@ -19,6 +19,7 @@ data class Career(
     val socialClass: SocialClass,
     val races: Set<Race>,
     val levels: List<Level>,
+    override val isVisibleToPlayers: Boolean = true,
 ) : CompendiumItem<Career>() {
 
     companion object {
@@ -49,6 +50,9 @@ data class Career(
     }
 
     override fun duplicate(): Career = copy(name = duplicateName())
+
+    override fun changeVisibility(isVisibleToPlayers: Boolean) =
+        copy(isVisibleToPlayers = isVisibleToPlayers)
 
     @Parcelize
     @Serializable

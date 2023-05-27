@@ -15,6 +15,7 @@ data class Trait(
     override val name: String,
     val specifications: Set<String>,
     val description: String,
+    override val isVisibleToPlayers: Boolean = true,
 ) : CompendiumItem<Trait>() {
     init {
         require(specifications.all { name.contains(it) })
@@ -26,6 +27,9 @@ data class Trait(
     override fun replace(original: Trait) = copy(id = original.id)
 
     override fun duplicate() = copy(id = uuid4(), name = duplicateName())
+
+    override fun changeVisibility(isVisibleToPlayers: Boolean) =
+        copy(isVisibleToPlayers = isVisibleToPlayers)
 
     companion object {
         const val NAME_MAX_LENGTH = 50

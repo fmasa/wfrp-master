@@ -19,6 +19,7 @@ data class Miracle(
     val duration: String,
     val effect: String,
     val cultName: String,
+    override val isVisibleToPlayers: Boolean = true,
 ) : CompendiumItem<Miracle>() {
     companion object {
         const val NAME_MAX_LENGTH = 50
@@ -41,4 +42,7 @@ data class Miracle(
     override fun replace(original: Miracle) = copy(id = original.id)
 
     override fun duplicate() = copy(id = uuid4(), name = duplicateName())
+
+    override fun changeVisibility(isVisibleToPlayers: Boolean) =
+        copy(isVisibleToPlayers = isVisibleToPlayers)
 }

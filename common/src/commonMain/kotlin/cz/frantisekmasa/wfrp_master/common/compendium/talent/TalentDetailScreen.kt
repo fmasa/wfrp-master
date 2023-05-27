@@ -31,7 +31,7 @@ class TalentDetailScreen(
             TalentDialog(
                 talent = item,
                 onDismissRequest = onDismissRequest,
-                screenModel = screenModel,
+                onSaveRequest = screenModel::update,
             )
         }
     }

@@ -15,6 +15,7 @@ data class MiracleImport(
     val duration: String,
     val effect: String,
     val cultName: String,
+    val isVisibleToPlayers: Boolean = true,
 ) {
     init {
         require(name.isNotBlank()) { "Miracle name cannot be blank" }
@@ -34,6 +35,7 @@ data class MiracleImport(
         duration = duration,
         effect = effect,
         cultName = cultName,
+        isVisibleToPlayers = isVisibleToPlayers,
     )
 
     companion object {
@@ -44,6 +46,7 @@ data class MiracleImport(
             duration = miracle.duration,
             effect = miracle.effect,
             cultName = miracle.cultName,
+            isVisibleToPlayers = miracle.isVisibleToPlayers,
         )
     }
 }

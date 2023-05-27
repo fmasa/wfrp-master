@@ -1,6 +1,7 @@
 package cz.frantisekmasa.wfrp_master.common.settings
 
 import cafe.adriel.voyager.core.model.ScreenModel
+import cz.frantisekmasa.wfrp_master.common.core.auth.UserId
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.PartyRepository
 import cz.frantisekmasa.wfrp_master.common.core.shared.SettingsKey
 import cz.frantisekmasa.wfrp_master.common.core.shared.SettingsStorage
@@ -17,7 +18,8 @@ class SettingsScreenModel(
     val darkMode: Flow<Boolean?> by lazy { getPreference(AppSettings.DARK_MODE) }
     val soundEnabled: Flow<Boolean?> by lazy { getPreference(AppSettings.SOUND_ENABLED) }
     val lastSeenVersion: Flow<String?> by lazy { storage.watch(AppSettings.LAST_SEEN_VERSION) }
-    suspend fun getPartyNames(userId: String): List<String> {
+
+    suspend fun getPartyNames(userId: UserId): List<String> {
         return parties.forUser(userId).map { it.name }
     }
 

@@ -172,6 +172,8 @@ val appModule = DI.Module("Common") {
             instance(),
             instance(),
             instance(),
+            instance(),
+            instance(),
         )
     }
     bindFactory { partyId: PartyId -> CharacterPickerScreenModel(partyId, instance()) }
@@ -181,19 +183,27 @@ val appModule = DI.Module("Common") {
         EncounterDetailScreenModel(encounterId, instance(), instance(), instance(), instance())
     }
     bindFactory { characterId: CharacterId ->
-        SkillsScreenModel(characterId, instance(), instance())
+        SkillsScreenModel(characterId, instance(), instance(), instance(), instance())
     }
     bindFactory { characterId: CharacterId ->
-        SpellsScreenModel(characterId, instance(), instance())
+        SpellsScreenModel(characterId, instance(), instance(), instance(), instance())
     }
     bindFactory { characterId: CharacterId ->
-        TalentsScreenModel(characterId, instance(), instance(), instance(), instance())
+        TalentsScreenModel(
+            characterId,
+            instance(),
+            instance(),
+            instance(),
+            instance(),
+            instance(),
+            instance(),
+        )
     }
     bindFactory { characterId: CharacterId ->
-        MiraclesScreenModel(characterId, instance(), instance())
+        MiraclesScreenModel(characterId, instance(), instance(), instance(), instance())
     }
     bindFactory { characterId: CharacterId ->
-        BlessingsScreenModel(characterId, instance(), instance())
+        BlessingsScreenModel(characterId, instance(), instance(), instance(), instance())
     }
 
     bindFactory { partyId: PartyId ->
@@ -220,7 +230,15 @@ val appModule = DI.Module("Common") {
 
     bindSingleton { EffectManager(instance(), instance(), instance()) }
     bindFactory { characterId: CharacterId ->
-        TraitsScreenModel(characterId, instance(), instance(), instance(), instance())
+        TraitsScreenModel(
+            characterId,
+            instance(),
+            instance(),
+            instance(),
+            instance(),
+            instance(),
+            instance(),
+        )
     }
     bindProvider { InvitationScreenModel(instance(), instance(), instance()) }
     bindProvider { PartyListScreenModel(instance()) }
@@ -229,7 +247,9 @@ val appModule = DI.Module("Common") {
         CharacterCreationScreenModel(
             partyId,
             instance(),
-            instance()
+            instance(),
+            instance(),
+            instance(),
         )
     }
     bindFactory { partyId: PartyId ->

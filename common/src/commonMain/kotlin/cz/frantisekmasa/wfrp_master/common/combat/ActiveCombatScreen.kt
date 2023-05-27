@@ -37,6 +37,7 @@ import androidx.compose.material.icons.rounded.ArrowForward
 import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.Stable
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
@@ -56,6 +57,7 @@ import cafe.adriel.voyager.navigator.currentOrThrow
 import cz.frantisekmasa.wfrp_master.common.character.CharacterDetailScreen
 import cz.frantisekmasa.wfrp_master.common.character.conditions.ConditionIcon
 import cz.frantisekmasa.wfrp_master.common.core.auth.LocalUser
+import cz.frantisekmasa.wfrp_master.common.core.auth.UserId
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.PartyId
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.combat.Advantage
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.combat.GroupAdvantage
@@ -275,7 +277,8 @@ class ActiveCombatScreen(
         }
     }
 
-    private fun canEditCombatant(userId: String, isGameMaster: Boolean, combatant: CombatantItem) =
+    @Stable
+    private fun canEditCombatant(userId: UserId, isGameMaster: Boolean, combatant: CombatantItem) =
         isGameMaster || (combatant is CombatantItem.Character && combatant.userId == userId)
 
     @Composable

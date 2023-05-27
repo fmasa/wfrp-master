@@ -19,6 +19,7 @@ data class Spell(
     val castingNumber: Int,
     val effect: String,
     val lore: String,
+    override val isVisibleToPlayers: Boolean = true,
 ) : CompendiumItem<Spell>() {
     companion object {
         const val NAME_MAX_LENGTH = 50
@@ -43,4 +44,7 @@ data class Spell(
     override fun replace(original: Spell) = copy(id = original.id)
 
     override fun duplicate() = copy(id = uuid4(), name = duplicateName())
+
+    override fun changeVisibility(isVisibleToPlayers: Boolean) =
+        copy(isVisibleToPlayers = isVisibleToPlayers)
 }

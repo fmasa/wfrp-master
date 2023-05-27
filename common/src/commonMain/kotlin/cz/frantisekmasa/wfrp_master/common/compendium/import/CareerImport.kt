@@ -18,6 +18,7 @@ data class CareerImport(
     val socialClass: SocialClass,
     val races: Set<Race>,
     val levels: List<Level>,
+    val isVisibleToPlayers: Boolean = true,
 ) {
     init {
         require(name.isNotBlank()) { "Career name cannot be blank" }
@@ -50,7 +51,8 @@ data class CareerImport(
                 talents = it.talents,
                 trappings = it.trappings,
             )
-        }
+        },
+        isVisibleToPlayers = isVisibleToPlayers,
     )
 
     @Serializable
@@ -95,7 +97,8 @@ data class CareerImport(
                     talents = it.talents,
                     trappings = it.trappings,
                 )
-            }
+            },
+            isVisibleToPlayers = career.isVisibleToPlayers,
         )
     }
 }

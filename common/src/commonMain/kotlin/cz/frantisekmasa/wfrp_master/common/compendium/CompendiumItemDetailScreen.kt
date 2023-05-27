@@ -15,7 +15,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import arrow.core.Either
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
@@ -45,7 +44,9 @@ fun <A : CompendiumItem<A>> Screen.CompendiumItemDetailScreen(
 
     val navigator = LocalNavigator.currentOrThrow
 
-    if (itemOrError !is Either.Right<A>) {
+    val item = itemOrError.orNull()
+
+    if (item == null) {
         val message = LocalStrings.current.compendium.messages.itemDoesNotExist
         val snackbarHolder = LocalPersistentSnackbarHolder.current
 
@@ -59,14 +60,14 @@ fun <A : CompendiumItem<A>> Screen.CompendiumItemDetailScreen(
     var editDialogOpened by remember { mutableStateOf(false) }
 
     if (editDialogOpened) {
-        editDialog(itemOrError.value) { editDialogOpened = false }
+        editDialog(item) { editDialogOpened = false }
     }
 
     Scaffold(
         topBar = {
             TopAppBar(
                 navigationIcon = { BackButton() },
-                title = { Text(itemOrError.value.name) },
+                title = { Text(item.name) },
                 actions = {
                     IconAction(
                         Icons.Rounded.Edit,
@@ -78,7 +79,12 @@ fun <A : CompendiumItem<A>> Screen.CompendiumItemDetailScreen(
         }
     ) {
         Column(Modifier.verticalScroll(rememberScrollState())) {
-            detail(itemOrError.value)
+            VisibilitySwitchBar(
+                visible = item.isVisibleToPlayers,
+                onChange = { screenModel.update(item.changeVisibility(it)) },
+            )
+
+            detail(item)
         }
     }
 }

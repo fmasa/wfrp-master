@@ -3,6 +3,7 @@ package cz.frantisekmasa.wfrp_master.common.character
 import androidx.compose.runtime.Immutable
 import cafe.adriel.voyager.core.model.ScreenModel
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.Career
+import cz.frantisekmasa.wfrp_master.common.core.auth.UserProvider
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.Character
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.CharacterAvatarChanger
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.CharacterNotFound
@@ -10,6 +11,7 @@ import cz.frantisekmasa.wfrp_master.common.core.domain.character.CharacterReposi
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.CharacterType
 import cz.frantisekmasa.wfrp_master.common.core.domain.compendium.Compendium
 import cz.frantisekmasa.wfrp_master.common.core.domain.identifiers.CharacterId
+import cz.frantisekmasa.wfrp_master.common.core.domain.party.PartyRepository
 import cz.frantisekmasa.wfrp_master.common.core.utils.right
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
@@ -18,24 +20,36 @@ class CharacterScreenModel(
     private val characterId: CharacterId,
     private val characters: CharacterRepository,
     private val avatarChanger: CharacterAvatarChanger,
-    private val careerCompendium: Compendium<Career>,
+    careerCompendium: Compendium<Career>,
+    private val userProvider: UserProvider,
+    partyRepository: PartyRepository,
 ) : ScreenModel {
 
     val character: Flow<Character> = characters.getLive(characterId).right()
     val allCharacters: Flow<List<Character>> =
         characters.inParty(characterId.partyId, CharacterType.PLAYER_CHARACTER)
 
+    private val party = partyRepository.getLive(characterId.partyId).right()
+
     val allCareers: Flow<List<Career>> = careerCompendium.liveForParty(characterId.partyId)
-    val career: Flow<CurrentCareer?> = combine(character, allCareers) { character, allCareers ->
-        character.compendiumCareer?.let { currentCareer ->
-            val career = allCareers.firstOrNull { it.id == currentCareer.careerId }
-                ?: return@let null
+        .combine(party) { careers, party ->
+            if (userProvider.userId == party.gameMasterId) {
+                return@combine careers
+            }
 
-            val level = career.levels.firstOrNull { it.id == currentCareer.levelId }
-                ?: return@let null
-
-            CurrentCareer(career, level)
+            careers.filter { it.isVisibleToPlayers }
         }
+
+    val career: Flow<CurrentCareer?> = combine(character, allCareers) { character, allCareers ->
+        val currentCareer = character.compendiumCareer ?: return@combine null
+
+        val career = allCareers.firstOrNull { it.id == currentCareer.careerId }
+            ?: return@combine null
+
+        val level = career.levels.firstOrNull { it.id == currentCareer.levelId }
+            ?: return@combine null
+
+        CurrentCareer(career, level)
     }
 
     @Immutable

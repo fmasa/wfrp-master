@@ -6,6 +6,6 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class User(
     @SerialName("localId")
-    val id: String,
+    val id: UserId,
     val email: String?,
 )

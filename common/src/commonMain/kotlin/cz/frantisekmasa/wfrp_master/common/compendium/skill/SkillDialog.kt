@@ -34,7 +34,7 @@ import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
 fun SkillDialog(
     skill: Skill?,
     onDismissRequest: () -> Unit,
-    screenModel: SkillCompendiumScreenModel,
+    onSaveRequest: suspend (Skill) -> Unit,
 ) {
     val formData = SkillFormData.fromItem(skill)
     val strings = LocalStrings.current.skills
@@ -42,7 +42,7 @@ fun SkillDialog(
     CompendiumItemDialog(
         title = if (skill == null) strings.titleNew else strings.titleEdit,
         formData = formData,
-        saver = if (skill == null) screenModel::createNew else screenModel::update,
+        saver = onSaveRequest,
         onDismissRequest = onDismissRequest,
     ) { validate ->
         Column(
@@ -96,6 +96,7 @@ private data class SkillFormData(
     val description: InputValue,
     val characteristic: MutableState<Characteristic>,
     val advanced: MutableState<Boolean>,
+    val isVisibleToPlayers: Boolean,
 ) : CompendiumItemFormData<Skill> {
     companion object {
         @Composable
@@ -105,6 +106,7 @@ private data class SkillFormData(
             description = inputValue(item?.description ?: ""),
             characteristic = rememberSaveable { mutableStateOf(item?.characteristic ?: Characteristic.AGILITY) },
             advanced = checkboxValue(item?.advanced ?: false),
+            isVisibleToPlayers = item?.isVisibleToPlayers ?: false,
         )
     }
 
@@ -113,7 +115,8 @@ private data class SkillFormData(
         name = name.value,
         description = description.value,
         characteristic = characteristic.value,
-        advanced = advanced.value
+        advanced = advanced.value,
+        isVisibleToPlayers = isVisibleToPlayers,
     )
 
     override fun isValid() =

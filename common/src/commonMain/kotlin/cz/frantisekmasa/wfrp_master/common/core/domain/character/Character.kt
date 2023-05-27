@@ -3,6 +3,7 @@ package cz.frantisekmasa.wfrp_master.common.core.domain.character
 import androidx.compose.runtime.Immutable
 import com.benasher44.uuid.Uuid
 import com.benasher44.uuid.uuid4
+import cz.frantisekmasa.wfrp_master.common.core.auth.UserId
 import cz.frantisekmasa.wfrp_master.common.core.common.requireMaxLength
 import cz.frantisekmasa.wfrp_master.common.core.domain.Ambitions
 import cz.frantisekmasa.wfrp_master.common.core.domain.Money
@@ -26,7 +27,7 @@ data class Character(
     val type: CharacterType = CharacterType.PLAYER_CHARACTER,
     val name: String,
     val publicName: String? = null,
-    val userId: String?,
+    val userId: UserId?,
     val career: String,
     val compendiumCareer: CompendiumCareer? = null,
     val socialClass: String,
@@ -70,7 +71,7 @@ data class Character(
         require(publicName == null || type == CharacterType.NPC) {
             "Only NPC can have a public name"
         }
-        require(listOf(name, userId).all { it?.isNotBlank() ?: true })
+        require(name.isNotBlank())
         require(name.length <= NAME_MAX_LENGTH) { "Character name is too long" }
         require(career.length <= CAREER_MAX_LENGTH) { "Career is too long" }
         require(socialClass.length <= SOCIAL_CLASS_MAX_LENGTH) { "Social class is too long" }

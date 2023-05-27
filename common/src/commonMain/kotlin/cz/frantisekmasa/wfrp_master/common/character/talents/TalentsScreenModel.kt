@@ -5,8 +5,10 @@ import com.benasher44.uuid.Uuid
 import cz.frantisekmasa.wfrp_master.common.character.effects.EffectManager
 import cz.frantisekmasa.wfrp_master.common.character.effects.EffectSource
 import cz.frantisekmasa.wfrp_master.common.core.CharacterItemScreenModel
+import cz.frantisekmasa.wfrp_master.common.core.auth.UserProvider
 import cz.frantisekmasa.wfrp_master.common.core.domain.compendium.Compendium
 import cz.frantisekmasa.wfrp_master.common.core.domain.identifiers.CharacterId
+import cz.frantisekmasa.wfrp_master.common.core.domain.party.PartyRepository
 import cz.frantisekmasa.wfrp_master.common.core.domain.talents.Talent
 import cz.frantisekmasa.wfrp_master.common.core.domain.talents.TalentRepository
 import cz.frantisekmasa.wfrp_master.common.core.shared.IO
@@ -21,7 +23,15 @@ class TalentsScreenModel(
     private val compendium: Compendium<CompendiumTalent>,
     private val effectManager: EffectManager,
     private val firestore: Firestore,
-) : CharacterItemScreenModel<Talent, CompendiumTalent>(characterId, talentRepository, compendium) {
+    userProvider: UserProvider,
+    partyRepository: PartyRepository,
+) : CharacterItemScreenModel<Talent, CompendiumTalent>(
+    characterId,
+    talentRepository,
+    compendium,
+    userProvider,
+    partyRepository,
+) {
 
     suspend fun saveTalent(talent: Talent) {
         firestore.runTransaction { transaction ->

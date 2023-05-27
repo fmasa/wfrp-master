@@ -26,7 +26,7 @@ import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
 fun CareerFormDialog(
     title: String,
     existingCareer: CareerData?,
-    onSave: suspend (CareerData) -> Unit,
+    onSaveRequest: suspend (CareerData) -> Unit,
     onDismissRequest: () -> Unit,
 ) {
     val data = CareerFormData.fromCareerData(existingCareer)
@@ -36,7 +36,7 @@ fun CareerFormDialog(
             title = title,
             onDismissRequest = onDismissRequest,
             formData = data,
-            onSave = onSave,
+            onSave = onSaveRequest,
         ) { validate ->
             val strings = LocalStrings.current.careers
 

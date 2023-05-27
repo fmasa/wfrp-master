@@ -7,6 +7,7 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.firestoreSettings
 import com.google.firebase.functions.ktx.functions
 import com.google.firebase.ktx.Firebase
+import cz.frantisekmasa.wfrp_master.common.auth.AuthenticationManager
 import cz.frantisekmasa.wfrp_master.common.core.shared.SettingsStorage
 import cz.frantisekmasa.wfrp_master.common.firebase.firestore.Firestore
 import cz.frantisekmasa.wfrp_master.common.firebase.functions.CloudFunctions
@@ -35,6 +36,8 @@ actual val platformModule = DI.Module("android") {
 
         Firestore(firestore)
     }
+
+    bindSingleton { AuthenticationManager(instance()) }
 
     bindSingleton {
         val functions = Firebase.functions

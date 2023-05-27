@@ -34,7 +34,7 @@ class SpellDetailScreen(
             SpellDialog(
                 spell = item,
                 onDismissRequest = onDismissRequest,
-                screenModel = screenModel,
+                onSaveRequest = screenModel::update,
             )
         }
     }

@@ -24,7 +24,7 @@ import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
 fun TalentDialog(
     talent: Talent?,
     onDismissRequest: () -> Unit,
-    screenModel: TalentCompendiumScreenModel
+    onSaveRequest: suspend (Talent) -> Unit,
 ) {
     val formData = TalentFormData.fromTalent(talent)
     val strings = LocalStrings.current.talents
@@ -33,7 +33,7 @@ fun TalentDialog(
         onDismissRequest = onDismissRequest,
         title = if (talent == null) strings.titleNew else strings.titleEdit,
         formData = formData,
-        saver = if (talent == null) screenModel::createNew else screenModel::update,
+        saver = onSaveRequest,
     ) { validate ->
         Column(
             verticalArrangement = Arrangement.spacedBy(12.dp),
@@ -79,6 +79,7 @@ private data class TalentFormData(
     val tests: InputValue,
     val maxTimesTaken: InputValue,
     val description: InputValue,
+    val isVisibleToPlayers: Boolean,
 ) : CompendiumItemFormData<Talent> {
     companion object {
         @Composable
@@ -88,6 +89,7 @@ private data class TalentFormData(
             tests = inputValue(talent?.tests ?: ""),
             maxTimesTaken = inputValue(talent?.maxTimesTaken ?: ""),
             description = inputValue(talent?.description ?: ""),
+            isVisibleToPlayers = talent?.isVisibleToPlayers ?: false,
         )
     }
 
@@ -97,6 +99,7 @@ private data class TalentFormData(
         tests = tests.value.trim(),
         maxTimesTaken = maxTimesTaken.value,
         description = description.value,
+        isVisibleToPlayers = isVisibleToPlayers,
     )
 
     override fun isValid() = listOf(name, maxTimesTaken, description).all { it.isValid() }

@@ -17,6 +17,7 @@ data class Talent(
     val tests: String = "", // TODO: Remove default value in 3.0
     val maxTimesTaken: String,
     val description: String,
+    override val isVisibleToPlayers: Boolean = true,
 ) : CompendiumItem<Talent>() {
     companion object {
         const val NAME_MAX_LENGTH = 50
@@ -36,4 +37,7 @@ data class Talent(
     override fun replace(original: Talent) = copy(id = original.id)
 
     override fun duplicate() = copy(id = uuid4(), name = duplicateName())
+
+    override fun changeVisibility(isVisibleToPlayers: Boolean) =
+        copy(isVisibleToPlayers = isVisibleToPlayers)
 }

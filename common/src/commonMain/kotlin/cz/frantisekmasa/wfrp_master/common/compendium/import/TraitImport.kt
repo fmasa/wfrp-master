@@ -12,6 +12,7 @@ data class TraitImport(
     val name: String,
     val specifications: Set<String>,
     val description: String,
+    val isVisibleToPlayers: Boolean = true,
 ) {
     init {
         require(name.isNotBlank()) { "Trait name cannot be blank" }
@@ -30,6 +31,7 @@ data class TraitImport(
         name = name,
         specifications = specifications,
         description = description,
+        isVisibleToPlayers = isVisibleToPlayers,
     )
 
     companion object {
@@ -37,6 +39,7 @@ data class TraitImport(
             name = trait.name,
             specifications = trait.specifications,
             description = trait.description,
+            isVisibleToPlayers = trait.isVisibleToPlayers,
         )
     }
 }

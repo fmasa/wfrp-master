@@ -16,7 +16,7 @@ class CharacterPickerScreenModel(
     fun allUserCharacters(userId: UserId): Flow<List<Character>> {
         return characters.inParty(partyId, CharacterType.PLAYER_CHARACTER).map {
             it.filter { character ->
-                character.userId == userId.toString() || character.id == userId.toString()
+                character.userId == userId || character.id == userId.toString()
             }
         }
     }

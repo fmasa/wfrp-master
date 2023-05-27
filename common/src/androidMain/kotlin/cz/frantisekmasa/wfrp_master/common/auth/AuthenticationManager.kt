@@ -9,9 +9,9 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthUserCollisionException
 import com.google.firebase.auth.GoogleAuthProvider
-import com.google.firebase.auth.ktx.auth
-import com.google.firebase.ktx.Firebase
 import cz.frantisekmasa.wfrp_master.common.core.auth.User
+import cz.frantisekmasa.wfrp_master.common.core.auth.UserId
+import cz.frantisekmasa.wfrp_master.common.core.auth.UserProvider
 import cz.frantisekmasa.wfrp_master.common.core.logging.Reporter
 import io.github.aakira.napier.Napier
 import kotlinx.coroutines.CoroutineScope
@@ -25,10 +25,9 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 
-val LocalAuthenticationManager = staticCompositionLocalOf { AuthenticationManager(Firebase.auth) }
 val LocalWebClientId = staticCompositionLocalOf<String> { error("LocalWebTokenId was not set") }
 
-class AuthenticationManager(private val auth: FirebaseAuth) {
+class AuthenticationManager(private val auth: FirebaseAuth) : UserProvider {
     val coroutineScope = CoroutineScope(Dispatchers.Default)
 
     val authenticated: StateFlow<Boolean?> = callbackFlow {
@@ -63,10 +62,12 @@ class AuthenticationManager(private val auth: FirebaseAuth) {
         awaitClose { auth.removeAuthStateListener(listener) }
     }.map {
         User(
-            id = it.uid,
+            id = UserId(it.uid),
             email = if (it.email == "") null else it.email
         )
     }.stateIn(coroutineScope, SharingStarted.Eagerly, null)
+
+    override val userId: UserId? get() = user.value?.id
 
     init {
         coroutineScope.launch {

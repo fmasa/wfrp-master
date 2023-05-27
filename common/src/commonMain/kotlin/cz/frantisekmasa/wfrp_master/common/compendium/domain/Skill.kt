@@ -18,6 +18,7 @@ data class Skill(
     val description: String,
     val characteristic: Characteristic,
     val advanced: Boolean,
+    override val isVisibleToPlayers: Boolean = true,
 ) : CompendiumItem<Skill>() {
     companion object {
         const val NAME_MAX_LENGTH = 50
@@ -33,4 +34,7 @@ data class Skill(
     override fun replace(original: Skill) = copy(id = original.id)
 
     override fun duplicate() = copy(id = uuid4(), name = duplicateName())
+
+    override fun changeVisibility(isVisibleToPlayers: Boolean) =
+        copy(isVisibleToPlayers = isVisibleToPlayers)
 }

@@ -21,16 +21,18 @@ import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
 @Composable
 fun TalentCompendiumTab(partyId: PartyId, screenModel: TalentCompendiumScreenModel, width: Dp) {
     var newTalentDialogOpened by rememberSaveable { mutableStateOf(false) }
+    val navigator = LocalNavigator.currentOrThrow
 
     if (newTalentDialogOpened) {
         TalentDialog(
             talent = null,
-            screenModel = screenModel,
             onDismissRequest = { newTalentDialogOpened = false },
+            onSaveRequest = {
+                screenModel.createNew(it)
+                navigator.push(TalentDetailScreen(partyId, it.id))
+            }
         )
     }
-
-    val navigator = LocalNavigator.currentOrThrow
 
     CompendiumTab(
         liveItems = screenModel.items,

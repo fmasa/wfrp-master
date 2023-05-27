@@ -25,16 +25,18 @@ fun TraitCompendiumTab(
     width: Dp,
 ) {
     var newTraitDialogOpened by rememberSaveable { mutableStateOf(false) }
+    val navigator = LocalNavigator.currentOrThrow
 
     if (newTraitDialogOpened) {
         TraitDialog(
             trait = null,
-            screenModel = screenModel,
             onDismissRequest = { newTraitDialogOpened = false },
+            onSaveRequest = {
+                screenModel.createNew(it)
+                navigator.push(TraitDetailScreen(partyId, it.id))
+            }
         )
     }
-
-    val navigator = LocalNavigator.currentOrThrow
 
     CompendiumTab(
         liveItems = screenModel.items,

@@ -14,7 +14,6 @@ import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import cz.frantisekmasa.wfrp_master.common.characterCreation.CharacterCreationScreen
 import cz.frantisekmasa.wfrp_master.common.core.auth.LocalUser
-import cz.frantisekmasa.wfrp_master.common.core.auth.UserId
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.CharacterType
 import cz.frantisekmasa.wfrp_master.common.core.domain.identifiers.CharacterId
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.PartyId
@@ -34,7 +33,7 @@ data class CharacterPickerScreen(
     @Composable
     override fun Content() {
         val screenModel: CharacterPickerScreenModel = rememberScreenModel(arg = partyId)
-        val userId = UserId(LocalUser.current.id)
+        val userId = LocalUser.current.id
 
         val characters = remember { screenModel.allUserCharacters(userId) }
             .collectWithLifecycle(null).value

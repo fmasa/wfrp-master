@@ -539,6 +539,8 @@ data class CompendiumStrings(
     val titleImportCompendium: String = "Import Compendium",
     val titleExportCompendium: String = "Export Compendium",
     val titleImportDialog: String = "Importing Rulebook…",
+    val visibleToPlayersTrue: String = "Visible to Players",
+    val visibleToPlayersFalse: String = "Invisible to Players",
 )
 
 @Immutable

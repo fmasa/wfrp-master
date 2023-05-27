@@ -21,16 +21,18 @@ import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
 @Composable
 fun MiracleCompendiumTab(partyId: PartyId, screenModel: MiracleCompendiumScreenModel, width: Dp) {
     var newMiracleDialogOpened by rememberSaveable { mutableStateOf(false) }
+    val navigator = LocalNavigator.currentOrThrow
 
     if (newMiracleDialogOpened) {
         MiracleDialog(
             miracle = null,
-            screenModel = screenModel,
             onDismissRequest = { newMiracleDialogOpened = false },
+            onSaveRequest = {
+                screenModel.createNew(it)
+                navigator.push(MiracleDetailScreen(partyId, it.id))
+            },
         )
     }
-
-    val navigator = LocalNavigator.currentOrThrow
 
     CompendiumTab(
         liveItems = screenModel.items,

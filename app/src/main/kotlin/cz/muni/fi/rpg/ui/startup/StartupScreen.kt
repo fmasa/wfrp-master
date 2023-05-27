@@ -15,7 +15,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
 import com.google.android.gms.auth.api.signin.GoogleSignIn
-import cz.frantisekmasa.wfrp_master.common.auth.LocalAuthenticationManager
+import cz.frantisekmasa.wfrp_master.common.auth.AuthenticationManager
 import cz.frantisekmasa.wfrp_master.common.auth.LocalWebClientId
 import cz.frantisekmasa.wfrp_master.common.core.shared.SettingsStorage
 import cz.frantisekmasa.wfrp_master.common.core.shared.edit
@@ -32,10 +32,8 @@ import org.kodein.di.compose.localDI
 import org.kodein.di.instance
 
 @Composable
-fun StartupScreen() {
+fun StartupScreen(authenticationManager: AuthenticationManager) {
     SplashScreen()
-
-    val authenticationManager = LocalAuthenticationManager.current
 
     val authenticated by authenticationManager.authenticated.collectWithLifecycle()
 

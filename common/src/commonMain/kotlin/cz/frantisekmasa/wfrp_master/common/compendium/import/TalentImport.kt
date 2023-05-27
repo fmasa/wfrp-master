@@ -13,6 +13,7 @@ data class TalentImport(
     val associatedTests: String,
     val maxTimesTaken: String,
     val description: String,
+    val isVisibleToPlayers: Boolean = true,
 ) {
     init {
         require(name.isNotBlank()) { "Talent name cannot be blank" }
@@ -26,6 +27,7 @@ data class TalentImport(
         name = name,
         maxTimesTaken = maxTimesTaken,
         description = description,
+        isVisibleToPlayers = isVisibleToPlayers,
     )
 
     companion object {
@@ -34,6 +36,7 @@ data class TalentImport(
             associatedTests = talent.tests,
             maxTimesTaken = talent.maxTimesTaken,
             description = talent.description,
+            isVisibleToPlayers = talent.isVisibleToPlayers,
         )
     }
 }

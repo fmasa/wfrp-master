@@ -1,6 +1,7 @@
 package cz.frantisekmasa.wfrp_master.common.encounters
 
 import androidx.compose.runtime.Immutable
+import cz.frantisekmasa.wfrp_master.common.core.auth.UserId
 import cz.frantisekmasa.wfrp_master.common.core.domain.Stats
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.CurrentConditions
 import cz.frantisekmasa.wfrp_master.common.core.domain.identifiers.CharacterId
@@ -26,7 +27,7 @@ sealed class CombatantItem {
         override val combatant: Combatant.Character,
     ) : CombatantItem() {
 
-        val userId: String?
+        val userId: UserId?
             get() = character.userId
 
         val avatarUrl: String?

@@ -13,7 +13,7 @@ class PartyListScreenModel(
     private val parties: PartyRepository
 ) : ScreenModel {
 
-    fun liveForUser(userId: String): Flow<List<Party>> {
+    fun liveForUser(userId: UserId): Flow<List<Party>> {
         return parties.forUserLive(userId)
     }
 
@@ -24,7 +24,7 @@ class PartyListScreenModel(
     /**
      * @throws CouldNotConnectToBackend
      */
-    suspend fun createParty(partyName: String, gameMasterId: String): PartyId {
+    suspend fun createParty(partyName: String, gameMasterId: UserId): PartyId {
         val partyId = PartyId.generate()
         val party = Party(
             id = partyId,

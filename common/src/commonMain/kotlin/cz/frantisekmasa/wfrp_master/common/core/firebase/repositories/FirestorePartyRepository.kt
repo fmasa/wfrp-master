@@ -2,6 +2,7 @@ package cz.frantisekmasa.wfrp_master.common.core.firebase.repositories
 
 import arrow.core.left
 import arrow.core.right
+import cz.frantisekmasa.wfrp_master.common.core.auth.UserId
 import cz.frantisekmasa.wfrp_master.common.core.connectivity.CouldNotConnectToBackend
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.Party
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.PartyId
@@ -77,15 +78,15 @@ class FirestorePartyRepository(
                 )
             }
 
-    override fun forUserLive(userId: String) = queryForUser(userId).documents(mapper)
+    override fun forUserLive(userId: UserId) = queryForUser(userId).documents(mapper)
 
-    override suspend fun forUser(userId: String) =
+    override suspend fun forUser(userId: UserId) =
         queryForUser(userId)
             .get()
             .documents
             .map { mapper.fromDocumentSnapshot(it) }
 
-    private fun queryForUser(userId: String) = parties
-        .whereArrayContains("users", userId)
+    private fun queryForUser(userId: UserId) = parties
+        .whereArrayContains("users", userId.toString())
         .whereEqualTo("archived", false)
 }

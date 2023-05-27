@@ -18,6 +18,7 @@ data class Blessing(
     val target: String,
     val duration: String,
     val effect: String,
+    override val isVisibleToPlayers: Boolean = true,
 ) : CompendiumItem<Blessing>() {
     companion object {
         const val NAME_MAX_LENGTH = 50
@@ -26,6 +27,7 @@ data class Blessing(
         const val DURATION_MAX_LENGTH = 50
         const val EFFECT_MAX_LENGTH = 1000
     }
+
     init {
         require(name.isNotBlank()) { "Name must not be blank" }
         name.requireMaxLength(NAME_MAX_LENGTH, "name")
@@ -36,6 +38,9 @@ data class Blessing(
     }
 
     override fun replace(original: Blessing) = copy(id = original.id)
+
+    override fun changeVisibility(isVisibleToPlayers: Boolean) =
+        copy(isVisibleToPlayers = !isVisibleToPlayers)
 
     override fun duplicate() = copy(id = uuid4(), name = duplicateName())
 }

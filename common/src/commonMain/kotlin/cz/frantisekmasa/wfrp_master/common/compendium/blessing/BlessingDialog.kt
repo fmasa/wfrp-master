@@ -23,8 +23,8 @@ import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
 @Composable
 fun BlessingDialog(
     blessing: Blessing?,
-    screenModel: BlessingCompendiumScreenModel,
     onDismissRequest: () -> Unit,
+    onSaveRequest: suspend (Blessing) -> Unit,
 ) {
     val formData = BlessingFormData.fromItem(blessing)
     val strings = LocalStrings.current.blessings
@@ -32,7 +32,7 @@ fun BlessingDialog(
     CompendiumItemDialog(
         title = if (blessing == null) strings.titleNew else strings.titleEdit,
         formData = formData,
-        saver = if (blessing == null) screenModel::createNew else screenModel::update,
+        saver = onSaveRequest,
         onDismissRequest = onDismissRequest,
     ) { validate ->
         Column(
@@ -87,6 +87,7 @@ private data class BlessingFormData(
     val target: InputValue,
     val duration: InputValue,
     val effect: InputValue,
+    val isVisibleToPlayers: Boolean,
 ) : CompendiumItemFormData<Blessing> {
     companion object {
         @Composable
@@ -97,6 +98,7 @@ private data class BlessingFormData(
             target = inputValue(item?.target ?: ""),
             duration = inputValue(item?.duration ?: ""),
             effect = inputValue(item?.effect ?: ""),
+            isVisibleToPlayers = item?.isVisibleToPlayers ?: false,
         )
     }
 
@@ -107,6 +109,7 @@ private data class BlessingFormData(
         target = target.value,
         duration = duration.value,
         effect = effect.value,
+        isVisibleToPlayers = isVisibleToPlayers,
     )
 
     override fun isValid() =

@@ -5,8 +5,10 @@ import com.benasher44.uuid.Uuid
 import cz.frantisekmasa.wfrp_master.common.character.effects.EffectManager
 import cz.frantisekmasa.wfrp_master.common.character.effects.EffectSource
 import cz.frantisekmasa.wfrp_master.common.core.CharacterItemScreenModel
+import cz.frantisekmasa.wfrp_master.common.core.auth.UserProvider
 import cz.frantisekmasa.wfrp_master.common.core.domain.compendium.Compendium
 import cz.frantisekmasa.wfrp_master.common.core.domain.identifiers.CharacterId
+import cz.frantisekmasa.wfrp_master.common.core.domain.party.PartyRepository
 import cz.frantisekmasa.wfrp_master.common.core.domain.traits.Trait
 import cz.frantisekmasa.wfrp_master.common.core.domain.traits.TraitRepository
 import cz.frantisekmasa.wfrp_master.common.core.shared.IO
@@ -21,7 +23,15 @@ class TraitsScreenModel(
     private val compendium: Compendium<CompendiumTrait>,
     private val effectManager: EffectManager,
     private val firestore: Firestore,
-) : CharacterItemScreenModel<Trait, CompendiumTrait>(characterId, traitRepository, compendium) {
+    userProvider: UserProvider,
+    partyRepository: PartyRepository,
+) : CharacterItemScreenModel<Trait, CompendiumTrait>(
+    characterId,
+    traitRepository,
+    compendium,
+    userProvider,
+    partyRepository,
+) {
 
     fun removeTrait(trait: Trait) = coroutineScope.launch(Dispatchers.IO) {
         firestore.runTransaction { transaction ->
