@@ -31,6 +31,9 @@ object WindsOfMagic : Book, CareerSource, SpellSource {
 
     override fun importSpells(document: Document): List<Spell> {
         return SpellParser(
+            specialLores = mapOf(
+                "New Arcane Spells" to "Arcane Spells",
+            ),
             isEnd = {
                 (
                     it is Token.Heading1 && it.text.trim()
