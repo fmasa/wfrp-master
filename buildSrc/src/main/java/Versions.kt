@@ -6,6 +6,7 @@ object Versions {
     val agp = loadPropertyFromResources(versionsFile, "androidGradlePluginVersion")
     val compose = loadPropertyFromResources(versionsFile, "composeVersion")
     val kotlin = loadPropertyFromResources(versionsFile, "kotlinVersion")
+    val ktor = "2.0.0"
 
     val napier = loadPropertyFromResources(versionsFile, "napierVersion")
 

@@ -23,6 +23,10 @@ kotlin {
             dependencies {
                 api("com.google.cloud:google-cloud-firestore:3.0.18")
                 api("org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:1.6.4")
+                implementation("io.ktor:ktor-client-content-negotiation:${Versions.ktor}")
+                implementation("io.ktor:ktor-serialization-kotlinx-json:${Versions.ktor}")
+                api("io.ktor:ktor-client-cio:${Versions.ktor}")
+                api("io.ktor:ktor-client-core:${Versions.ktor}")
             }
         }
         named("androidMain") {

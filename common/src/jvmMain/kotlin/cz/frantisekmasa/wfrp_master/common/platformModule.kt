@@ -36,12 +36,20 @@ internal actual val platformModule = DI.Module("jvm") {
     }
 
     val firebaseProjectId = "dnd-master-58fca"
+    val region = "us-central1"
 
     bindSingleton { SettingsStorage() }
     bindSingleton { AuthenticationManager(instance(), instance(), instance()) }
 
     bindSingleton { FirebaseTokenHolder() }
-    bindSingleton { CloudFunctions(instance<FirebaseTokenHolder>().getToken(), firebaseProjectId) }
+    bindSingleton {
+        CloudFunctions(
+            instance<FirebaseTokenHolder>().getToken(),
+            firebaseProjectId,
+            region,
+            instance(),
+        )
+    }
     bindSingleton {
         val tokenHolder: FirebaseTokenHolder = instance()
         val firestore = FirestoreOptions.newBuilder()
