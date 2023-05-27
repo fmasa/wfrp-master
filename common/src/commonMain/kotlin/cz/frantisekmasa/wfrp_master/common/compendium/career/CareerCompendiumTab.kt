@@ -13,6 +13,7 @@ import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import com.benasher44.uuid.uuid4
 import cz.frantisekmasa.wfrp_master.common.compendium.CompendiumTab
+import cz.frantisekmasa.wfrp_master.common.compendium.VisibilityIcon
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.Career
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.PartyId
 import cz.frantisekmasa.wfrp_master.common.core.shared.Resources
@@ -67,7 +68,8 @@ fun CareerCompendiumTab(partyId: PartyId, screenModel: CareerCompendiumScreenMod
     ) { career ->
         ListItem(
             icon = { ItemIcon(Resources.Drawable.Career) },
-            text = { Text(career.name) }
+            text = { Text(career.name) },
+            trailing = { VisibilityIcon(career) },
         )
         Divider()
     }

@@ -12,6 +12,7 @@ import androidx.compose.ui.unit.Dp
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import cz.frantisekmasa.wfrp_master.common.compendium.CompendiumTab
+import cz.frantisekmasa.wfrp_master.common.compendium.VisibilityIcon
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.PartyId
 import cz.frantisekmasa.wfrp_master.common.core.shared.Resources
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.EmptyUI
@@ -52,7 +53,8 @@ fun SpellCompendiumTab(partyId: PartyId, screenModel: SpellCompendiumScreenModel
     ) { spell ->
         ListItem(
             icon = { ItemIcon(Resources.Drawable.Spell) },
-            text = { Text(spell.name) }
+            text = { Text(spell.name) },
+            trailing = { VisibilityIcon(spell) },
         )
         Divider()
     }
