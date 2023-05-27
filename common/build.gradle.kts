@@ -29,7 +29,6 @@ kotlin {
             }
         }
 
-        val ktorVersion = "2.0.0"
         val kodeinVersion = "7.11.0"
 
         val commonMain by getting {
@@ -45,8 +44,6 @@ kotlin {
                 api("cafe.adriel.voyager:voyager-transitions:$voyagerVersion")
 
                 api(project(":common:firebase"))
-
-                api("io.ktor:ktor-client-core:$ktorVersion")
 
                 // Basic Kotlin stuff
                 api("org.jetbrains.kotlin:kotlin-stdlib:${Versions.kotlin}")
@@ -70,9 +67,10 @@ kotlin {
                 api("io.github.aakira:napier:${Versions.napier}")
 
                 // HTTP client
-                implementation("io.ktor:ktor-client-content-negotiation:$ktorVersion")
-                implementation("io.ktor:ktor-serialization-kotlinx-json:$ktorVersion")
-                api("io.ktor:ktor-client-cio:$ktorVersion")
+                implementation("io.ktor:ktor-client-content-negotiation:${Versions.ktor}")
+                implementation("io.ktor:ktor-serialization-kotlinx-json:${Versions.ktor}")
+                api("io.ktor:ktor-client-cio:${Versions.ktor}")
+                api("io.ktor:ktor-client-core:${Versions.ktor}")
 
                 val richtextVersion = "0.13.0"
                 implementation("com.halilibo.compose-richtext:richtext-commonmark:$richtextVersion")
