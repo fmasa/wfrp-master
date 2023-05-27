@@ -13,5 +13,7 @@ sealed class CompendiumItem<T : CompendiumItem<T>> : Parcelable {
 
     abstract fun replace(original: T): T
 
+    abstract fun changeVisibility(isVisibleToPlayers: Boolean): T
+
     protected fun duplicateName(): String = duplicateName(name)
 }

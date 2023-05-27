@@ -30,7 +30,7 @@ class TraitDetailScreen(
             TraitDialog(
                 trait = item,
                 onDismissRequest = onDismissRequest,
-                screenModel = screenModel,
+                onSaveRequest = screenModel::update,
             )
         }
     }

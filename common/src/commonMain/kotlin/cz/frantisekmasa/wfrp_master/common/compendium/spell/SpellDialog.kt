@@ -25,8 +25,8 @@ import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
 @Composable
 fun SpellDialog(
     spell: Spell?,
-    screenModel: SpellCompendiumScreenModel,
     onDismissRequest: () -> Unit,
+    onSaveRequest: suspend (Spell) -> Unit,
 ) {
     val formData = SpellFormData.fromItem(spell)
 
@@ -35,7 +35,7 @@ fun SpellDialog(
     CompendiumItemDialog(
         title = if (spell == null) strings.titleAdd else strings.titleEdit,
         formData = formData,
-        saver = if (spell == null) screenModel::createNew else screenModel::update,
+        saver = onSaveRequest,
         onDismissRequest = onDismissRequest,
     ) { validate ->
         Column(
@@ -107,6 +107,7 @@ private data class SpellFormData(
     val duration: InputValue,
     val castingNumber: InputValue,
     val effect: InputValue,
+    val isVisibleToPlayers: Boolean,
 ) : CompendiumItemFormData<Spell> {
     companion object {
         @Composable
@@ -122,6 +123,7 @@ private data class SpellFormData(
                 Rules.NonNegativeInteger(),
             ),
             effect = inputValue(item?.effect ?: ""),
+            isVisibleToPlayers = item?.isVisibleToPlayers ?: false,
         )
     }
 
@@ -134,6 +136,7 @@ private data class SpellFormData(
         duration = duration.value,
         castingNumber = castingNumber.value.toInt(),
         effect = effect.value,
+        isVisibleToPlayers = isVisibleToPlayers,
     )
 
     override fun isValid() =

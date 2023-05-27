@@ -31,7 +31,7 @@ class BlessingDetailScreen(
             BlessingDialog(
                 blessing = item,
                 onDismissRequest = onDismissRequest,
-                screenModel = screenModel,
+                onSaveRequest = screenModel::update,
             )
         }
     }

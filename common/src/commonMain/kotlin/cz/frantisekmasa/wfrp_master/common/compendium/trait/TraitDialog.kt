@@ -24,7 +24,7 @@ import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
 fun TraitDialog(
     trait: Trait?,
     onDismissRequest: () -> Unit,
-    screenModel: TraitCompendiumScreenModel,
+    onSaveRequest: suspend (Trait) -> Unit,
 ) {
     val strings = LocalStrings.current.traits
     val formData = TraitFormData.fromTrait(trait)
@@ -33,7 +33,7 @@ fun TraitDialog(
         onDismissRequest = onDismissRequest,
         title = if (trait == null) strings.titleNew else strings.titleEdit,
         formData = formData,
-        saver = if (trait == null) screenModel::createNew else screenModel::update,
+        saver = onSaveRequest,
     ) { validate ->
         Column(
             verticalArrangement = Arrangement.spacedBy(12.dp),
@@ -71,6 +71,7 @@ private data class TraitFormData(
     val name: InputValue,
     val specifications: InputValue,
     val description: InputValue,
+    val isVisibleToPlayers: Boolean,
 ) : CompendiumItemFormData<Trait> {
     companion object {
         @Composable
@@ -79,6 +80,7 @@ private data class TraitFormData(
             name = inputValue(trait?.name ?: "", Rules.NotBlank()),
             specifications = inputValue(trait?.specifications?.joinToString(",") ?: ""),
             description = inputValue(trait?.description ?: ""),
+            isVisibleToPlayers = trait?.isVisibleToPlayers ?: false,
         )
     }
 
@@ -93,6 +95,7 @@ private data class TraitFormData(
             .map { it.trim() }
             .toSet(),
         description = description.value,
+        isVisibleToPlayers = isVisibleToPlayers,
     )
 
     override fun isValid() = listOf(name, specifications, description).all { it.isValid() }

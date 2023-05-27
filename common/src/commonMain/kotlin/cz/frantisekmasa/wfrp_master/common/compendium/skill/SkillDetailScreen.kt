@@ -31,7 +31,7 @@ class SkillDetailScreen(
             SkillDialog(
                 skill = item,
                 onDismissRequest = onDismissRequest,
-                screenModel = screenModel,
+                onSaveRequest = screenModel::update,
             )
         }
     }

@@ -12,6 +12,7 @@ import androidx.compose.ui.unit.Dp
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import cz.frantisekmasa.wfrp_master.common.compendium.CompendiumTab
+import cz.frantisekmasa.wfrp_master.common.compendium.VisibilityIcon
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.PartyId
 import cz.frantisekmasa.wfrp_master.common.core.shared.Resources
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.EmptyUI
@@ -21,16 +22,18 @@ import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
 @Composable
 fun SkillCompendiumTab(partyId: PartyId, screenModel: SkillCompendiumScreenModel, width: Dp) {
     var newSkillDialogOpened by rememberSaveable { mutableStateOf(false) }
+    val navigator = LocalNavigator.currentOrThrow
 
     if (newSkillDialogOpened) {
         SkillDialog(
             skill = null,
-            screenModel = screenModel,
             onDismissRequest = { newSkillDialogOpened = false },
+            onSaveRequest = {
+                screenModel.createNew(it)
+                navigator.push(SkillDetailScreen(partyId, it.id))
+            }
         )
     }
-
-    val navigator = LocalNavigator.currentOrThrow
 
     CompendiumTab(
         liveItems = screenModel.items,
@@ -50,7 +53,8 @@ fun SkillCompendiumTab(partyId: PartyId, screenModel: SkillCompendiumScreenModel
     ) { skill ->
         ListItem(
             icon = { ItemIcon(skill.characteristic.getIcon()) },
-            text = { Text(skill.name) }
+            text = { Text(skill.name) },
+            trailing = { VisibilityIcon(skill) },
         )
         Divider()
     }

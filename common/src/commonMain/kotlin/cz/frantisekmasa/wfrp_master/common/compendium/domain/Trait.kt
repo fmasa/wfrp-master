@@ -28,6 +28,9 @@ data class Trait(
 
     override fun duplicate() = copy(id = uuid4(), name = duplicateName())
 
+    override fun changeVisibility(isVisibleToPlayers: Boolean) =
+        copy(isVisibleToPlayers = isVisibleToPlayers)
+
     companion object {
         const val NAME_MAX_LENGTH = 50
         const val DESCRIPTION_MAX_LENGTH = 3000

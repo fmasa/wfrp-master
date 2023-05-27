@@ -31,7 +31,7 @@ fun CareerCompendiumTab(partyId: PartyId, screenModel: CareerCompendiumScreenMod
         CareerFormDialog(
             title = LocalStrings.current.careers.titleNewCareer,
             existingCareer = null,
-            onSave = {
+            onSaveRequest = {
                 val id = uuid4()
                 screenModel.createNew(
                     Career(

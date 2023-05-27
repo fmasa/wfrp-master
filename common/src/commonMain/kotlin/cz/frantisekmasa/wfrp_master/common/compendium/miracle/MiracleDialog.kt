@@ -23,8 +23,8 @@ import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
 @Composable
 fun MiracleDialog(
     miracle: Miracle?,
-    screenModel: MiracleCompendiumScreenModel,
     onDismissRequest: () -> Unit,
+    onSaveRequest: suspend (Miracle) -> Unit,
 ) {
     val formData = MiracleFormData.fromItem(miracle)
     val strings = LocalStrings.current.miracles
@@ -32,7 +32,7 @@ fun MiracleDialog(
     CompendiumItemDialog(
         title = if (miracle == null) strings.titleNew else strings.titleEdit,
         formData = formData,
-        saver = if (miracle == null) screenModel::createNew else screenModel::update,
+        saver = onSaveRequest,
         onDismissRequest = onDismissRequest,
     ) { validate ->
         Column(
@@ -95,6 +95,7 @@ private data class MiracleFormData(
     val target: InputValue,
     val duration: InputValue,
     val effect: InputValue,
+    val isVisibleToPlayers: Boolean,
 ) : CompendiumItemFormData<Miracle> {
     companion object {
         @Composable
@@ -106,6 +107,7 @@ private data class MiracleFormData(
             target = inputValue(item?.target ?: ""),
             duration = inputValue(item?.duration ?: ""),
             effect = inputValue(item?.effect ?: ""),
+            isVisibleToPlayers = item?.isVisibleToPlayers ?: false,
         )
     }
 
@@ -117,6 +119,7 @@ private data class MiracleFormData(
         target = target.value,
         duration = duration.value,
         effect = effect.value,
+        isVisibleToPlayers = isVisibleToPlayers,
     )
 
     override fun isValid() =

@@ -44,4 +44,7 @@ data class Spell(
     override fun replace(original: Spell) = copy(id = original.id)
 
     override fun duplicate() = copy(id = uuid4(), name = duplicateName())
+
+    override fun changeVisibility(isVisibleToPlayers: Boolean) =
+        copy(isVisibleToPlayers = isVisibleToPlayers)
 }

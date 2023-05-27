@@ -40,13 +40,13 @@ import cafe.adriel.voyager.navigator.currentOrThrow
 import com.benasher44.uuid.Uuid
 import com.halilibo.richtext.markdown.Markdown
 import com.halilibo.richtext.ui.RichText
+import cz.frantisekmasa.wfrp_master.common.compendium.VisibilitySwitchBar
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.Career
 import cz.frantisekmasa.wfrp_master.common.core.PartyScreenModel
 import cz.frantisekmasa.wfrp_master.common.core.auth.LocalUser
 import cz.frantisekmasa.wfrp_master.common.core.domain.localizedName
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.Party
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.PartyId
-import cz.frantisekmasa.wfrp_master.common.core.shared.IO
 import cz.frantisekmasa.wfrp_master.common.core.shared.Parcelable
 import cz.frantisekmasa.wfrp_master.common.core.shared.Parcelize
 import cz.frantisekmasa.wfrp_master.common.core.shared.Resources
@@ -170,7 +170,7 @@ class CareerDetailScreen(
                                     races = career.races,
                                     socialClass = career.socialClass,
                                 ),
-                                onSave = {
+                                onSaveRequest = {
                                     screenModel.update(
                                         career.copy(
                                             name = it.name,
@@ -204,27 +204,34 @@ class CareerDetailScreen(
         ) {
             TabPager(fullWidthTabs = true) {
                 tab(strings.tabDetail) {
-                    LazyColumn(contentPadding = PaddingValues(Spacing.bodyPadding)) {
-                        item {
-                            SingleLineTextValue(
-                                strings.labelSocialClass,
-                                career.socialClass.localizedName,
-                            )
-                        }
+                    Column {
+                        VisibilitySwitchBar(
+                            visible = career.isVisibleToPlayers,
+                            onChange = { screenModel.update(career.changeVisibility(it)) },
+                        )
 
-                        item {
-                            val globalStrings = LocalStrings.current
-                            SingleLineTextValue(
-                                strings.labelRaces,
-                                career.races.joinToString(", ") {
-                                    it.nameResolver(globalStrings)
-                                },
-                            )
-                        }
+                        LazyColumn(contentPadding = PaddingValues(Spacing.bodyPadding)) {
+                            item {
+                                SingleLineTextValue(
+                                    strings.labelSocialClass,
+                                    career.socialClass.localizedName,
+                                )
+                            }
 
-                        item {
-                            RichText {
-                                Markdown(career.description)
+                            item {
+                                val globalStrings = LocalStrings.current
+                                SingleLineTextValue(
+                                    strings.labelRaces,
+                                    career.races.joinToString(", ") {
+                                        it.nameResolver(globalStrings)
+                                    },
+                                )
+                            }
+
+                            item {
+                                RichText {
+                                    Markdown(career.description)
+                                }
                             }
                         }
                     }

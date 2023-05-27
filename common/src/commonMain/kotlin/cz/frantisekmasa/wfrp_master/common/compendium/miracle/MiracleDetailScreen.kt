@@ -33,7 +33,7 @@ class MiracleDetailScreen(
             MiracleDialog(
                 miracle = item,
                 onDismissRequest = onDismissRequest,
-                screenModel = screenModel,
+                onSaveRequest = screenModel::update,
             )
         }
     }

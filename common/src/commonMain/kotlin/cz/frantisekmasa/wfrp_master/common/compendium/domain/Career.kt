@@ -51,6 +51,9 @@ data class Career(
 
     override fun duplicate(): Career = copy(name = duplicateName())
 
+    override fun changeVisibility(isVisibleToPlayers: Boolean) =
+        copy(isVisibleToPlayers = isVisibleToPlayers)
+
     @Parcelize
     @Serializable
     data class Level(
