@@ -168,7 +168,7 @@ class Spells extends CharacterSubCollectionSuite {
                 {name: "a".repeat(51)},
 
                 // Effect too long
-                {effect: "a".repeat(1001)},
+                {effect: "a".repeat(1501)},
 
                 // Empty name
                 {name: ""},
