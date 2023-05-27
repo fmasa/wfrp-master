@@ -79,7 +79,12 @@ object CoreRulebook :
     }
 
     override fun importSpells(document: Document): List<Spell> {
-        return SpellParser().import(document, this, sequenceOf(240..257))
+        return SpellParser(
+            specialLores = mapOf(
+                "Petty Spells" to "Petty Spells",
+                "Arcane Spells" to "Arcane Spells",
+            ),
+        ).import(document, this, sequenceOf(240..257))
     }
 
     override fun importBlessings(document: Document): List<Blessing> {

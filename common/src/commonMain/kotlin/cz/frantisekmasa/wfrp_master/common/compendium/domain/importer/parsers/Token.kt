@@ -4,7 +4,9 @@ sealed interface Token {
 
     sealed class TextToken(val text: String) : Token
 
-    interface Heading
+    interface Heading : Token {
+        val text: String
+    }
     class Heading1(text: String) : TextToken(text), Heading
     class Heading2(text: String) : TextToken(text), Heading
     class Heading3(text: String) : ParagraphToken(text, "heading3"), Heading

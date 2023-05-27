@@ -29,6 +29,7 @@ import cafe.adriel.voyager.navigator.currentOrThrow
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.PdfCompendiumImporter
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.books.Book
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.books.CoreRulebook
+import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.books.EnemyInShadowsCompanion
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.books.UpInArms
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.books.WindsOfMagic
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.parsers.loadDocument
@@ -101,7 +102,7 @@ class RulebookCompendiumImportScreen(
                 modifier = Modifier.padding(bottom = Spacing.medium)
             )
 
-            val books = remember { listOf(CoreRulebook, UpInArms, WindsOfMagic) }
+            val books = remember { listOf(CoreRulebook, UpInArms, WindsOfMagic, EnemyInShadowsCompanion) }
 
             books.forEach { book ->
                 key(book) {

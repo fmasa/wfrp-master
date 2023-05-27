@@ -88,7 +88,7 @@ service cloud.firestore {
                         && spell.range is string && spell.range.size() <= 50
                         && spell.target is string && spell.target.size() <= 50
                         && spell.duration is string && spell.duration.size() <= 50
-                        && spell.effect is string && spell.effect.size() <= 1000
+                        && spell.effect is string && spell.effect.size() <= 1500
                         && spell.castingNumber is int && spell.castingNumber >= 0 && spell.castingNumber <= 99
                         && spell.lore is string && spell.lore.size() <= 50
                         && (! ("isVisibleToPlayers" in spell) || spell.isVisibleToPlayers is bool);
@@ -392,7 +392,7 @@ service cloud.firestore {
                             && spell.range is string && spell.range.size() <= 50
                             && spell.target is string && spell.target.size() <= 50
                             && spell.duration is string && spell.duration.size() <= 50
-                            && spell.effect is string && spell.effect.size() <= 1000
+                            && spell.effect is string && spell.effect.size() <= 1500
                             && spell.castingNumber is int && spell.castingNumber >= 0 && spell.castingNumber <= 99
                             && (! ("memorized" in spell) || spell.memorized is bool)
                             && (! ("compendiumId" in spell)

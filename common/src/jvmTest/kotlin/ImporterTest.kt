@@ -1,4 +1,5 @@
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.books.CoreRulebook
+import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.books.EnemyInShadowsCompanion
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.books.UpInArms
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.books.WindsOfMagic
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.parsers.Document
@@ -85,6 +86,14 @@ class ImporterTest {
     }
 
     @Test
+    fun `spell import (Enemy in Shadows - Companion)`() {
+        withEnemyInShadowsCompanion { document ->
+            val spells = EnemyInShadowsCompanion.importSpells(document)
+            assertEquals(9 + 14, spells.size)
+        }
+    }
+
+    @Test
     fun `blessings import (Core Rulebook)`() {
         withCoreRuleBook { document ->
             val blessings = CoreRulebook.importBlessings(document)
@@ -110,6 +119,12 @@ class ImporterTest {
     private fun withWindsOfMagic(block: (Document) -> Unit) {
         loadDocument(javaClass.getResourceAsStream("winds_of_magic.pdf") as InputStream)
             .use(block)
+    }
+
+    private fun withEnemyInShadowsCompanion(block: (Document) -> Unit) {
+        loadDocument(
+            javaClass.getResourceAsStream("enemy_in_shadows_companion.pdf") as InputStream
+        ).use(block)
     }
 
     private fun withUpInArms(block: (Document) -> Unit) {

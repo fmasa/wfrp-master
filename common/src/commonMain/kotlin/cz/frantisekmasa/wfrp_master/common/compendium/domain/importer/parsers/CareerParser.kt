@@ -39,7 +39,7 @@ class CareerParser {
         val stream = TokenStream(firstColumn.toList())
         val english = Localization.English
 
-        val name = stream.consumeOneOfType<Token.Heading1>().text
+        val name = stream.consumeOneOfType<Token.Heading>().text
             .trim()
             .splitToSequence(' ', '\n')
             .map { it.lowercase() }

@@ -4,6 +4,8 @@ import com.benasher44.uuid.uuid4
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.Spell
 
 class SpellParser(
+    private val specialLores: Map<String, String>,
+    private val ignoredSpellLikeHeadings: Set<String> = emptySet(),
     private val isEnd: (Token?) -> Boolean = { it == null },
 ) {
 
@@ -39,7 +41,10 @@ class SpellParser(
     }
 
     private fun consumeSpells(lore: String, stream: TokenStream): Sequence<Spell> = sequence {
-        stream.dropUntil { it is Token.Heading3 }
+        stream.dropUntil { token ->
+            token is Token.Heading3 &&
+                ignoredSpellLikeHeadings.none { token.text.trim().equals(it, ignoreCase = true) }
+        }
 
         while (stream.peek() is Token.Heading3) {
             val name = stream.consumeOneOfType<Token.Heading3>().text.trim()
@@ -136,10 +141,5 @@ class SpellParser(
 
     companion object {
         private val loreHeadingRegex = Regex("(The )?Lore of ([a-z]+)", RegexOption.IGNORE_CASE)
-        private val specialLores = mapOf(
-            "Petty Spells" to "Petty Spells",
-            "Arcane Spells" to "Arcane Spells",
-            "New Arcane Spells" to "Arcane Spells",
-        )
     }
 }

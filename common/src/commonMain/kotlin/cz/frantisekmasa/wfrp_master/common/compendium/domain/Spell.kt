@@ -26,7 +26,7 @@ data class Spell(
         const val RANGE_MAX_LENGTH = 50
         const val TARGET_MAX_LENGTH = 50
         const val DURATION_MAX_LENGTH = 50
-        const val EFFECT_MAX_LENGTH = 1000
+        const val EFFECT_MAX_LENGTH = 1500
         const val LORE_MAX_LENGTH = 50
     }
 
