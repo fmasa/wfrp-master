@@ -205,10 +205,12 @@ class CareerDetailScreen(
             TabPager(fullWidthTabs = true) {
                 tab(strings.tabDetail) {
                     Column {
-                        VisibilitySwitchBar(
-                            visible = career.isVisibleToPlayers,
-                            onChange = { screenModel.update(career.changeVisibility(it)) },
-                        )
+                        if (isGameMaster) {
+                            VisibilitySwitchBar(
+                                visible = career.isVisibleToPlayers,
+                                onChange = { screenModel.update(career.changeVisibility(it)) },
+                            )
+                        }
 
                         LazyColumn(contentPadding = PaddingValues(Spacing.bodyPadding)) {
                             item {
