@@ -26,6 +26,7 @@ class SpellDetailScreen(
                     effectiveCastingNumber = it.castingNumber,
                     range = it.range,
                     target = it.target,
+                    lore = it.lore,
                     duration = it.duration,
                     effect = it.effect,
                 )

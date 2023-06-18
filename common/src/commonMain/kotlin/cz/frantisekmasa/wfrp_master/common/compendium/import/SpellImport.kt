@@ -3,6 +3,7 @@ package cz.frantisekmasa.wfrp_master.common.compendium.import
 import androidx.compose.runtime.Immutable
 import com.benasher44.uuid.uuid4
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.Spell
+import cz.frantisekmasa.wfrp_master.common.compendium.domain.SpellLore
 import cz.frantisekmasa.wfrp_master.common.core.common.requireMaxLength
 import kotlinx.serialization.Serializable
 
@@ -15,7 +16,8 @@ data class SpellImport(
     val duration: String,
     val castingNumber: Int,
     val effect: String,
-    val lore: String,
+    val lore: SpellLore?,
+    val customLore: String,
     val isVisibleToPlayers: Boolean = true,
 ) {
     init {
@@ -26,7 +28,7 @@ data class SpellImport(
         target.requireMaxLength(Spell.TARGET_MAX_LENGTH, "spell target")
         duration.requireMaxLength(Spell.DURATION_MAX_LENGTH, "spell duration")
         effect.requireMaxLength(Spell.EFFECT_MAX_LENGTH, "spell effect")
-        lore.requireMaxLength(Spell.LORE_MAX_LENGTH, "spell lore")
+        customLore.requireMaxLength(Spell.LORE_MAX_LENGTH, "spell lore")
     }
 
     fun toSpell() = Spell(
@@ -37,6 +39,7 @@ data class SpellImport(
         duration = duration,
         castingNumber = castingNumber,
         effect = effect,
+        customLore = customLore,
         lore = lore,
         isVisibleToPlayers = isVisibleToPlayers,
     )
@@ -50,6 +53,7 @@ data class SpellImport(
             castingNumber = spell.castingNumber,
             effect = spell.effect,
             lore = spell.lore,
+            customLore = spell.customLore,
             isVisibleToPlayers = spell.isVisibleToPlayers,
         )
     }

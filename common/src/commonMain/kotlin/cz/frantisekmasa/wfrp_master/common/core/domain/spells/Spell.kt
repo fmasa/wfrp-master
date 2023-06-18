@@ -3,6 +3,7 @@ package cz.frantisekmasa.wfrp_master.common.core.domain.spells
 import androidx.compose.runtime.Immutable
 import com.benasher44.uuid.Uuid
 import com.benasher44.uuid.uuid4
+import cz.frantisekmasa.wfrp_master.common.compendium.domain.SpellLore
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.CharacterItem
 import cz.frantisekmasa.wfrp_master.common.core.shared.Parcelize
 import kotlinx.serialization.Contextual
@@ -21,6 +22,7 @@ data class Spell(
     val duration: String,
     val castingNumber: Int,
     val effect: String,
+    val lore: SpellLore? = null,
     val memorized: Boolean = true, // TODO: Remove default value and migrate stored data
 ) : CharacterItem<Spell, CompendiumSpell> {
 
@@ -69,6 +71,7 @@ data class Spell(
                 duration = spell.duration,
                 castingNumber = spell.castingNumber,
                 effect = spell.effect,
+                lore = spell.lore,
                 memorized = false,
             )
         }

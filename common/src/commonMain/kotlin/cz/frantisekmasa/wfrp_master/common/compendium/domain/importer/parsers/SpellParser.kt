@@ -2,9 +2,10 @@ package cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.parsers
 
 import com.benasher44.uuid.uuid4
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.Spell
+import cz.frantisekmasa.wfrp_master.common.compendium.domain.SpellLore
 
 class SpellParser(
-    private val specialLores: Map<String, String>,
+    private val specialLores: Map<String, Set<SpellLore>>,
     private val ignoredSpellLikeHeadings: Set<String> = emptySet(),
     private val isEnd: (Token?) -> Boolean = { it == null },
 ) {
@@ -21,26 +22,52 @@ class SpellParser(
             .toList()
     }
 
-    private fun parseFromPages(lexer: TwoColumnPdfLexer, pages: IntRange): Sequence<Spell> = sequence {
-        val tokens = pages.asSequence()
-            .flatMap { lexer.getTokens(it).toList() }
-            .flatten()
-            .toList()
+    private fun parseFromPages(lexer: TwoColumnPdfLexer, pages: IntRange): Sequence<Spell> =
+        sequence {
+            val tokens = pages.asSequence()
+                .flatMap { lexer.getTokens(it).toList() }
+                .flatten()
+                .toList()
 
-        val stream = TokenStream(tokens)
+            val stream = TokenStream(tokens)
 
-        stream.dropUntil { isLoreHeading(it) }
+            stream.dropUntil { isLoreHeading(it) }
 
-        while (!isEnd(stream.peek())) {
-            val loreHeading = stream.consumeOneOfType<Token.TextToken>().text.trim()
-            val lore = extractLore(loreHeading)
+            while (!isEnd(stream.peek())) {
+                val loreHeading = stream.consumeOneOfType<Token.TextToken>().text.trim()
+                val lores = extractLore(loreHeading)
+                val spells = consumeSpells(stream)
 
-            yieldAll(consumeSpells(lore, stream))
-            stream.dropUntil { isLoreHeading(it) || isEnd(it) }
+                spells.forEach { spell ->
+                    if (lores.size == 1) {
+                        yield(spell.copy(lore = lores.first()))
+                    } else {
+                        yield(spell) // Create one non-specialized spell for compatibility
+                        lores.forEach { lore ->
+                            yield(
+                                spell.copy(
+                                    id = uuid4(),
+                                    name = buildString {
+                                        append(spell.name)
+                                        append(" (")
+                                        append(
+                                            lore.name.lowercase()
+                                                .replaceFirstChar { it.titlecase() }
+                                        )
+                                        append(")")
+                                    },
+                                    lore = lore,
+                                )
+                            )
+                        }
+                    }
+                }
+
+                stream.dropUntil { isLoreHeading(it) || isEnd(it) }
+            }
         }
-    }
 
-    private fun consumeSpells(lore: String, stream: TokenStream): Sequence<Spell> = sequence {
+    private fun consumeSpells(stream: TokenStream): Sequence<Spell> = sequence {
         stream.dropUntil { token ->
             token is Token.Heading3 &&
                 ignoredSpellLikeHeadings.none { token.text.trim().equals(it, ignoreCase = true) }
@@ -97,7 +124,7 @@ class SpellParser(
                             stream.consumeUntil { it is Token.Heading },
                         ).flatten().filterIsInstance<Token.ParagraphToken>()
                     ),
-                    lore = lore,
+                    customLore = "",
                 )
             )
         }
@@ -123,20 +150,28 @@ class SpellParser(
         val text = token.text.trim()
 
         return (token is Token.Heading1 || token is Token.Heading2) &&
-            (specialLores.keys.any { it.equals(text, ignoreCase = true) } || text.matches(loreHeadingRegex))
+            (
+                specialLores.keys.any { it.equals(text, ignoreCase = true) } || text.matches(
+                    loreHeadingRegex
+                )
+                )
     }
 
-    private fun extractLore(text: String): String {
-        val specialLore = specialLores.entries.firstOrNull { it.key.equals(text, ignoreCase = true) }
-            ?.value
+    private fun extractLore(text: String): Set<SpellLore> {
+        val specialLores =
+            specialLores.entries.firstOrNull { it.key.equals(text, ignoreCase = true) }
+                ?.value
 
-        if (specialLore != null) {
-            return specialLore
+        if (specialLores != null) {
+            return specialLores
         }
 
-        return requireNotNull(loreHeadingRegex.matchEntire(text)).groupValues[2]
-            .lowercase()
-            .replaceFirstChar { it.titlecase() }
+        return setOf(
+            SpellLore.valueOf(
+                requireNotNull(loreHeadingRegex.matchEntire(text)).groupValues[2]
+                    .uppercase()
+            )
+        )
     }
 
     companion object {

@@ -2,6 +2,7 @@ package cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.books
 
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.Career
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.Spell
+import cz.frantisekmasa.wfrp_master.common.compendium.domain.SpellLore
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.parsers.CareerParser
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.parsers.Document
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.parsers.SpellParser
@@ -32,7 +33,7 @@ object WindsOfMagic : Book, CareerSource, SpellSource {
     override fun importSpells(document: Document): List<Spell> {
         return SpellParser(
             specialLores = mapOf(
-                "New Arcane Spells" to "Arcane Spells",
+                "New Arcane Spells" to SpellLore.values().toSet() - SpellLore.PETTY,
             ),
             isEnd = {
                 (

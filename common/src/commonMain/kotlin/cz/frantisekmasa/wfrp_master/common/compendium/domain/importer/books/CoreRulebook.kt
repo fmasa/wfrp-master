@@ -5,6 +5,7 @@ import cz.frantisekmasa.wfrp_master.common.compendium.domain.Career
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.Miracle
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.Skill
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.Spell
+import cz.frantisekmasa.wfrp_master.common.compendium.domain.SpellLore
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.Talent
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.Trait
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.parsers.BlessingParser
@@ -81,8 +82,8 @@ object CoreRulebook :
     override fun importSpells(document: Document): List<Spell> {
         return SpellParser(
             specialLores = mapOf(
-                "Petty Spells" to "Petty Spells",
-                "Arcane Spells" to "Arcane Spells",
+                "Petty Spells" to setOf(SpellLore.PETTY),
+                "Arcane Spells" to SpellLore.values().toSet() - SpellLore.PETTY,
             ),
         ).import(document, this, sequenceOf(240..257))
     }

@@ -1,3 +1,4 @@
+import cz.frantisekmasa.wfrp_master.common.compendium.domain.SpellLore
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.books.CoreRulebook
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.books.EnemyInShadowsCompanion
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.books.UpInArms
@@ -73,7 +74,19 @@ class ImporterTest {
     fun `spell import (Core Rulebook)`() {
         withCoreRuleBook { document ->
             val spells = CoreRulebook.importSpells(document)
-            assertEquals(135, spells.size)
+            assertEquals(
+                (
+                    23 * SpellLore.values().size + // Arcane Spells
+                        25 + // Petty Spells
+                        8 * 8 + // Color Spells
+                        2 + // Hedgecraft Spells
+                        10 + // Witchcraft Spells
+                        4 + // Daemonology Spells
+                        4 + // Necromancy Spells
+                        3 // Chaos Spells
+                    ),
+                spells.size
+            )
         }
     }
 
@@ -81,7 +94,13 @@ class ImporterTest {
     fun `spell import (Winds of Magic)`() {
         withWindsOfMagic { document ->
             val spells = WindsOfMagic.importSpells(document)
-            assertEquals(8 + (8 * 24), spells.size)
+            assertEquals(
+                (
+                    8 * SpellLore.values().size + // Arcane Spells
+                        (8 * 24) // Color spells
+                    ),
+                spells.size
+            )
         }
     }
 
@@ -89,7 +108,13 @@ class ImporterTest {
     fun `spell import (Enemy in Shadows - Companion)`() {
         withEnemyInShadowsCompanion { document ->
             val spells = EnemyInShadowsCompanion.importSpells(document)
-            assertEquals(9 + 14, spells.size)
+            assertEquals(
+                (
+                    9 * 4 + // Chaos Arcane Spells
+                        14 // Tzeentch Spells
+                    ),
+                spells.size,
+            )
         }
     }
 
