@@ -930,6 +930,7 @@ data class SpellStrings(
     val labelDuration: String = "Duration",
     val labelEffect: String = "Effect",
     val labelLore: String = "Lore",
+    val labelLoreLegacy: String = "Lore (Legacy)",
     val labelMemorized: String = "Memorized",
     val labelName: String = "Name",
     val labelRange: String = "Range",
@@ -940,6 +941,27 @@ data class SpellStrings(
     val titleEdit: String = "Edit Spell",
     val titleNew: String = "New Spell",
     val titleSpells: String = "Spells",
+    val lores: SpellLoreStrings = SpellLoreStrings(),
+)
+
+data class SpellLoreStrings(
+    val beasts: String = "Beasts",
+    val death: String = "Death",
+    val fire: String = "Fire",
+    val heavens: String = "Heavens",
+    val metal: String = "Metal",
+    val life: String = "Life",
+    val light: String = "Light",
+    val shadows: String = "Shadows",
+    val hedgecraft: String = "Hedgecraft",
+    val witchcraft: String = "Witchcraft",
+    val daemonology: String = "Daemonology",
+    val necromancy: String = "Necromancy",
+    val nurgle: String = "Nurgle",
+    val slaanesh: String = "Slaanesh",
+    val tzeentch: String = "Tzeentch",
+    val petty: String = "Petty Spells",
+    val other: String = "Other",
 )
 
 @Immutable

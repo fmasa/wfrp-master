@@ -16,6 +16,8 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import com.halilibo.richtext.markdown.Markdown
 import com.halilibo.richtext.ui.RichText
+import cz.frantisekmasa.wfrp_master.common.compendium.domain.SpellLore
+import cz.frantisekmasa.wfrp_master.common.core.domain.localizedName
 import cz.frantisekmasa.wfrp_master.common.core.domain.spells.Spell
 import cz.frantisekmasa.wfrp_master.common.core.ui.buttons.CloseButton
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
@@ -46,6 +48,7 @@ fun SpellDetail(
                 effectiveCastingNumber = spell.effectiveCastingNumber,
                 range = spell.range,
                 target = spell.target,
+                lore = spell.lore,
                 duration = spell.duration,
                 effect = spell.effect,
             )
@@ -59,6 +62,7 @@ fun SpellDetailBody(
     effectiveCastingNumber: Int,
     range: String,
     target: String,
+    lore: SpellLore?,
     duration: String,
     effect: String,
 ) {
@@ -85,6 +89,10 @@ fun SpellDetailBody(
         SingleLineTextValue(strings.labelTarget, target)
 
         SingleLineTextValue(strings.labelDuration, duration)
+
+        if (lore != null) {
+            SingleLineTextValue(strings.labelLore, lore.localizedName)
+        }
 
         RichText(Modifier.padding(top = 8.dp)) {
             Markdown(effect)

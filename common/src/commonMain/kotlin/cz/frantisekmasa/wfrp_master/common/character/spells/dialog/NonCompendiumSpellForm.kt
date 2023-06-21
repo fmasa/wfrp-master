@@ -8,6 +8,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -15,12 +16,14 @@ import androidx.compose.ui.text.input.KeyboardType
 import com.benasher44.uuid.Uuid
 import com.benasher44.uuid.uuid4
 import cz.frantisekmasa.wfrp_master.common.character.spells.SpellsScreenModel
+import cz.frantisekmasa.wfrp_master.common.compendium.domain.SpellLore
 import cz.frantisekmasa.wfrp_master.common.core.domain.spells.Spell
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.CheckboxWithText
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.FormDialog
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.HydratedFormData
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.InputValue
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.Rules
+import cz.frantisekmasa.wfrp_master.common.core.ui.forms.SelectBox
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.TextInput
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.inputValue
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
@@ -33,16 +36,16 @@ internal fun NonCompendiumSpellForm(
     onDismissRequest: () -> Unit,
 ) {
     val formData = NonCompendiumSpellFormData.fromSpell(existingSpell)
-    val strings = LocalStrings.current.spells
+    val strings = LocalStrings.current
 
     FormDialog(
-        title = if (existingSpell != null) strings.titleEdit else strings.titleEdit,
+        title = if (existingSpell != null) strings.spells.titleEdit else strings.spells.titleEdit,
         onDismissRequest = onDismissRequest,
         formData = formData,
         onSave = screenModel::saveSpell,
     ) { validate ->
         TextInput(
-            label = strings.labelName,
+            label = strings.spells.labelName,
             value = formData.name,
             validate = validate,
             maxLength = Spell.NAME_MAX_LENGTH
@@ -55,35 +58,45 @@ internal fun NonCompendiumSpellForm(
             contentAlignment = Alignment.Center
         ) {
             CheckboxWithText(
-                strings.labelMemorized,
+                strings.spells.labelMemorized,
                 checked = formData.memorized.value,
                 onCheckedChange = { formData.memorized.value = it },
             )
         }
 
+        SelectBox(
+            label = strings.spells.labelLore,
+            value = formData.lore.value,
+            onValueChange = { formData.lore.value = it },
+            items = remember(strings) {
+                SpellLore.values().map { it to it.nameResolver(strings) }
+                    .sortedBy { it.second } + (null to strings.spells.lores.other)
+            },
+        )
+
         TextInput(
-            label = strings.labelRange,
+            label = strings.spells.labelRange,
             value = formData.range,
             validate = validate,
             maxLength = Spell.RANGE_MAX_LENGTH,
         )
 
         TextInput(
-            label = strings.labelTarget,
+            label = strings.spells.labelTarget,
             value = formData.target,
             validate = validate,
             maxLength = Spell.TARGET_MAX_LENGTH,
         )
 
         TextInput(
-            label = strings.labelDuration,
+            label = strings.spells.labelDuration,
             value = formData.duration,
             validate = validate,
             maxLength = Spell.DURATION_MAX_LENGTH,
         )
 
         TextInput(
-            label = strings.labelCastingNumber,
+            label = strings.spells.labelCastingNumber,
             value = formData.castingNumber,
             keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
             validate = validate,
@@ -91,7 +104,7 @@ internal fun NonCompendiumSpellForm(
         )
 
         TextInput(
-            label = strings.labelEffect,
+            label = strings.spells.labelEffect,
             value = formData.effect,
             validate = validate,
             maxLength = Spell.EFFECT_MAX_LENGTH,
@@ -107,6 +120,7 @@ private class NonCompendiumSpellFormData(
     val memorized: MutableState<Boolean>,
     val range: InputValue,
     val target: InputValue,
+    val lore: MutableState<SpellLore?>,
     val duration: InputValue,
     val castingNumber: InputValue,
     val effect: InputValue,
@@ -125,6 +139,7 @@ private class NonCompendiumSpellFormData(
                 Rules.NonNegativeInteger(),
             ),
             effect = inputValue(item?.effect ?: ""),
+            lore = rememberSaveable { mutableStateOf(item?.lore) },
         )
     }
 
@@ -134,6 +149,7 @@ private class NonCompendiumSpellFormData(
         memorized = memorized.value,
         range = range.value,
         target = target.value,
+        lore = lore.value,
         duration = duration.value,
         castingNumber = castingNumber.value.toInt(),
         effect = effect.value,

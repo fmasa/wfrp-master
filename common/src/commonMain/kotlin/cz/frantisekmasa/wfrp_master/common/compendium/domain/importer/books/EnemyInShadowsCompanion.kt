@@ -1,6 +1,7 @@
 package cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.books
 
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.Spell
+import cz.frantisekmasa.wfrp_master.common.compendium.domain.SpellLore
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.parsers.Document
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.parsers.SpellParser
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.parsers.TextPosition
@@ -17,7 +18,11 @@ object EnemyInShadowsCompanion : Book, SpellSource {
     override fun importSpells(document: Document): List<Spell> {
         return SpellParser(
             specialLores = mapOf(
-                "Chaos Arcane Spells" to "Chaos Arcane Spells",
+                "Chaos Arcane Spells" to setOf(
+                    SpellLore.NURGLE,
+                    SpellLore.SLAANESH,
+                    SpellLore.TZEENTCH,
+                ),
             ),
             ignoredSpellLikeHeadings = setOf("Lore Attribute"),
         ).import(
