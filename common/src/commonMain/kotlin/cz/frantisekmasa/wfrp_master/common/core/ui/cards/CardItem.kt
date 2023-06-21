@@ -15,6 +15,7 @@ fun CardItem(
     onClick: () -> Unit,
     contextMenuItems: List<ContextMenu.Item> = emptyList(),
     badge: @Composable () -> Unit = {},
+    showDivider: Boolean = true,
 ) {
     WithContextMenu(
         items = contextMenuItems,
@@ -28,5 +29,7 @@ fun CardItem(
         )
     }
 
-    Divider()
+    if (showDivider) {
+        Divider()
+    }
 }

@@ -16,7 +16,9 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Add
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -25,10 +27,14 @@ import androidx.compose.ui.unit.dp
 import com.benasher44.uuid.Uuid
 import cz.frantisekmasa.wfrp_master.common.character.spells.dialog.AddSpellDialog
 import cz.frantisekmasa.wfrp_master.common.character.spells.dialog.EditSpellDialog
+import cz.frantisekmasa.wfrp_master.common.compendium.domain.SpellLore
+import cz.frantisekmasa.wfrp_master.common.core.domain.localizedName
 import cz.frantisekmasa.wfrp_master.common.core.domain.spells.Spell
 import cz.frantisekmasa.wfrp_master.common.core.shared.Resources
 import cz.frantisekmasa.wfrp_master.common.core.shared.drawableResource
+import cz.frantisekmasa.wfrp_master.common.core.ui.cards.CardContainer
 import cz.frantisekmasa.wfrp_master.common.core.ui.cards.CardItem
+import cz.frantisekmasa.wfrp_master.common.core.ui.cards.CardTitle
 import cz.frantisekmasa.wfrp_master.common.core.ui.flow.collectWithLifecycle
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.ContextMenu
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.EmptyUI
@@ -66,9 +72,15 @@ fun CharacterSpellsScreen(
 
 @Composable
 private fun MainContainer(screenModel: SpellsScreenModel) {
-    val spells = screenModel.items.collectWithLifecycle(null).value ?: return
+    val allSpells = screenModel.items.collectWithLifecycle(null).value ?: return
+    val spellsByLore = remember(allSpells) {
+        allSpells.groupBy { it.lore }
+            .asSequence()
+            .sortedBy { it.key?.ordinal ?: SpellLore.values().size }
+            .toList()
+    }
 
-    if (spells.isEmpty()) {
+    if (spellsByLore.isEmpty()) {
         val messages = LocalStrings.current.spells.messages
 
         EmptyUI(
@@ -81,13 +93,38 @@ private fun MainContainer(screenModel: SpellsScreenModel) {
 
     var editedSpellId: Uuid? by rememberSaveable { mutableStateOf(null) }
 
-    LazyColumn(contentPadding = PaddingValues(bottom = Spacing.bottomPaddingUnderFab)) {
-        items(spells) { spell ->
-            SpellItem(
-                spell,
-                onClick = { editedSpellId = spell.id },
-                onRemove = { screenModel.removeSpell(spell) }
-            )
+    LazyColumn(
+        contentPadding = PaddingValues(
+            bottom = Spacing.bottomPaddingUnderFab,
+            start = Spacing.small,
+            end = Spacing.small,
+        )
+    ) {
+        items(spellsByLore) { (lore, spells) ->
+            CardContainer(Modifier.padding(top = Spacing.small)) {
+                Column {
+                    CardTitle(
+                        buildString {
+                            append(lore?.localizedName ?: LocalStrings.current.spells.lores.other)
+
+                            lore?.wind?.let {
+                                append(" ($it)")
+                            }
+                        }
+                    )
+
+                    spells.forEachIndexed { index, spell ->
+                        key(spell.id, index) {
+                            SpellItem(
+                                spell = spell,
+                                onClick = { editedSpellId = spell.id },
+                                onRemove = { screenModel.removeSpell(spell) },
+                                isLast = index == spells.lastIndex,
+                            )
+                        }
+                    }
+                }
+            }
         }
     }
 
@@ -101,12 +138,18 @@ private fun MainContainer(screenModel: SpellsScreenModel) {
 }
 
 @Composable
-private fun SpellItem(spell: Spell, onClick: () -> Unit, onRemove: () -> Unit) {
+private fun SpellItem(
+    spell: Spell,
+    onClick: () -> Unit,
+    onRemove: () -> Unit,
+    isLast: Boolean,
+) {
     val strings = LocalStrings.current.spells
 
     CardItem(
         name = spell.name,
         onClick = onClick,
+        showDivider = !isLast,
         contextMenuItems = listOf(ContextMenu.Item(LocalStrings.current.commonUi.buttonRemove, onRemove)),
         badge = {
             Column(
