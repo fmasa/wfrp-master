@@ -162,31 +162,31 @@ class RulebookCompendiumImportScreen(
         return remember(book) {
             buildList {
                 if (book is SkillSource) {
-                    add(strings.compendium.tabSkills)
+                    add(strings.compendium.titleSkills)
                 }
 
                 if (book is TalentSource) {
-                    add(strings.compendium.tabTalents)
+                    add(strings.compendium.titleTalents)
                 }
 
                 if (book is SpellSource) {
-                    add(strings.compendium.tabSpells)
+                    add(strings.compendium.titleSpells)
                 }
 
                 if (book is CareerSource) {
-                    add(strings.compendium.tabCareers)
+                    add(strings.compendium.titleCareers)
                 }
 
                 if (book is TraitSource) {
-                    add(strings.compendium.tabTraits)
+                    add(strings.compendium.titleTraits)
                 }
 
                 if (book is BlessingSource) {
-                    add(strings.compendium.tabBlessings)
+                    add(strings.compendium.titleBlessings)
                 }
 
                 if (book is MiracleSource) {
-                    add(strings.compendium.tabMiracles)
+                    add(strings.compendium.titleMiracles)
                 }
             }.joinToString(", ")
         }

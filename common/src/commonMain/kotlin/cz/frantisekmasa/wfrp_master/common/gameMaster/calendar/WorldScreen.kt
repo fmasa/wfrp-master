@@ -31,7 +31,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
-import cz.frantisekmasa.wfrp_master.common.compendium.CompendiumScreen
+import cz.frantisekmasa.wfrp_master.common.compendium.CompendiumListScreen
 import cz.frantisekmasa.wfrp_master.common.core.domain.localizedName
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.Party
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.PartyId
@@ -107,7 +107,7 @@ private fun NavigationCard(partyId: PartyId) {
         )
 
         ListItem(
-            modifier = Modifier.clickable { navigator.push(CompendiumScreen(partyId)) },
+            modifier = Modifier.clickable { navigator.push(CompendiumListScreen(partyId)) },
             icon = { ItemIcon(Resources.Drawable.Compendium) },
             text = { Text(LocalStrings.current.compendium.title) },
         )
