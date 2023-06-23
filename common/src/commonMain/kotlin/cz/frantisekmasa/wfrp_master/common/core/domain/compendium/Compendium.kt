@@ -22,7 +22,7 @@ interface Compendium<T : CompendiumItem<T>> {
     /**
      * Updates item if it exists and creates it if it doesn't
      */
-    suspend fun saveItems(partyId: PartyId, vararg items: T)
+    suspend fun saveItems(partyId: PartyId, items: List<T>)
 
     fun save(transaction: Transaction, partyId: PartyId, item: T)
 

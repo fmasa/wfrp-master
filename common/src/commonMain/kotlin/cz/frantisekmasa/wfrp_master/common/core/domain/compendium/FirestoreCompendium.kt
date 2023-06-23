@@ -63,21 +63,23 @@ class FirestoreCompendium<T : CompendiumItem<T>>(
             }
     }
 
-    override suspend fun saveItems(partyId: PartyId, vararg items: T) {
+    override suspend fun saveItems(partyId: PartyId, items: List<T>) {
         val itemsData = coroutineScope {
             items.map { it.id to async { mapper.toDocumentData(it) } }
                 .map { (id, data) -> id to data.await() }
         }
 
-        firestore.runTransaction { transaction ->
-            itemsData.forEach { (id, data) ->
-                Napier.d("Saving Compendium item $data to $collectionName compendium of party $partyId")
+        itemsData.chunked(MAX_BATCH_SIZE).forEach { chunk ->
+            firestore.runTransaction { transaction ->
+                chunk.forEach { (id, data) ->
+                    Napier.d("Saving Compendium item $data to $collectionName compendium of party $partyId")
 
-                transaction.set(
-                    collection(partyId).document(id.toString()),
-                    data,
-                    SetOptions.mergeFields(data.keys)
-                )
+                    transaction.set(
+                        collection(partyId).document(id.toString()),
+                        data,
+                        SetOptions.mergeFields(data.keys)
+                    )
+                }
             }
         }
     }
@@ -102,4 +104,8 @@ class FirestoreCompendium<T : CompendiumItem<T>>(
         firestore.collection(Schema.Parties)
             .document(partyId.toString())
             .collection(collectionName)
+
+    companion object {
+        private val MAX_BATCH_SIZE = 500
+    }
 }

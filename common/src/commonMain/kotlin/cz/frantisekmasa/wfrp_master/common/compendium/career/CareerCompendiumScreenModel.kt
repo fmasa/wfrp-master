@@ -19,23 +19,17 @@ class CareerCompendiumScreenModel(
 ) : CompendiumItemScreenModel<Career>(partyId, compendium) {
     val careers: Flow<List<Career>> = compendium.liveForParty(partyId)
 
-    override suspend fun createNew(compendiumItem: Career) {
-        firestore.runTransaction { transaction ->
-            compendium.save(transaction, partyId, compendiumItem)
-        }
-    }
-
     suspend fun saveLevel(careerId: Uuid, level: Career.Level) {
         val career = compendium.getItem(partyId, careerId)
         val existingIndex = career.levels.indexOfFirst { it.id == level.id }
 
         if (existingIndex == -1) {
-            compendium.saveItems(partyId, career.copy(levels = career.levels + level))
+            compendium.saveItems(partyId, listOf(career.copy(levels = career.levels + level)))
         } else {
             val levels = career.levels.toMutableList()
             levels[existingIndex] = level
 
-            compendium.saveItems(partyId, career.copy(levels = levels))
+            compendium.saveItems(partyId, listOf(career.copy(levels = levels)))
         }
     }
 

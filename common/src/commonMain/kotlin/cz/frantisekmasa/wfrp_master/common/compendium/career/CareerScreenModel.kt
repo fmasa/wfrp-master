@@ -18,7 +18,7 @@ class CareerScreenModel(
     }
 
     suspend fun update(partyId: PartyId, career: Career) {
-        careerCompendium.saveItems(partyId, career)
+        careerCompendium.saveItems(partyId, listOf(career))
     }
 
     suspend fun saveLevel(partyId: PartyId, careerId: Uuid, level: Career.Level) {
@@ -29,7 +29,7 @@ class CareerScreenModel(
         if (existingIndex == -1) {
             careerCompendium.saveItems(
                 partyId,
-                career.copy(levels = career.levels + level)
+                listOf(career.copy(levels = career.levels + level)),
             )
         } else {
             val levels = career.levels.toMutableList()
@@ -37,7 +37,7 @@ class CareerScreenModel(
 
             careerCompendium.saveItems(
                 partyId,
-                career.copy(levels = levels)
+                listOf(career.copy(levels = levels)),
             )
         }
     }

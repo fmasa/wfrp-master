@@ -16,17 +16,29 @@ abstract class CompendiumItemScreenModel<A : CompendiumItem<A>>(
 
     val items: Flow<List<A>> = compendium.liveForParty(partyId)
 
-    abstract suspend fun createNew(compendiumItem: A)
+    suspend fun createNew(compendiumItem: A) {
+        createNew(listOf(compendiumItem))
+    }
+
+    private suspend fun createNew(compendiumItems: List<A>) {
+        compendium.saveItems(partyId, compendiumItems)
+    }
 
     abstract suspend fun update(compendiumItem: A)
 
-    suspend fun import(actions: Sequence<ImportAction<A>>) {
+    suspend fun import(actions: List<ImportAction<A>>) {
+        val newItems = mutableListOf<A>()
+        val updatedItems = mutableListOf<A>()
+
         actions.forEach { action ->
             when (action) {
-                is ImportAction.CreateNew -> createNew(action.item)
-                is ImportAction.Update -> update(action.item)
+                is ImportAction.CreateNew -> newItems += action.item
+                is ImportAction.Update -> updatedItems += action.item
             }
         }
+
+        createNew(newItems)
+        updatedItems.forEach { item -> update(item) }
     }
 
     sealed class ImportAction<T : CompendiumItem<T>>(val item: T) {

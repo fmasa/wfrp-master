@@ -16,12 +16,6 @@ abstract class CharacterItemCompendiumItemScreenModel<A : CompendiumItem<A>, B :
     protected val characterItems: CharacterCompendiumItemRepository<B>
 ) : CompendiumItemScreenModel<A>(partyId, compendium) {
 
-    override suspend fun createNew(compendiumItem: A) {
-        firestore.runTransaction { transaction ->
-            compendium.save(transaction, partyId, compendiumItem)
-        }
-    }
-
     override suspend fun update(compendiumItem: A) {
         val characterItems = characterItems.findByCompendiumId(partyId, compendiumItem.id)
 
