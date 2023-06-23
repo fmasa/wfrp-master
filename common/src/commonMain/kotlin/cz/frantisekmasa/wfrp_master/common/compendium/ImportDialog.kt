@@ -258,6 +258,7 @@ private fun <T : CompendiumItem<T>> ItemPicker(
                                                     else ImportAction.CreateNew(it)
                                                 }
                                                 .distinctBy { it.item.id }
+                                                .toList()
                                         )
                                     }
                                 }
