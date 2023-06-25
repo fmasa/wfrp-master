@@ -164,7 +164,7 @@ private fun CareerChooserDialog(
                 data = SearchableList.Data.Loaded(items),
                 searchableValue = { it.second },
                 navigationIcon = { CloseButton(onDismissRequest) },
-                title = LocalStrings.current.compendium.tabCareers,
+                title = LocalStrings.current.compendium.titleCareers,
                 searchPlaceholder = LocalStrings.current.careers.searchPlaceholder,
                 emptyUi = {
                     EmptyUI(
