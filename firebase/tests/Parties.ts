@@ -112,18 +112,6 @@ class Parties extends Suite {
             .collection("parties");
 
         await Promise.all(Object.keys(this.validParty()).map(field => {
-            if (field === 'time') {
-                return; // This field is optional for now (BC), TODO: Remove in 1.14
-            }
-
-            if (field === 'activeCombat') {
-                return; // This field is optional for now (BC), TODO: Remove in later versions
-            }
-
-            if (field === "settings") {
-                return; // This field is optional for now (BC), TODO: Remove in later versions
-            }
-
             const party = this.validParty();
             const partyId = party.id;
 

@@ -703,12 +703,12 @@ service cloud.firestore {
                     && isValidPartyName(party.name)
                     && party.users == [uid]
                     && party.archived is bool
-                    && (! ("activeCombat" in party) || party.activeCombat == null)
+                    && party.activeCombat == null
                     && (party.gameMasterId == uid || party.gameMasterId == null)
                     && party.accessCode is string && party.accessCode != ""
-                    && (! ("time" in party) || isValidImperialTime(party.time))
+                    && isValidImperialTime(party.time)
                     && areAmbitionsValid(party.ambitions)
-                    && (! ("settings" in party) || areValidSettings(party.settings))
+                    && areValidSettings(party.settings)
             }
 
             function isValidPartyEdit() {
@@ -719,12 +719,9 @@ service cloud.firestore {
                     && areAmbitionsValid(party.ambitions)
                     && isValidPartyName(party.name)
                     && party.users.toSet() == resource.data.users.toSet()
-                    && (! ("time" in party) || isValidImperialTime(party.time))
-                    && (! ("activeCombat" in party)
-                        || party.activeCombat == null
-                        || isValidCombat(party.activeCombat)
-                    )
-                    && (! ("settings" in party) || areValidSettings(party.settings))
+                    && isValidImperialTime(party.time)
+                    && (party.activeCombat == null || isValidCombat(party.activeCombat))
+                    && areValidSettings(party.settings)
                     && party.archived is bool;
             }
 
