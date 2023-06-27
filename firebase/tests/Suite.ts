@@ -64,10 +64,17 @@ export abstract class Suite {
     protected validCharacter(userId: string): Character {
         return {
             id: userId,
+            type: "PLAYER_CHARACTER",
             name: "Sigmar",
-            userId: userId,
+            publicName: null,
             career: "God",
+            size: null,
             socialClass: "Warrior",
+            status: {
+                tier: "BRASS",
+                standing: 0,
+            },
+            userId: userId,
             race: "HUMAN",
             characteristicsAdvances: {
                 weaponSkill: 35,
@@ -119,7 +126,17 @@ export abstract class Suite {
             hardyTalent: false,
             conditions: {
                 conditions: {}
-            }
+            },
+            woundsModifiers: {
+                afterMultiplier: 0,
+                extraToughnessBonusMultiplier: 0,
+                isConstruct: false,
+            },
+            encumbranceBonus: 0,
+            avatarUrl: null,
+            hiddenTabs: [],
+            archived: false,
+            compendiumCareer: null,
         }
     }
 
