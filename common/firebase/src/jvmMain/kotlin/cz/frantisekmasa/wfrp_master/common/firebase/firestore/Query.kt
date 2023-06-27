@@ -40,6 +40,10 @@ actual open class Query(
         return Query(query.whereEqualTo(field, value))
     }
 
+    actual fun whereIn(field: String, values: Iterable<Any?>): Query {
+        return Query(query.whereIn(field, values.toList()))
+    }
+
     actual fun whereArrayContains(field: String, value: Any): Query {
         return Query(query.whereArrayContains(field, value))
     }
