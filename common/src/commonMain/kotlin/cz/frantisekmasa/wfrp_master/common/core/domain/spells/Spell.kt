@@ -49,6 +49,7 @@ data class Spell(
             duration = compendiumItem.duration,
             castingNumber = compendiumItem.castingNumber,
             effect = compendiumItem.effect,
+            lore = compendiumItem.lore,
         )
     }
 
