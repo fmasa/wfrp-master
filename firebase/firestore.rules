@@ -546,11 +546,13 @@ service cloud.firestore {
                             character.hiddenTabs.toSet().size() == character.hiddenTabs.size() &&
                                 [
                                     "ATTRIBUTES",
+                                    "COMBAT",
                                     "CONDITIONS",
                                     "SKILLS_AND_TALENTS",
                                     "SPELLS",
                                     "RELIGION",
-                                    "TRAPPINGS"
+                                    "TRAPPINGS",
+                                    "NOTES"
                                 ].hasAll(character.hiddenTabs)
                         )
                         && (character.size == null || (
