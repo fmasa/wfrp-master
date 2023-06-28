@@ -370,7 +370,7 @@ private class InventoryItemFormData(
             id = remember(item) { item?.id ?: uuid4() },
             name = inputValue(item?.name ?: "", Rules.NotBlank()),
             encumbrance = inputValue(item?.encumbrance?.toString() ?: "0"),
-            quantity = inputValue(item?.quantity?.toString() ?: "1"),
+            quantity = inputValue(item?.quantity?.toString() ?: "1", Rules.PositiveInteger()),
             description = inputValue(item?.description ?: ""),
             type = TrappingTypeFormData.fromTrappingType(item?.trappingType),
             containerId = item?.containerId ?: defaultContainerId
