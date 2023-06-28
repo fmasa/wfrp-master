@@ -10,8 +10,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import cafe.adriel.voyager.core.screen.Screen
-import cafe.adriel.voyager.navigator.LocalNavigator
-import cafe.adriel.voyager.navigator.currentOrThrow
 import cz.frantisekmasa.wfrp_master.common.characterCreation.CharacterCreationScreen
 import cz.frantisekmasa.wfrp_master.common.core.auth.LocalUser
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.CharacterType
@@ -21,6 +19,7 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.CharacterAvatar
 import cz.frantisekmasa.wfrp_master.common.core.ui.buttons.BackButton
 import cz.frantisekmasa.wfrp_master.common.core.ui.cards.CardItem
 import cz.frantisekmasa.wfrp_master.common.core.ui.flow.collectWithLifecycle
+import cz.frantisekmasa.wfrp_master.common.core.ui.navigation.LocalNavigationTransaction
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.FullScreenProgress
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.ItemIcon
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.rememberScreenModel
@@ -43,14 +42,14 @@ data class CharacterPickerScreen(
             return
         }
 
-        val navigator = LocalNavigator.currentOrThrow
+        val navigation = LocalNavigationTransaction.current
 
         LaunchedEffect(characters) {
             when {
-                characters.isEmpty() -> navigator.replace(
+                characters.isEmpty() -> navigation.replace(
                     CharacterCreationScreen(partyId, CharacterType.PLAYER_CHARACTER, userId)
                 )
-                characters.size == 1 -> navigator.replace(
+                characters.size == 1 -> navigation.replace(
                     CharacterDetailScreen(
                         CharacterId(partyId, characters.first().id)
                     )
@@ -73,7 +72,7 @@ data class CharacterPickerScreen(
                             name = character.name,
                             icon = { CharacterAvatar(character.avatarUrl, ItemIcon.Size.Small) },
                             onClick = {
-                                navigator.replace(
+                                navigation.replace(
                                     CharacterDetailScreen(
                                         CharacterId(partyId, character.id)
                                     )

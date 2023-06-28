@@ -5,8 +5,7 @@ import androidx.compose.material.IconButton
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowBack
 import androidx.compose.runtime.Composable
-import cafe.adriel.voyager.navigator.LocalNavigator
-import cafe.adriel.voyager.navigator.currentOrThrow
+import cz.frantisekmasa.wfrp_master.common.core.ui.navigation.LocalNavigationTransaction
 import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
 
 @Composable
@@ -21,7 +20,7 @@ fun BackButton(onClick: () -> Unit) {
 
 @Composable
 fun BackButton() {
-    val navigator = LocalNavigator.currentOrThrow
+    val navigation = LocalNavigationTransaction.current
 
-    BackButton(onClick = navigator::pop)
+    BackButton(onClick = navigation::goBack)
 }

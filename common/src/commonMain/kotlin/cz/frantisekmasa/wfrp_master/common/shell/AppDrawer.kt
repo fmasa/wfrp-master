@@ -41,7 +41,9 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.VisualOnlyIconDescription
 import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
 import cz.frantisekmasa.wfrp_master.common.settings.SettingsScreen
+import io.github.mmolosay.debounce.debounced
 import kotlinx.coroutines.launch
+import kotlin.time.Duration.Companion.milliseconds
 
 @Composable
 fun AppDrawer(drawerState: DrawerState) {
@@ -88,7 +90,7 @@ fun AppDrawer(drawerState: DrawerState) {
         DrawerItem(
             icon = Icons.Rounded.Policy,
             text = strings.drawer.privacyPolicy,
-            onClick = {
+            onClick = debounced(300.milliseconds) {
                 urlOpener.open(strings.contact.privacyPolicyUrl, isGooglePlayLink = false)
             }
         )
@@ -131,7 +133,7 @@ private fun DrawerItem(
     Row(
         Modifier
             .fillMaxWidth()
-            .clickable(onClick = onClick)
+            .clickable(onClick = debounced(300.milliseconds, onClick))
             .padding(vertical = Spacing.medium, horizontal = Spacing.large)
             .then(modifier),
         horizontalArrangement = Arrangement.spacedBy(Spacing.medium),

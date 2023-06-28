@@ -31,12 +31,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import cafe.adriel.voyager.core.screen.Screen
-import cafe.adriel.voyager.navigator.LocalNavigator
-import cafe.adriel.voyager.navigator.currentOrThrow
 import com.google.accompanist.permissions.PermissionState
 import com.google.accompanist.permissions.rememberPermissionState
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.Invitation
 import cz.frantisekmasa.wfrp_master.common.core.ui.buttons.BackButton
+import cz.frantisekmasa.wfrp_master.common.core.ui.navigation.LocalNavigationTransaction
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.HorizontalLine
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.rememberScreenModel
@@ -47,19 +46,17 @@ import kotlinx.coroutines.launch
 actual class InvitationScannerScreen : Screen {
     @Composable
     override fun Content() {
-        val navigator = LocalNavigator.currentOrThrow
+        val navigation = LocalNavigationTransaction.current
+
         Scaffold(
             topBar = {
                 TopAppBar(
                     title = { Text(LocalStrings.current.parties.titleJoin) },
-                    navigationIcon = {
-                        BackButton(onClick = { navigator.pop() })
-                    },
+                    navigationIcon = { BackButton() },
                 )
             },
             modifier = Modifier.fillMaxHeight(),
         ) {
-
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center,
@@ -76,7 +73,7 @@ actual class InvitationScannerScreen : Screen {
                         InvitationConfirmation(
                             invitation,
                             screenModel,
-                            onSuccess = { navigator.pop() },
+                            onSuccess = navigation::goBack,
                             onError = { setInvitation(null) },
                         )
                     }

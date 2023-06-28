@@ -9,8 +9,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
-import cafe.adriel.voyager.navigator.LocalNavigator
-import cafe.adriel.voyager.navigator.currentOrThrow
 import cz.frantisekmasa.wfrp_master.common.core.PartyScreenModel
 import cz.frantisekmasa.wfrp_master.common.core.domain.localizedName
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.PartyId
@@ -20,6 +18,7 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.cards.CardContainer
 import cz.frantisekmasa.wfrp_master.common.core.ui.cards.CardItem
 import cz.frantisekmasa.wfrp_master.common.core.ui.flow.collectWithLifecycle
 import cz.frantisekmasa.wfrp_master.common.core.ui.menu.DropdownMenuItem
+import cz.frantisekmasa.wfrp_master.common.core.ui.navigation.LocalNavigationTransaction
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.ItemIcon
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.rememberScreenModel
@@ -36,7 +35,7 @@ class CompendiumListScreen(
         val screenModel: PartyScreenModel = rememberScreenModel(arg = partyId)
 
         val strings = LocalStrings.current.compendium
-        val navigator = LocalNavigator.currentOrThrow
+        val navigation = LocalNavigationTransaction.current
 
         Scaffold(
             topBar = {
@@ -53,19 +52,25 @@ class CompendiumListScreen(
                     actions = {
                         OptionsAction {
                             DropdownMenuItem(
-                                onClick = { navigator.push(RulebookCompendiumImportScreen(partyId)) }
+                                onClick = {
+                                    navigation.navigate(RulebookCompendiumImportScreen(partyId))
+                                }
                             ) {
                                 Text(strings.buttonImportFromRulebook)
                             }
 
                             DropdownMenuItem(
-                                onClick = { navigator.push(JsonCompendiumImportScreen(partyId)) }
+                                onClick = {
+                                    navigation.navigate(JsonCompendiumImportScreen(partyId))
+                                }
                             ) {
                                 Text(strings.buttonImportFile)
                             }
 
                             DropdownMenuItem(
-                                onClick = { navigator.push(JsonCompendiumExportScreen(partyId)) }
+                                onClick = {
+                                    navigation.navigate(JsonCompendiumExportScreen(partyId))
+                                }
                             ) {
                                 Text(strings.buttonExportFile)
                             }
@@ -86,7 +91,7 @@ class CompendiumListScreen(
                         CardItem(
                             name = compendiumType.localizedName,
                             icon = { ItemIcon(icon(compendiumType)) },
-                            onClick = { navigator.push(compendiumType.screen(partyId)) },
+                            onClick = { navigation.navigate(compendiumType.screen(partyId)) },
                             showDivider = index != types.lastIndex,
                         )
                     }

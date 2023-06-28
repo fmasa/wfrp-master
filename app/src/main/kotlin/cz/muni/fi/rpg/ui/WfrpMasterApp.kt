@@ -11,6 +11,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.Navigator
 import cafe.adriel.voyager.transitions.SlideTransition
+import cz.frantisekmasa.wfrp_master.common.core.ui.navigation.ProvideNavigationTransaction
 import cz.frantisekmasa.wfrp_master.common.core.ui.responsive.ScreenWithBreakpoints
 import cz.frantisekmasa.wfrp_master.common.core.ui.theme.Theme
 import cz.frantisekmasa.wfrp_master.common.core.ui.viewinterop.LocalActivity
@@ -47,7 +48,11 @@ fun WfrpMasterApp() {
                             }
                         ) { navigator ->
                             DrawerShell(drawerState) {
-                                SlideTransition(navigator)
+                                SlideTransition(navigator) {
+                                    ProvideNavigationTransaction(it) {
+                                        it.Content()
+                                    }
+                                }
                             }
                         }
                     }

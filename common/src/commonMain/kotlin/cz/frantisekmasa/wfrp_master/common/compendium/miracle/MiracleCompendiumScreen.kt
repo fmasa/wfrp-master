@@ -8,12 +8,11 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
-import cafe.adriel.voyager.navigator.LocalNavigator
-import cafe.adriel.voyager.navigator.currentOrThrow
 import cz.frantisekmasa.wfrp_master.common.compendium.CompendiumScreen
 import cz.frantisekmasa.wfrp_master.common.compendium.VisibilityIcon
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.PartyId
 import cz.frantisekmasa.wfrp_master.common.core.shared.Resources
+import cz.frantisekmasa.wfrp_master.common.core.ui.navigation.LocalNavigationTransaction
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.EmptyUI
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.ItemIcon
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.rememberScreenModel
@@ -27,7 +26,7 @@ class MiracleCompendiumScreen(
     override fun Content() {
         val screenModel: MiracleCompendiumScreenModel = rememberScreenModel(arg = partyId)
         var newMiracleDialogOpened by rememberSaveable { mutableStateOf(false) }
-        val navigator = LocalNavigator.currentOrThrow
+        val navigation = LocalNavigationTransaction.current
 
         if (newMiracleDialogOpened) {
             MiracleDialog(
@@ -35,7 +34,7 @@ class MiracleCompendiumScreen(
                 onDismissRequest = { newMiracleDialogOpened = false },
                 onSaveRequest = {
                     screenModel.createNew(it)
-                    navigator.push(MiracleDetailScreen(partyId, it.id))
+                    navigation.navigate(MiracleDetailScreen(partyId, it.id))
                 },
             )
         }
@@ -53,7 +52,7 @@ class MiracleCompendiumScreen(
             },
             remover = screenModel::remove,
             newItemSaver = screenModel::createNew,
-            onClick = { navigator.push(MiracleDetailScreen(partyId, it.id)) },
+            onClick = { navigation.navigate(MiracleDetailScreen(partyId, it.id)) },
             onNewItemRequest = { newMiracleDialogOpened = true },
             type = Type.MIRACLES,
         ) { miracle ->

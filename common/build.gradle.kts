@@ -39,6 +39,8 @@ kotlin {
                 api(compose.material)
                 api(compose.materialIconsExtended)
 
+                implementation("io.github.mmolosay:debounce:1.0.0")
+
                 val voyagerVersion = "1.0.0-rc04"
                 api("cafe.adriel.voyager:voyager-navigator:$voyagerVersion")
                 api("cafe.adriel.voyager:voyager-transitions:$voyagerVersion")

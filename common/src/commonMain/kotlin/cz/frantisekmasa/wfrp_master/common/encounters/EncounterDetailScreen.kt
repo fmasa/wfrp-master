@@ -44,8 +44,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
-import cafe.adriel.voyager.navigator.LocalNavigator
-import cafe.adriel.voyager.navigator.currentOrThrow
 import cz.frantisekmasa.wfrp_master.common.character.CharacterDetailScreen
 import cz.frantisekmasa.wfrp_master.common.combat.ActiveCombatScreen
 import cz.frantisekmasa.wfrp_master.common.combat.StartCombatDialog
@@ -68,6 +66,7 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.dialogs.AlertDialog
 import cz.frantisekmasa.wfrp_master.common.core.ui.flow.collectWithLifecycle
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.NumberPicker
 import cz.frantisekmasa.wfrp_master.common.core.ui.menu.DropdownMenuItem
+import cz.frantisekmasa.wfrp_master.common.core.ui.navigation.LocalNavigationTransaction
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.ContextMenu
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.EmptyUI
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.FullScreenProgress
@@ -145,7 +144,7 @@ class EncounterDetailScreen(
                 MainContainer(encounter, screenModel)
 
                 if (startCombatDialogVisible) {
-                    val navigator = LocalNavigator.currentOrThrow
+                    val navigation = LocalNavigationTransaction.current
 
                     StartCombatDialog(
                         encounter = encounter,
@@ -153,7 +152,7 @@ class EncounterDetailScreen(
                         screenModel = rememberScreenModel(arg = encounterId.partyId),
                         onComplete = {
                             startCombatDialogVisible = false
-                            navigator.push(ActiveCombatScreen(encounterId.partyId))
+                            navigation.navigate(ActiveCombatScreen(encounterId.partyId))
                         },
                     )
                 }
@@ -189,7 +188,7 @@ class EncounterDetailScreen(
         }
 
         OptionsAction {
-            val navigator = LocalNavigator.currentOrThrow
+            val navigation = LocalNavigationTransaction.current
 
             var dialogOpened by remember { mutableStateOf(false) }
 
@@ -202,7 +201,7 @@ class EncounterDetailScreen(
                             onClick = {
                                 coroutineScope.launch(Dispatchers.IO) {
                                     screenModel.remove()
-                                    navigator.pop()
+                                    navigation.goBack()
                                 }
                             }
                         ) {
@@ -269,15 +268,15 @@ class EncounterDetailScreen(
 
             DescriptionCard(screenModel)
 
-            val navigator = LocalNavigator.currentOrThrow
+            val navigation = LocalNavigationTransaction.current
 
             if (npcs.isEmpty()) {
                 NpcCharacterList(encounterId.partyId, encounter, screenModel)
             } else {
                 NpcsCard(
                     npcs,
-                    onCreateRequest = { navigator.push(NpcCreationScreen(encounterId)) },
-                    onEditRequest = { navigator.push(NpcDetailScreen(it)) },
+                    onCreateRequest = { navigation.navigate(NpcCreationScreen(encounterId)) },
+                    onEditRequest = { navigation.navigate(NpcDetailScreen(it)) },
                     onRemoveRequest = { screenModel.removeNpc(it) },
                     onDuplicateRequest = { coroutineScope.launch { screenModel.duplicateNpc(it.npcId) } }
                 )
@@ -417,7 +416,7 @@ private fun NpcCharacterList(
             )
         }
 
-        val navigator = LocalNavigator.currentOrThrow
+        val navigation = LocalNavigationTransaction.current
         val coroutineScope = rememberCoroutineScope()
 
         npcs.forEach { (npc, count) ->
@@ -426,7 +425,7 @@ private fun NpcCharacterList(
                     npc = npc,
                     count = count,
                     onDetailRequest = {
-                        navigator.push(CharacterDetailScreen(CharacterId(partyId, npc.id)))
+                        navigation.navigate(CharacterDetailScreen(CharacterId(partyId, npc.id)))
                     },
                     onCountChange = { count ->
                         coroutineScope.launch(Dispatchers.IO) {

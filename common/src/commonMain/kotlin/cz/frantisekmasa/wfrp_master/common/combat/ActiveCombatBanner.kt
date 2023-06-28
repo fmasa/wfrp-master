@@ -13,9 +13,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.intl.Locale
 import androidx.compose.ui.text.toUpperCase
 import androidx.compose.ui.unit.dp
-import cafe.adriel.voyager.navigator.LocalNavigator
-import cafe.adriel.voyager.navigator.currentOrThrow
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.Party
+import cz.frantisekmasa.wfrp_master.common.core.ui.navigation.LocalNavigationTransaction
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
 import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
 
@@ -33,9 +32,9 @@ fun ActiveCombatBanner(party: Party) {
         ) {
             Text(LocalStrings.current.combat.messages.combatInProgress)
 
-            val navigator = LocalNavigator.currentOrThrow
+            val navigation = LocalNavigationTransaction.current
 
-            TextButton(onClick = { navigator.push(ActiveCombatScreen(party.id)) }) {
+            TextButton(onClick = { navigation.navigate(ActiveCombatScreen(party.id)) }) {
                 Text(LocalStrings.current.commonUi.buttonOpen.toUpperCase(Locale.current))
             }
         }

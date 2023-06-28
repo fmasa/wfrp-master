@@ -33,8 +33,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
-import cafe.adriel.voyager.navigator.LocalNavigator
-import cafe.adriel.voyager.navigator.currentOrThrow
 import cz.frantisekmasa.wfrp_master.common.character.CharacterScreenModel
 import cz.frantisekmasa.wfrp_master.common.compendium.career.CareerDetailScreen
 import cz.frantisekmasa.wfrp_master.common.core.domain.Characteristic
@@ -56,6 +54,7 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.dialogs.Dialog
 import cz.frantisekmasa.wfrp_master.common.core.ui.dialogs.FullScreenDialog
 import cz.frantisekmasa.wfrp_master.common.core.ui.flow.collectWithLifecycle
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.NumberPicker
+import cz.frantisekmasa.wfrp_master.common.core.ui.navigation.LocalNavigationTransaction
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.CardRow
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.FloatingActionsMenu
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.FullScreenProgress
@@ -431,11 +430,11 @@ private fun CareerSection(
     val careerName = career?.level?.name ?: character.career
     val socialClass = career?.career?.socialClass?.localizedName ?: character.socialClass
 
-    val navigator = LocalNavigator.currentOrThrow
+    val navigation = LocalNavigationTransaction.current
 
     Column(
         if (career != null)
-            Modifier.clickable { navigator.push(CareerDetailScreen(partyId, career.career.id)) }
+            Modifier.clickable { navigation.navigate(CareerDetailScreen(partyId, career.career.id)) }
         else Modifier
     ) {
         Text(careerName, fontWeight = FontWeight.Bold)

@@ -40,8 +40,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
-import cafe.adriel.voyager.navigator.LocalNavigator
-import cafe.adriel.voyager.navigator.currentOrThrow
 import cz.frantisekmasa.wfrp_master.common.character.CharacterDetailScreen
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.Career
 import cz.frantisekmasa.wfrp_master.common.core.auth.UserId
@@ -50,6 +48,7 @@ import cz.frantisekmasa.wfrp_master.common.core.domain.party.PartyId
 import cz.frantisekmasa.wfrp_master.common.core.shared.IO
 import cz.frantisekmasa.wfrp_master.common.core.ui.buttons.BackButton
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.FormData
+import cz.frantisekmasa.wfrp_master.common.core.ui.navigation.LocalNavigationTransaction
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.FullScreenProgress
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.VisualOnlyIconDescription
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.rememberScreenModel
@@ -112,7 +111,7 @@ private fun Screen.MainContainer(partyId: PartyId, type: CharacterType, userId: 
     val characteristics = CharacterCharacteristicsForm.Data.fromCharacter(null)
     val points = PointsPoolForm.Data.empty()
 
-    val navigator = LocalNavigator.currentOrThrow
+    val navigation = LocalNavigationTransaction.current
     val saveCharacter = {
         formState.value = FormState.CREATING_CHARACTER
         coroutineScope.launch(Dispatchers.IO) {
@@ -124,7 +123,7 @@ private fun Screen.MainContainer(partyId: PartyId, type: CharacterType, userId: 
                 points
             )
 
-            navigator.replace(CharacterDetailScreen(characterId))
+            navigation.replace(CharacterDetailScreen(characterId))
         }
     }
 

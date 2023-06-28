@@ -8,12 +8,11 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import cafe.adriel.voyager.navigator.LocalNavigator
-import cafe.adriel.voyager.navigator.currentOrThrow
 import cz.frantisekmasa.wfrp_master.common.character.trappings.TrappingDetailScreen
 import cz.frantisekmasa.wfrp_master.common.core.domain.identifiers.CharacterId
 import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.InventoryItem
 import cz.frantisekmasa.wfrp_master.common.core.ui.flow.collectWithLifecycle
+import cz.frantisekmasa.wfrp_master.common.core.ui.navigation.LocalNavigationTransaction
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.FullScreenProgress
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
 
@@ -39,9 +38,9 @@ fun CharacterCombatScreen(
             .verticalScroll(rememberScrollState())
             .padding(top = Spacing.small),
     ) {
-        val navigator = LocalNavigator.currentOrThrow
+        val navigation = LocalNavigationTransaction.current
         val onTrappingClick: (InventoryItem) -> Unit = {
-            navigator.push(TrappingDetailScreen(characterId, it.id))
+            navigation.navigate(TrappingDetailScreen(characterId, it.id))
         }
 
         WeaponsCard(weapons, onTrappingClick = onTrappingClick)

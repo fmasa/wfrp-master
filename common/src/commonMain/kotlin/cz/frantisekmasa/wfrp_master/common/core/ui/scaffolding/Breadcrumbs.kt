@@ -14,8 +14,7 @@ import androidx.compose.runtime.key
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import cafe.adriel.voyager.core.screen.Screen
-import cafe.adriel.voyager.navigator.LocalNavigator
-import cafe.adriel.voyager.navigator.currentOrThrow
+import cz.frantisekmasa.wfrp_master.common.core.ui.navigation.LocalNavigationTransaction
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.VisualOnlyIconDescription
 
 @Composable
@@ -24,7 +23,7 @@ fun Breadcrumbs(content: BreadcrumbsScope.() -> Unit) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             val scope = BreadcrumbsScopeImpl()
             scope.content()
-            val navigator = LocalNavigator.currentOrThrow
+            val navigation = LocalNavigationTransaction.current
 
             scope.levels.forEachIndexed { index, breadcrumbLevel ->
                 key(index) {
@@ -38,7 +37,7 @@ fun Breadcrumbs(content: BreadcrumbsScope.() -> Unit) {
                         TextButton(
                             onClick = {
                                 val key = destination().key
-                                navigator.popUntil { it.key == key }
+                                navigation.goBackTo { it.key == key }
                             }
                         ) {
                             Text(breadcrumbLevel.label)

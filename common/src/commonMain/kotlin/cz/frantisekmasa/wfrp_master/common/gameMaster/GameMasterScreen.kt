@@ -14,8 +14,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import cafe.adriel.voyager.core.screen.Screen
-import cafe.adriel.voyager.navigator.LocalNavigator
-import cafe.adriel.voyager.navigator.currentOrThrow
 import cz.frantisekmasa.wfrp_master.common.character.CharacterDetailScreen
 import cz.frantisekmasa.wfrp_master.common.characterCreation.CharacterCreationScreen
 import cz.frantisekmasa.wfrp_master.common.combat.ActiveCombatBanner
@@ -26,6 +24,7 @@ import cz.frantisekmasa.wfrp_master.common.core.domain.identifiers.CharacterId
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.PartyId
 import cz.frantisekmasa.wfrp_master.common.core.ui.buttons.HamburgerButton
 import cz.frantisekmasa.wfrp_master.common.core.ui.flow.collectWithLifecycle
+import cz.frantisekmasa.wfrp_master.common.core.ui.navigation.LocalNavigationTransaction
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.rememberScreenModel
 import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.Breadcrumbs
 import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.IconAction
@@ -54,7 +53,7 @@ class GameMasterScreen(
                     title = { party?.let { Text(it.name) } },
                     navigationIcon = { HamburgerButton() },
                     actions = {
-                        val navigator = LocalNavigator.currentOrThrow
+                        val navigation = LocalNavigationTransaction.current
 
                         IconAction(
                             Icons.Rounded.Settings,
@@ -64,7 +63,7 @@ class GameMasterScreen(
                                     return@IconAction
                                 }
 
-                                navigator.push(PartySettingsScreen(party.id))
+                                navigation.navigate(PartySettingsScreen(party.id))
                             },
                         )
                     }
@@ -96,17 +95,19 @@ class GameMasterScreen(
                     val modifier = Modifier.width(screenWidth)
 
                     tab(strings.tabCharacters) {
-                        val navigator = LocalNavigator.currentOrThrow
+                        val navigation = LocalNavigationTransaction.current
 
                         PartySummaryScreen(
                             modifier = modifier,
                             partyId = party.id,
                             screenModel = screenModel,
                             onCharacterOpenRequest = {
-                                navigator.push(CharacterDetailScreen(CharacterId(party.id, it.id)))
+                                navigation.navigate(
+                                    CharacterDetailScreen(CharacterId(party.id, it.id))
+                                )
                             },
                             onCharacterCreateRequest = {
-                                navigator.push(
+                                navigation.navigate(
                                     CharacterCreationScreen(
                                         partyId,
                                         CharacterType.PLAYER_CHARACTER,

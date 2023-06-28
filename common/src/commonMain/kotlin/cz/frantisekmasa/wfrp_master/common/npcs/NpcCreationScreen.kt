@@ -8,11 +8,10 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import cafe.adriel.voyager.core.screen.Screen
-import cafe.adriel.voyager.navigator.LocalNavigator
-import cafe.adriel.voyager.navigator.currentOrThrow
 import cz.frantisekmasa.wfrp_master.common.core.domain.identifiers.EncounterId
 import cz.frantisekmasa.wfrp_master.common.core.shared.IO
 import cz.frantisekmasa.wfrp_master.common.core.ui.buttons.BackButton
+import cz.frantisekmasa.wfrp_master.common.core.ui.navigation.LocalNavigationTransaction
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.rememberScreenModel
 import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.SaveAction
 import cz.frantisekmasa.wfrp_master.common.encounters.EncounterDetailScreenModel
@@ -38,7 +37,7 @@ class NpcCreationScreen(
 
         Scaffold(
             topBar = {
-                val navigator = LocalNavigator.currentOrThrow
+                val navigation = LocalNavigationTransaction.current
 
                 TopBar(
                     strings.titleAdd,
@@ -61,7 +60,7 @@ class NpcCreationScreen(
                                         trappings = emptyList(),
                                     )
 
-                                    navigator.pop()
+                                    navigation.goBack()
                                 }
                             }
                         }

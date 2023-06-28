@@ -32,8 +32,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
-import cafe.adriel.voyager.navigator.LocalNavigator
-import cafe.adriel.voyager.navigator.currentOrThrow
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.firebase.auth.FirebaseAuthUserCollisionException
 import cz.frantisekmasa.wfrp_master.common.auth.AuthenticationManager
@@ -45,6 +43,7 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.cards.CardContainer
 import cz.frantisekmasa.wfrp_master.common.core.ui.cards.CardTitle
 import cz.frantisekmasa.wfrp_master.common.core.ui.dialogs.DialogProgress
 import cz.frantisekmasa.wfrp_master.common.core.ui.dialogs.DialogTitle
+import cz.frantisekmasa.wfrp_master.common.core.ui.navigation.LocalNavigationTransaction
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.VisualOnlyIconDescription
 import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.LocalPersistentSnackbarHolder
@@ -210,7 +209,7 @@ fun ConfirmSignInDialog(
 
                     val messages = strings.messages
                     val snackbarHolder = LocalPersistentSnackbarHolder.current
-                    val navigator = LocalNavigator.currentOrThrow
+                    val navigation = LocalNavigationTransaction.current
 
                     TextButton(
                         enabled = !loading,
@@ -233,7 +232,7 @@ fun ConfirmSignInDialog(
 
                                 withContext(Dispatchers.Main) {
                                     onDismissRequest()
-                                    navigator.popUntil { it is PartyListScreen }
+                                    navigation.goBackTo { it is PartyListScreen }
                                 }
                             }
                         }

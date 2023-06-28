@@ -9,8 +9,6 @@ import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import cafe.adriel.voyager.core.screen.Screen
-import cafe.adriel.voyager.navigator.LocalNavigator
-import cafe.adriel.voyager.navigator.currentOrThrow
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.PartyId
 import cz.frantisekmasa.wfrp_master.common.core.ui.buttons.BackButton
 import cz.frantisekmasa.wfrp_master.common.core.ui.flow.collectWithLifecycle
@@ -30,10 +28,8 @@ class PartySettingsScreen(
 
         Scaffold(
             topBar = {
-                val navigator = LocalNavigator.currentOrThrow
-
                 TopAppBar(
-                    navigationIcon = { BackButton(onClick = navigator::pop) },
+                    navigationIcon = { BackButton() },
                     title = { Text(strings.parties.titleSettings) },
                 )
             },
