@@ -31,10 +31,12 @@ import androidx.compose.material.icons.rounded.ArrowBackIos
 import androidx.compose.material.icons.rounded.ArrowForwardIos
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.IntOffset
@@ -205,10 +207,12 @@ private fun BottomBar(
                 .background(MaterialTheme.colors.surface)
         ) {
             val buttonModifier = Modifier.padding(8.dp)
+            var saving by remember { mutableStateOf(false) }
 
             if (currentStepIndex > 0) {
                 TextButton(
                     modifier = buttonModifier.align(Alignment.TopStart),
+                    enabled = !saving,
                     onClick = {
                         onChange(currentStepIndex - 1, false)
                     },
@@ -237,7 +241,10 @@ private fun BottomBar(
                     NextButton(
                         LocalStrings.current.commonUi.buttonFinish,
                         buttonModifier,
+                        enabled = !saving,
                         onClick = {
+                            saving = true
+
                             if (!currentStep.data.isValid()) {
                                 onChange(currentStepIndex, true)
                                 return@NextButton
@@ -251,6 +258,7 @@ private fun BottomBar(
                 NextButton(
                     steps[currentStepIndex + 1].label.uppercase(),
                     modifier = buttonModifier.align(Alignment.TopEnd),
+                    enabled = !saving,
                     onClick = {
                         if (!currentStep.data.isValid()) {
                             onChange(currentStepIndex, true)
@@ -280,9 +288,14 @@ private data class WizardStep<T : FormData>(
 private fun NextButton(
     label: String,
     modifier: Modifier,
+    enabled: Boolean,
     onClick: () -> Unit,
 ) {
-    TextButton(modifier = modifier, onClick = onClick) {
+    TextButton(
+        modifier = modifier,
+        enabled = enabled,
+        onClick = onClick,
+    ) {
         Text(label.uppercase())
         Icon(
             Icons.Rounded.ArrowForwardIos,
