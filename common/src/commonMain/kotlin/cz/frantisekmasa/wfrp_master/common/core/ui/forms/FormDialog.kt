@@ -16,11 +16,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import cafe.adriel.voyager.navigator.LocalNavigator
-import cafe.adriel.voyager.navigator.currentOrThrow
 import cz.frantisekmasa.wfrp_master.common.core.shared.IO
 import cz.frantisekmasa.wfrp_master.common.core.ui.buttons.BackButton
 import cz.frantisekmasa.wfrp_master.common.core.ui.buttons.CloseButton
+import cz.frantisekmasa.wfrp_master.common.core.ui.navigation.LocalNavigationTransaction
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.FullScreenProgress
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
 import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.SaveAction
@@ -55,7 +54,7 @@ fun <T> FormScreen(
     onSave: suspend (T) -> Unit,
     content: @Composable ColumnScope.(validate: Boolean) -> Unit,
 ) {
-    val navigator = LocalNavigator.currentOrThrow
+    val navigation = LocalNavigationTransaction.current
 
     FullScreenForm(
         title = title,
@@ -63,7 +62,7 @@ fun <T> FormScreen(
         formData = formData,
         onSave = {
             onSave(it)
-            navigator.pop()
+            navigation.goBack()
         },
         content = content,
     )

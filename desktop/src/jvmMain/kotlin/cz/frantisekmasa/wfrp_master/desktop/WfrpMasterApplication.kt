@@ -7,7 +7,6 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
-import cafe.adriel.voyager.navigator.CurrentScreen
 import cafe.adriel.voyager.navigator.Navigator
 import cz.frantisekmasa.wfrp_master.common.appModule
 import cz.frantisekmasa.wfrp_master.common.core.LocalStaticConfiguration
@@ -17,6 +16,7 @@ import cz.frantisekmasa.wfrp_master.common.core.shared.LocalEmailInitiator
 import cz.frantisekmasa.wfrp_master.common.core.shared.LocalFileChooserFactory
 import cz.frantisekmasa.wfrp_master.common.core.shared.LocalFileSaverFactory
 import cz.frantisekmasa.wfrp_master.common.core.shared.LocalUrlOpener
+import cz.frantisekmasa.wfrp_master.common.core.ui.navigation.ProvideNavigationTransaction
 import cz.frantisekmasa.wfrp_master.common.core.ui.responsive.ScreenWithBreakpoints
 import cz.frantisekmasa.wfrp_master.common.core.ui.theme.Theme
 import cz.frantisekmasa.wfrp_master.common.partyList.PartyListScreen
@@ -63,9 +63,15 @@ object WfrpMasterApplication {
 
                                             true
                                         }
-                                    ) {
+                                    ) { navigator ->
                                         DrawerShell(drawerState) {
-                                            CurrentScreen()
+                                            val screen = navigator.lastItem
+
+                                            navigator.saveableState("currentScreen") {
+                                                ProvideNavigationTransaction(screen) {
+                                                    screen.Content()
+                                                }
+                                            }
                                         }
                                     }
                                 }

@@ -36,14 +36,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
-import cafe.adriel.voyager.navigator.LocalNavigator
-import cafe.adriel.voyager.navigator.currentOrThrow
 import cz.frantisekmasa.wfrp_master.common.core.domain.identifiers.EncounterId
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.PartyId
 import cz.frantisekmasa.wfrp_master.common.core.shared.Resources
 import cz.frantisekmasa.wfrp_master.common.core.ui.buttons.HamburgerButton
 import cz.frantisekmasa.wfrp_master.common.core.ui.flow.collectWithLifecycle
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.CheckboxWithText
+import cz.frantisekmasa.wfrp_master.common.core.ui.navigation.LocalNavigationTransaction
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.DraggableListFor
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.EmptyUI
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.FullScreenProgress
@@ -99,7 +98,7 @@ class EncountersScreen(
                 )
             }
 
-            val navigator = LocalNavigator.currentOrThrow
+            val navigation = LocalNavigationTransaction.current
 
             Column {
                 FilterBar {
@@ -116,7 +115,7 @@ class EncountersScreen(
                 }
 
                 val onClick: (Encounter) -> Unit = {
-                    navigator.push(EncounterDetailScreen(EncounterId(partyId, it.id)))
+                    navigation.navigate(EncounterDetailScreen(EncounterId(partyId, it.id)))
                 }
                 if (showCompleted) {
                     AllEncountersList(encounters, onClick)

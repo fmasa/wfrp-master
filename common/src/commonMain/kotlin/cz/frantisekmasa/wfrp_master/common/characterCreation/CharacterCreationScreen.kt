@@ -31,17 +31,17 @@ import androidx.compose.material.icons.rounded.ArrowBackIos
 import androidx.compose.material.icons.rounded.ArrowForwardIos
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
-import cafe.adriel.voyager.navigator.LocalNavigator
-import cafe.adriel.voyager.navigator.currentOrThrow
 import cz.frantisekmasa.wfrp_master.common.character.CharacterDetailScreen
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.Career
 import cz.frantisekmasa.wfrp_master.common.core.auth.UserId
@@ -50,6 +50,7 @@ import cz.frantisekmasa.wfrp_master.common.core.domain.party.PartyId
 import cz.frantisekmasa.wfrp_master.common.core.shared.IO
 import cz.frantisekmasa.wfrp_master.common.core.ui.buttons.BackButton
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.FormData
+import cz.frantisekmasa.wfrp_master.common.core.ui.navigation.LocalNavigationTransaction
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.FullScreenProgress
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.VisualOnlyIconDescription
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.rememberScreenModel
@@ -112,7 +113,7 @@ private fun Screen.MainContainer(partyId: PartyId, type: CharacterType, userId: 
     val characteristics = CharacterCharacteristicsForm.Data.fromCharacter(null)
     val points = PointsPoolForm.Data.empty()
 
-    val navigator = LocalNavigator.currentOrThrow
+    val navigation = LocalNavigationTransaction.current
     val saveCharacter = {
         formState.value = FormState.CREATING_CHARACTER
         coroutineScope.launch(Dispatchers.IO) {
@@ -124,7 +125,7 @@ private fun Screen.MainContainer(partyId: PartyId, type: CharacterType, userId: 
                 points
             )
 
-            navigator.replace(CharacterDetailScreen(characterId))
+            navigation.replace(CharacterDetailScreen(characterId))
         }
     }
 
@@ -206,10 +207,12 @@ private fun BottomBar(
                 .background(MaterialTheme.colors.surface)
         ) {
             val buttonModifier = Modifier.padding(8.dp)
+            var saving by remember { mutableStateOf(false) }
 
             if (currentStepIndex > 0) {
                 TextButton(
                     modifier = buttonModifier.align(Alignment.TopStart),
+                    enabled = !saving,
                     onClick = {
                         onChange(currentStepIndex - 1, false)
                     },
@@ -238,7 +241,10 @@ private fun BottomBar(
                     NextButton(
                         LocalStrings.current.commonUi.buttonFinish,
                         buttonModifier,
+                        enabled = !saving,
                         onClick = {
+                            saving = true
+
                             if (!currentStep.data.isValid()) {
                                 onChange(currentStepIndex, true)
                                 return@NextButton
@@ -252,6 +258,7 @@ private fun BottomBar(
                 NextButton(
                     steps[currentStepIndex + 1].label.uppercase(),
                     modifier = buttonModifier.align(Alignment.TopEnd),
+                    enabled = !saving,
                     onClick = {
                         if (!currentStep.data.isValid()) {
                             onChange(currentStepIndex, true)
@@ -281,9 +288,14 @@ private data class WizardStep<T : FormData>(
 private fun NextButton(
     label: String,
     modifier: Modifier,
+    enabled: Boolean,
     onClick: () -> Unit,
 ) {
-    TextButton(modifier = modifier, onClick = onClick) {
+    TextButton(
+        modifier = modifier,
+        enabled = enabled,
+        onClick = onClick,
+    ) {
         Text(label.uppercase())
         Icon(
             Icons.Rounded.ArrowForwardIos,

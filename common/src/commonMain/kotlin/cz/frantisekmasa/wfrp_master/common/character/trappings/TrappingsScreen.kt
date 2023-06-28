@@ -25,8 +25,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import cafe.adriel.voyager.navigator.LocalNavigator
-import cafe.adriel.voyager.navigator.currentOrThrow
 import cz.frantisekmasa.wfrp_master.common.character.trappings.TrappingsScreenModel.Trapping
 import cz.frantisekmasa.wfrp_master.common.core.domain.identifiers.CharacterId
 import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.InventoryItem
@@ -37,6 +35,7 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.buttons.CardButton
 import cz.frantisekmasa.wfrp_master.common.core.ui.cards.CardContainer
 import cz.frantisekmasa.wfrp_master.common.core.ui.cards.CardTitle
 import cz.frantisekmasa.wfrp_master.common.core.ui.flow.collectWithLifecycle
+import cz.frantisekmasa.wfrp_master.common.core.ui.navigation.LocalNavigationTransaction
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.EmptyUI
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.UserTip
@@ -121,11 +120,11 @@ fun TrappingsScreen(
         }
 
         val coroutineScope = rememberCoroutineScope { EmptyCoroutineContext + Dispatchers.IO }
-        val navigator = LocalNavigator.currentOrThrow
+        val navigation = LocalNavigationTransaction.current
 
         InventoryItemsCard(
             trappings = trappings,
-            onClick = { navigator.push(TrappingDetailScreen(characterId, it.id)) },
+            onClick = { navigation.navigate(TrappingDetailScreen(characterId, it.id)) },
             onRemove = { screenModel.removeInventoryItem(it) },
             onDuplicate = { coroutineScope.launch { screenModel.saveInventoryItem(it.duplicate()) } },
             onNewItemButtonClicked = { newTrappingDialogOpened = true },

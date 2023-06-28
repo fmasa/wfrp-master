@@ -17,8 +17,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import cafe.adriel.voyager.core.screen.Screen
-import cafe.adriel.voyager.navigator.LocalNavigator
-import cafe.adriel.voyager.navigator.currentOrThrow
 import cz.frantisekmasa.wfrp_master.common.character.CharacterDetailScreen
 import cz.frantisekmasa.wfrp_master.common.characterCreation.CharacterCreationScreen
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.Character
@@ -31,6 +29,7 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.buttons.HamburgerButton
 import cz.frantisekmasa.wfrp_master.common.core.ui.dialogs.AlertDialog
 import cz.frantisekmasa.wfrp_master.common.core.ui.flow.collectWithLifecycle
 import cz.frantisekmasa.wfrp_master.common.core.ui.menu.WithContextMenu
+import cz.frantisekmasa.wfrp_master.common.core.ui.navigation.LocalNavigationTransaction
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.ContextMenu
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.EmptyUI
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.ItemIcon
@@ -45,7 +44,7 @@ class NpcsScreen(
 ) : Screen {
     @Composable
     override fun Content() {
-        val navigator = LocalNavigator.currentOrThrow
+        val navigation = LocalNavigationTransaction.current
         var processing by remember { mutableStateOf(false) }
 
         val strings = LocalStrings.current
@@ -107,7 +106,7 @@ class NpcsScreen(
             floatingActionButton = {
                 FloatingActionButton(
                     onClick = {
-                        navigator.push(
+                        navigation.navigate(
                             CharacterCreationScreen(partyId, CharacterType.NPC, null)
                         )
                     }
@@ -119,7 +118,7 @@ class NpcsScreen(
             Column {
                 WithContextMenu(
                     onClick = {
-                        navigator.push(CharacterDetailScreen(CharacterId(partyId, npc.id)))
+                        navigation.navigate(CharacterDetailScreen(CharacterId(partyId, npc.id)))
                     },
                     items = listOf(
                         ContextMenu.Item(LocalStrings.current.commonUi.buttonDuplicate) {

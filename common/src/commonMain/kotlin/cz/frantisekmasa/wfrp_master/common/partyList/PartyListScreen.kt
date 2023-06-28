@@ -27,8 +27,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import cafe.adriel.voyager.core.screen.Screen
-import cafe.adriel.voyager.navigator.LocalNavigator
-import cafe.adriel.voyager.navigator.currentOrThrow
 import cz.frantisekmasa.wfrp_master.common.changelog.ChangelogAction
 import cz.frantisekmasa.wfrp_master.common.changelog.ChangelogScreen
 import cz.frantisekmasa.wfrp_master.common.character.CharacterPickerScreen
@@ -41,6 +39,7 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.buttons.HamburgerButton
 import cz.frantisekmasa.wfrp_master.common.core.ui.dialogs.DialogState
 import cz.frantisekmasa.wfrp_master.common.core.ui.flow.collectWithLifecycle
 import cz.frantisekmasa.wfrp_master.common.core.ui.menu.WithContextMenu
+import cz.frantisekmasa.wfrp_master.common.core.ui.navigation.LocalNavigationTransaction
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.ContextMenu
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.EmptyUI
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.FloatingActionsMenu
@@ -66,13 +65,13 @@ object PartyListScreen : Screen {
         var createPartyDialogVisible by rememberSaveable { mutableStateOf(false) }
 
         if (createPartyDialogVisible) {
-            val navigator = LocalNavigator.currentOrThrow
+            val navigation = LocalNavigationTransaction.current
 
             CreatePartyDialog(
                 screenModel = viewModel,
                 onSuccess = { partyId ->
                     createPartyDialogVisible = false
-                    navigator.push(GameMasterScreen(partyId))
+                    navigation.navigate(GameMasterScreen(partyId))
                 },
                 onDismissRequest = { createPartyDialogVisible = false }
             )
@@ -84,11 +83,11 @@ object PartyListScreen : Screen {
                     title = { Text(LocalStrings.current.parties.titleParties) },
                     navigationIcon = { HamburgerButton() },
                     actions = {
-                        val navigator = LocalNavigator.currentOrThrow
+                        val navigation = LocalNavigationTransaction.current
 
                         ChangelogAction(
                             rememberScreenModel(),
-                            onClick = { navigator.push(ChangelogScreen) },
+                            onClick = { navigation.navigate(ChangelogScreen) },
                         )
                     }
                 )
@@ -130,17 +129,17 @@ object PartyListScreen : Screen {
                 )
             }
 
-            val navigator = LocalNavigator.currentOrThrow
+            val navigation = LocalNavigationTransaction.current
 
             MainContainer(
                 Modifier,
                 parties,
                 onClick = {
-                    if (it.gameMasterId == userId) {
-                        navigator.push(GameMasterScreen(it.id))
-                    } else {
-                        navigator.push(CharacterPickerScreen(it.id))
-                    }
+                    navigation.navigate(
+                        if (it.gameMasterId == userId)
+                            GameMasterScreen(it.id)
+                        else CharacterPickerScreen(it.id)
+                    )
                 },
                 onRemove = { removePartyDialogState = DialogState.Opened(it) },
                 onLeaveRequest = { leavePartyDialogState = DialogState.Opened(it) },
@@ -163,13 +162,13 @@ private fun Menu(
         icon = rememberVectorPainter(Icons.Rounded.Add),
     ) {
         if (LocalStaticConfiguration.current.platform == Platform.Android) {
-            val navigator = LocalNavigator.currentOrThrow
+            val navigation = LocalNavigationTransaction.current
 
             ExtendedFloatingActionButton(
                 icon = { Icon(Icons.Rounded.Camera, VisualOnlyIconDescription) },
                 text = { Text(strings.parties.titleJoinViaQrCode) },
                 onClick = {
-                    navigator.push(InvitationScannerScreen())
+                    navigation.navigate(InvitationScannerScreen())
                     onStateChangeRequest(MenuState.COLLAPSED)
                 }
             )

@@ -11,8 +11,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import cafe.adriel.voyager.core.screen.Screen
-import cafe.adriel.voyager.navigator.LocalNavigator
-import cafe.adriel.voyager.navigator.currentOrThrow
 import cz.frantisekmasa.wfrp_master.common.character.trappings.detail.AmmunitionDetail
 import cz.frantisekmasa.wfrp_master.common.character.trappings.detail.ArmourDetail
 import cz.frantisekmasa.wfrp_master.common.character.trappings.detail.ClothingOrAccessoryDetail
@@ -26,6 +24,7 @@ import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.InventoryItemId
 import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.TrappingType
 import cz.frantisekmasa.wfrp_master.common.core.ui.buttons.BackButton
 import cz.frantisekmasa.wfrp_master.common.core.ui.flow.collectWithLifecycle
+import cz.frantisekmasa.wfrp_master.common.core.ui.navigation.LocalNavigationTransaction
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.FullScreenProgress
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.rememberScreenModel
 import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.IconAction
@@ -50,7 +49,7 @@ data class TrappingDetailScreen(
         }
 
         val trapping = remember(trappings) { trappings.firstOrNull { it.id == trappingId } }
-        val navigator = LocalNavigator.currentOrThrow
+        val navigation = LocalNavigationTransaction.current
 
         if (trapping == null) {
             val message = LocalStrings.current.trappings.messages.trappingNotFound
@@ -58,7 +57,7 @@ data class TrappingDetailScreen(
 
             LaunchedEffect(Unit) {
                 snackbarHolder.showSnackbar(message)
-                navigator.pop()
+                navigation.goBack()
             }
 
             return
@@ -79,7 +78,7 @@ data class TrappingDetailScreen(
             trapping,
             screenModel,
             onEditRequest = { setDialogOpened(true) },
-            onOpenDetailRequest = { navigator.push(TrappingDetailScreen(characterId, it.id)) }
+            onOpenDetailRequest = { navigation.navigate(TrappingDetailScreen(characterId, it.id)) },
         )
     }
 }

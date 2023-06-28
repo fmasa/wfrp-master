@@ -11,12 +11,11 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import cafe.adriel.voyager.core.screen.Screen
-import cafe.adriel.voyager.navigator.LocalNavigator
-import cafe.adriel.voyager.navigator.currentOrThrow
 import cz.frantisekmasa.wfrp_master.common.core.auth.LocalUser
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.Invitation
 import cz.frantisekmasa.wfrp_master.common.core.ui.buttons.BackButton
 import cz.frantisekmasa.wfrp_master.common.core.ui.flow.collectWithLifecycle
+import cz.frantisekmasa.wfrp_master.common.core.ui.navigation.LocalNavigationTransaction
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.FullScreenProgress
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.rememberScreenModel
 import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.LocalPersistentSnackbarHolder
@@ -30,13 +29,13 @@ class InvitationLinkScreen(
 
     @Composable
     override fun Content() {
-        val navigator = LocalNavigator.currentOrThrow
+        val navigation = LocalNavigationTransaction.current
         val strings = LocalStrings.current
 
         Scaffold(
             topBar = {
                 TopAppBar(
-                    navigationIcon = { BackButton(onClick = { navigator.pop() }) },
+                    navigationIcon = { BackButton() },
                     title = { Text(strings.parties.titleJoin) }
                 )
             },
@@ -69,7 +68,7 @@ class InvitationLinkScreen(
                         strings.messages.invitationErrorInvitationInvalid,
                         duration = SnackbarDuration.Long,
                     )
-                    navigator.pop()
+                    navigation.goBack()
                 }
             }
 
@@ -77,8 +76,8 @@ class InvitationLinkScreen(
                 InvitationConfirmation(
                     invitation = it,
                     screenModel = screenModel,
-                    onError = { navigator.pop() },
-                    onSuccess = { navigator.pop() },
+                    onError = navigation::goBack,
+                    onSuccess = navigation::goBack,
                 )
             }
         }

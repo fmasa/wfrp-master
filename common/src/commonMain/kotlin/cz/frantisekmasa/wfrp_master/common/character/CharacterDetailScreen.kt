@@ -28,8 +28,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
-import cafe.adriel.voyager.navigator.LocalNavigator
-import cafe.adriel.voyager.navigator.currentOrThrow
 import cz.frantisekmasa.wfrp_master.common.character.characteristics.CharacteristicsScreen
 import cz.frantisekmasa.wfrp_master.common.character.combat.CharacterCombatScreen
 import cz.frantisekmasa.wfrp_master.common.character.conditions.ConditionsScreen
@@ -55,6 +53,7 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.buttons.HamburgerButton
 import cz.frantisekmasa.wfrp_master.common.core.ui.flow.collectWithLifecycle
 import cz.frantisekmasa.wfrp_master.common.core.ui.menu.DropdownMenu
 import cz.frantisekmasa.wfrp_master.common.core.ui.menu.DropdownMenuItem
+import cz.frantisekmasa.wfrp_master.common.core.ui.navigation.LocalNavigationTransaction
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.FullScreenProgress
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.rememberScreenModel
 import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.Breadcrumbs
@@ -82,7 +81,7 @@ data class CharacterDetailScreen(
         val character = screenModel.character.collectWithLifecycle(null).value
         val party = partyScreenModel.party.collectWithLifecycle(null).value
 
-        val navigator = LocalNavigator.currentOrThrow
+        val navigation = LocalNavigationTransaction.current
 
         if (party == null || character == null) {
             SkeletonScaffold()
@@ -116,7 +115,7 @@ data class CharacterDetailScreen(
                         IconAction(
                             Icons.Rounded.Edit,
                             LocalStrings.current.character.titleEdit,
-                            onClick = { navigator.push(CharacterEditScreen(characterId)) },
+                            onClick = { navigation.navigate(CharacterEditScreen(characterId)) },
                         )
                     }
                 )
@@ -174,14 +173,14 @@ data class CharacterDetailScreen(
                 dropdownOpened,
                 onDismissRequest = { dropdownOpened = false }
             ) {
-                val navigator = LocalNavigator.currentOrThrow
+                val navigation = LocalNavigationTransaction.current
 
                 allCharacters.forEach { otherCharacter ->
                     key(otherCharacter.id) {
                         DropdownMenuItem(
                             onClick = {
                                 if (otherCharacter.id != character.id) {
-                                    navigator.replace(
+                                    navigation.replace(
                                         CharacterDetailScreen(
                                             characterId = CharacterId(party.id, otherCharacter.id),
                                             comingFromCombat = comingFromCombat,
@@ -202,7 +201,7 @@ data class CharacterDetailScreen(
                 if (canAddCharacters) {
                     DropdownMenuItem(
                         onClick = {
-                            navigator.push(
+                            navigation.navigate(
                                 CharacterCreationScreen(
                                     party.id,
                                     CharacterType.PLAYER_CHARACTER,
@@ -263,10 +262,10 @@ data class CharacterDetailScreen(
             }
 
             if (tabs.isEmpty()) {
-                val navigator = LocalNavigator.currentOrThrow
+                val navigation = LocalNavigationTransaction.current
 
                 LaunchedEffect(Unit) {
-                    navigator.push(
+                    navigation.navigate(
                         CharacterEditScreen(characterId, CharacterEditScreen.Section.VISIBLE_TABS)
                     )
                 }

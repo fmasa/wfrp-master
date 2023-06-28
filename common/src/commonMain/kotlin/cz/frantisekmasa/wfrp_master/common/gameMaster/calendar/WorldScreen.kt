@@ -29,8 +29,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import cafe.adriel.voyager.navigator.LocalNavigator
-import cafe.adriel.voyager.navigator.currentOrThrow
 import cz.frantisekmasa.wfrp_master.common.compendium.CompendiumListScreen
 import cz.frantisekmasa.wfrp_master.common.core.domain.localizedName
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.Party
@@ -39,10 +37,10 @@ import cz.frantisekmasa.wfrp_master.common.core.domain.time.DateTime
 import cz.frantisekmasa.wfrp_master.common.core.domain.time.ImperialDate
 import cz.frantisekmasa.wfrp_master.common.core.domain.time.MannsliebPhase
 import cz.frantisekmasa.wfrp_master.common.core.domain.time.YearSeason
-import cz.frantisekmasa.wfrp_master.common.core.shared.IO
 import cz.frantisekmasa.wfrp_master.common.core.shared.Resources
 import cz.frantisekmasa.wfrp_master.common.core.ui.cards.CardContainer
 import cz.frantisekmasa.wfrp_master.common.core.ui.dialogs.Dialog
+import cz.frantisekmasa.wfrp_master.common.core.ui.navigation.LocalNavigationTransaction
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.ItemIcon
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.VisualOnlyIconDescription
@@ -92,22 +90,22 @@ private fun CalendarCard(screenModel: GameMasterScreenModel, dateTime: DateTime)
 @Composable
 private fun NavigationCard(partyId: PartyId) {
     CardContainer {
-        val navigator = LocalNavigator.currentOrThrow
+        val navigation = LocalNavigationTransaction.current
 
         ListItem(
-            modifier = Modifier.clickable { navigator.push(NpcsScreen(partyId)) },
+            modifier = Modifier.clickable { navigation.navigate(NpcsScreen(partyId)) },
             icon = { ItemIcon(Resources.Drawable.Npc) },
             text = { Text(LocalStrings.current.npcs.titlePlural) },
         )
 
         ListItem(
-            modifier = Modifier.clickable { navigator.push(EncountersScreen(partyId)) },
+            modifier = Modifier.clickable { navigation.navigate(EncountersScreen(partyId)) },
             icon = { ItemIcon(Resources.Drawable.Encounter) },
             text = { Text(LocalStrings.current.encounters.title) },
         )
 
         ListItem(
-            modifier = Modifier.clickable { navigator.push(CompendiumListScreen(partyId)) },
+            modifier = Modifier.clickable { navigation.navigate(CompendiumListScreen(partyId)) },
             icon = { ItemIcon(Resources.Drawable.Compendium) },
             text = { Text(LocalStrings.current.compendium.title) },
         )

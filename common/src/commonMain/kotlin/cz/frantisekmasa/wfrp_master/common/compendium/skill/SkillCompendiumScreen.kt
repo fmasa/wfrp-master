@@ -8,12 +8,11 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
-import cafe.adriel.voyager.navigator.LocalNavigator
-import cafe.adriel.voyager.navigator.currentOrThrow
 import cz.frantisekmasa.wfrp_master.common.compendium.CompendiumScreen
 import cz.frantisekmasa.wfrp_master.common.compendium.VisibilityIcon
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.PartyId
 import cz.frantisekmasa.wfrp_master.common.core.shared.Resources
+import cz.frantisekmasa.wfrp_master.common.core.ui.navigation.LocalNavigationTransaction
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.EmptyUI
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.ItemIcon
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.rememberScreenModel
@@ -27,7 +26,7 @@ class SkillCompendiumScreen(
     override fun Content() {
         val screenModel: SkillCompendiumScreenModel = rememberScreenModel(arg = partyId)
         var newSkillDialogOpened by rememberSaveable { mutableStateOf(false) }
-        val navigator = LocalNavigator.currentOrThrow
+        val navigation = LocalNavigationTransaction.current
 
         if (newSkillDialogOpened) {
             SkillDialog(
@@ -35,7 +34,7 @@ class SkillCompendiumScreen(
                 onDismissRequest = { newSkillDialogOpened = false },
                 onSaveRequest = {
                     screenModel.createNew(it)
-                    navigator.push(SkillDetailScreen(partyId, it.id))
+                    navigation.navigate(SkillDetailScreen(partyId, it.id))
                 }
             )
         }
@@ -52,7 +51,7 @@ class SkillCompendiumScreen(
             },
             remover = screenModel::remove,
             newItemSaver = screenModel::createNew,
-            onClick = { navigator.push(SkillDetailScreen(partyId, it.id)) },
+            onClick = { navigation.navigate(SkillDetailScreen(partyId, it.id)) },
             onNewItemRequest = { newSkillDialogOpened = true },
             type = Type.SKILLS,
         ) { skill ->

@@ -52,8 +52,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
-import cafe.adriel.voyager.navigator.LocalNavigator
-import cafe.adriel.voyager.navigator.currentOrThrow
 import cz.frantisekmasa.wfrp_master.common.character.CharacterDetailScreen
 import cz.frantisekmasa.wfrp_master.common.character.conditions.ConditionIcon
 import cz.frantisekmasa.wfrp_master.common.core.auth.LocalUser
@@ -72,6 +70,7 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.flow.collectWithLifecycle
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.NumberPicker
 import cz.frantisekmasa.wfrp_master.common.core.ui.menu.DropdownMenu
 import cz.frantisekmasa.wfrp_master.common.core.ui.menu.DropdownMenuItem
+import cz.frantisekmasa.wfrp_master.common.core.ui.navigation.LocalNavigationTransaction
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.DraggableListFor
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.FlowRow
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.ItemIcon
@@ -96,7 +95,7 @@ class ActiveCombatScreen(
         val viewModel: CombatScreenModel = rememberScreenModel(arg = partyId)
 
         val coroutineScope = rememberCoroutineScope()
-        val navigator = LocalNavigator.currentOrThrow
+        val navigation = LocalNavigationTransaction.current
 
         val party = viewModel.party.collectWithLifecycle(null).value
         val combatants = remember { viewModel.combatants() }.collectWithLifecycle(null).value
@@ -151,7 +150,7 @@ class ActiveCombatScreen(
                     advantageCap = advantageCap,
                     isGroupAdvantageSystemEnabled = isGroupAdvantageSystemEnabled,
                     onDetailOpenRequest = {
-                        navigator.push(
+                        navigation.navigate(
                             when (freshCombatant) {
                                 is CombatantItem.Npc -> NpcDetailScreen(freshCombatant.npcId)
                                 is CombatantItem.Character -> CharacterDetailScreen(
@@ -167,7 +166,7 @@ class ActiveCombatScreen(
                             coroutineScope.launch {
                                 if (combatants?.size == 1) {
                                     viewModel.endCombat()
-                                    navigator.pop()
+                                    navigation.goBack()
                                 } else {
                                     viewModel.removeCombatant(combatantId)
                                     setOpenedCombatant(null)
@@ -204,7 +203,7 @@ class ActiveCombatScreen(
                                         onClick = {
                                             coroutineScope.launch(Dispatchers.IO) {
                                                 viewModel.endCombat()
-                                                navigator.pop()
+                                                navigation.goBack()
                                             }
                                         }
                                     )
@@ -465,7 +464,6 @@ class ActiveCombatScreen(
                 .padding(Spacing.large),
             verticalArrangement = Arrangement.spacedBy(Spacing.small),
         ) {
-            val navigator = LocalNavigator.currentOrThrow
             Row(
                 modifier = Modifier.align(Alignment.CenterHorizontally),
                 verticalAlignment = Alignment.CenterVertically,

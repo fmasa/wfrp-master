@@ -8,12 +8,11 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
-import cafe.adriel.voyager.navigator.LocalNavigator
-import cafe.adriel.voyager.navigator.currentOrThrow
 import cz.frantisekmasa.wfrp_master.common.compendium.CompendiumScreen
 import cz.frantisekmasa.wfrp_master.common.compendium.VisibilityIcon
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.PartyId
 import cz.frantisekmasa.wfrp_master.common.core.shared.Resources
+import cz.frantisekmasa.wfrp_master.common.core.ui.navigation.LocalNavigationTransaction
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.EmptyUI
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.ItemIcon
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.rememberScreenModel
@@ -27,7 +26,7 @@ class TraitCompendiumScreen(
     override fun Content() {
         val screenModel: TraitCompendiumScreenModel = rememberScreenModel(arg = partyId)
         var newTraitDialogOpened by rememberSaveable { mutableStateOf(false) }
-        val navigator = LocalNavigator.currentOrThrow
+        val navigation = LocalNavigationTransaction.current
 
         if (newTraitDialogOpened) {
             TraitDialog(
@@ -35,7 +34,7 @@ class TraitCompendiumScreen(
                 onDismissRequest = { newTraitDialogOpened = false },
                 onSaveRequest = {
                     screenModel.createNew(it)
-                    navigator.push(TraitDetailScreen(partyId, it.id))
+                    navigation.navigate(TraitDetailScreen(partyId, it.id))
                 }
             )
         }
@@ -52,7 +51,7 @@ class TraitCompendiumScreen(
             },
             remover = screenModel::remove,
             newItemSaver = screenModel::createNew,
-            onClick = { navigator.push(TraitDetailScreen(partyId, it.id)) },
+            onClick = { navigation.navigate(TraitDetailScreen(partyId, it.id)) },
             onNewItemRequest = { newTraitDialogOpened = true },
             type = Type.TRAITS,
         ) { trait ->

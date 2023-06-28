@@ -8,14 +8,13 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import cafe.adriel.voyager.navigator.LocalNavigator
-import cafe.adriel.voyager.navigator.currentOrThrow
 import com.benasher44.uuid.uuid4
 import cz.frantisekmasa.wfrp_master.common.compendium.CompendiumScreen
 import cz.frantisekmasa.wfrp_master.common.compendium.VisibilityIcon
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.Career
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.PartyId
 import cz.frantisekmasa.wfrp_master.common.core.shared.Resources
+import cz.frantisekmasa.wfrp_master.common.core.ui.navigation.LocalNavigationTransaction
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.EmptyUI
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.ItemIcon
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.rememberScreenModel
@@ -29,7 +28,7 @@ class CareerCompendiumScreen(
     override fun Content() {
         val screenModel: CareerCompendiumScreenModel = rememberScreenModel(arg = partyId)
         val strings = LocalStrings.current.careers.messages
-        val navigator = LocalNavigator.currentOrThrow
+        val navigation = LocalNavigationTransaction.current
 
         var newCareerDialogOpened by remember { mutableStateOf(false) }
 
@@ -50,7 +49,7 @@ class CareerCompendiumScreen(
                         )
                     )
 
-                    navigator.push(CareerDetailScreen(partyId, id))
+                    navigation.navigate(CareerDetailScreen(partyId, id))
                 },
                 onDismissRequest = { newCareerDialogOpened = false },
             )
@@ -68,7 +67,7 @@ class CareerCompendiumScreen(
             remover = screenModel::remove,
             newItemSaver = screenModel::createNew,
             onNewItemRequest = { newCareerDialogOpened = true },
-            onClick = { navigator.push(CareerDetailScreen(partyId, it.id)) },
+            onClick = { navigation.navigate(CareerDetailScreen(partyId, it.id)) },
             type = Type.CAREERS,
         ) { career ->
             ListItem(

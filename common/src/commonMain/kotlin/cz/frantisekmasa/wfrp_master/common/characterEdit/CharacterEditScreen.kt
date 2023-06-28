@@ -19,14 +19,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.zIndex
 import cafe.adriel.voyager.core.screen.Screen
-import cafe.adriel.voyager.navigator.LocalNavigator
-import cafe.adriel.voyager.navigator.currentOrThrow
 import cz.frantisekmasa.wfrp_master.common.character.CharacterScreenModel
 import cz.frantisekmasa.wfrp_master.common.core.domain.Characteristic
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.CharacterTab
 import cz.frantisekmasa.wfrp_master.common.core.domain.identifiers.CharacterId
 import cz.frantisekmasa.wfrp_master.common.core.ui.buttons.BackButton
 import cz.frantisekmasa.wfrp_master.common.core.ui.flow.collectWithLifecycle
+import cz.frantisekmasa.wfrp_master.common.core.ui.navigation.LocalNavigationTransaction
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.FullScreenProgress
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.HorizontalLine
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.ItemIcon
@@ -94,9 +93,9 @@ data class CharacterEditScreen(
                         .padding(top = Spacing.large),
                 )
 
-                val navigator = LocalNavigator.currentOrThrow
+                val navigation = LocalNavigationTransaction.current
                 val openSection = { section: Section ->
-                    navigator.push(CharacterEditScreen(characterId, section))
+                    navigation.navigate(CharacterEditScreen(characterId, section))
                 }
 
                 SettingsCard(
@@ -181,7 +180,7 @@ data class CharacterEditScreen(
                                 snackbarHolder.showSnackbar(
                                     strings.character.messages.characterRemoved,
                                 )
-                                navigator.popUntil {
+                                navigation.goBackTo {
                                     it is GameMasterScreen || it == PartyListScreen
                                 }
                             },

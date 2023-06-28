@@ -8,12 +8,11 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
-import cafe.adriel.voyager.navigator.LocalNavigator
-import cafe.adriel.voyager.navigator.currentOrThrow
 import cz.frantisekmasa.wfrp_master.common.compendium.CompendiumScreen
 import cz.frantisekmasa.wfrp_master.common.compendium.VisibilityIcon
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.PartyId
 import cz.frantisekmasa.wfrp_master.common.core.shared.Resources
+import cz.frantisekmasa.wfrp_master.common.core.ui.navigation.LocalNavigationTransaction
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.EmptyUI
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.ItemIcon
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.rememberScreenModel
@@ -28,7 +27,7 @@ class BlessingCompendiumScreen(
         val screenModel: BlessingCompendiumScreenModel = rememberScreenModel(arg = partyId)
         val messages = LocalStrings.current.blessings.messages
         var newBlessingDialogOpened by rememberSaveable { mutableStateOf(false) }
-        val navigator = LocalNavigator.currentOrThrow
+        val navigation = LocalNavigationTransaction.current
 
         if (newBlessingDialogOpened) {
             BlessingDialog(
@@ -36,7 +35,7 @@ class BlessingCompendiumScreen(
                 onDismissRequest = { newBlessingDialogOpened = false },
                 onSaveRequest = {
                     screenModel.createNew(it)
-                    navigator.push(BlessingDetailScreen(partyId, it.id))
+                    navigation.navigate(BlessingDetailScreen(partyId, it.id))
                 },
             )
         }
@@ -53,7 +52,7 @@ class BlessingCompendiumScreen(
             remover = screenModel::remove,
             newItemSaver = screenModel::createNew,
             onNewItemRequest = { newBlessingDialogOpened = true },
-            onClick = { navigator.push(BlessingDetailScreen(partyId, it.id)) },
+            onClick = { navigation.navigate(BlessingDetailScreen(partyId, it.id)) },
             type = Type.BLESSINGS,
         ) { blessing ->
             ListItem(

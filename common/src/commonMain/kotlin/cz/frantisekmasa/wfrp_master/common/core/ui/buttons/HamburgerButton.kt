@@ -5,17 +5,16 @@ import androidx.compose.material.IconButton
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Menu
 import androidx.compose.runtime.Composable
-import cafe.adriel.voyager.navigator.LocalNavigator
-import cafe.adriel.voyager.navigator.currentOrThrow
 import cz.frantisekmasa.wfrp_master.common.core.LocalStaticConfiguration
 import cz.frantisekmasa.wfrp_master.common.core.config.Platform
+import cz.frantisekmasa.wfrp_master.common.core.ui.navigation.LocalNavigationTransaction
 import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
 
 @Composable
 fun HamburgerButton() {
     if (
         LocalStaticConfiguration.current.platform == Platform.Desktop &&
-        LocalNavigator.currentOrThrow.canPop
+        LocalNavigationTransaction.current.canPop
     ) {
         BackButton()
         return

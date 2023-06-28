@@ -24,8 +24,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import cafe.adriel.voyager.core.screen.Screen
-import cafe.adriel.voyager.navigator.LocalNavigator
-import cafe.adriel.voyager.navigator.currentOrThrow
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.PdfCompendiumImporter
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.books.Book
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.books.CoreRulebook
@@ -46,6 +44,7 @@ import cz.frantisekmasa.wfrp_master.common.core.domain.party.PartyId
 import cz.frantisekmasa.wfrp_master.common.core.shared.FileType
 import cz.frantisekmasa.wfrp_master.common.core.ui.buttons.BackButton
 import cz.frantisekmasa.wfrp_master.common.core.ui.flow.collectWithLifecycle
+import cz.frantisekmasa.wfrp_master.common.core.ui.navigation.LocalNavigationTransaction
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.rememberScreenModel
 import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.Subtitle
@@ -84,14 +83,14 @@ class RulebookCompendiumImportScreen(
         var importState by remember { mutableStateOf<ImportDialogState?>(null) }
 
         importState?.let {
-            val navigator = LocalNavigator.currentOrThrow
+            val navigation = LocalNavigationTransaction.current
 
             ImportDialog(
                 state = it,
                 partyId = partyId,
                 screen = this,
                 onDismissRequest = { importState = null },
-                onComplete = navigator::pop,
+                onComplete = navigation::goBack,
             )
         }
 

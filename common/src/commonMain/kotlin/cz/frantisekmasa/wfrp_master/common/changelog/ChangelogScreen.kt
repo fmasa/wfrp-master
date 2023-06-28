@@ -22,8 +22,6 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import cafe.adriel.voyager.core.screen.Screen
-import cafe.adriel.voyager.navigator.LocalNavigator
-import cafe.adriel.voyager.navigator.currentOrThrow
 import com.halilibo.richtext.markdown.Markdown
 import com.halilibo.richtext.ui.RichText
 import cz.frantisekmasa.wfrp_master.common.core.shared.IO
@@ -47,10 +45,7 @@ object ChangelogScreen : Screen {
         Scaffold(
             topBar = {
                 TopAppBar(
-                    navigationIcon = {
-                        val navigator = LocalNavigator.currentOrThrow
-                        BackButton { navigator.pop() }
-                    },
+                    navigationIcon = { BackButton() },
                     title = { Text(LocalStrings.current.changelog.title) }
                 )
             }
