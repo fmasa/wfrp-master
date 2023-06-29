@@ -35,7 +35,7 @@ class BlessingCompendiumScreen(
                 onDismissRequest = { newBlessingDialogOpened = false },
                 onSaveRequest = {
                     screenModel.createNew(it)
-                    navigation.navigate(BlessingDetailScreen(partyId, it.id))
+                    navigation.navigate(CompendiumBlessingDetailScreen(partyId, it.id))
                 },
             )
         }
@@ -52,7 +52,7 @@ class BlessingCompendiumScreen(
             remover = screenModel::remove,
             newItemSaver = screenModel::createNew,
             onNewItemRequest = { newBlessingDialogOpened = true },
-            onClick = { navigation.navigate(BlessingDetailScreen(partyId, it.id)) },
+            onClick = { navigation.navigate(CompendiumBlessingDetailScreen(partyId, it.id)) },
             type = Type.BLESSINGS,
         ) { blessing ->
             ListItem(

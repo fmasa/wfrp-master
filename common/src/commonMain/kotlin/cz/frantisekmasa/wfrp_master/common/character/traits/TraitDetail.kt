@@ -1,6 +1,7 @@
 package cz.frantisekmasa.wfrp_master.common.character.traits
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
@@ -24,6 +25,7 @@ import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
 fun TraitDetail(
     trait: Trait,
     onDismissRequest: () -> Unit,
+    subheadBar: @Composable ColumnScope.() -> Unit = {},
     actions: @Composable RowScope.() -> Unit = {},
 ) {
     Scaffold(
@@ -36,6 +38,8 @@ fun TraitDetail(
         }
     ) {
         Column(Modifier.verticalScroll(rememberScrollState())) {
+            subheadBar()
+
             TraitDetailBody(
                 specifications = trait.specificationValues.keys,
                 description = trait.description,

@@ -34,7 +34,7 @@ class SpellCompendiumScreen(
                 onDismissRequest = { newSpellDialogOpened = false },
                 onSaveRequest = {
                     screenModel.createNew(it)
-                    navigation.navigate(SpellDetailScreen(partyId, it.id))
+                    navigation.navigate(CompendiumSpellDetailScreen(partyId, it.id))
                 },
             )
         }
@@ -51,7 +51,7 @@ class SpellCompendiumScreen(
             },
             remover = screenModel::remove,
             newItemSaver = screenModel::createNew,
-            onClick = { navigation.navigate(SpellDetailScreen(partyId, it.id)) },
+            onClick = { navigation.navigate(CompendiumSpellDetailScreen(partyId, it.id)) },
             onNewItemRequest = { newSpellDialogOpened = true },
             type = Type.SPELLS,
         ) { spell ->

@@ -49,7 +49,7 @@ class CareerCompendiumScreen(
                         )
                     )
 
-                    navigation.navigate(CareerDetailScreen(partyId, id))
+                    navigation.navigate(CompendiumCareerDetailScreen(partyId, id))
                 },
                 onDismissRequest = { newCareerDialogOpened = false },
             )
@@ -67,7 +67,7 @@ class CareerCompendiumScreen(
             remover = screenModel::remove,
             newItemSaver = screenModel::createNew,
             onNewItemRequest = { newCareerDialogOpened = true },
-            onClick = { navigation.navigate(CareerDetailScreen(partyId, it.id)) },
+            onClick = { navigation.navigate(CompendiumCareerDetailScreen(partyId, it.id)) },
             type = Type.CAREERS,
         ) { career ->
             ListItem(

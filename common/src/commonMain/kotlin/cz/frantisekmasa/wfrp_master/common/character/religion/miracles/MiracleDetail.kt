@@ -2,6 +2,7 @@ package cz.frantisekmasa.wfrp_master.common.character.religion.miracles
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -26,6 +27,7 @@ import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
 @Composable
 fun MiracleDetail(
     miracle: Miracle,
+    subheadBar: @Composable ColumnScope.() -> Unit = {},
     onDismissRequest: () -> Unit,
 ) {
     Scaffold(
@@ -41,6 +43,7 @@ fun MiracleDetail(
         Column(Modifier.verticalScroll(rememberScrollState())) {
             MiracleDetailBody(
                 cultName = miracle.cultName,
+                subheadBar = subheadBar,
                 range = miracle.range,
                 target = miracle.target,
                 duration = miracle.duration,
@@ -53,6 +56,7 @@ fun MiracleDetail(
 @Composable
 fun MiracleDetailBody(
     cultName: String,
+    subheadBar: @Composable ColumnScope.() -> Unit = {},
     range: String,
     target: String,
     duration: String,
@@ -68,6 +72,8 @@ fun MiracleDetailBody(
                 Text(cultName)
             }
         }
+
+        subheadBar()
 
         Column(Modifier.padding(Spacing.bodyPadding)) {
             val strings = LocalStrings.current.miracles

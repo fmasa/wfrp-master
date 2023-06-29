@@ -1,35 +1,34 @@
-package cz.frantisekmasa.wfrp_master.common.compendium.blessing
+package cz.frantisekmasa.wfrp_master.common.compendium.trait
 
 import androidx.compose.runtime.Composable
 import cafe.adriel.voyager.core.screen.Screen
 import com.benasher44.uuid.Uuid
-import cz.frantisekmasa.wfrp_master.common.character.religion.blessings.BlessingDetailBody
+import cz.frantisekmasa.wfrp_master.common.character.traits.TraitDetailBody
 import cz.frantisekmasa.wfrp_master.common.compendium.CompendiumItemDetailScreen
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.PartyId
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.rememberScreenModel
-class BlessingDetailScreen(
+
+class CompendiumTraitDetailScreen(
     private val partyId: PartyId,
-    private val blessingId: Uuid,
+    private val traitId: Uuid,
 ) : Screen {
 
     @Composable
     override fun Content() {
-        val screenModel: BlessingCompendiumScreenModel = rememberScreenModel(arg = partyId)
+        val screenModel: TraitCompendiumScreenModel = rememberScreenModel(arg = partyId)
 
         CompendiumItemDetailScreen(
-            id = blessingId,
+            id = traitId,
             screenModel = screenModel,
             detail = {
-                BlessingDetailBody(
-                    range = it.range,
-                    target = it.target,
-                    duration = it.duration,
-                    effect = it.effect,
+                TraitDetailBody(
+                    specifications = it.specifications,
+                    description = it.description,
                 )
             }
         ) { item, onDismissRequest ->
-            BlessingDialog(
-                blessing = item,
+            TraitDialog(
+                trait = item,
                 onDismissRequest = onDismissRequest,
                 onSaveRequest = screenModel::update,
             )

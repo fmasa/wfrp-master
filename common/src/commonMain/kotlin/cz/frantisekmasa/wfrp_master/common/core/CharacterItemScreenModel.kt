@@ -21,14 +21,14 @@ abstract class CharacterItemScreenModel<
     TItem : CharacterItem<TItem, TCompendiumItem>,
     TCompendiumItem : CompendiumItem<TCompendiumItem>
     >(
-    private val characterId: CharacterId,
+    val characterId: CharacterId,
     private val repository: CharacterItemRepository<TItem>,
     private val compendium: Compendium<TCompendiumItem>,
     private val userProvider: UserProvider,
     partyRepository: PartyRepository,
 ) : ScreenModel {
 
-    private val isGameMaster = partyRepository.getLive(characterId.partyId)
+    val isGameMaster = partyRepository.getLive(characterId.partyId)
         .right()
         .map { it.gameMasterId == userProvider.userId }
         .distinctUntilChanged()

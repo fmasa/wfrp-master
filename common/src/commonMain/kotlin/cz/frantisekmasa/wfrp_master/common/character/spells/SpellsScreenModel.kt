@@ -4,6 +4,7 @@ import cafe.adriel.voyager.core.model.coroutineScope
 import cz.frantisekmasa.wfrp_master.common.core.CharacterItemScreenModel
 import cz.frantisekmasa.wfrp_master.common.core.auth.UserProvider
 import cz.frantisekmasa.wfrp_master.common.core.domain.compendium.Compendium
+import cz.frantisekmasa.wfrp_master.common.core.domain.identifiers.CharacterId
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.PartyRepository
 import cz.frantisekmasa.wfrp_master.common.core.domain.spells.Spell
 import cz.frantisekmasa.wfrp_master.common.core.domain.spells.SpellRepository
@@ -13,7 +14,7 @@ import kotlinx.coroutines.launch
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.Spell as CompendiumSpell
 
 class SpellsScreenModel(
-    private val characterId: cz.frantisekmasa.wfrp_master.common.core.domain.identifiers.CharacterId,
+    characterId: CharacterId,
     private val spellRepository: SpellRepository,
     userProvider: UserProvider,
     partyRepository: PartyRepository,

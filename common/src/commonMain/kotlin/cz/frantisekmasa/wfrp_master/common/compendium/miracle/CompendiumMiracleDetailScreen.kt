@@ -1,35 +1,37 @@
-package cz.frantisekmasa.wfrp_master.common.compendium.skill
+package cz.frantisekmasa.wfrp_master.common.compendium.miracle
 
 import androidx.compose.runtime.Composable
 import cafe.adriel.voyager.core.screen.Screen
 import com.benasher44.uuid.Uuid
-import cz.frantisekmasa.wfrp_master.common.character.skills.dialog.SkillDetailBody
+import cz.frantisekmasa.wfrp_master.common.character.religion.miracles.MiracleDetailBody
 import cz.frantisekmasa.wfrp_master.common.compendium.CompendiumItemDetailScreen
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.PartyId
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.rememberScreenModel
 
-class SkillDetailScreen(
+class CompendiumMiracleDetailScreen(
     private val partyId: PartyId,
-    private val skillId: Uuid,
+    private val miracleId: Uuid,
 ) : Screen {
 
     @Composable
     override fun Content() {
-        val screenModel: SkillCompendiumScreenModel = rememberScreenModel(arg = partyId)
+        val screenModel: MiracleCompendiumScreenModel = rememberScreenModel(arg = partyId)
 
         CompendiumItemDetailScreen(
-            id = skillId,
+            id = miracleId,
             screenModel = screenModel,
             detail = {
-                SkillDetailBody(
-                    characteristic = it.characteristic,
-                    advanced = it.advanced,
-                    description = it.description,
+                MiracleDetailBody(
+                    cultName = it.cultName,
+                    range = it.range,
+                    target = it.target,
+                    duration = it.duration,
+                    effect = it.effect,
                 )
             }
         ) { item, onDismissRequest ->
-            SkillDialog(
-                skill = item,
+            MiracleDialog(
+                miracle = item,
                 onDismissRequest = onDismissRequest,
                 onSaveRequest = screenModel::update,
             )

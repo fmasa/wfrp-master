@@ -65,7 +65,7 @@ import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class CareerDetailScreen(
+class CompendiumCareerDetailScreen(
     private val partyId: PartyId,
     private val careerId: Uuid,
 ) : Screen {

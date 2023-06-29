@@ -88,7 +88,12 @@ fun StatBlock(
         title = LocalStrings.current.traits.titleTraits,
         items = data.traits,
         value = { it.evaluatedName },
-        detail = { trait, onDismissRequest -> TraitDetail(trait, onDismissRequest) },
+        detail = { trait, onDismissRequest ->
+            TraitDetail(
+                trait = trait,
+                onDismissRequest = onDismissRequest,
+            )
+        },
     )
 
     CharacterItemList(
@@ -120,14 +125,24 @@ fun StatBlock(
         title = LocalStrings.current.blessings.title,
         items = data.blessings,
         value = { it.name },
-        detail = { blessing, onDismissRequest -> BlessingDetail(blessing, onDismissRequest) },
+        detail = { blessing, onDismissRequest ->
+            BlessingDetail(
+                blessing = blessing,
+                onDismissRequest = onDismissRequest,
+            )
+        },
     )
 
     CharacterItemList(
         title = LocalStrings.current.miracles.title,
         items = data.miracles,
         value = { it.name },
-        detail = { miracle, onDismissRequest -> MiracleDetail(miracle, onDismissRequest) },
+        detail = { miracle, onDismissRequest ->
+            MiracleDetail(
+                miracle = miracle,
+                onDismissRequest = onDismissRequest,
+            )
+        },
     )
 
     if (data.note != "") {

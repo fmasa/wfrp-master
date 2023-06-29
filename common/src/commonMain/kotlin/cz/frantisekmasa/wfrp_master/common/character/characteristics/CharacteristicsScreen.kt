@@ -34,7 +34,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import cz.frantisekmasa.wfrp_master.common.character.CharacterScreenModel
-import cz.frantisekmasa.wfrp_master.common.compendium.career.CareerDetailScreen
+import cz.frantisekmasa.wfrp_master.common.compendium.career.CompendiumCareerDetailScreen
 import cz.frantisekmasa.wfrp_master.common.core.domain.Characteristic
 import cz.frantisekmasa.wfrp_master.common.core.domain.Expression
 import cz.frantisekmasa.wfrp_master.common.core.domain.Stats
@@ -45,7 +45,6 @@ import cz.frantisekmasa.wfrp_master.common.core.domain.identifiers.CharacterId
 import cz.frantisekmasa.wfrp_master.common.core.domain.localizedName
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.Party
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.PartyId
-import cz.frantisekmasa.wfrp_master.common.core.shared.IO
 import cz.frantisekmasa.wfrp_master.common.core.shared.Resources
 import cz.frantisekmasa.wfrp_master.common.core.shared.drawableResource
 import cz.frantisekmasa.wfrp_master.common.core.shared.rememberSoundPlayer
@@ -434,7 +433,7 @@ private fun CareerSection(
 
     Column(
         if (career != null)
-            Modifier.clickable { navigation.navigate(CareerDetailScreen(partyId, career.career.id)) }
+            Modifier.clickable { navigation.navigate(CompendiumCareerDetailScreen(partyId, career.career.id)) }
         else Modifier
     ) {
         Text(careerName, fontWeight = FontWeight.Bold)

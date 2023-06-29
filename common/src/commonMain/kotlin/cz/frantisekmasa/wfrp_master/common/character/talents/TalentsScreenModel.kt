@@ -18,7 +18,7 @@ import kotlinx.coroutines.launch
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.Talent as CompendiumTalent
 
 class TalentsScreenModel(
-    private val characterId: CharacterId,
+    characterId: CharacterId,
     private val talentRepository: TalentRepository,
     private val compendium: Compendium<CompendiumTalent>,
     private val effectManager: EffectManager,
