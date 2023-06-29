@@ -1,14 +1,18 @@
 package cz.frantisekmasa.wfrp_master.common.character.spells.dialog
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
@@ -18,6 +22,7 @@ import androidx.compose.ui.unit.dp
 import com.halilibo.richtext.markdown.Markdown
 import com.halilibo.richtext.ui.RichText
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.SpellLore
+import cz.frantisekmasa.wfrp_master.common.compendium.spell.SpellLoreIcon
 import cz.frantisekmasa.wfrp_master.common.core.domain.localizedName
 import cz.frantisekmasa.wfrp_master.common.core.domain.spells.Spell
 import cz.frantisekmasa.wfrp_master.common.core.ui.buttons.CloseButton
@@ -70,6 +75,19 @@ fun SpellDetailBody(
     val strings = LocalStrings.current.spells
 
     Column(Modifier.padding(Spacing.bodyPadding)) {
+        if (lore != null) {
+            Row(
+                modifier = Modifier
+                    .align(Alignment.CenterHorizontally)
+                    .padding(bottom = Spacing.large),
+                horizontalArrangement = Arrangement.spacedBy(Spacing.small),
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                SpellLoreIcon(lore)
+                Text(lore.localizedName, style = MaterialTheme.typography.h6)
+            }
+        }
+
         SingleLineTextValue(
             strings.castingNumberShortcut,
             buildAnnotatedString {
@@ -90,10 +108,6 @@ fun SpellDetailBody(
         SingleLineTextValue(strings.labelTarget, target)
 
         SingleLineTextValue(strings.labelDuration, duration)
-
-        if (lore != null) {
-            SingleLineTextValue(strings.labelLore, lore.localizedName)
-        }
 
         RichText(Modifier.padding(top = 8.dp)) {
             Markdown(effect)

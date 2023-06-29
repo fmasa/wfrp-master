@@ -32,7 +32,8 @@ import kotlinx.coroutines.launch
 @Composable
 internal fun <A : CharacterItem<A, B>, B : CompendiumItem<B>> CompendiumItemChooser(
     title: String,
-    icon: @Composable (B) -> Resources.Drawable,
+    icon: (@Composable (B) -> Resources.Drawable)? = null,
+    customIcon: (@Composable (B) -> Unit)? = null,
     screenModel: CharacterItemScreenModel<A, B>,
     onSelect: suspend (B) -> Unit,
     onCustomItemRequest: (() -> Unit)? = null,
@@ -78,7 +79,13 @@ internal fun <A : CharacterItem<A, B>, B : CompendiumItem<B>> CompendiumItemChoo
                         coroutineScope.launch(Dispatchers.IO) { onSelect(item) }
                     }
                 ),
-                icon = { ItemIcon(icon(item), ItemIcon.Size.Small) },
+                icon = {
+                    if (customIcon != null) {
+                        customIcon(item)
+                    } else if (icon != null) {
+                        ItemIcon(icon(item), ItemIcon.Size.Small)
+                    }
+                },
                 text = { Text(item.name) }
             )
         }

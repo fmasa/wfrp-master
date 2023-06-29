@@ -63,6 +63,23 @@ object Resources {
         TrappingEncumbrance("drawable/ic_encumbrance.xml"),
         TrappingTool("drawable/ic_tool.xml"),
 
+        LoreBeasts("drawable/ic_lore_beasts.xml"),
+        LoreDeath("drawable/ic_lore_death.xml"),
+        LoreFire("drawable/ic_lore_fire.xml"),
+        LoreHeavens("drawable/ic_lore_heavens.xml"),
+        LoreLife("drawable/ic_lore_life.xml"),
+        LoreLight("drawable/ic_lore_light.xml"),
+        LoreMetal("drawable/ic_lore_metal.xml"),
+        LoreHedgecraft("drawable/ic_lore_hedgecraft.xml"),
+        LoreWitchcraft("drawable/ic_lore_witchcraft.xml"),
+        LoreDaemonology("drawable/ic_lore_daemonology.xml"),
+        LoreNecromancy("drawable/ic_lore_necromancy.xml"),
+        LorePettySpells("drawable/ic_lore_petty_spells.xml"),
+        LoreShadows("drawable/ic_lore_shadows.xml"),
+        LoreSlaanesh("drawable/ic_lore_slaanesh.xml"),
+        LoreNurgle("drawable/ic_lore_nurgle.xml"),
+        LoreTzeentch("drawable/ic_lore_tzeentch.xml"),
+
         // Raster images
         GoogleLogo("drawable/google_logo.png"),
     }
