@@ -46,7 +46,7 @@ fun <A : CompendiumItem<A>> Screen.CompendiumItemDetailScreen(
     val item = itemOrError.orNull()
 
     if (item == null) {
-        val message = LocalStrings.current.compendium.messages.itemDoesNotExist
+        val message = LocalStrings.current.commonUi.itemDoesNotExist
         val snackbarHolder = LocalPersistentSnackbarHolder.current
 
         LaunchedEffect(Unit) {

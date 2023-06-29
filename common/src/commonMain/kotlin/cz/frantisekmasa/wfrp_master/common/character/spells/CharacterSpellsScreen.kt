@@ -24,9 +24,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.benasher44.uuid.Uuid
 import cz.frantisekmasa.wfrp_master.common.character.spells.dialog.AddSpellDialog
-import cz.frantisekmasa.wfrp_master.common.character.spells.dialog.EditSpellDialog
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.SpellLore
 import cz.frantisekmasa.wfrp_master.common.core.domain.localizedName
 import cz.frantisekmasa.wfrp_master.common.core.domain.spells.Spell
@@ -36,6 +34,7 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.cards.CardContainer
 import cz.frantisekmasa.wfrp_master.common.core.ui.cards.CardItem
 import cz.frantisekmasa.wfrp_master.common.core.ui.cards.CardTitle
 import cz.frantisekmasa.wfrp_master.common.core.ui.flow.collectWithLifecycle
+import cz.frantisekmasa.wfrp_master.common.core.ui.navigation.LocalNavigationTransaction
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.ContextMenu
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.EmptyUI
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
@@ -91,8 +90,6 @@ private fun MainContainer(screenModel: SpellsScreenModel) {
         return
     }
 
-    var editedSpellId: Uuid? by rememberSaveable { mutableStateOf(null) }
-
     LazyColumn(
         contentPadding = PaddingValues(
             bottom = Spacing.bottomPaddingUnderFab,
@@ -113,11 +110,20 @@ private fun MainContainer(screenModel: SpellsScreenModel) {
                         }
                     )
 
+                    val navigation = LocalNavigationTransaction.current
+
                     spells.forEachIndexed { index, spell ->
                         key(spell.id, index) {
                             SpellItem(
                                 spell = spell,
-                                onClick = { editedSpellId = spell.id },
+                                onClick = {
+                                    navigation.navigate(
+                                        CharacterSpellDetailScreen(
+                                            screenModel.characterId,
+                                            spell.id,
+                                        )
+                                    )
+                                },
                                 onRemove = { screenModel.removeSpell(spell) },
                                 isLast = index == spells.lastIndex,
                             )
@@ -126,14 +132,6 @@ private fun MainContainer(screenModel: SpellsScreenModel) {
                 }
             }
         }
-    }
-
-    editedSpellId?.let {
-        EditSpellDialog(
-            screenModel = screenModel,
-            spellId = it,
-            onDismissRequest = { editedSpellId = null },
-        )
     }
 }
 

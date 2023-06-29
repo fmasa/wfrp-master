@@ -10,9 +10,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.benasher44.uuid.Uuid
 import cz.frantisekmasa.wfrp_master.common.character.religion.blessings.dialog.AddBlessingDialog
-import cz.frantisekmasa.wfrp_master.common.character.religion.blessings.dialog.EditBlessingDialog
 import cz.frantisekmasa.wfrp_master.common.core.domain.religion.Blessing
 import cz.frantisekmasa.wfrp_master.common.core.shared.Resources
 import cz.frantisekmasa.wfrp_master.common.core.ui.buttons.CardButton
@@ -20,6 +18,7 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.cards.CardContainer
 import cz.frantisekmasa.wfrp_master.common.core.ui.cards.CardItem
 import cz.frantisekmasa.wfrp_master.common.core.ui.cards.CardTitle
 import cz.frantisekmasa.wfrp_master.common.core.ui.flow.collectWithLifecycle
+import cz.frantisekmasa.wfrp_master.common.core.ui.navigation.LocalNavigationTransaction
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.ContextMenu
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.EmptyUI
 import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
@@ -47,21 +46,20 @@ internal fun BlessingsCard(screenModel: BlessingsScreenModel) {
                     size = EmptyUI.Size.Small
                 )
             } else {
-                var editedBlessingId: Uuid? by rememberSaveable { mutableStateOf(null) }
+                val navigation = LocalNavigationTransaction.current
 
                 for (blessing in blessings) {
                     BlessingItem(
                         blessing,
-                        onClick = { editedBlessingId = blessing.id },
+                        onClick = {
+                            navigation.navigate(
+                                CharacterBlessingDetailScreen(
+                                    screenModel.characterId,
+                                    blessing.id,
+                                )
+                            )
+                        },
                         onRemove = { coroutineScope.launch { screenModel.removeItem(blessing) } },
-                    )
-                }
-
-                editedBlessingId?.let { blessingId ->
-                    EditBlessingDialog(
-                        screenModel = screenModel,
-                        blessingId = blessingId,
-                        onDismissRequest = { editedBlessingId = null }
                     )
                 }
             }
