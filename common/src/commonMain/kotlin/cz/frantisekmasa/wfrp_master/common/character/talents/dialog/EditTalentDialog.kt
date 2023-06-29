@@ -10,8 +10,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import com.benasher44.uuid.Uuid
 import cz.frantisekmasa.wfrp_master.common.character.talents.TalentsScreenModel
-import cz.frantisekmasa.wfrp_master.common.compendium.talent.TalentDetailScreen
-import cz.frantisekmasa.wfrp_master.common.core.shared.IO
+import cz.frantisekmasa.wfrp_master.common.compendium.talent.CompendiumTalentDetailScreen
 import cz.frantisekmasa.wfrp_master.common.core.ui.buttons.CompendiumButton
 import cz.frantisekmasa.wfrp_master.common.core.ui.dialogs.FullScreenDialog
 import cz.frantisekmasa.wfrp_master.common.core.ui.flow.collectWithLifecycle
@@ -59,7 +58,7 @@ fun EditTalentDialog(
                                 .padding(top = Spacing.bodyPadding),
                             onClick = {
                                 navigation.navigate(
-                                    TalentDetailScreen(
+                                    CompendiumTalentDetailScreen(
                                         screenModel.characterId.partyId,
                                         talent.compendiumId,
                                     )

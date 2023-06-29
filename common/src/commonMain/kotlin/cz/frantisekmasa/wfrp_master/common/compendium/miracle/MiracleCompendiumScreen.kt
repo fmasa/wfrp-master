@@ -34,7 +34,7 @@ class MiracleCompendiumScreen(
                 onDismissRequest = { newMiracleDialogOpened = false },
                 onSaveRequest = {
                     screenModel.createNew(it)
-                    navigation.navigate(MiracleDetailScreen(partyId, it.id))
+                    navigation.navigate(CompendiumMiracleDetailScreen(partyId, it.id))
                 },
             )
         }
@@ -52,7 +52,7 @@ class MiracleCompendiumScreen(
             },
             remover = screenModel::remove,
             newItemSaver = screenModel::createNew,
-            onClick = { navigation.navigate(MiracleDetailScreen(partyId, it.id)) },
+            onClick = { navigation.navigate(CompendiumMiracleDetailScreen(partyId, it.id)) },
             onNewItemRequest = { newMiracleDialogOpened = true },
             type = Type.MIRACLES,
         ) { miracle ->

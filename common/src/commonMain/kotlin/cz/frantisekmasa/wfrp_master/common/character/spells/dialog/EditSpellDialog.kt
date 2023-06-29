@@ -12,8 +12,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import com.benasher44.uuid.Uuid
 import cz.frantisekmasa.wfrp_master.common.character.spells.SpellsScreenModel
-import cz.frantisekmasa.wfrp_master.common.compendium.spell.SpellDetailScreen
-import cz.frantisekmasa.wfrp_master.common.core.shared.IO
+import cz.frantisekmasa.wfrp_master.common.compendium.spell.CompendiumSpellDetailScreen
 import cz.frantisekmasa.wfrp_master.common.core.ui.buttons.CompendiumButton
 import cz.frantisekmasa.wfrp_master.common.core.ui.dialogs.FullScreenDialog
 import cz.frantisekmasa.wfrp_master.common.core.ui.flow.collectWithLifecycle
@@ -71,7 +70,7 @@ fun EditSpellDialog(
                                 .padding(top = Spacing.bodyPadding),
                             onClick = {
                                 navigation.navigate(
-                                    SpellDetailScreen(
+                                    CompendiumSpellDetailScreen(
                                         screenModel.characterId.partyId,
                                         spell.compendiumId,
                                     )

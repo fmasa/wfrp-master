@@ -13,7 +13,7 @@ import androidx.compose.ui.Modifier
 import com.benasher44.uuid.Uuid
 import cz.frantisekmasa.wfrp_master.common.character.traits.TraitDetail
 import cz.frantisekmasa.wfrp_master.common.character.traits.TraitsScreenModel
-import cz.frantisekmasa.wfrp_master.common.compendium.trait.TraitDetailScreen
+import cz.frantisekmasa.wfrp_master.common.compendium.trait.CompendiumTraitDetailScreen
 import cz.frantisekmasa.wfrp_master.common.core.ui.buttons.CompendiumButton
 import cz.frantisekmasa.wfrp_master.common.core.ui.dialogs.FullScreenDialog
 import cz.frantisekmasa.wfrp_master.common.core.ui.flow.collectWithLifecycle
@@ -59,7 +59,7 @@ fun EditTraitDialog(
                                 .padding(top = Spacing.bodyPadding),
                             onClick = {
                                 navigation.navigate(
-                                    TraitDetailScreen(
+                                    CompendiumTraitDetailScreen(
                                         screenModel.characterId.partyId,
                                         trait.compendiumId,
                                     )

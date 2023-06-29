@@ -34,7 +34,7 @@ class TalentCompendiumScreen(
                 onDismissRequest = { newTalentDialogOpened = false },
                 onSaveRequest = {
                     screenModel.createNew(it)
-                    navigation.navigate(TalentDetailScreen(partyId, it.id))
+                    navigation.navigate(CompendiumTalentDetailScreen(partyId, it.id))
                 }
             )
         }
@@ -51,7 +51,7 @@ class TalentCompendiumScreen(
             },
             remover = screenModel::remove,
             newItemSaver = screenModel::createNew,
-            onClick = { navigation.navigate(TalentDetailScreen(partyId, it.id)) },
+            onClick = { navigation.navigate(CompendiumTalentDetailScreen(partyId, it.id)) },
             onNewItemRequest = { newTalentDialogOpened = true },
             type = Type.TALENTS,
         ) { talent ->

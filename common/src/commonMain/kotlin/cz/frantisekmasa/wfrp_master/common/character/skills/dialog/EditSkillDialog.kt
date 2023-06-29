@@ -12,7 +12,7 @@ import androidx.compose.ui.Modifier
 import com.benasher44.uuid.Uuid
 import cz.frantisekmasa.wfrp_master.common.character.skills.SkillRating
 import cz.frantisekmasa.wfrp_master.common.character.skills.SkillsScreenModel
-import cz.frantisekmasa.wfrp_master.common.compendium.skill.SkillDetailScreen
+import cz.frantisekmasa.wfrp_master.common.compendium.skill.CompendiumSkillDetailScreen
 import cz.frantisekmasa.wfrp_master.common.core.domain.Stats
 import cz.frantisekmasa.wfrp_master.common.core.ui.buttons.CompendiumButton
 import cz.frantisekmasa.wfrp_master.common.core.ui.dialogs.FullScreenDialog
@@ -69,7 +69,7 @@ fun EditSkillDialog(
                             modifier = Modifier.align(Alignment.CenterHorizontally),
                             onClick = {
                                 navigation.navigate(
-                                    SkillDetailScreen(
+                                    CompendiumSkillDetailScreen(
                                         screenModel.characterId.partyId,
                                         skill.compendiumId,
                                     )

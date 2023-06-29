@@ -7,7 +7,7 @@ import androidx.compose.ui.Modifier
 import com.benasher44.uuid.Uuid
 import cz.frantisekmasa.wfrp_master.common.character.religion.blessings.BlessingDetail
 import cz.frantisekmasa.wfrp_master.common.character.religion.blessings.BlessingsScreenModel
-import cz.frantisekmasa.wfrp_master.common.compendium.blessing.BlessingDetailScreen
+import cz.frantisekmasa.wfrp_master.common.compendium.blessing.CompendiumBlessingDetailScreen
 import cz.frantisekmasa.wfrp_master.common.core.ui.buttons.CompendiumButton
 import cz.frantisekmasa.wfrp_master.common.core.ui.dialogs.FullScreenDialog
 import cz.frantisekmasa.wfrp_master.common.core.ui.flow.collectWithLifecycle
@@ -41,7 +41,7 @@ internal fun EditBlessingDialog(
                                 .padding(top = Spacing.bodyPadding),
                             onClick = {
                                 navigation.navigate(
-                                    BlessingDetailScreen(
+                                    CompendiumBlessingDetailScreen(
                                         screenModel.characterId.partyId,
                                         blessing.compendiumId,
                                     )

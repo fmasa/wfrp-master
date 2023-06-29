@@ -1,35 +1,35 @@
-package cz.frantisekmasa.wfrp_master.common.compendium.talent
+package cz.frantisekmasa.wfrp_master.common.compendium.skill
 
 import androidx.compose.runtime.Composable
 import cafe.adriel.voyager.core.screen.Screen
 import com.benasher44.uuid.Uuid
-import cz.frantisekmasa.wfrp_master.common.character.talents.dialog.TalentDetailBody
+import cz.frantisekmasa.wfrp_master.common.character.skills.dialog.SkillDetailBody
 import cz.frantisekmasa.wfrp_master.common.compendium.CompendiumItemDetailScreen
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.PartyId
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.rememberScreenModel
 
-class TalentDetailScreen(
+class CompendiumSkillDetailScreen(
     private val partyId: PartyId,
-    private val talentId: Uuid,
+    private val skillId: Uuid,
 ) : Screen {
 
     @Composable
     override fun Content() {
-        val screenModel: TalentCompendiumScreenModel = rememberScreenModel(arg = partyId)
+        val screenModel: SkillCompendiumScreenModel = rememberScreenModel(arg = partyId)
 
         CompendiumItemDetailScreen(
-            id = talentId,
+            id = skillId,
             screenModel = screenModel,
             detail = {
-                TalentDetailBody(
-                    maxTimesTaken = it.maxTimesTaken,
-                    tests = it.tests,
+                SkillDetailBody(
+                    characteristic = it.characteristic,
+                    advanced = it.advanced,
                     description = it.description,
                 )
             }
         ) { item, onDismissRequest ->
-            TalentDialog(
-                talent = item,
+            SkillDialog(
+                skill = item,
                 onDismissRequest = onDismissRequest,
                 onSaveRequest = screenModel::update,
             )

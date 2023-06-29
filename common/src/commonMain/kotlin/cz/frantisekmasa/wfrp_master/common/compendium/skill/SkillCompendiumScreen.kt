@@ -34,7 +34,7 @@ class SkillCompendiumScreen(
                 onDismissRequest = { newSkillDialogOpened = false },
                 onSaveRequest = {
                     screenModel.createNew(it)
-                    navigation.navigate(SkillDetailScreen(partyId, it.id))
+                    navigation.navigate(CompendiumSkillDetailScreen(partyId, it.id))
                 }
             )
         }
@@ -51,7 +51,7 @@ class SkillCompendiumScreen(
             },
             remover = screenModel::remove,
             newItemSaver = screenModel::createNew,
-            onClick = { navigation.navigate(SkillDetailScreen(partyId, it.id)) },
+            onClick = { navigation.navigate(CompendiumSkillDetailScreen(partyId, it.id)) },
             onNewItemRequest = { newSkillDialogOpened = true },
             type = Type.SKILLS,
         ) { skill ->

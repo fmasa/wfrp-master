@@ -34,7 +34,7 @@ class TraitCompendiumScreen(
                 onDismissRequest = { newTraitDialogOpened = false },
                 onSaveRequest = {
                     screenModel.createNew(it)
-                    navigation.navigate(TraitDetailScreen(partyId, it.id))
+                    navigation.navigate(CompendiumTraitDetailScreen(partyId, it.id))
                 }
             )
         }
@@ -51,7 +51,7 @@ class TraitCompendiumScreen(
             },
             remover = screenModel::remove,
             newItemSaver = screenModel::createNew,
-            onClick = { navigation.navigate(TraitDetailScreen(partyId, it.id)) },
+            onClick = { navigation.navigate(CompendiumTraitDetailScreen(partyId, it.id)) },
             onNewItemRequest = { newTraitDialogOpened = true },
             type = Type.TRAITS,
         ) { trait ->
