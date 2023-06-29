@@ -14,7 +14,6 @@ import cz.frantisekmasa.wfrp_master.common.core.domain.party.PartyId
 import cz.frantisekmasa.wfrp_master.common.core.shared.Resources
 import cz.frantisekmasa.wfrp_master.common.core.ui.navigation.LocalNavigationTransaction
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.EmptyUI
-import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.ItemIcon
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.rememberScreenModel
 import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
 
@@ -56,7 +55,7 @@ class SpellCompendiumScreen(
             type = Type.SPELLS,
         ) { spell ->
             ListItem(
-                icon = { ItemIcon(Resources.Drawable.Spell) },
+                icon = { SpellLoreIcon(spell.lore) },
                 text = { Text(spell.name) },
                 trailing = { VisibilityIcon(spell) },
             )
