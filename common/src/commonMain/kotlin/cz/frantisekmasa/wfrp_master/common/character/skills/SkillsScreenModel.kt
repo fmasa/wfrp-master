@@ -18,7 +18,7 @@ import kotlinx.coroutines.launch
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.Skill as CompendiumSkill
 
 class SkillsScreenModel(
-    private val characterId: CharacterId,
+    characterId: CharacterId,
     private val skillRepository: SkillRepository,
     private val compendium: Compendium<CompendiumSkill>,
     userProvider: UserProvider,

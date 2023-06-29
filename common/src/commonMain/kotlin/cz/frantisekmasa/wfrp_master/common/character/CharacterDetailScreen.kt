@@ -99,6 +99,9 @@ data class CharacterDetailScreen(
             )
         }
 
+        val userId = LocalUser.current.id
+        val isGameMaster = party.gameMasterId == null || party.gameMasterId == userId
+
         Scaffold(
             topBar = {
                 TopAppBar(
@@ -109,6 +112,7 @@ data class CharacterDetailScreen(
                             character = character,
                             screenModel = screenModel,
                             currentTab = currentTab,
+                            isGameMaster = isGameMaster,
                         )
                     },
                     actions = {
@@ -124,6 +128,7 @@ data class CharacterDetailScreen(
             MainContainer(
                 character = character,
                 party = party,
+                isGameMaster = isGameMaster,
                 screenModel = screenModel,
                 tabs = tabs,
                 onTabChange = { currentTab = it },
@@ -137,11 +142,11 @@ data class CharacterDetailScreen(
         character: Character,
         screenModel: CharacterScreenModel,
         currentTab: CharacterTab?,
+        isGameMaster: Boolean,
     ) {
         val characterPickerScreenModel: CharacterPickerScreenModel =
             rememberScreenModel(arg = party.id)
         val userId = LocalUser.current.id
-        val isGameMaster = party.gameMasterId == null || party.gameMasterId == userId
         val canAddCharacters = !isGameMaster
 
         val allCharacters = remember {
@@ -227,6 +232,7 @@ data class CharacterDetailScreen(
     private fun MainContainer(
         character: Character?,
         party: Party?,
+        isGameMaster: Boolean,
         screenModel: CharacterScreenModel,
         tabs: List<CharacterTab>,
         onTabChange: (CharacterTab) -> Unit,

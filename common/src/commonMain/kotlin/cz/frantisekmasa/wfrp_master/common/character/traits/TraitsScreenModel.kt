@@ -18,7 +18,7 @@ import kotlinx.coroutines.launch
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.Trait as CompendiumTrait
 
 class TraitsScreenModel(
-    private val characterId: CharacterId,
+    characterId: CharacterId,
     traitRepository: TraitRepository,
     private val compendium: Compendium<CompendiumTrait>,
     private val effectManager: EffectManager,

@@ -1,7 +1,6 @@
 package cz.frantisekmasa.wfrp_master.common.character.skills.dialog
 
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -13,10 +12,13 @@ import androidx.compose.ui.Modifier
 import com.benasher44.uuid.Uuid
 import cz.frantisekmasa.wfrp_master.common.character.skills.SkillRating
 import cz.frantisekmasa.wfrp_master.common.character.skills.SkillsScreenModel
+import cz.frantisekmasa.wfrp_master.common.compendium.skill.SkillDetailScreen
 import cz.frantisekmasa.wfrp_master.common.core.domain.Stats
+import cz.frantisekmasa.wfrp_master.common.core.ui.buttons.CompendiumButton
 import cz.frantisekmasa.wfrp_master.common.core.ui.dialogs.FullScreenDialog
 import cz.frantisekmasa.wfrp_master.common.core.ui.flow.collectWithLifecycle
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.NumberPicker
+import cz.frantisekmasa.wfrp_master.common.core.ui.navigation.LocalNavigationTransaction
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
 import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.SubheadBar
 import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
@@ -40,23 +42,39 @@ fun EditSkillDialog(
                 skill,
                 onDismissRequest = onDismissRequest,
                 subheadBar = {
-                    Column {
-                        AdvancesBar(
-                            advances = skill.advances,
-                            minAdvances = if (skill.advanced) 1 else 0,
-                            onAdvancesChange = { advances ->
-                                coroutineScope.launch(Dispatchers.IO) {
-                                    screenModel.saveSkill(skill.copy(advances = advances))
-                                }
-                            },
-                        )
+                    AdvancesBar(
+                        advances = skill.advances,
+                        minAdvances = if (skill.advanced) 1 else 0,
+                        onAdvancesChange = { advances ->
+                            coroutineScope.launch(Dispatchers.IO) {
+                                screenModel.saveSkill(skill.copy(advances = advances))
+                            }
+                        },
+                    )
 
-                        SkillRating(
-                            label = LocalStrings.current.skills.labelRating,
-                            value = characteristics.get(skill.characteristic) + skill.advances,
-                            modifier = Modifier
-                                .padding(top = Spacing.extraLarge)
-                                .align(Alignment.CenterHorizontally),
+                    SkillRating(
+                        label = LocalStrings.current.skills.labelRating,
+                        value = characteristics.get(skill.characteristic) + skill.advances,
+                        modifier = Modifier
+                            .padding(top = Spacing.extraLarge)
+                            .align(Alignment.CenterHorizontally),
+                    )
+
+                    val isGameMaster = screenModel.isGameMaster.collectWithLifecycle(false).value
+
+                    if (isGameMaster) {
+                        val navigation = LocalNavigationTransaction.current
+
+                        CompendiumButton(
+                            modifier = Modifier.align(Alignment.CenterHorizontally),
+                            onClick = {
+                                navigation.navigate(
+                                    SkillDetailScreen(
+                                        screenModel.characterId.partyId,
+                                        skill.compendiumId,
+                                    )
+                                )
+                            }
                         )
                     }
                 }

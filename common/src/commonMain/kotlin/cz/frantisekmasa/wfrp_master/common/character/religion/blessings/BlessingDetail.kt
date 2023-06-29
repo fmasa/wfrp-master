@@ -1,6 +1,7 @@
 package cz.frantisekmasa.wfrp_master.common.character.religion.blessings
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -21,6 +22,7 @@ import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
 @Composable
 fun BlessingDetail(
     blessing: Blessing,
+    subheadBar: @Composable ColumnScope.() -> Unit = {},
     onDismissRequest: () -> Unit,
 ) {
     Scaffold(
@@ -34,6 +36,8 @@ fun BlessingDetail(
         }
     ) {
         Column(Modifier.verticalScroll(rememberScrollState())) {
+            subheadBar()
+
             BlessingDetailBody(
                 range = blessing.range,
                 target = blessing.target,
