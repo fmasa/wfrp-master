@@ -12,20 +12,13 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Group
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import com.halilibo.richtext.markdown.Markdown
-import com.halilibo.richtext.ui.RichText
 import cz.frantisekmasa.wfrp_master.common.ambitions.AmbitionsCard
 import cz.frantisekmasa.wfrp_master.common.character.CharacterScreenModel
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.Character
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.CharacterType
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.Party
-import cz.frantisekmasa.wfrp_master.common.core.ui.cards.CardEditButton
-import cz.frantisekmasa.wfrp_master.common.core.ui.cards.CardTitle
-import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.CardRow
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
 import cz.frantisekmasa.wfrp_master.common.core.ui.responsive.Breakpoint
 import cz.frantisekmasa.wfrp_master.common.core.ui.responsive.ColumnSize
@@ -45,32 +38,10 @@ fun NotesScreen(
         Column(
             Modifier
                 .verticalScroll(rememberScrollState())
-                .padding(bottom = Spacing.bottomPaddingUnderFab),
+                .padding(Spacing.small)
         ) {
-            CardRow {
-                Column {
-                    var editNoteDialogOpened by remember { mutableStateOf(false) }
-
-                    if (editNoteDialogOpened) {
-                        EditNoteDialog(
-                            character,
-                            screenModel,
-                            onDismissRequest = { editNoteDialogOpened = false },
-                        )
-                    }
-
-                    CardTitle(
-                        LocalStrings.current.character.note,
-                        actions = {
-                            CardEditButton(onClick = { editNoteDialogOpened = true })
-                        }
-                    )
-
-                    RichText {
-                        Markdown(character.note)
-                    }
-                }
-            }
+            NoteCard(character, screenModel)
+            MotivationCard(character, screenModel)
 
             if (character.type == CharacterType.PLAYER_CHARACTER) {
                 AmbitionsContainer(character, party, screenModel)
@@ -84,7 +55,6 @@ private fun AmbitionsContainer(character: Character, party: Party, screenModel: 
     val strings = LocalStrings.current.ambition
 
     Container(
-        Modifier.padding(top = Spacing.tiny),
         horizontalArrangement = Arrangement.spacedBy(Spacing.gutterSize()),
     ) {
         val size = if (breakpoint > Breakpoint.XSmall)
