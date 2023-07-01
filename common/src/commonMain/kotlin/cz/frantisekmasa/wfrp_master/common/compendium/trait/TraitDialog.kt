@@ -89,7 +89,7 @@ private data class TraitFormData(
         name = name.value,
         specifications = if (specifications.value == "")
             emptySet()
-        else description.value
+        else specifications.value
             .split(',')
             .asSequence()
             .map { it.trim() }

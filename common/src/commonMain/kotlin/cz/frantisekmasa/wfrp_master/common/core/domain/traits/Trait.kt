@@ -28,7 +28,13 @@ data class Trait(
     @Stable
     val evaluatedName get(): String = specificationValues
         .toList()
-        .fold(name) { name, (search, replacement) -> name.replace(search, replacement) }
+        .fold(name) { name, (search, replacement) ->
+            val lastIndex = name.lastIndexOf(search)
+
+            if (lastIndex != -1)
+                name.replaceRange(lastIndex, lastIndex + search.length, replacement)
+            else name
+        }
 
     @Stable
     override val effects: List<CharacterEffect> get() {
