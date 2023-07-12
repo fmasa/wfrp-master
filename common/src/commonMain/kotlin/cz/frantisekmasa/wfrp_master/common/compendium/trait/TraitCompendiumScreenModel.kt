@@ -26,6 +26,11 @@ class TraitCompendiumScreenModel(
         existing: CharacterTrait,
         new: CharacterTrait
     ) {
-        effectManager.saveEffectSource(transaction, characterId, EffectSource.Trait(new))
+        effectManager.saveEffectSource(
+            transaction,
+            characterId,
+            source = EffectSource.Trait(new),
+            previousSourceVersion = EffectSource.Trait(existing),
+        )
     }
 }

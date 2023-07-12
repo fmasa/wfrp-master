@@ -18,11 +18,9 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import com.benasher44.uuid.Uuid
-import com.benasher44.uuid.uuid4
 import cz.frantisekmasa.wfrp_master.common.character.traits.TraitsScreenModel
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.exceptions.CompendiumItemNotFound
 import cz.frantisekmasa.wfrp_master.common.core.domain.traits.Trait
-import cz.frantisekmasa.wfrp_master.common.core.shared.IO
 import cz.frantisekmasa.wfrp_master.common.core.ui.buttons.CloseButton
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.InputValue
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.Rules
@@ -82,16 +80,16 @@ internal fun TraitSpecificationsForm(
                                 try {
                                     val specificationValues = inputValues.mapValues { it.value.value }
                                     if (existingTrait == null) {
-                                        screenModel.saveCompendiumTrait(
-                                            traitId = existingTrait?.id ?: uuid4(),
+                                        screenModel.saveNewTrait(
                                             compendiumTraitId = compendiumTraitId,
                                             specificationValues = specificationValues,
                                         )
                                     } else {
                                         screenModel.saveTrait(
-                                            existingTrait.copy(
+                                            trait = existingTrait.copy(
                                                 specificationValues = specificationValues
-                                            )
+                                            ),
+                                            existingTrait = existingTrait,
                                         )
                                     }
                                 } catch (e: CompendiumItemNotFound) {

@@ -33,9 +33,17 @@ class TalentsScreenModel(
     partyRepository,
 ) {
 
-    suspend fun saveTalent(talent: Talent) {
+    suspend fun saveTalent(
+        talent: Talent,
+        existingTalent: Talent?,
+    ) {
         firestore.runTransaction { transaction ->
-            effectManager.saveEffectSource(transaction, characterId, EffectSource.Talent(talent))
+            effectManager.saveEffectSource(
+                transaction,
+                characterId,
+                EffectSource.Talent(talent),
+                existingTalent?.let(EffectSource::Talent),
+            )
         }
     }
 
@@ -45,7 +53,12 @@ class TalentsScreenModel(
         }
     }
 
-    suspend fun saveCompendiumTalent(talentId: Uuid, compendiumTalentId: Uuid, timesTaken: Int) {
+    suspend fun saveCompendiumTalent(
+        talentId: Uuid,
+        compendiumTalentId: Uuid,
+        timesTaken: Int,
+        existingTalent: Talent?,
+    ) {
         val compendiumTalent = compendium.getItem(
             partyId = characterId.partyId,
             itemId = compendiumTalentId,
@@ -59,7 +72,8 @@ class TalentsScreenModel(
                 tests = compendiumTalent.tests,
                 description = compendiumTalent.description,
                 taken = timesTaken,
-            )
+            ),
+            existingTalent = existingTalent,
         )
     }
 }

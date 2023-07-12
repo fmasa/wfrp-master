@@ -8,11 +8,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
-import com.benasher44.uuid.uuid4
 import cz.frantisekmasa.wfrp_master.common.character.CompendiumItemChooser
 import cz.frantisekmasa.wfrp_master.common.character.traits.TraitsScreenModel
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.Trait
-import cz.frantisekmasa.wfrp_master.common.core.shared.IO
 import cz.frantisekmasa.wfrp_master.common.core.shared.Parcelable
 import cz.frantisekmasa.wfrp_master.common.core.shared.Parcelize
 import cz.frantisekmasa.wfrp_master.common.core.shared.Resources
@@ -56,7 +54,7 @@ fun AddTraitDialog(screenModel: TraitsScreenModel, onDismissRequest: () -> Unit)
                         if (it.specifications.isEmpty()) {
                             saving = true
                             coroutineScope.launch(Dispatchers.IO) {
-                                screenModel.saveCompendiumTrait(uuid4(), it.id, emptyMap())
+                                screenModel.saveNewTrait(it.id, emptyMap())
                                 onDismissRequest()
                             }
                         } else {
