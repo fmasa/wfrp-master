@@ -16,5 +16,7 @@ expect open class Query {
 
     fun whereEqualTo(field: String, value: Any?): Query
 
+    fun whereIn(field: String, values: Iterable<Any?>): Query
+
     fun whereArrayContains(field: String, value: Any): Query
 }

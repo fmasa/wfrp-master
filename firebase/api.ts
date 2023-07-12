@@ -62,6 +62,13 @@ export interface Stats {
 export interface Character {
     id: string,
     name: string,
+    type: string,
+    publicName: string | null,
+    size: string | null,
+    status: {
+        tier: string,
+        standing: number,
+    }
     userId: string | null,
     career: string,
     socialClass: string,
@@ -80,6 +87,14 @@ export interface Character {
         sin: number,
         hardyWoundsBonus: number
     },
+    woundsModifiers: {
+        afterMultiplier: number,
+        extraToughnessBonusMultiplier: number,
+        isConstruct: boolean
+    },
+    encumbranceBonus: number,
+    avatarUrl: string | null,
+    hiddenTabs: string[],
     ambitions: {
         shortTerm: string,
         longTerm: string,
@@ -93,6 +108,8 @@ export interface Character {
     hardyTalent: boolean,
     note: string,
     conditions: Conditions,
+    archived: boolean,
+    compendiumCareer: { careerId: string, levelId: string } | null,
 }
 
 export interface Conditions {

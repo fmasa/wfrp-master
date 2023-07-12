@@ -103,9 +103,10 @@ class FirestoreCharacterRepository(
 
     override fun inParty(partyId: PartyId, types: Set<CharacterType>): Flow<List<Character>> {
         return characters(partyId)
+            .whereEqualTo("archived", false)
+            .whereIn("type", types.map { it.name })
             .orderBy("name")
             .documents(mapper)
-            .map { characters -> characters.filter { it.type in types && !it.isArchived } }
     }
 
     private fun characters(partyId: PartyId) =

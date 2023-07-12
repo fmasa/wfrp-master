@@ -525,9 +525,9 @@ service cloud.firestore {
                             (character.userId != null && character.userId == request.auth.uid) ||
                             (isGameMaster() && (character.userId == null || character.userId in get(/databases/$(database)/documents/parties/$(partyId)).data.users))
                         )
-                        && (! ("type" in character) || character.type in ["PLAYER_CHARACTER", "NPC"])
+                        && character.type in ["PLAYER_CHARACTER", "NPC"]
                         && character.name is string && isNotBlank(character.name) && character.name.size() <= 50
-                        && (! ("publicName" in character) || character.publicName == null || (character.publicName is string && isNotBlank(character.publicName) && character.publicName.size() <= 50))
+                        && (character.publicName == null || (character.publicName is string && isNotBlank(character.publicName) && character.publicName.size() <= 50))
                         && character.career is string && character.career.size() <= 50
                         && character.psychology is string && character.psychology.size() <= 200
                         && character.motivation is string && character.motivation.size() <= 200
@@ -541,20 +541,21 @@ service cloud.firestore {
                         && areAmbitionsValid(character.ambitions)
                         && character.note is string && character.note.size() <= 400
                         && character.hardyTalent is bool
-                        && (! ("hiddenTabs" in character) ||
-                            (character.hiddenTabs is list &&
-                             character.hiddenTabs.toSet().size() == character.hiddenTabs.size() &&
-                                 [
+                        && (
+                            character.hiddenTabs is list &&
+                            character.hiddenTabs.toSet().size() == character.hiddenTabs.size() &&
+                                [
                                     "ATTRIBUTES",
+                                    "COMBAT",
                                     "CONDITIONS",
                                     "SKILLS_AND_TALENTS",
                                     "SPELLS",
                                     "RELIGION",
-                                    "TRAPPINGS"
+                                    "TRAPPINGS",
+                                    "NOTES"
                                 ].hasAll(character.hiddenTabs)
-                            )
                         )
-                        && (! ("size" in character) || character.size == null || (
+                        && (character.size == null || (
                             character.size is string
                                 && character.size in [
                                     "TINY",
@@ -567,15 +568,15 @@ service cloud.firestore {
                                 ]
                             )
                         )
-                        && (! ("avatarUrl" in character) || character.avatarUrl is string || character.avatarUrl == null)
-                        && (! ("archived" in character) || (character.archived is bool && (!character.archived || character.userId == null)))
-                        && (! ("conditions" in character) || areValidConditions(character.conditions))
-                        && ! ("status" in character) || (
+                        && (character.avatarUrl is string || character.avatarUrl == null)
+                        && (character.archived is bool && (!character.archived || character.userId == null))
+                        && (areValidConditions(character.conditions))
+                        && (
                             character.status is map && character.status.keys().toSet() == ["tier", "standing"].toSet()
                                 && character.status.tier in ["BRASS", "SILVER", "GOLD"]
                                 && character.status.standing is int && character.status.standing >= 0
                         )
-                        && ! ("woundsModifiers" in character) || (
+                        && (
                             character.woundsModifiers is map &&
                             [
                                 "afterMultiplier",
@@ -586,15 +587,13 @@ service cloud.firestore {
                             character.woundsModifiers.extraToughnessBonusMultiplier is int &&
                             (! ("isConstruct" in character.woundsModifiers) || character.woundsModifiers.isConstruct is bool)
                         )
-                        && (! ("compendiumCareer" in character) || character.compendiumCareer == null || (
+                        && (character.compendiumCareer == null || (
                             character.compendiumCareer is map &&
                             character.compendiumCareer.keys().toSet() == ["careerId", "levelId"].toSet() &&
                             character.compendiumCareer.careerId is string && isValidUuid(character.compendiumCareer.careerId) &&
                             character.compendiumCareer.levelId is string && isValidUuid(character.compendiumCareer.levelId)
                         ))
-                        && (! ("encumbranceBonus" in character) ||
-                            (character.encumbranceBonus is number && character.encumbranceBonus >= 0)
-                    );
+                        && character.encumbranceBonus is number && character.encumbranceBonus >= 0;
                 }
             }
 
@@ -704,12 +703,12 @@ service cloud.firestore {
                     && isValidPartyName(party.name)
                     && party.users == [uid]
                     && party.archived is bool
-                    && (! ("activeCombat" in party) || party.activeCombat == null)
+                    && party.activeCombat == null
                     && (party.gameMasterId == uid || party.gameMasterId == null)
                     && party.accessCode is string && party.accessCode != ""
-                    && (! ("time" in party) || isValidImperialTime(party.time))
+                    && isValidImperialTime(party.time)
                     && areAmbitionsValid(party.ambitions)
-                    && (! ("settings" in party) || areValidSettings(party.settings))
+                    && areValidSettings(party.settings)
             }
 
             function isValidPartyEdit() {
@@ -720,12 +719,9 @@ service cloud.firestore {
                     && areAmbitionsValid(party.ambitions)
                     && isValidPartyName(party.name)
                     && party.users.toSet() == resource.data.users.toSet()
-                    && (! ("time" in party) || isValidImperialTime(party.time))
-                    && (! ("activeCombat" in party)
-                        || party.activeCombat == null
-                        || isValidCombat(party.activeCombat)
-                    )
-                    && (! ("settings" in party) || areValidSettings(party.settings))
+                    && isValidImperialTime(party.time)
+                    && (party.activeCombat == null || isValidCombat(party.activeCombat))
+                    && areValidSettings(party.settings)
                     && party.archived is bool;
             }
 

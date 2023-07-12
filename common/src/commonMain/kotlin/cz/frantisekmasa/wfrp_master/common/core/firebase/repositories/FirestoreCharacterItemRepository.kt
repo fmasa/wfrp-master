@@ -68,6 +68,7 @@ open class FirestoreCharacterItemRepository<T : CharacterItem<T, *>>(
             firestore.collection(Schema.Parties)
                 .document(partyId.toString())
                 .collection(Schema.Characters)
+                .whereEqualTo("archived", false)
                 .get()
                 .documents
                 .map { character ->
