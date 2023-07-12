@@ -39,7 +39,12 @@ internal fun NonCompendiumTalentForm(
         title = if (existingTalent != null) strings.titleEdit else strings.titleNew,
         onDismissRequest = onDismissRequest,
         formData = formData,
-        onSave = screenModel::saveTalent,
+        onSave = {
+            screenModel.saveTalent(
+                talent = it,
+                existingTalent = existingTalent,
+            )
+        },
     ) { validate ->
         Row(
             modifier = Modifier.fillMaxWidth(),

@@ -31,6 +31,11 @@ class TalentCompendiumScreenModel(
         existing: CharacterTalent,
         new: CharacterTalent
     ) {
-        effectManager.saveEffectSource(transaction, characterId, EffectSource.Talent(new))
+        effectManager.saveEffectSource(
+            transaction,
+            characterId,
+            source = EffectSource.Talent(new),
+            previousSourceVersion = EffectSource.Talent(existing),
+        )
     }
 }

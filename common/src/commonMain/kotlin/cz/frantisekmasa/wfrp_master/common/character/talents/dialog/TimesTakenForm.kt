@@ -69,6 +69,7 @@ internal fun TimesTakenForm(
                                         talentId = existingTalent?.id ?: uuid4(),
                                         compendiumTalentId = compendiumTalentId,
                                         timesTaken = timesTaken,
+                                        existingTalent = existingTalent,
                                     )
                                 } catch (e: CompendiumItemNotFound) {
                                     Napier.d(e.toString(), e)

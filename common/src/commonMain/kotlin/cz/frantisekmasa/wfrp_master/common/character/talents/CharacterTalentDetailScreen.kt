@@ -43,7 +43,10 @@ class CharacterTalentDetailScreen(characterId: CharacterId, talentId: Uuid) :
                     subheadBar = {
                         TimesTakenBar(talent.taken) { timesTaken ->
                             coroutineScope.launch(Dispatchers.IO) {
-                                screenModel.saveTalent(talent.copy(taken = timesTaken))
+                                screenModel.saveTalent(
+                                    talent = talent.copy(taken = timesTaken),
+                                    existingTalent = talent,
+                                )
                             }
                         }
 

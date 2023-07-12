@@ -18,21 +18,20 @@ class EffectManager(
     private val talents: TalentRepository,
 ) {
 
-    suspend fun saveEffectSource(
+    suspend fun <T : EffectSource> saveEffectSource(
         transaction: Transaction,
         characterId: CharacterId,
-        source: EffectSource,
+        source: T,
+        previousSourceVersion: T?,
     ): Unit = coroutineScope {
-        val characterDeferred = async(Dispatchers.IO) { characters.get(characterId) }
-
-        val effectSources = effectSources(characterId)
-        val previousSourceVersion = effectSources.firstOrNull { it.id == source.id }
-
         if (source.effects == (previousSourceVersion?.effects ?: emptyList<CharacterEffect>())) {
             // Fast path, no need to load other effect sources and update character
             saveSource(transaction, characterId, source)
             return@coroutineScope
         }
+
+        val characterDeferred = async(Dispatchers.IO) { characters.get(characterId) }
+        val effectSources = effectSources(characterId)
 
         val otherEffects = effectSources
             .filter { it.id != source.id }

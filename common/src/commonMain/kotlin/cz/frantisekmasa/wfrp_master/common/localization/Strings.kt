@@ -437,6 +437,7 @@ data class CommonUiStrings(
     val iconToggleFabMenu: String = "Toggle menu",
     val dismissTipConfirmation: String = "Do you really want to dismiss this tip?",
     val search: String = "Search",
+    val selectAll: String = "Select All",
     val expressionHelper: (variables: List<String>) -> String = {
         "Allowed operators: +,-,/,*,(,), MIN(...), MAX(...) and variables: " + it.joinToString(", ")
     }
@@ -552,6 +553,8 @@ data class CompendiumMessageStrings(
     val rulebookImportFailed: String = "PDF import failed. Check that you provided valid rulebook PDF.",
     val jsonImportFailed: String = "JSON import failed. Check that you provided valid WFRP Master export.",
     val itemAlreadyExists: String = "Item already exists",
+    val noChangedItems: String = "There are no changed items to import",
+    val unchangedItems: (Int) -> String = { "$it existing items are unchanged" },
     val noItems: String = "No items in compendium",
     val noItemsInCompendiumSubtextPlayer: String = "Your GM has to add them first.",
     val willReplaceExistingItem: String = "Will replace existing item",
