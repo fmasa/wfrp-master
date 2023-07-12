@@ -552,6 +552,8 @@ data class CompendiumMessageStrings(
     val rulebookImportFailed: String = "PDF import failed. Check that you provided valid rulebook PDF.",
     val jsonImportFailed: String = "JSON import failed. Check that you provided valid WFRP Master export.",
     val itemAlreadyExists: String = "Item already exists",
+    val noChangedItems: String = "There are no changed items to import",
+    val unchangedItems: (Int) -> String = { "$it existing items are unchanged" },
     val noItems: String = "No items in compendium",
     val noItemsInCompendiumSubtextPlayer: String = "Your GM has to add them first.",
     val willReplaceExistingItem: String = "Will replace existing item",

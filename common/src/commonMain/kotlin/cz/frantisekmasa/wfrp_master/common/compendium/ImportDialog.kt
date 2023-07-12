@@ -1,6 +1,7 @@
 package cz.frantisekmasa.wfrp_master.common.compendium
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -8,10 +9,13 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.selection.toggleable
 import androidx.compose.material.Checkbox
 import androidx.compose.material.ListItem
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.CheckCircle
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.getValue
@@ -46,8 +50,10 @@ import cz.frantisekmasa.wfrp_master.common.core.domain.party.PartyId
 import cz.frantisekmasa.wfrp_master.common.core.ui.buttons.CloseButton
 import cz.frantisekmasa.wfrp_master.common.core.ui.dialogs.FullScreenDialog
 import cz.frantisekmasa.wfrp_master.common.core.ui.flow.collectWithLifecycle
+import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.EmptyUI
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.FullScreenProgress
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.rememberScreenModel
+import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.SubheadBar
 import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.TopBarAction
 import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
 import kotlinx.coroutines.Dispatchers
@@ -216,8 +222,16 @@ private fun <T : CompendiumItem<T>> ItemPicker(
         existingItemsList.associateBy { it.name }
     }
 
-    val selectedItems = remember(items, existingItemsByName, replaceExistingByDefault) {
-        items.map { it.id to (replaceExistingByDefault || it.name !in existingItemsByName) }
+    val (unchangedItems, changedItems) = remember(items, existingItemsByName) {
+        items.partition {
+            val existingItem = existingItemsByName[it.name]
+
+            existingItem != null && it.replace(existingItem) == existingItem
+        }
+    }
+
+    val selectedItems = remember(changedItems, existingItemsByName, replaceExistingByDefault) {
+        changedItems.map { it.id to (replaceExistingByDefault || it.name !in existingItemsByName) }
             .toMutableStateMap()
     }
     val atLeastOneSelected = selectedItems.containsValue(true)
@@ -247,7 +261,7 @@ private fun <T : CompendiumItem<T>> ItemPicker(
                                 if (atLeastOneSelected) {
                                     withContext(Dispatchers.IO) {
                                         screenModel.import(
-                                            items
+                                            changedItems
                                                 .asSequence()
                                                 .filter { selectedItems[it.id] == true }
                                                 .map {
@@ -273,21 +287,27 @@ private fun <T : CompendiumItem<T>> ItemPicker(
         },
     ) {
         Column(Modifier.fillMaxWidth()) {
-            Surface(elevation = 2.dp, modifier = Modifier.fillMaxWidth()) {
-                Text(
-                    label,
-                    textAlign = TextAlign.Center,
-                    modifier = Modifier
-                        .align(Alignment.CenterHorizontally)
-                        .padding(16.dp)
-                )
+            SubheadBar {
+                Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                    Text(label, textAlign = TextAlign.Center)
+                    Text(
+                        strings.compendium.messages.unchangedItems(unchangedItems.size),
+                        textAlign = TextAlign.Center,
+                        style = MaterialTheme.typography.caption,
+                    )
+                }
             }
 
             if (isLoading) {
                 FullScreenProgress()
+            } else if (changedItems.isEmpty()) {
+                EmptyUI(
+                    text = strings.compendium.messages.noChangedItems,
+                    icon = Icons.Rounded.CheckCircle,
+                )
             } else {
                 LazyColumn {
-                    items(items) { item ->
+                    items(changedItems) { item ->
                         ListItem(
                             icon = {
                                 Checkbox(
