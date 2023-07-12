@@ -1,9 +1,7 @@
 package cz.frantisekmasa.wfrp_master.common.compendium
 
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.selection.toggleable
@@ -18,6 +16,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.CheckCircle
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableStateOf
@@ -27,8 +26,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.runtime.toMutableStateMap
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.state.ToggleableState
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
 import cz.frantisekmasa.wfrp_master.common.compendium.CompendiumItemScreenModel.ImportAction
 import cz.frantisekmasa.wfrp_master.common.compendium.blessing.BlessingCompendiumScreenModel
@@ -50,6 +49,7 @@ import cz.frantisekmasa.wfrp_master.common.core.domain.party.PartyId
 import cz.frantisekmasa.wfrp_master.common.core.ui.buttons.CloseButton
 import cz.frantisekmasa.wfrp_master.common.core.ui.dialogs.FullScreenDialog
 import cz.frantisekmasa.wfrp_master.common.core.ui.flow.collectWithLifecycle
+import cz.frantisekmasa.wfrp_master.common.core.ui.forms.TriStateCheckboxWithText
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.EmptyUI
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.FullScreenProgress
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.rememberScreenModel
@@ -307,6 +307,28 @@ private fun <T : CompendiumItem<T>> ItemPicker(
                 )
             } else {
                 LazyColumn {
+                    item {
+                        val checkboxState by remember {
+                            derivedStateOf {
+                                when {
+                                    !selectedItems.containsValue(false) -> ToggleableState.On
+                                    selectedItems.containsValue(true) -> ToggleableState.Indeterminate
+                                    else -> ToggleableState.Off
+                                }
+                            }
+                        }
+
+                        TriStateCheckboxWithText(
+                            text = strings.commonUi.selectAll,
+                            state = checkboxState,
+                            onClick = {
+                                val shouldSelectAllItems = checkboxState == ToggleableState.Off
+                                selectedItems.putAll(
+                                    selectedItems.map { it.key to shouldSelectAllItems }
+                                )
+                            }
+                        )
+                    }
                     items(changedItems) { item ->
                         ListItem(
                             icon = {

@@ -437,6 +437,7 @@ data class CommonUiStrings(
     val iconToggleFabMenu: String = "Toggle menu",
     val dismissTipConfirmation: String = "Do you really want to dismiss this tip?",
     val search: String = "Search",
+    val selectAll: String = "Select All",
     val expressionHelper: (variables: List<String>) -> String = {
         "Allowed operators: +,-,/,*,(,), MIN(...), MAX(...) and variables: " + it.joinToString(", ")
     }
