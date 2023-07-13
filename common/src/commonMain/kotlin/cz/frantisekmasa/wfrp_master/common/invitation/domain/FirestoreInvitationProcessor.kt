@@ -35,7 +35,7 @@ class FirestoreInvitationProcessor(
 
         firestore.collection("parties")
             .document(invitation.partyId.toString())
-            .update("users", arrayUnion(userId))
+            .update("users", arrayUnion(userId.toString()))
 
         return InvitationProcessingResult.Success
     }
