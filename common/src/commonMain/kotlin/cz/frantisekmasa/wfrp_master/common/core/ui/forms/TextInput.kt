@@ -3,6 +3,8 @@ package cz.frantisekmasa.wfrp_master.common.core.ui.forms
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
@@ -167,13 +169,26 @@ private fun TextInput(
             }
         }
 
-        if (helperText != null && helperText.isNotBlank()) {
+        if (maxLength < Int.MAX_VALUE || helperText.isNullOrBlank()) {
             CompositionLocalProvider(LocalContentAlpha provides ContentAlpha.medium) {
-                Text(helperText, style = MaterialTheme.typography.body2)
+                Row {
+                    if (!helperText.isNullOrBlank()) {
+                        Text(helperText, style = MaterialTheme.typography.body2)
+                    }
+
+                    Spacer(Modifier.weight(1f))
+
+                    if (maxLength < Int.MAX_VALUE) {
+                        Text(
+                            "${value.length} / $maxLength",
+                            style = MaterialTheme.typography.overline,
+                        )
+                    }
+                }
             }
         }
 
-        if (errorMessage != null && errorMessage.isNotBlank()) {
+        if (!errorMessage.isNullOrBlank()) {
             ErrorMessage(errorMessage)
         }
     }
