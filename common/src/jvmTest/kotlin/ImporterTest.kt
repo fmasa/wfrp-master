@@ -18,6 +18,12 @@ class ImporterTest {
         withCoreRuleBook { document ->
             val careers = CoreRulebook.importCareers(document)
             assertEquals(64, careers.size)
+            careers.forEach {
+                assertEquals(3, it.levels[0].characteristics.size)
+                assertEquals(1, it.levels[1].characteristics.size)
+                assertEquals(1, it.levels[2].characteristics.size)
+                assertEquals(1, it.levels[3].characteristics.size)
+            }
         }
     }
 
@@ -27,6 +33,12 @@ class ImporterTest {
             val careers = WindsOfMagic.importCareers(document)
 
             assertEquals(11, careers.size)
+            careers.forEach {
+                assertEquals(3, it.levels[0].characteristics.size)
+                assertEquals(1, it.levels[1].characteristics.size)
+                assertEquals(1, it.levels[2].characteristics.size)
+                assertEquals(1, it.levels[3].characteristics.size)
+            }
         }
     }
 
@@ -35,6 +47,12 @@ class ImporterTest {
         withUpInArms { document ->
             val careers = UpInArms.importCareers(document)
             assertEquals(14, careers.size)
+            careers.forEach {
+                assertEquals(3, it.levels[0].characteristics.size)
+                assertEquals(1, it.levels[1].characteristics.size)
+                assertEquals(1, it.levels[2].characteristics.size)
+                assertEquals(1, it.levels[3].characteristics.size)
+            }
         }
     }
 

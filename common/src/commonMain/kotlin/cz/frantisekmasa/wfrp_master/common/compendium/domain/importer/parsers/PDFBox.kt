@@ -14,7 +14,11 @@ expect class TextPosition {
     fun getUnicode(): String
 }
 
-expect class Document : Closeable
+expect class Document : Closeable {
+    fun getPage(index: Int): Page
+}
+
+expect class Page
 
 expect abstract class Font {
     abstract fun getName(): String
@@ -37,3 +41,17 @@ expect fun loadDocument(inputStream: InputStream): Document
 
 @Composable
 expect fun pdfBoxInitializer(): () -> Unit
+
+expect abstract class RectangleFinder constructor(page: Page) {
+    abstract fun appendRectangle(
+        points: List<Pair<Double, Double>>,
+        components: List<Float>,
+    )
+
+    fun processPage(page: Page)
+}
+
+data class Point(
+    val x: Float,
+    val y: Float,
+)
