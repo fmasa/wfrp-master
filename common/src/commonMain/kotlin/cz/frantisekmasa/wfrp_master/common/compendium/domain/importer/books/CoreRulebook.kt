@@ -123,8 +123,18 @@ object CoreRulebook :
             return Token.OptionsBoxHeading(textToken.text)
         }
 
-        if (textToken.fontName == "CaslonAntique,Bold" && textToken.fontSizePt == 19f) {
-            return Token.Heading1(textToken.text)
+        if (textToken.fontName == "CaslonAntique,Bold") {
+            if (textToken.fontSizePt == 19f) {
+                return Token.Heading1(textToken.text)
+            }
+
+            if (textToken.fontSizePt == 10f && textToken.text.isNotBlank()) {
+                return Token.TableHeadCell(textToken.text)
+            }
+        }
+
+        if (textToken.fontName == "crossbatstfb" && textToken.text == "h") {
+            return Token.CrossIcon
         }
 
         if (textToken.fontName == "CaslonAntique-Bold-SC700") {

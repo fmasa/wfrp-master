@@ -2,6 +2,7 @@ package cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.parsers
 
 import com.benasher44.uuid.uuid4
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.Career
+import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.parsers.careers.CareerCharacteristicsParser
 import cz.frantisekmasa.wfrp_master.common.core.domain.SocialClass
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.Race
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.SocialStatus
@@ -15,6 +16,7 @@ class CareerParser {
         classPageRanges: Sequence<Pair<SocialClass, Iterable<Int>>>,
     ): List<Career> {
         val lexer = TwoColumnPdfLexer(document, structure)
+        val characteristicsParser = CareerCharacteristicsParser(document, structure)
 
         return classPageRanges
             .flatMap { (socialClass, pages) ->
@@ -22,10 +24,22 @@ class CareerParser {
                     .map { page ->
                         val columns = lexer.getTokens(page)
 
-                        parseCareerPage(
+                        val career = parseCareerPage(
                             socialClass,
                             columns.first,
                             columns.second,
+                        )
+
+                        val characteristics = characteristicsParser.findCharacteristics(page)
+                            .groupBy({ it.level - 1 }, { it.characteristic })
+
+                        career.copy(
+                            levels = career.levels.mapIndexed { index, level ->
+                                level.copy(
+                                    characteristics = characteristics[index]?.toSet()
+                                        ?: emptySet()
+                                )
+                            }
                         )
                     }
             }.toList()
@@ -60,7 +74,7 @@ class CareerParser {
                 else it
             }
 
-        stream.dropWhile { it is Token.BoxHeader || it is Token.Heading2 }
+        stream.dropWhile { it is Token.BoxHeader || it is Token.Heading2 || it is Token.TableHeadCell }
 
         val levels = (0 until 4).map {
             val (levelName, status) = stream.consumeOneOfType<Token.BoldPart>().text

@@ -38,8 +38,18 @@ object UpInArms : Book, CareerSource, TalentSource {
             return Token.BoxHeader(textToken.text)
         }
 
-        if (textToken.fontSizePt == 19f && textToken.fontName.endsWith("CaslonAntique-Bold")) {
-            return Token.Heading1(textToken.text)
+        if (textToken.fontName.endsWith("CaslonAntique-Bold")) {
+            if (textToken.fontSizePt == 19f) {
+                return Token.Heading1(textToken.text)
+            }
+
+            if (textToken.fontSizePt == 10f) {
+                return Token.TableHeadCell(textToken.text)
+            }
+        }
+
+        if (textToken.fontName.endsWith("crossbatstfb") && textToken.text == "h") {
+            return Token.CrossIcon
         }
 
         if (textToken.fontSizePt == 12f && textToken.fontName.endsWith("ACaslonPro-Bold")) {

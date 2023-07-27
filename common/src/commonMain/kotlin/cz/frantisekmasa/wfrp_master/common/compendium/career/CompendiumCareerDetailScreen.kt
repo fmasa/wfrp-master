@@ -42,6 +42,7 @@ import cz.frantisekmasa.wfrp_master.common.compendium.VisibilitySwitchBar
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.Career
 import cz.frantisekmasa.wfrp_master.common.core.PartyScreenModel
 import cz.frantisekmasa.wfrp_master.common.core.auth.LocalUser
+import cz.frantisekmasa.wfrp_master.common.core.domain.Characteristic
 import cz.frantisekmasa.wfrp_master.common.core.domain.localizedName
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.Party
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.PartyId
@@ -308,6 +309,30 @@ private fun LevelList(
                     },
                     secondaryText = {
                         Column {
+                            Text(
+                                buildAnnotatedString {
+                                    withStyle(SpanStyle(fontWeight = FontWeight.Bold)) {
+                                        append(LocalStrings.current.careers.labelCharacteristics)
+                                        append(": ")
+                                    }
+
+                                    val characteristics = remember(level.characteristics) {
+                                        Characteristic.ORDER.filter { it in level.characteristics }
+                                    }
+
+                                    if (characteristics.isEmpty()) {
+                                        append("—")
+                                    }
+
+                                    characteristics.forEachIndexed { index, characteristic ->
+                                        append(characteristic.getShortcutName())
+
+                                        if (index != characteristics.lastIndex) {
+                                            append(", ")
+                                        }
+                                    }
+                                }
+                            )
                             Text(
                                 buildAnnotatedString {
                                     withStyle(SpanStyle(fontWeight = FontWeight.Bold)) {

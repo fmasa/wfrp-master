@@ -27,8 +27,14 @@ sealed interface Token {
 
     sealed class TableValue(val text: String) : Token
     class BodyCellPart(text: String) : TableValue(text)
+    class TableHeadCell(text: String) : TableValue(text) {
+        override fun toString(): String {
+            return "TableHeadCell(text=$text)"
+        }
+    }
     class TableHeading(text: String) : TableValue(text)
     object BulletPoint : ParagraphToken("\n -", "bulletPoint")
+    object CrossIcon : Token
 
     class BoxHeader(val text: String) : Token
 }

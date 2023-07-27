@@ -213,8 +213,8 @@ private fun CompactCharacteristicsTable(characteristics: Stats) {
         Modifier.fillMaxWidth()
             .height(IntrinsicSize.Min),
     ) {
-        val lastCharacteristic = remember { characteristicOrder.last() }
-        characteristicOrder.forEach { characteristic ->
+        val lastCharacteristic = remember { Characteristic.ORDER.last() }
+        Characteristic.ORDER.forEach { characteristic ->
             key(characteristic) {
                 Column(
                     Modifier.weight(1f),
@@ -245,15 +245,3 @@ private fun CompactCharacteristicsTable(characteristics: Stats) {
         }
     }
 }
-
-private val characteristicOrder = listOf(
-    Characteristic.WEAPON_SKILL,
-    Characteristic.BALLISTIC_SKILL,
-    Characteristic.STRENGTH,
-    Characteristic.TOUGHNESS,
-    Characteristic.AGILITY,
-    Characteristic.DEXTERITY,
-    Characteristic.INTELLIGENCE,
-    Characteristic.WILL_POWER,
-    Characteristic.FELLOWSHIP,
-)
