@@ -156,6 +156,7 @@ fun CharacterBasicInfoForm(
             label = strings.labelNote,
             value = data.note,
             multiLine = true,
+            maxLength = Character.NOTE_MAX_LENGTH,
             validate = validate,
         )
     }

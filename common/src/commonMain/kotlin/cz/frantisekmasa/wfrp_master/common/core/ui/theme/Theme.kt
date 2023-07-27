@@ -73,6 +73,10 @@ fun Theme(content: @Composable () -> Unit) {
         colors = if (darkMode) Theme.darkColors() else Theme.lightColors(),
         typography = MaterialTheme.typography.copy(
             caption = MaterialTheme.typography.caption.copy(fontSize = 14.sp),
+            overline = MaterialTheme.typography.overline.copy(
+                fontSize = 12.sp,
+                letterSpacing = 0.25.sp,
+            )
         ),
     ) {
         SystemBarsChangingEffect()
