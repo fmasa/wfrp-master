@@ -61,4 +61,19 @@ enum class Characteristic(override val nameResolver: (strings: Strings) -> Strin
         WEAPON_SKILL -> Resources.Drawable.WeaponSkill
         WILL_POWER -> Resources.Drawable.WillPower
     }
+
+    companion object {
+        val ORDER = listOf(
+            WEAPON_SKILL,
+            BALLISTIC_SKILL,
+            STRENGTH,
+            TOUGHNESS,
+            INITIATIVE,
+            AGILITY,
+            DEXTERITY,
+            INTELLIGENCE,
+            WILL_POWER,
+            FELLOWSHIP,
+        )
+    }
 }
