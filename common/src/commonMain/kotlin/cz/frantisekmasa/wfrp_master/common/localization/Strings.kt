@@ -287,6 +287,10 @@ data class CharacterStrings(
     val buttonChangeAvatar: String = "Change Avatar",
     val buttonRemoveAvatar: String = "Remove Avatar",
     val buttonChoose: String = "Choose Character",
+    val buttonTurnIntoPC: String = "Turn into Player Character",
+    val buttonTurnIntoNPC: String = "Turn into NPC",
+    val buttonUnlinkFromPlayer: String = "Unlink from Player",
+    val buttonUnlinkFromPlayerSubtext: String = "Character will become available for a different Player",
     val errorVisibleTabRequired: String = "At least one character tab must be visible",
     val labelCareer: String = "Career",
     val labelCharacteristicAdvances: String = "Advances",
@@ -367,6 +371,12 @@ data class CharacterMessageStrings(
     val unassignedCharactersExist: String =
         "There are already unassigned Characters created by GM," +
             " you can assign one of them to yourself.",
+    val turnIntoNPCConfirmation: String = "Do you really want to turn this Character to an NPC?",
+    val turnIntoPCConfirmation: String = "Do you really want to turn this Character to a Player Character?",
+    val unlinkFromPlayerConfirmation: String = """
+        Do you really want to turn unlink this Character from a Player?
+        The Player will lose access to this Character.
+    """.trimIndent(),
 )
 
 @Immutable
@@ -429,6 +439,7 @@ data class CommonUiStrings(
     val buttonRemove: String = "Remove",
     val buttonSave: String = "Save",
     val buttonSkip: String = "Skip",
+    val buttonYes: String = "Yes",
     val labelCloseDialog: String = "Close current dialog",
     val labelExpandSelectBox: String = "Expand select box",
     val labelOpenDrawer: String = "Open navigation drawer",

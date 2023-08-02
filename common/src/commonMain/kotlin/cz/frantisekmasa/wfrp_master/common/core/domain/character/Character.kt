@@ -257,6 +257,15 @@ data class Character(
         return copy(userId = userId)
     }
 
+    fun unlinkFromUser() = copy(userId = null)
+
+    fun turnIntoNPC() = copy(
+        type = CharacterType.NPC,
+        userId = null,
+    )
+
+    fun turnIntoPlayerCharacter() = copy(type = CharacterType.PLAYER_CHARACTER)
+
     companion object {
         const val NAME_MAX_LENGTH = 50
         const val CAREER_MAX_LENGTH = 50
