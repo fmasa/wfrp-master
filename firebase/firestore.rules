@@ -484,9 +484,15 @@ service cloud.firestore {
                     return request.auth != null && request.auth.uid == character.userId;
                 }
 
+                function isUnassignedPlayerCharacter() {
+                    let character = get(/databases/$(database)/documents/parties/$(partyId)/characters/$(characterId)).data;
+
+                    return character.type == "PLAYER_CHARACTER" && character.userId == null;
+                }
+
                 function canEditCharacter() {
                     return hasAccessToParty()
-                        && (isGameMaster() || isCharacterOwner());
+                        && (isGameMaster() || isCharacterOwner() || isUnassignedPlayerCharacter());
                 }
 
                 function isValidCharacter(character) {

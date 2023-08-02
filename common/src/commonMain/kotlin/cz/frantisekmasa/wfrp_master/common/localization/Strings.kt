@@ -283,9 +283,10 @@ data class CareerMessageStrings(
 
 @Immutable
 data class CharacterStrings(
-    val buttonAdd: String = "Add Character",
+    val buttonAdd: String = "Add New Character",
     val buttonChangeAvatar: String = "Change Avatar",
     val buttonRemoveAvatar: String = "Remove Avatar",
+    val buttonChoose: String = "Choose Character",
     val errorVisibleTabRequired: String = "At least one character tab must be visible",
     val labelCareer: String = "Career",
     val labelCharacteristicAdvances: String = "Advances",
@@ -361,7 +362,11 @@ data class CharacterMessageStrings(
             withStyle(SpanStyle(fontWeight = FontWeight.Bold)) { append(characterName) }
             append("?")
         }
-    }
+    },
+    val noCharacterInParty: String = "No Character in Party",
+    val unassignedCharactersExist: String =
+        "There are already unassigned Characters created by GM," +
+            " you can assign one of them to yourself.",
 )
 
 @Immutable
