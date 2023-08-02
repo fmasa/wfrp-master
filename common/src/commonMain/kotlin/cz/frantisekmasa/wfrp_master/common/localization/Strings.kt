@@ -286,7 +286,7 @@ data class CharacterStrings(
     val buttonAdd: String = "Add New Character",
     val buttonChangeAvatar: String = "Change Avatar",
     val buttonRemoveAvatar: String = "Remove Avatar",
-    val buttonChoose: String = "Choose Character",
+    val buttonLink: String = "Link Existing Character",
     val buttonTurnIntoPC: String = "Turn into Player Character",
     val buttonTurnIntoNPC: String = "Turn into NPC",
     val buttonUnlinkFromPlayer: String = "Unlink from Player",

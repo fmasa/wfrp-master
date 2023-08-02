@@ -40,18 +40,18 @@ fun UnassignedCharacterPickerDialog(
         onDismissRequest = onDismissRequest,
         buttons = {},
         text = {
+            val coroutineScope = rememberCoroutineScope()
+            val (saving, setSaving) = remember { mutableStateOf(false) }
+
+            if (saving) {
+                LinearProgressIndicator(Modifier.fillMaxWidth())
+                return@AlertDialog
+            }
+
             Column {
                 DialogTitle(LocalStrings.current.character.titleSelectCharacter)
 
                 Spacer(Modifier.height(Spacing.large))
-
-                val coroutineScope = rememberCoroutineScope()
-                val (saving, setSaving) = remember { mutableStateOf(false) }
-
-                if (saving) {
-                    LinearProgressIndicator(Modifier.fillMaxWidth())
-                    return@Column
-                }
 
                 LazyColumn {
                     items(unassignedCharacters, key = { it.id }) { character ->

@@ -152,7 +152,7 @@ data class CharacterPickerScreen(
 
             if (unassignedCharacters.isNotEmpty()) {
                 OutlinedButton(onClick = { unassignedCharactersDialogVisible = true }) {
-                    Text(LocalStrings.current.character.buttonChoose.uppercase())
+                    Text(LocalStrings.current.character.buttonLink.uppercase())
                 }
 
                 val userId = LocalUser.current.id
