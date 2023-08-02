@@ -7,14 +7,26 @@ import cz.frantisekmasa.wfrp_master.common.core.domain.character.CharacterReposi
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.CharacterType
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.PartyId
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.map
 
 class CharacterPickerScreenModel(
     private val partyId: PartyId,
     private val characters: CharacterRepository,
 ) : ScreenModel {
+
+    private val playerCharacters = characters.inParty(partyId, CharacterType.PLAYER_CHARACTER)
+
+    val unassignedPlayerCharacters = playerCharacters.map {
+        it.filter { character -> character.userId == null }
+    }
+
+    suspend fun assignCharacter(character: Character, userId: UserId) {
+        characters.save(partyId, character.assignToUser(userId))
+    }
+
     fun allUserCharacters(userId: UserId): Flow<List<Character>> {
-        return characters.inParty(partyId, CharacterType.PLAYER_CHARACTER).map {
+        return playerCharacters.map {
             it.filter { character ->
                 character.userId == userId || character.id == userId.toString()
             }

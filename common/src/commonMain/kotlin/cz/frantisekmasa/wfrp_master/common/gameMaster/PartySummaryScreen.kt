@@ -13,7 +13,6 @@ import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
-import androidx.compose.material.ProvideTextStyle
 import androidx.compose.material.Scaffold
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Group
@@ -25,8 +24,6 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
 import cz.frantisekmasa.wfrp_master.common.ambitions.AmbitionsCard
@@ -156,17 +153,17 @@ private fun PlayersCard(
 
             CardTitle(strings.titleCharacters)
 
-            val players = screenModel.players.collectWithLifecycle(null).value
+            val playerCharacters = screenModel.playerCharacters.collectWithLifecycle(null).value
 
             when {
-                players == null -> {
+                playerCharacters == null -> {
                     CircularProgressIndicator(
                         Modifier
                             .align(Alignment.CenterHorizontally)
                             .padding(vertical = 16.dp)
                     )
                 }
-                players.isEmpty() -> {
+                playerCharacters.isEmpty() -> {
                     EmptyUI(
                         text = strings.messages.noCharactersInParty,
                         icon = Icons.Rounded.Group,
@@ -175,11 +172,10 @@ private fun PlayersCard(
                 }
                 else -> {
                     Column(modifier = Modifier.fillMaxWidth()) {
-                        for (player in players) {
-                            PlayerItem(
-                                player = player,
+                        for (character in playerCharacters) {
+                            CharacterItem(
+                                character = character,
                                 onCharacterOpenRequest = onCharacterOpenRequest,
-                                onCharacterCreateRequest = onCharacterCreateRequest,
                                 onRemoveCharacter = onRemoveCharacter,
                             )
                         }
@@ -209,38 +205,21 @@ private fun PlayersCard(
 }
 
 @Composable
-private fun PlayerItem(
-    player: Player,
+private fun CharacterItem(
+    character: Character,
     onCharacterOpenRequest: (Character) -> Unit,
-    onCharacterCreateRequest: (userId: UserId) -> Unit,
     onRemoveCharacter: (Character) -> Unit
 ) {
     val strings = LocalStrings.current
 
-    when (player) {
-        is Player.UserWithoutCharacter -> {
-            ProvideTextStyle(TextStyle.Default.copy(fontStyle = FontStyle.Italic)) {
-                CardItem(
-                    name = strings.parties.messages.waitingForPlayerCharacter,
-                    icon = { CharacterAvatar(null, ItemIcon.Size.Small) },
-                    onClick = { onCharacterCreateRequest(UserId(player.userId)) },
-                    contextMenuItems = emptyList(),
-                )
+    CardItem(
+        name = character.name,
+        icon = { CharacterAvatar(character.avatarUrl, ItemIcon.Size.Small) },
+        onClick = { onCharacterOpenRequest(character) },
+        contextMenuItems = listOf(
+            ContextMenu.Item(strings.commonUi.buttonRemove) {
+                onRemoveCharacter(character)
             }
-        }
-        is Player.ExistingCharacter -> {
-            val character = player.character
-
-            CardItem(
-                name = character.name,
-                icon = { CharacterAvatar(character.avatarUrl, ItemIcon.Size.Small) },
-                onClick = { onCharacterOpenRequest(character) },
-                contextMenuItems = listOf(
-                    ContextMenu.Item(strings.commonUi.buttonRemove) {
-                        onRemoveCharacter(character)
-                    }
-                )
-            )
-        }
-    }
+        )
+    )
 }

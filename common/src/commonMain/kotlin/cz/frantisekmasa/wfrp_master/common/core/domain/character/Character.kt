@@ -246,6 +246,26 @@ data class Character(
         userId = null,
     )
 
+    fun assignToUser(userId: UserId): Character {
+        require(this.userId == null) {
+            "Cannot assign Character that is already assigned to User"
+        }
+        require(type == CharacterType.PLAYER_CHARACTER) {
+            "Only Player Characters can be assigned to User"
+        }
+
+        return copy(userId = userId)
+    }
+
+    fun unlinkFromUser() = copy(userId = null)
+
+    fun turnIntoNPC() = copy(
+        type = CharacterType.NPC,
+        userId = null,
+    )
+
+    fun turnIntoPlayerCharacter() = copy(type = CharacterType.PLAYER_CHARACTER)
+
     companion object {
         const val NAME_MAX_LENGTH = 50
         const val CAREER_MAX_LENGTH = 50

@@ -148,6 +148,7 @@ data class CharacterDetailScreen(
             rememberScreenModel(arg = party.id)
         val userId = LocalUser.current.id
         val canAddCharacters = !isGameMaster
+        val navigation = LocalNavigationTransaction.current
 
         val allCharacters = remember {
             if (isGameMaster)
@@ -155,7 +156,35 @@ data class CharacterDetailScreen(
             else characterPickerScreenModel.allUserCharacters(userId)
         }.collectWithLifecycle(null).value
 
-        if (allCharacters != null && (allCharacters.isNotEmpty() || canAddCharacters)) {
+        val unassignedCharacters = characterPickerScreenModel.unassignedPlayerCharacters
+            .collectWithLifecycle(null).value
+
+        if (
+            allCharacters != null &&
+            unassignedCharacters != null &&
+            (allCharacters.isNotEmpty() || canAddCharacters)
+        ) {
+            var unassignedCharactersDialogOpened by remember { mutableStateOf(false) }
+
+            if (unassignedCharactersDialogOpened) {
+                UnassignedCharacterPickerDialog(
+                    partyId = party.id,
+                    unassignedCharacters = unassignedCharacters,
+                    screenModel = characterPickerScreenModel,
+                    onDismissRequest = { unassignedCharactersDialogOpened = false },
+                    onAssigned = {
+                        navigation.replace(
+                            CharacterDetailScreen(
+                                characterId = it,
+                                comingFromCombat = comingFromCombat,
+                                initialTab = currentTab ?: CharacterTab.values().first(),
+                            )
+                        )
+                        unassignedCharactersDialogOpened = false
+                    }
+                )
+            }
+
             var dropdownOpened by remember { mutableStateOf(false) }
 
             Row(
@@ -178,8 +207,6 @@ data class CharacterDetailScreen(
                 dropdownOpened,
                 onDismissRequest = { dropdownOpened = false }
             ) {
-                val navigation = LocalNavigationTransaction.current
-
                 allCharacters.forEach { otherCharacter ->
                     key(otherCharacter.id) {
                         DropdownMenuItem(
@@ -204,6 +231,18 @@ data class CharacterDetailScreen(
                 }
 
                 if (canAddCharacters) {
+                    if (unassignedCharacters.isNotEmpty()) {
+                        DropdownMenuItem(
+                            onClick = {
+                                dropdownOpened = false
+                                unassignedCharactersDialogOpened = true
+                            },
+                        ) {
+                            Icon(Icons.Rounded.Add, null, modifier = Modifier.size(24.dp))
+                            Text(LocalStrings.current.character.buttonLink)
+                        }
+                    }
+
                     DropdownMenuItem(
                         onClick = {
                             navigation.navigate(

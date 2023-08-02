@@ -15,6 +15,8 @@ import cz.frantisekmasa.wfrp_master.common.core.domain.party.PartyRepository
 import cz.frantisekmasa.wfrp_master.common.core.utils.right
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.map
 
 class CharacterScreenModel(
     private val characterId: CharacterId,
@@ -30,6 +32,10 @@ class CharacterScreenModel(
         characters.inParty(characterId.partyId, CharacterType.PLAYER_CHARACTER)
 
     private val party = partyRepository.getLive(characterId.partyId).right()
+
+    val isGameMaster = party
+        .map { it.gameMasterId == userProvider.userId }
+        .distinctUntilChanged()
 
     val allCareers: Flow<List<Career>> = careerCompendium.liveForParty(characterId.partyId)
         .combine(party) { careers, party ->

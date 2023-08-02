@@ -22,6 +22,7 @@ import cafe.adriel.voyager.core.screen.Screen
 import cz.frantisekmasa.wfrp_master.common.character.CharacterScreenModel
 import cz.frantisekmasa.wfrp_master.common.core.domain.Characteristic
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.CharacterTab
+import cz.frantisekmasa.wfrp_master.common.core.domain.character.CharacterType
 import cz.frantisekmasa.wfrp_master.common.core.domain.identifiers.CharacterId
 import cz.frantisekmasa.wfrp_master.common.core.ui.buttons.BackButton
 import cz.frantisekmasa.wfrp_master.common.core.ui.flow.collectWithLifecycle
@@ -31,6 +32,7 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.HorizontalLine
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.ItemIcon
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.rememberScreenModel
+import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.ConfirmationDialog
 import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.LocalPersistentSnackbarHolder
 import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.Subtitle
 import cz.frantisekmasa.wfrp_master.common.core.ui.settings.SettingsCard
@@ -185,6 +187,65 @@ data class CharacterEditScreen(
                                 }
                             },
                         )
+                    }
+
+                    val isGameMaster = screenModel.isGameMaster.collectWithLifecycle(false).value
+
+                    if (isGameMaster) {
+                        if (character.type != CharacterType.PLAYER_CHARACTER) {
+                            val (dialogOpened, setDialogOpened) = remember { mutableStateOf(false) }
+
+                            if (dialogOpened) {
+                                ConfirmationDialog(
+                                    onDismissRequest = { setDialogOpened(false) },
+                                    text = LocalStrings.current.character.messages.turnIntoPCConfirmation,
+                                    confirmationButtonText = LocalStrings.current.commonUi.buttonYes,
+                                    onConfirmation = { screenModel.update { it.turnIntoPlayerCharacter() } },
+                                )
+                            }
+
+                            ListItem(
+                                text = { Text(strings.character.buttonTurnIntoPC) },
+                                modifier = Modifier.clickable { setDialogOpened(true) },
+                            )
+                        }
+
+                        if (character.type != CharacterType.NPC) {
+                            val (dialogOpened, setDialogOpened) = remember { mutableStateOf(false) }
+
+                            if (dialogOpened) {
+                                ConfirmationDialog(
+                                    onDismissRequest = { setDialogOpened(false) },
+                                    text = LocalStrings.current.character.messages.turnIntoNPCConfirmation,
+                                    confirmationButtonText = LocalStrings.current.commonUi.buttonYes,
+                                    onConfirmation = { screenModel.update { it.turnIntoNPC() } },
+                                )
+                            }
+
+                            ListItem(
+                                text = { Text(strings.character.buttonTurnIntoNPC) },
+                                modifier = Modifier.clickable { setDialogOpened(true) },
+                            )
+                        }
+
+                        if (character.userId != null) {
+                            val (dialogOpened, setDialogOpened) = remember { mutableStateOf(false) }
+
+                            if (dialogOpened) {
+                                ConfirmationDialog(
+                                    onDismissRequest = { setDialogOpened(false) },
+                                    text = LocalStrings.current.character.messages.unlinkFromPlayerConfirmation,
+                                    confirmationButtonText = LocalStrings.current.commonUi.buttonYes,
+                                    onConfirmation = { screenModel.update { it.unlinkFromUser() } },
+                                )
+                            }
+
+                            ListItem(
+                                text = { Text(strings.character.buttonUnlinkFromPlayer) },
+                                secondaryText = { Text(strings.character.buttonUnlinkFromPlayerSubtext) },
+                                modifier = Modifier.clickable { setDialogOpened(true) },
+                            )
+                        }
                     }
 
                     ListItem(
