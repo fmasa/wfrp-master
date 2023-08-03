@@ -12,31 +12,21 @@
   <img align="center" src="https://raw.githubusercontent.com/fmasa/wfrp-master/master/.github/kofi.png" width="240"/></a>
 </p>
 
-## User documentation
+## What is it good for?
 
-For both players and GMs there is a [documentation](https://github.com/fmasa/wfrp-master/wiki) for various features and mechanics used in the app. 
+- Manage Player Characters inside the app.
+- Track NPCs and simplify Combat tracking (Wounds of all the Combatants, Advantage, Determining Initiative).
+- Skills, Talents, and more from official Cubicle 7 PDFs. No need to search the Rulebook for the spell effect in the middle of the combat.
+- Access your data from multiple devices, all data are synced to Cloud.
 
-## Development
+## User documentation (WIKI)
 
-Development is done using Android Studio 2021.2.1+.
-
-This application heavily uses the Firebase Firestore. The best way to work on this project is to
- start your own Firestore emulator and use it instead of production database.
-
-There are just a few steps:
-1) [Install Firebase CLI](https://firebase.google.com/docs/cli#install_the_firebase_cli)
-2) Start Firestore emulator using `firebase emulators:exec --only firestore`
-3) Set `dev.firestoreEmulatorUrl` variable in local.properties to `<Host IP accessible from device>:8080`\*
-
----
-
-\* You may need to expose port 8080 on your machine. Both your Android device and your host must be on same network,
-or you need to use software such as [ngrok](https://ngrok.com/). 
+For both players and GMs, there is a [documentation](https://github.com/fmasa/wfrp-master/wiki) for various features and mechanics used in the app. 
 
 ## Attribution
 
-This application is unofficial companion app and as such is not affiliated, associated, authorized,
-endorsed by, or in any way way affiliated with GW or Cubicle7.
+This application is an unofficial companion app and as such is not affiliated, associated, authorized,
+endorsed by, or in any way affiliated with GW or Cubicle7.
 
 This app uses third-party content such as icons or sounds, I care about proper attribution
 in these cases. If you think that your content is used in the app without attribution,
