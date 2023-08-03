@@ -9,7 +9,7 @@
   <img align="center" src="https://play.google.com/intl/en_gb/badges/static/images/badges/en_badge_web_generic.png" width="240"/></a>
  <br>
  <a href="https://ko-fi.com/fmasa" target="_blank">
-  <img align="center" src="https://github.com/fmasa/wfrp-master/assets/5658260/063c58ef-3204-407c-8de2-adcb824da4ba" width="240"/></a>
+  <img align="center" src="https://raw.githubusercontent.com/fmasa/wfrp-master/master/.github/kofi.png" width="240"/></a>
 </p>
 
 ## User documentation
