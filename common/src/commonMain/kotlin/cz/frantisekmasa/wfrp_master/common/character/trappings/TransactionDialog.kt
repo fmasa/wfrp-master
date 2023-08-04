@@ -181,6 +181,7 @@ private fun RowScope.CoinInput(value: InputValue, label: String, validate: Boole
         validate = validate,
         keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
         maxLength = 4,
+        showCharacterCount = false,
         placeholder = "0",
     )
 }

@@ -111,7 +111,7 @@ fun SelectBoxToggle(
                     .padding(Spacing.medium),
                 horizontalArrangement = Arrangement.SpaceBetween,
             ) {
-                Row { content() }
+                Row(Modifier.weight(1f), content = content)
                 Icon(
                     Icons.Rounded.ExpandMore,
                     LocalStrings.current.commonUi.labelExpandSelectBox,

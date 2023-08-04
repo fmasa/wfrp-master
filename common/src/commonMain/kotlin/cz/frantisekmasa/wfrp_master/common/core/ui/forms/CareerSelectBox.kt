@@ -111,7 +111,10 @@ fun CareerSelectBox(
                     label = null,
                     onClick = { dialogOpened = true },
                 ) {
-                    Text(itemValue ?: LocalStrings.current.commonUi.itemNone)
+                    Text(
+                        itemValue ?: LocalStrings.current.commonUi.itemNone,
+                        maxLines = 1,
+                    )
                 }
             }
 
