@@ -68,6 +68,7 @@ fun TextInput(
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
     keyboardActions: KeyboardActions = KeyboardActions.Default,
     maxLength: Int = Int.MAX_VALUE,
+    showCharacterCount: Boolean = maxLength < Int.MAX_VALUE,
     multiLine: Boolean = false,
     placeholder: String? = null,
     horizontalAlignment: Alignment.Horizontal = Alignment.Start,
@@ -88,6 +89,7 @@ fun TextInput(
         horizontalAlignment = horizontalAlignment,
         filters = filters,
         modifier = modifier,
+        showCharacterCount = showCharacterCount,
         rules = value.rules,
         visualTransformation = visualTransformation,
     )
@@ -104,6 +106,7 @@ private fun TextInput(
     keyboardOptions: KeyboardOptions,
     keyboardActions: KeyboardActions,
     maxLength: Int = Int.MAX_VALUE,
+    showCharacterCount: Boolean,
     multiLine: Boolean = false,
     placeholder: String? = null,
     horizontalAlignment: Alignment.Horizontal = Alignment.Start,
@@ -169,7 +172,7 @@ private fun TextInput(
             }
         }
 
-        if (maxLength < Int.MAX_VALUE || helperText.isNullOrBlank()) {
+        if (showCharacterCount || helperText.isNullOrBlank()) {
             CompositionLocalProvider(LocalContentAlpha provides ContentAlpha.medium) {
                 Row {
                     if (!helperText.isNullOrBlank()) {
@@ -178,7 +181,7 @@ private fun TextInput(
 
                     Spacer(Modifier.weight(1f))
 
-                    if (maxLength < Int.MAX_VALUE) {
+                    if (showCharacterCount) {
                         Text(
                             "${value.length} / $maxLength",
                             style = MaterialTheme.typography.overline,

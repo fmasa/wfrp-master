@@ -201,6 +201,7 @@ private fun CharacteristicInputs(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 validate = validate,
                 maxLength = 3,
+                showCharacterCount = false,
                 placeholder = "0",
             )
 
@@ -213,6 +214,7 @@ private fun CharacteristicInputs(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 validate = validate,
                 maxLength = 3,
+                showCharacterCount = false,
                 placeholder = "0",
             )
         }
