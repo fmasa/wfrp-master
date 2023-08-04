@@ -3,7 +3,6 @@ package cz.frantisekmasa.wfrp_master.common.character
 import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.remember
 import cafe.adriel.voyager.core.screen.Screen
 import com.benasher44.uuid.Uuid
@@ -38,7 +37,7 @@ abstract class CharacterItemDetailScreen(
 
         val navigation = LocalNavigationTransaction.current
         val snackbarHolder = LocalPersistentSnackbarHolder.current
-        val item = remember { derivedStateOf { items.firstOrNull { it.id == itemId } } }.value
+        val item = remember(items, itemId) { items.firstOrNull { it.id == itemId } }
 
         if (item == null) {
             val message = LocalStrings.current.commonUi.itemDoesNotExist
