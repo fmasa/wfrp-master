@@ -21,6 +21,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import com.benasher44.uuid.Uuid
 import com.benasher44.uuid.uuid4
+import cz.frantisekmasa.wfrp_master.common.Str
 import cz.frantisekmasa.wfrp_master.common.character.skills.SkillRating
 import cz.frantisekmasa.wfrp_master.common.character.skills.SkillsScreenModel
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.exceptions.CompendiumItemNotFound
@@ -32,7 +33,7 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.FullScreenProgress
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
 import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.LocalPersistentSnackbarHolder
 import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.SaveAction
-import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
+import dev.icerock.moko.resources.compose.stringResource
 import io.github.aakira.napier.Napier
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -48,16 +49,18 @@ internal fun AdvancesForm(
     var saving by remember { mutableStateOf(false) }
     var advances by rememberSaveable { mutableStateOf(1) }
 
-    val strings = LocalStrings.current.skills
-
     Scaffold(
         topBar = {
             TopAppBar(
                 navigationIcon = { CloseButton(onDismissRequest) },
-                title = { Text(strings.titleNew) },
+                title = { Text(stringResource(Str.skills_title_new)) },
                 actions = {
                     val coroutineScope = rememberCoroutineScope()
                     val snackbarHolder = LocalPersistentSnackbarHolder.current
+
+                    val messageCompendiumSkillRemoved = stringResource(
+                        Str.skills_messages_compendium_skill_removed
+                    )
                     SaveAction(
                         enabled = !saving,
                         onClick = {
@@ -74,7 +77,7 @@ internal fun AdvancesForm(
                                     Napier.d(e.toString(), e)
 
                                     snackbarHolder.showSnackbar(
-                                        strings.messages.compendiumSkillRemoved,
+                                        messageCompendiumSkillRemoved,
                                         SnackbarDuration.Short,
                                     )
                                 } finally {
@@ -104,7 +107,7 @@ internal fun AdvancesForm(
         ) {
             Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
                 Text(
-                    text = strings.labelAdvances,
+                    text = stringResource(Str.skills_label_advances),
                     modifier = Modifier.weight(1f),
                 )
 

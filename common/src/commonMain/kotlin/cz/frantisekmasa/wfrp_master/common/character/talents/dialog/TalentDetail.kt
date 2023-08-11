@@ -12,11 +12,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.halilibo.richtext.markdown.Markdown
 import com.halilibo.richtext.ui.RichText
+import cz.frantisekmasa.wfrp_master.common.Str
 import cz.frantisekmasa.wfrp_master.common.core.domain.talents.Talent
 import cz.frantisekmasa.wfrp_master.common.core.ui.buttons.CloseButton
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
 import cz.frantisekmasa.wfrp_master.common.core.ui.text.SingleLineTextValue
-import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
+import dev.icerock.moko.resources.compose.stringResource
 
 @Composable
 fun TalentDetail(
@@ -52,11 +53,11 @@ fun TalentDetailBody(
 ) {
     Column(Modifier.padding(Spacing.bodyPadding)) {
         if (maxTimesTaken != null) {
-            SingleLineTextValue(LocalStrings.current.talents.labelMaxTimesTaken, maxTimesTaken)
+            SingleLineTextValue(stringResource(Str.talents_label_max_times_taken), maxTimesTaken)
         }
 
         if (tests.isNotBlank()) {
-            SingleLineTextValue(LocalStrings.current.talents.labelTests, tests)
+            SingleLineTextValue(stringResource(Str.talents_label_tests), tests)
         }
 
         RichText {

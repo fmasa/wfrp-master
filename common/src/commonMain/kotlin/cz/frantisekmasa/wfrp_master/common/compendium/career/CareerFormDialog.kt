@@ -6,6 +6,7 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
+import cz.frantisekmasa.wfrp_master.common.Str
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.Career
 import cz.frantisekmasa.wfrp_master.common.core.domain.SocialClass
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.Race
@@ -20,7 +21,7 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.forms.Rules
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.SelectBox
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.TextInput
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.inputValue
-import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
+import dev.icerock.moko.resources.compose.stringResource
 
 @Composable
 fun CareerFormDialog(
@@ -38,32 +39,30 @@ fun CareerFormDialog(
             formData = data,
             onSave = onSaveRequest,
         ) { validate ->
-            val strings = LocalStrings.current.careers
-
             TextInput(
-                label = strings.labelName,
+                label = stringResource(Str.careers_label_name),
                 value = data.name,
                 validate = validate,
                 maxLength = Career.NAME_MAX_LENGTH,
             )
 
             TextInput(
-                label = strings.labelDescription,
+                label = stringResource(Str.careers_label_description),
                 value = data.description,
                 multiLine = true,
                 validate = validate,
                 maxLength = Career.DESCRIPTION_MAX_LENGTH,
-                helperText = LocalStrings.current.commonUi.markdownSupportedNote,
+                helperText = stringResource(Str.common_ui_markdown_supported_note),
             )
 
             SelectBox(
-                label = strings.labelSocialClass,
+                label = stringResource(Str.careers_label_social_class),
                 items = SocialClass.values(),
                 value = data.socialClass.value,
                 onValueChange = { data.socialClass.value = it },
             )
 
-            InputLabel(strings.labelRaces)
+            InputLabel(stringResource(Str.careers_label_races))
 
             CheckboxList(
                 Race.values(),

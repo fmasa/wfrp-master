@@ -9,11 +9,12 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import cz.frantisekmasa.wfrp_master.common.Str
 import cz.frantisekmasa.wfrp_master.common.core.shared.Resources
 import cz.frantisekmasa.wfrp_master.common.core.shared.drawableResource
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.VisualOnlyIconDescription
-import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
+import dev.icerock.moko.resources.compose.stringResource
 
 @Composable
 fun CompendiumButton(modifier: Modifier, onClick: () -> Unit) {
@@ -28,6 +29,6 @@ fun CompendiumButton(modifier: Modifier, onClick: () -> Unit) {
                 Modifier.size(16.dp)
             )
         }
-        Text(LocalStrings.current.compendium.title)
+        Text(stringResource(Str.compendium_title))
     }
 }

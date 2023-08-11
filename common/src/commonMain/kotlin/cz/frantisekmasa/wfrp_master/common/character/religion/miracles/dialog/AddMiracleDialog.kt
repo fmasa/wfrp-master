@@ -5,6 +5,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import cz.frantisekmasa.wfrp_master.common.Str
 import cz.frantisekmasa.wfrp_master.common.character.CompendiumItemChooser
 import cz.frantisekmasa.wfrp_master.common.character.religion.miracles.MiraclesScreenModel
 import cz.frantisekmasa.wfrp_master.common.core.domain.religion.Miracle
@@ -12,7 +13,7 @@ import cz.frantisekmasa.wfrp_master.common.core.shared.Parcelable
 import cz.frantisekmasa.wfrp_master.common.core.shared.Parcelize
 import cz.frantisekmasa.wfrp_master.common.core.shared.Resources
 import cz.frantisekmasa.wfrp_master.common.core.ui.dialogs.FullScreenDialog
-import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
+import dev.icerock.moko.resources.compose.stringResource
 
 @Composable
 internal fun AddMiracleDialog(screenModel: MiraclesScreenModel, onDismissRequest: () -> Unit) {
@@ -31,12 +32,12 @@ internal fun AddMiracleDialog(screenModel: MiraclesScreenModel, onDismissRequest
             ChoosingCompendiumMiracle ->
                 CompendiumItemChooser(
                     screenModel = screenModel,
-                    title = LocalStrings.current.miracles.titleChooseCompendiumMiracle,
+                    title = stringResource(Str.miracles_title_choose_compendium_miracle),
                     onDismissRequest = onDismissRequest,
                     icon = { Resources.Drawable.Miracle },
                     onSelect = { screenModel.saveItem(Miracle.fromCompendium(it)) },
                     onCustomItemRequest = { state = FillingInCustomMiracle },
-                    customItemButtonText = LocalStrings.current.miracles.buttonAddNonCompendium,
+                    customItemButtonText = stringResource(Str.miracles_button_add_non_compendium),
                     emptyUiIcon = Resources.Drawable.Miracle,
                 )
             is FillingInCustomMiracle -> NonCompendiumMiracleForm(

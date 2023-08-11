@@ -18,6 +18,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import com.benasher44.uuid.Uuid
+import cz.frantisekmasa.wfrp_master.common.Str
 import cz.frantisekmasa.wfrp_master.common.character.traits.TraitsScreenModel
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.exceptions.CompendiumItemNotFound
 import cz.frantisekmasa.wfrp_master.common.core.domain.traits.Trait
@@ -29,7 +30,7 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.FullScreenProgress
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
 import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.LocalPersistentSnackbarHolder
 import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.SaveAction
-import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
+import dev.icerock.moko.resources.compose.stringResource
 import io.github.aakira.napier.Napier
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -52,7 +53,6 @@ internal fun TraitSpecificationsForm(
         }
     }
 
-    val strings = LocalStrings.current.traits
     val snackbarHolder = LocalPersistentSnackbarHolder.current
 
     Scaffold(
@@ -60,11 +60,18 @@ internal fun TraitSpecificationsForm(
             TopAppBar(
                 navigationIcon = { CloseButton(onDismissRequest) },
                 title = {
-                    Text(if (existingTrait != null) strings.titleEdit else strings.titleEdit)
+                    Text(
+                        stringResource(
+                            if (existingTrait != null)
+                                Str.traits_title_edit
+                            else Str.traits_title_new
+                        )
+                    )
                 },
                 actions = {
                     val coroutineScope = rememberCoroutineScope()
 
+                    val messageCompendiumTraitRemoved = stringResource(Str.traits_messages_compendium_trait_removed)
                     SaveAction(
                         enabled = !saving,
                         onClick = {
@@ -95,9 +102,7 @@ internal fun TraitSpecificationsForm(
                                 } catch (e: CompendiumItemNotFound) {
                                     Napier.d(e.toString(), e)
 
-                                    snackbarHolder.showSnackbar(
-                                        strings.messages.compendiumTraitRemoved
-                                    )
+                                    snackbarHolder.showSnackbar(messageCompendiumTraitRemoved)
                                 } finally {
                                     onDismissRequest()
                                 }

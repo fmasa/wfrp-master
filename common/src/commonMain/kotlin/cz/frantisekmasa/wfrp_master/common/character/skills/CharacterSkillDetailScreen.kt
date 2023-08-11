@@ -10,6 +10,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import com.benasher44.uuid.Uuid
+import cz.frantisekmasa.wfrp_master.common.Str
 import cz.frantisekmasa.wfrp_master.common.character.CharacterItemDetailScreen
 import cz.frantisekmasa.wfrp_master.common.character.CharacterScreenModel
 import cz.frantisekmasa.wfrp_master.common.character.skills.dialog.NonCompendiumSkillForm
@@ -24,7 +25,7 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.FullScreenProgress
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.rememberScreenModel
 import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.SubheadBar
-import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
+import dev.icerock.moko.resources.compose.stringResource
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
@@ -64,7 +65,7 @@ class CharacterSkillDetailScreen(characterId: CharacterId, skillId: Uuid) :
                         )
 
                         SkillRating(
-                            label = LocalStrings.current.skills.labelRating,
+                            label = stringResource(Str.skills_label_rating),
                             value = characteristics.get(skill.characteristic) + skill.advances,
                             modifier = Modifier
                                 .padding(top = Spacing.extraLarge)
@@ -110,7 +111,7 @@ private fun AdvancesBar(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween,
         ) {
-            Text(LocalStrings.current.skills.labelAdvances)
+            Text(stringResource(Str.skills_label_advances))
             NumberPicker(
                 value = advances,
                 onIncrement = { onAdvancesChange(advances + 1) },

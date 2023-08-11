@@ -6,6 +6,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import cafe.adriel.voyager.core.screen.Screen
 import com.benasher44.uuid.Uuid
+import cz.frantisekmasa.wfrp_master.common.Str
 import cz.frantisekmasa.wfrp_master.common.core.CharacterItemScreenModel
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.CharacterItem
 import cz.frantisekmasa.wfrp_master.common.core.domain.identifiers.CharacterId
@@ -13,7 +14,7 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.flow.collectWithLifecycle
 import cz.frantisekmasa.wfrp_master.common.core.ui.navigation.LocalNavigationTransaction
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.FullScreenProgress
 import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.LocalPersistentSnackbarHolder
-import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
+import dev.icerock.moko.resources.compose.stringResource
 
 abstract class CharacterItemDetailScreen(
     protected val characterId: CharacterId,
@@ -40,7 +41,7 @@ abstract class CharacterItemDetailScreen(
         val item = remember(items, itemId) { items.firstOrNull { it.id == itemId } }
 
         if (item == null) {
-            val message = LocalStrings.current.commonUi.itemDoesNotExist
+            val message = stringResource(Str.common_ui_item_does_not_exist)
 
             LaunchedEffect(Unit) {
                 snackbarHolder.showSnackbar(message)

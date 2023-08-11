@@ -8,6 +8,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import cafe.adriel.voyager.core.screen.Screen
+import cz.frantisekmasa.wfrp_master.common.Str
 import cz.frantisekmasa.wfrp_master.common.core.domain.identifiers.EncounterId
 import cz.frantisekmasa.wfrp_master.common.core.shared.IO
 import cz.frantisekmasa.wfrp_master.common.core.ui.buttons.BackButton
@@ -16,9 +17,9 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.rememberScreenMode
 import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.SaveAction
 import cz.frantisekmasa.wfrp_master.common.encounters.EncounterDetailScreenModel
 import cz.frantisekmasa.wfrp_master.common.encounters.domain.Wounds
-import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
 import cz.frantisekmasa.wfrp_master.common.npcs.form.FormData
 import cz.frantisekmasa.wfrp_master.common.npcs.form.NpcForm
+import dev.icerock.moko.resources.compose.stringResource
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
@@ -33,14 +34,13 @@ class NpcCreationScreen(
         val data = FormData.empty()
         val validate = remember { mutableStateOf(false) }
         val submitEnabled = remember { mutableStateOf(true) }
-        val strings = LocalStrings.current.npcs
 
         Scaffold(
             topBar = {
                 val navigation = LocalNavigationTransaction.current
 
                 TopBar(
-                    strings.titleAdd,
+                    stringResource(Str.npcs_title_add),
                     onSave = {
                         if (!data.isValid()) {
                             validate.value = true

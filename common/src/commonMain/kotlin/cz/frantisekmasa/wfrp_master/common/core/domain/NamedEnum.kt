@@ -1,11 +1,11 @@
 package cz.frantisekmasa.wfrp_master.common.core.domain
 
 import androidx.compose.runtime.Composable
-import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
-import cz.frantisekmasa.wfrp_master.common.localization.Strings
+import dev.icerock.moko.resources.StringResource
+import dev.icerock.moko.resources.compose.stringResource
 
 interface NamedEnum {
-    val nameResolver: (strings: Strings) -> String
+    val translatableName: StringResource
 }
 
-val NamedEnum.localizedName: String @Composable get() = nameResolver(LocalStrings.current)
+val NamedEnum.localizedName: String @Composable get() = stringResource(translatableName)

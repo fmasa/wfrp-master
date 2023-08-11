@@ -10,6 +10,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.benasher44.uuid.Uuid
 import com.benasher44.uuid.uuid4
+import cz.frantisekmasa.wfrp_master.common.Str
 import cz.frantisekmasa.wfrp_master.common.compendium.CompendiumItemDialog
 import cz.frantisekmasa.wfrp_master.common.compendium.CompendiumItemFormData
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.Trait
@@ -18,7 +19,7 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.forms.Rules
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.TextInput
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.inputValue
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
-import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
+import dev.icerock.moko.resources.compose.stringResource
 
 @Composable
 fun TraitDialog(
@@ -26,12 +27,15 @@ fun TraitDialog(
     onDismissRequest: () -> Unit,
     onSaveRequest: suspend (Trait) -> Unit,
 ) {
-    val strings = LocalStrings.current.traits
     val formData = TraitFormData.fromTrait(trait)
 
     CompendiumItemDialog(
         onDismissRequest = onDismissRequest,
-        title = if (trait == null) strings.titleNew else strings.titleEdit,
+        title = stringResource(
+            if (trait == null)
+                Str.traits_title_new
+            else Str.traits_title_edit
+        ),
         formData = formData,
         saver = onSaveRequest,
     ) { validate ->
@@ -40,26 +44,26 @@ fun TraitDialog(
             modifier = Modifier.padding(Spacing.bodyPadding),
         ) {
             TextInput(
-                label = strings.labelName,
+                label = stringResource(Str.traits_label_name),
                 value = formData.name,
                 validate = validate,
                 maxLength = Trait.NAME_MAX_LENGTH
             )
 
             TextInput(
-                label = strings.labelSpecifications,
+                label = stringResource(Str.traits_label_specifications),
                 value = formData.specifications,
                 validate = validate,
-                helperText = strings.specificationsHelper,
+                helperText = stringResource(Str.traits_specifications_helper),
             )
 
             TextInput(
-                label = strings.labelDescription,
+                label = stringResource(Str.traits_label_description),
                 value = formData.description,
                 validate = validate,
                 maxLength = Trait.DESCRIPTION_MAX_LENGTH,
                 multiLine = true,
-                helperText = LocalStrings.current.commonUi.markdownSupportedNote,
+                helperText = stringResource(Str.common_ui_markdown_supported_note),
             )
         }
     }

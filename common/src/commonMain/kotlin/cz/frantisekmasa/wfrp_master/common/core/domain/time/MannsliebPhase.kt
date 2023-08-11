@@ -1,14 +1,17 @@
 package cz.frantisekmasa.wfrp_master.common.core.domain.time
 
 import androidx.compose.runtime.Stable
+import cz.frantisekmasa.wfrp_master.common.Str
 import cz.frantisekmasa.wfrp_master.common.core.domain.NamedEnum
-import cz.frantisekmasa.wfrp_master.common.localization.Strings
+import dev.icerock.moko.resources.StringResource
 
-enum class MannsliebPhase(override val nameResolver: (strings: Strings) -> String) : NamedEnum {
-    NEW_MOON({ it.calendar.moonPhases.newMoon }),
-    FULL_MOON({ it.calendar.moonPhases.fullMoon }),
-    WAXING({ it.calendar.moonPhases.waxing }),
-    WANING({ it.calendar.moonPhases.waning });
+enum class MannsliebPhase(
+    override val translatableName: StringResource,
+) : NamedEnum {
+    NEW_MOON(Str.calendar_moon_phases_new_moon),
+    FULL_MOON(Str.calendar_moon_phases_full_moon),
+    WAXING(Str.calendar_moon_phases_waxing),
+    WANING(Str.calendar_moon_phases_waning);
 
     companion object {
         private const val MANNSLIEB_WAXING_PERIOD = 13

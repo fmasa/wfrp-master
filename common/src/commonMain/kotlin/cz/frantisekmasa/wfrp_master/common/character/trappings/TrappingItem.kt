@@ -15,6 +15,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import cz.frantisekmasa.wfrp_master.common.Str
 import cz.frantisekmasa.wfrp_master.common.character.trappings.TrappingsScreenModel.Trapping
 import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.Encumbrance
 import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.sum
@@ -24,7 +25,7 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.menu.WithContextMenu
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.ContextMenu
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.ItemIcon
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
-import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
+import dev.icerock.moko.resources.compose.stringResource
 
 @Composable
 fun TrappingItem(
@@ -38,11 +39,11 @@ fun TrappingItem(
         onClick = onClick,
         items = additionalContextItems + listOf(
             ContextMenu.Item(
-                LocalStrings.current.commonUi.buttonDuplicate,
+                stringResource(Str.common_ui_button_duplicate),
                 onClick = onDuplicate,
             ),
             ContextMenu.Item(
-                LocalStrings.current.commonUi.buttonRemove,
+                stringResource(Str.common_ui_button_remove),
                 onClick = onRemove,
             ),
         )
@@ -107,7 +108,7 @@ private fun IconWithValue(
     ) {
         Icon(
             drawableResource(icon),
-            LocalStrings.current.trappings.iconEncumbrance,
+            stringResource(Str.trappings_icon_encumbrance),
             Modifier.size(Spacing.medium),
         )
         Text(value, color = textColor)

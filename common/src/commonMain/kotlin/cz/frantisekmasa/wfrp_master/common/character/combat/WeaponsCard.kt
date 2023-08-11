@@ -13,6 +13,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import cz.frantisekmasa.wfrp_master.common.Str
 import cz.frantisekmasa.wfrp_master.common.character.combat.CharacterCombatScreenModel.EquippedWeapon
 import cz.frantisekmasa.wfrp_master.common.character.trappings.trappingIcon
 import cz.frantisekmasa.wfrp_master.common.core.domain.localizedName
@@ -24,7 +25,7 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.cards.CardTitle
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.EmptyUI
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.ItemIcon
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
-import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
+import dev.icerock.moko.resources.compose.stringResource
 
 @Composable
 fun WeaponsCard(
@@ -36,12 +37,12 @@ fun WeaponsCard(
             .padding(horizontal = 8.dp)
             .padding(bottom = 8.dp)
     ) {
-        CardTitle(LocalStrings.current.character.titleWeapons)
+        CardTitle(stringResource(Str.character_title_weapons))
 
         if (equips.isEmpty()) {
             EmptyUI(
-                text = LocalStrings.current.character.messages.noEquippedWeapons,
-                subText = LocalStrings.current.character.messages.noEquippedWeaponsSubText,
+                text = stringResource(Str.character_messages_no_equipped_weapons),
+                subText = stringResource(Str.character_messages_no_equipped_weapons_sub_text),
                 icon = Resources.Drawable.WeaponSkill,
                 size = EmptyUI.Size.Small,
             )

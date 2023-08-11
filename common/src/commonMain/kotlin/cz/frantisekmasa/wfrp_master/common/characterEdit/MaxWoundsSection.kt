@@ -11,6 +11,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import cz.frantisekmasa.wfrp_master.common.Str
 import cz.frantisekmasa.wfrp_master.common.character.CharacterScreenModel
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.Character
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.CheckboxWithText
@@ -22,23 +23,21 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.forms.TextInput
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.inputValue
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.UserTip
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.UserTipCard
-import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
+import dev.icerock.moko.resources.compose.stringResource
 
 @Composable
 fun MaxWoundsSection(character: Character, screenModel: CharacterScreenModel) {
     val formData = WoundsFormData.fromCharacter(character)
     FormScreen(
-        title = LocalStrings.current.points.wounds,
+        title = stringResource(Str.points_wounds),
         formData = formData,
         onSave = { data ->
             screenModel.update { it.updateMaxWounds(data.maxWounds, data.hardyTalent) }
         }
     ) { validate ->
-        val strings = LocalStrings.current.points
-
         Column(Modifier.padding(top = 20.dp)) {
             TextInput(
-                label = strings.maxWounds,
+                label = stringResource(Str.points_max_wounds),
                 modifier = Modifier
                     .fillMaxWidth(0.3f)
                     .padding(bottom = 12.dp),
@@ -46,7 +45,7 @@ fun MaxWoundsSection(character: Character, screenModel: CharacterScreenModel) {
                 maxLength = 3,
                 keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
                 validate = validate,
-                placeholder = strings.autoMaxWoundsPlaceholder,
+                placeholder = stringResource(Str.points_auto_max_wounds_placeholder),
             )
 
             if (formData.hardyTalent.value) {
@@ -54,7 +53,7 @@ fun MaxWoundsSection(character: Character, screenModel: CharacterScreenModel) {
             }
 
             CheckboxWithText(
-                text = strings.labelHardy,
+                text = stringResource(Str.points_label_hardy),
                 checked = formData.hardyTalent.value,
                 onCheckedChange = { formData.hardyTalent.value = it }
             )

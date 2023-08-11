@@ -21,6 +21,7 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import com.halilibo.richtext.markdown.Markdown
 import com.halilibo.richtext.ui.RichText
+import cz.frantisekmasa.wfrp_master.common.Str
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.SpellLore
 import cz.frantisekmasa.wfrp_master.common.compendium.spell.SpellLoreIcon
 import cz.frantisekmasa.wfrp_master.common.core.domain.localizedName
@@ -28,7 +29,7 @@ import cz.frantisekmasa.wfrp_master.common.core.domain.spells.Spell
 import cz.frantisekmasa.wfrp_master.common.core.ui.buttons.CloseButton
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
 import cz.frantisekmasa.wfrp_master.common.core.ui.text.SingleLineTextValue
-import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
+import dev.icerock.moko.resources.compose.stringResource
 
 @Composable
 fun SpellDetail(
@@ -72,8 +73,6 @@ fun SpellDetailBody(
     duration: String,
     effect: String,
 ) {
-    val strings = LocalStrings.current.spells
-
     Column(Modifier.padding(Spacing.bodyPadding)) {
         if (lore != null) {
             Row(
@@ -89,7 +88,7 @@ fun SpellDetailBody(
         }
 
         SingleLineTextValue(
-            strings.castingNumberShortcut,
+            stringResource(Str.spells_casting_number_shortcut),
             buildAnnotatedString {
                 if (castingNumber != effectiveCastingNumber) {
                     withStyle(SpanStyle(textDecoration = TextDecoration.LineThrough)) {
@@ -103,11 +102,11 @@ fun SpellDetailBody(
             }
         )
 
-        SingleLineTextValue(strings.labelRange, range)
+        SingleLineTextValue(stringResource(Str.spells_label_range), range)
 
-        SingleLineTextValue(strings.labelTarget, target)
+        SingleLineTextValue(stringResource(Str.spells_label_target), target)
 
-        SingleLineTextValue(strings.labelDuration, duration)
+        SingleLineTextValue(stringResource(Str.spells_label_duration), duration)
 
         RichText(Modifier.padding(top = 8.dp)) {
             Markdown(effect)

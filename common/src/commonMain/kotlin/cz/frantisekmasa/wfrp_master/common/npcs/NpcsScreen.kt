@@ -17,6 +17,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import cafe.adriel.voyager.core.screen.Screen
+import cz.frantisekmasa.wfrp_master.common.Str
 import cz.frantisekmasa.wfrp_master.common.character.CharacterDetailScreen
 import cz.frantisekmasa.wfrp_master.common.characterCreation.CharacterCreationScreen
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.Character
@@ -35,7 +36,7 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.EmptyUI
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.ItemIcon
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.SearchableList
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.rememberScreenModel
-import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
+import dev.icerock.moko.resources.compose.stringResource
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
@@ -47,7 +48,6 @@ class NpcsScreen(
         val navigation = LocalNavigationTransaction.current
         var processing by remember { mutableStateOf(false) }
 
-        val strings = LocalStrings.current
         val screenModel: NpcsScreenModel = rememberScreenModel(arg = partyId)
         val npcs by screenModel.npcs.collectWithLifecycle(null)
         val (npcToRemove, setNpcToRemove) = remember { mutableStateOf<Character?>(null) }
@@ -66,7 +66,7 @@ class NpcsScreen(
         if (npcToRemove != null) {
             AlertDialog(
                 onDismissRequest = { setNpcToRemove(null) },
-                text = { Text(LocalStrings.current.npcs.messages.removalConfirmation) },
+                text = { Text(stringResource(Str.npcs_messages_removal_confirmation)) },
                 confirmButton = {
                     TextButton(
                         onClick = {
@@ -78,12 +78,12 @@ class NpcsScreen(
                             }
                         }
                     ) {
-                        Text(LocalStrings.current.commonUi.buttonRemove)
+                        Text(stringResource(Str.common_ui_button_remove).uppercase())
                     }
                 },
                 dismissButton = {
                     TextButton(onClick = { setNpcToRemove(null) }) {
-                        Text(LocalStrings.current.commonUi.buttonCancel)
+                        Text(stringResource(Str.common_ui_button_cancel).uppercase())
                     }
                 }
             )
@@ -92,12 +92,12 @@ class NpcsScreen(
         SearchableList(
             data = data,
             navigationIcon = { HamburgerButton() },
-            title = strings.npcs.titlePlural,
-            searchPlaceholder = strings.npcs.searchPlaceholder,
+            title = stringResource(Str.npcs_title_plural),
+            searchPlaceholder = stringResource(Str.npcs_search_placeholder),
             emptyUi = {
                 EmptyUI(
-                    text = strings.npcs.messages.noNpcs,
-                    subText = strings.npcs.messages.noNpcsSubtext,
+                    text = stringResource(Str.npcs_messages_no_npcs),
+                    subText = stringResource(Str.npcs_messages_no_npcs_subtext),
                     icon = Resources.Drawable.Npc,
                 )
             },
@@ -111,7 +111,7 @@ class NpcsScreen(
                         )
                     }
                 ) {
-                    Icon(Icons.Rounded.Add, LocalStrings.current.npcs.buttonAddNpc)
+                    Icon(Icons.Rounded.Add, stringResource(Str.npcs_button_add_npc))
                 }
             }
         ) { npc ->
@@ -121,7 +121,7 @@ class NpcsScreen(
                         navigation.navigate(CharacterDetailScreen(CharacterId(partyId, npc.id)))
                     },
                     items = listOf(
-                        ContextMenu.Item(LocalStrings.current.commonUi.buttonDuplicate) {
+                        ContextMenu.Item(stringResource(Str.common_ui_button_duplicate)) {
                             coroutineScope.launch(Dispatchers.IO) {
                                 processing = true
                                 try {
@@ -131,7 +131,7 @@ class NpcsScreen(
                                 }
                             }
                         },
-                        ContextMenu.Item(LocalStrings.current.commonUi.buttonRemove) {
+                        ContextMenu.Item(stringResource(Str.common_ui_button_remove)) {
                             setNpcToRemove(npc)
                         }
                     )

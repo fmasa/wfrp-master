@@ -17,6 +17,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
+import cz.frantisekmasa.wfrp_master.common.Str
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.Points
 import cz.frantisekmasa.wfrp_master.common.core.shared.IO
 import cz.frantisekmasa.wfrp_master.common.core.ui.buttons.CloseButton
@@ -27,7 +28,7 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.forms.TextInput
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.inputValue
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
 import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.SaveAction
-import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
+import dev.icerock.moko.resources.compose.stringResource
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
@@ -44,13 +45,11 @@ fun ExperiencePointsDialog(
         val coroutineScope = rememberCoroutineScope()
         var validate by remember { mutableStateOf(false) }
 
-        val strings = LocalStrings.current.points
-
         Scaffold(
             topBar = {
                 TopAppBar(
                     navigationIcon = { CloseButton(onClick = onDismissRequest) },
-                    title = { Text(strings.experience) },
+                    title = { Text(stringResource(Str.points_experience)) },
                     actions = {
                         var saving by remember { mutableStateOf(false) }
                         SaveAction(
@@ -84,8 +83,16 @@ fun ExperiencePointsDialog(
                     .padding(Spacing.bodyPadding),
                 verticalArrangement = Arrangement.spacedBy(Spacing.small)
             ) {
-                PointInput(spentPoints, strings.labelSpentExperience, validate)
-                PointInput(currentPoints, strings.labelCurrentExperience, validate)
+                PointInput(
+                    spentPoints,
+                    stringResource(Str.points_label_spent_experience),
+                    validate,
+                )
+                PointInput(
+                    currentPoints,
+                    stringResource(Str.points_label_current_experience),
+                    validate,
+                )
             }
         }
     }

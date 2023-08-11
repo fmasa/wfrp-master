@@ -32,6 +32,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
+import cz.frantisekmasa.wfrp_master.common.Str
 import cz.frantisekmasa.wfrp_master.common.about.AboutScreen
 import cz.frantisekmasa.wfrp_master.common.core.shared.Resources
 import cz.frantisekmasa.wfrp_master.common.core.shared.drawableResource
@@ -39,8 +40,9 @@ import cz.frantisekmasa.wfrp_master.common.core.shared.rememberEmailInitiator
 import cz.frantisekmasa.wfrp_master.common.core.shared.rememberUrlOpener
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.VisualOnlyIconDescription
-import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
+import cz.frantisekmasa.wfrp_master.common.localization.FixedStrings
 import cz.frantisekmasa.wfrp_master.common.settings.SettingsScreen
+import dev.icerock.moko.resources.compose.stringResource
 import io.github.mmolosay.debounce.debounced
 import kotlinx.coroutines.launch
 import kotlin.time.Duration.Companion.milliseconds
@@ -51,12 +53,11 @@ fun AppDrawer(drawerState: DrawerState) {
 
     Column(Modifier.fillMaxSize()) {
         val coroutineScope = rememberCoroutineScope()
-        val strings = LocalStrings.current
         val navigator = LocalNavigator.currentOrThrow
 
         DrawerItem(
             icon = Icons.Rounded.Settings,
-            text = strings.settings.title,
+            text = stringResource(Str.settings_title),
             onClick = {
                 coroutineScope.launch { drawerState.close() }
                 if (navigator.lastItem !is SettingsScreen) {
@@ -70,7 +71,7 @@ fun AppDrawer(drawerState: DrawerState) {
 
         DrawerItem(
             icon = Icons.Rounded.MenuBook,
-            text = strings.drawer.wiki,
+            text = stringResource(Str.drawer_wiki),
             onClick = {
                 urlOpener.open(
                     "https://github.com/fmasa/wfrp-master/wiki",
@@ -81,17 +82,17 @@ fun AppDrawer(drawerState: DrawerState) {
 
         DrawerItem(
             icon = Icons.Rounded.Star,
-            text = strings.drawer.rateApp,
+            text = stringResource(Str.drawer_rate_app),
             onClick = {
-                urlOpener.open(strings.contact.googlePlayUrl, isGooglePlayLink = true)
+                urlOpener.open(FixedStrings.googlePlayUrl, isGooglePlayLink = true)
             },
         )
 
         DrawerItem(
             icon = Icons.Rounded.Policy,
-            text = strings.drawer.privacyPolicy,
+            text = stringResource(Str.drawer_privacy_policy),
             onClick = debounced(300.milliseconds) {
-                urlOpener.open(strings.contact.privacyPolicyUrl, isGooglePlayLink = false)
+                urlOpener.open(FixedStrings.privacyPolicyUrl, isGooglePlayLink = false)
             }
         )
 
@@ -99,18 +100,18 @@ fun AppDrawer(drawerState: DrawerState) {
 
         DrawerItem(
             icon = Icons.Rounded.BugReport,
-            text = strings.drawer.reportIssue,
+            text = stringResource(Str.drawer_report_issue),
             onClick = {
                 emailInitiator.initiateNewEmail(
-                    subject = strings.contact.bugReportEmailSubject,
-                    recipient = strings.contact.emailAddress,
+                    subject = FixedStrings.bugReportEmailSubject,
+                    recipient = FixedStrings.emailAddress,
                 )
             },
         )
 
         DrawerItem(
             icon = Icons.Rounded.Info,
-            text = strings.about.title,
+            text = stringResource(Str.about_title),
             onClick = {
                 coroutineScope.launch { drawerState.close() }
 
@@ -168,7 +169,7 @@ private fun DrawerHeader() {
                 Modifier.size(80.dp),
             )
             Text(
-                LocalStrings.current.about.appName,
+                FixedStrings.appName,
                 style = MaterialTheme.typography.h6,
                 color = contentColorFor(MaterialTheme.colors.primarySurface),
             )

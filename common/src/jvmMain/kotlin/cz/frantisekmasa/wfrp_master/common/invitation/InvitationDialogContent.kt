@@ -10,9 +10,10 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
+import cz.frantisekmasa.wfrp_master.common.Str
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.Invitation
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.FullScreenProgress
-import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
+import dev.icerock.moko.resources.compose.stringResource
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
@@ -39,7 +40,7 @@ actual fun InvitationDialogContent(
     }
 
     Text(
-        LocalStrings.current.parties.messages.invitationUrlDescription,
+        stringResource(Str.parties_messages_invitation_url_description),
         modifier = Modifier.fillMaxWidth(),
         textAlign = TextAlign.Center,
         style = MaterialTheme.typography.caption,

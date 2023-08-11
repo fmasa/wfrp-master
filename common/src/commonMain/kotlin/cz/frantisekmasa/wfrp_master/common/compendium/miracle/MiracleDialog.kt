@@ -10,6 +10,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.benasher44.uuid.Uuid
 import com.benasher44.uuid.uuid4
+import cz.frantisekmasa.wfrp_master.common.Str
 import cz.frantisekmasa.wfrp_master.common.compendium.CompendiumItemDialog
 import cz.frantisekmasa.wfrp_master.common.compendium.CompendiumItemFormData
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.Miracle
@@ -18,7 +19,7 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.forms.Rules
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.TextInput
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.inputValue
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
-import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
+import dev.icerock.moko.resources.compose.stringResource
 
 @Composable
 fun MiracleDialog(
@@ -27,10 +28,13 @@ fun MiracleDialog(
     onSaveRequest: suspend (Miracle) -> Unit,
 ) {
     val formData = MiracleFormData.fromItem(miracle)
-    val strings = LocalStrings.current.miracles
 
     CompendiumItemDialog(
-        title = if (miracle == null) strings.titleNew else strings.titleEdit,
+        title = stringResource(
+            if (miracle == null)
+                Str.miracles_title_new
+            else Str.miracles_title_edit
+        ),
         formData = formData,
         saver = onSaveRequest,
         onDismissRequest = onDismissRequest,
@@ -40,47 +44,47 @@ fun MiracleDialog(
             modifier = Modifier.padding(Spacing.bodyPadding),
         ) {
             TextInput(
-                label = strings.labelName,
+                label = stringResource(Str.miracles_label_name),
                 value = formData.name,
                 validate = validate,
                 maxLength = Miracle.NAME_MAX_LENGTH
             )
 
             TextInput(
-                label = strings.labelCultName,
+                label = stringResource(Str.miracles_label_cult_name),
                 value = formData.cultName,
                 validate = validate,
                 maxLength = Miracle.CULT_NAME_MAX_LENGTH
             )
 
             TextInput(
-                label = strings.labelRange,
+                label = stringResource(Str.miracles_label_range),
                 value = formData.range,
                 validate = validate,
                 maxLength = Miracle.RANGE_MAX_LENGTH,
             )
 
             TextInput(
-                label = strings.labelTarget,
+                label = stringResource(Str.miracles_label_target),
                 value = formData.target,
                 validate = validate,
                 maxLength = Miracle.TARGET_MAX_LENGTH,
             )
 
             TextInput(
-                label = strings.labelDuration,
+                label = stringResource(Str.miracles_label_duration),
                 value = formData.duration,
                 validate = validate,
                 maxLength = Miracle.DURATION_MAX_LENGTH,
             )
 
             TextInput(
-                label = strings.labelEffect,
+                label = stringResource(Str.miracles_label_effect),
                 value = formData.effect,
                 validate = validate,
                 maxLength = Miracle.EFFECT_MAX_LENGTH,
                 multiLine = true,
-                helperText = LocalStrings.current.commonUi.markdownSupportedNote,
+                helperText = stringResource(Str.common_ui_markdown_supported_note),
             )
         }
     }

@@ -10,6 +10,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import cz.frantisekmasa.wfrp_master.common.Str
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.Career
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.Character
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.CharacterType
@@ -25,7 +26,7 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.forms.SelectedCareer
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.SocialStatusInput
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.TextInput
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.inputValue
-import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
+import dev.icerock.moko.resources.compose.stringResource
 
 object CharacterBasicInfoForm {
     @Stable
@@ -95,11 +96,9 @@ fun CharacterBasicInfoForm(
     data: CharacterBasicInfoForm.Data,
     validate: Boolean,
 ) {
-    val strings = LocalStrings.current.character
-
     Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
         TextInput(
-            label = strings.labelName,
+            label = stringResource(Str.character_label_name),
             value = data.name,
             maxLength = Character.NAME_MAX_LENGTH,
             validate = validate,
@@ -107,7 +106,7 @@ fun CharacterBasicInfoForm(
 
         if (data.characterType == CharacterType.NPC) {
             TextInput(
-                label = strings.labelPublicName,
+                label = stringResource(Str.character_label_public_name),
                 value = data.publicName,
                 maxLength = Character.NAME_MAX_LENGTH,
                 validate = validate,
@@ -115,7 +114,7 @@ fun CharacterBasicInfoForm(
         }
 
         ChipList(
-            label = strings.labelRace,
+            label = stringResource(Str.character_label_race),
             modifier = Modifier.padding(top = 8.dp),
             items = raceOptions(),
             value = data.race.value,
@@ -139,21 +138,21 @@ fun CharacterBasicInfoForm(
         )
 
         TextInput(
-            label = strings.labelPsychology,
+            label = stringResource(Str.character_label_psychology),
             value = data.psychology,
             maxLength = Character.PSYCHOLOGY_MAX_LENGTH,
             validate = validate,
         )
 
         TextInput(
-            label = strings.labelMotivation,
+            label = stringResource(Str.character_label_motivation),
             value = data.motivation,
             maxLength = Character.MOTIVATION_MAX_LENGTH,
             validate = validate,
         )
 
         TextInput(
-            label = strings.labelNote,
+            label = stringResource(Str.character_label_note),
             value = data.note,
             multiLine = true,
             maxLength = Character.NOTE_MAX_LENGTH,
@@ -166,5 +165,5 @@ fun CharacterBasicInfoForm(
 @Stable
 fun raceOptions(): List<Pair<Race?, String>> {
     return Race.values().map { it to it.localizedName } +
-        listOf(null to LocalStrings.current.races.custom)
+        listOf(null to stringResource(Str.races_custom))
 }

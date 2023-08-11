@@ -27,6 +27,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import cafe.adriel.voyager.core.screen.Screen
+import cz.frantisekmasa.wfrp_master.common.Plurals
+import cz.frantisekmasa.wfrp_master.common.Str
 import cz.frantisekmasa.wfrp_master.common.changelog.ChangelogAction
 import cz.frantisekmasa.wfrp_master.common.changelog.ChangelogScreen
 import cz.frantisekmasa.wfrp_master.common.character.CharacterPickerScreen
@@ -50,7 +52,7 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.VisualOnlyIconDesc
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.rememberScreenModel
 import cz.frantisekmasa.wfrp_master.common.gameMaster.GameMasterScreen
 import cz.frantisekmasa.wfrp_master.common.invitation.InvitationScannerScreen
-import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
+import dev.icerock.moko.resources.compose.stringResource
 
 object PartyListScreen : Screen {
     override val key = "parties"
@@ -80,7 +82,7 @@ object PartyListScreen : Screen {
         Scaffold(
             topBar = {
                 TopAppBar(
-                    title = { Text(LocalStrings.current.parties.titleParties) },
+                    title = { Text(stringResource(Str.parties_title_parties)) },
                     navigationIcon = { HamburgerButton() },
                     actions = {
                         val navigation = LocalNavigationTransaction.current
@@ -154,8 +156,6 @@ private fun Menu(
     onStateChangeRequest: (MenuState) -> Unit,
     onCreatePartyRequest: () -> Unit,
 ) {
-    val strings = LocalStrings.current
-
     FloatingActionsMenu(
         state = state,
         onToggleRequest = { onStateChangeRequest(it) },
@@ -166,7 +166,7 @@ private fun Menu(
 
             ExtendedFloatingActionButton(
                 icon = { Icon(Icons.Rounded.Camera, VisualOnlyIconDescription) },
-                text = { Text(strings.parties.titleJoinViaQrCode) },
+                text = { Text(stringResource(Str.parties_title_join_via_qr_code)) },
                 onClick = {
                     navigation.navigate(InvitationScannerScreen())
                     onStateChangeRequest(MenuState.COLLAPSED)
@@ -179,7 +179,7 @@ private fun Menu(
             icon = {
                 Icon(Icons.Rounded.GroupAdd, VisualOnlyIconDescription)
             },
-            text = { Text(strings.parties.titleCreateParty) },
+            text = { Text(stringResource(Str.parties_title_create_party)) },
             onClick = {
                 onCreatePartyRequest()
                 onStateChangeRequest(MenuState.COLLAPSED)
@@ -197,7 +197,7 @@ fun PartyItem(party: Party) {
             icon = { ItemIcon(Icons.Rounded.Group, ItemIcon.Size.Large) },
             text = { Text(party.name) },
             trailing = if (playersCount > 0)
-                ({ Text(LocalStrings.current.parties.numberOfPlayers(playersCount)) })
+                ({ Text(stringResource(Plurals.parties_player_count, playersCount, playersCount)) })
             else null,
         )
         Divider()
@@ -215,11 +215,9 @@ private fun MainContainer(
     Box(modifier) {
         parties?.let {
             if (it.isEmpty()) {
-                val messages = LocalStrings.current.parties.messages
-
                 EmptyUI(
-                    text = messages.noParties,
-                    subText = messages.noPartiesSubtext,
+                    text = stringResource(Str.parties_messages_no_parties),
+                    subText = stringResource(Str.parties_messages_no_parties_subtext),
                     icon = Resources.Drawable.PartyNotFound,
                 )
                 return@let
@@ -249,18 +247,17 @@ fun PartyList(
         items(parties, key = { it.id }) { party ->
             val isGameMaster =
                 LocalUser.current.id == party.gameMasterId || party.gameMasterId == null
-            val strings = LocalStrings.current
 
             WithContextMenu(
                 onClick = { onClick(party) },
                 items = listOf(
                     if (isGameMaster)
                         ContextMenu.Item(
-                            strings.commonUi.buttonRemove,
+                            stringResource(Str.common_ui_button_remove),
                             onClick = { onRemove(party) },
                         )
                     else ContextMenu.Item(
-                        strings.parties.buttonLeave,
+                        stringResource(Str.parties_button_leave),
                         onClick = { onLeaveRequest(party) },
                     )
                 )

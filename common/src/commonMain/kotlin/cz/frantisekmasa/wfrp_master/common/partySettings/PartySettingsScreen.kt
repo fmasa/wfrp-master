@@ -9,6 +9,7 @@ import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import cafe.adriel.voyager.core.screen.Screen
+import cz.frantisekmasa.wfrp_master.common.Str
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.PartyId
 import cz.frantisekmasa.wfrp_master.common.core.ui.buttons.BackButton
 import cz.frantisekmasa.wfrp_master.common.core.ui.flow.collectWithLifecycle
@@ -16,7 +17,7 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.FullScreenProgress
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.rememberScreenModel
 import cz.frantisekmasa.wfrp_master.common.core.ui.settings.SettingsCard
 import cz.frantisekmasa.wfrp_master.common.core.ui.settings.SettingsTitle
-import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
+import dev.icerock.moko.resources.compose.stringResource
 
 class PartySettingsScreen(
     private val partyId: PartyId,
@@ -24,13 +25,12 @@ class PartySettingsScreen(
     @Composable
     override fun Content() {
         val viewModel: PartySettingsScreenModel = rememberScreenModel(arg = partyId)
-        val strings = LocalStrings.current
 
         Scaffold(
             topBar = {
                 TopAppBar(
                     navigationIcon = { BackButton() },
-                    title = { Text(strings.parties.titleSettings) },
+                    title = { Text(stringResource(Str.parties_title_settings)) },
                 )
             },
         ) {
@@ -43,10 +43,10 @@ class PartySettingsScreen(
 
             Column(Modifier.verticalScroll(rememberScrollState())) {
                 SettingsCard {
-                    SettingsTitle(strings.parties.titleSettingsGeneral)
+                    SettingsTitle(stringResource(Str.parties_title_settings_general))
                     PartyNameItem(party.name, viewModel)
 
-                    SettingsTitle(strings.combat.title)
+                    SettingsTitle(stringResource(Str.combat_title))
                     InitiativeStrategyItem(party, viewModel)
                     AdvantageSystemItem(party.settings, viewModel)
                     AdvantageCapItem(party.settings, viewModel)

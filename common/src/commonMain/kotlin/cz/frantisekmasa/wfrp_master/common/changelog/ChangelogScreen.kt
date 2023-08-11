@@ -24,6 +24,7 @@ import androidx.compose.ui.Modifier
 import cafe.adriel.voyager.core.screen.Screen
 import com.halilibo.richtext.markdown.Markdown
 import com.halilibo.richtext.ui.RichText
+import cz.frantisekmasa.wfrp_master.common.Str
 import cz.frantisekmasa.wfrp_master.common.core.shared.IO
 import cz.frantisekmasa.wfrp_master.common.core.shared.Parcelable
 import cz.frantisekmasa.wfrp_master.common.core.shared.Parcelize
@@ -34,7 +35,7 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.FullScreenProgress
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.HorizontalLine
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.rememberScreenModel
-import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
+import dev.icerock.moko.resources.compose.stringResource
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
@@ -46,7 +47,7 @@ object ChangelogScreen : Screen {
             topBar = {
                 TopAppBar(
                     navigationIcon = { BackButton() },
-                    title = { Text(LocalStrings.current.changelog.title) }
+                    title = { Text(stringResource(Str.changelog_title)) }
                 )
             }
         ) {
@@ -71,7 +72,7 @@ object ChangelogScreen : Screen {
                 }
                 State.Error -> {
                     EmptyUI(
-                        text = LocalStrings.current.changelog.couldNotLoad,
+                        text = stringResource(Str.changelog_could_not_load),
                         icon = Icons.Rounded.CloudOff,
                     )
                 }
@@ -112,7 +113,7 @@ object ChangelogScreen : Screen {
                                         )
                                     }
                                 ) {
-                                    Text(LocalStrings.current.changelog.githubButton.uppercase())
+                                    Text(stringResource(Str.changelog_github_button).uppercase())
                                 }
                             }
                         }

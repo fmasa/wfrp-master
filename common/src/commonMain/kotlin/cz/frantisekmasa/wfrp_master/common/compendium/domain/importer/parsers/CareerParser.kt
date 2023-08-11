@@ -6,7 +6,6 @@ import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.parsers.ca
 import cz.frantisekmasa.wfrp_master.common.core.domain.SocialClass
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.Race
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.SocialStatus
-import cz.frantisekmasa.wfrp_master.common.localization.Localization
 
 class CareerParser {
 
@@ -51,7 +50,6 @@ class CareerParser {
         secondColumn: Sequence<Token>,
     ): Career {
         val stream = TokenStream(firstColumn.toList())
-        val english = Localization.English
 
         val name = stream.consumeOneOfType<Token.Heading>().text
             .trim()
@@ -63,7 +61,11 @@ class CareerParser {
         val species = stream.consumeOneOfType<Token.NormalPart>().text
             .splitToSequence(",")
             .map { it.trim() }
-            .map { value -> Race.values().first { it.nameResolver(english) == value } }
+            .map { value ->
+                Race.values().first {
+                    it.name.replace("_", " ").equals(value, ignoreCase = true)
+                }
+            }
             .toSet()
 
         val description = listOf(stream.consumeOneOfType<Token.ItalicsPart>(), Token.BlankLine) +
@@ -110,7 +112,7 @@ class CareerParser {
             CareerLevel(
                 name = levelName.trim(),
                 status = SocialStatus(
-                    SocialStatus.Tier.values().first { it.nameResolver(english) == tier },
+                    SocialStatus.Tier.values().first { it.name.equals(tier, ignoreCase = true) },
                     standing.toInt()
                 ),
                 skills = skills,

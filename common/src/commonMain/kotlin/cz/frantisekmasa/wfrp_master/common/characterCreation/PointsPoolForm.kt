@@ -10,13 +10,14 @@ import androidx.compose.runtime.Stable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import cz.frantisekmasa.wfrp_master.common.Str
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.Points
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.HydratedFormData
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.InputValue
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.Rules
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.TextInput
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.inputValue
-import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
+import dev.icerock.moko.resources.compose.stringResource
 
 object PointsPoolForm {
 
@@ -58,11 +59,25 @@ object PointsPoolForm {
 
 @Composable
 fun PointsPoolForm(data: PointsPoolForm.Data, validate: Boolean) {
-    val strings = LocalStrings.current.points
     Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(16.dp)) {
-        PointInput(data.maxWounds, strings.maxWounds, validate, strings.autoMaxWoundsPlaceholder)
-        PointInput(data.fatePoints, strings.fate, validate, "0")
-        PointInput(data.resiliencePoints, strings.resilience, validate, "0")
+        PointInput(
+            data.maxWounds,
+            stringResource(Str.points_max_wounds),
+            validate,
+            stringResource(Str.points_auto_max_wounds_placeholder),
+        )
+        PointInput(
+            data.fatePoints,
+            stringResource(Str.points_fate),
+            validate,
+            "0",
+        )
+        PointInput(
+            data.resiliencePoints,
+            stringResource(Str.points_resilience),
+            validate,
+            "0",
+        )
     }
 }
 

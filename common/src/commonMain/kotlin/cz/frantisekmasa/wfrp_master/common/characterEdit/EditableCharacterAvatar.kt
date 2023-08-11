@@ -17,6 +17,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import cz.frantisekmasa.wfrp_master.common.Str
 import cz.frantisekmasa.wfrp_master.common.character.CharacterScreenModel
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.Character
 import cz.frantisekmasa.wfrp_master.common.core.shared.FileType
@@ -26,7 +27,7 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.menu.DropdownMenu
 import cz.frantisekmasa.wfrp_master.common.core.ui.menu.DropdownMenuItem
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.ItemIcon
 import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.LocalPersistentSnackbarHolder
-import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
+import dev.icerock.moko.resources.compose.stringResource
 import io.github.aakira.napier.Napier
 import kotlinx.coroutines.launch
 
@@ -57,15 +58,17 @@ fun EditableCharacterAvatar(
         }
 
         val coroutineScope = rememberCoroutineScope()
-        val messages = LocalStrings.current.messages
         val snackbarHolder = LocalPersistentSnackbarHolder.current
 
+        val errorCouldNotOpenFile = stringResource(Str.messages_could_not_open_file)
+        val messageAvatarChanged = stringResource(Str.messages_avatar_changed)
         val fileChooser = rememberFileChooser { result ->
             result
-                .onFailure { snackbarHolder.showSnackbar(messages.couldNotOpenFile) }
+                .onFailure { snackbarHolder.showSnackbar(errorCouldNotOpenFile) }
                 .mapCatching { image ->
                     processing = true
                     screenModel.changeAvatar(image.readBytes())
+                    snackbarHolder.showSnackbar(messageAvatarChanged)
                 }.onFailure {
                     Napier.e(it.toString(), it)
                 }
@@ -79,18 +82,20 @@ fun EditableCharacterAvatar(
                     fileChooser.open(FileType.IMAGE)
                 },
             ) {
-                Text("Change avatar")
+                Text(stringResource(Str.character_button_change_avatar))
             }
+
+            val messageAvatarRemoved = stringResource(Str.messages_avatar_removed)
             DropdownMenuItem(
                 onClick = {
                     active = false
                     coroutineScope.launch {
                         screenModel.removeAvatar()
-                        snackbarHolder.showSnackbar(messages.avatarRemoved)
+                        snackbarHolder.showSnackbar(messageAvatarRemoved)
                     }
                 },
             ) {
-                Text("Remove avatar")
+                Text(stringResource(Str.character_button_remove_avatar))
             }
         }
     }

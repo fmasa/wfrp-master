@@ -23,11 +23,13 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import cz.frantisekmasa.wfrp_master.common.Str
 import cz.frantisekmasa.wfrp_master.common.core.domain.NamedEnum
+import cz.frantisekmasa.wfrp_master.common.core.domain.localizedName
 import cz.frantisekmasa.wfrp_master.common.core.ui.menu.DropdownMenu
 import cz.frantisekmasa.wfrp_master.common.core.ui.menu.DropdownMenuItem
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
-import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
+import dev.icerock.moko.resources.compose.stringResource
 
 @Composable
 inline fun <reified T : NamedEnum> SelectBox(
@@ -37,16 +39,14 @@ inline fun <reified T : NamedEnum> SelectBox(
     modifier: Modifier = Modifier,
     label: String? = null,
 ) {
-    Box(modifier) {
-        val strings = LocalStrings.current
+    val translatedItems = items.map { it to it.localizedName }
 
+    Box(modifier) {
         SelectBox(
             label = label,
             value = value,
             onValueChange = onValueChange,
-            items = remember(items) {
-                items.map { it to it.nameResolver(strings) }.sortedBy { it.second }
-            }
+            items = remember(translatedItems) { translatedItems.sortedBy { it.second } },
         )
     }
 }
@@ -114,7 +114,7 @@ fun SelectBoxToggle(
                 Row(Modifier.weight(1f), content = content)
                 Icon(
                     Icons.Rounded.ExpandMore,
-                    LocalStrings.current.commonUi.labelExpandSelectBox,
+                    stringResource(Str.common_ui_label_expand_select_box),
                 )
             }
         }

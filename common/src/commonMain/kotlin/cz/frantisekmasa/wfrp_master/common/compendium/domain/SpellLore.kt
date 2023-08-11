@@ -1,26 +1,27 @@
 package cz.frantisekmasa.wfrp_master.common.compendium.domain
 
+import cz.frantisekmasa.wfrp_master.common.Str
 import cz.frantisekmasa.wfrp_master.common.core.domain.NamedEnum
-import cz.frantisekmasa.wfrp_master.common.localization.Strings
+import dev.icerock.moko.resources.StringResource
 
 enum class SpellLore(
-    override val nameResolver: (strings: Strings) -> String,
+    override val translatableName: StringResource,
     val wind: String?,
 ) : NamedEnum {
-    BEASTS({ it.spells.lores.beasts }, "Ghur"),
-    DEATH({ it.spells.lores.death }, "Shyish"),
-    FIRE({ it.spells.lores.fire }, "Aqshy"),
-    HEAVENS({ it.spells.lores.heavens }, "Azyr"),
-    METAL({ it.spells.lores.metal }, "Chamon"),
-    LIFE({ it.spells.lores.life }, "Ghyran"),
-    LIGHT({ it.spells.lores.light }, "Hysh"),
-    SHADOWS({ it.spells.lores.shadows }, "Ulgu"),
-    HEDGECRAFT({ it.spells.lores.hedgecraft }, null),
-    WITCHCRAFT({ it.spells.lores.witchcraft }, null),
-    DAEMONOLOGY({ it.spells.lores.daemonology }, "Dhar"),
-    NECROMANCY({ it.spells.lores.necromancy }, "Dhar"),
-    NURGLE({ it.spells.lores.nurgle }, "Dhar"),
-    SLAANESH({ it.spells.lores.slaanesh }, "Dhar"),
-    TZEENTCH({ it.spells.lores.tzeentch }, "Dhar"),
-    PETTY({ it.spells.lores.petty }, null),
+    BEASTS(Str.spells_lores_beasts, "Ghur"),
+    DEATH(Str.spells_lores_death, "Shyish"),
+    FIRE(Str.spells_lores_fire, "Aqshy"),
+    HEAVENS(Str.spells_lores_heavens, "Azyr"),
+    METAL(Str.spells_lores_metal, "Chamon"),
+    LIFE(Str.spells_lores_life, "Ghyran"),
+    LIGHT(Str.spells_lores_light, "Hysh"),
+    SHADOWS(Str.spells_lores_shadows, "Ulgu"),
+    HEDGECRAFT(Str.spells_lores_hedgecraft, null),
+    WITCHCRAFT(Str.spells_lores_witchcraft, null),
+    DAEMONOLOGY(Str.spells_lores_daemonology, "Dhar"),
+    NECROMANCY(Str.spells_lores_necromancy, "Dhar"),
+    NURGLE(Str.spells_lores_nurgle, "Dhar"),
+    SLAANESH(Str.spells_lores_slaanesh, "Dhar"),
+    TZEENTCH(Str.spells_lores_tzeentch, "Dhar"),
+    PETTY(Str.spells_lores_petty, null),
 }

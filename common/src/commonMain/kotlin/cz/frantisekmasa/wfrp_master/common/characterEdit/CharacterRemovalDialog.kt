@@ -1,9 +1,10 @@
 package cz.frantisekmasa.wfrp_master.common.characterEdit
 
 import androidx.compose.runtime.Composable
+import cz.frantisekmasa.wfrp_master.common.Str
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.Character
 import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.ConfirmationDialog
-import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
+import dev.icerock.moko.resources.compose.stringResource
 
 @Composable
 fun CharacterRemovalDialog(
@@ -12,8 +13,8 @@ fun CharacterRemovalDialog(
     onConfirmation: suspend () -> Unit,
 ) {
     ConfirmationDialog(
-        text = LocalStrings.current.character.messages.removalDialogText(character.name),
-        confirmationButtonText = LocalStrings.current.commonUi.buttonRemove,
+        text = stringResource(Str.character_messages_removal_dialog_text, character.name),
+        confirmationButtonText = stringResource(Str.common_ui_button_remove),
         onDismissRequest = onDismissRequest,
         onConfirmation = onConfirmation,
     )

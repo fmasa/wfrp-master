@@ -10,6 +10,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import cz.frantisekmasa.wfrp_master.common.Str
 import cz.frantisekmasa.wfrp_master.common.character.religion.blessings.dialog.AddBlessingDialog
 import cz.frantisekmasa.wfrp_master.common.core.domain.religion.Blessing
 import cz.frantisekmasa.wfrp_master.common.core.shared.Resources
@@ -21,7 +22,7 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.flow.collectWithLifecycle
 import cz.frantisekmasa.wfrp_master.common.core.ui.navigation.LocalNavigationTransaction
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.ContextMenu
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.EmptyUI
-import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
+import dev.icerock.moko.resources.compose.stringResource
 import kotlinx.coroutines.launch
 
 @Composable
@@ -29,19 +30,17 @@ internal fun BlessingsCard(screenModel: BlessingsScreenModel) {
     val blessings = screenModel.items.collectWithLifecycle(null).value ?: return
     val coroutineScope = rememberCoroutineScope()
 
-    val strings = LocalStrings.current.blessings
-
     CardContainer(
         Modifier
             .padding(horizontal = 8.dp)
             .padding(bottom = 8.dp)
     ) {
         Column(Modifier.padding(horizontal = 6.dp)) {
-            CardTitle(strings.title)
+            CardTitle(stringResource(Str.blessings_title))
 
             if (blessings.isEmpty()) {
                 EmptyUI(
-                    strings.messages.characterHasNoBlessings,
+                    stringResource(Str.blessings_messages_character_has_no_blessings),
                     Resources.Drawable.Blessing,
                     size = EmptyUI.Size.Small
                 )
@@ -66,7 +65,10 @@ internal fun BlessingsCard(screenModel: BlessingsScreenModel) {
 
             var showAddBlessingDialog by rememberSaveable { mutableStateOf(false) }
 
-            CardButton(strings.titleAdd, onClick = { showAddBlessingDialog = true })
+            CardButton(
+                stringResource(Str.blessings_title_add),
+                onClick = { showAddBlessingDialog = true },
+            )
 
             if (showAddBlessingDialog) {
                 AddBlessingDialog(
@@ -88,7 +90,7 @@ private fun BlessingItem(
         name = blessing.name,
         onClick = onClick,
         contextMenuItems = listOf(
-            ContextMenu.Item(LocalStrings.current.commonUi.buttonRemove, onClick = { onRemove() }),
+            ContextMenu.Item(stringResource(Str.common_ui_button_remove), onClick = { onRemove() }),
         ),
     )
 }

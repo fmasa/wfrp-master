@@ -10,6 +10,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.benasher44.uuid.Uuid
 import com.benasher44.uuid.uuid4
+import cz.frantisekmasa.wfrp_master.common.Str
 import cz.frantisekmasa.wfrp_master.common.compendium.CompendiumItemDialog
 import cz.frantisekmasa.wfrp_master.common.compendium.CompendiumItemFormData
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.Blessing
@@ -18,7 +19,7 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.forms.Rules
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.TextInput
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.inputValue
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
-import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
+import dev.icerock.moko.resources.compose.stringResource
 
 @Composable
 fun BlessingDialog(
@@ -27,10 +28,13 @@ fun BlessingDialog(
     onSaveRequest: suspend (Blessing) -> Unit,
 ) {
     val formData = BlessingFormData.fromItem(blessing)
-    val strings = LocalStrings.current.blessings
 
     CompendiumItemDialog(
-        title = if (blessing == null) strings.titleNew else strings.titleEdit,
+        title = stringResource(
+            if (blessing == null)
+                Str.blessings_title_new
+            else Str.blessings_title_edit
+        ),
         formData = formData,
         saver = onSaveRequest,
         onDismissRequest = onDismissRequest,
@@ -40,40 +44,40 @@ fun BlessingDialog(
             modifier = Modifier.padding(Spacing.bodyPadding),
         ) {
             TextInput(
-                label = strings.labelName,
+                label = stringResource(Str.blessings_label_name),
                 value = formData.name,
                 validate = validate,
                 maxLength = Blessing.NAME_MAX_LENGTH
             )
 
             TextInput(
-                label = strings.labelRange,
+                label = stringResource(Str.blessings_label_range),
                 value = formData.range,
                 validate = validate,
                 maxLength = Blessing.RANGE_MAX_LENGTH,
             )
 
             TextInput(
-                label = strings.labelTarget,
+                label = stringResource(Str.blessings_label_target),
                 value = formData.target,
                 validate = validate,
                 maxLength = Blessing.TARGET_MAX_LENGTH,
             )
 
             TextInput(
-                label = strings.labelDuration,
+                label = stringResource(Str.blessings_label_duration),
                 value = formData.duration,
                 validate = validate,
                 maxLength = Blessing.DURATION_MAX_LENGTH,
             )
 
             TextInput(
-                label = strings.labelEffect,
+                label = stringResource(Str.blessings_label_effect),
                 value = formData.effect,
                 validate = validate,
                 maxLength = Blessing.EFFECT_MAX_LENGTH,
                 multiLine = true,
-                helperText = LocalStrings.current.commonUi.markdownSupportedNote,
+                helperText = stringResource(Str.common_ui_markdown_supported_note),
             )
         }
     }

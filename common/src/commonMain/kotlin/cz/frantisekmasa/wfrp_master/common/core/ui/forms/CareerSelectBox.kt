@@ -29,6 +29,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.benasher44.uuid.Uuid
+import cz.frantisekmasa.wfrp_master.common.Str
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.Career
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.Character
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.SocialStatus
@@ -44,7 +45,7 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.SearchableList
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.defaultBackgroundColor
 import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.SaveAction
-import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
+import dev.icerock.moko.resources.compose.stringResource
 
 sealed interface SelectedCareer : Parcelable {
 
@@ -103,7 +104,7 @@ fun CareerSelectBox(
     }
 
     Column {
-        SelectBoxLabel(LocalStrings.current.character.labelCareer)
+        SelectBoxLabel(stringResource(Str.character_label_career))
 
         Row(verticalAlignment = Alignment.CenterVertically) {
             Box(Modifier.weight(1f)) {
@@ -112,7 +113,7 @@ fun CareerSelectBox(
                     onClick = { dialogOpened = true },
                 ) {
                     Text(
-                        itemValue ?: LocalStrings.current.commonUi.itemNone,
+                        itemValue ?: stringResource(Str.common_ui_item_none),
                         maxLines = 1,
                     )
                 }
@@ -120,7 +121,7 @@ fun CareerSelectBox(
 
             if (itemValue != null) {
                 CloseButton(
-                    contentDescription = LocalStrings.current.careers.buttonClearSelectBox,
+                    contentDescription = stringResource(Str.careers_button_clear_select_box),
                     onClick = {
                         onValueChange(SelectedCareer.NoCareer)
                     }
@@ -167,12 +168,16 @@ private fun CareerChooserDialog(
                 data = SearchableList.Data.Loaded(items),
                 searchableValue = { it.second },
                 navigationIcon = { CloseButton(onDismissRequest) },
-                title = LocalStrings.current.compendium.titleCareers,
-                searchPlaceholder = LocalStrings.current.careers.searchPlaceholder,
+                title = stringResource(Str.compendium_title_careers),
+                searchPlaceholder = stringResource(Str.careers_search_placeholder),
                 emptyUi = {
                     EmptyUI(
-                        text = LocalStrings.current.characterCreation.messages.noCareersInCompendium,
-                        subText = LocalStrings.current.compendium.messages.noItemsInCompendiumSubtextPlayer,
+                        text = stringResource(
+                            Str.character_creation_messages_no_careers_in_compendium,
+                        ),
+                        subText = stringResource(
+                            Str.compendium_messages_no_items_in_compendium_subtext_player,
+                        ),
                         icon = Resources.Drawable.Career,
                     )
                 },
@@ -214,7 +219,7 @@ private fun CareerChooserDialog(
                         .padding(Spacing.medium),
                     onClick = { customCareer = true },
                 ) {
-                    Text(LocalStrings.current.character.labelCustomCareer)
+                    Text(stringResource(Str.character_label_custom_career))
                 }
             }
         }
@@ -234,7 +239,7 @@ fun NonCompendiumCareerForm(
         topBar = {
             TopAppBar(
                 title = {
-                    Text(LocalStrings.current.character.labelCareer)
+                    Text(stringResource(Str.character_label_career))
                 },
                 navigationIcon = { BackButton(onDismissRequest) },
                 actions = {
@@ -259,14 +264,14 @@ fun NonCompendiumCareerForm(
             verticalArrangement = Arrangement.spacedBy(Spacing.small),
         ) {
             TextInput(
-                label = LocalStrings.current.character.labelClass,
+                label = stringResource(Str.character_label_class),
                 value = socialClass,
                 maxLength = Character.SOCIAL_CLASS_MAX_LENGTH,
                 validate = true,
             )
 
             TextInput(
-                label = LocalStrings.current.character.labelCareer,
+                label = stringResource(Str.character_label_career),
                 value = careerName,
                 maxLength = Character.CAREER_MAX_LENGTH,
                 validate = true,

@@ -11,6 +11,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import com.benasher44.uuid.Uuid
+import cz.frantisekmasa.wfrp_master.common.Str
 import cz.frantisekmasa.wfrp_master.common.character.CharacterItemDetailScreen
 import cz.frantisekmasa.wfrp_master.common.character.spells.dialog.NonCompendiumSpellForm
 import cz.frantisekmasa.wfrp_master.common.character.spells.dialog.SpellDetail
@@ -21,7 +22,7 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.navigation.LocalNavigationTra
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.rememberScreenModel
 import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.SubheadBar
-import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
+import dev.icerock.moko.resources.compose.stringResource
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
@@ -48,7 +49,7 @@ class CharacterSpellDetailScreen(characterId: CharacterId, spellId: Uuid) :
                                 horizontalArrangement = Arrangement.SpaceBetween,
                                 verticalAlignment = Alignment.CenterVertically,
                             ) {
-                                Text(LocalStrings.current.spells.labelMemorized)
+                                Text(stringResource(Str.spells_label_memorized))
                                 Switch(
                                     checked = spell.memorized,
                                     onCheckedChange = { memorized ->

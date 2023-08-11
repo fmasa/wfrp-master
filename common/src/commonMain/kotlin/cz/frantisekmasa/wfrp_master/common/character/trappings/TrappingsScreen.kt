@@ -25,6 +25,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import cz.frantisekmasa.wfrp_master.common.Str
 import cz.frantisekmasa.wfrp_master.common.character.trappings.TrappingsScreenModel.Trapping
 import cz.frantisekmasa.wfrp_master.common.core.domain.identifiers.CharacterId
 import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.InventoryItem
@@ -41,7 +42,7 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.UserTip
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.UserTipCard
 import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.TopPanel
-import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
+import dev.icerock.moko.resources.compose.stringResource
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
@@ -111,10 +112,10 @@ fun TrappingsScreen(
             }
 
             ChooseTrappingDialog(
-                title = LocalStrings.current.trappings.titleSelectContainer,
+                title = stringResource(Str.trappings_title_select_container),
                 trappings = containers,
                 onSelected = { screenModel.addToContainer(trapping, it.item) },
-                emptyUiText = LocalStrings.current.trappings.messages.noContainersFound,
+                emptyUiText = stringResource(Str.trappings_messages_no_containers_found),
                 onDismissRequest = { addToContainerDialogTrapping = null },
             )
         }
@@ -149,7 +150,7 @@ private fun CharacterEncumbrance(screenModel: TrappingsScreenModel, modifier: Mo
     ) {
         Icon(
             drawableResource(Resources.Drawable.TrappingEncumbrance),
-            LocalStrings.current.trappings.iconTotalEncumbrance,
+            stringResource(Str.trappings_icon_total_encumbrance),
             Modifier.size(18.dp),
         )
         Text(
@@ -168,14 +169,12 @@ private fun InventoryItemsCard(
     onNewItemButtonClicked: () -> Unit,
     onAddToContainerRequest: (InventoryItem) -> Unit,
 ) {
-    val strings = LocalStrings.current.trappings
-
     CardContainer(Modifier.padding(horizontal = 8.dp)) {
         Column(Modifier.padding(horizontal = 8.dp)) {
-            CardTitle(strings.title)
+            CardTitle(stringResource(Str.trappings_title))
             if (trappings.isEmpty()) {
                 EmptyUI(
-                    text = strings.messages.noItems,
+                    text = stringResource(Str.trappings_messages_no_items),
                     Resources.Drawable.TrappingContainer,
                     size = EmptyUI.Size.Small
                 )
@@ -189,7 +188,7 @@ private fun InventoryItemsCard(
                 )
             }
 
-            CardButton(strings.titleAdd, onClick = onNewItemButtonClicked)
+            CardButton(stringResource(Str.trappings_title_add), onClick = onNewItemButtonClicked)
         }
     }
 }

@@ -39,10 +39,11 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.intl.Locale
 import androidx.compose.ui.text.toUpperCase
 import androidx.compose.ui.unit.dp
+import cz.frantisekmasa.wfrp_master.common.Str
 import cz.frantisekmasa.wfrp_master.common.core.domain.time.ImperialDate
 import cz.frantisekmasa.wfrp_master.common.core.shared.Parcelable
 import cz.frantisekmasa.wfrp_master.common.core.shared.Parcelize
-import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
+import dev.icerock.moko.resources.compose.stringResource
 
 @Composable
 fun ImperialCalendar(date: ImperialDate, onDateChange: (ImperialDate) -> Unit) {
@@ -55,8 +56,6 @@ fun ImperialCalendar(date: ImperialDate, onDateChange: (ImperialDate) -> Unit) {
 
             mutableStateOf(firstYear until firstYear + size)
         }
-
-        val strings = LocalStrings.current.calendar
 
         Row(
             Modifier.fillMaxWidth(),
@@ -74,7 +73,7 @@ fun ImperialCalendar(date: ImperialDate, onDateChange: (ImperialDate) -> Unit) {
                     ) {
                         Icon(
                             Icons.Rounded.ArrowBackIos,
-                            strings.iconPreviousYears,
+                            stringResource(Str.calendar_icon_previous_years),
                             tint = MaterialTheme.colors.primaryVariant
                         )
                     }
@@ -91,7 +90,7 @@ fun ImperialCalendar(date: ImperialDate, onDateChange: (ImperialDate) -> Unit) {
                     ) {
                         Icon(
                             Icons.Rounded.ArrowForwardIos,
-                            strings.iconNextYears,
+                            stringResource(Str.calendar_icon_next_years),
                             tint = MaterialTheme.colors.primaryVariant
                         )
                     }
@@ -100,7 +99,7 @@ fun ImperialCalendar(date: ImperialDate, onDateChange: (ImperialDate) -> Unit) {
                     IconButton(onClick = { activeMonth = activeMonth.previousMonth() }) {
                         Icon(
                             Icons.Rounded.ArrowBackIos,
-                            strings.iconPreviousMonth,
+                            stringResource(Str.calendar_icon_previous_month),
                             tint = MaterialTheme.colors.primaryVariant
                         )
                     }
@@ -114,7 +113,7 @@ fun ImperialCalendar(date: ImperialDate, onDateChange: (ImperialDate) -> Unit) {
                     IconButton(onClick = { activeMonth = activeMonth.nextMonth() }) {
                         Icon(
                             Icons.Rounded.ArrowForwardIos,
-                            strings.iconNextMonth,
+                            stringResource(Str.calendar_icon_next_month),
                             tint = MaterialTheme.colors.primaryVariant
                         )
                     }

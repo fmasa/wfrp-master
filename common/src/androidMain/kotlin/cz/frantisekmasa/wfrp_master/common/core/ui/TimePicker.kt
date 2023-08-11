@@ -5,7 +5,8 @@ import androidx.compose.runtime.remember
 import com.vanpra.composematerialdialogs.MaterialDialog
 import com.vanpra.composematerialdialogs.datetime.time.timepicker
 import com.vanpra.composematerialdialogs.title
-import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
+import cz.frantisekmasa.wfrp_master.common.Str
+import dev.icerock.moko.resources.compose.stringResource
 import java.time.LocalTime
 
 @Composable
@@ -15,11 +16,11 @@ actual fun timePicker(time: LocalTime, onTimeChange: TimePicker.(LocalTime) -> U
 
     dialog.build(
         buttons = {
-            positiveButton(LocalStrings.current.commonUi.buttonSave)
-            negativeButton(LocalStrings.current.commonUi.buttonCancel)
+            positiveButton(stringResource(Str.common_ui_button_save))
+            negativeButton(stringResource(Str.common_ui_button_cancel))
         }
     ) {
-        title(LocalStrings.current.calendar.titleSelectTime)
+        title(stringResource(Str.calendar_title_select_time))
         timepicker(time, onTimeChange = { timePicker.onTimeChange(it) })
     }
 

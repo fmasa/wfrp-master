@@ -12,12 +12,13 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.text.font.FontWeight
+import cz.frantisekmasa.wfrp_master.common.Str
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.Party
 import cz.frantisekmasa.wfrp_master.common.core.shared.IO
 import cz.frantisekmasa.wfrp_master.common.core.ui.dialogs.AlertDialog
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
 import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.LocalPersistentSnackbarHolder
-import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
+import dev.icerock.moko.resources.compose.stringResource
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
@@ -32,14 +33,12 @@ fun RemovePartyDialog(
     AlertDialog(
         onDismissRequest = onDismissRequest,
         text = {
-            val messages = LocalStrings.current.parties.messages
-
             Column(verticalArrangement = Arrangement.spacedBy(Spacing.medium)) {
-                Text(messages.removalConfirmation)
+                Text(stringResource(Str.parties_messages_removal_confirmation))
 
                 if (party.playersCount > 0) {
                     Text(
-                        messages.membersWillLoseAccess,
+                        stringResource(Str.parties_messages_members_will_lose_access),
                         fontWeight = FontWeight.Bold,
                     )
                 }
@@ -50,14 +49,14 @@ fun RemovePartyDialog(
                 enabled = !removing,
                 onClick = onDismissRequest
             ) {
-                Text(LocalStrings.current.commonUi.buttonCancel.uppercase())
+                Text(stringResource(Str.common_ui_button_cancel).uppercase())
             }
         },
         confirmButton = {
             val coroutineScope = rememberCoroutineScope()
-            val messages = LocalStrings.current.messages
             val snackbarHolder = LocalPersistentSnackbarHolder.current
 
+            val partyRemovedMessage = stringResource(Str.parties_messages_party_removed)
             TextButton(
                 enabled = !removing,
                 onClick = {
@@ -68,13 +67,13 @@ fun RemovePartyDialog(
                         onDismissRequest()
 
                         snackbarHolder.showSnackbar(
-                            messages.partyRemoved,
+                            partyRemovedMessage,
                             duration = SnackbarDuration.Long,
                         )
                     }
                 },
             ) {
-                Text(LocalStrings.current.commonUi.buttonRemove.uppercase())
+                Text(stringResource(Str.common_ui_button_remove).uppercase())
             }
         }
     )

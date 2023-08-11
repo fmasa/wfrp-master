@@ -8,6 +8,7 @@ import androidx.compose.material.icons.rounded.Add
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import cafe.adriel.voyager.core.screen.Screen
+import cz.frantisekmasa.wfrp_master.common.Str
 import cz.frantisekmasa.wfrp_master.common.compendium.blessing.BlessingCompendiumScreen
 import cz.frantisekmasa.wfrp_master.common.compendium.career.CareerCompendiumScreen
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.CompendiumItem
@@ -24,8 +25,8 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.flow.collectWithLifecycle
 import cz.frantisekmasa.wfrp_master.common.core.ui.menu.WithContextMenu
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.ContextMenu
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.SearchableList
-import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
-import cz.frantisekmasa.wfrp_master.common.localization.Strings
+import dev.icerock.moko.resources.StringResource
+import dev.icerock.moko.resources.compose.stringResource
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
@@ -34,16 +35,16 @@ import kotlin.coroutines.EmptyCoroutineContext
 abstract class CompendiumScreen() : Screen {
 
     enum class Type(
-        override val nameResolver: (strings: Strings) -> String,
+        override val translatableName: StringResource,
         val screen: (PartyId) -> Screen,
     ) : NamedEnum {
-        SKILLS({ it.compendium.titleSkills }, ::SkillCompendiumScreen),
-        TALENTS({ it.compendium.titleTalents }, ::TalentCompendiumScreen),
-        SPELLS({ it.compendium.titleSpells }, ::SpellCompendiumScreen),
-        BLESSINGS({ it.compendium.titleBlessings }, ::BlessingCompendiumScreen),
-        MIRACLES({ it.compendium.titleMiracles }, ::MiracleCompendiumScreen),
-        TRAITS({ it.compendium.titleTraits }, ::TraitCompendiumScreen),
-        CAREERS({ it.compendium.titleCareers }, ::CareerCompendiumScreen),
+        SKILLS(Str.compendium_title_skills, ::SkillCompendiumScreen),
+        TALENTS(Str.compendium_title_talents, ::TalentCompendiumScreen),
+        SPELLS(Str.compendium_title_spells, ::SpellCompendiumScreen),
+        BLESSINGS(Str.compendium_title_blessings, ::BlessingCompendiumScreen),
+        MIRACLES(Str.compendium_title_miracles, ::MiracleCompendiumScreen),
+        TRAITS(Str.compendium_title_traits, ::TraitCompendiumScreen),
+        CAREERS(Str.compendium_title_careers, ::CareerCompendiumScreen),
     }
 
     @Composable
@@ -72,13 +73,13 @@ abstract class CompendiumScreen() : Screen {
                 WithContextMenu(
                     items = listOf(
                         ContextMenu.Item(
-                            LocalStrings.current.commonUi.buttonDuplicate,
+                            stringResource(Str.common_ui_button_duplicate),
                             onClick = {
                                 coroutineScope.launch { newItemSaver(item.duplicate()) }
                             }
                         ),
                         ContextMenu.Item(
-                            LocalStrings.current.commonUi.buttonRemove,
+                            stringResource(Str.common_ui_button_remove),
                             onClick = { coroutineScope.launch { remover(item) } }
                         ),
                     ),
@@ -91,7 +92,7 @@ abstract class CompendiumScreen() : Screen {
                 FloatingActionButton(onClick = onNewItemRequest) {
                     Icon(
                         Icons.Rounded.Add,
-                        LocalStrings.current.compendium.iconAddCompendiumItem,
+                        stringResource(Str.compendium_icon_add_compendium_item),
                     )
                 }
             }

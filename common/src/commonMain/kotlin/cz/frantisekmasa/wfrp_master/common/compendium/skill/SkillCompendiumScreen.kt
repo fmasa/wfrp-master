@@ -8,6 +8,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import cz.frantisekmasa.wfrp_master.common.Str
 import cz.frantisekmasa.wfrp_master.common.compendium.CompendiumScreen
 import cz.frantisekmasa.wfrp_master.common.compendium.VisibilityIcon
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.PartyId
@@ -16,7 +17,7 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.navigation.LocalNavigationTra
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.EmptyUI
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.ItemIcon
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.rememberScreenModel
-import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
+import dev.icerock.moko.resources.compose.stringResource
 
 class SkillCompendiumScreen(
     private val partyId: PartyId
@@ -42,10 +43,9 @@ class SkillCompendiumScreen(
         ItemsList(
             liveItems = screenModel.items,
             emptyUI = {
-                val messages = LocalStrings.current.skills.messages
                 EmptyUI(
-                    text = messages.noSkillsInCompendium,
-                    subText = messages.noSkillsInCompendiumSubtext,
+                    text = stringResource(Str.skills_messages_no_skills_in_compendium),
+                    subText = stringResource(Str.skills_messages_no_skills_in_compendium_subtext),
                     icon = Resources.Drawable.Skill,
                 )
             },

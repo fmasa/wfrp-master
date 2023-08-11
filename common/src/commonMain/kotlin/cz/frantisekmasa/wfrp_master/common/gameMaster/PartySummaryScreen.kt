@@ -26,6 +26,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
+import cz.frantisekmasa.wfrp_master.common.Str
 import cz.frantisekmasa.wfrp_master.common.ambitions.AmbitionsCard
 import cz.frantisekmasa.wfrp_master.common.characterEdit.CharacterRemovalDialog
 import cz.frantisekmasa.wfrp_master.common.core.auth.UserId
@@ -49,8 +50,8 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.UserTip
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.UserTipCard
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.rememberScreenModel
 import cz.frantisekmasa.wfrp_master.common.invitation.InvitationDialog
-import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
 import cz.frantisekmasa.wfrp_master.common.skillTest.SkillTestDialog
+import dev.icerock.moko.resources.compose.stringResource
 
 @Composable
 internal fun Screen.PartySummaryScreen(
@@ -69,15 +70,13 @@ internal fun Screen.PartySummaryScreen(
         )
     }
 
-    val strings = LocalStrings.current
-
     Scaffold(
         modifier,
         floatingActionButton = {
             FloatingActionButton(onClick = { skillTestDialogVisible = true }) {
                 Icon(
                     drawableResource(Resources.Drawable.DiceRoll),
-                    strings.tests.buttonHiddenSkillTest,
+                    stringResource(Str.tests_button_hidden_skill_test),
                 )
             }
         }
@@ -123,7 +122,7 @@ internal fun Screen.PartySummaryScreen(
 
             AmbitionsCard(
                 modifier = Modifier.padding(horizontal = 8.dp),
-                title = strings.ambition.titlePartyAmbitions,
+                title = stringResource(Str.ambition_title_party_ambitions),
                 ambitions = party.ambitions,
                 onSave = { screenModel.updatePartyAmbitions(it) },
             )
@@ -149,9 +148,7 @@ private fun PlayersCard(
             .padding(8.dp)
     ) {
         Column(Modifier.fillMaxWidth()) {
-            val strings = LocalStrings.current.parties
-
-            CardTitle(strings.titleCharacters)
+            CardTitle(stringResource(Str.parties_title_characters))
 
             val playerCharacters = screenModel.playerCharacters.collectWithLifecycle(null).value
 
@@ -165,7 +162,7 @@ private fun PlayersCard(
                 }
                 playerCharacters.isEmpty() -> {
                     EmptyUI(
-                        text = strings.messages.noCharactersInParty,
+                        text = stringResource(Str.parties_messages_no_characters_in_party),
                         icon = Icons.Rounded.Group,
                         size = EmptyUI.Size.Small,
                     )
@@ -188,14 +185,14 @@ private fun PlayersCard(
                 modifier = Modifier.fillMaxWidth(),
             ) {
                 PrimaryButton(
-                    LocalStrings.current.commonUi.buttonCreate,
+                    stringResource(Str.common_ui_button_create),
                     onClick = { onCharacterCreateRequest(null) },
                 )
 
                 val party = screenModel.party.collectWithLifecycle(null).value
 
                 PrimaryButton(
-                    LocalStrings.current.parties.buttonInvite,
+                    stringResource(Str.parties_button_invite),
                     enabled = party !== null,
                     onClick = { party?.let { onInvitationDialogRequest(party.getInvitation()) } },
                 )
@@ -210,14 +207,12 @@ private fun CharacterItem(
     onCharacterOpenRequest: (Character) -> Unit,
     onRemoveCharacter: (Character) -> Unit
 ) {
-    val strings = LocalStrings.current
-
     CardItem(
         name = character.name,
         icon = { CharacterAvatar(character.avatarUrl, ItemIcon.Size.Small) },
         onClick = { onCharacterOpenRequest(character) },
         contextMenuItems = listOf(
-            ContextMenu.Item(strings.commonUi.buttonRemove) {
+            ContextMenu.Item(stringResource(Str.common_ui_button_remove)) {
                 onRemoveCharacter(character)
             }
         )

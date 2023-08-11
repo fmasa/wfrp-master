@@ -29,6 +29,7 @@ import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.withStyle
+import cz.frantisekmasa.wfrp_master.common.Str
 import cz.frantisekmasa.wfrp_master.common.character.trappings.ChooseTrappingDialog
 import cz.frantisekmasa.wfrp_master.common.character.trappings.InventoryItemDialog
 import cz.frantisekmasa.wfrp_master.common.character.trappings.TrappingItem
@@ -47,7 +48,7 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.MenuState
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
 import cz.frantisekmasa.wfrp_master.common.core.ui.text.SingleLineTextValue
 import cz.frantisekmasa.wfrp_master.common.core.utils.launchLogged
-import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
+import dev.icerock.moko.resources.compose.stringResource
 import kotlinx.coroutines.Dispatchers
 
 @Composable
@@ -86,10 +87,10 @@ fun ContainerDetail(
         }
 
         ChooseTrappingDialog(
-            title = LocalStrings.current.trappings.titleSelectTrapping,
+            title = stringResource(Str.trappings_title_select_trapping),
             trappings = trappingsToAdd,
             onSelected = { onAddToContainerRequest(it.item) },
-            emptyUiText = LocalStrings.current.trappings.messages.noTrappingsToAdd,
+            emptyUiText = stringResource(Str.trappings_messages_no_trappings_to_add),
             onDismissRequest = { trappingPickerOpened = false },
         )
     }
@@ -109,7 +110,7 @@ fun ContainerDetail(
             ) {
                 ExtendedFloatingActionButton(
                     icon = { Icon(rememberVectorPainter(Icons.Rounded.Search), null) },
-                    text = { Text(LocalStrings.current.trappings.buttonSelectExisting) },
+                    text = { Text(stringResource(Str.trappings_button_select_existing)) },
                     onClick = {
                         menuState = MenuState.COLLAPSED
                         trappingPickerOpened = true
@@ -118,7 +119,7 @@ fun ContainerDetail(
 
                 ExtendedFloatingActionButton(
                     icon = { Icon(rememberVectorPainter(Icons.Rounded.Add), null) },
-                    text = { Text(LocalStrings.current.trappings.buttonCreateNew) },
+                    text = { Text(stringResource(Str.trappings_button_create_new)) },
                     onClick = {
                         menuState = MenuState.COLLAPSED
                         newTrappingDialogOpened = true
@@ -146,7 +147,7 @@ fun ContainerDetail(
                 EncumbranceBox(trapping)
 
                 SingleLineTextValue(
-                    LocalStrings.current.trappings.labelCarries,
+                    stringResource(Str.trappings_label_carries),
                     buildAnnotatedString {
                         withStyle(
                             SpanStyle(
@@ -177,8 +178,7 @@ fun ContainerDetail(
             } else {
                 CardContainer(Modifier.padding(horizontal = Spacing.small)) {
                     Text(
-                        LocalStrings.current.trappings.messages
-                            .cannotStoreTrappingsInContainerStoredInContainer,
+                        stringResource(Str.trappings_messages_cannot_store_trappings_in_container_stored_in_container),
                         modifier = Modifier.align(Alignment.CenterHorizontally)
                             .padding(horizontal = Spacing.small)
                     )
@@ -200,11 +200,11 @@ private fun StoredTrappingsCard(
 
     CardContainer(Modifier.padding(horizontal = Spacing.small)) {
         Column(Modifier.padding(horizontal = Spacing.small)) {
-            CardTitle(LocalStrings.current.trappings.titleStoredTrappings)
+            CardTitle(stringResource(Str.trappings_title_stored_trappings))
 
             if (trappings.isEmpty()) {
                 EmptyUI(
-                    text = LocalStrings.current.trappings.messages.noItems,
+                    text = stringResource(Str.trappings_messages_no_items),
                     Resources.Drawable.TrappingContainer,
                     size = EmptyUI.Size.Small
                 )
@@ -226,7 +226,7 @@ private fun StoredTrappingsCard(
                                     }
                                 },
                                 additionalContextItems = listOf(
-                                    ContextMenu.Item(LocalStrings.current.trappings.buttonTakeOut) {
+                                    ContextMenu.Item(stringResource(Str.trappings_button_take_out)) {
                                         coroutineScope.launchLogged(Dispatchers.IO) {
                                             onRemoveFromContainerRequest(trapping)
                                         }

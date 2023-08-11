@@ -10,8 +10,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import cz.frantisekmasa.wfrp_master.common.Str
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.ContextMenu
-import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
+import dev.icerock.moko.resources.compose.stringResource
 
 @Composable
 fun WithContextMenu(
@@ -24,7 +25,7 @@ fun WithContextMenu(
     Box {
         Box(
             Modifier.combinedClickable(
-                onLongClickLabel = LocalStrings.current.commonUi.labelOpenContextMenu,
+                onLongClickLabel = stringResource(Str.common_ui_label_open_context_menu),
                 onLongClick = { expanded = true },
                 onClick = onClick,
             ),

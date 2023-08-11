@@ -17,9 +17,14 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
+import cz.frantisekmasa.wfrp_master.common.Str
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.JsonCompendiumImporter
 import cz.frantisekmasa.wfrp_master.common.core.PartyScreenModel
 import cz.frantisekmasa.wfrp_master.common.core.domain.ExceptionWithUserMessage
@@ -31,7 +36,7 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.navigation.LocalNavigationTra
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.rememberScreenModel
 import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.Subtitle
-import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
+import dev.icerock.moko.resources.compose.stringResource
 import java.lang.OutOfMemoryError
 
 class JsonCompendiumImportScreen(
@@ -50,7 +55,7 @@ class JsonCompendiumImportScreen(
         TopAppBar(
             title = {
                 Column {
-                    Text(LocalStrings.current.compendium.titleImportCompendium)
+                    Text(stringResource(Str.compendium_title_import_compendium))
                     partyScreenModel.party.collectWithLifecycle(null).value?.let {
                         Subtitle(it.name)
                     }
@@ -62,8 +67,6 @@ class JsonCompendiumImportScreen(
 
     @Composable
     private fun MainContainer() {
-        val strings = LocalStrings.current.compendium
-
         var importState by remember { mutableStateOf<ImportDialogState?>(null) }
 
         importState?.let {
@@ -78,14 +81,16 @@ class JsonCompendiumImportScreen(
             )
         }
 
+        val errorJsonImportFailed = stringResource(Str.compendium_messages_json_import_failed)
+        val errorOutOfMemory = stringResource(Str.compendium_messages_out_of_memory)
         val fileChooser = ImportFileChooser(
             onStateChange = { importState = it },
             importerFactory = { JsonCompendiumImporter(it.stream) },
             errorMessageFactory = {
                 when (it) {
-                    is ExceptionWithUserMessage -> it.message ?: strings.messages.jsonImportFailed
-                    is OutOfMemoryError -> strings.messages.outOfMemory
-                    else -> strings.messages.jsonImportFailed
+                    is ExceptionWithUserMessage -> it.message ?: errorJsonImportFailed
+                    is OutOfMemoryError -> errorOutOfMemory
+                    else -> errorJsonImportFailed
                 }
             }
         )
@@ -96,16 +101,24 @@ class JsonCompendiumImportScreen(
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             Text(
-                strings.jsonImportPrompt,
+                buildAnnotatedString {
+                    append(stringResource(Str.compendium_json_import_prompt_title))
+                    append('\n')
+                    withStyle(SpanStyle(fontWeight = FontWeight.SemiBold)) {
+                        append(stringResource(Str.compendium_json_import_prompt_warning))
+                    }
+                    append('\n')
+                    append(stringResource(Str.compendium_json_import_prompt_warning_explanation))
+                },
                 textAlign = TextAlign.Center,
             )
 
             Button(onClick = { fileChooser.open(FileType.JSON) }) {
-                Text(strings.buttonImport.uppercase())
+                Text(stringResource(Str.compendium_button_import).uppercase())
             }
 
             Text(
-                strings.assurance,
+                stringResource(Str.compendium_assurance),
                 color = MaterialTheme.colors.onSurface.copy(alpha = ContentAlpha.medium),
                 textAlign = TextAlign.Center,
                 style = MaterialTheme.typography.body2

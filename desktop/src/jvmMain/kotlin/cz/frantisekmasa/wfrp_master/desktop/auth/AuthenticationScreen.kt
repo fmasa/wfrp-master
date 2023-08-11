@@ -18,6 +18,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
+import cz.frantisekmasa.wfrp_master.common.Str
 import cz.frantisekmasa.wfrp_master.common.auth.AuthenticationManager
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.ErrorMessage
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.Rules
@@ -25,8 +26,8 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.forms.TextInput
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.inputValue
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.FullScreenProgress
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
-import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
 import cz.frantisekmasa.wfrp_master.common.shell.SplashScreen
+import dev.icerock.moko.resources.compose.stringResource
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.kodein.di.compose.localDI
@@ -37,7 +38,6 @@ fun AuthenticationScreen() {
     val email = inputValue("", Rules.NotBlank())
     val password = inputValue("", Rules.NotBlank())
 
-    val strings = LocalStrings.current
     val coroutineScope = rememberCoroutineScope()
 
     var validate by remember { mutableStateOf(false) }
@@ -67,19 +67,24 @@ fun AuthenticationScreen() {
                     }
                 }
                 TextInput(
-                    label = LocalStrings.current.authentication.labelEmail,
+                    label = stringResource(Str.authentication_label_email),
                     value = email,
                     validate = validate
                 )
 
                 TextInput(
-                    label = LocalStrings.current.authentication.labelPassword,
+                    label = stringResource(Str.authentication_label_password),
                     value = password,
                     validate = validate,
                     visualTransformation = PasswordVisualTransformation(),
                 )
 
                 val auth: AuthenticationManager by localDI().instance()
+
+                val errorInvalidEmail = stringResource(Str.authentication_messages_invalid_email)
+                val errorEmailNotFound = stringResource(Str.authentication_messages_email_not_found)
+                val errorInvalidPassword = stringResource(Str.authentication_messages_invalid_password)
+                val errorUnknown = stringResource(Str.authentication_messages_unknown_error)
 
                 Button(
                     onClick = {
@@ -96,10 +101,10 @@ fun AuthenticationScreen() {
 
                             if (result is AuthenticationManager.SignInResponse.Failure) {
                                 error = when {
-                                    result.isInvalidEmail -> strings.authentication.messages.invalidEmail
-                                    result.isEmailNotFound -> strings.authentication.messages.emailNotFound
-                                    result.isInvalidPassword -> strings.authentication.messages.invalidPassword
-                                    else -> strings.authentication.messages.unknownError
+                                    result.isInvalidEmail -> errorInvalidEmail
+                                    result.isEmailNotFound -> errorEmailNotFound
+                                    result.isInvalidPassword -> errorInvalidPassword
+                                    else -> errorUnknown
                                 }
 
                                 processing = false
@@ -107,7 +112,7 @@ fun AuthenticationScreen() {
                         }
                     }
                 ) {
-                    Text(strings.authentication.buttonSignIn)
+                    Text(stringResource(Str.authentication_button_sign_in))
                 }
             }
         }

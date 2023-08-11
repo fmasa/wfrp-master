@@ -10,12 +10,13 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import cz.frantisekmasa.wfrp_master.common.Str
 import cz.frantisekmasa.wfrp_master.common.core.domain.localizedName
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.settings.AdvantageSystem
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.settings.Settings
 import cz.frantisekmasa.wfrp_master.common.core.ui.dialogs.SelectionDialog
 import cz.frantisekmasa.wfrp_master.common.core.utils.launchLogged
-import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
+import dev.icerock.moko.resources.compose.stringResource
 import kotlinx.coroutines.Dispatchers
 
 @Composable
@@ -42,7 +43,7 @@ fun AdvantageSystemItem(
     }
 
     ListItem(
-        text = { Text(LocalStrings.current.combat.advantageSystemConfigOption) },
+        text = { Text(stringResource(Str.combat_advantage_system_config_option)) },
         secondaryText = { Text(currentSystem.localizedName) },
         modifier = Modifier.clickable {
             dialogVisible = true
@@ -57,7 +58,7 @@ private fun AdvantageSystemDialog(
     onDismissRequest: () -> Unit
 ) {
     SelectionDialog(
-        title = LocalStrings.current.combat.advantageSystemPrompt,
+        title = stringResource(Str.combat_advantage_system_prompt),
         items = AdvantageSystem.values().toList(),
         selected = selected,
         onDismissRequest = onDismissRequest,

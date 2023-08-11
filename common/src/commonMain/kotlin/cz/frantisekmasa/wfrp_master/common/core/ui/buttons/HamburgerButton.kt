@@ -5,10 +5,11 @@ import androidx.compose.material.IconButton
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Menu
 import androidx.compose.runtime.Composable
+import cz.frantisekmasa.wfrp_master.common.Str
 import cz.frantisekmasa.wfrp_master.common.core.LocalStaticConfiguration
 import cz.frantisekmasa.wfrp_master.common.core.config.Platform
 import cz.frantisekmasa.wfrp_master.common.core.ui.navigation.LocalNavigationTransaction
-import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
+import dev.icerock.moko.resources.compose.stringResource
 
 @Composable
 fun HamburgerButton() {
@@ -24,7 +25,7 @@ fun HamburgerButton() {
     IconButton(onClick = callback) {
         Icon(
             Icons.Rounded.Menu,
-            LocalStrings.current.commonUi.labelOpenDrawer,
+            stringResource(Str.common_ui_label_open_drawer),
         )
     }
 }

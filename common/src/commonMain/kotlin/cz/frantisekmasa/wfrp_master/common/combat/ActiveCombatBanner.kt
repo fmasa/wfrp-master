@@ -10,13 +10,12 @@ import androidx.compose.material.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.intl.Locale
-import androidx.compose.ui.text.toUpperCase
 import androidx.compose.ui.unit.dp
+import cz.frantisekmasa.wfrp_master.common.Str
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.Party
 import cz.frantisekmasa.wfrp_master.common.core.ui.navigation.LocalNavigationTransaction
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
-import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
+import dev.icerock.moko.resources.compose.stringResource
 
 @Composable
 fun ActiveCombatBanner(party: Party) {
@@ -30,12 +29,12 @@ fun ActiveCombatBanner(party: Party) {
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            Text(LocalStrings.current.combat.messages.combatInProgress)
+            Text(stringResource(Str.combat_messages_combat_in_progress))
 
             val navigation = LocalNavigationTransaction.current
 
             TextButton(onClick = { navigation.navigate(ActiveCombatScreen(party.id)) }) {
-                Text(LocalStrings.current.commonUi.buttonOpen.toUpperCase(Locale.current))
+                Text(stringResource(Str.common_ui_button_open).uppercase())
             }
         }
     }

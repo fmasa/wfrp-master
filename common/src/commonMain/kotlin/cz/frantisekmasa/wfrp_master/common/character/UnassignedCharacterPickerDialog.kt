@@ -16,6 +16,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import cz.frantisekmasa.wfrp_master.common.Str
 import cz.frantisekmasa.wfrp_master.common.core.auth.LocalUser
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.Character
 import cz.frantisekmasa.wfrp_master.common.core.domain.identifiers.CharacterId
@@ -25,7 +26,7 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.dialogs.DialogTitle
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.ItemIcon
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
 import cz.frantisekmasa.wfrp_master.common.core.utils.launchLogged
-import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
+import dev.icerock.moko.resources.compose.stringResource
 import kotlinx.coroutines.Dispatchers
 
 @Composable
@@ -49,7 +50,7 @@ fun UnassignedCharacterPickerDialog(
             }
 
             Column {
-                DialogTitle(LocalStrings.current.character.titleSelectCharacter)
+                DialogTitle(stringResource(Str.character_title_select_character))
 
                 Spacer(Modifier.height(Spacing.large))
 

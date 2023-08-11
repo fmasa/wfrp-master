@@ -9,14 +9,15 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
+import cz.frantisekmasa.wfrp_master.common.Str
+import dev.icerock.moko.resources.compose.stringResource
 
 @Composable
 fun PartyNameItem(partyName: String, viewModel: PartySettingsScreenModel) {
     var dialogVisible by remember { mutableStateOf(false) }
 
     ListItem(
-        text = { Text(LocalStrings.current.parties.labelName) },
+        text = { Text(stringResource(Str.parties_label_name)) },
         secondaryText = { Text(partyName) },
         modifier = Modifier.clickable { dialogVisible = true },
     )

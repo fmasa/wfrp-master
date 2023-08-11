@@ -15,6 +15,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import cz.frantisekmasa.wfrp_master.common.Str
 import cz.frantisekmasa.wfrp_master.common.core.domain.Ambitions
 import cz.frantisekmasa.wfrp_master.common.core.shared.IO
 import cz.frantisekmasa.wfrp_master.common.core.ui.buttons.CloseButton
@@ -23,7 +24,7 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.forms.TextInput
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.inputValue
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
 import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.SaveAction
-import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
+import dev.icerock.moko.resources.compose.stringResource
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
@@ -74,10 +75,8 @@ fun ChangeAmbitionsDialog(
                     .padding(Spacing.bodyPadding),
                 verticalArrangement = Arrangement.spacedBy(Spacing.small),
             ) {
-                val strings = LocalStrings.current.ambition
-
                 TextInput(
-                    label = strings.labelShortTerm,
+                    label = stringResource(Str.ambition_label_short_term),
                     value = shortTerm,
                     validate = false,
                     maxLength = Ambitions.MAX_LENGTH,
@@ -85,7 +84,7 @@ fun ChangeAmbitionsDialog(
                 )
 
                 TextInput(
-                    label = strings.labelLongTerm,
+                    label = stringResource(Str.ambition_label_long_term),
                     value = longTerm,
                     validate = false,
                     maxLength = Ambitions.MAX_LENGTH,

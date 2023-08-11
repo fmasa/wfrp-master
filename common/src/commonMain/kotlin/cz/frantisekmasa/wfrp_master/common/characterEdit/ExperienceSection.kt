@@ -11,6 +11,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import cz.frantisekmasa.wfrp_master.common.Str
 import cz.frantisekmasa.wfrp_master.common.ambitions.ChangeAmbitionsDialog
 import cz.frantisekmasa.wfrp_master.common.character.CharacterScreenModel
 import cz.frantisekmasa.wfrp_master.common.character.characteristics.ExperiencePointsDialog
@@ -18,7 +19,7 @@ import cz.frantisekmasa.wfrp_master.common.core.domain.character.Character
 import cz.frantisekmasa.wfrp_master.common.core.ui.buttons.BackButton
 import cz.frantisekmasa.wfrp_master.common.core.ui.settings.SettingsCard
 import cz.frantisekmasa.wfrp_master.common.core.ui.settings.SettingsTitle
-import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
+import dev.icerock.moko.resources.compose.stringResource
 
 @Composable
 fun ExperienceSection(character: Character, screenModel: CharacterScreenModel) {
@@ -26,7 +27,7 @@ fun ExperienceSection(character: Character, screenModel: CharacterScreenModel) {
         topBar = {
             TopAppBar(
                 navigationIcon = { BackButton() },
-                title = { Text(LocalStrings.current.character.titleExperience) },
+                title = { Text(stringResource(Str.character_title_experience)) },
             )
         }
     ) {
@@ -51,16 +52,16 @@ private fun ExperiencePointsSection(character: Character, screenModel: Character
         )
     }
 
-    SettingsTitle(LocalStrings.current.points.experience)
+    SettingsTitle(stringResource(Str.points_experience))
 
     ListItem(
-        text = { Text(LocalStrings.current.points.labelCurrentExperience) },
+        text = { Text(stringResource(Str.points_label_current_experience)) },
         secondaryText = { Text(character.points.experience.toString()) },
         modifier = Modifier.clickable { experienceDialogVisible = true }
     )
 
     ListItem(
-        text = { Text(LocalStrings.current.points.labelSpentExperience) },
+        text = { Text(stringResource(Str.points_label_spent_experience)) },
         secondaryText = { Text(character.points.spentExperience.toString()) },
         modifier = Modifier.clickable { experienceDialogVisible = true }
     )
@@ -71,7 +72,7 @@ private fun AmbitionsSection(character: Character, screenModel: CharacterScreenM
 
     if (ambitionsDialogVisible) {
         ChangeAmbitionsDialog(
-            title = LocalStrings.current.ambition.titleCharacterAmbitions,
+            title = stringResource(Str.ambition_title_character_ambitions),
             defaults = character.ambitions,
             save = {
                 screenModel.update { character -> character.updateAmbitions(it) }
@@ -80,16 +81,16 @@ private fun AmbitionsSection(character: Character, screenModel: CharacterScreenM
         )
     }
 
-    SettingsTitle(LocalStrings.current.ambition.titleCharacterAmbitions)
+    SettingsTitle(stringResource(Str.ambition_title_character_ambitions))
 
     ListItem(
-        text = { Text(LocalStrings.current.ambition.labelShortTerm) },
+        text = { Text(stringResource(Str.ambition_label_short_term)) },
         secondaryText = { Text(character.ambitions.shortTerm) },
         modifier = Modifier.clickable { ambitionsDialogVisible = true }
     )
 
     ListItem(
-        text = { Text(LocalStrings.current.ambition.labelLongTerm) },
+        text = { Text(stringResource(Str.ambition_label_long_term)) },
         secondaryText = { Text(character.ambitions.longTerm) },
         modifier = Modifier.clickable { ambitionsDialogVisible = true }
     )

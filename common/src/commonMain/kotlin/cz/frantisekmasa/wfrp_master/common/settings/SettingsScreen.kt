@@ -20,25 +20,24 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
+import cz.frantisekmasa.wfrp_master.common.Str
 import cz.frantisekmasa.wfrp_master.common.core.ui.buttons.BackButton
 import cz.frantisekmasa.wfrp_master.common.core.ui.flow.collectWithLifecycle
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.rememberScreenModel
 import cz.frantisekmasa.wfrp_master.common.core.ui.settings.SettingsCard
 import cz.frantisekmasa.wfrp_master.common.core.ui.settings.SettingsTitle
-import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
+import dev.icerock.moko.resources.compose.stringResource
 import kotlinx.coroutines.launch
 
 object SettingsScreen : Screen {
     @Composable
     override fun Content() {
-        val strings = LocalStrings.current.settings
-
         Scaffold(
             topBar = {
                 TopAppBar(
                     navigationIcon = { BackButton() },
-                    title = { Text(strings.title) }
+                    title = { Text(stringResource(Str.settings_title)) }
                 )
             }
         ) {
@@ -54,7 +53,7 @@ object SettingsScreen : Screen {
                 SignInCard(screenModel)
 
                 SettingsCard {
-                    SettingsTitle(strings.titleGeneral)
+                    SettingsTitle(stringResource(Str.settings_title_general))
                     SoundCard(screenModel)
                     DarkModeCard(screenModel)
                 }
@@ -66,7 +65,7 @@ object SettingsScreen : Screen {
 @Composable
 private fun DarkModeCard(viewModel: SettingsScreenModel) {
     SwitchItem(
-        name = LocalStrings.current.settings.darkMode,
+        name = stringResource(Str.settings_dark_mode),
         value = viewModel.darkMode.collectWithLifecycle(null).value ?: isSystemInDarkTheme(),
         onChange = { viewModel.toggleDarkMode(it) },
     )
@@ -75,7 +74,7 @@ private fun DarkModeCard(viewModel: SettingsScreenModel) {
 @Composable
 private fun SoundCard(viewModel: SettingsScreenModel) {
     SwitchItem(
-        name = LocalStrings.current.settings.sound,
+        name = stringResource(Str.settings_sound),
         value = viewModel.soundEnabled.collectWithLifecycle(null).value ?: false,
         onChange = { viewModel.toggleSound(it) }
     )

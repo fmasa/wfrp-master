@@ -15,14 +15,15 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
 import com.google.android.gms.auth.api.signin.GoogleSignIn
+import cz.frantisekmasa.wfrp_master.common.Str
 import cz.frantisekmasa.wfrp_master.common.auth.AuthenticationManager
 import cz.frantisekmasa.wfrp_master.common.auth.LocalWebClientId
 import cz.frantisekmasa.wfrp_master.common.core.shared.SettingsStorage
 import cz.frantisekmasa.wfrp_master.common.core.shared.edit
 import cz.frantisekmasa.wfrp_master.common.core.ui.flow.collectWithLifecycle
-import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
 import cz.frantisekmasa.wfrp_master.common.settings.AppSettings
 import cz.frantisekmasa.wfrp_master.common.shell.SplashScreen
+import dev.icerock.moko.resources.compose.stringResource
 import io.github.aakira.napier.Napier
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -101,14 +102,12 @@ fun StartupScreen(authenticationManager: AuthenticationManager) {
 
 @Composable
 private fun AnonymousAuthenticationExplanationDialog(onDismissRequest: () -> Unit) {
-    val strings = LocalStrings.current
-
     AlertDialog(
         onDismissRequest = onDismissRequest,
-        text = { Text(strings.authentication.startupGoogleSignInFailed) },
+        text = { Text(stringResource(Str.authentication_startup_google_sign_in_failed)) },
         confirmButton = {
             TextButton(onClick = onDismissRequest) {
-                Text(strings.commonUi.buttonOk.uppercase())
+                Text(stringResource(Str.common_ui_button_ok).uppercase())
             }
         }
     )

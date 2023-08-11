@@ -6,13 +6,14 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import cz.frantisekmasa.wfrp_master.common.Str
 import cz.frantisekmasa.wfrp_master.common.core.domain.localizedName
 import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.InventoryItem
 import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.TrappingType
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.FullScreenProgress
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
 import cz.frantisekmasa.wfrp_master.common.core.ui.text.SingleLineTextValue
-import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
+import dev.icerock.moko.resources.compose.stringResource
 
 @Composable
 fun MeleeWeaponDetail(
@@ -31,27 +32,25 @@ fun MeleeWeaponDetail(
         EquipBar(trapping, meleeWeapon, onSaveRequest)
 
         Column(Modifier.padding(Spacing.bodyPadding)) {
-            val strings = LocalStrings.current
-
             SingleLineTextValue(
-                strings.trappings.labelType,
-                strings.trappings.types.meleeWeapon,
+                stringResource(Str.trappings_label_type),
+                stringResource(Str.trappings_types_melee_weapon),
             )
 
             EncumbranceBox(trapping)
 
             SingleLineTextValue(
-                strings.weapons.labelDamage,
+                stringResource(Str.weapons_label_damage),
                 damageValue(meleeWeapon.damage, strengthBonus),
             )
 
             SingleLineTextValue(
-                strings.weapons.labelGroup,
+                stringResource(Str.weapons_label_group),
                 meleeWeapon.group.localizedName,
             )
 
             SingleLineTextValue(
-                strings.weapons.labelReach,
+                stringResource(Str.weapons_label_reach),
                 meleeWeapon.reach.localizedName,
             )
 
@@ -62,7 +61,7 @@ fun MeleeWeaponDetail(
 
             if (trapping.quantity > 0) {
                 SingleLineTextValue(
-                    strings.trappings.labelQuantity,
+                    stringResource(Str.trappings_label_quantity),
                     trapping.quantity.toString(),
                 )
             }

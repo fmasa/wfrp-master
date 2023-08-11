@@ -6,13 +6,14 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import com.benasher44.uuid.Uuid
+import cz.frantisekmasa.wfrp_master.common.Str
 import cz.frantisekmasa.wfrp_master.common.character.CompendiumItemChooser
 import cz.frantisekmasa.wfrp_master.common.character.talents.TalentsScreenModel
 import cz.frantisekmasa.wfrp_master.common.core.shared.Parcelable
 import cz.frantisekmasa.wfrp_master.common.core.shared.Parcelize
 import cz.frantisekmasa.wfrp_master.common.core.shared.Resources
 import cz.frantisekmasa.wfrp_master.common.core.ui.dialogs.FullScreenDialog
-import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
+import dev.icerock.moko.resources.compose.stringResource
 
 @Composable
 fun AddTalentDialog(screenModel: TalentsScreenModel, onDismissRequest: () -> Unit) {
@@ -31,12 +32,12 @@ fun AddTalentDialog(screenModel: TalentsScreenModel, onDismissRequest: () -> Uni
             ChoosingCompendiumTalent ->
                 CompendiumItemChooser(
                     screenModel = screenModel,
-                    title = LocalStrings.current.talents.titleChooseCompendiumTalent,
+                    title = stringResource(Str.talents_title_choose_compendium_talent),
                     onDismissRequest = onDismissRequest,
                     icon = { Resources.Drawable.Talent },
                     onSelect = { state = FillingInTimesTaken(it.id) },
                     onCustomItemRequest = { state = FillingInCustomTalent },
-                    customItemButtonText = LocalStrings.current.talents.buttonAddNonCompendium,
+                    customItemButtonText = stringResource(Str.talents_button_add_non_compendium),
                     emptyUiIcon = Resources.Drawable.Talent,
                 )
             is FillingInTimesTaken ->

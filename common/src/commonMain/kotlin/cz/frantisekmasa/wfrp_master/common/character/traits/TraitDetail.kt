@@ -15,11 +15,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.halilibo.richtext.markdown.Markdown
 import com.halilibo.richtext.ui.RichText
+import cz.frantisekmasa.wfrp_master.common.Str
 import cz.frantisekmasa.wfrp_master.common.core.domain.traits.Trait
 import cz.frantisekmasa.wfrp_master.common.core.ui.buttons.CloseButton
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
 import cz.frantisekmasa.wfrp_master.common.core.ui.text.SingleLineTextValue
-import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
+import dev.icerock.moko.resources.compose.stringResource
 
 @Composable
 fun TraitDetail(
@@ -56,7 +57,7 @@ fun TraitDetailBody(
     Column(Modifier.padding(Spacing.bodyPadding)) {
         if (specifications.isNotEmpty()) {
             SingleLineTextValue(
-                label = LocalStrings.current.traits.labelSpecifications,
+                label = stringResource(Str.traits_label_specifications),
                 value = remember(specifications) {
                     specifications.sorted().joinToString(", ")
                 },

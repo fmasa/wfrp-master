@@ -6,9 +6,10 @@ import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.withStyle
+import cz.frantisekmasa.wfrp_master.common.Str
 import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.InventoryItem
 import cz.frantisekmasa.wfrp_master.common.core.ui.text.SingleLineTextValue
-import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
+import dev.icerock.moko.resources.compose.stringResource
 
 @Composable
 fun EncumbranceBox(trapping: InventoryItem) {
@@ -17,7 +18,7 @@ fun EncumbranceBox(trapping: InventoryItem) {
         val effectiveEncumbrance = trapping.effectiveEncumbrance
 
         SingleLineTextValue(
-            LocalStrings.current.trappings.labelEncumbranceTotal,
+            stringResource(Str.trappings_label_encumbrance_total),
             buildAnnotatedString {
                 if (totalEncumbrance != effectiveEncumbrance) {
                     withStyle(SpanStyle(textDecoration = TextDecoration.LineThrough)) {
@@ -32,7 +33,7 @@ fun EncumbranceBox(trapping: InventoryItem) {
         )
 
         SingleLineTextValue(
-            LocalStrings.current.trappings.labelEncumbrancePerUnit,
+            stringResource(Str.trappings_label_encumbrance_per_unit),
             trapping.encumbrance.toString(),
         )
     }

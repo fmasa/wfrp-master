@@ -16,6 +16,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
+import cz.frantisekmasa.wfrp_master.common.Str
 import cz.frantisekmasa.wfrp_master.common.core.auth.LocalUser
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.Invitation
 import cz.frantisekmasa.wfrp_master.common.core.ui.buttons.PrimaryButton
@@ -23,7 +24,7 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.FullScreenProgress
 import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.LocalPersistentSnackbarHolder
 import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.PersistentSnackbarHolder
 import cz.frantisekmasa.wfrp_master.common.invitation.domain.InvitationProcessingResult
-import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
+import dev.icerock.moko.resources.compose.stringResource
 import io.github.aakira.napier.Napier
 import kotlinx.coroutines.launch
 
@@ -42,15 +43,16 @@ fun InvitationConfirmation(
         return
     }
 
-    val strings = LocalStrings.current
-
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center,
         modifier = Modifier.fillMaxHeight()
     ) {
         Text(
-            text = strings.parties.messages.invitationConfirmation(invitation.partyName),
+            text = stringResource(
+                Str.parties_messages_invitation_confirmation,
+                invitation.partyName,
+            ),
             style = MaterialTheme.typography.h5,
             textAlign = TextAlign.Center,
             modifier = Modifier.fillMaxWidth()
@@ -58,14 +60,17 @@ fun InvitationConfirmation(
 
         val userId = LocalUser.current.id
         val snackbarHolder = LocalPersistentSnackbarHolder.current
+        val errorInvalidInvitationToken = stringResource(
+            Str.parties_messages_invalid_invitation_token
+        )
+        val errorAlreadyMember = stringResource(Str.parties_messages_already_member)
 
         PrimaryButton(
-            strings.parties.buttonJoin,
+            stringResource(Str.parties_button_join).uppercase(),
             onClick = {
                 processingInvitation = true
 
                 coroutineScope.launch {
-
                     when (val result = screenModel.acceptInvitation(userId, invitation)) {
                         InvitationProcessingResult.Success -> {
                             onSuccess()
@@ -73,7 +78,7 @@ fun InvitationConfirmation(
                         }
                         is InvitationProcessingResult.InvalidInvitation -> {
                             showError(
-                                strings.parties.messages.invalidInvitationToken,
+                                errorInvalidInvitationToken,
                                 snackbarHolder,
                                 result.cause,
                             )
@@ -81,7 +86,7 @@ fun InvitationConfirmation(
                             onError()
                         }
                         InvitationProcessingResult.AlreadyInParty -> {
-                            showError(strings.parties.messages.alreadyMember, snackbarHolder)
+                            showError(errorAlreadyMember, snackbarHolder)
                             onError()
                         }
                     }

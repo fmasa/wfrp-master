@@ -21,6 +21,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontStyle
+import cz.frantisekmasa.wfrp_master.common.Str
 import cz.frantisekmasa.wfrp_master.common.core.domain.Stats
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.settings.AdvantageCapExpression
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.settings.AdvantageSystem
@@ -33,20 +34,20 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.forms.inputValue
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.rule
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
 import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.SaveAction
-import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
+import dev.icerock.moko.resources.compose.stringResource
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 @Composable
 fun AdvantageCapItem(settings: Settings, screenModel: PartySettingsScreenModel) {
-    val title = LocalStrings.current.combat.advantageCap
+    val title = stringResource(Str.combat_advantage_cap)
 
     if (settings.advantageSystem == AdvantageSystem.GROUP_ADVANTAGE) {
         ListItem(
             text = { Disabled { Text(title) } },
             secondaryText = {
                 Disabled {
-                    Text(LocalStrings.current.combat.messages.doesNotApplyToGroupAdvantage)
+                    Text(stringResource(Str.combat_messages_does_not_apply_to_group_advantage))
                 }
             }
         )
@@ -61,7 +62,7 @@ fun AdvantageCapItem(settings: Settings, screenModel: PartySettingsScreenModel) 
         text = { Text(title) },
         secondaryText = {
             if (expression.value == "") {
-                Text(LocalStrings.current.combat.advantageUnlimited, fontStyle = FontStyle.Italic)
+                Text(stringResource(Str.combat_advantage_unlimited), fontStyle = FontStyle.Italic)
             } else {
                 Text(expression.value)
             }
@@ -95,10 +96,8 @@ fun AdvantageCapDialog(
         var validate by remember { mutableStateOf(false) }
         val newExpression = inputValue(
             currentExpression.value,
-            rule(LocalStrings.current.validation.invalidExpression, AdvantageCapExpression::isValid)
+            rule(stringResource(Str.validation_invalid_expression), AdvantageCapExpression::isValid)
         )
-
-        val strings = LocalStrings.current.parties
 
         Scaffold(
             topBar = {
@@ -107,7 +106,7 @@ fun AdvantageCapDialog(
 
                 TopAppBar(
                     navigationIcon = { CloseButton(onClick = onDismissRequest) },
-                    title = { Text(LocalStrings.current.combat.advantageCap) },
+                    title = { Text(stringResource(Str.combat_advantage_cap)) },
                     actions = {
                         SaveAction(
                             enabled = !saving,
@@ -141,11 +140,14 @@ fun AdvantageCapDialog(
                     .padding(Spacing.bodyPadding),
             ) {
                 TextInput(
-                    label = LocalStrings.current.combat.advantageCap,
+                    label = stringResource(Str.combat_advantage_cap),
                     value = newExpression,
                     validate = validate,
                     maxLength = AdvantageCapExpression.MAX_LENGTH,
-                    helperText = LocalStrings.current.commonUi.expressionHelper(AdvantageVariables),
+                    helperText = stringResource(
+                        Str.common_ui_expression_helper,
+                        AdvantageVariables.joinToString(", "),
+                    ),
                 )
             }
         }

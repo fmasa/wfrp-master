@@ -3,21 +3,24 @@ package cz.frantisekmasa.wfrp_master.common.core.domain
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.Stable
+import cz.frantisekmasa.wfrp_master.common.Str
 import cz.frantisekmasa.wfrp_master.common.core.shared.Resources
-import cz.frantisekmasa.wfrp_master.common.localization.Strings
+import dev.icerock.moko.resources.StringResource
 
 @Immutable
-enum class Characteristic(override val nameResolver: (strings: Strings) -> String) : NamedEnum {
-    AGILITY({ it.characteristics.agility }),
-    BALLISTIC_SKILL({ it.characteristics.ballisticSkill }),
-    DEXTERITY({ it.characteristics.dexterity }),
-    INITIATIVE({ it.characteristics.initiative }),
-    INTELLIGENCE({ it.characteristics.intelligence }),
-    FELLOWSHIP({ it.characteristics.fellowship }),
-    STRENGTH({ it.characteristics.strength }),
-    TOUGHNESS({ it.characteristics.toughness }),
-    WEAPON_SKILL({ it.characteristics.weaponSkill }),
-    WILL_POWER({ it.characteristics.willPower });
+enum class Characteristic(
+    override val translatableName: StringResource,
+) : NamedEnum {
+    AGILITY(Str.characteristics_agility),
+    BALLISTIC_SKILL(Str.characteristics_ballistic_skill),
+    DEXTERITY(Str.characteristics_dexterity),
+    INITIATIVE(Str.characteristics_initiative),
+    INTELLIGENCE(Str.characteristics_intelligence),
+    FELLOWSHIP(Str.characteristics_fellowship),
+    STRENGTH(Str.characteristics_strength),
+    TOUGHNESS(Str.characteristics_toughness),
+    WEAPON_SKILL(Str.characteristics_weapon_skill),
+    WILL_POWER(Str.characteristics_will_power);
 
     @Stable
     fun getShortcutName(): String {

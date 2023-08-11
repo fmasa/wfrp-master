@@ -11,6 +11,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import cz.frantisekmasa.wfrp_master.common.Str
 import cz.frantisekmasa.wfrp_master.common.core.shared.IO
 import cz.frantisekmasa.wfrp_master.common.core.shared.Resources
 import cz.frantisekmasa.wfrp_master.common.core.ui.CharacterAvatar
@@ -21,7 +22,7 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.EmptyUI
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.ItemIcon
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.SearchableList
 import cz.frantisekmasa.wfrp_master.common.encounters.domain.Encounter
-import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
+import dev.icerock.moko.resources.compose.stringResource
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
@@ -44,7 +45,6 @@ fun ChooseNpcDialog(
                 ?: SearchableList.Data.Loading
         }
 
-        val strings = LocalStrings.current.npcs
         val coroutineScope = rememberCoroutineScope()
 
         SearchableList(
@@ -52,11 +52,11 @@ fun ChooseNpcDialog(
             key = { it.id },
             searchableValue = { it.name },
             navigationIcon = { CloseButton(onDismissRequest) },
-            title = strings.titleAdd,
-            searchPlaceholder = strings.searchPlaceholder,
+            title = stringResource(Str.npcs_title_add),
+            searchPlaceholder = stringResource(Str.npcs_search_placeholder),
             emptyUi = {
                 EmptyUI(
-                    text = strings.messages.noNpcs,
+                    text = stringResource(Str.npcs_messages_no_npcs),
                     icon = Resources.Drawable.Npc,
                 )
             },

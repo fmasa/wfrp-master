@@ -13,11 +13,12 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import cz.frantisekmasa.wfrp_master.common.Str
 import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.InventoryItem
 import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.TrappingType
 import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.SubheadBar
 import cz.frantisekmasa.wfrp_master.common.core.utils.launchLogged
-import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
+import dev.icerock.moko.resources.compose.stringResource
 import kotlinx.coroutines.Dispatchers
 
 @Composable
@@ -32,7 +33,7 @@ fun WornBar(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween,
         ) {
-            Text(LocalStrings.current.trappings.labelWorn)
+            Text(stringResource(Str.trappings_label_worn))
 
             val coroutineScope = rememberCoroutineScope()
             var saving by remember { mutableStateOf(false) }

@@ -19,11 +19,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.intl.Locale
-import androidx.compose.ui.text.toUpperCase
+import cz.frantisekmasa.wfrp_master.common.Str
 import cz.frantisekmasa.wfrp_master.common.core.ui.interactions.clickableWithoutIndication
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
-import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
+import dev.icerock.moko.resources.compose.stringResource
 
 @Composable
 fun <T> SelectionDialog(
@@ -74,7 +73,7 @@ fun <T> SelectionDialog(
                     horizontalArrangement = Arrangement.End,
                 ) {
                     TextButton(onClick = { onSelect(currentItem) }) {
-                        Text(LocalStrings.current.commonUi.buttonSave.toUpperCase(Locale.current))
+                        Text(stringResource(Str.common_ui_button_save).uppercase())
                     }
                 }
             }

@@ -12,12 +12,13 @@ import androidx.compose.material.primarySurface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
+import cz.frantisekmasa.wfrp_master.common.Str
 import cz.frantisekmasa.wfrp_master.common.core.LocalStaticConfiguration
 import cz.frantisekmasa.wfrp_master.common.core.shared.IO
 import cz.frantisekmasa.wfrp_master.common.core.ui.flow.collectWithLifecycle
 import cz.frantisekmasa.wfrp_master.common.core.ui.theme.Theme
-import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
 import cz.frantisekmasa.wfrp_master.common.settings.SettingsScreenModel
+import dev.icerock.moko.resources.compose.stringResource
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
@@ -48,7 +49,7 @@ fun ChangelogAction(
         ) {
             Icon(
                 Icons.Rounded.Notifications,
-                LocalStrings.current.changelog.title,
+                stringResource(Str.changelog_title),
                 tint = contentColorFor(MaterialTheme.colors.primarySurface),
             )
         }

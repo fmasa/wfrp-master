@@ -5,6 +5,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
+import cz.frantisekmasa.wfrp_master.common.Str
 import cz.frantisekmasa.wfrp_master.common.character.CharacterScreenModel
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.Career
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.Character
@@ -15,7 +16,7 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.forms.HydratedFormData
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.SelectedCareer
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.SocialStatusInput
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.FullScreenProgress
-import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
+import dev.icerock.moko.resources.compose.stringResource
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.withContext
@@ -23,10 +24,9 @@ import kotlinx.coroutines.withContext
 @Composable
 fun CareerSection(character: Character, screenModel: CharacterScreenModel) {
     val data = CareerFormData.fromCharacter(character)
-    val strings = LocalStrings.current.character
 
     FormScreen(
-        title = strings.titleCareer,
+        title = stringResource(Str.character_title_career),
         formData = data,
         onSave = {
             screenModel.update { character ->

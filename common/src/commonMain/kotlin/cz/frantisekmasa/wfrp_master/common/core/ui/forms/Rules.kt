@@ -1,22 +1,23 @@
 package cz.frantisekmasa.wfrp_master.common.core.ui.forms
 
 import androidx.compose.runtime.Composable
-import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
+import cz.frantisekmasa.wfrp_master.common.Str
+import dev.icerock.moko.resources.compose.stringResource
 
 class Rules(private vararg val rules: Rule) : Rule {
     companion object {
         val NoRules = Rules()
 
         @Composable
-        fun NotBlank() = rule(LocalStrings.current.validation.notBlank) { it.isNotBlank() }
+        fun NotBlank() = rule(stringResource(Str.validation_not_blank)) { it.isNotBlank() }
 
         @Composable
-        fun PositiveInteger() = rule(LocalStrings.current.validation.positiveInteger) {
+        fun PositiveInteger() = rule(stringResource(Str.validation_positive_integer)) {
             it.toIntOrNull() != null && it.toInt() > 0
         }
 
         @Composable
-        fun NonNegativeInteger() = rule(LocalStrings.current.validation.nonNegative) {
+        fun NonNegativeInteger() = rule(stringResource(Str.validation_non_negative)) {
             it.toIntOrNull() != null && it.toInt() >= 0
         }
 

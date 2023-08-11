@@ -27,6 +27,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
+import cz.frantisekmasa.wfrp_master.common.Str
 import cz.frantisekmasa.wfrp_master.common.core.domain.Money
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.NotEnoughMoney
 import cz.frantisekmasa.wfrp_master.common.core.shared.IO
@@ -39,7 +40,7 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.forms.inputValue
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
 import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.SaveAction
 import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.SubheadBar
-import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
+import dev.icerock.moko.resources.compose.stringResource
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
@@ -58,16 +59,16 @@ fun TransactionDialog(
         var validate by remember { mutableStateOf(false) }
         var errorMessage: String? by remember { mutableStateOf(null) }
 
-        val strings = LocalStrings.current.trappings.money
-
         Scaffold(
             topBar = {
                 TopAppBar(
-                    title = { Text(strings.titleNewTransaction) },
+                    title = { Text(stringResource(Str.trappings_money_title_new_transaction)) },
                     navigationIcon = { CloseButton(onClick = onDismissRequest) },
                     actions = {
                         val coroutineScope = rememberCoroutineScope()
-                        val notEnoughMoneyMessage = strings.messages.notEnoughMoney
+                        val notEnoughMoneyMessage = stringResource(
+                            Str.trappings_money_messages_not_enough_money
+                        )
                         var saving by remember { mutableStateOf(false) }
 
                         SaveAction(
@@ -118,7 +119,13 @@ fun TransactionDialog(
                     }
                 ) {
                     Row(horizontalArrangement = Arrangement.spacedBy(Spacing.small)) {
-                        Text("${strings.balance}:", fontWeight = FontWeight.SemiBold)
+                        Text(
+                            buildString {
+                                append(stringResource(Str.trappings_money_balance))
+                                append(':')
+                            },
+                            fontWeight = FontWeight.SemiBold,
+                        )
                         MoneyBalance(balance)
                     }
                 }
@@ -139,13 +146,13 @@ fun TransactionDialog(
                         RadioButtonWithText(
                             selected = operation == Operation.ADD,
                             onClick = { operation = Operation.ADD },
-                            text = strings.add,
+                            text = stringResource(Str.trappings_money_add),
                         )
 
                         RadioButtonWithText(
                             selected = operation == Operation.SUBTRACT,
                             onClick = { operation = Operation.SUBTRACT },
-                            text = strings.subtract,
+                            text = stringResource(Str.trappings_money_subtract),
                         )
                     }
 
@@ -153,9 +160,21 @@ fun TransactionDialog(
                         Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.spacedBy(Spacing.medium),
                     ) {
-                        CoinInput(crowns, strings.crowns, validate)
-                        CoinInput(shillings, strings.shillings, validate)
-                        CoinInput(pennies, strings.pennies, validate)
+                        CoinInput(
+                            crowns,
+                            stringResource(Str.trappings_money_crowns),
+                            validate,
+                        )
+                        CoinInput(
+                            shillings,
+                            stringResource(Str.trappings_money_shillings),
+                            validate,
+                        )
+                        CoinInput(
+                            pennies,
+                            stringResource(Str.trappings_money_pennies),
+                            validate,
+                        )
                     }
 
                     errorMessage?.let {

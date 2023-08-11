@@ -10,13 +10,14 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import cz.frantisekmasa.wfrp_master.common.Str
 import cz.frantisekmasa.wfrp_master.common.core.domain.localizedName
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.Party
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.settings.InitiativeStrategy
 import cz.frantisekmasa.wfrp_master.common.core.shared.IO
 import cz.frantisekmasa.wfrp_master.common.core.ui.dialogs.SelectionDialog
 import cz.frantisekmasa.wfrp_master.common.core.utils.launchLogged
-import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
+import dev.icerock.moko.resources.compose.stringResource
 import kotlinx.coroutines.Dispatchers
 
 @Composable
@@ -43,7 +44,7 @@ internal fun InitiativeStrategyItem(
     }
 
     ListItem(
-        text = { Text(LocalStrings.current.combat.initiativeStrategyConfigOption) },
+        text = { Text(stringResource(Str.combat_initiative_strategy_config_option)) },
         secondaryText = { Text(strategy.localizedName) },
         modifier = Modifier.clickable {
             dialogVisible = true
@@ -58,7 +59,7 @@ private fun InitiativeStrategyDialog(
     onDismissRequest: () -> Unit
 ) {
     SelectionDialog(
-        title = LocalStrings.current.combat.initiativeStrategyPrompt,
+        title = stringResource(Str.combat_initiative_strategy_prompt),
         items = InitiativeStrategy.values().toList(),
         selected = selected,
         onDismissRequest = onDismissRequest,

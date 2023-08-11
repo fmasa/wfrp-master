@@ -4,9 +4,10 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.material.Divider
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.key
+import cz.frantisekmasa.wfrp_master.common.Str
 import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.InventoryItem
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.ContextMenu
-import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
+import dev.icerock.moko.resources.compose.stringResource
 
 @Composable
 fun InventoryItemList(
@@ -27,7 +28,7 @@ fun InventoryItemList(
                         onDuplicate = { onDuplicate(trapping.item) },
                         additionalContextItems = listOf(
                             ContextMenu.Item(
-                                LocalStrings.current.trappings.buttonMoveToContainer,
+                                stringResource(Str.trappings_button_move_to_container),
                                 onClick = { onAddToContainerRequest(trapping.item) },
                             )
                         )

@@ -8,6 +8,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import cz.frantisekmasa.wfrp_master.common.Str
 import cz.frantisekmasa.wfrp_master.common.character.CharacterScreenModel
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.Character
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.FormScreen
@@ -16,14 +17,14 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.forms.InputValue
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.NumberPicker
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.TextInput
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.inputValue
-import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
+import dev.icerock.moko.resources.compose.stringResource
 
 @Composable
 fun WellBeingSection(character: Character, screenModel: CharacterScreenModel) {
     val formData = WellBeingFormData.fromCharacter(character)
 
     FormScreen(
-        title = LocalStrings.current.character.titleWellBeing,
+        title = stringResource(Str.character_title_well_being),
         formData = formData,
         onSave = {
             screenModel.update { character ->
@@ -33,7 +34,7 @@ fun WellBeingSection(character: Character, screenModel: CharacterScreenModel) {
     ) { validate ->
         NumberPicker(
             modifier = Modifier.align(Alignment.CenterHorizontally),
-            label = LocalStrings.current.points.corruption,
+            label = stringResource(Str.points_corruption),
             value = formData.corruptionPoints.value,
             onIncrement = { formData.corruptionPoints.value++ },
             onDecrement = {
@@ -46,7 +47,7 @@ fun WellBeingSection(character: Character, screenModel: CharacterScreenModel) {
         )
 
         TextInput(
-            label = LocalStrings.current.character.labelPsychology,
+            label = stringResource(Str.character_label_psychology),
             value = formData.psychology,
             maxLength = Character.PSYCHOLOGY_MAX_LENGTH,
             validate = validate,

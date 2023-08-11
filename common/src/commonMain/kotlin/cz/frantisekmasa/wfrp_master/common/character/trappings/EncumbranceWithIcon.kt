@@ -8,11 +8,12 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import cz.frantisekmasa.wfrp_master.common.Str
 import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.Encumbrance
 import cz.frantisekmasa.wfrp_master.common.core.shared.Resources
 import cz.frantisekmasa.wfrp_master.common.core.shared.drawableResource
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
-import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
+import dev.icerock.moko.resources.compose.stringResource
 
 @Composable
 fun EncumbranceWithIcon(encumbrance: Encumbrance) {
@@ -26,7 +27,7 @@ fun EncumbranceWithIcon(encumbrance: Encumbrance) {
     ) {
         Icon(
             drawableResource(Resources.Drawable.TrappingEncumbrance),
-            LocalStrings.current.trappings.iconEncumbrance,
+            stringResource(Str.trappings_icon_encumbrance),
             Modifier.size(Spacing.medium),
         )
         Text(encumbrance.toString())

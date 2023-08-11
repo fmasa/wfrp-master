@@ -13,6 +13,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import cafe.adriel.voyager.core.screen.Screen
+import cz.frantisekmasa.wfrp_master.common.Str
 import cz.frantisekmasa.wfrp_master.common.core.domain.identifiers.NpcId
 import cz.frantisekmasa.wfrp_master.common.core.shared.IO
 import cz.frantisekmasa.wfrp_master.common.core.ui.buttons.BackButton
@@ -21,9 +22,9 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.navigation.LocalNavigationTra
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.rememberScreenModel
 import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.SaveAction
 import cz.frantisekmasa.wfrp_master.common.encounters.EncounterDetailScreenModel
-import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
 import cz.frantisekmasa.wfrp_master.common.npcs.form.FormData
 import cz.frantisekmasa.wfrp_master.common.npcs.form.NpcForm
+import dev.icerock.moko.resources.compose.stringResource
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
@@ -47,7 +48,7 @@ class NpcDetailScreen(
         Scaffold(
             topBar = {
                 TopBar(
-                    title = LocalStrings.current.npcs.title,
+                    title = stringResource(Str.npcs_title),
                     onSave = {
                         if (data == null) {
                             return@TopBar

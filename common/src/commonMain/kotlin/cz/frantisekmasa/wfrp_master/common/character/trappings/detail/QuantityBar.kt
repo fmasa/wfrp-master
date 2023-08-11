@@ -8,11 +8,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import cz.frantisekmasa.wfrp_master.common.Str
 import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.InventoryItem
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.NumberPicker
 import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.SubheadBar
 import cz.frantisekmasa.wfrp_master.common.core.utils.launchLogged
-import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
+import dev.icerock.moko.resources.compose.stringResource
 import kotlinx.coroutines.Dispatchers
 
 @Composable
@@ -33,7 +34,7 @@ fun QuantityBar(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween,
         ) {
-            Text(LocalStrings.current.trappings.labelQuantity)
+            Text(stringResource(Str.trappings_label_quantity))
 
             val quantity = trapping.quantity
 
