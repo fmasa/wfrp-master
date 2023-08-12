@@ -80,7 +80,9 @@ fun Theme(content: @Composable () -> Unit) {
         ),
     ) {
         SystemBarsChangingEffect()
-        CompositionLocalProvider(LocalSoundEnabled provides soundEnabled) {
+        CompositionLocalProvider(
+            LocalSoundEnabled provides soundEnabled,
+        ) {
             SetupMaterialRichText {
                 content()
             }

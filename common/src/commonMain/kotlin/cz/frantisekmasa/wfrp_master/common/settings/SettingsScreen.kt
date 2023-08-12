@@ -1,6 +1,7 @@
 package cz.frantisekmasa.wfrp_master.common.settings
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -16,6 +17,9 @@ import androidx.compose.material.Switch
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.key
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -28,34 +32,40 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.rememberScreenMode
 import cz.frantisekmasa.wfrp_master.common.core.ui.settings.SettingsCard
 import cz.frantisekmasa.wfrp_master.common.core.ui.settings.SettingsTitle
 import dev.icerock.moko.resources.compose.stringResource
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 object SettingsScreen : Screen {
     @Composable
     override fun Content() {
-        Scaffold(
-            topBar = {
-                TopAppBar(
-                    navigationIcon = { BackButton() },
-                    title = { Text(stringResource(Str.settings_title)) }
-                )
-            }
-        ) {
-            Column(
-                Modifier
-                    .verticalScroll(rememberScrollState())
-                    .background(MaterialTheme.colors.background)
-                    .padding(top = 6.dp),
-                verticalArrangement = Arrangement.spacedBy(Spacing.medium),
+        val screenModel: SettingsScreenModel = rememberScreenModel()
+        val language = screenModel.language.collectWithLifecycle(null).value
+
+        key(language) {
+            Scaffold(
+                topBar = {
+                    TopAppBar(
+                        navigationIcon = { BackButton() },
+                        title = { Text(stringResource(Str.settings_title)) }
+                    )
+                }
             ) {
-                val screenModel: SettingsScreenModel = rememberScreenModel()
+                Column(
+                    Modifier
+                        .verticalScroll(rememberScrollState())
+                        .background(MaterialTheme.colors.background)
+                        .padding(top = 6.dp),
+                    verticalArrangement = Arrangement.spacedBy(Spacing.medium),
+                ) {
 
-                SignInCard(screenModel)
+                    SignInCard(screenModel)
 
-                SettingsCard {
-                    SettingsTitle(stringResource(Str.settings_title_general))
-                    SoundCard(screenModel)
-                    DarkModeCard(screenModel)
+                    SettingsCard {
+                        SettingsTitle(stringResource(Str.settings_title_general))
+                        SoundCard(screenModel)
+                        DarkModeCard(screenModel)
+                        LanguageCard(screenModel)
+                    }
                 }
             }
         }
@@ -81,11 +91,38 @@ private fun SoundCard(viewModel: SettingsScreenModel) {
 }
 
 @Composable
+private fun LanguageCard(screenModel: SettingsScreenModel) {
+    val language = screenModel.language.collectWithLifecycle(null).value ?: Language.BASE
+
+    val (dialogOpened, setDialogOpened) = remember { mutableStateOf(false) }
+
+    if (dialogOpened) {
+        val coroutineScope = rememberCoroutineScope()
+
+        LanguageDialog(
+            selected = language,
+            onSelect = {
+                coroutineScope.launch(Dispatchers.IO) {
+                    screenModel.updateLanguage(it)
+                    setDialogOpened(false)
+                }
+            },
+            onDismissRequest = { setDialogOpened(false) },
+        )
+    }
+
+    ListItem(
+        text = { Text(stringResource(Str.settings_language)) },
+        secondaryText = { Text(language.localizedName) },
+        modifier = Modifier.clickable { setDialogOpened(true) }
+    )
+}
+
+@Composable
 private fun SwitchItem(
     name: String,
     value: Boolean?,
     onChange: suspend (newValue: Boolean) -> Unit,
-    disabledText: String? = null,
     enabled: Boolean = true,
 ) {
     val color = LocalContentColor.current.copy(
@@ -96,7 +133,6 @@ private fun SwitchItem(
         text = {
             Text(name, color = color)
         },
-        secondaryText = disabledText?.let { { Text(disabledText, color = color) } },
         trailing = {
             val checked = value ?: return@ListItem
             val coroutineScope = rememberCoroutineScope()

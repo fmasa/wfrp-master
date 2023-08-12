@@ -418,6 +418,7 @@
 
     <string name="settings_dark_mode">Dark Mode</string>
     <string name="settings_sound">Sound Effects</string>
+    <string name="settings_language">Language</string>
     <string name="settings_title">Settings</string>
     <string name="settings_title_account">Account</string>
     <string name="settings_title_general">General</string>
