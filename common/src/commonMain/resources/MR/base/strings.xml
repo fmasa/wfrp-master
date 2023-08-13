@@ -526,7 +526,6 @@
     <string name="tests_difficulties_very_hard">Very Hard</string>
     <string name="tests_fumble">Fumble</string>
     <string name="tests_label_difficulty">Difficulty</string>
-    <string name="tests_label_dramatic_result">Dramatic Result</string>
     <string name="tests_label_skill">Skill</string>
     <string name="tests_results_astounding_failure">Astounding Failure</string>
     <string name="tests_results_astounding_success">Astounding Success</string>

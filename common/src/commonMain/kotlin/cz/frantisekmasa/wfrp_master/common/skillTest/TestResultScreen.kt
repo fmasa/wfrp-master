@@ -93,12 +93,12 @@ private fun TestResultCard(
 
                 SingleLineTextValue(
                     stringResource(Str.tests_success_level_shortcut),
-                    testResult.successLevelText,
-                )
-
-                SingleLineTextValue(
-                    stringResource(Str.tests_label_dramatic_result),
-                    testResult.dramaticResult.localizedName,
+                    buildString {
+                        append(testResult.successLevelText)
+                        append(" (")
+                        append(testResult.dramaticResult.localizedName)
+                        append(')')
+                    },
                 )
 
                 CardButton(
