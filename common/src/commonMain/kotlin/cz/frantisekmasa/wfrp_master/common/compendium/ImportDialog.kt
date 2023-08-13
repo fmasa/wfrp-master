@@ -29,6 +29,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.state.ToggleableState
 import androidx.compose.ui.text.style.TextAlign
 import cafe.adriel.voyager.core.screen.Screen
+import cz.frantisekmasa.wfrp_master.common.Str
 import cz.frantisekmasa.wfrp_master.common.compendium.CompendiumItemScreenModel.ImportAction
 import cz.frantisekmasa.wfrp_master.common.compendium.blessing.BlessingCompendiumScreenModel
 import cz.frantisekmasa.wfrp_master.common.compendium.career.CareerCompendiumScreenModel
@@ -55,7 +56,7 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.FullScreenProgress
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.rememberScreenModel
 import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.SubheadBar
 import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.TopBarAction
-import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
+import dev.icerock.moko.resources.compose.stringResource
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -106,8 +107,6 @@ private fun ImportedItemsPicker(
             .toList()
     }
     var step by remember(state) { mutableStateOf(steps.firstOrNull() ?: ItemsScreen.SKILLS) }
-
-    val strings = LocalStrings.current.compendium
     val goToNextStep = { current: ItemsScreen ->
         val index = steps.indexOf(current)
 
@@ -122,7 +121,7 @@ private fun ImportedItemsPicker(
         when (step) {
             ItemsScreen.SKILLS -> {
                 ItemPicker(
-                    label = strings.pickPromptSkills,
+                    label = stringResource(Str.compendium_pick_prompt_skills),
                     items = state.skills,
                     screenModel = screen.rememberScreenModel<PartyId, SkillCompendiumScreenModel>(arg = partyId),
                     onContinue = { goToNextStep(ItemsScreen.SKILLS) },
@@ -132,7 +131,7 @@ private fun ImportedItemsPicker(
             }
             ItemsScreen.TALENTS -> {
                 ItemPicker(
-                    label = strings.pickPromptTalents,
+                    label = stringResource(Str.compendium_pick_prompt_talents),
                     items = state.talents,
                     screenModel = screen.rememberScreenModel<PartyId, TalentCompendiumScreenModel>(arg = partyId),
                     onContinue = { goToNextStep(ItemsScreen.TALENTS) },
@@ -142,7 +141,7 @@ private fun ImportedItemsPicker(
             }
             ItemsScreen.SPELLS -> {
                 ItemPicker(
-                    label = strings.pickPromptSpells,
+                    label = stringResource(Str.compendium_pick_prompt_spells),
                     items = state.spells,
                     screenModel = screen.rememberScreenModel<PartyId, SpellCompendiumScreenModel>(arg = partyId),
                     onContinue = { goToNextStep(ItemsScreen.SPELLS) },
@@ -152,7 +151,7 @@ private fun ImportedItemsPicker(
             }
             ItemsScreen.BLESSINGS -> {
                 ItemPicker(
-                    label = strings.pickPromptBlessings,
+                    label = stringResource(Str.compendium_pick_prompt_blessings),
                     items = state.blessings,
                     screenModel = screen.rememberScreenModel<PartyId, BlessingCompendiumScreenModel>(arg = partyId),
                     onContinue = { goToNextStep(ItemsScreen.BLESSINGS) },
@@ -162,7 +161,7 @@ private fun ImportedItemsPicker(
             }
             ItemsScreen.MIRACLES -> {
                 ItemPicker(
-                    label = strings.pickPromptMiracles,
+                    label = stringResource(Str.compendium_pick_prompt_miracles),
                     items = state.miracles,
                     screenModel = screen.rememberScreenModel<PartyId, MiracleCompendiumScreenModel>(arg = partyId),
                     onContinue = { goToNextStep(ItemsScreen.MIRACLES) },
@@ -172,7 +171,7 @@ private fun ImportedItemsPicker(
             }
             ItemsScreen.TRAITS -> {
                 ItemPicker(
-                    label = strings.pickPromptTraits,
+                    label = stringResource(Str.compendium_pick_prompt_traits),
                     items = state.traits,
                     screenModel = screen.rememberScreenModel<PartyId, TraitCompendiumScreenModel>(arg = partyId),
                     onContinue = { goToNextStep(ItemsScreen.TRAITS) },
@@ -182,7 +181,7 @@ private fun ImportedItemsPicker(
             }
             ItemsScreen.CAREERS -> {
                 ItemPicker(
-                    label = strings.pickPromptCareers,
+                    label = stringResource(Str.compendium_pick_prompt_careers),
                     items = state.careers,
                     screenModel = screen.rememberScreenModel<PartyId, CareerCompendiumScreenModel>(arg = partyId),
                     onContinue = { goToNextStep(ItemsScreen.CAREERS) },
@@ -210,7 +209,7 @@ private fun <T : CompendiumItem<T>> ItemPicker(
             topBar = {
                 TopAppBar(
                     navigationIcon = { CloseButton(onClose) },
-                    title = { Text(LocalStrings.current.compendium.titleImportDialog) }
+                    title = { Text(stringResource(Str.compendium_title_import_dialog)) }
                 )
             },
             content = { FullScreenProgress() }
@@ -239,20 +238,20 @@ private fun <T : CompendiumItem<T>> ItemPicker(
     var saving by remember { mutableStateOf(false) }
     val isLoading = saving
 
-    val strings = LocalStrings.current
-
     Scaffold(
         topBar = {
             TopAppBar(
                 navigationIcon = { CloseButton(onClick = onClose) },
-                title = { Text(strings.compendium.titleImportDialog) },
+                title = { Text(stringResource(Str.compendium_title_import_dialog)) },
                 actions = {
                     val coroutineScope = rememberCoroutineScope()
                     TopBarAction(
-                        text = when {
-                            atLeastOneSelected -> strings.commonUi.buttonSave
-                            else -> strings.commonUi.buttonSkip
-                        },
+                        text = stringResource(
+                            when {
+                                atLeastOneSelected -> Str.common_ui_button_save
+                                else -> Str.common_ui_button_skip
+                            }
+                        ),
                         enabled = !isLoading,
                         onClick = {
                             coroutineScope.launch {
@@ -291,7 +290,7 @@ private fun <T : CompendiumItem<T>> ItemPicker(
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
                     Text(label, textAlign = TextAlign.Center)
                     Text(
-                        strings.compendium.messages.unchangedItems(unchangedItems.size),
+                        stringResource(Str.compendium_messages_unchanged_items, unchangedItems.size),
                         textAlign = TextAlign.Center,
                         style = MaterialTheme.typography.caption,
                     )
@@ -302,7 +301,7 @@ private fun <T : CompendiumItem<T>> ItemPicker(
                 FullScreenProgress()
             } else if (changedItems.isEmpty()) {
                 EmptyUI(
-                    text = strings.compendium.messages.noChangedItems,
+                    text = stringResource(Str.compendium_messages_no_changed_items),
                     icon = Icons.Rounded.CheckCircle,
                 )
             } else {
@@ -319,7 +318,7 @@ private fun <T : CompendiumItem<T>> ItemPicker(
                         }
 
                         TriStateCheckboxWithText(
-                            text = strings.commonUi.selectAll,
+                            text = stringResource(Str.common_ui_select_all),
                             state = checkboxState,
                             onClick = {
                                 val shouldSelectAllItems = checkboxState == ToggleableState.Off
@@ -345,9 +344,11 @@ private fun <T : CompendiumItem<T>> ItemPicker(
                             secondaryText = if (item.name in existingItemsByName) {
                                 {
                                     Text(
-                                        if (selectedItems[item.id] == true)
-                                            strings.compendium.messages.willReplaceExistingItem
-                                        else strings.compendium.messages.itemAlreadyExists
+                                        stringResource(
+                                            if (selectedItems[item.id] == true)
+                                                Str.compendium_messages_will_replace_existing_item
+                                            else Str.compendium_messages_item_already_exists
+                                        )
                                     )
                                 }
                             } else null

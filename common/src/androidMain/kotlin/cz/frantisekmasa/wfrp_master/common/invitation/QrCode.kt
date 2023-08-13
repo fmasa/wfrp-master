@@ -23,7 +23,8 @@ import com.google.zxing.BarcodeFormat
 import com.google.zxing.EncodeHintType
 import com.google.zxing.common.BitMatrix
 import com.google.zxing.qrcode.QRCodeWriter
-import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
+import cz.frantisekmasa.wfrp_master.common.Str
+import dev.icerock.moko.resources.compose.stringResource
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
@@ -45,7 +46,7 @@ internal fun QrCode(data: String) {
                 }
             }
             else -> {
-                Image(bitmap, LocalStrings.current.parties.imageQrCodeAlt)
+                Image(bitmap, stringResource(Str.parties_image_qr_code_alt))
             }
         }
     }

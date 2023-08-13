@@ -14,6 +14,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import cafe.adriel.voyager.core.screen.Screen
+import cz.frantisekmasa.wfrp_master.common.Str
 import cz.frantisekmasa.wfrp_master.common.character.CharacterDetailScreen
 import cz.frantisekmasa.wfrp_master.common.characterCreation.CharacterCreationScreen
 import cz.frantisekmasa.wfrp_master.common.combat.ActiveCombatBanner
@@ -31,9 +32,9 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.IconAction
 import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.tabs.TabPager
 import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.tabs.tab
 import cz.frantisekmasa.wfrp_master.common.gameMaster.calendar.WorldScreen
-import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
 import cz.frantisekmasa.wfrp_master.common.partyList.PartyListScreen
 import cz.frantisekmasa.wfrp_master.common.partySettings.PartySettingsScreen
+import dev.icerock.moko.resources.compose.stringResource
 
 class GameMasterScreen(
     private val partyId: PartyId,
@@ -45,7 +46,6 @@ class GameMasterScreen(
     override fun Content() {
         val screenModel: GameMasterScreenModel = rememberScreenModel(arg = partyId)
         val party = screenModel.party.collectWithLifecycle(null).value
-        val strings = LocalStrings.current.parties
 
         Scaffold(
             topBar = {
@@ -57,7 +57,7 @@ class GameMasterScreen(
 
                         IconAction(
                             Icons.Rounded.Settings,
-                            strings.titleSettings,
+                            stringResource(Str.parties_title_settings),
                             onClick = {
                                 if (party == null) {
                                     return@IconAction
@@ -80,8 +80,9 @@ class GameMasterScreen(
 
             Column(Modifier.fillMaxSize()) {
                 if (LocalStaticConfiguration.current.platform == Platform.Desktop) {
+                    val titleParties = stringResource(Str.parties_title_parties)
                     Breadcrumbs {
-                        level(strings.titleParties) { PartyListScreen }
+                        level(titleParties) { PartyListScreen }
                         level(party.name)
                     }
                 }
@@ -94,7 +95,7 @@ class GameMasterScreen(
                 ) {
                     val modifier = Modifier.width(screenWidth)
 
-                    tab(strings.tabCharacters) {
+                    tab({ stringResource(Str.parties_tab_characters) }) {
                         val navigation = LocalNavigationTransaction.current
 
                         PartySummaryScreen(
@@ -118,7 +119,7 @@ class GameMasterScreen(
                         )
                     }
 
-                    tab(strings.tabWorld) {
+                    tab({ stringResource(Str.parties_tab_world) }) {
                         WorldScreen(
                             party,
                             modifier = modifier,

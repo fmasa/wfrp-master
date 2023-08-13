@@ -23,6 +23,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import cz.frantisekmasa.wfrp_master.common.Str
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.Skill
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.Character
 import cz.frantisekmasa.wfrp_master.common.core.shared.drawableResource
@@ -34,7 +35,7 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.FullScreenProgress
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.VisualOnlyIconDescription
 import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.TopBarAction
-import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
+import dev.icerock.moko.resources.compose.stringResource
 import kotlin.math.absoluteValue
 
 @Composable
@@ -55,16 +56,14 @@ internal fun OptionsForm(
         mutableStateOf(characterIds ?: emptySet())
     }
 
-    val strings = LocalStrings.current.tests
-
     Scaffold(
         topBar = {
             TopAppBar(
                 navigationIcon = { CloseButton(onClick = onDismissRequest) },
-                title = { Text(strings.titleSkillTest) },
+                title = { Text(stringResource(Str.tests_title_skill_test)) },
                 actions = {
                     TopBarAction(
-                        text = strings.buttonExecute,
+                        text = stringResource(Str.tests_button_execute),
                         enabled = !executing && (selectedCharacterIds.isNotEmpty()),
                         onClick = {
                             val charactersById =
@@ -94,7 +93,7 @@ internal fun OptionsForm(
             verticalArrangement = Arrangement.spacedBy(Spacing.small),
         ) {
             SelectBoxToggle(
-                label = strings.labelSkill,
+                label = stringResource(Str.tests_label_skill),
                 onClick = onNewSkillPickingRequest,
             ) {
                 Icon(
@@ -106,7 +105,7 @@ internal fun OptionsForm(
             }
 
             SelectBox(
-                label = strings.labelDifficulty,
+                label = stringResource(Str.tests_label_difficulty),
                 value = difficulty,
                 onValueChange = { difficulty = it },
                 items = difficultyOptions()
@@ -135,7 +134,7 @@ private fun CharacterList(
 ) {
     Column(Modifier.fillMaxWidth()) {
         Text(
-            LocalStrings.current.parties.titleCharacters,
+            stringResource(Str.parties_title_characters),
             style = MaterialTheme.typography.body2,
         )
 
@@ -167,16 +166,14 @@ private fun CharacterList(
 
 @Composable
 private fun difficultyOptions(): List<Pair<Int, String>> {
-    val labels = LocalStrings.current.tests.difficulties
-
     return listOf(
-        60 to labels.veryEasy,
-        40 to labels.easy,
-        20 to labels.average,
-        0 to labels.challenging,
-        -10 to labels.difficult,
-        -20 to labels.hard,
-        -30 to labels.veryHard,
+        60 to stringResource(Str.tests_difficulties_very_easy),
+        40 to stringResource(Str.tests_difficulties_easy),
+        20 to stringResource(Str.tests_difficulties_average),
+        0 to stringResource(Str.tests_difficulties_challenging),
+        -10 to stringResource(Str.tests_difficulties_difficult),
+        -20 to stringResource(Str.tests_difficulties_hard),
+        -30 to stringResource(Str.tests_difficulties_very_hard),
     ).map { (modifier, label) ->
         modifier to "$label (${modifier.signSymbol}${modifier.absoluteValue})"
     }

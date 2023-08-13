@@ -7,11 +7,13 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import cz.frantisekmasa.wfrp_master.common.Str
+import cz.frantisekmasa.wfrp_master.common.core.domain.localizedName
 import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.InventoryItem
 import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.TrappingType
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
 import cz.frantisekmasa.wfrp_master.common.core.ui.text.SingleLineTextValue
-import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
+import dev.icerock.moko.resources.compose.stringResource
 
 @Composable
 fun AmmunitionDetail(
@@ -23,25 +25,28 @@ fun AmmunitionDetail(
         QuantityBar(trapping, onSaveRequest)
 
         Column(Modifier.padding(Spacing.bodyPadding)) {
-            val strings = LocalStrings.current
-
             SingleLineTextValue(
-                strings.trappings.labelType,
-                strings.trappings.types.ammunition,
+                stringResource(Str.trappings_label_type),
+                stringResource(Str.trappings_types_ammunition),
             )
 
             EncumbranceBox(trapping)
 
-            SingleLineTextValue(strings.weapons.labelDamage, ammunition.damage.value)
-            SingleLineTextValue(strings.weapons.labelRange, ammunition.range.value)
             SingleLineTextValue(
-                strings.weapons.labelGroups,
-                remember(ammunition.weaponGroups) {
-                    ammunition.weaponGroups
-                        .asSequence()
-                        .map { it.nameResolver(strings) }
-                        .sorted()
-                        .joinToString(", ")
+                stringResource(Str.weapons_label_damage),
+                ammunition.damage.value,
+            )
+
+            SingleLineTextValue(
+                stringResource(Str.weapons_label_range),
+                ammunition.range.value,
+            )
+
+            val weaponGroups = ammunition.weaponGroups.map { it.localizedName }
+            SingleLineTextValue(
+                stringResource(Str.weapons_label_groups),
+                remember(weaponGroups) {
+                    weaponGroups.sorted().joinToString(", ")
                 },
             )
 

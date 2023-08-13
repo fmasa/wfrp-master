@@ -12,11 +12,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import cz.frantisekmasa.wfrp_master.common.Str
 import cz.frantisekmasa.wfrp_master.common.core.domain.Money
 import cz.frantisekmasa.wfrp_master.common.core.shared.Resources
 import cz.frantisekmasa.wfrp_master.common.core.shared.drawableResource
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.VisualOnlyIconDescription
-import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
+import dev.icerock.moko.resources.compose.stringResource
 
 @Composable
 fun MoneyBalance(value: Money, modifier: Modifier = Modifier) {
@@ -25,16 +26,32 @@ fun MoneyBalance(value: Money, modifier: Modifier = Modifier) {
         horizontalArrangement = Arrangement.spacedBy(8.dp, Alignment.End)
     ) {
         ProvideTextStyle(MaterialTheme.typography.body1) {
-            val labels = LocalStrings.current.trappings.money
-
             MoneyIcon(colorGold)
-            Text("${value.getCrowns()} ${labels.goldCoinsShortcut}")
+            Text(
+                buildString {
+                    append(value.getCrowns())
+                    append(" ")
+                    append(stringResource(Str.trappings_money_gold_coins_shortcut))
+                }
+            )
 
             MoneyIcon(colorSilver)
-            Text("${value.getShillings()} ${labels.silverShillingsShortcut}")
+            Text(
+                buildString {
+                    append(value.getShillings())
+                    append(" ")
+                    append(stringResource(Str.trappings_money_silver_shillings_shortcut))
+                }
+            )
 
             MoneyIcon(colorBrass)
-            Text("${value.getPennies()} ${labels.brassPenniesShortcut}")
+            Text(
+                buildString {
+                    append(value.getPennies())
+                    append(" ")
+                    append(stringResource(Str.trappings_money_brass_pennies_shortcut))
+                }
+            )
         }
     }
 }

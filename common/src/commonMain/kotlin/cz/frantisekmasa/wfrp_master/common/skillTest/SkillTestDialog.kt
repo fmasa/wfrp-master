@@ -7,15 +7,15 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import cz.frantisekmasa.wfrp_master.common.Str
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.Skill
 import cz.frantisekmasa.wfrp_master.common.core.domain.Expression
 import cz.frantisekmasa.wfrp_master.common.core.domain.rolls.Dice
 import cz.frantisekmasa.wfrp_master.common.core.domain.rolls.TestResult
-import cz.frantisekmasa.wfrp_master.common.core.shared.IO
 import cz.frantisekmasa.wfrp_master.common.core.shared.Parcelable
 import cz.frantisekmasa.wfrp_master.common.core.shared.Parcelize
 import cz.frantisekmasa.wfrp_master.common.core.ui.dialogs.FullScreenDialog
-import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
+import dev.icerock.moko.resources.compose.stringResource
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
@@ -73,7 +73,7 @@ fun SkillTestDialog(
             }
             is SkillTestDialogStep.ShowResults -> {
                 TestResultScreen(
-                    testName = LocalStrings.current.tests.titleTest(currentStep.testName),
+                    testName = stringResource(Str.tests_title_test, currentStep.testName),
                     onDismissRequest = onDismissRequest,
                     results = currentStep.results,
                     onRerollRequest = { step = currentStep.rerollForCharacter(it) }

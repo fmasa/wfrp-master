@@ -12,6 +12,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import cz.frantisekmasa.wfrp_master.common.Str
 import cz.frantisekmasa.wfrp_master.common.core.domain.localizedName
 import cz.frantisekmasa.wfrp_master.common.core.ui.buttons.CardButton
 import cz.frantisekmasa.wfrp_master.common.core.ui.buttons.CloseButton
@@ -19,7 +20,7 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.cards.CardContainer
 import cz.frantisekmasa.wfrp_master.common.core.ui.cards.CardTitle
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
 import cz.frantisekmasa.wfrp_master.common.core.ui.text.SingleLineTextValue
-import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
+import dev.icerock.moko.resources.compose.stringResource
 
 @Composable
 internal fun TestResultScreen(
@@ -55,12 +56,10 @@ private fun TestResultCard(
     CardContainer(Modifier.fillMaxWidth(), bodyPadding = PaddingValues(start = 8.dp, end = 8.dp)) {
         CardTitle(result.characterName)
 
-        val strings = LocalStrings.current
-
         when (val roll = result.roll) {
             Roll.CharacterDoesNotHaveAdvances -> {
                 Text(
-                    LocalStrings.current.tests.cannotTestAgainstUnknownAdvancedSkill,
+                    stringResource(Str.tests_cannot_test_against_unknown_advanced_skill),
                     Modifier.fillMaxWidth(),
                     textAlign = TextAlign.Center,
                 )
@@ -74,27 +73,38 @@ private fun TestResultCard(
                 val testResult = roll.result
 
                 SingleLineTextValue(
-                    strings.tests.roll,
-                    strings.tests.rollLabel(testResult.rollValue, testResult.testedValue).let {
-                        when {
-                            testResult.isFumble -> "$it (${strings.tests.fumble})"
-                            testResult.isCritical -> "$it (${strings.tests.critical})"
-                            else -> it
+                    stringResource(Str.tests_roll),
+                    buildString {
+                        append(
+                            stringResource(
+                                Str.tests_roll_label,
+                                testResult.rollValue,
+                                testResult.testedValue,
+                            )
+                        )
+
+                        if (testResult.isFumble) {
+                            append(stringResource(Str.tests_fumble))
+                        } else if (testResult.isCritical) {
+                            append(stringResource(Str.tests_critical))
                         }
                     }
                 )
 
                 SingleLineTextValue(
-                    strings.tests.successLevelShortcut,
-                    testResult.successLevelText,
+                    stringResource(Str.tests_success_level_shortcut),
+                    buildString {
+                        append(testResult.successLevelText)
+                        append(" (")
+                        append(testResult.dramaticResult.localizedName)
+                        append(')')
+                    },
                 )
 
-                SingleLineTextValue(
-                    strings.tests.labelDramaticResult,
-                    testResult.dramaticResult.localizedName,
+                CardButton(
+                    stringResource(Str.tests_button_reroll),
+                    onClick = onRerollRequest,
                 )
-
-                CardButton(strings.tests.buttonReroll, onClick = onRerollRequest)
             }
             is Roll.Generic -> {
                 Text(
@@ -110,7 +120,10 @@ private fun TestResultCard(
                     modifier = Modifier.fillMaxWidth(),
                 )
 
-                CardButton(strings.tests.buttonReroll, onClick = onRerollRequest)
+                CardButton(
+                    stringResource(Str.tests_button_reroll),
+                    onClick = onRerollRequest,
+                )
             }
         }
     }

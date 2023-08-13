@@ -16,10 +16,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import cz.frantisekmasa.wfrp_master.common.Str
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
 import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.SubheadBar
 import cz.frantisekmasa.wfrp_master.common.core.utils.launchLogged
-import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
+import dev.icerock.moko.resources.compose.stringResource
 import kotlinx.coroutines.Dispatchers
 
 @Composable
@@ -39,8 +40,8 @@ fun VisibilitySwitchBar(visible: Boolean, onChange: suspend (Boolean) -> Unit) {
 
                 Text(
                     if (visible)
-                        LocalStrings.current.compendium.visibleToPlayersTrue
-                    else LocalStrings.current.compendium.visibleToPlayersFalse
+                        stringResource(Str.compendium_visible_to_players_true)
+                    else stringResource(Str.compendium_visible_to_players_false)
                 )
             }
 

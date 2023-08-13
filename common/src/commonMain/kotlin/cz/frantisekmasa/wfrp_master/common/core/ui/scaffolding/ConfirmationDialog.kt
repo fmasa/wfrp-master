@@ -9,10 +9,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.text.AnnotatedString
+import cz.frantisekmasa.wfrp_master.common.Str
 import cz.frantisekmasa.wfrp_master.common.core.ui.dialogs.AlertDialog
 import cz.frantisekmasa.wfrp_master.common.core.ui.dialogs.DialogProgress
 import cz.frantisekmasa.wfrp_master.common.core.utils.launchLogged
-import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
+import dev.icerock.moko.resources.compose.stringResource
 import kotlinx.coroutines.Dispatchers
 
 @Composable
@@ -54,7 +55,7 @@ fun ConfirmationDialog(
                 enabled = !processing,
                 onClick = onDismissRequest
             ) {
-                Text(LocalStrings.current.commonUi.buttonCancel)
+                Text(stringResource(Str.common_ui_button_cancel).uppercase())
             }
         }
     )

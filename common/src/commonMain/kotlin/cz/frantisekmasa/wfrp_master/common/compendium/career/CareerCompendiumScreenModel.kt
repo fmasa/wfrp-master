@@ -8,7 +8,6 @@ import cz.frantisekmasa.wfrp_master.common.core.domain.character.CharacterReposi
 import cz.frantisekmasa.wfrp_master.common.core.domain.compendium.Compendium
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.PartyId
 import cz.frantisekmasa.wfrp_master.common.firebase.firestore.Firestore
-import cz.frantisekmasa.wfrp_master.common.localization.Localization
 import kotlinx.coroutines.flow.Flow
 
 class CareerCompendiumScreenModel(
@@ -65,7 +64,7 @@ class CareerCompendiumScreenModel(
 
         return character.updateCareer(
             careerName = level?.name ?: "",
-            socialClass = previousCareerVersion.socialClass.nameResolver(Localization.English),
+            socialClass = character.socialClass,
             status = character.status,
             compendiumCareer = null,
         )

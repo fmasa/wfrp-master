@@ -5,15 +5,16 @@ import androidx.compose.material.IconButton
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowBack
 import androidx.compose.runtime.Composable
+import cz.frantisekmasa.wfrp_master.common.Str
 import cz.frantisekmasa.wfrp_master.common.core.ui.navigation.LocalNavigationTransaction
-import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
+import dev.icerock.moko.resources.compose.stringResource
 
 @Composable
 fun BackButton(onClick: () -> Unit) {
     IconButton(onClick = onClick) {
         Icon(
             Icons.Rounded.ArrowBack,
-            LocalStrings.current.commonUi.labelPreviousScreen,
+            stringResource(Str.common_ui_label_previous_screen),
         )
     }
 }

@@ -17,6 +17,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import cz.frantisekmasa.wfrp_master.common.Str
 import cz.frantisekmasa.wfrp_master.common.character.CharacterScreenModel
 import cz.frantisekmasa.wfrp_master.common.character.skills.dialog.AddBasicSkillsDialog
 import cz.frantisekmasa.wfrp_master.common.character.skills.dialog.AddSkillDialog
@@ -32,7 +33,7 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.menu.DropdownMenu
 import cz.frantisekmasa.wfrp_master.common.core.ui.navigation.LocalNavigationTransaction
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.ContextMenu
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.EmptyUI
-import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
+import dev.icerock.moko.resources.compose.stringResource
 
 @Composable
 internal fun SkillsCard(
@@ -46,8 +47,6 @@ internal fun SkillsCard(
 
     CardContainer(Modifier.padding(horizontal = 8.dp).padding(bottom = 8.dp)) {
         Column(Modifier.padding(horizontal = 6.dp)) {
-            val strings = LocalStrings.current.skills
-
             var basicSkillsDialogOpened by remember { mutableStateOf(false) }
 
             if (basicSkillsDialogOpened) {
@@ -58,14 +57,14 @@ internal fun SkillsCard(
             }
 
             CardTitle(
-                strings.titleSkills,
+                stringResource(Str.skills_title_skills),
                 actions = {
                     var contextMenuExpanded by remember { mutableStateOf(false) }
 
                     IconButton(onClick = { contextMenuExpanded = true }) {
                         Icon(
                             Icons.Filled.MoreVert,
-                            LocalStrings.current.commonUi.labelOpenContextMenu,
+                            stringResource(Str.common_ui_label_open_context_menu),
                         )
                     }
 
@@ -80,7 +79,7 @@ internal fun SkillsCard(
                                 basicSkillsDialogOpened = true
                             },
                         ) {
-                            Text(LocalStrings.current.skills.buttonImportBasicSkills)
+                            Text(stringResource(Str.skills_button_import_basic_skills))
                         }
                     }
                 },
@@ -88,7 +87,7 @@ internal fun SkillsCard(
 
             if (skills.isEmpty()) {
                 EmptyUI(
-                    text = strings.messages.characterHasNoSkills,
+                    text = stringResource(Str.skills_messages_character_has_no_skills),
                     icon = Resources.Drawable.Skill,
                     size = EmptyUI.Size.Small
                 )
@@ -114,7 +113,10 @@ internal fun SkillsCard(
 
             var showAddSkillDialog by rememberSaveable { mutableStateOf(false) }
 
-            CardButton(strings.titleAdd, onClick = { showAddSkillDialog = true })
+            CardButton(
+                stringResource(Str.skills_title_add),
+                onClick = { showAddSkillDialog = true },
+            )
 
             if (showAddSkillDialog) {
                 AddSkillDialog(
@@ -138,7 +140,7 @@ private fun SkillItem(
         skill.name,
         onClick = onClick,
         contextMenuItems = listOf(
-            ContextMenu.Item(LocalStrings.current.commonUi.buttonRemove, onClick = { onRemove() })
+            ContextMenu.Item(stringResource(Str.common_ui_button_remove), onClick = { onRemove() })
         ),
         badge = { TestNumber(skill, characteristics) }
     )

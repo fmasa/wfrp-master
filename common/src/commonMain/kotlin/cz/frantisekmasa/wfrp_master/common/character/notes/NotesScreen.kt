@@ -11,9 +11,8 @@ import androidx.compose.material.Scaffold
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Group
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import cz.frantisekmasa.wfrp_master.common.Str
 import cz.frantisekmasa.wfrp_master.common.ambitions.AmbitionsCard
 import cz.frantisekmasa.wfrp_master.common.character.CharacterScreenModel
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.Character
@@ -23,7 +22,7 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
 import cz.frantisekmasa.wfrp_master.common.core.ui.responsive.Breakpoint
 import cz.frantisekmasa.wfrp_master.common.core.ui.responsive.ColumnSize
 import cz.frantisekmasa.wfrp_master.common.core.ui.responsive.Container
-import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
+import dev.icerock.moko.resources.compose.stringResource
 
 @Composable
 fun NotesScreen(
@@ -52,8 +51,6 @@ fun NotesScreen(
 
 @Composable
 private fun AmbitionsContainer(character: Character, party: Party, screenModel: CharacterScreenModel) {
-    val strings = LocalStrings.current.ambition
-
     Container(
         horizontalArrangement = Arrangement.spacedBy(Spacing.gutterSize()),
     ) {
@@ -63,7 +60,7 @@ private fun AmbitionsContainer(character: Character, party: Party, screenModel: 
 
         column(size) {
             AmbitionsCard(
-                title = strings.titleCharacterAmbitions,
+                title = stringResource(Str.ambition_title_character_ambitions),
                 ambitions = character.ambitions,
                 onSave = { ambitions ->
                     screenModel.update { it.updateAmbitions(ambitions) }
@@ -73,7 +70,7 @@ private fun AmbitionsContainer(character: Character, party: Party, screenModel: 
 
         column(size) {
             AmbitionsCard(
-                title = strings.titlePartyAmbitions,
+                title = stringResource(Str.ambition_title_party_ambitions),
                 ambitions = party.ambitions,
                 titleIcon = Icons.Rounded.Group,
                 onSave = null,

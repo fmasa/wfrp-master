@@ -8,6 +8,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import cz.frantisekmasa.wfrp_master.common.Str
 import cz.frantisekmasa.wfrp_master.common.compendium.CompendiumScreen
 import cz.frantisekmasa.wfrp_master.common.compendium.VisibilityIcon
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.PartyId
@@ -16,7 +17,7 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.navigation.LocalNavigationTra
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.EmptyUI
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.ItemIcon
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.rememberScreenModel
-import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
+import dev.icerock.moko.resources.compose.stringResource
 
 class BlessingCompendiumScreen(
     private val partyId: PartyId
@@ -25,7 +26,6 @@ class BlessingCompendiumScreen(
     @Composable
     override fun Content() {
         val screenModel: BlessingCompendiumScreenModel = rememberScreenModel(arg = partyId)
-        val messages = LocalStrings.current.blessings.messages
         var newBlessingDialogOpened by rememberSaveable { mutableStateOf(false) }
         val navigation = LocalNavigationTransaction.current
 
@@ -44,8 +44,10 @@ class BlessingCompendiumScreen(
             liveItems = screenModel.items,
             emptyUI = {
                 EmptyUI(
-                    text = messages.noBlessingsInCompendium,
-                    subText = messages.noBlessingsInCompendiumSubtext,
+                    text = stringResource(Str.blessings_messages_no_blessings_in_compendium),
+                    subText = stringResource(
+                        Str.blessings_messages_no_blessings_in_compendium_subtext,
+                    ),
                     icon = Resources.Drawable.Blessing
                 )
             },

@@ -17,6 +17,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import cafe.adriel.voyager.core.screen.Screen
 import com.benasher44.uuid.Uuid
+import cz.frantisekmasa.wfrp_master.common.Str
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.CompendiumItem
 import cz.frantisekmasa.wfrp_master.common.core.ui.buttons.BackButton
 import cz.frantisekmasa.wfrp_master.common.core.ui.flow.collectWithLifecycle
@@ -24,7 +25,7 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.navigation.LocalNavigationTra
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.FullScreenProgress
 import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.IconAction
 import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.LocalPersistentSnackbarHolder
-import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
+import dev.icerock.moko.resources.compose.stringResource
 
 @Composable
 fun <A : CompendiumItem<A>> Screen.CompendiumItemDetailScreen(
@@ -46,7 +47,7 @@ fun <A : CompendiumItem<A>> Screen.CompendiumItemDetailScreen(
     val item = itemOrError.orNull()
 
     if (item == null) {
-        val message = LocalStrings.current.commonUi.itemDoesNotExist
+        val message = stringResource(Str.common_ui_item_does_not_exist)
         val snackbarHolder = LocalPersistentSnackbarHolder.current
 
         LaunchedEffect(Unit) {
@@ -70,7 +71,7 @@ fun <A : CompendiumItem<A>> Screen.CompendiumItemDetailScreen(
                 actions = {
                     IconAction(
                         Icons.Rounded.Edit,
-                        LocalStrings.current.commonUi.buttonEdit,
+                        stringResource(Str.common_ui_button_edit),
                         onClick = { editDialogOpened = true },
                     )
                 },

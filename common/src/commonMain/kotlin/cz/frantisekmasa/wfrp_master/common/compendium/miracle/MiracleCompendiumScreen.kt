@@ -8,6 +8,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import cz.frantisekmasa.wfrp_master.common.Str
 import cz.frantisekmasa.wfrp_master.common.compendium.CompendiumScreen
 import cz.frantisekmasa.wfrp_master.common.compendium.VisibilityIcon
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.PartyId
@@ -16,7 +17,7 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.navigation.LocalNavigationTra
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.EmptyUI
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.ItemIcon
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.rememberScreenModel
-import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
+import dev.icerock.moko.resources.compose.stringResource
 
 class MiracleCompendiumScreen(
     private val partyId: PartyId
@@ -42,11 +43,11 @@ class MiracleCompendiumScreen(
         ItemsList(
             liveItems = screenModel.items,
             emptyUI = {
-                val strings = LocalStrings.current.miracles
-
                 EmptyUI(
-                    text = strings.messages.noMiraclesInCompendium,
-                    subText = strings.messages.noMiraclesInCompendiumSubtext,
+                    text = stringResource(Str.miracles_messages_no_miracles_in_compendium),
+                    subText = stringResource(
+                        Str.miracles_messages_no_miracles_in_compendium_subtext
+                    ),
                     icon = Resources.Drawable.Miracle
                 )
             },

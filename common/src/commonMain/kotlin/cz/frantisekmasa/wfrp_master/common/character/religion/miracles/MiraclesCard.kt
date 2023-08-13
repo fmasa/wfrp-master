@@ -10,6 +10,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import cz.frantisekmasa.wfrp_master.common.Str
 import cz.frantisekmasa.wfrp_master.common.character.religion.miracles.dialog.AddMiracleDialog
 import cz.frantisekmasa.wfrp_master.common.core.domain.religion.Miracle
 import cz.frantisekmasa.wfrp_master.common.core.shared.Resources
@@ -21,7 +22,7 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.flow.collectWithLifecycle
 import cz.frantisekmasa.wfrp_master.common.core.ui.navigation.LocalNavigationTransaction
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.ContextMenu
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.EmptyUI
-import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
+import dev.icerock.moko.resources.compose.stringResource
 import kotlinx.coroutines.launch
 
 @Composable
@@ -35,13 +36,11 @@ internal fun MiraclesCard(screenModel: MiraclesScreenModel) {
             .padding(bottom = 8.dp)
     ) {
         Column(Modifier.padding(horizontal = 6.dp)) {
-            val strings = LocalStrings.current.miracles
-
-            CardTitle(strings.title)
+            CardTitle(stringResource(Str.miracles_title))
 
             if (miracles.isEmpty()) {
                 EmptyUI(
-                    strings.messages.characterHasNoMiracles,
+                    stringResource(Str.miracles_messages_character_has_no_miracles),
                     Resources.Drawable.Miracle,
                     size = EmptyUI.Size.Small
                 )
@@ -66,7 +65,10 @@ internal fun MiraclesCard(screenModel: MiraclesScreenModel) {
 
             var showAddMiracleDialog by rememberSaveable { mutableStateOf(false) }
 
-            CardButton(strings.titleAdd, onClick = { showAddMiracleDialog = true })
+            CardButton(
+                stringResource(Str.miracles_title_add).uppercase(),
+                onClick = { showAddMiracleDialog = true },
+            )
 
             if (showAddMiracleDialog) {
                 AddMiracleDialog(
@@ -89,7 +91,7 @@ private fun MiracleItem(
         onClick = onClick,
         contextMenuItems = listOf(
             ContextMenu.Item(
-                LocalStrings.current.commonUi.buttonRemove,
+                stringResource(Str.common_ui_button_remove),
                 onClick = { onRemove() },
             )
         ),

@@ -11,6 +11,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.snapshots.SnapshotStateMap
 import androidx.compose.ui.text.input.KeyboardType
 import com.benasher44.uuid.uuid4
+import cz.frantisekmasa.wfrp_master.common.Str
 import cz.frantisekmasa.wfrp_master.common.core.domain.HitLocation
 import cz.frantisekmasa.wfrp_master.common.core.domain.NamedEnum
 import cz.frantisekmasa.wfrp_master.common.core.domain.localizedName
@@ -47,8 +48,8 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.forms.SelectBox
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.TextInput
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.inputValue
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.rule
-import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
-import cz.frantisekmasa.wfrp_master.common.localization.Strings
+import dev.icerock.moko.resources.StringResource
+import dev.icerock.moko.resources.compose.stringResource
 import kotlin.math.max
 
 @Composable
@@ -60,30 +61,33 @@ fun InventoryItemDialog(
 ) {
     FullScreenDialog(onDismissRequest = onDismissRequest) {
         val formData = InventoryItemFormData.fromItem(existingItem, defaultContainerId)
-        val strings = LocalStrings.current.trappings
 
         FormDialog(
-            title = if (existingItem != null) strings.titleEdit else strings.titleAdd,
+            title = stringResource(
+                if (existingItem != null)
+                    Str.trappings_title_edit
+                else Str.trappings_title_add
+            ),
             onDismissRequest = onDismissRequest,
             formData = formData,
             onSave = onSaveRequest,
         ) { validate ->
             TextInput(
-                label = strings.labelName,
+                label = stringResource(Str.trappings_label_name),
                 value = formData.name,
                 validate = validate,
                 maxLength = InventoryItem.NAME_MAX_LENGTH,
             )
 
             TextInput(
-                label = strings.labelQuantity,
+                label = stringResource(Str.trappings_label_quantity),
                 value = formData.quantity,
                 validate = validate,
                 keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
             )
 
             TextInput(
-                label = strings.labelEncumbrancePerUnit,
+                label = stringResource(Str.trappings_label_encumbrance_per_unit),
                 value = formData.encumbrance,
                 maxLength = 8,
                 validate = validate,
@@ -92,12 +96,12 @@ fun InventoryItemDialog(
             )
 
             TextInput(
-                label = strings.labelDescription,
+                label = stringResource(Str.trappings_label_description),
                 value = formData.description,
                 validate = validate,
                 maxLength = InventoryItem.DESCRIPTION_MAX_LENGTH,
                 multiLine = true,
-                helperText = LocalStrings.current.commonUi.markdownSupportedNote,
+                helperText = stringResource(Str.common_ui_markdown_supported_note),
             )
 
             TrappingTypeForm(
@@ -110,10 +114,8 @@ fun InventoryItemDialog(
 
 @Composable
 private fun TrappingTypeForm(formData: TrappingTypeFormData, validate: Boolean) {
-    val strings = LocalStrings.current
-
     SelectBox(
-        label = strings.trappings.labelType,
+        label = stringResource(Str.trappings_label_type),
         value = formData.type.value,
         onValueChange = { formData.type.value = it },
         items = remember { TrappingTypeOption.values() },
@@ -123,11 +125,15 @@ private fun TrappingTypeForm(formData: TrappingTypeFormData, validate: Boolean) 
     val exhaustive = when (formData.type.value) {
         TrappingTypeOption.AMMUNITION -> {
             TextInput(
-                label = strings.weapons.labelRange,
+                label = stringResource(Str.weapons_label_range),
                 value = formData.ammunitionRange,
                 validate = validate,
-                helperText = LocalStrings.current.commonUi.expressionHelper(
-                    remember { AmmunitionRangeExpression.Constant.values().map { it.value } }
+                helperText = stringResource(
+                    Str.common_ui_expression_helper,
+                    remember {
+                        AmmunitionRangeExpression.Constant.values()
+                            .joinToString(", ") { it.value }
+                    }
                 ),
             )
             CheckboxList(
@@ -141,25 +147,25 @@ private fun TrappingTypeForm(formData: TrappingTypeFormData, validate: Boolean) 
         }
         TrappingTypeOption.ARMOUR -> {
             SelectBox(
-                label = strings.armour.labelType,
+                label = stringResource(Str.armour_label_type),
                 value = formData.armourType.value,
                 onValueChange = { formData.armourType.value = it },
                 items = remember { ArmourType.values() },
             )
             ArmourLocationsPickers(formData, validate)
             TextInput(
-                label = strings.armour.labelArmourPoints,
+                label = stringResource(Str.armour_label_armour_points),
                 value = formData.armourPoints,
                 validate = validate,
             )
             WornCheckbox(formData)
             TrappingFeaturePicker(
-                strings.armour.labelQualities,
+                stringResource(Str.armour_label_qualities),
                 ArmourQuality.values(),
                 formData.armourQualities,
             )
             TrappingFeaturePicker(
-                strings.armour.labelFlaws,
+                stringResource(Str.armour_label_flaws),
                 ArmourFlaw.values(),
                 formData.armourFlaws,
             )
@@ -169,7 +175,7 @@ private fun TrappingTypeForm(formData: TrappingTypeFormData, validate: Boolean) 
         }
         TrappingTypeOption.CONTAINER -> {
             TextInput(
-                label = strings.trappings.labelCarries,
+                label = stringResource(Str.trappings_label_carries),
                 value = formData.carries,
                 validate = validate,
             )
@@ -178,13 +184,13 @@ private fun TrappingTypeForm(formData: TrappingTypeFormData, validate: Boolean) 
         TrappingTypeOption.MELEE_WEAPON -> {
             WeaponEquipSelect(formData)
             SelectBox(
-                label = strings.weapons.labelGroup,
+                label = stringResource(Str.weapons_label_group),
                 value = formData.meleeWeaponGroup.value,
                 onValueChange = { formData.meleeWeaponGroup.value = it },
                 items = remember { MeleeWeaponGroup.values() },
             )
             SelectBox(
-                label = strings.weapons.labelReach,
+                label = stringResource(Str.weapons_label_reach),
                 value = formData.weaponReach.value,
                 onValueChange = { formData.weaponReach.value = it },
                 items = remember { Reach.values() },
@@ -196,16 +202,20 @@ private fun TrappingTypeForm(formData: TrappingTypeFormData, validate: Boolean) 
         TrappingTypeOption.RANGED_WEAPON -> {
             WeaponEquipSelect(formData)
             SelectBox(
-                label = strings.weapons.labelGroup,
+                label = stringResource(Str.weapons_label_group),
                 value = formData.rangedWeaponGroup.value,
                 onValueChange = { formData.rangedWeaponGroup.value = it },
                 items = remember { RangedWeaponGroup.values() },
             )
             TextInput(
-                label = strings.weapons.labelRange,
+                label = stringResource(Str.weapons_label_range),
                 value = formData.weaponRange,
-                helperText = LocalStrings.current.commonUi.expressionHelper(
-                    remember { WeaponRangeExpression.Constant.values().map { it.value } }
+                helperText = stringResource(
+                    Str.common_ui_expression_helper,
+                    remember {
+                        WeaponRangeExpression.Constant.values()
+                            .joinToString(", ") { it.value }
+                    },
                 ),
                 validate = validate,
             )
@@ -226,13 +236,11 @@ private fun TrappingTypeForm(formData: TrappingTypeFormData, validate: Boolean) 
 
 @Composable
 private fun WeaponEquipSelect(formData: TrappingTypeFormData) {
-    val strings = LocalStrings.current
-
     SelectBox(
-        label = strings.weapons.labelEquip,
+        label = stringResource(Str.weapons_label_equip),
         value = formData.weaponEquipped.value,
         onValueChange = { formData.weaponEquipped.value = it },
-        items = listOf(null to strings.weapons.equip.notEquipped) +
+        items = listOf(null to stringResource(Str.weapons_equip_not_equipped)) +
             WeaponEquip.values().map { it to it.localizedName }
     )
 }
@@ -240,7 +248,7 @@ private fun WeaponEquipSelect(formData: TrappingTypeFormData) {
 @Composable
 private fun WornCheckbox(formData: TrappingTypeFormData) {
     CheckboxWithText(
-        text = LocalStrings.current.trappings.labelWorn,
+        text = stringResource(Str.trappings_label_worn),
         checked = formData.worn.value,
         onCheckedChange = { formData.worn.value = it }
     )
@@ -249,9 +257,8 @@ private fun WornCheckbox(formData: TrappingTypeFormData) {
 @Composable
 private fun ArmourLocationsPickers(formData: TrappingTypeFormData, validate: Boolean) {
     val selectedParts = formData.armourLocations
-    val strings = LocalStrings.current.armour
 
-    InputLabel(strings.labelLocations)
+    InputLabel(stringResource(Str.armour_label_locations))
 
     CheckboxList(
         items = HitLocation.values(),
@@ -260,19 +267,18 @@ private fun ArmourLocationsPickers(formData: TrappingTypeFormData, validate: Boo
     )
 
     if (validate && selectedParts.value.isEmpty()) {
-        ErrorMessage(strings.messages.atLeastOneLocationRequired)
+        ErrorMessage(stringResource(Str.armour_messages_at_least_one_location_required))
     }
 }
 
 @Composable
 private fun DamageInput(formData: TrappingTypeFormData, validate: Boolean) {
-    val strings = LocalStrings.current.weapons
-
     TextInput(
-        label = strings.labelDamage,
+        label = stringResource(Str.weapons_label_damage),
         value = formData.damage,
-        helperText = LocalStrings.current.commonUi.expressionHelper(
-            remember { DamageExpression.Constant.values().map { it.value } }
+        helperText = stringResource(
+            Str.common_ui_expression_helper,
+            remember { DamageExpression.Constant.values().joinToString(", ") { it.value } },
         ),
         validate = validate,
     )
@@ -281,7 +287,7 @@ private fun DamageInput(formData: TrappingTypeFormData, validate: Boolean) {
 @Composable
 private fun WeaponQualitiesPicker(formData: TrappingTypeFormData) {
     TrappingFeaturePicker(
-        LocalStrings.current.weapons.labelQualities,
+        stringResource(Str.weapons_label_qualities),
         WeaponQuality.values(),
         formData.weaponQualities
     )
@@ -290,7 +296,7 @@ private fun WeaponQualitiesPicker(formData: TrappingTypeFormData) {
 @Composable
 private fun WeaponFlawsPicker(formData: TrappingTypeFormData) {
     TrappingFeaturePicker(
-        LocalStrings.current.weapons.labelFlaws,
+        stringResource(Str.weapons_label_flaws),
         WeaponFlaw.values(),
         formData.weaponFlaws
     )
@@ -548,7 +554,7 @@ private class TrappingTypeFormData(
             weaponReach: Reach = Reach.AVERAGE,
             worn: Boolean = false,
         ): TrappingTypeFormData {
-            val invalidExpressionMessage = LocalStrings.current.validation.invalidExpression
+            val invalidExpressionMessage = stringResource(Str.validation_invalid_expression)
 
             return TrappingTypeFormData(
                 type = rememberSaveable { mutableStateOf(type) },
@@ -592,20 +598,21 @@ private class TrappingTypeFormData(
     }
 }
 
-private enum class TrappingTypeOption(override val nameResolver: (strings: Strings) -> String) :
-    NamedEnum {
-    AMMUNITION({ it.trappings.types.ammunition }),
-    ARMOUR({ it.trappings.types.armour }),
-    BOOK_OR_DOCUMENT({ it.trappings.types.bookOrDocument }),
-    CLOTHING_OR_ACCESSORY({ it.trappings.types.clothingOrAccessory }),
-    CONTAINER({ it.trappings.types.container }),
-    DRUG_OR_POISON({ it.trappings.types.drugOrPoison }),
-    FOOD_OR_DRINK({ it.trappings.types.foodOrDrink }),
-    HERB_OR_DRAUGHT({ it.trappings.types.herbOrDraught }),
-    MELEE_WEAPON({ it.trappings.types.meleeWeapon }),
-    MISCELLANEOUS({ it.trappings.types.miscellaneous }),
-    RANGED_WEAPON({ it.trappings.types.rangedWeapon }),
-    SPELL_INGREDIENT({ it.trappings.types.spellIngredient }),
-    TOOL_OR_KIT({ it.trappings.types.toolOrKit }),
-    TRADE_TOOLS({ it.trappings.types.tradeTools }),
+private enum class TrappingTypeOption(
+    override val translatableName: StringResource,
+) : NamedEnum {
+    AMMUNITION(Str.trappings_types_ammunition),
+    ARMOUR(Str.trappings_types_armour),
+    BOOK_OR_DOCUMENT(Str.trappings_types_book_or_document),
+    CLOTHING_OR_ACCESSORY(Str.trappings_types_clothing_or_accessory),
+    CONTAINER(Str.trappings_types_container),
+    DRUG_OR_POISON(Str.trappings_types_drug_or_poison),
+    FOOD_OR_DRINK(Str.trappings_types_food_or_drink),
+    HERB_OR_DRAUGHT(Str.trappings_types_herb_or_draught),
+    MELEE_WEAPON(Str.trappings_types_melee_weapon),
+    MISCELLANEOUS(Str.trappings_types_miscellaneous),
+    RANGED_WEAPON(Str.trappings_types_ranged_weapon),
+    SPELL_INGREDIENT(Str.trappings_types_spell_ingredient),
+    TOOL_OR_KIT(Str.trappings_types_tool_or_kit),
+    TRADE_TOOLS(Str.trappings_types_trade_tools),
 }

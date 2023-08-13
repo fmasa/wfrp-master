@@ -15,6 +15,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import cz.frantisekmasa.wfrp_master.common.Str
 import cz.frantisekmasa.wfrp_master.common.core.connectivity.CouldNotConnectToBackend
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.Party
 import cz.frantisekmasa.wfrp_master.common.core.shared.IO
@@ -26,7 +27,7 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.forms.inputValue
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
 import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.LocalPersistentSnackbarHolder
 import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.SaveAction
-import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
+import dev.icerock.moko.resources.compose.stringResource
 import io.github.aakira.napier.Napier
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -41,8 +42,6 @@ fun RenamePartyDialog(
         var validate by remember { mutableStateOf(false) }
         val newName = inputValue(currentName, Rules.NotBlank())
 
-        val strings = LocalStrings.current.parties
-
         Scaffold(
             topBar = {
                 val coroutineScope = rememberCoroutineScope()
@@ -51,11 +50,13 @@ fun RenamePartyDialog(
 
                 TopAppBar(
                     navigationIcon = { CloseButton(onClick = onDismissRequest) },
-                    title = { Text(strings.titleRename) },
+                    title = { Text(stringResource(Str.parties_title_rename)) },
                     actions = {
-                        val messages = LocalStrings.current.messages
                         val snackbarHolder = LocalPersistentSnackbarHolder.current
 
+                        val partyUpdatedMessage = stringResource(Str.parties_messages_party_updated)
+                        val errorUnknown = stringResource(Str.messages_error_unknown)
+                        val errorNoConnection = stringResource(Str.parties_messages_update_error_no_connection)
                         SaveAction(
                             enabled = !saving,
                             onClick = {
@@ -70,7 +71,7 @@ fun RenamePartyDialog(
                                     try {
                                         viewModel.renameParty(newName.value)
                                         snackbarHolder.showSnackbar(
-                                            messages.partyUpdated,
+                                            partyUpdatedMessage,
                                             duration = SnackbarDuration.Short,
                                         )
 
@@ -85,12 +86,12 @@ fun RenamePartyDialog(
                                             e,
                                         )
                                         snackbarHolder.showSnackbar(
-                                            messages.partyUpdateErrorNoConnection,
+                                            errorNoConnection,
                                             duration = SnackbarDuration.Long,
                                         )
                                     } catch (e: Throwable) {
                                         snackbarHolder.showSnackbar(
-                                            messages.errorUnknown,
+                                            errorUnknown,
                                             duration = SnackbarDuration.Long,
                                         )
                                         Napier.e(e.toString(), e)
@@ -110,7 +111,7 @@ fun RenamePartyDialog(
                     .padding(Spacing.bodyPadding),
             ) {
                 TextInput(
-                    label = strings.labelName,
+                    label = stringResource(Str.parties_label_name),
                     value = newName,
                     validate = validate,
                     maxLength = Party.NAME_MAX_LENGTH,

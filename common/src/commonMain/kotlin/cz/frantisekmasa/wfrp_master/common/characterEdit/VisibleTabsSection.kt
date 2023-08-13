@@ -13,19 +13,20 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
+import cz.frantisekmasa.wfrp_master.common.Str
 import cz.frantisekmasa.wfrp_master.common.character.CharacterScreenModel
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.Character
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.CharacterTab
 import cz.frantisekmasa.wfrp_master.common.core.domain.localizedName
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.FormScreen
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.HydratedFormData
-import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
+import dev.icerock.moko.resources.compose.stringResource
 
 @Composable
 fun VisibleTabsSection(character: Character, screenModel: CharacterScreenModel) {
     val data = VisibleTabsFormData.fromCharacter(character)
     FormScreen(
-        title = LocalStrings.current.character.titleVisibleTabs,
+        title = stringResource(Str.character_title_visible_tabs),
         formData = data,
         onSave = {
             screenModel.update { character ->
@@ -36,7 +37,7 @@ fun VisibleTabsSection(character: Character, screenModel: CharacterScreenModel) 
 
         if (validate && !data.isValid()) {
             Text(
-                text = LocalStrings.current.character.errorVisibleTabRequired,
+                text = stringResource(Str.character_error_visible_tab_required),
                 textAlign = TextAlign.Center,
                 color = MaterialTheme.colors.error,
                 modifier = Modifier.fillMaxWidth()

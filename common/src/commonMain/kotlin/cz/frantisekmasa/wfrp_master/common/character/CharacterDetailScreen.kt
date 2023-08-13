@@ -28,6 +28,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
+import cz.frantisekmasa.wfrp_master.common.Str
 import cz.frantisekmasa.wfrp_master.common.character.characteristics.CharacteristicsScreen
 import cz.frantisekmasa.wfrp_master.common.character.combat.CharacterCombatScreen
 import cz.frantisekmasa.wfrp_master.common.character.conditions.ConditionsScreen
@@ -62,8 +63,8 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.Subtitle
 import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.tabs.TabPager
 import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.tabs.TabPagerScope
 import cz.frantisekmasa.wfrp_master.common.gameMaster.GameMasterScreen
-import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
 import cz.frantisekmasa.wfrp_master.common.partyList.PartyListScreen
+import dev.icerock.moko.resources.compose.stringResource
 
 data class CharacterDetailScreen(
     private val characterId: CharacterId,
@@ -118,7 +119,7 @@ data class CharacterDetailScreen(
                     actions = {
                         IconAction(
                             Icons.Rounded.Edit,
-                            LocalStrings.current.character.titleEdit,
+                            stringResource(Str.character_title_edit),
                             onClick = { navigation.navigate(CharacterEditScreen(characterId)) },
                         )
                     }
@@ -239,7 +240,7 @@ data class CharacterDetailScreen(
                             },
                         ) {
                             Icon(Icons.Rounded.Add, null, modifier = Modifier.size(24.dp))
-                            Text(LocalStrings.current.character.buttonLink)
+                            Text(stringResource(Str.character_button_link))
                         }
                     }
 
@@ -255,7 +256,7 @@ data class CharacterDetailScreen(
                         }
                     ) {
                         Icon(Icons.Rounded.Add, null, modifier = Modifier.size(24.dp))
-                        Text(LocalStrings.current.character.buttonAdd)
+                        Text(stringResource(Str.character_button_add))
                     }
                 }
             }
@@ -286,11 +287,11 @@ data class CharacterDetailScreen(
 
         Column(Modifier.fillMaxSize()) {
             if (LocalStaticConfiguration.current.platform == Platform.Desktop) {
-                val strings = LocalStrings.current
                 val userId = LocalUser.current.id
 
+                val titleParties = stringResource(Str.parties_title_parties)
                 Breadcrumbs {
-                    level(strings.parties.titleParties) { PartyListScreen }
+                    level(titleParties) { PartyListScreen }
 
                     if (party.gameMasterId == userId) {
                         level(party.name) { GameMasterScreen(party.id) }

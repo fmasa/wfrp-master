@@ -16,6 +16,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import cz.frantisekmasa.wfrp_master.common.Str
 import cz.frantisekmasa.wfrp_master.common.core.domain.localizedName
 import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.InventoryItem
 import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.TrappingType
@@ -23,7 +24,7 @@ import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.WeaponEquip
 import cz.frantisekmasa.wfrp_master.common.core.ui.dialogs.SelectionDialog
 import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.SubheadBar
 import cz.frantisekmasa.wfrp_master.common.core.utils.launchLogged
-import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
+import dev.icerock.moko.resources.compose.stringResource
 import kotlinx.coroutines.Dispatchers
 
 @Composable
@@ -38,7 +39,7 @@ fun EquipBar(
 
     if (dialogOpened) {
         SelectionDialog(
-            title = LocalStrings.current.trappings.titleEquipWeapon,
+            title = stringResource(Str.trappings_title_equip_weapon),
             items = listOf<WeaponEquip?>(null) + WeaponEquip.values().toList(),
             selected = weapon.equipped,
             onDismissRequest = { dialogOpened = false },
@@ -66,7 +67,7 @@ fun EquipBar(
                 }
             }
         ) {
-            Text(it?.localizedName ?: LocalStrings.current.weapons.equip.notEquipped)
+            Text(it?.localizedName ?: stringResource(Str.weapons_equip_not_equipped))
         }
     }
 
@@ -76,18 +77,18 @@ fun EquipBar(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween,
         ) {
-            Text(LocalStrings.current.weapons.labelEquip)
+            Text(stringResource(Str.weapons_label_equip))
 
             Row(
                 Modifier.clickable { dialogOpened = true }
             ) {
                 Text(
                     weapon.equipped?.localizedName
-                        ?: LocalStrings.current.weapons.equip.notEquipped
+                        ?: stringResource(Str.weapons_equip_not_equipped)
                 )
                 Icon(
                     Icons.Rounded.ExpandMore,
-                    LocalStrings.current.commonUi.buttonEdit,
+                    stringResource(Str.common_ui_button_edit),
                 )
             }
         }

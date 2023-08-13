@@ -18,6 +18,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import cz.frantisekmasa.wfrp_master.common.Str
 import cz.frantisekmasa.wfrp_master.common.core.domain.Characteristic
 import cz.frantisekmasa.wfrp_master.common.core.domain.Stats
 import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.Armour
@@ -30,7 +31,7 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.forms.inputValue
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.HorizontalLine
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
 import cz.frantisekmasa.wfrp_master.common.encounters.domain.Npc
-import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
+import dev.icerock.moko.resources.compose.stringResource
 
 @Composable
 fun NpcForm(data: FormData, validate: Boolean) {
@@ -40,8 +41,6 @@ fun NpcForm(data: FormData, validate: Boolean) {
             .padding(Spacing.bodyPadding)
             .padding(bottom = 30.dp)
     ) {
-        val strings = LocalStrings.current
-
         Column(verticalArrangement = Arrangement.spacedBy(Spacing.small)) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
@@ -50,7 +49,7 @@ fun NpcForm(data: FormData, validate: Boolean) {
 
                 TextInput(
                     modifier = Modifier.weight(0.7f),
-                    label = strings.npcs.labelName,
+                    label = stringResource(Str.npcs_label_name),
                     value = data.name,
                     maxLength = Npc.NAME_MAX_LENGTH,
                     validate = validate,
@@ -58,7 +57,7 @@ fun NpcForm(data: FormData, validate: Boolean) {
 
                 TextInput(
                     modifier = Modifier.weight(0.3f),
-                    label = LocalStrings.current.points.wounds,
+                    label = stringResource(Str.points_wounds),
                     value = data.wounds,
                     keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
                     maxLength = 3,
@@ -67,7 +66,7 @@ fun NpcForm(data: FormData, validate: Boolean) {
             }
 
             TextInput(
-                label = strings.npcs.labelDescription,
+                label = stringResource(Str.npcs_label_description),
                 value = data.note,
                 validate = validate,
                 multiLine = true,
@@ -75,12 +74,12 @@ fun NpcForm(data: FormData, validate: Boolean) {
 
             Row(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
                 CheckboxWithText(
-                    text = strings.npcs.labelEnemy,
+                    text = stringResource(Str.npcs_label_enemy),
                     checked = data.enemy.value,
                     onCheckedChange = { data.enemy.value = it }
                 )
                 CheckboxWithText(
-                    text = strings.npcs.labelAlive,
+                    text = stringResource(Str.npcs_label_alive),
                     checked = data.alive.value,
                     onCheckedChange = { data.alive.value = it }
                 )
@@ -90,7 +89,7 @@ fun NpcForm(data: FormData, validate: Boolean) {
         HorizontalLine()
 
         Text(
-            strings.npcs.titleCharacteristics,
+            stringResource(Str.npcs_title_characteristics),
             style = MaterialTheme.typography.h6,
             textAlign = TextAlign.Center,
             modifier = Modifier
@@ -103,7 +102,7 @@ fun NpcForm(data: FormData, validate: Boolean) {
         HorizontalLine()
 
         Text(
-            strings.npcs.titleArmour,
+            stringResource(Str.npcs_title_armour),
             style = MaterialTheme.typography.h6,
             textAlign = TextAlign.Center,
             modifier = Modifier
@@ -154,21 +153,19 @@ private fun CharacteristicsSegment(data: CharacteristicsFormData, validate: Bool
 
 @Composable
 private fun ArmorSegment(data: ArmorFormData, validate: Boolean) {
-    val labels = LocalStrings.current.combat.hitLocations
-
     val rows = listOf(
         listOf(
-            labels.head to data.head,
-            labels.body to data.body,
-            LocalStrings.current.armour.shield to data.shield,
+            stringResource(Str.combat_hit_locations_head) to data.head,
+            stringResource(Str.combat_hit_locations_body) to data.body,
+            stringResource(Str.armour_shield) to data.shield,
             "" to null // Empty container
         ),
 
         listOf(
-            labels.leftArm to data.leftArm,
-            labels.rightArm to data.rightArm,
-            labels.leftLeg to data.leftLeg,
-            labels.rightLeg to data.rightLeg,
+            stringResource(Str.combat_hit_locations_left_arm) to data.leftArm,
+            stringResource(Str.combat_hit_locations_right_arm) to data.rightArm,
+            stringResource(Str.combat_hit_locations_left_leg) to data.leftLeg,
+            stringResource(Str.combat_hit_locations_right_leg) to data.rightLeg,
         )
     )
 

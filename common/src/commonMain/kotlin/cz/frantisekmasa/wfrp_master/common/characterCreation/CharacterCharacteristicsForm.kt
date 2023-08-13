@@ -16,6 +16,7 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import cz.frantisekmasa.wfrp_master.common.Str
 import cz.frantisekmasa.wfrp_master.common.core.domain.Stats
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.Character
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.HydratedFormData
@@ -23,7 +24,7 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.forms.InputValue
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.Rules
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.TextInput
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.inputValue
-import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
+import dev.icerock.moko.resources.compose.stringResource
 
 object CharacterCharacteristicsForm {
     @Stable
@@ -130,19 +131,17 @@ fun CharacterCharacteristicsForm(
     data: CharacterCharacteristicsForm.Data,
     validate: Boolean,
 ) {
-    val labels = LocalStrings.current.characteristics
-
     val characteristics = listOf(
-        labels.weaponSkill to data.weaponSkill,
-        labels.ballisticSkill to data.ballisticSkill,
-        labels.strength to data.strength,
-        labels.toughness to data.toughness,
-        labels.initiative to data.initiative,
-        labels.agility to data.agility,
-        labels.dexterity to data.dexterity,
-        labels.intelligence to data.intelligence,
-        labels.willPower to data.willPower,
-        labels.fellowship to data.fellowship,
+        stringResource(Str.characteristics_weapon_skill) to data.weaponSkill,
+        stringResource(Str.characteristics_ballistic_skill) to data.ballisticSkill,
+        stringResource(Str.characteristics_strength) to data.strength,
+        stringResource(Str.characteristics_toughness) to data.toughness,
+        stringResource(Str.characteristics_initiative) to data.initiative,
+        stringResource(Str.characteristics_agility) to data.agility,
+        stringResource(Str.characteristics_dexterity) to data.dexterity,
+        stringResource(Str.characteristics_intelligence) to data.intelligence,
+        stringResource(Str.characteristics_will_power) to data.willPower,
+        stringResource(Str.characteristics_fellowship) to data.fellowship,
     )
 
     Column(verticalArrangement = Arrangement.spacedBy(20.dp)) {
@@ -181,7 +180,6 @@ private fun CharacteristicInputs(
         ) {
             val base = baseAndAdvances.first
             val advances = baseAndAdvances.second
-            val strings = LocalStrings.current.character
 
             val focusManager = LocalFocusManager.current
             val keyboardOptions = KeyboardOptions.Default.copy(
@@ -194,7 +192,7 @@ private fun CharacteristicInputs(
 
             TextInput(
                 modifier = Modifier.weight(1f),
-                label = strings.labelCharacteristicBase,
+                label = stringResource(Str.character_label_characteristic_base),
                 keyboardOptions = keyboardOptions,
                 keyboardActions = keyboardActions,
                 value = base,
@@ -207,7 +205,7 @@ private fun CharacteristicInputs(
 
             TextInput(
                 modifier = Modifier.weight(1f),
-                label = strings.labelCharacteristicAdvances,
+                label = stringResource(Str.character_label_characteristic_advances),
                 keyboardOptions = keyboardOptions,
                 keyboardActions = keyboardActions,
                 value = advances,

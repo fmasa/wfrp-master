@@ -15,6 +15,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import cz.frantisekmasa.wfrp_master.common.Str
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.CompendiumItem
 import cz.frantisekmasa.wfrp_master.common.core.CharacterItemScreenModel
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.CharacterItem
@@ -25,7 +26,7 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.EmptyUI
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.ItemIcon
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.SearchableList
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
-import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
+import dev.icerock.moko.resources.compose.stringResource
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
@@ -63,13 +64,15 @@ internal fun <A : CharacterItem<A, B>, B : CompendiumItem<B>> CompendiumItemChoo
             emptyUi = {
                 EmptyUI(
                     icon = emptyUiIcon,
-                    text = LocalStrings.current.compendium.messages.noItems,
+                    text = stringResource(Str.compendium_messages_no_items),
                     subText = if (totalCompendiumItemCount == 0)
-                        LocalStrings.current.compendium.messages.noItemsInCompendiumSubtextPlayer
+                        stringResource(
+                            Str.compendium_messages_no_items_in_compendium_subtext_player
+                        )
                     else null,
                 )
             },
-            searchPlaceholder = LocalStrings.current.compendium.searchPlaceholder,
+            searchPlaceholder = stringResource(Str.compendium_search_placeholder),
             key = { it.id },
             searchableValue = { it.name },
         ) { item ->

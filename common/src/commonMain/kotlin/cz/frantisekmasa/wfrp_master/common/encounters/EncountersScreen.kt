@@ -36,6 +36,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
+import cz.frantisekmasa.wfrp_master.common.Str
 import cz.frantisekmasa.wfrp_master.common.core.domain.identifiers.EncounterId
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.PartyId
 import cz.frantisekmasa.wfrp_master.common.core.shared.Resources
@@ -51,7 +52,7 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.VisualOnlyIconDesc
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.rememberScreenModel
 import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.FilterBar
 import cz.frantisekmasa.wfrp_master.common.encounters.domain.Encounter
-import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
+import dev.icerock.moko.resources.compose.stringResource
 
 class EncountersScreen(
     private val partyId: PartyId,
@@ -80,7 +81,7 @@ class EncountersScreen(
             topBar = {
                 TopAppBar(
                     navigationIcon = { HamburgerButton() },
-                    title = { Text(LocalStrings.current.encounters.title) }
+                    title = { Text(stringResource(Str.encounters_title)) }
                 )
             },
             floatingActionButton = {
@@ -108,7 +109,7 @@ class EncountersScreen(
                     ) {
                         CheckboxWithText(
                             checked = showCompleted,
-                            text = LocalStrings.current.encounters.buttonShowCompleted,
+                            text = stringResource(Str.encounters_button_show_completed),
                             onCheckedChange = { showCompleted = !showCompleted },
                         )
                     }
@@ -134,7 +135,7 @@ class EncountersScreen(
 @Composable
 private fun AddEncounterButton(onCreateEncounterRequest: () -> Unit) {
     FloatingActionButton(onClick = onCreateEncounterRequest) {
-        Icon(Icons.Rounded.Add, LocalStrings.current.encounters.buttonAdd)
+        Icon(Icons.Rounded.Add, stringResource(Str.encounters_button_add))
     }
 }
 
@@ -176,13 +177,13 @@ fun EncounterItem(
             },
             secondaryText = {
                 val npcCount = remember(encounter.characters) { encounter.characters.values.sum() }
-                Text("$npcCount ${LocalStrings.current.npcs.titlePlural}")
+                Text("$npcCount ${stringResource(Str.npcs_title_plural)}")
             },
             trailing = {
                 if (encounter.completed) {
                     Icon(
                         Icons.Rounded.Done,
-                        contentDescription = LocalStrings.current.encounters.labelCompleted,
+                        contentDescription = stringResource(Str.encounters_label_completed),
                     )
                 }
             }
@@ -198,10 +199,9 @@ private fun ActiveEncounterList(
     onClick: (Encounter) -> Unit,
 ) {
     if (encounters.isEmpty()) {
-        val strings = LocalStrings.current.encounters
         EmptyUI(
-            text = strings.messages.noEncounters,
-            subText = strings.messages.noEncountersSubtext,
+            text = stringResource(Str.encounters_messages_no_encounters),
+            subText = stringResource(Str.encounters_messages_no_encounters_subtext),
             icon = Resources.Drawable.Encounter,
         )
 

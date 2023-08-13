@@ -15,6 +15,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import com.benasher44.uuid.Uuid
 import com.benasher44.uuid.uuid4
+import cz.frantisekmasa.wfrp_master.common.Str
 import cz.frantisekmasa.wfrp_master.common.character.skills.SkillRating
 import cz.frantisekmasa.wfrp_master.common.character.skills.SkillsScreenModel
 import cz.frantisekmasa.wfrp_master.common.core.domain.Characteristic
@@ -31,7 +32,7 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.forms.TextInput
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.checkboxValue
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.inputValue
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
-import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
+import dev.icerock.moko.resources.compose.stringResource
 
 @Composable
 internal fun NonCompendiumSkillForm(
@@ -41,10 +42,11 @@ internal fun NonCompendiumSkillForm(
     onDismissRequest: () -> Unit,
 ) {
     val formData = NonCompendiumSkillFormData.fromSkill(existingSkill)
-    val strings = LocalStrings.current.skills
 
     FormDialog(
-        title = if (existingSkill != null) strings.titleEdit else strings.titleNew,
+        title = stringResource(
+            if (existingSkill != null) Str.skills_title_edit else Str.skills_title_new,
+        ),
         onDismissRequest = onDismissRequest,
         formData = formData,
         onSave = screenModel::saveSkill,
@@ -56,14 +58,14 @@ internal fun NonCompendiumSkillForm(
         ) {
             TextInput(
                 modifier = Modifier.weight(1f),
-                label = strings.labelName,
+                label = stringResource(Str.skills_label_name),
                 value = formData.name,
                 validate = validate,
                 maxLength = Skill.NAME_MAX_LENGTH,
             )
 
             NumberPicker(
-                label = strings.labelAdvances,
+                label = stringResource(Str.skills_label_advances),
                 value = formData.advances.value,
                 onIncrement = { formData.advances.value++ },
                 onDecrement = {
@@ -74,7 +76,7 @@ internal fun NonCompendiumSkillForm(
         }
 
         TextInput(
-            label = strings.labelDescription,
+            label = stringResource(Str.skills_label_description),
             value = formData.description,
             validate = validate,
             multiLine = true,
@@ -82,7 +84,7 @@ internal fun NonCompendiumSkillForm(
         )
 
         ChipList(
-            label = strings.labelCharacteristic,
+            label = stringResource(Str.skills_label_characteristic),
             items = Characteristic.values().map { it to it.getShortcutName() },
             value = formData.characteristic.value,
             onValueChange = { formData.characteristic.value = it }
@@ -93,14 +95,14 @@ internal fun NonCompendiumSkillForm(
             contentAlignment = Alignment.TopCenter
         ) {
             CheckboxWithText(
-                text = strings.labelAdvanced,
+                text = stringResource(Str.skills_label_advanced),
                 checked = formData.advanced.value,
                 onCheckedChange = { formData.advanced.value = it },
             )
         }
 
         SkillRating(
-            label = LocalStrings.current.skills.labelRating,
+            label = stringResource(Str.skills_label_rating),
             value = characteristics.get(formData.characteristic.value) + formData.advances.value,
             modifier = Modifier
                 .padding(top = Spacing.extraLarge)

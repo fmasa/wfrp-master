@@ -15,17 +15,19 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import com.benasher44.uuid.Uuid
 import com.benasher44.uuid.uuid4
+import cz.frantisekmasa.wfrp_master.common.Str
 import cz.frantisekmasa.wfrp_master.common.compendium.CompendiumItemDialog
 import cz.frantisekmasa.wfrp_master.common.compendium.CompendiumItemFormData
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.Spell
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.SpellLore
+import cz.frantisekmasa.wfrp_master.common.core.domain.localizedName
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.InputValue
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.Rules
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.SelectBox
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.TextInput
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.inputValue
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
-import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
+import dev.icerock.moko.resources.compose.stringResource
 
 @Composable
 fun SpellDialog(
@@ -35,10 +37,12 @@ fun SpellDialog(
 ) {
     val formData = SpellFormData.fromItem(spell)
 
-    val strings = LocalStrings.current
-
     CompendiumItemDialog(
-        title = if (spell == null) strings.spells.titleAdd else strings.spells.titleEdit,
+        title = stringResource(
+            if (spell == null)
+                Str.spells_title_add
+            else Str.spells_title_edit
+        ),
         formData = formData,
         saver = onSaveRequest,
         onDismissRequest = onDismissRequest,
@@ -48,52 +52,51 @@ fun SpellDialog(
             modifier = Modifier.padding(Spacing.bodyPadding),
         ) {
             TextInput(
-                label = strings.spells.labelName,
+                label = stringResource(Str.spells_label_name),
                 value = formData.name,
                 validate = validate,
                 maxLength = Spell.NAME_MAX_LENGTH
             )
 
+            val lores = SpellLore.values().map { it to it.localizedName }
             SelectBox(
-                label = strings.spells.labelLore,
+                label = stringResource(Str.spells_label_lore),
                 value = formData.lore.value,
                 onValueChange = { formData.lore.value = it },
-                items = remember(strings) {
-                    SpellLore.values().map { it to it.nameResolver(strings) }
-                        .sortedBy { it.second } + (null to strings.spells.lores.other)
-                },
+                items = remember(lores) { lores.sortedBy { it.second } } +
+                    (null to stringResource(Str.spells_lores_other)),
             )
 
             TextInput(
-                label = strings.spells.labelLoreLegacy,
+                label = stringResource(Str.spells_label_lore_legacy),
                 value = formData.customLore,
                 validate = validate,
                 maxLength = Spell.LORE_MAX_LENGTH
             )
 
             TextInput(
-                label = strings.spells.labelRange,
+                label = stringResource(Str.spells_label_range),
                 value = formData.range,
                 validate = validate,
                 maxLength = Spell.RANGE_MAX_LENGTH,
             )
 
             TextInput(
-                label = strings.spells.labelTarget,
+                label = stringResource(Str.spells_label_target),
                 value = formData.target,
                 validate = validate,
                 maxLength = Spell.TARGET_MAX_LENGTH,
             )
 
             TextInput(
-                label = strings.spells.labelDuration,
+                label = stringResource(Str.spells_label_duration),
                 value = formData.duration,
                 validate = validate,
                 maxLength = Spell.DURATION_MAX_LENGTH,
             )
 
             TextInput(
-                label = strings.spells.labelCastingNumber,
+                label = stringResource(Str.spells_label_casting_number),
                 value = formData.castingNumber,
                 keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
                 validate = validate,
@@ -101,12 +104,12 @@ fun SpellDialog(
             )
 
             TextInput(
-                label = strings.spells.labelEffect,
+                label = stringResource(Str.spells_label_effect),
                 value = formData.effect,
                 validate = validate,
                 maxLength = Spell.EFFECT_MAX_LENGTH,
                 multiLine = true,
-                helperText = LocalStrings.current.commonUi.markdownSupportedNote,
+                helperText = stringResource(Str.common_ui_markdown_supported_note),
             )
         }
     }

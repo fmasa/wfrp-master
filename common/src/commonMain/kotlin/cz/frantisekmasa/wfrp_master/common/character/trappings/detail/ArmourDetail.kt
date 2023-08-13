@@ -7,11 +7,13 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import cz.frantisekmasa.wfrp_master.common.Str
+import cz.frantisekmasa.wfrp_master.common.core.domain.localizedName
 import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.InventoryItem
 import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.TrappingType
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
 import cz.frantisekmasa.wfrp_master.common.core.ui.text.SingleLineTextValue
-import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
+import dev.icerock.moko.resources.compose.stringResource
 
 @Composable
 fun ArmourDetail(
@@ -23,32 +25,25 @@ fun ArmourDetail(
         WornBar(trapping, armour, onSaveRequest)
 
         Column(Modifier.padding(Spacing.bodyPadding)) {
-            val strings = LocalStrings.current
-
             SingleLineTextValue(
-                strings.trappings.labelType,
-                strings.trappings.types.armour,
+                stringResource(Str.trappings_label_type),
+                stringResource(Str.trappings_types_armour),
             )
 
             EncumbranceBox(trapping)
 
+            val locations = armour.locations.map { it.localizedName }
             SingleLineTextValue(
-                LocalStrings.current.armour.labelLocations,
-                remember(armour.locations) {
-                    armour.locations
-                        .asSequence()
-                        .map { it.nameResolver(strings) }
-                        .sorted()
-                        .joinToString(", ")
-                }
+                stringResource(Str.armour_label_locations),
+                remember(locations) { locations.sorted().joinToString(", ") },
             )
 
             SingleLineTextValue(
-                strings.armour.labelArmourPoints,
+                stringResource(Str.armour_label_armour_points),
                 armour.points.value.toString(),
             )
             SingleLineTextValue(
-                strings.trappings.labelQuantity,
+                stringResource(Str.trappings_label_quantity),
                 trapping.quantity.toString(),
             )
 

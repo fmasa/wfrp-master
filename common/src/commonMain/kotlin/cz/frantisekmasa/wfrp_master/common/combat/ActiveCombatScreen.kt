@@ -52,6 +52,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
+import cz.frantisekmasa.wfrp_master.common.Str
 import cz.frantisekmasa.wfrp_master.common.character.CharacterDetailScreen
 import cz.frantisekmasa.wfrp_master.common.character.conditions.ConditionIcon
 import cz.frantisekmasa.wfrp_master.common.core.auth.LocalUser
@@ -80,8 +81,8 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.OptionsAction
 import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.Subtitle
 import cz.frantisekmasa.wfrp_master.common.encounters.CombatantItem
 import cz.frantisekmasa.wfrp_master.common.encounters.domain.Wounds
-import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
 import cz.frantisekmasa.wfrp_master.common.npcs.NpcDetailScreen
+import dev.icerock.moko.resources.compose.stringResource
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -179,8 +180,6 @@ class ActiveCombatScreen(
             },
         ) {
             Column {
-                val strings = LocalStrings.current
-
                 Scaffold(
                     modifier = Modifier.weight(1f),
                     topBar = {
@@ -188,7 +187,7 @@ class ActiveCombatScreen(
                             navigationIcon = { BackButton() },
                             title = {
                                 Column {
-                                    Text(strings.combat.title)
+                                    Text(stringResource(Str.combat_title))
                                     party?.let { Subtitle(it.name) }
                                 }
                             },
@@ -199,7 +198,9 @@ class ActiveCombatScreen(
 
                                 OptionsAction {
                                     DropdownMenuItem(
-                                        content = { Text(strings.combat.buttonEndCombat) },
+                                        content = {
+                                            Text(stringResource(Str.combat_button_end_combat))
+                                        },
                                         onClick = {
                                             coroutineScope.launch(Dispatchers.IO) {
                                                 viewModel.endCombat()
@@ -232,7 +233,7 @@ class ActiveCombatScreen(
                                 horizontalAlignment = Alignment.CenterHorizontally,
                             ) {
                                 CircularProgressIndicator()
-                                Text(LocalStrings.current.combat.messages.waitingForCombat)
+                                Text(stringResource(Str.combat_messages_waiting_for_combat))
                             }
                         }
                         return@Scaffold
@@ -292,11 +293,9 @@ class ActiveCombatScreen(
                 modifier = Modifier.padding(top = Spacing.small),
             ) {
                 Text(
-                    LocalStrings.current.combat.labelAdvantage,
+                    stringResource(Str.combat_label_advantage),
                     fontWeight = FontWeight.Bold,
                 )
-
-                val strings = LocalStrings.current.combat
 
                 Row {
                     if (isGameMaster) {
@@ -308,27 +307,27 @@ class ActiveCombatScreen(
                         }
 
                         AdvantagePicker(
-                            label = strings.labelAllies,
+                            label = stringResource(Str.combat_label_allies),
                             value = groupAdvantage.allies,
                             onChange = { update(groupAdvantage.copy(allies = it)) },
                             modifier = Modifier.weight(1f),
                         )
 
                         AdvantagePicker(
-                            label = strings.labelEnemies,
+                            label = stringResource(Str.combat_label_enemies),
                             value = groupAdvantage.enemies,
                             onChange = { update(groupAdvantage.copy(enemies = it)) },
                             modifier = Modifier.weight(1f),
                         )
                     } else {
                         AdvantageValue(
-                            label = strings.labelAllies,
+                            label = stringResource(Str.combat_label_allies),
                             value = groupAdvantage.allies,
                             modifier = Modifier.weight(1f),
                         )
 
                         AdvantageValue(
-                            label = strings.labelEnemies,
+                            label = stringResource(Str.combat_label_enemies),
                             value = groupAdvantage.enemies,
                             modifier = Modifier.weight(1f),
                         )
@@ -377,7 +376,6 @@ class ActiveCombatScreen(
     @Composable
     private fun BottomBar(turn: Int, round: Int, viewModel: CombatScreenModel) {
         val coroutineScope = rememberCoroutineScope()
-        val strings = LocalStrings.current.combat
 
         BottomAppBar(backgroundColor = MaterialTheme.colors.surface) {
             Row(
@@ -393,11 +391,11 @@ class ActiveCombatScreen(
                 ) {
                     Icon(
                         Icons.Rounded.ArrowBack,
-                        strings.iconPreviousTurn,
+                        stringResource(Str.combat_icon_previous_turn),
                     )
                 }
 
-                Text(strings.nthRound(round))
+                Text(stringResource(Str.combat_nth_round, round))
 
                 IconButton(
                     onClick = {
@@ -406,7 +404,7 @@ class ActiveCombatScreen(
                 ) {
                     Icon(
                         Icons.Rounded.ArrowForward,
-                        strings.iconNextTurn,
+                        stringResource(Str.combat_icon_next_turn),
                     )
                 }
             }
@@ -480,7 +478,7 @@ class ActiveCombatScreen(
                         IconButton(onClick = { contextMenuExpanded = true }) {
                             Icon(
                                 Icons.Filled.MoreVert,
-                                LocalStrings.current.commonUi.labelOpenContextMenu,
+                                stringResource(Str.common_ui_label_open_context_menu),
                             )
                         }
                         DropdownMenu(
@@ -488,7 +486,7 @@ class ActiveCombatScreen(
                             onDismissRequest = { contextMenuExpanded = false },
                         ) {
                             DropdownMenuItem(onClick = onRemoveRequest) {
-                                Text(LocalStrings.current.combat.buttonRemoveCombatant)
+                                Text(stringResource(Str.combat_button_remove_combatant))
                             }
                         }
                     }
@@ -539,7 +537,7 @@ class ActiveCombatScreen(
         val wounds = combatant.wounds
 
         NumberPicker(
-            label = LocalStrings.current.points.wounds,
+            label = stringResource(Str.points_wounds),
             value = wounds.current,
             onIncrement = { updateWounds(wounds.restore(1)) },
             onDecrement = { updateWounds(wounds.lose(1)) },
@@ -562,7 +560,7 @@ class ActiveCombatScreen(
         val advantage = combatant.combatant.advantage
 
         AdvantagePicker(
-            label = LocalStrings.current.combat.labelAdvantage,
+            label = stringResource(Str.combat_label_advantage),
             value = advantage,
             onChange = { updateAdvantage(it.coerceAtMost(advantageCap)) }
         )
@@ -679,7 +677,7 @@ private fun ConditionsBox(
         val conditions = combatant.conditions
 
         if (conditions.areEmpty()) {
-            Text(LocalStrings.current.combat.messages.noConditions)
+            Text(stringResource(Str.combat_messages_no_conditions))
         } else {
             FlowRow(verticalSpacing = Spacing.small, horizontalSpacing = Spacing.small) {
                 conditions.toList().forEach { (condition, count) ->

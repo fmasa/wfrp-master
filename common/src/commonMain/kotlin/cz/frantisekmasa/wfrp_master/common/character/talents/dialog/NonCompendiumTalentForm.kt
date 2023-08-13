@@ -13,6 +13,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import com.benasher44.uuid.Uuid
 import com.benasher44.uuid.uuid4
+import cz.frantisekmasa.wfrp_master.common.Str
 import cz.frantisekmasa.wfrp_master.common.character.talents.TalentsScreenModel
 import cz.frantisekmasa.wfrp_master.common.core.domain.talents.Talent
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.FormDialog
@@ -23,7 +24,7 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.forms.Rules
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.TextInput
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.inputValue
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
-import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
+import dev.icerock.moko.resources.compose.stringResource
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.Talent.Companion as CompendiumTalent
 
 @Composable
@@ -33,10 +34,13 @@ internal fun NonCompendiumTalentForm(
     onDismissRequest: () -> Unit,
 ) {
     val formData = NonCompendiumTalentFormData.fromTalent(existingTalent)
-    val strings = LocalStrings.current.talents
 
     FormDialog(
-        title = if (existingTalent != null) strings.titleEdit else strings.titleNew,
+        title = stringResource(
+            if (existingTalent != null)
+                Str.talents_title_edit
+            else Str.talents_title_new
+        ),
         onDismissRequest = onDismissRequest,
         formData = formData,
         onSave = {
@@ -53,14 +57,14 @@ internal fun NonCompendiumTalentForm(
         ) {
             TextInput(
                 modifier = Modifier.weight(1f),
-                label = strings.labelName,
+                label = stringResource(Str.talents_label_name),
                 value = formData.name,
                 validate = validate,
                 maxLength = Talent.NAME_MAX_LENGTH,
             )
 
             NumberPicker(
-                label = strings.labelTimesTaken,
+                label = stringResource(Str.talents_label_times_taken),
                 value = formData.taken.value,
                 onIncrement = { formData.taken.value++ },
                 onDecrement = {
@@ -70,14 +74,14 @@ internal fun NonCompendiumTalentForm(
         }
 
         TextInput(
-            label = strings.labelTests,
+            label = stringResource(Str.talents_label_tests),
             value = formData.tests,
             validate = validate,
             maxLength = CompendiumTalent.TESTS_MAX_LENGTH,
         )
 
         TextInput(
-            label = strings.labelDescription,
+            label = stringResource(Str.talents_label_description),
             value = formData.description,
             validate = validate,
             multiLine = true,

@@ -14,7 +14,7 @@ import androidx.compose.ui.unit.dp
 import cz.frantisekmasa.wfrp_master.common.core.shared.Resources
 import cz.frantisekmasa.wfrp_master.common.core.shared.drawableResource
 import cz.frantisekmasa.wfrp_master.common.core.ui.theme.Theme
-import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
+import cz.frantisekmasa.wfrp_master.common.localization.FixedStrings
 
 @Composable
 fun SplashScreen() {
@@ -27,11 +27,11 @@ fun SplashScreen() {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
             Image(
                 drawableResource(Resources.Drawable.SplashScreenIcon),
-                LocalStrings.current.about.appName,
+                FixedStrings.appName,
                 Modifier.size(140.dp)
             )
             Text(
-                LocalStrings.current.about.appName,
+                FixedStrings.appName,
                 style = MaterialTheme.typography.h6,
                 color = Theme.fixedColors.splashScreenContent,
             )

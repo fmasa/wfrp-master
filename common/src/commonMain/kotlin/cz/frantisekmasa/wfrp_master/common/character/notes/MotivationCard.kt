@@ -18,6 +18,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import com.halilibo.richtext.markdown.Markdown
 import com.halilibo.richtext.ui.RichText
+import cz.frantisekmasa.wfrp_master.common.Str
 import cz.frantisekmasa.wfrp_master.common.character.CharacterScreenModel
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.Character
 import cz.frantisekmasa.wfrp_master.common.core.ui.buttons.CloseButton
@@ -29,7 +30,7 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.forms.TextInput
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.inputValue
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
 import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.SaveAction
-import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
+import dev.icerock.moko.resources.compose.stringResource
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
@@ -50,7 +51,7 @@ fun MotivationCard(character: Character, screenModel: CharacterScreenModel) {
             }
 
             CardTitle(
-                LocalStrings.current.character.motivation,
+                stringResource(Str.character_motivation),
                 actions = {
                     CardEditButton(onClick = { editDialogOpened = true })
                 }
@@ -76,7 +77,7 @@ private fun EditMotivationDialog(
             topBar = {
                 TopAppBar(
                     navigationIcon = { CloseButton(onClick = onDismissRequest) },
-                    title = { Text(LocalStrings.current.character.titleEditMotivation) },
+                    title = { Text(stringResource(Str.character_title_edit_motivation)) },
                     actions = {
                         val coroutineScope = rememberCoroutineScope()
                         var saving by remember { mutableStateOf(false) }
@@ -104,12 +105,12 @@ private fun EditMotivationDialog(
                 verticalArrangement = Arrangement.spacedBy(Spacing.small),
             ) {
                 TextInput(
-                    label = LocalStrings.current.character.motivation,
+                    label = stringResource(Str.character_motivation),
                     value = motivation,
                     validate = false,
                     maxLength = Character.MOTIVATION_MAX_LENGTH,
                     multiLine = true,
-                    helperText = LocalStrings.current.commonUi.markdownSupportedNote,
+                    helperText = stringResource(Str.common_ui_markdown_supported_note),
                 )
             }
         }

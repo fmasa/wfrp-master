@@ -15,6 +15,7 @@ import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.Stable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableStateOf
@@ -22,8 +23,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import cafe.adriel.voyager.core.screen.Screen
+import cz.frantisekmasa.wfrp_master.common.Str
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.PdfCompendiumImporter
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.books.Book
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.books.CoreRulebook
@@ -48,7 +51,7 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.navigation.LocalNavigationTra
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.rememberScreenModel
 import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.Subtitle
-import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
+import dev.icerock.moko.resources.compose.stringResource
 
 class RulebookCompendiumImportScreen(
     private val partyId: PartyId,
@@ -66,7 +69,7 @@ class RulebookCompendiumImportScreen(
         TopAppBar(
             title = {
                 Column {
-                    Text(LocalStrings.current.compendium.titleImportCompendium)
+                    Text(stringResource(Str.compendium_title_import_compendium))
                     partyScreenModel.party.collectWithLifecycle(null).value?.let {
                         Subtitle(it.name)
                     }
@@ -78,8 +81,6 @@ class RulebookCompendiumImportScreen(
 
     @Composable
     private fun MainContainer() {
-        val strings = LocalStrings.current.compendium
-
         var importState by remember { mutableStateOf<ImportDialogState?>(null) }
 
         importState?.let {
@@ -96,8 +97,13 @@ class RulebookCompendiumImportScreen(
 
         Column(modifier = Modifier.fillMaxSize().padding(Spacing.bodyPadding)) {
             Text(
-                strings.rulebookImportPrompt,
+                stringResource(Str.compendium_rulebook_import_prompt_title),
                 textAlign = TextAlign.Center,
+            )
+            Text(
+                stringResource(Str.compendium_rulebook_import_prompt_subtitle),
+                textAlign = TextAlign.Center,
+                fontWeight = FontWeight.SemiBold,
                 modifier = Modifier.padding(bottom = Spacing.medium)
             )
 
@@ -110,7 +116,7 @@ class RulebookCompendiumImportScreen(
             }
 
             Text(
-                strings.assurance,
+                stringResource(Str.compendium_assurance),
                 modifier = Modifier.align(Alignment.CenterHorizontally),
                 color = MaterialTheme.colors.onSurface.copy(alpha = ContentAlpha.medium),
                 textAlign = TextAlign.Center,
@@ -121,9 +127,10 @@ class RulebookCompendiumImportScreen(
 
     @Composable
     private fun BookRow(book: Book, onStateChange: (ImportDialogState?) -> Unit) {
-        val strings = LocalStrings.current.compendium
         val initializePdfBox = pdfBoxInitializer()
 
+        val errorOutOfMemory = stringResource(Str.compendium_messages_out_of_memory)
+        val errorImportFailed = stringResource(Str.compendium_messages_rulebook_import_failed)
         val fileChooser = ImportFileChooser(
             onStateChange = onStateChange,
             importerFactory = {
@@ -132,8 +139,8 @@ class RulebookCompendiumImportScreen(
             },
             errorMessageFactory = {
                 when (it) {
-                    is OutOfMemoryError -> strings.messages.outOfMemory
-                    else -> strings.messages.rulebookImportFailed
+                    is OutOfMemoryError -> errorOutOfMemory
+                    else -> errorImportFailed
                 }
             }
         )
@@ -155,39 +162,37 @@ class RulebookCompendiumImportScreen(
     }
 
     @Composable
+    @Stable
     private fun items(book: Book): String {
-        val strings = LocalStrings.current
 
-        return remember(book) {
-            buildList {
-                if (book is SkillSource) {
-                    add(strings.compendium.titleSkills)
-                }
+        return buildList {
+            if (book is SkillSource) {
+                add(stringResource(Str.compendium_title_skills))
+            }
 
-                if (book is TalentSource) {
-                    add(strings.compendium.titleTalents)
-                }
+            if (book is TalentSource) {
+                add(stringResource(Str.compendium_title_talents))
+            }
 
-                if (book is SpellSource) {
-                    add(strings.compendium.titleSpells)
-                }
+            if (book is SpellSource) {
+                add(stringResource(Str.compendium_title_spells))
+            }
 
-                if (book is CareerSource) {
-                    add(strings.compendium.titleCareers)
-                }
+            if (book is CareerSource) {
+                add(stringResource(Str.compendium_title_careers))
+            }
 
-                if (book is TraitSource) {
-                    add(strings.compendium.titleTraits)
-                }
+            if (book is TraitSource) {
+                add(stringResource(Str.compendium_title_traits))
+            }
 
-                if (book is BlessingSource) {
-                    add(strings.compendium.titleBlessings)
-                }
+            if (book is BlessingSource) {
+                add(stringResource(Str.compendium_title_blessings))
+            }
 
-                if (book is MiracleSource) {
-                    add(strings.compendium.titleMiracles)
-                }
-            }.joinToString(", ")
-        }
+            if (book is MiracleSource) {
+                add(stringResource(Str.compendium_title_miracles))
+            }
+        }.joinToString(", ")
     }
 }

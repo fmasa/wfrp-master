@@ -16,6 +16,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.benasher44.uuid.Uuid
 import com.benasher44.uuid.uuid4
+import cz.frantisekmasa.wfrp_master.common.Str
 import cz.frantisekmasa.wfrp_master.common.compendium.CompendiumItemDialog
 import cz.frantisekmasa.wfrp_master.common.compendium.CompendiumItemFormData
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.Skill
@@ -28,7 +29,7 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.forms.TextInput
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.checkboxValue
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.inputValue
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
-import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
+import dev.icerock.moko.resources.compose.stringResource
 
 @Composable
 fun SkillDialog(
@@ -37,10 +38,13 @@ fun SkillDialog(
     onSaveRequest: suspend (Skill) -> Unit,
 ) {
     val formData = SkillFormData.fromItem(skill)
-    val strings = LocalStrings.current.skills
 
     CompendiumItemDialog(
-        title = if (skill == null) strings.titleNew else strings.titleEdit,
+        title = stringResource(
+            if (skill == null)
+                Str.skills_title_new
+            else Str.skills_title_edit
+        ),
         formData = formData,
         saver = onSaveRequest,
         onDismissRequest = onDismissRequest,
@@ -50,23 +54,23 @@ fun SkillDialog(
             modifier = Modifier.padding(Spacing.bodyPadding),
         ) {
             TextInput(
-                label = strings.labelName,
+                label = stringResource(Str.skills_label_name),
                 value = formData.name,
                 validate = validate,
                 maxLength = Skill.NAME_MAX_LENGTH
             )
 
             TextInput(
-                label = strings.labelDescription,
+                label = stringResource(Str.skills_label_description),
                 value = formData.description,
                 validate = validate,
                 maxLength = Skill.DESCRIPTION_MAX_LENGTH,
                 multiLine = true,
-                helperText = LocalStrings.current.commonUi.markdownSupportedNote,
+                helperText = stringResource(Str.common_ui_markdown_supported_note),
             )
 
             ChipList(
-                label = strings.labelCharacteristic,
+                label = stringResource(Str.skills_label_characteristic),
                 items = Characteristic.values()
                     .map { it to it.getShortcutName() },
                 value = formData.characteristic.value,
@@ -80,7 +84,7 @@ fun SkillDialog(
                 contentAlignment = Alignment.TopCenter,
             ) {
                 CheckboxWithText(
-                    text = strings.labelAdvanced,
+                    text = stringResource(Str.skills_label_advanced),
                     checked = formData.advanced.value,
                     onCheckedChange = { formData.advanced.value = it }
                 )

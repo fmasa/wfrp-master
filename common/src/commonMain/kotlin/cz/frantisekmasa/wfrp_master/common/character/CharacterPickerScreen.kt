@@ -20,6 +20,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import cafe.adriel.voyager.core.screen.Screen
+import cz.frantisekmasa.wfrp_master.common.Str
 import cz.frantisekmasa.wfrp_master.common.characterCreation.CharacterCreationScreen
 import cz.frantisekmasa.wfrp_master.common.core.auth.LocalUser
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.Character
@@ -37,7 +38,7 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.FullScreenProgress
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.ItemIcon
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.rememberScreenModel
-import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
+import dev.icerock.moko.resources.compose.stringResource
 
 data class CharacterPickerScreen(
     private val partyId: PartyId,
@@ -62,7 +63,7 @@ data class CharacterPickerScreen(
             topBar = {
                 TopAppBar(
                     navigationIcon = { BackButton() },
-                    title = { Text(LocalStrings.current.character.titleSelectCharacter) }
+                    title = { Text(stringResource(Str.character_title_select_character)) }
                 )
             }
         ) {
@@ -143,16 +144,16 @@ data class CharacterPickerScreen(
                 .padding(Spacing.bodyPadding)
         ) {
             EmptyUI(
-                text = LocalStrings.current.character.messages.noCharacterInParty,
+                text = stringResource(Str.character_messages_no_character_in_party),
                 icon = Resources.Drawable.Character,
                 subText = if (unassignedCharacters.isNotEmpty())
-                    LocalStrings.current.character.messages.unassignedCharactersExist
+                    stringResource(Str.character_messages_unassigned_characters_exist)
                 else null,
             )
 
             if (unassignedCharacters.isNotEmpty()) {
                 OutlinedButton(onClick = { unassignedCharactersDialogVisible = true }) {
-                    Text(LocalStrings.current.character.buttonLink.uppercase())
+                    Text(stringResource(Str.character_button_link).uppercase())
                 }
 
                 val userId = LocalUser.current.id
@@ -167,7 +168,7 @@ data class CharacterPickerScreen(
                         )
                     }
                 ) {
-                    Text(LocalStrings.current.character.buttonAdd.uppercase())
+                    Text(stringResource(Str.character_button_add).uppercase())
                 }
             }
         }

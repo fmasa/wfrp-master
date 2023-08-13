@@ -7,6 +7,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import cz.frantisekmasa.wfrp_master.common.Str
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.Skill
 import cz.frantisekmasa.wfrp_master.common.core.shared.Resources
 import cz.frantisekmasa.wfrp_master.common.core.ui.buttons.CloseButton
@@ -14,7 +15,7 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.flow.collectWithLifecycle
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.EmptyUI
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.ItemIcon
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.SearchableList
-import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
+import dev.icerock.moko.resources.compose.stringResource
 
 @Composable
 internal fun SkillChooser(
@@ -22,8 +23,6 @@ internal fun SkillChooser(
     onDismissRequest: () -> Unit,
     onSkillSelected: (Skill) -> Unit
 ) {
-    val strings = LocalStrings.current.skills
-
     val skills by screenModel.skills.collectWithLifecycle(null)
     val data by derivedStateOf {
         skills?.let { SearchableList.Data.Loaded(it) }
@@ -33,14 +32,14 @@ internal fun SkillChooser(
     SearchableList(
         data = data,
         navigationIcon = { CloseButton(onClick = onDismissRequest) },
-        title = strings.titleSelectSkill,
+        title = stringResource(Str.skills_title_select_skill),
         key = { it.id },
         searchableValue = { it.name },
-        searchPlaceholder = LocalStrings.current.compendium.searchPlaceholder,
+        searchPlaceholder = stringResource(Str.compendium_search_placeholder),
         emptyUi = {
             EmptyUI(
                 icon = Resources.Drawable.Skill,
-                text = strings.messages.noSkillsInCompendium,
+                text = stringResource(Str.skills_messages_no_skills_in_compendium),
             )
         },
     ) { skill ->

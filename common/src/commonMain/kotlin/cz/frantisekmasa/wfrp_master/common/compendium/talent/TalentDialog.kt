@@ -10,6 +10,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.benasher44.uuid.Uuid
 import com.benasher44.uuid.uuid4
+import cz.frantisekmasa.wfrp_master.common.Str
 import cz.frantisekmasa.wfrp_master.common.compendium.CompendiumItemDialog
 import cz.frantisekmasa.wfrp_master.common.compendium.CompendiumItemFormData
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.Talent
@@ -18,7 +19,7 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.forms.Rules
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.TextInput
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.inputValue
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
-import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
+import dev.icerock.moko.resources.compose.stringResource
 
 @Composable
 fun TalentDialog(
@@ -27,11 +28,14 @@ fun TalentDialog(
     onSaveRequest: suspend (Talent) -> Unit,
 ) {
     val formData = TalentFormData.fromTalent(talent)
-    val strings = LocalStrings.current.talents
 
     CompendiumItemDialog(
         onDismissRequest = onDismissRequest,
-        title = if (talent == null) strings.titleNew else strings.titleEdit,
+        title = stringResource(
+            if (talent == null)
+                Str.talents_title_new
+            else Str.talents_title_edit
+        ),
         formData = formData,
         saver = onSaveRequest,
     ) { validate ->
@@ -40,33 +44,33 @@ fun TalentDialog(
             modifier = Modifier.padding(Spacing.bodyPadding),
         ) {
             TextInput(
-                label = strings.labelName,
+                label = stringResource(Str.talents_label_name),
                 value = formData.name,
                 validate = validate,
                 maxLength = Talent.NAME_MAX_LENGTH
             )
 
             TextInput(
-                label = strings.labelTests,
+                label = stringResource(Str.talents_label_tests),
                 value = formData.tests,
                 validate = validate,
                 maxLength = Talent.TESTS_MAX_LENGTH,
             )
 
             TextInput(
-                label = strings.labelMaxTimesTaken,
+                label = stringResource(Str.talents_label_max_times_taken),
                 value = formData.maxTimesTaken,
                 validate = validate,
                 maxLength = Talent.MAX_TIMES_TAKEN_MAX_LENGTH,
             )
 
             TextInput(
-                label = strings.labelDescription,
+                label = stringResource(Str.talents_label_description),
                 value = formData.description,
                 validate = validate,
                 maxLength = Talent.DESCRIPTION_MAX_LENGTH,
                 multiLine = true,
-                helperText = LocalStrings.current.commonUi.markdownSupportedNote,
+                helperText = stringResource(Str.common_ui_markdown_supported_note),
             )
         }
     }

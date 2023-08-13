@@ -1,21 +1,22 @@
 package cz.frantisekmasa.wfrp_master.common.core.domain
 
 import androidx.compose.runtime.Immutable
+import cz.frantisekmasa.wfrp_master.common.Str
 import cz.frantisekmasa.wfrp_master.common.core.shared.Parcelable
 import cz.frantisekmasa.wfrp_master.common.core.shared.Parcelize
-import cz.frantisekmasa.wfrp_master.common.localization.Strings
+import dev.icerock.moko.resources.StringResource
 
 @Parcelize
 @Immutable
 enum class HitLocation(
-    override val nameResolver: (strings: Strings) -> String,
+    override val translatableName: StringResource,
 ) : NamedEnum, Parcelable {
-    HEAD({ it.combat.hitLocations.head }),
-    BODY({ it.combat.hitLocations.body }),
-    LEFT_ARM({ it.combat.hitLocations.leftArm }),
-    RIGHT_ARM({ it.combat.hitLocations.rightArm }),
-    LEFT_LEG({ it.combat.hitLocations.leftLeg }),
-    RIGHT_LEG({ it.combat.hitLocations.rightLeg });
+    HEAD(Str.combat_hit_locations_head),
+    BODY(Str.combat_hit_locations_body),
+    LEFT_ARM(Str.combat_hit_locations_left_arm),
+    RIGHT_ARM(Str.combat_hit_locations_right_arm),
+    LEFT_LEG(Str.combat_hit_locations_left_leg),
+    RIGHT_LEG(Str.combat_hit_locations_right_leg);
 
     val rollRange: IntRange get() = when (this) {
         HEAD -> 1..9

@@ -8,6 +8,11 @@ plugins {
     kotlin("plugin.serialization")
     id("kotlin-parcelize")
     id("org.jetbrains.compose")
+    id("dev.icerock.mobile.multiplatform-resources")
+}
+
+multiplatformResources {
+    multiplatformResourcesPackage = "cz.frantisekmasa.wfrp_master.common"
 }
 
 kotlin {
@@ -80,6 +85,9 @@ kotlin {
                 implementation("io.github.z4kn4fein:semver:1.3.3")
 
                 implementation("org.jsoup:jsoup:1.15.3")
+
+                api("dev.icerock.moko:resources:0.23.0")
+                api("dev.icerock.moko:resources-compose:0.23.0")
             }
         }
 

@@ -1,10 +1,11 @@
 package cz.frantisekmasa.wfrp_master.common.core.domain.rolls
 
 import androidx.compose.runtime.Immutable
+import cz.frantisekmasa.wfrp_master.common.Str
 import cz.frantisekmasa.wfrp_master.common.core.domain.NamedEnum
 import cz.frantisekmasa.wfrp_master.common.core.shared.Parcelable
 import cz.frantisekmasa.wfrp_master.common.core.shared.Parcelize
-import cz.frantisekmasa.wfrp_master.common.localization.Strings
+import dev.icerock.moko.resources.StringResource
 
 @Parcelize
 @Immutable
@@ -53,15 +54,15 @@ data class TestResult(
     @Immutable
     enum class DramaticResult(
         val successLevelRange: IntRange,
-        override val nameResolver: (strings: Strings) -> String,
+        override val translatableName: StringResource,
     ) : NamedEnum {
-        ASTOUNDING_SUCCESS(6..Int.MAX_VALUE, { it.tests.results.astoundingSuccess }),
-        IMPRESSIVE_SUCCESS(4..5, { it.tests.results.impressiveSuccess }),
-        SUCCESS(2..3, { it.tests.results.success }),
-        MARGINAL_SUCCESS(0..1, { it.tests.results.marginalSuccess }),
-        MARGINAL_FAILURE(-1..0, { it.tests.results.marginalFailure }),
-        FAILURE(-3..-2, { it.tests.results.failure }),
-        IMPRESSIVE_FAILURE(-5..-4, { it.tests.results.impressiveFailure }),
-        ASTOUNDING_FAILURE(Int.MIN_VALUE..-6, { it.tests.results.astoundingFailure }),
+        ASTOUNDING_SUCCESS(6..Int.MAX_VALUE, Str.tests_results_astounding_success),
+        IMPRESSIVE_SUCCESS(4..5, Str.tests_results_impressive_success),
+        SUCCESS(2..3, Str.tests_results_success),
+        MARGINAL_SUCCESS(0..1, Str.tests_results_marginal_success),
+        MARGINAL_FAILURE(-1..0, Str.tests_results_marginal_failure),
+        FAILURE(-3..-2, Str.tests_results_failure),
+        IMPRESSIVE_FAILURE(-5..-4, Str.tests_results_impressive_failure),
+        ASTOUNDING_FAILURE(Int.MIN_VALUE..-6, Str.tests_results_astounding_failure),
     }
 }

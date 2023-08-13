@@ -10,6 +10,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import cz.frantisekmasa.wfrp_master.common.Str
 import cz.frantisekmasa.wfrp_master.common.character.talents.dialog.AddTalentDialog
 import cz.frantisekmasa.wfrp_master.common.core.domain.talents.Talent
 import cz.frantisekmasa.wfrp_master.common.core.ui.buttons.CardButton
@@ -19,7 +20,7 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.cards.CardTitle
 import cz.frantisekmasa.wfrp_master.common.core.ui.flow.collectWithLifecycle
 import cz.frantisekmasa.wfrp_master.common.core.ui.navigation.LocalNavigationTransaction
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.ContextMenu
-import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
+import dev.icerock.moko.resources.compose.stringResource
 
 @Composable
 internal fun TalentsCard(
@@ -30,9 +31,7 @@ internal fun TalentsCard(
 
     CardContainer(Modifier.padding(horizontal = 8.dp).padding(bottom = 8.dp)) {
         Column(Modifier.padding(horizontal = 6.dp)) {
-            val strings = LocalStrings.current.talents
-
-            CardTitle(strings.titleTalents)
+            CardTitle(stringResource(Str.talents_title_talents))
 
             if (talents.isNotEmpty()) {
                 Column {
@@ -58,7 +57,7 @@ internal fun TalentsCard(
             var showAddTalentDialog by rememberSaveable { mutableStateOf(false) }
 
             CardButton(
-                strings.titleAdd,
+                stringResource(Str.talents_title_add),
                 onClick = { showAddTalentDialog = true }
             )
 
@@ -78,7 +77,7 @@ private fun TalentItem(talent: Talent, onClick: () -> Unit, onRemove: () -> Unit
         name = talent.name,
         onClick = onClick,
         contextMenuItems = listOf(
-            ContextMenu.Item(LocalStrings.current.commonUi.buttonRemove, onClick = { onRemove() })
+            ContextMenu.Item(stringResource(Str.common_ui_button_remove), onClick = { onRemove() })
         ),
         badge = { Text("+ ${talent.taken}") }
     )

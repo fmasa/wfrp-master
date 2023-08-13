@@ -21,14 +21,15 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.unit.dp
+import cz.frantisekmasa.wfrp_master.common.Str
 import cz.frantisekmasa.wfrp_master.common.core.domain.NamedEnum
 import cz.frantisekmasa.wfrp_master.common.core.domain.localizedName
 import cz.frantisekmasa.wfrp_master.common.core.tips.DismissedUserTipsHolder
 import cz.frantisekmasa.wfrp_master.common.core.ui.dialogs.AlertDialog
 import cz.frantisekmasa.wfrp_master.common.core.ui.flow.collectWithLifecycle
 import cz.frantisekmasa.wfrp_master.common.core.ui.theme.Theme
-import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
-import cz.frantisekmasa.wfrp_master.common.localization.Strings
+import dev.icerock.moko.resources.StringResource
+import dev.icerock.moko.resources.compose.stringResource
 import kotlinx.coroutines.launch
 import org.kodein.di.compose.rememberInstance
 
@@ -47,13 +48,11 @@ fun UserTipCard(tip: UserTip, modifier: Modifier = Modifier) {
     if (dialogVisible) {
         var processing by remember { mutableStateOf(false) }
 
-        val strings = LocalStrings.current.commonUi
-
         AlertDialog(
             onDismissRequest = { dialogVisible = false },
             text = {
                 Text(
-                    strings.dismissTipConfirmation,
+                    stringResource(Str.common_ui_dismiss_tip_confirmation),
                     style = MaterialTheme.typography.body1,
                 )
             },
@@ -66,7 +65,7 @@ fun UserTipCard(tip: UserTip, modifier: Modifier = Modifier) {
                         coroutineScope.launch { dismissedTipsHolder.dismissTip(tip) }
                     }
                 ) {
-                    Text(remember { strings.buttonDismiss.uppercase() })
+                    Text(stringResource(Str.common_ui_button_dismiss).uppercase())
                 }
             },
             dismissButton = {
@@ -74,7 +73,7 @@ fun UserTipCard(tip: UserTip, modifier: Modifier = Modifier) {
                     enabled = !processing,
                     onClick = { dialogVisible = false },
                 ) {
-                    Text(remember { strings.buttonKeep.uppercase() })
+                    Text(stringResource(Str.common_ui_button_keep))
                 }
             }
         )
@@ -103,8 +102,8 @@ fun UserTipCard(tip: UserTip, modifier: Modifier = Modifier) {
     }
 }
 
-enum class UserTip(override val nameResolver: (strings: Strings) -> String) : NamedEnum {
-    ARMOUR_TRAPPINGS({ it.armour.tipTrappings }),
-    HARDY_TALENTS({ it.talents.tipHardyTalentCheckbox }),
-    COMPENDIUM_LINK_MOVED({ it.parties.messages.compendiumCardMoved })
+enum class UserTip(override val translatableName: StringResource) : NamedEnum {
+    ARMOUR_TRAPPINGS(Str.armour_tip_trappings),
+    HARDY_TALENTS(Str.talents_tip_hardy_talent_checkbox),
+    COMPENDIUM_LINK_MOVED(Str.parties_messages_compendium_card_moved),
 }

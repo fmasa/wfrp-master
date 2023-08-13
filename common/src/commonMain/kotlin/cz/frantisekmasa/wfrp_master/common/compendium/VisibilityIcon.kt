@@ -8,8 +8,9 @@ import androidx.compose.material.icons.rounded.VisibilityOff
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import cz.frantisekmasa.wfrp_master.common.Str
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.CompendiumItem
-import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
+import dev.icerock.moko.resources.compose.stringResource
 
 @Composable
 fun VisibilityIcon(item: CompendiumItem<*>) {
@@ -18,13 +19,13 @@ fun VisibilityIcon(item: CompendiumItem<*>) {
     if (item.isVisibleToPlayers) {
         Icon(
             Icons.Rounded.Visibility,
-            LocalStrings.current.compendium.visibleToPlayersTrue,
+            stringResource(Str.compendium_visible_to_players_true),
             modifier = modifier,
         )
     } else {
         Icon(
             Icons.Rounded.VisibilityOff,
-            LocalStrings.current.compendium.visibleToPlayersFalse,
+            stringResource(Str.compendium_visible_to_players_false),
             modifier = modifier,
         )
     }

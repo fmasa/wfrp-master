@@ -1,7 +1,8 @@
 package cz.frantisekmasa.wfrp_master.common.core.domain.character
 
+import cz.frantisekmasa.wfrp_master.common.Str
 import cz.frantisekmasa.wfrp_master.common.core.domain.NamedEnum
-import cz.frantisekmasa.wfrp_master.common.localization.Strings
+import dev.icerock.moko.resources.StringResource
 import kotlinx.serialization.Serializable
 import kotlin.math.min
 
@@ -63,10 +64,12 @@ data class Points(
         }
     }
 
-    enum class PointPool(override val nameResolver: (strings: Strings) -> String) : NamedEnum {
-        FATE({ it.points.fate }),
-        FORTUNE({ it.points.fortune }),
-        RESILIENCE({ it.points.resilience }),
-        RESOLVE({ it.points.resolve }),
+    enum class PointPool(
+        override val translatableName: StringResource,
+    ) : NamedEnum {
+        FATE(Str.points_fate),
+        FORTUNE(Str.points_fortune),
+        RESILIENCE(Str.points_resilience),
+        RESOLVE(Str.points_resolve),
     }
 }

@@ -12,11 +12,12 @@ import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import cz.frantisekmasa.wfrp_master.common.Str
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.Invitation
 import cz.frantisekmasa.wfrp_master.common.core.ui.buttons.CloseButton
 import cz.frantisekmasa.wfrp_master.common.core.ui.dialogs.FullScreenDialog
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
-import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
+import dev.icerock.moko.resources.compose.stringResource
 
 @Composable
 fun InvitationDialog(
@@ -24,14 +25,12 @@ fun InvitationDialog(
     screenModel: InvitationScreenModel,
     onDismissRequest: () -> Unit,
 ) {
-    val strings = LocalStrings.current
-
     FullScreenDialog(onDismissRequest = onDismissRequest) {
         Scaffold(
             topBar = {
                 TopAppBar(
                     navigationIcon = { CloseButton(onClick = onDismissRequest) },
-                    title = { Text(strings.parties.titleInvitePlayers) },
+                    title = { Text(stringResource(Str.parties_title_invite_players)) },
                 )
             }
         ) {

@@ -6,13 +6,14 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import cz.frantisekmasa.wfrp_master.common.Str
 import cz.frantisekmasa.wfrp_master.common.core.domain.localizedName
 import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.InventoryItem
 import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.TrappingType
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.FullScreenProgress
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
 import cz.frantisekmasa.wfrp_master.common.core.ui.text.SingleLineTextValue
-import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
+import dev.icerock.moko.resources.compose.stringResource
 
 @Composable
 fun RangedWeaponDetail(
@@ -30,27 +31,25 @@ fun RangedWeaponDetail(
         EquipBar(trapping, rangedWeapon, onSaveRequest)
 
         Column(Modifier.padding(Spacing.bodyPadding)) {
-            val strings = LocalStrings.current
-
             SingleLineTextValue(
-                strings.trappings.labelType,
-                strings.trappings.types.rangedWeapon,
+                stringResource(Str.trappings_label_type),
+                stringResource(Str.trappings_types_ranged_weapon),
             )
 
             EncumbranceBox(trapping)
 
             SingleLineTextValue(
-                strings.weapons.labelDamage,
+                stringResource(Str.weapons_label_damage),
                 damageValue(rangedWeapon.damage, strengthBonus),
             )
 
             SingleLineTextValue(
-                strings.weapons.labelGroup,
+                stringResource(Str.weapons_label_group),
                 rangedWeapon.group.localizedName,
             )
 
             SingleLineTextValue(
-                strings.weapons.labelRange,
+                stringResource(Str.weapons_label_range),
                 rangedWeapon.range.value,
             )
 
@@ -61,7 +60,7 @@ fun RangedWeaponDetail(
 
             if (trapping.quantity > 0) {
                 SingleLineTextValue(
-                    strings.trappings.labelQuantity,
+                    stringResource(Str.trappings_label_quantity),
                     trapping.quantity.toString(),
                 )
             }

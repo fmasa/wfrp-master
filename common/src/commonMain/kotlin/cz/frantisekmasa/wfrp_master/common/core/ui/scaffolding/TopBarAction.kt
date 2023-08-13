@@ -23,8 +23,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.intl.Locale
 import androidx.compose.ui.text.toUpperCase
+import cz.frantisekmasa.wfrp_master.common.Str
 import cz.frantisekmasa.wfrp_master.common.core.ui.menu.DropdownMenu
-import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
+import dev.icerock.moko.resources.compose.stringResource
 
 @Composable
 fun TopBarAction(
@@ -50,7 +51,7 @@ fun OptionsAction(content: @Composable ColumnScope.() -> Unit) {
 
     IconAction(
         Icons.Filled.MoreVert,
-        LocalStrings.current.commonUi.labelOpenContextMenu,
+        stringResource(Str.common_ui_label_open_context_menu),
         onClick = { contextMenuExpanded = true }
     )
 

@@ -6,14 +6,14 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.Stable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import cz.frantisekmasa.wfrp_master.common.core.domain.localizedName
 import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.Flaw
 import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.Quality
 import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.Rating
 import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.TrappingFeature
-import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
-import cz.frantisekmasa.wfrp_master.common.localization.Strings
 
 @Composable
 fun <Q : Quality, F : Flaw> TrappingFeatureList(
@@ -22,14 +22,12 @@ fun <Q : Quality, F : Flaw> TrappingFeatureList(
     modifier: Modifier = Modifier,
 ) {
     CompositionLocalProvider(LocalContentAlpha provides ContentAlpha.medium) {
-        val strings = LocalStrings.current
+        val translatedQualities = translateFeatures(qualities)
+        val translatedFlaws = translateFeatures(flaws)
 
         Text(
-            remember(qualities, flaws) {
-                (
-                    translateFeatures(qualities, strings).sorted() +
-                        translateFeatures(flaws, strings).sorted()
-                    )
+            remember(translatedQualities, translatedFlaws) {
+                (translatedQualities.sorted() + translatedFlaws.sorted())
                     .joinToString(", ")
             },
             modifier = modifier,
@@ -38,12 +36,13 @@ fun <Q : Quality, F : Flaw> TrappingFeatureList(
     }
 }
 
+@Composable
+@Stable
 fun <T : TrappingFeature> translateFeatures(
     features: Map<T, Rating>,
-    strings: Strings,
 ): List<String> {
     return features.map { (feature, rating) ->
-        val name = feature.nameResolver(strings)
+        val name = feature.localizedName
 
         if (!feature.hasRating) {
             return@map name

@@ -10,6 +10,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import cz.frantisekmasa.wfrp_master.common.Str
 import cz.frantisekmasa.wfrp_master.common.character.traits.dialog.AddTraitDialog
 import cz.frantisekmasa.wfrp_master.common.core.domain.traits.Trait
 import cz.frantisekmasa.wfrp_master.common.core.ui.buttons.CardButton
@@ -19,7 +20,7 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.cards.CardTitle
 import cz.frantisekmasa.wfrp_master.common.core.ui.flow.collectWithLifecycle
 import cz.frantisekmasa.wfrp_master.common.core.ui.navigation.LocalNavigationTransaction
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.ContextMenu
-import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
+import dev.icerock.moko.resources.compose.stringResource
 
 @Composable
 internal fun TraitsCard(
@@ -30,9 +31,7 @@ internal fun TraitsCard(
 
     CardContainer(Modifier.padding(horizontal = 8.dp).padding(bottom = 8.dp)) {
         Column(Modifier.padding(horizontal = 6.dp)) {
-            val strings = LocalStrings.current.traits
-
-            CardTitle(strings.titleTraits)
+            CardTitle(stringResource(Str.traits_title_traits))
 
             if (traits.isNotEmpty()) {
                 Column {
@@ -58,7 +57,7 @@ internal fun TraitsCard(
             var showAddTraitDialog by rememberSaveable { mutableStateOf(false) }
 
             CardButton(
-                strings.titleAdd,
+                stringResource(Str.traits_title_add),
                 onClick = { showAddTraitDialog = true },
             )
 
@@ -78,7 +77,7 @@ private fun TraitItem(trait: Trait, onClick: () -> Unit, onRemove: () -> Unit) {
         name = derivedStateOf { trait.evaluatedName }.value,
         onClick = onClick,
         contextMenuItems = listOf(
-            ContextMenu.Item(LocalStrings.current.commonUi.buttonRemove, onClick = { onRemove() })
+            ContextMenu.Item(stringResource(Str.common_ui_button_remove), onClick = { onRemove() })
         ),
     )
 }

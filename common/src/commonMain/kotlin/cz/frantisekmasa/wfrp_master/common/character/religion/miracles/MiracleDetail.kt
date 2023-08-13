@@ -17,12 +17,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.halilibo.richtext.markdown.Markdown
 import com.halilibo.richtext.ui.RichText
+import cz.frantisekmasa.wfrp_master.common.Str
 import cz.frantisekmasa.wfrp_master.common.core.domain.religion.Miracle
 import cz.frantisekmasa.wfrp_master.common.core.ui.buttons.CloseButton
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
 import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.SubheadBar
 import cz.frantisekmasa.wfrp_master.common.core.ui.text.SingleLineTextValue
-import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
+import dev.icerock.moko.resources.compose.stringResource
 
 @Composable
 fun MiracleDetail(
@@ -76,11 +77,9 @@ fun MiracleDetailBody(
         subheadBar()
 
         Column(Modifier.padding(Spacing.bodyPadding)) {
-            val strings = LocalStrings.current.miracles
-
-            SingleLineTextValue(strings.labelRange, range)
-            SingleLineTextValue(strings.labelTarget, target)
-            SingleLineTextValue(strings.labelDuration, duration)
+            SingleLineTextValue(stringResource(Str.miracles_label_range), range)
+            SingleLineTextValue(stringResource(Str.miracles_label_target), target)
+            SingleLineTextValue(stringResource(Str.miracles_label_duration), duration)
 
             RichText(Modifier.padding(top = 8.dp)) {
                 Markdown(effect)

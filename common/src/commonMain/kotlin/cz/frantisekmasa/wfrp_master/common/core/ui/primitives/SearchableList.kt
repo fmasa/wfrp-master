@@ -30,8 +30,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
+import cz.frantisekmasa.wfrp_master.common.Str
 import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.IconAction
-import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
+import dev.icerock.moko.resources.compose.stringResource
 
 object SearchableList {
     @Immutable
@@ -98,7 +99,7 @@ fun <T : Any> SearchableList(
                     if (searchActive) {
                         IconAction(
                             Icons.Rounded.Close,
-                            LocalStrings.current.commonUi.buttonDismiss,
+                            stringResource(Str.common_ui_button_dismiss),
                             onClick = {
                                 searchedValue = ""
                                 searchActive = false
@@ -107,7 +108,7 @@ fun <T : Any> SearchableList(
                     } else {
                         IconAction(
                             Icons.Rounded.Search,
-                            LocalStrings.current.commonUi.buttonDismiss,
+                            stringResource(Str.common_ui_button_dismiss),
                             onClick = { searchActive = true }
                         )
                     }
@@ -141,8 +142,8 @@ fun <T : Any> SearchableList(
 
                 if (filteredItems.isEmpty()) {
                     EmptyUI(
-                        text = LocalStrings.current.messages.searchNotFound,
-                        subText = LocalStrings.current.messages.searchNotFoundSubtext,
+                        text = stringResource(Str.messages_search_not_found),
+                        subText = stringResource(Str.messages_search_not_found_subtext),
                         icon = Icons.Rounded.SearchOff,
                     )
                     return@Scaffold

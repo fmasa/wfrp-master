@@ -6,6 +6,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import com.benasher44.uuid.Uuid
+import cz.frantisekmasa.wfrp_master.common.Str
 import cz.frantisekmasa.wfrp_master.common.character.CompendiumItemChooser
 import cz.frantisekmasa.wfrp_master.common.character.skills.SkillsScreenModel
 import cz.frantisekmasa.wfrp_master.common.core.domain.Stats
@@ -13,7 +14,7 @@ import cz.frantisekmasa.wfrp_master.common.core.shared.Parcelable
 import cz.frantisekmasa.wfrp_master.common.core.shared.Parcelize
 import cz.frantisekmasa.wfrp_master.common.core.shared.Resources
 import cz.frantisekmasa.wfrp_master.common.core.ui.dialogs.FullScreenDialog
-import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
+import dev.icerock.moko.resources.compose.stringResource
 
 @Composable
 fun AddSkillDialog(
@@ -36,12 +37,12 @@ fun AddSkillDialog(
             ChoosingCompendiumSkill ->
                 CompendiumItemChooser(
                     screenModel = screenModel,
-                    title = LocalStrings.current.skills.titleChooseCompendiumSkill,
+                    title = stringResource(Str.skills_title_choose_compendium_skill),
                     onDismissRequest = onDismissRequest,
                     icon = { it.characteristic.getIcon() },
                     onSelect = { state = FillingInAdvances(it.id, it.advanced) },
                     onCustomItemRequest = { state = FillingInCustomSkill },
-                    customItemButtonText = LocalStrings.current.skills.buttonAddNonCompendium,
+                    customItemButtonText = stringResource(Str.skills_button_add_non_compendium),
                     emptyUiIcon = Resources.Drawable.Skill,
                 )
             is FillingInAdvances ->

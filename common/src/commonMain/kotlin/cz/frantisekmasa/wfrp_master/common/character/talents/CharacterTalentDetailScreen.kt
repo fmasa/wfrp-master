@@ -9,6 +9,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import com.benasher44.uuid.Uuid
+import cz.frantisekmasa.wfrp_master.common.Str
 import cz.frantisekmasa.wfrp_master.common.character.CharacterItemDetailScreen
 import cz.frantisekmasa.wfrp_master.common.character.talents.dialog.NonCompendiumTalentForm
 import cz.frantisekmasa.wfrp_master.common.character.talents.dialog.TalentDetail
@@ -20,7 +21,7 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.navigation.LocalNavigationTra
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.rememberScreenModel
 import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.SubheadBar
-import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
+import dev.icerock.moko.resources.compose.stringResource
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
@@ -83,7 +84,7 @@ private fun TimesTakenBar(timesTaken: Int, onTimesTakenChange: (timesTaken: Int)
     SubheadBar {
         Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
             Text(
-                text = LocalStrings.current.talents.labelTimesTaken,
+                text = stringResource(Str.talents_label_times_taken),
                 modifier = Modifier.weight(1f),
             )
             NumberPicker(

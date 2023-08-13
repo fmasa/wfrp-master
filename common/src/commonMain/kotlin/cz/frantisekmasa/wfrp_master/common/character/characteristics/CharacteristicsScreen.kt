@@ -33,6 +33,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
+import cz.frantisekmasa.wfrp_master.common.Str
 import cz.frantisekmasa.wfrp_master.common.character.CharacterScreenModel
 import cz.frantisekmasa.wfrp_master.common.compendium.career.CompendiumCareerDetailScreen
 import cz.frantisekmasa.wfrp_master.common.core.domain.Characteristic
@@ -66,10 +67,10 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.responsive.ColumnSize.HalfWid
 import cz.frantisekmasa.wfrp_master.common.core.ui.responsive.Container
 import cz.frantisekmasa.wfrp_master.common.core.ui.responsive.LocalBreakpoint
 import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.TopPanel
-import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
 import cz.frantisekmasa.wfrp_master.common.skillTest.Roll
 import cz.frantisekmasa.wfrp_master.common.skillTest.RollResult
 import cz.frantisekmasa.wfrp_master.common.skillTest.TestResultScreen
+import dev.icerock.moko.resources.compose.stringResource
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
@@ -96,7 +97,7 @@ internal fun CharacteristicsScreen(
             val coroutineScope = rememberCoroutineScope()
 
             TestResultScreen(
-                testName = LocalStrings.current.tests.roll,
+                testName = stringResource(Str.tests_roll),
                 results = listOf(
                     RollResult(
                         characterId.toString(),
@@ -251,13 +252,12 @@ private fun careerName(career: CharacterScreenModel.CurrentCareer?, character: C
 @Composable
 private fun WoundsBadge(character: Character, points: Points, update: (Points) -> Unit) {
     var dialogVisible by remember { mutableStateOf(false) }
-    val strings = LocalStrings.current.points
     val wounds = character.wounds
 
     Button(onClick = { dialogVisible = true }) {
         Text("${wounds.current} / ${wounds.max}")
         Text(
-            strings.wounds,
+            stringResource(Str.points_wounds),
             fontWeight = FontWeight.Normal,
             modifier = Modifier.padding(start = Spacing.small)
         )
@@ -269,7 +269,7 @@ private fun WoundsBadge(character: Character, points: Points, update: (Points) -
 
     PointsDialog(onDismissRequest = { dialogVisible = false }) {
         NumberPicker(
-            label = strings.wounds,
+            label = stringResource(Str.points_wounds),
             value = wounds.current,
             onIncrement = {
                 if (wounds.current < character.wounds.max) {
@@ -403,16 +403,14 @@ private fun ExperiencePointsSection(
             .clickable(onClick = { experiencePointsDialogVisible = true })
             .padding(horizontal = Spacing.large),
     ) {
-        val strings = LocalStrings.current.points
-
         Row(horizontalArrangement = Arrangement.spacedBy(Spacing.tiny)) {
             Text(points.experience.toString(), fontWeight = FontWeight.Bold)
-            Text(strings.experience)
+            Text(stringResource(Str.points_experience))
         }
 
         CompositionLocalProvider(LocalContentAlpha provides ContentAlpha.medium) {
             Text(
-                strings.spentExperience(points.spentExperience),
+                stringResource(Str.points_spent_experience, points.spentExperience),
                 style = MaterialTheme.typography.caption,
             )
         }

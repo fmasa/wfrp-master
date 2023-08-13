@@ -42,6 +42,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
+import cz.frantisekmasa.wfrp_master.common.Str
 import cz.frantisekmasa.wfrp_master.common.character.CharacterDetailScreen
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.Career
 import cz.frantisekmasa.wfrp_master.common.core.auth.UserId
@@ -55,7 +56,7 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.FullScreenProgress
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.VisualOnlyIconDescription
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.rememberScreenModel
 import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.SubheadBar
-import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
+import dev.icerock.moko.resources.compose.stringResource
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -75,7 +76,7 @@ class CharacterCreationScreen(
         Scaffold(
             topBar = {
                 TopAppBar(
-                    title = { Text(LocalStrings.current.characterCreation.title) },
+                    title = { Text(stringResource(Str.character_creation_title)) },
                     navigationIcon = { BackButton() }
                 )
             }
@@ -128,17 +129,14 @@ private fun Screen.MainContainer(partyId: PartyId, type: CharacterType, userId: 
             navigation.replace(CharacterDetailScreen(characterId))
         }
     }
-
-    val labels = LocalStrings.current.characterCreation
-
     val steps = listOf(
-        WizardStep(labels.stepBasicInfo, basicInfo) {
+        WizardStep(stringResource(Str.character_creation_step_basic_info), basicInfo) {
             CharacterBasicInfoForm(it, validate = validate.value)
         },
-        WizardStep(labels.stepAttributes, characteristics) {
+        WizardStep(stringResource(Str.character_creation_step_attributes), characteristics) {
             CharacterCharacteristicsForm(it, validate = validate.value)
         },
-        WizardStep(labels.stepPointPools, points) {
+        WizardStep(stringResource(Str.character_creation_step_point_pools), points) {
             PointsPoolForm(it, validate = validate.value)
         }
     )
@@ -239,7 +237,7 @@ private fun BottomBar(
                     }
 
                     NextButton(
-                        LocalStrings.current.commonUi.buttonFinish,
+                        stringResource(Str.common_ui_button_finish),
                         buttonModifier,
                         enabled = !saving,
                         onClick = {

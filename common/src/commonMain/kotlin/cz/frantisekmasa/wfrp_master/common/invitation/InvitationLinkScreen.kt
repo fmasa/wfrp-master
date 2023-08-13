@@ -11,6 +11,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import cafe.adriel.voyager.core.screen.Screen
+import cz.frantisekmasa.wfrp_master.common.Str
 import cz.frantisekmasa.wfrp_master.common.core.auth.LocalUser
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.Invitation
 import cz.frantisekmasa.wfrp_master.common.core.ui.buttons.BackButton
@@ -19,7 +20,7 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.navigation.LocalNavigationTra
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.FullScreenProgress
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.rememberScreenModel
 import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.LocalPersistentSnackbarHolder
-import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
+import dev.icerock.moko.resources.compose.stringResource
 import io.ktor.http.URLBuilder
 import io.ktor.http.Url
 
@@ -30,13 +31,12 @@ class InvitationLinkScreen(
     @Composable
     override fun Content() {
         val navigation = LocalNavigationTransaction.current
-        val strings = LocalStrings.current
 
         Scaffold(
             topBar = {
                 TopAppBar(
                     navigationIcon = { BackButton() },
-                    title = { Text(strings.parties.titleJoin) }
+                    title = { Text(stringResource(Str.parties_title_join)) }
                 )
             },
         ) {
@@ -55,6 +55,7 @@ class InvitationLinkScreen(
             var invitation: Invitation? by remember { mutableStateOf(null) }
 
             val snackbarHolder = LocalPersistentSnackbarHolder.current
+            val invalidInvitationError = stringResource(Str.messages_invitation_error_invitation_invalid)
 
             LaunchedEffect(url) {
                 val loadedInvitation = Url(url).parameters[QUERY_PARAMETER]?.let {
@@ -65,7 +66,7 @@ class InvitationLinkScreen(
                     invitation = loadedInvitation
                 } else {
                     snackbarHolder.showSnackbar(
-                        strings.messages.invitationErrorInvitationInvalid,
+                        invalidInvitationError,
                         duration = SnackbarDuration.Long,
                     )
                     navigation.goBack()

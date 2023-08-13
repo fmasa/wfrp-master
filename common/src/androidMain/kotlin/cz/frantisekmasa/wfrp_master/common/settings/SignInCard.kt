@@ -34,6 +34,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.firebase.auth.FirebaseAuthUserCollisionException
+import cz.frantisekmasa.wfrp_master.common.Str
 import cz.frantisekmasa.wfrp_master.common.auth.AuthenticationManager
 import cz.frantisekmasa.wfrp_master.common.auth.LocalWebClientId
 import cz.frantisekmasa.wfrp_master.common.core.auth.LocalUser
@@ -47,8 +48,8 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.navigation.LocalNavigationTra
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.VisualOnlyIconDescription
 import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.LocalPersistentSnackbarHolder
-import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
 import cz.frantisekmasa.wfrp_master.common.partyList.PartyListScreen
+import dev.icerock.moko.resources.compose.stringResource
 import io.github.aakira.napier.Napier
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -76,8 +77,6 @@ actual fun SignInCard(settingsScreenModel: SettingsScreenModel) {
             onDismissRequest = { pendingSingInConfirmation = null },
         )
     }
-
-    val strings = LocalStrings.current
 
     val launcher = rememberLauncherForActivityResult(contract) { result ->
         coroutineScope.launch(Dispatchers.IO) {
@@ -120,16 +119,16 @@ actual fun SignInCard(settingsScreenModel: SettingsScreenModel) {
                 .padding(horizontal = 8.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            CardTitle(strings.settings.titleAccount)
+            CardTitle(stringResource(Str.settings_title_account))
 
             val email = LocalUser.current.email
 
             if (email != null) {
-                Text(strings.authentication.messages.signedInAs)
+                Text(stringResource(Str.authentication_messages_signed_in_as))
                 Text(email)
             } else {
                 Text(
-                    strings.authentication.messages.notSignedInDescription,
+                    stringResource(Str.authentication_messages_not_signed_in_description),
                     textAlign = TextAlign.Center,
                     modifier = Modifier.padding(bottom = 8.dp)
                 )
@@ -143,7 +142,7 @@ actual fun SignInCard(settingsScreenModel: SettingsScreenModel) {
                             drawableResource(Resources.Drawable.GoogleLogo),
                             VisualOnlyIconDescription,
                         )
-                        Text(strings.authentication.buttonSignIn)
+                        Text(stringResource(Str.authentication_button_sign_in))
                     }
                 }
             }
@@ -172,8 +171,6 @@ fun ConfirmSignInDialog(
 
     Dialog(onDismissRequest = onDismissRequest) {
         Surface(shape = MaterialTheme.shapes.medium) {
-            val strings = LocalStrings.current
-
             Column {
                 Column(
                     Modifier
@@ -181,17 +178,24 @@ fun ConfirmSignInDialog(
                         .padding(Spacing.bodyPadding),
                     verticalArrangement = Arrangement.spacedBy(Spacing.small),
                 ) {
-                    DialogTitle(strings.authentication.messages.duplicateAccount)
+                    DialogTitle(stringResource(Str.authentication_messages_duplicate_account))
 
                     if (loading) {
                         DialogProgress()
                     } else {
-                        Text(strings.authentication.messages.googleAccountCollision)
+                        Text(stringResource(Str.authentication_messages_google_account_collision))
 
                         if (partyNames!!.isNotEmpty()) {
                             Column {
-                                Text(strings.authentication.messages.loseAccessToParties)
-                                Text(partyNames!!.joinToString("\n"), fontWeight = FontWeight.SemiBold)
+                                Text(
+                                    stringResource(
+                                        Str.authentication_messages_lose_access_to_parties
+                                    )
+                                )
+                                Text(
+                                    partyNames!!.joinToString("\n"),
+                                    fontWeight = FontWeight.SemiBold,
+                                )
                             }
                         }
                     }
@@ -204,13 +208,15 @@ fun ConfirmSignInDialog(
                         .padding(bottom = Spacing.small, end = Spacing.small),
                 ) {
                     TextButton(enabled = !loading, onClick = onDismissRequest) {
-                        Text(strings.commonUi.buttonCancel.uppercase())
+                        Text(stringResource(Str.common_ui_button_cancel).uppercase())
                     }
 
-                    val messages = strings.messages
                     val snackbarHolder = LocalPersistentSnackbarHolder.current
                     val navigation = LocalNavigationTransaction.current
 
+                    val googleSignInFailedMessage = stringResource(
+                        Str.messages_authentication_google_sign_in_failed
+                    )
                     TextButton(
                         enabled = !loading,
                         onClick = {
@@ -220,7 +226,7 @@ fun ConfirmSignInDialog(
                                     authManager.signInWithGoogleToken(idToken).let { success ->
                                         if (!success) {
                                             snackbarHolder.showSnackbar(
-                                                messages.authenticationGoogleSignInFailed,
+                                                googleSignInFailedMessage,
                                                 SnackbarDuration.Short,
                                             )
                                         }
@@ -237,7 +243,7 @@ fun ConfirmSignInDialog(
                             }
                         }
                     ) {
-                        Text(strings.authentication.buttonSignIn.uppercase())
+                        Text(stringResource(Str.authentication_button_sign_in).uppercase())
                     }
                 }
             }

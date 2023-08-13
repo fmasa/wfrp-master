@@ -9,6 +9,7 @@ import cz.frantisekmasa.wfrp_master.common.core.shared.booleanSettingsKey
 import cz.frantisekmasa.wfrp_master.common.core.shared.edit
 import cz.frantisekmasa.wfrp_master.common.core.shared.stringKey
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 
 class SettingsScreenModel(
     private val parties: PartyRepository,
@@ -18,6 +19,11 @@ class SettingsScreenModel(
     val darkMode: Flow<Boolean?> by lazy { getPreference(AppSettings.DARK_MODE) }
     val soundEnabled: Flow<Boolean?> by lazy { getPreference(AppSettings.SOUND_ENABLED) }
     val lastSeenVersion: Flow<String?> by lazy { storage.watch(AppSettings.LAST_SEEN_VERSION) }
+    val language: Flow<Language?> by lazy {
+        storage.watch(AppSettings.LANGUAGE).map {
+            it?.let { code -> Language.valueOf(code) }
+        }
+    }
 
     suspend fun getPartyNames(userId: UserId): List<String> {
         return parties.forUser(userId).map { it.name }
@@ -35,6 +41,10 @@ class SettingsScreenModel(
         storage.edit(AppSettings.LAST_SEEN_VERSION, version)
     }
 
+    suspend fun updateLanguage(language: Language) {
+        storage.edit(AppSettings.LANGUAGE, language.name)
+    }
+
     private fun getPreference(preference: SettingsKey<Boolean>): Flow<Boolean?> {
         return storage.watch(preference)
     }
@@ -45,4 +55,5 @@ object AppSettings {
     val SOUND_ENABLED = booleanSettingsKey("sound_enabled")
     val GOOGLE_SIGN_IN_DISMISSED = booleanSettingsKey("dismissed_google_sign_in")
     val LAST_SEEN_VERSION = stringKey("last_seen_version")
+    val LANGUAGE = stringKey("language")
 }

@@ -33,6 +33,7 @@ import androidx.compose.ui.text.style.TextAlign
 import cafe.adriel.voyager.core.screen.Screen
 import com.google.accompanist.permissions.PermissionState
 import com.google.accompanist.permissions.rememberPermissionState
+import cz.frantisekmasa.wfrp_master.common.Str
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.Invitation
 import cz.frantisekmasa.wfrp_master.common.core.ui.buttons.BackButton
 import cz.frantisekmasa.wfrp_master.common.core.ui.navigation.LocalNavigationTransaction
@@ -40,7 +41,7 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.HorizontalLine
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.rememberScreenModel
 import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.SubheadBar
-import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
+import dev.icerock.moko.resources.compose.stringResource
 import kotlinx.coroutines.launch
 
 actual class InvitationScannerScreen : Screen {
@@ -51,7 +52,7 @@ actual class InvitationScannerScreen : Screen {
         Scaffold(
             topBar = {
                 TopAppBar(
-                    title = { Text(LocalStrings.current.parties.titleJoin) },
+                    title = { Text(stringResource(Str.parties_title_join)) },
                     navigationIcon = { BackButton() },
                 )
             },
@@ -92,7 +93,7 @@ actual class InvitationScannerScreen : Screen {
 
         when {
             camera.hasPermission -> {
-                SubheadBar(LocalStrings.current.parties.messages.qrCodeScanningPrompt)
+                SubheadBar(stringResource(Str.parties_messages_qr_code_scanning_prompt))
                 QrCodeScanner(
                     modifier = Modifier.fillMaxSize(),
                     onSuccessfulScan = { qrCodeData ->
@@ -115,17 +116,15 @@ actual class InvitationScannerScreen : Screen {
                 SideEffect { camera.launchPermissionRequest() }
             }
 
-            val strings = LocalStrings.current.permissions
-
             Text(
-                strings.cameraRequired,
+                stringResource(Str.permissions_camera_required),
                 style = MaterialTheme.typography.h6,
             )
 
             Rationale()
 
             TextButton(onClick = { camera.launchPermissionRequest() }) {
-                Text(strings.buttonRequestPermission.uppercase())
+                Text(stringResource(Str.permissions_button_request_permission).uppercase())
             }
 
             Alternative()
@@ -135,15 +134,19 @@ actual class InvitationScannerScreen : Screen {
     @Composable
     private fun PermissionDeniedScreen() {
         ScreenBody {
-            val strings = LocalStrings.current.permissions
-
-            Text(strings.cameraDenied, style = MaterialTheme.typography.h6)
+            Text(
+                stringResource(Str.permissions_camera_denied),
+                style = MaterialTheme.typography.h6,
+            )
             Rationale()
-            Text(strings.messages.settingsScreenInstructions, textAlign = TextAlign.Center)
+            Text(
+                stringResource(Str.permissions_messages_settings_screen_instructions),
+                textAlign = TextAlign.Center,
+            )
 
             val context = LocalContext.current
             TextButton(onClick = { context.openApplicationSettings() }) {
-                Text(strings.buttonOpenSettings.uppercase())
+                Text(stringResource(Str.permissions_button_open_settings).uppercase())
             }
 
             Alternative()
@@ -165,7 +168,7 @@ actual class InvitationScannerScreen : Screen {
     @Composable
     private fun Rationale() {
         Text(
-            LocalStrings.current.permissions.messages.cameraPermissionRationale,
+            stringResource(Str.permissions_messages_camera_permission_rationale),
             textAlign = TextAlign.Center,
         )
     }
@@ -176,7 +179,7 @@ actual class InvitationScannerScreen : Screen {
         HorizontalLine()
 
         Text(
-            LocalStrings.current.parties.messages.invitationLinkAlternative,
+            stringResource(Str.parties_messages_invitation_link_alternative),
             modifier = Modifier.padding(top = Spacing.mediumLarge),
             textAlign = TextAlign.Center,
         )

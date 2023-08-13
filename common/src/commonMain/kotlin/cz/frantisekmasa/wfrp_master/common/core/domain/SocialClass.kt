@@ -1,16 +1,17 @@
 package cz.frantisekmasa.wfrp_master.common.core.domain
 
-import cz.frantisekmasa.wfrp_master.common.localization.Strings
+import cz.frantisekmasa.wfrp_master.common.Str
+import dev.icerock.moko.resources.StringResource
 
 enum class SocialClass(
-    override val nameResolver: (strings: Strings) -> String
+    override val translatableName: StringResource,
 ) : NamedEnum {
-    ACADEMICS({ it.socialClasses.academics }),
-    BURGHERS({ it.socialClasses.burghers }),
-    COURTIERS({ it.socialClasses.courtiers }),
-    PEASANTS({ it.socialClasses.peasants }),
-    RANGERS({ it.socialClasses.rangers }),
-    RIVERFOLK({ it.socialClasses.riverfolk }),
-    ROGUES({ it.socialClasses.rogues }),
-    WARRIORS({ it.socialClasses.warriors }),
+    ACADEMICS(Str.social_classes_academics),
+    BURGHERS(Str.social_classes_burghers),
+    COURTIERS(Str.social_classes_courtiers),
+    PEASANTS(Str.social_classes_peasants),
+    RANGERS(Str.social_classes_rangers),
+    RIVERFOLK(Str.social_classes_riverfolk),
+    ROGUES(Str.social_classes_rogues),
+    WARRIORS(Str.social_classes_warriors),
 }

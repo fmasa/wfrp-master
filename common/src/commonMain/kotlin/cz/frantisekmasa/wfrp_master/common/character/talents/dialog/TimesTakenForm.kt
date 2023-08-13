@@ -20,6 +20,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import com.benasher44.uuid.Uuid
 import com.benasher44.uuid.uuid4
+import cz.frantisekmasa.wfrp_master.common.Str
 import cz.frantisekmasa.wfrp_master.common.character.talents.TalentsScreenModel
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.exceptions.CompendiumItemNotFound
 import cz.frantisekmasa.wfrp_master.common.core.domain.talents.Talent
@@ -30,7 +31,7 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.FullScreenProgress
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
 import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.LocalPersistentSnackbarHolder
 import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.SaveAction
-import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
+import dev.icerock.moko.resources.compose.stringResource
 import io.github.aakira.napier.Napier
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -45,7 +46,6 @@ internal fun TimesTakenForm(
     var saving by remember { mutableStateOf(false) }
     var timesTaken by rememberSaveable { mutableStateOf(existingTalent?.taken ?: 1) }
 
-    val strings = LocalStrings.current.talents
     val snackbarHolder = LocalPersistentSnackbarHolder.current
 
     Scaffold(
@@ -53,10 +53,19 @@ internal fun TimesTakenForm(
             TopAppBar(
                 navigationIcon = { CloseButton(onDismissRequest) },
                 title = {
-                    Text(if (existingTalent != null) strings.titleEdit else strings.titleEdit)
+                    Text(
+                        stringResource(
+                            if (existingTalent != null)
+                                Str.talents_title_edit
+                            else Str.talents_title_new
+                        )
+                    )
                 },
                 actions = {
                     val coroutineScope = rememberCoroutineScope()
+                    val successMessage = stringResource(
+                        Str.talents_messages_compendium_talent_removed
+                    )
 
                     SaveAction(
                         enabled = !saving,
@@ -74,9 +83,7 @@ internal fun TimesTakenForm(
                                 } catch (e: CompendiumItemNotFound) {
                                     Napier.d(e.toString(), e)
 
-                                    snackbarHolder.showSnackbar(
-                                        strings.messages.compendiumTalentRemoved
-                                    )
+                                    snackbarHolder.showSnackbar(successMessage)
                                 } finally {
                                     onDismissRequest()
                                 }
@@ -99,7 +106,7 @@ internal fun TimesTakenForm(
         ) {
             Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
                 Text(
-                    text = strings.labelTimesTaken,
+                    text = stringResource(Str.talents_label_times_taken),
                     modifier = Modifier.weight(1f),
                 )
                 NumberPicker(

@@ -15,8 +15,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
 import com.benasher44.uuid.Uuid
 import com.benasher44.uuid.uuid4
+import cz.frantisekmasa.wfrp_master.common.Str
 import cz.frantisekmasa.wfrp_master.common.character.spells.SpellsScreenModel
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.SpellLore
+import cz.frantisekmasa.wfrp_master.common.core.domain.localizedName
 import cz.frantisekmasa.wfrp_master.common.core.domain.spells.Spell
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.CheckboxWithText
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.FormDialog
@@ -27,7 +29,7 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.forms.SelectBox
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.TextInput
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.inputValue
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
-import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
+import dev.icerock.moko.resources.compose.stringResource
 
 @Composable
 internal fun NonCompendiumSpellForm(
@@ -36,16 +38,19 @@ internal fun NonCompendiumSpellForm(
     onDismissRequest: () -> Unit,
 ) {
     val formData = NonCompendiumSpellFormData.fromSpell(existingSpell)
-    val strings = LocalStrings.current
 
     FormDialog(
-        title = if (existingSpell != null) strings.spells.titleEdit else strings.spells.titleEdit,
+        title = stringResource(
+            if (existingSpell != null)
+                Str.spells_title_edit
+            else Str.spells_title_new
+        ),
         onDismissRequest = onDismissRequest,
         formData = formData,
         onSave = screenModel::saveSpell,
     ) { validate ->
         TextInput(
-            label = strings.spells.labelName,
+            label = stringResource(Str.spells_label_name),
             value = formData.name,
             validate = validate,
             maxLength = Spell.NAME_MAX_LENGTH
@@ -58,45 +63,44 @@ internal fun NonCompendiumSpellForm(
             contentAlignment = Alignment.Center
         ) {
             CheckboxWithText(
-                strings.spells.labelMemorized,
+                stringResource(Str.spells_label_memorized),
                 checked = formData.memorized.value,
                 onCheckedChange = { formData.memorized.value = it },
             )
         }
 
+        val lores = SpellLore.values().map { it to it.localizedName }
         SelectBox(
-            label = strings.spells.labelLore,
+            label = stringResource(Str.spells_label_lore),
             value = formData.lore.value,
             onValueChange = { formData.lore.value = it },
-            items = remember(strings) {
-                SpellLore.values().map { it to it.nameResolver(strings) }
-                    .sortedBy { it.second } + (null to strings.spells.lores.other)
-            },
+            items = remember(lores) { lores.sortedBy { it.second } } +
+                (null to stringResource(Str.spells_lores_other)),
         )
 
         TextInput(
-            label = strings.spells.labelRange,
+            label = stringResource(Str.spells_label_range),
             value = formData.range,
             validate = validate,
             maxLength = Spell.RANGE_MAX_LENGTH,
         )
 
         TextInput(
-            label = strings.spells.labelTarget,
+            label = stringResource(Str.spells_label_target),
             value = formData.target,
             validate = validate,
             maxLength = Spell.TARGET_MAX_LENGTH,
         )
 
         TextInput(
-            label = strings.spells.labelDuration,
+            label = stringResource(Str.spells_label_duration),
             value = formData.duration,
             validate = validate,
             maxLength = Spell.DURATION_MAX_LENGTH,
         )
 
         TextInput(
-            label = strings.spells.labelCastingNumber,
+            label = stringResource(Str.spells_label_casting_number),
             value = formData.castingNumber,
             keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
             validate = validate,
@@ -104,7 +108,7 @@ internal fun NonCompendiumSpellForm(
         )
 
         TextInput(
-            label = strings.spells.labelEffect,
+            label = stringResource(Str.spells_label_effect),
             value = formData.effect,
             validate = validate,
             maxLength = Spell.EFFECT_MAX_LENGTH,

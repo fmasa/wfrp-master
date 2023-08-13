@@ -12,13 +12,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.halilibo.richtext.markdown.Markdown
 import com.halilibo.richtext.ui.RichText
+import cz.frantisekmasa.wfrp_master.common.Str
 import cz.frantisekmasa.wfrp_master.common.core.domain.Characteristic
 import cz.frantisekmasa.wfrp_master.common.core.domain.localizedName
 import cz.frantisekmasa.wfrp_master.common.core.domain.skills.Skill
 import cz.frantisekmasa.wfrp_master.common.core.ui.buttons.CloseButton
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
 import cz.frantisekmasa.wfrp_master.common.core.ui.text.SingleLineTextValue
-import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
+import dev.icerock.moko.resources.compose.stringResource
 
 @Composable
 fun SkillDetail(
@@ -53,16 +54,18 @@ fun SkillDetailBody(
     description: String,
 ) {
     Column(Modifier.padding(Spacing.bodyPadding)) {
-        val strings = LocalStrings.current
-
         SingleLineTextValue(
-            label = strings.skills.labelCharacteristic,
+            label = stringResource(Str.skills_label_characteristic),
             characteristic.localizedName,
         )
 
         SingleLineTextValue(
-            label = strings.skills.labelAdvanced,
-            value = strings.commonUi.boolean(advanced),
+            label = stringResource(Str.skills_label_advanced),
+            value = stringResource(
+                if (advanced)
+                    Str.common_ui_boolean_yes
+                else Str.common_ui_boolean_no,
+            ),
         )
 
         RichText(Modifier.padding(top = Spacing.small)) {

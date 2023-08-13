@@ -5,6 +5,7 @@ import androidx.compose.runtime.Stable
 import androidx.compose.runtime.remember
 import com.benasher44.uuid.Uuid
 import com.benasher44.uuid.uuid4
+import cz.frantisekmasa.wfrp_master.common.Str
 import cz.frantisekmasa.wfrp_master.common.character.religion.blessings.BlessingsScreenModel
 import cz.frantisekmasa.wfrp_master.common.core.domain.religion.Blessing
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.FormDialog
@@ -13,7 +14,7 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.forms.InputValue
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.Rules
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.TextInput
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.inputValue
-import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
+import dev.icerock.moko.resources.compose.stringResource
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.Blessing.Companion as CompendiumBlessing
 
 @Composable
@@ -24,44 +25,46 @@ internal fun NonCompendiumBlessingForm(
 ) {
     val formData = NonCompendiumBlessingFormData.fromBlessing(existingBlessing)
 
-    val strings = LocalStrings.current.blessings
-
     FormDialog(
-        title = if (existingBlessing != null) strings.titleNew else strings.titleEdit,
+        title = stringResource(
+            if (existingBlessing != null)
+                Str.blessings_title_edit
+            else Str.blessings_title_new
+        ),
         onDismissRequest = onDismissRequest,
         formData = formData,
         onSave = screenModel::saveItem,
     ) { validate ->
         TextInput(
-            label = strings.labelName,
+            label = stringResource(Str.blessings_label_name),
             value = formData.name,
             validate = validate,
             maxLength = CompendiumBlessing.NAME_MAX_LENGTH
         )
 
         TextInput(
-            label = strings.labelRange,
+            label = stringResource(Str.blessings_label_range),
             value = formData.range,
             validate = validate,
             maxLength = CompendiumBlessing.RANGE_MAX_LENGTH,
         )
 
         TextInput(
-            label = strings.labelTarget,
+            label = stringResource(Str.blessings_label_target),
             value = formData.target,
             validate = validate,
             maxLength = CompendiumBlessing.TARGET_MAX_LENGTH,
         )
 
         TextInput(
-            label = strings.labelDuration,
+            label = stringResource(Str.blessings_label_duration),
             value = formData.duration,
             validate = validate,
             maxLength = CompendiumBlessing.DURATION_MAX_LENGTH,
         )
 
         TextInput(
-            label = strings.labelEffect,
+            label = stringResource(Str.blessings_label_effect),
             value = formData.effect,
             validate = validate,
             maxLength = CompendiumBlessing.EFFECT_MAX_LENGTH,

@@ -15,6 +15,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import cz.frantisekmasa.wfrp_master.common.Str
 import cz.frantisekmasa.wfrp_master.common.core.auth.LocalUser
 import cz.frantisekmasa.wfrp_master.common.core.connectivity.CouldNotConnectToBackend
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.Party
@@ -28,7 +29,7 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.forms.inputValue
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
 import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.LocalPersistentSnackbarHolder
 import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.SaveAction
-import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
+import dev.icerock.moko.resources.compose.stringResource
 import io.github.aakira.napier.Napier
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -42,22 +43,22 @@ fun CreatePartyDialog(
     FullScreenDialog(onDismissRequest = onDismissRequest) {
         var validate by remember { mutableStateOf(false) }
         val partyName = inputValue("", Rules.NotBlank())
-        val strings = LocalStrings.current.parties
 
         Scaffold(
             topBar = {
                 val coroutineScope = rememberCoroutineScope()
-                val messages = LocalStrings.current.messages
                 val userId = LocalUser.current.id
 
                 var saving by remember { mutableStateOf(false) }
 
                 TopAppBar(
                     navigationIcon = { CloseButton(onClick = onDismissRequest) },
-                    title = { Text(strings.titleCreateParty) },
+                    title = { Text(stringResource(Str.parties_title_create_party)) },
                     actions = {
                         val snackbarHolder = LocalPersistentSnackbarHolder.current
 
+                        val errorUnknown = stringResource(Str.messages_error_unknown)
+                        val errorNoConnection = stringResource(Str.parties_messages_create_error_no_connection)
                         SaveAction(
                             enabled = !saving,
                             onClick = {
@@ -77,12 +78,12 @@ fun CreatePartyDialog(
                                         Napier.i("User could not assemble party, because (s)he is offline", e)
 
                                         snackbarHolder.showSnackbar(
-                                            messages.partyCreateErrorNoConnection,
+                                            errorNoConnection,
                                             duration = SnackbarDuration.Long,
                                         )
                                     } catch (e: Throwable) {
                                         snackbarHolder.showSnackbar(
-                                            messages.errorUnknown,
+                                            errorUnknown,
                                             duration = SnackbarDuration.Long,
                                         )
                                         Napier.e(e.toString(), e)
@@ -102,7 +103,7 @@ fun CreatePartyDialog(
                     .padding(Spacing.bodyPadding),
             ) {
                 TextInput(
-                    label = strings.labelName,
+                    label = stringResource(Str.parties_label_name),
                     value = partyName,
                     validate = validate,
                     maxLength = Party.NAME_MAX_LENGTH,

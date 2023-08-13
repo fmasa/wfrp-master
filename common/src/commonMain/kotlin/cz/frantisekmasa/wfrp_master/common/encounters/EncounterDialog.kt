@@ -2,6 +2,7 @@ package cz.frantisekmasa.wfrp_master.common.encounters
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Stable
+import cz.frantisekmasa.wfrp_master.common.Str
 import cz.frantisekmasa.wfrp_master.common.core.ui.dialogs.FullScreenDialog
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.FormDialog
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.HydratedFormData
@@ -10,7 +11,7 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.forms.Rules
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.TextInput
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.inputValue
 import cz.frantisekmasa.wfrp_master.common.encounters.domain.Encounter
-import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
+import dev.icerock.moko.resources.compose.stringResource
 
 @Composable
 fun EncounterDialog(
@@ -20,10 +21,13 @@ fun EncounterDialog(
 ) {
     FullScreenDialog(onDismissRequest = onDismissRequest) {
         val formData = EncounterDialogFormData.fromEncounter(existingEncounter)
-        val strings = LocalStrings.current.encounters
 
         FormDialog(
-            title = if (existingEncounter != null) strings.titleEdit else strings.titleCreate,
+            title = stringResource(
+                if (existingEncounter != null)
+                    Str.encounters_title_edit
+                else Str.encounters_title_create
+            ),
             onDismissRequest = onDismissRequest,
             formData = formData,
             onSave = {
@@ -35,14 +39,14 @@ fun EncounterDialog(
             }
         ) { validate ->
             TextInput(
-                label = strings.labelName,
+                label = stringResource(Str.encounters_label_name),
                 value = formData.name,
                 validate = validate,
                 maxLength = Encounter.NAME_MAX_LENGTH,
             )
 
             TextInput(
-                label = strings.labelDescription,
+                label = stringResource(Str.encounters_label_description),
                 value = formData.description,
                 validate = validate,
                 maxLength = Encounter.DESCRIPTION_MAX_LENGTH,

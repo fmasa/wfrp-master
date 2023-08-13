@@ -11,6 +11,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import cafe.adriel.voyager.core.screen.Screen
+import cz.frantisekmasa.wfrp_master.common.Str
 import cz.frantisekmasa.wfrp_master.common.character.trappings.detail.AmmunitionDetail
 import cz.frantisekmasa.wfrp_master.common.character.trappings.detail.ArmourDetail
 import cz.frantisekmasa.wfrp_master.common.character.trappings.detail.ClothingOrAccessoryDetail
@@ -29,7 +30,7 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.FullScreenProgress
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.rememberScreenModel
 import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.IconAction
 import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.LocalPersistentSnackbarHolder
-import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
+import dev.icerock.moko.resources.compose.stringResource
 
 data class TrappingDetailScreen(
     private val characterId: CharacterId,
@@ -52,7 +53,7 @@ data class TrappingDetailScreen(
         val navigation = LocalNavigationTransaction.current
 
         if (trapping == null) {
-            val message = LocalStrings.current.trappings.messages.trappingNotFound
+            val message = stringResource(Str.trappings_messages_trapping_not_found)
             val snackbarHolder = LocalPersistentSnackbarHolder.current
 
             LaunchedEffect(Unit) {
@@ -98,7 +99,7 @@ private fun TrappingDetail(
                 actions = {
                     IconAction(
                         Icons.Rounded.Edit,
-                        LocalStrings.current.character.titleEdit,
+                        stringResource(Str.character_title_edit),
                         onClick = onEditRequest,
                     )
                 }
@@ -123,7 +124,7 @@ private fun TrappingDetail(
             TrappingType.BookOrDocument -> {
                 SimpleTrappingDetail(
                     trapping = trapping,
-                    trappingType = LocalStrings.current.trappings.types.bookOrDocument,
+                    trappingType = stringResource(Str.trappings_types_book_or_document),
                     onSaveRequest = screenModel::saveInventoryItem,
                 )
             }
@@ -151,21 +152,21 @@ private fun TrappingDetail(
             TrappingType.DrugOrPoison -> {
                 SimpleTrappingDetail(
                     trapping = trapping,
-                    trappingType = LocalStrings.current.trappings.types.drugOrPoison,
+                    trappingType = stringResource(Str.trappings_types_drug_or_poison),
                     onSaveRequest = screenModel::saveInventoryItem,
                 )
             }
             TrappingType.FoodOrDrink -> {
                 SimpleTrappingDetail(
                     trapping = trapping,
-                    trappingType = LocalStrings.current.trappings.types.foodOrDrink,
+                    trappingType = stringResource(Str.trappings_types_food_or_drink),
                     onSaveRequest = screenModel::saveInventoryItem,
                 )
             }
             TrappingType.HerbOrDraught -> {
                 SimpleTrappingDetail(
                     trapping = trapping,
-                    trappingType = LocalStrings.current.trappings.types.herbOrDraught,
+                    trappingType = stringResource(Str.trappings_types_herb_or_draught),
                     onSaveRequest = screenModel::saveInventoryItem,
                 )
             }
@@ -188,28 +189,28 @@ private fun TrappingDetail(
             null -> {
                 SimpleTrappingDetail(
                     trapping = trapping,
-                    trappingType = LocalStrings.current.trappings.types.miscellaneous,
+                    trappingType = stringResource(Str.trappings_types_miscellaneous),
                     onSaveRequest = screenModel::saveInventoryItem,
                 )
             }
             TrappingType.SpellIngredient -> {
                 SimpleTrappingDetail(
                     trapping = trapping,
-                    trappingType = LocalStrings.current.trappings.types.spellIngredient,
+                    trappingType = stringResource(Str.trappings_types_spell_ingredient),
                     onSaveRequest = screenModel::saveInventoryItem,
                 )
             }
             TrappingType.ToolOrKit -> {
                 SimpleTrappingDetail(
                     trapping = trapping,
-                    trappingType = LocalStrings.current.trappings.types.toolOrKit,
+                    trappingType = stringResource(Str.trappings_types_tool_or_kit),
                     onSaveRequest = screenModel::saveInventoryItem,
                 )
             }
             TrappingType.TradeTools -> {
                 SimpleTrappingDetail(
                     trapping = trapping,
-                    trappingType = LocalStrings.current.trappings.types.tradeTools,
+                    trappingType = stringResource(Str.trappings_types_trade_tools),
                     onSaveRequest = screenModel::saveInventoryItem,
                 )
             }

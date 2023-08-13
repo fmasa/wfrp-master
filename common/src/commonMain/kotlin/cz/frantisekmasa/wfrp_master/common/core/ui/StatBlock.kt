@@ -37,6 +37,7 @@ import androidx.compose.ui.text.withAnnotation
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import com.benasher44.uuid.uuidFrom
+import cz.frantisekmasa.wfrp_master.common.Str
 import cz.frantisekmasa.wfrp_master.common.character.religion.blessings.BlessingDetail
 import cz.frantisekmasa.wfrp_master.common.character.religion.miracles.MiracleDetail
 import cz.frantisekmasa.wfrp_master.common.character.skills.dialog.SkillDetail
@@ -56,7 +57,7 @@ import cz.frantisekmasa.wfrp_master.common.core.shared.Parcelable
 import cz.frantisekmasa.wfrp_master.common.core.shared.Parcelize
 import cz.frantisekmasa.wfrp_master.common.core.ui.dialogs.FullScreenDialog
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
-import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
+import dev.icerock.moko.resources.compose.stringResource
 
 @Immutable
 @Parcelize
@@ -85,7 +86,7 @@ fun StatBlock(
     }
 
     CharacterItemList(
-        title = LocalStrings.current.traits.titleTraits,
+        title = stringResource(Str.traits_title_traits),
         items = data.traits,
         value = { it.evaluatedName },
         detail = { trait, onDismissRequest ->
@@ -97,7 +98,7 @@ fun StatBlock(
     )
 
     CharacterItemList(
-        title = LocalStrings.current.skills.titleSkills,
+        title = stringResource(Str.skills_title_skills),
         items = derivedStateOf {
             // Only basic skills can have 0 advances,
             // and these can be easily derived from characteristics
@@ -108,21 +109,21 @@ fun StatBlock(
     )
 
     CharacterItemList(
-        title = LocalStrings.current.talents.titleTalents,
+        title = stringResource(Str.talents_title_talents),
         items = data.talents,
         value = { it.name + if (it.taken > 1) " ${it.taken}" else "" },
         detail = { talent, onDismissRequest -> TalentDetail(talent, onDismissRequest) },
     )
 
     CharacterItemList(
-        title = LocalStrings.current.spells.titleSpells,
+        title = stringResource(Str.spells_title_spells),
         items = data.spells,
         value = { it.name },
         detail = { spell, onDismissRequest -> SpellDetail(spell, onDismissRequest) },
     )
 
     CharacterItemList(
-        title = LocalStrings.current.blessings.title,
+        title = stringResource(Str.blessings_title),
         items = data.blessings,
         value = { it.name },
         detail = { blessing, onDismissRequest ->
@@ -134,7 +135,7 @@ fun StatBlock(
     )
 
     CharacterItemList(
-        title = LocalStrings.current.miracles.title,
+        title = stringResource(Str.miracles_title),
         items = data.miracles,
         value = { it.name },
         detail = { miracle, onDismissRequest ->

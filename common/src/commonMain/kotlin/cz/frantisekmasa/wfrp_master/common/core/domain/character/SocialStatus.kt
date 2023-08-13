@@ -1,10 +1,11 @@
 package cz.frantisekmasa.wfrp_master.common.core.domain.character
 
 import androidx.compose.runtime.Immutable
+import cz.frantisekmasa.wfrp_master.common.Str
 import cz.frantisekmasa.wfrp_master.common.core.domain.NamedEnum
 import cz.frantisekmasa.wfrp_master.common.core.shared.Parcelable
 import cz.frantisekmasa.wfrp_master.common.core.shared.Parcelize
-import cz.frantisekmasa.wfrp_master.common.localization.Strings
+import dev.icerock.moko.resources.StringResource
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -18,9 +19,11 @@ data class SocialStatus(
         require(standing >= 0) { "Status standing must be non-negative" }
     }
 
-    enum class Tier(override val nameResolver: (strings: Strings) -> String) : NamedEnum {
-        BRASS({ it.socialStatusBrass }),
-        SILVER({ it.socialStatusSilver }),
-        GOLD({ it.socialStatusGold }),
+    enum class Tier(
+        override val translatableName: StringResource,
+    ) : NamedEnum {
+        BRASS(Str.social_status_brass),
+        SILVER(Str.social_status_silver),
+        GOLD(Str.social_status_gold),
     }
 }

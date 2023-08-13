@@ -16,19 +16,19 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
+import cz.frantisekmasa.wfrp_master.common.Str
 import cz.frantisekmasa.wfrp_master.common.core.LocalStaticConfiguration
 import cz.frantisekmasa.wfrp_master.common.core.ui.buttons.BackButton
-import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
+import cz.frantisekmasa.wfrp_master.common.localization.FixedStrings
+import dev.icerock.moko.resources.compose.stringResource
 
 object AboutScreen : Screen {
     @Composable
     override fun Content() {
-        val strings = LocalStrings.current.about
-
         Scaffold(
             topBar = {
                 TopAppBar(
-                    title = { Text(strings.title) },
+                    title = { Text(stringResource(Str.about_title)) },
                     navigationIcon = { BackButton() }
                 )
             }
@@ -41,19 +41,22 @@ object AboutScreen : Screen {
                         .padding(horizontal = 20.dp)
                         .padding(top = 40.dp)
                 ) {
-                    Text(strings.appName, style = MaterialTheme.typography.h4)
+                    Text(FixedStrings.appName, style = MaterialTheme.typography.h4)
                     Text(LocalStaticConfiguration.current.version, Modifier.padding(bottom = 8.dp))
-                    Text(strings.body, textAlign = TextAlign.Center)
+                    Text(stringResource(Str.about_body), textAlign = TextAlign.Center)
 
                     Divider(Modifier.padding(vertical = 12.dp))
 
                     Text(
-                        strings.titleAttribution,
+                        stringResource(Str.about_title_attribution),
                         style = MaterialTheme.typography.h6,
                     )
 
-                    listOf(strings.attributionIcons, strings.attributionDiceRollSound).forEach {
-                        Text(it, textAlign = TextAlign.Center)
+                    listOf(
+                        Str.about_attribution_icons,
+                        Str.about_attribution_dice_roll_sound,
+                    ).forEach {
+                        Text(stringResource(it), textAlign = TextAlign.Center)
                     }
                 }
             }

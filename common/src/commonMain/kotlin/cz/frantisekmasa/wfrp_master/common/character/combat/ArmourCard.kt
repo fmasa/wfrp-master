@@ -25,6 +25,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import cz.frantisekmasa.wfrp_master.common.Str
 import cz.frantisekmasa.wfrp_master.common.character.combat.CharacterCombatScreenModel.WornArmourPiece
 import cz.frantisekmasa.wfrp_master.common.core.domain.HitLocation
 import cz.frantisekmasa.wfrp_master.common.core.domain.localizedName
@@ -37,7 +38,7 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.forms.Chip
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.UserTip
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.UserTipCard
-import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
+import dev.icerock.moko.resources.compose.stringResource
 
 @Composable
 fun ArmourCard(
@@ -53,7 +54,7 @@ fun ArmourCard(
             .padding(horizontal = 8.dp)
             .padding(bottom = 8.dp)
     ) {
-        CardTitle(LocalStrings.current.armour.title)
+        CardTitle(stringResource(Str.armour_title))
 
         Row(
             modifier = Modifier.padding(top = Spacing.large),
@@ -68,7 +69,7 @@ fun ArmourCard(
                 modifier = Modifier.weight(1f),
             ) {
                 Text(
-                    LocalStrings.current.characteristics.toughnessBonusShortcut,
+                    stringResource(Str.characteristics_toughness_bonus_shortcut),
                     Modifier.padding(end = Spacing.medium),
                 )
                 Points(toughnessBonus)
@@ -80,7 +81,7 @@ fun ArmourCard(
             ) {
                 Points(armour.shield)
                 Text(
-                    LocalStrings.current.armour.shield,
+                    stringResource(Str.armour_shield),
                     Modifier.padding(start = Spacing.medium),
                 )
             }

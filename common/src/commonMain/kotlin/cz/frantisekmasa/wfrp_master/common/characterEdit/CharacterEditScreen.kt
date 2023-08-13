@@ -19,6 +19,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.zIndex
 import cafe.adriel.voyager.core.screen.Screen
+import cz.frantisekmasa.wfrp_master.common.Str
 import cz.frantisekmasa.wfrp_master.common.character.CharacterScreenModel
 import cz.frantisekmasa.wfrp_master.common.core.domain.Characteristic
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.CharacterTab
@@ -38,8 +39,8 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.Subtitle
 import cz.frantisekmasa.wfrp_master.common.core.ui.settings.SettingsCard
 import cz.frantisekmasa.wfrp_master.common.core.ui.settings.SettingsTitle
 import cz.frantisekmasa.wfrp_master.common.gameMaster.GameMasterScreen
-import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
 import cz.frantisekmasa.wfrp_master.common.partyList.PartyListScreen
+import dev.icerock.moko.resources.compose.stringResource
 
 data class CharacterEditScreen(
     private val characterId: CharacterId,
@@ -105,24 +106,22 @@ data class CharacterEditScreen(
                         .offset(y = -(ItemIcon.Size.XLarge.dimensions * 3 / 4))
                         .zIndex(1f)
                 ) {
-                    val strings = LocalStrings.current
-
-                    SettingsTitle(strings.character.titleGeneralSettings)
+                    SettingsTitle(stringResource(Str.character_title_general_settings))
 
                     ListItem(
-                        text = { Text(strings.character.titleBasics) },
-                        secondaryText = { Text(strings.character.secondaryTextBasics) },
+                        text = { Text(stringResource(Str.character_title_basics)) },
+                        secondaryText = { Text(stringResource(Str.character_secondary_text_basics)) },
                         modifier = Modifier.clickable { openSection(Section.BASICS) },
                     )
 
                     ListItem(
-                        text = { Text(strings.character.titleCareer) },
-                        secondaryText = { Text(strings.character.secondaryTextCareer) },
+                        text = { Text(stringResource(Str.character_title_career)) },
+                        secondaryText = { Text(stringResource(Str.character_secondary_text_career)) },
                         modifier = Modifier.clickable { openSection(Section.CAREER) },
                     )
 
                     ListItem(
-                        text = { Text(strings.character.titleCharacteristics) },
+                        text = { Text(stringResource(Str.character_title_characteristics)) },
                         modifier = Modifier.clickable { openSection(Section.CHARACTERISTICS) },
                         secondaryText = {
                             Text(
@@ -134,32 +133,33 @@ data class CharacterEditScreen(
                     )
 
                     ListItem(
-                        text = { Text(strings.points.wounds) },
-                        secondaryText = { Text(strings.character.secondaryTextWounds) },
+                        text = { Text(stringResource(Str.points_wounds)) },
+                        secondaryText = { Text(stringResource(Str.character_secondary_text_wounds)) },
                         modifier = Modifier.clickable { openSection(Section.WOUNDS) },
                     )
 
                     ListItem(
-                        text = { Text(strings.points.experience) },
-                        secondaryText = { Text(strings.character.secondaryTextExperience) },
+                        text = { Text(stringResource(Str.points_experience)) },
+                        secondaryText = { Text(stringResource(Str.character_secondary_text_experience)) },
                         modifier = Modifier.clickable { openSection(Section.EXPERIENCE) },
                     )
 
                     ListItem(
-                        text = { Text(strings.character.titleWellBeing) },
-                        secondaryText = { Text(strings.character.secondaryTextWellBeing) },
+                        text = { Text(stringResource(Str.character_title_well_being)) },
+                        secondaryText = { Text(stringResource(Str.character_secondary_text_well_being)) },
                         modifier = Modifier.clickable { openSection(Section.WELL_BEING) },
                     )
 
-                    SettingsTitle(strings.character.titleUiSettings)
+                    SettingsTitle(stringResource(Str.character_title_ui_settings))
 
                     ListItem(
-                        text = { Text(strings.character.titleVisibleTabs) },
+                        text = { Text(stringResource(Str.character_title_visible_tabs)) },
                         secondaryText = {
                             val tabs = remember { CharacterTab.values().toSet() }
 
                             Text(
-                                strings.character.tabsVisible(
+                                stringResource(
+                                    Str.character_tabs_visible,
                                     tabs.size - character.hiddenTabs.size,
                                     tabs.size,
                                 )
@@ -174,14 +174,15 @@ data class CharacterEditScreen(
                     var removalDialogOpened by remember { mutableStateOf(false) }
 
                     if (removalDialogOpened) {
+                        val messageCharacterRemoved = stringResource(
+                            Str.character_messages_character_removed
+                        )
                         CharacterRemovalDialog(
                             character = character,
                             onDismissRequest = { removalDialogOpened = false },
                             onConfirmation = {
                                 screenModel.archive()
-                                snackbarHolder.showSnackbar(
-                                    strings.character.messages.characterRemoved,
-                                )
+                                snackbarHolder.showSnackbar(messageCharacterRemoved)
                                 navigation.goBackTo {
                                     it is GameMasterScreen || it == PartyListScreen
                                 }
@@ -198,14 +199,14 @@ data class CharacterEditScreen(
                             if (dialogOpened) {
                                 ConfirmationDialog(
                                     onDismissRequest = { setDialogOpened(false) },
-                                    text = LocalStrings.current.character.messages.turnIntoPCConfirmation,
-                                    confirmationButtonText = LocalStrings.current.commonUi.buttonYes,
+                                    text = stringResource(Str.character_messages_turn_into_p_c_confirmation),
+                                    confirmationButtonText = stringResource(Str.common_ui_button_yes),
                                     onConfirmation = { screenModel.update { it.turnIntoPlayerCharacter() } },
                                 )
                             }
 
                             ListItem(
-                                text = { Text(strings.character.buttonTurnIntoPC) },
+                                text = { Text(stringResource(Str.character_button_turn_into_p_c)) },
                                 modifier = Modifier.clickable { setDialogOpened(true) },
                             )
                         }
@@ -216,14 +217,14 @@ data class CharacterEditScreen(
                             if (dialogOpened) {
                                 ConfirmationDialog(
                                     onDismissRequest = { setDialogOpened(false) },
-                                    text = LocalStrings.current.character.messages.turnIntoNPCConfirmation,
-                                    confirmationButtonText = LocalStrings.current.commonUi.buttonYes,
+                                    text = stringResource(Str.character_messages_turn_into_n_p_c_confirmation),
+                                    confirmationButtonText = stringResource(Str.common_ui_button_yes),
                                     onConfirmation = { screenModel.update { it.turnIntoNPC() } },
                                 )
                             }
 
                             ListItem(
-                                text = { Text(strings.character.buttonTurnIntoNPC) },
+                                text = { Text(stringResource(Str.character_button_turn_into_n_p_c)) },
                                 modifier = Modifier.clickable { setDialogOpened(true) },
                             )
                         }
@@ -234,23 +235,23 @@ data class CharacterEditScreen(
                             if (dialogOpened) {
                                 ConfirmationDialog(
                                     onDismissRequest = { setDialogOpened(false) },
-                                    text = LocalStrings.current.character.messages.unlinkFromPlayerConfirmation,
-                                    confirmationButtonText = LocalStrings.current.commonUi.buttonYes,
+                                    text = stringResource(Str.character_messages_unlink_from_player_confirmation),
+                                    confirmationButtonText = stringResource(Str.common_ui_button_yes),
                                     onConfirmation = { screenModel.update { it.unlinkFromUser() } },
                                 )
                             }
 
                             ListItem(
-                                text = { Text(strings.character.buttonUnlinkFromPlayer) },
-                                secondaryText = { Text(strings.character.buttonUnlinkFromPlayerSubtext) },
+                                text = { Text(stringResource(Str.character_button_unlink_from_player)) },
+                                secondaryText = { Text(stringResource(Str.character_button_unlink_from_player_subtext)) },
                                 modifier = Modifier.clickable { setDialogOpened(true) },
                             )
                         }
                     }
 
                     ListItem(
-                        text = { Text(strings.character.titleRemoval) },
-                        secondaryText = { Text(strings.character.secondaryTextRemoval) },
+                        text = { Text(stringResource(Str.character_title_removal)) },
+                        secondaryText = { Text(stringResource(Str.character_secondary_text_removal)) },
                         modifier = Modifier.clickable { removalDialogOpened = true },
                     )
                 }
@@ -265,7 +266,7 @@ data class CharacterEditScreen(
             title = {
                 Column {
                     Text(characterName)
-                    Subtitle(LocalStrings.current.character.titleEdit)
+                    Subtitle(stringResource(Str.character_title_edit))
                 }
             },
         )

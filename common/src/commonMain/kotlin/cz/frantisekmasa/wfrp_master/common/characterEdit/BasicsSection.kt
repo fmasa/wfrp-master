@@ -9,6 +9,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import cz.frantisekmasa.wfrp_master.common.Str
 import cz.frantisekmasa.wfrp_master.common.character.CharacterScreenModel
 import cz.frantisekmasa.wfrp_master.common.characterCreation.raceOptions
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.Character
@@ -21,15 +22,14 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.forms.InputValue
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.Rules
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.TextInput
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.inputValue
-import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
+import dev.icerock.moko.resources.compose.stringResource
 
 @Composable
 fun BasicsSection(character: Character, screenModel: CharacterScreenModel) {
     val data = BasicFormData.fromCharacter(character)
-    val strings = LocalStrings.current.character
 
     FormScreen(
-        title = strings.titleBasics,
+        title = stringResource(Str.character_title_basics),
         formData = data,
         onSave = {
             screenModel.update { character ->
@@ -44,7 +44,7 @@ fun BasicsSection(character: Character, screenModel: CharacterScreenModel) {
         }
     ) { validate ->
         TextInput(
-            label = strings.labelName,
+            label = stringResource(Str.character_label_name),
             value = data.name,
             maxLength = Character.NAME_MAX_LENGTH,
             validate = validate,
@@ -52,7 +52,7 @@ fun BasicsSection(character: Character, screenModel: CharacterScreenModel) {
 
         if (character.type == CharacterType.NPC) {
             TextInput(
-                label = strings.labelPublicName,
+                label = stringResource(Str.character_label_public_name),
                 value = data.publicName,
                 maxLength = Character.NAME_MAX_LENGTH,
                 validate = validate,
@@ -60,7 +60,7 @@ fun BasicsSection(character: Character, screenModel: CharacterScreenModel) {
         }
 
         ChipList(
-            label = strings.labelRace,
+            label = stringResource(Str.character_label_race),
             modifier = Modifier.padding(top = 8.dp),
             items = raceOptions(),
             value = data.race.value,
@@ -68,7 +68,7 @@ fun BasicsSection(character: Character, screenModel: CharacterScreenModel) {
         )
 
         TextInput(
-            label = strings.labelMotivation,
+            label = stringResource(Str.character_label_motivation),
             value = data.motivation,
             maxLength = Character.MOTIVATION_MAX_LENGTH,
             validate = validate,
@@ -76,7 +76,7 @@ fun BasicsSection(character: Character, screenModel: CharacterScreenModel) {
         )
 
         TextInput(
-            label = strings.labelNote,
+            label = stringResource(Str.character_label_note),
             value = data.note,
             maxLength = Character.NOTE_MAX_LENGTH,
             validate = validate,

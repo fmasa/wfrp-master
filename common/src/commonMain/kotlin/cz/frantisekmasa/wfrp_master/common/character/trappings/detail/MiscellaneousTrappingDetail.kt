@@ -6,10 +6,11 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import cz.frantisekmasa.wfrp_master.common.Str
 import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.InventoryItem
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
 import cz.frantisekmasa.wfrp_master.common.core.ui.text.SingleLineTextValue
-import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
+import dev.icerock.moko.resources.compose.stringResource
 
 @Composable
 fun SimpleTrappingDetail(
@@ -21,7 +22,7 @@ fun SimpleTrappingDetail(
         QuantityBar(trapping, onSaveRequest)
 
         Column(Modifier.padding(Spacing.bodyPadding)) {
-            SingleLineTextValue(LocalStrings.current.trappings.labelType, trappingType)
+            SingleLineTextValue(stringResource(Str.trappings_label_type), trappingType)
 
             EncumbranceBox(trapping)
 

@@ -1,15 +1,18 @@
 package cz.frantisekmasa.wfrp_master.common.core.domain.character
 
+import cz.frantisekmasa.wfrp_master.common.Str
 import cz.frantisekmasa.wfrp_master.common.core.domain.NamedEnum
-import cz.frantisekmasa.wfrp_master.common.localization.Strings
+import dev.icerock.moko.resources.StringResource
 
-enum class CharacterTab(override val nameResolver: (strings: Strings) -> String) : NamedEnum {
-    ATTRIBUTES({ it.character.tabAttributes }),
-    COMBAT({ it.character.tabCombat }),
-    CONDITIONS({ it.character.tabConditions }),
-    SKILLS_AND_TALENTS({ it.character.tabSkillsAndTalents }),
-    SPELLS({ it.character.tabSpells }),
-    RELIGION({ it.character.tabReligions }),
-    TRAPPINGS({ it.character.tabTrappings }),
-    NOTES({ it.character.tabNotes }),
+enum class CharacterTab(
+    override val translatableName: StringResource,
+) : NamedEnum {
+    ATTRIBUTES(Str.character_tab_attributes),
+    COMBAT(Str.character_tab_combat),
+    CONDITIONS(Str.character_tab_conditions),
+    SKILLS_AND_TALENTS(Str.character_tab_skills_and_talents),
+    SPELLS(Str.character_tab_spells),
+    RELIGION(Str.character_tab_religions),
+    TRAPPINGS(Str.character_tab_trappings),
+    NOTES(Str.character_tab_notes),
 }

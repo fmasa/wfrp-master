@@ -9,6 +9,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
+import cz.frantisekmasa.wfrp_master.common.Str
 import cz.frantisekmasa.wfrp_master.common.core.PartyScreenModel
 import cz.frantisekmasa.wfrp_master.common.core.domain.localizedName
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.PartyId
@@ -24,7 +25,7 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.rememberScreenModel
 import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.OptionsAction
 import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.Subtitle
-import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
+import dev.icerock.moko.resources.compose.stringResource
 
 class CompendiumListScreen(
     private val partyId: PartyId,
@@ -34,7 +35,6 @@ class CompendiumListScreen(
     override fun Content() {
         val screenModel: PartyScreenModel = rememberScreenModel(arg = partyId)
 
-        val strings = LocalStrings.current.compendium
         val navigation = LocalNavigationTransaction.current
 
         Scaffold(
@@ -42,7 +42,7 @@ class CompendiumListScreen(
                 TopAppBar(
                     title = {
                         Column {
-                            Text(strings.title)
+                            Text(stringResource(Str.compendium_title))
                             screenModel.party.collectWithLifecycle(null).value?.let {
                                 Subtitle(it.name)
                             }
@@ -56,7 +56,7 @@ class CompendiumListScreen(
                                     navigation.navigate(RulebookCompendiumImportScreen(partyId))
                                 }
                             ) {
-                                Text(strings.buttonImportFromRulebook)
+                                Text(stringResource(Str.compendium_button_import_from_rulebook))
                             }
 
                             DropdownMenuItem(
@@ -64,7 +64,7 @@ class CompendiumListScreen(
                                     navigation.navigate(JsonCompendiumImportScreen(partyId))
                                 }
                             ) {
-                                Text(strings.buttonImportFile)
+                                Text(stringResource(Str.compendium_button_import_file))
                             }
 
                             DropdownMenuItem(
@@ -72,7 +72,7 @@ class CompendiumListScreen(
                                     navigation.navigate(JsonCompendiumExportScreen(partyId))
                                 }
                             ) {
-                                Text(strings.buttonExportFile)
+                                Text(stringResource(Str.compendium_button_export_file))
                             }
                         }
                     }

@@ -7,6 +7,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import com.benasher44.uuid.Uuid
 import com.benasher44.uuid.uuid4
+import cz.frantisekmasa.wfrp_master.common.Str
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.Career
 import cz.frantisekmasa.wfrp_master.common.core.domain.Characteristic
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.SocialStatus
@@ -22,7 +23,7 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.forms.Rules
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.SocialStatusInput
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.TextInput
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.inputValue
-import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
+import dev.icerock.moko.resources.compose.stringResource
 
 @Composable
 fun CareerLevelDialog(
@@ -41,10 +42,8 @@ fun CareerLevelDialog(
             formData = data,
             onSave = onSave,
         ) { validate ->
-            val strings = LocalStrings.current.careers
-
             TextInput(
-                label = strings.labelName,
+                label = stringResource(Str.careers_label_name),
                 value = data.name,
                 validate = validate,
             )
@@ -54,7 +53,7 @@ fun CareerLevelDialog(
                 onValueChange = { data.status.value = it },
             )
 
-            InputLabel(strings.labelCharacteristics)
+            InputLabel(stringResource(Str.careers_label_characteristics))
 
             CheckboxList(
                 Characteristic.values(),
@@ -63,35 +62,35 @@ fun CareerLevelDialog(
             )
 
             TextInput(
-                label = strings.labelIncomeSkills,
+                label = stringResource(Str.careers_label_income_skills),
                 value = data.incomeSkills,
                 validate = validate,
                 multiLine = true,
-                helperText = strings.commaSeparatedSkillsHelper,
+                helperText = stringResource(Str.careers_comma_separated_skills_helper),
             )
 
             TextInput(
-                label = strings.labelSkills,
+                label = stringResource(Str.careers_label_skills),
                 value = data.skills,
                 validate = validate,
                 multiLine = true,
-                helperText = strings.commaSeparatedSkillsHelper,
+                helperText = stringResource(Str.careers_comma_separated_skills_helper),
             )
 
             TextInput(
-                label = strings.labelTalents,
+                label = stringResource(Str.careers_label_talents),
                 value = data.talents,
                 validate = validate,
                 multiLine = true,
-                helperText = strings.commaSeparatedTalentsHelper,
+                helperText = stringResource(Str.careers_comma_separated_talents_helper),
             )
 
             TextInput(
-                label = strings.labelTrappings,
+                label = stringResource(Str.careers_label_trappings),
                 value = data.trappings,
                 validate = validate,
                 multiLine = true,
-                helperText = strings.commaSeparatedTrappingsHelper,
+                helperText = stringResource(Str.careers_comma_separated_trappings_helper),
             )
         }
     }
@@ -151,7 +150,7 @@ data class CareerLevelDialogData(
     companion object {
         @Composable
         fun fromCareerLevel(level: Career.Level?, existingLevelNames: Set<String>): CareerLevelDialogData {
-            val strings = LocalStrings.current.careers.messages
+            val errorLevelWithNameExists = stringResource(Str.careers_messages_level_with_name_exists)
             return CareerLevelDialogData(
                 id = level?.id,
                 name = inputValue(
@@ -159,7 +158,7 @@ data class CareerLevelDialogData(
                     Rules.NotBlank(),
                     Rule {
                         if (it.trim() in existingLevelNames)
-                            strings.levelWithNameExists
+                            errorLevelWithNameExists
                         else null
                     }
                 ),

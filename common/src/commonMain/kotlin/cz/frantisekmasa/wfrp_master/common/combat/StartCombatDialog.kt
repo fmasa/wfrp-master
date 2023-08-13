@@ -21,6 +21,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import cz.frantisekmasa.wfrp_master.common.Str
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.Character
 import cz.frantisekmasa.wfrp_master.common.core.shared.IO
 import cz.frantisekmasa.wfrp_master.common.core.ui.buttons.CloseButton
@@ -32,7 +33,7 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
 import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.TopBarAction
 import cz.frantisekmasa.wfrp_master.common.encounters.domain.Encounter
 import cz.frantisekmasa.wfrp_master.common.encounters.domain.Npc
-import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
+import dev.icerock.moko.resources.compose.stringResource
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
@@ -70,13 +71,13 @@ fun StartCombatDialog(
             topBar = {
                 TopAppBar(
                     navigationIcon = { CloseButton(onClick = onDismissRequest) },
-                    title = { Text(LocalStrings.current.combat.titleStartCombat) },
+                    title = { Text(stringResource(Str.combat_title_start_combat)) },
                     actions = {
                         val saving by remember { mutableStateOf(false) }
                         val coroutineScope = rememberCoroutineScope()
 
                         TopBarAction(
-                            text = LocalStrings.current.commonUi.buttonSave,
+                            text = stringResource(Str.common_ui_button_save),
                             onClick = {
                                 coroutineScope.launch(Dispatchers.IO) {
                                     screenModel.startCombat(
@@ -104,7 +105,7 @@ fun StartCombatDialog(
                 verticalArrangement = Arrangement.spacedBy(Spacing.small),
             ) {
                 CombatantList(
-                    title = LocalStrings.current.combat.titleCharacterCombatants,
+                    title = stringResource(Str.combat_title_character_combatants),
                     items = characters,
                     nameFactory = { it.name },
                 )
@@ -113,7 +114,7 @@ fun StartCombatDialog(
                     NpcCharacterList(npcCharacters)
                 } else {
                     CombatantList(
-                        title = LocalStrings.current.combat.titleNpcCombatants,
+                        title = stringResource(Str.combat_title_npc_combatants),
                         items = npcs,
                         nameFactory = { it.name },
                     )
@@ -159,7 +160,7 @@ private fun <T> CombatantList(
 @Composable
 private fun NpcCharacterList(items: MutableMap<Character, Int>) {
     CardContainer(Modifier.fillMaxWidth()) {
-        CardTitle(LocalStrings.current.combat.titleNpcCombatants)
+        CardTitle(stringResource(Str.combat_title_npc_combatants))
 
         val sortedCharacters by derivedStateOf {
             items.toList().sortedBy { (character, _) -> character.name }

@@ -21,11 +21,12 @@ import com.google.firebase.dynamiclinks.ktx.androidParameters
 import com.google.firebase.dynamiclinks.ktx.dynamicLinks
 import com.google.firebase.dynamiclinks.ktx.shortLinkAsync
 import com.google.firebase.ktx.Firebase
+import cz.frantisekmasa.wfrp_master.common.Str
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.Invitation
 import cz.frantisekmasa.wfrp_master.common.core.logging.Reporter
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.FullScreenProgress
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.VisualOnlyIconDescription
-import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
+import dev.icerock.moko.resources.compose.stringResource
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
@@ -42,10 +43,9 @@ actual fun InvitationDialogContent(invitation: Invitation, screenModel: Invitati
         FullScreenProgress()
     } else {
         val context = LocalContext.current
-        val strings = LocalStrings.current.parties
 
         Text(
-            strings.messages.qrCodeDescription,
+            stringResource(Str.parties_messages_qr_code_description),
             modifier = Modifier.fillMaxWidth(),
             textAlign = TextAlign.Center,
             style = MaterialTheme.typography.caption,
@@ -60,7 +60,7 @@ actual fun InvitationDialogContent(invitation: Invitation, screenModel: Invitati
             },
         ) {
             Icon(Icons.Rounded.Share, VisualOnlyIconDescription)
-            Text(strings.buttonShareLink.uppercase())
+            Text(stringResource(Str.parties_button_share_link).uppercase())
         }
     }
 }

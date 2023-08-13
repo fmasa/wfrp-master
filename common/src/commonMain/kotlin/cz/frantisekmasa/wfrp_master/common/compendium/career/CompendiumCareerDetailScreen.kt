@@ -38,6 +38,7 @@ import cafe.adriel.voyager.core.screen.Screen
 import com.benasher44.uuid.Uuid
 import com.halilibo.richtext.markdown.Markdown
 import com.halilibo.richtext.ui.RichText
+import cz.frantisekmasa.wfrp_master.common.Str
 import cz.frantisekmasa.wfrp_master.common.compendium.VisibilitySwitchBar
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.Career
 import cz.frantisekmasa.wfrp_master.common.core.PartyScreenModel
@@ -62,7 +63,7 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.LocalPersistentSn
 import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.tabs.TabPager
 import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.tabs.tab
 import cz.frantisekmasa.wfrp_master.common.core.ui.text.SingleLineTextValue
-import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
+import dev.icerock.moko.resources.compose.stringResource
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
@@ -93,12 +94,12 @@ class CompendiumCareerDetailScreen(
             ?.takeIf { it.isVisibleToPlayers || party.gameMasterId == LocalUser.current.id }
 
         val snackbarHolder = LocalPersistentSnackbarHolder.current
-        val strings = LocalStrings.current
         val navigation = LocalNavigationTransaction.current
 
         if (careerValue == null) {
+            val messageNotFound = stringResource(Str.careers_messages_not_found)
             LaunchedEffect(Unit) {
-                snackbarHolder.showSnackbar(strings.careers.messages.notFound)
+                snackbarHolder.showSnackbar(messageNotFound)
                 navigation.goBack()
             }
 
@@ -121,7 +122,6 @@ class CompendiumCareerDetailScreen(
 
     @Composable
     private fun Detail(career: Career, party: Party, screenModel: CareerCompendiumScreenModel) {
-        val strings = LocalStrings.current.careers
         val (dialogState, setDialogState) = remember {
             mutableStateOf<LevelDialogState>(
                 LevelDialogState.Closed
@@ -135,7 +135,7 @@ class CompendiumCareerDetailScreen(
             LevelDialogState.Closed -> {}
             LevelDialogState.AddLevel -> {
                 CareerLevelDialog(
-                    title = strings.titleAddLevel,
+                    title = stringResource(Str.careers_title_add_level),
                     existingLevel = null,
                     onSave = { screenModel.saveLevel(career.id, it) },
                     onDismissRequest = { setDialogState(LevelDialogState.Closed) },
@@ -144,7 +144,7 @@ class CompendiumCareerDetailScreen(
             }
             is LevelDialogState.EditLevel -> {
                 CareerLevelDialog(
-                    title = strings.titleEditLevel,
+                    title = stringResource(Str.careers_title_edit_level),
                     existingLevel = dialogState.level,
                     onSave = { screenModel.saveLevel(career.id, it) },
                     onDismissRequest = { setDialogState(LevelDialogState.Closed) },
@@ -163,7 +163,7 @@ class CompendiumCareerDetailScreen(
 
                         if (editDialogOpened) {
                             CareerFormDialog(
-                                title = LocalStrings.current.careers.titleEditCareer,
+                                title = stringResource(Str.careers_title_edit_career),
                                 existingCareer = CareerData(
                                     name = career.name,
                                     description = career.description,
@@ -187,7 +187,7 @@ class CompendiumCareerDetailScreen(
                         if (isGameMaster) {
                             IconAction(
                                 Icons.Rounded.Edit,
-                                LocalStrings.current.careers.titleEditCareer,
+                                stringResource(Str.careers_title_edit_career),
                                 onClick = { editDialogOpened = true }
                             )
                         }
@@ -197,13 +197,16 @@ class CompendiumCareerDetailScreen(
             floatingActionButton = {
                 if (isGameMaster) {
                     FloatingActionButton(onClick = { setDialogState(LevelDialogState.AddLevel) }) {
-                        Icon(Icons.Rounded.Add, strings.titleAddLevel)
+                        Icon(Icons.Rounded.Add, stringResource(Str.careers_title_add_level))
                     }
                 }
             }
         ) {
+            val tabDetail = stringResource(Str.careers_tab_detail)
+            val tabLevels = stringResource(Str.careers_tab_levels)
+
             TabPager(fullWidthTabs = true) {
-                tab(strings.tabDetail) {
+                tab(tabDetail) {
                     Column {
                         if (isGameMaster) {
                             VisibilitySwitchBar(
@@ -215,18 +218,16 @@ class CompendiumCareerDetailScreen(
                         LazyColumn(contentPadding = PaddingValues(Spacing.bodyPadding)) {
                             item {
                                 SingleLineTextValue(
-                                    strings.labelSocialClass,
+                                    stringResource(Str.careers_label_social_class),
                                     career.socialClass.localizedName,
                                 )
                             }
 
                             item {
-                                val globalStrings = LocalStrings.current
                                 SingleLineTextValue(
-                                    strings.labelRaces,
-                                    career.races.joinToString(", ") {
-                                        it.nameResolver(globalStrings)
-                                    },
+                                    stringResource(Str.careers_label_races),
+                                    career.races.map { it.localizedName }
+                                        .joinToString(", ")
                                 )
                             }
 
@@ -239,7 +240,7 @@ class CompendiumCareerDetailScreen(
                     }
                 }
 
-                tab(strings.tabLevels) {
+                tab(tabLevels) {
                     val coroutineScope = rememberCoroutineScope()
 
                     LevelList(
@@ -270,8 +271,8 @@ private fun LevelList(
     if (levels.isEmpty()) {
         EmptyUI(
             icon = Resources.Drawable.Career,
-            text = LocalStrings.current.careers.messages.noLevel,
-            subText = LocalStrings.current.careers.messages.noLevelSubtext,
+            text = stringResource(Str.careers_messages_no_level),
+            subText = stringResource(Str.careers_messages_no_level_subtext),
         )
         return
     }
@@ -312,7 +313,7 @@ private fun LevelList(
                             Text(
                                 buildAnnotatedString {
                                     withStyle(SpanStyle(fontWeight = FontWeight.Bold)) {
-                                        append(LocalStrings.current.careers.labelCharacteristics)
+                                        append(stringResource(Str.careers_label_characteristics))
                                         append(": ")
                                     }
 
@@ -336,7 +337,7 @@ private fun LevelList(
                             Text(
                                 buildAnnotatedString {
                                     withStyle(SpanStyle(fontWeight = FontWeight.Bold)) {
-                                        append(LocalStrings.current.skills.titleSkills)
+                                        append(stringResource(Str.skills_title_skills))
                                         append(": ")
                                     }
 
@@ -363,7 +364,7 @@ private fun LevelList(
                             Text(
                                 buildAnnotatedString {
                                     withStyle(SpanStyle(fontWeight = FontWeight.Bold)) {
-                                        append(LocalStrings.current.talents.titleTalents)
+                                        append(stringResource(Str.talents_title_talents))
                                         append(": ")
                                     }
 
@@ -385,7 +386,7 @@ private fun LevelList(
                             Text(
                                 buildAnnotatedString {
                                     withStyle(SpanStyle(fontWeight = FontWeight.Bold)) {
-                                        append(LocalStrings.current.trappings.title)
+                                        append(stringResource(Str.trappings_title))
                                         append(": ")
                                     }
 

@@ -1,11 +1,12 @@
 package cz.frantisekmasa.wfrp_master.common.core.domain.party.settings
 
+import cz.frantisekmasa.wfrp_master.common.Str
 import cz.frantisekmasa.wfrp_master.common.core.domain.NamedEnum
-import cz.frantisekmasa.wfrp_master.common.localization.Strings
+import dev.icerock.moko.resources.StringResource
 
 enum class AdvantageSystem(
-    override val nameResolver: (strings: Strings) -> String
+    override val translatableName: StringResource
 ) : NamedEnum {
-    CORE_RULEBOOK({ it.combat.advantageSystems.coreRulebook }),
-    GROUP_ADVANTAGE({ it.combat.advantageSystems.groupAdvantage }),
+    CORE_RULEBOOK(Str.combat_advantage_systems_core_rulebook),
+    GROUP_ADVANTAGE(Str.combat_advantage_systems_group_advantage),
 }

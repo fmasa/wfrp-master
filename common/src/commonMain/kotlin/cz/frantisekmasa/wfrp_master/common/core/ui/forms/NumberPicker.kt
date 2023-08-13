@@ -18,7 +18,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
+import cz.frantisekmasa.wfrp_master.common.Str
+import dev.icerock.moko.resources.compose.stringResource
 
 @Composable
 fun NumberPicker(
@@ -51,7 +52,7 @@ fun NumberPicker(
             ) {
                 Icon(
                     Icons.Rounded.RemoveCircleOutline,
-                    contentDescription = LocalStrings.current.commonUi.decrement,
+                    contentDescription = stringResource(Str.common_ui_decrement),
                     tint = tint,
                 )
             }
@@ -68,7 +69,7 @@ fun NumberPicker(
             ) {
                 Icon(
                     Icons.Rounded.AddCircleOutline,
-                    contentDescription = LocalStrings.current.commonUi.increment,
+                    contentDescription = stringResource(Str.common_ui_increment),
                     tint = tint,
                 )
             }

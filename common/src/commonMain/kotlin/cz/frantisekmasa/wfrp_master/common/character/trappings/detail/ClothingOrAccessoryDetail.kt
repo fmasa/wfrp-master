@@ -6,11 +6,12 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import cz.frantisekmasa.wfrp_master.common.Str
 import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.InventoryItem
 import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.TrappingType
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
 import cz.frantisekmasa.wfrp_master.common.core.ui.text.SingleLineTextValue
-import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
+import dev.icerock.moko.resources.compose.stringResource
 
 @Composable
 fun ClothingOrAccessoryDetail(
@@ -22,11 +23,9 @@ fun ClothingOrAccessoryDetail(
         WornBar(trapping, clothingOrAccessory, onSaveRequest)
 
         Column(Modifier.padding(Spacing.bodyPadding)) {
-            val strings = LocalStrings.current
-
             SingleLineTextValue(
-                strings.trappings.labelType,
-                strings.trappings.types.clothingOrAccessory,
+                stringResource(Str.trappings_label_type),
+                stringResource(Str.trappings_types_clothing_or_accessory),
             )
 
             EncumbranceBox(trapping)

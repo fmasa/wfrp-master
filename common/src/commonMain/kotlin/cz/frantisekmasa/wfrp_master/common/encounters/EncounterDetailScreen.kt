@@ -44,6 +44,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
+import cz.frantisekmasa.wfrp_master.common.Str
 import cz.frantisekmasa.wfrp_master.common.character.CharacterDetailScreen
 import cz.frantisekmasa.wfrp_master.common.combat.ActiveCombatScreen
 import cz.frantisekmasa.wfrp_master.common.combat.StartCombatDialog
@@ -78,9 +79,9 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.OptionsAction
 import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.SubheadBar
 import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.Subtitle
 import cz.frantisekmasa.wfrp_master.common.encounters.domain.Encounter
-import cz.frantisekmasa.wfrp_master.common.localization.LocalStrings
 import cz.frantisekmasa.wfrp_master.common.npcs.NpcCreationScreen
 import cz.frantisekmasa.wfrp_master.common.npcs.NpcDetailScreen
+import dev.icerock.moko.resources.compose.stringResource
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlin.coroutines.EmptyCoroutineContext
@@ -131,7 +132,7 @@ class EncounterDetailScreen(
                             Modifier.width(24.dp),
                         )
                     },
-                    text = { Text(LocalStrings.current.combat.titleStartCombat) },
+                    text = { Text(stringResource(Str.combat_title_start_combat)) },
                     onClick = { startCombatDialogVisible = true },
                 )
             },
@@ -177,12 +178,10 @@ class EncounterDetailScreen(
             )
         }
 
-        val strings = LocalStrings.current
-
         IconButton(onClick = { editDialogOpened = true }) {
             Icon(
                 Icons.Rounded.Edit,
-                strings.encounters.titleEdit,
+                stringResource(Str.encounters_title_edit),
                 tint = contentColorFor(MaterialTheme.colors.primarySurface),
             )
         }
@@ -195,7 +194,7 @@ class EncounterDetailScreen(
             if (dialogOpened) {
                 AlertDialog(
                     onDismissRequest = { dialogOpened = false },
-                    text = { Text(strings.encounters.messages.removalConfirmation) },
+                    text = { Text(stringResource(Str.encounters_messages_removal_confirmation)) },
                     confirmButton = {
                         TextButton(
                             onClick = {
@@ -205,12 +204,12 @@ class EncounterDetailScreen(
                                 }
                             }
                         ) {
-                            Text(strings.commonUi.buttonRemove)
+                            Text(stringResource(Str.common_ui_button_remove).uppercase())
                         }
                     },
                     dismissButton = {
                         TextButton(onClick = { dialogOpened = false }) {
-                            Text(strings.commonUi.buttonCancel)
+                            Text(stringResource(Str.common_ui_button_cancel).uppercase())
                         }
                     }
                 )
@@ -219,7 +218,7 @@ class EncounterDetailScreen(
             DropdownMenuItem(
                 onClick = { dialogOpened = true }
             ) {
-                Text(LocalStrings.current.commonUi.buttonRemove)
+                Text(stringResource(Str.common_ui_button_remove))
             }
         }
     }
@@ -252,7 +251,7 @@ class EncounterDetailScreen(
                     verticalAlignment = Alignment.CenterVertically,
                     modifier = Modifier.fillMaxWidth(),
                 ) {
-                    Text(LocalStrings.current.encounters.labelCompleted)
+                    Text(stringResource(Str.encounters_label_completed))
                     Switch(
                         checked = encounter.completed,
                         onCheckedChange = {
@@ -291,7 +290,7 @@ class EncounterDetailScreen(
                 .fillMaxWidth()
                 .padding(horizontal = 8.dp)
         ) {
-            CardTitle(LocalStrings.current.encounters.titleDescription)
+            CardTitle(stringResource(Str.encounters_title_description))
 
             val encounter = screenModel.encounter.collectWithLifecycle(null).value
 
@@ -319,9 +318,7 @@ class EncounterDetailScreen(
                 .fillMaxWidth()
                 .padding(8.dp)
         ) {
-            val strings = LocalStrings.current.npcs
-
-            CardTitle(strings.titlePlural)
+            CardTitle(stringResource(Str.npcs_title_plural))
 
             Column(Modifier.fillMaxWidth()) {
                 NpcList(
@@ -335,7 +332,7 @@ class EncounterDetailScreen(
                     Modifier.fillMaxWidth(),
                     contentAlignment = Alignment.TopCenter
                 ) {
-                    PrimaryButton(LocalStrings.current.npcs.buttonAddNpc, onClick = onCreateRequest)
+                    PrimaryButton(stringResource(Str.npcs_button_add_npc), onClick = onCreateRequest)
                 }
             }
         }
@@ -365,11 +362,11 @@ class EncounterDetailScreen(
                     onClick = { onEditRequest(npc.id) },
                     contextMenuItems = listOf(
                         ContextMenu.Item(
-                            text = LocalStrings.current.commonUi.buttonDuplicate,
+                            text = stringResource(Str.common_ui_button_duplicate),
                             onClick = { onDuplicateRequest(npc.id) },
                         ),
                         ContextMenu.Item(
-                            text = LocalStrings.current.commonUi.buttonRemove,
+                            text = stringResource(Str.common_ui_button_remove),
                             onClick = { onRemoveRequest(npc.id) },
                         ),
                     ),
@@ -390,9 +387,7 @@ private fun NpcCharacterList(
             .fillMaxWidth()
             .padding(8.dp)
     ) {
-        val strings = LocalStrings.current.npcs
-
-        CardTitle(strings.titlePlural)
+        CardTitle(stringResource(Str.npcs_title_plural))
 
         val characters = screenModel.allNpcsCharacters.collectWithLifecycle(null).value
 
@@ -410,7 +405,7 @@ private fun NpcCharacterList(
 
         if (npcs.isEmpty()) {
             EmptyUI(
-                text = strings.messages.noNpcs,
+                text = stringResource(Str.npcs_messages_no_npcs),
                 icon = Resources.Drawable.Npc,
                 size = EmptyUI.Size.Small,
             )
@@ -451,7 +446,7 @@ private fun NpcCharacterList(
             contentAlignment = Alignment.TopCenter
         ) {
             PrimaryButton(
-                LocalStrings.current.npcs.buttonAddNpc,
+                stringResource(Str.npcs_button_add_npc),
                 onClick = { chooseNpcDialogVisible = true },
             )
         }
@@ -480,7 +475,7 @@ private fun NpcItem(
         },
         contextMenuItems = listOf(
             ContextMenu.Item(
-                text = LocalStrings.current.commonUi.buttonOpen,
+                text = stringResource(Str.common_ui_button_open),
                 onClick = onDetailRequest,
             ),
         ),
