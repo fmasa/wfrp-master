@@ -105,7 +105,7 @@ fun EmptyUI(
             colorFilter = ColorFilter.tint(disabledColor),
         )
 
-        Text(text, style = size.textStyle)
+        Text(text, style = size.textStyle, textAlign = TextAlign.Center)
 
         subText?.let {
             Text(it, textAlign = TextAlign.Center, color = disabledColor)
