@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" ?>
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="ambition_label_long_term">Lungo termine</string>
     <string name="ambition_label_short_term">Breve termine</string>
@@ -88,11 +88,11 @@
     <string name="changelog_could_not_load">Il Changelog non si carica</string>
     <string name="changelog_github_button">Il resto è su GitHub</string>
     <string name="changelog_title">Changelog</string>
-    <string name="character_button_add">Nuovo Personaggio</string>
+    <string name="character_button_add">Aggiungi Personaggio</string>
     <string name="character_button_change_avatar">Cambia Avatar</string>
     <string name="character_button_link">Collega Personaggi esistenti</string>
     <string name="character_button_remove_avatar">Rimuovi Avatar</string>
-    <string name="character_button_turn_into_n_p_c">Converti in NPC</string>
+    <string name="character_button_turn_into_n_p_c">Converti in PNG</string>
     <string name="character_button_turn_into_p_c">Converti in un Personaggio giocante</string>
     <string name="character_button_unlink_from_player">Scollega dal Giocatore</string>
     <string name="character_button_unlink_from_player_subtext">Il Personaggo diventerà disponibile per un altro Giocatore</string>
@@ -119,8 +119,8 @@
     <string name="character_messages_no_equipped_weapons">Nessuna arma equipaggiata</string>
     <string name="character_messages_no_equipped_weapons_sub_text">Il Personaggio non ha nessuna arma equipaggiata</string>
     <string name="character_messages_removal_dialog_text">Vuoi davvero cancellarlo definitivamente %s?</string>
-    <string name="character_messages_turn_into_n_p_c_confirmation">Vuoi veramente convertire questo Personaggio in un NPC?</string>
-    <string name="character_messages_turn_into_p_c_confirmation">Vuoi veramente convertire questo NPC in un Personaggio?</string>
+    <string name="character_messages_turn_into_n_p_c_confirmation">Vuoi veramente convertire questo Personaggio in un PNG\?</string>
+    <string name="character_messages_turn_into_p_c_confirmation">Vuoi veramente convertire questo PNG in un Personaggio\?</string>
     <string name="character_messages_unassigned_characters_exist">Ci sono già Personaggi non assegnati creati dal GM, puoi assegnare uno di questi a te.</string>
     <string name="character_messages_unlink_from_player_confirmation">Vuoi veramente scollegare questo Personaggio da un Giocatore? Il Giocatore non potrà più utilizzarlo.</string>
     <string name="character_motivation">Motivazione</string>
@@ -196,7 +196,7 @@
     <string name="combat_messages_waiting_for_combat">In attesa del Combattimento…</string>
     <string name="combat_title">Combattimento</string>
     <string name="combat_title_character_combatants">Personaggi</string>
-    <string name="combat_title_npc_combatants">NPC</string>
+    <string name="combat_title_npc_combatants">PNG</string>
     <string name="combat_title_start_combat">Inizia Combattimento</string>
     <string name="common_ui_boolean_no">No</string>
     <string name="common_ui_boolean_yes">Si</string>
@@ -214,7 +214,7 @@
     <string name="common_ui_button_yes">Si</string>
     <string name="common_ui_decrement">Decrementa di</string>
     <string name="common_ui_dismiss_tip_confirmation">Vuoi davvero nascondere questo consiglio?</string>
-    <string name="common_ui_expression_helper">Operatori utilizzabili: +,-,/,*,(,), MIN(...), MAX(...) e variabili: %s</string>
+    <string name="common_ui_expression_helper">Operatori utilizzabili: +,-,/,*,(,), MIN(…), MAX(…) e variabili: %s</string>
     <string name="common_ui_icon_toggle_fab_menu">Cambia menu</string>
     <string name="common_ui_increment">Incrementa di</string>
     <string name="common_ui_item_does_not_exist">L\'oggetto non esiste.</string>
@@ -317,7 +317,6 @@
     <string name="parties_button_share_link">Condividi link</string>
     <string name="parties_image_qr_code_alt">Invito QR code</string>
     <string name="parties_label_name">Nome gruppo</string>
-
     <string name="parties_messages_already_member">Sei già membro di questo gruppo</string>
     <string name="parties_messages_compendium_card_moved">La scheda Compendio è stata spostata nella scheda Mondo.</string>
     <string name="parties_messages_invalid_invitation_token">Il token di invito non è valido</string>
@@ -336,7 +335,6 @@
     <string name="parties_messages_party_removed">Il Gruppo è stato rimosso</string>
     <string name="parties_messages_update_error_no_connection">Devi essere collegato ad internet per aggiornare un gruppo</string>
     <string name="parties_messages_party_updated">Gruppo aggiornato</string>
-
     <string name="parties_tab_characters">Personaggi</string>
     <string name="parties_tab_world">Mondo</string>
     <string name="parties_title_characters">Personaggi</string>
@@ -631,4 +629,30 @@
     <string name="weapons_reach_short">Corta</string>
     <string name="weapons_reach_very_long">Molto lunga</string>
     <string name="weapons_reach_very_short">Molto corta</string>
+    <string name="about_title">Informazioni</string>
+    <string name="about_title_attribution">Riconoscimenti</string>
+    <string name="about_attribution_icons">Icone fatte da Delapouite and Lorc.
+\nDisponibili su https://game-icons.net</string>
+    <string name="about_attribution_dice_roll_sound">Il suono di Shake And Roll Dice è stato realizzato da Mike Koenig (soundbible.com) e utilizzato tramite licenza CC BY 3.0</string>
+    <string name="common_ui_button_create">Crea</string>
+    <string name="compendium_messages_no_changed_items">Non ci sono elementi modificati da importare</string>
+    <string name="compendium_messages_no_items_in_compendium_subtext_player">Il tuo GM deve prima aggiungerli.</string>
+    <string name="compendium_messages_unchanged_items">%d elementi non sono variati</string>
+    <string name="compendium_messages_will_replace_existing_item">Sostituirà l\'articolo esistente</string>
+    <string name="messages_non_desktop_feature">Questa funzione non è attualmente disponibile per la versione desktop. Abbiamo in programma di introdurlo nelle versioni future.</string>
+    <string name="settings_language">Lingua</string>
+    <string name="compendium_messages_item_already_exists">elemento già presente</string>
+    <string name="compendium_messages_json_import_failed">importazione JSON fallita. Controlla di aver utilizzato una esportazione di WFRP Master.</string>
+    <string name="common_ui_markdown_supported_note">La formattazione del testo è supportata</string>
+    <string name="compendium_messages_no_items">Nessun elemento nel compendio</string>
+    <string name="common_ui_label_open_drawer">Apri il disegnatore di navigazione</string>
+    <string name="compendium_messages_rulebook_import_failed">Importazione PDF non riuscita. Verifica di aver fornito un manuale PDF valido.</string>
+    <string name="compendium_messages_out_of_memory">Importazione PDF non riuscita. RAM disponibile insufficiente sul dispositivo.</string>
+    <string name="common_ui_label_previous_screen">Ritorna alla schermata precedente</string>
+    <string name="combat_nth_round">Round %d</string>
+    <string name="about_body">Questa applicazione è stata creata da František Maša e dai suoi colleghi studenti, ora è stata sviluppata
+\nnel tempo libero di František Maša.
+\nSe ti piace l\'app, per favore dai la tua valutazione di WFRP Master su Google Play.</string>
+    <string name="authentication_startup_google_sign_in_failed">Non siamo riusciti a farti accedere tramite Google.
+\nI tuoi dati saranno associati a questo dispositivo, ma potrai sempre accedere in un secondo momento nelle Impostazioni.</string>
 </resources>
