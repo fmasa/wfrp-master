@@ -23,6 +23,16 @@
 
 For both players and GMs, there is a [documentation](https://github.com/fmasa/wfrp-master/wiki) for various features and mechanics used in the app. 
 
+## Translations
+
+The WFRP Master uses [https://hosted.weblate.org/engage/wfrp-master/](Weblate) to simplify external translations. 
+
+Existing translations:
+
+<a href="https://hosted.weblate.org/engage/wfrp-master/">
+  <img src="https://hosted.weblate.org/widget/wfrp-master/application/multi-auto.svg" alt="Translation status" />
+</a>
+
 ## Attribution
 
 This application is an unofficial companion app and as such is not affiliated, associated, authorized,
