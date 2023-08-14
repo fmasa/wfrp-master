@@ -17,15 +17,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.capitalize
-import androidx.compose.ui.text.intl.Locale
-import androidx.compose.ui.text.toLowerCase
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import cz.frantisekmasa.wfrp_master.common.character.CharacterScreenModel
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.Character
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.Condition
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.CurrentConditions
+import cz.frantisekmasa.wfrp_master.common.core.domain.localizedName
 import cz.frantisekmasa.wfrp_master.common.core.shared.IO
 import cz.frantisekmasa.wfrp_master.common.core.shared.Resources
 import cz.frantisekmasa.wfrp_master.common.core.shared.drawableResource
@@ -93,7 +91,7 @@ private fun ConditionRow(
     ) {
         ConditionIcon(condition)
         Text(
-            conditionName(condition),
+            condition.localizedName,
             modifier = Modifier
                 .weight(1f)
                 .padding(start = 8.dp),
@@ -141,12 +139,7 @@ fun ConditionIcon(condition: Condition, size: Dp = 28.dp) {
     }
     Image(
         drawableResource(iconRes),
-        conditionName(condition),
+        condition.localizedName,
         Modifier.size(size)
     )
-}
-
-@Composable
-private fun conditionName(condition: Condition): String {
-    return condition.name.toLowerCase(Locale.current).capitalize(Locale.current)
 }
