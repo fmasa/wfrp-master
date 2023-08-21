@@ -264,7 +264,10 @@ data class Character(
         userId = null,
     )
 
-    fun turnIntoPlayerCharacter() = copy(type = CharacterType.PLAYER_CHARACTER)
+    fun turnIntoPlayerCharacter() = copy(
+        type = CharacterType.PLAYER_CHARACTER,
+        publicName = null,
+    )
 
     companion object {
         const val NAME_MAX_LENGTH = 50

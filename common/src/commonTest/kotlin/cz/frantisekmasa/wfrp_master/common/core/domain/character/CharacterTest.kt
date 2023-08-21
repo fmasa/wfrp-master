@@ -7,6 +7,7 @@ import cz.frantisekmasa.wfrp_master.common.core.domain.Stats
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
+import kotlin.test.assertNull
 
 class CharacterTest {
     private fun character() = Character(
@@ -46,5 +47,29 @@ class CharacterTest {
                 .addMoney(Money.shillings(10))
                 .money
         )
+    }
+
+    @Test
+    fun `NPC with public name can be converted to PC`() {
+        val character = Character(
+            id = uuid4().toString(),
+            name = "Bilbo",
+            publicName = "The hobbit",
+            type = CharacterType.NPC,
+            userId = null,
+            career = "Writer",
+            socialClass = "Noble",
+            psychology = "Does not like orcs",
+            motivation = "Food",
+            race = Race.HALFLING,
+            characteristicsBase = Stats(20, 40, 2, 4, 80, 5, 5, 4, 0, 10),
+            characteristicsAdvances = Stats(20, 40, 2, 4, 80, 5, 5, 4, 0, 10),
+            points = Points(0, 4, 4, 5, 5, 0, 0, 0, 0, 0, 0)
+        )
+
+        val playerCharacter = character.turnIntoPlayerCharacter()
+
+        assertEquals(CharacterType.PLAYER_CHARACTER, playerCharacter.type)
+        assertNull(playerCharacter.publicName)
     }
 }
