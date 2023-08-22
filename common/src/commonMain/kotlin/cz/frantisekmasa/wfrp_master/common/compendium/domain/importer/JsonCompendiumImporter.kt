@@ -9,6 +9,7 @@ import cz.frantisekmasa.wfrp_master.common.compendium.domain.Skill
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.Spell
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.Talent
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.Trait
+import cz.frantisekmasa.wfrp_master.common.compendium.domain.Trapping
 import cz.frantisekmasa.wfrp_master.common.compendium.import.CompendiumBundle
 import cz.frantisekmasa.wfrp_master.common.core.domain.ExceptionWithUserMessage
 import kotlinx.serialization.ExperimentalSerializationApi
@@ -51,6 +52,10 @@ class JsonCompendiumImporter(stream: InputStream) : CompendiumImporter {
 
     override suspend fun importCareers(): List<Career> {
         return data.getOrThrow().careers.map { it.toCareer() }
+    }
+
+    override suspend fun importTrappings(): List<Trapping> {
+        return data.getOrThrow().trappings.map { it.toTrapping() }
     }
 
     companion object {

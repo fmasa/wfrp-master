@@ -1,12 +1,15 @@
 package cz.frantisekmasa.wfrp_master.common.core.domain.trappings
 
 import androidx.compose.runtime.Immutable
+import cz.frantisekmasa.wfrp_master.common.character.trappings.TrappingTypeOption
 import cz.frantisekmasa.wfrp_master.common.core.domain.HitLocation
 import cz.frantisekmasa.wfrp_master.common.core.shared.Parcelable
 import cz.frantisekmasa.wfrp_master.common.core.shared.Parcelize
+import dev.icerock.moko.resources.StringResource
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.JsonClassDiscriminator
+import cz.frantisekmasa.wfrp_master.common.compendium.domain.TrappingType as CompendiumTrappingType
 
 typealias Rating = Int
 
@@ -14,6 +17,77 @@ typealias Rating = Int
 @JsonClassDiscriminator("kind")
 @Immutable
 sealed class TrappingType : Parcelable {
+
+    fun updateFromCompendium(trappingType: CompendiumTrappingType?): TrappingType? {
+        val updatedTrappingType = fromCompendium(trappingType)
+
+        if (updatedTrappingType is WearableTrapping && this is WearableTrapping && worn) {
+            return updatedTrappingType.takeOn()
+        }
+
+        if (updatedTrappingType is Weapon && this is Weapon && equipped != null) {
+            return updatedTrappingType.equip(equipped!!)
+        }
+
+        return updatedTrappingType
+    }
+
+    companion object {
+        fun fromCompendium(trappingType: CompendiumTrappingType?): TrappingType? {
+            return when (trappingType) {
+                null -> null
+                is CompendiumTrappingType.Armour -> Armour(
+                    locations = trappingType.locations,
+                    type = trappingType.type,
+                    points = trappingType.points,
+                    qualities = trappingType.qualities,
+                    flaws = trappingType.flaws,
+                    worn = false,
+                )
+
+                is CompendiumTrappingType.Ammunition -> Ammunition(
+                    weaponGroups = trappingType.weaponGroups,
+                    range = trappingType.range,
+                    qualities = trappingType.qualities,
+                    flaws = trappingType.flaws,
+                    damage = trappingType.damage,
+                )
+
+                is CompendiumTrappingType.BookOrDocument -> BookOrDocument
+                is CompendiumTrappingType.ClothingOrAccessory -> ClothingOrAccessory(worn = false)
+                is CompendiumTrappingType.Container -> Container(
+                    carries = trappingType.carries,
+                    worn = false,
+                )
+
+                is CompendiumTrappingType.DrugOrPoison -> DrugOrPoison
+                is CompendiumTrappingType.FoodOrDrink -> FoodOrDrink
+                is CompendiumTrappingType.HerbOrDraught -> HerbOrDraught
+                is CompendiumTrappingType.MeleeWeapon -> MeleeWeapon(
+                    group = trappingType.group,
+                    reach = trappingType.reach,
+                    damage = trappingType.damage,
+                    qualities = trappingType.qualities,
+                    flaws = trappingType.flaws,
+                    equipped = null,
+                )
+
+                is CompendiumTrappingType.RangedWeapon -> RangedWeapon(
+                    group = trappingType.group,
+                    range = trappingType.range,
+                    damage = trappingType.damage,
+                    qualities = trappingType.qualities,
+                    flaws = trappingType.flaws,
+                    equipped = null,
+                )
+
+                CompendiumTrappingType.SpellIngredient -> SpellIngredient
+                CompendiumTrappingType.ToolOrKit -> ToolOrKit
+                CompendiumTrappingType.TradeTools -> TradeTools
+            }
+        }
+    }
+
     sealed class WearableTrapping : TrappingType() {
         abstract val worn: Boolean
 
@@ -118,35 +192,53 @@ sealed class TrappingType : Parcelable {
     @Parcelize
     @Serializable
     @SerialName("FOOD_OR_DRINK")
-    object FoodOrDrink : TrappingType()
+    object FoodOrDrink : SimpleTrapping() {
+        override val name get() = TrappingTypeOption.FOOD_OR_DRINK.translatableName
+    }
 
     @Parcelize
     @Serializable
     @SerialName("TOOL_OR_KIT")
-    object ToolOrKit : TrappingType()
+    object ToolOrKit : SimpleTrapping() {
+        override val name get() = TrappingTypeOption.TOOL_OR_KIT.translatableName
+    }
 
     @Parcelize
     @Serializable
     @SerialName("BOOKS_OR_DOCUMENT")
-    object BookOrDocument : TrappingType()
+    object BookOrDocument : SimpleTrapping() {
+        override val name get() = TrappingTypeOption.BOOK_OR_DOCUMENT.translatableName
+    }
 
     @Parcelize
     @Serializable
     @SerialName("TRADE_TOOLS")
-    object TradeTools : TrappingType()
+    object TradeTools : SimpleTrapping() {
+        override val name get() = TrappingTypeOption.TRADE_TOOLS.translatableName
+    }
 
     @Parcelize
     @Serializable
     @SerialName("DRUG_OR_POISON")
-    object DrugOrPoison : TrappingType()
+    object DrugOrPoison : SimpleTrapping() {
+        override val name get() = TrappingTypeOption.DRUG_OR_POISON.translatableName
+    }
 
     @Parcelize
     @Serializable
     @SerialName("HERB_OR_DRAUGHT")
-    object HerbOrDraught : TrappingType()
+    object HerbOrDraught : SimpleTrapping() {
+        override val name get() = TrappingTypeOption.HERB_OR_DRAUGHT.translatableName
+    }
 
     @Parcelize
     @Serializable
     @SerialName("SPELL_INGREDIENT")
-    object SpellIngredient : TrappingType()
+    object SpellIngredient : SimpleTrapping() {
+        override val name get() = TrappingTypeOption.SPELL_INGREDIENT.translatableName
+    }
+
+    sealed class SimpleTrapping : TrappingType() {
+        abstract val name: StringResource
+    }
 }

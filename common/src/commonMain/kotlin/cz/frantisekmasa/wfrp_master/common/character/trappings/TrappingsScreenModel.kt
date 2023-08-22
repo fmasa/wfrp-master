@@ -1,39 +1,41 @@
 package cz.frantisekmasa.wfrp_master.common.character.trappings
 
 import androidx.compose.runtime.Immutable
-import cafe.adriel.voyager.core.model.ScreenModel
-import cafe.adriel.voyager.core.model.coroutineScope
+import cz.frantisekmasa.wfrp_master.common.compendium.domain.Trapping
+import cz.frantisekmasa.wfrp_master.common.core.CharacterItemScreenModel
+import cz.frantisekmasa.wfrp_master.common.core.auth.UserProvider
 import cz.frantisekmasa.wfrp_master.common.core.domain.Money
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.CharacterRepository
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.NotEnoughMoney
+import cz.frantisekmasa.wfrp_master.common.core.domain.compendium.Compendium
 import cz.frantisekmasa.wfrp_master.common.core.domain.identifiers.CharacterId
+import cz.frantisekmasa.wfrp_master.common.core.domain.party.PartyRepository
 import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.Encumbrance
 import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.InventoryItem
 import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.InventoryItemRepository
 import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.TrappingType
 import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.sum
-import cz.frantisekmasa.wfrp_master.common.core.shared.IO
 import cz.frantisekmasa.wfrp_master.common.core.utils.right
 import cz.frantisekmasa.wfrp_master.common.firebase.firestore.Firestore
 import io.github.aakira.napier.Napier
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.launch
 
 class TrappingsScreenModel(
-    private val characterId: CharacterId,
+    characterId: CharacterId,
+    partyRepository: PartyRepository,
+    userProvider: UserProvider,
     private val inventoryItems: InventoryItemRepository,
     private val characters: CharacterRepository,
     private val firestore: Firestore,
-) : ScreenModel {
+    private val trappingSaver: TrappingSaver,
+    compendium: Compendium<Trapping>,
+) : CharacterItemScreenModel<InventoryItem, Trapping>(characterId, inventoryItems, compendium, userProvider, partyRepository) {
 
     private val character = characters.getLive(characterId).right()
-    val items = inventoryItems.findAllForCharacter(characterId)
 
-    val inventory: Flow<List<Trapping>> = items.map { items ->
+    val inventory: Flow<List<TrappingItem>> = items.map { items ->
         val (storedItems, notStoredItems) = items.partition { it.containerId != null }
         val storedItemsByContainer = storedItems.groupBy { it.containerId }
 
@@ -41,12 +43,12 @@ class TrappingsScreenModel(
             val type = item.trappingType
 
             if (type is TrappingType.Container)
-                Trapping.Container(
+                TrappingItem.Container(
                     item,
                     type,
                     storedItemsByContainer[item.id] ?: emptyList(),
                 )
-            else Trapping.SeparateTrapping(item)
+            else TrappingItem.SeparateTrapping(item)
         }
     }
 
@@ -64,7 +66,7 @@ class TrappingsScreenModel(
     val money: Flow<Money> = character.map { it.money }
 
     @Immutable
-    sealed interface Trapping {
+    sealed interface TrappingItem {
 
         val item: InventoryItem
         val allItems: List<InventoryItem>
@@ -74,12 +76,12 @@ class TrappingsScreenModel(
             override val item: InventoryItem,
             val container: TrappingType.Container,
             val storedTrappings: List<InventoryItem>,
-        ) : Trapping {
+        ) : TrappingItem {
             override val allItems: List<InventoryItem> = listOf(item) + storedTrappings
         }
 
         @Immutable
-        data class SeparateTrapping(override val item: InventoryItem) : Trapping {
+        data class SeparateTrapping(override val item: InventoryItem) : TrappingItem {
             override val allItems: List<InventoryItem> get() = listOf(item)
         }
     }
@@ -100,37 +102,12 @@ class TrappingsScreenModel(
         characters.save(characterId.partyId, character.subtractMoney(amount))
     }
 
-    suspend fun saveInventoryItem(inventoryItem: InventoryItem) {
-        val itemsRemovedFromContainer = takeAllItemsFromContainer(inventoryItem)
-
-        firestore.runTransaction { transaction ->
-            inventoryItems.save(transaction, characterId, inventoryItem)
-
-            if (inventoryItem.trappingType !is TrappingType.Container) {
-                itemsRemovedFromContainer.forEach {
-                    inventoryItems.save(transaction, characterId, it)
-                }
-            }
-            characterId
-        }
+    override suspend fun saveItem(item: InventoryItem) {
+        trappingSaver.saveInventoryItem(characterId, item)
     }
 
-    fun removeInventoryItem(inventoryItem: InventoryItem) = coroutineScope.launch(Dispatchers.IO) {
-        val itemsPreviouslyStoredInContainer = takeAllItemsFromContainer(inventoryItem)
-
-        firestore.runTransaction { transaction ->
-            inventoryItems.remove(transaction, characterId, inventoryItem.id)
-
-            itemsPreviouslyStoredInContainer.forEach {
-                inventoryItems.save(transaction, characterId, it)
-            }
-        }
-    }
-
-    private suspend fun takeAllItemsFromContainer(possibleContainer: InventoryItem): List<InventoryItem> {
-        return items.first()
-            .filter { it.containerId == possibleContainer.id }
-            .map { it.copy(containerId = null) }
+    override suspend fun removeItem(item: InventoryItem) {
+        trappingSaver.removeInventoryItem(characterId, item)
     }
 
     suspend fun removeFromContainer(trapping: InventoryItem) {
@@ -157,7 +134,7 @@ class TrappingsScreenModel(
         // in X will be stored in Y
         if (trappingType is TrappingType.Container) {
             updatedTrappings.addAll(
-                takeAllItemsFromContainer(trapping)
+                trappingSaver.takeAllItemsFromContainer(characterId, trapping)
                     .map { it.addToContainer(container.id) }
             )
         }

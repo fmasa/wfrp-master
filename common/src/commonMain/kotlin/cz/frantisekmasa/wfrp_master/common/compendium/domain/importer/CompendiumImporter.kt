@@ -7,6 +7,7 @@ import cz.frantisekmasa.wfrp_master.common.compendium.domain.Skill
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.Spell
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.Talent
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.Trait
+import cz.frantisekmasa.wfrp_master.common.compendium.domain.Trapping
 
 interface CompendiumImporter {
     suspend fun importSkills(): List<Skill>
@@ -22,4 +23,6 @@ interface CompendiumImporter {
     suspend fun importTraits(): List<Trait>
 
     suspend fun importCareers(): List<Career>
+
+    suspend fun importTrappings(): List<Trapping>
 }

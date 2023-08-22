@@ -56,13 +56,13 @@ abstract class CharacterItemScreenModel<
 
     val compendiumItemsCount: Flow<Int> by lazy { compendiumItems.map { it.size } }
 
-    suspend fun saveItem(item: TItem) {
+    open suspend fun saveItem(item: TItem) {
         withContext(Dispatchers.IO) {
             repository.save(characterId, item)
         }
     }
 
-    suspend fun removeItem(item: TItem) {
+    open suspend fun removeItem(item: TItem) {
         withContext(Dispatchers.IO) {
             repository.remove(characterId, item.id)
         }

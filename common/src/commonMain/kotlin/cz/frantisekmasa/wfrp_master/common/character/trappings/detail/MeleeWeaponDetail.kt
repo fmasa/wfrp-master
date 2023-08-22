@@ -1,6 +1,7 @@
 package cz.frantisekmasa.wfrp_master.common.character.trappings.detail
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -8,28 +9,32 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import cz.frantisekmasa.wfrp_master.common.Str
 import cz.frantisekmasa.wfrp_master.common.core.domain.localizedName
+import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.DamageExpression
+import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.Encumbrance
 import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.InventoryItem
-import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.TrappingType
-import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.FullScreenProgress
+import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.MeleeWeaponGroup
+import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.Reach
+import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.WeaponFlaw
+import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.WeaponQuality
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
 import cz.frantisekmasa.wfrp_master.common.core.ui.text.SingleLineTextValue
 import dev.icerock.moko.resources.compose.stringResource
 
 @Composable
-fun MeleeWeaponDetail(
-    trapping: InventoryItem,
-    meleeWeapon: TrappingType.MeleeWeapon,
+fun MeleeWeaponDetailBody(
+    subheadBar: @Composable ColumnScope.() -> Unit = {},
+    damage: DamageExpression,
+    reach: Reach,
+    group: MeleeWeaponGroup,
+    qualities: Map<WeaponQuality, Int>,
+    flaws: Map<WeaponFlaw, Int>,
     strengthBonus: Int?,
-    onSaveRequest: suspend (InventoryItem) -> Unit,
+    description: String,
+    encumbrance: Encumbrance,
+    characterTrapping: InventoryItem?,
 ) {
-
-    if (strengthBonus == null) {
-        FullScreenProgress()
-        return
-    }
-
     Column(Modifier.verticalScroll(rememberScrollState())) {
-        EquipBar(trapping, meleeWeapon, onSaveRequest)
+        subheadBar()
 
         Column(Modifier.padding(Spacing.bodyPadding)) {
             SingleLineTextValue(
@@ -37,36 +42,33 @@ fun MeleeWeaponDetail(
                 stringResource(Str.trappings_types_melee_weapon),
             )
 
-            EncumbranceBox(trapping)
+            EncumbranceBox(encumbrance, characterTrapping)
 
             SingleLineTextValue(
                 stringResource(Str.weapons_label_damage),
-                damageValue(meleeWeapon.damage, strengthBonus),
+                damageValue(damage, strengthBonus),
             )
 
             SingleLineTextValue(
                 stringResource(Str.weapons_label_group),
-                meleeWeapon.group.localizedName,
+                group.localizedName,
             )
 
             SingleLineTextValue(
                 stringResource(Str.weapons_label_reach),
-                meleeWeapon.reach.localizedName,
+                reach.localizedName,
             )
 
-            TrappingFeatures(
-                meleeWeapon.qualities,
-                meleeWeapon.flaws
-            )
+            TrappingFeatures(qualities, flaws)
 
-            if (trapping.quantity > 0) {
+            if (characterTrapping != null && characterTrapping.quantity > 0) {
                 SingleLineTextValue(
                     stringResource(Str.trappings_label_quantity),
-                    trapping.quantity.toString(),
+                    characterTrapping.quantity.toString(),
                 )
             }
 
-            TrappingDescription(trapping)
+            TrappingDescription(description)
         }
     }
 }

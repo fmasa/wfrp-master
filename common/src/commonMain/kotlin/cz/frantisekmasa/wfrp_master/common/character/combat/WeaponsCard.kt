@@ -89,7 +89,9 @@ private fun WeaponList(weapons: List<EquippedWeapon>, onTrappingClick: (Inventor
                         )
 
                         Text(
-                            "+${weapon.damage.value}",
+                            if (weapon.damage.value.startsWith("+"))
+                                weapon.damage.value
+                            else "+${weapon.damage.value}",
                             style = MaterialTheme.typography.overline
                         )
                     }

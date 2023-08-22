@@ -31,6 +31,7 @@ import dev.icerock.moko.resources.compose.stringResource
 fun <A : CompendiumItem<A>> Screen.CompendiumItemDetailScreen(
     id: Uuid,
     screenModel: CompendiumItemScreenModel<A>,
+    scrollable: Boolean = true,
     detail: @Composable (A) -> Unit,
     editDialog: @Composable (item: A, onDismissRequest: () -> Unit) -> Unit,
 ) {
@@ -78,7 +79,11 @@ fun <A : CompendiumItem<A>> Screen.CompendiumItemDetailScreen(
             )
         }
     ) {
-        Column(Modifier.verticalScroll(rememberScrollState())) {
+        Column(
+            if (scrollable)
+                Modifier.verticalScroll(rememberScrollState())
+            else Modifier
+        ) {
             VisibilitySwitchBar(
                 visible = item.isVisibleToPlayers,
                 onChange = { screenModel.update(item.changeVisibility(it)) },

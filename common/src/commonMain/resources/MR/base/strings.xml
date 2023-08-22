@@ -225,6 +225,7 @@
     <string name="common_ui_expression_helper">Allowed operators: +,-,/,*,(,), MIN(…), MAX(…) and variables: %s</string>
     <string name="common_ui_icon_toggle_fab_menu">Toggle menu</string>
     <string name="common_ui_increment">Increment value</string>
+    <string name="common_ui_item_added">Item was added.</string>
     <string name="common_ui_item_does_not_exist">Item does not exist.</string>
     <string name="common_ui_item_none">None</string>
     <string name="common_ui_label_close_dialog">Close current dialog</string>
@@ -261,6 +262,7 @@
     <string name="compendium_pick_prompt_spells">Select which spells you want to import.</string>
     <string name="compendium_pick_prompt_talents">Select which talents you want to import.</string>
     <string name="compendium_pick_prompt_traits">Select which traits you want to import.</string>
+    <string name="compendium_pick_prompt_trappings">Select which trappings you want to import.</string>
     <string name="compendium_rulebook_import_prompt_subtitle">Only the latest version of English Rulebooks are supported.</string>
     <string name="compendium_rulebook_import_prompt_title">Import compendium from official WFRP Rulebook PDFs.</string>
     <string name="compendium_search_placeholder">Search items</string>
@@ -275,6 +277,7 @@
     <string name="compendium_title_spells">Spells</string>
     <string name="compendium_title_talents">Talents</string>
     <string name="compendium_title_traits">Traits</string>
+    <string name="compendium_title_trappings">Trappings</string>
     <string name="compendium_visible_to_players_false">Invisible to Players</string>
     <string name="compendium_visible_to_players_true">Visible to Players</string>
     <string name="conditions_ablaze">Ablaze</string>
@@ -538,18 +541,25 @@
     <string name="traits_title_edit">Edit Trait</string>
     <string name="traits_title_new">New Trait</string>
     <string name="traits_title_traits">Traits</string>
+    <string name="trappings_button_add_non_compendium">…or add non-Compendium trapping</string>
     <string name="trappings_button_create_new">Create new Trapping</string>
     <string name="trappings_button_move_to_container">Move to Container</string>
     <string name="trappings_button_select_existing">Select existing Trapping</string>
     <string name="trappings_button_take_out">Take out</string>
     <string name="trappings_icon_encumbrance">Trapping encumbrance</string>
     <string name="trappings_icon_total_encumbrance">Total encumbrance of character (current encumbrance / total encumbrance)</string>
+    <string name="trappings_availability_common">Common</string>
+    <string name="trappings_availability_exotic">Exotic</string>
+    <string name="trappings_availability_rare">Rare</string>
+    <string name="trappings_availability_scarce">Scarce</string>
+    <string name="trappings_label_availability">Availability</string>
     <string name="trappings_label_carries">Carries</string>
     <string name="trappings_label_description">Description (optional)</string>
     <string name="trappings_label_encumbrance_per_unit">Encumbrance (per unit)</string>
     <string name="trappings_label_encumbrance_total">Encumbrance (total)</string>
     <string name="trappings_label_flaws">Flaws</string>
     <string name="trappings_label_name">Name</string>
+    <string name="trappings_label_price">Price</string>
     <string name="trappings_label_qualities">Qualities</string>
     <string name="trappings_label_quantity">Quantity</string>
     <string name="trappings_label_type">Trapping type</string>
@@ -557,6 +567,8 @@
     <string name="trappings_messages_cannot_store_trappings_in_container_stored_in_container">Trappings cannot be stored in Container that is itself stored in a Container.</string>
     <string name="trappings_messages_no_containers_found">There are no available containers.</string>
     <string name="trappings_messages_no_items">There is no trapping in your inventory.</string>
+    <string name="trappings_messages_no_trappings_in_compendium">No trappings</string>
+    <string name="trappings_messages_no_trappings_in_compendium_subtext">There are no trappings in your compendium yet.</string>
     <string name="trappings_messages_no_trappings_to_add">There are no trappings to add to container.</string>
     <string name="trappings_messages_trapping_not_found">Trapping does not exist</string>
     <string name="trappings_money_add">Add</string>
@@ -571,6 +583,7 @@
     <string name="trappings_money_subtract">Subtract</string>
     <string name="trappings_money_title_new_transaction">New money transaction</string>
     <string name="trappings_none">None</string>
+    <string name="trappings_title_choose_compendium_trapping">Choose Compendium trapping…</string>
     <string name="trappings_search_placeholder">Search in trappings…</string>
     <string name="trappings_title">Trappings</string>
     <string name="trappings_title_add">Add trapping</string>

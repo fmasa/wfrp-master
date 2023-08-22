@@ -1,7 +1,13 @@
-package cz.frantisekmasa.wfrp_master.common.character.trappings
+package cz.frantisekmasa.wfrp_master.common.compendium.trapping
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.RowScope
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.Divider
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.Stable
@@ -9,27 +15,30 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.snapshots.SnapshotStateMap
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
+import com.benasher44.uuid.Uuid
 import com.benasher44.uuid.uuid4
 import cz.frantisekmasa.wfrp_master.common.Str
+import cz.frantisekmasa.wfrp_master.common.character.trappings.TrappingTypeOption
+import cz.frantisekmasa.wfrp_master.common.compendium.domain.Trapping
+import cz.frantisekmasa.wfrp_master.common.compendium.domain.TrappingType
 import cz.frantisekmasa.wfrp_master.common.core.domain.HitLocation
-import cz.frantisekmasa.wfrp_master.common.core.domain.NamedEnum
+import cz.frantisekmasa.wfrp_master.common.core.domain.Money
 import cz.frantisekmasa.wfrp_master.common.core.domain.localizedName
 import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.AmmunitionRangeExpression
 import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.ArmourFlaw
 import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.ArmourPoints
 import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.ArmourQuality
 import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.ArmourType
+import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.Availability
 import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.DamageExpression
 import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.Encumbrance
 import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.InventoryItem
-import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.InventoryItemId
 import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.MeleeWeaponGroup
 import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.RangedWeaponGroup
 import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.Reach
 import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.TrappingFeature
-import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.TrappingType
-import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.WeaponEquip
 import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.WeaponFlaw
 import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.WeaponQuality
 import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.WeaponRangeExpression
@@ -48,23 +57,21 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.forms.SelectBox
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.TextInput
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.inputValue
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.rule
-import dev.icerock.moko.resources.StringResource
+import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
 import dev.icerock.moko.resources.compose.stringResource
-import kotlin.math.max
 
 @Composable
-fun InventoryItemDialog(
-    onSaveRequest: suspend (InventoryItem) -> Unit,
-    existingItem: InventoryItem?,
-    defaultContainerId: InventoryItemId?,
+fun TrappingDialog(
+    onSaveRequest: suspend (Trapping) -> Unit,
+    existingTrapping: Trapping?,
     onDismissRequest: () -> Unit,
 ) {
     FullScreenDialog(onDismissRequest = onDismissRequest) {
-        val formData = InventoryItemFormData.fromItem(existingItem, defaultContainerId)
+        val formData = TrappingFormData.fromItem(existingTrapping)
 
         FormDialog(
             title = stringResource(
-                if (existingItem != null)
+                if (existingTrapping != null)
                     Str.trappings_title_edit
                 else Str.trappings_title_add
             ),
@@ -77,13 +84,6 @@ fun InventoryItemDialog(
                 value = formData.name,
                 validate = validate,
                 maxLength = InventoryItem.NAME_MAX_LENGTH,
-            )
-
-            TextInput(
-                label = stringResource(Str.trappings_label_quantity),
-                value = formData.quantity,
-                validate = validate,
-                keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
             )
 
             TextInput(
@@ -104,11 +104,60 @@ fun InventoryItemDialog(
                 helperText = stringResource(Str.common_ui_markdown_supported_note),
             )
 
+            Divider()
+
+            SelectBox(
+                label = stringResource(Str.trappings_label_availability),
+                value = formData.availability.value,
+                onValueChange = { formData.availability.value = it },
+                items = remember { Availability.values() },
+            )
+
+            Text(stringResource(Str.trappings_label_price))
+
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(Spacing.small),
+            ) {
+                CoinInput(
+                    formData.price.crowns,
+                    stringResource(Str.trappings_money_crowns),
+                    validate,
+                )
+                CoinInput(
+                    formData.price.shillings,
+                    stringResource(Str.trappings_money_shillings),
+                    validate,
+                )
+                CoinInput(
+                    formData.price.pennies,
+                    stringResource(Str.trappings_money_pennies),
+                    validate,
+                )
+            }
+
+            Divider()
+
             TrappingTypeForm(
                 formData = formData.type,
                 validate = validate,
             )
         }
+    }
+}
+
+@Composable
+private fun RowScope.CoinInput(value: InputValue, label: String, validate: Boolean) {
+    Column(Modifier.weight(1f)) {
+        TextInput(
+            value = value,
+            label = label,
+            validate = validate,
+            keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
+            maxLength = 4,
+            showCharacterCount = false,
+            placeholder = "0",
+        )
     }
 }
 
@@ -145,6 +194,7 @@ private fun TrappingTypeForm(formData: TrappingTypeFormData, validate: Boolean) 
             WeaponQualitiesPicker(formData)
             WeaponFlawsPicker(formData)
         }
+
         TrappingTypeOption.ARMOUR -> {
             SelectBox(
                 label = stringResource(Str.armour_label_type),
@@ -158,7 +208,6 @@ private fun TrappingTypeForm(formData: TrappingTypeFormData, validate: Boolean) 
                 value = formData.armourPoints,
                 validate = validate,
             )
-            WornCheckbox(formData)
             TrappingFeaturePicker(
                 stringResource(Str.armour_label_qualities),
                 ArmourQuality.values(),
@@ -170,19 +219,19 @@ private fun TrappingTypeForm(formData: TrappingTypeFormData, validate: Boolean) 
                 formData.armourFlaws,
             )
         }
+
         TrappingTypeOption.CLOTHING_OR_ACCESSORY -> {
-            WornCheckbox(formData)
         }
+
         TrappingTypeOption.CONTAINER -> {
             TextInput(
                 label = stringResource(Str.trappings_label_carries),
                 value = formData.carries,
                 validate = validate,
             )
-            WornCheckbox(formData)
         }
+
         TrappingTypeOption.MELEE_WEAPON -> {
-            WeaponEquipSelect(formData)
             SelectBox(
                 label = stringResource(Str.weapons_label_group),
                 value = formData.meleeWeaponGroup.value,
@@ -199,8 +248,8 @@ private fun TrappingTypeForm(formData: TrappingTypeFormData, validate: Boolean) 
             WeaponQualitiesPicker(formData)
             WeaponFlawsPicker(formData)
         }
+
         TrappingTypeOption.RANGED_WEAPON -> {
-            WeaponEquipSelect(formData)
             SelectBox(
                 label = stringResource(Str.weapons_label_group),
                 value = formData.rangedWeaponGroup.value,
@@ -223,6 +272,7 @@ private fun TrappingTypeForm(formData: TrappingTypeFormData, validate: Boolean) 
             WeaponQualitiesPicker(formData)
             WeaponFlawsPicker(formData)
         }
+
         TrappingTypeOption.BOOK_OR_DOCUMENT,
         TrappingTypeOption.DRUG_OR_POISON,
         TrappingTypeOption.MISCELLANEOUS,
@@ -230,28 +280,9 @@ private fun TrappingTypeForm(formData: TrappingTypeFormData, validate: Boolean) 
         TrappingTypeOption.HERB_OR_DRAUGHT,
         TrappingTypeOption.SPELL_INGREDIENT,
         TrappingTypeOption.TOOL_OR_KIT,
-        TrappingTypeOption.TRADE_TOOLS -> {}
+        TrappingTypeOption.TRADE_TOOLS -> {
+        }
     }
-}
-
-@Composable
-private fun WeaponEquipSelect(formData: TrappingTypeFormData) {
-    SelectBox(
-        label = stringResource(Str.weapons_label_equip),
-        value = formData.weaponEquipped.value,
-        onValueChange = { formData.weaponEquipped.value = it },
-        items = listOf(null to stringResource(Str.weapons_equip_not_equipped)) +
-            WeaponEquip.values().map { it to it.localizedName }
-    )
-}
-
-@Composable
-private fun WornCheckbox(formData: TrappingTypeFormData) {
-    CheckboxWithText(
-        text = stringResource(Str.trappings_label_worn),
-        checked = formData.worn.value,
-        onCheckedChange = { formData.worn.value = it }
-    )
 }
 
 @Composable
@@ -338,48 +369,84 @@ private fun <T : TrappingFeature> TrappingFeaturePicker(
 }
 
 @Stable
-private class InventoryItemFormData(
-    val id: InventoryItemId,
-    val containerId: InventoryItemId?,
-    val name: InputValue,
-    val encumbrance: InputValue,
-    val quantity: InputValue,
-    val description: InputValue,
-    val type: TrappingTypeFormData,
-) : HydratedFormData<InventoryItem> {
-    override fun isValid() =
-        listOf(name, encumbrance, quantity, description).all { it.isValid() } && type.isValid()
+private class PriceFormData(
+    val crowns: InputValue,
+    val shillings: InputValue,
+    val pennies: InputValue,
+) : HydratedFormData<Money> {
+    override fun isValid(): Boolean = listOf(crowns, shillings, pennies).all { it.isValid() }
 
-    override fun toValue(): InventoryItem {
-        val trappingType = type.toValue()
-
-        return InventoryItem(
-            id = id,
-            name = name.value,
-            description = description.value,
-            quantity = max(1, quantity.toInt()),
-            encumbrance = Encumbrance(encumbrance.toDouble()),
-            trappingType = type.toValue(),
-            containerId = if (
-                (trappingType is TrappingType.Weapon && trappingType.equipped != null) ||
-                (trappingType is TrappingType.WearableTrapping && trappingType.worn)
-            ) null else containerId,
+    override fun toValue(): Money {
+        return Money.sum(
+            Money.crowns(crowns.toIntOrNull() ?: 0),
+            Money.shillings(shillings.toIntOrNull() ?: 0),
+            Money.pennies(pennies.toIntOrNull() ?: 0),
         )
     }
 
     companion object {
         @Composable
-        fun fromItem(
-            item: InventoryItem?,
-            defaultContainerId: InventoryItemId?,
-        ) = InventoryItemFormData(
+        fun fromMoney(money: Money?): PriceFormData {
+            return PriceFormData(
+                crowns = inputValue(
+                    money?.getCrowns()?.toString() ?: "",
+                    Rules.NonNegativeInteger(),
+                ),
+                shillings = inputValue(
+                    money?.getShillings()?.toString() ?: "",
+                    Rules.NonNegativeInteger(),
+                ),
+                pennies = inputValue(
+                    money?.getPennies()?.toString() ?: "",
+                    Rules.NonNegativeInteger(),
+                ),
+            )
+        }
+    }
+}
+
+@Stable
+private class TrappingFormData(
+    val id: Uuid,
+    val name: InputValue,
+    val encumbrance: InputValue,
+    val availability: MutableState<Availability>,
+    val price: PriceFormData,
+    val description: InputValue,
+    val type: TrappingTypeFormData,
+    val isVisibleToPlayers: Boolean,
+) : HydratedFormData<Trapping> {
+    override fun isValid() =
+        listOf(name, encumbrance, description).all { it.isValid() } && type.isValid()
+
+    override fun toValue(): Trapping {
+        val trappingType = type.toValue()
+
+        return Trapping(
+            id = id,
+            name = name.value,
+            description = description.value,
+            encumbrance = Encumbrance(encumbrance.toDouble()),
+            trappingType = type.toValue(),
+            availability = availability.value,
+            price = price.toValue(),
+            isVisibleToPlayers = isVisibleToPlayers,
+        )
+    }
+
+    companion object {
+        @Composable
+        fun fromItem(item: Trapping?) = TrappingFormData(
             id = remember(item) { item?.id ?: uuid4() },
             name = inputValue(item?.name ?: "", Rules.NotBlank()),
             encumbrance = inputValue(item?.encumbrance?.toString() ?: "0"),
-            quantity = inputValue(item?.quantity?.toString() ?: "1", Rules.PositiveInteger()),
             description = inputValue(item?.description ?: ""),
             type = TrappingTypeFormData.fromTrappingType(item?.trappingType),
-            containerId = item?.containerId ?: defaultContainerId
+            isVisibleToPlayers = item?.isVisibleToPlayers ?: false,
+            availability = rememberSaveable(item) {
+                mutableStateOf(item?.availability ?: Availability.EXOTIC)
+            },
+            price = PriceFormData.fromMoney(item?.price)
         )
     }
 }
@@ -397,12 +464,10 @@ private class TrappingTypeFormData(
     val damage: InputValue,
     val meleeWeaponGroup: MutableState<MeleeWeaponGroup>,
     val rangedWeaponGroup: MutableState<RangedWeaponGroup>,
-    val weaponEquipped: MutableState<WeaponEquip?>,
     val weaponFlaws: SnapshotStateMap<WeaponFlaw, Int>,
     val weaponRange: InputValue,
     val weaponReach: MutableState<Reach>,
     val weaponQualities: SnapshotStateMap<WeaponQuality, Int>,
-    val worn: MutableState<Boolean>,
 ) : HydratedFormData<TrappingType?> {
     override fun isValid(): Boolean = when (type.value) {
         TrappingTypeOption.AMMUNITION -> {
@@ -410,6 +475,7 @@ private class TrappingTypeFormData(
                 ammunitionWeaponGroups.value.isNotEmpty() &&
                 damage.isValid()
         }
+
         TrappingTypeOption.ARMOUR -> armourLocations.value.isNotEmpty() && armourPoints.isValid()
         TrappingTypeOption.CONTAINER -> carries.isValid()
         TrappingTypeOption.MELEE_WEAPON -> damage.isValid()
@@ -433,22 +499,22 @@ private class TrappingTypeFormData(
             flaws = weaponFlaws.toMap(),
             damage = DamageExpression(damage.value.trim()),
         )
+
         TrappingTypeOption.ARMOUR -> TrappingType.Armour(
             locations = armourLocations.value,
             points = ArmourPoints(armourPoints.toInt()),
             type = armourType.value,
-            worn = worn.value,
             qualities = armourQualities.toMap(),
             flaws = armourFlaws.toMap(),
         )
+
         TrappingTypeOption.BOOK_OR_DOCUMENT -> TrappingType.BookOrDocument
-        TrappingTypeOption.CLOTHING_OR_ACCESSORY -> TrappingType.ClothingOrAccessory(
-            worn = worn.value,
-        )
+        TrappingTypeOption.CLOTHING_OR_ACCESSORY -> TrappingType.ClothingOrAccessory
+
         TrappingTypeOption.CONTAINER -> TrappingType.Container(
             carries = Encumbrance(carries.toDouble()),
-            worn = worn.value,
         )
+
         TrappingTypeOption.DRUG_OR_POISON -> TrappingType.DrugOrPoison
         TrappingTypeOption.FOOD_OR_DRINK -> TrappingType.FoodOrDrink
         TrappingTypeOption.HERB_OR_DRAUGHT -> TrappingType.HerbOrDraught
@@ -458,16 +524,16 @@ private class TrappingTypeFormData(
             damage = DamageExpression(damage.value.trim()),
             qualities = weaponQualities.toMap(),
             flaws = weaponFlaws.toMap(),
-            equipped = weaponEquipped.value,
         )
+
         TrappingTypeOption.RANGED_WEAPON -> TrappingType.RangedWeapon(
             group = rangedWeaponGroup.value,
             range = WeaponRangeExpression(weaponRange.value),
             damage = DamageExpression(damage.value.trim()),
             qualities = weaponQualities.toMap(),
             flaws = weaponFlaws.toMap(),
-            equipped = weaponEquipped.value,
         )
+
         TrappingTypeOption.SPELL_INGREDIENT -> TrappingType.SpellIngredient
         TrappingTypeOption.MISCELLANEOUS -> null
         TrappingTypeOption.TOOL_OR_KIT -> TrappingType.ToolOrKit
@@ -487,6 +553,7 @@ private class TrappingTypeFormData(
                     weaponQualities = type.qualities,
                     weaponFlaws = type.flaws,
                 )
+
                 is TrappingType.Armour -> fromDefaults(
                     type = TrappingTypeOption.ARMOUR,
                     armourType = type.type,
@@ -494,18 +561,18 @@ private class TrappingTypeFormData(
                     armourPoints = type.points,
                     armourQualities = type.qualities,
                     armourFlaws = type.flaws,
-                    worn = type.worn,
                 )
+
                 is TrappingType.BookOrDocument -> fromDefaults(TrappingTypeOption.BOOK_OR_DOCUMENT)
                 is TrappingType.ClothingOrAccessory -> fromDefaults(
                     type = TrappingTypeOption.CLOTHING_OR_ACCESSORY,
-                    worn = type.worn,
                 )
+
                 is TrappingType.Container -> fromDefaults(
                     type = TrappingTypeOption.CONTAINER,
                     carries = type.carries,
-                    worn = type.worn,
                 )
+
                 is TrappingType.DrugOrPoison -> fromDefaults(TrappingTypeOption.DRUG_OR_POISON)
                 is TrappingType.HerbOrDraught -> fromDefaults(TrappingTypeOption.HERB_OR_DRAUGHT)
                 is TrappingType.MeleeWeapon -> fromDefaults(
@@ -515,8 +582,8 @@ private class TrappingTypeFormData(
                     weaponReach = type.reach,
                     weaponQualities = type.qualities,
                     weaponFlaws = type.flaws,
-                    weaponEquipped = type.equipped,
                 )
+
                 is TrappingType.RangedWeapon -> fromDefaults(
                     type = TrappingTypeOption.RANGED_WEAPON,
                     damage = type.damage,
@@ -524,8 +591,8 @@ private class TrappingTypeFormData(
                     weaponRange = type.range,
                     weaponQualities = type.qualities,
                     weaponFlaws = type.flaws,
-                    weaponEquipped = type.equipped,
                 )
+
                 is TrappingType.SpellIngredient -> fromDefaults(TrappingTypeOption.SPELL_INGREDIENT)
                 TrappingType.FoodOrDrink -> fromDefaults(TrappingTypeOption.FOOD_OR_DRINK)
                 TrappingType.ToolOrKit -> fromDefaults(TrappingTypeOption.TOOL_OR_KIT)
@@ -548,11 +615,9 @@ private class TrappingTypeFormData(
             meleeWeaponGroup: MeleeWeaponGroup = MeleeWeaponGroup.BASIC,
             rangedWeaponGroup: RangedWeaponGroup = RangedWeaponGroup.BLACKPOWDER,
             weaponQualities: Map<WeaponQuality, Int> = emptyMap(),
-            weaponEquipped: WeaponEquip? = null,
             weaponFlaws: Map<WeaponFlaw, Int> = emptyMap(),
             weaponRange: WeaponRangeExpression? = null,
             weaponReach: Reach = Reach.AVERAGE,
-            worn: Boolean = false,
         ): TrappingTypeFormData {
             val invalidExpressionMessage = stringResource(Str.validation_invalid_expression)
 
@@ -580,7 +645,6 @@ private class TrappingTypeFormData(
                 ),
                 meleeWeaponGroup = rememberSaveable { mutableStateOf(meleeWeaponGroup) },
                 rangedWeaponGroup = rememberSaveable { mutableStateOf(rangedWeaponGroup) },
-                weaponEquipped = rememberSaveable { mutableStateOf(weaponEquipped) },
                 weaponFlaws = remember { stateMapFrom(weaponFlaws) },
                 weaponQualities = remember { stateMapFrom(weaponQualities) },
                 weaponRange = inputValue(
@@ -589,30 +653,10 @@ private class TrappingTypeFormData(
                     rule(invalidExpressionMessage, WeaponRangeExpression::isValid),
                 ),
                 weaponReach = rememberSaveable { mutableStateOf(weaponReach) },
-                worn = rememberSaveable { mutableStateOf(worn) },
             )
         }
 
         private fun <K, V> stateMapFrom(map: Map<K, V>) =
             SnapshotStateMap<K, V>().apply { putAll(map) }
     }
-}
-
-private enum class TrappingTypeOption(
-    override val translatableName: StringResource,
-) : NamedEnum {
-    AMMUNITION(Str.trappings_types_ammunition),
-    ARMOUR(Str.trappings_types_armour),
-    BOOK_OR_DOCUMENT(Str.trappings_types_book_or_document),
-    CLOTHING_OR_ACCESSORY(Str.trappings_types_clothing_or_accessory),
-    CONTAINER(Str.trappings_types_container),
-    DRUG_OR_POISON(Str.trappings_types_drug_or_poison),
-    FOOD_OR_DRINK(Str.trappings_types_food_or_drink),
-    HERB_OR_DRAUGHT(Str.trappings_types_herb_or_draught),
-    MELEE_WEAPON(Str.trappings_types_melee_weapon),
-    MISCELLANEOUS(Str.trappings_types_miscellaneous),
-    RANGED_WEAPON(Str.trappings_types_ranged_weapon),
-    SPELL_INGREDIENT(Str.trappings_types_spell_ingredient),
-    TOOL_OR_KIT(Str.trappings_types_tool_or_kit),
-    TRADE_TOOLS(Str.trappings_types_trade_tools),
 }

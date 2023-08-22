@@ -207,6 +207,7 @@ class InputValue(
     fun isValid() = rules.errorMessage(value) == null
 
     fun toInt(): Int = value.toInt()
+    fun toIntOrNull(): Int? = value.toIntOrNull()
     fun toDouble(): Double = value.toDouble()
 }
 

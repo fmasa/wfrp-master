@@ -11,13 +11,18 @@ import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.DamageExpressio
 
 @Composable
 @Stable
-fun damageValue(damage: DamageExpression, strengthBonus: Int): AnnotatedString {
+fun damageValue(damage: DamageExpression, strengthBonus: Int?): AnnotatedString {
     return buildAnnotatedString {
         if (!damage.value.startsWith('+')) {
             append("+")
         }
 
         append(damage.value)
+
+        if (strengthBonus == null) {
+            return@buildAnnotatedString
+        }
+
         withStyle(SpanStyle(fontStyle = FontStyle.Italic)) {
             append(" (+")
             append(

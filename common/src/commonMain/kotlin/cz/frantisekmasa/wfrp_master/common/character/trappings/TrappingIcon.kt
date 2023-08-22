@@ -2,24 +2,44 @@ package cz.frantisekmasa.wfrp_master.common.character.trappings
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Stable
-import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.TrappingType
 import cz.frantisekmasa.wfrp_master.common.core.shared.Resources
+import cz.frantisekmasa.wfrp_master.common.compendium.domain.TrappingType as CompendiumTrappingType
+import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.TrappingType as CharacterTrappingType
 
 @Composable
 @Stable
-fun trappingIcon(trappingType: TrappingType?) = when (trappingType) {
-    is TrappingType.Ammunition -> Resources.Drawable.TrappingAmmunition
-    is TrappingType.Armour -> Resources.Drawable.TrappingArmour
-    is TrappingType.BookOrDocument -> Resources.Drawable.TrappingBookOrDocument
-    is TrappingType.MeleeWeapon -> Resources.Drawable.WeaponSkill
-    is TrappingType.ClothingOrAccessory -> Resources.Drawable.TrappingClothingOrAccessory
-    is TrappingType.Container -> Resources.Drawable.TrappingContainer
-    is TrappingType.DrugOrPoison -> Resources.Drawable.TrappingDrugOrPoison
-    is TrappingType.FoodOrDrink -> Resources.Drawable.TrappingFoodOrDrink
-    is TrappingType.HerbOrDraught -> Resources.Drawable.TrappingHerbOrDraught
-    is TrappingType.RangedWeapon -> Resources.Drawable.BallisticSkill
-    is TrappingType.SpellIngredient -> Resources.Drawable.Spell
-    is TrappingType.ToolOrKit -> Resources.Drawable.TrappingTool
-    is TrappingType.TradeTools -> Resources.Drawable.TrappingTool
+fun trappingIcon(trappingType: CharacterTrappingType?) = when (trappingType) {
+    is CharacterTrappingType.Ammunition -> Resources.Drawable.TrappingAmmunition
+    is CharacterTrappingType.Armour -> Resources.Drawable.TrappingArmour
+    is CharacterTrappingType.BookOrDocument -> Resources.Drawable.TrappingBookOrDocument
+    is CharacterTrappingType.MeleeWeapon -> Resources.Drawable.WeaponSkill
+    is CharacterTrappingType.ClothingOrAccessory -> Resources.Drawable.TrappingClothingOrAccessory
+    is CharacterTrappingType.Container -> Resources.Drawable.TrappingContainer
+    is CharacterTrappingType.DrugOrPoison -> Resources.Drawable.TrappingDrugOrPoison
+    is CharacterTrappingType.FoodOrDrink -> Resources.Drawable.TrappingFoodOrDrink
+    is CharacterTrappingType.HerbOrDraught -> Resources.Drawable.TrappingHerbOrDraught
+    is CharacterTrappingType.RangedWeapon -> Resources.Drawable.BallisticSkill
+    is CharacterTrappingType.SpellIngredient -> Resources.Drawable.Spell
+    is CharacterTrappingType.ToolOrKit -> Resources.Drawable.TrappingTool
+    is CharacterTrappingType.TradeTools -> Resources.Drawable.TrappingTool
+    null -> Resources.Drawable.TrappingMiscellaneous
+}
+
+@Composable
+@Stable
+fun trappingIcon(trappingType: CompendiumTrappingType?) = when (trappingType) {
+    is CompendiumTrappingType.Ammunition -> Resources.Drawable.TrappingAmmunition
+    is CompendiumTrappingType.Armour -> Resources.Drawable.TrappingArmour
+    is CompendiumTrappingType.BookOrDocument -> Resources.Drawable.TrappingBookOrDocument
+    is CompendiumTrappingType.MeleeWeapon -> Resources.Drawable.WeaponSkill
+    is CompendiumTrappingType.ClothingOrAccessory -> Resources.Drawable.TrappingClothingOrAccessory
+    is CompendiumTrappingType.Container -> Resources.Drawable.TrappingContainer
+    is CompendiumTrappingType.DrugOrPoison -> Resources.Drawable.TrappingDrugOrPoison
+    is CompendiumTrappingType.FoodOrDrink -> Resources.Drawable.TrappingFoodOrDrink
+    is CompendiumTrappingType.HerbOrDraught -> Resources.Drawable.TrappingHerbOrDraught
+    is CompendiumTrappingType.RangedWeapon -> Resources.Drawable.BallisticSkill
+    is CompendiumTrappingType.SpellIngredient -> Resources.Drawable.Spell
+    is CompendiumTrappingType.ToolOrKit -> Resources.Drawable.TrappingTool
+    is CompendiumTrappingType.TradeTools -> Resources.Drawable.TrappingTool
     null -> Resources.Drawable.TrappingMiscellaneous
 }

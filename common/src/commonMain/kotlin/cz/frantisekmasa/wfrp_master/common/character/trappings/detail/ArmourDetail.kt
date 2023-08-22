@@ -1,6 +1,7 @@
 package cz.frantisekmasa.wfrp_master.common.character.trappings.detail
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -8,50 +9,60 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import cz.frantisekmasa.wfrp_master.common.Str
+import cz.frantisekmasa.wfrp_master.common.character.trappings.TrappingTypeOption
+import cz.frantisekmasa.wfrp_master.common.core.domain.HitLocation
 import cz.frantisekmasa.wfrp_master.common.core.domain.localizedName
+import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.ArmourFlaw
+import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.ArmourPoints
+import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.ArmourQuality
+import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.Encumbrance
 import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.InventoryItem
-import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.TrappingType
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
 import cz.frantisekmasa.wfrp_master.common.core.ui.text.SingleLineTextValue
 import dev.icerock.moko.resources.compose.stringResource
 
 @Composable
-fun ArmourDetail(
-    trapping: InventoryItem,
-    armour: TrappingType.Armour,
-    onSaveRequest: suspend (InventoryItem) -> Unit,
+fun ArmourDetailBody(
+    subheadBar: @Composable ColumnScope.() -> Unit = {},
+    locations: Set<HitLocation>,
+    points: ArmourPoints,
+    qualities: Map<ArmourQuality, Int>,
+    flaws: Map<ArmourFlaw, Int>,
+    encumbrance: Encumbrance,
+    description: String,
+    characterTrapping: InventoryItem?,
 ) {
     Column(Modifier.verticalScroll(rememberScrollState())) {
-        WornBar(trapping, armour, onSaveRequest)
+        subheadBar()
 
         Column(Modifier.padding(Spacing.bodyPadding)) {
             SingleLineTextValue(
                 stringResource(Str.trappings_label_type),
-                stringResource(Str.trappings_types_armour),
+                TrappingTypeOption.ARMOUR.localizedName,
             )
 
-            EncumbranceBox(trapping)
+            EncumbranceBox(encumbrance, characterTrapping)
 
-            val locations = armour.locations.map { it.localizedName }
+            val locationNames = locations.map { it.localizedName }
             SingleLineTextValue(
                 stringResource(Str.armour_label_locations),
-                remember(locations) { locations.sorted().joinToString(", ") },
+                remember(locationNames) { locationNames.sorted().joinToString(", ") },
             )
 
             SingleLineTextValue(
                 stringResource(Str.armour_label_armour_points),
-                armour.points.value.toString(),
-            )
-            SingleLineTextValue(
-                stringResource(Str.trappings_label_quantity),
-                trapping.quantity.toString(),
+                points.value.toString()
             )
 
-            TrappingFeatures(
-                armour.qualities,
-                armour.flaws
-            )
-            TrappingDescription(trapping)
+            if (characterTrapping != null) {
+                SingleLineTextValue(
+                    stringResource(Str.trappings_label_quantity),
+                    characterTrapping.quantity.toString(),
+                )
+            }
+
+            TrappingFeatures(qualities, flaws)
+            TrappingDescription(description)
         }
     }
 }

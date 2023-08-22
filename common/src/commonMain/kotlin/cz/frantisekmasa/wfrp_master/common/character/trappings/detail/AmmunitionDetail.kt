@@ -1,6 +1,7 @@
 package cz.frantisekmasa.wfrp_master.common.character.trappings.detail
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -9,20 +10,31 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import cz.frantisekmasa.wfrp_master.common.Str
 import cz.frantisekmasa.wfrp_master.common.core.domain.localizedName
+import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.AmmunitionRangeExpression
+import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.DamageExpression
+import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.Encumbrance
 import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.InventoryItem
-import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.TrappingType
+import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.RangedWeaponGroup
+import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.WeaponFlaw
+import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.WeaponQuality
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
 import cz.frantisekmasa.wfrp_master.common.core.ui.text.SingleLineTextValue
 import dev.icerock.moko.resources.compose.stringResource
 
 @Composable
-fun AmmunitionDetail(
-    trapping: InventoryItem,
-    ammunition: TrappingType.Ammunition,
-    onSaveRequest: suspend (InventoryItem) -> Unit,
+fun AmmunitionDetailBody(
+    subheadBar: @Composable ColumnScope.() -> Unit = {},
+    damage: DamageExpression,
+    range: AmmunitionRangeExpression,
+    weaponGroups: Set<RangedWeaponGroup>,
+    description: String,
+    qualities: Map<WeaponQuality, Int>,
+    flaws: Map<WeaponFlaw, Int>,
+    encumbrance: Encumbrance,
+    characterTrapping: InventoryItem?,
 ) {
     Column(Modifier.verticalScroll(rememberScrollState())) {
-        QuantityBar(trapping, onSaveRequest)
+        subheadBar()
 
         Column(Modifier.padding(Spacing.bodyPadding)) {
             SingleLineTextValue(
@@ -30,29 +42,26 @@ fun AmmunitionDetail(
                 stringResource(Str.trappings_types_ammunition),
             )
 
-            EncumbranceBox(trapping)
-
-            SingleLineTextValue(
-                stringResource(Str.weapons_label_damage),
-                ammunition.damage.value,
+            EncumbranceBox(
+                encumbrance = encumbrance,
+                characterTrapping = characterTrapping,
             )
 
-            SingleLineTextValue(
-                stringResource(Str.weapons_label_range),
-                ammunition.range.value,
-            )
+            SingleLineTextValue(stringResource(Str.weapons_label_damage), damage.value)
 
-            val weaponGroups = ammunition.weaponGroups.map { it.localizedName }
+            SingleLineTextValue(stringResource(Str.weapons_label_range), range.value)
+
+            val weaponGroupsNames = weaponGroups.map { it.localizedName }
             SingleLineTextValue(
                 stringResource(Str.weapons_label_groups),
-                remember(weaponGroups) {
-                    weaponGroups.sorted().joinToString(", ")
+                remember(weaponGroupsNames) {
+                    weaponGroupsNames.sorted().joinToString(", ")
                 },
             )
 
-            TrappingFeatures(ammunition.qualities, ammunition.flaws)
+            TrappingFeatures(qualities, flaws)
 
-            TrappingDescription(trapping)
+            TrappingDescription(description)
         }
     }
 }

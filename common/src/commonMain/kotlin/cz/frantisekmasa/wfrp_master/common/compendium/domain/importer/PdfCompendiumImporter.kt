@@ -7,6 +7,7 @@ import cz.frantisekmasa.wfrp_master.common.compendium.domain.Skill
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.Spell
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.Talent
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.Trait
+import cz.frantisekmasa.wfrp_master.common.compendium.domain.Trapping
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.books.Book
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.parsers.Document
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.sources.BlessingSource
@@ -16,6 +17,7 @@ import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.sources.Sk
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.sources.SpellSource
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.sources.TalentSource
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.sources.TraitSource
+import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.sources.TrappingSource
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 
@@ -80,5 +82,13 @@ class PdfCompendiumImporter(
         }
 
         return book.importCareers(document)
+    }
+
+    override suspend fun importTrappings(): List<Trapping> {
+        if (book !is TrappingSource) {
+            return emptyList()
+        }
+
+        return book.importTrappings(document)
     }
 }

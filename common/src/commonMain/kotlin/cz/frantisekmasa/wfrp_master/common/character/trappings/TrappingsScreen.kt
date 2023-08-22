@@ -26,10 +26,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import cz.frantisekmasa.wfrp_master.common.Str
-import cz.frantisekmasa.wfrp_master.common.character.trappings.TrappingsScreenModel.Trapping
+import cz.frantisekmasa.wfrp_master.common.character.trappings.TrappingsScreenModel.TrappingItem
 import cz.frantisekmasa.wfrp_master.common.core.domain.identifiers.CharacterId
 import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.InventoryItem
-import cz.frantisekmasa.wfrp_master.common.core.shared.IO
 import cz.frantisekmasa.wfrp_master.common.core.shared.Resources
 import cz.frantisekmasa.wfrp_master.common.core.shared.drawableResource
 import cz.frantisekmasa.wfrp_master.common.core.ui.buttons.CardButton
@@ -44,7 +43,6 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.UserTipCard
 import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.TopPanel
 import dev.icerock.moko.resources.compose.stringResource
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import kotlin.coroutines.EmptyCoroutineContext
 
@@ -92,10 +90,9 @@ fun TrappingsScreen(
         var newTrappingDialogOpened by rememberSaveable { mutableStateOf(false) }
 
         if (newTrappingDialogOpened) {
-            InventoryItemDialog(
-                onSaveRequest = screenModel::saveInventoryItem,
-                defaultContainerId = null,
-                existingItem = null,
+            AddTrappingDialog(
+                screenModel = screenModel,
+                containerId = null,
                 onDismissRequest = { newTrappingDialogOpened = false }
             )
         }
@@ -108,7 +105,7 @@ fun TrappingsScreen(
 
         addToContainerDialogTrapping?.let { trapping ->
             val containers by derivedStateOf {
-                trappings.filter { it.item.id != trapping.id && it is Trapping.Container }
+                trappings.filter { it.item.id != trapping.id && it is TrappingItem.Container }
             }
 
             ChooseTrappingDialog(
@@ -126,8 +123,8 @@ fun TrappingsScreen(
         InventoryItemsCard(
             trappings = trappings,
             onClick = { navigation.navigate(TrappingDetailScreen(characterId, it.id)) },
-            onRemove = { screenModel.removeInventoryItem(it) },
-            onDuplicate = { coroutineScope.launch { screenModel.saveInventoryItem(it.duplicate()) } },
+            onRemove = { coroutineScope.launch { screenModel.removeItem(it) } },
+            onDuplicate = { coroutineScope.launch { screenModel.saveItem(it.duplicate()) } },
             onNewItemButtonClicked = { newTrappingDialogOpened = true },
             onAddToContainerRequest = { addToContainerDialogTrapping = it },
         )
@@ -162,7 +159,7 @@ private fun CharacterEncumbrance(screenModel: TrappingsScreenModel, modifier: Mo
 
 @Composable
 private fun InventoryItemsCard(
-    trappings: List<Trapping>,
+    trappings: List<TrappingItem>,
     onClick: (InventoryItem) -> Unit,
     onRemove: (InventoryItem) -> Unit,
     onDuplicate: (InventoryItem) -> Unit,
