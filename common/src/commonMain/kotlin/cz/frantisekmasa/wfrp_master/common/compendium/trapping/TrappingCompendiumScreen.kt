@@ -54,7 +54,7 @@ class TrappingCompendiumScreen(
             newItemSaver = screenModel::createNew,
             onClick = { navigation.navigate(CompendiumTrappingDetailScreen(partyId, it.id)) },
             onNewItemRequest = { newTrappingDialogOpened = true },
-            type = Type.SKILLS,
+            type = Type.TRAPPINGS,
         ) { trapping ->
             ListItem(
                 icon = { ItemIcon(trappingIcon(trapping.trappingType)) },
