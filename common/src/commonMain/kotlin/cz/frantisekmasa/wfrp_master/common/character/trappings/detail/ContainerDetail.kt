@@ -1,6 +1,7 @@
 package cz.frantisekmasa.wfrp_master.common.character.trappings.detail
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -30,8 +31,8 @@ import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.withStyle
 import cz.frantisekmasa.wfrp_master.common.Str
+import cz.frantisekmasa.wfrp_master.common.character.trappings.AddTrappingDialog
 import cz.frantisekmasa.wfrp_master.common.character.trappings.ChooseTrappingDialog
-import cz.frantisekmasa.wfrp_master.common.character.trappings.InventoryItemDialog
 import cz.frantisekmasa.wfrp_master.common.character.trappings.TrappingItem
 import cz.frantisekmasa.wfrp_master.common.character.trappings.TrappingsScreenModel
 import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.InventoryItem
@@ -53,9 +54,11 @@ import kotlinx.coroutines.Dispatchers
 
 @Composable
 fun ContainerDetail(
+    subheadBar: @Composable ColumnScope.() -> Unit = {},
     trapping: InventoryItem,
     container: TrappingType.Container,
-    allItems: List<TrappingsScreenModel.Trapping>?,
+    allItems: List<TrappingsScreenModel.TrappingItem>?,
+    screenModel: TrappingsScreenModel,
     onSaveRequest: suspend (InventoryItem) -> Unit,
     onOpenDetailRequest: (InventoryItem) -> Unit,
     onRemoveRequest: suspend (InventoryItem) -> Unit,
@@ -70,11 +73,10 @@ fun ContainerDetail(
     var newTrappingDialogOpened by rememberSaveable { mutableStateOf(false) }
 
     if (newTrappingDialogOpened) {
-        InventoryItemDialog(
-            onSaveRequest = { onSaveRequest(it) },
-            existingItem = null,
+        AddTrappingDialog(
+            screenModel = screenModel,
             onDismissRequest = { newTrappingDialogOpened = false },
-            defaultContainerId = trapping.id,
+            containerId = trapping.id,
         )
     }
 
@@ -129,7 +131,7 @@ fun ContainerDetail(
         }
     ) {
         Column(Modifier.verticalScroll(rememberScrollState())) {
-            WornBar(trapping, container, onSaveRequest)
+            subheadBar()
 
             val carriedItems by derivedStateOf {
                 allItems
@@ -213,7 +215,7 @@ private fun StoredTrappingsCard(
                     key(trapping.id) {
                         Column {
                             TrappingItem(
-                                trapping = TrappingsScreenModel.Trapping.SeparateTrapping(trapping),
+                                trapping = TrappingsScreenModel.TrappingItem.SeparateTrapping(trapping),
                                 onClick = { onOpenDetailRequest(trapping) },
                                 onDuplicate = {
                                     coroutineScope.launchLogged(Dispatchers.IO) {

@@ -10,7 +10,12 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
 
 @Composable
 fun TrappingDescription(trapping: InventoryItem) {
+    TrappingDescription(trapping.description)
+}
+
+@Composable
+fun TrappingDescription(description: String) {
     RichText(Modifier.padding(top = Spacing.small)) {
-        Markdown(trapping.description)
+        Markdown(description)
     }
 }

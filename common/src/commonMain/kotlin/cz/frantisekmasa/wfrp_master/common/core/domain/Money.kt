@@ -1,17 +1,20 @@
 package cz.frantisekmasa.wfrp_master.common.core.domain
 
 import androidx.compose.runtime.Immutable
+import cz.frantisekmasa.wfrp_master.common.core.shared.Parcelable
+import cz.frantisekmasa.wfrp_master.common.core.shared.Parcelize
 import kotlinx.serialization.Serializable
 import kotlin.math.min
 
 @Serializable
 @Immutable
-data class Money(private val pennies: Int) : Comparable<Money> {
+@Parcelize
+data class Money(private val pennies: Int) : Parcelable, Comparable<Money> {
     companion object {
         private const val SHILLINGS_IN_CROWNS = 20
         private const val PENNIES_IN_SHILLING = 12
 
-        fun zero() = Money(0)
+        val ZERO = Money(0)
 
         fun pennies(pennies: Int) = Money(pennies)
         fun shillings(shillings: Int) = Money(shillings * PENNIES_IN_SHILLING)

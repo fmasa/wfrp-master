@@ -8,6 +8,7 @@ import cz.frantisekmasa.wfrp_master.common.compendium.domain.Skill
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.Spell
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.Talent
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.Trait
+import cz.frantisekmasa.wfrp_master.common.compendium.domain.Trapping
 import cz.frantisekmasa.wfrp_master.common.compendium.import.BlessingImport
 import cz.frantisekmasa.wfrp_master.common.compendium.import.CareerImport
 import cz.frantisekmasa.wfrp_master.common.compendium.import.CompendiumBundle
@@ -16,6 +17,7 @@ import cz.frantisekmasa.wfrp_master.common.compendium.import.SkillImport
 import cz.frantisekmasa.wfrp_master.common.compendium.import.SpellImport
 import cz.frantisekmasa.wfrp_master.common.compendium.import.TalentImport
 import cz.frantisekmasa.wfrp_master.common.compendium.import.TraitImport
+import cz.frantisekmasa.wfrp_master.common.compendium.import.TrappingImport
 import cz.frantisekmasa.wfrp_master.common.core.domain.compendium.Compendium
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.Party
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.PartyId
@@ -37,6 +39,7 @@ class CompendiumExportScreenModel(
     private val blessingCompendium: Compendium<Blessing>,
     private val miracleCompendium: Compendium<Miracle>,
     private val traitCompendium: Compendium<Trait>,
+    private val trappingCompendium: Compendium<Trapping>,
     parties: PartyRepository,
 ) : ScreenModel {
 
@@ -65,6 +68,9 @@ class CompendiumExportScreenModel(
             val careers = async {
                 careerCompendium.liveForParty(partyId).first().map(CareerImport::fromCareer)
             }
+            val trappings = async {
+                trappingCompendium.liveForParty(partyId).first().map(TrappingImport::fromTrapping)
+            }
 
             val bundle = CompendiumBundle(
                 skills = skills.await(),
@@ -74,6 +80,7 @@ class CompendiumExportScreenModel(
                 miracles = miracles.await(),
                 traits = traits.await(),
                 careers = careers.await(),
+                trappings = trappings.await(),
             )
 
             json.encodeToString(serializer(), bundle)

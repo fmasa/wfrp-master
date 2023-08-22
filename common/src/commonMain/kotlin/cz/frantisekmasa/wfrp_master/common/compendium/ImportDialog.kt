@@ -41,11 +41,13 @@ import cz.frantisekmasa.wfrp_master.common.compendium.domain.Skill
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.Spell
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.Talent
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.Trait
+import cz.frantisekmasa.wfrp_master.common.compendium.domain.Trapping
 import cz.frantisekmasa.wfrp_master.common.compendium.miracle.MiracleCompendiumScreenModel
 import cz.frantisekmasa.wfrp_master.common.compendium.skill.SkillCompendiumScreenModel
 import cz.frantisekmasa.wfrp_master.common.compendium.spell.SpellCompendiumScreenModel
 import cz.frantisekmasa.wfrp_master.common.compendium.talent.TalentCompendiumScreenModel
 import cz.frantisekmasa.wfrp_master.common.compendium.trait.TraitCompendiumScreenModel
+import cz.frantisekmasa.wfrp_master.common.compendium.trapping.TrappingCompendiumScreenModel
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.PartyId
 import cz.frantisekmasa.wfrp_master.common.core.ui.buttons.CloseButton
 import cz.frantisekmasa.wfrp_master.common.core.ui.dialogs.FullScreenDialog
@@ -102,6 +104,7 @@ private fun ImportedItemsPicker(
             ItemsScreen.MIRACLES to state.miracles.isNotEmpty(),
             ItemsScreen.TRAITS to state.miracles.isNotEmpty(),
             ItemsScreen.CAREERS to state.careers.isNotEmpty(),
+            ItemsScreen.TRAPPINGS to state.trappings.isNotEmpty(),
         ).filter { it.second }
             .map { it.first }
             .toList()
@@ -185,6 +188,16 @@ private fun ImportedItemsPicker(
                     items = state.careers,
                     screenModel = screen.rememberScreenModel<PartyId, CareerCompendiumScreenModel>(arg = partyId),
                     onContinue = { goToNextStep(ItemsScreen.CAREERS) },
+                    onClose = onDismissRequest,
+                    replaceExistingByDefault = state.replaceExistingByDefault,
+                )
+            }
+            ItemsScreen.TRAPPINGS -> {
+                ItemPicker(
+                    label = stringResource(Str.compendium_pick_prompt_trappings),
+                    items = state.trappings,
+                    screenModel = screen.rememberScreenModel<PartyId, TrappingCompendiumScreenModel>(arg = partyId),
+                    onContinue = { goToNextStep(ItemsScreen.TRAPPINGS) },
                     onClose = onDismissRequest,
                     replaceExistingByDefault = state.replaceExistingByDefault,
                 )
@@ -374,6 +387,7 @@ sealed class ImportDialogState {
         val miracles: List<Miracle>,
         val traits: List<Trait>,
         val careers: List<Career>,
+        val trappings: List<Trapping>,
         val replaceExistingByDefault: Boolean,
     ) : ImportDialogState()
 }
@@ -387,4 +401,5 @@ private enum class ItemsScreen {
     MIRACLES,
     TRAITS,
     CAREERS,
+    TRAPPINGS,
 }

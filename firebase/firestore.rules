@@ -173,6 +173,33 @@ service cloud.firestore {
             }
 
 
+            match /trappings/{trappingId} {
+                allow read: if hasAccessToParty();
+                allow create: if isGameMaster() && isValidTrait(request.resource.data);
+                allow update: if isGameMaster() && isValidTrait(request.resource.data);
+                allow delete: if isGameMaster();
+
+                function isValidTrait(trapping) {
+                    return [
+                           "id",
+                           "name",
+                           "encumbrance",
+                           "trappingType",
+                           "availability",
+                           "price",
+                           "description",
+                           "isVisibleToPlayers"
+                           ].hasAll(trapping.keys())
+                           && trapping.id is string && trapping.id == trappingId && isValidUuid(trapping.id)
+                           && trapping.name is string && isNotBlank(trapping.name) && trapping.name.size() <= 50
+                           && trapping.encumbrance is number && trapping.encumbrance >= 0
+                           && trapping.availability in ["COMMON", "SCARCE", "RARE", "EXOTIC"]
+                           && areMoneyValid(trapping.price)
+                           && trapping.description is string && trapping.description.size() <= 200
+                           && trapping.isVisibleToPlayers is bool;
+                }
+            }
+
             match /careers/{careerId} {
                 allow read: if hasAccessToParty();
                 allow create: if isGameMaster() && isValidCareer(request.resource.data);
@@ -287,7 +314,7 @@ service cloud.firestore {
                     allow delete: if canEditCharacter();
 
                     function isValidInventoryItem(item) {
-                        return ["id", "name", "description", "quantity", "encumbrance", "trappingType", "containerId"].hasAll(item.keys())
+                        return ["id", "name", "description", "quantity", "encumbrance", "trappingType", "containerId", "compendiumId"].hasAll(item.keys())
                             && item.id is string && item.id == itemId && isValidUuid(item.id)
                             && item.name is string && isNotBlank(item.name) && item.name.size() <= 50
                             && item.description is string && item.description.size() <= 1000
@@ -296,7 +323,8 @@ service cloud.firestore {
                             && (! ("trappingType" in item) || item.trappingType == null || item.trappingType is map)
                             && (! ("containerId" in item)
                                 || item.containerId == null || containerExists(item.containerId)
-                            );
+                            )
+                            && (!("compendiumId" in item) || (item.compendiumId == null || (item.compendiumId is string && exists(/databases/$(database)/documents/parties/$(partyId)/trappings/$(item.compendiumId)))));
                     }
 
                     function containerExists(containerId) {
@@ -470,12 +498,6 @@ service cloud.firestore {
                     function isValidFeature(data) {
                         return featureName == "armor" && isArmorValid(data);
                     }
-                }
-
-                function areMoneyValid(money) {
-                    return money is map
-                        && money.keys().toSet() == ["pennies"].toSet()
-                        && money.pennies is int && money.pennies >= 0;
                 }
 
                 function isCharacterOwner() {
@@ -868,5 +890,11 @@ service cloud.firestore {
            "WILL_POWER",
            "WEAPON_SKILL"
        ];
+    }
+
+    function areMoneyValid(money) {
+        return money is map
+               && money.keys().toSet() == ["pennies"].toSet()
+               && money.pennies is int && money.pennies >= 0;
     }
 }

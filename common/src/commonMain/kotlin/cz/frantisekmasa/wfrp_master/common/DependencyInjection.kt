@@ -12,6 +12,7 @@ import cz.frantisekmasa.wfrp_master.common.character.skills.SkillsScreenModel
 import cz.frantisekmasa.wfrp_master.common.character.spells.SpellsScreenModel
 import cz.frantisekmasa.wfrp_master.common.character.talents.TalentsScreenModel
 import cz.frantisekmasa.wfrp_master.common.character.traits.TraitsScreenModel
+import cz.frantisekmasa.wfrp_master.common.character.trappings.TrappingSaver
 import cz.frantisekmasa.wfrp_master.common.character.trappings.TrappingsScreenModel
 import cz.frantisekmasa.wfrp_master.common.characterCreation.CharacterCreationScreenModel
 import cz.frantisekmasa.wfrp_master.common.combat.CombatScreenModel
@@ -26,11 +27,13 @@ import cz.frantisekmasa.wfrp_master.common.compendium.domain.Skill
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.Spell
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.Talent
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.Trait
+import cz.frantisekmasa.wfrp_master.common.compendium.domain.Trapping
 import cz.frantisekmasa.wfrp_master.common.compendium.miracle.MiracleCompendiumScreenModel
 import cz.frantisekmasa.wfrp_master.common.compendium.skill.SkillCompendiumScreenModel
 import cz.frantisekmasa.wfrp_master.common.compendium.spell.SpellCompendiumScreenModel
 import cz.frantisekmasa.wfrp_master.common.compendium.talent.TalentCompendiumScreenModel
 import cz.frantisekmasa.wfrp_master.common.compendium.trait.TraitCompendiumScreenModel
+import cz.frantisekmasa.wfrp_master.common.compendium.trapping.TrappingCompendiumScreenModel
 import cz.frantisekmasa.wfrp_master.common.core.PartyScreenModel
 import cz.frantisekmasa.wfrp_master.common.core.cache.CharacterRepositoryIdentityMap
 import cz.frantisekmasa.wfrp_master.common.core.cache.PartyRepositoryIdentityMap
@@ -131,6 +134,10 @@ val appModule = DI.Module("Common") {
         FirestoreCompendium(Schema.Compendium.Careers, instance(), mapper())
     }
 
+    bindSingleton<Compendium<Trapping>> {
+        FirestoreCompendium(Schema.Compendium.Trappings, instance(), mapper())
+    }
+
     bindSingleton { DismissedUserTipsHolder(instance()) }
 
     bindSingleton<InvitationProcessor> { FirestoreInvitationProcessor(instance(), instance()) }
@@ -155,7 +162,16 @@ val appModule = DI.Module("Common") {
     bindSingleton<CharacterAvatarChanger> { CloudFunctionCharacterAvatarChanger(instance()) }
 
     bindFactory { characterId: CharacterId ->
-        TrappingsScreenModel(characterId, instance(), instance(), instance())
+        TrappingsScreenModel(
+            characterId,
+            instance(),
+            instance(),
+            instance(),
+            instance(),
+            instance(),
+            instance(),
+            instance(),
+        )
     }
 
     /**
@@ -227,8 +243,12 @@ val appModule = DI.Module("Common") {
     bindFactory { partyId: PartyId ->
         TraitCompendiumScreenModel(partyId, instance(), instance(), instance(), instance())
     }
+    bindFactory { partyId: PartyId ->
+        TrappingCompendiumScreenModel(partyId, instance(), instance(), instance())
+    }
 
     bindSingleton { EffectManager(instance(), instance(), instance()) }
+    bindSingleton { TrappingSaver(instance(), instance()) }
     bindFactory { characterId: CharacterId ->
         TraitsScreenModel(
             characterId,
@@ -255,6 +275,7 @@ val appModule = DI.Module("Common") {
     bindFactory { partyId: PartyId ->
         CompendiumExportScreenModel(
             partyId,
+            instance(),
             instance(),
             instance(),
             instance(),

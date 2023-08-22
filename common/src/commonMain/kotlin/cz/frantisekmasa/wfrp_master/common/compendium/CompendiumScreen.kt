@@ -17,6 +17,7 @@ import cz.frantisekmasa.wfrp_master.common.compendium.skill.SkillCompendiumScree
 import cz.frantisekmasa.wfrp_master.common.compendium.spell.SpellCompendiumScreen
 import cz.frantisekmasa.wfrp_master.common.compendium.talent.TalentCompendiumScreen
 import cz.frantisekmasa.wfrp_master.common.compendium.trait.TraitCompendiumScreen
+import cz.frantisekmasa.wfrp_master.common.compendium.trapping.TrappingCompendiumScreen
 import cz.frantisekmasa.wfrp_master.common.core.domain.NamedEnum
 import cz.frantisekmasa.wfrp_master.common.core.domain.localizedName
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.PartyId
@@ -45,6 +46,7 @@ abstract class CompendiumScreen() : Screen {
         MIRACLES(Str.compendium_title_miracles, ::MiracleCompendiumScreen),
         TRAITS(Str.compendium_title_traits, ::TraitCompendiumScreen),
         CAREERS(Str.compendium_title_careers, ::CareerCompendiumScreen),
+        TRAPPINGS(Str.compendium_title_trappings, ::TrappingCompendiumScreen)
     }
 
     @Composable

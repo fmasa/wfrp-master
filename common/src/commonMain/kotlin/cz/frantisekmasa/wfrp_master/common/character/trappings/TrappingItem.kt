@@ -16,7 +16,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import cz.frantisekmasa.wfrp_master.common.Str
-import cz.frantisekmasa.wfrp_master.common.character.trappings.TrappingsScreenModel.Trapping
+import cz.frantisekmasa.wfrp_master.common.character.trappings.TrappingsScreenModel.TrappingItem
 import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.Encumbrance
 import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.sum
 import cz.frantisekmasa.wfrp_master.common.core.shared.Resources
@@ -29,7 +29,7 @@ import dev.icerock.moko.resources.compose.stringResource
 
 @Composable
 fun TrappingItem(
-    trapping: Trapping,
+    trapping: TrappingItem,
     onClick: () -> Unit,
     onDuplicate: () -> Unit,
     onRemove: () -> Unit,
@@ -37,16 +37,25 @@ fun TrappingItem(
 ) {
     WithContextMenu(
         onClick = onClick,
-        items = additionalContextItems + listOf(
-            ContextMenu.Item(
-                stringResource(Str.common_ui_button_duplicate),
-                onClick = onDuplicate,
-            ),
-            ContextMenu.Item(
-                stringResource(Str.common_ui_button_remove),
-                onClick = onRemove,
-            ),
-        )
+        items = buildList {
+            addAll(additionalContextItems)
+
+            if (trapping.item.compendiumId == null) {
+                add(
+                    ContextMenu.Item(
+                        stringResource(Str.common_ui_button_duplicate),
+                        onClick = onDuplicate,
+                    )
+                )
+            }
+
+            add(
+                ContextMenu.Item(
+                    stringResource(Str.common_ui_button_remove),
+                    onClick = onRemove,
+                )
+            )
+        }
     ) {
         TrappingItem(trapping)
     }
@@ -54,7 +63,7 @@ fun TrappingItem(
 
 @Composable
 fun TrappingItem(
-    trapping: Trapping,
+    trapping: TrappingItem,
     modifier: Modifier = Modifier,
 ) {
     ListItem(
@@ -76,7 +85,7 @@ fun TrappingItem(
                     )
                 }
 
-                if (trapping is Trapping.Container) {
+                if (trapping is TrappingItem.Container) {
                     val currentlyCarries by derivedStateOf {
                         trapping.storedTrappings
                             .map { it.totalEncumbrance }

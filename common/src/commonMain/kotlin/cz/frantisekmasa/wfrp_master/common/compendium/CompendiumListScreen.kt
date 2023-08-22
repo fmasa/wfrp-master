@@ -110,6 +110,7 @@ class CompendiumListScreen(
             CompendiumScreen.Type.SPELLS -> Resources.Drawable.Spell
             CompendiumScreen.Type.TRAITS -> Resources.Drawable.Trait
             CompendiumScreen.Type.CAREERS -> Resources.Drawable.Career
+            CompendiumScreen.Type.TRAPPINGS -> Resources.Drawable.TrappingContainer
         }
     }
 }

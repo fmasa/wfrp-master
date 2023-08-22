@@ -13,4 +13,5 @@ data class CompendiumBundle(
     val blessings: List<BlessingImport> = emptyList(),
     val traits: List<TraitImport> = emptyList(),
     val careers: List<CareerImport> = emptyList(),
+    val trappings: List<TrappingImport> = emptyList(),
 )

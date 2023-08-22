@@ -4,6 +4,7 @@ import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.Stable
 import com.benasher44.uuid.Uuid
 import com.benasher44.uuid.uuid4
+import cz.frantisekmasa.wfrp_master.common.compendium.domain.Trapping
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.CharacterItem
 import cz.frantisekmasa.wfrp_master.common.core.shared.Parcelize
 import cz.frantisekmasa.wfrp_master.common.core.utils.duplicateName
@@ -24,19 +25,12 @@ data class InventoryItem(
     val encumbrance: Encumbrance = Encumbrance.Zero,
     @Contextual val containerId: InventoryItemId? = null,
     val trappingType: TrappingType? = null,
-) : CharacterItem<InventoryItem, Nothing> {
+    @Contextual override val compendiumId: Uuid?,
+) : CharacterItem<InventoryItem, Trapping> {
 
     init {
         require(quantity > 0) { "Quantity must be greater than 0" }
     }
-
-    companion object {
-        const val NAME_MAX_LENGTH = 50
-        const val DESCRIPTION_MAX_LENGTH = 1000
-    }
-
-    // TODO: Add support for Trappings compendium
-    override val compendiumId: Uuid? get() = null
 
     @Stable
     val effectiveEncumbrance: Encumbrance get() {
@@ -57,11 +51,14 @@ data class InventoryItem(
 
     val totalEncumbrance: Encumbrance get() = encumbrance * quantity
 
-    override fun updateFromCompendium(compendiumItem: Nothing): InventoryItem {
-        error("TODO: Add support for Trappings compendium")
-    }
+    override fun updateFromCompendium(compendiumItem: Trapping): InventoryItem = copy(
+        name = compendiumItem.name,
+        encumbrance = compendiumItem.encumbrance,
+        trappingType = trappingType?.updateFromCompendium(compendiumItem.trappingType)
+            ?: TrappingType.fromCompendium(compendiumItem.trappingType)
+    )
 
-    override fun unlinkFromCompendium() = this
+    override fun unlinkFromCompendium() = copy(compendiumId = null)
 
     fun duplicate(): InventoryItem = copy(
         id = uuid4(),
@@ -82,10 +79,21 @@ data class InventoryItem(
         }
     }
 
-    init {
-        require(name.isNotBlank()) { "Inventory item must have non-blank name" }
-        require(quantity > 0) { "Inventory item quantity must be > 0" }
-        require(name.length <= NAME_MAX_LENGTH) { "Maximum allowed name length is $NAME_MAX_LENGTH" }
-        require(description.length <= DESCRIPTION_MAX_LENGTH) { "Maximum allowed description length is $DESCRIPTION_MAX_LENGTH" }
+    companion object {
+        const val NAME_MAX_LENGTH = 50
+        const val DESCRIPTION_MAX_LENGTH = 1000
+
+        fun fromCompendium(compendiumItem: Trapping): InventoryItem {
+            return InventoryItem(
+                id = uuid4(),
+                name = compendiumItem.name,
+                encumbrance = compendiumItem.encumbrance,
+                trappingType = TrappingType.fromCompendium(compendiumItem.trappingType),
+                description = compendiumItem.description,
+                quantity = 1,
+                containerId = null,
+                compendiumId = compendiumItem.id,
+            )
+        }
     }
 }

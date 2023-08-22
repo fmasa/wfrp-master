@@ -47,7 +47,7 @@ data class Character(
     val encumbranceBonus: Encumbrance = Encumbrance.Zero,
     @SerialName("archived") val isArchived: Boolean = false,
     val avatarUrl: String? = null,
-    val money: Money = Money.zero(),
+    val money: Money = Money.ZERO,
     val hiddenTabs: Set<CharacterTab> = emptySet(),
     val size: Size? = null,
 ) {

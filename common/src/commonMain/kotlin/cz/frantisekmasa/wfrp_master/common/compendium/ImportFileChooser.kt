@@ -33,6 +33,7 @@ fun ImportFileChooser(
                 val miracles = async { importer.importMiracles() }
                 val traits = async { importer.importTraits() }
                 val careers = async { importer.importCareers() }
+                val trappings = async { importer.importTrappings() }
 
                 onStateChange(
                     ImportDialogState.PickingItemsToImport(
@@ -43,6 +44,7 @@ fun ImportFileChooser(
                         miracles.await(),
                         traits.await(),
                         careers.await(),
+                        trappings.await(),
                         replaceExistingByDefault = false,
                     )
                 )
