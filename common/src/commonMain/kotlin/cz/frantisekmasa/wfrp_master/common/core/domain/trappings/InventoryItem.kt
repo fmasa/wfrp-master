@@ -25,7 +25,7 @@ data class InventoryItem(
     val encumbrance: Encumbrance = Encumbrance.Zero,
     @Contextual val containerId: InventoryItemId? = null,
     val trappingType: TrappingType? = null,
-    @Contextual override val compendiumId: Uuid?,
+    @Contextual override val compendiumId: Uuid? = null,
 ) : CharacterItem<InventoryItem, Trapping> {
 
     init {
