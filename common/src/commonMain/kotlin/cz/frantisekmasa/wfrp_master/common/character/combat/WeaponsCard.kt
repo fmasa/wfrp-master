@@ -73,6 +73,7 @@ private fun WeaponList(weapons: List<EquippedWeapon>, onTrappingClick: (Inventor
                     (
                         {
                             TrappingFeatureList(
+                                equippedWeapon.trapping,
                                 weapon.qualities,
                                 weapon.flaws,
                                 Modifier.fillMaxWidth()

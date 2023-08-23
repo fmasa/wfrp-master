@@ -40,14 +40,12 @@ fun TrappingItem(
         items = buildList {
             addAll(additionalContextItems)
 
-            if (trapping.item.compendiumId == null) {
-                add(
-                    ContextMenu.Item(
-                        stringResource(Str.common_ui_button_duplicate),
-                        onClick = onDuplicate,
-                    )
+            add(
+                ContextMenu.Item(
+                    stringResource(Str.common_ui_button_duplicate),
+                    onClick = onDuplicate,
                 )
-            }
+            )
 
             add(
                 ContextMenu.Item(

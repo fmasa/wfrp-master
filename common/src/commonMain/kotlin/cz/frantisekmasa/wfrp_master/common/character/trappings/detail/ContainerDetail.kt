@@ -146,6 +146,8 @@ fun ContainerDetail(
                     carriedItems.map { it.totalEncumbrance }.sum()
                 }
 
+                ItemQualitiesAndFlaws(trapping)
+
                 EncumbranceBox(trapping)
 
                 SingleLineTextValue(

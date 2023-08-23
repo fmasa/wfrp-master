@@ -180,6 +180,7 @@ private fun Location(
                         (
                             {
                                 TrappingFeatureList(
+                                    item.trapping,
                                     armour.qualities,
                                     armour.flaws,
                                     Modifier.fillMaxWidth()

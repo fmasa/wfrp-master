@@ -314,7 +314,7 @@ service cloud.firestore {
                     allow delete: if canEditCharacter();
 
                     function isValidInventoryItem(item) {
-                        return ["id", "name", "description", "quantity", "encumbrance", "trappingType", "containerId", "compendiumId"].hasAll(item.keys())
+                        return ["id", "name", "description", "quantity", "encumbrance", "trappingType", "containerId", "compendiumId", "itemQualities", "itemFlaws"].hasAll(item.keys())
                             && item.id is string && item.id == itemId && isValidUuid(item.id)
                             && item.name is string && isNotBlank(item.name) && item.name.size() <= 50
                             && item.description is string && item.description.size() <= 1000

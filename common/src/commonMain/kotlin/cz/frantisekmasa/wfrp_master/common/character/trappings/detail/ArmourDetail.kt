@@ -41,6 +41,10 @@ fun ArmourDetailBody(
                 TrappingTypeOption.ARMOUR.localizedName,
             )
 
+            if (characterTrapping != null) {
+                ItemQualitiesAndFlaws(characterTrapping)
+            }
+
             EncumbranceBox(encumbrance, characterTrapping)
 
             val locationNames = locations.map { it.localizedName }
