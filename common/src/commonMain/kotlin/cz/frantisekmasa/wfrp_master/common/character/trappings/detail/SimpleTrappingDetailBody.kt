@@ -28,6 +28,10 @@ fun SimpleTrappingDetailBody(
         Column(Modifier.padding(Spacing.bodyPadding)) {
             SingleLineTextValue(stringResource(Str.trappings_label_type), trappingType)
 
+            if (characterTrapping != null) {
+                ItemQualitiesAndFlaws(characterTrapping)
+            }
+
             EncumbranceBox(encumbrance, characterTrapping)
 
             TrappingDescription(description)

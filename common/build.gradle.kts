@@ -86,6 +86,7 @@ kotlin {
 
                 implementation("org.jsoup:jsoup:1.15.3")
 
+                api("dev.icerock.moko:parcelize:0.9.0")
                 api("dev.icerock.moko:resources:0.23.0")
                 api("dev.icerock.moko:resources-compose:0.23.0")
             }

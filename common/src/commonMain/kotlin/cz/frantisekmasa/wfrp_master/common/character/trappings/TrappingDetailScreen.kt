@@ -88,13 +88,11 @@ private fun TrappingDetail(
                 title = { Text(trapping.name) },
                 navigationIcon = { BackButton() },
                 actions = {
-                    if (trapping.compendiumId == null) {
-                        IconAction(
-                            Icons.Rounded.Edit,
-                            stringResource(Str.character_title_edit),
-                            onClick = onEditRequest,
-                        )
-                    }
+                    IconAction(
+                        Icons.Rounded.Edit,
+                        stringResource(Str.character_title_edit),
+                        onClick = onEditRequest,
+                    )
                 }
             )
         },

@@ -42,6 +42,10 @@ fun MeleeWeaponDetailBody(
                 stringResource(Str.trappings_types_melee_weapon),
             )
 
+            if (characterTrapping != null) {
+                ItemQualitiesAndFlaws(characterTrapping)
+            }
+
             EncumbranceBox(encumbrance, characterTrapping)
 
             SingleLineTextValue(

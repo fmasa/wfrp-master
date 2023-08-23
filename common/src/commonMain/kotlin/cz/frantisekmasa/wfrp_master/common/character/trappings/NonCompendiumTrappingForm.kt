@@ -24,6 +24,8 @@ import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.DamageExpressio
 import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.Encumbrance
 import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.InventoryItem
 import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.InventoryItemId
+import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.ItemFlaw
+import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.ItemQuality
 import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.MeleeWeaponGroup
 import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.RangedWeaponGroup
 import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.Reach
@@ -100,6 +102,22 @@ fun NonCompendiumTrappingForm(
             maxLength = InventoryItem.DESCRIPTION_MAX_LENGTH,
             multiLine = true,
             helperText = stringResource(Str.common_ui_markdown_supported_note),
+        )
+
+        InputLabel(stringResource(Str.trappings_label_item_qualities))
+
+        CheckboxList(
+            items = ItemQuality.values(),
+            text = { it.localizedName },
+            selected = formData.itemQualities,
+        )
+
+        InputLabel(stringResource(Str.trappings_label_item_flaws))
+
+        CheckboxList(
+            items = ItemFlaw.values(),
+            text = { it.localizedName },
+            selected = formData.itemFlaws,
         )
 
         TrappingTypeForm(
@@ -341,6 +359,8 @@ private class InventoryItemFormData(
     val name: InputValue,
     val encumbrance: InputValue,
     val quantity: InputValue,
+    val itemQualities: MutableState<Set<ItemQuality>>,
+    val itemFlaws: MutableState<Set<ItemFlaw>>,
     val description: InputValue,
     val type: TrappingTypeFormData,
 ) : HydratedFormData<InventoryItem> {
@@ -355,6 +375,8 @@ private class InventoryItemFormData(
             name = name.value,
             description = description.value,
             quantity = max(1, quantity.toInt()),
+            itemQualities = itemQualities.value,
+            itemFlaws = itemFlaws.value,
             encumbrance = Encumbrance(encumbrance.toDouble()),
             trappingType = type.toValue(),
             containerId = if (
@@ -375,9 +397,15 @@ private class InventoryItemFormData(
             name = inputValue(item?.name ?: "", Rules.NotBlank()),
             encumbrance = inputValue(item?.encumbrance?.toString() ?: "0"),
             quantity = inputValue(item?.quantity?.toString() ?: "1", Rules.PositiveInteger()),
+            itemQualities = rememberSaveable(item?.id) {
+                mutableStateOf(item?.itemQualities ?: emptySet())
+            },
+            itemFlaws = rememberSaveable(item?.id) {
+                mutableStateOf(item?.itemFlaws ?: emptySet())
+            },
             description = inputValue(item?.description ?: ""),
             type = TrappingTypeFormData.fromTrappingType(item?.trappingType),
-            containerId = item?.containerId ?: defaultContainerId
+            containerId = item?.containerId ?: defaultContainerId,
         )
     }
 }

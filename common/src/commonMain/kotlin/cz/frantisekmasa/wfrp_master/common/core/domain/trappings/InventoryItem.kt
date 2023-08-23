@@ -25,7 +25,9 @@ data class InventoryItem(
     val encumbrance: Encumbrance = Encumbrance.Zero,
     @Contextual val containerId: InventoryItemId? = null,
     val trappingType: TrappingType? = null,
-    @Contextual override val compendiumId: Uuid?,
+    val itemQualities: Set<ItemQuality> = emptySet(),
+    val itemFlaws: Set<ItemFlaw> = emptySet(),
+    @Contextual override val compendiumId: Uuid? = null,
 ) : CharacterItem<InventoryItem, Trapping> {
 
     init {
@@ -53,9 +55,20 @@ data class InventoryItem(
 
     override fun updateFromCompendium(compendiumItem: Trapping): InventoryItem = copy(
         name = compendiumItem.name,
-        encumbrance = compendiumItem.encumbrance,
+        encumbrance = compendiumItem.encumbrance + encumbranceModifier(itemQualities, itemFlaws),
         trappingType = trappingType?.updateFromCompendium(compendiumItem.trappingType)
             ?: TrappingType.fromCompendium(compendiumItem.trappingType)
+    )
+
+    fun updateItemQualitiesAndFlaws(
+        itemQualities: Set<ItemQuality>,
+        itemFlaws: Set<ItemFlaw>,
+    ): InventoryItem = copy(
+        encumbrance = encumbrance -
+            encumbranceModifier(this.itemQualities, this.itemFlaws) +
+            encumbranceModifier(this.itemQualities, this.itemFlaws),
+        itemQualities = itemQualities,
+        itemFlaws = itemFlaws,
     )
 
     override fun unlinkFromCompendium() = copy(compendiumId = null)
@@ -83,17 +96,40 @@ data class InventoryItem(
         const val NAME_MAX_LENGTH = 50
         const val DESCRIPTION_MAX_LENGTH = 1000
 
-        fun fromCompendium(compendiumItem: Trapping): InventoryItem {
+        fun fromCompendium(
+            compendiumItem: Trapping,
+            itemQualities: Set<ItemQuality>,
+            itemFlaws: Set<ItemFlaw>,
+        ): InventoryItem {
             return InventoryItem(
                 id = uuid4(),
                 name = compendiumItem.name,
-                encumbrance = compendiumItem.encumbrance,
+                encumbrance = compendiumItem.encumbrance + encumbranceModifier(itemQualities, itemFlaws),
+                itemQualities = itemQualities,
+                itemFlaws = itemFlaws,
                 trappingType = TrappingType.fromCompendium(compendiumItem.trappingType),
                 description = compendiumItem.description,
                 quantity = 1,
                 containerId = null,
                 compendiumId = compendiumItem.id,
             )
+        }
+
+        private fun encumbranceModifier(
+            itemQualities: Set<ItemQuality>,
+            itemFlaws: Set<ItemFlaw>
+        ): Encumbrance {
+            var modifier = Encumbrance.Zero
+
+            if (ItemFlaw.BULKY in itemFlaws) {
+                modifier += Encumbrance.One
+            }
+
+            if (ItemQuality.LIGHTWEIGHT in itemQualities && modifier > Encumbrance.Zero) {
+                modifier += Encumbrance.One
+            }
+
+            return modifier
         }
     }
 }

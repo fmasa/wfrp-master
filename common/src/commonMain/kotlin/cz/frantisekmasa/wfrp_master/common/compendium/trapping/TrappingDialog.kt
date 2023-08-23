@@ -420,8 +420,6 @@ private class TrappingFormData(
         listOf(name, encumbrance, description).all { it.isValid() } && type.isValid()
 
     override fun toValue(): Trapping {
-        val trappingType = type.toValue()
-
         return Trapping(
             id = id,
             name = name.value,

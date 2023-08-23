@@ -42,6 +42,10 @@ fun AmmunitionDetailBody(
                 stringResource(Str.trappings_types_ammunition),
             )
 
+            if (characterTrapping != null) {
+                ItemQualitiesAndFlaws(characterTrapping)
+            }
+
             EncumbranceBox(
                 encumbrance = encumbrance,
                 characterTrapping = characterTrapping,

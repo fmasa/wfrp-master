@@ -40,10 +40,14 @@ internal fun <A : CharacterItem<A, B>, B : CompendiumItem<B>> CompendiumItemChoo
     onCustomItemRequest: (() -> Unit)? = null,
     onDismissRequest: () -> Unit,
     customItemButtonText: String = "",
+    showUsedItems: Boolean = false,
     emptyUiIcon: Resources.Drawable,
 ) {
-    val compendiumItems =
-        screenModel.notUsedItemsFromCompendium.collectWithLifecycle(null).value
+    val compendiumItems = (
+        if (showUsedItems)
+            screenModel.compendiumItems
+        else screenModel.notUsedItemsFromCompendium
+        ).collectWithLifecycle(null).value
     val totalCompendiumItemCount =
         screenModel.compendiumItemsCount.collectWithLifecycle(null).value
 
