@@ -12,11 +12,13 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import cz.frantisekmasa.wfrp_master.common.Str
 import cz.frantisekmasa.wfrp_master.common.character.trappings.TrappingsScreenModel.TrappingItem
+import cz.frantisekmasa.wfrp_master.common.core.domain.localizedName
 import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.Encumbrance
 import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.sum
 import cz.frantisekmasa.wfrp_master.common.core.shared.Resources
@@ -67,7 +69,24 @@ fun TrappingItem(
     ListItem(
         modifier = modifier,
         icon = { ItemIcon(trappingIcon(trapping.item.trappingType), ItemIcon.Size.Small) },
-        text = { Text(trapping.item.name) },
+        text = {
+            Text(
+                buildString {
+                    append(trapping.item.name)
+
+                    val itemFeatures = trapping.item.itemQualities + trapping.item.itemFlaws
+
+                    if (trapping.item.compendiumId != null && itemFeatures.isNotEmpty()) {
+                        val featureNames = itemFeatures.map { it.localizedName }
+                        val sorted = remember(featureNames) { featureNames.sorted() }
+
+                        append(" (")
+                        append(sorted.joinToString(", "))
+                        append(')')
+                    }
+                }
+            )
+        },
         trailing = {
             Column(horizontalAlignment = Alignment.End) {
                 if (trapping.item.quantity > 1) {

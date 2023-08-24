@@ -176,7 +176,12 @@ private fun Location(
                 ListItem(
                     modifier = Modifier.clickable { onTrappingClick(item.trapping) },
                     text = { Text(item.trapping.name) },
-                    secondaryText = if (armour.qualities.isNotEmpty() || armour.flaws.isNotEmpty())
+                    secondaryText = if (
+                        armour.qualities.isNotEmpty() ||
+                        armour.flaws.isNotEmpty() ||
+                        item.trapping.itemQualities.isNotEmpty() ||
+                        item.trapping.itemFlaws.isNotEmpty()
+                    )
                         (
                             {
                                 TrappingFeatureList(

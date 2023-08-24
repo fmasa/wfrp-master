@@ -69,7 +69,12 @@ private fun WeaponList(weapons: List<EquippedWeapon>, onTrappingClick: (Inventor
                 modifier = Modifier.clickable { onTrappingClick(equippedWeapon.trapping) },
                 icon = { ItemIcon(trappingIcon(equippedWeapon.weapon), ItemIcon.Size.Small) },
                 text = { Text(equippedWeapon.trapping.name) },
-                secondaryText = if (weapon.qualities.isNotEmpty() || weapon.flaws.isNotEmpty())
+                secondaryText = if (
+                    weapon.qualities.isNotEmpty() ||
+                    weapon.flaws.isNotEmpty() ||
+                    equippedWeapon.trapping.itemQualities.isNotEmpty() ||
+                    equippedWeapon.trapping.itemFlaws.isNotEmpty()
+                )
                     (
                         {
                             TrappingFeatureList(
