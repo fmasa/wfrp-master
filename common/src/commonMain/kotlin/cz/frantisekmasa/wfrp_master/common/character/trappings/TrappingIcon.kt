@@ -18,6 +18,7 @@ fun trappingIcon(trappingType: CharacterTrappingType?) = when (trappingType) {
     is CharacterTrappingType.DrugOrPoison -> Resources.Drawable.TrappingDrugOrPoison
     is CharacterTrappingType.FoodOrDrink -> Resources.Drawable.TrappingFoodOrDrink
     is CharacterTrappingType.HerbOrDraught -> Resources.Drawable.TrappingHerbOrDraught
+    is CharacterTrappingType.Prosthetic -> Resources.Drawable.TrappingProsthetic
     is CharacterTrappingType.RangedWeapon -> Resources.Drawable.BallisticSkill
     is CharacterTrappingType.SpellIngredient -> Resources.Drawable.Spell
     is CharacterTrappingType.ToolOrKit -> Resources.Drawable.TrappingTool
@@ -37,6 +38,7 @@ fun trappingIcon(trappingType: CompendiumTrappingType?) = when (trappingType) {
     is CompendiumTrappingType.DrugOrPoison -> Resources.Drawable.TrappingDrugOrPoison
     is CompendiumTrappingType.FoodOrDrink -> Resources.Drawable.TrappingFoodOrDrink
     is CompendiumTrappingType.HerbOrDraught -> Resources.Drawable.TrappingHerbOrDraught
+    is CompendiumTrappingType.Prosthetic -> Resources.Drawable.TrappingProsthetic
     is CompendiumTrappingType.RangedWeapon -> Resources.Drawable.BallisticSkill
     is CompendiumTrappingType.SpellIngredient -> Resources.Drawable.Spell
     is CompendiumTrappingType.ToolOrKit -> Resources.Drawable.TrappingTool
