@@ -62,6 +62,7 @@ object Resources {
         TrappingHerbOrDraught("drawable/ic_herb_or_draught.xml"),
         TrappingMiscellaneous("drawable/ic_miscellaneous.xml"),
         TrappingEncumbrance("drawable/ic_encumbrance.xml"),
+        TrappingProsthetic("drawable/ic_prosthetic.xml"),
         TrappingTool("drawable/ic_tool.xml"),
 
         LoreBeasts("drawable/ic_lore_beasts.xml"),

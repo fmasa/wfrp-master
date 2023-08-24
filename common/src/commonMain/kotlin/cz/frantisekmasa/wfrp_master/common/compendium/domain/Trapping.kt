@@ -166,4 +166,9 @@ sealed class TrappingType : Parcelable {
     @Serializable
     @SerialName("SPELL_INGREDIENT")
     object SpellIngredient : TrappingType()
+
+    @Parcelize
+    @Serializable
+    @SerialName("PROSTHETIC")
+    object Prosthetic : TrappingType()
 }

@@ -43,6 +43,11 @@ data class InventoryItem(
 
         val type = trappingType
 
+        if (type is TrappingType.Prosthetic && type.worn) {
+            // See rulebook page 308
+            return Encumbrance.Zero
+        }
+
         if (type != null && type is TrappingType.WearableTrapping && type.worn) {
             // See rulebook page 293
             return totalEncumbrance - Encumbrance.One

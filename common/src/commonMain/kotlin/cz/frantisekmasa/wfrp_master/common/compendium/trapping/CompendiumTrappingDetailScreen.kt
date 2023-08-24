@@ -171,6 +171,16 @@ class CompendiumTrappingDetailScreen(
                         )
                     }
 
+                    is TrappingType.Prosthetic -> {
+                        SimpleTrappingDetailBody(
+                            subheadBar = subheadBar,
+                            trappingType = TrappingTypeOption.PROSTHETIC.localizedName,
+                            encumbrance = trapping.encumbrance,
+                            description = trapping.description,
+                            characterTrapping = null,
+                        )
+                    }
+
                     is TrappingType.RangedWeapon -> {
                         RangedWeaponDetailBody(
                             subheadBar = subheadBar,

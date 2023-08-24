@@ -84,6 +84,7 @@ sealed class TrappingType : Parcelable {
                 CompendiumTrappingType.SpellIngredient -> SpellIngredient
                 CompendiumTrappingType.ToolOrKit -> ToolOrKit
                 CompendiumTrappingType.TradeTools -> TradeTools
+                CompendiumTrappingType.Prosthetic -> Prosthetic(worn = false)
             }
         }
     }
@@ -236,6 +237,16 @@ sealed class TrappingType : Parcelable {
     @SerialName("SPELL_INGREDIENT")
     object SpellIngredient : SimpleTrapping() {
         override val name get() = TrappingTypeOption.SPELL_INGREDIENT.translatableName
+    }
+
+    @Parcelize
+    @Serializable
+    @SerialName("PROSTHETIC")
+    data class Prosthetic(
+        override val worn: Boolean,
+    ) : WearableTrapping() {
+        override fun takeOff(): Prosthetic = copy(worn = false)
+        override fun takeOn(): Prosthetic = copy(worn = true)
     }
 
     sealed class SimpleTrapping : TrappingType() {

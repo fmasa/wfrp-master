@@ -226,9 +226,6 @@ private fun TrappingTypeForm(formData: TrappingTypeFormData, validate: Boolean) 
             )
         }
 
-        TrappingTypeOption.CLOTHING_OR_ACCESSORY -> {
-        }
-
         TrappingTypeOption.CONTAINER -> {
             TextInput(
                 label = stringResource(Str.trappings_label_carries),
@@ -280,10 +277,12 @@ private fun TrappingTypeForm(formData: TrappingTypeFormData, validate: Boolean) 
         }
 
         TrappingTypeOption.BOOK_OR_DOCUMENT,
+        TrappingTypeOption.CLOTHING_OR_ACCESSORY,
         TrappingTypeOption.DRUG_OR_POISON,
         TrappingTypeOption.MISCELLANEOUS,
         TrappingTypeOption.FOOD_OR_DRINK,
         TrappingTypeOption.HERB_OR_DRAUGHT,
+        TrappingTypeOption.PROSTHETIC,
         TrappingTypeOption.SPELL_INGREDIENT,
         TrappingTypeOption.TOOL_OR_KIT,
         TrappingTypeOption.TRADE_TOOLS -> {
@@ -493,6 +492,7 @@ private class TrappingTypeFormData(
         TrappingTypeOption.FOOD_OR_DRINK,
         TrappingTypeOption.HERB_OR_DRAUGHT,
         TrappingTypeOption.MISCELLANEOUS,
+        TrappingTypeOption.PROSTHETIC,
         TrappingTypeOption.SPELL_INGREDIENT,
         TrappingTypeOption.TOOL_OR_KIT,
         TrappingTypeOption.TRADE_TOOLS -> true
@@ -506,7 +506,6 @@ private class TrappingTypeFormData(
             flaws = weaponFlaws.toMap(),
             damage = DamageExpression(damage.value.trim()),
         )
-
         TrappingTypeOption.ARMOUR -> TrappingType.Armour(
             locations = armourLocations.value,
             points = ArmourPoints(armourPoints.toInt()),
@@ -514,14 +513,11 @@ private class TrappingTypeFormData(
             qualities = armourQualities.toMap(),
             flaws = armourFlaws.toMap(),
         )
-
         TrappingTypeOption.BOOK_OR_DOCUMENT -> TrappingType.BookOrDocument
         TrappingTypeOption.CLOTHING_OR_ACCESSORY -> TrappingType.ClothingOrAccessory
-
         TrappingTypeOption.CONTAINER -> TrappingType.Container(
             carries = Encumbrance(carries.toDouble()),
         )
-
         TrappingTypeOption.DRUG_OR_POISON -> TrappingType.DrugOrPoison
         TrappingTypeOption.FOOD_OR_DRINK -> TrappingType.FoodOrDrink
         TrappingTypeOption.HERB_OR_DRAUGHT -> TrappingType.HerbOrDraught
@@ -532,7 +528,7 @@ private class TrappingTypeFormData(
             qualities = weaponQualities.toMap(),
             flaws = weaponFlaws.toMap(),
         )
-
+        TrappingTypeOption.PROSTHETIC -> TrappingType.Prosthetic
         TrappingTypeOption.RANGED_WEAPON -> TrappingType.RangedWeapon(
             group = rangedWeaponGroup.value,
             range = WeaponRangeExpression(weaponRange.value),
@@ -540,7 +536,6 @@ private class TrappingTypeFormData(
             qualities = weaponQualities.toMap(),
             flaws = weaponFlaws.toMap(),
         )
-
         TrappingTypeOption.SPELL_INGREDIENT -> TrappingType.SpellIngredient
         TrappingTypeOption.MISCELLANEOUS -> null
         TrappingTypeOption.TOOL_OR_KIT -> TrappingType.ToolOrKit
@@ -560,7 +555,6 @@ private class TrappingTypeFormData(
                     weaponQualities = type.qualities,
                     weaponFlaws = type.flaws,
                 )
-
                 is TrappingType.Armour -> fromDefaults(
                     type = TrappingTypeOption.ARMOUR,
                     armourType = type.type,
@@ -569,17 +563,14 @@ private class TrappingTypeFormData(
                     armourQualities = type.qualities,
                     armourFlaws = type.flaws,
                 )
-
                 is TrappingType.BookOrDocument -> fromDefaults(TrappingTypeOption.BOOK_OR_DOCUMENT)
                 is TrappingType.ClothingOrAccessory -> fromDefaults(
                     type = TrappingTypeOption.CLOTHING_OR_ACCESSORY,
                 )
-
                 is TrappingType.Container -> fromDefaults(
                     type = TrappingTypeOption.CONTAINER,
                     carries = type.carries,
                 )
-
                 is TrappingType.DrugOrPoison -> fromDefaults(TrappingTypeOption.DRUG_OR_POISON)
                 is TrappingType.HerbOrDraught -> fromDefaults(TrappingTypeOption.HERB_OR_DRAUGHT)
                 is TrappingType.MeleeWeapon -> fromDefaults(
@@ -590,7 +581,9 @@ private class TrappingTypeFormData(
                     weaponQualities = type.qualities,
                     weaponFlaws = type.flaws,
                 )
-
+                is TrappingType.Prosthetic -> fromDefaults(
+                    type = TrappingTypeOption.PROSTHETIC,
+                )
                 is TrappingType.RangedWeapon -> fromDefaults(
                     type = TrappingTypeOption.RANGED_WEAPON,
                     damage = type.damage,
