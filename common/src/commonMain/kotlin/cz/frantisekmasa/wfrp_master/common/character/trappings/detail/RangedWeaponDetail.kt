@@ -2,6 +2,7 @@ package cz.frantisekmasa.wfrp_master.common.character.trappings.detail
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
@@ -15,6 +16,7 @@ import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.RangedWeaponGro
 import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.WeaponFlaw
 import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.WeaponQuality
 import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.WeaponRangeExpression
+import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
 import cz.frantisekmasa.wfrp_master.common.core.ui.text.SingleLineTextValue
 import dev.icerock.moko.resources.compose.stringResource
 
@@ -34,7 +36,7 @@ fun RangedWeaponDetailBody(
     Column(Modifier.verticalScroll(rememberScrollState())) {
         subheadBar()
 
-        Column {
+        Column(Modifier.padding(Spacing.bodyPadding)) {
             SingleLineTextValue(
                 stringResource(Str.trappings_label_type),
                 stringResource(Str.trappings_types_ranged_weapon),
