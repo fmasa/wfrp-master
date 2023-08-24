@@ -80,7 +80,7 @@ data class InventoryItem(
 
     fun duplicate(): InventoryItem = copy(
         id = uuid4(),
-        name = duplicateName(name),
+        name = if (compendiumId == null) duplicateName(name) else name,
     )
 
     fun addToContainer(containerId: InventoryItemId): InventoryItem {
