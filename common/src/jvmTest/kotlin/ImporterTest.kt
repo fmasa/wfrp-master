@@ -154,6 +154,15 @@ class ImporterTest {
         }
     }
 
+    @Test
+    fun `trappings import (Core Rulebook)`() {
+        withCoreRuleBook { document ->
+            val trappings = CoreRulebook.importTrappings(document)
+
+            assertEquals(227, trappings.size)
+        }
+    }
+
     private fun withCoreRuleBook(block: (Document) -> Unit) {
         loadDocument(javaClass.getResourceAsStream("rulebook.pdf") as InputStream)
             .use(block)

@@ -8,6 +8,7 @@ package cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.parsers
 class DefaultLayoutPdfLexer(
     private val document: Document,
     private val structure: PdfStructure,
+    private val mergeSubsequentTokens: Boolean = true,
 ) {
 
     fun getTokens(page: Int): Sequence<Token> {
@@ -42,6 +43,7 @@ class DefaultLayoutPdfLexer(
         }
 
         override fun onTextLine(text: String, textPositions: List<TextPosition>) {
+            var lastPositionInLine: TextPosition? = null
 
             for (position in textPositions) {
                 val lastPosition = lastTextPosition
@@ -59,9 +61,31 @@ class DefaultLayoutPdfLexer(
                     lastTextPosition = position
                 }
 
+                if (
+                    !mergeSubsequentTokens &&
+                    lastPositionInLine != null &&
+                    lastPositionInLine.getUnicode() == " " &&
+                    position.getX() - lastPositionInLine.getEndX() > position.getWidth() * 5
+                ) {
+                    // Sometimes text is laid as single line even when it should be separate.
+                    // This happens mostly in tables, so we want to split parts tokens with long
+                    // space between them.
+                    currentText.deleteCharAt(currentText.lastIndex)
+                    buildToken()
+                    lastTextPosition = position
+                }
+
                 currentText.append(position.getUnicode())
+
+                lastPositionInLine = position
             }
-            currentText.append("\n")
+
+            if (mergeSubsequentTokens) {
+                currentText.append("\n")
+            } else {
+                buildToken()
+                lastTextPosition = null
+            }
         }
 
         override fun onFinish() {

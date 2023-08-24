@@ -16,6 +16,7 @@ data class TrappingImport(
     val encumbrance: Encumbrance,
     val availability: Availability,
     val price: Money,
+    val packSize: Int,
     val isVisibleToPlayers: Boolean,
 ) {
     fun toTrapping(): Trapping {
@@ -27,6 +28,7 @@ data class TrappingImport(
             encumbrance = encumbrance,
             availability = availability,
             price = price,
+            packSize = packSize,
             isVisibleToPlayers = isVisibleToPlayers,
         )
     }
@@ -40,6 +42,7 @@ data class TrappingImport(
                 encumbrance = trapping.encumbrance,
                 availability = trapping.availability,
                 price = trapping.price,
+                packSize = trapping.packSize,
                 isVisibleToPlayers = trapping.isVisibleToPlayers,
             )
         }

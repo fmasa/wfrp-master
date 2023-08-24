@@ -21,15 +21,18 @@ value class DamageExpression(val value: String) : Parcelable {
     }
 
     enum class Constant(val value: String) {
-        STRENGTH_BONUS("SB")
+        STRENGTH_BONUS("SB"),
+        SPECIAL("Special"),
     }
 
     @Stable
     fun calculate(strengthBonus: Int, successLevels: Int): Damage {
         val damage = expression(value, strengthBonus).evaluate()
 
-        return Damage(damage + successLevels)
+        return Damage((damage + successLevels).coerceAtLeast(0))
     }
+
+    operator fun plus(other: DamageExpression) = DamageExpression("$value + ${other.value}")
 
     companion object {
         private fun expression(
@@ -38,7 +41,10 @@ value class DamageExpression(val value: String) : Parcelable {
         ): Expression {
             return Expression.fromString(
                 if (value.startsWith('+')) value.substring(1) else value,
-                mapOf(Constant.STRENGTH_BONUS.value to strengthBonus),
+                mapOf(
+                    Constant.STRENGTH_BONUS.value to strengthBonus,
+                    Constant.SPECIAL.value to 0,
+                ),
             )
         }
 

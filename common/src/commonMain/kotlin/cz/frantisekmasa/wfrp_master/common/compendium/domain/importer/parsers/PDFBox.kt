@@ -9,6 +9,7 @@ expect class TextPosition {
     fun getFontSizeInPt(): Float
     fun getX(): Float
     fun getEndX(): Float
+    fun getWidth(): Float
     fun getHeight(): Float
     fun getFont(): Font
     fun getUnicode(): String

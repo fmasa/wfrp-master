@@ -561,9 +561,11 @@
     <string name="trappings_label_item_qualities">Item Qualities</string>
     <string name="trappings_label_item_flaws">Item Flaws</string>
     <string name="trappings_label_name">Name</string>
+    <string name="trappings_label_pack_size">Pack size</string>
     <string name="trappings_label_price">Price</string>
     <string name="trappings_label_qualities">Qualities</string>
     <string name="trappings_label_quantity">Quantity</string>
+    <string name="trappings_label_sold_amount">Sold amount</string>
     <string name="trappings_label_type">Trapping type</string>
     <string name="trappings_label_worn">Worn</string>
     <string name="trappings_qualities_durable">Durable</string>
@@ -594,6 +596,7 @@
     <string name="trappings_money_title_new_transaction">New money transaction</string>
     <string name="trappings_none">None</string>
     <string name="trappings_title_choose_compendium_trapping">Choose Compendium trapping…</string>
+    <string name="trappings_pack_size">Price for a pack of %d pieces</string>
     <string name="trappings_search_placeholder">Search in trappings…</string>
     <string name="trappings_title">Trappings</string>
     <string name="trappings_title_add">Add trapping</string>

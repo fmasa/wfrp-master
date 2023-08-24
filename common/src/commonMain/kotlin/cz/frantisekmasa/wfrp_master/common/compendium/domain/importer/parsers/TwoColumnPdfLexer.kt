@@ -9,6 +9,7 @@ import kotlin.properties.Delegates
 class TwoColumnPdfLexer(
     private val document: Document,
     private val structure: PdfStructure,
+    private val mergeSubsequentTokens: Boolean = true,
 ) {
 
     fun getTokens(page: Int): Pair<Sequence<Token>, Sequence<Token>> {
@@ -86,7 +87,15 @@ class TwoColumnPdfLexer(
 
                 column.currentText.append(position.getUnicode())
             }
-            touchedColumns.forEach { it.currentText.append("\n") }
+
+            touchedColumns.forEach {
+                if (mergeSubsequentTokens) {
+                    it.currentText.append("\n")
+                } else {
+                    it.buildToken()
+                    it.lastTextPosition = null
+                }
+            }
         }
 
         override fun onFinish() {
