@@ -83,6 +83,6 @@ object MarkdownBuilder {
 
                 appendLine(line)
             }
-        }
+        }.replace("  ", " ")
     }
 }

@@ -8,6 +8,8 @@ import cz.frantisekmasa.wfrp_master.common.compendium.domain.Spell
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.SpellLore
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.Talent
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.Trait
+import cz.frantisekmasa.wfrp_master.common.compendium.domain.Trapping
+import cz.frantisekmasa.wfrp_master.common.compendium.domain.TrappingType
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.parsers.BlessingParser
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.parsers.CareerParser
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.parsers.Document
@@ -19,6 +21,12 @@ import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.parsers.Te
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.parsers.TextToken
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.parsers.Token
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.parsers.TraitParser
+import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.parsers.trappings.AmmunitionParser
+import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.parsers.trappings.ArmourParser
+import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.parsers.trappings.BasicTrappingsParser
+import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.parsers.trappings.BasicTrappingsParser.Column
+import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.parsers.trappings.MeleeWeaponsParser
+import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.parsers.trappings.RangedWeaponsParser
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.sources.BlessingSource
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.sources.CareerSource
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.sources.MiracleSource
@@ -26,7 +34,9 @@ import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.sources.Sk
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.sources.SpellSource
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.sources.TalentSource
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.sources.TraitSource
+import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.sources.TrappingSource
 import cz.frantisekmasa.wfrp_master.common.core.domain.SocialClass
+import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.Encumbrance
 import kotlin.math.abs
 import kotlin.math.max
 import kotlin.math.min
@@ -39,7 +49,8 @@ object CoreRulebook :
     TraitSource,
     SpellSource,
     BlessingSource,
-    MiracleSource {
+    MiracleSource,
+    TrappingSource {
 
     override val name: String = "Core Rulebook"
 
@@ -94,6 +105,115 @@ object CoreRulebook :
 
     override fun importMiracles(document: Document): List<Miracle> {
         return MiracleParser().import(document, this, (222..228).asSequence())
+    }
+
+    override fun importTrappings(document: Document): List<Trapping> {
+        val structure = this
+        return buildList {
+            addAll(
+                MeleeWeaponsParser().parse(document, structure, 294, IntRange.EMPTY)
+            )
+            addAll(
+                RangedWeaponsParser().parse(document, structure, 295, IntRange.EMPTY)
+            )
+            addAll(
+                AmmunitionParser().parse(document, structure, 296, IntRange.EMPTY)
+            )
+            addAll(
+                ArmourParser().parse(document, structure, 300, IntRange.EMPTY)
+            )
+
+            val basicTrappingsParser = BasicTrappingsParser(document, structure)
+            addAll(
+                basicTrappingsParser.parse(
+                    { TrappingType.Container(carries = Encumbrance(it.toDouble())) },
+                    301,
+                    301..301,
+                    Column.LEFT,
+                    additionalColumn = 3,
+                )
+            )
+            addAll(
+                basicTrappingsParser.parse(
+                    { TrappingType.ClothingOrAccessory },
+                    302,
+                    302..302,
+                    Column.LEFT,
+                )
+            )
+            addAll(
+                basicTrappingsParser.parse(
+                    { TrappingType.FoodOrDrink },
+                    302,
+                    302..303,
+                    Column.RIGHT,
+                )
+            )
+            addAll(
+                basicTrappingsParser.parse(
+                    { TrappingType.ToolOrKit },
+                    303,
+                    303..304,
+                    Column.LEFT,
+                )
+            )
+            addAll(
+                basicTrappingsParser.parse(
+                    { TrappingType.ToolOrKit },
+                    303,
+                    303..304,
+                    Column.RIGHT,
+                )
+            )
+            addAll(
+                basicTrappingsParser.parse(
+                    { TrappingType.BookOrDocument },
+                    304,
+                    304..305,
+                    Column.LEFT,
+                )
+            )
+            addAll(
+                basicTrappingsParser.parse(
+                    { TrappingType.TradeTools },
+                    305,
+                    IntRange.EMPTY, // There are only descriptions for specific professions
+                    Column.LEFT,
+                )
+            )
+            addAll(
+                basicTrappingsParser.parse(
+                    { TrappingType.DrugOrPoison },
+                    306,
+                    306..307,
+                    Column.RIGHT,
+                )
+            )
+            addAll(
+                basicTrappingsParser.parse(
+                    { TrappingType.HerbOrDraught },
+                    307,
+                    307..307,
+                    Column.LEFT,
+                )
+            )
+            addAll(
+                basicTrappingsParser.parse(
+                    { TrappingType.Prosthetic },
+                    308,
+                    308..308,
+                    Column.LEFT,
+                )
+            )
+            addAll(
+                basicTrappingsParser.parse(
+                    typeFactory = { null },
+                    308,
+                    309..309,
+                    Column.RIGHT,
+                )
+            )
+        }.sortedBy { it.name }
     }
 
     override fun areSameStyle(a: TextPosition, b: TextPosition): Boolean {
@@ -167,6 +287,14 @@ object CoreRulebook :
                     return Token.NormalPart(textToken.text)
                 }
             }
+        }
+
+        if (textToken.fontSizePt == 8f && textToken.fontName.endsWith("ACaslonPro-Regular")) {
+            return Token.BodyCellPart(textToken.text)
+        }
+
+        if (textToken.fontSizePt == 11f && textToken.fontName.endsWith("CaslonAntique")) {
+            return Token.TableHeading(textToken.text)
         }
 
         return null
