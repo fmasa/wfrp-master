@@ -612,6 +612,7 @@
     <string name="trappings_types_herb_or_draught">Herbs and Draughts</string>
     <string name="trappings_types_melee_weapon">Melee Weapons</string>
     <string name="trappings_types_miscellaneous">Miscellaneous</string>
+    <string name="trappings_types_prosthetics">Prosthetics</string>
     <string name="trappings_types_ranged_weapon">Ranged Weapons</string>
     <string name="trappings_types_spell_ingredient">Spell Ingredients</string>
     <string name="trappings_types_tool_or_kit">Tools and Kits</string>

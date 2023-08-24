@@ -132,7 +132,6 @@ private fun TrappingDetail(
         }
 
         when (val type = trapping.trappingType) {
-
             is TrappingType.Ammunition -> {
                 AmmunitionDetailBody(
                     subheadBar = subheadBar,
@@ -146,7 +145,6 @@ private fun TrappingDetail(
                     characterTrapping = trapping,
                 )
             }
-
             is TrappingType.Armour -> {
                 ArmourDetailBody(
                     subheadBar = subheadBar,
@@ -159,7 +157,6 @@ private fun TrappingDetail(
                     characterTrapping = trapping,
                 )
             }
-
             is TrappingType.SimpleTrapping -> {
                 SimpleTrappingDetailBody(
                     subheadBar = subheadBar,
@@ -169,7 +166,6 @@ private fun TrappingDetail(
                     characterTrapping = trapping,
                 )
             }
-
             null -> {
                 SimpleTrappingDetailBody(
                     subheadBar = subheadBar,
@@ -179,7 +175,6 @@ private fun TrappingDetail(
                     characterTrapping = trapping,
                 )
             }
-
             is TrappingType.Container -> {
                 ContainerDetail(
                     subheadBar = subheadBar,
@@ -196,7 +191,6 @@ private fun TrappingDetail(
                     }
                 )
             }
-
             is TrappingType.ClothingOrAccessory -> {
                 SimpleTrappingDetailBody(
                     subheadBar = subheadBar,
@@ -206,7 +200,6 @@ private fun TrappingDetail(
                     characterTrapping = trapping,
                 )
             }
-
             is TrappingType.MeleeWeapon -> {
                 MeleeWeaponDetailBody(
                     subheadBar = subheadBar,
@@ -221,7 +214,15 @@ private fun TrappingDetail(
                     characterTrapping = trapping,
                 )
             }
-
+            is TrappingType.Prosthetic -> {
+                SimpleTrappingDetailBody(
+                    subheadBar = subheadBar,
+                    trappingType = TrappingTypeOption.PROSTHETIC.localizedName,
+                    encumbrance = trapping.encumbrance,
+                    description = trapping.description,
+                    characterTrapping = trapping,
+                )
+            }
             is TrappingType.RangedWeapon -> {
                 RangedWeaponDetailBody(
                     subheadBar = subheadBar,

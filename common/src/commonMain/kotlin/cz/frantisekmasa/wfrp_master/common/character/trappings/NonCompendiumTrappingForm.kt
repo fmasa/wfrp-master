@@ -185,7 +185,7 @@ private fun TrappingTypeForm(formData: TrappingTypeFormData, validate: Boolean) 
                 formData.armourFlaws,
             )
         }
-        TrappingTypeOption.CLOTHING_OR_ACCESSORY -> {
+        TrappingTypeOption.CLOTHING_OR_ACCESSORY, TrappingTypeOption.PROSTHETIC -> {
             WornCheckbox(formData)
         }
         TrappingTypeOption.CONTAINER -> {
@@ -446,6 +446,7 @@ private class TrappingTypeFormData(
         TrappingTypeOption.FOOD_OR_DRINK,
         TrappingTypeOption.HERB_OR_DRAUGHT,
         TrappingTypeOption.MISCELLANEOUS,
+        TrappingTypeOption.PROSTHETIC,
         TrappingTypeOption.SPELL_INGREDIENT,
         TrappingTypeOption.TOOL_OR_KIT,
         TrappingTypeOption.TRADE_TOOLS -> true
@@ -486,6 +487,7 @@ private class TrappingTypeFormData(
             flaws = weaponFlaws.toMap(),
             equipped = weaponEquipped.value,
         )
+        TrappingTypeOption.PROSTHETIC -> TrappingType.Prosthetic(worn = worn.value)
         TrappingTypeOption.RANGED_WEAPON -> TrappingType.RangedWeapon(
             group = rangedWeaponGroup.value,
             range = WeaponRangeExpression(weaponRange.value),
@@ -542,6 +544,10 @@ private class TrappingTypeFormData(
                     weaponQualities = type.qualities,
                     weaponFlaws = type.flaws,
                     weaponEquipped = type.equipped,
+                )
+                is TrappingType.Prosthetic -> fromDefaults(
+                    type = TrappingTypeOption.PROSTHETIC,
+                    worn = type.worn
                 )
                 is TrappingType.RangedWeapon -> fromDefaults(
                     type = TrappingTypeOption.RANGED_WEAPON,
@@ -637,6 +643,7 @@ enum class TrappingTypeOption(
     HERB_OR_DRAUGHT(Str.trappings_types_herb_or_draught),
     MELEE_WEAPON(Str.trappings_types_melee_weapon),
     MISCELLANEOUS(Str.trappings_types_miscellaneous),
+    PROSTHETIC(Str.trappings_types_prosthetics),
     RANGED_WEAPON(Str.trappings_types_ranged_weapon),
     SPELL_INGREDIENT(Str.trappings_types_spell_ingredient),
     TOOL_OR_KIT(Str.trappings_types_tool_or_kit),
