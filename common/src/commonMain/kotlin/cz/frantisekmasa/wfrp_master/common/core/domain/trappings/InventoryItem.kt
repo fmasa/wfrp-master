@@ -93,8 +93,8 @@ data class InventoryItem(
     }
 
     companion object {
-        const val NAME_MAX_LENGTH = 50
-        const val DESCRIPTION_MAX_LENGTH = 1000
+        const val NAME_MAX_LENGTH = Trapping.NAME_MAX_LENGTH
+        const val DESCRIPTION_MAX_LENGTH = Trapping.DESCRIPTION_MAX_LENGTH
 
         fun fromCompendium(
             compendiumItem: Trapping,

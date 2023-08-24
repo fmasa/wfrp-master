@@ -187,6 +187,7 @@ service cloud.firestore {
                            "trappingType",
                            "availability",
                            "price",
+                           "packSize",
                            "description",
                            "isVisibleToPlayers"
                            ].hasAll(trapping.keys())
@@ -195,7 +196,8 @@ service cloud.firestore {
                            && trapping.encumbrance is number && trapping.encumbrance >= 0
                            && trapping.availability in ["COMMON", "SCARCE", "RARE", "EXOTIC"]
                            && areMoneyValid(trapping.price)
-                           && trapping.description is string && trapping.description.size() <= 200
+                           && trapping.packSize is number && trapping.packSize >= 1
+                           && trapping.description is string && trapping.description.size() <= 1000
                            && trapping.isVisibleToPlayers is bool;
                 }
             }
