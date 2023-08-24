@@ -136,6 +136,12 @@ fun TrappingDialog(
                 )
             }
 
+            TextInput(
+                label = stringResource(Str.trappings_label_pack_size),
+                value = formData.packSize,
+                validate = validate
+            )
+
             Divider()
 
             TrappingTypeForm(
@@ -412,6 +418,7 @@ private class TrappingFormData(
     val encumbrance: InputValue,
     val availability: MutableState<Availability>,
     val price: PriceFormData,
+    val packSize: InputValue,
     val description: InputValue,
     val type: TrappingTypeFormData,
     val isVisibleToPlayers: Boolean,
@@ -428,6 +435,7 @@ private class TrappingFormData(
             trappingType = type.toValue(),
             availability = availability.value,
             price = price.toValue(),
+            packSize = packSize.toInt(),
             isVisibleToPlayers = isVisibleToPlayers,
         )
     }
@@ -444,7 +452,8 @@ private class TrappingFormData(
             availability = rememberSaveable(item) {
                 mutableStateOf(item?.availability ?: Availability.EXOTIC)
             },
-            price = PriceFormData.fromMoney(item?.price)
+            price = PriceFormData.fromMoney(item?.price),
+            packSize = inputValue((item?.packSize ?: 1).toString(), Rules.PositiveInteger()),
         )
     }
 }

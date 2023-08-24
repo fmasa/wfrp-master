@@ -37,6 +37,7 @@ data class Trapping(
     val description: String,
     val encumbrance: Encumbrance,
     val availability: Availability,
+    val packSize: Int,
     val price: Money,
     override val isVisibleToPlayers: Boolean,
 ) : CompendiumItem<Trapping>() {
@@ -44,6 +45,7 @@ data class Trapping(
         require(name.isNotBlank())
         require(name.length <= NAME_MAX_LENGTH) { "Maximum allowed name length is $NAME_MAX_LENGTH" }
         require(description.length <= DESCRIPTION_MAX_LENGTH) { "Maximum allowed description length is $DESCRIPTION_MAX_LENGTH" }
+        require(packSize >= 1) { "Pack size must be a positive number" }
     }
 
     override fun replace(original: Trapping) = copy(id = original.id)
