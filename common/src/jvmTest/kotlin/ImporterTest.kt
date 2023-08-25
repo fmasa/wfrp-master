@@ -1,10 +1,13 @@
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.SpellLore
+import cz.frantisekmasa.wfrp_master.common.compendium.domain.TrappingType
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.books.CoreRulebook
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.books.EnemyInShadowsCompanion
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.books.UpInArms
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.books.WindsOfMagic
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.parsers.Document
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.parsers.loadDocument
+import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.MeleeWeaponGroup
+import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.RangedWeaponGroup
 import java.io.InputStream
 import kotlin.test.Ignore
 import kotlin.test.Test
@@ -160,6 +163,33 @@ class ImporterTest {
             val trappings = CoreRulebook.importTrappings(document)
 
             assertEquals(227, trappings.size)
+        }
+    }
+
+    @Test
+    fun `trappings import (Up in Arms)`() {
+        withUpInArms { document ->
+            val trappings = UpInArms.importTrappings(document)
+            val countMeleeWeapons = { group: MeleeWeaponGroup ->
+                trappings.count { (it.trappingType as? TrappingType.MeleeWeapon)?.group == group }
+            }
+            val countRangedWeapons = { group: RangedWeaponGroup ->
+                trappings.count { (it.trappingType as? TrappingType.RangedWeapon)?.group == group }
+            }
+
+            assertEquals(12, trappings.count { it.trappingType == null })
+            assertEquals(11 + 4, countMeleeWeapons(MeleeWeaponGroup.BASIC))
+            assertEquals(4, countMeleeWeapons(MeleeWeaponGroup.CAVALRY))
+            assertEquals(3, countMeleeWeapons(MeleeWeaponGroup.FENCING))
+            assertEquals(7, countMeleeWeapons(MeleeWeaponGroup.BRAWLING))
+            assertEquals(7, countMeleeWeapons(MeleeWeaponGroup.BRAWLING))
+            assertEquals(3, countMeleeWeapons(MeleeWeaponGroup.FLAIL))
+            assertEquals(4, countMeleeWeapons(MeleeWeaponGroup.PARRY))
+            assertEquals(9, countMeleeWeapons(MeleeWeaponGroup.POLEARM))
+            assertEquals(6, countMeleeWeapons(MeleeWeaponGroup.TWO_HANDED))
+            assertEquals(9 + 11, trappings.count { it.trappingType is TrappingType.Ammunition })
+            assertEquals(11, countRangedWeapons(RangedWeaponGroup.BLACKPOWDER))
+            assertEquals(5, countRangedWeapons(RangedWeaponGroup.ENGINEERING))
         }
     }
 

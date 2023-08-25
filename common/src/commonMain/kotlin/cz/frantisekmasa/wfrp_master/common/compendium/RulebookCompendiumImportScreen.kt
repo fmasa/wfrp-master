@@ -42,6 +42,7 @@ import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.sources.Sk
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.sources.SpellSource
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.sources.TalentSource
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.sources.TraitSource
+import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.sources.TrappingSource
 import cz.frantisekmasa.wfrp_master.common.core.PartyScreenModel
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.PartyId
 import cz.frantisekmasa.wfrp_master.common.core.shared.FileType
@@ -192,6 +193,10 @@ class RulebookCompendiumImportScreen(
 
             if (book is MiracleSource) {
                 add(stringResource(Str.compendium_title_miracles))
+            }
+
+            if (book is TrappingSource) {
+                add(stringResource(Str.compendium_title_trappings))
             }
         }.joinToString(", ")
     }

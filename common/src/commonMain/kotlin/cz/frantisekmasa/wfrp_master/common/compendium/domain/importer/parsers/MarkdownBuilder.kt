@@ -41,6 +41,7 @@ object MarkdownBuilder {
                 }
                 is Token.ItalicsPart -> "*${text.trim()}*"
                 is Token.BoldPart -> "**${text.trim()}**"
+                is Token.BoldItalicPart -> "**_${text.trim()}_**"
                 is Token.Heading3 -> "\n\n#### ${text.trim()}\n"
                 is Token.BlankLine -> "\n\n"
                 is Token.BlockQuote -> "\n\n" + text.lines().joinToString("\n") { "> $it" }

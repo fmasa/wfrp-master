@@ -40,7 +40,11 @@ value class DamageExpression(val value: String) : Parcelable {
             strengthBonus: Int,
         ): Expression {
             return Expression.fromString(
-                if (value.startsWith('+')) value.substring(1) else value,
+                when {
+                    value.startsWith("+") -> value.substring(1)
+                    value.startsWith("-") -> "0 $value"
+                    else -> value
+                },
                 mapOf(
                     Constant.STRENGTH_BONUS.value to strengthBonus,
                     Constant.SPECIAL.value to 0,

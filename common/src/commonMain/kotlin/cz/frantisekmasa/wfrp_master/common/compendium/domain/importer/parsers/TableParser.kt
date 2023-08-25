@@ -5,9 +5,11 @@ class TableParser {
         tokens: List<Token>,
         columnCount: Int,
     ): List<TableSection> {
-        val stream = TokenStream(tokens.filterIsInstance<Token.TableValue>())
+        val stream = TokenStream(
+            tokens.filterIsInstance<Token.TableValue>()
+        )
 
-        stream.dropUntil { it is Token.TableHeading || it is Token.TableValue }
+        stream.dropUntil { it is Token.TableHeading || it is Token.BodyCellPart }
 
         return buildList {
             var heading: String? = null
@@ -29,8 +31,8 @@ class TableParser {
                     var text = stream.consumeOneOfType<Token.BodyCellPart>().text
 
                     val hasAnotherLine = if (it == columnCount - 1)
-                        text.endsWith(", ") // e.g. list of weapon qualities in last column
-                    else text.endsWith(" ") // e.g. "10% \n Perception
+                        (text.endsWith(", ") || text.endsWith(" or ")) // e.g. list of weapon qualities in last column
+                    else (text.endsWith(" ") || text.endsWith("’s")) // e.g. "10% \n Perception
 
                     if (hasAnotherLine) {
                         text += stream.consumeOneOfType<Token.BodyCellPart>().text

@@ -132,7 +132,7 @@ class Inventory extends CharacterSubCollectionSuite {
                 {name: " \t\r"},
 
                 // Description too long
-                {description: "a".repeat(1001)},
+                {description: "a".repeat(2501)},
 
                 // Zero quantity
                 {quantity: 0},

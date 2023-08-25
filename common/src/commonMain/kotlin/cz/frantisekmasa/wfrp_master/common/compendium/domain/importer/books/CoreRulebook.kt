@@ -111,13 +111,13 @@ object CoreRulebook :
         val structure = this
         return buildList {
             addAll(
-                MeleeWeaponsParser().parse(document, structure, 294, IntRange.EMPTY)
+                MeleeWeaponsParser(document, structure).parse(294, IntRange.EMPTY)
             )
             addAll(
-                RangedWeaponsParser().parse(document, structure, 295, IntRange.EMPTY)
+                RangedWeaponsParser(document, structure).parse(295, IntRange.EMPTY)
             )
             addAll(
-                AmmunitionParser().parse(document, structure, 296, IntRange.EMPTY)
+                AmmunitionParser(document, structure).parse(296, IntRange.EMPTY)
             )
             addAll(
                 ArmourParser().parse(document, structure, 300, IntRange.EMPTY)

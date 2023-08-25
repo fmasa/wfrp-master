@@ -61,10 +61,18 @@ class BasicTrappingsParser(
                     val row = if (additionalColumn == null)
                         fullRow
                     else fullRow.take(additionalColumn) + fullRow.drop(additionalColumn + 1)
-                    val price = PriceParser.parse(row[1].trimEnd('+'))
                     val encumbrance = row[2].trim()
                     val reach = row[3].trim()
-                    val (name, packSize) = parseNameAndPackSize(row[0].trim())
+                    var (name, packSize) = parseNameAndPackSize(row[0].trim())
+                    var priceCell = row[1].trimEnd('+')
+
+                    if (priceCell.endsWith("/ yard")) {
+                        name += ", 1 yard"
+
+                        priceCell = priceCell.replace("/ yard", "")
+                    }
+
+                    val price = PriceParser.parse(priceCell.trimEnd('+'))
 
                     if (encumbrance == "–") {
                         return@mapNotNull null // Consumer's guide contains stuff like lodging
