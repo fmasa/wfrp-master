@@ -15,11 +15,12 @@ import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.RangedWeaponGro
 import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.WeaponQuality
 import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.WeaponRangeExpression
 
-class RangedWeaponsParser {
+class RangedWeaponsParser(
+    private val document: Document,
+    private val structure: PdfStructure,
+) {
 
     fun parse(
-        document: Document,
-        structure: PdfStructure,
         tablePage: Int,
         descriptionPages: IntRange,
     ): List<Trapping> {
@@ -29,6 +30,8 @@ class RangedWeaponsParser {
                 .toList(),
             columnCount = 7,
         )
+
+        val descriptionsByName = descriptionsByName(document, structure, descriptionPages).toList()
 
         return table
             .asSequence()
@@ -48,12 +51,13 @@ class RangedWeaponsParser {
                 else emptyMap()
 
                 section.rows.map { row ->
+                    val name = row[0].replace("*", "").trim()
                     val price = PriceParser.parse(row[1])
                     val damage = row[5].trim().replace("*", "")
 
                     Trapping(
                         id = uuid4(),
-                        name = row[0].replace("*", "").trim(),
+                        name = name,
                         price = if (price is PriceParser.Amount) price.money else Money.ZERO,
                         packSize = 1,
                         encumbrance = Encumbrance(row[2].trim().toDoubleOrNull() ?: 0.0),
@@ -77,7 +81,9 @@ class RangedWeaponsParser {
                             qualities = parseFeatures<WeaponQuality>(row[6]) + defaultQualities,
                             flaws = parseFeatures(row[6]),
                         ),
-                        description = "",
+                        description = descriptionsByName.firstOrNull {
+                            name.startsWith(it.first, ignoreCase = true)
+                        }?.second ?: "",
                         isVisibleToPlayers = true,
                     )
                 }

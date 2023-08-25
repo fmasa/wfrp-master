@@ -14,10 +14,11 @@ import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.DamageExpressio
 import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.Encumbrance
 import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.RangedWeaponGroup
 
-class AmmunitionParser {
+class AmmunitionParser(
+    private val document: Document,
+    private val structure: PdfStructure,
+) {
     fun parse(
-        document: Document,
-        structure: PdfStructure,
         tablePage: Int,
         descriptionPages: IntRange,
     ): List<Trapping> {
@@ -28,6 +29,8 @@ class AmmunitionParser {
             columnCount = 7,
         )
 
+        val descriptionsByName = descriptionsByName(document, structure, descriptionPages).toList()
+
         return table
             .asSequence()
             .filter { it.heading != null }
@@ -37,7 +40,7 @@ class AmmunitionParser {
 
                 section.rows.map { row ->
                     val price = PriceParser.parse(row[1])
-                    val damage = row[5].trim()
+                    val damage = row[5].trim().replace("–", "-")
                     val (name, packSize) = parseNameAndPackSize(row[0].trim())
 
                     Trapping(
@@ -46,16 +49,21 @@ class AmmunitionParser {
                         price = if (price is PriceParser.Amount) price.money else Money.ZERO,
                         packSize = packSize,
                         encumbrance = Encumbrance(row[2].toDoubleOrNull() ?: 0.0),
-                        availability = Availability.values()
-                            .first { it.name.equals(row[3], ignoreCase = true) },
+                        availability = matchEnumOrNull<Availability>(
+                            row[3],
+                            mapOf("Rarce" to Availability.RARE)
+                        )
+                            ?: error("Invalid availability ${row[3]}"),
                         trappingType = TrappingType.Ammunition(
                             weaponGroups = weaponGroups,
-                            damage = DamageExpression(if (damage == "–") "+0" else damage),
+                            damage = DamageExpression(if (damage == "-") "+0" else damage),
                             range = range(row[4].trim()),
                             qualities = parseFeatures(row[6]),
                             flaws = parseFeatures(row[6]),
                         ),
-                        description = "",
+                        description = descriptionsByName.firstOrNull {
+                            name.startsWith(it.first, ignoreCase = true)
+                        }?.second ?: "",
                         isVisibleToPlayers = true,
                     )
                 }

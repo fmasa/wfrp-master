@@ -35,7 +35,7 @@ inline fun <reified T : Enum<T>> matchEnumSetOrNull(value: String, separator: St
     return enums.toSet()
 }
 
-val FEATURE_REGEX = Regex("([a-zA-Z- ])+ ?\\+?([0-9])?")
+val FEATURE_REGEX = Regex("([a-zA-Z- ])+ ?\\(?\\+?([0-9])?A?\\)?")
 private val NAME_WITH_COUNT_PATTERN = Regex("(.*) \\((\\d+|dozen)\\)")
 
 inline fun <reified T : Enum<T>> parseFeatures(value: String): Map<T, Int> {
@@ -43,7 +43,8 @@ inline fun <reified T : Enum<T>> parseFeatures(value: String): Map<T, Int> {
         return emptyMap()
     }
 
-    return value.splitToSequence(",")
+    return value.replace("*", "")
+        .splitToSequence(",")
         .map { it.trim() }
         .mapNotNull {
             val (name, rating) = FEATURE_REGEX.matchEntire(it)?.groupValues
@@ -65,6 +66,8 @@ fun parseNameAndPackSize(value: String): Pair<String, Int> {
         else result.groupValues[2].toInt(),
     )
 }
+
+private val NEWLINES_TO_REMOVE_REGEX = Regex("\\n(?!(\\*\\*_Example:))")
 
 fun descriptionsByName(
     document: Document,
@@ -93,13 +96,18 @@ fun descriptionsByName(
         val name = stream.consumeOneOfType<Token.BoldPart>()
             .text.trim { it == ':' || it.isWhitespace() }
 
-        val description = MarkdownBuilder.buildMarkdown(
+        val x =MarkdownBuilder.buildMarkdown(
             stream.consumeUntil { isName(it) || it is Token.Heading }
                 .filterIsInstance<Token.ParagraphToken>()
         )
+        val description = x.replace(NEWLINES_TO_REMOVE_REGEX, " ")
 
-        descriptionsByName[name] = description.replace('\n', ' ')
+        descriptionsByName[name] = description
 
+        if (name.contains(" and ", ignoreCase = true)) {
+            name.splitToSequence(" and ", ignoreCase = true)
+                .forEach { descriptionsByName[it.trim()] = description }
+        }
         val nextToken = stream.peek()
 
         if (nextToken != null && !isName(nextToken)) {

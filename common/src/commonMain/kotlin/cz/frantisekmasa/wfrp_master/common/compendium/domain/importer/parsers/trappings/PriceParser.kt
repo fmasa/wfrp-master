@@ -4,11 +4,19 @@ import cz.frantisekmasa.wfrp_master.common.core.domain.Money
 
 object PriceParser {
 
-    private val PRICE_REGEX = Regex("((\\d+)GC)? ?((\\d+|–)/(\\d+|–))?")
+    private val PRICE_REGEX = Regex("((\\d+) ?GC)? ?((\\d+|–|-)/(\\d+|–|-))?")
     private val PENNIES_REGEX = Regex("(\\d+)d")
 
     fun parse(text: String): Result {
         val trimmedValue = text.trim()
+
+        val crownPrice = trimmedValue.toIntOrNull()
+
+        if (crownPrice != null) {
+            // In Up in Arms, some items are missing "GC" suffix
+            return Amount(Money.crowns(crownPrice))
+        }
+
         val penniesResult = PENNIES_REGEX.matchEntire(trimmedValue)
 
         if (penniesResult != null) {
