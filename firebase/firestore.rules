@@ -197,7 +197,7 @@ service cloud.firestore {
                            && trapping.availability in ["COMMON", "SCARCE", "RARE", "EXOTIC"]
                            && areMoneyValid(trapping.price)
                            && trapping.packSize is number && trapping.packSize >= 1
-                           && trapping.description is string && trapping.description.size() <= 1000
+                           && trapping.description is string && trapping.description.size() <= 2500
                            && trapping.isVisibleToPlayers is bool;
                 }
             }
@@ -319,7 +319,7 @@ service cloud.firestore {
                         return ["id", "name", "description", "quantity", "encumbrance", "trappingType", "containerId", "compendiumId", "itemQualities", "itemFlaws"].hasAll(item.keys())
                             && item.id is string && item.id == itemId && isValidUuid(item.id)
                             && item.name is string && isNotBlank(item.name) && item.name.size() <= 50
-                            && item.description is string && item.description.size() <= 1000
+                            && item.description is string && item.description.size() <= 2500
                             && item.quantity is int && item.quantity > 0
                             && (! ("encumbrance" in item) || (item.encumbrance is number && item.encumbrance >= 0))
                             && (! ("trappingType" in item) || item.trappingType == null || item.trappingType is map)

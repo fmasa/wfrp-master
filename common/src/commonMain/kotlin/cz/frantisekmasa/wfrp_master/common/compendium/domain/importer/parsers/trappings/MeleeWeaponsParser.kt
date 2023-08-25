@@ -7,6 +7,8 @@ import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.parsers.De
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.parsers.Document
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.parsers.PdfStructure
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.parsers.TableParser
+import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.parsers.Token
+import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.parsers.TokenStream
 import cz.frantisekmasa.wfrp_master.common.core.domain.Money
 import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.Availability
 import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.DamageExpression
@@ -14,36 +16,46 @@ import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.Encumbrance
 import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.MeleeWeaponGroup
 import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.Reach
 
-class MeleeWeaponsParser {
+class MeleeWeaponsParser(
+    private val document: Document,
+    private val structure: PdfStructure,
+) {
 
     fun parse(
-        document: Document,
-        structure: PdfStructure,
         tablePage: Int,
         descriptionPages: IntRange,
     ): List<Trapping> {
-        val table = TableParser().parseTable(
-            DefaultLayoutPdfLexer(document, structure, mergeSubsequentTokens = false)
-                .getTokens(tablePage)
-                .toList(),
-            columnCount = 7,
-        )
+        val table = findTables(tablePage)
+            .asSequence()
+            .flatMap {
+                TableParser().parseTable(
+                    it,
+                    columnCount = 7,
+                )
+            }
+
+        val descriptionsByName = descriptionsByName(document, structure, descriptionPages).toList()
 
         return table
-            .asSequence()
             .filter { it.heading != null }
             .flatMap { section ->
-                val group = matchEnumOrNull<MeleeWeaponGroup>(section.heading!!.replace("*", ""))
+                val group = matchEnumOrNull<MeleeWeaponGroup>(
+                    section.heading!!.replace("*", ""),
+                    mapOf(
+                        "PARRYING" to MeleeWeaponGroup.PARRY,
+                    )
+                )
                     ?: error("Invalid weapon group ${section.heading}")
 
                 section.rows.map { row ->
+                    val name = row[0].trim()
                     val price = PriceParser.parse(row[1])
                     val encumbrance = row[2].trim()
                     val reach = row[4].trim()
 
                     Trapping(
                         id = uuid4(),
-                        name = row[0].trim(),
+                        name = name,
                         price = if (price is PriceParser.Amount) price.money else Money.ZERO,
                         packSize = 1,
                         encumbrance = Encumbrance(encumbrance.toDoubleOrNull() ?: 0.0),
@@ -59,6 +71,7 @@ class MeleeWeaponsParser {
                             reach = matchEnumOrNull(
                                 reach,
                                 mapOf(
+                                    "N/A" to Reach.AVERAGE,
                                     "Medium" to Reach.AVERAGE,
                                     "Varies" to Reach.AVERAGE
                                 ),
@@ -75,10 +88,43 @@ class MeleeWeaponsParser {
                             if (reach == "Varies") {
                                 append("**Reach:** Varies\n")
                             }
+
+                            descriptionsByName.firstOrNull {
+                                name.startsWith(it.first, ignoreCase = true)
+                            }?.let {
+                                if (isNotEmpty()) {
+                                    append("\n")
+                                }
+
+                                append(it.second)
+                            }
                         },
                         isVisibleToPlayers = true,
                     )
                 }
             }.toList()
+    }
+
+    private fun findTables(tablePage: Int): List<List<Token>> {
+        val tokens = DefaultLayoutPdfLexer(document, structure, mergeSubsequentTokens = false)
+            .getTokens(tablePage)
+            .toList()
+
+        val tables = mutableListOf<List<Token>>()
+
+        val stream = TokenStream(tokens)
+
+        while (stream.peek() != null) {
+            stream.dropUntil { it is Token.TableValue }
+            stream.dropWhile { it is Token.TableHeadCell }
+
+            tables += stream.consumeWhile {
+                it is Token.TableHeading ||
+                    (it is Token.BodyCellPart && !it.text.startsWith("* "))
+            }
+            stream.dropWhile { it is Token.BodyCellPart || it is Token.ItalicsPart }
+        }
+
+        return tables
     }
 }

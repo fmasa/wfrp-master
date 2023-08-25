@@ -19,6 +19,7 @@ sealed interface Token {
     class NormalPart(text: String) : ParagraphToken(text, "normal")
     class ItalicsPart(text: String) : ParagraphToken(text, "italics")
     class BoldPart(text: String) : ParagraphToken(text, "bold")
+    class BoldItalicPart(text: String) : ParagraphToken(text, "bold-italic")
     object BlankLine : ParagraphToken(text = "\n\n", "blankLine")
     class BlockQuote(text: String) : ParagraphToken(text, "blockQuote")
     object LineBreak : ParagraphToken("\n", "lineBreak")
