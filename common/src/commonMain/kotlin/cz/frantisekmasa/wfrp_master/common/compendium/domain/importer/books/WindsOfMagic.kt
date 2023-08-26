@@ -3,17 +3,22 @@ package cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.books
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.Career
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.Spell
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.SpellLore
+import cz.frantisekmasa.wfrp_master.common.compendium.domain.Trapping
+import cz.frantisekmasa.wfrp_master.common.compendium.domain.TrappingType
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.parsers.CareerParser
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.parsers.Document
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.parsers.SpellParser
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.parsers.TextPosition
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.parsers.TextToken
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.parsers.Token
+import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.parsers.trappings.BasicTrappingsParser
+import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.parsers.trappings.BasicTrappingsParser.Column
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.sources.CareerSource
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.sources.SpellSource
+import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.sources.TrappingSource
 import cz.frantisekmasa.wfrp_master.common.core.domain.SocialClass
 
-object WindsOfMagic : Book, CareerSource, SpellSource {
+object WindsOfMagic : Book, CareerSource, SpellSource, TrappingSource {
 
     override val name = "Winds of Magic"
 
@@ -59,6 +64,21 @@ object WindsOfMagic : Book, CareerSource, SpellSource {
         )
     }
 
+    override fun importTrappings(document: Document): List<Trapping> {
+        val basicTrappingsParser = BasicTrappingsParser(document, this)
+
+        return buildList {
+            addAll(
+                basicTrappingsParser.parse(
+                    { TrappingType.ClothingOrAccessory },
+                    151,
+                    151..151,
+                    Column.LEFT,
+                )
+            )
+        }
+    }
+
     override fun areSameStyle(a: TextPosition, b: TextPosition): Boolean {
         return super.areSameStyle(a, b) || arePartsOfNormalText(a, b)
     }
@@ -94,6 +114,10 @@ object WindsOfMagic : Book, CareerSource, SpellSource {
             return Token.Heading3(textToken.text)
         }
 
+        if (textToken.fontSizePt == 9f && textToken.fontName.endsWith("ACaslonPro-Regular")) {
+            return Token.BodyCellPart(textToken.text)
+        }
+
         if (textToken.fontSizePt == 10f || textToken.fontSizePt == 9f) {
             if (textToken.fontName.endsWith("ACaslonPro-Bold")) {
                 return Token.BoldPart(textToken.text)
@@ -102,6 +126,7 @@ object WindsOfMagic : Book, CareerSource, SpellSource {
             if (textToken.fontName.endsWith("ACaslonPro-Italic")) {
                 return Token.ItalicsPart(textToken.text)
             }
+
             if (textToken.fontName.endsWith("ACaslonPro-Regular")) {
                 return Token.NormalPart(textToken.text)
             }
