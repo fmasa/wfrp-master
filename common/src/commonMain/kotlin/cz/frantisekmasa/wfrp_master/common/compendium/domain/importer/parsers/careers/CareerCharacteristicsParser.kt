@@ -118,7 +118,7 @@ class CareerCharacteristicsParser(
                 )
             )
 
-            if (type is Token.TableHeadCell) {
+            if (type is Token.TableHeadCell || type is Token.TableHeading) {
                 val characteristic = characteristics[text.lowercase()] ?: return
 
                 characteristicCells += CharacteristicCell(
