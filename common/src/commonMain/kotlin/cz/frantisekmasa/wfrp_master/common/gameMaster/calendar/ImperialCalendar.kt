@@ -12,14 +12,18 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Button
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.LocalContentColor
 import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.TextButton
+import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowBackIos
 import androidx.compose.material.icons.rounded.ArrowForwardIos
@@ -43,98 +47,126 @@ import cz.frantisekmasa.wfrp_master.common.Str
 import cz.frantisekmasa.wfrp_master.common.core.domain.time.ImperialDate
 import cz.frantisekmasa.wfrp_master.common.core.shared.Parcelable
 import cz.frantisekmasa.wfrp_master.common.core.shared.Parcelize
+import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
+import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.SubheadBar
 import dev.icerock.moko.resources.compose.stringResource
 
 @Composable
-fun ImperialCalendar(date: ImperialDate, onDateChange: (ImperialDate) -> Unit) {
-    Column {
-        var activeScreen by rememberSaveable { mutableStateOf(ActiveScreen.DAYS_OF_MONTH) }
-        var activeMonth by rememberSaveable { mutableStateOf(ActiveMonth.forDate(date)) }
-        var activeYearRange by rememberSaveable(activeMonth, stateSaver = IntRangeSaver()) {
-            val size = YEAR_COLUMNS * YEAR_ROWS
-            val firstYear = (activeMonth.year - 1) / size * size + 1
-
-            mutableStateOf(firstYear until firstYear + size)
+fun ImperialCalendar(
+    actions: @Composable RowScope.() -> Unit,
+    date: ImperialDate,
+    onDateChange: (ImperialDate) -> Unit
+) {
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                title = { Text(stringResource(Str.calendar_title_select_date)) },
+                actions = actions,
+            )
         }
+    ) {
 
-        Row(
-            Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.Center,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            when (activeScreen) {
-                ActiveScreen.YEARS -> {
-                    IconButton(
-                        onClick = {
-                            if (activeYearRange.first != 1) {
-                                activeYearRange = activeYearRange.move(-YEAR_ROWS * YEAR_COLUMNS)
+        Column {
+            var activeScreen by rememberSaveable { mutableStateOf(ActiveScreen.DAYS_OF_MONTH) }
+            var activeMonth by rememberSaveable { mutableStateOf(ActiveMonth.forDate(date)) }
+            var activeYearRange by rememberSaveable(activeMonth, stateSaver = IntRangeSaver()) {
+                val size = YEAR_COLUMNS * YEAR_ROWS
+                val firstYear = (activeMonth.year - 1) / size * size + 1
+
+                mutableStateOf(firstYear until firstYear + size)
+            }
+
+            SubheadBar {
+                Row(
+                    Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.Center,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    when (activeScreen) {
+                        ActiveScreen.YEARS -> {
+                            IconButton(
+                                onClick = {
+                                    if (activeYearRange.first != 1) {
+                                        activeYearRange =
+                                            activeYearRange.move(-YEAR_ROWS * YEAR_COLUMNS)
+                                    }
+                                }
+                            ) {
+                                Icon(
+                                    Icons.Rounded.ArrowBackIos,
+                                    stringResource(Str.calendar_icon_previous_years),
+                                    tint = MaterialTheme.colors.primaryVariant
+                                )
+                            }
+
+                            Text(
+                                "${activeYearRange.first} - ${activeYearRange.last}",
+                                style = MaterialTheme.typography.h6
+                            )
+
+                            IconButton(
+                                onClick = {
+                                    activeYearRange =
+                                        activeYearRange.move(+YEAR_ROWS * YEAR_COLUMNS)
+                                }
+                            ) {
+                                Icon(
+                                    Icons.Rounded.ArrowForwardIos,
+                                    stringResource(Str.calendar_icon_next_years),
+                                    tint = MaterialTheme.colors.primaryVariant
+                                )
                             }
                         }
-                    ) {
-                        Icon(
-                            Icons.Rounded.ArrowBackIos,
-                            stringResource(Str.calendar_icon_previous_years),
-                            tint = MaterialTheme.colors.primaryVariant
-                        )
-                    }
 
-                    Text(
-                        "${activeYearRange.first} - ${activeYearRange.last}",
-                        style = MaterialTheme.typography.h6
-                    )
+                        ActiveScreen.DAYS_OF_MONTH -> {
+                            IconButton(onClick = { activeMonth = activeMonth.previousMonth() }) {
+                                Icon(
+                                    Icons.Rounded.ArrowBackIos,
+                                    stringResource(Str.calendar_icon_previous_month),
+                                    tint = MaterialTheme.colors.primaryVariant
+                                )
+                            }
 
-                    IconButton(
-                        onClick = {
-                            activeYearRange = activeYearRange.move(+YEAR_ROWS * YEAR_COLUMNS)
+                            Text(
+                                activeMonth.toString(),
+                                style = MaterialTheme.typography.h6,
+                                modifier = Modifier.clickable { activeScreen = ActiveScreen.YEARS },
+                            )
+
+                            IconButton(onClick = { activeMonth = activeMonth.nextMonth() }) {
+                                Icon(
+                                    Icons.Rounded.ArrowForwardIos,
+                                    stringResource(Str.calendar_icon_next_month),
+                                    tint = MaterialTheme.colors.primaryVariant
+                                )
+                            }
                         }
-                    ) {
-                        Icon(
-                            Icons.Rounded.ArrowForwardIos,
-                            stringResource(Str.calendar_icon_next_years),
-                            tint = MaterialTheme.colors.primaryVariant
-                        )
-                    }
-                }
-                ActiveScreen.DAYS_OF_MONTH -> {
-                    IconButton(onClick = { activeMonth = activeMonth.previousMonth() }) {
-                        Icon(
-                            Icons.Rounded.ArrowBackIos,
-                            stringResource(Str.calendar_icon_previous_month),
-                            tint = MaterialTheme.colors.primaryVariant
-                        )
-                    }
-
-                    Text(
-                        activeMonth.toString(),
-                        style = MaterialTheme.typography.h6,
-                        modifier = Modifier.clickable { activeScreen = ActiveScreen.YEARS },
-                    )
-
-                    IconButton(onClick = { activeMonth = activeMonth.nextMonth() }) {
-                        Icon(
-                            Icons.Rounded.ArrowForwardIos,
-                            stringResource(Str.calendar_icon_next_month),
-                            tint = MaterialTheme.colors.primaryVariant
-                        )
                     }
                 }
             }
-        }
 
-        when (activeScreen) {
-            ActiveScreen.YEARS -> YearPicker(
-                selectedYear = activeMonth.year,
-                firstYear = activeYearRange.first,
-                onYearChange = {
-                    activeMonth = activeMonth.copy(year = it)
-                    activeScreen = ActiveScreen.DAYS_OF_MONTH
+            Column(
+                Modifier
+                    .verticalScroll(rememberScrollState())
+                    .padding(Spacing.bodyPadding),
+            ) {
+                when (activeScreen) {
+                    ActiveScreen.YEARS -> YearPicker(
+                        selectedYear = activeMonth.year,
+                        firstYear = activeYearRange.first,
+                        onYearChange = {
+                            activeMonth = activeMonth.copy(year = it)
+                            activeScreen = ActiveScreen.DAYS_OF_MONTH
+                        }
+                    )
+
+                    ActiveScreen.DAYS_OF_MONTH -> DayPicker(
+                        activeMonth,
+                        date,
+                        onDateChange
+                    )
                 }
-            )
-            ActiveScreen.DAYS_OF_MONTH -> DayPicker(
-                activeMonth,
-                date,
-                onDateChange
-            )
+            }
         }
     }
 }
@@ -328,6 +360,7 @@ private data class ActiveMonth(val month: ImperialDate.Month, val year: Int) : P
             ImperialDate.Month.values().last(),
             year - 1
         )
+
         else -> ActiveMonth(ImperialDate.Month.values()[month.ordinal - 1], year)
     }
 
@@ -336,6 +369,7 @@ private data class ActiveMonth(val month: ImperialDate.Month, val year: Int) : P
             ImperialDate.Month.values().first(),
             year + 1
         )
+
         else -> ActiveMonth(ImperialDate.Month.values()[month.ordinal + 1], year)
     }
 

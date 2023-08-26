@@ -64,6 +64,7 @@
     <string name="calendar_moon_phases_new_moon">New moon</string>
     <string name="calendar_moon_phases_waning">Waning</string>
     <string name="calendar_moon_phases_waxing">Waxing</string>
+    <string name="calendar_title_select_date">Select Date</string>
     <string name="calendar_title_select_time">Select Time</string>
     <string name="careers_button_clear_select_box">Clear Career Select box</string>
     <string name="careers_comma_separated_skills_helper">Comma separated list of Skills</string>
