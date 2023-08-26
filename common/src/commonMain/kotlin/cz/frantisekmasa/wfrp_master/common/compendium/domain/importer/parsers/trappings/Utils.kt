@@ -67,7 +67,7 @@ fun parseNameAndPackSize(value: String): Pair<String, Int> {
     )
 }
 
-private val NEWLINES_TO_REMOVE_REGEX = Regex("\\n(?!(\\*\\*_Example:))")
+private val NEWLINES_TO_REMOVE_REGEX = Regex("\\n(?!(\\*\\*_?Example:))")
 
 fun descriptionsByName(
     document: Document,
@@ -87,7 +87,7 @@ fun descriptionsByName(
 
     val descriptionsByName = mutableMapOf<String, String>()
     val isName: (Token) -> Boolean = {
-        it is Token.BoldPart && (it.text.endsWith(':') || it.text.endsWith(": "))
+        it is Token.BoldPart && (it.text.endsWith(':') || it.text.endsWith(": ") && !it.text.startsWith("Example:"))
     }
 
     stream.dropUntil(isName)

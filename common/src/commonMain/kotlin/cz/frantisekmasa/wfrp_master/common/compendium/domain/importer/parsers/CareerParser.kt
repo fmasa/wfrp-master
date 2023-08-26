@@ -49,7 +49,17 @@ class CareerParser {
         firstColumn: Sequence<Token>,
         secondColumn: Sequence<Token>,
     ): Career {
-        val stream = TokenStream(firstColumn.toList())
+        val stream = TokenStream(
+            firstColumn
+                .map {
+                    when (it) {
+                        is Token.BodyCellPart -> Token.NormalPart(it.text)
+                        is Token.TableHeadCell -> Token.BoldPart(it.text)
+                        else -> it
+                    }
+                }
+                .toList()
+        )
 
         val name = stream.consumeOneOfType<Token.Heading>().text
             .trim()
@@ -76,7 +86,7 @@ class CareerParser {
                 else it
             }
 
-        stream.dropWhile { it is Token.BoxHeader || it is Token.Heading2 || it is Token.TableHeadCell }
+        stream.dropWhile { it is Token.BoxHeader || it is Token.Heading2 || it is Token.TableHeading }
 
         val levels = (0 until 4).map {
             val (levelName, status) = stream.consumeOneOfType<Token.BoldPart>().text

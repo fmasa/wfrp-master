@@ -193,6 +193,18 @@ class ImporterTest {
         }
     }
 
+    @Test
+    fun `trappings import (Winds of Magic)`() {
+        withWindsOfMagic { document ->
+            val trappings = WindsOfMagic.importTrappings(document)
+
+            assertEquals(
+                3,
+                trappings.count { it.trappingType == TrappingType.ClothingOrAccessory },
+            )
+        }
+    }
+
     private fun withCoreRuleBook(block: (Document) -> Unit) {
         loadDocument(javaClass.getResourceAsStream("rulebook.pdf") as InputStream)
             .use(block)
