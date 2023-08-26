@@ -2,21 +2,16 @@ package cz.frantisekmasa.wfrp_master.common.gameMaster.calendar
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Icon
 import androidx.compose.material.ListItem
 import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
 import androidx.compose.material.Text
-import androidx.compose.material.TextButton
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.NightsStay
 import androidx.compose.runtime.Composable
@@ -41,11 +36,12 @@ import cz.frantisekmasa.wfrp_master.common.core.domain.time.MannsliebPhase
 import cz.frantisekmasa.wfrp_master.common.core.domain.time.YearSeason
 import cz.frantisekmasa.wfrp_master.common.core.shared.Resources
 import cz.frantisekmasa.wfrp_master.common.core.ui.cards.CardContainer
-import cz.frantisekmasa.wfrp_master.common.core.ui.dialogs.Dialog
+import cz.frantisekmasa.wfrp_master.common.core.ui.dialogs.FullScreenDialog
 import cz.frantisekmasa.wfrp_master.common.core.ui.navigation.LocalNavigationTransaction
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.ItemIcon
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.VisualOnlyIconDescription
+import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.SaveAction
 import cz.frantisekmasa.wfrp_master.common.core.ui.timePicker
 import cz.frantisekmasa.wfrp_master.common.encounters.EncountersScreen
 import cz.frantisekmasa.wfrp_master.common.gameMaster.GameMasterScreenModel
@@ -143,39 +139,24 @@ private fun Date(screenModel: GameMasterScreenModel, date: ImperialDate) {
     var dialogVisible by rememberSaveable { mutableStateOf(false) }
 
     if (dialogVisible) {
-        Dialog(onDismissRequest = { dialogVisible = false }) {
-            Surface(
-                modifier = Modifier.wrapContentHeight(),
-                shape = MaterialTheme.shapes.large,
-            ) {
-                var selectedDate by rememberSaveable { mutableStateOf(date) }
+        FullScreenDialog(onDismissRequest = { dialogVisible = false }) {
+            var selectedDate by rememberSaveable { mutableStateOf(date) }
 
-                Column {
-                    Box(modifier = Modifier.padding(horizontal = 20.dp, vertical = 10.dp)) {
-                        ImperialCalendar(
-                            date = selectedDate,
-                            onDateChange = { selectedDate = it },
-                        )
-                    }
-
-                    Row(
-                        Modifier
-                            .fillMaxWidth()
-                            .padding(bottom = 10.dp, end = 10.dp),
-                        horizontalArrangement = Arrangement.End
-                    ) {
-                        val coroutineScope = rememberCoroutineScope()
-                        TextButton(
-                            onClick = {
-                                coroutineScope.launch(Dispatchers.IO) {
-                                    screenModel.changeTime { it.copy(date = selectedDate) }
-                                    dialogVisible = false
-                                }
+            val coroutineScope = rememberCoroutineScope()
+            ImperialCalendar(
+                date = selectedDate,
+                onDateChange = { selectedDate = it },
+                actions = {
+                    SaveAction(
+                        onClick = {
+                            coroutineScope.launch(Dispatchers.IO) {
+                                screenModel.changeTime { it.copy(date = selectedDate) }
+                                dialogVisible = false
                             }
-                        ) { Text(stringResource(Str.common_ui_button_save).uppercase()) }
-                    }
+                        }
+                    )
                 }
-            }
+            )
         }
     }
 
