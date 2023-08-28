@@ -683,4 +683,16 @@
     <string name="common_ui_item_added">Oggetto aggiunto.</string>
     <string name="trappings_availability_common">Comune</string>
     <string name="trappings_availability_exotic">Esotico</string>
+    <string name="calendar_title_select_date">Seleziona Data</string>
+    <string name="trappings_availability_rare">Raro</string>
+    <string name="trappings_availability_scarce">Scarso</string>
+    <string name="trappings_label_sold_amount">Importo di Vendita</string>
+    <string name="trappings_flaws_shoddy">Scadente</string>
+    <string name="trappings_flaws_ugly">Brutto</string>
+    <string name="trappings_pack_size">Prezzo totale per %d pezzi</string>
+    <string name="trappings_messages_no_trappings_in_compendium_subtext">Non ci sono Averi nel tuo Compendio.</string>
+    <string name="trappings_types_prosthetics">Protesi</string>
+    <string name="compendium_pick_prompt_trappings">Seleziona quali Averi vuoi importare.</string>
+    <string name="trappings_flaws_unreliable">Inaffidabile</string>
+    <string name="compendium_title_trappings">Averi</string>
 </resources>
