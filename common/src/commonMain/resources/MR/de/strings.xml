@@ -27,4 +27,8 @@
     <string name="skills_title_add">Fertigkeit hinzufügen</string>
     <string name="spells_title_add">Zauber hinzufügen</string>
     <string name="skills_label_advanced">Erweitert</string>
+    <string name="character_label_characteristic_advances">Fortschritte</string>
+    <string name="combat_advantage_cap">Vorteils Limit</string>
+    <string name="skills_label_advances">Fortschritte</string>
+    <string name="combat_label_advantage">Vorteil</string>
 </resources>
