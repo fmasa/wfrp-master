@@ -3,7 +3,6 @@ package cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.books
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.Career
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.Talent
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.Trapping
-import cz.frantisekmasa.wfrp_master.common.compendium.domain.TrappingType
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.TrappingType.MeleeWeapon
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.parsers.CareerParser
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.parsers.Document
@@ -116,7 +115,11 @@ object UpInArms : Book, CareerSource, TalentSource, TrappingSource {
 
             if (textToken.fontName.endsWith("ACaslonPro-Regular")) {
                 if (textToken.height == 6.201f) {
-                    return Token.BodyCellPart(textToken.text)
+                    return Token.BodyCellPart(
+                        text = textToken.text,
+                        y = textToken.y,
+                        height = textToken.height,
+                    )
                 }
 
                 return Token.NormalPart(textToken.text)

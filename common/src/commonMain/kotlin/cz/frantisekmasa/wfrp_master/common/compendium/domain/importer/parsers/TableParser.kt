@@ -26,11 +26,26 @@ class TableParser {
                 }
 
                 val cells = mutableListOf<String>()
+                lateinit var lastToken: Token.BodyCellPart
 
-                repeat(columnCount) {
-                    var text = stream.consumeOneOfType<Token.BodyCellPart>().text
+                for (column in 0 until columnCount) {
+                    val nextToken = stream.peek()
+                    val isLastColumn = column == columnCount - 1
 
-                    val hasAnotherLine = if (it == columnCount - 1)
+                    // Handle empty last column
+                    if (
+                        isLastColumn &&
+                        nextToken is Token.BodyCellPart &&
+                        nextToken.y > lastToken.y + lastToken.height
+                    ) {
+                        cells += ""
+                        break
+                    }
+
+                    lastToken = stream.consumeOneOfType<Token.BodyCellPart>()
+                    var text = lastToken.text
+
+                    val hasAnotherLine = if (isLastColumn)
                         (text.endsWith(", ") || text.endsWith(" or ")) // e.g. list of weapon qualities in last column
                     else (text.endsWith(" ") || text.endsWith("’s")) // e.g. "10% \n Perception
 

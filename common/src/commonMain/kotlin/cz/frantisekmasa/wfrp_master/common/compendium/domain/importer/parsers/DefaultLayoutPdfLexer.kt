@@ -95,10 +95,11 @@ class DefaultLayoutPdfLexer(
 
     private fun createToken(text: String, position: TextPosition): TextToken {
         return TextToken(
-            text,
-            position.getFont().getName(),
-            position.getHeight(),
-            position.getFontSizeInPt(),
+            text = text,
+            fontName = position.getFont().getName(),
+            height = position.getHeight(),
+            fontSizePt = position.getFontSizeInPt(),
+            y = position.getY(),
         )
     }
 }

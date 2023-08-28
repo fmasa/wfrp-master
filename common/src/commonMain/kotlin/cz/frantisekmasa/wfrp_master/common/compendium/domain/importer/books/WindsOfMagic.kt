@@ -115,7 +115,11 @@ object WindsOfMagic : Book, CareerSource, SpellSource, TrappingSource {
         }
 
         if (textToken.fontSizePt == 9f && textToken.fontName.endsWith("ACaslonPro-Regular")) {
-            return Token.BodyCellPart(textToken.text)
+            return Token.BodyCellPart(
+                text = textToken.text,
+                y = textToken.y,
+                height = textToken.height,
+            )
         }
 
         if (textToken.fontSizePt == 10f || textToken.fontSizePt == 9f) {
