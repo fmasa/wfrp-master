@@ -1,2 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <string name="about_title">Über</string>
+    <string name="character_label_note">Zusätzliche Anmerkungen (Optional)</string>
+    <string name="character_tabs_visible">%1$d von %2$d Tabs sichtbar</string>
+    <string name="npcs_button_add_npc">NPC hinzufügen</string>
+    <string name="tests_roll_label">%1$d vs %2$d</string>
+    <string name="traits_title_add">Eigenschaft hinzufügen</string>
+    <string name="trappings_money_add">Hinzufügen</string>
+    <string name="trappings_title_add">Gegenstand hinzufügen</string>
+    <string name="conditions_ablaze">In Flammen</string>
+    <string name="social_classes_academics">Akademiker</string>
+    <string name="permissions_messages_camera_permission_rationale">Zugriff zu einer Kamera wird benötigt, damit Sie QR-Codes mit Partyeinladungen scannen können.</string>
+    <string name="settings_title_account">Account</string>
+    <string name="weapons_qualities_accurate">Akkurat</string>
+    <string name="skills_add_basic_skills_dialog_title">Grundfertigkeiten hinzufügen\?</string>
+    <string name="compendium_icon_add_compendium_item">Kompendiumeintrag hinzufügen</string>
+    <string name="blessings_title_add">Segen hinzufügen</string>
+    <string name="encounters_button_add">Begegnung hinzufügen</string>
+    <string name="encounters_messages_no_encounters_subtext">Erste Begegnung für deine Gruppe hinzufügen.</string>
+    <string name="miracles_title_add">Wunder hinzufügen</string>
+    <string name="character_note">Zusätzliche Anmerkungen</string>
+    <string name="careers_title_add_level">Level hinzufügen</string>
+    <string name="talents_title_add">Talent hinzufügen</string>
+    <string name="character_button_add">Neuen Charakter hinzufügen</string>
+    <string name="npcs_title_add">NPC hinzufügen</string>
+    <string name="skills_title_add">Fertigkeit hinzufügen</string>
+    <string name="spells_title_add">Zauber hinzufügen</string>
+    <string name="skills_label_advanced">Erweitert</string>
+</resources>
