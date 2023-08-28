@@ -667,4 +667,20 @@
     <string name="conditions_poisoned">Avvelenato</string>
     <string name="conditions_stunned">Stordito</string>
     <string name="conditions_unconscious">Privo di Sensi</string>
+    <string name="trappings_button_add_non_compendium">...o aggiungi un Avere non da Compendio</string>
+    <string name="trappings_label_availability">Disponibilità</string>
+    <string name="trappings_label_item_flaws">Difetti</string>
+    <string name="trappings_label_pack_size">Dimensioni</string>
+    <string name="trappings_qualities_fine">Raffinato</string>
+    <string name="trappings_qualities_lightweight">Leggero</string>
+    <string name="trappings_title_choose_compendium_trapping">Scegli un Avere dal Compendio…</string>
+    <string name="trappings_label_price">Prezzo</string>
+    <string name="trappings_label_item_qualities">Qualità</string>
+    <string name="trappings_flaws_bulky">Ingombrante</string>
+    <string name="trappings_qualities_durable">Resistente</string>
+    <string name="trappings_messages_no_trappings_in_compendium">Nessun Avere</string>
+    <string name="trappings_qualities_practical">Pratico</string>
+    <string name="common_ui_item_added">Oggetto aggiunto.</string>
+    <string name="trappings_availability_common">Comune</string>
+    <string name="trappings_availability_exotic">Esotico</string>
 </resources>
