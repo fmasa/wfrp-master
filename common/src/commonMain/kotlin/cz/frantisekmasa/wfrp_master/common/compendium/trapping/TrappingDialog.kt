@@ -449,7 +449,7 @@ private class TrappingFormData(
             type = TrappingTypeFormData.fromTrappingType(item?.trappingType),
             isVisibleToPlayers = item?.isVisibleToPlayers ?: false,
             availability = rememberSaveable(item) {
-                mutableStateOf(item?.availability ?: Availability.EXOTIC)
+                mutableStateOf(item?.availability ?: Availability.COMMON)
             },
             price = PriceFormData.fromMoney(item?.price),
             packSize = inputValue((item?.packSize ?: 1).toString(), Rules.PositiveInteger()),
