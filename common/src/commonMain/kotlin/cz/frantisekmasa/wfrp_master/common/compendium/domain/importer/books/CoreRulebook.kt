@@ -290,7 +290,11 @@ object CoreRulebook :
         }
 
         if (textToken.fontSizePt == 8f && textToken.fontName.endsWith("ACaslonPro-Regular")) {
-            return Token.BodyCellPart(textToken.text)
+            return Token.BodyCellPart(
+                text = textToken.text,
+                y = textToken.y,
+                height = textToken.height,
+            )
         }
 
         if (textToken.fontSizePt == 11f && textToken.fontName.endsWith("CaslonAntique")) {

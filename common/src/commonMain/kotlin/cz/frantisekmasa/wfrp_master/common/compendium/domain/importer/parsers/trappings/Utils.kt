@@ -39,7 +39,7 @@ val FEATURE_REGEX = Regex("([a-zA-Z- ])+ ?\\(?\\+?([0-9])?A?\\)?")
 private val NAME_WITH_COUNT_PATTERN = Regex("(.*) \\((\\d+|dozen)\\)")
 
 inline fun <reified T : Enum<T>> parseFeatures(value: String): Map<T, Int> {
-    if (value == "–") {
+    if (value == "–" || value == "") {
         return emptyMap()
     }
 

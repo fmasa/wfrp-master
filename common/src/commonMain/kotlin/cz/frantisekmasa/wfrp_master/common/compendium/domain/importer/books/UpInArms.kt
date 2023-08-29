@@ -3,6 +3,7 @@ package cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.books
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.Career
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.Talent
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.Trapping
+import cz.frantisekmasa.wfrp_master.common.compendium.domain.TrappingType.MeleeWeapon
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.parsers.CareerParser
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.parsers.Document
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.parsers.TalentParser
@@ -17,6 +18,7 @@ import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.sources.Ca
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.sources.TalentSource
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.sources.TrappingSource
 import cz.frantisekmasa.wfrp_master.common.core.domain.SocialClass
+import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.MeleeWeaponGroup
 
 object UpInArms : Book, CareerSource, TalentSource, TrappingSource {
 
@@ -46,8 +48,8 @@ object UpInArms : Book, CareerSource, TalentSource, TrappingSource {
         val ammunitionParser = AmmunitionParser(document, this)
         val rangedWeaponsParser = RangedWeaponsParser(document, this)
 
-        return buildList {
-            addAll(
+        return sequence {
+            yieldAll(
                 basicTrappingsParser.parse(
                     typeFactory = { null },
                     tablePage = 88,
@@ -55,17 +57,24 @@ object UpInArms : Book, CareerSource, TalentSource, TrappingSource {
                     column = Column.LEFT,
                 )
             )
-            addAll(meleeWeaponsParser.parse(91, 91..91))
-            addAll(meleeWeaponsParser.parse(92, 92..92))
-            addAll(meleeWeaponsParser.parse(93, 93..93))
-            addAll(meleeWeaponsParser.parse(94, 94..95))
-            addAll(meleeWeaponsParser.parse(95, 95..96))
-            addAll(meleeWeaponsParser.parse(96, 96..97))
-            addAll(meleeWeaponsParser.parse(97, 97..97))
-            addAll(ammunitionParser.parse(98, IntRange.EMPTY))
-            addAll(rangedWeaponsParser.parse(101, 101..103))
-            addAll(ammunitionParser.parse(102, 103..104))
-        }
+            yieldAll(meleeWeaponsParser.parse(91, 91..91))
+            yieldAll(meleeWeaponsParser.parse(92, 92..92))
+            yieldAll(meleeWeaponsParser.parse(93, 93..93))
+            yieldAll(meleeWeaponsParser.parse(94, 94..95))
+            yieldAll(meleeWeaponsParser.parse(95, 95..96))
+            yieldAll(meleeWeaponsParser.parse(96, 96..97))
+            yieldAll(meleeWeaponsParser.parse(97, 97..97))
+            yieldAll(ammunitionParser.parse(98, IntRange.EMPTY))
+            yieldAll(rangedWeaponsParser.parse(101, 101..103))
+            yieldAll(ammunitionParser.parse(102, 103..104))
+        }.map {
+            if (
+                it.name == "Warhammer" &&
+                (it.trappingType as MeleeWeapon).group == MeleeWeaponGroup.BASIC
+            )
+                it.copy(name = "Warhammer (Basic)")
+            else it
+        }.toList()
     }
 
     override fun resolveToken(textToken: TextToken): Token? {
@@ -106,7 +115,11 @@ object UpInArms : Book, CareerSource, TalentSource, TrappingSource {
 
             if (textToken.fontName.endsWith("ACaslonPro-Regular")) {
                 if (textToken.height == 6.201f) {
-                    return Token.BodyCellPart(textToken.text)
+                    return Token.BodyCellPart(
+                        text = textToken.text,
+                        y = textToken.y,
+                        height = textToken.height,
+                    )
                 }
 
                 return Token.NormalPart(textToken.text)

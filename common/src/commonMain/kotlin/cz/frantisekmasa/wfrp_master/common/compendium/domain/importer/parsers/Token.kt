@@ -27,7 +27,15 @@ sealed interface Token {
     class OptionsBoxHeading(text: String) : Token
 
     sealed class TableValue(val text: String) : Token
-    class BodyCellPart(text: String) : TableValue(text)
+    class BodyCellPart(
+        text: String,
+        val y: Float,
+        val height: Float,
+    ) : TableValue(text) {
+        override fun toString(): String {
+            return "BodyCellPart(text=$text, x=$y, height=$height)"
+        }
+    }
     class TableHeadCell(text: String) : TableValue(text) {
         override fun toString(): String {
             return "TableHeadCell(text=$text)"

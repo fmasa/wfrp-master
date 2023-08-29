@@ -111,10 +111,11 @@ class CareerCharacteristicsParser(
             val position = textPositions[0]
             val type = structure.resolveToken(
                 TextToken(
-                    position.getUnicode(),
-                    position.getFont().getName(),
-                    position.getHeight(),
-                    position.getFontSizeInPt(),
+                    text = position.getUnicode(),
+                    fontName = position.getFont().getName(),
+                    height = position.getHeight(),
+                    fontSizePt = position.getFontSizeInPt(),
+                    y = position.getY(),
                 )
             )
 
