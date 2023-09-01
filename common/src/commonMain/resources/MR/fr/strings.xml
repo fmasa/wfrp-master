@@ -1,2 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <string name="careers_title_add_level">Ajouter un niveau</string>
+    <string name="character_label_note">Notes supplémentaires (optionnel)</string>
+    <string name="character_note">Notes supplémentaires</string>
+    <string name="characteristics_agility">Agilité</string>
+    <string name="combat_advantage_cap">Limite d\'avantage</string>
+    <string name="combat_advantage_system_config_option">Règles d\'avantages</string>
+    <string name="combat_label_advantage">Avantage</string>
+    <string name="encounters_messages_no_encounters_subtext">Ajoutez une première rencontre pour votre groupe.</string>
+    <string name="miracles_title_add">Ajouter un miracle</string>
+    <string name="npcs_button_add_npc">Ajouter un PNJ</string>
+    <string name="npcs_label_alive">En vie</string>
+    <string name="skills_label_advanced">Avancé</string>
+    <string name="skills_label_advances">Avancé</string>
+    <string name="spells_title_add">Ajouter un sort</string>
+    <string name="talents_title_add">Ajouter un talent</string>
+    <string name="traits_title_add">Ajouter un trait</string>
+    <string name="character_button_add">Ajouter un nouveau personnage</string>
+    <string name="npcs_title_add">Ajouter un PNJ</string>
+    <string name="skills_title_add">Ajouter une compétence</string>
+    <string name="character_label_characteristic_advances">Avancé</string>
+    <string name="trappings_title_add">Ajouter un objet</string>
+</resources>
