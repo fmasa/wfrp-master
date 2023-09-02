@@ -26,6 +26,7 @@ For both players and GMs, there is a [documentation](https://github.com/fmasa/wf
 ## Translations
 
 The WFRP Master uses [Weblate](https://hosted.weblate.org/engage/wfrp-master/) to simplify external translation contributions. 
+[See more information about contributing translations](https://github.com/fmasa/wfrp-master/wiki/Translations) 
 
 Existing translations:
 
