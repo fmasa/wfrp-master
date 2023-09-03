@@ -12,6 +12,12 @@ plugins {
 android {
     compileSdk = Versions.Android.compileSdk
 
+    bundle {
+        language {
+            enableSplit = false
+        }
+    }
+
     defaultConfig {
         applicationId = "cz.frantisekmasa.dnd"
         minSdk = Versions.Android.minSdk
