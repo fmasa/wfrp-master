@@ -13,6 +13,7 @@ platform :android do
         track_promote_to: 'beta',
         skip_upload_apk: true,
         skip_upload_aab: true,
+        skip_upload_changelogs: true,
     )
   end
 end
