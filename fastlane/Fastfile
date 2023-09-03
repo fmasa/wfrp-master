@@ -9,8 +9,8 @@ platform :android do
         skip_upload_apk: true, # We are uploading AAB
     )
     upload_to_play_store(
-        track: 'internal'
-        track_promote_to: 'beta'
+        track: 'internal',
+        track_promote_to: 'beta',
         skip_upload_apk: true,
         skip_upload_aab: true,
     )
