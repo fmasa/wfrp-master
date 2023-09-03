@@ -1,7 +1,8 @@
-<?xml version="1.0" encoding="UTF-8" ?>
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <plurals name="parties_player_count">
         <item quantity="one">%d giocatore</item>
+        <item quantity="many">%d giocatori</item>
         <item quantity="other">%d giocatori</item>
     </plurals>
 </resources>
