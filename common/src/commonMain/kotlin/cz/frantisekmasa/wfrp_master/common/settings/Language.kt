@@ -5,5 +5,6 @@ enum class Language(
     val englishName: String
 ) {
     BASE("English", "English"),
-    IT("Italiano", "Italian")
+    IT("Italiano", "Italian"),
+    FR("Français", "French"),
 }
