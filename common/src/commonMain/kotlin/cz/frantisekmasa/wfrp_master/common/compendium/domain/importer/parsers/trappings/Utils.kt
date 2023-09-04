@@ -35,7 +35,7 @@ inline fun <reified T : Enum<T>> matchEnumSetOrNull(value: String, separator: St
     return enums.toSet()
 }
 
-val FEATURE_REGEX = Regex("([a-zA-Z- ])+ ?\\(?\\+?([0-9])?A?\\)?")
+val FEATURE_REGEX = Regex("([a-zA-Z- ]+) ?\\(?\\+?([0-9])?A?\\)?")
 private val NAME_WITH_COUNT_PATTERN = Regex("(.*) \\((\\d+|dozen)\\)")
 
 inline fun <reified T : Enum<T>> parseFeatures(value: String): Map<T, Int> {
@@ -47,11 +47,11 @@ inline fun <reified T : Enum<T>> parseFeatures(value: String): Map<T, Int> {
         .splitToSequence(",")
         .map { it.trim() }
         .mapNotNull {
-            val (name, rating) = FEATURE_REGEX.matchEntire(it)?.groupValues
+            val (_, name, rating) = FEATURE_REGEX.matchEntire(it)?.groupValues
                 ?: error("Invalid feature $it")
-            val feature = matchEnumOrNull<T>(name) ?: return@mapNotNull null
+            val feature = matchEnumOrNull<T>(name.trim()) ?: return@mapNotNull null
 
-            feature to (rating.toIntOrNull() ?: 0)
+            feature to (rating.toIntOrNull() ?: 1)
         }.toMap()
 }
 
