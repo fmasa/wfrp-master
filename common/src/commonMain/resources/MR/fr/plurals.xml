@@ -3,6 +3,6 @@
     <plurals name="parties_player_count">
         <item quantity="one">%d joueur</item>
         <item quantity="many">%d joueurs</item>
-        <item quantity="other"></item>
+        <item quantity="other">%d joueurs</item>
     </plurals>
 </resources>
