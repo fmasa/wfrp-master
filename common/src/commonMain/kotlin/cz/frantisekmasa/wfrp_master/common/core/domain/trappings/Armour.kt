@@ -3,8 +3,8 @@ package cz.frantisekmasa.wfrp_master.common.core.domain.trappings
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.Stable
 import cz.frantisekmasa.wfrp_master.common.core.domain.HitLocation
-import cz.frantisekmasa.wfrp_master.common.core.shared.Parcelable
-import cz.frantisekmasa.wfrp_master.common.core.shared.Parcelize
+import dev.icerock.moko.parcelize.Parcelable
+import dev.icerock.moko.parcelize.Parcelize
 import kotlinx.serialization.Serializable
 
 @Parcelize

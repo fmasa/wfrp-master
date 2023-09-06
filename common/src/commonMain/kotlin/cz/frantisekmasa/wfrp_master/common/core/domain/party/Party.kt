@@ -10,8 +10,8 @@ import cz.frantisekmasa.wfrp_master.common.core.domain.party.combat.Combatant
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.settings.Settings
 import cz.frantisekmasa.wfrp_master.common.core.domain.time.DateTime
 import cz.frantisekmasa.wfrp_master.common.core.domain.time.ImperialDate
-import cz.frantisekmasa.wfrp_master.common.core.shared.Parcelable
-import cz.frantisekmasa.wfrp_master.common.core.shared.Parcelize
+import dev.icerock.moko.parcelize.Parcelable
+import dev.icerock.moko.parcelize.Parcelize
 import kotlinx.serialization.Serializable
 
 @Parcelize
