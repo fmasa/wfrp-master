@@ -630,14 +630,12 @@
     <string name="trappings_availability_scarce">Rare</string>
     <string name="trappings_label_worn">Porté</string>
     <string name="trappings_label_type">Type d\'objet</string>
-    <string name="trappings_label_sold_amount">Montant de la vente</string>
     <string name="trappings_flaws_unreliable">Peu fiable</string>
     <string name="trappings_flaws_ugly">Laid</string>
     <string name="trappings_qualities_practical">Pratique</string>
     <string name="trappings_label_qualities">Qualités</string>
     <string name="trappings_label_quantity">Quantité</string>
     <string name="trappings_flaws_shoddy">Bâclé</string>
-    <string name="trappings_messages_trapping_not_found">L\'objet n\'existe pas</string>
     <string name="trappings_messages_no_trappings_to_add">Il n\'y a pas d\'accessoires à ajouter au conteneur.</string>
     <string name="trappings_messages_no_trappings_in_compendium_subtext">Il n\'y a pas encore d\'objet dans votre compendium.</string>
     <string name="trappings_messages_no_items">Il n\'y a pas d\'objet dans votre inventaire.</string>
