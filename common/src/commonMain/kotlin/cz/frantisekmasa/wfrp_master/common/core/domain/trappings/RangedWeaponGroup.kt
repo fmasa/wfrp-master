@@ -11,7 +11,6 @@ import dev.icerock.moko.resources.StringResource
 @Immutable
 enum class RangedWeaponGroup(
     override val translatableName: StringResource,
-    val needsAmmo: Boolean = true
 ) : NamedEnum, Parcelable {
     BLACKPOWDER(Str.weapons_ranged_groups_blackpowder),
     BOW(Str.weapons_ranged_groups_bow),
@@ -20,5 +19,5 @@ enum class RangedWeaponGroup(
     ENGINEERING(Str.weapons_ranged_groups_engineering),
     EXPLOSIVES(Str.weapons_ranged_groups_explosives),
     SLING(Str.weapons_ranged_groups_sling),
-    THROWING(Str.weapons_ranged_groups_throwing, needsAmmo = false),
+    THROWING(Str.weapons_ranged_groups_throwing),
 }

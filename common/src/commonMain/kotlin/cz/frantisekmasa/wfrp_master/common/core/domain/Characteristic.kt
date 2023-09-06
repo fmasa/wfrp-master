@@ -2,7 +2,6 @@ package cz.frantisekmasa.wfrp_master.common.core.domain
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
-import androidx.compose.runtime.Stable
 import cz.frantisekmasa.wfrp_master.common.Str
 import cz.frantisekmasa.wfrp_master.common.core.shared.Resources
 import dev.icerock.moko.resources.StringResource
@@ -22,22 +21,6 @@ enum class Characteristic(
     TOUGHNESS(Str.characteristics_toughness, Str.characteristics_toughness_shortcut),
     WEAPON_SKILL(Str.characteristics_weapon_skill, Str.characteristics_weapon_skill_shortcut),
     WILL_POWER(Str.characteristics_will_power, Str.characteristics_will_power_shortcut);
-
-    @Stable
-    fun getShortcutName(): String {
-        return when (this) {
-            AGILITY -> "Ag"
-            BALLISTIC_SKILL -> "BS"
-            DEXTERITY -> "Dex"
-            INITIATIVE -> "I"
-            INTELLIGENCE -> "Int"
-            FELLOWSHIP -> "Fel"
-            STRENGTH -> "S"
-            TOUGHNESS -> "T"
-            WEAPON_SKILL -> "WS"
-            WILL_POWER -> "WP"
-        }
-    }
 
     fun characteristicValue(characteristics: Stats): Int = when (this) {
         AGILITY -> characteristics.agility

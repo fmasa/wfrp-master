@@ -15,7 +15,6 @@ object Resources {
         WeaponSkill("drawable/ic_weapon_skill.xml"),
         WillPower("drawable/ic_will_power.xml"),
 
-        Dead("drawable/ic_dead.xml"),
         DefaultAvatarIcon("drawable/ic_face.xml"),
         Character("drawable/ic_character.xml"),
         DiceRoll("drawable/ic_dice_roll.xml"),

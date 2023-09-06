@@ -19,8 +19,6 @@ data class Wounds(
     fun lose(lost: Int): Wounds = copy(current = max(0, current - lost))
 
     companion object {
-        fun fromMax(max: Int) = Wounds(max, max)
-
         // See rulebook page 341
         fun calculateMax(
             size: Size,

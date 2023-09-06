@@ -13,9 +13,5 @@ value class UserId internal constructor(private val value: String) : Parcelable 
         require(value.isNotBlank()) { "UserId cannot be blank" }
     }
 
-    companion object {
-        fun fromString(userId: String): UserId = UserId(userId)
-    }
-
     override fun toString() = value
 }

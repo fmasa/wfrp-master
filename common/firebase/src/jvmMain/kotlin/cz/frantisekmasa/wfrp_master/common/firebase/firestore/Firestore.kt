@@ -7,8 +7,6 @@ actual class Firestore(
 ) {
     actual fun collection(collectionPath: String) = CollectionReference(firestore.collection(collectionPath))
 
-    actual fun document(documentPath: String) = DocumentReference(firestore.document(documentPath))
-
     actual suspend fun runTransaction(block: suspend (Transaction) -> Unit) {
         val batch = firestore.batch()
 

@@ -44,8 +44,6 @@ data class Party(
 
     val playersCount: Int get() = users.size - 1
 
-    val players: List<UserId> get() = users.filter { it != gameMasterId }
-
     fun updateAmbitions(ambitions: Ambitions) = copy(ambitions = ambitions)
 
     fun rename(name: String) = copy(name = name)

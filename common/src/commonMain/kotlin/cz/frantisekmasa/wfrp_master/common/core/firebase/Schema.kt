@@ -3,7 +3,6 @@ package cz.frantisekmasa.wfrp_master.common.core.firebase
 object Schema {
     const val Parties = "parties"
     const val Characters = "characters"
-    const val CharacterFeatures = "features"
 
     object Party {
         const val Encounters = "encounters"

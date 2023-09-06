@@ -10,7 +10,6 @@ expect class TextPosition {
     fun getX(): Float
     fun getEndX(): Float
     fun getY(): Float
-    fun getEndY(): Float
     fun getWidth(): Float
     fun getHeight(): Float
     fun getFont(): Font
@@ -53,8 +52,3 @@ expect abstract class RectangleFinder constructor(page: Page) {
 
     fun processPage(page: Page)
 }
-
-data class Point(
-    val x: Float,
-    val y: Float,
-)

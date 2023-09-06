@@ -6,7 +6,6 @@ import cz.frantisekmasa.wfrp_master.common.compendium.domain.Career
 import cz.frantisekmasa.wfrp_master.common.core.auth.UserProvider
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.Character
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.CharacterAvatarChanger
-import cz.frantisekmasa.wfrp_master.common.core.domain.character.CharacterNotFound
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.CharacterRepository
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.CharacterType
 import cz.frantisekmasa.wfrp_master.common.core.domain.compendium.Compendium
@@ -68,16 +67,6 @@ class CharacterScreenModel(
         val character = characters.get(characterId)
 
         characters.save(characterId.partyId, change(character))
-    }
-
-    suspend fun characterExists(): Boolean {
-        return try {
-            characters.get(characterId)
-
-            true
-        } catch (e: CharacterNotFound) {
-            false
-        }
     }
 
     suspend fun archive() {

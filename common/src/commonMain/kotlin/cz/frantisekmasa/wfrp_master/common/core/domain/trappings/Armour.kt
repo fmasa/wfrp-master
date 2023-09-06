@@ -27,11 +27,6 @@ data class Armour(
     }
 
     @Stable
-    fun isZero(): Boolean {
-        return shield == 0 && HitLocation.values().all { armourPoints(it).value == 0 }
-    }
-
-    @Stable
     fun armourPoints(location: HitLocation) = ArmourPoints(
         when (location) {
             HitLocation.HEAD -> head
@@ -54,8 +49,6 @@ data class Armour(
     )
 
     companion object {
-        const val MAX_VALUE = 99
-
         fun fromItems(items: List<InventoryItem>): Armour =
             fromArmourPieces(items) + fromWornShields(items)
 
