@@ -94,10 +94,11 @@ private fun WeaponList(weapons: List<EquippedWeapon>, onTrappingClick: (Inventor
                             fontWeight = FontWeight.Bold,
                         )
 
+                        val damageExpression = weapon.damage.formatted()
                         Text(
-                            if (weapon.damage.value.startsWith("+"))
-                                weapon.damage.value
-                            else "+${weapon.damage.value}",
+                            if (damageExpression.startsWith("+"))
+                                damageExpression
+                            else "+$damageExpression",
                             style = MaterialTheme.typography.overline
                         )
                     }
