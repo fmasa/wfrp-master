@@ -5,7 +5,6 @@ import cz.frantisekmasa.wfrp_master.common.core.domain.party.Party
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.PartyId
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.PartyNotFound
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.PartyRepository
-import cz.frantisekmasa.wfrp_master.common.core.shared.IO
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow

@@ -2,7 +2,6 @@ package cz.frantisekmasa.wfrp_master.common.core.firebase.functions
 
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.CharacterAvatarChanger
 import cz.frantisekmasa.wfrp_master.common.core.domain.identifiers.CharacterId
-import cz.frantisekmasa.wfrp_master.common.core.shared.IO
 import cz.frantisekmasa.wfrp_master.common.firebase.functions.CloudFunctions
 import io.ktor.util.encodeBase64
 import kotlinx.coroutines.Dispatchers

@@ -17,7 +17,6 @@ import cz.frantisekmasa.wfrp_master.common.character.religion.blessings.Blessing
 import cz.frantisekmasa.wfrp_master.common.character.religion.miracles.MiraclesCard
 import cz.frantisekmasa.wfrp_master.common.character.religion.miracles.MiraclesScreenModel
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.Character
-import cz.frantisekmasa.wfrp_master.common.core.shared.IO
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.NumberPicker
 import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.TopPanel
 import dev.icerock.moko.resources.compose.stringResource
