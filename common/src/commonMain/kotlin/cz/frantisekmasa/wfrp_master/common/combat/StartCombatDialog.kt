@@ -23,7 +23,6 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import cz.frantisekmasa.wfrp_master.common.Str
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.Character
-import cz.frantisekmasa.wfrp_master.common.core.shared.IO
 import cz.frantisekmasa.wfrp_master.common.core.ui.buttons.CloseButton
 import cz.frantisekmasa.wfrp_master.common.core.ui.cards.CardContainer
 import cz.frantisekmasa.wfrp_master.common.core.ui.cards.CardTitle
@@ -32,7 +31,6 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.forms.NumberPicker
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
 import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.TopBarAction
 import cz.frantisekmasa.wfrp_master.common.encounters.domain.Encounter
-import cz.frantisekmasa.wfrp_master.common.encounters.domain.Npc
 import dev.icerock.moko.resources.compose.stringResource
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
@@ -47,13 +45,11 @@ fun StartCombatDialog(
     screenModel: CombatScreenModel,
 ) {
     FullScreenDialog(onDismissRequest = onDismissRequest) {
-        val npcs: MutableMap<Npc, Boolean> = remember { mutableStateMapOf() }
         val characters: MutableMap<Character, Boolean> = remember { mutableStateMapOf() }
         val npcCharacters: MutableMap<Character, Int> = remember { mutableStateMapOf() }
 
         LaunchedEffect(encounter.id) {
             withContext(Dispatchers.IO) {
-                val npcsAsync = async { screenModel.loadNpcsFromEncounter(encounter.id) }
                 val charactersAsync = async { screenModel.loadCharacters() }
                 val npcCharactersAsync = async {
                     screenModel.loadNpcs()
@@ -61,7 +57,6 @@ fun StartCombatDialog(
                         .filter { (_, count) -> count > 0 }
                 }
 
-                npcs.putAll(npcsAsync.await().associateWith { true })
                 characters.putAll(charactersAsync.await().associateWith { true })
                 npcCharacters.putAll(npcCharactersAsync.await())
             }
@@ -83,14 +78,13 @@ fun StartCombatDialog(
                                     screenModel.startCombat(
                                         encounter.id,
                                         pickCheckedOnes(characters),
-                                        pickCheckedOnes(npcs),
                                         npcCharacters.filterValues { it > 0 },
                                     )
                                     onComplete()
                                 }
                             },
                             enabled = !saving &&
-                                (isAtLeastOneChecked(npcs) || npcCharacters.any { it.value > 0 }) &&
+                                npcCharacters.any { it.value > 0 } &&
                                 isAtLeastOneChecked(characters),
                         )
                     }
@@ -110,15 +104,7 @@ fun StartCombatDialog(
                     nameFactory = { it.name },
                 )
 
-                if (npcCharacters.isNotEmpty()) {
-                    NpcCharacterList(npcCharacters)
-                } else {
-                    CombatantList(
-                        title = stringResource(Str.combat_title_npc_combatants),
-                        items = npcs,
-                        nameFactory = { it.name },
-                    )
-                }
+                NpcCharacterList(npcCharacters)
             }
         }
     }

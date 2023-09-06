@@ -2,19 +2,17 @@ package cz.frantisekmasa.wfrp_master.common.core.domain.party.combat
 
 import androidx.compose.runtime.Immutable
 import com.benasher44.uuid.Uuid
-import cz.frantisekmasa.wfrp_master.common.core.domain.identifiers.NpcId
 import cz.frantisekmasa.wfrp_master.common.core.shared.Parcelable
 import cz.frantisekmasa.wfrp_master.common.core.shared.Parcelize
 import kotlinx.serialization.Contextual
 import kotlinx.serialization.Serializable
-import java.util.UUID
 
 @Parcelize
 @Serializable
 @Immutable
 data class Combat(
     @Contextual
-    val encounterId: UUID,
+    val encounterId: Uuid,
     private var combatants: List<Combatant>,
     private val turn: Int = 1,
     private val round: Int = 1,
@@ -71,10 +69,6 @@ data class Combat(
 
     fun removeCombatant(id: Uuid): Combat? {
         return removeFirstCombatant { it.id == id }
-    }
-
-    fun removeNpc(npcId: NpcId): Combat? {
-        return removeFirstCombatant { it is Combatant.Npc && it.npcId == npcId }
     }
 
     private fun removeFirstCombatant(predicate: (Combatant) -> Boolean): Combat? {

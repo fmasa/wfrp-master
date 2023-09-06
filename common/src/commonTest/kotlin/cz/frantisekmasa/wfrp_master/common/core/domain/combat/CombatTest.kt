@@ -1,41 +1,36 @@
 package cz.frantisekmasa.wfrp_master.common.core.domain.combat
 
 import com.benasher44.uuid.uuid4
-import cz.frantisekmasa.wfrp_master.common.core.domain.identifiers.EncounterId
-import cz.frantisekmasa.wfrp_master.common.core.domain.identifiers.NpcId
-import cz.frantisekmasa.wfrp_master.common.core.domain.party.PartyId
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.combat.Advantage
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.combat.Combat
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.combat.Combatant
-import java.util.UUID
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNull
 
 class CombatTest {
-    private val encounterId = EncounterId(PartyId.generate(), UUID.randomUUID())
-    private val npcId1 = NpcId(encounterId, UUID.randomUUID())
-    private val npcId2 = NpcId(encounterId, UUID.randomUUID())
-
     private val combat = Combat(
-        encounterId = encounterId.encounterId,
+        encounterId = uuid4(),
         combatants = listOf(
-            Combatant.Npc(npcId1, initiative = 10, advantage = Advantage.ZERO, id = uuid4()),
-            Combatant.Character(characterId = "foo", initiative = 10, advantage = Advantage.ZERO, id = uuid4()),
-            Combatant.Npc(npcId2, initiative = 10, advantage = Advantage.ZERO, id = uuid4()),
+            Combatant(characterId = uuid4().toString(), initiative = 10, advantage = Advantage.ZERO, id = uuid4()),
+            Combatant(characterId = uuid4().toString(), initiative = 10, advantage = Advantage.ZERO, id = uuid4()),
+            Combatant(characterId = uuid4().toString(), initiative = 10, advantage = Advantage.ZERO, id = uuid4()),
         )
     )
 
     @Test
-    fun `removeNpc() does nothing if npc is not in combat`() {
-        assertEquals(combat, combat.removeNpc(NpcId(encounterId, UUID.randomUUID())))
+    fun `removeCombatant() does nothing if combatant is not in combat`() {
+        assertEquals(
+            combat,
+            combat.removeCombatant(uuid4()),
+        )
     }
 
     @Test
-    fun `removeNpc() removes NPC from combat`() {
+    fun `removeCombatant() removes combatant from combat`() {
         assertEquals(
             combat.copy(combatants = listOf(combat.getCombatants()[1], combat.getCombatants()[2])),
-            combat.removeNpc(npcId1),
+            combat.removeCombatant(combat.getCombatants()[0].id!!),
         )
     }
 
@@ -46,7 +41,7 @@ class CombatTest {
                 combatants = listOf(combat.getCombatants()[1], combat.getCombatants()[2]),
             ),
             combat.copy(turn = 2)
-                .removeNpc(npcId1)
+                .removeCombatant(combat.getCombatants()[0].id!!)
         )
     }
 
@@ -55,7 +50,7 @@ class CombatTest {
         assertEquals(
             1000,
             combat.copy(round = 1000)
-                .removeNpc(npcId1)
+                .removeCombatant(combat.getCombatants()[0].id!!)
                 ?.getRound()
         )
     }
@@ -68,7 +63,7 @@ class CombatTest {
                 combatants = listOf(combat.getCombatants()[1], combat.getCombatants()[2]),
             ),
             combat.copy(turn = 2)
-                .removeNpc(npcId1)
+                .removeCombatant(combat.getCombatants()[0].id!!)
         )
     }
 
@@ -81,7 +76,7 @@ class CombatTest {
                 combatants = listOf(combat.getCombatants()[0], combat.getCombatants()[1]),
             ),
             combat.copy(turn = 3)
-                .removeNpc(npcId2)
+                .removeCombatant(combat.getCombatants()[2].id!!)
         )
     }
 
@@ -89,7 +84,7 @@ class CombatTest {
     fun `combat is ended when last combatant is removed`() {
         assertNull(
             combat.copy(combatants = listOf(combat.getCombatants()[0]))
-                .removeNpc(npcId1)
+                .removeCombatant(combat.getCombatants()[0].id!!)
         )
     }
 }

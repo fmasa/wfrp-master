@@ -53,8 +53,6 @@
     <string name="common_ui_expression_helper">Erlaubte Operatoren: +,-,/,*,(,), MIN(…), MAX(…) und Variablen: %s</string>
     <string name="messages_avatar_changed">Avatar wurde geändert</string>
     <string name="messages_avatar_removed">Avatar wurde entfernt</string>
-    <string name="npcs_label_alive">Lebendig</string>
-    <string name="npcs_title_armour">Rüstung</string>
     <string name="parties_messages_members_will_lose_access">Alle Mitglieder verlieren ihren Zugang.</string>
     <string name="parties_messages_invitation_link_alternative">Alternativ können Sie auch Ihren GM um einen Einladungslink bitten.</string>
     <string name="points_auto_max_wounds_placeholder">Auto.</string>

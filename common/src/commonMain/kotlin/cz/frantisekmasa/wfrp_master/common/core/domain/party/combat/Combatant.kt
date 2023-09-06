@@ -3,75 +3,35 @@ package cz.frantisekmasa.wfrp_master.common.core.domain.party.combat
 import androidx.compose.runtime.Immutable
 import com.benasher44.uuid.Uuid
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.CurrentConditions
-import cz.frantisekmasa.wfrp_master.common.core.domain.identifiers.NpcId
-import cz.frantisekmasa.wfrp_master.common.core.shared.Parcelable
-import cz.frantisekmasa.wfrp_master.common.core.shared.Parcelize
 import cz.frantisekmasa.wfrp_master.common.encounters.domain.Wounds
+import dev.icerock.moko.parcelize.Parcelable
+import dev.icerock.moko.parcelize.Parcelize
 import kotlinx.serialization.Contextual
-import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.json.JsonClassDiscriminator
 
 @Serializable
 @Immutable
-@JsonClassDiscriminator("@type")
-sealed class Combatant : Parcelable {
-    abstract val id: Uuid?
-    abstract val advantage: Advantage
-    abstract val initiative: Int
-    abstract val name: String?
-    abstract val wounds: Wounds?
-    abstract val conditions: CurrentConditions?
+@Parcelize
+data class Combatant(
+    val characterId: String,
+    @Contextual val id: Uuid? = null,
+    val initiative: Int,
+    val name: String? = null,
+    val wounds: Wounds? = null,
+    val advantage: Advantage = Advantage.ZERO,
+    val conditions: CurrentConditions? = null,
+) : Parcelable {
 
-    abstract fun withAdvantage(advantage: Advantage): Combatant
-    abstract fun withInitiative(initiative: Int): Combatant
-    abstract fun withWounds(wounds: Wounds): Combatant
-    abstract fun withConditions(conditions: CurrentConditions): Combatant
+    fun withAdvantage(advantage: Advantage) = copy(advantage = advantage)
+    fun withInitiative(initiative: Int) = copy(initiative = initiative)
+    fun withWounds(wounds: Wounds) = copy(wounds = wounds)
+    fun withConditions(conditions: CurrentConditions) = copy(conditions = conditions)
 
     fun areSameEntity(other: Combatant): Boolean {
         if (id != null || other.id != null) {
             return id == other.id
         }
 
-        return (this is Character && other is Character && characterId == other.characterId) ||
-            (this is Npc && other is Npc && npcId == other.npcId)
-    }
-
-    @Parcelize
-    @Serializable
-    @SerialName("character")
-    @Immutable
-    data class Character(
-        val characterId: String,
-        @Contextual override val id: Uuid? = null,
-        override val initiative: Int,
-        override val name: String? = null,
-        override val wounds: Wounds? = null,
-        override val advantage: Advantage = Advantage.ZERO,
-        override val conditions: CurrentConditions? = null,
-    ) : Combatant() {
-        override fun withAdvantage(advantage: Advantage): Character = copy(advantage = advantage)
-        override fun withInitiative(initiative: Int): Character = copy(initiative = initiative)
-        override fun withWounds(wounds: Wounds) = copy(wounds = wounds)
-        override fun withConditions(conditions: CurrentConditions) = copy(conditions = conditions)
-    }
-
-    @Parcelize
-    @Serializable
-    @SerialName("npc")
-    @Immutable
-    data class Npc(
-        val npcId: NpcId,
-        @Contextual override val id: Uuid? = null,
-        override val initiative: Int,
-        override val name: String? = null,
-        override val wounds: Wounds? = null,
-        override val advantage: Advantage = Advantage.ZERO,
-        override val conditions: CurrentConditions = CurrentConditions.none(),
-    ) : Combatant() {
-        override fun withAdvantage(advantage: Advantage): Npc = copy(advantage = advantage)
-        override fun withInitiative(initiative: Int): Npc = copy(initiative = initiative)
-        override fun withWounds(wounds: Wounds) = copy(wounds = wounds)
-        override fun withConditions(conditions: CurrentConditions) = copy(conditions = conditions)
+        return characterId == other.characterId
     }
 }

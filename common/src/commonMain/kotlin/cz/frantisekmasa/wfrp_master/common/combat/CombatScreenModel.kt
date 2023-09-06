@@ -14,7 +14,6 @@ import cz.frantisekmasa.wfrp_master.common.core.domain.character.CharacterType
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.CurrentConditions
 import cz.frantisekmasa.wfrp_master.common.core.domain.identifiers.CharacterId
 import cz.frantisekmasa.wfrp_master.common.core.domain.identifiers.EncounterId
-import cz.frantisekmasa.wfrp_master.common.core.domain.identifiers.NpcId
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.Party
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.PartyId
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.PartyRepository
@@ -33,8 +32,6 @@ import cz.frantisekmasa.wfrp_master.common.core.logging.Reporter
 import cz.frantisekmasa.wfrp_master.common.core.ui.StatBlockData
 import cz.frantisekmasa.wfrp_master.common.core.utils.right
 import cz.frantisekmasa.wfrp_master.common.encounters.CombatantItem
-import cz.frantisekmasa.wfrp_master.common.encounters.domain.Npc
-import cz.frantisekmasa.wfrp_master.common.encounters.domain.NpcRepository
 import cz.frantisekmasa.wfrp_master.common.encounters.domain.Wounds
 import io.github.aakira.napier.Napier
 import kotlinx.coroutines.async
@@ -42,19 +39,16 @@ import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.emitAll
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.mapLatest
 import kotlinx.coroutines.flow.mapNotNull
-import kotlinx.coroutines.flow.transform
 import kotlin.random.Random
 
 class CombatScreenModel(
     private val partyId: PartyId,
     private val random: Random,
     private val parties: PartyRepository,
-    private val npcs: NpcRepository,
     private val characters: CharacterRepository,
     private val skills: SkillRepository,
     private val talents: TalentRepository,
@@ -70,10 +64,6 @@ class CombatScreenModel(
         .mapLatest { it.activeCombat }
         .filterNotNull()
 
-    private val activeEncounterId: Flow<EncounterId> = combatFlow
-        .mapLatest { EncounterId(partyId, it.encounterId) }
-        .distinctUntilChanged()
-
     val turn: Flow<Int> = combatFlow
         .mapLatest { it.getTurn() }
         .distinctUntilChanged()
@@ -86,9 +76,6 @@ class CombatScreenModel(
         .mapLatest { it.groupAdvantage }
         .distinctUntilChanged()
 
-    suspend fun loadNpcsFromEncounter(encounterId: Uuid): List<Npc> =
-        npcs.findByEncounter(EncounterId(partyId, encounterId)).first()
-
     suspend fun loadCharacters(): List<Character> =
         characters.inParty(partyId, CharacterType.PLAYER_CHARACTER).first()
 
@@ -96,18 +83,6 @@ class CombatScreenModel(
         characters.inParty(partyId, CharacterType.NPC).first()
 
     suspend fun getStatBlockData(combatant: CombatantItem): StatBlockData {
-        if (combatant !is CombatantItem.Character) {
-            return StatBlockData(
-                "",
-                emptyList(),
-                emptyList(),
-                emptyList(),
-                emptyList(),
-                emptyList(),
-                emptyList(),
-            )
-        }
-
         val characterId = combatant.characterId
 
         return coroutineScope {
@@ -133,31 +108,23 @@ class CombatScreenModel(
     suspend fun startCombat(
         encounterId: Uuid,
         characters: List<Character>,
-        npcs: List<Npc>,
         npcCharacters: Map<Character, Int>,
     ) {
         val globalEncounterId = EncounterId(partyId, encounterId)
         val combatants =
             characters.map {
-                characteristics(it) to Combatant.Character(
+                characteristics(it) to Combatant(
                     id = uuid4(),
                     characterId = it.id,
                     initiative = 1,
                 )
             } +
-                npcs.map {
-                    it.stats to Combatant.Npc(
-                        id = uuid4(),
-                        npcId = NpcId(globalEncounterId, it.id),
-                        initiative = 1,
-                    )
-                } +
                 npcCharacters.flatMap { (character, count) ->
                     val characteristics = characteristics(character)
 
                     if (count == 1)
                         listOf(
-                            characteristics to Combatant.Character(
+                            characteristics to Combatant(
                                 id = uuid4(),
                                 name = character.publicName,
                                 characterId = character.id,
@@ -165,7 +132,7 @@ class CombatScreenModel(
                             )
                         )
                     else (1..count).map { index ->
-                        characteristics to Combatant.Character(
+                        characteristics to Combatant(
                             id = uuid4(),
                             characterId = character.id,
                             initiative = 1,
@@ -205,8 +172,6 @@ class CombatScreenModel(
     }
 
     fun combatants(): Flow<List<CombatantItem>> {
-        val npcsFlow = activeEncounterId.transform { emitAll(npcs.findByEncounter(it)) }
-
         val charactersFlow = characters
             .inParty(partyId, CharacterType.values().toSet())
             .distinctUntilChanged()
@@ -215,36 +180,18 @@ class CombatScreenModel(
             .mapNotNull { it.activeCombat?.getCombatants() }
             .distinctUntilChanged()
 
-        return combineFlows(
-            combatantsFlow,
-            npcsFlow,
-            charactersFlow
-        ) { combatants, npcs, characters ->
-            val npcsById = npcs.associateBy { it.id }
+        return combatantsFlow.combine(charactersFlow) { combatants, characters ->
             val charactersById = characters.associateBy { it.id }
 
             combatants
                 .map { combatant ->
-                    when (combatant) {
-                        is Combatant.Character -> {
-                            val character = charactersById[combatant.characterId] ?: return@map null
+                    val character = charactersById[combatant.characterId] ?: return@map null
 
-                            CombatantItem.Character(
-                                characterId = CharacterId(partyId, character.id),
-                                character = character,
-                                combatant = combatant,
-                            )
-                        }
-                        is Combatant.Npc -> {
-                            val npc = npcsById[combatant.npcId.npcId] ?: return@map null
-
-                            CombatantItem.Npc(
-                                npcId = combatant.npcId,
-                                npc = npc,
-                                combatant = combatant,
-                            )
-                        }
-                    }
+                    CombatantItem(
+                        characterId = CharacterId(partyId, character.id),
+                        character = character,
+                        combatant = combatant,
+                    )
                 }.filterNotNull()
         }
     }
@@ -282,15 +229,6 @@ class CombatScreenModel(
         else party.updateCombat(updatedCombat)
     }
 
-    private fun <T1, T2, T3, R> combineFlows(
-        first: Flow<T1>,
-        second: Flow<T2>,
-        third: Flow<T3>,
-        transform: suspend (T1, T2, T3) -> R,
-    ): Flow<R> =
-        first.combine(second) { a, b -> Pair(a, b) }
-            .combine(third) { (a, b), c -> transform(a, b, c) }
-
     suspend fun updateWounds(combatant: CombatantItem, wounds: Wounds) {
         if (combatant.combatant.wounds != null) {
             // Wounds are combatant specific (there may be multiple combatants of same character)
@@ -298,27 +236,14 @@ class CombatScreenModel(
             return
         }
 
-        when (combatant) {
-            is CombatantItem.Character -> {
-                val character = characters.get(combatant.characterId)
-                val points = character.points
+        val character = characters.get(combatant.characterId)
+        val points = character.points
 
-                if (points.wounds == wounds.current) {
-                    return
-                }
-
-                characters.save(partyId, character.updatePoints(points.copy(wounds = wounds.current)))
-            }
-            is CombatantItem.Npc -> {
-                val npc = npcs.get(combatant.npcId)
-
-                if (npc.wounds == wounds) {
-                    return
-                }
-
-                npcs.save(combatant.npcId.encounterId, npc.updateCurrentWounds(wounds.current))
-            }
+        if (points.wounds == wounds.current) {
+            return
         }
+
+        characters.save(partyId, character.updatePoints(points.copy(wounds = wounds.current)))
     }
 
     suspend fun updateConditions(combatant: CombatantItem, conditions: CurrentConditions) {
@@ -328,20 +253,13 @@ class CombatScreenModel(
             return
         }
 
-        when (combatant) {
-            is CombatantItem.Character -> {
-                val character = characters.get(combatant.characterId)
+        val character = characters.get(combatant.characterId)
 
-                if (character.conditions == conditions) {
-                    return
-                }
-
-                characters.save(partyId, character.updateConditions(conditions))
-            }
-            is CombatantItem.Npc -> {
-                // NPC do not have conditions, so this must have been handled as combatant specific
-            }
+        if (character.conditions == conditions) {
+            return
         }
+
+        characters.save(partyId, character.updateConditions(conditions))
     }
 
     suspend fun updateAdvantage(combatant: Combatant, advantage: Advantage) {

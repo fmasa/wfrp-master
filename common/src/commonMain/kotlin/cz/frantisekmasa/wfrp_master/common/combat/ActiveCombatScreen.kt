@@ -61,7 +61,6 @@ import cz.frantisekmasa.wfrp_master.common.core.domain.party.PartyId
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.combat.Advantage
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.combat.GroupAdvantage
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.settings.AdvantageSystem
-import cz.frantisekmasa.wfrp_master.common.core.shared.Resources
 import cz.frantisekmasa.wfrp_master.common.core.ui.CharacterAvatar
 import cz.frantisekmasa.wfrp_master.common.core.ui.StatBlock
 import cz.frantisekmasa.wfrp_master.common.core.ui.StatBlockData
@@ -81,7 +80,6 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.OptionsAction
 import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.Subtitle
 import cz.frantisekmasa.wfrp_master.common.encounters.CombatantItem
 import cz.frantisekmasa.wfrp_master.common.encounters.domain.Wounds
-import cz.frantisekmasa.wfrp_master.common.npcs.NpcDetailScreen
 import dev.icerock.moko.resources.compose.stringResource
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -152,13 +150,10 @@ class ActiveCombatScreen(
                     isGroupAdvantageSystemEnabled = isGroupAdvantageSystemEnabled,
                     onDetailOpenRequest = {
                         navigation.navigate(
-                            when (freshCombatant) {
-                                is CombatantItem.Npc -> NpcDetailScreen(freshCombatant.npcId)
-                                is CombatantItem.Character -> CharacterDetailScreen(
-                                    freshCombatant.characterId,
-                                    comingFromCombat = true,
-                                )
-                            }
+                            CharacterDetailScreen(
+                                freshCombatant.characterId,
+                                comingFromCombat = true,
+                            )
                         )
                         coroutineScope.launch { bottomSheetState.hide() }
                     },
@@ -279,7 +274,7 @@ class ActiveCombatScreen(
 
     @Stable
     private fun canEditCombatant(userId: UserId, isGameMaster: Boolean, combatant: CombatantItem) =
-        isGameMaster || (combatant is CombatantItem.Character && combatant.userId == userId)
+        isGameMaster || combatant.userId == userId
 
     @Composable
     private fun GroupAdvantageBar(
@@ -593,16 +588,7 @@ class ActiveCombatScreen(
 
                 Column {
                     ListItem(
-                        icon = {
-                            when (combatant) {
-                                is CombatantItem.Character -> {
-                                    CharacterAvatar(combatant.avatarUrl, ItemIcon.Size.Small)
-                                }
-                                is CombatantItem.Npc -> {
-                                    ItemIcon(Resources.Drawable.Npc, ItemIcon.Size.Small)
-                                }
-                            }
-                        },
+                        icon = { CharacterAvatar(combatant.avatarUrl, ItemIcon.Size.Small) },
                         text = {
                             Column {
                                 Text(combatant.name)
