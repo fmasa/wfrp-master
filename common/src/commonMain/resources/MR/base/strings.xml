@@ -566,7 +566,6 @@
     <string name="trappings_label_price">Price</string>
     <string name="trappings_label_qualities">Qualities</string>
     <string name="trappings_label_quantity">Quantity</string>
-    <string name="trappings_label_sold_amount">Sold amount</string>
     <string name="trappings_label_type">Trapping type</string>
     <string name="trappings_label_worn">Worn</string>
     <string name="trappings_qualities_durable">Durable</string>
@@ -583,7 +582,6 @@
     <string name="trappings_messages_no_trappings_in_compendium">No trappings</string>
     <string name="trappings_messages_no_trappings_in_compendium_subtext">There are no trappings in your compendium yet.</string>
     <string name="trappings_messages_no_trappings_to_add">There are no trappings to add to container.</string>
-    <string name="trappings_messages_trapping_not_found">Trapping does not exist</string>
     <string name="trappings_money_add">Add</string>
     <string name="trappings_money_balance">Balance</string>
     <string name="trappings_money_brass_pennies_shortcut">p</string>

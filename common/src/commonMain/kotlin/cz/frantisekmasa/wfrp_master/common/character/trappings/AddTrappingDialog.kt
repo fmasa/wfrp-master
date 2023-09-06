@@ -45,7 +45,7 @@ fun AddTrappingDialog(
                     icon = { trappingIcon(it.trappingType) },
                     onSelect = { setState(State.FillingInItemQualitiesAndFlaws(it)) },
                     onCustomItemRequest = { setState(State.FillingInCustomTrapping) },
-                    customItemButtonText = stringResource(Str.blessings_button_add_non_compendium),
+                    customItemButtonText = stringResource(Str.trappings_button_add_non_compendium),
                     emptyUiIcon = Resources.Drawable.TrappingContainer,
                 )
             }

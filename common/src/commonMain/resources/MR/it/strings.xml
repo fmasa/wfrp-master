@@ -525,7 +525,6 @@
     <string name="trappings_messages_no_containers_found">Non ci sono contenitori disponibili.</string>
     <string name="trappings_messages_no_items">Non ci sono Averi nel tuo inventario.</string>
     <string name="trappings_messages_no_trappings_to_add">Non ci sono averi da aggiungere al contenitore.</string>
-    <string name="trappings_messages_trapping_not_found">L\'Avere non esiste</string>
     <string name="trappings_money_add">Aggiungi</string>
     <string name="trappings_money_balance">Bilancio</string>
     <string name="trappings_money_brass_pennies_shortcut">p</string>
@@ -686,7 +685,6 @@
     <string name="calendar_title_select_date">Seleziona Data</string>
     <string name="trappings_availability_rare">Raro</string>
     <string name="trappings_availability_scarce">Scarso</string>
-    <string name="trappings_label_sold_amount">Importo di Vendita</string>
     <string name="trappings_flaws_shoddy">Scadente</string>
     <string name="trappings_flaws_ugly">Brutto</string>
     <string name="trappings_pack_size">Prezzo totale per %d pezzi</string>
