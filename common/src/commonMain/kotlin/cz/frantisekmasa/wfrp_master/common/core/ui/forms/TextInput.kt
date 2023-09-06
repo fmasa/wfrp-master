@@ -172,7 +172,7 @@ private fun TextInput(
             }
         }
 
-        if (showCharacterCount || helperText.isNullOrBlank()) {
+        if (showCharacterCount || !helperText.isNullOrBlank()) {
             CompositionLocalProvider(LocalContentAlpha provides ContentAlpha.medium) {
                 Row {
                     if (!helperText.isNullOrBlank()) {
