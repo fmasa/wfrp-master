@@ -687,4 +687,25 @@
     <string name="compendium_pick_prompt_trappings">Seleziona quali Averi vuoi importare.</string>
     <string name="trappings_flaws_unreliable">Inaffidabile</string>
     <string name="compendium_title_trappings">Averi</string>
+    <string name="trappings_expression_constants_weapon_range">GittataArma</string>
+    <string name="characteristics_fellowship_bonus_shortcut">BSoc</string>
+    <string name="characteristics_toughness_shortcut">R</string>
+    <string name="characteristics_intelligence_bonus_shortcut">BInt</string>
+    <string name="characteristics_initiative_shortcut">I</string>
+    <string name="trappings_expression_constants_damage_special">Speciale</string>
+    <string name="characteristics_intelligence_shortcut">Int</string>
+    <string name="characteristics_dexterity_bonus_shortcut">BDes</string>
+    <string name="characteristics_will_power_bonus_shortcut">BVol</string>
+    <string name="characteristics_agility_shortcut">Agi</string>
+    <string name="characteristics_ballistic_skill_bonus_shortcut">BAB</string>
+    <string name="characteristics_dexterity_shortcut">Des</string>
+    <string name="characteristics_will_power_shortcut">Vol</string>
+    <string name="characteristics_strength_shortcut">F</string>
+    <string name="characteristics_weapon_skill_bonus_shortcut">BAC</string>
+    <string name="characteristics_initiative_bonus_shortcut">BI</string>
+    <string name="characteristics_agility_bonus_shortcut">BAgi</string>
+    <string name="characteristics_fellowship_shortcut">Soc</string>
+    <string name="characteristics_strength_bonus_shortcut">BF</string>
+    <string name="characteristics_ballistic_skill_shortcut">AB</string>
+    <string name="characteristics_weapon_skill_shortcut">AC</string>
 </resources>

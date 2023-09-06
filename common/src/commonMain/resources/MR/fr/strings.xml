@@ -690,4 +690,25 @@
     <string name="skills_messages_no_skills_in_compendium_subtext">Il n\'y a pas encore de compétences dans votre compendium.</string>
     <string name="authentication_messages_google_account_collision">Il existe déjà un compte WFRP Master associé à un compte Google donné.
 \nVoulez-vous vous connecter à ce compte à la place \?</string>
+    <string name="trappings_expression_constants_weapon_range">ArmeDePortee</string>
+    <string name="characteristics_fellowship_bonus_shortcut">BSoc</string>
+    <string name="characteristics_toughness_shortcut">E</string>
+    <string name="characteristics_intelligence_bonus_shortcut">BInt</string>
+    <string name="characteristics_initiative_shortcut">I</string>
+    <string name="trappings_expression_constants_damage_special">Spécial</string>
+    <string name="characteristics_intelligence_shortcut">Int</string>
+    <string name="characteristics_dexterity_bonus_shortcut">BDex</string>
+    <string name="characteristics_will_power_bonus_shortcut">BFM</string>
+    <string name="characteristics_agility_shortcut">Ag</string>
+    <string name="characteristics_ballistic_skill_bonus_shortcut">BCT</string>
+    <string name="characteristics_dexterity_shortcut">Dex</string>
+    <string name="characteristics_will_power_shortcut">FM</string>
+    <string name="characteristics_strength_shortcut">F</string>
+    <string name="characteristics_weapon_skill_bonus_shortcut">BCC</string>
+    <string name="characteristics_initiative_bonus_shortcut">BI</string>
+    <string name="characteristics_agility_bonus_shortcut">BAg</string>
+    <string name="characteristics_fellowship_shortcut">Soc</string>
+    <string name="characteristics_strength_bonus_shortcut">BF</string>
+    <string name="characteristics_ballistic_skill_shortcut">CT</string>
+    <string name="characteristics_weapon_skill_shortcut">CC</string>
 </resources>
