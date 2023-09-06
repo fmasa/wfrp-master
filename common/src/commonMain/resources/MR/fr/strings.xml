@@ -10,7 +10,6 @@
     <string name="encounters_messages_no_encounters_subtext">Ajoutez une première rencontre pour votre groupe.</string>
     <string name="miracles_title_add">Ajouter un miracle</string>
     <string name="npcs_button_add_npc">Ajouter un PNJ</string>
-    <string name="npcs_label_alive">En vie</string>
     <string name="skills_label_advanced">Avancé</string>
     <string name="skills_label_advances">Avancé</string>
     <string name="spells_title_add">Ajouter un sort</string>
@@ -106,12 +105,8 @@
     <string name="encounters_title_edit">Éditer la rencontre</string>
     <string name="messages_authentication_google_sign_in_failed">Échec de la connexion à Google</string>
     <string name="miracles_title_choose_compendium_miracle">Choisissez le miracle du compendium…</string>
-    <string name="npcs_label_description">Description (optionnel)</string>
     <string name="miracles_title_edit">Éditer le miracle</string>
-    <string name="npcs_label_enemy">Ennemi</string>
     <string name="npcs_messages_removal_confirmation">Voulez-vous vraiment supprimer définitivement ce PNJ \?</string>
-    <string name="npcs_title_armour">Armure</string>
-    <string name="npcs_title_characteristics">Caractéristiques</string>
     <string name="parties_messages_invitation_link_alternative">Vous pouvez également demander le lien d\'invitation à votre GM.</string>
     <string name="parties_messages_compendium_card_moved">La carte Compendium a été déplacée vers l\'onglet Monde.</string>
     <string name="parties_messages_members_will_lose_access">Tous les membres perdront leur accès.</string>
@@ -358,7 +353,6 @@
     <string name="miracles_label_name">Nom</string>
     <string name="miracles_messages_no_miracles_in_compendium">Aucun miracle</string>
     <string name="miracles_title">Miracles</string>
-    <string name="npcs_label_name">Nom</string>
     <string name="miracles_title_new">Nouveau miracle</string>
     <string name="npcs_messages_no_npcs">Aucun PNJ</string>
     <string name="npcs_title">PNJ</string>

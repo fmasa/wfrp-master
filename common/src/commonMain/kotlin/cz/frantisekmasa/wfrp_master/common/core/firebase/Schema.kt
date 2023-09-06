@@ -7,11 +7,6 @@ object Schema {
 
     object Party {
         const val Encounters = "encounters"
-
-        object Encounter {
-            // Tech debt. TODO: Rename to "npcs"
-            const val Npcs = "combatants"
-        }
     }
 
     object Character {

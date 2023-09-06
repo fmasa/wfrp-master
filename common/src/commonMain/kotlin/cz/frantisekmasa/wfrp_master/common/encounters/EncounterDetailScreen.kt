@@ -14,12 +14,10 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.CircularProgressIndicator
-import androidx.compose.material.ContentAlpha
 import androidx.compose.material.ExtendedFloatingActionButton
 import androidx.compose.material.FabPosition
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
-import androidx.compose.material.LocalContentAlpha
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Switch
@@ -31,7 +29,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Edit
 import androidx.compose.material.primarySurface
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
@@ -52,9 +49,7 @@ import cz.frantisekmasa.wfrp_master.common.core.PartyScreenModel
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.Character
 import cz.frantisekmasa.wfrp_master.common.core.domain.identifiers.CharacterId
 import cz.frantisekmasa.wfrp_master.common.core.domain.identifiers.EncounterId
-import cz.frantisekmasa.wfrp_master.common.core.domain.identifiers.NpcId
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.PartyId
-import cz.frantisekmasa.wfrp_master.common.core.shared.IO
 import cz.frantisekmasa.wfrp_master.common.core.shared.Resources
 import cz.frantisekmasa.wfrp_master.common.core.shared.drawableResource
 import cz.frantisekmasa.wfrp_master.common.core.ui.CharacterAvatar
@@ -79,8 +74,6 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.OptionsAction
 import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.SubheadBar
 import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.Subtitle
 import cz.frantisekmasa.wfrp_master.common.encounters.domain.Encounter
-import cz.frantisekmasa.wfrp_master.common.npcs.NpcCreationScreen
-import cz.frantisekmasa.wfrp_master.common.npcs.NpcDetailScreen
 import dev.icerock.moko.resources.compose.stringResource
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -229,14 +222,6 @@ class EncounterDetailScreen(
         screenModel: EncounterDetailScreenModel
     ) {
         val coroutineScope = rememberCoroutineScope { EmptyCoroutineContext + Dispatchers.IO }
-        val npcs = screenModel.npcs.collectWithLifecycle(null).value
-
-        if (npcs == null) {
-            Box(Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
-                CircularProgressIndicator()
-            }
-            return
-        }
 
         Column(
             Modifier
@@ -269,17 +254,7 @@ class EncounterDetailScreen(
 
             val navigation = LocalNavigationTransaction.current
 
-            if (npcs.isEmpty()) {
-                NpcCharacterList(encounterId.partyId, encounter, screenModel)
-            } else {
-                NpcsCard(
-                    npcs,
-                    onCreateRequest = { navigation.navigate(NpcCreationScreen(encounterId)) },
-                    onEditRequest = { navigation.navigate(NpcDetailScreen(it)) },
-                    onRemoveRequest = { screenModel.removeNpc(it) },
-                    onDuplicateRequest = { coroutineScope.launch { screenModel.duplicateNpc(it.npcId) } }
-                )
-            }
+            NpcCharacterList(encounterId.partyId, encounter, screenModel)
         }
     }
 
@@ -302,76 +277,6 @@ class EncounterDetailScreen(
             }
 
             Text(encounter.description, Modifier.padding(horizontal = 8.dp))
-        }
-    }
-
-    @Composable
-    private fun NpcsCard(
-        npcs: List<NpcListItem>,
-        onCreateRequest: () -> Unit,
-        onEditRequest: (NpcId) -> Unit,
-        onRemoveRequest: (NpcId) -> Unit,
-        onDuplicateRequest: (NpcId) -> Unit,
-    ) {
-        CardContainer(
-            Modifier
-                .fillMaxWidth()
-                .padding(8.dp)
-        ) {
-            CardTitle(stringResource(Str.npcs_title_plural))
-
-            Column(Modifier.fillMaxWidth()) {
-                NpcList(
-                    npcs,
-                    onEditRequest = onEditRequest,
-                    onRemoveRequest = onRemoveRequest,
-                    onDuplicateRequest = onDuplicateRequest,
-                )
-
-                Box(
-                    Modifier.fillMaxWidth(),
-                    contentAlignment = Alignment.TopCenter
-                ) {
-                    PrimaryButton(stringResource(Str.npcs_button_add_npc), onClick = onCreateRequest)
-                }
-            }
-        }
-    }
-
-    @Composable
-    private fun NpcList(
-        npcs: List<NpcListItem>,
-        onEditRequest: (NpcId) -> Unit,
-        onRemoveRequest: (NpcId) -> Unit,
-        onDuplicateRequest: (NpcId) -> Unit,
-    ) {
-        for (npc in npcs) {
-            val alpha = if (npc.alive) ContentAlpha.high else ContentAlpha.disabled
-
-            CompositionLocalProvider(LocalContentAlpha provides alpha) {
-                CardItem(
-                    name = npc.name,
-                    icon = {
-                        ItemIcon(
-                            if (npc.alive)
-                                Resources.Drawable.Npc
-                            else Resources.Drawable.Dead,
-                            ItemIcon.Size.Small
-                        )
-                    },
-                    onClick = { onEditRequest(npc.id) },
-                    contextMenuItems = listOf(
-                        ContextMenu.Item(
-                            text = stringResource(Str.common_ui_button_duplicate),
-                            onClick = { onDuplicateRequest(npc.id) },
-                        ),
-                        ContextMenu.Item(
-                            text = stringResource(Str.common_ui_button_remove),
-                            onClick = { onRemoveRequest(npc.id) },
-                        ),
-                    ),
-                )
-            }
         }
     }
 }

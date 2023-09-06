@@ -59,7 +59,6 @@ import cz.frantisekmasa.wfrp_master.common.core.firebase.functions.CloudFunction
 import cz.frantisekmasa.wfrp_master.common.core.firebase.repositories.FirestoreCharacterItemRepository
 import cz.frantisekmasa.wfrp_master.common.core.firebase.repositories.FirestoreCharacterRepository
 import cz.frantisekmasa.wfrp_master.common.core.firebase.repositories.FirestoreEncounterRepository
-import cz.frantisekmasa.wfrp_master.common.core.firebase.repositories.FirestoreNpcRepository
 import cz.frantisekmasa.wfrp_master.common.core.firebase.repositories.FirestorePartyRepository
 import cz.frantisekmasa.wfrp_master.common.core.firebase.repositories.FirestoreSkillRepository
 import cz.frantisekmasa.wfrp_master.common.core.serialization.UuidSerializer
@@ -67,7 +66,6 @@ import cz.frantisekmasa.wfrp_master.common.core.tips.DismissedUserTipsHolder
 import cz.frantisekmasa.wfrp_master.common.encounters.EncounterDetailScreenModel
 import cz.frantisekmasa.wfrp_master.common.encounters.EncountersScreenModel
 import cz.frantisekmasa.wfrp_master.common.encounters.domain.EncounterRepository
-import cz.frantisekmasa.wfrp_master.common.encounters.domain.NpcRepository
 import cz.frantisekmasa.wfrp_master.common.gameMaster.GameMasterScreenModel
 import cz.frantisekmasa.wfrp_master.common.invitation.InvitationScreenModel
 import cz.frantisekmasa.wfrp_master.common.invitation.domain.FirestoreInvitationProcessor
@@ -157,7 +155,6 @@ val appModule = DI.Module("Common") {
     }
 
     bindSingleton<EncounterRepository> { FirestoreEncounterRepository(instance(), mapper()) }
-    bindSingleton<NpcRepository> { FirestoreNpcRepository(instance(), mapper()) }
 
     bindSingleton<CharacterAvatarChanger> { CloudFunctionCharacterAvatarChanger(instance()) }
 
@@ -196,7 +193,7 @@ val appModule = DI.Module("Common") {
     bindFactory { partyId: PartyId -> EncountersScreenModel(partyId, instance()) }
     bindFactory { partyId: PartyId -> PartyScreenModel(partyId, instance()) }
     bindFactory { encounterId: EncounterId ->
-        EncounterDetailScreenModel(encounterId, instance(), instance(), instance(), instance())
+        EncounterDetailScreenModel(encounterId, instance(), instance(), instance())
     }
     bindFactory { characterId: CharacterId ->
         SkillsScreenModel(characterId, instance(), instance(), instance(), instance())
@@ -308,7 +305,6 @@ val appModule = DI.Module("Common") {
         CombatScreenModel(
             partyId,
             Random,
-            instance(),
             instance(),
             instance(),
             instance(),

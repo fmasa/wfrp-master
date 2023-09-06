@@ -254,42 +254,6 @@ service cloud.firestore {
                               && isGameMaster();
                 allow delete: if hasAccessToParty() && isGameMaster();
 
-                match /combatants/{npcId} {
-                    allow read: if hasAccessToParty();
-
-                    allow create: if isValidNpc(request.resource.data)
-                                && hasAccessToParty()
-                                && isGameMaster();
-                    allow update: if isValidNpc(request.resource.data)
-                                && hasAccessToParty()
-                                && isGameMaster();
-                    allow delete: if hasAccessToParty() && isGameMaster();
-
-                    function isValidNpc(npc) {
-                        return npc is map
-                            && ["id", "name", "note", "wounds", "stats", "armor", "enemy", "alive", "traits", "trappings", "position", "conditions"].hasAll(npc.keys())
-                            && npc.id is string && isValidUuid(npc.id) && npc.id == npcId
-                            && npc.name is string && isNotBlank(npc.name) && npc.name.size() <= 100
-                            && npc.note is string && npc.note.size() <= 400
-                            && areValidWounds(npc.wounds)
-                            && areStatsValid(npc.stats)
-                            && isArmorValid(npc.armor)
-                            && npc.enemy is bool
-                            && npc.alive is bool
-                            && npc.traits is list
-                            && npc.trappings is list
-                            && (! ("conditions" in npc) || areValidConditions(npc.conditions))
-                            && npc.position is number && npc.position >= 0;
-                    }
-
-                    function areValidWounds(wounds) {
-                        return wounds is map
-                           && wounds.keys().toSet() == ["max", "current"].toSet()
-                           && wounds.max is int && wounds.max > 0
-                           && wounds.current is int && wounds.current >= 0 && wounds.current <= wounds.max;
-                    }
-                }
-
                 function isValidEncounter(encounter) {
                     return encounter is map
                         && ["id", "name", "description", "position", "completed", "characters"].hasAll(encounter.keys())
@@ -855,7 +819,7 @@ service cloud.firestore {
                     && request.resource.data.users.toSet() == resource.data.users.toSet()
                     && userId in request.resource.data.users
                     && isValidCombat(combat)
-                    && combat.diff(oldCombat).affectedKeys() == ["combatants"].toSet();
+                    && ["combatants"].toSet().hasAll(combat.diff(oldCombat).affectedKeys());
             }
         }
 
