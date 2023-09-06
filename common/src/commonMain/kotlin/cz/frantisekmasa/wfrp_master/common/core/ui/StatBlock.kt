@@ -222,7 +222,7 @@ private fun CompactCharacteristicsTable(characteristics: Stats) {
                     horizontalAlignment = Alignment.CenterHorizontally,
                 ) {
                     Text(
-                        text = characteristic.getShortcutName(),
+                        text = stringResource(characteristic.shortcut),
                         modifier = Modifier.padding(vertical = Spacing.tiny)
                     )
 

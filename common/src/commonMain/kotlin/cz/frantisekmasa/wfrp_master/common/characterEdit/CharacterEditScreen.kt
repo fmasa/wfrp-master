@@ -124,10 +124,11 @@ data class CharacterEditScreen(
                         text = { Text(stringResource(Str.character_title_characteristics)) },
                         modifier = Modifier.clickable { openSection(Section.CHARACTERISTICS) },
                         secondaryText = {
+                            @Suppress("SimplifiableCallChain") // stringResource() is composable
                             Text(
-                                remember {
-                                    Characteristic.values().joinToString { it.getShortcutName() }
-                                }
+                                Characteristic.values()
+                                    .map { stringResource(it.shortcut) }
+                                    .joinToString(", ")
                             )
                         }
                     )

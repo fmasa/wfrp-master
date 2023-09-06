@@ -50,13 +50,23 @@ value class AdvantageCapExpression(val value: String) : Parcelable {
 
         fun isValid(value: String) = runCatching { AdvantageCapExpression(value) }.isSuccess
         fun constantsFrom(characteristics: Stats): Map<String, Int> {
-            return Characteristic.values()
-                .flatMap {
-                    listOf(
-                        it.getShortcutName() to characteristics.get(it),
-                        it.getShortcutName() + "B" to characteristics.getBonus(it),
-                    )
-                }.toMap()
+            return sequenceOf(
+                "Ag" to Characteristic.AGILITY,
+                "BS" to Characteristic.BALLISTIC_SKILL,
+                "Dex" to Characteristic.DEXTERITY,
+                "I" to Characteristic.INITIATIVE,
+                "Int" to Characteristic.INTELLIGENCE,
+                "Fel" to Characteristic.FELLOWSHIP,
+                "S" to Characteristic.STRENGTH,
+                "T" to Characteristic.TOUGHNESS,
+                "WS" to Characteristic.WEAPON_SKILL,
+                "WP" to Characteristic.WILL_POWER,
+            ).flatMap { (shortcut, characteristic) ->
+                sequenceOf(
+                    shortcut to characteristics.get(characteristic),
+                    shortcut + "B" to characteristics.getBonus(characteristic),
+                )
+            }.toMap()
         }
     }
 }

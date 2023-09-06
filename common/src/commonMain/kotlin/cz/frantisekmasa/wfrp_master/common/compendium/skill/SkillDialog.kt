@@ -72,7 +72,7 @@ fun SkillDialog(
             ChipList(
                 label = stringResource(Str.skills_label_characteristic),
                 items = Characteristic.values()
-                    .map { it to it.getShortcutName() },
+                    .map { it to stringResource(it.shortcut) },
                 value = formData.characteristic.value,
                 onValueChange = { formData.characteristic.value = it }
             )

@@ -2,7 +2,7 @@ package cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.parsers
 
 import com.benasher44.uuid.uuid4
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.Skill
-import cz.frantisekmasa.wfrp_master.common.core.domain.Characteristic
+import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.parsers.careers.CareerCharacteristicsParser
 
 class SkillParser {
 
@@ -23,8 +23,9 @@ class SkillParser {
 
         while (stream.peek() != null) {
             val name = stream.consumeOneOfType<Token.Heading3>().text.trim()
-            val characteristic = characteristics.getValue(
+            val characteristic = CareerCharacteristicsParser.CHARACTERISTICS.getValue(
                 stream.consumeOneOfType<Token.BoldPart>().text.trim('(', ')', ' ')
+                    .lowercase()
             )
 
             val skillType = stream.consumeOneOfType<Token.BoldPart>().text.trim(' ', ')', '\n')
@@ -73,10 +74,5 @@ class SkillParser {
         return description to specialisationsList.text
             .splitToSequence(',')
             .map { " (${it.trim()})" }
-    }
-
-    companion object {
-        private val characteristics = Characteristic
-            .values().associateBy { it.getShortcutName() }
     }
 }

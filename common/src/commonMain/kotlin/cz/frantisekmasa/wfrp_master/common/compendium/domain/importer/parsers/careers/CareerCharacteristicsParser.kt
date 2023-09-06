@@ -29,20 +29,6 @@ class CareerCharacteristicsParser(
     private val document: Document,
     private val structure: PdfStructure,
 ) {
-    private val characteristics = mapOf(
-        "agi" to Characteristic.AGILITY,
-        "ag" to Characteristic.AGILITY,
-        "bs" to Characteristic.BALLISTIC_SKILL,
-        "dex" to Characteristic.DEXTERITY,
-        "i" to Characteristic.INITIATIVE,
-        "int" to Characteristic.INTELLIGENCE,
-        "fel" to Characteristic.FELLOWSHIP,
-        "s" to Characteristic.STRENGTH,
-        "t" to Characteristic.TOUGHNESS,
-        "ws" to Characteristic.WEAPON_SKILL,
-        "wp" to Characteristic.WILL_POWER,
-    )
-
     fun findCharacteristics(pageNumber: Int): List<UpgradableCharacteristic> {
         val stripper = TextStripper()
         stripper.setStartPage(pageNumber)
@@ -120,7 +106,7 @@ class CareerCharacteristicsParser(
             )
 
             if (type is Token.TableHeadCell || type is Token.TableHeading) {
-                val characteristic = characteristics[text.lowercase()] ?: return
+                val characteristic = CHARACTERISTICS[text.lowercase()] ?: return
 
                 characteristicCells += CharacteristicCell(
                     characteristic,
@@ -169,6 +155,20 @@ class CareerCharacteristicsParser(
             listOf(0.779f, 0.785f, 0.793f) to Color.SILVER,
             listOf(0.765f, 0.515f, 0.346f) to Color.BRONZE,
             listOf(1.0f, 0.889f, 0.0f) to Color.GOLD,
+        )
+
+        val CHARACTERISTICS = mapOf(
+            "agi" to Characteristic.AGILITY,
+            "ag" to Characteristic.AGILITY,
+            "bs" to Characteristic.BALLISTIC_SKILL,
+            "dex" to Characteristic.DEXTERITY,
+            "i" to Characteristic.INITIATIVE,
+            "int" to Characteristic.INTELLIGENCE,
+            "fel" to Characteristic.FELLOWSHIP,
+            "s" to Characteristic.STRENGTH,
+            "t" to Characteristic.TOUGHNESS,
+            "ws" to Characteristic.WEAPON_SKILL,
+            "wp" to Characteristic.WILL_POWER,
         )
     }
 }

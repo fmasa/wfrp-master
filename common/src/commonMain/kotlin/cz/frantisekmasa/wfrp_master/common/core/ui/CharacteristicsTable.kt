@@ -13,6 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import cz.frantisekmasa.wfrp_master.common.core.domain.Characteristic
 import cz.frantisekmasa.wfrp_master.common.core.domain.Stats
+import dev.icerock.moko.resources.compose.stringResource
 
 @Composable
 fun CharacteristicsTable(characteristics: Stats) {
@@ -47,7 +48,7 @@ fun CharacteristicsTable(characteristics: Stats) {
 @Composable
 private fun CharacteristicItem(characteristic: Characteristic, value: Int) {
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
-        Text(characteristic.getShortcutName(), style = MaterialTheme.typography.subtitle1)
+        Text(stringResource(characteristic.shortcut), style = MaterialTheme.typography.subtitle1)
         Text(
             value.toString(),
             Modifier.padding(vertical = 12.dp),
