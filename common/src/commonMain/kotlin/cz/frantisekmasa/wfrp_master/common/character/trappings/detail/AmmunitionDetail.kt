@@ -51,9 +51,9 @@ fun AmmunitionDetailBody(
                 characterTrapping = characterTrapping,
             )
 
-            SingleLineTextValue(stringResource(Str.weapons_label_damage), damage.value)
+            SingleLineTextValue(stringResource(Str.weapons_label_damage), damage.formatted())
 
-            SingleLineTextValue(stringResource(Str.weapons_label_range), range.value)
+            SingleLineTextValue(stringResource(Str.weapons_label_range), range.formatted())
 
             val weaponGroupsNames = weaponGroups.map { it.localizedName }
             SingleLineTextValue(

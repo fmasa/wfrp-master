@@ -60,7 +60,7 @@ fun RangedWeaponDetailBody(
 
             SingleLineTextValue(
                 stringResource(Str.weapons_label_range),
-                range.value,
+                range.formatted(),
             )
 
             TrappingFeatures(qualities, flaws)

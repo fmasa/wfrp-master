@@ -1,6 +1,9 @@
 package cz.frantisekmasa.wfrp_master.common.core.domain
 
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
+import androidx.compose.runtime.Stable
+import androidx.compose.runtime.remember
 import com.github.h0tk3y.betterParse.combinators.leftAssociative
 import com.github.h0tk3y.betterParse.combinators.map
 import com.github.h0tk3y.betterParse.combinators.optional
@@ -25,12 +28,43 @@ class InvalidExpression(cause: Throwable?) : Exception(cause)
 @Immutable
 interface Expression : Parcelable {
     companion object {
+        private val CONSTANT_REGEX = Regex("(?<![a-zA-Z0-9])[a-zA-Z]+(?![a-zA-Z0-9])")
+
         fun fromString(text: String, constants: Map<String, Int> = emptyMap()): Expression =
             try {
                 RollExpressionGrammar(constants).parseToEnd(text)
             } catch (e: ParseException) {
                 throw InvalidExpression(e)
             }
+
+        fun substituteConstants(expression: String, substitutions: Map<String, String>): String {
+            return expression.replace(CONSTANT_REGEX) { substitutions[it.value] ?: it.value }
+        }
+
+        @Composable
+        @Stable
+        inline fun <reified T> formatter(): (String) -> String where T : Enum<T>, T : Constant {
+            val substitutions = enumValues<T>().associate { it.value to it.localizedName }
+
+            return remember(substitutions) {
+                { substituteConstants(it, substitutions) }
+            }
+        }
+
+        @Composable
+        @Stable
+        inline fun <reified T> normalizer(): (String) -> String where T : Enum<T>, T : Constant {
+            val substitutions = enumValues<T>().associate { it.localizedName to it.value }
+
+            return remember(substitutions) {
+                { substituteConstants(it.trim(), substitutions) }
+            }
+        }
+    }
+
+    @Immutable
+    interface Constant : NamedEnum {
+        val value: String
     }
 
     fun evaluate(): Int

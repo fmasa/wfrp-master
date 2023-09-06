@@ -10,17 +10,18 @@ import dev.icerock.moko.resources.StringResource
 @Immutable
 enum class Characteristic(
     override val translatableName: StringResource,
+    val shortcut: StringResource,
 ) : NamedEnum {
-    AGILITY(Str.characteristics_agility),
-    BALLISTIC_SKILL(Str.characteristics_ballistic_skill),
-    DEXTERITY(Str.characteristics_dexterity),
-    INITIATIVE(Str.characteristics_initiative),
-    INTELLIGENCE(Str.characteristics_intelligence),
-    FELLOWSHIP(Str.characteristics_fellowship),
-    STRENGTH(Str.characteristics_strength),
-    TOUGHNESS(Str.characteristics_toughness),
-    WEAPON_SKILL(Str.characteristics_weapon_skill),
-    WILL_POWER(Str.characteristics_will_power);
+    AGILITY(Str.characteristics_agility, Str.characteristics_agility_shortcut),
+    BALLISTIC_SKILL(Str.characteristics_ballistic_skill, Str.characteristics_ballistic_skill_shortcut),
+    DEXTERITY(Str.characteristics_dexterity, Str.characteristics_dexterity_shortcut),
+    INITIATIVE(Str.characteristics_initiative, Str.characteristics_initiative_shortcut),
+    INTELLIGENCE(Str.characteristics_intelligence, Str.characteristics_intelligence_shortcut),
+    FELLOWSHIP(Str.characteristics_fellowship, Str.characteristics_fellowship_shortcut),
+    STRENGTH(Str.characteristics_strength, Str.characteristics_strength_shortcut),
+    TOUGHNESS(Str.characteristics_toughness, Str.characteristics_toughness_shortcut),
+    WEAPON_SKILL(Str.characteristics_weapon_skill, Str.characteristics_weapon_skill_shortcut),
+    WILL_POWER(Str.characteristics_will_power, Str.characteristics_will_power_shortcut);
 
     @Stable
     fun getShortcutName(): String {

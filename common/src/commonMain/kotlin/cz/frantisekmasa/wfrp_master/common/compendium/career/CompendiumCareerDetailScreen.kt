@@ -326,7 +326,7 @@ private fun LevelList(
                                     }
 
                                     characteristics.forEachIndexed { index, characteristic ->
-                                        append(characteristic.getShortcutName())
+                                        append(stringResource(characteristic.shortcut))
 
                                         if (index != characteristics.lastIndex) {
                                             append(", ")

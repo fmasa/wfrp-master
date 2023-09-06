@@ -32,6 +32,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
+import cz.frantisekmasa.wfrp_master.common.core.domain.Expression
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
 
 interface Filter {
@@ -201,8 +202,10 @@ private fun TextInput(
 class InputValue(
     state: MutableState<String>,
     internal val rules: Rules,
+    private val normalize: (String) -> String = { it.trim() },
 ) {
     var value: String by state
+    val normalizedValue get() = normalize(value)
 
     fun isValid() = rules.errorMessage(value) == null
 
@@ -219,3 +222,23 @@ fun inputValue(default: String, vararg rules: Rule) = InputValue(
     rememberSaveable { mutableStateOf(default) },
     Rules(*rules),
 )
+
+@Composable
+@Stable
+inline fun <reified T> expressionInputValue(
+    default: String,
+    vararg rules: Rule,
+): InputValue where T : Enum<T>, T : Expression.Constant {
+    val format = Expression.formatter<T>()
+    val normalize = Expression.normalizer<T>()
+
+    return InputValue(
+        rememberSaveable { mutableStateOf(format(default)) },
+        Rules(
+            *rules
+                .map { RuleWrapper(it, normalize) }
+                .toTypedArray(),
+        ),
+        normalize = normalize,
+    )
+}

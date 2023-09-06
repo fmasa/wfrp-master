@@ -1,9 +1,12 @@
 package cz.frantisekmasa.wfrp_master.common.core.ui.forms
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Immutable
+import androidx.compose.runtime.Stable
 import cz.frantisekmasa.wfrp_master.common.Str
 import dev.icerock.moko.resources.compose.stringResource
 
+@Immutable
 class Rules(private vararg val rules: Rule) : Rule {
     companion object {
         val NoRules = Rules()
@@ -51,6 +54,7 @@ class Rules(private vararg val rules: Rule) : Rule {
     }
 }
 
+@Immutable
 fun interface Rule {
     /**
      * Returns error message if text value is invalid or null if it's valid
@@ -58,7 +62,18 @@ fun interface Rule {
     fun errorMessage(value: String): String?
 }
 
-private data class CallbackRule(
+@Immutable
+data class RuleWrapper(
+    val rule: Rule,
+    val preprocessor: (String) -> String,
+) : Rule {
+    override fun errorMessage(value: String): String? {
+        return rule.errorMessage(preprocessor(value))
+    }
+}
+
+@Immutable
+data class CallbackRule(
     val errorMessage: String,
     val validate: (String) -> Boolean,
 ) : Rule {
@@ -66,6 +81,7 @@ private data class CallbackRule(
 }
 
 @Composable
+@Stable
 fun rule(errorMessage: String, validate: (String) -> Boolean): Rule = CallbackRule(
     errorMessage,
     validate,

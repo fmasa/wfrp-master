@@ -47,6 +47,7 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.forms.NumberPicker
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.Rules
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.SelectBox
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.TextInput
+import cz.frantisekmasa.wfrp_master.common.core.ui.forms.expressionInputValue
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.inputValue
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.rule
 import dev.icerock.moko.resources.StringResource
@@ -455,10 +456,10 @@ private class TrappingTypeFormData(
     override fun toValue(): TrappingType? = when (type.value) {
         TrappingTypeOption.AMMUNITION -> TrappingType.Ammunition(
             weaponGroups = ammunitionWeaponGroups.value,
-            range = AmmunitionRangeExpression(ammunitionRange.value),
+            range = AmmunitionRangeExpression(ammunitionRange.normalizedValue),
             qualities = weaponQualities.toMap(),
             flaws = weaponFlaws.toMap(),
-            damage = DamageExpression(damage.value.trim()),
+            damage = DamageExpression(damage.normalizedValue),
         )
         TrappingTypeOption.ARMOUR -> TrappingType.Armour(
             locations = armourLocations.value,
@@ -482,7 +483,7 @@ private class TrappingTypeFormData(
         TrappingTypeOption.MELEE_WEAPON -> TrappingType.MeleeWeapon(
             group = meleeWeaponGroup.value,
             reach = weaponReach.value,
-            damage = DamageExpression(damage.value.trim()),
+            damage = DamageExpression(damage.normalizedValue),
             qualities = weaponQualities.toMap(),
             flaws = weaponFlaws.toMap(),
             equipped = weaponEquipped.value,
@@ -490,8 +491,8 @@ private class TrappingTypeFormData(
         TrappingTypeOption.PROSTHETIC -> TrappingType.Prosthetic(worn = worn.value)
         TrappingTypeOption.RANGED_WEAPON -> TrappingType.RangedWeapon(
             group = rangedWeaponGroup.value,
-            range = WeaponRangeExpression(weaponRange.value),
-            damage = DamageExpression(damage.value.trim()),
+            range = WeaponRangeExpression(weaponRange.normalizedValue),
+            damage = DamageExpression(damage.normalizedValue),
             qualities = weaponQualities.toMap(),
             flaws = weaponFlaws.toMap(),
             equipped = weaponEquipped.value,
@@ -597,7 +598,7 @@ private class TrappingTypeFormData(
                 ),
                 armourQualities = remember { stateMapFrom(armourQualities) },
                 armourFlaws = remember { stateMapFrom(armourFlaws) },
-                ammunitionRange = inputValue(
+                ammunitionRange = expressionInputValue<AmmunitionRangeExpression.Constant>(
                     ammunitionRange?.value ?: "",
                     Rules.NotBlank(),
                     rule(invalidExpressionMessage, AmmunitionRangeExpression::isValid)
@@ -605,7 +606,7 @@ private class TrappingTypeFormData(
                 ammunitionWeaponGroups = rememberSaveable { mutableStateOf(ammunitionWeaponGroups) },
                 armourType = rememberSaveable { mutableStateOf(armourType) },
                 carries = inputValue(carries?.toString() ?: "", Rules.NonNegativeInteger()),
-                damage = inputValue(
+                damage = expressionInputValue<DamageExpression.Constant>(
                     damage?.value ?: "",
                     Rules.NotBlank(),
                     rule(invalidExpressionMessage, DamageExpression::isValid),
@@ -615,7 +616,7 @@ private class TrappingTypeFormData(
                 weaponEquipped = rememberSaveable { mutableStateOf(weaponEquipped) },
                 weaponFlaws = remember { stateMapFrom(weaponFlaws) },
                 weaponQualities = remember { stateMapFrom(weaponQualities) },
-                weaponRange = inputValue(
+                weaponRange = expressionInputValue<WeaponRangeExpression.Constant>(
                     weaponRange?.value ?: "",
                     Rules.NotBlank(),
                     rule(invalidExpressionMessage, WeaponRangeExpression::isValid),

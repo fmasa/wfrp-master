@@ -368,7 +368,7 @@ private fun CharacteristicsCard(values: Stats) {
                             horizontalAlignment = Alignment.CenterHorizontally,
                         ) {
                             Text(
-                                characteristic.getShortcutName(),
+                                stringResource(characteristic.shortcut),
                                 style = MaterialTheme.typography.caption,
                             )
                             Text(

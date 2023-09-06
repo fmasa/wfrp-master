@@ -1,6 +1,7 @@
 package cz.frantisekmasa.wfrp_master.common.core.domain
 
 import kotlin.test.Test
+import kotlin.test.assertEquals
 import kotlin.test.assertSame
 import kotlin.test.assertTrue
 
@@ -71,6 +72,15 @@ class ExpressionTest {
         assertThrowsExpressionError("MAX()")
     }
 
+    @Test
+    fun `test constant substitution`() {
+        assertEquals("c + y + 3d10", "c + d + 3d10".substitute("d" to "y"))
+        assertEquals("IB + y + 1", "IB + I + 1".substitute("I" to "y"))
+        assertEquals("b + x", "a + x".substitute("a" to "b", "b" to "c"))
+        assertEquals("MAX(y)", "MAX(M)".substitute("M" to "y"))
+        assertEquals("x + y", "x + y".substitute("x" to "x"))
+    }
+
     private fun assertThrowsExpressionError(expression: String) {
         assertTrue(
             try {
@@ -84,4 +94,7 @@ class ExpressionTest {
     }
 
     private fun String.evaluate() = Expression.fromString(this).evaluate()
+    private fun String.substitute(vararg substitutions: Pair<String, String>): String {
+        return Expression.substituteConstants(this, substitutions.toMap())
+    }
 }
