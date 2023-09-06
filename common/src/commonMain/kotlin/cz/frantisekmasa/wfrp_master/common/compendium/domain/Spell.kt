@@ -3,7 +3,7 @@ package cz.frantisekmasa.wfrp_master.common.compendium.domain
 import androidx.compose.runtime.Immutable
 import com.benasher44.uuid.Uuid
 import com.benasher44.uuid.uuid4
-import cz.frantisekmasa.wfrp_master.common.core.shared.Parcelize
+import dev.icerock.moko.parcelize.Parcelize
 import kotlinx.serialization.Contextual
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable

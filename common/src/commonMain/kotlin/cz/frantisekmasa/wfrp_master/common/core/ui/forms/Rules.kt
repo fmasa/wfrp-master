@@ -30,7 +30,6 @@ class Rules(private vararg val rules: Rule) : Rule {
          * - Do not have *unexpected* validation rules for user
          */
         fun withEmptyMessage(rule: Rule) = Rule { if (rule.errorMessage(it) != null) "" else null }
-        fun withEmptyMessage(validate: (String) -> Boolean): Rule = CallbackRule("", validate)
 
         fun IfNotBlank(rule: Rule): Rule = Rule {
             if (it.isBlank()) {

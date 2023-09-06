@@ -8,8 +8,8 @@ import cz.frantisekmasa.wfrp_master.common.core.domain.Expression
 import cz.frantisekmasa.wfrp_master.common.core.domain.NamedEnum
 import cz.frantisekmasa.wfrp_master.common.core.domain.Stats
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.combat.Advantage
-import cz.frantisekmasa.wfrp_master.common.core.shared.Parcelable
-import cz.frantisekmasa.wfrp_master.common.core.shared.Parcelize
+import dev.icerock.moko.parcelize.Parcelable
+import dev.icerock.moko.parcelize.Parcelize
 import dev.icerock.moko.resources.StringResource
 import kotlinx.serialization.Serializable
 import kotlin.jvm.JvmInline

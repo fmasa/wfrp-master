@@ -24,7 +24,6 @@ import cz.frantisekmasa.wfrp_master.common.core.domain.character.Character
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.Condition
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.CurrentConditions
 import cz.frantisekmasa.wfrp_master.common.core.domain.localizedName
-import cz.frantisekmasa.wfrp_master.common.core.shared.IO
 import cz.frantisekmasa.wfrp_master.common.core.shared.Resources
 import cz.frantisekmasa.wfrp_master.common.core.shared.drawableResource
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.NumberPicker

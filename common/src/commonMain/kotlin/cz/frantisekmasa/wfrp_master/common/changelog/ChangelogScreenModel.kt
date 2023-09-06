@@ -2,8 +2,8 @@ package cz.frantisekmasa.wfrp_master.common.changelog
 
 import androidx.compose.runtime.Immutable
 import cafe.adriel.voyager.core.model.ScreenModel
-import cz.frantisekmasa.wfrp_master.common.core.shared.Parcelable
-import cz.frantisekmasa.wfrp_master.common.core.shared.Parcelize
+import dev.icerock.moko.parcelize.Parcelable
+import dev.icerock.moko.parcelize.Parcelize
 import io.github.aakira.napier.Napier
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body

@@ -9,7 +9,7 @@ import cz.frantisekmasa.wfrp_master.common.character.effects.CharacteristicChang
 import cz.frantisekmasa.wfrp_master.common.character.effects.HardyWoundsModification
 import cz.frantisekmasa.wfrp_master.common.core.common.requireMaxLength
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.CharacterItem
-import cz.frantisekmasa.wfrp_master.common.core.shared.Parcelize
+import dev.icerock.moko.parcelize.Parcelize
 import kotlinx.serialization.Contextual
 import kotlinx.serialization.Serializable
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.Talent as CompendiumTalent

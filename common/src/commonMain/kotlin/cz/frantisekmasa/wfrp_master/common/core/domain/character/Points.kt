@@ -4,7 +4,6 @@ import cz.frantisekmasa.wfrp_master.common.Str
 import cz.frantisekmasa.wfrp_master.common.core.domain.NamedEnum
 import dev.icerock.moko.resources.StringResource
 import kotlinx.serialization.Serializable
-import kotlin.math.min
 
 @Serializable
 data class Points(
@@ -30,11 +29,6 @@ data class Points(
         require(experience >= 0)
         require(spentExperience >= 0)
     }
-
-    fun withFate(newFate: Int) = copy(
-        fate = newFate,
-        fortune = min(fortune, newFate)
-    )
 
     fun modify(pool: PointPool, value: Int): Result<Points> {
         return runCatching {

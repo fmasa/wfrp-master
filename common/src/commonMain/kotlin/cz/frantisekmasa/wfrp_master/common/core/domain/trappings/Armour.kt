@@ -3,8 +3,8 @@ package cz.frantisekmasa.wfrp_master.common.core.domain.trappings
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.Stable
 import cz.frantisekmasa.wfrp_master.common.core.domain.HitLocation
-import cz.frantisekmasa.wfrp_master.common.core.shared.Parcelable
-import cz.frantisekmasa.wfrp_master.common.core.shared.Parcelize
+import dev.icerock.moko.parcelize.Parcelable
+import dev.icerock.moko.parcelize.Parcelize
 import kotlinx.serialization.Serializable
 
 @Parcelize
@@ -24,11 +24,6 @@ data class Armour(
         listOf(head, body, leftArm, rightArm, leftLeg, rightLeg, shield).forEach {
             require(it in 0..99)
         }
-    }
-
-    @Stable
-    fun isZero(): Boolean {
-        return shield == 0 && HitLocation.values().all { armourPoints(it).value == 0 }
     }
 
     @Stable
@@ -54,8 +49,6 @@ data class Armour(
     )
 
     companion object {
-        const val MAX_VALUE = 99
-
         fun fromItems(items: List<InventoryItem>): Armour =
             fromArmourPieces(items) + fromWornShields(items)
 

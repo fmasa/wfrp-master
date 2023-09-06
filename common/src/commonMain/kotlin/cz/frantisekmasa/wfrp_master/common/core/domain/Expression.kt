@@ -20,8 +20,8 @@ import com.github.h0tk3y.betterParse.lexer.regexToken
 import com.github.h0tk3y.betterParse.parser.ParseException
 import com.github.h0tk3y.betterParse.parser.Parser
 import cz.frantisekmasa.wfrp_master.common.core.domain.rolls.Dice
-import cz.frantisekmasa.wfrp_master.common.core.shared.Parcelable
-import cz.frantisekmasa.wfrp_master.common.core.shared.Parcelize
+import dev.icerock.moko.parcelize.Parcelable
+import dev.icerock.moko.parcelize.Parcelize
 
 class InvalidExpression(cause: Throwable?) : Exception(cause)
 

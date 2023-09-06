@@ -2,8 +2,8 @@ package cz.frantisekmasa.wfrp_master.common.core.domain.party.combat
 
 import androidx.compose.runtime.Immutable
 import com.benasher44.uuid.Uuid
-import cz.frantisekmasa.wfrp_master.common.core.shared.Parcelable
-import cz.frantisekmasa.wfrp_master.common.core.shared.Parcelize
+import dev.icerock.moko.parcelize.Parcelable
+import dev.icerock.moko.parcelize.Parcelize
 import kotlinx.serialization.Contextual
 import kotlinx.serialization.Serializable
 

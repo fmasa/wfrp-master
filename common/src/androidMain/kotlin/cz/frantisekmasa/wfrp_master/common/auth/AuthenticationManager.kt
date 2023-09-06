@@ -75,8 +75,6 @@ class AuthenticationManager(private val auth: FirebaseAuth) : UserProvider {
         }
     }
 
-    fun isAuthenticated() = auth.currentUser != null
-
     suspend fun signInWithGoogleToken(idToken: String): Boolean {
         val credential = GoogleAuthProvider.getCredential(idToken, null)
 
@@ -161,8 +159,6 @@ class AuthenticationManager(private val auth: FirebaseAuth) : UserProvider {
             false
         }
     }
-
-    fun getUserId() = auth.currentUser?.uid ?: error("User is not authenticated")
 
     private fun googleClient(context: Context, webClientId: String) = GoogleSignIn.getClient(
         context,

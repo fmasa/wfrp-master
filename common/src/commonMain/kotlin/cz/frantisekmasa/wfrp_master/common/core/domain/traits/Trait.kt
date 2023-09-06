@@ -9,7 +9,7 @@ import cz.frantisekmasa.wfrp_master.common.character.effects.ConstructWoundsModi
 import cz.frantisekmasa.wfrp_master.common.character.effects.SizeChange
 import cz.frantisekmasa.wfrp_master.common.character.effects.SwarmWoundsModification
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.CharacterItem
-import cz.frantisekmasa.wfrp_master.common.core.shared.Parcelize
+import dev.icerock.moko.parcelize.Parcelize
 import kotlinx.serialization.Contextual
 import kotlinx.serialization.Serializable
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.Trait as CompendiumTrait
