@@ -43,10 +43,17 @@ interface Expression : Parcelable {
 
 @Parcelize
 @Immutable
-private data class DiceRoll(private val sides: Int) : Expression {
-    override fun evaluate() = Dice(sides).roll()
+private data class DiceRoll(
+    private val count: Int,
+    private val sides: Int,
+) : Expression {
+    override fun evaluate(): Int {
+        val dice = Dice(sides)
+
+        return (0 until count).sumOf { dice.roll() }
+    }
     override fun isDeterministic() = false
-    override fun toString(): String = "d$sides"
+    override fun toString(): String = "${count}d$sides"
 }
 
 @Parcelize
@@ -148,8 +155,8 @@ private class RollExpressionGrammar(val constants: Map<String, Int>) : Grammar<E
     val comma by literalToken(",")
 
     private val diceTerm by dice use {
-        val (multiplier, sides) = text.split('d')
-        Multiplication(IntegerLiteral(multiplier.toInt()), DiceRoll(sides.toInt()))
+        val (count, sides) = text.split('d')
+        DiceRoll(count.toInt(), sides.toInt())
     }
 
     val term by diceTerm or
