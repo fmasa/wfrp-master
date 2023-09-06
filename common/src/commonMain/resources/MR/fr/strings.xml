@@ -93,7 +93,7 @@
     <string name="conditions_deafened">Sourds</string>
     <string name="conditions_entangled">Enchevêtré</string>
     <string name="conditions_fatigued">Fatigué</string>
-    <string name="conditions_ablaze">Incendie</string>
+    <string name="conditions_ablaze">En flammes</string>
     <string name="encounters_label_completed">Complété</string>
     <string name="encounters_label_description">Description (optionnel)</string>
     <string name="encounters_button_add">Ajouter une rencontre</string>
@@ -124,7 +124,7 @@
     <string name="permissions_messages_camera_permission_rationale">L\'accès à l\'appareil photo est nécessaire pour te permettre de scanner les codes QR avec les invitations à la fête.</string>
     <string name="points_corruption">Points de corruption</string>
     <string name="points_fate">Destin</string>
-    <string name="points_fortune">Fortune</string>
+    <string name="points_fortune">Chance</string>
     <string name="points_label_hardy">Dur (Augmente les blessures maximales de TB)</string>
     <string name="points_spent_experience">%d dépensé</string>
     <string name="races_gnome">Gnome</string>
@@ -180,8 +180,8 @@
     <string name="trappings_money_add">Ajouter</string>
     <string name="trappings_money_balance">Équilibre</string>
     <string name="trappings_money_messages_not_enough_money">Le personnage n\'a pas assez d\'argent</string>
-    <string name="trappings_money_crowns">Couronnes</string>
-    <string name="trappings_money_gold_coins_shortcut">C</string>
+    <string name="trappings_money_crowns">Couronne d\'or</string>
+    <string name="trappings_money_gold_coins_shortcut">co</string>
     <string name="trappings_types_ammunition">Munitions</string>
     <string name="trappings_types_armour">Armure</string>
     <string name="trappings_types_book_or_document">Livres et documents</string>
@@ -225,14 +225,14 @@
     <string name="character_title_basics">Principes de base</string>
     <string name="about_title_attribution">Attribution</string>
     <string name="points_auto_max_wounds_placeholder">Auto</string>
-    <string name="social_status_brass">Cuivre</string>
+    <string name="social_status_brass">Bronze</string>
     <string name="careers_messages_level_with_name_exists">Le niveau de carrière portant le même nom existe déjà</string>
     <string name="social_classes_burghers">Bourgeois</string>
     <string name="permissions_camera_denied">Autorisation d\'appareil photo requise</string>
     <string name="permissions_camera_required">Autorisation d\'appareil photo requise</string>
     <string name="spells_label_casting_number">Valeur de lancement (VL)</string>
     <string name="changelog_could_not_load">L\'historique de modification n\'a pas pu être chargé</string>
-    <string name="changelog_title">Historique de modification</string>
+    <string name="changelog_title">Patch note</string>
     <string name="character_messages_no_equipped_weapons_sub_text">Le personnage n\'a pas d\'arme équipée</string>
     <string name="skills_messages_character_has_no_skills">Le personnage n\'a aucune compétence.</string>
     <string name="blessings_messages_character_has_no_blessings">Le personnage ne connaît pas de bénédiction.</string>
@@ -296,7 +296,7 @@
     <string name="combat_initiative_strategies_initiative_plus_1d10">Initiative + 1d10</string>
     <string name="ambition_label_long_term">Long terme</string>
     <string name="armour_label_locations">Localisation</string>
-    <string name="armour_types_mail">Mail</string>
+    <string name="armour_types_mail">Maille</string>
     <string name="armour_types_other">Autre</string>
     <string name="authentication_messages_invalid_email">Email invalide</string>
     <string name="blessings_label_name">Nom</string>
@@ -413,7 +413,7 @@
     <string name="trappings_label_pack_size">Taille du paquet</string>
     <string name="trappings_qualities_lightweight">Poids léger</string>
     <string name="trappings_messages_no_trappings_in_compendium">Aucun objets</string>
-    <string name="trappings_money_brass_pennies_shortcut">p</string>
+    <string name="trappings_money_brass_pennies_shortcut">sc</string>
     <string name="trappings_types_melee_weapon">Armes de mêlée</string>
     <string name="trappings_types_miscellaneous">Divers</string>
     <string name="validation_non_negative">Doit être supérieur ou égal à 0</string>
@@ -484,8 +484,8 @@
     <string name="character_title_select_character">Sélectionner un personnage</string>
     <string name="character_title_well_being">Bien-être</string>
     <string name="character_title_weapons">Armes</string>
-    <string name="characteristics_will_power">Volonté</string>
-    <string name="characteristics_weapon_skill">Compétence d\'arme</string>
+    <string name="characteristics_will_power">Force Mental</string>
+    <string name="characteristics_weapon_skill">Capacité de combat</string>
     <string name="characteristics_toughness_bonus_shortcut">BE</string>
     <string name="characteristics_toughness">Endurance</string>
     <string name="characteristics_strength">Force</string>
@@ -627,7 +627,7 @@
     <string name="traits_label_specifications">Spécifications</string>
     <string name="trappings_label_price">Prix</string>
     <string name="trappings_availability_rare">Rare</string>
-    <string name="trappings_availability_scarce">Rare</string>
+    <string name="trappings_availability_scarce">Limitée</string>
     <string name="trappings_label_worn">Porté</string>
     <string name="trappings_label_type">Type d\'objet</string>
     <string name="trappings_flaws_unreliable">Peu fiable</string>
@@ -642,7 +642,7 @@
     <string name="trappings_messages_no_containers_found">Il n\'y a pas de conteneurs disponibles.</string>
     <string name="trappings_messages_cannot_store_trappings_in_container_stored_in_container">Les objets ne peuvent pas être stockés dans un conteneur qui est lui-même stocké dans un conteneur.</string>
     <string name="trappings_types_spell_ingredient">Ingrédients de sort</string>
-    <string name="trappings_money_pennies">Pièces de monnaie</string>
+    <string name="trappings_money_pennies">Pièces de cuivre</string>
     <string name="trappings_pack_size">Prix pour un paquet de %d pièces</string>
     <string name="trappings_types_prosthetics">Prothèses</string>
     <string name="trappings_types_ranged_weapon">Armes à distance</string>
@@ -655,7 +655,7 @@
     <string name="trappings_title_select_trapping">Objet sélectionner</string>
     <string name="trappings_title">Inventaire</string>
     <string name="trappings_money_subtract">Soustraire</string>
-    <string name="trappings_money_shillings">Shillings</string>
+    <string name="trappings_money_shillings">Pistole d\'argent</string>
     <string name="weapons_flaws_imprecise">Imprecise</string>
     <string name="weapons_equip_primary_hand">Main principale</string>
     <string name="weapons_flaws_reload">Recharger</string>
@@ -687,7 +687,7 @@
     <string name="weapons_reach_very_short">Très court</string>
     <string name="weapons_reach_very_long">Très longue</string>
     <string name="weapons_reach_short">Courte</string>
-    <string name="points_resolve">Résoudre</string>
+    <string name="points_resolve">Détermination</string>
     <string name="weapons_qualities_shield">Protectrice (indice)</string>
     <string name="weapons_qualities_pummel">Assommante</string>
     <string name="weapons_qualities_impale">Empaleuse</string>
