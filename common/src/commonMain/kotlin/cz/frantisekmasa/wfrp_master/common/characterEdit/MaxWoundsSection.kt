@@ -48,15 +48,17 @@ fun MaxWoundsSection(character: Character, screenModel: CharacterScreenModel) {
                 placeholder = stringResource(Str.points_auto_max_wounds_placeholder),
             )
 
-            if (formData.hardyTalent.value) {
-                UserTipCard(UserTip.HARDY_TALENTS)
-            }
+            if (character.hasHardyTalent) {
+                if (formData.hardyTalent.value) {
+                    UserTipCard(UserTip.HARDY_TALENTS)
+                }
 
-            CheckboxWithText(
-                text = stringResource(Str.points_label_hardy),
-                checked = formData.hardyTalent.value,
-                onCheckedChange = { formData.hardyTalent.value = it }
-            )
+                CheckboxWithText(
+                    text = stringResource(Str.points_label_hardy),
+                    checked = formData.hardyTalent.value,
+                    onCheckedChange = { formData.hardyTalent.value = it }
+                )
+            }
         }
     }
 }
