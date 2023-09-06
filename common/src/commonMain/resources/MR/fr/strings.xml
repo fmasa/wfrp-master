@@ -690,7 +690,7 @@
     <string name="skills_messages_no_skills_in_compendium_subtext">Il n\'y a pas encore de compétences dans votre compendium.</string>
     <string name="authentication_messages_google_account_collision">Il existe déjà un compte WFRP Master associé à un compte Google donné.
 \nVoulez-vous vous connecter à ce compte à la place \?</string>
-    <string name="trappings_expression_constants_weapon_range">Arme de portée</string>
+    <string name="trappings_expression_constants_weapon_range">ArmeDePortee</string>
     <string name="characteristics_fellowship_bonus_shortcut">BSoc</string>
     <string name="characteristics_toughness_shortcut">E</string>
     <string name="characteristics_intelligence_bonus_shortcut">BInt</string>
