@@ -120,7 +120,7 @@
     <string name="points_corruption">Points de corruption</string>
     <string name="points_fate">Destin</string>
     <string name="points_fortune">Chance</string>
-    <string name="points_label_hardy">Dur (Augmente les blessures maximales de TB)</string>
+    <string name="points_label_hardy">Robuste (Augmente les blessures maximales de BE)</string>
     <string name="points_spent_experience">%d dépensé</string>
     <string name="races_gnome">Gnome</string>
     <string name="races_halfling">Halfling</string>
@@ -149,8 +149,8 @@
     <string name="tests_critical">Critique</string>
     <string name="talents_title_edit">Éditer le talent</string>
     <string name="tests_button_execute">Exécuter</string>
-    <string name="talents_tip_hardy_talent_checkbox">La case à cocher Hardy sera supprimée à l\'avenir.
-\nAjoute un talent appelé Hardy et supprime la valeur manuelle Max Wounds à la place.</string>
+    <string name="talents_tip_hardy_talent_checkbox">La case à cocher Robuste sera supprimée à l\'avenir.
+\nAjoute un talent appelé Robuste et supprime la valeur manuelle Max Wounds à la place.</string>
     <string name="tests_button_hidden_skill_test">Test de compétences cachées</string>
     <string name="tests_difficulties_average">Moyenne</string>
     <string name="tests_difficulties_challenging">Défi</string>
@@ -317,7 +317,7 @@
     <string name="character_messages_no_equipped_weapons">Aucune arme équipée</string>
     <string name="character_motivation">Motivation</string>
     <string name="character_secondary_text_basics">Nom, race, motivation</string>
-    <string name="character_secondary_text_wounds">Blessures maximales, progrès du talent Hardy</string>
+    <string name="character_secondary_text_wounds">Blessures maximales, progrès du talent Robuste</string>
     <string name="character_tab_notes">Notes</string>
     <string name="characteristics_intelligence">Intelligence</string>
     <string name="combat_hit_locations_left_arm">Bras gauche</string>
