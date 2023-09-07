@@ -103,7 +103,7 @@
     <string name="character_creation_title">Descrivi il tuo Personaggio…</string>
     <string name="character_error_visible_tab_required">Almeno una scheda del Personaggio deve essere visibile</string>
     <string name="character_label_career">Carriera</string>
-    <string name="character_label_characteristic_advances">Avanzamenti</string>
+    <string name="character_label_characteristic_advances">Avanzam.</string>
     <string name="character_label_characteristic_base">Base</string>
     <string name="character_label_class">Classe</string>
     <string name="character_label_custom_career">Carriera Personalizzata</string>
@@ -117,7 +117,7 @@
     <string name="character_messages_character_removed">Il Personaggio è stato eliminato.</string>
     <string name="character_messages_no_character_in_party">Nessun Personaggio nel gruppo</string>
     <string name="character_messages_no_equipped_weapons">Nessuna arma equipaggiata</string>
-    <string name="character_messages_no_equipped_weapons_sub_text">Il Personaggio non ha nessuna arma equipaggiata</string>
+    <string name="character_messages_no_equipped_weapons_sub_text">Il Personaggio non ha nessuna Arma equipaggiata</string>
     <string name="character_messages_removal_dialog_text">Vuoi davvero cancellarlo definitivamente %s?</string>
     <string name="character_messages_turn_into_n_p_c_confirmation">Vuoi veramente convertire questo Personaggio in un PNG\?</string>
     <string name="character_messages_turn_into_p_c_confirmation">Vuoi veramente convertire questo PNG in un Personaggio\?</string>
@@ -150,22 +150,22 @@
     <string name="character_title_general_settings">Generale</string>
     <string name="character_title_removal">Rimuovi Personaggio</string>
     <string name="character_title_select_character">Seleziona Personaggio</string>
-    <string name="character_title_ui_settings">Impostazioni IU</string>
+    <string name="character_title_ui_settings">Impostazioni Interfaccia</string>
     <string name="character_title_visible_tabs">Schede visibili</string>
     <string name="character_title_weapons">Armi</string>
     <string name="character_title_well_being">Stato</string>
     <string name="characteristics_agility">Agilità</string>
     <string name="characteristics_ballistic_skill">Abilità Balistica</string>
     <string name="characteristics_dexterity">Destrezza</string>
-    <string name="characteristics_fellowship">Sociabilité</string>
+    <string name="characteristics_fellowship">Socialità</string>
     <string name="characteristics_initiative">Iniziativa</string>
     <string name="characteristics_intelligence">Intelligenza</string>
     <string name="characteristics_strength">Forza</string>
     <string name="characteristics_toughness">Resistenza</string>
     <string name="characteristics_toughness_bonus_shortcut">BR</string>
-    <string name="characteristics_weapon_skill">Ab. di Combattimento</string>
+    <string name="characteristics_weapon_skill">Ab. Combattimento</string>
     <string name="characteristics_will_power">Volontà</string>
-    <string name="combat_advantage_cap">Limite Vantiaggio</string>
+    <string name="combat_advantage_cap">Limite Vantaggio</string>
     <string name="combat_advantage_system_config_option">Regole Vantaggio</string>
     <string name="combat_advantage_system_prompt">Seleziona la modalità del Vantaggio</string>
     <string name="combat_advantage_systems_core_rulebook">Default (Manuale Base)</string>
@@ -229,7 +229,7 @@
     <string name="compendium_button_import">Importa</string>
     <string name="compendium_button_import_file">Importa file</string>
     <string name="compendium_button_import_from_rulebook">Importa da Manuale</string>
-    <string name="compendium_icon_add_compendium_item">Aggiungi un oggetto al Compendio</string>
+    <string name="compendium_icon_add_compendium_item">Aggiungi al Compendio</string>
     <string name="compendium_json_import_prompt_title">Compendio da importare precedentemente esportato da WFRP Master.</string>
     <string name="compendium_json_import_prompt_warning">L formato di esportazione non è ancora ultimato\!</string>
     <string name="compendium_json_import_prompt_warning_explanation">Quindi mentre le esportazioni dalla stessa versione di WFRP Master funzionano, le esportazioni dalle versioni precedenti potrebbero non funzionare correttamente.</string>
@@ -368,7 +368,7 @@
     <string name="races_human">Umano</string>
     <string name="races_ogre">Ogre</string>
     <string name="races_wood_elf">Elfo Silvano</string>
-    <string name="settings_dark_mode">Dark Mode</string>
+    <string name="settings_dark_mode">Modalità Scura</string>
     <string name="settings_sound">Suoni</string>
     <string name="settings_title">Impostazioni</string>
     <string name="settings_title_account">Account</string>
@@ -377,7 +377,7 @@
     <string name="skills_button_add_non_compendium">…o aggiungi una Abilità non da Compendio</string>
     <string name="skills_button_import_basic_skills">Importa le Abilità Base</string>
     <string name="skills_label_advanced">Avanzate</string>
-    <string name="skills_label_advances">Avanzamenti</string>
+    <string name="skills_label_advances">Avanzam.</string>
     <string name="skills_label_characteristic">Caratteristiche</string>
     <string name="skills_label_description">Descrizione (opzionale)</string>
     <string name="skills_label_name">Nome</string>
@@ -505,7 +505,7 @@
     <string name="trappings_button_take_out">Tira fuori</string>
     <string name="trappings_icon_encumbrance">Ingombro dell\'Avere</string>
     <string name="trappings_icon_total_encumbrance">Ingombro totale del Personaggio (ingombro attuale / ingombro totale)</string>
-    <string name="trappings_label_carries">Portati</string>
+    <string name="trappings_label_carries">Quantità</string>
     <string name="trappings_label_description">Descrizione (opzionale)</string>
     <string name="trappings_label_encumbrance_per_unit">Ingombro (per unità)</string>
     <string name="trappings_label_encumbrance_total">Ingombro (totale)</string>
@@ -643,7 +643,7 @@
     <string name="compendium_messages_out_of_memory">Importazione PDF non riuscita. RAM disponibile insufficiente sul dispositivo.</string>
     <string name="common_ui_label_previous_screen">Ritorna alla schermata precedente</string>
     <string name="combat_nth_round">Round %d</string>
-    <string name="about_body">Questa applicazione è stata creata da František Maša e dai suoi colleghi studenti, ora è stata sviluppata
+    <string name="about_body">Questa applicazione è stata creata da František Maša e dai suoi colleghi studenti, ora è sviluppata
 \nnel tempo libero di František Maša.
 \nSe ti piace l\'app, per favore dai la tua valutazione di WFRP Master su Google Play.</string>
     <string name="authentication_startup_google_sign_in_failed">Non siamo riusciti a farti accedere tramite Google.
