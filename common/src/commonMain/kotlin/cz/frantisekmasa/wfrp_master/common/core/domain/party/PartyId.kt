@@ -3,7 +3,7 @@ package cz.frantisekmasa.wfrp_master.common.core.domain.party
 import androidx.compose.runtime.Immutable
 import com.benasher44.uuid.Uuid
 import com.benasher44.uuid.uuid4
-import dev.icerock.moko.parcelize.Parcelable
+import cz.frantisekmasa.wfrp_master.common.core.domain.Identifier
 import dev.icerock.moko.parcelize.Parcelize
 import kotlinx.serialization.Contextual
 import kotlinx.serialization.Serializable
@@ -13,7 +13,7 @@ import kotlin.jvm.JvmInline
 @Serializable
 @Parcelize
 @Immutable
-value class PartyId(@Contextual private val value: Uuid) : Parcelable {
+value class PartyId(@Contextual private val value: Uuid) : Identifier {
     companion object {
         fun generate(): PartyId = PartyId(uuid4())
     }
