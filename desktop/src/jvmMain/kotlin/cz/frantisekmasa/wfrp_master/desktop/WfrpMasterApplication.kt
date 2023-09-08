@@ -21,6 +21,7 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.responsive.ScreenWithBreakpoi
 import cz.frantisekmasa.wfrp_master.common.core.ui.theme.Theme
 import cz.frantisekmasa.wfrp_master.common.partyList.PartyListScreen
 import cz.frantisekmasa.wfrp_master.common.shell.DrawerShell
+import cz.frantisekmasa.wfrp_master.common.shell.SnackbarScaffold
 import cz.frantisekmasa.wfrp_master.desktop.interop.DesktopEmailInitiator
 import cz.frantisekmasa.wfrp_master.desktop.interop.DesktopUrlOpener
 import cz.frantisekmasa.wfrp_master.desktop.interop.NativeFileChooser
@@ -49,27 +50,29 @@ object WfrpMasterApplication {
                 ) {
                     Window(onCloseRequest = ::exitApplication) {
                         Theme {
-                            Startup {
-                                ScreenWithBreakpoints {
-                                    val drawerState = rememberDrawerState(DrawerValue.Closed)
+                            SnackbarScaffold {
+                                Startup {
+                                    ScreenWithBreakpoints {
+                                        val drawerState = rememberDrawerState(DrawerValue.Closed)
 
-                                    Navigator(
-                                        screens = listOf(PartyListScreen),
-                                        onBackPressed = {
-                                            if (drawerState.isOpen) {
-                                                coroutineScope.launch { drawerState.close() }
-                                                return@Navigator false
+                                        Navigator(
+                                            screens = listOf(PartyListScreen),
+                                            onBackPressed = {
+                                                if (drawerState.isOpen) {
+                                                    coroutineScope.launch { drawerState.close() }
+                                                    return@Navigator false
+                                                }
+
+                                                true
                                             }
+                                        ) { navigator ->
+                                            DrawerShell(drawerState) {
+                                                val screen = navigator.lastItem
 
-                                            true
-                                        }
-                                    ) { navigator ->
-                                        DrawerShell(drawerState) {
-                                            val screen = navigator.lastItem
-
-                                            navigator.saveableState("currentScreen") {
-                                                ProvideNavigationTransaction(screen) {
-                                                    screen.Content()
+                                                navigator.saveableState("currentScreen") {
+                                                    ProvideNavigationTransaction(screen) {
+                                                        screen.Content()
+                                                    }
                                                 }
                                             }
                                         }

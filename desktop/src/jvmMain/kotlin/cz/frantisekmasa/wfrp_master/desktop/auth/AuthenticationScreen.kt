@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.material.Button
 import androidx.compose.material.Card
 import androidx.compose.material.Text
+import androidx.compose.material.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -87,6 +88,7 @@ fun AuthenticationScreen() {
                 val errorUnknown = stringResource(Str.authentication_messages_unknown_error)
 
                 Button(
+                    modifier = Modifier.fillMaxWidth(),
                     onClick = {
                         validate = true
 
@@ -113,6 +115,22 @@ fun AuthenticationScreen() {
                     }
                 ) {
                     Text(stringResource(Str.authentication_button_sign_in))
+                }
+
+                var resetPasswordDialogVisible by remember { mutableStateOf(false) }
+
+                if (resetPasswordDialogVisible) {
+                    ResetPasswordDialog(
+                        auth = auth,
+                        onDismissRequest = { resetPasswordDialogVisible = false },
+                    )
+                }
+
+                TextButton(
+                    modifier = Modifier.align(Alignment.CenterHorizontally),
+                    onClick = { resetPasswordDialogVisible = true },
+                ) {
+                    Text(stringResource(Str.authentication_button_reset_password))
                 }
             }
         }

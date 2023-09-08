@@ -19,6 +19,7 @@ import cz.frantisekmasa.wfrp_master.common.invitation.InvitationLinkScreen
 import cz.frantisekmasa.wfrp_master.common.partyList.PartyListScreen
 import cz.frantisekmasa.wfrp_master.common.shell.DrawerShell
 import cz.frantisekmasa.wfrp_master.common.shell.NetworkStatusBanner
+import cz.frantisekmasa.wfrp_master.common.shell.SnackbarScaffold
 import cz.muni.fi.rpg.ui.shell.ProvideDIContainer
 import cz.muni.fi.rpg.ui.shell.Startup
 import kotlinx.coroutines.launch
@@ -47,10 +48,12 @@ fun WfrpMasterApp() {
                                 true
                             }
                         ) { navigator ->
-                            DrawerShell(drawerState) {
-                                SlideTransition(navigator) {
-                                    ProvideNavigationTransaction(it) {
-                                        it.Content()
+                            SnackbarScaffold {
+                                DrawerShell(drawerState) {
+                                    SlideTransition(navigator) {
+                                        ProvideNavigationTransaction(it) {
+                                            it.Content()
+                                        }
                                     }
                                 }
                             }

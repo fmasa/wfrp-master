@@ -29,6 +29,9 @@
     <string name="armour_types_plate">Plate</string>
     <string name="armour_types_soft_leather">Soft Leather</string>
     <string name="authentication_button_sign_in">Sign in</string>
+    <string name="authentication_button_log_out">Log out</string>
+    <string name="authentication_button_reset_password">Reset password</string>
+    <string name="authentication_button_send">Send</string>
     <string name="authentication_label_email">Email</string>
     <string name="authentication_label_password">Password</string>
     <string name="authentication_messages_duplicate_account">Existing account found</string>
@@ -38,6 +41,7 @@
     <string name="authentication_messages_invalid_password">Invalid password</string>
     <string name="authentication_messages_lose_access_to_parties">You will lose access to these parties:</string>
     <string name="authentication_messages_not_signed_in_description">You are not signed-in.\nSigning-in lets you keep access to parties between devices.</string>
+    <string name="authentication_messages_reset_password_email_sent">Email with instructions for password reset was sent</string>
     <string name="authentication_messages_signed_in_as">You are signed-in as</string>
     <string name="authentication_messages_unknown_error">Unknown error occurred</string>
     <string name="authentication_startup_google_sign_in_failed">We could not sign you in via Google.\nYour data will be tied to this device, but you can always sign in later in Settings.</string>

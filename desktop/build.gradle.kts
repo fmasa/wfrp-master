@@ -21,6 +21,9 @@ kotlin {
 
     sourceSets {
         named("jvmMain") {
+            languageSettings.apply {
+                optIn("androidx.compose.material.ExperimentalMaterialApi")
+            }
             dependencies {
                 implementation(compose.desktop.currentOs)
                 implementation(project(":common:firebase"))
