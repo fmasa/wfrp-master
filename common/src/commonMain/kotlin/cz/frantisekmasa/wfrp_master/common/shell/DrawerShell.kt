@@ -1,13 +1,9 @@
 package cz.frantisekmasa.wfrp_master.common.shell
 
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.material.DrawerState
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.ModalDrawer
-import androidx.compose.material.Scaffold
-import androidx.compose.material.SnackbarHostState
-import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.SideEffect
@@ -18,8 +14,6 @@ import cz.frantisekmasa.wfrp_master.common.core.shared.SettingsStorage
 import cz.frantisekmasa.wfrp_master.common.core.ui.buttons.LocalHamburgerButtonHandler
 import cz.frantisekmasa.wfrp_master.common.core.ui.flow.collectWithLifecycle
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.FullScreenProgress
-import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.LocalPersistentSnackbarHolder
-import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.PersistentSnackbarHolder
 import cz.frantisekmasa.wfrp_master.common.settings.AppSettings
 import cz.frantisekmasa.wfrp_master.common.settings.Language
 import dev.icerock.moko.resources.desc.StringDesc
@@ -30,7 +24,7 @@ import org.kodein.di.instance
 
 @Composable
 @ExperimentalMaterialApi
-fun DrawerShell(drawerState: DrawerState, bodyContent: @Composable (PaddingValues) -> Unit) {
+fun DrawerShell(drawerState: DrawerState, bodyContent: @Composable () -> Unit) {
     val settings: SettingsStorage by localDI().instance()
     val language = remember {
         settings.watch(AppSettings.LANGUAGE)
@@ -56,21 +50,10 @@ fun DrawerShell(drawerState: DrawerState, bodyContent: @Composable (PaddingValue
             },
             content = {
                 val coroutineScope = rememberCoroutineScope()
-                val snackbarHostState = remember { SnackbarHostState() }
-                val persistentSnackbarHolder =
-                    remember(coroutineScope, snackbarHostState) {
-                        PersistentSnackbarHolder(coroutineScope, snackbarHostState)
-                    }
 
                 CompositionLocalProvider(
                     LocalHamburgerButtonHandler provides { coroutineScope.launch { drawerState.open() } },
-                    LocalPersistentSnackbarHolder provides persistentSnackbarHolder,
-                    content = {
-                        Scaffold(
-                            scaffoldState = rememberScaffoldState(snackbarHostState = snackbarHostState),
-                            content = bodyContent,
-                        )
-                    },
+                    content = bodyContent,
                 )
             },
         )

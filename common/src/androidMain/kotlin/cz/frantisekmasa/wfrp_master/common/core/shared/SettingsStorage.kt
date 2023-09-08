@@ -15,8 +15,16 @@ private val Context.settingsDataStore by preferencesDataStore("settings")
 actual class SettingsStorage(context: Context,) {
     private val storage = context.settingsDataStore
 
-    actual suspend fun <T> edit(key: SettingsKey<T>, update: (T?) -> T) {
-        storage.edit { it[key] = update(it[key]) }
+    actual suspend fun <T> edit(key: SettingsKey<T>, update: (T?) -> T?) {
+        storage.edit {
+            val newValue = update(it[key])
+
+            if (newValue == null) {
+                it.remove(key)
+            } else {
+                it[key] = newValue
+            }
+        }
     }
 
     actual fun <T> watch(key: SettingsKey<T>): Flow<T?> {

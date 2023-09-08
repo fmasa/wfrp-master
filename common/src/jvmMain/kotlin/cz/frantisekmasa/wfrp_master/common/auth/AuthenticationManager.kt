@@ -127,6 +127,12 @@ class AuthenticationManager(
         return body
     }
 
+    suspend fun logout() {
+        tokenHolder.setToken(null)
+        settings.edit(REFRESH_TOKEN, null)
+        statusFlow.emit(AuthenticationStatus.NotAuthenticated)
+    }
+
     @Serializable
     sealed class SignInResponse {
         @Serializable
@@ -154,6 +160,50 @@ class AuthenticationManager(
         val password: String,
         val returnSecureToken: Boolean = true,
     )
+
+    @Serializable
+    data class Failure(val error: Error)
+
+    /**
+     * https://firebase.google.com/docs/reference/rest/auth#section-send-password-reset-email
+     */
+    suspend fun resetPassword(email: String): PasswordResetResult {
+        val response = http.post(
+            "https://identitytoolkit.googleapis.com/v1/accounts:sendOobCode?key=$API_KEY"
+        ) {
+            contentType(ContentType.Application.Json)
+            setBody(
+                PasswordResetRequest(
+                    requestType = "PASSWORD_RESET",
+                    email = email,
+                )
+            )
+        }
+
+        if (response.status != HttpStatusCode.OK) {
+            val body = response.body<Failure>()
+
+            if (body.error.message == "EMAIL_NOT_FOUND") {
+                return PasswordResetResult.EmailNotFound
+            }
+
+            return PasswordResetResult.UnknownError
+        }
+
+        return PasswordResetResult.Success
+    }
+
+    @Serializable
+    private data class PasswordResetRequest(
+        val requestType: String,
+        val email: String,
+    )
+
+    sealed interface PasswordResetResult {
+        object Success : PasswordResetResult
+        object EmailNotFound : PasswordResetResult
+        object UnknownError : PasswordResetResult
+    }
 
     companion object {
         private val REFRESH_TOKEN = stringKey("firebase_refresh_token")

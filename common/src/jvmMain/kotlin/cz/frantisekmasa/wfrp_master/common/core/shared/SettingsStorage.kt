@@ -24,8 +24,15 @@ actual class SettingsStorage() {
         awaitClose { preferences.removePreferenceChangeListener(listener) }
     }
 
-    actual suspend fun <T> edit(key: SettingsKey<T>, update: (T?) -> T) {
-        key.set(preferences, update(key.get(preferences)))
+    actual suspend fun <T> edit(key: SettingsKey<T>, update: (T?) -> T?) {
+        val newValue = update(key.get(preferences))
+
+        if (newValue == null) {
+            preferences.remove(key.name)
+        } else {
+            key.set(preferences, newValue)
+        }
+
         preferences.sync()
     }
 
@@ -41,16 +48,19 @@ actual class SettingsStorage() {
 }
 
 actual class SettingsKey<T>(
+    val name: String,
     val set: (Preferences, T) -> Unit,
     val get: (Preferences) -> T?
 )
 
 actual fun booleanSettingsKey(name: String): SettingsKey<Boolean> = SettingsKey(
+    name = name,
     get = { if (name in it.keys()) it.getBoolean(name, false) else null },
     set = { preferences, value -> preferences.putBoolean(name, value) },
 )
 
 actual fun stringSetKey(name: String): SettingsKey<Set<String>> = SettingsKey(
+    name = name,
     get = { preferences ->
         if (name in preferences.keys())
             preferences.get(name, "")
@@ -68,6 +78,7 @@ actual fun stringSetKey(name: String): SettingsKey<Set<String>> = SettingsKey(
 )
 
 actual fun stringKey(name: String): SettingsKey<String> = SettingsKey(
+    name = name,
     get = { if (name in it.keys()) it.get(name, "") else null },
     set = { preferences, value -> preferences.put(name, value) },
 )
