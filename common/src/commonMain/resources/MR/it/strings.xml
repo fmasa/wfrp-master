@@ -505,7 +505,7 @@
     <string name="trappings_button_take_out">Tira fuori</string>
     <string name="trappings_icon_encumbrance">Ingombro dell\'Avere</string>
     <string name="trappings_icon_total_encumbrance">Ingombro totale del Personaggio (ingombro attuale / ingombro totale)</string>
-    <string name="trappings_label_carries">Quantità</string>
+    <string name="trappings_label_carries">Carico</string>
     <string name="trappings_label_description">Descrizione (opzionale)</string>
     <string name="trappings_label_encumbrance_per_unit">Ingombro (per unità)</string>
     <string name="trappings_label_encumbrance_total">Ingombro (totale)</string>
@@ -708,4 +708,8 @@
     <string name="characteristics_strength_bonus_shortcut">BF</string>
     <string name="characteristics_ballistic_skill_shortcut">AB</string>
     <string name="characteristics_weapon_skill_shortcut">AC</string>
+    <string name="authentication_messages_reset_password_email_sent">Ti è stata inviata una Email con le istruzioni per il reset della password</string>
+    <string name="authentication_button_send">Invia</string>
+    <string name="authentication_button_log_out">Log out</string>
+    <string name="authentication_button_reset_password">Resetta password</string>
 </resources>
