@@ -4,7 +4,7 @@ enum class Language(
     val localizedName: String,
     val englishName: String,
 ) {
-    BASE("English", "English"),
+    EN("English", "English"),
     FR("Français", "French"),
     IT("Italiano", "Italian"),
 }

@@ -92,7 +92,7 @@ private fun SoundCard(viewModel: SettingsScreenModel) {
 
 @Composable
 private fun LanguageCard(screenModel: SettingsScreenModel) {
-    val language = screenModel.language.collectWithLifecycle(null).value ?: Language.BASE
+    val language = screenModel.language.collectWithLifecycle(null).value ?: Language.EN
 
     val (dialogOpened, setDialogOpened) = remember { mutableStateOf(false) }
 
