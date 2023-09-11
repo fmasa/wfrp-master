@@ -23,7 +23,7 @@
     <string name="armour_types_other">Altro</string>
     <string name="armour_types_plate">Piastre</string>
     <string name="armour_types_soft_leather">Cuoio Morbido</string>
-    <string name="authentication_button_sign_in">Registrati</string>
+    <string name="authentication_button_sign_in">Accedi</string>
     <string name="authentication_label_email">Email</string>
     <string name="authentication_label_password">Password</string>
     <string name="authentication_messages_duplicate_account">Account esistente trovato</string>
@@ -116,7 +116,7 @@
     <string name="character_label_status">Status</string>
     <string name="character_messages_character_removed">Il Personaggio è stato eliminato.</string>
     <string name="character_messages_no_character_in_party">Nessun Personaggio nel gruppo</string>
-    <string name="character_messages_no_equipped_weapons">Nessuna arma equipaggiata</string>
+    <string name="character_messages_no_equipped_weapons">Nessuna Arma equipaggiata</string>
     <string name="character_messages_no_equipped_weapons_sub_text">Il Personaggio non ha nessuna Arma equipaggiata</string>
     <string name="character_messages_removal_dialog_text">Vuoi davvero cancellarlo definitivamente %s?</string>
     <string name="character_messages_turn_into_n_p_c_confirmation">Vuoi veramente convertire questo Personaggio in un PNG\?</string>
@@ -289,7 +289,7 @@
     <string name="miracles_label_name">Nome</string>
     <string name="miracles_label_range">Gittata</string>
     <string name="miracles_label_target">Bersaglio</string>
-    <string name="miracles_messages_character_has_no_miracles">Il personaggio non conosce miracoli.</string>
+    <string name="miracles_messages_character_has_no_miracles">Il personaggio non conosce Miracoli.</string>
     <string name="miracles_messages_no_miracles_in_compendium">Nessun Miracolo</string>
     <string name="miracles_messages_no_miracles_in_compendium_subtext">Non ci sono ancora Miracoli nel tuo Compendio.</string>
     <string name="miracles_title">Miracoli</string>
