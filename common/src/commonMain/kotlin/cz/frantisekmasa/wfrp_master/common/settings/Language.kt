@@ -9,5 +9,11 @@ enum class Language(
 ) {
     EN("English", "English", Locale.ENGLISH),
     FR("Français", "French", Locale.FRENCH),
-    IT("Italiano", "Italian", Locale.ITALIAN),
+    IT("Italiano", "Italian", Locale.ITALIAN);
+
+    companion object {
+        fun fromCodeOrNull(code: String): Language? {
+            return Language.values().firstOrNull { it.name == code }
+        }
+    }
 }

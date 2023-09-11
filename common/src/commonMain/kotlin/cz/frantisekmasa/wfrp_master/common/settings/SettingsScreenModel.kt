@@ -21,7 +21,7 @@ class SettingsScreenModel(
     val lastSeenVersion: Flow<String?> by lazy { storage.watch(AppSettings.LAST_SEEN_VERSION) }
     val language: Flow<Language?> by lazy {
         storage.watch(AppSettings.LANGUAGE).map {
-            it?.let { code -> Language.valueOf(code) }
+            it?.let { code -> Language.fromCodeOrNull(code) }
         }
     }
 
