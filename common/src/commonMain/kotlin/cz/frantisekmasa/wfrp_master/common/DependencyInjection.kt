@@ -60,7 +60,6 @@ import cz.frantisekmasa.wfrp_master.common.core.firebase.repositories.FirestoreC
 import cz.frantisekmasa.wfrp_master.common.core.firebase.repositories.FirestoreCharacterRepository
 import cz.frantisekmasa.wfrp_master.common.core.firebase.repositories.FirestoreEncounterRepository
 import cz.frantisekmasa.wfrp_master.common.core.firebase.repositories.FirestorePartyRepository
-import cz.frantisekmasa.wfrp_master.common.core.firebase.repositories.FirestoreSkillRepository
 import cz.frantisekmasa.wfrp_master.common.core.serialization.UuidSerializer
 import cz.frantisekmasa.wfrp_master.common.core.tips.DismissedUserTipsHolder
 import cz.frantisekmasa.wfrp_master.common.encounters.EncounterDetailScreenModel
@@ -139,7 +138,7 @@ val appModule = DI.Module("Common") {
     bindSingleton { DismissedUserTipsHolder(instance()) }
 
     bindSingleton<InvitationProcessor> { FirestoreInvitationProcessor(instance(), instance()) }
-    bindSingleton<SkillRepository> { FirestoreSkillRepository(instance(), mapper()) }
+    bindSingleton<SkillRepository> { characterItemRepository(Schema.Character.Skills) }
     bindSingleton<TalentRepository> { characterItemRepository(Schema.Character.Talents) }
     bindSingleton<SpellRepository> { characterItemRepository(Schema.Character.Spells) }
     bindSingleton<BlessingRepository> { characterItemRepository(Schema.Character.Blessings) }
