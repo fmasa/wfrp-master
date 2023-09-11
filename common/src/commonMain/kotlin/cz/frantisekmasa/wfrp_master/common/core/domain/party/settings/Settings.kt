@@ -8,6 +8,7 @@ import cz.frantisekmasa.wfrp_master.common.core.domain.Expression
 import cz.frantisekmasa.wfrp_master.common.core.domain.NamedEnum
 import cz.frantisekmasa.wfrp_master.common.core.domain.Stats
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.combat.Advantage
+import cz.frantisekmasa.wfrp_master.common.settings.Language
 import dev.icerock.moko.parcelize.Parcelable
 import dev.icerock.moko.parcelize.Parcelize
 import dev.icerock.moko.resources.StringResource
@@ -21,6 +22,7 @@ data class Settings(
     val initiativeStrategy: InitiativeStrategy = InitiativeStrategy.INITIATIVE_CHARACTERISTIC,
     val advantageSystem: AdvantageSystem = AdvantageSystem.CORE_RULEBOOK,
     val advantageCap: AdvantageCapExpression = AdvantageCapExpression(""),
+    val language: Language = Language.EN,
 ) : Parcelable
 
 @JvmInline

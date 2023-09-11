@@ -1,7 +1,6 @@
 package cz.frantisekmasa.wfrp_master.common.skillTest
 
 import cafe.adriel.voyager.core.model.ScreenModel
-import cz.frantisekmasa.wfrp_master.common.core.domain.Stats
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.Character
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.CharacterRepository
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.CharacterType
@@ -10,7 +9,6 @@ import cz.frantisekmasa.wfrp_master.common.core.domain.identifiers.CharacterId
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.PartyId
 import cz.frantisekmasa.wfrp_master.common.core.domain.rolls.Dice
 import cz.frantisekmasa.wfrp_master.common.core.domain.rolls.TestResult
-import cz.frantisekmasa.wfrp_master.common.core.domain.skills.Skill
 import cz.frantisekmasa.wfrp_master.common.core.domain.skills.SkillRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first

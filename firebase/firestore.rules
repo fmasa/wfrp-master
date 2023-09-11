@@ -728,7 +728,7 @@ service cloud.firestore {
 
             function areValidSettings(settings) {
                 return settings is map
-                    && ["initiativeStrategy", "advantageCap", "advantageSystem"].toSet().hasAll(settings.keys())
+                    && ["initiativeStrategy", "advantageCap", "advantageSystem", "language"].toSet().hasAll(settings.keys())
                     && settings.initiativeStrategy in [
                         "INITIATIVE_CHARACTERISTIC",
                         "INITIATIVE_TEST",
@@ -739,7 +739,8 @@ service cloud.firestore {
                     && ! ("advantageSystem" in settings) || settings.advantageSystem in [
                         "CORE_RULEBOOK",
                         "GROUP_ADVANTAGE",
-                    ];
+                    ]
+                    && (! ("language" in settings) || (settings.language is string));
             }
 
             function isValidCombat(combat) {

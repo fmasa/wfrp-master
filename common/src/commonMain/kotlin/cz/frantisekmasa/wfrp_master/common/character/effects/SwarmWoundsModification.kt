@@ -1,5 +1,6 @@
 package cz.frantisekmasa.wfrp_master.common.character.effects
 
+import cz.frantisekmasa.wfrp_master.common.Str
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.Character
 
 class SwarmWoundsModification : CharacterEffect {
@@ -32,8 +33,8 @@ class SwarmWoundsModification : CharacterEffect {
     }
 
     companion object {
-        fun fromTraitNameOrNull(name: String): SwarmWoundsModification? {
-            if (name.equals("swarm", ignoreCase = true)) {
+        fun fromTraitNameOrNull(name: String, translator: Translator): SwarmWoundsModification? {
+            if (name.equals(translator.translate(Str.character_effect_swarm), ignoreCase = true)) {
                 return SwarmWoundsModification()
             }
 

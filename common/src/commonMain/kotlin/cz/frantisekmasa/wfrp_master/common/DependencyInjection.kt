@@ -219,31 +219,31 @@ val appModule = DI.Module("Common") {
     }
 
     bindFactory { partyId: PartyId ->
-        BlessingCompendiumScreenModel(partyId, instance(), instance(), instance())
+        BlessingCompendiumScreenModel(partyId, instance(), instance(), instance(), instance())
     }
     bindFactory { partyId: PartyId ->
         CareerCompendiumScreenModel(partyId, instance(), instance(), instance())
     }
     bindFactory { partyId: PartyId ->
-        MiracleCompendiumScreenModel(partyId, instance(), instance(), instance())
+        MiracleCompendiumScreenModel(partyId, instance(), instance(), instance(), instance())
     }
     bindFactory { partyId: PartyId ->
-        SkillCompendiumScreenModel(partyId, instance(), instance(), instance())
+        SkillCompendiumScreenModel(partyId, instance(), instance(), instance(), instance())
     }
     bindFactory { partyId: PartyId ->
-        SpellCompendiumScreenModel(partyId, instance(), instance(), instance())
+        SpellCompendiumScreenModel(partyId, instance(), instance(), instance(), instance())
     }
     bindFactory { partyId: PartyId ->
-        TalentCompendiumScreenModel(partyId, instance(), instance(), instance(), instance())
+        TalentCompendiumScreenModel(partyId, instance(), instance(), instance(), instance(), instance())
     }
     bindFactory { partyId: PartyId ->
-        TraitCompendiumScreenModel(partyId, instance(), instance(), instance(), instance())
+        TraitCompendiumScreenModel(partyId, instance(), instance(), instance(), instance(), instance())
     }
     bindFactory { partyId: PartyId ->
-        TrappingCompendiumScreenModel(partyId, instance(), instance(), instance())
+        TrappingCompendiumScreenModel(partyId, instance(), instance(), instance(), instance())
     }
 
-    bindSingleton { EffectManager(instance(), instance(), instance()) }
+    bindSingleton { EffectManager(instance(), instance(), instance(), instance()) }
     bindSingleton { TrappingSaver(instance(), instance()) }
     bindFactory { characterId: CharacterId ->
         TraitsScreenModel(

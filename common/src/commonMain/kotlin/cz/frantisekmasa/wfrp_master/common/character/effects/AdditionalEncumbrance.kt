@@ -1,5 +1,6 @@
 package cz.frantisekmasa.wfrp_master.common.character.effects
 
+import cz.frantisekmasa.wfrp_master.common.Str
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.Character
 import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.Encumbrance
 import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.sum
@@ -25,12 +26,18 @@ class AdditionalEncumbrance(
     }
 
     companion object {
-        fun fromTalentOrNull(name: String, timesTaken: Int): AdditionalEncumbrance? {
-            if (name.equals("strong back", ignoreCase = true)) {
+        fun fromTalentOrNull(
+            name: String,
+            translator: Translator,
+            timesTaken: Int,
+        ): AdditionalEncumbrance? {
+            val cleanName = name.lowercase()
+
+            if (cleanName == translator.translate(Str.character_effect_strong_back)) {
                 return AdditionalEncumbrance(Encumbrance(timesTaken.toDouble()))
             }
 
-            if (name.equals("sturdy", ignoreCase = true)) {
+            if (name.equals(translator.translate(Str.character_effect_sturdy), ignoreCase = true)) {
                 return AdditionalEncumbrance(Encumbrance((timesTaken * 2).toDouble()))
             }
 

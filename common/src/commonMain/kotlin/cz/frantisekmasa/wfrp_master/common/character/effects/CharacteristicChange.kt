@@ -1,5 +1,6 @@
 package cz.frantisekmasa.wfrp_master.common.character.effects
 
+import cz.frantisekmasa.wfrp_master.common.Str
 import cz.frantisekmasa.wfrp_master.common.core.domain.Stats
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.Character
 
@@ -23,10 +24,13 @@ open class CharacteristicChange(
     }
 
     companion object {
-        fun fromTraitNameOrNull(name: String): CharacteristicChange? {
-            val cleanName = name.lowercase()
+        fun fromTraitNameOrNull(
+            name: String,
+            translator: Translator,
+        ): CharacteristicChange? {
+            val cleanName = name.lowercase(translator.locale)
 
-            if (cleanName == "big") {
+            if (cleanName == translator.translate(Str.character_effect_big)) {
                 return CharacteristicChange(
                     plus = Stats.ZERO.copy(
                         strength = 10,
@@ -38,7 +42,7 @@ open class CharacteristicChange(
                 )
             }
 
-            if (cleanName == "brute") {
+            if (cleanName == translator.translate(Str.character_effect_brute)) {
                 return CharacteristicChange(
                     plus = Stats.ZERO.copy(
                         toughness = 10,
@@ -50,7 +54,7 @@ open class CharacteristicChange(
                 )
             }
 
-            if (cleanName == "clever") {
+            if (cleanName == translator.translate(Str.character_effect_clever)) {
                 return CharacteristicChange(
                     plus = Stats.ZERO.copy(
                         intelligence = 10,
@@ -59,7 +63,7 @@ open class CharacteristicChange(
                 )
             }
 
-            if (cleanName == "cunning") {
+            if (cleanName == translator.translate(Str.character_effect_cunning)) {
                 return CharacteristicChange(
                     plus = Stats.ZERO.copy(
                         intelligence = 10,
@@ -69,7 +73,7 @@ open class CharacteristicChange(
                 )
             }
 
-            if (cleanName == "elite") {
+            if (cleanName == translator.translate(Str.character_effect_elite)) {
                 return CharacteristicChange(
                     plus = Stats.ZERO.copy(
                         weaponSkill = 20,
@@ -79,7 +83,7 @@ open class CharacteristicChange(
                 )
             }
 
-            if (cleanName == "leader") {
+            if (cleanName == translator.translate(Str.character_effect_leader)) {
                 return CharacteristicChange(
                     plus = Stats.ZERO.copy(
                         fellowship = 10,
@@ -88,7 +92,7 @@ open class CharacteristicChange(
                 )
             }
 
-            if (cleanName == "tough") {
+            if (cleanName == translator.translate(Str.character_effect_tough)) {
                 return CharacteristicChange(
                     plus = Stats.ZERO.copy(
                         toughness = 10,
@@ -97,7 +101,7 @@ open class CharacteristicChange(
                 )
             }
 
-            if (cleanName == "swarm") {
+            if (cleanName == translator.translate(Str.character_effect_brute)) {
                 return CharacteristicChange(
                     plus = Stats.ZERO.copy(
                         weaponSkill = 10,
@@ -108,10 +112,13 @@ open class CharacteristicChange(
             return null
         }
 
-        fun fromTalentNameOrNull(name: String): CharacteristicChange? {
+        fun fromTalentNameOrNull(
+            name: String,
+            translator: Translator,
+        ): CharacteristicChange? {
             val cleanName = name.lowercase()
 
-            if (cleanName == "savvy") {
+            if (cleanName == translator.translate(Str.character_effect_savvy)) {
                 return CharacteristicChange(
                     plus = Stats.ZERO.copy(
                         intelligence = 5,
@@ -119,7 +126,7 @@ open class CharacteristicChange(
                 )
             }
 
-            if (cleanName == "suave") {
+            if (cleanName == translator.translate(Str.character_effect_suave)) {
                 return CharacteristicChange(
                     plus = Stats.ZERO.copy(
                         fellowship = 5,
@@ -127,7 +134,7 @@ open class CharacteristicChange(
                 )
             }
 
-            if (cleanName == "marksman") {
+            if (cleanName == translator.translate(Str.character_effect_marksman)) {
                 return CharacteristicChange(
                     plus = Stats.ZERO.copy(
                         ballisticSkill = 5,
@@ -135,7 +142,7 @@ open class CharacteristicChange(
                 )
             }
 
-            if (cleanName == "very strong") {
+            if (cleanName == translator.translate(Str.character_effect_very_strong)) {
                 return CharacteristicChange(
                     plus = Stats.ZERO.copy(
                         strength = 5,
@@ -143,7 +150,7 @@ open class CharacteristicChange(
                 )
             }
 
-            if (cleanName == "sharp") {
+            if (cleanName == translator.translate(Str.character_effect_sharp)) {
                 return CharacteristicChange(
                     plus = Stats.ZERO.copy(
                         initiative = 5,
@@ -151,7 +158,7 @@ open class CharacteristicChange(
                 )
             }
 
-            if (cleanName == "lightning reflexes") {
+            if (cleanName == translator.translate(Str.character_effect_lightning_reflexes)) {
                 return CharacteristicChange(
                     plus = Stats.ZERO.copy(
                         agility = 5,
@@ -159,7 +166,7 @@ open class CharacteristicChange(
                 )
             }
 
-            if (cleanName == "coolheaded") {
+            if (cleanName == translator.translate(Str.character_effect_coolheaded)) {
                 return CharacteristicChange(
                     plus = Stats.ZERO.copy(
                         willPower = 5,
@@ -167,7 +174,7 @@ open class CharacteristicChange(
                 )
             }
 
-            if (cleanName == "very resilient") {
+            if (cleanName == translator.translate(Str.character_effect_very_resilient)) {
                 return CharacteristicChange(
                     plus = Stats.ZERO.copy(
                         toughness = 5,
@@ -175,7 +182,7 @@ open class CharacteristicChange(
                 )
             }
 
-            if (cleanName == "nimble fingered") {
+            if (cleanName == translator.translate(Str.character_effect_nimble_fingered)) {
                 return CharacteristicChange(
                     plus = Stats.ZERO.copy(
                         dexterity = 5,
@@ -183,7 +190,7 @@ open class CharacteristicChange(
                 )
             }
 
-            if (cleanName == "warrior born") {
+            if (cleanName == translator.translate(Str.character_effect_warrior_born)) {
                 return CharacteristicChange(
                     plus = Stats.ZERO.copy(
                         weaponSkill = 5,

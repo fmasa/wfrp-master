@@ -2,12 +2,15 @@
 
 package cz.frantisekmasa.wfrp_master.common
 
+import android.content.Context
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.firestoreSettings
 import com.google.firebase.functions.ktx.functions
 import com.google.firebase.ktx.Firebase
 import cz.frantisekmasa.wfrp_master.common.auth.AuthenticationManager
+import cz.frantisekmasa.wfrp_master.common.character.effects.AndroidTranslator
+import cz.frantisekmasa.wfrp_master.common.character.effects.Translator
 import cz.frantisekmasa.wfrp_master.common.core.shared.SettingsStorage
 import cz.frantisekmasa.wfrp_master.common.firebase.firestore.Firestore
 import cz.frantisekmasa.wfrp_master.common.firebase.functions.CloudFunctions
@@ -51,5 +54,10 @@ actual val platformModule = DI.Module("android") {
         }
 
         functions
+    }
+
+    bindSingleton {
+        val context: Context = instance()
+        Translator.Factory { AndroidTranslator(context, it) }
     }
 }

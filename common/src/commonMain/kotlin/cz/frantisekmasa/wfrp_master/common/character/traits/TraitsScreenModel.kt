@@ -4,7 +4,6 @@ import cafe.adriel.voyager.core.model.coroutineScope
 import com.benasher44.uuid.Uuid
 import com.benasher44.uuid.uuid4
 import cz.frantisekmasa.wfrp_master.common.character.effects.EffectManager
-import cz.frantisekmasa.wfrp_master.common.character.effects.EffectSource
 import cz.frantisekmasa.wfrp_master.common.core.CharacterItemScreenModel
 import cz.frantisekmasa.wfrp_master.common.core.auth.UserProvider
 import cz.frantisekmasa.wfrp_master.common.core.domain.compendium.Compendium
@@ -19,12 +18,12 @@ import cz.frantisekmasa.wfrp_master.common.compendium.domain.Trait as Compendium
 
 class TraitsScreenModel(
     characterId: CharacterId,
-    traitRepository: TraitRepository,
+    private val traitRepository: TraitRepository,
     private val compendium: Compendium<CompendiumTrait>,
     private val effectManager: EffectManager,
     private val firestore: Firestore,
     userProvider: UserProvider,
-    partyRepository: PartyRepository,
+    private val partyRepository: PartyRepository,
 ) : CharacterItemScreenModel<Trait, CompendiumTrait>(
     characterId,
     traitRepository,
@@ -35,7 +34,13 @@ class TraitsScreenModel(
 
     fun removeTrait(trait: Trait) = coroutineScope.launch(Dispatchers.IO) {
         firestore.runTransaction { transaction ->
-            effectManager.removeEffectSource(transaction, characterId, EffectSource.Trait(trait))
+            effectManager.removeItem(
+                transaction,
+                partyRepository.get(characterId.partyId),
+                characterId,
+                traitRepository,
+                trait,
+            )
         }
     }
 
@@ -44,11 +49,13 @@ class TraitsScreenModel(
         existingTrait: Trait?,
     ) {
         firestore.runTransaction { transaction ->
-            effectManager.saveEffectSource(
+            effectManager.saveItem(
                 transaction,
+                partyRepository.get(characterId.partyId),
                 characterId,
-                source = EffectSource.Trait(trait),
-                previousSourceVersion = existingTrait?.let(EffectSource::Trait),
+                repository = traitRepository,
+                item = trait,
+                previousItemVersion = existingTrait,
             )
         }
     }

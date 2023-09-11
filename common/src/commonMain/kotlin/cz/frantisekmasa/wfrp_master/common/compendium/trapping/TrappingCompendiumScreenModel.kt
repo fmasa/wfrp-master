@@ -5,7 +5,9 @@ import cz.frantisekmasa.wfrp_master.common.compendium.domain.Trapping
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.CharacterItemRepository
 import cz.frantisekmasa.wfrp_master.common.core.domain.compendium.Compendium
 import cz.frantisekmasa.wfrp_master.common.core.domain.identifiers.CharacterId
+import cz.frantisekmasa.wfrp_master.common.core.domain.party.Party
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.PartyId
+import cz.frantisekmasa.wfrp_master.common.core.domain.party.PartyRepository
 import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.InventoryItem
 import cz.frantisekmasa.wfrp_master.common.firebase.firestore.Firestore
 import cz.frantisekmasa.wfrp_master.common.firebase.firestore.Transaction
@@ -15,15 +17,18 @@ class TrappingCompendiumScreenModel(
     firestore: Firestore,
     compendium: Compendium<Trapping>,
     characterItems: CharacterItemRepository<InventoryItem>,
+    parties: PartyRepository,
 ) : CharacterItemCompendiumItemScreenModel<Trapping, InventoryItem>(
     partyId,
     firestore,
     compendium,
-    characterItems
+    characterItems,
+    parties,
 ) {
 
-    override suspend fun saveCharacterItem(
+    override suspend fun updateCharacterItem(
         transaction: Transaction,
+        party: Party,
         characterId: CharacterId,
         existing: InventoryItem,
         new: InventoryItem,
