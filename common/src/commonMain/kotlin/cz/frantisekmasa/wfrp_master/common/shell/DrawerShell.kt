@@ -28,7 +28,7 @@ fun DrawerShell(drawerState: DrawerState, bodyContent: @Composable () -> Unit) {
     val settings: SettingsStorage by localDI().instance()
     val language = remember {
         settings.watch(AppSettings.LANGUAGE)
-            .map { code -> code?.let { Language.valueOf(it) } ?: Language.BASE }
+            .map { code -> code?.let { Language.fromCodeOrNull(it) } ?: Language.EN }
     }.collectWithLifecycle(null).value
 
     if (language == null) {

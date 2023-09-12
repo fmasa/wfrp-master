@@ -5,7 +5,9 @@ import cz.frantisekmasa.wfrp_master.common.compendium.domain.Blessing
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.CharacterItemRepository
 import cz.frantisekmasa.wfrp_master.common.core.domain.compendium.Compendium
 import cz.frantisekmasa.wfrp_master.common.core.domain.identifiers.CharacterId
+import cz.frantisekmasa.wfrp_master.common.core.domain.party.Party
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.PartyId
+import cz.frantisekmasa.wfrp_master.common.core.domain.party.PartyRepository
 import cz.frantisekmasa.wfrp_master.common.firebase.firestore.Firestore
 import cz.frantisekmasa.wfrp_master.common.firebase.firestore.Transaction
 import cz.frantisekmasa.wfrp_master.common.core.domain.religion.Blessing as CharacterBlessing
@@ -15,15 +17,18 @@ class BlessingCompendiumScreenModel(
     firestore: Firestore,
     compendium: Compendium<Blessing>,
     characterItems: CharacterItemRepository<CharacterBlessing>,
+    parties: PartyRepository,
 ) : CharacterItemCompendiumItemScreenModel<Blessing, CharacterBlessing>(
     partyId,
     firestore,
     compendium,
-    characterItems
+    characterItems,
+    parties,
 ) {
 
-    override suspend fun saveCharacterItem(
+    override suspend fun updateCharacterItem(
         transaction: Transaction,
+        party: Party,
         characterId: CharacterId,
         existing: CharacterBlessing,
         new: CharacterBlessing

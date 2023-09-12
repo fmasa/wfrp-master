@@ -6,7 +6,9 @@ import com.benasher44.uuid.Uuid
 import cz.frantisekmasa.wfrp_master.common.character.effects.AdditionalEncumbrance
 import cz.frantisekmasa.wfrp_master.common.character.effects.CharacterEffect
 import cz.frantisekmasa.wfrp_master.common.character.effects.CharacteristicChange
+import cz.frantisekmasa.wfrp_master.common.character.effects.EffectSource
 import cz.frantisekmasa.wfrp_master.common.character.effects.HardyWoundsModification
+import cz.frantisekmasa.wfrp_master.common.character.effects.Translator
 import cz.frantisekmasa.wfrp_master.common.core.common.requireMaxLength
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.CharacterItem
 import dev.icerock.moko.parcelize.Parcelize
@@ -24,16 +26,16 @@ data class Talent(
     val tests: String = "", // TODO: Remove default value in 3.0
     val description: String,
     val taken: Int
-) : CharacterItem<Talent, CompendiumTalent> {
+) : CharacterItem<Talent, CompendiumTalent>, EffectSource {
 
     @Stable
-    override val effects: List<CharacterEffect> get() {
+    override fun getEffects(translator: Translator): List<CharacterEffect> {
         val name = name.trim()
 
         return listOfNotNull(
-            HardyWoundsModification.fromTalentOrNull(name, taken),
-            CharacteristicChange.fromTalentNameOrNull(name),
-            AdditionalEncumbrance.fromTalentOrNull(name, taken),
+            HardyWoundsModification.fromTalentOrNull(name, translator, taken),
+            CharacteristicChange.fromTalentNameOrNull(name, translator),
+            AdditionalEncumbrance.fromTalentOrNull(name, translator, taken),
         )
     }
 

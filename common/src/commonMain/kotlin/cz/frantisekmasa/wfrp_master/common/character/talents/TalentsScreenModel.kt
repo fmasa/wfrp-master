@@ -3,7 +3,6 @@ package cz.frantisekmasa.wfrp_master.common.character.talents
 import cafe.adriel.voyager.core.model.coroutineScope
 import com.benasher44.uuid.Uuid
 import cz.frantisekmasa.wfrp_master.common.character.effects.EffectManager
-import cz.frantisekmasa.wfrp_master.common.character.effects.EffectSource
 import cz.frantisekmasa.wfrp_master.common.core.CharacterItemScreenModel
 import cz.frantisekmasa.wfrp_master.common.core.auth.UserProvider
 import cz.frantisekmasa.wfrp_master.common.core.domain.compendium.Compendium
@@ -23,7 +22,7 @@ class TalentsScreenModel(
     private val effectManager: EffectManager,
     private val firestore: Firestore,
     userProvider: UserProvider,
-    partyRepository: PartyRepository,
+    private val partyRepository: PartyRepository,
 ) : CharacterItemScreenModel<Talent, CompendiumTalent>(
     characterId,
     talentRepository,
@@ -32,23 +31,28 @@ class TalentsScreenModel(
     partyRepository,
 ) {
 
-    suspend fun saveTalent(
-        talent: Talent,
-        existingTalent: Talent?,
-    ) {
+    suspend fun saveTalent(talent: Talent, existingTalent: Talent?) {
         firestore.runTransaction { transaction ->
-            effectManager.saveEffectSource(
+            effectManager.saveItem(
                 transaction,
+                partyRepository.get(characterId.partyId),
                 characterId,
-                EffectSource.Talent(talent),
-                existingTalent?.let(EffectSource::Talent),
+                talentRepository,
+                item = talent,
+                previousItemVersion = existingTalent,
             )
         }
     }
 
     fun removeTalent(talent: Talent) = coroutineScope.launch(Dispatchers.IO) {
         firestore.runTransaction { transaction ->
-            effectManager.removeEffectSource(transaction, characterId, EffectSource.Talent(talent))
+            effectManager.removeItem(
+                transaction,
+                partyRepository.get(characterId.partyId),
+                characterId,
+                talentRepository,
+                talent,
+            )
         }
     }
 

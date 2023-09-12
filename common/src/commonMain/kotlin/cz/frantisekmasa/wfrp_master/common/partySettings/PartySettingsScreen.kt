@@ -45,6 +45,7 @@ class PartySettingsScreen(
                 SettingsCard {
                     SettingsTitle(stringResource(Str.parties_title_settings_general))
                     PartyNameItem(party.name, viewModel)
+                    LanguageItem(party.settings.language, viewModel)
 
                     SettingsTitle(stringResource(Str.combat_title))
                     InitiativeStrategyItem(party, viewModel)

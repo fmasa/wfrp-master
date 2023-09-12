@@ -112,6 +112,29 @@
     <string name="character_creation_step_basic_info">Basic info</string>
     <string name="character_creation_step_point_pools">Point pools</string>
     <string name="character_creation_title">Describe your character…</string>
+    <string name="character_effect_big">big</string>
+    <string name="character_effect_brute">brute</string>
+    <string name="character_effect_clever">clever</string>
+    <string name="character_effect_construct">construct</string>
+    <string name="character_effect_coolheaded">coolheaded</string>
+    <string name="character_effect_cunning">cunning</string>
+    <string name="character_effect_elite">elite</string>
+    <string name="character_effect_hardy">hardy</string>
+    <string name="character_effect_leader">leader</string>
+    <string name="character_effect_lightning_reflexes">lightning reflexes</string>
+    <string name="character_effect_marksman">marksman</string>
+    <string name="character_effect_nimble_fingered">nimble fingered</string>
+    <string name="character_effect_savvy">savvy</string>
+    <string name="character_effect_sharp">sharp</string>
+    <string name="character_effect_size">size</string>
+    <string name="character_effect_strong_back">strong back</string>
+    <string name="character_effect_sturdy">sturdy</string>
+    <string name="character_effect_suave">suave</string>
+    <string name="character_effect_swarm">swarm</string>
+    <string name="character_effect_tough">tough</string>
+    <string name="character_effect_very_resilient">very resilient</string>
+    <string name="character_effect_very_strong">very strong</string>
+    <string name="character_effect_warrior_born">warrior born</string>
     <string name="character_error_visible_tab_required">At least one character tab must be visible</string>
     <string name="character_label_career">Career</string>
     <string name="character_label_characteristic_advances">Advances</string>
@@ -136,6 +159,13 @@
     <string name="character_messages_unlink_from_player_confirmation">Do you really want to turn unlink this Character from a Player?\nThe Player will lose access to this Character.</string>
     <string name="character_motivation">Motivation</string>
     <string name="character_note">Additional notes</string>
+    <string name="character_size_average">Average</string>
+    <string name="character_size_enormous">Enormous</string>
+    <string name="character_size_large">Large</string>
+    <string name="character_size_little">Little</string>
+    <string name="character_size_monstrous">Monstrous</string>
+    <string name="character_size_small">Small</string>
+    <string name="character_size_tiny">Tiny</string>
     <string name="character_secondary_text_basics">Name, Race, Motivation</string>
     <string name="character_secondary_text_career">Career, Class, Social status</string>
     <string name="character_secondary_text_experience">XP, Ambitions</string>
@@ -371,6 +401,15 @@
     <string name="parties_button_share_link">Share link</string>
     <string name="parties_image_qr_code_alt">Invitation QR code</string>
     <string name="parties_label_name">Party Name</string>
+    <string name="parties_label_language">Party Language</string>
+    <string name="parties_language_explanation">
+        There are several Talents and Traits that affect various Character stats and mechanics,
+        such as *Hardy*. This option changes the language used to match these Talents and Traits,
+        so e.g. when using the Italian language, *Gagliardo* is interpreted as *Hardy*,
+        and the effect is correctly applied.\n\n
+        For list of supported Talents and Traits see [WIKI](https://github.com/fmasa/wfrp-master/wiki/Automation#effects).
+    </string>
+    <string name="parties_language_change_warning">Changing the Party Language may affect existing Characters</string>
     <string name="parties_messages_already_member">You are already member of this party</string>
     <string name="parties_messages_compendium_card_moved">Compendium card has been moved to the World tab.</string>
     <string name="parties_messages_invalid_invitation_token">Invitation token is not valid</string>

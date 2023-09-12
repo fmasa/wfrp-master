@@ -60,7 +60,6 @@ import cz.frantisekmasa.wfrp_master.common.core.firebase.repositories.FirestoreC
 import cz.frantisekmasa.wfrp_master.common.core.firebase.repositories.FirestoreCharacterRepository
 import cz.frantisekmasa.wfrp_master.common.core.firebase.repositories.FirestoreEncounterRepository
 import cz.frantisekmasa.wfrp_master.common.core.firebase.repositories.FirestorePartyRepository
-import cz.frantisekmasa.wfrp_master.common.core.firebase.repositories.FirestoreSkillRepository
 import cz.frantisekmasa.wfrp_master.common.core.serialization.UuidSerializer
 import cz.frantisekmasa.wfrp_master.common.core.tips.DismissedUserTipsHolder
 import cz.frantisekmasa.wfrp_master.common.encounters.EncounterDetailScreenModel
@@ -139,7 +138,7 @@ val appModule = DI.Module("Common") {
     bindSingleton { DismissedUserTipsHolder(instance()) }
 
     bindSingleton<InvitationProcessor> { FirestoreInvitationProcessor(instance(), instance()) }
-    bindSingleton<SkillRepository> { FirestoreSkillRepository(instance(), mapper()) }
+    bindSingleton<SkillRepository> { characterItemRepository(Schema.Character.Skills) }
     bindSingleton<TalentRepository> { characterItemRepository(Schema.Character.Talents) }
     bindSingleton<SpellRepository> { characterItemRepository(Schema.Character.Spells) }
     bindSingleton<BlessingRepository> { characterItemRepository(Schema.Character.Blessings) }
@@ -220,31 +219,31 @@ val appModule = DI.Module("Common") {
     }
 
     bindFactory { partyId: PartyId ->
-        BlessingCompendiumScreenModel(partyId, instance(), instance(), instance())
+        BlessingCompendiumScreenModel(partyId, instance(), instance(), instance(), instance())
     }
     bindFactory { partyId: PartyId ->
         CareerCompendiumScreenModel(partyId, instance(), instance(), instance())
     }
     bindFactory { partyId: PartyId ->
-        MiracleCompendiumScreenModel(partyId, instance(), instance(), instance())
+        MiracleCompendiumScreenModel(partyId, instance(), instance(), instance(), instance())
     }
     bindFactory { partyId: PartyId ->
-        SkillCompendiumScreenModel(partyId, instance(), instance(), instance())
+        SkillCompendiumScreenModel(partyId, instance(), instance(), instance(), instance())
     }
     bindFactory { partyId: PartyId ->
-        SpellCompendiumScreenModel(partyId, instance(), instance(), instance())
+        SpellCompendiumScreenModel(partyId, instance(), instance(), instance(), instance())
     }
     bindFactory { partyId: PartyId ->
-        TalentCompendiumScreenModel(partyId, instance(), instance(), instance(), instance())
+        TalentCompendiumScreenModel(partyId, instance(), instance(), instance(), instance(), instance())
     }
     bindFactory { partyId: PartyId ->
-        TraitCompendiumScreenModel(partyId, instance(), instance(), instance(), instance())
+        TraitCompendiumScreenModel(partyId, instance(), instance(), instance(), instance(), instance())
     }
     bindFactory { partyId: PartyId ->
-        TrappingCompendiumScreenModel(partyId, instance(), instance(), instance())
+        TrappingCompendiumScreenModel(partyId, instance(), instance(), instance(), instance())
     }
 
-    bindSingleton { EffectManager(instance(), instance(), instance()) }
+    bindSingleton { EffectManager(instance(), instance(), instance(), instance()) }
     bindSingleton { TrappingSaver(instance(), instance()) }
     bindFactory { characterId: CharacterId ->
         TraitsScreenModel(
@@ -315,7 +314,9 @@ val appModule = DI.Module("Common") {
             instance(),
         )
     }
-    bindFactory { partyId: PartyId -> PartySettingsScreenModel(partyId, instance()) }
+    bindFactory { partyId: PartyId ->
+        PartySettingsScreenModel(partyId, instance(), instance(), instance(), instance())
+    }
 
     bindProvider {
         ChangelogScreenModel(

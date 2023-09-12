@@ -5,7 +5,9 @@ import cz.frantisekmasa.wfrp_master.common.compendium.domain.Skill
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.CharacterItemRepository
 import cz.frantisekmasa.wfrp_master.common.core.domain.compendium.Compendium
 import cz.frantisekmasa.wfrp_master.common.core.domain.identifiers.CharacterId
+import cz.frantisekmasa.wfrp_master.common.core.domain.party.Party
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.PartyId
+import cz.frantisekmasa.wfrp_master.common.core.domain.party.PartyRepository
 import cz.frantisekmasa.wfrp_master.common.firebase.firestore.Firestore
 import cz.frantisekmasa.wfrp_master.common.firebase.firestore.Transaction
 import cz.frantisekmasa.wfrp_master.common.core.domain.skills.Skill as CharacterSkill
@@ -15,15 +17,18 @@ class SkillCompendiumScreenModel(
     firestore: Firestore,
     compendium: Compendium<Skill>,
     characterItems: CharacterItemRepository<CharacterSkill>,
+    parties: PartyRepository,
 ) : CharacterItemCompendiumItemScreenModel<Skill, CharacterSkill>(
     partyId,
     firestore,
     compendium,
-    characterItems
+    characterItems,
+    parties,
 ) {
 
-    override suspend fun saveCharacterItem(
+    override suspend fun updateCharacterItem(
         transaction: Transaction,
+        party: Party,
         characterId: CharacterId,
         existing: CharacterSkill,
         new: CharacterSkill

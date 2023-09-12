@@ -14,6 +14,7 @@ import cz.frantisekmasa.wfrp_master.common.firebase.firestore.Firestore
 import cz.frantisekmasa.wfrp_master.common.firebase.firestore.FirestoreException
 import cz.frantisekmasa.wfrp_master.common.firebase.firestore.SetOptions
 import cz.frantisekmasa.wfrp_master.common.firebase.firestore.Source
+import cz.frantisekmasa.wfrp_master.common.firebase.firestore.Transaction
 import io.github.aakira.napier.Napier
 import kotlinx.coroutines.flow.map
 
@@ -42,6 +43,18 @@ class FirestorePartyRepository(
 
             throw e
         }
+    }
+
+    override fun save(transaction: Transaction, party: Party) {
+        val data = mapper.toDocumentData(party)
+
+        Napier.d("Saving party $data to firestore")
+
+        transaction.set(
+            parties.document(party.id.toString()),
+            data,
+            SetOptions.mergeFields(data.keys),
+        )
     }
 
     override suspend fun update(id: PartyId, mutator: (Party) -> Party) {

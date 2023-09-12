@@ -4,6 +4,8 @@ import com.google.auth.oauth2.IdToken
 import com.google.auth.oauth2.IdTokenCredentials
 import com.google.cloud.firestore.FirestoreOptions
 import cz.frantisekmasa.wfrp_master.common.auth.AuthenticationManager
+import cz.frantisekmasa.wfrp_master.common.character.effects.JvmTranslator
+import cz.frantisekmasa.wfrp_master.common.character.effects.Translator
 import cz.frantisekmasa.wfrp_master.common.core.shared.SettingsStorage
 import cz.frantisekmasa.wfrp_master.common.firebase.firestore.Firestore
 import cz.frantisekmasa.wfrp_master.common.firebase.functions.CloudFunctions
@@ -69,6 +71,9 @@ internal actual val platformModule = DI.Module("jvm") {
 
         Firestore(firestore)
     }
+
+    bindSingleton { Translator.Factory { JvmTranslator(it) } }
+
 //
 //    bindSingleton {
 //        val functions = Firebase.functions

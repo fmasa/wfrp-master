@@ -1,7 +1,9 @@
 package cz.frantisekmasa.wfrp_master.common.character.effects
 
+import cz.frantisekmasa.wfrp_master.common.Str
 import cz.frantisekmasa.wfrp_master.common.core.domain.Size
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.Character
+import java.util.Locale
 
 /**
  * Change character size to according to largest Size(...) trait
@@ -23,14 +25,23 @@ class SizeChange(private val size: Size) : CharacterEffect {
     }
 
     companion object {
-        fun fromTraitNameOrNull(name: String): SizeChange? {
-            val match = Regex("Size \\((.*)\\)", RegexOption.IGNORE_CASE).matchEntire(name)
-                ?: return null
+        private val LANGUAGE_REGEXES = mutableMapOf<Locale, Regex>()
+        fun fromTraitNameOrNull(name: String, translator: Translator): SizeChange? {
+            val regex = LANGUAGE_REGEXES.getOrPut(translator.locale) {
+                Regex(
+                    translator.translate(Str.character_effect_size) + " \\((.*)\\)",
+                    RegexOption.IGNORE_CASE,
+                )
+            }
+
+            val match = regex.matchEntire(name) ?: return null
 
             val size = match.groupValues[1].trim()
 
-            return Size.values().firstOrNull { it.name.equals(size, ignoreCase = true) }
-                ?.let { SizeChange(it) }
+            return Size.values()
+                .firstOrNull {
+                    translator.translate(it.translatableName).equals(size, ignoreCase = true)
+                }?.let { SizeChange(it) }
         }
     }
 }

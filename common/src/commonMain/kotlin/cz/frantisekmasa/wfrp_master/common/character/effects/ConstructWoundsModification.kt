@@ -1,5 +1,6 @@
 package cz.frantisekmasa.wfrp_master.common.character.effects
 
+import cz.frantisekmasa.wfrp_master.common.Str
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.Character
 
 class ConstructWoundsModification : CharacterEffect {
@@ -24,8 +25,11 @@ class ConstructWoundsModification : CharacterEffect {
     }
 
     companion object {
-        fun fromTraitNameOrNull(name: String): ConstructWoundsModification? {
-            if (name.equals("construct", ignoreCase = true)) {
+        fun fromTraitNameOrNull(
+            name: String,
+            translator: Translator,
+        ): ConstructWoundsModification? {
+            if (name.equals(translator.translate(Str.character_effect_construct), ignoreCase = true)) {
                 return ConstructWoundsModification()
             }
 

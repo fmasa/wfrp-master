@@ -6,8 +6,10 @@ import com.benasher44.uuid.Uuid
 import cz.frantisekmasa.wfrp_master.common.character.effects.CharacterEffect
 import cz.frantisekmasa.wfrp_master.common.character.effects.CharacteristicChange
 import cz.frantisekmasa.wfrp_master.common.character.effects.ConstructWoundsModification
+import cz.frantisekmasa.wfrp_master.common.character.effects.EffectSource
 import cz.frantisekmasa.wfrp_master.common.character.effects.SizeChange
 import cz.frantisekmasa.wfrp_master.common.character.effects.SwarmWoundsModification
+import cz.frantisekmasa.wfrp_master.common.character.effects.Translator
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.CharacterItem
 import dev.icerock.moko.parcelize.Parcelize
 import kotlinx.serialization.Contextual
@@ -23,7 +25,7 @@ data class Trait(
     val name: String,
     val specificationValues: Map<String, String>,
     val description: String,
-) : CharacterItem<Trait, CompendiumTrait> {
+) : CharacterItem<Trait, CompendiumTrait>, EffectSource {
 
     @Stable
     val evaluatedName get(): String = specificationValues
@@ -37,14 +39,14 @@ data class Trait(
         }
 
     @Stable
-    override val effects: List<CharacterEffect> get() {
+    override fun getEffects(translator: Translator): List<CharacterEffect> {
         val name = evaluatedName.trim()
 
         return listOfNotNull(
-            SizeChange.fromTraitNameOrNull(name),
-            CharacteristicChange.fromTraitNameOrNull(name),
-            SwarmWoundsModification.fromTraitNameOrNull(name),
-            ConstructWoundsModification.fromTraitNameOrNull(name),
+            SizeChange.fromTraitNameOrNull(name, translator),
+            CharacteristicChange.fromTraitNameOrNull(name, translator),
+            SwarmWoundsModification.fromTraitNameOrNull(name, translator),
+            ConstructWoundsModification.fromTraitNameOrNull(name, translator),
         )
     }
 

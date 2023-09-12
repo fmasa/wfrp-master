@@ -1,5 +1,6 @@
 package cz.frantisekmasa.wfrp_master.common.character.effects
 
+import cz.frantisekmasa.wfrp_master.common.Str
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.Character
 
 class HardyWoundsModification(private val timesTaken: Int) : CharacterEffect {
@@ -29,8 +30,14 @@ class HardyWoundsModification(private val timesTaken: Int) : CharacterEffect {
     }
 
     companion object {
-        fun fromTalentOrNull(name: String, timesTaken: Int): HardyWoundsModification? {
-            if (name.equals("hardy", ignoreCase = true)) {
+        fun fromTalentOrNull(
+            name: String,
+            translator: Translator,
+            timesTaken: Int,
+        ): HardyWoundsModification? {
+            val effectName = translator.translate(Str.character_effect_hardy)
+
+            if (name.equals(effectName, ignoreCase = true)) {
                 return HardyWoundsModification(timesTaken)
             }
 

@@ -1,6 +1,8 @@
 package cz.frantisekmasa.wfrp_master.common.partyList
 
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -13,7 +15,9 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import cz.frantisekmasa.wfrp_master.common.Str
 import cz.frantisekmasa.wfrp_master.common.core.auth.LocalUser
@@ -22,12 +26,16 @@ import cz.frantisekmasa.wfrp_master.common.core.domain.party.Party
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.PartyId
 import cz.frantisekmasa.wfrp_master.common.core.ui.buttons.CloseButton
 import cz.frantisekmasa.wfrp_master.common.core.ui.dialogs.FullScreenDialog
+import cz.frantisekmasa.wfrp_master.common.core.ui.forms.InputLabel
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.Rules
+import cz.frantisekmasa.wfrp_master.common.core.ui.forms.SelectBox
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.TextInput
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.inputValue
+import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.InfoIcon
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
 import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.LocalPersistentSnackbarHolder
 import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.SaveAction
+import cz.frantisekmasa.wfrp_master.common.settings.Language
 import dev.icerock.moko.resources.compose.stringResource
 import io.github.aakira.napier.Napier
 import kotlinx.coroutines.Dispatchers
@@ -42,6 +50,7 @@ fun CreatePartyDialog(
     FullScreenDialog(onDismissRequest = onDismissRequest) {
         var validate by remember { mutableStateOf(false) }
         val partyName = inputValue("", Rules.NotBlank())
+        var language by rememberSaveable { mutableStateOf(Language.EN) }
 
         Scaffold(
             topBar = {
@@ -70,7 +79,11 @@ fun CreatePartyDialog(
 
                                 coroutineScope.launch(Dispatchers.IO) {
                                     try {
-                                        val partyId = screenModel.createParty(partyName.value, userId)
+                                        val partyId = screenModel.createParty(
+                                            partyName.value,
+                                            language,
+                                            userId,
+                                        )
 
                                         onSuccess(partyId)
                                     } catch (e: CouldNotConnectToBackend) {
@@ -107,6 +120,28 @@ fun CreatePartyDialog(
                     validate = validate,
                     maxLength = Party.NAME_MAX_LENGTH,
                 )
+
+                val label = stringResource(Str.parties_label_language)
+
+                InputLabel(label)
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Box(Modifier.weight(1f)) {
+                        SelectBox(
+                            value = language,
+                            onValueChange = { language = it },
+                            items = remember {
+                                Language.values()
+                                    .map { it to it.localizedName }
+                                    .sortedBy { it.second }
+                            },
+                        )
+                    }
+
+                    InfoIcon(
+                        title = label,
+                        text = stringResource(Str.parties_language_explanation)
+                    )
+                }
             }
         }
     }
