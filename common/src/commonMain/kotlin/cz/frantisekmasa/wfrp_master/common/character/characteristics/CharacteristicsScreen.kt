@@ -210,6 +210,7 @@ private fun CharacterTopPanel(
                     CharacterAvatar(
                         character.avatarUrl,
                         ItemIcon.Size.XLarge,
+                        zoomable = true,
                     )
 
                     Column(
