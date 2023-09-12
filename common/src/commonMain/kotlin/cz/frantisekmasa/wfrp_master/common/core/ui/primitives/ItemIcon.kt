@@ -45,7 +45,11 @@ object ItemIcon {
 }
 
 @Composable
-fun ItemIcon(url: String, size: ItemIcon.Size = ItemIcon.Size.Small) {
+fun ItemIcon(
+    url: String,
+    size: ItemIcon.Size = ItemIcon.Size.Small,
+    modifier: Modifier = Modifier,
+) {
     val backgroundColor = MaterialTheme.colors.onSurface.copy(alpha = ContentAlpha.medium)
 
     val dimensions = size.dimensions + size.padding * 2
@@ -53,7 +57,7 @@ fun ItemIcon(url: String, size: ItemIcon.Size = ItemIcon.Size.Small) {
     Image(
         rememberImagePainter(url).value,
         VisualOnlyIconDescription, // TODO: Provide mechanism to specify what does this image means, such as: ("Character's image", "Strength-based skill", etc.)
-        modifier = Modifier
+        modifier = modifier
             .clip(CircleShape)
             .background(backgroundColor, CircleShape)
             .width(dimensions)

@@ -9,14 +9,12 @@ import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.platform.LocalContext
 import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
-import coil.transform.CircleCropTransformation
 
 @Composable
 internal actual fun rememberImagePainter(url: String): State<Painter> {
     val painter = rememberAsyncImagePainter(
         ImageRequest.Builder(LocalContext.current)
             .data(url)
-            .transformations(CircleCropTransformation())
             .build()
     )
 

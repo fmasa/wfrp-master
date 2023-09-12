@@ -588,7 +588,13 @@ class ActiveCombatScreen(
 
                 Column {
                     ListItem(
-                        icon = { CharacterAvatar(combatant.avatarUrl, ItemIcon.Size.Small) },
+                        icon = {
+                            CharacterAvatar(
+                                combatant.avatarUrl,
+                                ItemIcon.Size.Small,
+                                zoomable = true,
+                            )
+                        },
                         text = {
                             Column {
                                 Text(combatant.name)
