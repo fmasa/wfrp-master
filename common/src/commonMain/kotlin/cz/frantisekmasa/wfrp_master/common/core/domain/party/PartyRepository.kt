@@ -3,6 +3,7 @@ package cz.frantisekmasa.wfrp_master.common.core.domain.party
 import arrow.core.Either
 import cz.frantisekmasa.wfrp_master.common.core.auth.UserId
 import cz.frantisekmasa.wfrp_master.common.core.connectivity.CouldNotConnectToBackend
+import cz.frantisekmasa.wfrp_master.common.firebase.firestore.Transaction
 import kotlinx.coroutines.flow.Flow
 
 interface PartyRepository {
@@ -11,6 +12,8 @@ interface PartyRepository {
      * @throws CouldNotConnectToBackend when repository cannot connect to server
      */
     suspend fun save(party: Party)
+
+    fun save(transaction: Transaction, party: Party)
 
     /**
      * @throws PartyNotFound

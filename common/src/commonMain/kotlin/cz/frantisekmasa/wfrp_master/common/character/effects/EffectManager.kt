@@ -7,9 +7,11 @@ import cz.frantisekmasa.wfrp_master.common.core.domain.character.CharacterItemRe
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.CharacterRepository
 import cz.frantisekmasa.wfrp_master.common.core.domain.identifiers.CharacterId
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.Party
+import cz.frantisekmasa.wfrp_master.common.core.domain.party.PartyId
 import cz.frantisekmasa.wfrp_master.common.core.domain.talents.TalentRepository
 import cz.frantisekmasa.wfrp_master.common.core.domain.traits.TraitRepository
 import cz.frantisekmasa.wfrp_master.common.firebase.firestore.Transaction
+import cz.frantisekmasa.wfrp_master.common.settings.Language
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
@@ -22,6 +24,45 @@ class EffectManager(
     private val translatorFactory: Translator.Factory,
 ) {
 
+    suspend fun reapplyWithDifferentLanguage(
+        transaction: Transaction,
+        partyId: PartyId,
+        character: Character,
+        originalLanguage: Language,
+        newLanguage: Language,
+    ) {
+        val characterId = CharacterId(partyId, character.id)
+        val effectSources = effectSources(characterId).toList()
+
+        var updatedCharacter = character
+
+        val originalTranslator = translatorFactory.create(originalLanguage)
+        val originalEffects = effectSources
+            .asSequence()
+            .map { it.getEffects(originalTranslator) }
+            .filter { it.isNotEmpty() }
+            .toList()
+
+        originalEffects.forEachIndexed { index, effects ->
+            updatedCharacter = updatedCharacter.revert(effects, originalEffects.drop(index).flatten())
+        }
+
+        val newTranslator = translatorFactory.create(newLanguage)
+        val newEffects = effectSources
+            .asSequence()
+            .map { it.getEffects(newTranslator) }
+            .filter { it.isNotEmpty() }
+            .toList()
+
+        newEffects.forEachIndexed { index, effects ->
+            updatedCharacter = updatedCharacter.apply(effects, newEffects.take(index).flatten())
+        }
+
+        if (updatedCharacter != character) {
+            characters.save(transaction, partyId, updatedCharacter)
+        }
+    }
+
     suspend fun <T> saveItem(
         transaction: Transaction,
         party: Party,
@@ -30,7 +71,7 @@ class EffectManager(
         item: T,
         previousItemVersion: T?,
     ): Unit where T : EffectSource, T : CharacterItem<T, *> = coroutineScope {
-        val translator = translator(party)
+        val translator = translator(party.settings.language)
 
         val newEffects = item.getEffects(translator)
         val previousEffects = previousItemVersion?.getEffects(translator) ?: emptyList()
@@ -68,7 +109,7 @@ class EffectManager(
         repository: CharacterItemRepository<T>,
         item: T,
     ): Unit where T : EffectSource, T : CharacterItem<T, *> = coroutineScope {
-        val translator = translator(party)
+        val translator = translator(party.settings.language)
 
         val characterDeferred = async(Dispatchers.IO) { characters.get(characterId) }
         val effectSources = effects(characterId, translator)
@@ -88,18 +129,22 @@ class EffectManager(
         repository.remove(transaction, characterId, item.id)
     }
 
-    private suspend fun effects(
-        characterId: CharacterId,
-        translator: Translator,
-    ): Sequence<Effects> {
+    private suspend fun effectSources(characterId: CharacterId): Sequence<EffectSource> {
         return coroutineScope {
             val traits = async(Dispatchers.IO) { traits.findAllForCharacter(characterId).first() }
             val talents = async(Dispatchers.IO) { talents.findAllForCharacter(characterId).first() }
 
             sequenceOf(traits.await(), talents.await())
                 .flatten()
-                .map { Effects(it.id, it.getEffects(translator)) }
         }
+    }
+
+    private suspend fun effects(
+        characterId: CharacterId,
+        translator: Translator,
+    ): Sequence<Effects> {
+        return effectSources(characterId)
+            .map { Effects(it.id, it.getEffects(translator)) }
     }
 
     private data class Effects(
@@ -121,7 +166,7 @@ class EffectManager(
         return effects.fold(this) { character, effect -> effect.revert(character, otherEffects) }
     }
 
-    private fun translator(party: Party): Translator {
-        return translatorFactory.create(party.settings.language)
+    private fun translator(language: Language): Translator {
+        return translatorFactory.create(language)
     }
 }

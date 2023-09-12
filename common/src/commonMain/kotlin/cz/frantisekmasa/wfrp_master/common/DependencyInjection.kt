@@ -314,7 +314,9 @@ val appModule = DI.Module("Common") {
             instance(),
         )
     }
-    bindFactory { partyId: PartyId -> PartySettingsScreenModel(partyId, instance()) }
+    bindFactory { partyId: PartyId ->
+        PartySettingsScreenModel(partyId, instance(), instance(), instance(), instance())
+    }
 
     bindProvider {
         ChangelogScreenModel(
