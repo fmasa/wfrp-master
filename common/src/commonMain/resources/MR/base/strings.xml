@@ -401,6 +401,14 @@
     <string name="parties_button_share_link">Share link</string>
     <string name="parties_image_qr_code_alt">Invitation QR code</string>
     <string name="parties_label_name">Party Name</string>
+    <string name="parties_label_language">Party Language</string>
+    <string name="parties_language_explanation">
+        There are several Talents and Traits that affect various Character stats and mechanics,
+        such as *Hardy*. This option changes the language used to match these Talents and Traits,
+        so e.g. when using the Italian language, *Gagliardo* is interpreted as *Hardy*,
+        and the effect is correctly applied.\n\n
+        For list of supported Talents and Traits see [WIKI](https://github.com/fmasa/wfrp-master/wiki/Automation#effects).
+    </string>
     <string name="parties_messages_already_member">You are already member of this party</string>
     <string name="parties_messages_compendium_card_moved">Compendium card has been moved to the World tab.</string>
     <string name="parties_messages_invalid_invitation_token">Invitation token is not valid</string>
