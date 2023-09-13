@@ -46,7 +46,7 @@ abstract class CompendiumScreen() : Screen {
         MIRACLES(Str.compendium_title_miracles, ::MiracleCompendiumScreen),
         TRAITS(Str.compendium_title_traits, ::TraitCompendiumScreen),
         CAREERS(Str.compendium_title_careers, ::CareerCompendiumScreen),
-        TRAPPINGS(Str.compendium_title_trappings, ::TrappingCompendiumScreen)
+        TRAPPINGS(Str.compendium_title_trappings, ::TrappingCompendiumScreen),
     }
 
     @Composable

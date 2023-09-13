@@ -27,6 +27,7 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.unit.dp
 import cz.frantisekmasa.wfrp_master.common.Str
 import cz.frantisekmasa.wfrp_master.common.compendium.CompendiumListScreen
+import cz.frantisekmasa.wfrp_master.common.compendium.journal.JournalScreen
 import cz.frantisekmasa.wfrp_master.common.core.domain.localizedName
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.Party
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.PartyId
@@ -106,6 +107,12 @@ private fun NavigationCard(partyId: PartyId) {
             modifier = Modifier.clickable { navigation.navigate(CompendiumListScreen(partyId)) },
             icon = { ItemIcon(Resources.Drawable.Compendium) },
             text = { Text(stringResource(Str.compendium_title)) },
+        )
+
+        ListItem(
+            modifier = Modifier.clickable { navigation.navigate(JournalScreen(partyId)) },
+            icon = { ItemIcon(Resources.Drawable.JournalEntry) },
+            text = { Text(stringResource(Str.compendium_title_journal)) },
         )
     }
 }

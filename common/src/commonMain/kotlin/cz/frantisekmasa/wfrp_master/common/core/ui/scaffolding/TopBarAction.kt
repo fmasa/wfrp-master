@@ -1,6 +1,7 @@
 package cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding
 
 import androidx.compose.foundation.layout.ColumnScope
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.ContentAlpha
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
@@ -20,9 +21,12 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.text.intl.Locale
 import androidx.compose.ui.text.toUpperCase
+import androidx.compose.ui.unit.dp
 import cz.frantisekmasa.wfrp_master.common.Str
 import cz.frantisekmasa.wfrp_master.common.core.ui.menu.DropdownMenu
 import dev.icerock.moko.resources.compose.stringResource
@@ -66,13 +70,35 @@ fun IconAction(
     icon: ImageVector,
     description: String,
     onClick: () -> Unit,
+    enabled: Boolean = true,
     tint: Color = contentColorFor(MaterialTheme.colors.primarySurface),
 ) {
-    IconButton(onClick = onClick) {
+    IconAction(
+        rememberVectorPainter(icon),
+        description = description,
+        onClick = onClick,
+        enabled = enabled,
+        tint = tint,
+    )
+}
+
+@Composable
+fun IconAction(
+    icon: Painter,
+    description: String,
+    onClick: () -> Unit,
+    enabled: Boolean = true,
+    tint: Color = contentColorFor(MaterialTheme.colors.primarySurface),
+) {
+    IconButton(
+        onClick = onClick,
+        enabled = enabled,
+    ) {
         Icon(
             icon,
             description,
             tint = tint,
+            modifier = Modifier.size(24.dp)
         )
     }
 }

@@ -326,6 +326,7 @@
     <string name="compendium_title_export_compendium">Export Compendium</string>
     <string name="compendium_title_import_compendium">Import Compendium</string>
     <string name="compendium_title_import_dialog">Importing Rulebook…</string>
+    <string name="compendium_title_journal">Journal</string>
     <string name="compendium_title_miracles">Miracles</string>
     <string name="compendium_title_skills">Skills</string>
     <string name="compendium_title_spells">Spells</string>
@@ -362,6 +363,18 @@
     <string name="encounters_title_create">Create Encounter</string>
     <string name="encounters_title_description">Description</string>
     <string name="encounters_title_edit">Edit Encounter</string>
+    <string name="journal_label_entry_name">Name</string>
+    <string name="journal_label_text">Text</string>
+    <string name="journal_label_gm_text">Text (GM only)</string>
+    <string name="journal_title_gm_text">GM only</string>
+    <string name="journal_label_parents">Parent folder</string>
+    <string name="journal_parents_helper_text">You can create sub-folders by using %s as separator</string>
+    <string name="journal_label_pinned">Pinned</string>
+    <string name="journal_folder_pin_cta">Pin entry</string>
+    <string name="journal_folder_unpin_cta">Unpin entry</string>
+    <string name="journal_title_new_entry">New Journal Entry</string>
+    <string name="journal_messages_no_entries">No entries</string>
+    <string name="journal_messages_no_entries_subtext">There are no entries in your journal yet.</string>
     <string name="messages_authentication_google_sign_in_failed">Google sign-in failed</string>
     <string name="messages_avatar_changed">Avatar was changed</string>
     <string name="messages_avatar_removed">Avatar was removed</string>

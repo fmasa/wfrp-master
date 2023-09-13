@@ -22,12 +22,14 @@ import cz.frantisekmasa.wfrp_master.common.compendium.career.CareerCompendiumScr
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.Blessing
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.Career
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.CompendiumItem
+import cz.frantisekmasa.wfrp_master.common.compendium.domain.JournalEntry
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.Miracle
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.Skill
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.Spell
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.Talent
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.Trait
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.Trapping
+import cz.frantisekmasa.wfrp_master.common.compendium.journal.JournalScreenModel
 import cz.frantisekmasa.wfrp_master.common.compendium.miracle.MiracleCompendiumScreenModel
 import cz.frantisekmasa.wfrp_master.common.compendium.skill.SkillCompendiumScreenModel
 import cz.frantisekmasa.wfrp_master.common.compendium.spell.SpellCompendiumScreenModel
@@ -133,6 +135,10 @@ val appModule = DI.Module("Common") {
 
     bindSingleton<Compendium<Trapping>> {
         FirestoreCompendium(Schema.Compendium.Trappings, instance(), mapper())
+    }
+
+    bindSingleton<Compendium<JournalEntry>> {
+        FirestoreCompendium(Schema.Compendium.Journal, instance(), mapper())
     }
 
     bindSingleton { DismissedUserTipsHolder(instance()) }
@@ -241,6 +247,9 @@ val appModule = DI.Module("Common") {
     }
     bindFactory { partyId: PartyId ->
         TrappingCompendiumScreenModel(partyId, instance(), instance(), instance(), instance())
+    }
+    bindFactory { partyId: PartyId ->
+        JournalScreenModel(partyId, instance(), instance(), instance(), instance())
     }
 
     bindSingleton { EffectManager(instance(), instance(), instance(), instance()) }

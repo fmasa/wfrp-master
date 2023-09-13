@@ -40,6 +40,7 @@ import cz.frantisekmasa.wfrp_master.common.character.trappings.TrappingsScreen
 import cz.frantisekmasa.wfrp_master.common.characterCreation.CharacterCreationScreen
 import cz.frantisekmasa.wfrp_master.common.characterEdit.CharacterEditScreen
 import cz.frantisekmasa.wfrp_master.common.combat.ActiveCombatBanner
+import cz.frantisekmasa.wfrp_master.common.compendium.journal.JournalScreen
 import cz.frantisekmasa.wfrp_master.common.core.LocalStaticConfiguration
 import cz.frantisekmasa.wfrp_master.common.core.PartyScreenModel
 import cz.frantisekmasa.wfrp_master.common.core.auth.LocalUser
@@ -50,6 +51,8 @@ import cz.frantisekmasa.wfrp_master.common.core.domain.character.CharacterType
 import cz.frantisekmasa.wfrp_master.common.core.domain.identifiers.CharacterId
 import cz.frantisekmasa.wfrp_master.common.core.domain.localizedName
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.Party
+import cz.frantisekmasa.wfrp_master.common.core.shared.Resources
+import cz.frantisekmasa.wfrp_master.common.core.shared.drawableResource
 import cz.frantisekmasa.wfrp_master.common.core.ui.buttons.HamburgerButton
 import cz.frantisekmasa.wfrp_master.common.core.ui.flow.collectWithLifecycle
 import cz.frantisekmasa.wfrp_master.common.core.ui.menu.DropdownMenu
@@ -117,6 +120,11 @@ data class CharacterDetailScreen(
                         )
                     },
                     actions = {
+                        IconAction(
+                            drawableResource(Resources.Drawable.JournalEntry),
+                            stringResource(Str.compendium_title_journal),
+                            onClick = { navigation.navigate(JournalScreen(characterId.partyId)) }
+                        )
                         IconAction(
                             Icons.Rounded.Edit,
                             stringResource(Str.character_title_edit),

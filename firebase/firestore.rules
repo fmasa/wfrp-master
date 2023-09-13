@@ -242,6 +242,32 @@ service cloud.firestore {
                     ];
                 }
             }
+
+            match /journal/{entryId} {
+                allow read: if hasAccessToParty();
+                allow create: if isGameMaster() && isValidJournalEntry(request.resource.data);
+                allow update: if isGameMaster() && isValidJournalEntry(request.resource.data);
+                allow delete: if isGameMaster();
+
+                function isValidJournalEntry(entry) {
+                    return [
+                        "id",
+                        "name",
+                        "parents",
+                        "pinned",
+                        "text",
+                        "gmText",
+                        "isVisibleToPlayers"
+                    ].hasAll(entry.keys())
+                        && entry.id is string && entry.id == entryId && isValidUuid(entry.id)
+                        && entry.name is string && isNotBlank(entry.name) && entry.name.size() <= 50
+                        && entry.parents is list
+                        && entry.pinned is bool
+                        && entry.text is string && entry.text.size() <= 3000
+                        && entry.gmText is string && entry.gmText.size() <= 3000
+                        && entry.isVisibleToPlayers is bool;
+                }
+            }
             // End of Compendium
 
             match /encounters/{encounterId} {
