@@ -17,6 +17,14 @@ interface Compendium<T : CompendiumItem<T>> {
      */
     suspend fun getItem(partyId: PartyId, itemId: Uuid): T
 
+    suspend fun findItem(partyId: PartyId, itemId: Uuid): T? {
+        return try {
+            getItem(partyId, itemId)
+        } catch (e: CompendiumItemNotFound) {
+            return null
+        }
+    }
+
     fun getLive(partyId: PartyId, itemId: Uuid): Flow<Either<CompendiumItemNotFound, T>>
 
     /**

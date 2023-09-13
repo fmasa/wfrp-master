@@ -14,9 +14,14 @@ import dev.icerock.moko.resources.compose.stringResource
 
 @Composable
 fun VisibilityIcon(item: CompendiumItem<*>) {
+    VisibilityIcon(item.isVisibleToPlayers)
+}
+
+@Composable
+fun VisibilityIcon(isVisibleToPlayers: Boolean) {
     val modifier = Modifier.size(16.dp)
 
-    if (item.isVisibleToPlayers) {
+    if (isVisibleToPlayers) {
         Icon(
             Icons.Rounded.Visibility,
             stringResource(Str.compendium_visible_to_players_true),

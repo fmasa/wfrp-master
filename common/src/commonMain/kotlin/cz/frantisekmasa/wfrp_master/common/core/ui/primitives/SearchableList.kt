@@ -57,6 +57,7 @@ fun <T : Any> SearchableList(
     emptyUi: @Composable () -> Unit,
     floatingActionButton: (@Composable () -> Unit)? = null,
     key: (T) -> Any,
+    defaultContent: (@Composable () -> Unit)? = null,
     itemContent: @Composable LazyItemScope.(T) -> Unit,
 ) {
     val focusRequester = remember { FocusRequester() }
@@ -126,6 +127,11 @@ fun <T : Any> SearchableList(
 
                 if (items.isEmpty()) {
                     emptyUi()
+                    return@Scaffold
+                }
+
+                if (searchedValue == "" && defaultContent != null) {
+                    defaultContent()
                     return@Scaffold
                 }
 

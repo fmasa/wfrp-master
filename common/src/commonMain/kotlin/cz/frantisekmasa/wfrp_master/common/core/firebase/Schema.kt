@@ -27,5 +27,6 @@ object Schema {
         const val Traits = "traits"
         const val Trappings = "trappings"
         const val Careers = "careers"
+        const val Journal = "journal"
     }
 }

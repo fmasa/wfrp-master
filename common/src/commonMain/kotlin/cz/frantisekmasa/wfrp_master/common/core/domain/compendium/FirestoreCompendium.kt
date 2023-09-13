@@ -87,6 +87,7 @@ class FirestoreCompendium<T : CompendiumItem<T>>(
     override fun save(transaction: Transaction, partyId: PartyId, item: T) {
         val data = mapper.toDocumentData(item)
 
+        Napier.d("Saving compendium item $data")
         transaction.set(
             collection(partyId).document(item.id.toString()),
             data,

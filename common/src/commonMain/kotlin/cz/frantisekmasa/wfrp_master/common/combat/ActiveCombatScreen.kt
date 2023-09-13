@@ -55,12 +55,15 @@ import cafe.adriel.voyager.core.screen.Screen
 import cz.frantisekmasa.wfrp_master.common.Str
 import cz.frantisekmasa.wfrp_master.common.character.CharacterDetailScreen
 import cz.frantisekmasa.wfrp_master.common.character.conditions.ConditionIcon
+import cz.frantisekmasa.wfrp_master.common.compendium.journal.JournalScreen
 import cz.frantisekmasa.wfrp_master.common.core.auth.LocalUser
 import cz.frantisekmasa.wfrp_master.common.core.auth.UserId
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.PartyId
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.combat.Advantage
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.combat.GroupAdvantage
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.settings.AdvantageSystem
+import cz.frantisekmasa.wfrp_master.common.core.shared.Resources
+import cz.frantisekmasa.wfrp_master.common.core.shared.drawableResource
 import cz.frantisekmasa.wfrp_master.common.core.ui.CharacterAvatar
 import cz.frantisekmasa.wfrp_master.common.core.ui.StatBlock
 import cz.frantisekmasa.wfrp_master.common.core.ui.StatBlockData
@@ -76,6 +79,7 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.FlowRow
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.ItemIcon
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.rememberScreenModel
+import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.IconAction
 import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.OptionsAction
 import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.Subtitle
 import cz.frantisekmasa.wfrp_master.common.encounters.CombatantItem
@@ -187,6 +191,12 @@ class ActiveCombatScreen(
                                 }
                             },
                             actions = {
+                                IconAction(
+                                    drawableResource(Resources.Drawable.JournalEntry),
+                                    stringResource(Str.compendium_title_journal),
+                                    onClick = { navigation.navigate(JournalScreen(partyId)) }
+                                )
+
                                 if (!isGameMaster) {
                                     return@TopAppBar
                                 }
