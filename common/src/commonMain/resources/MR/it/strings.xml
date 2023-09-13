@@ -712,4 +712,39 @@
     <string name="authentication_button_send">Invia</string>
     <string name="authentication_button_log_out">Log out</string>
     <string name="authentication_button_reset_password">Resetta password</string>
+    <string name="character_effect_big">grosso</string>
+    <string name="character_effect_savvy">buon senso</string>
+    <string name="character_effect_tough">tenace</string>
+    <string name="character_size_average">Media</string>
+    <string name="character_size_large">Grande</string>
+    <string name="character_effect_sturdy">vigoroso</string>
+    <string name="character_effect_construct">costrutto</string>
+    <string name="character_effect_swarm">sciame</string>
+    <string name="character_effect_size">taglia</string>
+    <string name="character_size_small">Piccolo</string>
+    <string name="character_effect_very_resilient">saldo</string>
+    <string name="character_effect_hardy">gagliardo</string>
+    <string name="parties_language_change_warning">Cambiando la lingua del Gruppo potrebbe avere effetto sui Personaggi già creati</string>
+    <string name="character_size_enormous">Enorme</string>
+    <string name="character_effect_elite">elite</string>
+    <string name="character_effect_cunning">astuto</string>
+    <string name="character_effect_strong_back">spalle forti</string>
+    <string name="character_effect_marksman">tiratore</string>
+    <string name="character_effect_clever">intelligente</string>
+    <string name="parties_language_explanation">Esistono diversi talenti e tratti che influenzano varie statistiche e meccaniche dei Personaggi, come *Gagliardo*. Questa opzione cambia la lingua utilizzata per abbinare questi talenti e tratti, quindi ad esempio quando si utilizza la lingua italiana, *Gagliardo* viene interpretato come *Hardy* e l\'effetto viene applicato correttamente.
+\n
+\n Per l\'elenco dei talenti e dei tratti supportati, vedere [WIKI](https://github.com/fmasa/wfrp-master/wiki/Automation#effects).</string>
+    <string name="character_size_tiny">Minuscola</string>
+    <string name="character_size_little">Piccolo</string>
+    <string name="character_effect_warrior_born">guerriero nato</string>
+    <string name="character_effect_very_strong">forzuto</string>
+    <string name="character_effect_coolheaded">razionale</string>
+    <string name="character_effect_brute">bruto</string>
+    <string name="character_effect_sharp">acuto</string>
+    <string name="character_effect_leader">capo</string>
+    <string name="character_effect_lightning_reflexes">riflessi fulminei</string>
+    <string name="character_effect_suave">cortese</string>
+    <string name="character_effect_nimble_fingered">dita agili</string>
+    <string name="parties_label_language">Lingua del Gruppo</string>
+    <string name="character_size_monstrous">Mostruoso</string>
 </resources>
