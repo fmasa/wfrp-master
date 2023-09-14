@@ -747,4 +747,17 @@
     <string name="character_effect_nimble_fingered">dita agili</string>
     <string name="parties_label_language">Lingua del Gruppo</string>
     <string name="character_size_monstrous">Mostruoso</string>
+    <string name="compendium_title_journal">Diario</string>
+    <string name="journal_label_pinned">Appuntato</string>
+    <string name="journal_label_gm_text">Testo (Per GM)</string>
+    <string name="journal_folder_pin_cta">Appunta</string>
+    <string name="journal_messages_no_entries_subtext">Non ci sono annotazioni nel diario.</string>
+    <string name="journal_messages_no_entries">Nessuna annotazione</string>
+    <string name="journal_title_gm_text">Per il GM</string>
+    <string name="journal_label_parents">Cartella principale</string>
+    <string name="journal_parents_helper_text">Puoi creare una sotto cartella usando %s come separatore</string>
+    <string name="journal_folder_unpin_cta">Togli Appunto</string>
+    <string name="journal_title_new_entry">Nuova Annotazione</string>
+    <string name="journal_label_text">Testo</string>
+    <string name="journal_label_entry_name">Nome</string>
 </resources>
