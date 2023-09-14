@@ -54,21 +54,24 @@ import cz.frantisekmasa.wfrp_master.common.core.domain.spells.Spell
 import cz.frantisekmasa.wfrp_master.common.core.domain.talents.Talent
 import cz.frantisekmasa.wfrp_master.common.core.domain.traits.Trait
 import cz.frantisekmasa.wfrp_master.common.core.ui.dialogs.FullScreenDialog
+import cz.frantisekmasa.wfrp_master.common.core.ui.flow.collectWithLifecycle
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
 import dev.icerock.moko.parcelize.Parcelable
 import dev.icerock.moko.parcelize.Parcelize
 import dev.icerock.moko.resources.compose.stringResource
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 
 @Immutable
 @Parcelize
 data class StatBlockData(
     val note: String,
-    val skills: List<Skill>,
-    val talents: List<Talent>,
-    val spells: List<Spell>,
-    val blessings: List<Blessing>,
-    val miracles: List<Miracle>,
-    val traits: List<Trait>,
+    val skills: Flow<List<Skill>>,
+    val talents: Flow<List<Talent>>,
+    val spells: Flow<List<Spell>>,
+    val blessings: Flow<List<Blessing>>,
+    val miracles: Flow<List<Miracle>>,
+    val traits: Flow<List<Trait>>,
 ) : Parcelable
 
 @Composable
@@ -99,11 +102,11 @@ fun StatBlock(
 
     CharacterItemList(
         title = stringResource(Str.skills_title_skills),
-        items = derivedStateOf {
+        items = remember(data.skills) {
             // Only basic skills can have 0 advances,
             // and these can be easily derived from characteristics
-            data.skills.filter { it.advances > 0 }
-        }.value,
+            data.skills.map { skills -> skills.filter { it.advances > 0 } }
+        },
         value = { "${it.name} ${characteristics.get(it.characteristic) + it.advances}" },
         detail = { skill, onDismissRequest -> SkillDetail(skill, onDismissRequest) },
     )
@@ -157,11 +160,13 @@ private const val SkillTag = "[skill]"
 @Composable
 private fun <T : CharacterItem<T, *>> CharacterItemList(
     title: String,
-    items: List<T>,
+    items: Flow<List<T>>,
     value: (T) -> String,
     detail: @Composable (item: T, onDismissRequest: () -> Unit) -> Unit
 ) {
-    if (items.isEmpty()) {
+    val itemList = items.collectWithLifecycle(emptyList()).value
+
+    if (itemList.isEmpty()) {
         return
     }
 
@@ -180,12 +185,12 @@ private fun <T : CharacterItem<T, *>> CharacterItemList(
                 append(": ")
             }
 
-            items.forEachIndexed { index, item ->
+            itemList.forEachIndexed { index, item ->
                 withAnnotation(SkillTag, item.id.toString()) {
                     append(value(item))
                 }
 
-                if (index != items.lastIndex) {
+                if (index != itemList.lastIndex) {
                     append(", ")
                 }
             }
@@ -203,7 +208,7 @@ private fun <T : CharacterItem<T, *>> CharacterItemList(
             ?.let { range ->
                 val itemId = uuidFrom(range.item)
 
-                visibleSkill = items.first { it.id == itemId }
+                visibleSkill = itemList.first { it.id == itemId }
             }
     }
 }

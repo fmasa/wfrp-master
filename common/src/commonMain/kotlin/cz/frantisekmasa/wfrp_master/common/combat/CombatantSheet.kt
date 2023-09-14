@@ -17,7 +17,6 @@ import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableStateOf
@@ -32,7 +31,6 @@ import cz.frantisekmasa.wfrp_master.common.Str
 import cz.frantisekmasa.wfrp_master.common.character.conditions.ConditionIcon
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.combat.Advantage
 import cz.frantisekmasa.wfrp_master.common.core.ui.StatBlock
-import cz.frantisekmasa.wfrp_master.common.core.ui.StatBlockData
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.NumberPicker
 import cz.frantisekmasa.wfrp_master.common.core.ui.menu.DropdownMenu
 import cz.frantisekmasa.wfrp_master.common.core.ui.menu.DropdownMenuItem
@@ -43,7 +41,6 @@ import cz.frantisekmasa.wfrp_master.common.encounters.domain.Wounds
 import dev.icerock.moko.resources.compose.stringResource
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 @Composable
 fun CombatantSheet(
@@ -97,15 +94,10 @@ fun CombatantSheet(
             screenModel = viewModel,
         )
 
-        var statBlockData: StatBlockData? by rememberSaveable { mutableStateOf(null) }
-
-        StatBlock(combatant.characteristics, statBlockData)
-
-        LaunchedEffect(combatant.combatant.id) {
-            withContext(Dispatchers.IO) {
-                statBlockData = viewModel.getStatBlockData(combatant)
-            }
-        }
+        StatBlock(
+            combatant.characteristics,
+            rememberSaveable(combatant.combatant.id) { viewModel.getStatBlockData(combatant) },
+        )
 
         Divider()
 

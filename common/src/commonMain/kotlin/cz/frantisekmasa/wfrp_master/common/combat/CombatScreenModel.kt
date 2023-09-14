@@ -34,8 +34,6 @@ import cz.frantisekmasa.wfrp_master.common.core.utils.right
 import cz.frantisekmasa.wfrp_master.common.encounters.CombatantItem
 import cz.frantisekmasa.wfrp_master.common.encounters.domain.Wounds
 import io.github.aakira.napier.Napier
-import kotlinx.coroutines.async
-import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -82,27 +80,18 @@ class CombatScreenModel(
     suspend fun loadNpcs(): List<Character> =
         characters.inParty(partyId, CharacterType.NPC).first()
 
-    suspend fun getStatBlockData(combatant: CombatantItem): StatBlockData {
+    fun getStatBlockData(combatant: CombatantItem): StatBlockData {
         val characterId = combatant.characterId
 
-        return coroutineScope {
-            val skillsDeferred = async { skills.findAllForCharacter(characterId).first() }
-            val talentsDeferred = async { talents.findAllForCharacter(characterId).first() }
-            val spellsDeferred = async { spells.findAllForCharacter(characterId).first() }
-            val blessingsDeferred = async { blessings.findAllForCharacter(characterId).first() }
-            val miraclesDeferred = async { miracles.findAllForCharacter(characterId).first() }
-            val traitsDeferred = async { traits.findAllForCharacter(characterId).first() }
-
-            StatBlockData(
-                combatant.note,
-                skillsDeferred.await(),
-                talentsDeferred.await(),
-                spellsDeferred.await(),
-                blessingsDeferred.await(),
-                miraclesDeferred.await(),
-                traitsDeferred.await(),
-            )
-        }
+        return StatBlockData(
+            note = combatant.note,
+            skills = skills.findAllForCharacter(characterId),
+            talents = talents.findAllForCharacter(characterId),
+            spells = spells.findAllForCharacter(characterId),
+            blessings.findAllForCharacter(characterId),
+            miracles.findAllForCharacter(characterId),
+            traits.findAllForCharacter(characterId),
+        )
     }
 
     suspend fun startCombat(
