@@ -19,7 +19,6 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.BottomAppBar
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.ContentAlpha
-import androidx.compose.material.Divider
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.ListItem
@@ -31,12 +30,10 @@ import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.rounded.ArrowBack
 import androidx.compose.material.icons.rounded.ArrowForward
 import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
@@ -44,8 +41,6 @@ import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -65,17 +60,12 @@ import cz.frantisekmasa.wfrp_master.common.core.domain.party.settings.AdvantageS
 import cz.frantisekmasa.wfrp_master.common.core.shared.Resources
 import cz.frantisekmasa.wfrp_master.common.core.shared.drawableResource
 import cz.frantisekmasa.wfrp_master.common.core.ui.CharacterAvatar
-import cz.frantisekmasa.wfrp_master.common.core.ui.StatBlock
-import cz.frantisekmasa.wfrp_master.common.core.ui.StatBlockData
 import cz.frantisekmasa.wfrp_master.common.core.ui.buttons.BackButton
 import cz.frantisekmasa.wfrp_master.common.core.ui.dialogs.DialogProgress
 import cz.frantisekmasa.wfrp_master.common.core.ui.flow.collectWithLifecycle
-import cz.frantisekmasa.wfrp_master.common.core.ui.forms.NumberPicker
-import cz.frantisekmasa.wfrp_master.common.core.ui.menu.DropdownMenu
 import cz.frantisekmasa.wfrp_master.common.core.ui.menu.DropdownMenuItem
 import cz.frantisekmasa.wfrp_master.common.core.ui.navigation.LocalNavigationTransaction
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.DraggableListFor
-import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.FlowRow
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.ItemIcon
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.rememberScreenModel
@@ -83,12 +73,10 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.IconAction
 import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.OptionsAction
 import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.Subtitle
 import cz.frantisekmasa.wfrp_master.common.encounters.CombatantItem
-import cz.frantisekmasa.wfrp_master.common.encounters.domain.Wounds
 import dev.icerock.moko.resources.compose.stringResource
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 class ActiveCombatScreen(
     private val partyId: PartyId,
@@ -363,22 +351,6 @@ class ActiveCombatScreen(
     }
 
     @Composable
-    private fun AdvantagePicker(
-        label: String,
-        value: Advantage,
-        onChange: (Advantage) -> Unit,
-        modifier: Modifier = Modifier,
-    ) {
-        NumberPicker(
-            label = label,
-            value = value.value,
-            onIncrement = { onChange(value.inc()) },
-            onDecrement = { onChange(value.dec()) },
-            modifier = modifier,
-        )
-    }
-
-    @Composable
     private fun BottomBar(turn: Int, round: Int, viewModel: CombatScreenModel) {
         val coroutineScope = rememberCoroutineScope()
 
@@ -450,125 +422,6 @@ class ActiveCombatScreen(
                 }
             )
         }
-    }
-
-    @Composable
-    private fun CombatantSheet(
-        combatant: CombatantItem,
-        viewModel: CombatScreenModel,
-        isGroupAdvantageSystemEnabled: Boolean,
-        advantageCap: Advantage,
-        onRemoveRequest: (() -> Unit)?,
-        onDetailOpenRequest: () -> Unit,
-    ) {
-        Column(
-            Modifier
-                .verticalScroll(rememberScrollState())
-                .padding(Spacing.large),
-            verticalArrangement = Arrangement.spacedBy(Spacing.small),
-        ) {
-            Row(
-                modifier = Modifier.align(Alignment.CenterHorizontally),
-                verticalAlignment = Alignment.CenterVertically,
-            ) {
-                Text(
-                    combatant.name,
-                    style = MaterialTheme.typography.h6,
-                    modifier = Modifier.clickable(onClick = onDetailOpenRequest)
-                )
-
-                if (onRemoveRequest != null) {
-                    var contextMenuExpanded by remember { mutableStateOf(false) }
-                    Box {
-                        IconButton(onClick = { contextMenuExpanded = true }) {
-                            Icon(
-                                Icons.Filled.MoreVert,
-                                stringResource(Str.common_ui_label_open_context_menu),
-                            )
-                        }
-                        DropdownMenu(
-                            expanded = contextMenuExpanded,
-                            onDismissRequest = { contextMenuExpanded = false },
-                        ) {
-                            DropdownMenuItem(onClick = onRemoveRequest) {
-                                Text(stringResource(Str.combat_button_remove_combatant))
-                            }
-                        }
-                    }
-                }
-            }
-
-            ConditionsBox(
-                modifier = Modifier.padding(bottom = Spacing.small),
-                combatant = combatant,
-                screenModel = viewModel,
-            )
-
-            var statBlockData: StatBlockData? by rememberSaveable { mutableStateOf(null) }
-
-            StatBlock(combatant.characteristics, statBlockData)
-
-            LaunchedEffect(combatant.combatant.id) {
-                withContext(Dispatchers.IO) {
-                    statBlockData = viewModel.getStatBlockData(combatant)
-                }
-            }
-
-            Divider()
-
-            Row(Modifier.padding(bottom = Spacing.medium)) {
-                Box(Modifier.weight(1f), contentAlignment = Alignment.TopCenter) {
-                    CombatantWounds(combatant, viewModel)
-                }
-
-                if (!isGroupAdvantageSystemEnabled) {
-                    Box(Modifier.weight(1f), contentAlignment = Alignment.TopCenter) {
-                        CombatantAdvantage(combatant, viewModel, advantageCap)
-                    }
-                }
-            }
-        }
-    }
-
-    @Composable
-    private fun CombatantWounds(combatant: CombatantItem, viewModel: CombatScreenModel) {
-        val coroutineScope = rememberCoroutineScope()
-        val updateWounds = { wounds: Wounds ->
-            coroutineScope.launch(Dispatchers.IO) {
-                viewModel.updateWounds(combatant, wounds)
-            }
-        }
-
-        val wounds = combatant.wounds
-
-        NumberPicker(
-            label = stringResource(Str.points_wounds),
-            value = wounds.current,
-            onIncrement = { updateWounds(wounds.restore(1)) },
-            onDecrement = { updateWounds(wounds.lose(1)) },
-        )
-    }
-
-    @Composable
-    private fun CombatantAdvantage(
-        combatant: CombatantItem,
-        viewModel: CombatScreenModel,
-        advantageCap: Advantage,
-    ) {
-        val coroutineScope = rememberCoroutineScope()
-        val updateAdvantage = { advantage: Advantage ->
-            coroutineScope.launch(Dispatchers.IO) {
-                viewModel.updateAdvantage(combatant.combatant, advantage)
-            }
-        }
-
-        val advantage = combatant.combatant.advantage
-
-        AdvantagePicker(
-            label = stringResource(Str.combat_label_advantage),
-            value = advantage,
-            onChange = { updateAdvantage(it.coerceAtMost(advantageCap)) }
-        )
     }
 
     @Composable
@@ -646,46 +499,6 @@ class ActiveCombatScreen(
                                     repeat(count) { ConditionIcon(condition, size = 20.dp) }
                                 }
                             }
-                        }
-                    }
-                }
-            }
-        }
-    }
-}
-
-@Composable
-private fun ConditionsBox(
-    modifier: Modifier,
-    combatant: CombatantItem,
-    screenModel: CombatScreenModel,
-) {
-    var conditionsDialogOpened by remember { mutableStateOf(false) }
-
-    if (conditionsDialogOpened) {
-        ConditionsDialog(
-            combatantItem = combatant,
-            screenModel = screenModel,
-            onDismissRequest = { conditionsDialogOpened = false },
-        )
-    }
-
-    Box(
-        modifier = modifier.clickable { conditionsDialogOpened = true }
-            .fillMaxWidth(),
-        contentAlignment = Alignment.Center,
-    ) {
-
-        val conditions = combatant.conditions
-
-        if (conditions.areEmpty()) {
-            Text(stringResource(Str.combat_messages_no_conditions))
-        } else {
-            FlowRow(verticalSpacing = Spacing.small, horizontalSpacing = Spacing.small) {
-                conditions.toList().forEach { (condition, count) ->
-                    repeat(count) { index ->
-                        key(condition, index) {
-                            ConditionIcon(condition, size = 28.dp)
                         }
                     }
                 }
