@@ -166,7 +166,7 @@ class JournalEntryScreen(
                             stringResource(Str.journal_label_parents),
                             remember(entry.parents) {
                                 entry.parents
-                                    .joinToString(" ${JournalEntry.PARENT_SEPARATOR}")
+                                    .joinToString(" ${JournalEntry.PARENT_SEPARATOR} ")
                             }
                         )
                         Markdown(entry.text)
