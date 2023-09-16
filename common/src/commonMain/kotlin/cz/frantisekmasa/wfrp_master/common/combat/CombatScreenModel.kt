@@ -3,10 +3,14 @@ package cz.frantisekmasa.wfrp_master.common.combat
 import cafe.adriel.voyager.core.model.ScreenModel
 import com.benasher44.uuid.Uuid
 import com.benasher44.uuid.uuid4
+import cz.frantisekmasa.wfrp_master.common.combat.domain.ArmourPart
+import cz.frantisekmasa.wfrp_master.common.combat.domain.EquippedWeapon
+import cz.frantisekmasa.wfrp_master.common.combat.domain.WornArmourPiece
 import cz.frantisekmasa.wfrp_master.common.combat.domain.initiative.BonusesPlus1d10Strategy
 import cz.frantisekmasa.wfrp_master.common.combat.domain.initiative.InitiativeCharacteristicStrategy
 import cz.frantisekmasa.wfrp_master.common.combat.domain.initiative.InitiativePlus1d10Strategy
 import cz.frantisekmasa.wfrp_master.common.combat.domain.initiative.InitiativeTestStrategy
+import cz.frantisekmasa.wfrp_master.common.core.domain.HitLocation
 import cz.frantisekmasa.wfrp_master.common.core.domain.Stats
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.Character
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.CharacterRepository
@@ -28,6 +32,7 @@ import cz.frantisekmasa.wfrp_master.common.core.domain.skills.SkillRepository
 import cz.frantisekmasa.wfrp_master.common.core.domain.spells.SpellRepository
 import cz.frantisekmasa.wfrp_master.common.core.domain.talents.TalentRepository
 import cz.frantisekmasa.wfrp_master.common.core.domain.traits.TraitRepository
+import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.InventoryItemRepository
 import cz.frantisekmasa.wfrp_master.common.core.logging.Reporter
 import cz.frantisekmasa.wfrp_master.common.core.ui.StatBlockData
 import cz.frantisekmasa.wfrp_master.common.core.utils.right
@@ -39,6 +44,7 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.mapLatest
 import kotlinx.coroutines.flow.mapNotNull
 import kotlin.random.Random
@@ -54,6 +60,7 @@ class CombatScreenModel(
     private val blessings: BlessingRepository,
     private val miracles: MiracleRepository,
     private val traits: TraitRepository,
+    private val trappings: InventoryItemRepository,
 ) : ScreenModel {
 
     val party: Flow<Party> = parties.getLive(partyId).right()
@@ -80,17 +87,37 @@ class CombatScreenModel(
     suspend fun loadNpcs(): List<Character> =
         characters.inParty(partyId, CharacterType.NPC).first()
 
-    fun getStatBlockData(combatant: CombatantItem): StatBlockData {
-        val characterId = combatant.characterId
+    fun getStatBlockData(characterId: CharacterId): StatBlockData {
+        val characterFlow = characters.getLive(characterId).right()
+        val trappings = trappings.findAllForCharacter(characterId)
 
         return StatBlockData(
-            note = combatant.note,
+            note = characterFlow.map { it.note }.distinctUntilChanged(),
             skills = skills.findAllForCharacter(characterId),
             talents = talents.findAllForCharacter(characterId),
             spells = spells.findAllForCharacter(characterId),
-            blessings.findAllForCharacter(characterId),
-            miracles.findAllForCharacter(characterId),
-            traits.findAllForCharacter(characterId),
+            blessings = blessings.findAllForCharacter(characterId),
+            miracles = miracles.findAllForCharacter(characterId),
+            traits = traits.findAllForCharacter(characterId),
+            weapons = trappings
+                .combine(characterFlow) { items, character ->
+                    items.mapNotNull {
+                        EquippedWeapon.fromTrappingOrNull(it, character.characteristics.strengthBonus)
+                    }
+                },
+            armour = trappings.map { items ->
+                val armourPiecesByPart = items.asSequence()
+                    .mapNotNull(WornArmourPiece::fromTrappingOrNull)
+                    .flatMap {
+                        it.armour.locations.map { location -> location to it }
+                    }.groupBy({ it.first }, { it.second })
+
+                HitLocation.values()
+                    .asSequence()
+                    .filter { it in armourPiecesByPart }
+                    .map { ArmourPart(it, armourPiecesByPart.getValue(it)) }
+                    .toList()
+            },
         )
     }
 

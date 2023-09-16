@@ -95,8 +95,11 @@ fun CombatantSheet(
         )
 
         StatBlock(
+            combatant.characterId,
             combatant.characteristics,
-            rememberSaveable(combatant.combatant.id) { viewModel.getStatBlockData(combatant) },
+            rememberSaveable(combatant.combatant.id) {
+                viewModel.getStatBlockData(combatant.characterId)
+            },
         )
 
         Divider()

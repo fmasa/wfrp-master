@@ -2,7 +2,6 @@
 
 package cz.frantisekmasa.wfrp_master.common.core.ui
 
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
@@ -12,7 +11,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.ClickableText
-import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Divider
 import androidx.compose.material.LocalContentAlpha
 import androidx.compose.material.LocalContentColor
@@ -20,13 +18,8 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
-import androidx.compose.runtime.derivedStateOf
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.ExperimentalTextApi
@@ -36,25 +29,34 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withAnnotation
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
-import com.benasher44.uuid.uuidFrom
+import cafe.adriel.voyager.core.screen.Screen
 import cz.frantisekmasa.wfrp_master.common.Str
-import cz.frantisekmasa.wfrp_master.common.character.religion.blessings.BlessingDetail
-import cz.frantisekmasa.wfrp_master.common.character.religion.miracles.MiracleDetail
-import cz.frantisekmasa.wfrp_master.common.character.skills.dialog.SkillDetail
-import cz.frantisekmasa.wfrp_master.common.character.spells.dialog.SpellDetail
-import cz.frantisekmasa.wfrp_master.common.character.talents.dialog.TalentDetail
-import cz.frantisekmasa.wfrp_master.common.character.traits.TraitDetail
+import cz.frantisekmasa.wfrp_master.common.character.CharacterDetailScreen
+import cz.frantisekmasa.wfrp_master.common.character.combat.translateFeatures
+import cz.frantisekmasa.wfrp_master.common.character.religion.blessings.CharacterBlessingDetailScreen
+import cz.frantisekmasa.wfrp_master.common.character.religion.miracles.CharacterMiracleDetailScreen
+import cz.frantisekmasa.wfrp_master.common.character.skills.CharacterSkillDetailScreen
+import cz.frantisekmasa.wfrp_master.common.character.spells.CharacterSpellDetailScreen
+import cz.frantisekmasa.wfrp_master.common.character.talents.CharacterTalentDetailScreen
+import cz.frantisekmasa.wfrp_master.common.character.traits.CharacterTraitDetailScreen
+import cz.frantisekmasa.wfrp_master.common.character.trappings.TrappingDetailScreen
+import cz.frantisekmasa.wfrp_master.common.combat.domain.ArmourPart
+import cz.frantisekmasa.wfrp_master.common.combat.domain.EquippedWeapon
 import cz.frantisekmasa.wfrp_master.common.core.domain.Characteristic
 import cz.frantisekmasa.wfrp_master.common.core.domain.Stats
-import cz.frantisekmasa.wfrp_master.common.core.domain.character.CharacterItem
+import cz.frantisekmasa.wfrp_master.common.core.domain.character.CharacterTab
+import cz.frantisekmasa.wfrp_master.common.core.domain.identifiers.CharacterId
+import cz.frantisekmasa.wfrp_master.common.core.domain.localizedName
 import cz.frantisekmasa.wfrp_master.common.core.domain.religion.Blessing
 import cz.frantisekmasa.wfrp_master.common.core.domain.religion.Miracle
 import cz.frantisekmasa.wfrp_master.common.core.domain.skills.Skill
 import cz.frantisekmasa.wfrp_master.common.core.domain.spells.Spell
 import cz.frantisekmasa.wfrp_master.common.core.domain.talents.Talent
 import cz.frantisekmasa.wfrp_master.common.core.domain.traits.Trait
-import cz.frantisekmasa.wfrp_master.common.core.ui.dialogs.FullScreenDialog
+import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.TrappingType
+import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.WeaponEquip
 import cz.frantisekmasa.wfrp_master.common.core.ui.flow.collectWithLifecycle
+import cz.frantisekmasa.wfrp_master.common.core.ui.navigation.LocalNavigationTransaction
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
 import dev.icerock.moko.parcelize.Parcelable
 import dev.icerock.moko.parcelize.Parcelize
@@ -65,39 +67,82 @@ import kotlinx.coroutines.flow.map
 @Immutable
 @Parcelize
 data class StatBlockData(
-    val note: String,
+    val note: Flow<String>,
     val skills: Flow<List<Skill>>,
     val talents: Flow<List<Talent>>,
     val spells: Flow<List<Spell>>,
     val blessings: Flow<List<Blessing>>,
     val miracles: Flow<List<Miracle>>,
     val traits: Flow<List<Trait>>,
+    val weapons: Flow<List<EquippedWeapon>>,
+    val armour: Flow<List<ArmourPart>>,
 ) : Parcelable
 
 @Composable
 fun StatBlock(
+    characterId: CharacterId,
     characteristics: Stats,
-    data: StatBlockData?,
+    data: StatBlockData,
 ) {
     CompactCharacteristicsTable(characteristics)
 
-    if (data == null) {
-        Box(Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
-            CircularProgressIndicator()
-        }
-        return
-    }
+    CharacterItemList(
+        title = stringResource(Str.character_title_weapons),
+        items = data.weapons,
+        value = {
+            buildString {
+                val weapon = it.weapon
+                append(it.trapping.name)
+                append(" (+")
+                append(
+                    (
+                        sequenceOf(it.damage.value.toString()) +
+                            sequenceOf(
+                                if (weapon is TrappingType.RangedWeapon)
+                                    listOf(
+                                        weapon.range.calculate(
+                                            strengthBonus = characteristics.strengthBonus,
+                                        ).value.toString()
+                                    )
+                                else emptyList(),
+                                if (weapon.equipped == WeaponEquip.OFF_HAND)
+                                    listOf(WeaponEquip.OFF_HAND.localizedName)
+                                else emptyList(),
+                                translateFeatures(weapon.qualities),
+                                translateFeatures(weapon.flaws),
+                                translateFeatures(it.trapping.itemQualities.associateWith { 1 }),
+                                translateFeatures(it.trapping.itemFlaws.associateWith { 1 }),
+                            ).flatten()
+                                .sorted()
+                        ).joinToString(", ")
+                )
+                append(')')
+            }
+        },
+        detail = { TrappingDetailScreen(characterId, it.trapping.id) },
+        key = { it.trapping.id.toString() },
+    )
+
+    CharacterItemList(
+        title = stringResource(Str.armour_title),
+        items = data.armour,
+        value = { "${it.hitLocation.localizedName} ${it.points.value}" },
+        detail = {
+            CharacterDetailScreen(
+                characterId,
+                comingFromCombat = true,
+                initialTab = CharacterTab.COMBAT,
+            )
+        },
+        key = { it.hitLocation.name },
+    )
 
     CharacterItemList(
         title = stringResource(Str.traits_title_traits),
         items = data.traits,
         value = { it.evaluatedName },
-        detail = { trait, onDismissRequest ->
-            TraitDetail(
-                trait = trait,
-                onDismissRequest = onDismissRequest,
-            )
-        },
+        detail = { CharacterTraitDetailScreen(characterId, it.id) },
+        key = { it.id.toString() },
     )
 
     CharacterItemList(
@@ -108,61 +153,59 @@ fun StatBlock(
             data.skills.map { skills -> skills.filter { it.advances > 0 } }
         },
         value = { "${it.name} ${characteristics.get(it.characteristic) + it.advances}" },
-        detail = { skill, onDismissRequest -> SkillDetail(skill, onDismissRequest) },
+        key = { it.id.toString() },
+        detail = { CharacterSkillDetailScreen(characterId, it.id) },
     )
 
     CharacterItemList(
         title = stringResource(Str.talents_title_talents),
         items = data.talents,
         value = { it.name + if (it.taken > 1) " ${it.taken}" else "" },
-        detail = { talent, onDismissRequest -> TalentDetail(talent, onDismissRequest) },
+        key = { it.id.toString() },
+        detail = { CharacterTalentDetailScreen(characterId, it.id) },
     )
 
     CharacterItemList(
         title = stringResource(Str.spells_title_spells),
         items = data.spells,
         value = { it.name },
-        detail = { spell, onDismissRequest -> SpellDetail(spell, onDismissRequest) },
+        key = { it.id.toString() },
+        detail = { CharacterSpellDetailScreen(characterId, it.id) },
     )
 
     CharacterItemList(
         title = stringResource(Str.blessings_title),
         items = data.blessings,
         value = { it.name },
-        detail = { blessing, onDismissRequest ->
-            BlessingDetail(
-                blessing = blessing,
-                onDismissRequest = onDismissRequest,
-            )
-        },
+        key = { it.id.toString() },
+        detail = { CharacterBlessingDetailScreen(characterId, it.id) },
     )
 
     CharacterItemList(
         title = stringResource(Str.miracles_title),
         items = data.miracles,
         value = { it.name },
-        detail = { miracle, onDismissRequest ->
-            MiracleDetail(
-                miracle = miracle,
-                onDismissRequest = onDismissRequest,
-            )
-        },
+        key = { it.id.toString() },
+        detail = { CharacterMiracleDetailScreen(characterId, it.id) },
     )
 
-    if (data.note != "") {
+    val note = data.note.collectWithLifecycle("").value
+
+    if (note != "") {
         Divider(Modifier.padding(top = Spacing.small))
-        Text(data.note)
+        Text(note)
     }
 }
 
 private const val SkillTag = "[skill]"
 
 @Composable
-private fun <T : CharacterItem<T, *>> CharacterItemList(
+private fun <T> CharacterItemList(
     title: String,
     items: Flow<List<T>>,
-    value: (T) -> String,
-    detail: @Composable (item: T, onDismissRequest: () -> Unit) -> Unit
+    key: (T) -> String,
+    value: @Composable (T) -> String,
+    detail: (item: T) -> Screen,
 ) {
     val itemList = items.collectWithLifecycle(emptyList()).value
 
@@ -170,24 +213,17 @@ private fun <T : CharacterItem<T, *>> CharacterItemList(
         return
     }
 
-    var visibleSkill: T? by rememberSaveable { mutableStateOf(null) }
-
-    visibleSkill?.let {
-        FullScreenDialog(onDismissRequest = { visibleSkill = null }) {
-            detail(it) { visibleSkill = null }
-        }
-    }
-
-    val text by derivedStateOf {
+    val formattedItems = itemList.map { key(it) to value(it) }
+    val text = remember(formattedItems, key, value) {
         buildAnnotatedString {
             withStyle(SpanStyle(fontWeight = FontWeight.Bold)) {
                 append(title)
                 append(": ")
             }
 
-            itemList.forEachIndexed { index, item ->
-                withAnnotation(SkillTag, item.id.toString()) {
-                    append(value(item))
+            formattedItems.forEachIndexed { index, (key, value) ->
+                withAnnotation(SkillTag, key) {
+                    append(value)
                 }
 
                 if (index != itemList.lastIndex) {
@@ -197,6 +233,7 @@ private fun <T : CharacterItem<T, *>> CharacterItemList(
         }
     }
 
+    val navigation = LocalNavigationTransaction.current
     ClickableText(
         text,
         style = MaterialTheme.typography.body2.copy(
@@ -206,9 +243,7 @@ private fun <T : CharacterItem<T, *>> CharacterItemList(
         text.getStringAnnotations(SkillTag, offset, offset)
             .firstOrNull()
             ?.let { range ->
-                val itemId = uuidFrom(range.item)
-
-                visibleSkill = itemList.first { it.id == itemId }
+                navigation.navigate(detail(itemList.first { key(it) == range.item }))
             }
     }
 }

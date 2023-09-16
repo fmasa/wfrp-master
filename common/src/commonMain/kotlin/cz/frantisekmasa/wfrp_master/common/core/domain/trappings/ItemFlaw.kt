@@ -6,9 +6,12 @@ import dev.icerock.moko.resources.StringResource
 
 enum class ItemFlaw(
     override val translatableName: StringResource,
-) : NamedEnum {
+) : TrappingFeature, NamedEnum {
     BULKY(Str.trappings_flaws_bulky),
     UGLY(Str.trappings_flaws_ugly),
     SHODDY(Str.trappings_flaws_shoddy),
-    UNRELIABLE(Str.trappings_flaws_unreliable),
+    UNRELIABLE(Str.trappings_flaws_unreliable);
+
+    override val hasRating get() = false
+    override val ratingUnit get() = null
 }
