@@ -41,6 +41,7 @@ import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -92,7 +93,9 @@ class ActiveCombatScreen(
         val combatants = remember { viewModel.combatants() }.collectWithLifecycle(null).value
         val isGameMaster = LocalUser.current.id == party?.gameMasterId
 
-        val (openedCombatant, setOpenedCombatant) = remember { mutableStateOf<CombatantItem?>(null) }
+        val (openedCombatant, setOpenedCombatant) = rememberSaveable {
+            mutableStateOf<CombatantItem?>(null)
+        }
         val freshCombatant = if (openedCombatant != null)
             combatants?.firstOrNull { it.areSameEntity(openedCombatant) }
         else null
