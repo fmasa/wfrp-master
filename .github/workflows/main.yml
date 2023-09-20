@@ -118,6 +118,7 @@ jobs:
     env:
       PLAY_STORE_TRACK: internal
       PLAY_STORE_JSON_FILE: ${{ secrets.PLAY_STORE_JSON_FILE }}
+      SUPPLY_UPLOAD_MAX_RETRIES: '5'
     steps:
       - uses: actions/checkout@v2
       - name: Download a single artifact
