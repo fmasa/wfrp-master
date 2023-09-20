@@ -263,8 +263,8 @@ service cloud.firestore {
                         && entry.name is string && isNotBlank(entry.name) && entry.name.size() <= 50
                         && entry.parents is list
                         && entry.pinned is bool
-                        && entry.text is string && entry.text.size() <= 3000
-                        && entry.gmText is string && entry.gmText.size() <= 3000
+                        && entry.text is string && entry.text.size() <= 5000
+                        && entry.gmText is string && entry.gmText.size() <= 5000
                         && entry.isVisibleToPlayers is bool;
                 }
             }
