@@ -28,7 +28,12 @@ internal actual fun rememberImagePainter(url: String): State<Painter> {
         val response: HttpResponse = http.get(url)
 
         val body: ByteArray = response.body()
-        painter.value = BitmapPainter(Image.makeFromEncoded(body).toComposeImageBitmap())
+
+        try {
+            painter.value = BitmapPainter(Image.makeFromEncoded(body).toComposeImageBitmap())
+        } catch (e: IllegalArgumentException) {
+            // Do nothing
+        }
     }
 
     return painter
