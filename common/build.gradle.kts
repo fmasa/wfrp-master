@@ -31,6 +31,8 @@ kotlin {
                 optIn("androidx.compose.ui.ExperimentalComposeUiApi")
                 optIn("androidx.compose.animation.ExperimentalAnimationApi")
                 optIn("com.google.accompanist.permissions.ExperimentalPermissionsApi")
+                optIn("kotlinx.coroutines.ExperimentalCoroutinesApi")
+                optIn("kotlinx.serialization.ExperimentalSerializationApi")
             }
         }
 

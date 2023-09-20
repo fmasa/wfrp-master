@@ -106,7 +106,7 @@ class AuthenticationManager(private val auth: FirebaseAuth) : UserProvider {
     fun googleSignInContract(webClientId: String): ActivityResultContract<Int?, IntentResult> {
         return object : ActivityResultContract<Int?, IntentResult>() {
 
-            override fun createIntent(context: Context, requestCode: Int?) =
+            override fun createIntent(context: Context, input: Int?) =
                 getGoogleSignInIntent(context, webClientId)
 
             override fun parseResult(resultCode: Int, intent: Intent?): IntentResult {

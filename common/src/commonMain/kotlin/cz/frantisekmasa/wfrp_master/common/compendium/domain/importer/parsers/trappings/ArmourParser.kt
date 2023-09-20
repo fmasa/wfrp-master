@@ -19,6 +19,7 @@ class ArmourParser {
         document: Document,
         structure: PdfStructure,
         tablePage: Int,
+        @Suppress("UNUSED_PARAMETER") // Will be used in the future
         descriptionPages: IntRange,
     ): List<Trapping> {
         val table = TableParser().parseTable(

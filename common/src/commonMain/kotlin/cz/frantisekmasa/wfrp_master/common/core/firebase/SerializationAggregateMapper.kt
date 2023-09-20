@@ -1,8 +1,6 @@
 package cz.frantisekmasa.wfrp_master.common.core.firebase
 
 import cz.frantisekmasa.wfrp_master.common.core.serialization.UuidSerializer
-import cz.frantisekmasa.wfrp_master.common.firebase.firestore.DocumentSnapshot
-import io.github.aakira.napier.Napier
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonArray
@@ -21,13 +19,6 @@ import kotlinx.serialization.serializer
 class SerializationAggregateMapper<T : Any>(
     private val serializer: KSerializer<T>,
 ) : AggregateMapper<T> {
-    override fun fromDocumentSnapshot(snapshot: DocumentSnapshot): T {
-        Napier.d("Mapping document $snapshot to entity")
-
-        val data = snapshot.data ?: error("Snapshot data shouldn't be null")
-
-        return fromDocumentData(data)
-    }
 
     override fun fromDocumentData(data: Map<String, Any?>): T {
         return json.decodeFromJsonElement(serializer, mapToJsonElement(data))

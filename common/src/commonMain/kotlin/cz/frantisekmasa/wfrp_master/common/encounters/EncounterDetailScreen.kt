@@ -252,8 +252,6 @@ class EncounterDetailScreen(
 
             DescriptionCard(screenModel)
 
-            val navigation = LocalNavigationTransaction.current
-
             NpcCharacterList(encounterId.partyId, encounter, screenModel)
         }
     }

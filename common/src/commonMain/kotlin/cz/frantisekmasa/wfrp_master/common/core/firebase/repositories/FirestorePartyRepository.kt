@@ -68,9 +68,10 @@ class FirestorePartyRepository(
 
     override suspend fun get(id: PartyId): Party {
         try {
-            return this.mapper.fromDocumentSnapshot(
-                parties.document(id.toString()).get(Source.SERVER)
-            )
+            val data = parties.document(id.toString()).get(Source.SERVER).data
+                ?: throw PartyNotFound(id)
+
+            return this.mapper.fromDocumentData(data)
         } catch (e: FirestoreException) {
             throw PartyNotFound(id, e)
         }
@@ -97,7 +98,8 @@ class FirestorePartyRepository(
         queryForUser(userId)
             .get()
             .documents
-            .map { mapper.fromDocumentSnapshot(it) }
+            .mapNotNull { it.data }
+            .map { mapper.fromDocumentData(it) }
 
     private fun queryForUser(userId: UserId) = parties
         .whereArrayContains("users", userId.toString())

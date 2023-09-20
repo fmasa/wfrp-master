@@ -11,7 +11,9 @@ import kotlinx.coroutines.withContext
 fun <T : Any> Query.documents(aggregateMapper: AggregateMapper<T>): Flow<List<T>> {
     return snapshots.map { snapshot ->
         withContext(Dispatchers.Default) {
-            snapshot.documents.map { async { aggregateMapper.fromDocumentSnapshot(it) } }
+            snapshot.documents
+                .mapNotNull { it.data }
+                .map { async { aggregateMapper.fromDocumentData(it) } }
                 .awaitAll()
         }
     }
