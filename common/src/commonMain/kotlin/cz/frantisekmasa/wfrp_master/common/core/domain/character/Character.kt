@@ -276,7 +276,7 @@ data class Character(
         const val PSYCHOLOGY_MAX_LENGTH = 200
         const val MOTIVATION_MAX_LENGTH = 200
         const val MUTATION_MAX_LENGTH = 200
-        const val NOTE_MAX_LENGTH = 400
+        const val NOTE_MAX_LENGTH = 2000
 
         private fun calculateMaxWounds(
             size: Size?,

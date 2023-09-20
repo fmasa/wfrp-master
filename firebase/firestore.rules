@@ -559,7 +559,7 @@ service cloud.firestore {
                         && areStatsValid(character.characteristicsAdvances)
                         && areMoneyValid(character.money)
                         && areAmbitionsValid(character.ambitions)
-                        && character.note is string && character.note.size() <= 400
+                        && character.note is string && character.note.size() <= 2000
                         && character.hardyTalent is bool
                         && (
                             character.hiddenTabs is list &&
