@@ -58,14 +58,11 @@ import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.WeaponEquip
 import cz.frantisekmasa.wfrp_master.common.core.ui.flow.collectWithLifecycle
 import cz.frantisekmasa.wfrp_master.common.core.ui.navigation.LocalNavigationTransaction
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
-import dev.icerock.moko.parcelize.Parcelable
-import dev.icerock.moko.parcelize.Parcelize
 import dev.icerock.moko.resources.compose.stringResource
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
 @Immutable
-@Parcelize
 data class StatBlockData(
     val note: Flow<String>,
     val skills: Flow<List<Skill>>,
@@ -76,7 +73,7 @@ data class StatBlockData(
     val traits: Flow<List<Trait>>,
     val weapons: Flow<List<EquippedWeapon>>,
     val armour: Flow<List<ArmourPart>>,
-) : Parcelable
+)
 
 @Composable
 fun StatBlock(
