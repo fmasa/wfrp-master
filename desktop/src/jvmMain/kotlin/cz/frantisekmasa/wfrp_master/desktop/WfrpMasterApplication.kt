@@ -19,6 +19,7 @@ import cz.frantisekmasa.wfrp_master.common.core.shared.LocalUrlOpener
 import cz.frantisekmasa.wfrp_master.common.core.ui.navigation.ProvideNavigationTransaction
 import cz.frantisekmasa.wfrp_master.common.core.ui.responsive.ScreenWithBreakpoints
 import cz.frantisekmasa.wfrp_master.common.core.ui.theme.Theme
+import cz.frantisekmasa.wfrp_master.common.localization.FixedStrings
 import cz.frantisekmasa.wfrp_master.common.partyList.PartyListScreen
 import cz.frantisekmasa.wfrp_master.common.shell.DrawerShell
 import cz.frantisekmasa.wfrp_master.common.shell.SnackbarScaffold
@@ -48,7 +49,10 @@ object WfrpMasterApplication {
                         platform = Platform.Desktop,
                     )
                 ) {
-                    Window(onCloseRequest = ::exitApplication) {
+                    Window(
+                        title = FixedStrings.appName,
+                        onCloseRequest = ::exitApplication,
+                    ) {
                         Theme {
                             SnackbarScaffold {
                                 Startup {
