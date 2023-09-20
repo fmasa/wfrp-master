@@ -64,6 +64,7 @@ fun TextInput(
     value: InputValue,
     validate: Boolean,
     modifier: Modifier = Modifier,
+    textFieldModifier: Modifier = Modifier,
     label: String? = null,
     helperText: String? = null,
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
@@ -90,6 +91,7 @@ fun TextInput(
         horizontalAlignment = horizontalAlignment,
         filters = filters,
         modifier = modifier,
+        textFieldModifier = textFieldModifier,
         showCharacterCount = showCharacterCount,
         rules = value.rules,
         visualTransformation = visualTransformation,
@@ -102,6 +104,7 @@ private fun TextInput(
     onValueChange: (String) -> Unit,
     validate: Boolean,
     modifier: Modifier = Modifier,
+    textFieldModifier: Modifier,
     label: String? = null,
     helperText: String? = null,
     keyboardOptions: KeyboardOptions,
@@ -157,7 +160,7 @@ private fun TextInput(
                     textStyle = textStyle.copy(color = textColor),
                     singleLine = !multiLine,
                     visualTransformation = visualTransformation,
-                    modifier = Modifier
+                    modifier = textFieldModifier
                         .fillMaxWidth()
                         .padding(Spacing.medium)
                         .then(if (multiLine) Modifier.heightIn(min = 48.dp) else Modifier),

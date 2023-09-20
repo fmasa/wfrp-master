@@ -22,6 +22,7 @@ kotlin {
     sourceSets {
         named("jvmMain") {
             languageSettings.apply {
+                optIn("androidx.compose.ui.ExperimentalComposeUiApi")
                 optIn("androidx.compose.material.ExperimentalMaterialApi")
             }
             dependencies {

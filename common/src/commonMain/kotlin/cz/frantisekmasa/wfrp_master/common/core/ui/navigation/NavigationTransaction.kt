@@ -38,8 +38,12 @@ class NavigationTransaction(
         navigator.replace(screen)
     }
 
-    fun goBack() {
+    fun goBack(popLast: Boolean = true) {
         if (navigator.lastItemOrNull != currentScreen) {
+            return
+        }
+
+        if (!popLast && navigator.size < 2) {
             return
         }
 
