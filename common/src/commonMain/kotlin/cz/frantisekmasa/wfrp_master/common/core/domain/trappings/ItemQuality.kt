@@ -6,9 +6,12 @@ import dev.icerock.moko.resources.StringResource
 
 enum class ItemQuality(
     override val translatableName: StringResource,
-) : NamedEnum {
+) : TrappingFeature, NamedEnum {
     DURABLE(Str.trappings_qualities_durable),
     FINE(Str.trappings_qualities_fine),
     LIGHTWEIGHT(Str.trappings_qualities_lightweight),
-    PRACTICAL(Str.trappings_qualities_practical),
+    PRACTICAL(Str.trappings_qualities_practical);
+
+    override val hasRating get() = false
+    override val ratingUnit get() = null
 }

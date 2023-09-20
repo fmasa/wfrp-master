@@ -5,6 +5,7 @@ import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.Stable
 import cz.frantisekmasa.wfrp_master.common.Str
 import cz.frantisekmasa.wfrp_master.common.core.domain.Expression
+import cz.frantisekmasa.wfrp_master.common.core.domain.Yards
 import dev.icerock.moko.parcelize.Parcelable
 import dev.icerock.moko.parcelize.Parcelize
 import dev.icerock.moko.resources.StringResource
@@ -17,12 +18,9 @@ import kotlin.jvm.JvmInline
 @Immutable
 value class WeaponRangeExpression(val value: String) : Parcelable {
     init {
-        require(
-            Expression.fromString(
-                value,
-                Constant.values().associate { it.value to 1 }
-            ).isDeterministic()
-        ) { "Yards expression must be deterministic" }
+        require(expression(value, strengthBonus = 1).isDeterministic()) {
+            "Yards expression must be deterministic"
+        }
     }
 
     enum class Constant(
@@ -38,9 +36,24 @@ value class WeaponRangeExpression(val value: String) : Parcelable {
         return Expression.formatter<Constant>()(value)
     }
 
+    @Stable
+    fun calculate(strengthBonus: Int): Yards {
+        return Yards(expression(value, strengthBonus).evaluate().coerceAtLeast(0))
+    }
+
     companion object {
         fun parse(value: String): Result<WeaponRangeExpression> {
             return kotlin.runCatching { WeaponRangeExpression(value) }
+        }
+
+        private fun expression(
+            value: String,
+            strengthBonus: Int,
+        ): Expression {
+            return Expression.fromString(
+                value,
+                mapOf(Constant.STRENGTH_BONUS.value to strengthBonus)
+            )
         }
 
         fun isValid(value: String) = parse(value).isSuccess

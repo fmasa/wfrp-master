@@ -3,10 +3,14 @@ package cz.frantisekmasa.wfrp_master.common.combat
 import cafe.adriel.voyager.core.model.ScreenModel
 import com.benasher44.uuid.Uuid
 import com.benasher44.uuid.uuid4
+import cz.frantisekmasa.wfrp_master.common.combat.domain.ArmourPart
+import cz.frantisekmasa.wfrp_master.common.combat.domain.EquippedWeapon
+import cz.frantisekmasa.wfrp_master.common.combat.domain.WornArmourPiece
 import cz.frantisekmasa.wfrp_master.common.combat.domain.initiative.BonusesPlus1d10Strategy
 import cz.frantisekmasa.wfrp_master.common.combat.domain.initiative.InitiativeCharacteristicStrategy
 import cz.frantisekmasa.wfrp_master.common.combat.domain.initiative.InitiativePlus1d10Strategy
 import cz.frantisekmasa.wfrp_master.common.combat.domain.initiative.InitiativeTestStrategy
+import cz.frantisekmasa.wfrp_master.common.core.domain.HitLocation
 import cz.frantisekmasa.wfrp_master.common.core.domain.Stats
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.Character
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.CharacterRepository
@@ -28,19 +32,19 @@ import cz.frantisekmasa.wfrp_master.common.core.domain.skills.SkillRepository
 import cz.frantisekmasa.wfrp_master.common.core.domain.spells.SpellRepository
 import cz.frantisekmasa.wfrp_master.common.core.domain.talents.TalentRepository
 import cz.frantisekmasa.wfrp_master.common.core.domain.traits.TraitRepository
+import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.InventoryItemRepository
 import cz.frantisekmasa.wfrp_master.common.core.logging.Reporter
 import cz.frantisekmasa.wfrp_master.common.core.ui.StatBlockData
 import cz.frantisekmasa.wfrp_master.common.core.utils.right
 import cz.frantisekmasa.wfrp_master.common.encounters.CombatantItem
 import cz.frantisekmasa.wfrp_master.common.encounters.domain.Wounds
 import io.github.aakira.napier.Napier
-import kotlinx.coroutines.async
-import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.mapLatest
 import kotlinx.coroutines.flow.mapNotNull
 import kotlin.random.Random
@@ -56,6 +60,7 @@ class CombatScreenModel(
     private val blessings: BlessingRepository,
     private val miracles: MiracleRepository,
     private val traits: TraitRepository,
+    private val trappings: InventoryItemRepository,
 ) : ScreenModel {
 
     val party: Flow<Party> = parties.getLive(partyId).right()
@@ -82,27 +87,38 @@ class CombatScreenModel(
     suspend fun loadNpcs(): List<Character> =
         characters.inParty(partyId, CharacterType.NPC).first()
 
-    suspend fun getStatBlockData(combatant: CombatantItem): StatBlockData {
-        val characterId = combatant.characterId
+    fun getStatBlockData(characterId: CharacterId): StatBlockData {
+        val characterFlow = characters.getLive(characterId).right()
+        val trappings = trappings.findAllForCharacter(characterId)
 
-        return coroutineScope {
-            val skillsDeferred = async { skills.findAllForCharacter(characterId).first() }
-            val talentsDeferred = async { talents.findAllForCharacter(characterId).first() }
-            val spellsDeferred = async { spells.findAllForCharacter(characterId).first() }
-            val blessingsDeferred = async { blessings.findAllForCharacter(characterId).first() }
-            val miraclesDeferred = async { miracles.findAllForCharacter(characterId).first() }
-            val traitsDeferred = async { traits.findAllForCharacter(characterId).first() }
+        return StatBlockData(
+            note = characterFlow.map { it.note }.distinctUntilChanged(),
+            skills = skills.findAllForCharacter(characterId),
+            talents = talents.findAllForCharacter(characterId),
+            spells = spells.findAllForCharacter(characterId),
+            blessings = blessings.findAllForCharacter(characterId),
+            miracles = miracles.findAllForCharacter(characterId),
+            traits = traits.findAllForCharacter(characterId),
+            weapons = trappings
+                .combine(characterFlow) { items, character ->
+                    items.mapNotNull {
+                        EquippedWeapon.fromTrappingOrNull(it, character.characteristics.strengthBonus)
+                    }
+                },
+            armour = trappings.map { items ->
+                val armourPiecesByPart = items.asSequence()
+                    .mapNotNull(WornArmourPiece::fromTrappingOrNull)
+                    .flatMap {
+                        it.armour.locations.map { location -> location to it }
+                    }.groupBy({ it.first }, { it.second })
 
-            StatBlockData(
-                combatant.note,
-                skillsDeferred.await(),
-                talentsDeferred.await(),
-                spellsDeferred.await(),
-                blessingsDeferred.await(),
-                miraclesDeferred.await(),
-                traitsDeferred.await(),
-            )
-        }
+                HitLocation.values()
+                    .asSequence()
+                    .filter { it in armourPiecesByPart }
+                    .map { ArmourPart(it, armourPiecesByPart.getValue(it)) }
+                    .toList()
+            },
+        )
     }
 
     suspend fun startCombat(
