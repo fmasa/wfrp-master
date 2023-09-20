@@ -57,12 +57,7 @@ class MiracleParser {
                     target = target.trim(),
                     duration = duration.trim(),
                     cultName = cultName,
-                    effect = MarkdownBuilder.buildMarkdown(
-                        listOf(
-                            listOf(Token.NormalPart(effectStart)),
-                            stream.consumeUntil { it is Token.Heading },
-                        ).filterIsInstance<Token.ParagraphToken>()
-                    ),
+                    effect = effect,
                 )
             )
         }
