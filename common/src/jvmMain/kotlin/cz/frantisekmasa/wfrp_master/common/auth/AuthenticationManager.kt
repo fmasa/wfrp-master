@@ -14,6 +14,7 @@ import io.ktor.client.request.setBody
 import io.ktor.http.ContentType
 import io.ktor.http.HttpStatusCode
 import io.ktor.http.contentType
+import io.ktor.http.isSuccess
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.serialization.SerialName
@@ -51,20 +52,33 @@ class AuthenticationManager(
             return UserRefreshResult.NO_VALID_TOKEN
         }
 
-        updateIdToken(getIdToken(refreshToken))
+        val idToken = getIdToken(refreshToken)
+
+        if (idToken == null) {
+            statusFlow.emit(AuthenticationStatus.NotAuthenticated)
+            return UserRefreshResult.NO_VALID_TOKEN
+        }
+
+        updateIdToken(idToken)
 
         return UserRefreshResult.SUCCESS
     }
 
-    private suspend fun getIdToken(refreshToken: String): String {
-        val response: IdTokenResponse = http.post("https://securetoken.googleapis.com/v1/token?key=$API_KEY") {
+    private suspend fun getIdToken(refreshToken: String): String? {
+        val response = http.post("https://securetoken.googleapis.com/v1/token?key=$API_KEY") {
             contentType(ContentType.Application.Json)
             setBody(IdTokenRequest(refreshToken, "refresh_token"))
-        }.body()
+        }
 
-        settings.edit(REFRESH_TOKEN, response.refreshToken)
+        if (!response.status.isSuccess()) {
+            return null
+        }
 
-        return response.idToken
+        val body = response.body<IdTokenResponse>()
+
+        settings.edit(REFRESH_TOKEN, body.refreshToken)
+
+        return body.idToken
     }
 
     @Serializable
