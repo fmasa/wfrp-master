@@ -17,6 +17,10 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.key.Key
+import androidx.compose.ui.input.key.KeyEvent
+import androidx.compose.ui.input.key.key
+import androidx.compose.ui.input.key.onPreviewKeyEvent
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import cz.frantisekmasa.wfrp_master.common.Str
@@ -53,6 +57,46 @@ fun AuthenticationScreen() {
     Box {
         SplashScreen()
 
+        val auth: AuthenticationManager by localDI().instance()
+
+        val errorInvalidEmail = stringResource(Str.authentication_messages_invalid_email)
+        val errorEmailNotFound = stringResource(Str.authentication_messages_email_not_found)
+        val errorInvalidPassword = stringResource(Str.authentication_messages_invalid_password)
+        val errorUnknown = stringResource(Str.authentication_messages_unknown_error)
+        val submit = submit@{
+            validate = true
+
+            if (!email.isValid() || !password.isValid()) {
+                return@submit
+            }
+
+            processing = true
+
+            coroutineScope.launch(Dispatchers.IO) {
+                val result = auth.signIn(email.value, password.value)
+
+                if (result is AuthenticationManager.SignInResponse.Failure) {
+                    error = when {
+                        result.isInvalidEmail -> errorInvalidEmail
+                        result.isEmailNotFound -> errorEmailNotFound
+                        result.isInvalidPassword -> errorInvalidPassword
+                        else -> errorUnknown
+                    }
+
+                    processing = false
+                }
+            }
+        }
+
+        val keyEventListener: (KeyEvent) -> Boolean = listener@{
+            if ((it.key == Key.Enter || it.key == Key.NumPadEnter) && !processing) {
+                submit()
+                return@listener true
+            }
+
+            false
+        }
+
         Card(
             Modifier
                 .width(400.dp)
@@ -70,7 +114,8 @@ fun AuthenticationScreen() {
                 TextInput(
                     label = stringResource(Str.authentication_label_email),
                     value = email,
-                    validate = validate
+                    validate = validate,
+                    textFieldModifier = Modifier.onPreviewKeyEvent(keyEventListener),
                 )
 
                 TextInput(
@@ -78,41 +123,12 @@ fun AuthenticationScreen() {
                     value = password,
                     validate = validate,
                     visualTransformation = PasswordVisualTransformation(),
+                    textFieldModifier = Modifier.onPreviewKeyEvent(keyEventListener),
                 )
-
-                val auth: AuthenticationManager by localDI().instance()
-
-                val errorInvalidEmail = stringResource(Str.authentication_messages_invalid_email)
-                val errorEmailNotFound = stringResource(Str.authentication_messages_email_not_found)
-                val errorInvalidPassword = stringResource(Str.authentication_messages_invalid_password)
-                val errorUnknown = stringResource(Str.authentication_messages_unknown_error)
 
                 Button(
                     modifier = Modifier.fillMaxWidth(),
-                    onClick = {
-                        validate = true
-
-                        if (!email.isValid() || !password.isValid()) {
-                            return@Button
-                        }
-
-                        processing = true
-
-                        coroutineScope.launch(Dispatchers.IO) {
-                            val result = auth.signIn(email.value, password.value)
-
-                            if (result is AuthenticationManager.SignInResponse.Failure) {
-                                error = when {
-                                    result.isInvalidEmail -> errorInvalidEmail
-                                    result.isEmailNotFound -> errorEmailNotFound
-                                    result.isInvalidPassword -> errorInvalidPassword
-                                    else -> errorUnknown
-                                }
-
-                                processing = false
-                            }
-                        }
-                    }
+                    onClick = submit,
                 ) {
                     Text(stringResource(Str.authentication_button_sign_in))
                 }

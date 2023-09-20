@@ -45,6 +45,10 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.key.Key
+import androidx.compose.ui.input.key.KeyEventType
+import androidx.compose.ui.input.key.key
+import androidx.compose.ui.input.key.type
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
@@ -71,6 +75,7 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.ItemIcon
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.rememberScreenModel
 import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.IconAction
+import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.KeyboardEffect
 import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.OptionsAction
 import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.Subtitle
 import cz.frantisekmasa.wfrp_master.common.encounters.CombatantItem
@@ -114,6 +119,24 @@ class ActiveCombatScreen(
             sheetShape = MaterialTheme.shapes.small,
             sheetContent = {
                 Box(Modifier.height(1.dp))
+
+                KeyboardEffect(Unit) { event ->
+                    if (event.key != Key.Escape || event.type != KeyEventType.KeyDown) {
+                        return@KeyboardEffect false
+                    }
+
+                    if (
+                        bottomSheetState.isVisible &&
+                        bottomSheetState.targetValue != ModalBottomSheetValue.Hidden
+                    ) {
+                        coroutineScope.launch {
+                            bottomSheetState.hide()
+                        }
+                        return@KeyboardEffect true
+                    }
+
+                    return@KeyboardEffect false
+                }
 
                 if (openedCombatant == null) {
                     DialogProgress()
