@@ -372,6 +372,7 @@
     <string name="journal_label_pinned">Pinned</string>
     <string name="journal_folder_pin_cta">Pin entry</string>
     <string name="journal_folder_unpin_cta">Unpin entry</string>
+    <string name="journal_title_edit_entry">Edit Journal Entry</string>
     <string name="journal_title_new_entry">New Journal Entry</string>
     <string name="journal_messages_no_entries">No entries</string>
     <string name="journal_messages_no_entries_subtext">There are no entries in your journal yet.</string>

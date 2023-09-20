@@ -43,5 +43,6 @@ data class JournalEntry(
         const val NAME_MAX_LENGTH = 50
         const val TEXT_MAX_LENGTH = 5000
         const val PARENT_SEPARATOR = '/'
+        const val PARENT_MAX_LENGTH = 200
     }
 }

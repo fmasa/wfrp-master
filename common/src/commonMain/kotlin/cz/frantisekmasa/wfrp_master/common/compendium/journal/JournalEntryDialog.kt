@@ -16,7 +16,6 @@ import cz.frantisekmasa.wfrp_master.common.Str
 import cz.frantisekmasa.wfrp_master.common.compendium.CompendiumItemDialog
 import cz.frantisekmasa.wfrp_master.common.compendium.CompendiumItemFormData
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.JournalEntry
-import cz.frantisekmasa.wfrp_master.common.compendium.domain.Skill
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.InputValue
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.Rules
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.TextInput
@@ -35,8 +34,8 @@ fun JournalEntryDialog(
     CompendiumItemDialog(
         title = stringResource(
             if (entry == null)
-                Str.skills_title_new
-            else Str.skills_title_edit
+                Str.journal_title_new_entry
+            else Str.journal_title_edit_entry
         ),
         formData = formData,
         saver = onSaveRequest,
@@ -50,14 +49,14 @@ fun JournalEntryDialog(
                 label = stringResource(Str.journal_label_entry_name),
                 value = formData.name,
                 validate = validate,
-                maxLength = Skill.NAME_MAX_LENGTH
+                maxLength = JournalEntry.NAME_MAX_LENGTH
             )
 
             TextInput(
                 label = stringResource(Str.journal_label_parents),
                 value = formData.parents,
                 validate = validate,
-                maxLength = Skill.NAME_MAX_LENGTH,
+                maxLength = JournalEntry.PARENT_MAX_LENGTH,
             )
 
             Text(
@@ -106,16 +105,17 @@ private data class JournalEntryFormData(
             .split(JournalEntry.PARENT_SEPARATOR)
             .filter { it.isNotBlank() }
             .map { it.trim() },
-        text = text.value.trim(),
-        gmText = gmText.value.trim(),
+        text = text.normalizedValue,
+        gmText = gmText.normalizedValue,
         isPinned = isPinned,
         isVisibleToPlayers = isVisibleToPlayers,
     )
 
     override fun isValid() =
         name.isValid() &&
-            name.value.length <= Skill.NAME_MAX_LENGTH &&
-            text.value.length <= Skill.DESCRIPTION_MAX_LENGTH
+            name.value.length <= JournalEntry.NAME_MAX_LENGTH &&
+            text.value.length <= JournalEntry.TEXT_MAX_LENGTH &&
+            gmText.value.length <= JournalEntry.TEXT_MAX_LENGTH
 
     companion object {
         @Composable
