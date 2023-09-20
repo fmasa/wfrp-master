@@ -20,8 +20,7 @@ data class Spell(
     val castingNumber: Int,
     val effect: String,
     @SerialName("lore")
-    @Deprecated("Remove this in favor of [lore] enum")
-    val customLore: String,
+    val customLore: String, // TODO: Remove this in favor of [lore] enum
     @SerialName("loreType")
     val lore: SpellLore? = null,
     override val isVisibleToPlayers: Boolean = true,

@@ -86,8 +86,12 @@ class FirestoreEncounterRepository(
             .orderBy("position", Query.Direction.DESCENDING)
             .get()
 
-        val lastPosition = snapshot.documents.map(mapper::fromDocumentSnapshot)
-            .getOrNull(0)?.position ?: -1
+        val lastPosition = snapshot.documents
+            .asSequence()
+            .mapNotNull { it.data }
+            .map(mapper::fromDocumentData)
+            .firstOrNull()
+            ?.position ?: -1
 
         return lastPosition + 1
     }

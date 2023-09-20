@@ -38,7 +38,7 @@ fun CareerSection(character: Character, screenModel: CharacterScreenModel) {
                 )
             }
         }
-    ) { validate ->
+    ) { _ ->
         val (careers, setCareers) = rememberSaveable {
             mutableStateOf<List<Career>?>(null)
         }

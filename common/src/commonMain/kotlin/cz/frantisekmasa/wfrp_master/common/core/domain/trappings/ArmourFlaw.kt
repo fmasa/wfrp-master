@@ -13,5 +13,5 @@ enum class ArmourFlaw(
     PARTIAL(Str.armour_flaws_partial),
     WEAKPOINTS(Str.armour_flaws_weakpoints);
 
-    override val hasRating: Boolean = false
+    override val hasRating: Boolean get() = false
 }

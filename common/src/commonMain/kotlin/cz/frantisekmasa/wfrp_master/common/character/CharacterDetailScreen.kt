@@ -295,13 +295,11 @@ data class CharacterDetailScreen(
 
         Column(Modifier.fillMaxSize()) {
             if (LocalStaticConfiguration.current.platform == Platform.Desktop) {
-                val userId = LocalUser.current.id
-
                 val titleParties = stringResource(Str.parties_title_parties)
                 Breadcrumbs {
                     level(titleParties) { PartyListScreen }
 
-                    if (party.gameMasterId == userId) {
+                    if (isGameMaster) {
                         level(party.name) { GameMasterScreen(party.id) }
                     }
 

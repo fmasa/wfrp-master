@@ -240,7 +240,7 @@ object CoreRulebook :
 
     override fun resolveToken(textToken: TextToken): Token? {
         if (textToken.fontName == "CaslonAntique" && textToken.fontSizePt == 15f) {
-            return Token.OptionsBoxHeading(textToken.text)
+            return Token.OptionsBoxHeading
         }
 
         if (textToken.fontName == "CaslonAntique,Bold") {

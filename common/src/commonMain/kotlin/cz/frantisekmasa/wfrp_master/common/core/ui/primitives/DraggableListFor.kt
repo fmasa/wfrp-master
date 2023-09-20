@@ -11,7 +11,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.input.pointer.consumeAllChanges
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.platform.LocalDensity
@@ -74,7 +73,7 @@ fun <T> DraggableListFor(
                             onDrag = { change, delta ->
                                 coroutineScope.launch {
                                     dragY.snapTo(dragY.value + delta.y)
-                                    change.consumeAllChanges()
+                                    change.consume()
                                 }
                             },
                             onDragCancel = { draggedItemIndex = null }
