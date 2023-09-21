@@ -180,15 +180,21 @@ fun <T : Any> SearchableList(
                     return@Scaffold
                 }
 
-                val filteredItems by derivedStateOf {
+                val filteredItems = remember(searchedValue, searchableValue, items) {
                     if (searchedValue == "")
                         items
-                    else items.filter {
-                        searchableValue(it).contains(
-                            searchedValue,
-                            ignoreCase = true
-                        )
-                    }
+                    else items
+                        .asSequence()
+                        .filter {
+                            searchableValue(it).contains(
+                                searchedValue,
+                                ignoreCase = true
+                            )
+                        }
+                        .sortedByDescending {
+                            searchableValue(it).startsWith(searchedValue, ignoreCase = true)
+                        }
+                        .toList()
                 }
 
                 if (filteredItems.isEmpty()) {
