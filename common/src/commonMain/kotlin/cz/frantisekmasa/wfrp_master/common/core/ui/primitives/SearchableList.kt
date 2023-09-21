@@ -4,6 +4,9 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyItemScope
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.text.selection.LocalTextSelectionColors
+import androidx.compose.foundation.text.selection.TextSelectionColors
+import androidx.compose.material.ContentAlpha
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.ProvideTextStyle
 import androidx.compose.material.Scaffold
@@ -17,6 +20,7 @@ import androidx.compose.material.icons.rounded.Close
 import androidx.compose.material.icons.rounded.Search
 import androidx.compose.material.icons.rounded.SearchOff
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.Stable
@@ -85,18 +89,26 @@ fun <T : Any> SearchableList(
                         Text(title)
                     }
 
-                    ProvideTextStyle(MaterialTheme.typography.body1) {
-                        TextField(
-                            colors = textFieldColors(),
-                            value = searchedValue,
-                            onValueChange = { searchedValue = it },
-                            singleLine = true,
-                            placeholder = { Text(searchPlaceholder) },
-                            modifier = Modifier
-                                .alpha(if (searchVisible) 1f else 0f)
-                                .focusRequester(focusRequester)
-                                .onFocusChanged { isFocused = it.hasFocus }
-                        )
+                    val textSelectionColors = TextSelectionColors(
+                        handleColor = MaterialTheme.colors.onPrimary,
+                        backgroundColor = MaterialTheme.colors.onPrimary.copy(alpha = ContentAlpha.disabled),
+                    )
+                    CompositionLocalProvider(
+                        LocalTextSelectionColors provides textSelectionColors,
+                    ) {
+                        ProvideTextStyle(MaterialTheme.typography.body1) {
+                            TextField(
+                                colors = textFieldColors(),
+                                value = searchedValue,
+                                onValueChange = { searchedValue = it },
+                                singleLine = true,
+                                placeholder = { Text(searchPlaceholder) },
+                                modifier = Modifier
+                                    .alpha(if (searchVisible) 1f else 0f)
+                                    .focusRequester(focusRequester)
+                                    .onFocusChanged { isFocused = it.hasFocus }
+                            )
+                        }
                     }
 
                     KeyboardEffect("search") {
@@ -209,6 +221,8 @@ private fun textFieldColors(): TextFieldColors {
     return TextFieldDefaults.textFieldColors(
         backgroundColor = Color.Transparent,
         focusedIndicatorColor = Color.Transparent,
+        cursorColor = MaterialTheme.colors.onPrimary,
+        placeholderColor = MaterialTheme.colors.onPrimary.copy(ContentAlpha.medium),
         unfocusedIndicatorColor = Color.Transparent,
     )
 }
