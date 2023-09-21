@@ -27,11 +27,18 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.key.KeyEventType
+import androidx.compose.ui.input.key.key
+import androidx.compose.ui.input.key.type
+import androidx.compose.ui.input.key.utf16CodePoint
 import cz.frantisekmasa.wfrp_master.common.Str
 import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.IconAction
+import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.KeyboardEffect
 import dev.icerock.moko.resources.compose.stringResource
 
 object SearchableList {
@@ -69,23 +76,49 @@ fun <T : Any> SearchableList(
         floatingActionButton = floatingActionButton ?: {},
         topBar = {
             val searchVisible by derivedStateOf { searchActive || searchedValue != "" }
+            var isFocused by remember { mutableStateOf(false) }
 
             TopAppBar(
                 navigationIcon = navigationIcon,
                 title = {
-                    if (searchVisible) {
-                        ProvideTextStyle(MaterialTheme.typography.body1) {
-                            TextField(
-                                colors = textFieldColors(),
-                                value = searchedValue,
-                                onValueChange = { searchedValue = it },
-                                singleLine = true,
-                                placeholder = { Text(searchPlaceholder) },
-                                modifier = Modifier.focusRequester(focusRequester),
-                            )
-                        }
-                    } else {
+                    if (!searchVisible) {
                         Text(title)
+                    }
+
+                    ProvideTextStyle(MaterialTheme.typography.body1) {
+                        TextField(
+                            colors = textFieldColors(),
+                            value = searchedValue,
+                            onValueChange = { searchedValue = it },
+                            singleLine = true,
+                            placeholder = { Text(searchPlaceholder) },
+                            modifier = Modifier
+                                .alpha(if (searchVisible) 1f else 0f)
+                                .focusRequester(focusRequester)
+                                .onFocusChanged { isFocused = it.hasFocus }
+                        )
+                    }
+
+                    KeyboardEffect("search") {
+                        val character = it.utf16CodePoint
+                        if (
+                            character == 0 ||
+                            isFocused || searchedValue != "" ||
+                            it.type != KeyEventType.KeyDown
+                        ) {
+                            return@KeyboardEffect false
+                        }
+
+                        val symbol = character.toChar()
+
+                        if (!symbol.isWhitespace() && !symbol.isLetterOrDigit()) {
+                            return@KeyboardEffect false
+                        }
+
+                        focusRequester.requestFocus()
+                        searchedValue += character.toChar()
+
+                        return@KeyboardEffect true
                     }
 
                     DisposableEffect(searchVisible) {
