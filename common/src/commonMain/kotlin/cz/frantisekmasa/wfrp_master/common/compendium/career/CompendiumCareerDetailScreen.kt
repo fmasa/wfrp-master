@@ -4,7 +4,8 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.rememberScrollState
@@ -205,9 +206,12 @@ class CompendiumCareerDetailScreen(
             val tabDetail = stringResource(Str.careers_tab_detail)
             val tabLevels = stringResource(Str.careers_tab_levels)
 
-            TabPager(fullWidthTabs = true) {
+            TabPager(
+                fullWidthTabs = true,
+                beyondBoundsPageCount = 1,
+            ) {
                 tab(tabDetail) {
-                    Column {
+                    Column(Modifier.fillMaxHeight()) {
                         if (isGameMaster) {
                             VisibilitySwitchBar(
                                 visible = career.isVisibleToPlayers,
@@ -282,7 +286,7 @@ private fun LevelList(
             items = levels,
             onReorder = if (isGameMaster) onReorder else ({}),
         ) { levelIndex, level, isDragged ->
-            val modifier = Modifier.fillMaxWidth()
+            val modifier = Modifier.fillMaxSize()
 
             Card(
                 elevation = if (isDragged) 6.dp else 2.dp,
