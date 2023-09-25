@@ -22,6 +22,7 @@ typealias LocalCharacterId = String
 
 @Serializable
 @Immutable
+@Parcelize
 data class Character(
     val id: LocalCharacterId,
     val type: CharacterType = CharacterType.PLAYER_CHARACTER,
@@ -50,7 +51,7 @@ data class Character(
     val money: Money = Money.ZERO,
     val hiddenTabs: Set<CharacterTab> = emptySet(),
     val size: Size? = null,
-) {
+) : Parcelable {
 
     val characteristics: Stats get() = characteristicsBase + characteristicsAdvances
     val wounds: Wounds get() = Wounds(

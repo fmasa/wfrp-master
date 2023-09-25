@@ -60,10 +60,8 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.navigation.LocalNavigationTra
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
 import dev.icerock.moko.resources.compose.stringResource
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.map
 
-@Immutable
-data class StatBlockData(
+data class FlowStatBlockData(
     val note: Flow<String>,
     val skills: Flow<List<Skill>>,
     val talents: Flow<List<Talent>>,
@@ -73,6 +71,34 @@ data class StatBlockData(
     val traits: Flow<List<Trait>>,
     val weapons: Flow<List<EquippedWeapon>>,
     val armour: Flow<List<ArmourPart>>,
+) {
+    @Composable
+    fun collectWithLifecycle(): StatBlockData? {
+        return StatBlockData(
+            note = note.collectWithLifecycle(null).value ?: return null,
+            skills = skills.collectWithLifecycle(null).value ?: return null,
+            talents = talents.collectWithLifecycle(null).value ?: return null,
+            spells = spells.collectWithLifecycle(null).value ?: return null,
+            blessings = blessings.collectWithLifecycle(null).value ?: return null,
+            miracles = miracles.collectWithLifecycle(null).value ?: return null,
+            traits = traits.collectWithLifecycle(null).value ?: return null,
+            weapons = weapons.collectWithLifecycle(null).value ?: return null,
+            armour = armour.collectWithLifecycle(null).value ?: return null,
+        )
+    }
+}
+
+@Immutable
+data class StatBlockData(
+    val note: String,
+    val skills: List<Skill>,
+    val talents: List<Talent>,
+    val spells: List<Spell>,
+    val blessings: List<Blessing>,
+    val miracles: List<Miracle>,
+    val traits: List<Trait>,
+    val weapons: List<EquippedWeapon>,
+    val armour: List<ArmourPart>,
 )
 
 @Composable
@@ -144,11 +170,7 @@ fun StatBlock(
 
     CharacterItemList(
         title = stringResource(Str.skills_title_skills),
-        items = remember(data.skills) {
-            // Only basic skills can have 0 advances,
-            // and these can be easily derived from characteristics
-            data.skills.map { skills -> skills.filter { it.advances > 0 } }
-        },
+        items = data.skills,
         value = { "${it.name} ${characteristics.get(it.characteristic) + it.advances}" },
         key = { it.id.toString() },
         detail = { CharacterSkillDetailScreen(characterId, it.id) },
@@ -186,7 +208,7 @@ fun StatBlock(
         detail = { CharacterMiracleDetailScreen(characterId, it.id) },
     )
 
-    val note = data.note.collectWithLifecycle("").value
+    val note = data.note
 
     if (note != "") {
         Divider(Modifier.padding(top = Spacing.small))
@@ -199,18 +221,16 @@ private const val SkillTag = "[skill]"
 @Composable
 private fun <T> CharacterItemList(
     title: String,
-    items: Flow<List<T>>,
+    items: List<T>,
     key: (T) -> String,
     value: @Composable (T) -> String,
     detail: (item: T) -> Screen,
 ) {
-    val itemList = items.collectWithLifecycle(emptyList()).value
-
-    if (itemList.isEmpty()) {
+    if (items.isEmpty()) {
         return
     }
 
-    val formattedItems = itemList.map { key(it) to value(it) }
+    val formattedItems = items.map { key(it) to value(it) }
     val text = remember(formattedItems, key, value) {
         buildAnnotatedString {
             withStyle(SpanStyle(fontWeight = FontWeight.Bold)) {
@@ -223,7 +243,7 @@ private fun <T> CharacterItemList(
                     append(value)
                 }
 
-                if (index != itemList.lastIndex) {
+                if (index != items.lastIndex) {
                     append(", ")
                 }
             }
@@ -240,7 +260,7 @@ private fun <T> CharacterItemList(
         text.getStringAnnotations(SkillTag, offset, offset)
             .firstOrNull()
             ?.let { range ->
-                navigation.navigate(detail(itemList.first { key(it) == range.item }))
+                navigation.navigate(detail(items.first { key(it) == range.item }))
             }
     }
 }

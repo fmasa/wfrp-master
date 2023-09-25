@@ -34,7 +34,7 @@ import cz.frantisekmasa.wfrp_master.common.core.domain.talents.TalentRepository
 import cz.frantisekmasa.wfrp_master.common.core.domain.traits.TraitRepository
 import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.InventoryItemRepository
 import cz.frantisekmasa.wfrp_master.common.core.logging.Reporter
-import cz.frantisekmasa.wfrp_master.common.core.ui.StatBlockData
+import cz.frantisekmasa.wfrp_master.common.core.ui.FlowStatBlockData
 import cz.frantisekmasa.wfrp_master.common.core.utils.right
 import cz.frantisekmasa.wfrp_master.common.encounters.CombatantItem
 import cz.frantisekmasa.wfrp_master.common.encounters.domain.Wounds
@@ -87,13 +87,17 @@ class CombatScreenModel(
     suspend fun loadNpcs(): List<Character> =
         characters.inParty(partyId, CharacterType.NPC).first()
 
-    fun getStatBlockData(characterId: CharacterId): StatBlockData {
+    fun getStatBlockData(characterId: CharacterId): FlowStatBlockData {
         val characterFlow = characters.getLive(characterId).right()
         val trappings = trappings.findAllForCharacter(characterId)
 
-        return StatBlockData(
+        return FlowStatBlockData(
             note = characterFlow.map { it.note }.distinctUntilChanged(),
-            skills = skills.findAllForCharacter(characterId),
+            skills = skills.findAllForCharacter(characterId).map { skills ->
+                // Only basic skills can have 0 advances,
+                // and these can be easily derived from characteristics
+                skills.filter { it.advances > 0 }
+            },
             talents = talents.findAllForCharacter(characterId),
             spells = spells.findAllForCharacter(characterId),
             blessings = blessings.findAllForCharacter(characterId),
