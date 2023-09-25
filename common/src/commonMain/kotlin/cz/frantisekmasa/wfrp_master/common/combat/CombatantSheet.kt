@@ -1,5 +1,6 @@
 package cz.frantisekmasa.wfrp_master.common.combat
 
+import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -9,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Divider
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
@@ -50,67 +52,82 @@ fun CombatantSheet(
     onRemoveRequest: (() -> Unit)?,
     onDetailOpenRequest: () -> Unit,
 ) {
-    Column(
-        Modifier
-            .verticalScroll(rememberScrollState())
-            .padding(Spacing.large),
-        verticalArrangement = Arrangement.spacedBy(Spacing.small),
-    ) {
-        Row(
-            modifier = Modifier.align(Alignment.CenterHorizontally),
-            verticalAlignment = Alignment.CenterVertically,
+    key(combatant.combatant.id) {
+        Column(
+            Modifier
+                .verticalScroll(rememberScrollState())
+                .padding(Spacing.large)
+                .animateContentSize(),
+            verticalArrangement = Arrangement.spacedBy(Spacing.small),
         ) {
-            Text(
-                combatant.name,
-                style = MaterialTheme.typography.h6,
-                modifier = Modifier.clickable(onClick = onDetailOpenRequest)
-            )
+            val statBlockData = remember(combatant.combatant.id) {
+                viewModel.getStatBlockData(combatant.characterId)
+            }.collectWithLifecycle()
 
-            if (onRemoveRequest != null) {
-                var contextMenuExpanded by remember { mutableStateOf(false) }
-                Box {
-                    IconButton(onClick = { contextMenuExpanded = true }) {
-                        Icon(
-                            Icons.Filled.MoreVert,
-                            stringResource(Str.common_ui_label_open_context_menu),
-                        )
-                    }
-                    DropdownMenu(
-                        expanded = contextMenuExpanded,
-                        onDismissRequest = { contextMenuExpanded = false },
-                    ) {
-                        DropdownMenuItem(onClick = onRemoveRequest) {
-                            Text(stringResource(Str.combat_button_remove_combatant))
+            if (statBlockData == null) {
+                Box(
+                    modifier = Modifier.fillMaxWidth(),
+                    contentAlignment = Alignment.Center,
+                ) {
+                    CircularProgressIndicator()
+                }
+                return@Column
+            }
+
+            Row(
+                modifier = Modifier.align(Alignment.CenterHorizontally),
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                Text(
+                    combatant.name,
+                    style = MaterialTheme.typography.h6,
+                    modifier = Modifier.clickable(onClick = onDetailOpenRequest)
+                )
+
+                if (onRemoveRequest != null) {
+                    var contextMenuExpanded by remember { mutableStateOf(false) }
+                    Box {
+                        IconButton(onClick = { contextMenuExpanded = true }) {
+                            Icon(
+                                Icons.Filled.MoreVert,
+                                stringResource(Str.common_ui_label_open_context_menu),
+                            )
+                        }
+                        DropdownMenu(
+                            expanded = contextMenuExpanded,
+                            onDismissRequest = { contextMenuExpanded = false },
+                        ) {
+                            DropdownMenuItem(onClick = onRemoveRequest) {
+                                Text(stringResource(Str.combat_button_remove_combatant))
+                            }
                         }
                     }
                 }
             }
-        }
 
-        ConditionsBox(
-            modifier = Modifier.padding(bottom = Spacing.small),
-            combatant = combatant,
-            screenModel = viewModel,
-        )
+            ConditionsBox(
+                modifier = Modifier.padding(bottom = Spacing.small),
+                combatant = combatant,
+                screenModel = viewModel,
+            )
 
-        StatBlock(
-            combatant.characterId,
-            combatant.characteristics,
-            remember(combatant.combatant.id) {
-                viewModel.getStatBlockData(combatant.characterId)
-            },
-        )
+            StatBlock(
+                combatant.characterId,
+                combatant.characteristics,
+                statBlockData,
+            )
 
-        Divider()
+            Divider()
 
-        Row(Modifier.padding(bottom = Spacing.medium)) {
-            Box(Modifier.weight(1f), contentAlignment = Alignment.TopCenter) {
-                CombatantWounds(combatant, viewModel)
-            }
-
-            if (!isGroupAdvantageSystemEnabled) {
+            Row(Modifier.padding(bottom = Spacing.medium)) {
                 Box(Modifier.weight(1f), contentAlignment = Alignment.TopCenter) {
-                    CombatantAdvantage(combatant, viewModel, advantageCap)
+                    CombatantWounds(combatant, viewModel)
+                }
+
+                if (!isGroupAdvantageSystemEnabled) {
+                    Box(Modifier.weight(1f), contentAlignment = Alignment.TopCenter) {
+                        CombatantAdvantage(combatant, viewModel, advantageCap)
+                    }
                 }
             }
         }
