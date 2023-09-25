@@ -4,6 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
@@ -60,6 +61,7 @@ internal fun WorldScreen(
 ) {
     Column(
         modifier
+            .fillMaxHeight()
             .background(MaterialTheme.colors.background)
             .verticalScroll(rememberScrollState())
             .padding(top = 6.dp)

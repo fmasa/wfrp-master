@@ -3,7 +3,6 @@ package cz.frantisekmasa.wfrp_master.common.gameMaster
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.width
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
@@ -91,9 +90,10 @@ class GameMasterScreen(
 
                 TabPager(
                     modifier = Modifier.weight(1f),
+                    beyondBoundsPageCount = 1,
                     fullWidthTabs = true,
                 ) {
-                    val modifier = Modifier.width(screenWidth)
+                    val modifier = Modifier.fillMaxSize()
 
                     tab({ stringResource(Str.parties_tab_characters) }) {
                         val navigation = LocalNavigationTransaction.current
