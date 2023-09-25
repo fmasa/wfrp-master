@@ -2,10 +2,13 @@ package cz.frantisekmasa.wfrp_master.common.core.domain.character
 
 import cz.frantisekmasa.wfrp_master.common.Str
 import cz.frantisekmasa.wfrp_master.common.core.domain.NamedEnum
+import dev.icerock.moko.parcelize.Parcelable
+import dev.icerock.moko.parcelize.Parcelize
 import dev.icerock.moko.resources.StringResource
 import kotlinx.serialization.Serializable
 
 @Serializable
+@Parcelize
 data class Points(
     val corruption: Int,
     val fate: Int,
@@ -19,7 +22,7 @@ data class Points(
     val spentExperience: Int = 0,
     @Deprecated("Hardy is calculated from stats automatically")
     val hardyWoundsBonus: Int = 0
-) {
+) : Parcelable {
     init {
         // TODO: Ensure fortune & resolve is not negative
         require(corruption >= 0)

@@ -2,10 +2,13 @@ package cz.frantisekmasa.wfrp_master.common.core.domain
 
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.Stable
+import dev.icerock.moko.parcelize.Parcelable
+import dev.icerock.moko.parcelize.Parcelize
 import kotlinx.serialization.Serializable
 
 @Serializable
 @Immutable
+@Parcelize
 data class Stats(
     val weaponSkill: Int,
     val dexterity: Int,
@@ -17,7 +20,7 @@ data class Stats(
     val initiative: Int,
     val willPower: Int,
     val fellowship: Int
-) {
+) : Parcelable {
     init {
         require(
             listOf(
