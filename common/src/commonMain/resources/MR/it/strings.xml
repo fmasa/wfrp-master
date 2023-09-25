@@ -201,7 +201,7 @@
     <string name="common_ui_boolean_no">No</string>
     <string name="common_ui_boolean_yes">Si</string>
     <string name="common_ui_button_cancel">Cancella</string>
-    <string name="common_ui_button_dismiss">Disattiva</string>
+    <string name="common_ui_button_dismiss">Chiudi</string>
     <string name="common_ui_button_duplicate">Duplica</string>
     <string name="common_ui_button_edit">Modifica</string>
     <string name="common_ui_button_finish">Termina</string>
@@ -760,4 +760,5 @@
     <string name="journal_title_new_entry">Nuova Annotazione</string>
     <string name="journal_label_text">Testo</string>
     <string name="journal_label_entry_name">Nome</string>
+    <string name="journal_title_edit_entry">Modifica Annotazione Diario</string>
 </resources>
