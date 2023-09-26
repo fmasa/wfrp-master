@@ -331,7 +331,7 @@
     <string name="parties_button_leave">Abandonar</string>
     <string name="weapons_qualities_impale">Empalante</string>
     <string name="careers_label_skills">Otras Habilidades</string>
-    <string name="trappings_pack_size">Precio por un paquete de %d unidades</string>
+    <string name="trappings_pack_size">Precio de un paquete de %d unidades</string>
     <string name="careers_button_clear_select_box">Borrar la casilla de selección de Carrera</string>
     <string name="character_effect_hardy">resistente</string>
     <string name="spells_label_target">Objetivo</string>
