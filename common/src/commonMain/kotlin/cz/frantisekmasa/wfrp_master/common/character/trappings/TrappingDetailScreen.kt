@@ -28,6 +28,7 @@ import cz.frantisekmasa.wfrp_master.common.core.domain.identifiers.CharacterId
 import cz.frantisekmasa.wfrp_master.common.core.domain.localizedName
 import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.InventoryItem
 import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.InventoryItemId
+import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.RangedWeaponGroup
 import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.TrappingType
 import cz.frantisekmasa.wfrp_master.common.core.ui.buttons.BackButton
 import cz.frantisekmasa.wfrp_master.common.core.ui.buttons.CompendiumButton
@@ -105,6 +106,13 @@ private fun TrappingDetail(
 
                 is TrappingType.Weapon -> {
                     EquipBar(trapping, type, onChange = screenModel::saveItem)
+
+                    if (
+                        type is TrappingType.RangedWeapon &&
+                        type.group == RangedWeaponGroup.THROWING
+                    ) {
+                        QuantityBar(trapping, onChange = screenModel::saveItem)
+                    }
                 }
 
                 else -> {
