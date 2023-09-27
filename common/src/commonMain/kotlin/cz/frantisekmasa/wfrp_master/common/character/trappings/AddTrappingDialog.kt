@@ -43,7 +43,7 @@ fun AddTrappingDialog(
                     title = stringResource(Str.trappings_title_choose_compendium_trapping),
                     onDismissRequest = onDismissRequest,
                     icon = { trappingIcon(it.trappingType) },
-                    onSelect = { setState(State.FillingInItemQualitiesAndFlaws(it)) },
+                    onSelect = { setState(State.FillingInDetails(it)) },
                     onCustomItemRequest = { setState(State.FillingInCustomTrapping) },
                     customItemButtonText = stringResource(Str.trappings_button_add_non_compendium),
                     emptyUiIcon = Resources.Drawable.TrappingContainer,
@@ -60,14 +60,20 @@ fun AddTrappingDialog(
                 defaultContainerId = null,
             )
 
-            is State.FillingInItemQualitiesAndFlaws -> {
+            is State.FillingInDetails -> {
                 val navigation = LocalNavigationTransaction.current
-                ItemQualitiesAndFlawsForm(
+                TrappingFromCompendiumForm(
                     itemName = state.compendiumItem.name,
                     itemQualities = emptySet(),
                     itemFlaws = emptySet(),
-                    onSaveRequest = { itemQualities, itemFlaws ->
-                        val item = InventoryItem.fromCompendium(state.compendiumItem, itemQualities, itemFlaws)
+                    quantity = 1,
+                    onSaveRequest = { itemQualities, itemFlaws, quantity ->
+                        val item = InventoryItem.fromCompendium(
+                            state.compendiumItem,
+                            itemQualities,
+                            itemFlaws,
+                            quantity,
+                        )
 
                         screenModel.saveItem(
                             if (containerId != null)
@@ -92,5 +98,5 @@ private sealed class State : Parcelable {
     @Parcelize
     object FillingInCustomTrapping : State()
     @Parcelize
-    data class FillingInItemQualitiesAndFlaws(val compendiumItem: Trapping) : State()
+    data class FillingInDetails(val compendiumItem: Trapping) : State()
 }
