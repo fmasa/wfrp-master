@@ -65,15 +65,17 @@ data class InventoryItem(
             ?: TrappingType.fromCompendium(compendiumItem.trappingType)
     )
 
-    fun updateItemQualitiesAndFlaws(
+    fun update(
         itemQualities: Set<ItemQuality>,
         itemFlaws: Set<ItemFlaw>,
+        quantity: Int,
     ): InventoryItem = copy(
         encumbrance = encumbrance -
             encumbranceModifier(this.itemQualities, this.itemFlaws) +
             encumbranceModifier(this.itemQualities, this.itemFlaws),
         itemQualities = itemQualities,
         itemFlaws = itemFlaws,
+        quantity = quantity,
     )
 
     override fun unlinkFromCompendium() = copy(compendiumId = null)
@@ -105,6 +107,7 @@ data class InventoryItem(
             compendiumItem: Trapping,
             itemQualities: Set<ItemQuality>,
             itemFlaws: Set<ItemFlaw>,
+            quantity: Int,
         ): InventoryItem {
             return InventoryItem(
                 id = uuid4(),
@@ -114,7 +117,7 @@ data class InventoryItem(
                 itemFlaws = itemFlaws,
                 trappingType = TrappingType.fromCompendium(compendiumItem.trappingType),
                 description = compendiumItem.description,
-                quantity = 1,
+                quantity = quantity,
                 containerId = null,
                 compendiumId = compendiumItem.id,
             )

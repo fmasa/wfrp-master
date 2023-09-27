@@ -9,12 +9,19 @@ fun EditQualitiesDetailDialog(
     onSaveRequest: suspend (InventoryItem) -> Unit,
     onDismissRequest: () -> Unit,
 ) {
-    ItemQualitiesAndFlawsForm(
+    TrappingFromCompendiumForm(
         itemName = trapping.name,
         itemQualities = trapping.itemQualities,
         itemFlaws = trapping.itemFlaws,
-        onSaveRequest = { qualities, flaws ->
-            onSaveRequest(trapping.updateItemQualitiesAndFlaws(qualities, flaws))
+        quantity = trapping.quantity,
+        onSaveRequest = { qualities, flaws, quantity ->
+            onSaveRequest(
+                trapping.update(
+                    itemQualities = qualities,
+                    itemFlaws = flaws,
+                    quantity = quantity,
+                )
+            )
             onDismissRequest()
         },
         onDismissRequest = onDismissRequest,
