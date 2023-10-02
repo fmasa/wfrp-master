@@ -498,7 +498,7 @@
     <string name="weapons_flaws_tiring">Fatigosa</string>
     <string name="authentication_label_email">Email</string>
     <string name="calendar_moon_phases_new_moon">Luna Nueva</string>
-    <string name="weapons_qualities_trip">Zancadilla</string>
+    <string name="weapons_qualities_trip">Obstaculizante</string>
     <string name="trappings_label_item_qualities">Cualidades de objeto</string>
     <string name="parties_messages_invitation_confirmation">Has sido invitado a %s.</string>
     <string name="spells_label_name">Nombre</string>
