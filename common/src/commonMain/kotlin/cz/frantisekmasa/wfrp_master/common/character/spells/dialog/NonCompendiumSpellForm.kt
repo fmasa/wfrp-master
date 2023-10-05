@@ -16,7 +16,6 @@ import androidx.compose.ui.text.input.KeyboardType
 import com.benasher44.uuid.Uuid
 import com.benasher44.uuid.uuid4
 import cz.frantisekmasa.wfrp_master.common.Str
-import cz.frantisekmasa.wfrp_master.common.character.spells.SpellsScreenModel
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.SpellLore
 import cz.frantisekmasa.wfrp_master.common.core.domain.localizedName
 import cz.frantisekmasa.wfrp_master.common.core.domain.spells.Spell
@@ -33,7 +32,7 @@ import dev.icerock.moko.resources.compose.stringResource
 
 @Composable
 internal fun NonCompendiumSpellForm(
-    screenModel: SpellsScreenModel,
+    onSave: suspend (Spell) -> Unit,
     existingSpell: Spell?,
     onDismissRequest: () -> Unit,
 ) {
@@ -47,7 +46,7 @@ internal fun NonCompendiumSpellForm(
         ),
         onDismissRequest = onDismissRequest,
         formData = formData,
-        onSave = screenModel::saveSpell,
+        onSave = onSave,
     ) { validate ->
         TextInput(
             label = stringResource(Str.spells_label_name),

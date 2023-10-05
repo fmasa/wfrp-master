@@ -129,8 +129,8 @@ data class CharacterPickerScreen(
             UnassignedCharacterPickerDialog(
                 partyId = partyId,
                 unassignedCharacters = unassignedCharacters,
-                screenModel = screenModel,
                 onDismissRequest = { unassignedCharactersDialogVisible = false },
+                assignCharacter = screenModel::assignCharacter,
                 onAssigned = {
                     navigation.replace(CharacterDetailScreen(it))
                 }

@@ -212,6 +212,8 @@ data class Character(
         )
     }
 
+    fun updateMoneyBalance(money: Money) = copy(money = money)
+
     fun addMoney(amount: Money) = copy(money = money + amount)
 
     fun updateHiddenTabs(hiddenTabs: Set<CharacterTab>) = copy(hiddenTabs = hiddenTabs)

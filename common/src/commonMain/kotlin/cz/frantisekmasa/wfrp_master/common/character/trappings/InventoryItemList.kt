@@ -11,7 +11,7 @@ import dev.icerock.moko.resources.compose.stringResource
 
 @Composable
 fun InventoryItemList(
-    trappings: List<TrappingsScreenModel.TrappingItem>,
+    trappings: List<TrappingItem>,
     onClick: (InventoryItem) -> Unit,
     onRemove: (InventoryItem) -> Unit,
     onDuplicate: (InventoryItem) -> Unit,

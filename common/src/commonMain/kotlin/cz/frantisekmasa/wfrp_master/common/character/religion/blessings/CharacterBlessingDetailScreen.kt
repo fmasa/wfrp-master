@@ -19,7 +19,7 @@ class CharacterBlessingDetailScreen(characterId: CharacterId, blessingId: Uuid) 
 
     @Composable
     override fun Content() {
-        val screenModel: BlessingsScreenModel = rememberScreenModel(arg = characterId)
+        val screenModel: CharacterBlessingDetailScreenModel = rememberScreenModel(arg = characterId)
 
         Detail(screenModel) { blessing, isGameMaster ->
             val navigation = LocalNavigationTransaction.current
@@ -48,7 +48,7 @@ class CharacterBlessingDetailScreen(characterId: CharacterId, blessingId: Uuid) 
                 )
             } else {
                 NonCompendiumBlessingForm(
-                    screenModel = screenModel,
+                    onSave = screenModel::saveItem,
                     existingBlessing = blessing,
                     onDismissRequest = navigation::goBack,
                 )

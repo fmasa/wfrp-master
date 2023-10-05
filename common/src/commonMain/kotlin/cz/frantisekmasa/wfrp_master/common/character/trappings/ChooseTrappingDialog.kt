@@ -21,8 +21,8 @@ import kotlinx.coroutines.launch
 @Composable
 fun ChooseTrappingDialog(
     title: String,
-    trappings: List<TrappingsScreenModel.TrappingItem>,
-    onSelected: suspend (TrappingsScreenModel.TrappingItem) -> Unit,
+    trappings: List<TrappingItem>,
+    onSelected: suspend (TrappingItem) -> Unit,
     emptyUiText: String,
     onDismissRequest: () -> Unit,
 ) {

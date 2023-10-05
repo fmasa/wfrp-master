@@ -19,7 +19,7 @@ class CharacterMiracleDetailScreen(characterId: CharacterId, miracleId: Uuid) :
 
     @Composable
     override fun Content() {
-        val screenModel: MiraclesScreenModel = rememberScreenModel(arg = characterId)
+        val screenModel: CharacterMiracleDetailScreenModel = rememberScreenModel(arg = characterId)
 
         Detail(screenModel) { miracle, isGameMaster ->
             val navigation = LocalNavigationTransaction.current
@@ -48,7 +48,7 @@ class CharacterMiracleDetailScreen(characterId: CharacterId, miracleId: Uuid) :
                 )
             } else {
                 NonCompendiumMiracleForm(
-                    screenModel = screenModel,
+                    onSave = screenModel::saveItem,
                     existingMiracle = miracle,
                     onDismissRequest = navigation::goBack,
                 )

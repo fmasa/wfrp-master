@@ -1,6 +1,10 @@
 package cz.frantisekmasa.wfrp_master.common.core.firebase.repositories
 
+import arrow.core.Either
+import arrow.core.left
+import arrow.core.right
 import com.benasher44.uuid.Uuid
+import cz.frantisekmasa.wfrp_master.common.compendium.domain.exceptions.CompendiumItemNotFound
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.CharacterItem
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.CharacterItemRepository
 import cz.frantisekmasa.wfrp_master.common.core.domain.identifiers.CharacterId
@@ -16,6 +20,7 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 
 open class FirestoreCharacterItemRepository<T : CharacterItem<T, *>>(
     private val collectionName: String,
@@ -27,6 +32,24 @@ open class FirestoreCharacterItemRepository<T : CharacterItem<T, *>>(
         itemCollection(characterId)
             .orderBy("name")
             .documents(mapper)
+
+    override fun getLive(
+        characterId: CharacterId,
+        itemId: Uuid
+    ): Flow<Either<CompendiumItemNotFound, T>> {
+        return itemCollection(characterId)
+            .document(itemId.toString())
+            .snapshots
+            .map {
+                it.fold(
+                    { snapshot ->
+                        snapshot.data?.let(mapper::fromDocumentData)?.right()
+                            ?: CompendiumItemNotFound(null).left()
+                    },
+                    { error -> CompendiumItemNotFound(null, error).left() },
+                )
+            }
+    }
 
     override suspend fun remove(characterId: CharacterId, itemId: Uuid) {
         itemCollection(characterId)

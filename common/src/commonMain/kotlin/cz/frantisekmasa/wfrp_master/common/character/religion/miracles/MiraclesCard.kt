@@ -3,33 +3,29 @@ package cz.frantisekmasa.wfrp_master.common.character.religion.miracles
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import cz.frantisekmasa.wfrp_master.common.Str
-import cz.frantisekmasa.wfrp_master.common.character.religion.miracles.dialog.AddMiracleDialog
+import cz.frantisekmasa.wfrp_master.common.character.religion.miracles.add.AddMiracleScreen
+import cz.frantisekmasa.wfrp_master.common.core.domain.identifiers.CharacterId
 import cz.frantisekmasa.wfrp_master.common.core.domain.religion.Miracle
 import cz.frantisekmasa.wfrp_master.common.core.shared.Resources
 import cz.frantisekmasa.wfrp_master.common.core.ui.buttons.CardButton
 import cz.frantisekmasa.wfrp_master.common.core.ui.cards.CardContainer
 import cz.frantisekmasa.wfrp_master.common.core.ui.cards.CardItem
 import cz.frantisekmasa.wfrp_master.common.core.ui.cards.CardTitle
-import cz.frantisekmasa.wfrp_master.common.core.ui.flow.collectWithLifecycle
 import cz.frantisekmasa.wfrp_master.common.core.ui.navigation.LocalNavigationTransaction
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.ContextMenu
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.EmptyUI
 import dev.icerock.moko.resources.compose.stringResource
-import kotlinx.coroutines.launch
+import kotlinx.collections.immutable.ImmutableList
 
 @Composable
-internal fun MiraclesCard(screenModel: MiraclesScreenModel) {
-    val miracles = screenModel.items.collectWithLifecycle(null).value ?: return
-    val coroutineScope = rememberCoroutineScope()
-
+internal fun MiraclesCard(
+    characterId: CharacterId,
+    miracles: ImmutableList<Miracle>,
+    onRemove: (Miracle) -> Unit,
+) {
     CardContainer(
         Modifier
             .padding(horizontal = 8.dp)
@@ -52,30 +48,20 @@ internal fun MiraclesCard(screenModel: MiraclesScreenModel) {
                         miracle,
                         onClick = {
                             navigation.navigate(
-                                CharacterMiracleDetailScreen(
-                                    screenModel.characterId,
-                                    miracle.id,
-                                )
+                                CharacterMiracleDetailScreen(characterId, miracle.id)
                             )
                         },
-                        onRemove = { coroutineScope.launch { screenModel.removeItem(miracle) } },
+                        onRemove = { onRemove(miracle) },
                     )
                 }
             }
 
-            var showAddMiracleDialog by rememberSaveable { mutableStateOf(false) }
+            val navigation = LocalNavigationTransaction.current
 
             CardButton(
                 stringResource(Str.miracles_title_add).uppercase(),
-                onClick = { showAddMiracleDialog = true },
+                onClick = { navigation.navigate(AddMiracleScreen(characterId)) },
             )
-
-            if (showAddMiracleDialog) {
-                AddMiracleDialog(
-                    screenModel = screenModel,
-                    onDismissRequest = { showAddMiracleDialog = false }
-                )
-            }
         }
     }
 }

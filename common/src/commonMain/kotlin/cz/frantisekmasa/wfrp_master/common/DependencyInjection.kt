@@ -1,19 +1,29 @@
 package cz.frantisekmasa.wfrp_master.common
 
 import cz.frantisekmasa.wfrp_master.common.changelog.ChangelogScreenModel
+import cz.frantisekmasa.wfrp_master.common.character.CharacterDetailScreenModel
 import cz.frantisekmasa.wfrp_master.common.character.CharacterPickerScreenModel
 import cz.frantisekmasa.wfrp_master.common.character.CharacterScreenModel
 import cz.frantisekmasa.wfrp_master.common.character.characteristics.CharacteristicsScreenModel
 import cz.frantisekmasa.wfrp_master.common.character.combat.CharacterCombatScreenModel
 import cz.frantisekmasa.wfrp_master.common.character.effects.EffectManager
-import cz.frantisekmasa.wfrp_master.common.character.religion.blessings.BlessingsScreenModel
-import cz.frantisekmasa.wfrp_master.common.character.religion.miracles.MiraclesScreenModel
-import cz.frantisekmasa.wfrp_master.common.character.skills.SkillsScreenModel
-import cz.frantisekmasa.wfrp_master.common.character.spells.SpellsScreenModel
-import cz.frantisekmasa.wfrp_master.common.character.talents.TalentsScreenModel
-import cz.frantisekmasa.wfrp_master.common.character.traits.TraitsScreenModel
+import cz.frantisekmasa.wfrp_master.common.character.items.AvailableCompendiumItemsFactory
+import cz.frantisekmasa.wfrp_master.common.character.religion.blessings.CharacterBlessingDetailScreenModel
+import cz.frantisekmasa.wfrp_master.common.character.religion.blessings.add.AddBlessingScreenModel
+import cz.frantisekmasa.wfrp_master.common.character.religion.miracles.CharacterMiracleDetailScreenModel
+import cz.frantisekmasa.wfrp_master.common.character.religion.miracles.add.AddMiracleScreenModel
+import cz.frantisekmasa.wfrp_master.common.character.skills.CharacterSkillDetailScreenModel
+import cz.frantisekmasa.wfrp_master.common.character.skills.add.AddSkillScreenModel
+import cz.frantisekmasa.wfrp_master.common.character.skills.addBasic.AddBasicSkillsScreenModel
+import cz.frantisekmasa.wfrp_master.common.character.spells.CharacterSpellDetailScreenModel
+import cz.frantisekmasa.wfrp_master.common.character.spells.add.AddSpellScreenModel
+import cz.frantisekmasa.wfrp_master.common.character.talents.CharacterTalentDetailScreenModel
+import cz.frantisekmasa.wfrp_master.common.character.talents.add.AddTalentScreenModel
+import cz.frantisekmasa.wfrp_master.common.character.traits.CharacterTraitDetailScreenModel
+import cz.frantisekmasa.wfrp_master.common.character.traits.add.AddTraitScreenModel
+import cz.frantisekmasa.wfrp_master.common.character.trappings.CharacterTrappingsDetailScreenModel
 import cz.frantisekmasa.wfrp_master.common.character.trappings.TrappingSaver
-import cz.frantisekmasa.wfrp_master.common.character.trappings.TrappingsScreenModel
+import cz.frantisekmasa.wfrp_master.common.character.trappings.add.AddTrappingScreenModel
 import cz.frantisekmasa.wfrp_master.common.characterCreation.CharacterCreationScreenModel
 import cz.frantisekmasa.wfrp_master.common.combat.CombatScreenModel
 import cz.frantisekmasa.wfrp_master.common.compendium.CompendiumExportScreenModel
@@ -164,10 +174,8 @@ val appModule = DI.Module("Common") {
     bindSingleton<CharacterAvatarChanger> { CloudFunctionCharacterAvatarChanger(instance()) }
 
     bindFactory { characterId: CharacterId ->
-        TrappingsScreenModel(
+        CharacterTrappingsDetailScreenModel(
             characterId,
-            instance(),
-            instance(),
             instance(),
             instance(),
             instance(),
@@ -194,6 +202,25 @@ val appModule = DI.Module("Common") {
             instance(),
         )
     }
+    bindFactory { characterId: CharacterId ->
+        CharacterDetailScreenModel(
+            characterId,
+            instance(),
+            instance(),
+            instance(),
+            instance(),
+            instance(),
+            instance(),
+            instance(),
+            instance(),
+            instance(),
+            instance(),
+            instance(),
+            instance(),
+            instance(),
+            instance(),
+        )
+    }
     bindFactory { partyId: PartyId -> CharacterPickerScreenModel(partyId, instance()) }
     bindFactory { partyId: PartyId -> EncountersScreenModel(partyId, instance()) }
     bindFactory { partyId: PartyId -> PartyScreenModel(partyId, instance()) }
@@ -201,13 +228,37 @@ val appModule = DI.Module("Common") {
         EncounterDetailScreenModel(encounterId, instance(), instance(), instance())
     }
     bindFactory { characterId: CharacterId ->
-        SkillsScreenModel(characterId, instance(), instance(), instance(), instance())
+        CharacterSkillDetailScreenModel(characterId, instance(), instance(), instance())
     }
     bindFactory { characterId: CharacterId ->
-        SpellsScreenModel(characterId, instance(), instance(), instance(), instance())
+        AddSkillScreenModel(characterId, instance(), instance(), instance(), instance())
     }
     bindFactory { characterId: CharacterId ->
-        TalentsScreenModel(
+        AddBasicSkillsScreenModel(characterId, instance(), instance())
+    }
+    bindFactory { characterId: CharacterId ->
+        CharacterSpellDetailScreenModel(characterId, instance(), instance(), instance())
+    }
+    bindFactory { characterId: CharacterId ->
+        AddSpellScreenModel(characterId, instance(), instance(), instance())
+    }
+    bindFactory { characterId: CharacterId ->
+        CharacterTalentDetailScreenModel(
+            characterId,
+            instance(),
+            instance(),
+            instance(),
+            instance(),
+            instance(),
+        )
+    }
+
+    bindSingleton {
+        AvailableCompendiumItemsFactory(instance(), instance())
+    }
+
+    bindFactory { characterId: CharacterId ->
+        AddTalentScreenModel(
             characterId,
             instance(),
             instance(),
@@ -218,10 +269,35 @@ val appModule = DI.Module("Common") {
         )
     }
     bindFactory { characterId: CharacterId ->
-        MiraclesScreenModel(characterId, instance(), instance(), instance(), instance())
+        CharacterMiracleDetailScreenModel(characterId, instance(), instance(), instance())
     }
     bindFactory { characterId: CharacterId ->
-        BlessingsScreenModel(characterId, instance(), instance(), instance(), instance())
+        AddMiracleScreenModel(characterId, instance(), instance(), instance())
+    }
+    bindFactory { characterId: CharacterId ->
+        CharacterBlessingDetailScreenModel(characterId, instance(), instance(), instance())
+    }
+    bindFactory { characterId: CharacterId ->
+        AddBlessingScreenModel(characterId, instance(), instance(), instance())
+    }
+    bindFactory { characterId: CharacterId ->
+        AddTraitScreenModel(
+            characterId,
+            instance(),
+            instance(),
+            instance(),
+            instance(),
+            instance(),
+            instance(),
+        )
+    }
+    bindFactory { characterId: CharacterId ->
+        AddTrappingScreenModel(
+            characterId,
+            instance(),
+            instance(),
+            instance(),
+        )
     }
 
     bindFactory { partyId: PartyId ->
@@ -255,9 +331,8 @@ val appModule = DI.Module("Common") {
     bindSingleton { EffectManager(instance(), instance(), instance(), instance()) }
     bindSingleton { TrappingSaver(instance(), instance()) }
     bindFactory { characterId: CharacterId ->
-        TraitsScreenModel(
+        CharacterTraitDetailScreenModel(
             characterId,
-            instance(),
             instance(),
             instance(),
             instance(),

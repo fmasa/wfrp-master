@@ -7,7 +7,6 @@ import cz.frantisekmasa.wfrp_master.common.core.auth.UserProvider
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.Character
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.CharacterAvatarChanger
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.CharacterRepository
-import cz.frantisekmasa.wfrp_master.common.core.domain.character.CharacterType
 import cz.frantisekmasa.wfrp_master.common.core.domain.compendium.Compendium
 import cz.frantisekmasa.wfrp_master.common.core.domain.identifiers.CharacterId
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.PartyRepository
@@ -27,8 +26,6 @@ class CharacterScreenModel(
 ) : ScreenModel {
 
     val character: Flow<Character> = characters.getLive(characterId).right()
-    val allCharacters: Flow<List<Character>> =
-        characters.inParty(characterId.partyId, CharacterType.PLAYER_CHARACTER)
 
     private val party = partyRepository.getLive(characterId.partyId).right()
 

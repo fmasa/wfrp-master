@@ -34,7 +34,7 @@ class CharacterSkillDetailScreen(characterId: CharacterId, skillId: Uuid) :
 
     @Composable
     override fun Content() {
-        val screenModel: SkillsScreenModel = rememberScreenModel(arg = characterId)
+        val screenModel: CharacterSkillDetailScreenModel = rememberScreenModel(arg = characterId)
         val characterScreenModel: CharacterScreenModel = rememberScreenModel(arg = characterId)
 
         Detail(screenModel) { skill, isGameMaster ->
@@ -89,7 +89,7 @@ class CharacterSkillDetailScreen(characterId: CharacterId, skillId: Uuid) :
                 )
             } else {
                 NonCompendiumSkillForm(
-                    screenModel = screenModel,
+                    onSave = screenModel::saveSkill,
                     existingSkill = skill,
                     characteristics = characteristics,
                     onDismissRequest = navigation::goBack,

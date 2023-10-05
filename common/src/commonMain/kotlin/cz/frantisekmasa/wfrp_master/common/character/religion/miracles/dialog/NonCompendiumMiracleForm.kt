@@ -6,7 +6,6 @@ import androidx.compose.runtime.remember
 import com.benasher44.uuid.Uuid
 import com.benasher44.uuid.uuid4
 import cz.frantisekmasa.wfrp_master.common.Str
-import cz.frantisekmasa.wfrp_master.common.character.religion.miracles.MiraclesScreenModel
 import cz.frantisekmasa.wfrp_master.common.core.domain.religion.Miracle
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.FormDialog
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.HydratedFormData
@@ -19,8 +18,8 @@ import cz.frantisekmasa.wfrp_master.common.compendium.domain.Miracle.Companion a
 
 @Composable
 internal fun NonCompendiumMiracleForm(
-    screenModel: MiraclesScreenModel,
     existingMiracle: Miracle?,
+    onSave: suspend (Miracle) -> Unit,
     onDismissRequest: () -> Unit,
 ) {
     val formData = NonCompendiumMiracleFormData.fromMiracle(existingMiracle)
@@ -32,7 +31,7 @@ internal fun NonCompendiumMiracleForm(
         ),
         onDismissRequest = onDismissRequest,
         formData = formData,
-        onSave = screenModel::saveItem,
+        onSave = onSave,
     ) { validate ->
         TextInput(
             label = stringResource(Str.miracles_label_name),

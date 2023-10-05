@@ -29,7 +29,6 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import cz.frantisekmasa.wfrp_master.common.Str
 import cz.frantisekmasa.wfrp_master.common.core.domain.Money
-import cz.frantisekmasa.wfrp_master.common.core.domain.character.NotEnoughMoney
 import cz.frantisekmasa.wfrp_master.common.core.ui.buttons.CloseButton
 import cz.frantisekmasa.wfrp_master.common.core.ui.dialogs.FullScreenDialog
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.InputValue
@@ -46,7 +45,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun TransactionDialog(
     balance: Money,
-    screenModel: TrappingsScreenModel,
+    updateBalance: suspend (Money) -> Unit,
     onDismissRequest: () -> Unit,
 ) {
     FullScreenDialog(onDismissRequest = onDismissRequest) {
@@ -91,16 +90,16 @@ fun TransactionDialog(
                                 saving = true
                                 errorMessage = null
                                 coroutineScope.launch(Dispatchers.IO) {
-                                    try {
-                                        when (operation) {
-                                            Operation.ADD -> screenModel.addMoney(money)
-                                            Operation.SUBTRACT -> screenModel.subtractMoney(money)
+                                    when (operation) {
+                                        Operation.ADD -> updateBalance(balance + money)
+                                        Operation.SUBTRACT -> {
+                                            if (money > balance) {
+                                                saving = false
+                                                errorMessage = notEnoughMoneyMessage
+                                            } else {
+                                                updateBalance(balance - money)
+                                            }
                                         }
-
-                                        onDismissRequest()
-                                    } catch (e: NotEnoughMoney) {
-                                        saving = false
-                                        errorMessage = notEnoughMoneyMessage
                                     }
                                 }
                             },

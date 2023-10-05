@@ -1,136 +1,105 @@
 package cz.frantisekmasa.wfrp_master.common.character.skills.dialog
 
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.Scaffold
 import androidx.compose.material.SnackbarDuration
 import androidx.compose.material.Text
-import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.Stable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import com.benasher44.uuid.Uuid
-import com.benasher44.uuid.uuid4
 import cz.frantisekmasa.wfrp_master.common.Str
 import cz.frantisekmasa.wfrp_master.common.character.skills.SkillRating
-import cz.frantisekmasa.wfrp_master.common.character.skills.SkillsScreenModel
-import cz.frantisekmasa.wfrp_master.common.compendium.domain.exceptions.CompendiumItemNotFound
+import cz.frantisekmasa.wfrp_master.common.compendium.domain.Skill
 import cz.frantisekmasa.wfrp_master.common.core.domain.Stats
-import cz.frantisekmasa.wfrp_master.common.core.ui.buttons.CloseButton
-import cz.frantisekmasa.wfrp_master.common.core.ui.flow.collectWithLifecycle
+import cz.frantisekmasa.wfrp_master.common.core.ui.forms.FormDialog
+import cz.frantisekmasa.wfrp_master.common.core.ui.forms.HydratedFormData
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.NumberPicker
-import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.FullScreenProgress
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
 import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.LocalPersistentSnackbarHolder
-import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.SaveAction
 import dev.icerock.moko.resources.compose.stringResource
-import io.github.aakira.napier.Napier
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 
 @Composable
 internal fun AdvancesForm(
-    compendiumSkillId: Uuid,
+    compendiumSkill: Skill,
     characteristics: Stats,
-    screenModel: SkillsScreenModel,
+    onSave: suspend (advances: Int) -> AdvancesForm.SavingResult,
     isAdvanced: Boolean,
     onDismissRequest: () -> Unit,
 ) {
-    var saving by remember { mutableStateOf(false) }
-    var advances by rememberSaveable { mutableStateOf(1) }
+    val messageCompendiumSkillRemoved = stringResource(Str.skills_messages_compendium_skill_removed)
+    val snackbarHolder = LocalPersistentSnackbarHolder.current
 
-    Scaffold(
-        topBar = {
-            TopAppBar(
-                navigationIcon = { CloseButton(onDismissRequest) },
-                title = { Text(stringResource(Str.skills_title_new)) },
-                actions = {
-                    val coroutineScope = rememberCoroutineScope()
-                    val snackbarHolder = LocalPersistentSnackbarHolder.current
+    val formData = AdvancesForm.Data(
+        rememberSaveable(compendiumSkill.id) { mutableStateOf(1) },
+    )
 
-                    val messageCompendiumSkillRemoved = stringResource(
-                        Str.skills_messages_compendium_skill_removed
+    FormDialog(
+        title = stringResource(Str.skills_title_new),
+        onDismissRequest = onDismissRequest,
+        formData = formData,
+        onSave = {
+            when (onSave(it)) {
+                AdvancesForm.SavingResult.SUCCESS -> {}
+                AdvancesForm.SavingResult.COMPENDIUM_ITEM_WAS_REMOVED -> {
+                    snackbarHolder.showSnackbar(
+                        messageCompendiumSkillRemoved,
+                        SnackbarDuration.Short,
                     )
-                    SaveAction(
-                        enabled = !saving,
-                        onClick = {
-                            coroutineScope.launch(Dispatchers.IO) {
-                                saving = true
+                }
+            }
 
-                                try {
-                                    screenModel.saveCompendiumSkill(
-                                        skillId = uuid4(),
-                                        compendiumSkillId = compendiumSkillId,
-                                        advances = advances,
-                                    )
-                                } catch (e: CompendiumItemNotFound) {
-                                    Napier.d(e.toString(), e)
+            onDismissRequest()
+        }
+    ) {
+        Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
+            Text(
+                text = stringResource(Str.skills_label_advances),
+                modifier = Modifier.weight(1f),
+            )
 
-                                    snackbarHolder.showSnackbar(
-                                        messageCompendiumSkillRemoved,
-                                        SnackbarDuration.Short,
-                                    )
-                                } finally {
-                                    onDismissRequest()
-                                }
-                            }
-                        }
-                    )
+            val minAdvances = if (isAdvanced) 1 else 0
+
+            NumberPicker(
+                value = formData.advances,
+                onIncrement = { formData.advances++ },
+                onDecrement = {
+                    if (formData.advances > minAdvances) {
+                        formData.advances--
+                    }
                 }
             )
         }
-    ) {
-        val skill = screenModel.compendiumItems
-            .collectWithLifecycle(null)
-            .value
-            ?.firstOrNull { it.id == compendiumSkillId }
 
-        if (saving || skill == null) {
-            FullScreenProgress()
-            return@Scaffold
-        }
+        SkillRating(
+            label = compendiumSkill.name,
+            value = characteristics.get(compendiumSkill.characteristic) + formData.advances,
+            modifier = Modifier
+                .padding(top = Spacing.large)
+                .align(Alignment.CenterHorizontally),
+        )
+    }
+}
 
-        Column(
-            Modifier
-                .verticalScroll(rememberScrollState())
-                .padding(Spacing.bodyPadding),
-        ) {
-            Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
-                Text(
-                    text = stringResource(Str.skills_label_advances),
-                    modifier = Modifier.weight(1f),
-                )
+object AdvancesForm {
 
-                val minAdvances = if (isAdvanced) 1 else 0
+    enum class SavingResult { SUCCESS, COMPENDIUM_ITEM_WAS_REMOVED }
 
-                NumberPicker(
-                    value = advances,
-                    onIncrement = { advances++ },
-                    onDecrement = {
-                        if (advances > minAdvances) {
-                            advances--
-                        }
-                    }
-                )
-            }
+    @Stable
+    data class Data(
+        private val advancesState: MutableState<Int>,
+    ) : HydratedFormData<Int> {
 
-            SkillRating(
-                label = skill.name,
-                value = characteristics.get(skill.characteristic) + advances,
-                modifier = Modifier
-                    .padding(top = Spacing.large)
-                    .align(Alignment.CenterHorizontally),
-            )
-        }
+        var advances by advancesState
+
+        override fun isValid(): Boolean = true
+
+        override fun toValue(): Int = advances
     }
 }

@@ -46,6 +46,8 @@ kotlin {
                 api(compose.material)
                 api(compose.materialIconsExtended)
 
+                implementation("org.jetbrains.kotlinx:kotlinx-collections-immutable:0.3.5")
+
                 implementation("io.github.mmolosay:debounce:1.0.0")
 
                 val voyagerVersion = "1.0.0-rc04"

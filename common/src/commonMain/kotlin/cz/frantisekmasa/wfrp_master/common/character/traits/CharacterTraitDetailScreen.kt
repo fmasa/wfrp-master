@@ -28,7 +28,7 @@ class CharacterTraitDetailScreen(characterId: CharacterId, traitId: Uuid) :
 
     @Composable
     override fun Content() {
-        val screenModel: TraitsScreenModel = rememberScreenModel(arg = characterId)
+        val screenModel: CharacterTraitDetailScreenModel = rememberScreenModel(arg = characterId)
 
         Detail(screenModel) { trait, isGameMaster ->
             val navigation = LocalNavigationTransaction.current
@@ -38,8 +38,12 @@ class CharacterTraitDetailScreen(characterId: CharacterId, traitId: Uuid) :
                 TraitSpecificationsForm(
                     existingTrait = trait,
                     defaultSpecifications = trait.specificationValues,
-                    compendiumTraitId = trait.compendiumId,
-                    screenModel = screenModel,
+                    onSave = {
+                        screenModel.saveTrait(
+                            trait = trait.copy(specificationValues = it),
+                            existingTrait = trait,
+                        )
+                    },
                     onDismissRequest = { edit = false },
                 )
             } else {

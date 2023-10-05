@@ -6,7 +6,6 @@ import androidx.compose.runtime.remember
 import com.benasher44.uuid.Uuid
 import com.benasher44.uuid.uuid4
 import cz.frantisekmasa.wfrp_master.common.Str
-import cz.frantisekmasa.wfrp_master.common.character.religion.blessings.BlessingsScreenModel
 import cz.frantisekmasa.wfrp_master.common.core.domain.religion.Blessing
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.FormDialog
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.HydratedFormData
@@ -19,8 +18,8 @@ import cz.frantisekmasa.wfrp_master.common.compendium.domain.Blessing.Companion 
 
 @Composable
 internal fun NonCompendiumBlessingForm(
-    screenModel: BlessingsScreenModel,
     existingBlessing: Blessing?,
+    onSave: suspend (Blessing) -> Unit,
     onDismissRequest: () -> Unit,
 ) {
     val formData = NonCompendiumBlessingFormData.fromBlessing(existingBlessing)
@@ -33,7 +32,7 @@ internal fun NonCompendiumBlessingForm(
         ),
         onDismissRequest = onDismissRequest,
         formData = formData,
-        onSave = screenModel::saveItem,
+        onSave = onSave,
     ) { validate ->
         TextInput(
             label = stringResource(Str.blessings_label_name),
