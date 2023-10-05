@@ -42,7 +42,7 @@ import dev.icerock.moko.resources.compose.stringResource
 
 @Composable
 fun ArmourCard(
-    armour: Armour,
+    armourPoints: Armour,
     armourPieces: Map<HitLocation, List<WornArmourPiece>>,
     toughnessBonus: Int,
     onTrappingClick: (InventoryItem) -> Unit,
@@ -79,7 +79,7 @@ fun ArmourCard(
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier.weight(1f),
             ) {
-                Points(armour.shield)
+                Points(armourPoints.shield)
                 Text(
                     stringResource(Str.armour_shield),
                     Modifier.padding(start = Spacing.medium),
@@ -93,7 +93,7 @@ fun ArmourCard(
             key(location) {
                 Location(
                     location = location,
-                    points = armour.armourPoints(location),
+                    points = armourPoints.armourPoints(location),
                     trappings = armourPieces[location] ?: emptyList(),
                     onTrappingClick = onTrappingClick,
                 )

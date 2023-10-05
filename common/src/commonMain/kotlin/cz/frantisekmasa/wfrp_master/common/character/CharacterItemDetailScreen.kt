@@ -23,13 +23,15 @@ abstract class CharacterItemDetailScreen(
 
     @Composable
     protected fun <T : CharacterItem<T, *>> Detail(
-        screenModel: CharacterItemScreenModel<T, *>,
+        screenModel: CharacterItemScreenModel<T>,
         content: @Composable (T, isGameMaster: Boolean) -> Unit,
     ) {
-        val items = screenModel.items.collectWithLifecycle(null).value
         val isGameMaster = screenModel.isGameMaster.collectWithLifecycle(null).value
+        val itemOrError = remember(screenModel) { screenModel.getItem(itemId) }
+            .collectWithLifecycle(null)
+            .value
 
-        if (items == null || isGameMaster == null) {
+        if (itemOrError == null || isGameMaster == null) {
             Surface {
                 FullScreenProgress()
             }
@@ -38,7 +40,7 @@ abstract class CharacterItemDetailScreen(
 
         val navigation = LocalNavigationTransaction.current
         val snackbarHolder = LocalPersistentSnackbarHolder.current
-        val item = remember(items, itemId) { items.firstOrNull { it.id == itemId } }
+        val item = itemOrError.orNull()
 
         if (item == null) {
             val message = stringResource(Str.common_ui_item_does_not_exist)

@@ -19,8 +19,6 @@ import androidx.compose.ui.Modifier
 import com.halilibo.richtext.markdown.Markdown
 import com.halilibo.richtext.ui.RichText
 import cz.frantisekmasa.wfrp_master.common.Str
-import cz.frantisekmasa.wfrp_master.common.character.CharacterScreenModel
-import cz.frantisekmasa.wfrp_master.common.core.domain.character.Character
 import cz.frantisekmasa.wfrp_master.common.core.ui.buttons.CloseButton
 import cz.frantisekmasa.wfrp_master.common.core.ui.cards.CardContainer
 import cz.frantisekmasa.wfrp_master.common.core.ui.cards.CardEditButton
@@ -35,7 +33,13 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 @Composable
-fun NoteCard(character: Character, screenModel: CharacterScreenModel) {
+fun NoteCard(
+    text: String,
+    onUpdate: suspend (String) -> Unit,
+    title: @Composable () -> String,
+    updateDialogTitle: @Composable () -> String,
+    maxLength: Int,
+) {
     CardContainer(
         bodyPadding = PaddingValues(start = Spacing.small, end = Spacing.small),
     ) {
@@ -44,21 +48,23 @@ fun NoteCard(character: Character, screenModel: CharacterScreenModel) {
 
             if (editDialogOpened) {
                 EditNoteDialog(
-                    character,
-                    screenModel,
+                    title = updateDialogTitle,
+                    value = text,
+                    onUpdate = onUpdate,
                     onDismissRequest = { editDialogOpened = false },
+                    maxLength = maxLength,
                 )
             }
 
             CardTitle(
-                stringResource(Str.character_note),
+                text = title(),
                 actions = {
                     CardEditButton(onClick = { editDialogOpened = true })
                 }
             )
 
             RichText {
-                Markdown(character.note)
+                Markdown(text)
             }
         }
     }
@@ -66,18 +72,20 @@ fun NoteCard(character: Character, screenModel: CharacterScreenModel) {
 
 @Composable
 private fun EditNoteDialog(
-    character: Character,
-    screenModel: CharacterScreenModel,
+    title: @Composable () -> String,
+    value: String,
+    onUpdate: suspend (String) -> Unit,
     onDismissRequest: () -> Unit,
+    maxLength: Int,
 ) {
     FullScreenDialog(onDismissRequest = onDismissRequest) {
-        val note = inputValue(character.note)
+        val noteValue = inputValue(value)
 
         Scaffold(
             topBar = {
                 TopAppBar(
                     navigationIcon = { CloseButton(onClick = onDismissRequest) },
-                    title = { Text(stringResource(Str.character_title_edit_note)) },
+                    title = { Text(title()) },
                     actions = {
                         val coroutineScope = rememberCoroutineScope()
                         var saving by remember { mutableStateOf(false) }
@@ -88,8 +96,7 @@ private fun EditNoteDialog(
                                 saving = true
 
                                 coroutineScope.launch(Dispatchers.IO) {
-                                    screenModel.update { it.copy(note = note.value) }
-
+                                    onUpdate(noteValue.value)
                                     onDismissRequest()
                                 }
                             }
@@ -106,9 +113,9 @@ private fun EditNoteDialog(
             ) {
                 TextInput(
                     label = stringResource(Str.character_note),
-                    value = note,
+                    value = noteValue,
                     validate = false,
-                    maxLength = Character.NOTE_MAX_LENGTH,
+                    maxLength = maxLength,
                     multiLine = true,
                     helperText = stringResource(Str.common_ui_markdown_supported_note),
                 )

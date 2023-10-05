@@ -31,7 +31,7 @@ class CharacterSpellDetailScreen(characterId: CharacterId, spellId: Uuid) :
 
     @Composable
     override fun Content() {
-        val screenModel: SpellsScreenModel = rememberScreenModel(arg = characterId)
+        val screenModel: CharacterSpellDetailScreenModel = rememberScreenModel(arg = characterId)
 
         Detail(screenModel) { spell, isGameMaster ->
             val navigation = LocalNavigationTransaction.current
@@ -80,7 +80,7 @@ class CharacterSpellDetailScreen(characterId: CharacterId, spellId: Uuid) :
                 )
             } else {
                 NonCompendiumSpellForm(
-                    screenModel = screenModel,
+                    onSave = screenModel::saveSpell,
                     existingSpell = spell,
                     onDismissRequest = navigation::goBack,
                 )

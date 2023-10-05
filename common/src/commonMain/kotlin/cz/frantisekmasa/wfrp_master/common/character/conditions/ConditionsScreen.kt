@@ -14,13 +14,10 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Switch
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import cz.frantisekmasa.wfrp_master.common.character.CharacterScreenModel
-import cz.frantisekmasa.wfrp_master.common.core.domain.character.Character
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.Condition
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.CurrentConditions
 import cz.frantisekmasa.wfrp_master.common.core.domain.localizedName
@@ -28,31 +25,17 @@ import cz.frantisekmasa.wfrp_master.common.core.shared.Resources
 import cz.frantisekmasa.wfrp_master.common.core.shared.drawableResource
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.NumberPicker
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 @Composable
 fun ConditionsScreen(
-    character: Character,
-    screenModel: CharacterScreenModel,
+    state: ConditionsScreenState,
+    updateConditions: (CurrentConditions) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val coroutineScope = rememberCoroutineScope()
-    val conditions = character.conditions
-
     ConditionsForm(
         modifier = modifier,
-        conditions = conditions,
-        onUpdate = { newConditions ->
-            if (newConditions != conditions) {
-                coroutineScope.launch {
-                    withContext(Dispatchers.IO) {
-                        screenModel.update { it.updateConditions(newConditions) }
-                    }
-                }
-            }
-        }
+        conditions = state.conditions,
+        onUpdate = updateConditions,
     )
 }
 

@@ -1,6 +1,8 @@
 package cz.frantisekmasa.wfrp_master.common.core.domain.character
 
+import arrow.core.Either
 import com.benasher44.uuid.Uuid
+import cz.frantisekmasa.wfrp_master.common.compendium.domain.exceptions.CompendiumItemNotFound
 import cz.frantisekmasa.wfrp_master.common.core.domain.identifiers.CharacterId
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.PartyId
 import cz.frantisekmasa.wfrp_master.common.firebase.firestore.Transaction
@@ -14,6 +16,8 @@ interface CharacterItemRepository<T> : CharacterCompendiumItemRepository<T> {
      * Returns flow which emits current list of items for given character
      */
     fun findAllForCharacter(characterId: CharacterId): Flow<List<T>>
+
+    fun getLive(characterId: CharacterId, itemId: Uuid): Flow<Either<CompendiumItemNotFound, T>>
 
     /**
      * Removes given skill item character's skill list

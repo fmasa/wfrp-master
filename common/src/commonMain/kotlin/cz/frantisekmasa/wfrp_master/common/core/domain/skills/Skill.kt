@@ -2,6 +2,7 @@ package cz.frantisekmasa.wfrp_master.common.core.domain.skills
 
 import androidx.compose.runtime.Immutable
 import com.benasher44.uuid.Uuid
+import com.benasher44.uuid.uuid4
 import cz.frantisekmasa.wfrp_master.common.core.domain.Characteristic
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.CharacterItem
 import dev.icerock.moko.parcelize.Parcelize
@@ -44,5 +45,17 @@ data class Skill(
         const val NAME_MAX_LENGTH = 50
         val DESCRIPTION_MAX_LENGTH get() = CompendiumSkill.DESCRIPTION_MAX_LENGTH
         const val MIN_ADVANCES = 0
+
+        fun fromCompendium(compendiumSkill: CompendiumSkill, advances: Int): Skill {
+            return Skill(
+                id = uuid4(),
+                compendiumId = compendiumSkill.id,
+                advanced = compendiumSkill.advanced,
+                characteristic = compendiumSkill.characteristic,
+                name = compendiumSkill.name,
+                description = compendiumSkill.description,
+                advances = advances,
+            )
+        }
     }
 }

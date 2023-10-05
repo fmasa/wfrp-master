@@ -14,7 +14,6 @@ import androidx.compose.ui.Modifier
 import com.benasher44.uuid.Uuid
 import com.benasher44.uuid.uuid4
 import cz.frantisekmasa.wfrp_master.common.Str
-import cz.frantisekmasa.wfrp_master.common.character.talents.TalentsScreenModel
 import cz.frantisekmasa.wfrp_master.common.core.domain.talents.Talent
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.FormDialog
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.HydratedFormData
@@ -29,8 +28,8 @@ import cz.frantisekmasa.wfrp_master.common.compendium.domain.Talent.Companion as
 
 @Composable
 internal fun NonCompendiumTalentForm(
-    screenModel: TalentsScreenModel,
     existingTalent: Talent?,
+    onSave: suspend (Talent) -> Unit,
     onDismissRequest: () -> Unit,
 ) {
     val formData = NonCompendiumTalentFormData.fromTalent(existingTalent)
@@ -43,12 +42,7 @@ internal fun NonCompendiumTalentForm(
         ),
         onDismissRequest = onDismissRequest,
         formData = formData,
-        onSave = {
-            screenModel.saveTalent(
-                talent = it,
-                existingTalent = existingTalent,
-            )
-        },
+        onSave = onSave,
     ) { validate ->
         Row(
             modifier = Modifier.fillMaxWidth(),

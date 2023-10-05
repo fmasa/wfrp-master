@@ -13,49 +13,36 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import cz.frantisekmasa.wfrp_master.common.Str
-import cz.frantisekmasa.wfrp_master.common.character.CharacterScreenModel
-import cz.frantisekmasa.wfrp_master.common.character.skills.dialog.AddBasicSkillsDialog
-import cz.frantisekmasa.wfrp_master.common.character.skills.dialog.AddSkillDialog
+import cz.frantisekmasa.wfrp_master.common.character.skills.add.AddSkillScreen
+import cz.frantisekmasa.wfrp_master.common.character.skills.addBasic.AddBasicSkillsScreen
 import cz.frantisekmasa.wfrp_master.common.core.domain.Stats
+import cz.frantisekmasa.wfrp_master.common.core.domain.identifiers.CharacterId
 import cz.frantisekmasa.wfrp_master.common.core.domain.skills.Skill
 import cz.frantisekmasa.wfrp_master.common.core.shared.Resources
 import cz.frantisekmasa.wfrp_master.common.core.ui.buttons.CardButton
 import cz.frantisekmasa.wfrp_master.common.core.ui.cards.CardContainer
 import cz.frantisekmasa.wfrp_master.common.core.ui.cards.CardItem
 import cz.frantisekmasa.wfrp_master.common.core.ui.cards.CardTitle
-import cz.frantisekmasa.wfrp_master.common.core.ui.flow.collectWithLifecycle
 import cz.frantisekmasa.wfrp_master.common.core.ui.menu.DropdownMenu
 import cz.frantisekmasa.wfrp_master.common.core.ui.navigation.LocalNavigationTransaction
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.ContextMenu
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.EmptyUI
 import dev.icerock.moko.resources.compose.stringResource
+import kotlinx.collections.immutable.ImmutableList
 
 @Composable
 internal fun SkillsCard(
-    characterScreenModel: CharacterScreenModel,
-    skillsScreenModel: SkillsScreenModel,
+    characterId: CharacterId,
+    skills: ImmutableList<Skill>,
+    characteristics: Stats,
     onRemove: (Skill) -> Unit,
 ) {
-    val skills = skillsScreenModel.items.collectWithLifecycle(null).value ?: return
-    val characteristics = characterScreenModel.character
-        .collectWithLifecycle(null).value?.characteristics ?: return
-
     CardContainer(Modifier.padding(horizontal = 8.dp).padding(bottom = 8.dp)) {
         Column(Modifier.padding(horizontal = 6.dp)) {
-            var basicSkillsDialogOpened by remember { mutableStateOf(false) }
-
-            if (basicSkillsDialogOpened) {
-                AddBasicSkillsDialog(
-                    skillsScreenModel,
-                    onDismissRequest = { basicSkillsDialogOpened = false }
-                )
-            }
-
             CardTitle(
                 stringResource(Str.skills_title_skills),
                 actions = {
@@ -72,11 +59,11 @@ internal fun SkillsCard(
                         expanded = contextMenuExpanded,
                         onDismissRequest = { contextMenuExpanded = false },
                     ) {
-
+                        val navigation = LocalNavigationTransaction.current
                         DropdownMenuItem(
                             onClick = {
                                 contextMenuExpanded = false
-                                basicSkillsDialogOpened = true
+                                navigation.navigate(AddBasicSkillsScreen(characterId))
                             },
                         ) {
                             Text(stringResource(Str.skills_button_import_basic_skills))
@@ -101,7 +88,7 @@ internal fun SkillsCard(
                         onClick = {
                             navigation.navigate(
                                 CharacterSkillDetailScreen(
-                                    skillsScreenModel.characterId,
+                                    characterId,
                                     skill.id,
                                 )
                             )
@@ -111,20 +98,11 @@ internal fun SkillsCard(
                 }
             }
 
-            var showAddSkillDialog by rememberSaveable { mutableStateOf(false) }
-
+            val navigation = LocalNavigationTransaction.current
             CardButton(
                 stringResource(Str.skills_title_add),
-                onClick = { showAddSkillDialog = true },
+                onClick = { navigation.navigate(AddSkillScreen(characterId)) },
             )
-
-            if (showAddSkillDialog) {
-                AddSkillDialog(
-                    screenModel = skillsScreenModel,
-                    characteristics = characteristics,
-                    onDismissRequest = { showAddSkillDialog = false }
-                )
-            }
         }
     }
 }

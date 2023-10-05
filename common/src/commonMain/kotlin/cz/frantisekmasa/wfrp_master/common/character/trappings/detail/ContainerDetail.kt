@@ -31,16 +31,17 @@ import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.withStyle
 import cz.frantisekmasa.wfrp_master.common.Str
-import cz.frantisekmasa.wfrp_master.common.character.trappings.AddTrappingDialog
 import cz.frantisekmasa.wfrp_master.common.character.trappings.ChooseTrappingDialog
 import cz.frantisekmasa.wfrp_master.common.character.trappings.TrappingItem
-import cz.frantisekmasa.wfrp_master.common.character.trappings.TrappingsScreenModel
+import cz.frantisekmasa.wfrp_master.common.character.trappings.add.AddTrappingScreen
+import cz.frantisekmasa.wfrp_master.common.core.domain.identifiers.CharacterId
 import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.InventoryItem
 import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.TrappingType
 import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.sum
 import cz.frantisekmasa.wfrp_master.common.core.shared.Resources
 import cz.frantisekmasa.wfrp_master.common.core.ui.cards.CardContainer
 import cz.frantisekmasa.wfrp_master.common.core.ui.cards.CardTitle
+import cz.frantisekmasa.wfrp_master.common.core.ui.navigation.LocalNavigationTransaction
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.ContextMenu
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.EmptyUI
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.FloatingActionsMenu
@@ -54,11 +55,11 @@ import kotlinx.coroutines.Dispatchers
 
 @Composable
 fun ContainerDetail(
+    characterId: CharacterId,
     subheadBar: @Composable ColumnScope.() -> Unit = {},
     trapping: InventoryItem,
     container: TrappingType.Container,
-    allItems: List<TrappingsScreenModel.TrappingItem>?,
-    screenModel: TrappingsScreenModel,
+    allItems: List<TrappingItem>?,
     onSaveRequest: suspend (InventoryItem) -> Unit,
     onOpenDetailRequest: (InventoryItem) -> Unit,
     onRemoveRequest: suspend (InventoryItem) -> Unit,
@@ -68,16 +69,6 @@ fun ContainerDetail(
     if (allItems == null) {
         FullScreenProgress()
         return
-    }
-
-    var newTrappingDialogOpened by rememberSaveable { mutableStateOf(false) }
-
-    if (newTrappingDialogOpened) {
-        AddTrappingDialog(
-            screenModel = screenModel,
-            onDismissRequest = { newTrappingDialogOpened = false },
-            containerId = trapping.id,
-        )
     }
 
     var trappingPickerOpened by rememberSaveable { mutableStateOf(false) }
@@ -119,12 +110,19 @@ fun ContainerDetail(
                     }
                 )
 
+                val navigation = LocalNavigationTransaction.current
+
                 ExtendedFloatingActionButton(
                     icon = { Icon(rememberVectorPainter(Icons.Rounded.Add), null) },
                     text = { Text(stringResource(Str.trappings_button_create_new)) },
                     onClick = {
                         menuState = MenuState.COLLAPSED
-                        newTrappingDialogOpened = true
+                        navigation.navigate(
+                            AddTrappingScreen(
+                                characterId = characterId,
+                                containerId = trapping.id,
+                            )
+                        )
                     }
                 )
             }
@@ -217,7 +215,7 @@ private fun StoredTrappingsCard(
                     key(trapping.id) {
                         Column {
                             TrappingItem(
-                                trapping = TrappingsScreenModel.TrappingItem.SeparateTrapping(trapping),
+                                trapping = TrappingItem.SeparateTrapping(trapping),
                                 onClick = { onOpenDetailRequest(trapping) },
                                 onDuplicate = {
                                     coroutineScope.launchLogged(Dispatchers.IO) {

@@ -1,13 +1,11 @@
 package cz.frantisekmasa.wfrp_master.common.character
 
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.size
-import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Icon
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
@@ -42,15 +40,15 @@ import cz.frantisekmasa.wfrp_master.common.characterEdit.CharacterEditScreen
 import cz.frantisekmasa.wfrp_master.common.combat.ActiveCombatBanner
 import cz.frantisekmasa.wfrp_master.common.compendium.journal.JournalScreen
 import cz.frantisekmasa.wfrp_master.common.core.LocalStaticConfiguration
-import cz.frantisekmasa.wfrp_master.common.core.PartyScreenModel
 import cz.frantisekmasa.wfrp_master.common.core.auth.LocalUser
+import cz.frantisekmasa.wfrp_master.common.core.auth.UserId
 import cz.frantisekmasa.wfrp_master.common.core.config.Platform
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.Character
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.CharacterTab
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.CharacterType
 import cz.frantisekmasa.wfrp_master.common.core.domain.identifiers.CharacterId
 import cz.frantisekmasa.wfrp_master.common.core.domain.localizedName
-import cz.frantisekmasa.wfrp_master.common.core.domain.party.Party
+import cz.frantisekmasa.wfrp_master.common.core.domain.party.PartyId
 import cz.frantisekmasa.wfrp_master.common.core.shared.Resources
 import cz.frantisekmasa.wfrp_master.common.core.shared.drawableResource
 import cz.frantisekmasa.wfrp_master.common.core.ui.buttons.HamburgerButton
@@ -64,7 +62,6 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.Breadcrumbs
 import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.IconAction
 import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.Subtitle
 import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.tabs.TabPager
-import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.tabs.TabPagerScope
 import cz.frantisekmasa.wfrp_master.common.gameMaster.GameMasterScreen
 import cz.frantisekmasa.wfrp_master.common.partyList.PartyListScreen
 import dev.icerock.moko.resources.compose.stringResource
@@ -79,20 +76,17 @@ data class CharacterDetailScreen(
 
     @Composable
     override fun Content() {
-        val screenModel: CharacterScreenModel = rememberScreenModel(arg = characterId)
-        val partyScreenModel: PartyScreenModel = rememberScreenModel(arg = characterId.partyId)
-
-        val character = screenModel.character.collectWithLifecycle(null).value
-        val party = partyScreenModel.party.collectWithLifecycle(null).value
+        val screenModelV2: CharacterDetailScreenModel = rememberScreenModel(arg = characterId)
+        val state = screenModelV2.state.collectWithLifecycle(null).value
 
         val navigation = LocalNavigationTransaction.current
 
-        if (party == null || character == null) {
+        if (state == null) {
             SkeletonScaffold()
             return
         }
 
-        val hiddenTabs = character.hiddenTabs
+        val hiddenTabs = state.character.hiddenTabs
         val tabs = remember(hiddenTabs) { CharacterTab.values().filterNot { it in hiddenTabs } }
 
         var currentTab by rememberSaveable(tabs) {
@@ -103,20 +97,19 @@ data class CharacterDetailScreen(
             )
         }
 
-        val userId = LocalUser.current.id
-        val isGameMaster = party.gameMasterId == null || party.gameMasterId == userId
-
         Scaffold(
             topBar = {
                 TopAppBar(
                     navigationIcon = { HamburgerButton() },
                     title = {
                         CharacterTitle(
-                            party = party,
-                            character = character,
-                            screenModel = screenModel,
+                            partyId = state.characterId.partyId,
+                            partyName = state.partyName,
+                            character = state.character,
                             currentTab = currentTab,
-                            isGameMaster = isGameMaster,
+                            isGameMaster = state.isGameMaster,
+                            state = state.characterPickerState,
+                            assignCharacter = screenModelV2::assignCharacter,
                         )
                     },
                     actions = {
@@ -135,10 +128,9 @@ data class CharacterDetailScreen(
             }
         ) {
             MainContainer(
-                character = character,
-                party = party,
-                isGameMaster = isGameMaster,
-                screenModel = screenModel,
+                isGameMaster = state.isGameMaster,
+                screenModelV2 = screenModelV2,
+                state = state,
                 tabs = tabs,
                 onTabChange = { currentTab = it },
             )
@@ -147,39 +139,26 @@ data class CharacterDetailScreen(
 
     @Composable
     private fun CharacterTitle(
-        party: Party,
+        partyId: PartyId,
+        partyName: String,
+        state: CharacterPickerState,
         character: Character,
-        screenModel: CharacterScreenModel,
+        assignCharacter: suspend (Character, UserId) -> Unit,
         currentTab: CharacterTab?,
         isGameMaster: Boolean,
     ) {
-        val characterPickerScreenModel: CharacterPickerScreenModel =
-            rememberScreenModel(arg = party.id)
         val userId = LocalUser.current.id
         val canAddCharacters = !isGameMaster
         val navigation = LocalNavigationTransaction.current
 
-        val allCharacters = remember {
-            if (isGameMaster)
-                screenModel.allCharacters
-            else characterPickerScreenModel.allUserCharacters(userId)
-        }.collectWithLifecycle(null).value
-
-        val unassignedCharacters = characterPickerScreenModel.unassignedPlayerCharacters
-            .collectWithLifecycle(null).value
-
-        if (
-            allCharacters != null &&
-            unassignedCharacters != null &&
-            (allCharacters.isNotEmpty() || canAddCharacters)
-        ) {
+        if (state.allCharacters.isNotEmpty() || canAddCharacters) {
             var unassignedCharactersDialogOpened by remember { mutableStateOf(false) }
 
             if (unassignedCharactersDialogOpened) {
                 UnassignedCharacterPickerDialog(
-                    partyId = party.id,
-                    unassignedCharacters = unassignedCharacters,
-                    screenModel = characterPickerScreenModel,
+                    partyId = partyId,
+                    unassignedCharacters = state.assignableCharacters,
+                    assignCharacter = assignCharacter,
                     onDismissRequest = { unassignedCharactersDialogOpened = false },
                     onAssigned = {
                         navigation.replace(
@@ -197,17 +176,17 @@ data class CharacterDetailScreen(
             var dropdownOpened by remember { mutableStateOf(false) }
 
             Row(
-                modifier = if (allCharacters.size > 1 || canAddCharacters)
+                modifier = if (state.allCharacters.size > 1 || canAddCharacters)
                     Modifier.clickable { dropdownOpened = true }
                 else Modifier,
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 Column {
                     Text(character.name)
-                    Subtitle(party.name)
+                    Subtitle(partyName)
                 }
 
-                if (allCharacters.size > 1 || canAddCharacters) {
+                if (state.allCharacters.size > 1 || canAddCharacters) {
                     Icon(Icons.Rounded.ExpandMore, null)
                 }
             }
@@ -216,14 +195,14 @@ data class CharacterDetailScreen(
                 dropdownOpened,
                 onDismissRequest = { dropdownOpened = false }
             ) {
-                allCharacters.forEach { otherCharacter ->
+                state.allCharacters.forEach { otherCharacter ->
                     key(otherCharacter.id) {
                         DropdownMenuItem(
                             onClick = {
                                 if (otherCharacter.id != character.id) {
                                     navigation.replace(
                                         CharacterDetailScreen(
-                                            characterId = CharacterId(party.id, otherCharacter.id),
+                                            characterId = CharacterId(partyId, otherCharacter.id),
                                             comingFromCombat = comingFromCombat,
                                             initialTab = currentTab ?: CharacterTab.values()
                                                 .first(),
@@ -240,7 +219,7 @@ data class CharacterDetailScreen(
                 }
 
                 if (canAddCharacters) {
-                    if (unassignedCharacters.isNotEmpty()) {
+                    if (state.assignableCharacters.isNotEmpty()) {
                         DropdownMenuItem(
                             onClick = {
                                 dropdownOpened = false
@@ -256,7 +235,7 @@ data class CharacterDetailScreen(
                         onClick = {
                             navigation.navigate(
                                 CharacterCreationScreen(
-                                    party.id,
+                                    partyId,
                                     CharacterType.PLAYER_CHARACTER,
                                     userId,
                                 )
@@ -271,28 +250,19 @@ data class CharacterDetailScreen(
         } else {
             Column {
                 Text(character.name)
-                Subtitle(party.name)
+                Subtitle(partyName)
             }
         }
     }
 
     @Composable
     private fun MainContainer(
-        character: Character?,
-        party: Party?,
         isGameMaster: Boolean,
-        screenModel: CharacterScreenModel,
+        screenModelV2: CharacterDetailScreenModel,
+        state: CharacterDetailScreenState,
         tabs: List<CharacterTab>,
         onTabChange: (CharacterTab) -> Unit,
     ) {
-        if (character == null || party == null) {
-            Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                CircularProgressIndicator()
-            }
-
-            return
-        }
-
         Column(Modifier.fillMaxSize()) {
             if (LocalStaticConfiguration.current.platform == Platform.Desktop) {
                 val titleParties = stringResource(Str.parties_title_parties)
@@ -300,17 +270,17 @@ data class CharacterDetailScreen(
                     level(titleParties) { PartyListScreen }
 
                     if (isGameMaster) {
-                        level(party.name) { GameMasterScreen(party.id) }
+                        level(state.partyName) { GameMasterScreen(state.characterId.partyId) }
                     }
 
-                    level(character.name)
+                    level(state.character.name)
                 }
             }
 
-            if (!comingFromCombat) {
+            if (!comingFromCombat && state.isCombatActive) {
                 // Prevent long and confusing back stack when user goes i.e.
                 // combat -> character detail -> combat
-                ActiveCombatBanner(party)
+                ActiveCombatBanner(state.characterId.partyId)
             }
 
             if (tabs.isEmpty()) {
@@ -333,84 +303,83 @@ data class CharacterDetailScreen(
             ) {
                 val modifier = Modifier.fillMaxHeight()
 
-                tabs.forEach {
-                    tab(it, character, party, modifier, screenModel)
-                }
-            }
-        }
-    }
-
-    private fun TabPagerScope.tab(
-        tab: CharacterTab,
-        character: Character,
-        party: Party,
-        modifier: Modifier,
-        screenModel: CharacterScreenModel,
-    ) {
-        tab(name = { tab.localizedName }) {
-            when (tab) {
-                CharacterTab.ATTRIBUTES -> {
-                    CharacteristicsScreen(
-                        character = character,
-                        screenModel = rememberScreenModel(arg = characterId),
-                        characterScreenModel = screenModel,
-                        modifier = modifier,
-                        characterId = characterId,
-                        party = party,
-                    )
-                }
-                CharacterTab.COMBAT -> {
-                    CharacterCombatScreen(
-                        characterId = characterId,
-                        screenModel = rememberScreenModel(arg = characterId),
-                        modifier = modifier,
-                    )
-                }
-                CharacterTab.CONDITIONS -> {
-                    ConditionsScreen(
-                        character = character,
-                        screenModel = screenModel,
-                        modifier = modifier,
-                    )
-                }
-                CharacterTab.SKILLS_AND_TALENTS -> {
-                    SkillsScreen(
-                        screenModel = screenModel,
-                        skillsScreenModel = rememberScreenModel(arg = characterId),
-                        talentsScreenModel = rememberScreenModel(arg = characterId),
-                        traitsScreenModel = rememberScreenModel(arg = characterId),
-                        modifier = modifier,
-                    )
-                }
-                CharacterTab.SPELLS -> {
-                    CharacterSpellsScreen(
-                        screenModel = rememberScreenModel(arg = characterId),
-                        modifier = modifier,
-                    )
-                }
-                CharacterTab.RELIGION -> {
-                    ReligionScreen(
-                        modifier = modifier,
-                        character = character,
-                        updateCharacter = screenModel::update,
-                        blessingsScreenModel = rememberScreenModel(arg = characterId),
-                        miraclesScreenModel = rememberScreenModel(arg = characterId)
-                    )
-                }
-                CharacterTab.TRAPPINGS -> {
-                    TrappingsScreen(
-                        characterId = characterId,
-                        screenModel = rememberScreenModel(arg = characterId),
-                        modifier = modifier,
-                    )
-                }
-                CharacterTab.NOTES -> {
-                    NotesScreen(
-                        character = character,
-                        screenModel = screenModel,
-                        party = party,
-                        modifier = modifier,
-                    )
+                tabs.forEach { tab ->
+                    tab(name = { tab.localizedName }) {
+                        when (tab) {
+                            CharacterTab.ATTRIBUTES -> {
+                                CharacteristicsScreen(
+                                    characterId = characterId,
+                                    character = state.character,
+                                    updatePoints = screenModelV2::updatePoints,
+                                    state = state.characteristicsScreenState,
+                                    modifier = modifier,
+                                )
+                            }
+                            CharacterTab.COMBAT -> {
+                                CharacterCombatScreen(
+                                    characterId = characterId,
+                                    state = state.combatScreenState,
+                                    modifier = modifier,
+                                )
+                            }
+                            CharacterTab.CONDITIONS -> {
+                                ConditionsScreen(
+                                    state = state.conditionsScreenState,
+                                    updateConditions = screenModelV2::updateConditions,
+                                    modifier = modifier,
+                                )
+                            }
+                            CharacterTab.SKILLS_AND_TALENTS -> {
+                                SkillsScreen(
+                                    characterId = characterId,
+                                    state = state.skillsScreenState,
+                                    modifier = modifier,
+                                    removeSkill = screenModelV2::removeSkill,
+                                    removeTalent = screenModelV2::removeTalent,
+                                    removeTrait = screenModelV2::removeTrait,
+                                )
+                            }
+                            CharacterTab.SPELLS -> {
+                                CharacterSpellsScreen(
+                                    characterId = characterId,
+                                    state = state.spellsScreenState,
+                                    onRemove = screenModelV2::removeSpell,
+                                    modifier = modifier,
+                                )
+                            }
+                            CharacterTab.RELIGION -> {
+                                ReligionScreen(
+                                    characterId = characterId,
+                                    modifier = modifier,
+                                    character = state.character,
+                                    state = state.religionScreenState,
+                                    updateCharacter = screenModelV2::updateCharacter,
+                                    removeBlessing = screenModelV2::removeBlessing,
+                                    removeMiracle = screenModelV2::removeMiracle,
+                                )
+                            }
+                            CharacterTab.TRAPPINGS -> {
+                                TrappingsScreen(
+                                    characterId = characterId,
+                                    state = state.trappingsScreenState,
+                                    onMoneyBalanceUpdate = screenModelV2::updateMoneyBalance,
+                                    onAddToContainer = screenModelV2::addToContainer,
+                                    onDuplicate = screenModelV2::duplicateTrapping,
+                                    onRemove = screenModelV2::removeTrapping,
+                                    modifier = modifier,
+                                )
+                            }
+                            CharacterTab.NOTES -> {
+                                NotesScreen(
+                                    updateNote = screenModelV2::updateNote,
+                                    updateMotivation = screenModelV2::updateMotivation,
+                                    updateCharacterAmbitions = screenModelV2::updateCharacterAmbitions,
+                                    state = state.notesScreenState,
+                                    modifier = modifier,
+                                )
+                            }
+                        }
+                    }
                 }
             }
         }

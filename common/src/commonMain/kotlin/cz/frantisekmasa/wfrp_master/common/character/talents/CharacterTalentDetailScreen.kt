@@ -30,7 +30,7 @@ class CharacterTalentDetailScreen(characterId: CharacterId, talentId: Uuid) :
 
     @Composable
     override fun Content() {
-        val screenModel: TalentsScreenModel = rememberScreenModel(arg = characterId)
+        val screenModel: CharacterTalentDetailScreenModel = rememberScreenModel(arg = characterId)
 
         Detail(screenModel) { talent, isGameMaster ->
             val navigation = LocalNavigationTransaction.current
@@ -44,7 +44,7 @@ class CharacterTalentDetailScreen(characterId: CharacterId, talentId: Uuid) :
                     subheadBar = {
                         TimesTakenBar(talent.taken) { timesTaken ->
                             coroutineScope.launch(Dispatchers.IO) {
-                                screenModel.saveTalent(
+                                screenModel.updateTalent(
                                     talent = talent.copy(taken = timesTaken),
                                     existingTalent = talent,
                                 )
@@ -70,8 +70,8 @@ class CharacterTalentDetailScreen(characterId: CharacterId, talentId: Uuid) :
                 )
             } else {
                 NonCompendiumTalentForm(
-                    screenModel = screenModel,
                     existingTalent = talent,
+                    onSave = { screenModel.updateTalent(it, existingTalent = talent) },
                     onDismissRequest = navigation::goBack,
                 )
             }

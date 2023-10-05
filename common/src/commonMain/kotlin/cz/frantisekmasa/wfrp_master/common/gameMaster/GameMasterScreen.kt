@@ -86,7 +86,9 @@ class GameMasterScreen(
                     }
                 }
 
-                ActiveCombatBanner(party)
+                if (party.activeCombat != null) {
+                    ActiveCombatBanner(party.id)
+                }
 
                 TabPager(
                     modifier = Modifier.weight(1f),

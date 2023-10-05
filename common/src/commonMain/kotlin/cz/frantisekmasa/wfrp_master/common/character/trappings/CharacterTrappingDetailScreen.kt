@@ -39,7 +39,7 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.rememberScreenMode
 import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.IconAction
 import dev.icerock.moko.resources.compose.stringResource
 
-class TrappingDetailScreen(
+class CharacterTrappingDetailScreen(
     characterId: CharacterId,
     itemId: InventoryItemId,
 ) : CharacterItemDetailScreen(characterId, itemId) {
@@ -48,7 +48,7 @@ class TrappingDetailScreen(
 
     @Composable
     override fun Content() {
-        val screenModel: TrappingsScreenModel = rememberScreenModel(arg = characterId)
+        val screenModel: CharacterTrappingsDetailScreenModel = rememberScreenModel(arg = characterId)
 
         Detail(screenModel) { trapping, isGameMaster ->
             val (dialogOpened, setDialogOpened) = rememberSaveable { mutableStateOf(false) }
@@ -63,12 +63,13 @@ class TrappingDetailScreen(
 
             val navigation = LocalNavigationTransaction.current
             TrappingDetail(
+                characterId = characterId,
                 trapping = trapping,
                 screenModel = screenModel,
                 isGameMaster = isGameMaster,
                 onEditRequest = { setDialogOpened(true) },
                 onOpenDetailRequest = {
-                    navigation.navigate(TrappingDetailScreen(characterId, it.id))
+                    navigation.navigate(CharacterTrappingDetailScreen(characterId, it.id))
                 },
             )
         }
@@ -77,8 +78,9 @@ class TrappingDetailScreen(
 
 @Composable
 private fun TrappingDetail(
+    characterId: CharacterId,
     trapping: InventoryItem,
-    screenModel: TrappingsScreenModel,
+    screenModel: CharacterTrappingsDetailScreenModel,
     isGameMaster: Boolean,
     onEditRequest: () -> Unit,
     onOpenDetailRequest: (InventoryItem) -> Unit
@@ -185,11 +187,11 @@ private fun TrappingDetail(
             }
             is TrappingType.Container -> {
                 ContainerDetail(
+                    characterId = characterId,
                     subheadBar = subheadBar,
                     trapping = trapping,
                     container = type,
                     allItems = screenModel.inventory.collectWithLifecycle(null).value,
-                    screenModel = screenModel,
                     onSaveRequest = screenModel::saveItem,
                     onOpenDetailRequest = onOpenDetailRequest,
                     onRemoveRequest = screenModel::removeItem,

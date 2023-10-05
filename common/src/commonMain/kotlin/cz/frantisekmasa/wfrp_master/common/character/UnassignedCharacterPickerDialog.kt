@@ -18,6 +18,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import cz.frantisekmasa.wfrp_master.common.Str
 import cz.frantisekmasa.wfrp_master.common.core.auth.LocalUser
+import cz.frantisekmasa.wfrp_master.common.core.auth.UserId
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.Character
 import cz.frantisekmasa.wfrp_master.common.core.domain.identifiers.CharacterId
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.PartyId
@@ -33,9 +34,9 @@ import kotlinx.coroutines.Dispatchers
 fun UnassignedCharacterPickerDialog(
     partyId: PartyId,
     unassignedCharacters: List<Character>,
-    screenModel: CharacterPickerScreenModel,
     onDismissRequest: () -> Unit,
     onAssigned: (CharacterId) -> Unit,
+    assignCharacter: suspend (Character, UserId) -> Unit,
 ) {
     AlertDialog(
         onDismissRequest = onDismissRequest,
@@ -64,7 +65,7 @@ fun UnassignedCharacterPickerDialog(
                                 .clickable {
                                     coroutineScope.launchLogged(Dispatchers.IO) {
                                         setSaving(true)
-                                        screenModel.assignCharacter(character, userId)
+                                        assignCharacter(character, userId)
                                         onAssigned(CharacterId(partyId, character.id))
                                     }
                                 },

@@ -5,12 +5,45 @@ import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.InventoryItem
 import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.InventoryItemRepository
 import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.TrappingType
 import cz.frantisekmasa.wfrp_master.common.firebase.firestore.Firestore
+import io.github.aakira.napier.Napier
 import kotlinx.coroutines.flow.first
 
 class TrappingSaver(
     private val trappings: InventoryItemRepository,
     private val firestore: Firestore,
 ) {
+
+    suspend fun addToContainer(
+        characterId: CharacterId,
+        trapping: InventoryItem,
+        container: InventoryItem,
+    ) {
+        Napier.d("Trying to store $trapping in $container")
+
+        if (container.containerId != null || trapping.containerId == container.id) {
+            return
+        }
+
+        val trappingType = trapping.trappingType
+        val updatedTrappings = mutableListOf<InventoryItem>()
+
+        // When storing Container X in a Container Y, all items previously stored
+        // in X will be stored in Y
+        if (trappingType is TrappingType.Container) {
+            updatedTrappings.addAll(
+                takeAllItemsFromContainer(characterId, trapping)
+                    .map { it.addToContainer(container.id) }
+            )
+        }
+
+        updatedTrappings += trapping.addToContainer(container.id)
+
+        firestore.runTransaction { transaction ->
+            updatedTrappings.forEach {
+                trappings.save(transaction, characterId, it)
+            }
+        }
+    }
 
     suspend fun saveInventoryItem(characterId: CharacterId, inventoryItem: InventoryItem) {
         val itemsRemovedFromContainer = takeAllItemsFromContainer(characterId, inventoryItem)

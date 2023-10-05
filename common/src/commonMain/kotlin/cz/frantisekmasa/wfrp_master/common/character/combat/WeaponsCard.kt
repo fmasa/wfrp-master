@@ -26,10 +26,11 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.EmptyUI
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.ItemIcon
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
 import dev.icerock.moko.resources.compose.stringResource
+import kotlinx.collections.immutable.ImmutableMap
 
 @Composable
 fun WeaponsCard(
-    equips: List<Pair<WeaponEquip, List<EquippedWeapon>>>,
+    equips: ImmutableMap<WeaponEquip, List<EquippedWeapon>>,
     onTrappingClick: (InventoryItem) -> Unit,
 ) {
     CardContainer(
@@ -50,10 +51,14 @@ fun WeaponsCard(
             return@CardContainer
         }
 
-        equips.forEach { (equip, weapons) ->
+        WeaponEquip.values().forEach { equip ->
             key(equip) {
-                CardSubtitle(equip.localizedName)
-                WeaponList(weapons, onTrappingClick)
+                val weapons = equips[equip]
+
+                if (weapons != null) {
+                    CardSubtitle(equip.localizedName)
+                    WeaponList(weapons, onTrappingClick)
+                }
             }
         }
     }

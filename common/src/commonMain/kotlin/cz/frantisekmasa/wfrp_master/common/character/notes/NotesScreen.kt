@@ -14,10 +14,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import cz.frantisekmasa.wfrp_master.common.Str
 import cz.frantisekmasa.wfrp_master.common.ambitions.AmbitionsCard
-import cz.frantisekmasa.wfrp_master.common.character.CharacterScreenModel
+import cz.frantisekmasa.wfrp_master.common.core.domain.Ambitions
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.Character
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.CharacterType
-import cz.frantisekmasa.wfrp_master.common.core.domain.party.Party
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
 import cz.frantisekmasa.wfrp_master.common.core.ui.responsive.Breakpoint
 import cz.frantisekmasa.wfrp_master.common.core.ui.responsive.ColumnSize
@@ -26,10 +25,11 @@ import dev.icerock.moko.resources.compose.stringResource
 
 @Composable
 fun NotesScreen(
-    screenModel: CharacterScreenModel,
-    character: Character,
-    party: Party,
+    state: NotesScreenState,
     modifier: Modifier = Modifier,
+    updateNote: suspend (String) -> Unit,
+    updateMotivation: suspend (String) -> Unit,
+    updateCharacterAmbitions: suspend (Ambitions) -> Unit,
 ) {
     Scaffold(
         modifier = modifier.background(MaterialTheme.colors.background),
@@ -39,18 +39,39 @@ fun NotesScreen(
                 .verticalScroll(rememberScrollState())
                 .padding(Spacing.small)
         ) {
-            NoteCard(character, screenModel)
-            MotivationCard(character, screenModel)
+            NoteCard(
+                title = { stringResource(Str.character_note) },
+                text = state.characterNote,
+                updateDialogTitle = { stringResource(Str.character_title_edit_note) },
+                onUpdate = updateNote,
+                maxLength = Character.NOTE_MAX_LENGTH,
+            )
 
-            if (character.type == CharacterType.PLAYER_CHARACTER) {
-                AmbitionsContainer(character, party, screenModel)
+            NoteCard(
+                title = { stringResource(Str.character_motivation) },
+                text = state.characterMotivation,
+                updateDialogTitle = { stringResource(Str.character_title_edit_motivation) },
+                onUpdate = updateMotivation,
+                maxLength = Character.MOTIVATION_MAX_LENGTH,
+            )
+
+            if (state.characterType == CharacterType.PLAYER_CHARACTER) {
+                AmbitionsContainer(
+                    characterAmbitions = state.characterAmbitions,
+                    partyAmbitions = state.partyAmbitions,
+                    updateCharacterAmbitions = updateCharacterAmbitions,
+                )
             }
         }
     }
 }
 
 @Composable
-private fun AmbitionsContainer(character: Character, party: Party, screenModel: CharacterScreenModel) {
+private fun AmbitionsContainer(
+    characterAmbitions: Ambitions,
+    partyAmbitions: Ambitions,
+    updateCharacterAmbitions: suspend (Ambitions) -> Unit,
+) {
     Container(
         horizontalArrangement = Arrangement.spacedBy(Spacing.gutterSize()),
     ) {
@@ -61,17 +82,15 @@ private fun AmbitionsContainer(character: Character, party: Party, screenModel: 
         column(size) {
             AmbitionsCard(
                 title = stringResource(Str.ambition_title_character_ambitions),
-                ambitions = character.ambitions,
-                onSave = { ambitions ->
-                    screenModel.update { it.updateAmbitions(ambitions) }
-                },
+                ambitions = characterAmbitions,
+                onSave = updateCharacterAmbitions,
             )
         }
 
         column(size) {
             AmbitionsCard(
                 title = stringResource(Str.ambition_title_party_ambitions),
-                ambitions = party.ambitions,
+                ambitions = partyAmbitions,
                 titleIcon = Icons.Rounded.Group,
                 onSave = null,
             )

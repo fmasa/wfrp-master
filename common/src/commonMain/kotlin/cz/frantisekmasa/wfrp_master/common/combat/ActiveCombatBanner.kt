@@ -12,15 +12,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import cz.frantisekmasa.wfrp_master.common.Str
-import cz.frantisekmasa.wfrp_master.common.core.domain.party.Party
+import cz.frantisekmasa.wfrp_master.common.core.domain.party.PartyId
 import cz.frantisekmasa.wfrp_master.common.core.ui.navigation.LocalNavigationTransaction
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
 import dev.icerock.moko.resources.compose.stringResource
 
 @Composable
-fun ActiveCombatBanner(party: Party) {
-    party.activeCombat ?: return
-
+fun ActiveCombatBanner(partyId: PartyId) {
     Surface(elevation = 8.dp) {
         Row(
             Modifier
@@ -33,7 +31,7 @@ fun ActiveCombatBanner(party: Party) {
 
             val navigation = LocalNavigationTransaction.current
 
-            TextButton(onClick = { navigation.navigate(ActiveCombatScreen(party.id)) }) {
+            TextButton(onClick = { navigation.navigate(ActiveCombatScreen(partyId)) }) {
                 Text(stringResource(Str.common_ui_button_open).uppercase())
             }
         }

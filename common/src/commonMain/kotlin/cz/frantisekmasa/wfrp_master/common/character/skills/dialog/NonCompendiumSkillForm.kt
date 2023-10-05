@@ -17,7 +17,6 @@ import com.benasher44.uuid.Uuid
 import com.benasher44.uuid.uuid4
 import cz.frantisekmasa.wfrp_master.common.Str
 import cz.frantisekmasa.wfrp_master.common.character.skills.SkillRating
-import cz.frantisekmasa.wfrp_master.common.character.skills.SkillsScreenModel
 import cz.frantisekmasa.wfrp_master.common.core.domain.Characteristic
 import cz.frantisekmasa.wfrp_master.common.core.domain.Stats
 import cz.frantisekmasa.wfrp_master.common.core.domain.skills.Skill
@@ -36,7 +35,7 @@ import dev.icerock.moko.resources.compose.stringResource
 
 @Composable
 internal fun NonCompendiumSkillForm(
-    screenModel: SkillsScreenModel,
+    onSave: suspend (Skill) -> Unit,
     existingSkill: Skill?,
     characteristics: Stats,
     onDismissRequest: () -> Unit,
@@ -49,7 +48,7 @@ internal fun NonCompendiumSkillForm(
         ),
         onDismissRequest = onDismissRequest,
         formData = formData,
-        onSave = screenModel::saveSkill,
+        onSave = onSave,
     ) { validate ->
         Row(
             modifier = Modifier.fillMaxWidth(),

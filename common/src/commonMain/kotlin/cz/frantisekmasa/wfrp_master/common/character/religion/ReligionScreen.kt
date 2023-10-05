@@ -13,23 +13,27 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import cz.frantisekmasa.wfrp_master.common.Str
 import cz.frantisekmasa.wfrp_master.common.character.religion.blessings.BlessingsCard
-import cz.frantisekmasa.wfrp_master.common.character.religion.blessings.BlessingsScreenModel
 import cz.frantisekmasa.wfrp_master.common.character.religion.miracles.MiraclesCard
-import cz.frantisekmasa.wfrp_master.common.character.religion.miracles.MiraclesScreenModel
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.Character
+import cz.frantisekmasa.wfrp_master.common.core.domain.identifiers.CharacterId
+import cz.frantisekmasa.wfrp_master.common.core.domain.religion.Blessing
+import cz.frantisekmasa.wfrp_master.common.core.domain.religion.Miracle
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.NumberPicker
 import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.TopPanel
 import dev.icerock.moko.resources.compose.stringResource
+import kotlinx.collections.immutable.ImmutableList
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 @Composable
 fun ReligionScreen(
     modifier: Modifier = Modifier,
+    characterId: CharacterId,
     character: Character,
     updateCharacter: suspend ((Character) -> Character) -> Unit,
-    blessingsScreenModel: BlessingsScreenModel,
-    miraclesScreenModel: MiraclesScreenModel,
+    removeBlessing: (Blessing) -> Unit,
+    removeMiracle: (Miracle) -> Unit,
+    state: ReligionScreenState,
 ) {
     Column(
         modifier
@@ -38,8 +42,17 @@ fun ReligionScreen(
     ) {
         SinPoints(character, updateCharacter)
 
-        BlessingsCard(blessingsScreenModel)
-        MiraclesCard(miraclesScreenModel)
+        BlessingsCard(
+            characterId = characterId,
+            blessings = state.blessings,
+            onRemove = removeBlessing,
+        )
+
+        MiraclesCard(
+            characterId = characterId,
+            miracles = state.miracles,
+            onRemove = removeMiracle,
+        )
     }
 }
 
@@ -76,3 +89,8 @@ private fun SinPoints(
         }
     }
 }
+
+data class ReligionScreenState(
+    val blessings: ImmutableList<Blessing>,
+    val miracles: ImmutableList<Miracle>,
+)

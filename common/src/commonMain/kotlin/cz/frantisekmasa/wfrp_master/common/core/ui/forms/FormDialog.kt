@@ -51,6 +51,7 @@ fun <T> FormScreen(
     title: String,
     formData: HydratedFormData<T>,
     onSave: suspend (T) -> Unit,
+    enabled: Boolean = true,
     content: @Composable ColumnScope.(validate: Boolean) -> Unit,
 ) {
     val navigation = LocalNavigationTransaction.current
@@ -59,6 +60,7 @@ fun <T> FormScreen(
         title = title,
         navigationIcon = { BackButton() },
         formData = formData,
+        enabled = enabled,
         onSave = {
             onSave(it)
             navigation.goBack()
@@ -72,6 +74,7 @@ private fun <T> FullScreenForm(
     title: String,
     navigationIcon: @Composable () -> Unit,
     formData: HydratedFormData<T>,
+    enabled: Boolean = true,
     onSave: suspend (T) -> Unit,
     content: @Composable ColumnScope.(validate: Boolean) -> Unit,
 ) {
@@ -87,7 +90,7 @@ private fun <T> FullScreenForm(
                     val coroutineScope = rememberCoroutineScope()
 
                     SaveAction(
-                        enabled = !saving,
+                        enabled = enabled && !saving,
                         onClick = {
                             if (!formData.isValid()) {
                                 validate = true

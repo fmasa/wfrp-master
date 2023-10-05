@@ -1,6 +1,9 @@
 package cz.frantisekmasa.wfrp_master.common.dummies
 
+import arrow.core.Either
+import arrow.core.rightIfNotNull
 import com.benasher44.uuid.Uuid
+import cz.frantisekmasa.wfrp_master.common.compendium.domain.exceptions.CompendiumItemNotFound
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.CharacterItem
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.CharacterItemRepository
 import cz.frantisekmasa.wfrp_master.common.core.domain.identifiers.CharacterId
@@ -14,6 +17,15 @@ class DummyCharacterItemRepository<T : CharacterItem<T, *>> : CharacterItemRepos
 
     override fun findAllForCharacter(characterId: CharacterId): Flow<List<T>> {
         return flowOf(items.getOrDefault(characterId, emptyMap()).values.toList())
+    }
+
+    override fun getLive(
+        characterId: CharacterId,
+        itemId: Uuid
+    ): Flow<Either<CompendiumItemNotFound, T>> {
+        return flowOf(
+            items[characterId]?.get(itemId).rightIfNotNull { CompendiumItemNotFound(null) }
+        )
     }
 
     override suspend fun remove(characterId: CharacterId, itemId: Uuid) {

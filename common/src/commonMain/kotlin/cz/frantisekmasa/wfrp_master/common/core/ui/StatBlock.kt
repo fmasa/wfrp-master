@@ -39,7 +39,7 @@ import cz.frantisekmasa.wfrp_master.common.character.skills.CharacterSkillDetail
 import cz.frantisekmasa.wfrp_master.common.character.spells.CharacterSpellDetailScreen
 import cz.frantisekmasa.wfrp_master.common.character.talents.CharacterTalentDetailScreen
 import cz.frantisekmasa.wfrp_master.common.character.traits.CharacterTraitDetailScreen
-import cz.frantisekmasa.wfrp_master.common.character.trappings.TrappingDetailScreen
+import cz.frantisekmasa.wfrp_master.common.character.trappings.CharacterTrappingDetailScreen
 import cz.frantisekmasa.wfrp_master.common.combat.domain.ArmourPart
 import cz.frantisekmasa.wfrp_master.common.combat.domain.EquippedWeapon
 import cz.frantisekmasa.wfrp_master.common.core.domain.Characteristic
@@ -142,7 +142,7 @@ fun StatBlock(
                 append(')')
             }
         },
-        detail = { TrappingDetailScreen(characterId, it.trapping.id) },
+        detail = { CharacterTrappingDetailScreen(characterId, it.trapping.id) },
         key = { it.trapping.id.toString() },
     )
 
