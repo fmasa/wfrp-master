@@ -4,6 +4,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -26,7 +27,7 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.VisualOnlyIconDesc
 fun CardTitle(
     text: String,
     icon: ImageVector? = null,
-    actions: (@Composable () -> Unit)? = null,
+    actions: (@Composable RowScope.() -> Unit)? = null,
 ) {
     CardTitle(
         text,
@@ -39,7 +40,7 @@ fun CardTitle(
 private fun CardTitle(
     text: String,
     painter: Painter?,
-    actions: (@Composable () -> Unit)?,
+    actions: (@Composable RowScope.() -> Unit)?,
 ) {
     Row(
         horizontalArrangement = Arrangement.Center,
@@ -65,9 +66,7 @@ private fun CardTitle(
 
         if (actions != null) {
             Box(Modifier.weight(1f), contentAlignment = Alignment.CenterEnd) {
-                Box {
-                    actions()
-                }
+                Row(content = actions)
             }
         }
     }

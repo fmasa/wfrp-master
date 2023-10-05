@@ -3,12 +3,13 @@ package cz.frantisekmasa.wfrp_master.common.character.conditions
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Divider
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Switch
@@ -45,15 +46,15 @@ fun ConditionsForm(
     onUpdate: (CurrentConditions) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    Column(
-        modifier
-            .background(MaterialTheme.colors.surface)
-            .verticalScroll(rememberScrollState())
-            .padding(top = Spacing.small)
+    LazyColumn(
+        modifier.background(MaterialTheme.colors.surface),
+        contentPadding = PaddingValues(top = Spacing.small),
     ) {
-        Condition.values().forEach { condition ->
-            ConditionRow(condition, conditions, onUpdate)
-            Divider()
+        items(Condition.values(), key = { it }) { condition ->
+            Column {
+                ConditionRow(condition, conditions, onUpdate)
+                Divider()
+            }
         }
     }
 }

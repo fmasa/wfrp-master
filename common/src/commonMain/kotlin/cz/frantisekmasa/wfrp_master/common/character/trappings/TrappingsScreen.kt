@@ -4,16 +4,20 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.material.Divider
 import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
 import androidx.compose.material.LocalContentColor
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Add
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
@@ -32,14 +36,12 @@ import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.Encumbrance
 import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.InventoryItem
 import cz.frantisekmasa.wfrp_master.common.core.shared.Resources
 import cz.frantisekmasa.wfrp_master.common.core.shared.drawableResource
-import cz.frantisekmasa.wfrp_master.common.core.ui.buttons.CardButton
-import cz.frantisekmasa.wfrp_master.common.core.ui.cards.CardContainer
 import cz.frantisekmasa.wfrp_master.common.core.ui.cards.CardTitle
+import cz.frantisekmasa.wfrp_master.common.core.ui.cards.StickyHeader
 import cz.frantisekmasa.wfrp_master.common.core.ui.navigation.LocalNavigationTransaction
+import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.ContextMenu
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.EmptyUI
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
-import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.UserTip
-import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.UserTipCard
 import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.TopPanel
 import dev.icerock.moko.resources.compose.stringResource
 
@@ -53,74 +55,120 @@ fun TrappingsScreen(
     state: TrappingsScreenState,
     modifier: Modifier,
 ) {
-    Column(modifier.verticalScroll(rememberScrollState())) {
-        TopPanel {
-            Row(
-                Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-            ) {
-                CharacterEncumbrance(
-                    current = state.currentEncumbrance,
-                    max = state.maxEncumbrance,
-                    Modifier.padding(Spacing.medium),
-                )
+    var addToContainerDialogTrapping: InventoryItem?
+        by remember { mutableStateOf(null) }
 
-                var transactionDialogVisible by rememberSaveable { mutableStateOf(false) }
+    addToContainerDialogTrapping?.let { trapping ->
+        val containers by derivedStateOf {
+            state.trappings.filter { it.item.id != trapping.id && it is TrappingItem.Container }
+        }
 
-                MoneyBalance(
-                    state.money,
-                    Modifier
-                        .clickable { transactionDialogVisible = true }
-                        .padding(Spacing.medium)
-                        .padding(end = 8.dp),
-                )
+        ChooseTrappingDialog(
+            title = stringResource(Str.trappings_title_select_container),
+            trappings = containers,
+            onSelected = { onAddToContainer(trapping, it.item) },
+            emptyUiText = stringResource(Str.trappings_messages_no_containers_found),
+            onDismissRequest = { addToContainerDialogTrapping = null },
+        )
+    }
 
-                if (transactionDialogVisible) {
-                    TransactionDialog(
-                        state.money,
-                        updateBalance = {
-                            onMoneyBalanceUpdate(it)
-                            transactionDialogVisible = false
-                        },
-                        onDismissRequest = { transactionDialogVisible = false },
+    LazyColumn(modifier.fillMaxSize()) {
+        item("top-panel") {
+            TopPanel {
+                Row(
+                    Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                ) {
+                    CharacterEncumbrance(
+                        current = state.currentEncumbrance,
+                        max = state.maxEncumbrance,
+                        Modifier.padding(Spacing.medium),
                     )
+
+                    var transactionDialogVisible by rememberSaveable { mutableStateOf(false) }
+
+                    MoneyBalance(
+                        state.money,
+                        Modifier
+                            .clickable { transactionDialogVisible = true }
+                            .padding(Spacing.medium)
+                            .padding(end = 8.dp),
+                    )
+
+                    if (transactionDialogVisible) {
+                        TransactionDialog(
+                            state.money,
+                            updateBalance = {
+                                onMoneyBalanceUpdate(it)
+                                transactionDialogVisible = false
+                            },
+                            onDismissRequest = { transactionDialogVisible = false },
+                        )
+                    }
                 }
             }
         }
 
-        UserTipCard(UserTip.ARMOUR_TRAPPINGS, Modifier.padding(horizontal = 8.dp))
-
-        var addToContainerDialogTrapping: InventoryItem?
-            by remember { mutableStateOf(null) }
-
-        addToContainerDialogTrapping?.let { trapping ->
-            val containers by derivedStateOf {
-                state.trappings.filter { it.item.id != trapping.id && it is TrappingItem.Container }
+        stickyHeader {
+            StickyHeader {
+                Divider()
+                CardTitle(
+                    stringResource(Str.trappings_title),
+                    actions = {
+                        val navigation = LocalNavigationTransaction.current
+                        IconButton(
+                            onClick = {
+                                navigation.navigate(
+                                    AddTrappingScreen(characterId, containerId = null)
+                                )
+                            }
+                        ) {
+                            Icon(Icons.Rounded.Add, stringResource(Str.trappings_title_add))
+                        }
+                    }
+                )
             }
-
-            ChooseTrappingDialog(
-                title = stringResource(Str.trappings_title_select_container),
-                trappings = containers,
-                onSelected = { onAddToContainer(trapping, it.item) },
-                emptyUiText = stringResource(Str.trappings_messages_no_containers_found),
-                onDismissRequest = { addToContainerDialogTrapping = null },
-            )
         }
 
-        val navigation = LocalNavigationTransaction.current
+        if (state.trappings.isEmpty()) {
+            item("trappings-empty-ui") {
+                EmptyUI(
+                    text = stringResource(Str.trappings_messages_no_items),
+                    Resources.Drawable.TrappingContainer,
+                    size = EmptyUI.Size.Small
+                )
+            }
+        }
 
-        InventoryItemsCard(
-            trappings = state.trappings,
-            onClick = { navigation.navigate(CharacterTrappingDetailScreen(characterId, it.id)) },
-            onRemove = onRemove,
-            onDuplicate = onDuplicate,
-            onNewItemButtonClicked = {
-                navigation.navigate(AddTrappingScreen(characterId, containerId = null))
-            },
-            onAddToContainerRequest = { addToContainerDialogTrapping = it },
-        )
+        itemsIndexed(
+            state.trappings,
+            key = { _, it -> it.item.id },
+        ) { index, trapping ->
+            Column {
+                if (index != 0) {
+                    Divider()
+                }
 
-        Spacer(Modifier.padding(bottom = 20.dp))
+                val navigation = LocalNavigationTransaction.current
+
+                TrappingItem(
+                    trapping = trapping,
+                    onClick = {
+                        navigation.navigate(
+                            CharacterTrappingDetailScreen(characterId, trapping.item.id)
+                        )
+                    },
+                    onRemove = { onRemove(trapping.item) },
+                    onDuplicate = { onDuplicate(trapping.item) },
+                    additionalContextItems = listOf(
+                        ContextMenu.Item(
+                            stringResource(Str.trappings_button_move_to_container),
+                            onClick = { addToContainerDialogTrapping = trapping.item },
+                        )
+                    )
+                )
+            }
+        }
     }
 }
 
@@ -144,38 +192,5 @@ private fun CharacterEncumbrance(
             "$current / $max",
             color = if (current > max) MaterialTheme.colors.error else LocalContentColor.current
         )
-    }
-}
-
-@Composable
-private fun InventoryItemsCard(
-    trappings: List<TrappingItem>,
-    onClick: (InventoryItem) -> Unit,
-    onRemove: (InventoryItem) -> Unit,
-    onDuplicate: (InventoryItem) -> Unit,
-    onNewItemButtonClicked: () -> Unit,
-    onAddToContainerRequest: (InventoryItem) -> Unit,
-) {
-    CardContainer(Modifier.padding(horizontal = 8.dp)) {
-        Column(Modifier.padding(horizontal = 8.dp)) {
-            CardTitle(stringResource(Str.trappings_title))
-            if (trappings.isEmpty()) {
-                EmptyUI(
-                    text = stringResource(Str.trappings_messages_no_items),
-                    Resources.Drawable.TrappingContainer,
-                    size = EmptyUI.Size.Small
-                )
-            } else {
-                InventoryItemList(
-                    trappings,
-                    onClick = onClick,
-                    onRemove = onRemove,
-                    onDuplicate = onDuplicate,
-                    onAddToContainerRequest = onAddToContainerRequest,
-                )
-            }
-
-            CardButton(stringResource(Str.trappings_title_add), onClick = onNewItemButtonClicked)
-        }
     }
 }

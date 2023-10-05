@@ -3,18 +3,25 @@ package cz.frantisekmasa.wfrp_master.common.character.skills
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyListScope
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.material.Divider
 import androidx.compose.material.DropdownMenuItem
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
+import androidx.compose.material.ListItem
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.material.icons.rounded.Add
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import cz.frantisekmasa.wfrp_master.common.Str
 import cz.frantisekmasa.wfrp_master.common.character.skills.add.AddSkillScreen
@@ -23,30 +30,36 @@ import cz.frantisekmasa.wfrp_master.common.core.domain.Stats
 import cz.frantisekmasa.wfrp_master.common.core.domain.identifiers.CharacterId
 import cz.frantisekmasa.wfrp_master.common.core.domain.skills.Skill
 import cz.frantisekmasa.wfrp_master.common.core.shared.Resources
-import cz.frantisekmasa.wfrp_master.common.core.ui.buttons.CardButton
-import cz.frantisekmasa.wfrp_master.common.core.ui.cards.CardContainer
-import cz.frantisekmasa.wfrp_master.common.core.ui.cards.CardItem
 import cz.frantisekmasa.wfrp_master.common.core.ui.cards.CardTitle
+import cz.frantisekmasa.wfrp_master.common.core.ui.cards.StickyHeader
 import cz.frantisekmasa.wfrp_master.common.core.ui.menu.DropdownMenu
+import cz.frantisekmasa.wfrp_master.common.core.ui.menu.WithContextMenu
 import cz.frantisekmasa.wfrp_master.common.core.ui.navigation.LocalNavigationTransaction
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.ContextMenu
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.EmptyUI
+import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
 import dev.icerock.moko.resources.compose.stringResource
 import kotlinx.collections.immutable.ImmutableList
 
-@Composable
-internal fun SkillsCard(
+internal fun LazyListScope.skillsCard(
     characterId: CharacterId,
     skills: ImmutableList<Skill>,
     characteristics: Stats,
     onRemove: (Skill) -> Unit,
 ) {
-    CardContainer(Modifier.padding(horizontal = 8.dp).padding(bottom = 8.dp)) {
-        Column(Modifier.padding(horizontal = 6.dp)) {
+    stickyHeader(key = "skills-header") {
+        StickyHeader {
             CardTitle(
                 stringResource(Str.skills_title_skills),
                 actions = {
                     var contextMenuExpanded by remember { mutableStateOf(false) }
+                    val navigation = LocalNavigationTransaction.current
+
+                    IconButton(
+                        onClick = { navigation.navigate(AddSkillScreen(characterId)) },
+                    ) {
+                        Icon(Icons.Rounded.Add, stringResource(Str.skills_title_add))
+                    }
 
                     IconButton(onClick = { contextMenuExpanded = true }) {
                         Icon(
@@ -59,7 +72,6 @@ internal fun SkillsCard(
                         expanded = contextMenuExpanded,
                         onDismissRequest = { contextMenuExpanded = false },
                     ) {
-                        val navigation = LocalNavigationTransaction.current
                         DropdownMenuItem(
                             onClick = {
                                 contextMenuExpanded = false
@@ -71,39 +83,38 @@ internal fun SkillsCard(
                     }
                 },
             )
+        }
+    }
 
+    if (skills.isEmpty()) {
+        item(key = "skills-empty-ui") {
             if (skills.isEmpty()) {
                 EmptyUI(
                     text = stringResource(Str.skills_messages_character_has_no_skills),
                     icon = Resources.Drawable.Skill,
                     size = EmptyUI.Size.Small
                 )
-            } else {
-                val navigation = LocalNavigationTransaction.current
-
-                for (skill in skills) {
-                    SkillItem(
-                        skill,
-                        characteristics,
-                        onClick = {
-                            navigation.navigate(
-                                CharacterSkillDetailScreen(
-                                    characterId,
-                                    skill.id,
-                                )
-                            )
-                        },
-                        onRemove = { onRemove(skill) },
-                    )
-                }
             }
-
-            val navigation = LocalNavigationTransaction.current
-            CardButton(
-                stringResource(Str.skills_title_add),
-                onClick = { navigation.navigate(AddSkillScreen(characterId)) },
-            )
         }
+    }
+
+    itemsIndexed(skills, key = { _, it -> "skill" to it.id }) { index, skill ->
+        val navigation = LocalNavigationTransaction.current
+
+        SkillItem(
+            skill,
+            characteristics,
+            onClick = {
+                navigation.navigate(
+                    CharacterSkillDetailScreen(
+                        characterId,
+                        skill.id,
+                    )
+                )
+            },
+            onRemove = { onRemove(skill) },
+            showDivider = index != 0,
+        )
     }
 }
 
@@ -112,16 +123,36 @@ private fun SkillItem(
     skill: Skill,
     characteristics: Stats,
     onClick: () -> Unit,
-    onRemove: () -> Unit
+    onRemove: () -> Unit,
+    showDivider: Boolean,
 ) {
-    CardItem(
-        skill.name,
-        onClick = onClick,
-        contextMenuItems = listOf(
-            ContextMenu.Item(stringResource(Str.common_ui_button_remove), onClick = { onRemove() })
-        ),
-        badge = { TestNumber(skill, characteristics) }
-    )
+    Column(Modifier.padding(horizontal = Spacing.large)) {
+        if (showDivider) {
+            Divider()
+        }
+
+        WithContextMenu(
+            items = listOf(
+                ContextMenu.Item(
+                    stringResource(Str.common_ui_button_remove),
+                    onClick = { onRemove() }
+                )
+            ),
+            onClick = onClick,
+        ) {
+            ListItem(
+                text = {
+                    Text(
+                        skill.name,
+                        fontWeight = if (skill.advances > 0)
+                            FontWeight.SemiBold
+                        else FontWeight.Normal
+                    )
+                },
+                trailing = { TestNumber(skill, characteristics) },
+            )
+        }
+    }
 }
 
 @Composable
