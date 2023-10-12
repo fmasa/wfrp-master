@@ -26,7 +26,7 @@ class TraitParser {
 
             val description = MarkdownBuilder.buildMarkdown(
                 stream
-                    .consumeUntil { it is Token.Heading3 || it is Token.OptionsBoxHeading }
+                    .consumeUntil { it is Token.Heading3 || it is Token.BoxHeader }
                     .filterIsInstance<Token.ParagraphToken>()
             )
 

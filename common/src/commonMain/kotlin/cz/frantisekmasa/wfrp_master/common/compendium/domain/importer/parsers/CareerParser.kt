@@ -7,7 +7,9 @@ import cz.frantisekmasa.wfrp_master.common.core.domain.SocialClass
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.Race
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.SocialStatus
 
-class CareerParser {
+class CareerParser(
+    private val convertTablesToText: Boolean = false,
+) {
 
     fun import(
         document: Document,
@@ -50,15 +52,16 @@ class CareerParser {
         secondColumn: Sequence<Token>,
     ): Career {
         val stream = TokenStream(
-            firstColumn
-                .map {
-                    when (it) {
-                        is Token.BodyCellPart -> Token.NormalPart(it.text)
-                        is Token.TableHeadCell -> Token.BoldPart(it.text)
-                        else -> it
-                    }
-                }
-                .toList()
+            if (convertTablesToText)
+                firstColumn
+                    .map {
+                        when (it) {
+                            is Token.BodyCellPart -> Token.NormalPart(it.text)
+                            is Token.TableHeadCell -> Token.BoldPart(it.text)
+                            else -> it
+                        }
+                    }.toList()
+            else firstColumn.toList()
         )
 
         val name = stream.consumeOneOfType<Token.Heading>().text
@@ -68,25 +71,48 @@ class CareerParser {
             .map { word -> word.replaceFirstChar { if (it.isLowerCase()) it.titlecase() else it.toString() } }
             .joinToString(" ")
 
-        val species = stream.consumeOneOfType<Token.NormalPart>().text
+        val text = stream.consumeOneOfType<Token.NormalPart>().text
+            .lineSequence()
+            .filter { it.isNotBlank() }
+            .toList()
+
+        val descriptionStart = mutableListOf<Token.ParagraphToken>()
+
+        if (text.size > 1) {
+            descriptionStart += text.drop(1).map { Token.NormalPart(it) }
+        }
+
+        val species = text[0]
             .splitToSequence(",")
             .map { it.trim() }
             .map { value ->
                 Race.values().first {
-                    it.name.replace("_", " ").equals(value, ignoreCase = true)
+                    value.contains(it.name.replace("_", " "), ignoreCase = true)
                 }
             }
             .toSet()
 
-        val description = listOf(stream.consumeOneOfType<Token.ItalicsPart>(), Token.BlankLine) +
-            stream.consumeWhileOfType<Token.ParagraphToken>() +
+        if (descriptionStart.isEmpty()) {
+            descriptionStart += stream.consumeOneOfType<Token.ItalicsPart>()
+            descriptionStart += Token.BlankLine
+            descriptionStart += stream.consumeWhileOfType<Token.ParagraphToken>()
+        }
+
+        val description = descriptionStart +
             secondColumn.filterIsInstance<Token.ParagraphToken>().map {
                 if (it is Token.ItalicsPart)
                     Token.BlockQuote(it.text)
                 else it
             }
 
-        stream.dropWhile { it is Token.BoxHeader || it is Token.Heading2 || it is Token.TableHeading }
+        val isAttributesSection: (Token) -> Boolean = {
+            it is Token.BoxHeader ||
+                it is Token.Heading2 ||
+                it is Token.TableHeading ||
+                it is Token.TableHeadCell
+        }
+        stream.dropUntil(isAttributesSection)
+        stream.dropWhile(isAttributesSection)
 
         val levels = (0 until 4).map {
             val (levelName, status) = stream.consumeOneOfType<Token.BoldPart>().text
@@ -96,6 +122,8 @@ class CareerParser {
                 .splitToSequence(levelLineDelimiterRegex)
                 .map { it.trim() }
                 .toList()
+
+            stream.dropWhile { it is Token.BoldPart }
 
             val skills = stream.consumeUntil { it is Token.BoldPart }
                 .filterIsInstance<Token.ParagraphToken>()

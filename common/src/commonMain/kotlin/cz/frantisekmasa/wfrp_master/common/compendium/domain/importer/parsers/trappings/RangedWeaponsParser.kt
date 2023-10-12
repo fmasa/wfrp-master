@@ -7,6 +7,7 @@ import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.parsers.De
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.parsers.Document
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.parsers.PdfStructure
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.parsers.TableParser
+import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.parsers.trappings.description.TrappingDescriptionParser
 import cz.frantisekmasa.wfrp_master.common.core.domain.Money
 import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.Availability
 import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.DamageExpression
@@ -18,23 +19,24 @@ import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.WeaponRangeExpr
 class RangedWeaponsParser(
     private val document: Document,
     private val structure: PdfStructure,
+    private val descriptionParser: TrappingDescriptionParser,
 ) {
 
     fun parse(
         tablePage: Int,
         descriptionPages: IntRange,
     ): List<Trapping> {
-        val table = TableParser().parseTable(
-            DefaultLayoutPdfLexer(document, structure, mergeSubsequentTokens = false)
-                .getTokens(tablePage)
-                .toList(),
-            columnCount = 7,
-        )
+        val parser = TableParser()
+        val lexer = DefaultLayoutPdfLexer(document, structure, mergeSubsequentTokens = false)
 
-        val descriptionsByName = descriptionsByName(document, structure, descriptionPages).toList()
+        val table = parser.findNamedTables(lexer, tablePage)
+            .asSequence()
+            .filter { it.name.contains("weapons", ignoreCase = true) }
+            .flatMap { parser.parseTable(it.tokens, columnCount = 7) }
+
+        val descriptionsByName = descriptionParser.parse(document, structure, descriptionPages)
 
         return table
-            .asSequence()
             .filter { it.heading != null }
             .flatMap { section ->
                 val group = matchEnumOrNull<RangedWeaponGroup>(section.heading!!.replace("*", ""))
@@ -54,6 +56,7 @@ class RangedWeaponsParser(
                     val name = row[0].replace("*", "").trim()
                     val price = PriceParser.parse(row[1])
                     val damage = row[5].trim().replace("*", "")
+                    val comparableName = descriptionParser.comparableName(name)
 
                     Trapping(
                         id = uuid4(),
@@ -82,7 +85,7 @@ class RangedWeaponsParser(
                             flaws = parseFeatures(row[6]),
                         ),
                         description = descriptionsByName.firstOrNull {
-                            name.startsWith(it.first, ignoreCase = true)
+                            comparableName.startsWith(it.first, ignoreCase = true)
                         }?.second ?: "",
                         isVisibleToPlayers = true,
                     )

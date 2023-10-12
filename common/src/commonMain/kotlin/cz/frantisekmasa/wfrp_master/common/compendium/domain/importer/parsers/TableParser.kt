@@ -1,6 +1,41 @@
 package cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.parsers
 
 class TableParser {
+    fun findNamedTables(lexer: DefaultLayoutPdfLexer, tablePage: Int): List<Table> {
+        val tokens = lexer.getTokens(tablePage)
+            .toList()
+
+        val tables = mutableListOf<Table>()
+
+        val stream = TokenStream(tokens)
+
+        while (stream.peek() != null) {
+            stream.dropUntil { it is Token.BoxHeader || it is Token.TableValue }
+            val tableName = stream.consumeWhileOfType<Token.BoxHeader>()
+                .joinToString("") { it.text }
+
+            stream.dropUntil { it is Token.TableValue }
+            stream.dropWhile { it is Token.TableHeadCell }
+
+            tables += Table(
+                name = tableName,
+                tokens = stream.consumeWhile {
+                    it is Token.TableHeading ||
+                        (it is Token.BodyCellPart && !it.text.startsWith("* "))
+                }
+            )
+
+            stream.dropWhile { it is Token.BodyCellPart || it is Token.ItalicsPart }
+        }
+
+        return tables
+    }
+
+    data class Table(
+        val name: String,
+        val tokens: List<Token>,
+    )
+
     fun parseTable(
         tokens: List<Token>,
         columnCount: Int,
@@ -42,7 +77,11 @@ class TableParser {
                         break
                     }
 
-                    lastToken = stream.consumeOneOfType<Token.BodyCellPart>()
+                    try {
+                        lastToken = stream.consumeOneOfType<Token.BodyCellPart>()
+                    } catch (e: Throwable) {
+                        throw e
+                    }
                     var text = lastToken.text
 
                     val hasAnotherLine = if (isLastColumn)

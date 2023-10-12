@@ -24,8 +24,6 @@ sealed interface Token {
     class BlockQuote(text: String) : ParagraphToken(text, "blockQuote")
     object LineBreak : ParagraphToken("\n", "lineBreak")
 
-    object OptionsBoxHeading : Token
-
     sealed class TableValue(val text: String) : Token
     class BodyCellPart(
         text: String,

@@ -9,6 +9,7 @@ import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.parsers.Pd
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.parsers.TableParser
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.parsers.Token
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.parsers.TokenStream
+import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.parsers.trappings.description.TrappingDescriptionParser
 import cz.frantisekmasa.wfrp_master.common.core.domain.Money
 import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.Availability
 import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.DamageExpression
@@ -19,6 +20,7 @@ import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.Reach
 class MeleeWeaponsParser(
     private val document: Document,
     private val structure: PdfStructure,
+    private val descriptionParser: TrappingDescriptionParser,
 ) {
 
     fun parse(
@@ -34,7 +36,7 @@ class MeleeWeaponsParser(
                 )
             }
 
-        val descriptionsByName = descriptionsByName(document, structure, descriptionPages).toList()
+        val descriptionsByName = descriptionParser.parse(document, structure, descriptionPages)
 
         return table
             .filter { it.heading != null }
@@ -89,8 +91,9 @@ class MeleeWeaponsParser(
                                 append("**Reach:** Varies\n")
                             }
 
+                            val comparableName = descriptionParser.comparableName(name)
                             descriptionsByName.firstOrNull {
-                                name.startsWith(it.first, ignoreCase = true)
+                                comparableName.startsWith(it.first, ignoreCase = true)
                             }?.let {
                                 if (isNotEmpty()) {
                                     append("\n")
