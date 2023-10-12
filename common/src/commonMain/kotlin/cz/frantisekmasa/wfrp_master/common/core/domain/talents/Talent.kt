@@ -3,6 +3,7 @@ package cz.frantisekmasa.wfrp_master.common.core.domain.talents
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.Stable
 import com.benasher44.uuid.Uuid
+import com.benasher44.uuid.uuid4
 import cz.frantisekmasa.wfrp_master.common.character.effects.AdditionalEncumbrance
 import cz.frantisekmasa.wfrp_master.common.character.effects.CharacterEffect
 import cz.frantisekmasa.wfrp_master.common.character.effects.CharacteristicChange
@@ -60,5 +61,16 @@ data class Talent(
     companion object {
         const val NAME_MAX_LENGTH = 50
         const val DESCRIPTION_MAX_LENGTH = 1500
+
+        fun fromCompendium(compendiumTalent: CompendiumTalent, timesTaken: Int): Talent {
+            return Talent(
+                id = uuid4(),
+                compendiumId = compendiumTalent.id,
+                name = compendiumTalent.name,
+                tests = compendiumTalent.tests,
+                description = compendiumTalent.description,
+                taken = timesTaken,
+            )
+        }
     }
 }

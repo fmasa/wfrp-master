@@ -72,6 +72,7 @@ fun TrappingFromCompendiumForm(
                                     flawValues.value,
                                     max(quantityField.toInt(), 1),
                                 )
+                                onDismissRequest()
                             }
                         },
                         enabled = !saving,

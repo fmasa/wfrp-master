@@ -3,6 +3,7 @@ package cz.frantisekmasa.wfrp_master.common.core.domain.traits
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.Stable
 import com.benasher44.uuid.Uuid
+import com.benasher44.uuid.uuid4
 import cz.frantisekmasa.wfrp_master.common.character.effects.CharacterEffect
 import cz.frantisekmasa.wfrp_master.common.character.effects.CharacteristicChange
 import cz.frantisekmasa.wfrp_master.common.character.effects.ConstructWoundsModification
@@ -71,6 +72,21 @@ data class Trait(
         }
         require(description.length <= CompendiumTrait.DESCRIPTION_MAX_LENGTH) {
             "Maximum allowed description length is ${CompendiumTrait.DESCRIPTION_MAX_LENGTH}"
+        }
+    }
+
+    companion object {
+        fun fromCompendium(
+            compendiumTrait: CompendiumTrait,
+            specificationValues: Map<String, String>,
+        ): Trait {
+            return Trait(
+                id = uuid4(),
+                compendiumId = compendiumTrait.id,
+                name = compendiumTrait.name,
+                description = compendiumTrait.description,
+                specificationValues = specificationValues.toMap(),
+            )
         }
     }
 }

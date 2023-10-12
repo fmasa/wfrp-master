@@ -13,14 +13,13 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.forms.HydratedFormData
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.InputValue
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.Rules
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.TextInput
-import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.LocalPersistentSnackbarHolder
 import dev.icerock.moko.resources.compose.stringResource
 
 @Composable
 internal fun TraitSpecificationsForm(
     defaultSpecifications: Map<String, String>,
     existingTrait: Trait?,
-    onSave: suspend (Map<String, String>) -> TraitSpecificationsForm.SavingResult,
+    onSave: suspend (Map<String, String>) -> Unit,
     onDismissRequest: () -> Unit,
 ) {
     val specifications = remember(defaultSpecifications.keys) {
@@ -34,9 +33,6 @@ internal fun TraitSpecificationsForm(
         }
     )
 
-    val snackbarHolder = LocalPersistentSnackbarHolder.current
-    val messageCompendiumTraitRemoved = stringResource(Str.traits_messages_compendium_trait_removed)
-
     FormDialog(
         title = stringResource(
             if (existingTrait != null)
@@ -45,15 +41,7 @@ internal fun TraitSpecificationsForm(
         ),
         formData = formData,
         onDismissRequest = onDismissRequest,
-        onSave = {
-            when (onSave(formData.inputValues.mapValues { it.value.value })) {
-                TraitSpecificationsForm.SavingResult.SUCCESS -> {}
-                TraitSpecificationsForm.SavingResult.COMPENDIUM_ITEM_WAS_REMOVED -> {
-                    snackbarHolder.showSnackbar(messageCompendiumTraitRemoved)
-                }
-            }
-            onDismissRequest()
-        }
+        onSave = { onSave(formData.inputValues.mapValues { it.value.value }) },
     ) { validate ->
         formData.inputValues.forEach { (specificationName, state) ->
             key(specificationName) {
