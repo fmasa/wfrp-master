@@ -17,22 +17,16 @@ import cz.frantisekmasa.wfrp_master.common.core.domain.talents.Talent
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.FormDialog
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.HydratedFormData
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.NumberPicker
-import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.LocalPersistentSnackbarHolder
 import dev.icerock.moko.resources.compose.stringResource
 
 @Composable
 internal fun TimesTakenForm(
     existingTalent: Talent?,
-    onSave: suspend (timesTaken: Int) -> TimesTakenForm.SavingResult,
+    onSave: suspend (timesTaken: Int) -> Unit,
     onDismissRequest: () -> Unit,
 ) {
     val formData = TimesTakenForm.FormData(
         rememberSaveable { mutableStateOf(existingTalent?.taken ?: 1) }
-    )
-
-    val snackbarHolder = LocalPersistentSnackbarHolder.current
-    val successMessage = stringResource(
-        Str.talents_messages_compendium_talent_removed
     )
 
     FormDialog(
@@ -43,16 +37,7 @@ internal fun TimesTakenForm(
         ),
         formData = formData,
         onDismissRequest = onDismissRequest,
-        onSave = {
-            when (onSave(it)) {
-                TimesTakenForm.SavingResult.SUCCESS -> {}
-                TimesTakenForm.SavingResult.COMPENDIUM_ITEM_WAS_REMOVED -> {
-                    snackbarHolder.showSnackbar(successMessage)
-                }
-            }
-
-            onDismissRequest()
-        }
+        onSave = onSave,
     ) {
         Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
             Text(
@@ -73,8 +58,6 @@ internal fun TimesTakenForm(
 }
 
 object TimesTakenForm {
-    enum class SavingResult { SUCCESS, COMPENDIUM_ITEM_WAS_REMOVED }
-
     @Stable
     data class FormData(
         private val timesTakenState: MutableState<Int>,

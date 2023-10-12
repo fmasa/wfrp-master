@@ -10,7 +10,11 @@ import androidx.compose.material.OutlinedButton
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import cz.frantisekmasa.wfrp_master.common.Str
@@ -39,6 +43,7 @@ internal fun <T : CompendiumItem<T>> CompendiumItemChooser(
     emptyUiIcon: Resources.Drawable,
 ) {
     val coroutineScope = rememberCoroutineScope()
+    var processing by remember { mutableStateOf(false) }
 
     Column(Modifier.fillMaxSize()) {
         SearchableList(
@@ -64,7 +69,14 @@ internal fun <T : CompendiumItem<T>> CompendiumItemChooser(
             ListItem(
                 modifier = Modifier.clickable(
                     onClick = {
-                        coroutineScope.launch(Dispatchers.IO) { onSelect(item) }
+                        processing = true
+                        coroutineScope.launch(Dispatchers.IO) {
+                            try {
+                                onSelect(item)
+                            } finally {
+                                processing = false
+                            }
+                        }
                     }
                 ),
                 icon = {

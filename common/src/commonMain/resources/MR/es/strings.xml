@@ -234,7 +234,6 @@
     <string name="common_ui_item_added">Se ha añadido el objeto.</string>
     <string name="trappings_label_encumbrance_total">Impedimenta (total)</string>
     <string name="journal_title_edit_entry">Editar Entrada del Diario</string>
-    <string name="traits_messages_compendium_trait_removed">El rasgo del Compendio se ha eliminado mientras tanto</string>
     <string name="character_size_large">Grande</string>
     <string name="trappings_expression_constants_damage_special">Especial</string>
     <string name="character_effect_sturdy">robusto</string>
@@ -504,7 +503,6 @@
     <string name="spells_label_name">Nombre</string>
     <string name="trappings_flaws_ugly">Feo</string>
     <string name="points_label_spent_experience">PX gastados anteriormente</string>
-    <string name="talents_messages_compendium_talent_removed">El talento del Compendio se ha eliminado mientras tanto</string>
     <string name="armour_types_soft_leather">De Cuero Blando</string>
     <string name="weapons_ranged_groups_throwing">Arrojadizas</string>
     <string name="weapons_label_flaws">Defectos de arma</string>
@@ -548,7 +546,6 @@
     <string name="common_ui_icon_toggle_fab_menu">Desplegar menú</string>
     <string name="authentication_button_log_out">Desconectar</string>
     <string name="parties_button_share_link">Compartir enlace</string>
-    <string name="skills_messages_compendium_skill_removed">La habilidad del Compendio se ha eliminado mientras tanto</string>
     <string name="authentication_messages_signed_in_as">Estás registrado como</string>
     <string name="compendium_button_import">Importar</string>
     <string name="changelog_github_button">Ver el resto en GitHub</string>

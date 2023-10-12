@@ -499,7 +499,6 @@
     <string name="skills_messages_add_basic_skills_explanation">All Basic Skills (%d) will be added without any Advances.</string>
     <string name="skills_messages_basic_skills_added">All Basic Skills were added.</string>
     <string name="skills_messages_character_has_no_skills">Character doesn\'t have any skills.</string>
-    <string name="skills_messages_compendium_skill_removed">Compendium skill was removed in the meantime</string>
     <string name="skills_messages_no_basic_skills_to_add">There are no additional Basic Skills to add from Compendium.</string>
     <string name="skills_messages_no_skills_in_compendium">No skills</string>
     <string name="skills_messages_no_skills_in_compendium_subtext">There are no skills in your compendium yet.</string>
@@ -563,7 +562,6 @@
     <string name="talents_label_name">Name</string>
     <string name="talents_label_tests">Tests</string>
     <string name="talents_label_times_taken">Times taken</string>
-    <string name="talents_messages_compendium_talent_removed">Compendium talent was removed in the meantime</string>
     <string name="talents_messages_no_talents_in_compendium">No talents</string>
     <string name="talents_messages_no_talents_in_compendium_subtext">There are no talents in your compendium yet.</string>
     <string name="talents_tip_hardy_talent_checkbox">Hardy checkbox will be removed in the future.\nAdd Talent called "Hardy" and delete manual Max. Wounds value instead.</string>
@@ -603,7 +601,6 @@
     <string name="traits_label_description">Description</string>
     <string name="traits_label_name">Name</string>
     <string name="traits_label_specifications">Specifications</string>
-    <string name="traits_messages_compendium_trait_removed">Compendium trait was removed in the meantime</string>
     <string name="traits_messages_no_traits_in_compendium">No traits</string>
     <string name="traits_messages_no_traits_in_compendium_subtext">There are no traits in your compendium yet.</string>
     <string name="traits_specifications_helper">Comma separated list of Specifications</string>

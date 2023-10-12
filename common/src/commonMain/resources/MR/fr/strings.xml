@@ -143,7 +143,6 @@
     <string name="spells_title_choose_compendium_spell">Choisir le sort du Compendium…</string>
     <string name="talents_label_description">Description (optionnel)</string>
     <string name="spells_title_edit">Éditer le sort</string>
-    <string name="talents_messages_compendium_talent_removed">Le talent a été supprimée du Compendium entre-temps</string>
     <string name="tests_cannot_test_against_unknown_advanced_skill">Le personnage ne peut pas faire de test contre une compétence avancée qu\'il ne connaît pas.</string>
     <string name="talents_title_choose_compendium_talent">Choisir le talent du Compendium…</string>
     <string name="tests_critical">Critique</string>
@@ -239,8 +238,6 @@
     <string name="trappings_title_choose_compendium_trapping">Choisir l\'objet du Compendium…</string>
     <string name="careers_button_clear_select_box">Effacer la boîte de sélection de la carrière</string>
     <string name="traits_specifications_helper">Liste de spécifications séparées par des virgules</string>
-    <string name="traits_messages_compendium_trait_removed">Le trait a été supprimée du Compendium entre-temps</string>
-    <string name="skills_messages_compendium_skill_removed">La compétence a été supprimée du Compendium entre-temps</string>
     <string name="character_tab_conditions">Conditions</string>
     <string name="messages_search_not_found_subtext">Envisagez de modifier l\'expression de recherche.</string>
     <string name="trappings_types_container">Conteneurs</string>

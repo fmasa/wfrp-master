@@ -385,7 +385,6 @@
     <string name="skills_messages_add_basic_skills_explanation">Tutte le Abilità Base (%d) verrà aggiunto senza Avanzamenti.</string>
     <string name="skills_messages_basic_skills_added">Sono state aggiunte tutte le Abilità Base.</string>
     <string name="skills_messages_character_has_no_skills">Il Personaggio non ha Abilità.</string>
-    <string name="skills_messages_compendium_skill_removed">Abilità rimossa dal Compendio</string>
     <string name="skills_messages_no_basic_skills_to_add">Non ci sono Abilità Base da aggiungere dal Compendio.</string>
     <string name="skills_messages_no_skills_in_compendium">Nessuna Abilità</string>
     <string name="skills_messages_no_skills_in_compendium_subtext">Non ci sono ancora Abilità nel Compendio.</string>
@@ -449,7 +448,6 @@
     <string name="talents_label_name">Nome</string>
     <string name="talents_label_tests">Prove</string>
     <string name="talents_label_times_taken">Grado</string>
-    <string name="talents_messages_compendium_talent_removed">Il Talento è stato rimosso dal Compendio</string>
     <string name="talents_messages_no_talents_in_compendium">Nessun Talento</string>
     <string name="talents_messages_no_talents_in_compendium_subtext">Non ci sono ancora Talenti nel tuo Compendio.</string>
     <string name="talents_tip_hardy_talent_checkbox">Il check Gagliardo verrà rimosso in futuro.\nAggiungi il talento chiamato "Gagliardo" ed elimina il numero MAX manuale. Le Ferite danno invece valore.</string>
@@ -490,7 +488,6 @@
     <string name="traits_label_description">Descrizione</string>
     <string name="traits_label_name">Nome</string>
     <string name="traits_label_specifications">Specifiche</string>
-    <string name="traits_messages_compendium_trait_removed">Il Tratto è stato rimosso del Compendio</string>
     <string name="traits_messages_no_traits_in_compendium">Nessun Tratto</string>
     <string name="traits_messages_no_traits_in_compendium_subtext">Non ci sono ancora Tratti nel tuo Compendio.</string>
     <string name="traits_specifications_helper">Lista specifiche separate da una virgola</string>
