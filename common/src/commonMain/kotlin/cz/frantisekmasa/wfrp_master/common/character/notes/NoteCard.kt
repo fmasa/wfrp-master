@@ -112,7 +112,6 @@ private fun EditNoteDialog(
                 verticalArrangement = Arrangement.spacedBy(Spacing.small),
             ) {
                 TextInput(
-                    label = stringResource(Str.character_note),
                     value = noteValue,
                     validate = false,
                     maxLength = maxLength,
