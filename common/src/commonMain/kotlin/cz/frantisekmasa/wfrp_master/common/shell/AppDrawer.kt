@@ -36,7 +36,6 @@ import cz.frantisekmasa.wfrp_master.common.Str
 import cz.frantisekmasa.wfrp_master.common.about.AboutScreen
 import cz.frantisekmasa.wfrp_master.common.core.shared.Resources
 import cz.frantisekmasa.wfrp_master.common.core.shared.drawableResource
-import cz.frantisekmasa.wfrp_master.common.core.shared.rememberEmailInitiator
 import cz.frantisekmasa.wfrp_master.common.core.shared.rememberUrlOpener
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.VisualOnlyIconDescription
@@ -74,7 +73,7 @@ fun AppDrawer(drawerState: DrawerState) {
             text = stringResource(Str.drawer_wiki),
             onClick = {
                 urlOpener.open(
-                    "https://github.com/fmasa/wfrp-master/wiki",
+                    FixedStrings.githubWikiUrl,
                     isGooglePlayLink = false,
                 )
             }
@@ -96,16 +95,11 @@ fun AppDrawer(drawerState: DrawerState) {
             }
         )
 
-        val emailInitiator = rememberEmailInitiator()
-
         DrawerItem(
             icon = Icons.Rounded.BugReport,
             text = stringResource(Str.drawer_report_issue),
             onClick = {
-                emailInitiator.initiateNewEmail(
-                    subject = FixedStrings.bugReportEmailSubject,
-                    recipient = FixedStrings.emailAddress,
-                )
+                urlOpener.open(FixedStrings.githubIssuesUrl, isGooglePlayLink = false)
             },
         )
 

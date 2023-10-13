@@ -12,7 +12,6 @@ import cz.frantisekmasa.wfrp_master.common.appModule
 import cz.frantisekmasa.wfrp_master.common.core.LocalStaticConfiguration
 import cz.frantisekmasa.wfrp_master.common.core.config.Platform
 import cz.frantisekmasa.wfrp_master.common.core.config.StaticConfiguration
-import cz.frantisekmasa.wfrp_master.common.core.shared.LocalEmailInitiator
 import cz.frantisekmasa.wfrp_master.common.core.shared.LocalFileChooserFactory
 import cz.frantisekmasa.wfrp_master.common.core.shared.LocalFileSaverFactory
 import cz.frantisekmasa.wfrp_master.common.core.shared.LocalUrlOpener
@@ -25,7 +24,6 @@ import cz.frantisekmasa.wfrp_master.common.localization.FixedStrings
 import cz.frantisekmasa.wfrp_master.common.partyList.PartyListScreen
 import cz.frantisekmasa.wfrp_master.common.shell.DrawerShell
 import cz.frantisekmasa.wfrp_master.common.shell.SnackbarScaffold
-import cz.frantisekmasa.wfrp_master.desktop.interop.DesktopEmailInitiator
 import cz.frantisekmasa.wfrp_master.desktop.interop.DesktopUrlOpener
 import cz.frantisekmasa.wfrp_master.desktop.interop.NativeFileChooser
 import cz.frantisekmasa.wfrp_master.desktop.interop.NativeFileSaver
@@ -44,7 +42,6 @@ object WfrpMasterApplication {
 
                 CompositionLocalProvider(
                     LocalUrlOpener provides DesktopUrlOpener,
-                    LocalEmailInitiator provides DesktopEmailInitiator,
                     LocalFileChooserFactory provides { NativeFileChooser(coroutineScope, it) },
                     LocalFileSaverFactory provides { NativeFileSaver(coroutineScope, it) },
                     LocalStaticConfiguration provides StaticConfiguration(
