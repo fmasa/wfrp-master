@@ -114,6 +114,7 @@ jobs:
     needs: [build-bundle]
     runs-on: ubuntu-22.04
     container: ruby:2.7.2-alpine3.12
+    concurrency: google-play
     environment: production
     env:
       PLAY_STORE_TRACK: internal
@@ -129,7 +130,7 @@ jobs:
       - run: echo "$PLAY_STORE_JSON_FILE" > fastlane/play_store_credentials.json
       - run: bundle install -j $(nproc)
       - run: bundle exec fastlane deploy
-
+      - run: '[ "$GITHUB_REF_TYPE" == "tag" ] && bundle exec fastlane production'
   firebase-deploy:
     name: "Firebase deploy"
     if: github.ref == 'refs/heads/master' || github.ref_type == 'tag'
