@@ -6,6 +6,8 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Card
 import androidx.compose.material.ContentAlpha
 import androidx.compose.material.LocalContentAlpha
@@ -97,16 +99,24 @@ class RulebookCompendiumImportScreen(
             )
         }
 
-        Column(modifier = Modifier.fillMaxSize().padding(Spacing.bodyPadding)) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .verticalScroll(rememberScrollState())
+                .padding(Spacing.bodyPadding)
+        ) {
             Text(
                 stringResource(Str.compendium_rulebook_import_prompt_title),
                 textAlign = TextAlign.Center,
+                modifier = Modifier.align(Alignment.CenterHorizontally),
             )
             Text(
                 stringResource(Str.compendium_rulebook_import_prompt_subtitle),
                 textAlign = TextAlign.Center,
                 fontWeight = FontWeight.SemiBold,
-                modifier = Modifier.padding(bottom = Spacing.medium)
+                modifier = Modifier
+                    .padding(bottom = Spacing.medium)
+                    .align(Alignment.CenterHorizontally),
             )
 
             val books = remember {
