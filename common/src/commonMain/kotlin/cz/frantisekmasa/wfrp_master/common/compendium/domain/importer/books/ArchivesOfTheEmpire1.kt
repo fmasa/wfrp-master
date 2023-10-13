@@ -17,6 +17,7 @@ import cz.frantisekmasa.wfrp_master.common.core.domain.SocialClass
 object ArchivesOfTheEmpire1 : Book, CareerSource, TrappingSource {
 
     override val name = "Archives of the Empire — Volume I"
+    override val tableFootnotesAsNormalText: Boolean = true
 
     override fun importCareers(document: Document): List<Career> {
         return CareerParser()

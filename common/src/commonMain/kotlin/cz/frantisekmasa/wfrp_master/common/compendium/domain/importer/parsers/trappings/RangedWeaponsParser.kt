@@ -29,7 +29,7 @@ class RangedWeaponsParser(
         val parser = TableParser()
         val lexer = DefaultLayoutPdfLexer(document, structure, mergeSubsequentTokens = false)
 
-        val table = parser.findNamedTables(lexer, tablePage)
+        val table = parser.findTables(lexer, structure, tablePage, findNames = true)
             .asSequence()
             .filter { it.name.contains("weapons", ignoreCase = true) }
             .flatMap { parser.parseTable(it.tokens, columnCount = 7) }
@@ -53,14 +53,24 @@ class RangedWeaponsParser(
                 else emptyMap()
 
                 section.rows.map { row ->
-                    val name = row[0].replace("*", "").trim()
+                    val name = row[0]
                     val price = PriceParser.parse(row[1])
-                    val damage = row[5].trim().replace("*", "")
+                    val damage = row[5].trim()
                     val comparableName = descriptionParser.comparableName(name)
+                    val qualitiesAndFlaws = row[6]
+
+                    val footnoteNumbers = sequenceOf(
+                        section.heading,
+                        name,
+                        damage,
+                        qualitiesAndFlaws,
+                    )
+                        .flatMap { parser.findFootnoteReferences(it) }
+                        .toSet()
 
                     Trapping(
                         id = uuid4(),
-                        name = name,
+                        name = name.trim { it.isWhitespace() || it == '*' },
                         price = if (price is PriceParser.Amount) price.money else Money.ZERO,
                         packSize = 1,
                         encumbrance = Encumbrance(row[2].trim().toDoubleOrNull() ?: 0.0),
@@ -80,13 +90,33 @@ class RangedWeaponsParser(
                                     .replace("  ", " ")
                                     .trim()
                             ),
-                            damage = DamageExpression(if (damage == "–") "0" else damage),
-                            qualities = parseFeatures<WeaponQuality>(row[6]) + defaultQualities,
-                            flaws = parseFeatures(row[6]),
+                            damage = DamageExpression(
+                                if (damage == "–")
+                                    "0"
+                                else damage.trim { it.isWhitespace() || it == '*' }
+                            ),
+                            qualities = parseFeatures<WeaponQuality>(qualitiesAndFlaws) +
+                                defaultQualities,
+                            flaws = parseFeatures(qualitiesAndFlaws),
                         ),
-                        description = descriptionsByName.firstOrNull {
-                            comparableName.startsWith(it.first, ignoreCase = true)
-                        }?.second ?: "",
+                        description = buildString {
+                            val footnotes = footnoteNumbers.mapNotNull { section.footnotes[it] }
+
+                            footnotes.forEach {
+                                append(it)
+                                append('\n')
+                            }
+
+                            val description = descriptionsByName.firstOrNull {
+                                comparableName.startsWith(it.first, ignoreCase = true)
+                            }?.second ?: return@buildString
+
+                            if (footnotes.isNotEmpty()) {
+                                append('\n')
+                            }
+
+                            append(description)
+                        },
                         isVisibleToPlayers = true,
                     )
                 }

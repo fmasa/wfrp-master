@@ -2,11 +2,14 @@ package cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.parsers
 
 sealed interface Token {
 
-    sealed class TextToken(val text: String) : Token
+    val text: String get() = ""
+
+    sealed class TextToken(override val text: String) : Token
 
     interface Heading : Token {
-        val text: String
+        override val text: String
     }
+
     class Heading1(text: String) : TextToken(text), Heading
     class Heading2(text: String) : TextToken(text), Heading
     class Heading3(text: String) : ParagraphToken(text, "heading3"), Heading
@@ -24,7 +27,7 @@ sealed interface Token {
     class BlockQuote(text: String) : ParagraphToken(text, "blockQuote")
     object LineBreak : ParagraphToken("\n", "lineBreak")
 
-    sealed class TableValue(val text: String) : Token
+    sealed class TableValue(override val text: String) : Token
     class BodyCellPart(
         text: String,
         val y: Float,
@@ -43,5 +46,5 @@ sealed interface Token {
     object BulletPoint : ParagraphToken("\n -", "bulletPoint")
     object CrossIcon : Token
 
-    class BoxHeader(val text: String) : Token
+    class BoxHeader(override val text: String) : Token
 }

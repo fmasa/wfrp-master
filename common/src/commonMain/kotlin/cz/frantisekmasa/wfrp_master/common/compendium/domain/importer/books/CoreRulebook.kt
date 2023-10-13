@@ -54,6 +54,7 @@ object CoreRulebook :
     TrappingSource {
 
     override val name: String = "Core Rulebook"
+    override val tableFootnotesAsNormalText: Boolean = true
 
     override fun importTalents(document: Document): List<Talent> {
         return TalentParser().import(document, this, (132..147).asSequence())

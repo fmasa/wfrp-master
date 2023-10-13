@@ -7,8 +7,6 @@ import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.parsers.De
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.parsers.Document
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.parsers.PdfStructure
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.parsers.TableParser
-import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.parsers.Token
-import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.parsers.TokenStream
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.parsers.trappings.description.TrappingDescriptionParser
 import cz.frantisekmasa.wfrp_master.common.core.domain.Money
 import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.Availability
@@ -27,14 +25,11 @@ class MeleeWeaponsParser(
         tablePage: Int,
         descriptionPages: IntRange,
     ): List<Trapping> {
-        val table = findTables(tablePage)
+        val parser = TableParser()
+        val lexer = DefaultLayoutPdfLexer(document, structure, mergeSubsequentTokens = false)
+        val table = parser.findTables(lexer, structure, tablePage, findNames = false)
             .asSequence()
-            .flatMap {
-                TableParser().parseTable(
-                    it,
-                    columnCount = 7,
-                )
-            }
+            .flatMap { parser.parseTable(it.tokens, columnCount = 7) }
 
         val descriptionsByName = descriptionParser.parse(document, structure, descriptionPages)
 
@@ -54,6 +49,11 @@ class MeleeWeaponsParser(
                     val price = PriceParser.parse(row[1])
                     val encumbrance = row[2].trim()
                     val reach = row[4].trim()
+                    val damage = row[5].trim()
+                    val qualitiesAndFlaws = row[6]
+
+                    val footnoteNumbers = sequenceOf(damage, qualitiesAndFlaws)
+                        .flatMap { parser.findFootnoteReferences(it) }
 
                     Trapping(
                         id = uuid4(),
@@ -78,9 +78,9 @@ class MeleeWeaponsParser(
                                     "Varies" to Reach.AVERAGE
                                 ),
                             ) ?: error("Invalid Reach ${row[4]}"),
-                            damage = DamageExpression(row[5].trim().replace("*", "")),
-                            qualities = parseFeatures(row[6]),
-                            flaws = parseFeatures(row[6]),
+                            damage = DamageExpression(damage.replace("*", "")),
+                            qualities = parseFeatures(qualitiesAndFlaws),
+                            flaws = parseFeatures(qualitiesAndFlaws),
                         ),
                         description = buildString {
                             if (encumbrance == "Varies") {
@@ -89,6 +89,13 @@ class MeleeWeaponsParser(
 
                             if (reach == "Varies") {
                                 append("**Reach:** Varies\n")
+                            }
+
+                            val footnotes = footnoteNumbers.mapNotNull { section.footnotes[it] }
+
+                            footnotes.forEach {
+                                append(it)
+                                append('\n')
                             }
 
                             val comparableName = descriptionParser.comparableName(name)
@@ -106,28 +113,5 @@ class MeleeWeaponsParser(
                     )
                 }
             }.toList()
-    }
-
-    private fun findTables(tablePage: Int): List<List<Token>> {
-        val tokens = DefaultLayoutPdfLexer(document, structure, mergeSubsequentTokens = false)
-            .getTokens(tablePage)
-            .toList()
-
-        val tables = mutableListOf<List<Token>>()
-
-        val stream = TokenStream(tokens)
-
-        while (stream.peek() != null) {
-            stream.dropUntil { it is Token.TableValue }
-            stream.dropWhile { it is Token.TableHeadCell }
-
-            tables += stream.consumeWhile {
-                it is Token.TableHeading ||
-                    (it is Token.BodyCellPart && !it.text.startsWith("* "))
-            }
-            stream.dropWhile { it is Token.BodyCellPart || it is Token.ItalicsPart }
-        }
-
-        return tables
     }
 }

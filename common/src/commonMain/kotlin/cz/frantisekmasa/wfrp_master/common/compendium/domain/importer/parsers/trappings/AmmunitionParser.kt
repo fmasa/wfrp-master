@@ -31,7 +31,7 @@ class AmmunitionParser(
             mergeSubsequentTokens = false,
             sortTokens = true,
         )
-        val table = parser.findNamedTables(lexer, tablePage)
+        val table = parser.findTables(lexer, structure, tablePage, findNames = true)
             .filter { it.name.contains("ammunition", ignoreCase = true) }
             .asSequence()
             .flatMap { parser.parseTable(it.tokens, columnCount = 7) }
@@ -52,6 +52,16 @@ class AmmunitionParser(
                     val damage = row[5].trim().replace("–", "-")
                     val (name, packSize) = parseNameAndPackSize(row[0].trim())
                     val comparableName = descriptionParser.comparableName(name)
+                    val qualitiesAndFlaws = row[6]
+
+                    val footnoteNumbers = sequenceOf(
+                        section.heading,
+                        name,
+                        damage,
+                        qualitiesAndFlaws,
+                    )
+                        .flatMap { parser.findFootnoteReferences(it) }
+                        .toSet()
 
                     Trapping(
                         id = uuid4(),
@@ -68,12 +78,27 @@ class AmmunitionParser(
                             weaponGroups = weaponGroups,
                             damage = DamageExpression(if (damage == "-") "+0" else damage),
                             range = range(row[4].trim()),
-                            qualities = parseFeatures(row[6]),
-                            flaws = parseFeatures(row[6]),
+                            qualities = parseFeatures(qualitiesAndFlaws),
+                            flaws = parseFeatures(qualitiesAndFlaws),
                         ),
-                        description = descriptionsByName.firstOrNull {
-                            comparableName.startsWith(it.first, ignoreCase = true)
-                        }?.second ?: "",
+                        description = buildString {
+                            val footnotes = footnoteNumbers.mapNotNull { section.footnotes[it] }
+
+                            footnotes.forEach {
+                                append(it)
+                                append('\n')
+                            }
+
+                            val description = descriptionsByName.firstOrNull {
+                                comparableName.startsWith(it.first, ignoreCase = true)
+                            }?.second ?: return@buildString
+
+                            if (footnotes.isNotEmpty()) {
+                                append('\n')
+                            }
+
+                            append(description)
+                        },
                         isVisibleToPlayers = true,
                     )
                 }
