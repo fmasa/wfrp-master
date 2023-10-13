@@ -8,6 +8,7 @@ import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.parsers.Pd
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.parsers.TableParser
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.parsers.Token
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.parsers.TwoColumnPdfLexer
+import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.parsers.trappings.description.TrappingDescriptionParser
 import cz.frantisekmasa.wfrp_master.common.core.domain.Money
 import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.Availability
 import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.Encumbrance
@@ -15,6 +16,7 @@ import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.Encumbrance
 class BasicTrappingsParser(
     private val document: Document,
     private val structure: PdfStructure,
+    private val descriptionParser: TrappingDescriptionParser,
 ) {
 
     enum class Column { LEFT, RIGHT }
@@ -52,7 +54,7 @@ class BasicTrappingsParser(
             columnCount = if (additionalColumn != null) 5 else 4,
         )
 
-        val descriptionsByName = descriptionsByName(document, structure, descriptionPages).toList()
+        val descriptionsByName = descriptionParser.parse(document, structure, descriptionPages)
 
         return table
             .asSequence()
@@ -105,8 +107,9 @@ class BasicTrappingsParser(
                                 append("**Reach:** Varies\n")
                             }
 
+                            val comparableName = descriptionParser.comparableName(name)
                             descriptionsByName.firstOrNull {
-                                name.startsWith(it.first, ignoreCase = true)
+                                comparableName.startsWith(it.first, ignoreCase = true)
                             }?.let {
                                 if (isNotEmpty()) {
                                     append("\n")

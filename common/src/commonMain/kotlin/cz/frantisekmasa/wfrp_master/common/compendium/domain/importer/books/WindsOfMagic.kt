@@ -13,6 +13,7 @@ import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.parsers.Te
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.parsers.Token
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.parsers.trappings.BasicTrappingsParser
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.parsers.trappings.BasicTrappingsParser.Column
+import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.parsers.trappings.description.ListDescriptionParser
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.sources.CareerSource
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.sources.SpellSource
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.sources.TrappingSource
@@ -65,7 +66,11 @@ object WindsOfMagic : Book, CareerSource, SpellSource, TrappingSource {
     }
 
     override fun importTrappings(document: Document): List<Trapping> {
-        val basicTrappingsParser = BasicTrappingsParser(document, this)
+        val basicTrappingsParser = BasicTrappingsParser(
+            document,
+            this,
+            ListDescriptionParser(),
+        )
 
         return buildList {
             addAll(

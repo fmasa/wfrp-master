@@ -14,6 +14,7 @@ import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.parsers.tr
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.parsers.trappings.BasicTrappingsParser.Column
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.parsers.trappings.MeleeWeaponsParser
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.parsers.trappings.RangedWeaponsParser
+import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.parsers.trappings.description.ListDescriptionParser
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.sources.CareerSource
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.sources.TalentSource
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.sources.TrappingSource
@@ -23,9 +24,10 @@ import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.MeleeWeaponGrou
 object UpInArms : Book, CareerSource, TalentSource, TrappingSource {
 
     override val name = "Up in Arms"
+    override val tokensSorted: Boolean = false
 
     override fun importCareers(document: Document): List<Career> {
-        return CareerParser().import(
+        return CareerParser(convertTablesToText = true).import(
             document,
             this,
             sequenceOf(
@@ -43,10 +45,11 @@ object UpInArms : Book, CareerSource, TalentSource, TrappingSource {
     }
 
     override fun importTrappings(document: Document): List<Trapping> {
-        val basicTrappingsParser = BasicTrappingsParser(document, this)
-        val meleeWeaponsParser = MeleeWeaponsParser(document, this)
-        val ammunitionParser = AmmunitionParser(document, this)
-        val rangedWeaponsParser = RangedWeaponsParser(document, this)
+        val descriptionParser = ListDescriptionParser()
+        val basicTrappingsParser = BasicTrappingsParser(document, this, descriptionParser)
+        val meleeWeaponsParser = MeleeWeaponsParser(document, this, descriptionParser)
+        val ammunitionParser = AmmunitionParser(document, this, descriptionParser)
+        val rangedWeaponsParser = RangedWeaponsParser(document, this, descriptionParser)
 
         return sequence {
             yieldAll(
@@ -89,6 +92,10 @@ object UpInArms : Book, CareerSource, TalentSource, TrappingSource {
 
             if (textToken.fontSizePt == 10f) {
                 return Token.TableHeading(textToken.text)
+            }
+
+            if (textToken.fontSizePt == 15f) {
+                return Token.BoxHeader(textToken.text)
             }
         }
 

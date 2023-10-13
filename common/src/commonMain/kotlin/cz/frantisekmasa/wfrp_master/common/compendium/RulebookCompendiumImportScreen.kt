@@ -28,6 +28,7 @@ import androidx.compose.ui.text.style.TextAlign
 import cafe.adriel.voyager.core.screen.Screen
 import cz.frantisekmasa.wfrp_master.common.Str
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.PdfCompendiumImporter
+import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.books.ArchivesOfTheEmpire1
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.books.Book
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.books.CoreRulebook
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.books.EnemyInShadowsCompanion
@@ -108,7 +109,15 @@ class RulebookCompendiumImportScreen(
                 modifier = Modifier.padding(bottom = Spacing.medium)
             )
 
-            val books = remember { listOf(CoreRulebook, UpInArms, WindsOfMagic, EnemyInShadowsCompanion) }
+            val books = remember {
+                listOf(
+                    CoreRulebook,
+                    UpInArms,
+                    WindsOfMagic,
+                    ArchivesOfTheEmpire1,
+                    EnemyInShadowsCompanion,
+                )
+            }
 
             books.forEach { book ->
                 key(book) {

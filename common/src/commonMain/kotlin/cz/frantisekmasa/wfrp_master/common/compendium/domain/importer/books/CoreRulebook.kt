@@ -27,6 +27,7 @@ import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.parsers.tr
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.parsers.trappings.BasicTrappingsParser.Column
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.parsers.trappings.MeleeWeaponsParser
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.parsers.trappings.RangedWeaponsParser
+import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.parsers.trappings.description.ListDescriptionParser
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.sources.BlessingSource
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.sources.CareerSource
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.sources.MiracleSource
@@ -53,6 +54,7 @@ object CoreRulebook :
     TrappingSource {
 
     override val name: String = "Core Rulebook"
+    override val tableFootnotesAsNormalText: Boolean = true
 
     override fun importTalents(document: Document): List<Talent> {
         return TalentParser().import(document, this, (132..147).asSequence())
@@ -109,21 +111,29 @@ object CoreRulebook :
 
     override fun importTrappings(document: Document): List<Trapping> {
         val structure = this
+        val descriptionParser = ListDescriptionParser()
+
         return buildList {
             addAll(
-                MeleeWeaponsParser(document, structure).parse(294, IntRange.EMPTY)
+                MeleeWeaponsParser(document, structure, descriptionParser).parse(
+                    294,
+                    IntRange.EMPTY
+                )
             )
             addAll(
-                RangedWeaponsParser(document, structure).parse(295, IntRange.EMPTY)
+                RangedWeaponsParser(document, structure, descriptionParser).parse(
+                    295,
+                    IntRange.EMPTY
+                )
             )
             addAll(
-                AmmunitionParser(document, structure).parse(296, IntRange.EMPTY)
+                AmmunitionParser(document, structure, descriptionParser).parse(296, IntRange.EMPTY)
             )
             addAll(
                 ArmourParser().parse(document, structure, 300, IntRange.EMPTY)
             )
 
-            val basicTrappingsParser = BasicTrappingsParser(document, structure)
+            val basicTrappingsParser = BasicTrappingsParser(document, structure, descriptionParser)
             addAll(
                 basicTrappingsParser.parse(
                     { TrappingType.Container(carries = Encumbrance(it.toDouble())) },
@@ -240,7 +250,7 @@ object CoreRulebook :
 
     override fun resolveToken(textToken: TextToken): Token? {
         if (textToken.fontName == "CaslonAntique" && textToken.fontSizePt == 15f) {
-            return Token.OptionsBoxHeading
+            return Token.BoxHeader(textToken.text)
         }
 
         if (textToken.fontName == "CaslonAntique,Bold") {

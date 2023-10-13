@@ -7,6 +7,7 @@ import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.parsers.De
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.parsers.Document
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.parsers.PdfStructure
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.parsers.TableParser
+import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.parsers.trappings.description.TrappingDescriptionParser
 import cz.frantisekmasa.wfrp_master.common.core.domain.Money
 import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.AmmunitionRangeExpression
 import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.Availability
@@ -17,31 +18,50 @@ import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.RangedWeaponGro
 class AmmunitionParser(
     private val document: Document,
     private val structure: PdfStructure,
+    private val descriptionParser: TrappingDescriptionParser,
 ) {
     fun parse(
         tablePage: Int,
         descriptionPages: IntRange,
     ): List<Trapping> {
-        val table = TableParser().parseTable(
-            DefaultLayoutPdfLexer(document, structure, mergeSubsequentTokens = false)
-                .getTokens(tablePage)
-                .toList(),
-            columnCount = 7,
+        val parser = TableParser()
+        val lexer = DefaultLayoutPdfLexer(
+            document,
+            structure,
+            mergeSubsequentTokens = false,
+            sortTokens = true,
         )
+        val table = parser.findTables(lexer, structure, tablePage, findNames = true)
+            .filter { it.name.contains("ammunition", ignoreCase = true) }
+            .asSequence()
+            .flatMap { parser.parseTable(it.tokens, columnCount = 7) }
 
-        val descriptionsByName = descriptionsByName(document, structure, descriptionPages).toList()
+        val descriptionsByName = descriptionParser.parse(document, structure, descriptionPages)
 
         return table
-            .asSequence()
             .filter { it.heading != null }
             .flatMap { section ->
-                val weaponGroups = matchEnumSetOrNull<RangedWeaponGroup>(section.heading!!, "and")
+                val weaponGroups = matchEnumSetOrNull<RangedWeaponGroup>(
+                    section.heading!!.replace("*", ""),
+                    separator = "and",
+                )
                     ?: error("Invalid ranged weapon groups: ${section.heading}")
 
                 section.rows.map { row ->
                     val price = PriceParser.parse(row[1])
                     val damage = row[5].trim().replace("–", "-")
                     val (name, packSize) = parseNameAndPackSize(row[0].trim())
+                    val comparableName = descriptionParser.comparableName(name)
+                    val qualitiesAndFlaws = row[6]
+
+                    val footnoteNumbers = sequenceOf(
+                        section.heading,
+                        name,
+                        damage,
+                        qualitiesAndFlaws,
+                    )
+                        .flatMap { parser.findFootnoteReferences(it) }
+                        .toSet()
 
                     Trapping(
                         id = uuid4(),
@@ -58,12 +78,27 @@ class AmmunitionParser(
                             weaponGroups = weaponGroups,
                             damage = DamageExpression(if (damage == "-") "+0" else damage),
                             range = range(row[4].trim()),
-                            qualities = parseFeatures(row[6]),
-                            flaws = parseFeatures(row[6]),
+                            qualities = parseFeatures(qualitiesAndFlaws),
+                            flaws = parseFeatures(qualitiesAndFlaws),
                         ),
-                        description = descriptionsByName.firstOrNull {
-                            name.startsWith(it.first, ignoreCase = true)
-                        }?.second ?: "",
+                        description = buildString {
+                            val footnotes = footnoteNumbers.mapNotNull { section.footnotes[it] }
+
+                            footnotes.forEach {
+                                append(it)
+                                append('\n')
+                            }
+
+                            val description = descriptionsByName.firstOrNull {
+                                comparableName.startsWith(it.first, ignoreCase = true)
+                            }?.second ?: return@buildString
+
+                            if (footnotes.isNotEmpty()) {
+                                append('\n')
+                            }
+
+                            append(description)
+                        },
                         isVisibleToPlayers = true,
                     )
                 }

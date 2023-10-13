@@ -54,7 +54,7 @@ class TalentParser {
             }
 
             description += stream.consumeUntil {
-                it is Token.Heading3 || it is Token.OptionsBoxHeading
+                it is Token.Heading3 || it is Token.BoxHeader
             }.filterIsInstance<Token.ParagraphToken>()
 
             // Drop the Options box tokens if necessary

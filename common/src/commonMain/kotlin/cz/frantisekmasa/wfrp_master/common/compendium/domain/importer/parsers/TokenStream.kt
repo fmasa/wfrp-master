@@ -27,6 +27,10 @@ class TokenStream(
         return consumeWhile { it is T } as List<T>
     }
 
+    fun consumeOne(): Token {
+        return consumeOneOfType()
+    }
+
     inline fun <reified T : Token> consumeOneOfType(): T {
         val tokens = consumeWhile(max = 1) { it is T }
         check(tokens.size == 1) { "Expected ${T::class.simpleName} on index $cursor, ${peek()} given" }

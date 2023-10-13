@@ -36,7 +36,7 @@ class SkillParser {
                 else -> error("Expected basic/advanced as skill type, $skillType found")
             }
             val (description, specialisations) = splitSpecialisationsFromDescription(
-                stream.consumeUntil { it is Token.Heading3 || it is Token.OptionsBoxHeading }
+                stream.consumeUntil { it is Token.Heading3 || it is Token.BoxHeader }
             )
 
             // Drop the Options box tokens if necessary

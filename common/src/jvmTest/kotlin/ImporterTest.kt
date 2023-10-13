@@ -1,5 +1,6 @@
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.SpellLore
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.TrappingType
+import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.books.ArchivesOfTheEmpire1
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.books.CoreRulebook
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.books.EnemyInShadowsCompanion
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.books.UpInArms
@@ -12,6 +13,7 @@ import java.io.InputStream
 import kotlin.test.Ignore
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertTrue
 
 @Ignore
 class ImporterTest {
@@ -50,6 +52,20 @@ class ImporterTest {
         withUpInArms { document ->
             val careers = UpInArms.importCareers(document)
             assertEquals(14, careers.size)
+            careers.forEach {
+                assertEquals(3, it.levels[0].characteristics.size)
+                assertEquals(1, it.levels[1].characteristics.size)
+                assertEquals(1, it.levels[2].characteristics.size)
+                assertEquals(1, it.levels[3].characteristics.size)
+            }
+        }
+    }
+
+    @Test
+    fun `careers import (Archives of the Empire I)`() {
+        withArchivesOfTheEmpire1 { document ->
+            val careers = ArchivesOfTheEmpire1.importCareers(document)
+            assertEquals(4, careers.size)
             careers.forEach {
                 assertEquals(3, it.levels[0].characteristics.size)
                 assertEquals(1, it.levels[1].characteristics.size)
@@ -205,6 +221,28 @@ class ImporterTest {
         }
     }
 
+    @Test
+    fun `trappings import (Archives of the Empire I)`() {
+        withArchivesOfTheEmpire1 { document ->
+            val trappings = ArchivesOfTheEmpire1.importTrappings(document)
+
+            trappings.forEach { assertTrue { it.description.isNotBlank() } }
+
+            assertEquals(
+                8,
+                trappings.count { it.trappingType is TrappingType.MeleeWeapon },
+            )
+            assertEquals(
+                6,
+                trappings.count { it.trappingType is TrappingType.RangedWeapon },
+            )
+            assertEquals(
+                4,
+                trappings.count { it.trappingType is TrappingType.Ammunition },
+            )
+        }
+    }
+
     private fun withCoreRuleBook(block: (Document) -> Unit) {
         loadDocument(javaClass.getResourceAsStream("rulebook.pdf") as InputStream)
             .use(block)
@@ -223,6 +261,11 @@ class ImporterTest {
 
     private fun withUpInArms(block: (Document) -> Unit) {
         loadDocument(javaClass.getResourceAsStream("up_in_arms.pdf") as InputStream)
+            .use(block)
+    }
+
+    private fun withArchivesOfTheEmpire1(block: (Document) -> Unit) {
+        loadDocument(javaClass.getResourceAsStream("archives_of_the_empire_1.pdf") as InputStream)
             .use(block)
     }
 }
