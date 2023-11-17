@@ -1,13 +1,12 @@
 package cz.frantisekmasa.wfrp_master.desktop
 
-import androidx.compose.material.DrawerValue
 import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.rememberDrawerState
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.key
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.ui.window.Window
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.window.application
-import cafe.adriel.voyager.navigator.Navigator
 import cz.frantisekmasa.wfrp_master.common.appModule
 import cz.frantisekmasa.wfrp_master.common.core.LocalStaticConfiguration
 import cz.frantisekmasa.wfrp_master.common.core.config.Platform
@@ -15,27 +14,18 @@ import cz.frantisekmasa.wfrp_master.common.core.config.StaticConfiguration
 import cz.frantisekmasa.wfrp_master.common.core.shared.LocalFileChooserFactory
 import cz.frantisekmasa.wfrp_master.common.core.shared.LocalFileSaverFactory
 import cz.frantisekmasa.wfrp_master.common.core.shared.LocalUrlOpener
-import cz.frantisekmasa.wfrp_master.common.core.ui.navigation.ProvideNavigationTransaction
-import cz.frantisekmasa.wfrp_master.common.core.ui.responsive.ScreenWithBreakpoints
-import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.KeyboardDispatcher
-import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.LocalKeyboardDispatcher
-import cz.frantisekmasa.wfrp_master.common.core.ui.theme.Theme
-import cz.frantisekmasa.wfrp_master.common.localization.FixedStrings
 import cz.frantisekmasa.wfrp_master.common.partyList.PartyListScreen
-import cz.frantisekmasa.wfrp_master.common.shell.DrawerShell
-import cz.frantisekmasa.wfrp_master.common.shell.SnackbarScaffold
 import cz.frantisekmasa.wfrp_master.desktop.interop.DesktopUrlOpener
 import cz.frantisekmasa.wfrp_master.desktop.interop.NativeFileChooser
 import cz.frantisekmasa.wfrp_master.desktop.interop.NativeFileSaver
-import kotlinx.coroutines.launch
+import io.github.aakira.napier.Napier
 import org.kodein.di.compose.withDI
+import java.util.UUID
 
 @ExperimentalMaterialApi
 object WfrpMasterApplication {
     @JvmStatic
     fun main(args: Array<String>) {
-        val keyboardDispatcher = KeyboardDispatcher()
-
         application {
             withDI(appModule) {
                 val coroutineScope = rememberCoroutineScope()
@@ -49,49 +39,38 @@ object WfrpMasterApplication {
                         version = "dev",
                         platform = Platform.Desktop,
                     ),
-                    LocalKeyboardDispatcher provides keyboardDispatcher,
                 ) {
-                    Window(
-                        title = FixedStrings.appName,
-                        onCloseRequest = ::exitApplication,
-                        onPreviewKeyEvent = {
-                            keyboardDispatcher.dispatch(it, beforeChildren = true)
-                        },
-                        onKeyEvent = {
-                            keyboardDispatcher.dispatch(it, beforeChildren = false)
-                        },
-                    ) {
-                        Theme {
-                            SnackbarScaffold {
-                                Startup {
-                                    ScreenWithBreakpoints {
-                                        val drawerState = rememberDrawerState(DrawerValue.Closed)
+                    val windows = rememberSaveable {
+                        mutableStateListOf(
+                            ApplicationWindowState(
+                                initialScreen = PartyListScreen,
+                                key = UUID.randomUUID(),
+                                isPrimary = true,
+                            )
+                        )
+                    }
 
-                                        Navigator(
-                                            screens = listOf(PartyListScreen),
-                                            onBackPressed = {
-                                                if (drawerState.isOpen) {
-                                                    coroutineScope.launch { drawerState.close() }
-                                                    return@Navigator false
-                                                }
-
-                                                true
-                                            }
-                                        ) { navigator ->
-                                            DrawerShell(drawerState) {
-                                                val screen = navigator.lastItem
-
-                                                navigator.saveableState("currentScreen") {
-                                                    ProvideNavigationTransaction(screen) {
-                                                        Shortcuts()
-                                                        screen.Content()
-                                                    }
-                                                }
-                                            }
-                                        }
+                    windows.forEach { window ->
+                        key(window.key) {
+                            ApplicationWindow(
+                                initialScreen = window.initialScreen,
+                                onNewWindowRequest = { initialScreen ->
+                                    windows += ApplicationWindowState(
+                                        initialScreen = initialScreen,
+                                        key = UUID.randomUUID(),
+                                        isPrimary = false,
+                                    )
+                                },
+                                onCloseRequest = {
+                                    if (window.isPrimary) {
+                                        Napier.d("Requested closing of primary window, exiting the app")
+                                        exitApplication()
+                                    } else {
+                                        Napier.d("Closing non-primary window")
+                                        windows.removeIf { it.key == window.key }
                                     }
-                                }
-                            }
+                                },
+                            )
                         }
                     }
                 }
