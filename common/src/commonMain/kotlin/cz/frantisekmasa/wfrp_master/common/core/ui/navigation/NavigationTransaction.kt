@@ -17,7 +17,7 @@ val LocalNavigationTransaction = staticCompositionLocalOf<NavigationTransaction>
  * This can be e.g. user clicking button multiple times.
  */
 class NavigationTransaction(
-    private val currentScreen: Screen,
+    val currentScreen: Screen,
     private val navigator: Navigator,
 ) {
     val canPop: Boolean get() = navigator.canPop
