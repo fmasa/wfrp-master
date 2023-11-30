@@ -59,14 +59,15 @@ fun CharacterAvatar(
                 ItemIcon(
                     url = url,
                     size = size,
-                    modifier = Modifier.clickable(
-                        enabled = zoomable,
-                        interactionSource = remember { MutableInteractionSource() },
-                        indication = rememberRipple(
-                            bounded = false,
-                        ),
-                        onClick = { dialogVisible = true },
-                    )
+                    modifier = if (zoomable)
+                        Modifier.clickable(
+                            interactionSource = remember { MutableInteractionSource() },
+                            indication = rememberRipple(
+                                bounded = false,
+                            ),
+                            onClick = { dialogVisible = true },
+                        )
+                    else Modifier
                 )
             }
         }
