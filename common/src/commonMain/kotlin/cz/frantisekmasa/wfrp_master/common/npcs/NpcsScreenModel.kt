@@ -15,8 +15,8 @@ import cz.frantisekmasa.wfrp_master.common.core.domain.spells.SpellRepository
 import cz.frantisekmasa.wfrp_master.common.core.domain.talents.TalentRepository
 import cz.frantisekmasa.wfrp_master.common.core.domain.traits.TraitRepository
 import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.InventoryItemRepository
-import cz.frantisekmasa.wfrp_master.common.firebase.firestore.Firestore
-import cz.frantisekmasa.wfrp_master.common.firebase.firestore.Transaction
+import dev.gitlive.firebase.firestore.FirebaseFirestore
+import dev.gitlive.firebase.firestore.Transaction
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 
@@ -30,7 +30,7 @@ class NpcsScreenModel(
     private val blessings: BlessingRepository,
     private val miracles: MiracleRepository,
     private val trappings: InventoryItemRepository,
-    private val firestore: Firestore,
+    private val firestore: FirebaseFirestore,
 ) : ScreenModel {
 
     val npcs: Flow<List<Character>> = characters.inParty(partyId, CharacterType.NPC)
@@ -40,20 +40,20 @@ class NpcsScreenModel(
     }
 
     suspend fun duplicate(npc: Character) {
-        firestore.runTransaction { transaction ->
+        firestore.runTransaction {
             val newNpc = npc.duplicate()
             val existingCharacterId = CharacterId(partyId, npc.id)
             val newCharacterId = CharacterId(partyId, newNpc.id)
 
-            copyItems(transaction, skills, existingCharacterId, newCharacterId)
-            copyItems(transaction, talents, existingCharacterId, newCharacterId)
-            copyItems(transaction, traits, existingCharacterId, newCharacterId)
-            copyItems(transaction, spells, existingCharacterId, newCharacterId)
-            copyItems(transaction, blessings, existingCharacterId, newCharacterId)
-            copyItems(transaction, miracles, existingCharacterId, newCharacterId)
-            copyItems(transaction, trappings, existingCharacterId, newCharacterId)
+            copyItems(this, skills, existingCharacterId, newCharacterId)
+            copyItems(this, talents, existingCharacterId, newCharacterId)
+            copyItems(this, traits, existingCharacterId, newCharacterId)
+            copyItems(this, spells, existingCharacterId, newCharacterId)
+            copyItems(this, blessings, existingCharacterId, newCharacterId)
+            copyItems(this, miracles, existingCharacterId, newCharacterId)
+            copyItems(this, trappings, existingCharacterId, newCharacterId)
 
-            characters.save(transaction, partyId, newNpc)
+            characters.save(this, partyId, newNpc)
         }
     }
 

@@ -27,7 +27,6 @@ kotlin {
             }
             dependencies {
                 implementation(compose.desktop.currentOs)
-                implementation(project(":common:firebase"))
                 implementation(project(":common"))
                 implementation("org.jetbrains.kotlinx:kotlinx-coroutines-swing:1.6.4")
                 implementation("org.slf4j:slf4j-simple:1.7.36")

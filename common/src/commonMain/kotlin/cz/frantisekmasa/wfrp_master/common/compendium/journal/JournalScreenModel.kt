@@ -1,5 +1,6 @@
 package cz.frantisekmasa.wfrp_master.common.compendium.journal
 
+import androidx.compose.runtime.Immutable
 import arrow.core.Either
 import cafe.adriel.voyager.core.model.ScreenModel
 import com.benasher44.uuid.Uuid
@@ -11,17 +12,16 @@ import cz.frantisekmasa.wfrp_master.common.core.domain.compendium.Compendium
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.PartyId
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.PartyRepository
 import cz.frantisekmasa.wfrp_master.common.core.utils.right
-import cz.frantisekmasa.wfrp_master.common.firebase.firestore.Firestore
+import dev.gitlive.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
-import javax.annotation.concurrent.Immutable
 
 class JournalScreenModel(
     private val partyId: PartyId,
     private val compendium: Compendium<JournalEntry>,
-    private val firestore: Firestore,
+    private val firestore: FirebaseFirestore,
     userProvider: UserProvider,
     parties: PartyRepository,
 ) : ScreenModel {
@@ -118,15 +118,15 @@ class JournalScreenModel(
     }
 
     suspend fun save(entry: JournalEntry) {
-        firestore.runTransaction { transaction ->
-            compendium.save(transaction, partyId, entry)
+        firestore.runTransaction {
+            compendium.save(this, partyId, entry)
         }
     }
 
     suspend fun duplicate(entryId: Uuid) {
-        firestore.runTransaction { transaction ->
+        firestore.runTransaction {
             compendium.save(
-                transaction,
+                this,
                 partyId,
                 compendium.getItem(partyId, entryId).duplicate(),
             )
@@ -136,8 +136,8 @@ class JournalScreenModel(
     suspend fun remove(entryId: Uuid) {
         val entry = compendium.findItem(partyId, entryId) ?: return
 
-        firestore.runTransaction { transaction ->
-            compendium.remove(transaction, partyId, entry)
+        firestore.runTransaction {
+            compendium.remove(this, partyId, entry)
         }
     }
 

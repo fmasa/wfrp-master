@@ -7,13 +7,13 @@ import cz.frantisekmasa.wfrp_master.common.core.domain.identifiers.CharacterId
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.PartyRepository
 import cz.frantisekmasa.wfrp_master.common.core.domain.talents.Talent
 import cz.frantisekmasa.wfrp_master.common.core.domain.talents.TalentRepository
-import cz.frantisekmasa.wfrp_master.common.firebase.firestore.Firestore
+import dev.gitlive.firebase.firestore.FirebaseFirestore
 
 class CharacterTalentDetailScreenModel(
     characterId: CharacterId,
     private val talentRepository: TalentRepository,
     private val effectManager: EffectManager,
-    private val firestore: Firestore,
+    private val firestore: FirebaseFirestore,
     userProvider: UserProvider,
     private val partyRepository: PartyRepository,
 ) : CharacterItemScreenModel<Talent>(
@@ -24,9 +24,9 @@ class CharacterTalentDetailScreenModel(
 ) {
 
     suspend fun updateTalent(talent: Talent, existingTalent: Talent?) {
-        firestore.runTransaction { transaction ->
+        firestore.runTransaction {
             effectManager.saveItem(
-                transaction,
+                this,
                 partyRepository.get(characterId.partyId),
                 characterId,
                 talentRepository,

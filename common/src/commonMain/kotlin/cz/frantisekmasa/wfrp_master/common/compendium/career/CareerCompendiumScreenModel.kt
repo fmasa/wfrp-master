@@ -7,12 +7,12 @@ import cz.frantisekmasa.wfrp_master.common.core.domain.character.Character
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.CharacterRepository
 import cz.frantisekmasa.wfrp_master.common.core.domain.compendium.Compendium
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.PartyId
-import cz.frantisekmasa.wfrp_master.common.firebase.firestore.Firestore
+import dev.gitlive.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.flow.Flow
 
 class CareerCompendiumScreenModel(
     private val partyId: PartyId,
-    private val firestore: Firestore,
+    private val firestore: FirebaseFirestore,
     compendium: Compendium<Career>,
     private val characters: CharacterRepository,
 ) : CompendiumItemScreenModel<Career>(partyId, compendium) {
@@ -33,20 +33,20 @@ class CareerCompendiumScreenModel(
     }
 
     override suspend fun update(compendiumItem: Career) {
-        firestore.runTransaction { transaction ->
-            compendium.save(transaction, partyId, compendiumItem)
+        firestore.runTransaction {
+            compendium.save(this, partyId, compendiumItem)
         }
     }
 
     override suspend fun remove(compendiumItem: Career) {
         val charactersWithCareer = characters.findByCompendiumCareer(partyId, compendiumItem.id)
 
-        firestore.runTransaction { transaction ->
-            compendium.remove(transaction, partyId, compendiumItem)
+        firestore.runTransaction {
+            compendium.remove(this, partyId, compendiumItem)
 
             charactersWithCareer.forEach { character ->
                 characters.save(
-                    transaction,
+                    this,
                     partyId,
                     unlinkCharacterFromCompendiumCareer(character, compendiumItem),
                 )

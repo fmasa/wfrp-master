@@ -46,6 +46,10 @@ kotlin {
                 api(compose.material)
                 api(compose.materialIconsExtended)
 
+                implementation("dev.gitlive:firebase-firestore:1.10.4")
+                implementation("dev.gitlive:firebase-auth:1.10.4")
+                implementation("dev.gitlive:firebase-functions:1.10.4")
+
                 implementation("org.jetbrains.kotlinx:kotlinx-collections-immutable:0.3.5")
 
                 implementation("io.github.mmolosay:debounce:1.0.0")
@@ -53,8 +57,6 @@ kotlin {
                 val voyagerVersion = "1.0.0-rc04"
                 api("cafe.adriel.voyager:voyager-navigator:$voyagerVersion")
                 api("cafe.adriel.voyager:voyager-transitions:$voyagerVersion")
-
-                api(project(":common:firebase"))
 
                 // Basic Kotlin stuff
                 api("org.jetbrains.kotlin:kotlin-stdlib:${Versions.kotlin}")
@@ -150,6 +152,9 @@ kotlin {
                 // Network availability check
                 implementation("com.github.pwittchen:reactivenetwork-rx2:3.0.8")
                 implementation("org.jetbrains.kotlinx:kotlinx-coroutines-rx2:1.6.4")
+
+
+                api("com.google.firebase:firebase-analytics-ktx:21.2.1")
             }
         }
 

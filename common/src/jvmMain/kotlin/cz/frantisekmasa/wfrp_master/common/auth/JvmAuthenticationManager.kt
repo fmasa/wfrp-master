@@ -1,12 +1,11 @@
 package cz.frantisekmasa.wfrp_master.common.auth
 
-import cz.frantisekmasa.wfrp_master.common.FirebaseTokenHolder
-import cz.frantisekmasa.wfrp_master.common.core.auth.User
-import cz.frantisekmasa.wfrp_master.common.core.auth.UserId
-import cz.frantisekmasa.wfrp_master.common.core.auth.UserProvider
 import cz.frantisekmasa.wfrp_master.common.core.shared.SettingsStorage
 import cz.frantisekmasa.wfrp_master.common.core.shared.edit
 import cz.frantisekmasa.wfrp_master.common.core.shared.stringKey
+import dev.gitlive.firebase.auth.FirebaseAuth
+import dev.gitlive.firebase.auth.FirebaseUser
+import dev.gitlive.firebase.auth.GoogleAuthProvider
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.post
@@ -14,111 +13,27 @@ import io.ktor.client.request.setBody
 import io.ktor.http.ContentType
 import io.ktor.http.HttpStatusCode
 import io.ktor.http.contentType
-import io.ktor.http.isSuccess
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.serialization.SerialName
+import kotlinx.coroutines.flow.map
 import kotlinx.serialization.Serializable
 
-class AuthenticationManager(
+class JvmAuthenticationManager(
+    val common: CommonAuthenticationManager,
+    private val auth: FirebaseAuth,
     private val http: HttpClient,
-    private val tokenHolder: FirebaseTokenHolder,
     private val settings: SettingsStorage,
-) : UserProvider {
-    private val statusFlow = MutableStateFlow<AuthenticationStatus?>(null)
-
-    override val userId: UserId? get() {
-        val status = statusFlow.value
-
-        if (status is AuthenticationStatus.Authenticated) {
-            return status.user.id
+) {
+    val status: Flow<AuthenticationStatus?> = auth.authStateChanged.map { user ->
+        if (user == null) {
+            AuthenticationStatus.NotAuthenticated
+        } else {
+            AuthenticationStatus.Authenticated(user)
         }
-
-        return null
     }
-
-    val status: Flow<AuthenticationStatus?> get() = statusFlow
 
     sealed interface AuthenticationStatus {
-        data class Authenticated(val user: User) : AuthenticationStatus
+        data class Authenticated(val user: FirebaseUser) : AuthenticationStatus
         object NotAuthenticated : AuthenticationStatus
-    }
-
-    suspend fun refreshUser(): UserRefreshResult {
-        val refreshToken = settings[REFRESH_TOKEN]
-
-        if (refreshToken == null) {
-            statusFlow.emit(AuthenticationStatus.NotAuthenticated)
-            return UserRefreshResult.NO_VALID_TOKEN
-        }
-
-        val idToken = getIdToken(refreshToken)
-
-        if (idToken == null) {
-            statusFlow.emit(AuthenticationStatus.NotAuthenticated)
-            return UserRefreshResult.NO_VALID_TOKEN
-        }
-
-        updateIdToken(idToken)
-
-        return UserRefreshResult.SUCCESS
-    }
-
-    private suspend fun getIdToken(refreshToken: String): String? {
-        val response = http.post("https://securetoken.googleapis.com/v1/token?key=$API_KEY") {
-            contentType(ContentType.Application.Json)
-            setBody(IdTokenRequest(refreshToken, "refresh_token"))
-        }
-
-        if (!response.status.isSuccess()) {
-            return null
-        }
-
-        val body = response.body<IdTokenResponse>()
-
-        settings.edit(REFRESH_TOKEN, body.refreshToken)
-
-        return body.idToken
-    }
-
-    @Serializable
-    data class IdTokenRequest(
-        @SerialName("refresh_token")
-        val refreshToken: String,
-        @SerialName("grant_type")
-        val grantType: String,
-    )
-
-    @Serializable
-    data class IdTokenResponse(
-        @SerialName("refresh_token")
-        val refreshToken: String,
-        @SerialName("id_token")
-        val idToken: String,
-    )
-
-    private suspend fun updateIdToken(idToken: String) {
-        tokenHolder.setToken(idToken)
-
-        val response: GetUserDataResponse = http.post(
-            "https://identitytoolkit.googleapis.com/v1/accounts:lookup?key=$API_KEY"
-        ) {
-            contentType(ContentType.Application.Json)
-            setBody(GetUserDataRequest(idToken))
-        }.body()
-
-        response.users.firstOrNull()?.let { statusFlow.emit(AuthenticationStatus.Authenticated(it)) }
-    }
-
-    @Serializable
-    data class GetUserDataRequest(val idToken: String)
-
-    @Serializable
-    data class GetUserDataResponse(val users: List<User>)
-
-    enum class UserRefreshResult {
-        NO_VALID_TOKEN,
-        SUCCESS
     }
 
     suspend fun signIn(email: String, password: String): SignInResponse {
@@ -136,15 +51,13 @@ class AuthenticationManager(
         val body: SignInResponse.Success = response.body()
 
         settings.edit(REFRESH_TOKEN, body.refreshToken)
-        updateIdToken(body.idToken)
+        auth.signInWithCredential(GoogleAuthProvider.credential(body.idToken, null))
 
         return body
     }
 
     suspend fun logout() {
-        tokenHolder.setToken(null)
-        settings.edit(REFRESH_TOKEN, null)
-        statusFlow.emit(AuthenticationStatus.NotAuthenticated)
+        auth.signOut()
     }
 
     @Serializable

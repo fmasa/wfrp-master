@@ -9,12 +9,12 @@ import cz.frantisekmasa.wfrp_master.common.core.domain.party.Party
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.PartyId
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.PartyRepository
 import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.InventoryItem
-import cz.frantisekmasa.wfrp_master.common.firebase.firestore.Firestore
-import cz.frantisekmasa.wfrp_master.common.firebase.firestore.Transaction
+import dev.gitlive.firebase.firestore.FirebaseFirestore
+import dev.gitlive.firebase.firestore.Transaction
 
 class TrappingCompendiumScreenModel(
     partyId: PartyId,
-    firestore: Firestore,
+    firestore: FirebaseFirestore,
     compendium: Compendium<Trapping>,
     characterItems: CharacterItemRepository<InventoryItem>,
     parties: PartyRepository,

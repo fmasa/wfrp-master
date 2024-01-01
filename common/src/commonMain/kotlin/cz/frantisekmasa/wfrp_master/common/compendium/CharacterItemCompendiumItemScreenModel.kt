@@ -8,12 +8,12 @@ import cz.frantisekmasa.wfrp_master.common.core.domain.identifiers.CharacterId
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.Party
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.PartyId
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.PartyRepository
-import cz.frantisekmasa.wfrp_master.common.firebase.firestore.Firestore
-import cz.frantisekmasa.wfrp_master.common.firebase.firestore.Transaction
+import dev.gitlive.firebase.firestore.FirebaseFirestore
+import dev.gitlive.firebase.firestore.Transaction
 
 abstract class CharacterItemCompendiumItemScreenModel<A : CompendiumItem<A>, B : CharacterItem<B, A>>(
     private val partyId: PartyId,
-    private val firestore: Firestore,
+    private val firestore: FirebaseFirestore,
     compendium: Compendium<A>,
     protected val characterItems: CharacterItemRepository<B>,
     private val parties: PartyRepository,
@@ -23,11 +23,11 @@ abstract class CharacterItemCompendiumItemScreenModel<A : CompendiumItem<A>, B :
         val characterItems = characterItems.findByCompendiumId(partyId, compendiumItem.id)
         val party = parties.get(partyId)
 
-        firestore.runTransaction { transaction ->
-            compendium.save(transaction, partyId, compendiumItem)
+        firestore.runTransaction {
+            compendium.save(this, partyId, compendiumItem)
             characterItems.forEach { (characterId, item) ->
                 updateCharacterItem(
-                    transaction,
+                    this,
                     party,
                     characterId,
                     item,
@@ -41,11 +41,11 @@ abstract class CharacterItemCompendiumItemScreenModel<A : CompendiumItem<A>, B :
         val characterItems = characterItems.findByCompendiumId(partyId, compendiumItem.id)
         val party = parties.get(partyId)
 
-        firestore.runTransaction { transaction ->
-            compendium.remove(transaction, partyId, compendiumItem)
+        firestore.runTransaction {
+            compendium.remove(this, partyId, compendiumItem)
             characterItems.forEach { (characterId, item) ->
                 updateCharacterItem(
-                    transaction,
+                    this,
                     party,
                     characterId,
                     item,
