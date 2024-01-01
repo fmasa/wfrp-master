@@ -8,7 +8,7 @@ import cz.frantisekmasa.wfrp_master.common.core.domain.compendium.Compendium
 import cz.frantisekmasa.wfrp_master.common.core.domain.identifiers.CharacterId
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.PartyRepository
 import cz.frantisekmasa.wfrp_master.common.core.domain.traits.Trait
-import cz.frantisekmasa.wfrp_master.common.firebase.firestore.Firestore
+import dev.gitlive.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.flow.map
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.Trait as CompendiumTrait
 
@@ -17,7 +17,7 @@ class AddTraitScreenModel(
     private val traits: CharacterItemRepository<Trait>,
     compendium: Compendium<CompendiumTrait>,
     private val effectManager: EffectManager,
-    private val firestore: Firestore,
+    private val firestore: FirebaseFirestore,
     private val parties: PartyRepository,
     availableCompendiumItemsFactory: AvailableCompendiumItemsFactory,
 ) : ScreenModel {
@@ -28,10 +28,10 @@ class AddTraitScreenModel(
     ).map { AddTraitScreenState(availableCompendiumItems = it) }
 
     suspend fun saveNewTrait(trait: Trait) {
-        firestore.runTransaction { transaction ->
+        firestore.runTransaction {
             effectManager.saveItem(
-                transaction,
-                parties.get(characterId.partyId),
+                this,
+                parties.get(this, characterId.partyId),
                 characterId,
                 repository = traits,
                 item = trait,

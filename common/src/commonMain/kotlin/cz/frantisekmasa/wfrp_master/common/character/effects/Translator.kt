@@ -1,9 +1,9 @@
 package cz.frantisekmasa.wfrp_master.common.character.effects
 
+import androidx.compose.runtime.Immutable
 import cz.frantisekmasa.wfrp_master.common.settings.Language
 import dev.icerock.moko.resources.StringResource
 import java.util.Locale
-import javax.annotation.concurrent.Immutable
 
 @Immutable
 interface Translator {

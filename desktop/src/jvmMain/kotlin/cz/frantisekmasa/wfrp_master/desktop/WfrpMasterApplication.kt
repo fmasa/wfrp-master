@@ -14,6 +14,7 @@ import cz.frantisekmasa.wfrp_master.common.core.config.StaticConfiguration
 import cz.frantisekmasa.wfrp_master.common.core.shared.LocalFileChooserFactory
 import cz.frantisekmasa.wfrp_master.common.core.shared.LocalFileSaverFactory
 import cz.frantisekmasa.wfrp_master.common.core.shared.LocalUrlOpener
+import cz.frantisekmasa.wfrp_master.common.firebase.initializeFirebase
 import cz.frantisekmasa.wfrp_master.common.partyList.PartyListScreen
 import cz.frantisekmasa.wfrp_master.desktop.interop.DesktopUrlOpener
 import cz.frantisekmasa.wfrp_master.desktop.interop.NativeFileChooser
@@ -26,6 +27,7 @@ import java.util.UUID
 object WfrpMasterApplication {
     @JvmStatic
     fun main(args: Array<String>) {
+        initializeFirebase()
         application {
             withDI(appModule) {
                 val coroutineScope = rememberCoroutineScope()

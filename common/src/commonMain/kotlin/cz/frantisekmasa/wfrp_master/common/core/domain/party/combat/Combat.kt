@@ -2,17 +2,16 @@ package cz.frantisekmasa.wfrp_master.common.core.domain.party.combat
 
 import androidx.compose.runtime.Immutable
 import com.benasher44.uuid.Uuid
+import cz.frantisekmasa.wfrp_master.common.core.serialization.UuidAsString
 import dev.icerock.moko.parcelize.Parcelable
 import dev.icerock.moko.parcelize.Parcelize
-import kotlinx.serialization.Contextual
 import kotlinx.serialization.Serializable
 
 @Parcelize
 @Serializable
 @Immutable
 data class Combat(
-    @Contextual
-    val encounterId: Uuid,
+    val encounterId: UuidAsString,
     private var combatants: List<Combatant>,
     private val turn: Int = 1,
     private val round: Int = 1,

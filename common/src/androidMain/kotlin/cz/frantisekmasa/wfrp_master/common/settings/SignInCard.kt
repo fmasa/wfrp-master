@@ -35,7 +35,7 @@ import androidx.compose.ui.window.Dialog
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.firebase.auth.FirebaseAuthUserCollisionException
 import cz.frantisekmasa.wfrp_master.common.Str
-import cz.frantisekmasa.wfrp_master.common.auth.AuthenticationManager
+import cz.frantisekmasa.wfrp_master.common.auth.AndroidAuthenticationManager
 import cz.frantisekmasa.wfrp_master.common.auth.LocalWebClientId
 import cz.frantisekmasa.wfrp_master.common.core.auth.LocalUser
 import cz.frantisekmasa.wfrp_master.common.core.shared.Resources
@@ -61,7 +61,7 @@ import org.kodein.di.instance
 
 @Composable
 actual fun SignInCard(settingsScreenModel: SettingsScreenModel) {
-    val authManager: AuthenticationManager by localDI().instance()
+    val authManager: AndroidAuthenticationManager by localDI().instance()
     val webClientId = LocalWebClientId.current
     val contract = remember(authManager) { authManager.googleSignInContract(webClientId) }
     val context = LocalContext.current
@@ -152,7 +152,7 @@ actual fun SignInCard(settingsScreenModel: SettingsScreenModel) {
 
 @Composable
 fun ConfirmSignInDialog(
-    authManager: AuthenticationManager,
+    authManager: AndroidAuthenticationManager,
     idToken: String,
     screenModel: SettingsScreenModel,
     onDismissRequest: () -> Unit,

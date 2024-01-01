@@ -1,11 +1,10 @@
 package cz.frantisekmasa.wfrp_master.common.compendium.domain
 
 import androidx.compose.runtime.Immutable
-import com.benasher44.uuid.Uuid
 import com.benasher44.uuid.uuid4
 import cz.frantisekmasa.wfrp_master.common.core.common.requireMaxLength
+import cz.frantisekmasa.wfrp_master.common.core.serialization.UuidAsString
 import dev.icerock.moko.parcelize.Parcelize
-import kotlinx.serialization.Contextual
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -13,7 +12,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 @Immutable
 data class JournalEntry(
-    @Contextual override val id: Uuid,
+    override val id: UuidAsString,
     override val name: String,
     val text: String,
     val gmText: String,

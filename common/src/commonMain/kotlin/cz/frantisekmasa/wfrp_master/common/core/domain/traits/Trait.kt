@@ -2,7 +2,6 @@ package cz.frantisekmasa.wfrp_master.common.core.domain.traits
 
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.Stable
-import com.benasher44.uuid.Uuid
 import com.benasher44.uuid.uuid4
 import cz.frantisekmasa.wfrp_master.common.character.effects.CharacterEffect
 import cz.frantisekmasa.wfrp_master.common.character.effects.CharacteristicChange
@@ -12,8 +11,8 @@ import cz.frantisekmasa.wfrp_master.common.character.effects.SizeChange
 import cz.frantisekmasa.wfrp_master.common.character.effects.SwarmWoundsModification
 import cz.frantisekmasa.wfrp_master.common.character.effects.Translator
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.CharacterItem
+import cz.frantisekmasa.wfrp_master.common.core.serialization.UuidAsString
 import dev.icerock.moko.parcelize.Parcelize
-import kotlinx.serialization.Contextual
 import kotlinx.serialization.Serializable
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.Trait as CompendiumTrait
 
@@ -21,8 +20,8 @@ import cz.frantisekmasa.wfrp_master.common.compendium.domain.Trait as Compendium
 @Serializable
 @Immutable
 data class Trait(
-    @Contextual override val id: Uuid,
-    @Contextual override val compendiumId: Uuid,
+    override val id: UuidAsString,
+    override val compendiumId: UuidAsString,
     val name: String,
     val specificationValues: Map<String, String>,
     val description: String,

@@ -1,20 +1,19 @@
 package cz.frantisekmasa.wfrp_master.common.compendium.domain
 
-import com.benasher44.uuid.Uuid
 import com.benasher44.uuid.uuid4
 import cz.frantisekmasa.wfrp_master.common.core.domain.Characteristic
 import cz.frantisekmasa.wfrp_master.common.core.domain.SocialClass
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.Race
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.SocialStatus
+import cz.frantisekmasa.wfrp_master.common.core.serialization.UuidAsString
 import dev.icerock.moko.parcelize.Parcelable
 import dev.icerock.moko.parcelize.Parcelize
-import kotlinx.serialization.Contextual
 import kotlinx.serialization.Serializable
 
 @Parcelize
 @Serializable
 data class Career(
-    @Contextual override val id: Uuid,
+    override val id: UuidAsString,
     override val name: String,
     val description: String,
     val socialClass: SocialClass,
@@ -58,7 +57,7 @@ data class Career(
     @Parcelize
     @Serializable
     data class Level(
-        @Contextual val id: Uuid,
+        val id: UuidAsString,
         val name: String,
         val status: SocialStatus,
         val characteristics: Set<Characteristic>,

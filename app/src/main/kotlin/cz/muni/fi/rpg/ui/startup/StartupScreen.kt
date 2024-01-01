@@ -21,7 +21,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import cz.frantisekmasa.wfrp_master.common.Str
-import cz.frantisekmasa.wfrp_master.common.auth.AuthenticationManager
+import cz.frantisekmasa.wfrp_master.common.auth.AndroidAuthenticationManager
 import cz.frantisekmasa.wfrp_master.common.auth.LocalWebClientId
 import cz.frantisekmasa.wfrp_master.common.core.shared.Resources
 import cz.frantisekmasa.wfrp_master.common.core.shared.drawableResource
@@ -36,11 +36,11 @@ import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
 
 @Composable
-fun StartupScreen(authenticationManager: AuthenticationManager): Unit = Box {
+fun StartupScreen(authenticationManager: AndroidAuthenticationManager): Unit = Box {
 
     var signInButtonVisible by rememberSaveable { mutableStateOf(false) }
 
-    val authenticated by authenticationManager.authenticated.collectWithLifecycle()
+    val authenticated by authenticationManager.common.authenticated.collectWithLifecycle()
 
     Napier.d("Authenticated: $authenticated")
 
@@ -94,7 +94,7 @@ fun StartupScreen(authenticationManager: AuthenticationManager): Unit = Box {
 
 @Composable
 private fun rememberGoogleSignInLauncher(
-    authenticationManager: AuthenticationManager,
+    authenticationManager: AndroidAuthenticationManager,
     onFailure: () -> Unit,
 ): () -> Unit {
     val webClientId = LocalWebClientId.current

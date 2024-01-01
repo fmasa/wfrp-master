@@ -1,14 +1,13 @@
 package cz.frantisekmasa.wfrp_master.common
 
-import com.google.auth.oauth2.IdToken
-import com.google.auth.oauth2.IdTokenCredentials
-import com.google.cloud.firestore.FirestoreOptions
-import cz.frantisekmasa.wfrp_master.common.auth.AuthenticationManager
+import cz.frantisekmasa.wfrp_master.common.auth.CommonAuthenticationManager
+import cz.frantisekmasa.wfrp_master.common.auth.JvmAuthenticationManager
 import cz.frantisekmasa.wfrp_master.common.character.effects.JvmTranslator
 import cz.frantisekmasa.wfrp_master.common.character.effects.Translator
 import cz.frantisekmasa.wfrp_master.common.core.shared.SettingsStorage
-import cz.frantisekmasa.wfrp_master.common.firebase.firestore.Firestore
-import cz.frantisekmasa.wfrp_master.common.firebase.functions.CloudFunctions
+import dev.gitlive.firebase.Firebase
+import dev.gitlive.firebase.firestore.firestore
+import dev.gitlive.firebase.functions.functions
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.HttpClientEngine
 import io.ktor.client.engine.cio.CIO
@@ -37,55 +36,27 @@ internal actual val platformModule = DI.Module("jvm") {
         }
     }
 
-    val firebaseProjectId = "dnd-master-58fca"
-    val region = "us-central1"
-
     bindSingleton { SettingsStorage() }
-    bindSingleton { AuthenticationManager(instance(), instance(), instance()) }
 
-    bindSingleton { FirebaseTokenHolder() }
+    bindSingleton { CommonAuthenticationManager(instance(), supportsEmail = false) }
+    bindSingleton { JvmAuthenticationManager(instance(), instance(), instance(), instance()) }
+
     bindSingleton {
-        CloudFunctions(
-            instance<FirebaseTokenHolder>().getToken(),
-            firebaseProjectId,
-            region,
-            instance(),
-        )
+        Firebase.functions.apply {
+            System.getProperty("functionsEmulatorUrl")?.let {
+                val (host, port) = it.split(':')
+                useEmulator(host, port.toInt())
+            }
+        }
     }
     bindSingleton {
-        val tokenHolder: FirebaseTokenHolder = instance()
-        val firestore = FirestoreOptions.newBuilder()
-            .apply {
-                System.getProperty("firestoreEmulatorHost")?.let {
-                    setEmulatorHost(it)
-                }
+        Firebase.firestore.apply {
+            System.getProperty("firestoreEmulatorUrl")?.let {
+                val (host, port) = it.split(':')
+                useEmulator(host, port.toInt())
             }
-            .setProjectId(firebaseProjectId)
-            .setCredentialsProvider {
-                IdTokenCredentials.newBuilder()
-                    .setTargetAudience("what is this?")
-                    .setIdTokenProvider { _, _ -> IdToken.create(tokenHolder.getToken()) }
-                    .build()
-            }.build()
-            .service
-
-        Firestore(firestore)
+        }
     }
 
     bindSingleton { Translator.Factory { JvmTranslator(it) } }
-
-//
-//    bindSingleton {
-//        val functions = Firebase.functions
-//        val url = BuildConfig.FUNCTIONS_EMULATOR_URL
-//
-//        @Suppress("ConstantConditionIf")
-//        if (url != "") {
-//            val parts = url.split(':')
-//
-//            functions.useEmulator(parts[0], parts[1].toInt())
-//        }
-//
-//        functions
-//    }
 }

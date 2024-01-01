@@ -1,7 +1,6 @@
 package cz.frantisekmasa.wfrp_master.common.core.domain.character
 
 import androidx.compose.runtime.Immutable
-import com.benasher44.uuid.Uuid
 import cz.frantisekmasa.wfrp_master.common.core.auth.UserId
 import cz.frantisekmasa.wfrp_master.common.core.common.requireMaxLength
 import cz.frantisekmasa.wfrp_master.common.core.domain.Ambitions
@@ -9,10 +8,10 @@ import cz.frantisekmasa.wfrp_master.common.core.domain.Money
 import cz.frantisekmasa.wfrp_master.common.core.domain.Size
 import cz.frantisekmasa.wfrp_master.common.core.domain.Stats
 import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.Encumbrance
+import cz.frantisekmasa.wfrp_master.common.core.serialization.UuidAsString
 import cz.frantisekmasa.wfrp_master.common.encounters.domain.Wounds
 import dev.icerock.moko.parcelize.Parcelable
 import dev.icerock.moko.parcelize.Parcelize
-import kotlinx.serialization.Contextual
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -92,8 +91,8 @@ data class Character(
     @Parcelize
     @Serializable
     data class CompendiumCareer(
-        @Contextual val careerId: Uuid,
-        @Contextual val levelId: Uuid,
+        val careerId: UuidAsString,
+        val levelId: UuidAsString,
     ) : Parcelable
 
     fun updateCharacteristics(base: Stats, advances: Stats): Character {

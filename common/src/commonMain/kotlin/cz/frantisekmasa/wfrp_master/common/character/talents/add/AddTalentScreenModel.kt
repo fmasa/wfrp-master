@@ -8,7 +8,7 @@ import cz.frantisekmasa.wfrp_master.common.core.domain.compendium.Compendium
 import cz.frantisekmasa.wfrp_master.common.core.domain.identifiers.CharacterId
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.PartyRepository
 import cz.frantisekmasa.wfrp_master.common.core.domain.talents.Talent
-import cz.frantisekmasa.wfrp_master.common.firebase.firestore.Firestore
+import dev.gitlive.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.flow.map
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.Talent as CompendiumTalent
 
@@ -17,7 +17,7 @@ class AddTalentScreenModel(
     private val talents: CharacterItemRepository<Talent>,
     private val compendium: Compendium<CompendiumTalent>,
     private val effectManager: EffectManager,
-    private val firestore: Firestore,
+    private val firestore: FirebaseFirestore,
     private val parties: PartyRepository,
     availableCompendiumItemsFactory: AvailableCompendiumItemsFactory,
 ) : ScreenModel {
@@ -33,10 +33,10 @@ class AddTalentScreenModel(
     }
 
     suspend fun addTalent(talent: Talent) {
-        firestore.runTransaction { transaction ->
+        firestore.runTransaction {
             effectManager.saveItem(
-                transaction,
-                parties.get(characterId.partyId),
+                this,
+                parties.get(this, characterId.partyId),
                 characterId,
                 talents,
                 item = talent,

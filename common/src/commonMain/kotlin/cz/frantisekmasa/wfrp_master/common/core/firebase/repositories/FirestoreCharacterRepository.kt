@@ -9,30 +9,31 @@ import cz.frantisekmasa.wfrp_master.common.core.domain.character.CharacterReposi
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.CharacterType
 import cz.frantisekmasa.wfrp_master.common.core.domain.identifiers.CharacterId
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.PartyId
-import cz.frantisekmasa.wfrp_master.common.core.firebase.AggregateMapper
 import cz.frantisekmasa.wfrp_master.common.core.firebase.Schema
-import cz.frantisekmasa.wfrp_master.common.core.firebase.documents
-import cz.frantisekmasa.wfrp_master.common.firebase.firestore.Firestore
-import cz.frantisekmasa.wfrp_master.common.firebase.firestore.FirestoreException
-import cz.frantisekmasa.wfrp_master.common.firebase.firestore.SetOptions
-import cz.frantisekmasa.wfrp_master.common.firebase.firestore.Transaction
+import dev.gitlive.firebase.firestore.FirebaseFirestore
+import dev.gitlive.firebase.firestore.FirebaseFirestoreException
+import dev.gitlive.firebase.firestore.Transaction
+import dev.gitlive.firebase.firestore.orderBy
+import dev.gitlive.firebase.firestore.where
 import io.github.aakira.napier.Napier
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
 class FirestoreCharacterRepository(
-    firestore: Firestore,
-    private val mapper: AggregateMapper<Character>
+    firestore: FirebaseFirestore,
 ) : CharacterRepository {
     private val parties = firestore.collection(Schema.Parties)
 
     override suspend fun save(partyId: PartyId, character: Character) {
-        val data = mapper.toDocumentData(character)
-
-        Napier.d("Saving character $data in party $partyId to firestore")
+        Napier.d("Saving character $character in party $partyId to firestore")
         characters(partyId)
             .document(character.id)
-            .set(data, SetOptions.mergeFields(data.keys))
+            .set(
+                strategy = Character.serializer(),
+                data = character,
+                merge = true,
+                encodeDefaults = true,
+            )
     }
 
     override fun save(
@@ -40,26 +41,29 @@ class FirestoreCharacterRepository(
         partyId: PartyId,
         character: Character
     ) {
-        val data = mapper.toDocumentData(character)
-
-        Napier.d("Saving character $data in party $partyId to firestore")
+        Napier.d("Saving character $character in party $partyId to firestore")
 
         transaction.set(
-            characters(partyId).document(character.id),
-            data,
-            SetOptions.mergeFields(data.keys),
+            documentRef = characters(partyId).document(character.id),
+            strategy = Character.serializer(),
+            data = character,
+            merge = true,
+            encodeDefaults = true,
         )
     }
 
     override suspend fun get(characterId: CharacterId): Character {
         try {
-            val data = characters(characterId.partyId)
+            val snapshot = characters(characterId.partyId)
                 .document(characterId.id)
                 .get()
-                .data ?: throw CharacterNotFound(characterId)
 
-            return mapper.fromDocumentData(data)
-        } catch (e: FirestoreException) {
+            if (!snapshot.exists) {
+                throw CharacterNotFound(characterId)
+            }
+
+            return snapshot.data(Character.serializer())
+        } catch (e: FirebaseFirestoreException) {
             throw CharacterNotFound(characterId, e)
         }
     }
@@ -69,18 +73,14 @@ class FirestoreCharacterRepository(
             .document(characterId.id)
             .snapshots
             .map {
-                it.fold(
-                    { snapshot ->
-                        snapshot.data?.let(mapper::fromDocumentData)?.right()
-                            ?: CharacterNotFound(characterId).left()
-                    },
-                    { error -> CharacterNotFound(characterId, error).left() },
-                )
+                if (it.exists)
+                    it.data(Character.serializer()).right()
+                else CharacterNotFound(characterId).left()
             }
 
     override suspend fun hasCharacterInParty(userId: String, partyId: PartyId): Boolean {
         return characters(partyId)
-            .whereEqualTo("userId", userId)
+            .where("userId", equalTo = userId)
             .get()
             .documents
             .isNotEmpty()
@@ -91,19 +91,21 @@ class FirestoreCharacterRepository(
         careerId: Uuid,
     ): List<Character> {
         return characters(partyId)
-            .whereEqualTo("compendiumCareer.careerId", careerId.toString())
+            .where("compendiumCareer.careerId", equalTo = careerId.toString())
             .get()
             .documents
-            .mapNotNull { it.data }
-            .map(mapper::fromDocumentData)
+            .map { it.data(Character.serializer()) }
     }
 
     override fun inParty(partyId: PartyId, types: Set<CharacterType>): Flow<List<Character>> {
         return characters(partyId)
-            .whereEqualTo("archived", false)
-            .whereIn("type", types.map { it.name })
+            .where { "archived" equalTo false }
+            .where { "type" inArray types.map { it.name } }
             .orderBy("name")
-            .documents(mapper)
+            .snapshots
+            .map { snapshot ->
+                snapshot.documents.map { it.data(Character.serializer()) }
+            }
     }
 
     private fun characters(partyId: PartyId) =

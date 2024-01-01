@@ -2,7 +2,6 @@ package cz.frantisekmasa.wfrp_master.common.core.domain.talents
 
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.Stable
-import com.benasher44.uuid.Uuid
 import com.benasher44.uuid.uuid4
 import cz.frantisekmasa.wfrp_master.common.character.effects.AdditionalEncumbrance
 import cz.frantisekmasa.wfrp_master.common.character.effects.CharacterEffect
@@ -12,8 +11,8 @@ import cz.frantisekmasa.wfrp_master.common.character.effects.HardyWoundsModifica
 import cz.frantisekmasa.wfrp_master.common.character.effects.Translator
 import cz.frantisekmasa.wfrp_master.common.core.common.requireMaxLength
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.CharacterItem
+import cz.frantisekmasa.wfrp_master.common.core.serialization.UuidAsString
 import dev.icerock.moko.parcelize.Parcelize
-import kotlinx.serialization.Contextual
 import kotlinx.serialization.Serializable
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.Talent as CompendiumTalent
 
@@ -21,8 +20,8 @@ import cz.frantisekmasa.wfrp_master.common.compendium.domain.Talent as Compendiu
 @Serializable
 @Immutable
 data class Talent(
-    @Contextual override val id: Uuid,
-    @Contextual override val compendiumId: Uuid? = null,
+    override val id: UuidAsString,
+    override val compendiumId: UuidAsString? = null,
     val name: String,
     val tests: String = "", // TODO: Remove default value in 3.0
     val maxTimesTaken: String = "", // TODO: Remove default value in 3.0

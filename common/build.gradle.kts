@@ -20,7 +20,7 @@ kotlin {
     jvm()
 
     tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
-        kotlinOptions.jvmTarget = "11"
+        kotlinOptions.jvmTarget = "17"
     }
 
     sourceSets {
@@ -46,6 +46,12 @@ kotlin {
                 api(compose.material)
                 api(compose.materialIconsExtended)
 
+                val firebaseVersion = "1.12.0"
+                implementation("dev.gitlive:firebase-common:$firebaseVersion")
+                implementation("dev.gitlive:firebase-firestore:$firebaseVersion")
+                implementation("dev.gitlive:firebase-auth:$firebaseVersion")
+                implementation("dev.gitlive:firebase-functions:$firebaseVersion")
+
                 implementation("org.jetbrains.kotlinx:kotlinx-collections-immutable:0.3.5")
 
                 implementation("io.github.mmolosay:debounce:1.0.0")
@@ -54,8 +60,6 @@ kotlin {
                 api("cafe.adriel.voyager:voyager-navigator:$voyagerVersion")
                 api("cafe.adriel.voyager:voyager-transitions:$voyagerVersion")
 
-                api(project(":common:firebase"))
-
                 // Basic Kotlin stuff
                 api("org.jetbrains.kotlin:kotlin-stdlib:${Versions.kotlin}")
 
@@ -63,7 +67,7 @@ kotlin {
                 api("org.kodein.di:kodein-di-framework-compose:$kodeinVersion")
                 implementation("org.kodein.di:kodein-di:$kodeinVersion")
 
-                implementation("io.arrow-kt:arrow-core:1.0.1")
+                api("io.arrow-kt:arrow-core:1.0.1")
 
                 // Parser combinator library (grammars etc.)
                 implementation("com.github.h0tk3y.betterParse:better-parse:0.4.2")
@@ -72,7 +76,7 @@ kotlin {
                 implementation("com.benasher44:uuid:0.3.1")
 
                 // JSON encoding
-                api("org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.2")
+                api("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.0")
 
                 // Logging
                 api("io.github.aakira:napier:${Versions.napier}")
@@ -122,7 +126,6 @@ kotlin {
 
                 // Authentication
                 api("com.google.android.gms:play-services-auth:20.4.1")
-                implementation("com.google.firebase:firebase-auth-ktx:21.2.0")
                 implementation("com.google.firebase:firebase-dynamic-links-ktx:21.1.0")
 
                 // Shared Preferences DataStore
@@ -150,6 +153,8 @@ kotlin {
                 // Network availability check
                 implementation("com.github.pwittchen:reactivenetwork-rx2:3.0.8")
                 implementation("org.jetbrains.kotlinx:kotlinx-coroutines-rx2:1.6.4")
+
+                api("com.google.firebase:firebase-analytics-ktx:21.2.1")
             }
         }
 
@@ -213,8 +218,8 @@ android {
         // Allow use of Java 8 APIs on older Android versions
         isCoreLibraryDesugaringEnabled = true
 
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
 
     sourceSets {

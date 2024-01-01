@@ -4,32 +4,42 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
-import cz.frantisekmasa.wfrp_master.common.auth.AuthenticationManager
-import cz.frantisekmasa.wfrp_master.common.auth.AuthenticationManager.AuthenticationStatus
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import cz.frantisekmasa.wfrp_master.common.auth.JvmAuthenticationManager
 import cz.frantisekmasa.wfrp_master.common.core.auth.LocalUser
 import cz.frantisekmasa.wfrp_master.common.shell.SplashScreen
 import cz.frantisekmasa.wfrp_master.desktop.auth.AuthenticationScreen
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.delay
 import org.kodein.di.compose.localDI
 import org.kodein.di.instance
+import kotlin.time.Duration.Companion.seconds
 
 @Composable
 fun Startup(content: @Composable () -> Unit) {
-    val auth: AuthenticationManager by localDI().instance()
+    val auth: JvmAuthenticationManager by localDI().instance()
 
-    LaunchedEffect(Unit) {
-        withContext(Dispatchers.IO) {
-            auth.refreshUser()
+    val user = auth.common.user.collectAsState(null).value
+    var authenticationScreenVisible by remember { mutableStateOf(false) }
+
+    if (authenticationScreenVisible) {
+        AuthenticationScreen()
+        return
+    }
+
+    if (user == null) {
+        LaunchedEffect(Unit) {
+            delay(3.seconds) // TODO: Somehow check whether user is signed in instead
+            authenticationScreenVisible = true
         }
+        SplashScreen()
+        return
     }
 
-    when (val status = auth.status.collectAsState(null).value) {
-        null -> SplashScreen()
-        is AuthenticationStatus.NotAuthenticated -> AuthenticationScreen()
-        is AuthenticationStatus.Authenticated -> CompositionLocalProvider(
-            LocalUser provides status.user,
-            content = content
-        )
-    }
+    CompositionLocalProvider(
+        LocalUser provides user,
+        content = content
+    )
 }

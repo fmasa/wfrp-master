@@ -86,6 +86,8 @@ import cz.frantisekmasa.wfrp_master.common.partyList.PartyListScreenModel
 import cz.frantisekmasa.wfrp_master.common.partySettings.PartySettingsScreenModel
 import cz.frantisekmasa.wfrp_master.common.settings.SettingsScreenModel
 import cz.frantisekmasa.wfrp_master.common.skillTest.SkillTestScreenModel
+import dev.gitlive.firebase.Firebase
+import dev.gitlive.firebase.auth.auth
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.HttpClientEngine
 import io.ktor.client.plugins.cache.HttpCache
@@ -94,6 +96,7 @@ import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.modules.SerializersModule
 import kotlinx.serialization.modules.contextual
+import kotlinx.serialization.serializer
 import org.kodein.di.DI
 import org.kodein.di.DirectDI
 import org.kodein.di.bindFactory
@@ -101,7 +104,6 @@ import org.kodein.di.bindProvider
 import org.kodein.di.bindSingleton
 import org.kodein.di.instance
 import kotlin.random.Random
-import cz.frantisekmasa.wfrp_master.common.core.firebase.serializationAggregateMapper as mapper
 
 val appModule = DI.Module("Common") {
     import(platformModule)
@@ -115,40 +117,42 @@ val appModule = DI.Module("Common") {
         }
     }
 
+    bindSingleton { Firebase.auth }
+
     bindSingleton<Compendium<Skill>> {
-        FirestoreCompendium(Schema.Compendium.Skills, instance(), mapper())
+        FirestoreCompendium(Schema.Compendium.Skills, instance(), serializer())
     }
 
     bindSingleton<Compendium<Talent>> {
-        FirestoreCompendium(Schema.Compendium.Talents, instance(), mapper())
+        FirestoreCompendium(Schema.Compendium.Talents, instance(), serializer())
     }
 
     bindSingleton<Compendium<Spell>> {
-        FirestoreCompendium(Schema.Compendium.Spells, instance(), mapper())
+        FirestoreCompendium(Schema.Compendium.Spells, instance(), serializer())
     }
 
     bindSingleton<Compendium<Blessing>> {
-        FirestoreCompendium(Schema.Compendium.Blessings, instance(), mapper())
+        FirestoreCompendium(Schema.Compendium.Blessings, instance(), serializer())
     }
 
     bindSingleton<Compendium<Miracle>> {
-        FirestoreCompendium(Schema.Compendium.Miracles, instance(), mapper())
+        FirestoreCompendium(Schema.Compendium.Miracles, instance(), serializer())
     }
 
     bindSingleton<Compendium<Trait>> {
-        FirestoreCompendium(Schema.Compendium.Traits, instance(), mapper())
+        FirestoreCompendium(Schema.Compendium.Traits, instance(), serializer())
     }
 
     bindSingleton<Compendium<Career>> {
-        FirestoreCompendium(Schema.Compendium.Careers, instance(), mapper())
+        FirestoreCompendium(Schema.Compendium.Careers, instance(), serializer())
     }
 
     bindSingleton<Compendium<Trapping>> {
-        FirestoreCompendium(Schema.Compendium.Trappings, instance(), mapper())
+        FirestoreCompendium(Schema.Compendium.Trappings, instance(), serializer())
     }
 
     bindSingleton<Compendium<JournalEntry>> {
-        FirestoreCompendium(Schema.Compendium.Journal, instance(), mapper())
+        FirestoreCompendium(Schema.Compendium.Journal, instance(), serializer())
     }
 
     bindSingleton { DismissedUserTipsHolder(instance()) }
@@ -163,13 +167,13 @@ val appModule = DI.Module("Common") {
     bindSingleton<TraitRepository> { characterItemRepository(Schema.Character.Traits) }
 
     bindSingleton<CharacterRepository> {
-        CharacterRepositoryIdentityMap(10, FirestoreCharacterRepository(instance(), mapper()))
+        CharacterRepositoryIdentityMap(10, FirestoreCharacterRepository(instance()))
     }
     bindSingleton<PartyRepository> {
-        PartyRepositoryIdentityMap(10, FirestorePartyRepository(instance(), mapper()))
+        PartyRepositoryIdentityMap(10, FirestorePartyRepository(instance()))
     }
 
-    bindSingleton<EncounterRepository> { FirestoreEncounterRepository(instance(), mapper()) }
+    bindSingleton<EncounterRepository> { FirestoreEncounterRepository(instance()) }
 
     bindSingleton<CharacterAvatarChanger> { CloudFunctionCharacterAvatarChanger(instance()) }
 
@@ -418,7 +422,8 @@ private inline fun <reified T : CharacterItem<T, C>, C : CompendiumItem<C>> Dire
 ): CharacterItemRepository<T> {
     return FirestoreCharacterItemRepository(
         collectionName,
-        mapper(), instance()
+        instance(),
+        serializer(),
     )
 }
 
