@@ -8,13 +8,13 @@ import cz.frantisekmasa.wfrp_master.common.core.domain.identifiers.CharacterId
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.PartyRepository
 import cz.frantisekmasa.wfrp_master.common.core.domain.traits.Trait
 import cz.frantisekmasa.wfrp_master.common.core.domain.traits.TraitRepository
-import cz.frantisekmasa.wfrp_master.common.firebase.firestore.Firestore
+import dev.gitlive.firebase.firestore.FirebaseFirestore
 
 class CharacterTraitDetailScreenModel(
     characterId: CharacterId,
     private val traitRepository: TraitRepository,
     private val effectManager: EffectManager,
-    private val firestore: Firestore,
+    private val firestore: FirebaseFirestore,
     userProvider: UserProvider,
     private val partyRepository: PartyRepository,
 ) : CharacterItemScreenModel<Trait>(
@@ -28,9 +28,9 @@ class CharacterTraitDetailScreenModel(
         trait: Trait,
         existingTrait: Trait?,
     ): TraitSpecificationsForm.SavingResult {
-        firestore.runTransaction { transaction ->
+        firestore.runTransaction {
             effectManager.saveItem(
-                transaction,
+                this,
                 partyRepository.get(characterId.partyId),
                 characterId,
                 repository = traitRepository,

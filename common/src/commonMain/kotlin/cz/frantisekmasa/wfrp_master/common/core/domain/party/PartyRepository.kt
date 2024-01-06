@@ -3,7 +3,7 @@ package cz.frantisekmasa.wfrp_master.common.core.domain.party
 import arrow.core.Either
 import cz.frantisekmasa.wfrp_master.common.core.auth.UserId
 import cz.frantisekmasa.wfrp_master.common.core.connectivity.CouldNotConnectToBackend
-import cz.frantisekmasa.wfrp_master.common.firebase.firestore.Transaction
+import dev.gitlive.firebase.firestore.Transaction
 import kotlinx.coroutines.flow.Flow
 
 interface PartyRepository {

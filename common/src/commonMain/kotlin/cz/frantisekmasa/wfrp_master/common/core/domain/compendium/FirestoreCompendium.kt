@@ -7,41 +7,44 @@ import com.benasher44.uuid.Uuid
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.CompendiumItem
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.exceptions.CompendiumItemNotFound
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.PartyId
-import cz.frantisekmasa.wfrp_master.common.core.firebase.AggregateMapper
 import cz.frantisekmasa.wfrp_master.common.core.firebase.Schema
-import cz.frantisekmasa.wfrp_master.common.core.firebase.documents
-import cz.frantisekmasa.wfrp_master.common.firebase.firestore.Firestore
-import cz.frantisekmasa.wfrp_master.common.firebase.firestore.FirestoreException
-import cz.frantisekmasa.wfrp_master.common.firebase.firestore.SetOptions
-import cz.frantisekmasa.wfrp_master.common.firebase.firestore.Transaction
+import dev.gitlive.firebase.firestore.FirebaseFirestore
+import dev.gitlive.firebase.firestore.FirebaseFirestoreException
+import dev.gitlive.firebase.firestore.Transaction
+import dev.gitlive.firebase.firestore.orderBy
 import io.github.aakira.napier.Napier
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
-import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import kotlinx.serialization.KSerializer
 
 class FirestoreCompendium<T : CompendiumItem<T>>(
     private val collectionName: String,
-    private val firestore: Firestore,
-    private val mapper: AggregateMapper<T>,
+    private val firestore: FirebaseFirestore,
+    private val serializer: KSerializer<T>,
 ) : Compendium<T>, CoroutineScope by CoroutineScope(Dispatchers.IO) {
 
     override fun liveForParty(partyId: PartyId): Flow<List<T>> =
         collection(partyId)
             .orderBy("name")
-            .documents(mapper)
+            .snapshots
+            .map { snapshot ->
+                snapshot.documents.map { it.data(serializer) }
+            }
 
     override suspend fun getItem(partyId: PartyId, itemId: Uuid): T {
         try {
             val snapshot = collection(partyId).document(itemId.toString()).get()
 
-            return snapshot.data?.let(mapper::fromDocumentData)
-                ?: throw CompendiumItemNotFound(
+            if (!snapshot.exists) {
+                throw CompendiumItemNotFound(
                     "Compendium item $itemId was not found in collection $collectionName"
                 )
-        } catch (e: FirestoreException) {
+            }
+
+            return snapshot.data(serializer)
+        } catch (e: FirebaseFirestoreException) {
             throw CompendiumItemNotFound(
                 "Compendium item $itemId was not found in collection $collectionName",
                 e
@@ -53,31 +56,24 @@ class FirestoreCompendium<T : CompendiumItem<T>>(
         return collection(partyId).document(itemId.toString())
             .snapshots
             .map {
-                it.fold(
-                    { snapshot ->
-                        snapshot.data?.let(mapper::fromDocumentData)?.right()
-                            ?: CompendiumItemNotFound(null).left()
-                    },
-                    { error -> CompendiumItemNotFound(null, error).left() },
-                )
+                if (it.exists)
+                    it.data(serializer).right()
+                else CompendiumItemNotFound("Compendium item $itemId was not found").left()
             }
     }
 
     override suspend fun saveItems(partyId: PartyId, items: List<T>) {
-        val itemsData = coroutineScope {
-            items.map { it.id to async { mapper.toDocumentData(it) } }
-                .map { (id, data) -> id to data.await() }
-        }
+        items.chunked(MAX_BATCH_SIZE).forEach { chunk ->
+            firestore.runTransaction {
+                chunk.forEach { item ->
+                    Napier.d("Saving Compendium item $item to $collectionName compendium of party $partyId")
 
-        itemsData.chunked(MAX_BATCH_SIZE).forEach { chunk ->
-            firestore.runTransaction { transaction ->
-                chunk.forEach { (id, data) ->
-                    Napier.d("Saving Compendium item $data to $collectionName compendium of party $partyId")
-
-                    transaction.set(
-                        collection(partyId).document(id.toString()),
-                        data,
-                        SetOptions.mergeFields(data.keys)
+                    set(
+                        documentRef = collection(partyId).document(item.id.toString()),
+                        strategy = serializer,
+                        data = item,
+                        encodeDefaults = true,
+                        merge = true,
                     )
                 }
             }
@@ -85,13 +81,13 @@ class FirestoreCompendium<T : CompendiumItem<T>>(
     }
 
     override fun save(transaction: Transaction, partyId: PartyId, item: T) {
-        val data = mapper.toDocumentData(item)
-
-        Napier.d("Saving compendium item $data")
+        Napier.d("Saving compendium item $item")
         transaction.set(
-            collection(partyId).document(item.id.toString()),
-            data,
-            SetOptions.mergeFields(data.keys)
+            documentRef = collection(partyId).document(item.id.toString()),
+            strategy = serializer,
+            data = item,
+            merge = true,
+            encodeDefaults = true,
         )
     }
 

@@ -1,10 +1,10 @@
 package cz.frantisekmasa.wfrp_master.common.core.domain.trappings
 
+import androidx.compose.runtime.Immutable
 import cz.frantisekmasa.wfrp_master.common.Str
 import cz.frantisekmasa.wfrp_master.common.core.domain.NamedEnum
 import dev.icerock.moko.parcelize.Parcelize
 import dev.icerock.moko.resources.StringResource
-import javax.annotation.concurrent.Immutable
 
 @Parcelize
 @Immutable

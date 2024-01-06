@@ -16,7 +16,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import cz.frantisekmasa.wfrp_master.common.Str
-import cz.frantisekmasa.wfrp_master.common.auth.AuthenticationManager
+import cz.frantisekmasa.wfrp_master.common.auth.AndroidAuthenticationManager
 import cz.frantisekmasa.wfrp_master.common.auth.LocalWebClientId
 import cz.frantisekmasa.wfrp_master.common.core.shared.SettingsStorage
 import cz.frantisekmasa.wfrp_master.common.core.shared.edit
@@ -33,10 +33,10 @@ import org.kodein.di.compose.localDI
 import org.kodein.di.instance
 
 @Composable
-fun StartupScreen(authenticationManager: AuthenticationManager) {
+fun StartupScreen(authenticationManager: AndroidAuthenticationManager) {
     SplashScreen()
 
-    val authenticated by authenticationManager.authenticated.collectWithLifecycle()
+    val authenticated by authenticationManager.common.authenticated.collectWithLifecycle()
 
     Napier.d("Authenticated: $authenticated")
 

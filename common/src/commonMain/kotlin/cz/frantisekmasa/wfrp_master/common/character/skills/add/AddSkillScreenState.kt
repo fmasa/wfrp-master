@@ -1,9 +1,9 @@
 package cz.frantisekmasa.wfrp_master.common.character.skills.add
 
+import androidx.compose.runtime.Immutable
 import cz.frantisekmasa.wfrp_master.common.character.items.AvailableCompendiumItems
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.Skill
 import cz.frantisekmasa.wfrp_master.common.core.domain.Stats
-import javax.annotation.concurrent.Immutable
 
 @Immutable
 data class AddSkillScreenState(

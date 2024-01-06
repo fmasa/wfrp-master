@@ -9,13 +9,13 @@ import cz.frantisekmasa.wfrp_master.common.core.domain.identifiers.CharacterId
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.Party
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.PartyId
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.PartyRepository
-import cz.frantisekmasa.wfrp_master.common.firebase.firestore.Firestore
-import cz.frantisekmasa.wfrp_master.common.firebase.firestore.Transaction
+import dev.gitlive.firebase.firestore.FirebaseFirestore
+import dev.gitlive.firebase.firestore.Transaction
 import cz.frantisekmasa.wfrp_master.common.core.domain.traits.Trait as CharacterTrait
 
 class TraitCompendiumScreenModel(
     partyId: PartyId,
-    firestore: Firestore,
+    firestore: FirebaseFirestore,
     compendium: Compendium<Trait>,
     characterItems: CharacterItemRepository<CharacterTrait>,
     private val effectManager: EffectManager,

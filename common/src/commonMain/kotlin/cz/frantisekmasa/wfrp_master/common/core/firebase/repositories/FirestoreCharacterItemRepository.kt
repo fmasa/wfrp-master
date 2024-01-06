@@ -9,29 +9,32 @@ import cz.frantisekmasa.wfrp_master.common.core.domain.character.CharacterItem
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.CharacterItemRepository
 import cz.frantisekmasa.wfrp_master.common.core.domain.identifiers.CharacterId
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.PartyId
-import cz.frantisekmasa.wfrp_master.common.core.firebase.AggregateMapper
 import cz.frantisekmasa.wfrp_master.common.core.firebase.Schema
-import cz.frantisekmasa.wfrp_master.common.core.firebase.documents
-import cz.frantisekmasa.wfrp_master.common.firebase.firestore.Firestore
-import cz.frantisekmasa.wfrp_master.common.firebase.firestore.SetOptions
-import cz.frantisekmasa.wfrp_master.common.firebase.firestore.Transaction
+import dev.gitlive.firebase.firestore.FirebaseFirestore
+import dev.gitlive.firebase.firestore.Transaction
+import dev.gitlive.firebase.firestore.orderBy
+import dev.gitlive.firebase.firestore.where
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import kotlinx.serialization.KSerializer
 
 open class FirestoreCharacterItemRepository<T : CharacterItem<T, *>>(
     private val collectionName: String,
-    protected val mapper: AggregateMapper<T>,
-    private val firestore: Firestore,
+    private val firestore: FirebaseFirestore,
+    private val serializer: KSerializer<T>,
 ) : CharacterItemRepository<T> {
 
     override fun findAllForCharacter(characterId: CharacterId): Flow<List<T>> =
         itemCollection(characterId)
             .orderBy("name")
-            .documents(mapper)
+            .snapshots
+            .map { snapshot ->
+                snapshot.documents.map { it.data(serializer) }
+            }
 
     override fun getLive(
         characterId: CharacterId,
@@ -41,13 +44,9 @@ open class FirestoreCharacterItemRepository<T : CharacterItem<T, *>>(
             .document(itemId.toString())
             .snapshots
             .map {
-                it.fold(
-                    { snapshot ->
-                        snapshot.data?.let(mapper::fromDocumentData)?.right()
-                            ?: CompendiumItemNotFound(null).left()
-                    },
-                    { error -> CompendiumItemNotFound(null, error).left() },
-                )
+                if (it.exists)
+                    it.data(serializer).right()
+                else CompendiumItemNotFound(null).left()
             }
     }
 
@@ -62,11 +61,14 @@ open class FirestoreCharacterItemRepository<T : CharacterItem<T, *>>(
     }
 
     override suspend fun save(characterId: CharacterId, item: T) {
-        val data = mapper.toDocumentData(item)
-
         itemCollection(characterId)
             .document(item.id.toString())
-            .set(data, SetOptions.mergeFields(data.keys))
+            .set(
+                data = item,
+                strategy = serializer,
+                merge = true,
+                encodeDefaults = true,
+            )
     }
 
     override fun save(
@@ -74,12 +76,11 @@ open class FirestoreCharacterItemRepository<T : CharacterItem<T, *>>(
         characterId: CharacterId,
         item: T
     ) {
-        val data = mapper.toDocumentData(item)
-
         transaction.set(
             itemCollection(characterId).document(item.id.toString()),
-            data,
-            SetOptions.mergeFields(data.keys),
+            data = item,
+            merge = true,
+            encodeDefaults = true,
         )
     }
 
@@ -91,7 +92,7 @@ open class FirestoreCharacterItemRepository<T : CharacterItem<T, *>>(
             firestore.collection(Schema.Parties)
                 .document(partyId.toString())
                 .collection(Schema.Characters)
-                .whereEqualTo("archived", false)
+                .where("archived", equalTo = false)
                 .get()
                 .documents
                 .map { character ->
@@ -99,11 +100,11 @@ open class FirestoreCharacterItemRepository<T : CharacterItem<T, *>>(
                         val characterId = CharacterId(partyId, character.id)
 
                         itemCollection(characterId)
-                            .whereEqualTo("compendiumId", compendiumItemId.toString())
+                            .where("compendiumId", equalTo = compendiumItemId.toString())
                             .get()
                             .documents
-                            .mapNotNull { it.data }
-                            .map { characterId to mapper.fromDocumentData(it) }
+                            .map { it.data(serializer) }
+                            .map { characterId to it }
                     }
                 }.awaitAll()
                 .flatten()
