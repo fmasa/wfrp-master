@@ -44,7 +44,6 @@
     <string name="authentication_messages_reset_password_email_sent">Email with instructions for password reset was sent</string>
     <string name="authentication_messages_signed_in_as">You are signed-in as</string>
     <string name="authentication_messages_unknown_error">Unknown error occurred</string>
-    <string name="authentication_startup_google_sign_in_failed">We could not sign you in via Google.\nYour data will be tied to this device, but you can always sign in later in Settings.</string>
     <string name="blessings_button_add_non_compendium">…or add non-Compendium blessing</string>
     <string name="blessings_label_duration">Duration</string>
     <string name="blessings_label_effect">Effect</string>

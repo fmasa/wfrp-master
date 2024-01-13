@@ -434,8 +434,6 @@
     <string name="authentication_messages_not_signed_in_description">Vous n\'êtes pas connecté.
 \nLa connexion vous permet de conserver l\'accès aux parties entre les appareils.</string>
     <string name="authentication_messages_lose_access_to_parties">Vous perdrez l\'accès à ces groupes :</string>
-    <string name="authentication_startup_google_sign_in_failed">Nous n\'avons pas pu vous connecter via Google.
-\nVos données seront liées à cet appareil, mais vous pourrez toujours vous connecter ultérieurement dans les paramètres.</string>
     <string name="authentication_messages_unknown_error">Une erreur inconnue s\'est produite</string>
     <string name="blessings_label_range">Portée</string>
     <string name="calendar_icon_previous_month">Mois précédent</string>

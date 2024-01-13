@@ -142,24 +142,6 @@ class AuthenticationManager(private val auth: FirebaseAuth) : UserProvider {
         }
     }
 
-    /**
-     * @return true if user was successfully authenticated and false otherwise
-     */
-    suspend fun authenticateAnonymously(): Boolean {
-        check(auth.currentUser == null) { "User is already authenticated" }
-
-        return try {
-            Napier.d("Starting Firebase anonymous sign in")
-            auth.signInAnonymously().await()
-            Napier.d("User has signed in successfully")
-
-            true
-        } catch (e: Throwable) {
-            Napier.e("Anonymous sign-in has failed", e)
-            false
-        }
-    }
-
     private fun googleClient(context: Context, webClientId: String) = GoogleSignIn.getClient(
         context,
         GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
