@@ -96,8 +96,6 @@
     <string name="authentication_messages_email_not_found">Keine E-Mail gefunden</string>
     <string name="careers_comma_separated_skills_helper">Kommagetrennte Liste von Fähigkeiten</string>
     <string name="blessings_label_name">Name</string>
-    <string name="authentication_startup_google_sign_in_failed">Wir konnten Sie nicht über Google anmelden.
-\nIhre Daten werden an dieses Gerät gebunden, aber Sie können sich später jederzeit in den Einstellungen anmelden.</string>
     <string name="character_button_unlink_from_player">Verknüpfung vom Spieler lösen</string>
     <string name="authentication_messages_reset_password_email_sent">E-Mail mit Anweisungen zum Zurücksetzen des Kennworts wurde gesendet</string>
     <string name="blessings_label_duration">Dauer</string>

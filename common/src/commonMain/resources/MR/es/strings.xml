@@ -245,8 +245,6 @@
     <string name="tests_roll">Lanzar</string>
     <string name="characteristics_fellowship">Empatía</string>
     <string name="compendium_json_import_prompt_warning">El formato de exportación no es definitivo aún</string>
-    <string name="authentication_startup_google_sign_in_failed">No pudimos ingresarle a través de Google.
-\nTus datos se vincularán a este dispositivo, y podrás ingresar más tarde desde los Ajustes.</string>
     <string name="weapons_reach_very_long">Muy Larga</string>
     <string name="combat_hit_locations_left_leg">Pierna Izquierda</string>
     <string name="character_button_unlink_from_player">Desenlazar del Jugador</string>

@@ -643,8 +643,6 @@
     <string name="about_body">Questa applicazione è stata creata da František Maša e dai suoi colleghi studenti, ora è sviluppata
 \nnel tempo libero di František Maša.
 \nSe ti piace l\'app, per favore dai la tua valutazione di WFRP Master su Google Play.</string>
-    <string name="authentication_startup_google_sign_in_failed">Non siamo riusciti a farti accedere tramite Google.
-\nI tuoi dati saranno associati a questo dispositivo, ma potrai sempre accedere in un secondo momento nelle Impostazioni.</string>
     <string name="conditions_prone">Prono</string>
     <string name="conditions_blinded">Accecato</string>
     <string name="conditions_fatigued">Affaticato</string>
