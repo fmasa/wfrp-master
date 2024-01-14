@@ -14,7 +14,7 @@ fun EditTrappingDialog(
         onDismissRequest = onDismissRequest,
     ) {
         if (existingItem.compendiumId != null) {
-            EditQualitiesDetailDialog(
+            EditPlayerDataDialog(
                 trapping = existingItem,
                 onSaveRequest = onSaveRequest,
                 onDismissRequest = onDismissRequest,

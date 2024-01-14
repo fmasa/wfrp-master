@@ -622,6 +622,8 @@
     <string name="trappings_flaws_unreliable">Peu fiable</string>
     <string name="trappings_flaws_ugly">Laid</string>
     <string name="trappings_qualities_practical">Pratique</string>
+    <string name="trappings_label_note">Note (optionnel)</string>
+    <string name="trappings_note">Note</string>
     <string name="trappings_label_qualities">Qualités</string>
     <string name="trappings_label_quantity">Quantité</string>
     <string name="trappings_flaws_shoddy">Bâclé</string>

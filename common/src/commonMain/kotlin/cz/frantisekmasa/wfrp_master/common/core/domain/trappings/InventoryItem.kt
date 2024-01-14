@@ -5,6 +5,7 @@ import androidx.compose.runtime.Stable
 import com.benasher44.uuid.Uuid
 import com.benasher44.uuid.uuid4
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.Trapping
+import cz.frantisekmasa.wfrp_master.common.core.common.requireMaxLength
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.CharacterItem
 import cz.frantisekmasa.wfrp_master.common.core.utils.duplicateName
 import dev.icerock.moko.parcelize.Parcelize
@@ -21,6 +22,10 @@ data class InventoryItem(
     @Contextual override val id: InventoryItemId,
     val name: String,
     val description: String,
+    /**
+     * Used as custom player note for trappings where description is taken from compendium.
+     */
+    val note: String = "",
     val quantity: Int,
     val encumbrance: Encumbrance = Encumbrance.Zero,
     @Contextual val containerId: InventoryItemId? = null,
@@ -32,6 +37,7 @@ data class InventoryItem(
 
     init {
         require(quantity > 0) { "Quantity must be greater than 0" }
+        note.requireMaxLength(NOTE_MAX_LENGTH, "note")
     }
 
     @Stable
@@ -69,6 +75,7 @@ data class InventoryItem(
         itemQualities: Set<ItemQuality>,
         itemFlaws: Set<ItemFlaw>,
         quantity: Int,
+        note: String,
     ): InventoryItem = copy(
         encumbrance = encumbrance -
             encumbranceModifier(this.itemQualities, this.itemFlaws) +
@@ -76,6 +83,7 @@ data class InventoryItem(
         itemQualities = itemQualities,
         itemFlaws = itemFlaws,
         quantity = quantity,
+        note = note,
     )
 
     override fun unlinkFromCompendium() = copy(compendiumId = null)
@@ -102,12 +110,14 @@ data class InventoryItem(
     companion object {
         const val NAME_MAX_LENGTH = Trapping.NAME_MAX_LENGTH
         const val DESCRIPTION_MAX_LENGTH = Trapping.DESCRIPTION_MAX_LENGTH
+        const val NOTE_MAX_LENGTH = 500
 
         fun fromCompendium(
             compendiumItem: Trapping,
             itemQualities: Set<ItemQuality>,
             itemFlaws: Set<ItemFlaw>,
             quantity: Int,
+            note: String,
         ): InventoryItem {
             return InventoryItem(
                 id = uuid4(),
@@ -117,6 +127,7 @@ data class InventoryItem(
                 itemFlaws = itemFlaws,
                 trappingType = TrappingType.fromCompendium(compendiumItem.trappingType),
                 description = compendiumItem.description,
+                note = note,
                 quantity = quantity,
                 containerId = null,
                 compendiumId = compendiumItem.id,

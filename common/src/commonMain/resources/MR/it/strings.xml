@@ -508,6 +508,8 @@
     <string name="trappings_label_encumbrance_total">Ingombro (totale)</string>
     <string name="trappings_label_flaws">Difetti</string>
     <string name="trappings_label_name">Nome</string>
+    <string name="trappings_label_note">Nota (opzionale)</string>
+    <string name="trappings_note">Nota</string>
     <string name="trappings_label_qualities">Qualità</string>
     <string name="trappings_label_quantity">Quantità</string>
     <string name="trappings_label_type">Tipo di Avere</string>
