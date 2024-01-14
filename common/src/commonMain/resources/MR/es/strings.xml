@@ -386,6 +386,8 @@
     <string name="journal_messages_no_entries">Ninguna entrada</string>
     <string name="character_tab_conditions">Condiciones</string>
     <string name="compendium_messages_export_failed">La exportación del JSON ha fallado.</string>
+    <string name="trappings_label_note">Nota (opcional)</string>
+    <string name="trappings_note">Nota</string>
     <string name="trappings_label_item_flaws">Defectos de objeto</string>
     <string name="combat_hit_locations_left_arm">Brazo Izquierdo</string>
     <string name="races_ogre">Ogro</string>

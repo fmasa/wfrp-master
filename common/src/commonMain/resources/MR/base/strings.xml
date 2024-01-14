@@ -628,6 +628,8 @@
     <string name="trappings_label_item_qualities">Item Qualities</string>
     <string name="trappings_label_item_flaws">Item Flaws</string>
     <string name="trappings_label_name">Name</string>
+    <string name="trappings_label_note">Note (optional)</string>
+    <string name="trappings_note">Note</string>
     <string name="trappings_label_pack_size">Pack size</string>
     <string name="trappings_label_price">Price</string>
     <string name="trappings_label_qualities">Qualities</string>

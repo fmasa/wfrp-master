@@ -20,6 +20,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
 import cz.frantisekmasa.wfrp_master.common.Str
 import cz.frantisekmasa.wfrp_master.common.core.domain.localizedName
+import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.InventoryItem
 import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.ItemFlaw
 import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.ItemQuality
 import cz.frantisekmasa.wfrp_master.common.core.ui.buttons.CloseButton
@@ -33,20 +34,18 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.SaveAction
 import cz.frantisekmasa.wfrp_master.common.core.utils.launchLogged
 import dev.icerock.moko.resources.compose.stringResource
 import kotlinx.coroutines.Dispatchers
-import kotlin.math.max
 
 @Composable
 fun TrappingFromCompendiumForm(
     itemName: String,
-    itemQualities: Set<ItemQuality>,
-    itemFlaws: Set<ItemFlaw>,
-    quantity: Int,
-    onSaveRequest: suspend (Set<ItemQuality>, Set<ItemFlaw>, quantity: Int) -> Unit,
+    data: TrappingFromCompendiumPlayerData,
+    onSaveRequest: suspend (TrappingFromCompendiumPlayerData) -> Unit,
     onDismissRequest: () -> Unit,
 ) {
-    val quantityField = inputValue(quantity.toString(), Rules.PositiveInteger())
-    val qualityValues = rememberSaveable { mutableStateOf(itemQualities) }
-    val flawValues = rememberSaveable { mutableStateOf(itemFlaws) }
+    val quantityField = inputValue(data.quantity.toString(), Rules.PositiveInteger())
+    val noteField = inputValue(data.note)
+    val qualityValues = rememberSaveable { mutableStateOf(data.itemQualities) }
+    val flawValues = rememberSaveable { mutableStateOf(data.itemFlaws) }
     var validate by remember { mutableStateOf(false) }
 
     Scaffold(
@@ -68,9 +67,12 @@ fun TrappingFromCompendiumForm(
                             saving = true
                             coroutineScope.launchLogged(Dispatchers.IO) {
                                 onSaveRequest(
-                                    qualityValues.value,
-                                    flawValues.value,
-                                    max(quantityField.toInt(), 1),
+                                    TrappingFromCompendiumPlayerData(
+                                        itemQualities = qualityValues.value,
+                                        itemFlaws = flawValues.value,
+                                        quantity = quantityField.toInt().coerceAtLeast(1),
+                                        note = noteField.value,
+                                    )
                                 )
                                 onDismissRequest()
                             }
@@ -87,6 +89,16 @@ fun TrappingFromCompendiumForm(
                 .padding(Spacing.bodyPadding),
             verticalArrangement = Arrangement.spacedBy(Spacing.small),
         ) {
+
+            TextInput(
+                label = stringResource(Str.trappings_label_note),
+                value = noteField,
+                validate = validate,
+                multiLine = true,
+                helperText = stringResource(Str.common_ui_markdown_supported_note),
+                maxLength = InventoryItem.NOTE_MAX_LENGTH,
+            )
+
             InputLabel(stringResource(Str.trappings_label_item_qualities))
 
             CheckboxList(
@@ -112,3 +124,10 @@ fun TrappingFromCompendiumForm(
         }
     }
 }
+
+data class TrappingFromCompendiumPlayerData(
+    val itemQualities: Set<ItemQuality>,
+    val itemFlaws: Set<ItemFlaw>,
+    val quantity: Int,
+    val note: String,
+)

@@ -10,6 +10,7 @@ import cz.frantisekmasa.wfrp_master.common.character.items.rememberAddItemUiStat
 import cz.frantisekmasa.wfrp_master.common.character.trappings.CharacterTrappingDetailScreen
 import cz.frantisekmasa.wfrp_master.common.character.trappings.NonCompendiumTrappingForm
 import cz.frantisekmasa.wfrp_master.common.character.trappings.TrappingFromCompendiumForm
+import cz.frantisekmasa.wfrp_master.common.character.trappings.TrappingFromCompendiumPlayerData
 import cz.frantisekmasa.wfrp_master.common.character.trappings.trappingIcon
 import cz.frantisekmasa.wfrp_master.common.core.domain.identifiers.CharacterId
 import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.InventoryItem
@@ -58,15 +59,19 @@ class AddTrappingScreen(
             specification = { compendiumTrapping ->
                 TrappingFromCompendiumForm(
                     itemName = compendiumTrapping.name,
-                    itemQualities = emptySet(),
-                    itemFlaws = emptySet(),
-                    quantity = 1,
-                    onSaveRequest = { itemQualities, itemFlaws, quantity ->
+                    data = TrappingFromCompendiumPlayerData(
+                        itemQualities = emptySet(),
+                        itemFlaws = emptySet(),
+                        quantity = 1,
+                        note = "",
+                    ),
+                    onSaveRequest = {
                         val item = InventoryItem.fromCompendium(
                             compendiumTrapping,
-                            itemQualities,
-                            itemFlaws,
-                            quantity,
+                            it.itemQualities,
+                            it.itemFlaws,
+                            it.quantity,
+                            it.note,
                         )
 
                         addItemUiState.saveItem(

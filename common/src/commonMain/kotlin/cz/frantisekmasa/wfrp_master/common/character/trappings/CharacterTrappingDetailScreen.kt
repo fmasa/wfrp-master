@@ -1,6 +1,8 @@
 package cz.frantisekmasa.wfrp_master.common.character.trappings
 
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.ColumnScope
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
@@ -37,6 +39,7 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.navigation.LocalNavigationTra
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.rememberScreenModel
 import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.IconAction
+import cz.frantisekmasa.wfrp_master.common.core.ui.text.MarkdownTextValue
 import dev.icerock.moko.resources.compose.stringResource
 
 class CharacterTrappingDetailScreen(
@@ -138,6 +141,18 @@ private fun TrappingDetail(
                         )
                     }
                 )
+            }
+
+            if (trapping.note.isNotBlank()) {
+                Box(
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = Spacing.bodyPadding)
+                        .padding(top = Spacing.bodyPadding),
+                    contentAlignment = Alignment.Center,
+                ) {
+                    MarkdownTextValue(stringResource(Str.trappings_note), trapping.note)
+                }
             }
         }
 
