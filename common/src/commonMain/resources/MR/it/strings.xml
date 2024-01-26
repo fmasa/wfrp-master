@@ -217,7 +217,7 @@
     <string name="common_ui_expression_helper">Operatori utilizzabili: +,-,/,*,(,), MIN(…), MAX(…) e variabili: %s</string>
     <string name="common_ui_icon_toggle_fab_menu">Cambia menu</string>
     <string name="common_ui_increment">Incrementa di</string>
-    <string name="common_ui_item_does_not_exist">L\'oggetto non esiste.</string>
+    <string name="common_ui_item_does_not_exist">La voce non esiste.</string>
     <string name="common_ui_item_none">Nulla</string>
     <string name="common_ui_label_close_dialog">Chiudi la finestra corrente</string>
     <string name="common_ui_label_expand_select_box">Espandi il box selezionato</string>
@@ -243,7 +243,7 @@
     <string name="compendium_pick_prompt_traits">Seleziona i Tratti che desideri importare</string>
     <string name="compendium_rulebook_import_prompt_subtitle">È supportata solo l\'ultima versione dei manuali in inglese.</string>
     <string name="compendium_rulebook_import_prompt_title">Importa Compendio da manuale ufficiale WFRP PDF.</string>
-    <string name="compendium_search_placeholder">Cerca oggetti</string>
+    <string name="compendium_search_placeholder">Cerca voce</string>
     <string name="compendium_title">Compendio</string>
     <string name="compendium_title_blessings">Benedizioni</string>
     <string name="compendium_title_careers">Carriere</string>
@@ -468,7 +468,7 @@
     <string name="tests_difficulties_hard">Ardua</string>
     <string name="tests_difficulties_very_easy">Molto Semplice</string>
     <string name="tests_difficulties_very_hard">Molto Ardua</string>
-    <string name="tests_fumble">OPS\!</string>
+    <string name="tests_fumble">Disastro</string>
     <string name="tests_label_difficulty">Difficoltà</string>
     <string name="tests_label_dramatic_result">Risultato della Prova Drammatica</string>
     <string name="tests_label_skill">Abilità</string>
@@ -670,7 +670,7 @@
     <string name="trappings_qualities_durable">Resistente</string>
     <string name="trappings_messages_no_trappings_in_compendium">Nessun Avere</string>
     <string name="trappings_qualities_practical">Pratico</string>
-    <string name="common_ui_item_added">Oggetto aggiunto.</string>
+    <string name="common_ui_item_added">Voce aggiunta.</string>
     <string name="trappings_availability_common">Comune</string>
     <string name="trappings_availability_exotic">Esotico</string>
     <string name="calendar_title_select_date">Seleziona Data</string>
