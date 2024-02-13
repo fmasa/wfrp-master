@@ -456,10 +456,10 @@ private class TrappingTypeFormData(
     override fun toValue(): TrappingType? = when (type.value) {
         TrappingTypeOption.AMMUNITION -> TrappingType.Ammunition(
             weaponGroups = ammunitionWeaponGroups.value,
-            range = AmmunitionRangeExpression(ammunitionRange.normalizedValue),
+            range = AmmunitionRangeExpression(ammunitionRange.value),
             qualities = weaponQualities.toMap(),
             flaws = weaponFlaws.toMap(),
-            damage = DamageExpression(damage.normalizedValue),
+            damage = DamageExpression(damage.value),
         )
         TrappingTypeOption.ARMOUR -> TrappingType.Armour(
             locations = armourLocations.value,
@@ -483,7 +483,7 @@ private class TrappingTypeFormData(
         TrappingTypeOption.MELEE_WEAPON -> TrappingType.MeleeWeapon(
             group = meleeWeaponGroup.value,
             reach = weaponReach.value,
-            damage = DamageExpression(damage.normalizedValue),
+            damage = DamageExpression(damage.value),
             qualities = weaponQualities.toMap(),
             flaws = weaponFlaws.toMap(),
             equipped = weaponEquipped.value,
@@ -491,8 +491,8 @@ private class TrappingTypeFormData(
         TrappingTypeOption.PROSTHETIC -> TrappingType.Prosthetic(worn = worn.value)
         TrappingTypeOption.RANGED_WEAPON -> TrappingType.RangedWeapon(
             group = rangedWeaponGroup.value,
-            range = WeaponRangeExpression(weaponRange.normalizedValue),
-            damage = DamageExpression(damage.normalizedValue),
+            range = WeaponRangeExpression(weaponRange.value),
+            damage = DamageExpression(damage.value),
             qualities = weaponQualities.toMap(),
             flaws = weaponFlaws.toMap(),
             equipped = weaponEquipped.value,
