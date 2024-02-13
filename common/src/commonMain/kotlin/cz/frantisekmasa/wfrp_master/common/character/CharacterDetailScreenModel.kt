@@ -319,8 +319,8 @@ class CharacterDetailScreenModel(
         updateCharacter { it.copy(note = note) }
     }
 
-    suspend fun updateMotivation(note: String) {
-        updateCharacter { it.copy(note = note) }
+    suspend fun updateMotivation(motivation: String) {
+        updateCharacter { it.copy(motivation = motivation) }
     }
 
     suspend fun updateCharacterAmbitions(ambitions: Ambitions) {
