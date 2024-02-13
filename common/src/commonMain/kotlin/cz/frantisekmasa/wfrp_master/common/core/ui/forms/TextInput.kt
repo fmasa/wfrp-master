@@ -60,6 +60,7 @@ interface Filter {
 // TODO: Use this version everywhere where input must be validated
 // as it allows to define validation only on InputValue and then use value.isValid()
 @Composable
+@OptIn(InternalTextInputApi::class)
 fun TextInput(
     value: InputValue,
     validate: Boolean,
@@ -77,9 +78,9 @@ fun TextInput(
     visualTransformation: VisualTransformation = VisualTransformation.None,
     filters: List<Filter> = emptyList(),
 ) {
-    TextInput(
-        value = value.value,
-        onValueChange = { value.value = it },
+    TextInputImpl(
+        value = value.rawTextFieldValue,
+        onValueChange = { value.rawTextFieldValue = it },
         label = label,
         helperText = helperText,
         validate = validate,
@@ -99,7 +100,7 @@ fun TextInput(
 }
 
 @Composable
-private fun TextInput(
+private fun TextInputImpl(
     value: String,
     onValueChange: (String) -> Unit,
     validate: Boolean,
@@ -201,14 +202,24 @@ private fun TextInput(
     }
 }
 
+@Target(AnnotationTarget.PROPERTY)
+@RequiresOptIn(level = RequiresOptIn.Level.ERROR)
+annotation class InternalTextInputApi
+
 @Stable
 class InputValue(
     state: MutableState<String>,
     internal val rules: Rules,
     private val normalize: (String) -> String = { it.trim() },
 ) {
-    var value: String by state
-    val normalizedValue get() = normalize(value)
+    @InternalTextInputApi
+    var rawTextFieldValue by state
+    @OptIn(InternalTextInputApi::class)
+    var value: String
+        get() = normalize(rawTextFieldValue)
+        set(value) {
+            rawTextFieldValue = value
+        }
 
     fun isValid() = rules.errorMessage(value) == null
 

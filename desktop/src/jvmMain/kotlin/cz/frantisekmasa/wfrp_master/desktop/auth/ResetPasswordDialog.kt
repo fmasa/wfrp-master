@@ -79,7 +79,7 @@ fun ResetPasswordDialog(
                         processing = true
                         coroutineScope.launchLogged(Dispatchers.IO) {
                             try {
-                                when (auth.resetPassword(email.normalizedValue)) {
+                                when (auth.resetPassword(email.value)) {
                                     PasswordResetResult.Success -> {
                                         snackbarHolder.showSnackbar(
                                             messageEmailSent,

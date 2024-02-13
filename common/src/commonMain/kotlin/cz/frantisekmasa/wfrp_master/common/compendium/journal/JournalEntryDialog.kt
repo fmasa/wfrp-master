@@ -105,8 +105,8 @@ private data class JournalEntryFormData(
             .split(JournalEntry.PARENT_SEPARATOR)
             .filter { it.isNotBlank() }
             .map { it.trim() },
-        text = text.normalizedValue,
-        gmText = gmText.normalizedValue,
+        text = text.value,
+        gmText = gmText.value,
         isPinned = isPinned,
         isVisibleToPlayers = isVisibleToPlayers,
     )
