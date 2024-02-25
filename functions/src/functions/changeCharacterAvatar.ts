@@ -1,51 +1,23 @@
-import * as functions from "firebase-functions";
-import {firestore, storage} from 'firebase-admin';
-import {isLeft} from "fp-ts/Either";
-import {hasAccessToCharacter} from "../acl";
+import {storage} from 'firebase-admin';
 import {file} from "tmp-promise";
 import * as sharp from "sharp";
 import * as t from "io-ts";
 import {UploadResponse} from "@google-cloud/storage/build/src/bucket";
 import {Bucket} from "@google-cloud/storage";
+import {characterChange} from "../characterChange";
 
 const imageSize = 500;
 
-const RequestBody = t.interface({
+const RequestBody = t.type({
     partyId: t.string,
     characterId: t.string,
     imageData: t.string,
 });
 
-export const changeCharacterAvatar = functions.https.onCall(async (data, context) => {
-    const body = RequestBody.decode(data);
-
-    if (isLeft(body)) {
-        return {
-            error: 400,
-            message: "Invalid request body",
-        };
-    }
-
-    const userId = context.auth?.uid;
-    const partyId = body.right.partyId;
-    const characterId = body.right.characterId;
-    const imageData = body.right.imageData;
-
-    if (userId === undefined) {
-        return {
-            status: "error",
-            error: 401,
-            message: "User is not authorized",
-        };
-    }
-
-    if (!await hasAccessToCharacter(userId, partyId, characterId)) {
-        return {
-            status: "error",
-            error: 403,
-            message: "User does not have access to given character",
-        };
-    }
+export const changeCharacterAvatar = characterChange(RequestBody,async (body, character) => {
+    const partyId = body.partyId;
+    const characterId = body.characterId;
+    const imageData = body.imageData;
 
     const tempFile = await file();
 
@@ -70,9 +42,7 @@ export const changeCharacterAvatar = functions.https.onCall(async (data, context
 
     console.debug(`File url: ${url}`);
 
-    await firestore().doc(`parties/${partyId}/characters/${characterId}`)
-        .update("avatarUrl", url)
-
+    await character.update("avatarUrl", url);
     await tempFile.cleanup();
 
     return {
