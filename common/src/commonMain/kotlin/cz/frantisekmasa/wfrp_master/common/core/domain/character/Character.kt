@@ -2,7 +2,6 @@ package cz.frantisekmasa.wfrp_master.common.core.domain.character
 
 import androidx.compose.runtime.Immutable
 import com.benasher44.uuid.Uuid
-import com.benasher44.uuid.uuid4
 import cz.frantisekmasa.wfrp_master.common.core.auth.UserId
 import cz.frantisekmasa.wfrp_master.common.core.common.requireMaxLength
 import cz.frantisekmasa.wfrp_master.common.core.domain.Ambitions
@@ -10,7 +9,6 @@ import cz.frantisekmasa.wfrp_master.common.core.domain.Money
 import cz.frantisekmasa.wfrp_master.common.core.domain.Size
 import cz.frantisekmasa.wfrp_master.common.core.domain.Stats
 import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.Encumbrance
-import cz.frantisekmasa.wfrp_master.common.core.utils.duplicateName
 import cz.frantisekmasa.wfrp_master.common.encounters.domain.Wounds
 import dev.icerock.moko.parcelize.Parcelable
 import dev.icerock.moko.parcelize.Parcelize
@@ -238,11 +236,6 @@ data class Character(
     fun updateAmbitions(ambitions: Ambitions) = copy(ambitions = ambitions)
 
     fun updateConditions(newConditions: CurrentConditions) = copy(conditions = newConditions)
-
-    fun duplicate() = copy(
-        id = uuid4().toString(),
-        name = duplicateName(name),
-    )
 
     fun archive() = copy(
         isArchived = true,

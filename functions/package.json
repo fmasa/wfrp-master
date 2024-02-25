@@ -17,13 +17,15 @@
     "@google-cloud/storage": "^5.14.4",
     "@types/sharp": "^0.29.2",
     "@types/tmp": "^0.2.1",
+    "@types/uuid": "^9.0.8",
     "fast-crc32c": "^2.0.0",
     "firebase-admin": "^9.12.0",
     "firebase-functions": "^3.15.7",
     "fp-ts": "^2.11.4",
     "io-ts": "^2.2.16",
     "sharp": "^0.29.1",
-    "tmp-promise": "^3.0.2"
+    "tmp-promise": "^3.0.2",
+    "uuid": "^9.0.1"
   },
   "devDependencies": {
     "firebase-functions-test": "^0.2.0",
