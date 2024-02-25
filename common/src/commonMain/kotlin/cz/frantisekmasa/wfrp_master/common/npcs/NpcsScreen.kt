@@ -36,7 +36,9 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.EmptyUI
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.ItemIcon
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.SearchableList
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.rememberScreenModel
+import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.LocalPersistentSnackbarHolder
 import dev.icerock.moko.resources.compose.stringResource
+import io.github.aakira.napier.Napier
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
@@ -116,6 +118,9 @@ class NpcsScreen(
             }
         ) { npc ->
             Column {
+                val unknownErrorMessage = stringResource(Str.messages_error_unknown)
+                val snackbarHolder = LocalPersistentSnackbarHolder.current
+
                 WithContextMenu(
                     onClick = {
                         navigation.navigate(CharacterDetailScreen(CharacterId(partyId, npc.id)))
@@ -126,6 +131,9 @@ class NpcsScreen(
                                 processing = true
                                 try {
                                     screenModel.duplicate(npc)
+                                } catch (e: Exception) {
+                                    Napier.e("Failed to duplicate NPC", e)
+                                    snackbarHolder.showSnackbar(unknownErrorMessage)
                                 } finally {
                                     processing = false
                                 }

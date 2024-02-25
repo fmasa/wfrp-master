@@ -372,13 +372,6 @@ val appModule = DI.Module("Common") {
             partyId,
             instance(),
             instance(),
-            instance(),
-            instance(),
-            instance(),
-            instance(),
-            instance(),
-            instance(),
-            instance(),
         )
     }
     bindFactory { partyId: PartyId ->
