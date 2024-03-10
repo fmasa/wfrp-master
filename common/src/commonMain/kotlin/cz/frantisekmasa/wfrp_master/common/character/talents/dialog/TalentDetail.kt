@@ -37,7 +37,7 @@ fun TalentDetail(
             subheadBar()
 
             TalentDetailBody(
-                maxTimesTaken = null,
+                maxTimesTaken = talent.maxTimesTaken,
                 tests = talent.tests,
                 description = talent.description,
             )
@@ -47,14 +47,12 @@ fun TalentDetail(
 
 @Composable
 fun TalentDetailBody(
-    maxTimesTaken: String?,
+    maxTimesTaken: String,
     tests: String,
     description: String,
 ) {
     Column(Modifier.padding(Spacing.bodyPadding)) {
-        if (maxTimesTaken != null) {
-            SingleLineTextValue(stringResource(Str.talents_label_max_times_taken), maxTimesTaken)
-        }
+        SingleLineTextValue(stringResource(Str.talents_label_max_times_taken), maxTimesTaken)
 
         if (tests.isNotBlank()) {
             SingleLineTextValue(stringResource(Str.talents_label_tests), tests)

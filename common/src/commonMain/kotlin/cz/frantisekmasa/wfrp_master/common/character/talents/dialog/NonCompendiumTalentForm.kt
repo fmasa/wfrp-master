@@ -75,6 +75,13 @@ internal fun NonCompendiumTalentForm(
         )
 
         TextInput(
+            label = stringResource(Str.talents_label_max_times_taken),
+            value = formData.maxTimesTaken,
+            validate = validate,
+            maxLength = Talent.MAX_TIMES_TAKEN_MAX_LENGTH,
+        )
+
+        TextInput(
             label = stringResource(Str.talents_label_description),
             value = formData.description,
             validate = validate,
@@ -89,6 +96,7 @@ private class NonCompendiumTalentFormData(
     val id: Uuid,
     val name: InputValue,
     val tests: InputValue,
+    val maxTimesTaken: InputValue,
     val description: InputValue,
     val taken: MutableState<Int>,
 ) : HydratedFormData<Talent> {
@@ -98,6 +106,7 @@ private class NonCompendiumTalentFormData(
             id = remember { talent?.id ?: uuid4() },
             name = inputValue(talent?.name ?: "", Rules.NotBlank()),
             tests = inputValue(talent?.tests ?: ""),
+            maxTimesTaken = inputValue(talent?.maxTimesTaken ?: ""),
             description = inputValue(talent?.description ?: ""),
             taken = rememberSaveable { mutableStateOf(talent?.taken ?: 1) },
         )
@@ -108,6 +117,7 @@ private class NonCompendiumTalentFormData(
         compendiumId = null,
         name = name.value,
         tests = tests.value,
+        maxTimesTaken = maxTimesTaken.value,
         description = description.value.trim(),
         taken = taken.value,
     )

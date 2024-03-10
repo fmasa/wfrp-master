@@ -25,6 +25,7 @@ data class Talent(
     @Contextual override val compendiumId: Uuid? = null,
     val name: String,
     val tests: String = "", // TODO: Remove default value in 3.0
+    val maxTimesTaken: String = "", // TODO: Remove default value in 3.0
     val description: String,
     val taken: Int
 ) : CharacterItem<Talent, CompendiumTalent>, EffectSource {
@@ -61,6 +62,7 @@ data class Talent(
     companion object {
         const val NAME_MAX_LENGTH = 50
         const val DESCRIPTION_MAX_LENGTH = 1500
+        const val MAX_TIMES_TAKEN_MAX_LENGTH = CompendiumTalent.MAX_TIMES_TAKEN_MAX_LENGTH
 
         fun fromCompendium(compendiumTalent: CompendiumTalent, timesTaken: Int): Talent {
             return Talent(
@@ -69,6 +71,7 @@ data class Talent(
                 name = compendiumTalent.name,
                 tests = compendiumTalent.tests,
                 description = compendiumTalent.description,
+                maxTimesTaken = compendiumTalent.maxTimesTaken,
                 taken = timesTaken,
             )
         }
