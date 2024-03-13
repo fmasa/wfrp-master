@@ -155,21 +155,21 @@ data class CharacterPickerScreen(
                 OutlinedButton(onClick = { unassignedCharactersDialogVisible = true }) {
                     Text(stringResource(Str.character_button_link).uppercase())
                 }
+            }
 
-                val userId = LocalUser.current.id
-                Button(
-                    onClick = {
-                        navigation.replace(
-                            CharacterCreationScreen(
-                                partyId,
-                                CharacterType.PLAYER_CHARACTER,
-                                userId = userId,
-                            )
+            val userId = LocalUser.current.id
+            Button(
+                onClick = {
+                    navigation.replace(
+                        CharacterCreationScreen(
+                            partyId,
+                            CharacterType.PLAYER_CHARACTER,
+                            userId = userId,
                         )
-                    }
-                ) {
-                    Text(stringResource(Str.character_button_add).uppercase())
+                    )
                 }
+            ) {
+                Text(stringResource(Str.character_button_add).uppercase())
             }
         }
     }
