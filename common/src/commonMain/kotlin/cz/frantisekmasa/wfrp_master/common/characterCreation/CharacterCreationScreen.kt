@@ -30,7 +30,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowBackIos
 import androidx.compose.material.icons.rounded.ArrowForwardIos
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -44,11 +43,11 @@ import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
 import cz.frantisekmasa.wfrp_master.common.Str
 import cz.frantisekmasa.wfrp_master.common.character.CharacterDetailScreen
-import cz.frantisekmasa.wfrp_master.common.compendium.domain.Career
 import cz.frantisekmasa.wfrp_master.common.core.auth.UserId
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.CharacterType
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.PartyId
 import cz.frantisekmasa.wfrp_master.common.core.ui.buttons.BackButton
+import cz.frantisekmasa.wfrp_master.common.core.ui.flow.collectWithLifecycle
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.FormData
 import cz.frantisekmasa.wfrp_master.common.core.ui.navigation.LocalNavigationTransaction
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.FullScreenProgress
@@ -58,7 +57,6 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.SubheadBar
 import dev.icerock.moko.resources.compose.stringResource
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 private enum class FormState {
     EDITED_BY_USER,
@@ -90,15 +88,7 @@ private fun Screen.MainContainer(partyId: PartyId, type: CharacterType, userId: 
     val screenModel: CharacterCreationScreenModel = rememberScreenModel(arg = partyId)
     val coroutineScope = rememberCoroutineScope()
 
-    val (careers, setCareers) = rememberSaveable {
-        mutableStateOf<List<Career>?>(null)
-    }
-
-    LaunchedEffect(Unit) {
-        withContext(Dispatchers.IO) {
-            setCareers(screenModel.getCareers())
-        }
-    }
+    val careers = screenModel.careers.collectWithLifecycle(null).value
 
     if (careers == null) {
         FullScreenProgress()

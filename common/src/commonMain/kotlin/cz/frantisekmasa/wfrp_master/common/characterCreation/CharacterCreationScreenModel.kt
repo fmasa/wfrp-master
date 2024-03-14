@@ -14,29 +14,28 @@ import cz.frantisekmasa.wfrp_master.common.core.domain.party.PartyId
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.PartyRepository
 import cz.frantisekmasa.wfrp_master.common.core.logging.Reporter
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.SelectedCareer
+import cz.frantisekmasa.wfrp_master.common.core.utils.right
 import io.github.aakira.napier.Napier
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.withContext
 
 class CharacterCreationScreenModel(
     private val partyId: PartyId,
     private val characters: CharacterRepository,
-    private val careerCompendium: Compendium<Career>,
+    careerCompendium: Compendium<Career>,
     private val userProvider: UserProvider,
-    private val parties: PartyRepository,
+    parties: PartyRepository,
 ) : ScreenModel {
-
-    suspend fun getCareers(): List<Career> {
-        val careers = careerCompendium.liveForParty(partyId).first()
-        val party = parties.get(partyId)
-
-        if (userProvider.userId == party.gameMasterId) {
-            return careers
+    val careers: Flow<List<Career>> = careerCompendium.liveForParty(partyId)
+        .combine(parties.getLive(partyId).right()) { careers, party ->
+            if (userProvider.userId == party.gameMasterId) {
+                careers
+            } else {
+                careers.filter { it.isVisibleToPlayers }
+            }
         }
-
-        return careers.filter { it.isVisibleToPlayers }
-    }
 
     suspend fun createCharacter(
         userId: UserId?,
