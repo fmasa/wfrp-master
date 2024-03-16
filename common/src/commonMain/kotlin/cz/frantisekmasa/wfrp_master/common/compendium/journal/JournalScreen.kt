@@ -118,6 +118,10 @@ class JournalScreen(
                 }
             },
             floatingActionButton = {
+                if (isGameMaster != true) {
+                    return@SearchableList
+                }
+
                 FloatingActionButton(onClick = { newEntryDialogOpened = true }) {
                     Icon(
                         Icons.Rounded.Add,
