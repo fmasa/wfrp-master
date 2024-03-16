@@ -1,6 +1,7 @@
 package cz.frantisekmasa.wfrp_master.common.compendium.domain
 
 import com.benasher44.uuid.Uuid
+import com.benasher44.uuid.uuid4
 import cz.frantisekmasa.wfrp_master.common.core.domain.Characteristic
 import cz.frantisekmasa.wfrp_master.common.core.domain.SocialClass
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.Race
@@ -49,7 +50,7 @@ data class Career(
         )
     }
 
-    override fun duplicate(): Career = copy(name = duplicateName())
+    override fun duplicate(): Career = copy(id = uuid4(), name = duplicateName())
 
     override fun changeVisibility(isVisibleToPlayers: Boolean) =
         copy(isVisibleToPlayers = isVisibleToPlayers)
