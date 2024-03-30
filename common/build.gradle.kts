@@ -46,6 +46,7 @@ kotlin {
                 api(compose.material)
                 api(compose.materialIconsExtended)
 
+                implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.6.0-RC.2")
                 implementation("org.jetbrains.kotlinx:kotlinx-collections-immutable:0.3.5")
 
                 implementation("io.github.mmolosay:debounce:1.0.0")

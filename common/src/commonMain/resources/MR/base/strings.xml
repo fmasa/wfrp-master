@@ -466,7 +466,7 @@
     <string name="points_label_current_experience">Current XP</string>
     <string name="points_label_hardy">Hardy (Increase maximum wounds by TB)</string>
     <string name="points_label_sin_points">Sin points</string>
-    <string name="points_label_spent_experience">Previously spent XP</string>
+    <string name="points_label_spent_experience">Spent XP</string>
     <string name="points_max_wounds">Max. Wounds</string>
     <string name="points_resilience">Resilience</string>
     <string name="points_resolve">Resolve</string>

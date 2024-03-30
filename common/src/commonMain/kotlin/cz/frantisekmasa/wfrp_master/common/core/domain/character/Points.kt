@@ -33,6 +33,8 @@ data class Points(
         require(spentExperience >= 0)
     }
 
+    val totalExperience: Int get() = experience + spentExperience
+
     fun modify(pool: PointPool, value: Int): Result<Points> {
         return runCatching {
             when (pool) {

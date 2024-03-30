@@ -2,6 +2,7 @@ package cz.frantisekmasa.wfrp_master.common.core.domain.character
 
 import androidx.compose.runtime.Immutable
 import com.benasher44.uuid.Uuid
+import com.benasher44.uuid.uuid4
 import cz.frantisekmasa.wfrp_master.common.core.auth.UserId
 import cz.frantisekmasa.wfrp_master.common.core.common.requireMaxLength
 import cz.frantisekmasa.wfrp_master.common.core.domain.Ambitions
@@ -12,6 +13,10 @@ import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.Encumbrance
 import cz.frantisekmasa.wfrp_master.common.encounters.domain.Wounds
 import dev.icerock.moko.parcelize.Parcelable
 import dev.icerock.moko.parcelize.Parcelize
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.toImmutableList
+import kotlinx.datetime.Instant
 import kotlinx.serialization.Contextual
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -49,13 +54,23 @@ data class Character(
     val money: Money = Money.ZERO,
     val hiddenTabs: Set<CharacterTab> = emptySet(),
     val size: Size? = null,
+    // TODO: Drop default value after experience logs exist in all characters
+    @RawValue
+    val experienceLog: ImmutableList<ExperienceLogEntry>? = null,
 ) : Parcelable {
 
     val characteristics: Stats get() = characteristicsBase + characteristicsAdvances
-    val wounds: Wounds get() = Wounds(
-        points.wounds,
-        calculateMaxWounds(size ?: race?.size, points, hasHardyTalent, woundsModifiers, characteristics),
-    )
+    val wounds: Wounds
+        get() = Wounds(
+            points.wounds,
+            calculateMaxWounds(
+                size ?: race?.size,
+                points,
+                hasHardyTalent,
+                woundsModifiers,
+                characteristics
+            ),
+        )
 
     val maxEncumbrance: Encumbrance
         get() = Encumbrance.maximumForCharacter(characteristics) + encumbranceBonus
@@ -148,6 +163,59 @@ data class Character(
         )
     }
 
+    fun spendExperience(
+        amount: Int,
+        currentTime: Instant,
+        reason: String,
+        userId: UserId,
+    ): Character {
+        require(amount >= 0) { "Cannot spend non-positive amount of experience" }
+        require(amount <= points.experience) { "Cannot spend more experience than available" }
+
+        val newPoints = points.copy(
+            experience = points.experience - amount,
+            spentExperience = points.spentExperience + amount,
+        )
+
+        return copy(
+            points = newPoints,
+            experienceLog = (experienceLog ?: defaultExperienceLog(newPoints, currentTime, userId))
+                .plus(
+                    ExperienceLogEntry(
+                        id = uuid4(),
+                        amount = -amount,
+                        reason = reason,
+                        createdAt = currentTime,
+                        userId = userId,
+                    )
+                ).toImmutableList(),
+        )
+    }
+
+    fun gainExperience(
+        amount: Int,
+        currentTime: Instant,
+        reason: String,
+        userId: UserId,
+    ): Character {
+        require(amount >= 0) { "Cannot gain non-positive amount of experience" }
+
+        val newPoints = points.copy(experience = points.experience + amount)
+
+        return copy(
+            points = newPoints,
+            experienceLog = (experienceLog ?: defaultExperienceLog(newPoints, currentTime, userId))
+                .plus(
+                    ExperienceLogEntry(
+                        id = uuid4(),
+                        amount = amount,
+                        reason = reason,
+                        createdAt = currentTime,
+                        userId = userId,
+                    )
+                ).toImmutableList(),
+        )
+    }
     fun modifyEncumbranceBonus(bonus: Encumbrance): Character {
         return copy(encumbranceBonus = bonus)
     }
@@ -273,6 +341,33 @@ data class Character(
         const val MOTIVATION_MAX_LENGTH = 200
         const val MUTATION_MAX_LENGTH = 200
         const val NOTE_MAX_LENGTH = 2000
+
+        private fun defaultExperienceLog(
+            points: Points,
+            currentTime: Instant,
+            userId: UserId,
+        ): List<ExperienceLogEntry> {
+            if (points.experience == 0 && points.spentExperience == 0) {
+                return persistentListOf()
+            }
+
+            return listOfNotNull(
+                ExperienceLogEntry(
+                    id = uuid4(),
+                    amount = points.experience + points.spentExperience,
+                    reason = "",
+                    createdAt = currentTime,
+                    userId = userId,
+                ),
+                ExperienceLogEntry(
+                    id = uuid4(),
+                    amount = -points.spentExperience,
+                    reason = "",
+                    createdAt = currentTime,
+                    userId = userId,
+                ).takeIf { points.spentExperience > 0 }
+            )
+        }
 
         private fun calculateMaxWounds(
             size: Size?,
