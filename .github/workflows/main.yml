@@ -33,7 +33,7 @@ jobs:
   unit-tests:
     name: Unit tests
     runs-on: ubuntu-22.04
-    container: alvrme/alpine-android:android-33-jdk11
+    container: alvrme/alpine-android:android-33-jdk17
     steps:
       - uses: actions/checkout@v2
       - uses: actions/cache@v3
@@ -49,7 +49,7 @@ jobs:
   ktlint:
     name: Code style (ktlint)
     runs-on: ubuntu-22.04
-    container: alvrme/alpine-android:android-30-jdk11
+    container: alvrme/alpine-android:android-30-jdk17
     steps:
       - uses: actions/checkout@v2
       - uses: actions/cache@v3
@@ -79,7 +79,7 @@ jobs:
     if: github.ref == 'refs/heads/master' || github.ref_type == 'tag'
     needs: [checks-passed]
     runs-on: ubuntu-22.04
-    container: alvrme/alpine-android:android-30-jdk11
+    container: alvrme/alpine-android:android-30-jdk17
     environment: production
     env:
       KEYSTORE_FILE_BASE64: ${{ secrets.KEYSTORE_FILE_BASE64 }}

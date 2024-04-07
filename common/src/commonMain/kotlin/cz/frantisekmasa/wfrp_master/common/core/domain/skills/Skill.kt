@@ -1,12 +1,11 @@
 package cz.frantisekmasa.wfrp_master.common.core.domain.skills
 
 import androidx.compose.runtime.Immutable
-import com.benasher44.uuid.Uuid
 import com.benasher44.uuid.uuid4
 import cz.frantisekmasa.wfrp_master.common.core.domain.Characteristic
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.CharacterItem
+import cz.frantisekmasa.wfrp_master.common.core.serialization.UuidAsString
 import dev.icerock.moko.parcelize.Parcelize
-import kotlinx.serialization.Contextual
 import kotlinx.serialization.Serializable
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.Skill as CompendiumSkill
 
@@ -14,8 +13,8 @@ import cz.frantisekmasa.wfrp_master.common.compendium.domain.Skill as Compendium
 @Serializable
 @Immutable
 data class Skill(
-    @Contextual override val id: Uuid,
-    @Contextual override val compendiumId: Uuid? = null,
+    override val id: UuidAsString,
+    override val compendiumId: UuidAsString? = null,
     val advanced: Boolean,
     val characteristic: Characteristic,
     val name: String,

@@ -2,14 +2,13 @@ package cz.frantisekmasa.wfrp_master.common.encounters.domain
 
 import androidx.compose.runtime.Immutable
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.LocalCharacterId
-import kotlinx.serialization.Contextual
+import cz.frantisekmasa.wfrp_master.common.core.serialization.UuidAsString
 import kotlinx.serialization.Serializable
-import java.util.UUID
 
 @Serializable
 @Immutable
 data class Encounter(
-    @Contextual val id: UUID,
+    val id: UuidAsString,
     val name: String,
     val description: String,
     val position: Int,

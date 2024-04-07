@@ -17,8 +17,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import cz.frantisekmasa.wfrp_master.common.Str
-import cz.frantisekmasa.wfrp_master.common.auth.AuthenticationManager
-import cz.frantisekmasa.wfrp_master.common.auth.AuthenticationManager.PasswordResetResult
+import cz.frantisekmasa.wfrp_master.common.auth.JvmAuthenticationManager
+import cz.frantisekmasa.wfrp_master.common.auth.JvmAuthenticationManager.PasswordResetResult
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.CallbackRule
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.TextInput
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.inputValue
@@ -29,7 +29,7 @@ import kotlinx.coroutines.Dispatchers
 
 @Composable
 fun ResetPasswordDialog(
-    auth: AuthenticationManager,
+    auth: JvmAuthenticationManager,
     onDismissRequest: () -> Unit,
 ) {
     val email = inputValue(

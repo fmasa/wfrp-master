@@ -51,7 +51,7 @@ import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.TrappingType
 import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.WeaponEquip
 import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.sum
 import cz.frantisekmasa.wfrp_master.common.core.utils.right
-import cz.frantisekmasa.wfrp_master.common.firebase.firestore.Firestore
+import dev.gitlive.firebase.firestore.FirebaseFirestore
 import io.github.aakira.napier.Napier
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.ImmutableMap
@@ -79,7 +79,7 @@ class CharacterDetailScreenModel(
     private val trappingSaver: TrappingSaver,
     private val careerCompendium: Compendium<Career>,
     private val effectManager: EffectManager,
-    private val firestore: Firestore,
+    private val firestore: FirebaseFirestore,
     private val parties: PartyRepository,
     private val userProvider: UserProvider,
     private val spells: SpellRepository,
@@ -333,10 +333,10 @@ class CharacterDetailScreenModel(
 
     fun removeTrait(trait: Trait) {
         coroutineScope.launch(Dispatchers.IO) {
-            firestore.runTransaction { transaction ->
+            firestore.runTransaction {
                 effectManager.removeItem(
-                    transaction,
-                    parties.get(characterId.partyId),
+                    this,
+                    parties.get(this, characterId.partyId),
                     characterId,
                     traits,
                     trait,
@@ -347,10 +347,10 @@ class CharacterDetailScreenModel(
 
     fun removeTalent(talent: Talent) {
         coroutineScope.launch(Dispatchers.IO) {
-            firestore.runTransaction { transaction ->
+            firestore.runTransaction {
                 effectManager.removeItem(
-                    transaction,
-                    parties.get(characterId.partyId),
+                    this,
+                    parties.get(this, characterId.partyId),
                     characterId,
                     talents,
                     talent,
@@ -423,9 +423,9 @@ class CharacterDetailScreenModel(
 
         updatedTrappings += trapping.addToContainer(container.id)
 
-        firestore.runTransaction { transaction ->
+        firestore.runTransaction {
             updatedTrappings.forEach {
-                trappings.save(transaction, characterId, it)
+                trappings.save(this, characterId, it)
             }
         }
     }

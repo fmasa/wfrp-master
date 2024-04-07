@@ -9,8 +9,8 @@ import cz.frantisekmasa.wfrp_master.common.core.domain.party.PartyId
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.PartyRepository
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.settings.Settings
 import cz.frantisekmasa.wfrp_master.common.core.utils.right
-import cz.frantisekmasa.wfrp_master.common.firebase.firestore.Firestore
 import cz.frantisekmasa.wfrp_master.common.settings.Language
+import dev.gitlive.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 
@@ -19,7 +19,7 @@ class PartySettingsScreenModel(
     private val parties: PartyRepository,
     private val characters: CharacterRepository,
     private val effectManager: EffectManager,
-    private val firestore: Firestore,
+    private val firestore: FirebaseFirestore,
 ) : ScreenModel {
     val party: Flow<Party> = parties.getLive(partyId).right()
 
@@ -34,15 +34,15 @@ class PartySettingsScreenModel(
     }
 
     suspend fun changeLanguage(language: Language) {
-        val party = parties.get(partyId)
+        firestore.runTransaction {
+            val party = parties.get(this, partyId)
 
-        if (party.settings.language == language) {
-            return
-        }
+            if (party.settings.language == language) {
+                return@runTransaction
+            }
 
-        firestore.runTransaction { transaction ->
             parties.save(
-                transaction,
+                this,
                 party.updateSettings(party.settings.copy(language = language)),
             )
 
@@ -50,7 +50,7 @@ class PartySettingsScreenModel(
                 .first()
             for (character in allCharacters) {
                 effectManager.reapplyWithDifferentLanguage(
-                    transaction,
+                    this,
                     partyId,
                     character,
                     party.settings.language,

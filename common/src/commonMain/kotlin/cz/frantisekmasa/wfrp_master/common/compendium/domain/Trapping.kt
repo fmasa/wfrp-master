@@ -1,7 +1,6 @@
 package cz.frantisekmasa.wfrp_master.common.compendium.domain
 
 import androidx.compose.runtime.Immutable
-import com.benasher44.uuid.Uuid
 import com.benasher44.uuid.uuid4
 import cz.frantisekmasa.wfrp_master.common.core.domain.HitLocation
 import cz.frantisekmasa.wfrp_master.common.core.domain.Money
@@ -20,9 +19,11 @@ import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.Reach
 import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.WeaponFlaw
 import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.WeaponQuality
 import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.WeaponRangeExpression
+import cz.frantisekmasa.wfrp_master.common.core.serialization.NullableSerializer
+import cz.frantisekmasa.wfrp_master.common.core.serialization.UuidAsString
+import dev.gitlive.firebase.FirebaseClassDiscriminator
 import dev.icerock.moko.parcelize.Parcelable
 import dev.icerock.moko.parcelize.Parcelize
-import kotlinx.serialization.Contextual
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.JsonClassDiscriminator
@@ -31,8 +32,9 @@ import kotlinx.serialization.json.JsonClassDiscriminator
 @Serializable
 @Immutable
 data class Trapping(
-    @Contextual override val id: Uuid,
+    override val id: UuidAsString,
     override val name: String,
+    @Serializable(with = NullableTrappingTypeSerializer::class)
     val trappingType: TrappingType?,
     val description: String,
     val encumbrance: Encumbrance,
@@ -62,6 +64,7 @@ data class Trapping(
 }
 
 @Serializable
+@FirebaseClassDiscriminator("kind")
 @JsonClassDiscriminator("kind")
 @Immutable
 sealed class TrappingType : Parcelable {
@@ -172,3 +175,6 @@ sealed class TrappingType : Parcelable {
     @SerialName("PROSTHETIC")
     object Prosthetic : TrappingType()
 }
+
+private class NullableTrappingTypeSerializer :
+    NullableSerializer<TrappingType>(TrappingType.serializer())

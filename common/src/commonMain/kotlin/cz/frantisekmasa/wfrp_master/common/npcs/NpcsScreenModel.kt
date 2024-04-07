@@ -6,12 +6,13 @@ import cz.frantisekmasa.wfrp_master.common.core.domain.character.CharacterReposi
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.CharacterType
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.PartyId
 import cz.frantisekmasa.wfrp_master.common.core.utils.duplicateName
-import cz.frantisekmasa.wfrp_master.common.firebase.functions.CloudFunctions
+import dev.gitlive.firebase.functions.FirebaseFunctions
 import kotlinx.coroutines.flow.Flow
+import kotlinx.serialization.Serializable
 
 class NpcsScreenModel(
     private val partyId: PartyId,
-    private val functions: CloudFunctions,
+    private val functions: FirebaseFunctions,
     private val characters: CharacterRepository,
 ) : ScreenModel {
 
@@ -22,13 +23,20 @@ class NpcsScreenModel(
     }
 
     suspend fun duplicate(npc: Character) {
-        functions.getHttpsCallable("duplicateCharacter")
-            .call(
-                mapOf(
-                    "partyId" to partyId.toString(),
-                    "characterId" to npc.id,
-                    "newName" to duplicateName(npc.name)
-                )
+        functions.httpsCallable("duplicateCharacter")(
+            DuplicateCharacterRequest.serializer(),
+            DuplicateCharacterRequest(
+                partyId = partyId,
+                characterId = npc.id,
+                newName = duplicateName(npc.name)
             )
+        )
     }
+
+    @Serializable
+    private data class DuplicateCharacterRequest(
+        val partyId: PartyId,
+        val characterId: String,
+        val newName: String,
+    )
 }

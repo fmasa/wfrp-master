@@ -3,6 +3,7 @@ package cz.frantisekmasa.wfrp_master.common.core.domain.trappings
 import androidx.compose.runtime.Immutable
 import cz.frantisekmasa.wfrp_master.common.character.trappings.TrappingTypeOption
 import cz.frantisekmasa.wfrp_master.common.core.domain.HitLocation
+import dev.gitlive.firebase.FirebaseClassDiscriminator
 import dev.icerock.moko.parcelize.Parcelable
 import dev.icerock.moko.parcelize.Parcelize
 import dev.icerock.moko.resources.StringResource
@@ -14,6 +15,7 @@ import cz.frantisekmasa.wfrp_master.common.compendium.domain.TrappingType as Com
 typealias Rating = Int
 
 @Serializable
+@FirebaseClassDiscriminator("kind")
 @JsonClassDiscriminator("kind")
 @Immutable
 sealed class TrappingType : Parcelable {

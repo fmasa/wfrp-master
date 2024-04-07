@@ -1,10 +1,9 @@
 package cz.frantisekmasa.wfrp_master.common.compendium.domain
 
 import androidx.compose.runtime.Immutable
-import com.benasher44.uuid.Uuid
 import com.benasher44.uuid.uuid4
+import cz.frantisekmasa.wfrp_master.common.core.serialization.UuidAsString
 import dev.icerock.moko.parcelize.Parcelize
-import kotlinx.serialization.Contextual
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -12,7 +11,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 @Immutable
 data class Spell(
-    @Contextual override val id: Uuid,
+    override val id: UuidAsString,
     override val name: String,
     val range: String,
     val target: String,

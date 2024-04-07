@@ -1,18 +1,17 @@
 package cz.frantisekmasa.wfrp_master.common.compendium.domain
 
 import androidx.compose.runtime.Immutable
-import com.benasher44.uuid.Uuid
 import com.benasher44.uuid.uuid4
 import cz.frantisekmasa.wfrp_master.common.core.common.requireMaxLength
+import cz.frantisekmasa.wfrp_master.common.core.serialization.UuidAsString
 import dev.icerock.moko.parcelize.Parcelize
-import kotlinx.serialization.Contextual
 import kotlinx.serialization.Serializable
 
 @Parcelize
 @Serializable
 @Immutable
 data class Talent(
-    @Contextual override val id: Uuid,
+    override val id: UuidAsString,
     override val name: String,
     val tests: String = "", // TODO: Remove default value in 3.0
     val maxTimesTaken: String,

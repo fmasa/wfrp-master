@@ -2,24 +2,24 @@ package cz.frantisekmasa.wfrp_master.common.core.domain.trappings
 
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.Stable
-import com.benasher44.uuid.Uuid
 import com.benasher44.uuid.uuid4
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.Trapping
 import cz.frantisekmasa.wfrp_master.common.core.common.requireMaxLength
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.CharacterItem
+import cz.frantisekmasa.wfrp_master.common.core.serialization.NullableSerializer
+import cz.frantisekmasa.wfrp_master.common.core.serialization.UuidAsString
 import cz.frantisekmasa.wfrp_master.common.core.utils.duplicateName
 import dev.icerock.moko.parcelize.Parcelize
-import kotlinx.serialization.Contextual
 import kotlinx.serialization.Serializable
 
 // TODO: Use value class
-typealias InventoryItemId = Uuid
+typealias InventoryItemId = UuidAsString
 
 @Parcelize
 @Serializable
 @Immutable
 data class InventoryItem(
-    @Contextual override val id: InventoryItemId,
+    override val id: InventoryItemId,
     val name: String,
     val description: String,
     /**
@@ -28,11 +28,12 @@ data class InventoryItem(
     val note: String = "",
     val quantity: Int,
     val encumbrance: Encumbrance = Encumbrance.Zero,
-    @Contextual val containerId: InventoryItemId? = null,
+    val containerId: InventoryItemId? = null,
+    @Serializable(with = NullableTrappingTypeSerializer::class)
     val trappingType: TrappingType? = null,
     val itemQualities: Set<ItemQuality> = emptySet(),
     val itemFlaws: Set<ItemFlaw> = emptySet(),
-    @Contextual override val compendiumId: Uuid? = null,
+    override val compendiumId: UuidAsString? = null,
 ) : CharacterItem<InventoryItem, Trapping> {
 
     init {
@@ -152,3 +153,6 @@ data class InventoryItem(
         }
     }
 }
+
+private class NullableTrappingTypeSerializer :
+    NullableSerializer<TrappingType>(TrappingType.serializer())

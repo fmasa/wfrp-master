@@ -24,7 +24,8 @@ import androidx.compose.ui.input.key.onPreviewKeyEvent
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import cz.frantisekmasa.wfrp_master.common.Str
-import cz.frantisekmasa.wfrp_master.common.auth.AuthenticationManager
+import cz.frantisekmasa.wfrp_master.common.auth.JvmAuthenticationManager
+import cz.frantisekmasa.wfrp_master.common.auth.JvmAuthenticationManager.SignInError
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.ErrorMessage
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.Rules
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.TextInput
@@ -57,7 +58,7 @@ fun AuthenticationScreen() {
     Box {
         SplashScreen()
 
-        val auth: AuthenticationManager by localDI().instance()
+        val auth: JvmAuthenticationManager by localDI().instance()
 
         val errorInvalidEmail = stringResource(Str.authentication_messages_invalid_email)
         val errorEmailNotFound = stringResource(Str.authentication_messages_email_not_found)
@@ -73,14 +74,20 @@ fun AuthenticationScreen() {
             processing = true
 
             coroutineScope.launch(Dispatchers.IO) {
-                val result = auth.signIn(email.value, password.value)
-
-                if (result is AuthenticationManager.SignInResponse.Failure) {
-                    error = when {
-                        result.isInvalidEmail -> errorInvalidEmail
-                        result.isEmailNotFound -> errorEmailNotFound
-                        result.isInvalidPassword -> errorInvalidPassword
-                        else -> errorUnknown
+                auth.signIn(email.value, password.value).mapLeft {
+                    error = when (it) {
+                        SignInError.InvalidPassword -> {
+                            errorInvalidPassword
+                        }
+                        SignInError.InvalidEmail -> {
+                            errorInvalidEmail
+                        }
+                        SignInError.EmailNotFound -> {
+                            errorEmailNotFound
+                        }
+                        SignInError.UnknownError -> {
+                            errorUnknown
+                        }
                     }
 
                     processing = false

@@ -5,33 +5,34 @@ import arrow.core.right
 import cz.frantisekmasa.wfrp_master.common.core.connectivity.CouldNotConnectToBackend
 import cz.frantisekmasa.wfrp_master.common.core.domain.identifiers.EncounterId
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.PartyId
-import cz.frantisekmasa.wfrp_master.common.core.firebase.AggregateMapper
 import cz.frantisekmasa.wfrp_master.common.core.firebase.Schema
-import cz.frantisekmasa.wfrp_master.common.core.firebase.documents
 import cz.frantisekmasa.wfrp_master.common.encounters.domain.Encounter
 import cz.frantisekmasa.wfrp_master.common.encounters.domain.EncounterNotFound
 import cz.frantisekmasa.wfrp_master.common.encounters.domain.EncounterRepository
-import cz.frantisekmasa.wfrp_master.common.firebase.firestore.Firestore
-import cz.frantisekmasa.wfrp_master.common.firebase.firestore.FirestoreException
-import cz.frantisekmasa.wfrp_master.common.firebase.firestore.Query
-import cz.frantisekmasa.wfrp_master.common.firebase.firestore.SetOptions
+import dev.gitlive.firebase.firestore.Direction
+import dev.gitlive.firebase.firestore.FirebaseFirestore
+import dev.gitlive.firebase.firestore.FirebaseFirestoreException
+import dev.gitlive.firebase.firestore.FirestoreExceptionCode
+import dev.gitlive.firebase.firestore.orderBy
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
 class FirestoreEncounterRepository(
-    private val firestore: Firestore,
-    private val mapper: AggregateMapper<Encounter>
+    private val firestore: FirebaseFirestore,
 ) : EncounterRepository {
     private val parties = firestore.collection(Schema.Parties)
 
     override suspend fun get(id: EncounterId): Encounter {
         try {
-            val data = encounters(id.partyId).document(id.encounterId.toString()).get().data
-                ?: throw EncounterNotFound(id)
+            val snapshot = encounters(id.partyId).document(id.encounterId.toString()).get()
 
-            return mapper.fromDocumentData(data)
-        } catch (e: FirestoreException) {
-            if (e.isUnavailable) {
+            if (!snapshot.exists) {
+                throw EncounterNotFound(id)
+            }
+
+            return snapshot.data(Encounter.serializer())
+        } catch (e: FirebaseFirestoreException) {
+            if (e.code == FirestoreExceptionCode.UNAVAILABLE) {
                 throw CouldNotConnectToBackend(e)
             }
 
@@ -44,28 +45,19 @@ class FirestoreEncounterRepository(
             .document(id.encounterId.toString())
             .snapshots
             .map { snapshot ->
-                snapshot.fold(
-                    {
-                        when (val data = it.data) {
-                            null -> EncounterNotFound(id).left()
-                            else -> mapper.fromDocumentData(data).right()
-                        }
-                    },
-                    {
-                        EncounterNotFound(id, it).left()
-                    }
-                )
+                if (snapshot.exists)
+                    snapshot.data(Encounter.serializer()).right()
+                else EncounterNotFound(id).left()
             }
 
     override suspend fun save(partyId: PartyId, vararg encounters: Encounter) {
-        firestore.runTransaction { transaction ->
+        firestore.runTransaction {
             encounters.forEach { encounter ->
-                val data = mapper.toDocumentData(encounter)
-
-                transaction.set(
-                    encounters(partyId).document(encounter.id.toString()),
-                    data,
-                    SetOptions.mergeFields(data.keys),
+                set(
+                    documentRef = encounters(partyId).document(encounter.id.toString()),
+                    data = encounter,
+                    merge = true,
+                    encodeDefaults = true,
                 )
             }
         }
@@ -73,8 +65,9 @@ class FirestoreEncounterRepository(
 
     override fun findByParty(partyId: PartyId): Flow<List<Encounter>> {
         return encounters(partyId)
-            .orderBy("position", Query.Direction.ASCENDING)
-            .documents(mapper)
+            .orderBy("position")
+            .snapshots
+            .map { snapshot -> snapshot.documents.map { it.data(Encounter.serializer()) } }
     }
 
     override suspend fun remove(id: EncounterId) {
@@ -83,14 +76,12 @@ class FirestoreEncounterRepository(
 
     override suspend fun getNextPosition(partyId: PartyId): Int {
         val snapshot = encounters(partyId)
-            .orderBy("position", Query.Direction.DESCENDING)
+            .orderBy("position", Direction.DESCENDING)
             .get()
 
         val lastPosition = snapshot.documents
-            .asSequence()
-            .mapNotNull { it.data }
-            .map(mapper::fromDocumentData)
             .firstOrNull()
+            ?.data(Encounter.serializer())
             ?.position ?: -1
 
         return lastPosition + 1

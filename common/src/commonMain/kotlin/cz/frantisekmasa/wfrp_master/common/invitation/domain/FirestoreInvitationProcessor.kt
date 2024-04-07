@@ -5,44 +5,51 @@ import cz.frantisekmasa.wfrp_master.common.core.domain.party.Invitation
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.PartyId
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.PartyNotFound
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.PartyRepository
-import cz.frantisekmasa.wfrp_master.common.firebase.firestore.Firestore
-import cz.frantisekmasa.wfrp_master.common.firebase.firestore.SetOptions
-import cz.frantisekmasa.wfrp_master.common.firebase.firestore.arrayUnion
+import dev.gitlive.firebase.firestore.FieldValue
+import dev.gitlive.firebase.firestore.FieldValue.Companion.arrayUnion
+import dev.gitlive.firebase.firestore.FirebaseFirestore
+import dev.gitlive.firebase.firestore.Transaction
+import kotlinx.serialization.Serializable
 
 class FirestoreInvitationProcessor(
-    private val firestore: Firestore,
+    private val firestore: FirebaseFirestore,
     private val parties: PartyRepository
 ) : InvitationProcessor {
 
-    override suspend fun accept(userId: UserId, invitation: Invitation): InvitationProcessingResult {
+    override suspend fun accept(userId: UserId, invitation: Invitation): InvitationProcessingResult = firestore.runTransaction {
         if (isAlreadyInParty(userId, invitation.partyId)) {
-            return InvitationProcessingResult.AlreadyInParty
+            return@runTransaction InvitationProcessingResult.AlreadyInParty
         }
 
         firestore.collection("users")
             .document(userId.toString())
             .set(
-                mapOf(
-                    "invitations" to arrayUnion(
+                strategy = InvitationsUpdate.serializer(),
+                data = InvitationsUpdate(
+                    invitations = arrayUnion(
                         mapOf(
                             "partyId" to invitation.partyId.toString(),
                             "accessCode" to invitation.accessCode
                         )
                     )
                 ),
-                SetOptions.mergeFields(listOf("invitations"))
             )
 
         firestore.collection("parties")
             .document(invitation.partyId.toString())
-            .update("users", arrayUnion(userId.toString()))
+            .update("users" to arrayUnion(userId.toString()))
 
-        return InvitationProcessingResult.Success
+        return@runTransaction InvitationProcessingResult.Success
     }
 
-    private suspend fun isAlreadyInParty(userId: UserId, partyId: PartyId): Boolean {
+    @Serializable
+    private data class InvitationsUpdate(
+        val invitations: FieldValue,
+    )
+
+    private suspend fun Transaction.isAlreadyInParty(userId: UserId, partyId: PartyId): Boolean {
         return try {
-            parties.get(partyId).isMember(userId)
+            parties.get(this, partyId).isMember(userId)
         } catch (e: PartyNotFound) {
             false
         }

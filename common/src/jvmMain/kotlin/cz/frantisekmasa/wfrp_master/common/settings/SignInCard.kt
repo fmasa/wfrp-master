@@ -9,7 +9,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import cz.frantisekmasa.wfrp_master.common.Str
-import cz.frantisekmasa.wfrp_master.common.auth.AuthenticationManager
+import cz.frantisekmasa.wfrp_master.common.auth.JvmAuthenticationManager
 import cz.frantisekmasa.wfrp_master.common.core.auth.LocalUser
 import cz.frantisekmasa.wfrp_master.common.core.ui.buttons.CardButton
 import cz.frantisekmasa.wfrp_master.common.core.ui.cards.CardContainer
@@ -42,7 +42,7 @@ actual fun SignInCard(settingsScreenModel: SettingsScreenModel) {
                 SingleLineTextValue(stringResource(Str.authentication_label_email), email)
             }
 
-            val auth: AuthenticationManager by localDI().instance()
+            val auth: JvmAuthenticationManager by localDI().instance()
             val coroutineScope = rememberCoroutineScope()
 
             CardButton(

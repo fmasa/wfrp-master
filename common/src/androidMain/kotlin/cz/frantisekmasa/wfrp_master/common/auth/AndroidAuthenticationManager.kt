@@ -6,82 +6,25 @@ import androidx.activity.result.contract.ActivityResultContract
 import androidx.compose.runtime.staticCompositionLocalOf
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseAuthUserCollisionException
-import com.google.firebase.auth.GoogleAuthProvider
-import cz.frantisekmasa.wfrp_master.common.core.auth.User
-import cz.frantisekmasa.wfrp_master.common.core.auth.UserId
-import cz.frantisekmasa.wfrp_master.common.core.auth.UserProvider
-import cz.frantisekmasa.wfrp_master.common.core.logging.Reporter
+import dev.gitlive.firebase.auth.FirebaseAuth
+import dev.gitlive.firebase.auth.FirebaseAuthUserCollisionException
+import dev.gitlive.firebase.auth.GoogleAuthProvider
 import io.github.aakira.napier.Napier
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.channels.awaitClose
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.callbackFlow
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.stateIn
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 
 val LocalWebClientId = staticCompositionLocalOf<String> { error("LocalWebTokenId was not set") }
 
-class AuthenticationManager(private val auth: FirebaseAuth) : UserProvider {
-    val coroutineScope = CoroutineScope(Dispatchers.Default)
-
-    val authenticated: StateFlow<Boolean?> = callbackFlow {
-        trySend(auth.currentUser != null)
-
-        val listener = FirebaseAuth.AuthStateListener {
-            auth.currentUser?.let {
-                launch(Dispatchers.Main) {
-                    this@callbackFlow.trySend(auth.currentUser != null).isSuccess
-                }
-            }
-        }
-
-        auth.addAuthStateListener(listener)
-
-        awaitClose { auth.removeAuthStateListener(listener) }
-    }.stateIn(coroutineScope, SharingStarted.Eagerly, null)
-
-    val user: StateFlow<User?> = callbackFlow {
-        auth.currentUser?.let { this.trySend(it).isSuccess }
-
-        val listener = FirebaseAuth.AuthStateListener {
-            auth.currentUser?.let {
-                launch(Dispatchers.Main) {
-                    trySend(it)
-                }
-            }
-        }
-
-        auth.addAuthStateListener(listener)
-
-        awaitClose { auth.removeAuthStateListener(listener) }
-    }.map {
-        User(
-            id = UserId(it.uid),
-            email = if (it.email == "") null else it.email
-        )
-    }.stateIn(coroutineScope, SharingStarted.Eagerly, null)
-
-    override val userId: UserId? get() = user.value?.id
-
-    init {
-        coroutineScope.launch {
-            user.collect { it?.let { Reporter.setUserId(it.id) } }
-        }
-    }
-
+class AndroidAuthenticationManager(
+    private val auth: FirebaseAuth,
+    val common: CommonAuthenticationManager,
+) {
     suspend fun signInWithGoogleToken(idToken: String): Boolean {
-        val credential = GoogleAuthProvider.getCredential(idToken, null)
+        val credential = GoogleAuthProvider.credential(idToken, null)
 
         Napier.d("Authenticated, idToken: $idToken")
 
         return try {
-            auth.signInWithCredential(credential).await()
+            auth.signInWithCredential(credential)
 
             true
         } catch (e: Throwable) {
@@ -100,7 +43,7 @@ class AuthenticationManager(private val auth: FirebaseAuth) : UserProvider {
 
         check(user != null)
 
-        user.linkWithCredential(GoogleAuthProvider.getCredential(idToken, null)).await()
+        user.linkWithCredential(GoogleAuthProvider.credential(idToken, null))
     }
 
     fun googleSignInContract(webClientId: String): ActivityResultContract<Int?, IntentResult> {

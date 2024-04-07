@@ -62,6 +62,9 @@ class EncountersScreenModel(
 
     fun reorderEncounters(positions: Map<UUID, Int>) = coroutineScope.launch(Dispatchers.IO) {
         val encounters = positions.keys
+            // This is terribly non-optimal
+            // TODO: Load all encounters at once
+            // and/or use lexographical ordering
             .map(::encounterAsync)
             .awaitAll()
             .toMap()

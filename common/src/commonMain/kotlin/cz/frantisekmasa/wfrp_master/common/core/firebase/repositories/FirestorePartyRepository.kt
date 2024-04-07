@@ -8,36 +8,36 @@ import cz.frantisekmasa.wfrp_master.common.core.domain.party.Party
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.PartyId
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.PartyNotFound
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.PartyRepository
-import cz.frantisekmasa.wfrp_master.common.core.firebase.AggregateMapper
-import cz.frantisekmasa.wfrp_master.common.core.firebase.documents
-import cz.frantisekmasa.wfrp_master.common.firebase.firestore.Firestore
-import cz.frantisekmasa.wfrp_master.common.firebase.firestore.FirestoreException
-import cz.frantisekmasa.wfrp_master.common.firebase.firestore.SetOptions
-import cz.frantisekmasa.wfrp_master.common.firebase.firestore.Source
-import cz.frantisekmasa.wfrp_master.common.firebase.firestore.Transaction
+import cz.frantisekmasa.wfrp_master.common.core.firebase.Schema
+import dev.gitlive.firebase.firestore.FirebaseFirestore
+import dev.gitlive.firebase.firestore.FirebaseFirestoreException
+import dev.gitlive.firebase.firestore.FirestoreExceptionCode
+import dev.gitlive.firebase.firestore.QuerySnapshot
+import dev.gitlive.firebase.firestore.Transaction
+import dev.gitlive.firebase.firestore.where
 import io.github.aakira.napier.Napier
 import kotlinx.coroutines.flow.map
 
 class FirestorePartyRepository(
-    private val firestore: Firestore,
-    private val mapper: AggregateMapper<Party>
+    private val firestore: FirebaseFirestore
 ) : PartyRepository {
-    private val parties = firestore.collection("parties")
+    private val parties = firestore.collection(Schema.Parties)
 
     override suspend fun save(party: Party) {
-        val data = mapper.toDocumentData(party)
+        Napier.d("Saving party $party to firestore")
 
-        Napier.d("Saving party $data to firestore")
         try {
-            firestore.runTransaction { transaction ->
-                transaction.set(
-                    parties.document(party.id.toString()),
-                    data,
-                    SetOptions.mergeFields(data.keys),
+            firestore.runTransaction {
+                set(
+                    documentRef = parties.document(party.id.toString()),
+                    strategy = Party.serializer(),
+                    data = party,
+                    merge = true,
+                    encodeDefaults = true,
                 )
             }
-        } catch (e: FirestoreException) {
-            if (e.isUnavailable) {
+        } catch (e: FirebaseFirestoreException) {
+            if (e.code == FirestoreExceptionCode.UNAVAILABLE) {
                 throw CouldNotConnectToBackend(e)
             }
 
@@ -46,62 +46,62 @@ class FirestorePartyRepository(
     }
 
     override fun save(transaction: Transaction, party: Party) {
-        val data = mapper.toDocumentData(party)
-
-        Napier.d("Saving party $data to firestore")
+        Napier.d("Saving party $party to firestore")
 
         transaction.set(
-            parties.document(party.id.toString()),
-            data,
-            SetOptions.mergeFields(data.keys),
+            documentRef = parties.document(party.id.toString()),
+            strategy = Party.serializer(),
+            data = party,
+            merge = true,
+            encodeDefaults = true,
         )
     }
 
     override suspend fun update(id: PartyId, mutator: (Party) -> Party) {
-        val party = get(id)
-        val updatedParty = mutator(party)
+        firestore.runTransaction {
 
-        if (updatedParty != party) {
-            save(updatedParty)
+            val party = get(this, id)
+            val updatedParty = mutator(party)
+
+            if (updatedParty != party) {
+                save(this, updatedParty)
+            }
         }
     }
 
-    override suspend fun get(id: PartyId): Party {
-        try {
-            val data = parties.document(id.toString()).get(Source.SERVER).data
-                ?: throw PartyNotFound(id)
+    override suspend fun get(transaction: Transaction, id: PartyId): Party {
+        val snapshot = transaction.get(parties.document(id.toString()))
 
-            return this.mapper.fromDocumentData(data)
-        } catch (e: FirestoreException) {
-            throw PartyNotFound(id, e)
+        if (!snapshot.exists) {
+            throw PartyNotFound(id)
         }
+
+        return snapshot.data(Party.serializer())
     }
 
     override fun getLive(id: PartyId) =
         parties.document(id.toString())
             .snapshots
             .map { snapshot ->
-                snapshot.fold(
-                    {
-                        when (val data = it.data) {
-                            null -> PartyNotFound(id).left()
-                            else -> mapper.fromDocumentData(data).right()
-                        }
-                    },
-                    { PartyNotFound(id, it).left() }
-                )
+                if (snapshot.exists)
+                    snapshot.data(Party.serializer()).right()
+                else PartyNotFound(id).left()
             }
 
-    override fun forUserLive(userId: UserId) = queryForUser(userId).documents(mapper)
+    override fun forUserLive(userId: UserId) = queryForUser(userId)
+        .snapshots
+        .map { it.toPartyList() }
 
     override suspend fun forUser(userId: UserId) =
         queryForUser(userId)
             .get()
-            .documents
-            .mapNotNull { it.data }
-            .map { mapper.fromDocumentData(it) }
+            .toPartyList()
+
+    private fun QuerySnapshot.toPartyList(): List<Party> {
+        return documents.map { it.data(Party.serializer()) }
+    }
 
     private fun queryForUser(userId: UserId) = parties
-        .whereArrayContains("users", userId.toString())
-        .whereEqualTo("archived", false)
+        .where("users", arrayContains = userId.toString())
+        .where("archived", equalTo = false)
 }
