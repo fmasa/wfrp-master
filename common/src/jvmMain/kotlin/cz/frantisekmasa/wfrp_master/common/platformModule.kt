@@ -39,7 +39,7 @@ internal actual val platformModule = DI.Module("jvm") {
     bindSingleton { SettingsStorage() }
 
     bindSingleton { CommonAuthenticationManager(instance(), supportsEmail = false) }
-    bindSingleton { JvmAuthenticationManager(instance(), instance(), instance(), instance()) }
+    bindSingleton { JvmAuthenticationManager(instance(), instance(), instance()) }
 
     bindSingleton {
         Firebase.functions.apply {

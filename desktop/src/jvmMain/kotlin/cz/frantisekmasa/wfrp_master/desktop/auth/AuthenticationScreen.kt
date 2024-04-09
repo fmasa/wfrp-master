@@ -22,6 +22,7 @@ import androidx.compose.ui.input.key.KeyEvent
 import androidx.compose.ui.input.key.key
 import androidx.compose.ui.input.key.onPreviewKeyEvent
 import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import cz.frantisekmasa.wfrp_master.common.Str
 import cz.frantisekmasa.wfrp_master.common.auth.JvmAuthenticationManager
@@ -64,6 +65,8 @@ fun AuthenticationScreen() {
         val errorEmailNotFound = stringResource(Str.authentication_messages_email_not_found)
         val errorInvalidPassword = stringResource(Str.authentication_messages_invalid_password)
         val errorUnknown = stringResource(Str.authentication_messages_unknown_error)
+        val errorTooManyAttempts = stringResource(Str.authentication_messages_too_many_attempts)
+
         val submit = submit@{
             validate = true
 
@@ -84,6 +87,9 @@ fun AuthenticationScreen() {
                         }
                         SignInError.EmailNotFound -> {
                             errorEmailNotFound
+                        }
+                        SignInError.TooManyAttempts -> {
+                            errorTooManyAttempts
                         }
                         SignInError.UnknownError -> {
                             errorUnknown
@@ -112,10 +118,11 @@ fun AuthenticationScreen() {
             Column(Modifier.padding(Spacing.large)) {
                 error?.let {
                     Box(
-                        Modifier.fillMaxWidth(),
+                        Modifier.fillMaxWidth()
+                            .padding(bottom = Spacing.medium),
                         contentAlignment = Alignment.Center
                     ) {
-                        ErrorMessage(it)
+                        ErrorMessage(it, textAlign = TextAlign.Center)
                     }
                 }
                 TextInput(

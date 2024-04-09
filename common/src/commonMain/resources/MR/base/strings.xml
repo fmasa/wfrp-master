@@ -43,6 +43,7 @@
     <string name="authentication_messages_not_signed_in_description">You are not signed-in.\nSigning-in lets you keep access to parties between devices.</string>
     <string name="authentication_messages_reset_password_email_sent">Email with instructions for password reset was sent</string>
     <string name="authentication_messages_signed_in_as">You are signed-in as</string>
+    <string name="authentication_messages_too_many_attempts">Too many attempts.\nTry again in a few minutes or reset your password.</string>
     <string name="authentication_messages_unknown_error">Unknown error occurred</string>
     <string name="blessings_button_add_non_compendium">…or add non-Compendium blessing</string>
     <string name="blessings_label_duration">Duration</string>
