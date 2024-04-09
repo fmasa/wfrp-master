@@ -24,7 +24,7 @@ fun Startup(content: @Composable () -> Unit) {
     val user = auth.common.user.collectAsState(null).value
     var authenticationScreenVisible by remember { mutableStateOf(false) }
 
-    if (authenticationScreenVisible) {
+    if (authenticationScreenVisible && user == null) {
         AuthenticationScreen()
         return
     }

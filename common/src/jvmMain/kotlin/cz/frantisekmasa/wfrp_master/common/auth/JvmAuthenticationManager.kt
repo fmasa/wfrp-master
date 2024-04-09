@@ -3,7 +3,6 @@ package cz.frantisekmasa.wfrp_master.common.auth
 import arrow.core.Either
 import arrow.core.left
 import arrow.core.right
-import cz.frantisekmasa.wfrp_master.common.core.shared.SettingsStorage
 import dev.gitlive.firebase.auth.FirebaseAuth
 import dev.gitlive.firebase.auth.FirebaseUser
 import io.ktor.client.HttpClient
@@ -21,7 +20,6 @@ class JvmAuthenticationManager(
     val common: CommonAuthenticationManager,
     private val auth: FirebaseAuth,
     private val http: HttpClient,
-    private val settings: SettingsStorage,
 ) {
     val status: Flow<AuthenticationStatus?> = auth.authStateChanged.map { user ->
         if (user == null) {
@@ -40,6 +38,7 @@ class JvmAuthenticationManager(
         InvalidEmail,
         InvalidPassword,
         EmailNotFound,
+        TooManyAttempts,
         UnknownError
     }
 
@@ -58,10 +57,11 @@ class JvmAuthenticationManager(
 
         val body = response.body<FailureResponse>()
 
-        return when (body.error.message) {
-            "INVALID_EMAIL" -> SignInError.InvalidEmail
-            "INVALID_PASSWORD" -> SignInError.InvalidPassword
-            "EMAIL_NOT_FOUND" -> SignInError.EmailNotFound
+        return when {
+            body.error.message == "INVALID_EMAIL" -> SignInError.InvalidEmail
+            body.error.message == "INVALID_PASSWORD" -> SignInError.InvalidPassword
+            body.error.message == "EMAIL_NOT_FOUND" -> SignInError.EmailNotFound
+            body.error.message.startsWith("TOO_MANY_ATTEMPTS_TRY_LATER") -> SignInError.TooManyAttempts
             else -> SignInError.UnknownError
         }.left()
     }
