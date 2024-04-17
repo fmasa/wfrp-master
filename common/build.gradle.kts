@@ -16,7 +16,7 @@ multiplatformResources {
 }
 
 kotlin {
-    android()
+    androidTarget()
     jvm()
 
     tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
@@ -87,7 +87,7 @@ kotlin {
                 api("io.ktor:ktor-client-cio:${Versions.ktor}")
                 api("io.ktor:ktor-client-core:${Versions.ktor}")
 
-                val richtextVersion = "0.13.0"
+                val richtextVersion = "1.0.0-alpha01"
                 implementation("com.halilibo.compose-richtext:richtext-commonmark:$richtextVersion")
                 implementation("com.halilibo.compose-richtext:richtext-ui-material:$richtextVersion")
                 implementation("io.github.z4kn4fein:semver:1.3.3")
@@ -159,6 +159,7 @@ kotlin {
         }
 
         val jvmMain by getting {
+            dependsOn(commonMain)
             dependencies {
                 implementation(compose.desktop.common)
                 implementation(compose.desktop.currentOs)
@@ -168,10 +169,9 @@ kotlin {
             }
         }
 
-        val androidTest by getting {
-            dependsOn(commonTest)
+        val androidUnitTest by getting {
             dependencies {
-                dependsOn(sourceSets.getByName("commonTest"))
+                dependsOn(commonTest)
                 implementation(kotlin("test-junit"))
                 runtimeOnly("org.junit.jupiter:junit-jupiter-engine:5.6.0")
             }
@@ -184,7 +184,6 @@ android {
 
     defaultConfig {
         minSdk = Versions.Android.minSdk
-        targetSdk = Versions.Android.targetSdk
 
         //
         // Firestore emulator setup

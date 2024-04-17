@@ -1,7 +1,7 @@
 package cz.frantisekmasa.wfrp_master.common.characterCreation
 
 import androidx.compose.animation.AnimatedContent
-import androidx.compose.animation.AnimatedContentScope
+import androidx.compose.animation.AnimatedContentTransitionScope.SlideDirection
 import androidx.compose.animation.core.snap
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
@@ -146,8 +146,8 @@ private fun Screen.MainContainer(partyId: PartyId, type: CharacterType, userId: 
                         fadeIn(snap(), 0f) with fadeOut(snap(), 0f)
                     } else {
                         val direction = if (targetState > initialState)
-                            AnimatedContentScope.SlideDirection.Start
-                        else AnimatedContentScope.SlideDirection.End
+                            SlideDirection.Start
+                        else SlideDirection.End
                         val animationSpec = tween<IntOffset>(250)
                         slideIntoContainer(direction, animationSpec) with
                             slideOutOfContainer(direction, animationSpec)

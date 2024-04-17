@@ -39,6 +39,7 @@ fun TabPager(
 
         val pagerState = rememberPagerState(
             initialPage = initialPage,
+            pageCount = { scope.tabNames.size },
         )
 
         if (onPageChange !== null) {
@@ -101,7 +102,6 @@ fun TabPager(
         }
 
         HorizontalPager(
-            pageCount = scope.tabNames.size,
             state = pagerState,
             modifier = Modifier.fillMaxWidth(),
             beyondBoundsPageCount = beyondBoundsPageCount,
