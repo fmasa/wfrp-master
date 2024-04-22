@@ -95,8 +95,9 @@ kotlin {
                 implementation("org.jsoup:jsoup:1.15.3")
 
                 api("dev.icerock.moko:parcelize:0.9.0")
-                api("dev.icerock.moko:resources:0.23.0")
-                api("dev.icerock.moko:resources-compose:0.23.0")
+                val mokoResourcesVersion = "0.24.0-beta-1"
+                api("dev.icerock.moko:resources:$mokoResourcesVersion")
+                api("dev.icerock.moko:resources-compose:$mokoResourcesVersion")
             }
         }
 
@@ -159,7 +160,6 @@ kotlin {
         }
 
         val jvmMain by getting {
-            dependsOn(commonMain)
             dependencies {
                 implementation(compose.desktop.common)
                 implementation(compose.desktop.currentOs)
@@ -171,7 +171,6 @@ kotlin {
 
         val androidUnitTest by getting {
             dependencies {
-                dependsOn(commonTest)
                 implementation(kotlin("test-junit"))
                 runtimeOnly("org.junit.jupiter:junit-jupiter-engine:5.6.0")
             }
