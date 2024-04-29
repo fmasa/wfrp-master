@@ -19,8 +19,6 @@ import org.kodein.di.DI
 import org.kodein.di.bindSingleton
 import org.kodein.di.instance
 
-internal actual val ktorEngine: HttpClientEngine get() = CIO.create()
-
 internal actual val platformModule = DI.Module("jvm") {
     bindSingleton {
         HttpClient(CIO) {
@@ -40,23 +38,6 @@ internal actual val platformModule = DI.Module("jvm") {
 
     bindSingleton { CommonAuthenticationManager(instance(), supportsEmail = false) }
     bindSingleton { JvmAuthenticationManager(instance(), instance(), instance()) }
-
-    bindSingleton {
-        Firebase.functions.apply {
-            System.getProperty("functionsEmulatorUrl")?.let {
-                val (host, port) = it.split(':')
-                useEmulator(host, port.toInt())
-            }
-        }
-    }
-    bindSingleton {
-        Firebase.firestore.apply {
-            System.getProperty("firestoreEmulatorUrl")?.let {
-                val (host, port) = it.split(':')
-                useEmulator(host, port.toInt())
-            }
-        }
-    }
 
     bindSingleton { Translator.Factory { JvmTranslator(it) } }
 }

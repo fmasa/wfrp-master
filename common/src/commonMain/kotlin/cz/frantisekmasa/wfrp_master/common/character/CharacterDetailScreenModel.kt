@@ -1,7 +1,7 @@
 package cz.frantisekmasa.wfrp_master.common.character
 
 import cafe.adriel.voyager.core.model.ScreenModel
-import cafe.adriel.voyager.core.model.coroutineScope
+import cafe.adriel.voyager.core.model.screenModelScope
 import cz.frantisekmasa.wfrp_master.common.character.characteristics.CharacteristicsScreenState
 import cz.frantisekmasa.wfrp_master.common.character.characteristics.CompendiumCareer
 import cz.frantisekmasa.wfrp_master.common.character.combat.CharacterCombatScreenState
@@ -304,13 +304,13 @@ class CharacterDetailScreenModel(
     }
 
     fun updatePoints(points: Points) {
-        coroutineScope.launch(Dispatchers.IO) {
+        screenModelScope.launch(Dispatchers.IO) {
             updateCharacter { it.updatePoints(points) }
         }
     }
 
     fun updateConditions(conditions: CurrentConditions) {
-        coroutineScope.launch(Dispatchers.IO) {
+        screenModelScope.launch(Dispatchers.IO) {
             updateCharacter { it.updateConditions(conditions) }
         }
     }
@@ -332,7 +332,7 @@ class CharacterDetailScreenModel(
     }
 
     fun removeTrait(trait: Trait) {
-        coroutineScope.launch(Dispatchers.IO) {
+        screenModelScope.launch(Dispatchers.IO) {
             firestore.runTransaction {
                 effectManager.removeItem(
                     this,
@@ -346,7 +346,7 @@ class CharacterDetailScreenModel(
     }
 
     fun removeTalent(talent: Talent) {
-        coroutineScope.launch(Dispatchers.IO) {
+        screenModelScope.launch(Dispatchers.IO) {
             firestore.runTransaction {
                 effectManager.removeItem(
                     this,
@@ -360,31 +360,31 @@ class CharacterDetailScreenModel(
     }
 
     fun removeSkill(skill: Skill) {
-        coroutineScope.launch(Dispatchers.IO) {
+        screenModelScope.launch(Dispatchers.IO) {
             skills.remove(characterId, skill.id)
         }
     }
 
     fun removeBlessing(blessing: Blessing) {
-        coroutineScope.launch(Dispatchers.IO) {
+        screenModelScope.launch(Dispatchers.IO) {
             blessings.remove(characterId, blessing.id)
         }
     }
 
     fun removeMiracle(miracle: Miracle) {
-        coroutineScope.launch(Dispatchers.IO) {
+        screenModelScope.launch(Dispatchers.IO) {
             miracles.remove(characterId, miracle.id)
         }
     }
 
     fun removeTrapping(trapping: InventoryItem) {
-        coroutineScope.launch(Dispatchers.IO) {
+        screenModelScope.launch(Dispatchers.IO) {
             trappings.remove(characterId, trapping.id)
         }
     }
 
     fun removeSpell(spell: Spell) {
-        coroutineScope.launch(Dispatchers.IO) {
+        screenModelScope.launch(Dispatchers.IO) {
             spells.remove(characterId, spell.id)
         }
     }
@@ -394,7 +394,7 @@ class CharacterDetailScreenModel(
     }
 
     fun duplicateTrapping(trapping: InventoryItem) {
-        coroutineScope.launch(Dispatchers.IO) {
+        screenModelScope.launch(Dispatchers.IO) {
             trappings.save(characterId, trapping.duplicate())
         }
     }

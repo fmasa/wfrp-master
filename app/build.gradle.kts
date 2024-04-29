@@ -1,7 +1,7 @@
 plugins {
     id("com.android.application")
     kotlin("android")
-    id("kotlin-parcelize")
+    alias(libs.plugins.kotlin.parcelize)
     id("com.google.gms.google-services")
     id("com.google.firebase.crashlytics")
     kotlin("plugin.serialization")
@@ -10,7 +10,8 @@ plugins {
 }
 
 android {
-    compileSdk = Versions.Android.compileSdk
+    namespace = "cz.muni.fi.rpg"
+    compileSdk = rootProject.extra["compile_sdk"].toString().toInt()
 
     bundle {
         language {
@@ -20,8 +21,8 @@ android {
 
     defaultConfig {
         applicationId = "cz.frantisekmasa.dnd"
-        minSdk = Versions.Android.minSdk
-        targetSdk = Versions.Android.targetSdk
+        minSdk = rootProject.extra["min_sdk"].toString().toInt()
+        targetSdk = rootProject.extra["target_sdk"].toString().toInt()
         versionCode = System.getenv("SUPPLY_VERSION_CODE")?.toIntOrNull() ?: 1
         versionName = System.getenv("SUPPLY_VERSION_NAME") ?: "dev"
 
@@ -41,9 +42,6 @@ android {
         getByName("debug") {
             applicationIdSuffix = ".debug"
             resValue("string", "app_name", "[Debug] WFRP Master")
-            resValue("string", "character_ad_unit_id", "ca-app-pub-3940256099942544/6300978111")
-            resValue("string", "game_master_ad_unit_id", "ca-app-pub-3940256099942544/6300978111")
-            resValue("string", "combat_ad_unit_id", "ca-app-pub-3940256099942544/6300978111")
 
             addManifestPlaceholders(
                 mapOf(
@@ -61,9 +59,6 @@ android {
             signingConfig = signingConfigs.getByName("release")
 
             resValue("string", "app_name", "WFRP Master")
-            resValue("string", "character_ad_unit_id", "ca-app-pub-8647604386686373/9919978313")
-            resValue("string", "game_master_ad_unit_id", "ca-app-pub-8647604386686373/7714574658")
-            resValue("string", "combat_ad_unit_id", "ca-app-pub-8647604386686373/3858132571")
 
             addManifestPlaceholders(
                 mapOf(
@@ -110,7 +105,7 @@ dependencies {
     api("androidx.fragment:fragment-ktx:1.5.6")
 
     // Coroutines
-    api("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4")
-    api("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4")
-    api("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.6.4")
+    api("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.8.0")
+    api("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.8.0")
+    api("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.8.0")
 }

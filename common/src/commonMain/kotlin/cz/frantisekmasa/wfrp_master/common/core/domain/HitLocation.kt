@@ -3,14 +3,12 @@ package cz.frantisekmasa.wfrp_master.common.core.domain
 import androidx.compose.runtime.Immutable
 import cz.frantisekmasa.wfrp_master.common.Str
 import dev.icerock.moko.parcelize.Parcelable
-import dev.icerock.moko.parcelize.Parcelize
 import dev.icerock.moko.resources.StringResource
 
-@Parcelize
 @Immutable
 enum class HitLocation(
     override val translatableName: StringResource,
-) : NamedEnum, Parcelable {
+) : NamedEnum {
     HEAD(Str.combat_hit_locations_head),
     BODY(Str.combat_hit_locations_body),
     LEFT_ARM(Str.combat_hit_locations_left_arm),

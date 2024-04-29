@@ -1,10 +1,12 @@
-
+import com.codingfeline.buildkonfig.compiler.FieldSpec.Type.BOOLEAN
+import com.codingfeline.buildkonfig.compiler.FieldSpec.Type.STRING
 import org.jetbrains.kotlin.konan.properties.Properties
 import org.jetbrains.kotlin.konan.properties.loadProperties
 
 plugins {
     id("com.android.library")
-    kotlin("multiplatform")
+    alias(libs.plugins.kotlin.multiplatform)
+    alias(libs.plugins.buildkonfig)
     kotlin("plugin.serialization")
     id("kotlin-parcelize")
     id("org.jetbrains.compose")
@@ -12,7 +14,7 @@ plugins {
 }
 
 multiplatformResources {
-    multiplatformResourcesPackage = "cz.frantisekmasa.wfrp_master.common"
+    resourcesPackage.set("cz.frantisekmasa.wfrp_master.common")
 }
 
 kotlin {
@@ -25,6 +27,11 @@ kotlin {
 
     sourceSets {
         all {
+            @Suppress("OPT_IN_USAGE")
+            compilerOptions {
+                freeCompilerArgs.add("-Xexpect-actual-classes")
+            }
+
             languageSettings.apply {
                 optIn("androidx.compose.material.ExperimentalMaterialApi")
                 optIn("androidx.compose.foundation.ExperimentalFoundationApi")
@@ -36,8 +43,6 @@ kotlin {
             }
         }
 
-        val kodeinVersion = "7.11.0"
-
         val commonMain by getting {
             dependencies {
                 api(compose.runtime)
@@ -46,116 +51,99 @@ kotlin {
                 api(compose.material)
                 api(compose.materialIconsExtended)
 
-                val firebaseVersion = "1.12.0"
-                implementation("dev.gitlive:firebase-common:$firebaseVersion")
-                implementation("dev.gitlive:firebase-firestore:$firebaseVersion")
-                implementation("dev.gitlive:firebase-auth:$firebaseVersion")
-                implementation("dev.gitlive:firebase-functions:$firebaseVersion")
+                api(libs.firebase.common)
+                api(libs.firebase.firestore)
+                api(libs.firebase.auth)
+                api(libs.firebase.functions)
 
-                implementation("org.jetbrains.kotlinx:kotlinx-collections-immutable:0.3.5")
+                implementation(libs.kotlinx.collections.immutable)
 
-                implementation("io.github.mmolosay:debounce:1.0.0")
+                implementation(libs.debounce)
 
-                val voyagerVersion = "1.0.0-rc04"
-                api("cafe.adriel.voyager:voyager-navigator:$voyagerVersion")
-                api("cafe.adriel.voyager:voyager-transitions:$voyagerVersion")
+                api(libs.voyager.navigator)
+                api(libs.voyager.transitions)
+                api(libs.voyager.screenmodel)
 
-                // Basic Kotlin stuff
-                api("org.jetbrains.kotlin:kotlin-stdlib:${Versions.kotlin}")
+                api(libs.kodein.di.framework.compose)
+                implementation(libs.kodein.di)
 
-                // Dependency injection 2
-                api("org.kodein.di:kodein-di-framework-compose:$kodeinVersion")
-                implementation("org.kodein.di:kodein-di:$kodeinVersion")
-
-                api("io.arrow-kt:arrow-core:1.0.1")
+                api(libs.arrow)
 
                 // Parser combinator library (grammars etc.)
-                implementation("com.github.h0tk3y.betterParse:better-parse:0.4.2")
+                implementation(libs.better.parse)
 
                 // Multiplatform UUID
-                implementation("com.benasher44:uuid:0.3.1")
+                implementation(libs.uuid)
 
                 // JSON encoding
-                api("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.0")
+                api(libs.kotlinx.serialization.json)
 
                 // Logging
-                api("io.github.aakira:napier:${Versions.napier}")
+                api(libs.napier)
 
                 // HTTP client
-                implementation("io.ktor:ktor-client-content-negotiation:${Versions.ktor}")
-                implementation("io.ktor:ktor-serialization-kotlinx-json:${Versions.ktor}")
-                api("io.ktor:ktor-client-cio:${Versions.ktor}")
-                api("io.ktor:ktor-client-core:${Versions.ktor}")
+                implementation(libs.ktor.client.content.negotiation)
+                implementation(libs.ktor.serialization.kotlinx.json)
+                api(libs.ktor.client.cio)
+                api(libs.ktor.client.core)
 
-                val richtextVersion = "1.0.0-alpha01"
-                implementation("com.halilibo.compose-richtext:richtext-commonmark:$richtextVersion")
-                implementation("com.halilibo.compose-richtext:richtext-ui-material:$richtextVersion")
-                implementation("io.github.z4kn4fein:semver:1.3.3")
+                // Rich text
+                implementation(libs.richtext.commonmark)
+                implementation(libs.richtext.ui.material)
+                implementation(libs.semver)
 
-                implementation("org.jsoup:jsoup:1.15.3")
-
-                api("dev.icerock.moko:parcelize:0.9.0")
-                val mokoResourcesVersion = "0.24.0-beta-1"
-                api("dev.icerock.moko:resources:$mokoResourcesVersion")
-                api("dev.icerock.moko:resources-compose:$mokoResourcesVersion")
+                api(libs.moko.parcelize)
+                api(libs.moko.resources)
+                api(libs.resources.compose)
             }
         }
 
         val commonTest by getting {
             dependencies {
                 implementation(kotlin("test"))
-                implementation("io.mockk:mockk:1.13.7")
+                implementation(libs.mockk)
             }
         }
 
         val androidMain by getting {
             dependencies {
+                api(libs.firebase.analytics.ktx)
+                implementation(libs.crashlytics.ktx)
+
                 // Permission management
-                implementation("com.google.accompanist:accompanist-permissions:0.20.0")
+                implementation(libs.accompanist.permissions)
 
-                api("androidx.activity:activity-compose:1.7.0")
+                api(libs.appcompat)
+                api(libs.activity.compose)
 
-                api("androidx.appcompat:appcompat:1.6.1")
-                api("androidx.core:core-ktx:1.9.0")
-
-                api("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.6.4")
-
-                implementation("org.kodein.di:kodein-di-framework-android-core:$kodeinVersion")
-
-                api("androidx.lifecycle:lifecycle-viewmodel-compose:2.6.1")
-                api("androidx.lifecycle:lifecycle-runtime-ktx:2.6.1")
+                implementation(libs.kodein.di.framework.android.core)
 
                 // Authentication
-                api("com.google.android.gms:play-services-auth:20.4.1")
-                implementation("com.google.firebase:firebase-dynamic-links-ktx:21.1.0")
+                api(libs.play.services.auth)
+                implementation(libs.firebase.dynamic.links.ktx)
 
                 // Shared Preferences DataStore
-                api("androidx.datastore:datastore-preferences:1.0.0")
+                api(libs.datastore.preferences)
 
-                // Firebase functions
-                api("com.google.firebase:firebase-functions-ktx:20.2.2")
-
-                implementation("com.tom-roush:pdfbox-android:2.0.27.0")
+                implementation(libs.pdfbox.android)
 
                 // Coil - image library
-                implementation("io.coil-kt:coil-compose:2.0.0")
+                implementation(libs.coil.compose)
 
                 // Time picker
-                implementation("io.github.vanpra.compose-material-dialogs:datetime:0.5.1")
+                implementation(libs.datetime.dialog)
 
                 // QR codes
-                implementation("com.google.zxing:core:3.3.3")
-
-                implementation("androidx.camera:camera-camera2:1.2.2")
-                implementation("androidx.camera:camera-core:1.2.2")
-                implementation("androidx.camera:camera-lifecycle:1.2.2")
-                implementation("androidx.camera:camera-view:1.2.2")
+                implementation(libs.zxing.core)
+                implementation(libs.camera.camera2)
+                implementation(libs.camera.core)
+                implementation(libs.camera.lifecycle)
+                implementation(libs.camera.view)
 
                 // Network availability check
-                implementation("com.github.pwittchen:reactivenetwork-rx2:3.0.8")
-                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-rx2:1.6.4")
+                implementation(libs.reactivenetwork.rx2)
+                implementation(libs.kotlinx.coroutines.rx2)
 
-                api("com.google.firebase:firebase-analytics-ktx:21.2.1")
             }
         }
 
@@ -164,52 +152,31 @@ kotlin {
                 implementation(compose.desktop.common)
                 implementation(compose.desktop.currentOs)
 
-                implementation("com.soywiz.korlibs.korau:korau:2.2.0")
-                implementation("org.apache.pdfbox:pdfbox:2.0.27")
+                implementation(libs.korau)
+                implementation(libs.pdfbox)
             }
         }
 
         val androidUnitTest by getting {
             dependencies {
                 implementation(kotlin("test-junit"))
-                runtimeOnly("org.junit.jupiter:junit-jupiter-engine:5.6.0")
+                runtimeOnly(libs.junit.jupiter.engine)
             }
         }
     }
 }
 
 android {
-    compileSdk = Versions.Android.compileSdk
+    namespace = "cz.frantisekmasa.wfrp_master.common"
+    compileSdk = rootProject.extra["compile_sdk"].toString().toInt()
 
     defaultConfig {
-        minSdk = Versions.Android.minSdk
-
-        //
-        // Firestore emulator setup
-        //
-        val properties = if (File("local.properties").exists())
-            loadProperties("local.properties")
-        else Properties()
-
-        buildConfigField(
-            "String",
-            "FUNCTIONS_EMULATOR_URL",
-            "\"${properties.getOrDefault("dev.functionsEmulatorUrl", "")}\""
-        )
-
-        buildConfigField(
-            "String",
-            "FIRESTORE_EMULATOR_URL",
-            "\"${properties.getOrDefault("dev.firestoreEmulatorUrl", "")}\""
-        )
-        //
-        // End of Firestore Emulator setup
-        //
+        minSdk = rootProject.extra["min_sdk"].toString().toInt()
     }
 
     dependencies {
         // Allow use of Java 8 APIs on older Android versions
-        coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:1.2.2")
+        coreLibraryDesugaring(libs.desugar.jdk.libs)
     }
 
     compileOptions {
@@ -227,6 +194,19 @@ android {
         }
     }
 }
-dependencies {
-    implementation("com.google.firebase:firebase-crashlytics-ktx:18.3.6")
+
+buildkonfig {
+    packageName = "cz.frantisekmasa.wfrp_master.common"
+    exposeObjectWithName = "BuildKonfig"
+
+    defaultConfigs {
+        val properties = if (File("local.properties").exists())
+            loadProperties("local.properties")
+        else Properties()
+
+        buildConfigField(STRING, "functionsEmulatorUrl", properties.getOrDefault("dev.functionsEmulatorUrl", "").toString())
+        buildConfigField(STRING, "firestoreEmulatorUrl", properties.getOrDefault("dev.firestoreEmulatorUrls", "").toString())
+        buildConfigField(STRING, "versionName", System.getenv("SUPPLY_VERSION_NAME") ?: "dev")
+        buildConfigField(BOOLEAN, "isDebugMode", properties.getOrDefault("dev.debugMode", "false").toString())
+    }
 }

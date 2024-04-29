@@ -43,3 +43,6 @@
 
 -keep, allowobfuscation, allowoptimization class * extends org.kodein.type.TypeReference
 -keep, allowobfuscation, allowoptimization class * extends org.kodein.type.JVMAbstractTypeToken$Companion$WrappingTest
+
+-dontwarn com.gemalto.jp2.JP2Decoder
+-dontwarn org.slf4j.impl.StaticLoggerBinder

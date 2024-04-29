@@ -1,7 +1,7 @@
 package cz.frantisekmasa.wfrp_master.common.encounters
 
 import cafe.adriel.voyager.core.model.ScreenModel
-import cafe.adriel.voyager.core.model.coroutineScope
+import cafe.adriel.voyager.core.model.screenModelScope
 import cz.frantisekmasa.wfrp_master.common.core.domain.identifiers.EncounterId
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.PartyId
 import cz.frantisekmasa.wfrp_master.common.core.logging.Reporter
@@ -60,7 +60,7 @@ class EncountersScreenModel(
         encounterRepository.save(partyId, encounter.update(name, description))
     }
 
-    fun reorderEncounters(positions: Map<UUID, Int>) = coroutineScope.launch(Dispatchers.IO) {
+    fun reorderEncounters(positions: Map<UUID, Int>) = screenModelScope.launch(Dispatchers.IO) {
         val encounters = positions.keys
             // This is terribly non-optimal
             // TODO: Load all encounters at once
@@ -79,7 +79,7 @@ class EncountersScreenModel(
     }
 
     private fun encounterAsync(id: UUID): Deferred<Pair<UUID, Encounter>> {
-        return coroutineScope.async(Dispatchers.IO) {
+        return screenModelScope.async(Dispatchers.IO) {
             id to encounterRepository.get(
                 EncounterId(
                     partyId = partyId,

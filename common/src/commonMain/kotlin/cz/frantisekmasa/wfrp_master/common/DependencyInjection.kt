@@ -88,8 +88,11 @@ import cz.frantisekmasa.wfrp_master.common.settings.SettingsScreenModel
 import cz.frantisekmasa.wfrp_master.common.skillTest.SkillTestScreenModel
 import dev.gitlive.firebase.Firebase
 import dev.gitlive.firebase.auth.auth
+import dev.gitlive.firebase.firestore.firestore
+import dev.gitlive.firebase.functions.functions
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.HttpClientEngine
+import io.ktor.client.engine.cio.CIO
 import io.ktor.client.plugins.cache.HttpCache
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.serialization.kotlinx.json.json
@@ -401,8 +404,9 @@ val appModule = DI.Module("Common") {
     }
 
     bindProvider {
+
         ChangelogScreenModel(
-            HttpClient(ktorEngine) {
+            HttpClient(CIO) {
                 install(HttpCache)
                 install(ContentNegotiation) {
                     json(
@@ -414,6 +418,26 @@ val appModule = DI.Module("Common") {
                 }
             }
         )
+    }
+
+    bindSingleton {
+        Firebase.firestore.apply {
+            @Suppress("KotlinConstantConditions")
+            if (BuildKonfig.firestoreEmulatorUrl != "") {
+                val (host, port) = BuildKonfig.firestoreEmulatorUrl.split(':')
+                useEmulator(host, port.toInt())
+            }
+        }
+    }
+
+    bindSingleton {
+        Firebase.functions.apply {
+            @Suppress("KotlinConstantConditions")
+            if (BuildKonfig.functionsEmulatorUrl != "") {
+                val (host, port) = BuildKonfig.functionsEmulatorUrl.split(':')
+                useEmulator(host, port.toInt())
+            }
+        }
     }
 }
 
@@ -427,5 +451,4 @@ private inline fun <reified T : CharacterItem<T, C>, C : CompendiumItem<C>> Dire
     )
 }
 
-internal expect val ktorEngine: HttpClientEngine
 internal expect val platformModule: DI.Module
