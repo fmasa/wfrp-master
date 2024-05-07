@@ -220,7 +220,7 @@ fun StatBlock(
     }
 }
 
-private const val SkillTag = "[skill]"
+private const val SKILL_TAG = "[skill]"
 
 @Composable
 private fun <T> CharacterItemList(
@@ -244,7 +244,7 @@ private fun <T> CharacterItemList(
                 }
 
                 formattedItems.forEachIndexed { index, (key, value) ->
-                    withAnnotation(SkillTag, key) {
+                    withAnnotation(SKILL_TAG, key) {
                         append(value)
                     }
 
@@ -263,7 +263,7 @@ private fun <T> CharacterItemList(
                 color = LocalContentColor.current.copy(alpha = LocalContentAlpha.current),
             ),
     ) { offset ->
-        text.getStringAnnotations(SkillTag, offset, offset)
+        text.getStringAnnotations(SKILL_TAG, offset, offset)
             .firstOrNull()
             ?.let { range ->
                 navigation.navigate(detail(items.first { key(it) == range.item }))

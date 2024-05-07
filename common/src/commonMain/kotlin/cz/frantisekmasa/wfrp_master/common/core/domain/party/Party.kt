@@ -20,7 +20,8 @@ import kotlinx.serialization.Serializable
 data class Party(
     val id: PartyId,
     val name: String,
-    val gameMasterId: UserId?, // Remove support for single-player parties in 1.14
+    // Remove support for single-player parties in 1.14
+    val gameMasterId: UserId?,
     private val users: Set<UserId>,
     private val archived: Boolean = false,
     val ambitions: Ambitions = Ambitions("", ""),

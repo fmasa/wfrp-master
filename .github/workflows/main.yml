@@ -51,26 +51,19 @@ jobs:
     runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v2
+      - uses: actions/cache@v3
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
       - uses: actions/setup-java@v3
         with:
           distribution: 'temurin'
           java-version: '17'
-
-      - run: ./gradlew jvmTest
-
-      - uses: hydraulic-software/conveyor/actions/build@v1
-        with:
-          command: make site
-          signing_key: ${{ secrets.SIGNING_KEY }}
-          agree_to_license: 1
-          conveyor_version: "8.0"
-          cache_key: conveyor-${{ matrix.os }}-${{ matrix.arch }}
-
-      - uses: actions/upload-artifact@v3
-        with:
-          name: download-page
-          path: output
-          retention-days: 1
+      - run: ./gradlew --no-daemon --parallel jvmTest
 
   ktlint:
     name: Code style (ktlint)

@@ -59,7 +59,9 @@ fun ItemIcon(
 
     Image(
         rememberImagePainter(url).value,
-        VISUAL_ONLY_ICON_DESCRIPTION, // TODO: Provide mechanism to specify what does this image means, such as: ("Character's image", "Strength-based skill", etc.)
+        // TODO: Provide mechanism to specify what does this image means,
+        //  such as: ("Character's image", "Strength-based skill", etc.)
+        VISUAL_ONLY_ICON_DESCRIPTION,
         modifier =
             modifier
                 .clip(CircleShape)
@@ -101,7 +103,9 @@ private fun ItemIcon(
 ) {
     Image(
         painter,
-        VISUAL_ONLY_ICON_DESCRIPTION, // TODO: Provide mechanism to specify what does this image means, such as: ("Character's image", "Strength-based skill", etc.)
+        // TODO: Provide mechanism to specify what does this image means,
+        //  such as: ("Character's image", "Strength-based skill", etc.)
+        VISUAL_ONLY_ICON_DESCRIPTION,
         colorFilter = ColorFilter.tint(tint),
         modifier =
             Modifier
