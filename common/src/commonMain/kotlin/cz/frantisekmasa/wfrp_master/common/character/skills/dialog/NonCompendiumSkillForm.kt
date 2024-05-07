@@ -43,9 +43,10 @@ internal fun NonCompendiumSkillForm(
     val formData = NonCompendiumSkillFormData.fromSkill(existingSkill)
 
     FormDialog(
-        title = stringResource(
-            if (existingSkill != null) Str.skills_title_edit else Str.skills_title_new,
-        ),
+        title =
+            stringResource(
+                if (existingSkill != null) Str.skills_title_edit else Str.skills_title_new,
+            ),
         onDismissRequest = onDismissRequest,
         formData = formData,
         onSave = onSave,
@@ -68,9 +69,10 @@ internal fun NonCompendiumSkillForm(
                 value = formData.advances.value,
                 onIncrement = { formData.advances.value++ },
                 onDecrement = {
-                    formData.advances.value = (formData.advances.value - 1)
-                        .coerceAtLeast(Skill.MIN_ADVANCES)
-                }
+                    formData.advances.value =
+                        (formData.advances.value - 1)
+                            .coerceAtLeast(Skill.MIN_ADVANCES)
+                },
             )
         }
 
@@ -86,12 +88,12 @@ internal fun NonCompendiumSkillForm(
             label = stringResource(Str.skills_label_characteristic),
             items = Characteristic.values().map { it to stringResource(it.shortcut) },
             value = formData.characteristic.value,
-            onValueChange = { formData.characteristic.value = it }
+            onValueChange = { formData.characteristic.value = it },
         )
 
         Box(
             modifier = Modifier.fillMaxWidth(),
-            contentAlignment = Alignment.TopCenter
+            contentAlignment = Alignment.TopCenter,
         ) {
             CheckboxWithText(
                 text = stringResource(Str.skills_label_advanced),
@@ -103,9 +105,10 @@ internal fun NonCompendiumSkillForm(
         SkillRating(
             label = stringResource(Str.skills_label_rating),
             value = characteristics.get(formData.characteristic.value) + formData.advances.value,
-            modifier = Modifier
-                .padding(top = Spacing.extraLarge)
-                .align(Alignment.CenterHorizontally),
+            modifier =
+                Modifier
+                    .padding(top = Spacing.extraLarge)
+                    .align(Alignment.CenterHorizontally),
         )
     }
 }
@@ -121,29 +124,32 @@ private class NonCompendiumSkillFormData(
 ) : HydratedFormData<Skill> {
     companion object {
         @Composable
-        fun fromSkill(skill: Skill?): NonCompendiumSkillFormData = NonCompendiumSkillFormData(
-            id = remember { skill?.id ?: uuid4() },
-            name = inputValue(skill?.name ?: "", Rules.NotBlank()),
-            description = inputValue(skill?.description ?: ""),
-            characteristic = rememberSaveable {
-                mutableStateOf(
-                    skill?.characteristic ?: Characteristic.values().first()
-                )
-            },
-            advanced = checkboxValue(skill?.advanced ?: false),
-            advances = rememberSaveable { mutableStateOf(skill?.advances ?: 1) }
-        )
+        fun fromSkill(skill: Skill?): NonCompendiumSkillFormData =
+            NonCompendiumSkillFormData(
+                id = remember { skill?.id ?: uuid4() },
+                name = inputValue(skill?.name ?: "", Rules.NotBlank()),
+                description = inputValue(skill?.description ?: ""),
+                characteristic =
+                    rememberSaveable {
+                        mutableStateOf(
+                            skill?.characteristic ?: Characteristic.values().first(),
+                        )
+                    },
+                advanced = checkboxValue(skill?.advanced ?: false),
+                advances = rememberSaveable { mutableStateOf(skill?.advances ?: 1) },
+            )
     }
 
-    override fun toValue(): Skill = Skill(
-        id = id,
-        compendiumId = null,
-        advanced = advanced.value,
-        characteristic = characteristic.value,
-        name = name.value,
-        description = description.value,
-        advances = advances.value
-    )
+    override fun toValue(): Skill =
+        Skill(
+            id = id,
+            compendiumId = null,
+            advanced = advanced.value,
+            characteristic = characteristic.value,
+            name = name.value,
+            description = description.value,
+            advances = advances.value,
+        )
 
     override fun isValid() = name.isValid() && description.isValid()
 }

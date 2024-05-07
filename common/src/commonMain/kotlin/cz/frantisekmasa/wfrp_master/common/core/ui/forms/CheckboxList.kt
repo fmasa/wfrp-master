@@ -21,7 +21,7 @@ fun <T> CheckboxList(
                     } else {
                         selected.value -= item
                     }
-                }
+                },
             )
         }
     }

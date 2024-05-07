@@ -35,7 +35,7 @@ import kotlinx.coroutines.launch
 fun EditableCharacterAvatar(
     character: Character,
     screenModel: CharacterScreenModel,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     var active by remember { mutableStateOf(false) }
     var processing by remember { mutableStateOf(false) }
@@ -50,7 +50,7 @@ fun EditableCharacterAvatar(
                     interactionSource = remember { MutableInteractionSource() },
                     indication = rememberRipple(bounded = false),
                     onClick = { active = true },
-                )
+                ),
         )
 
         if (processing) {
@@ -62,18 +62,19 @@ fun EditableCharacterAvatar(
 
         val errorCouldNotOpenFile = stringResource(Str.messages_could_not_open_file)
         val messageAvatarChanged = stringResource(Str.messages_avatar_changed)
-        val fileChooser = rememberFileChooser { result ->
-            result
-                .onFailure { snackbarHolder.showSnackbar(errorCouldNotOpenFile) }
-                .mapCatching { image ->
-                    processing = true
-                    screenModel.changeAvatar(image.readBytes())
-                    snackbarHolder.showSnackbar(messageAvatarChanged)
-                }.onFailure {
-                    Napier.e(it.toString(), it)
-                }
-            processing = false
-        }
+        val fileChooser =
+            rememberFileChooser { result ->
+                result
+                    .onFailure { snackbarHolder.showSnackbar(errorCouldNotOpenFile) }
+                    .mapCatching { image ->
+                        processing = true
+                        screenModel.changeAvatar(image.readBytes())
+                        snackbarHolder.showSnackbar(messageAvatarChanged)
+                    }.onFailure {
+                        Napier.e(it.toString(), it)
+                    }
+                processing = false
+            }
 
         DropdownMenu(expanded = active, onDismissRequest = { active = false }) {
             DropdownMenuItem(

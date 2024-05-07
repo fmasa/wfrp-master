@@ -47,7 +47,7 @@ android {
                 mapOf(
                     "analytics_activated" to "false",
                     "usesCleartextTraffic" to "true",
-                )
+                ),
             )
         }
 
@@ -64,7 +64,7 @@ android {
                 mapOf(
                     "analytics_activated" to "true",
                     "usesCleartextTraffic" to "false",
-                )
+                ),
             )
         }
     }

@@ -31,30 +31,32 @@ data class SpellImport(
         customLore.requireMaxLength(Spell.LORE_MAX_LENGTH, "spell lore")
     }
 
-    fun toSpell() = Spell(
-        id = uuid4(),
-        name = name,
-        range = range,
-        target = target,
-        duration = duration,
-        castingNumber = castingNumber,
-        effect = effect,
-        customLore = customLore,
-        lore = lore,
-        isVisibleToPlayers = isVisibleToPlayers,
-    )
+    fun toSpell() =
+        Spell(
+            id = uuid4(),
+            name = name,
+            range = range,
+            target = target,
+            duration = duration,
+            castingNumber = castingNumber,
+            effect = effect,
+            customLore = customLore,
+            lore = lore,
+            isVisibleToPlayers = isVisibleToPlayers,
+        )
 
     companion object {
-        fun fromSpell(spell: Spell) = SpellImport(
-            name = spell.name,
-            range = spell.range,
-            target = spell.target,
-            duration = spell.duration,
-            castingNumber = spell.castingNumber,
-            effect = spell.effect,
-            lore = spell.lore,
-            customLore = spell.customLore,
-            isVisibleToPlayers = spell.isVisibleToPlayers,
-        )
+        fun fromSpell(spell: Spell) =
+            SpellImport(
+                name = spell.name,
+                range = spell.range,
+                target = spell.target,
+                duration = spell.duration,
+                castingNumber = spell.castingNumber,
+                effect = spell.effect,
+                lore = spell.lore,
+                customLore = spell.customLore,
+                isVisibleToPlayers = spell.isVisibleToPlayers,
+            )
     }
 }

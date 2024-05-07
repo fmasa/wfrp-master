@@ -13,12 +13,12 @@ import androidx.compose.ui.unit.dp
 fun PrimaryButton(
     text: String,
     enabled: Boolean = true,
-    onClick: () -> Unit
+    onClick: () -> Unit,
 ) {
     Button(
         onClick = onClick,
         enabled = enabled,
-        modifier = Modifier.padding(top = 16.dp)
+        modifier = Modifier.padding(top = 16.dp),
     ) {
         Text(text.toUpperCase(Locale.current))
     }

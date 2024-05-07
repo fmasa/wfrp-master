@@ -56,7 +56,7 @@ fun CharacterSpellsScreen(
                     stringResource(Str.spells_title_add),
                 )
             }
-        }
+        },
     ) {
         MainContainer(
             characterId = characterId,
@@ -72,12 +72,13 @@ private fun MainContainer(
     spells: ImmutableList<Spell>,
     onRemove: (Spell) -> Unit,
 ) {
-    val spellsByLore = remember(spells) {
-        spells.groupBy { it.lore }
-            .asSequence()
-            .sortedBy { it.key?.ordinal ?: SpellLore.values().size }
-            .toList()
-    }
+    val spellsByLore =
+        remember(spells) {
+            spells.groupBy { it.lore }
+                .asSequence()
+                .sortedBy { it.key?.ordinal ?: SpellLore.values().size }
+                .toList()
+        }
 
     if (spellsByLore.isEmpty()) {
         EmptyUI(
@@ -89,11 +90,12 @@ private fun MainContainer(
     }
 
     LazyColumn(
-        contentPadding = PaddingValues(
-            bottom = Spacing.bottomPaddingUnderFab,
-            start = Spacing.small,
-            end = Spacing.small,
-        )
+        contentPadding =
+            PaddingValues(
+                bottom = Spacing.bottomPaddingUnderFab,
+                start = Spacing.small,
+                end = Spacing.small,
+            ),
     ) {
         items(spellsByLore) { (lore, spells) ->
             CardContainer(Modifier.padding(top = Spacing.small)) {
@@ -105,7 +107,7 @@ private fun MainContainer(
                             lore?.wind?.let {
                                 append(" ($it)")
                             }
-                        }
+                        },
                     )
 
                     val navigation = LocalNavigationTransaction.current
@@ -116,7 +118,7 @@ private fun MainContainer(
                                 spell = spell,
                                 onClick = {
                                     navigation.navigate(
-                                        CharacterSpellDetailScreen(characterId, spell.id)
+                                        CharacterSpellDetailScreen(characterId, spell.id),
                                     )
                                 },
                                 onRemove = { onRemove(spell) },
@@ -163,6 +165,6 @@ private fun SpellItem(
                     )
                 }
             }
-        }
+        },
     )
 }

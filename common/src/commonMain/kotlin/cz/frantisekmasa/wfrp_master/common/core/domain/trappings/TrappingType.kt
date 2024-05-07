@@ -19,7 +19,6 @@ typealias Rating = Int
 @JsonClassDiscriminator("kind")
 @Immutable
 sealed class TrappingType : Parcelable {
-
     fun updateFromCompendium(trappingType: CompendiumTrappingType?): TrappingType? {
         val updatedTrappingType = fromCompendium(trappingType)
 
@@ -38,50 +37,55 @@ sealed class TrappingType : Parcelable {
         fun fromCompendium(trappingType: CompendiumTrappingType?): TrappingType? {
             return when (trappingType) {
                 null -> null
-                is CompendiumTrappingType.Armour -> Armour(
-                    locations = trappingType.locations,
-                    type = trappingType.type,
-                    points = trappingType.points,
-                    qualities = trappingType.qualities,
-                    flaws = trappingType.flaws,
-                    worn = false,
-                )
+                is CompendiumTrappingType.Armour ->
+                    Armour(
+                        locations = trappingType.locations,
+                        type = trappingType.type,
+                        points = trappingType.points,
+                        qualities = trappingType.qualities,
+                        flaws = trappingType.flaws,
+                        worn = false,
+                    )
 
-                is CompendiumTrappingType.Ammunition -> Ammunition(
-                    weaponGroups = trappingType.weaponGroups,
-                    range = trappingType.range,
-                    qualities = trappingType.qualities,
-                    flaws = trappingType.flaws,
-                    damage = trappingType.damage,
-                )
+                is CompendiumTrappingType.Ammunition ->
+                    Ammunition(
+                        weaponGroups = trappingType.weaponGroups,
+                        range = trappingType.range,
+                        qualities = trappingType.qualities,
+                        flaws = trappingType.flaws,
+                        damage = trappingType.damage,
+                    )
 
                 is CompendiumTrappingType.BookOrDocument -> BookOrDocument
                 is CompendiumTrappingType.ClothingOrAccessory -> ClothingOrAccessory(worn = false)
-                is CompendiumTrappingType.Container -> Container(
-                    carries = trappingType.carries,
-                    worn = false,
-                )
+                is CompendiumTrappingType.Container ->
+                    Container(
+                        carries = trappingType.carries,
+                        worn = false,
+                    )
 
                 is CompendiumTrappingType.DrugOrPoison -> DrugOrPoison
                 is CompendiumTrappingType.FoodOrDrink -> FoodOrDrink
                 is CompendiumTrappingType.HerbOrDraught -> HerbOrDraught
-                is CompendiumTrappingType.MeleeWeapon -> MeleeWeapon(
-                    group = trappingType.group,
-                    reach = trappingType.reach,
-                    damage = trappingType.damage,
-                    qualities = trappingType.qualities,
-                    flaws = trappingType.flaws,
-                    equipped = null,
-                )
+                is CompendiumTrappingType.MeleeWeapon ->
+                    MeleeWeapon(
+                        group = trappingType.group,
+                        reach = trappingType.reach,
+                        damage = trappingType.damage,
+                        qualities = trappingType.qualities,
+                        flaws = trappingType.flaws,
+                        equipped = null,
+                    )
 
-                is CompendiumTrappingType.RangedWeapon -> RangedWeapon(
-                    group = trappingType.group,
-                    range = trappingType.range,
-                    damage = trappingType.damage,
-                    qualities = trappingType.qualities,
-                    flaws = trappingType.flaws,
-                    equipped = null,
-                )
+                is CompendiumTrappingType.RangedWeapon ->
+                    RangedWeapon(
+                        group = trappingType.group,
+                        range = trappingType.range,
+                        damage = trappingType.damage,
+                        qualities = trappingType.qualities,
+                        flaws = trappingType.flaws,
+                        equipped = null,
+                    )
 
                 CompendiumTrappingType.SpellIngredient -> SpellIngredient
                 CompendiumTrappingType.ToolOrKit -> ToolOrKit
@@ -95,6 +99,7 @@ sealed class TrappingType : Parcelable {
         abstract val worn: Boolean
 
         abstract fun takeOff(): WearableTrapping
+
         abstract fun takeOn(): WearableTrapping
     }
 
@@ -105,6 +110,7 @@ sealed class TrappingType : Parcelable {
         abstract val equipped: WeaponEquip?
 
         abstract fun equip(equip: WeaponEquip): Weapon
+
         abstract fun unequip(): Weapon
     }
 
@@ -121,6 +127,7 @@ sealed class TrappingType : Parcelable {
         override val equipped: WeaponEquip?,
     ) : Weapon() {
         override fun equip(equip: WeaponEquip): MeleeWeapon = copy(equipped = equip)
+
         override fun unequip(): MeleeWeapon = copy(equipped = null)
     }
 
@@ -137,6 +144,7 @@ sealed class TrappingType : Parcelable {
         override val equipped: WeaponEquip?,
     ) : Weapon() {
         override fun equip(equip: WeaponEquip): RangedWeapon = copy(equipped = equip)
+
         override fun unequip(): RangedWeapon = copy(equipped = null)
     }
 
@@ -164,8 +172,8 @@ sealed class TrappingType : Parcelable {
         val flaws: Map<ArmourFlaw, Rating> = emptyMap(),
         override val worn: Boolean,
     ) : WearableTrapping() {
-
         override fun takeOff(): Armour = copy(worn = false)
+
         override fun takeOn(): Armour = copy(worn = true)
     }
 
@@ -177,8 +185,8 @@ sealed class TrappingType : Parcelable {
         val carries: Encumbrance,
         override val worn: Boolean,
     ) : WearableTrapping() {
-
         override fun takeOff(): Container = copy(worn = false)
+
         override fun takeOn(): Container = copy(worn = true)
     }
 
@@ -189,6 +197,7 @@ sealed class TrappingType : Parcelable {
         override val worn: Boolean,
     ) : WearableTrapping() {
         override fun takeOff(): ClothingOrAccessory = copy(worn = false)
+
         override fun takeOn(): ClothingOrAccessory = copy(worn = true)
     }
 
@@ -248,6 +257,7 @@ sealed class TrappingType : Parcelable {
         override val worn: Boolean,
     ) : WearableTrapping() {
         override fun takeOff(): Prosthetic = copy(worn = false)
+
         override fun takeOn(): Prosthetic = copy(worn = true)
     }
 

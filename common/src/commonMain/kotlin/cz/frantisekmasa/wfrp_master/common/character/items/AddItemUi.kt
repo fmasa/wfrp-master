@@ -29,9 +29,10 @@ fun <A : CharacterItem<A, B>, B : CompendiumItem<B>> rememberAddItemUiState(
     detailScreenFactory: (A) -> Screen,
 ): AddItemUiState<A, B> {
     val snackbarHostState = remember { SnackbarHostState() }
-    val step = rememberSaveable {
-        mutableStateOf<AddItemUiState.Step<B>>(AddItemUiState.Step.ChoosingCompendiumItems)
-    }
+    val step =
+        rememberSaveable {
+            mutableStateOf<AddItemUiState.Step<B>>(AddItemUiState.Step.ChoosingCompendiumItems)
+        }
     val successMessageText = stringResource(Str.common_ui_item_added)
     val detailButtonText = stringResource(Str.common_ui_button_open)
     val coroutineScope = rememberCoroutineScope()
@@ -79,10 +80,11 @@ class AddItemUiState<A : CharacterItem<A, B>, B : CompendiumItem<B>>(
     suspend fun saveItem(item: A) {
         saver(item)
         coroutineScope.launch {
-            val result = snackbarHostState.showSnackbar(
-                message = successMessageText,
-                actionLabel = detailButtonText,
-            )
+            val result =
+                snackbarHostState.showSnackbar(
+                    message = successMessageText,
+                    actionLabel = detailButtonText,
+                )
 
             if (result == SnackbarResult.ActionPerformed) {
                 navigation.replace(detailScreenFactory(item))
@@ -93,8 +95,10 @@ class AddItemUiState<A : CharacterItem<A, B>, B : CompendiumItem<B>>(
     sealed interface Step<out T : CompendiumItem<out T>> : Parcelable {
         @Parcelize
         object ChoosingCompendiumItems : Step<Nothing>
+
         @Parcelize
         object CreatingNonCompendiumItem : Step<Nothing>
+
         @Parcelize
         data class CompendiumItemSpecification<T : CompendiumItem<T>>(val item: T) : Step<T>
     }

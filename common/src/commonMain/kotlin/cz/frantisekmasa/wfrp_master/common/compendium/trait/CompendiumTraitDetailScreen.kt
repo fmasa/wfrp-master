@@ -12,7 +12,6 @@ class CompendiumTraitDetailScreen(
     private val partyId: PartyId,
     private val traitId: Uuid,
 ) : Screen {
-
     @Composable
     override fun Content() {
         val screenModel: TraitCompendiumScreenModel = rememberScreenModel(arg = partyId)
@@ -25,7 +24,7 @@ class CompendiumTraitDetailScreen(
                     specifications = it.specifications,
                     description = it.description,
                 )
-            }
+            },
         ) { item, onDismissRequest ->
             TraitDialog(
                 trait = item,

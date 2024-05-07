@@ -24,7 +24,6 @@ import dev.icerock.moko.resources.compose.stringResource
 class CareerCompendiumScreen(
     private val partyId: PartyId,
 ) : CompendiumScreen() {
-
     @Composable
     override fun Content() {
         val screenModel: CareerCompendiumScreenModel = rememberScreenModel(arg = partyId)
@@ -46,7 +45,7 @@ class CareerCompendiumScreen(
                             socialClass = it.socialClass,
                             races = it.races,
                             levels = emptyList(),
-                        )
+                        ),
                     )
 
                     navigation.navigate(CompendiumCareerDetailScreen(partyId, id))

@@ -20,8 +20,10 @@ class InvitationScreenModel(
     private val serializer: Json,
     private val parties: PartyRepository,
 ) : ScreenModel {
-
-    suspend fun acceptInvitation(userId: UserId, invitation: Invitation): InvitationProcessingResult {
+    suspend fun acceptInvitation(
+        userId: UserId,
+        invitation: Invitation,
+    ): InvitationProcessingResult {
         return withContext(Dispatchers.IO) { invitationProcessor.accept(userId, invitation) }
     }
 
@@ -29,18 +31,20 @@ class InvitationScreenModel(
         return parties.forUserLive(userId)
     }
 
-    suspend fun serializeInvitation(invitation: Invitation): String = withContext(Dispatchers.IO) {
-        serializer.encodeToString(invitation)
-    }
-
-    suspend fun deserializeInvitation(json: String): Invitation? = withContext(Dispatchers.IO) {
-        @Suppress("BlockingMethodInNonBlockingContext")
-        try {
-            serializer.decodeFromString<Invitation>(json)
-        } catch (e: Throwable) {
-            Napier.w(e.toString(), e)
-
-            null
+    suspend fun serializeInvitation(invitation: Invitation): String =
+        withContext(Dispatchers.IO) {
+            serializer.encodeToString(invitation)
         }
-    }
+
+    suspend fun deserializeInvitation(json: String): Invitation? =
+        withContext(Dispatchers.IO) {
+            @Suppress("BlockingMethodInNonBlockingContext")
+            try {
+                serializer.decodeFromString<Invitation>(json)
+            } catch (e: Throwable) {
+                Napier.w(e.toString(), e)
+
+                null
+            }
+        }
 }

@@ -70,7 +70,7 @@ private fun <T : CompendiumItem<T>> CompendiumItemDialogTopBar(
     saver: suspend (T) -> Unit,
     formState: MutableState<FormState>,
     validate: MutableState<Boolean>,
-    onDismissRequest: () -> Unit
+    onDismissRequest: () -> Unit,
 ) {
     TopAppBar(
         title = { Text(title) },
@@ -96,8 +96,8 @@ private fun <T : CompendiumItem<T>> CompendiumItemDialogTopBar(
                         Napier.d("Form values are invalid")
                         validate.value = true
                     }
-                }
+                },
             )
-        }
+        },
     )
 }

@@ -25,14 +25,17 @@ import cz.frantisekmasa.wfrp_master.common.Str
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.Invitation
 import cz.frantisekmasa.wfrp_master.common.core.logging.Reporter
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.FullScreenProgress
-import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.VisualOnlyIconDescription
+import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.VISUAL_ONLY_ICON_DESCRIPTION
 import dev.icerock.moko.resources.compose.stringResource
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
 
 @Composable
-actual fun InvitationDialogContent(invitation: Invitation, screenModel: InvitationScreenModel) {
+actual fun InvitationDialogContent(
+    invitation: Invitation,
+    screenModel: InvitationScreenModel,
+) {
     val (sharingOptions, setSharingOptions) = remember { mutableStateOf<SharingOptions?>(null) }
 
     LaunchedEffect(invitation) {
@@ -59,7 +62,7 @@ actual fun InvitationDialogContent(invitation: Invitation, screenModel: Invitati
                 startInvitationSendingIntent(context, invitation, sharingOptions.link)
             },
         ) {
-            Icon(Icons.Rounded.Share, VisualOnlyIconDescription)
+            Icon(Icons.Rounded.Share, VISUAL_ONLY_ICON_DESCRIPTION)
             Text(stringResource(Str.parties_button_share_link).uppercase())
         }
     }
@@ -71,11 +74,12 @@ private suspend fun buildSharingOptions(
 ): SharingOptions {
     return withContext(Dispatchers.IO) {
         val json = screenModel.serializeInvitation(invitation)
-        val link = Firebase.dynamicLinks.shortLinkAsync {
-            link = InvitationLinkScreen.deepLink(json).toString().toUri()
-            androidParameters { }
-            domainUriPrefix = "https://wfrp.page.link"
-        }
+        val link =
+            Firebase.dynamicLinks.shortLinkAsync {
+                link = InvitationLinkScreen.deepLink(json).toString().toUri()
+                androidParameters { }
+                domainUriPrefix = "https://wfrp.page.link"
+            }
 
         SharingOptions(
             link = link.await().shortLink.toString(),
@@ -92,7 +96,7 @@ private data class SharingOptions(
 private fun startInvitationSendingIntent(
     context: Context,
     invitation: Invitation,
-    link: String
+    link: String,
 ) {
     context.startActivity(
         Intent.createChooser(
@@ -101,8 +105,8 @@ private fun startInvitationSendingIntent(
                 putExtra(Intent.EXTRA_TEXT, "Join ${invitation.partyName} using this link: $link")
                 type = "text/plain"
             },
-            "Send link to your friends"
-        )
+            "Send link to your friends",
+        ),
     )
 
     Reporter.recordEvent(
@@ -111,6 +115,6 @@ private fun startInvitationSendingIntent(
             "content_type" to "party_invitation",
             "item_id" to invitation.partyId.toString(),
             "method" to "link",
-        )
+        ),
     )
 }

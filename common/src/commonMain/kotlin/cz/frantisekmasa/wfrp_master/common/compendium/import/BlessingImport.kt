@@ -25,24 +25,26 @@ data class BlessingImport(
         effect.requireMaxLength(Blessing.EFFECT_MAX_LENGTH, "blessing effect")
     }
 
-    fun toBlessing() = Blessing(
-        id = uuid4(),
-        name = name,
-        range = range,
-        target = target,
-        duration = duration,
-        effect = effect,
-        isVisibleToPlayers = isVisibleToPlayers,
-    )
+    fun toBlessing() =
+        Blessing(
+            id = uuid4(),
+            name = name,
+            range = range,
+            target = target,
+            duration = duration,
+            effect = effect,
+            isVisibleToPlayers = isVisibleToPlayers,
+        )
 
     companion object {
-        fun fromBlessing(blessing: Blessing) = BlessingImport(
-            name = blessing.name,
-            range = blessing.range,
-            target = blessing.target,
-            duration = blessing.duration,
-            effect = blessing.effect,
-            isVisibleToPlayers = blessing.isVisibleToPlayers,
-        )
+        fun fromBlessing(blessing: Blessing) =
+            BlessingImport(
+                name = blessing.name,
+                range = blessing.range,
+                target = blessing.target,
+                duration = blessing.duration,
+                effect = blessing.effect,
+                isVisibleToPlayers = blessing.isVisibleToPlayers,
+            )
     }
 }

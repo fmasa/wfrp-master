@@ -15,34 +15,36 @@ import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.parsers.Tw
  * **Trapping two:** Description of Trapping two
  */
 class ListDescriptionParser : TrappingDescriptionParser {
-
     override fun parse(
         document: Document,
         structure: PdfStructure,
         pages: IntRange,
     ): List<Pair<String, String>> {
         val lexer = TwoColumnPdfLexer(document, structure)
-        val stream = TokenStream(
-            pages
-                .asSequence()
-                .map { lexer.getTokens(it) }
-                .flatMap { sequenceOf(it.first, it.second) }
-                .flatten()
-                .filter { it !is Token.TableValue }
-                .toList()
-        )
+        val stream =
+            TokenStream(
+                pages
+                    .asSequence()
+                    .map { lexer.getTokens(it) }
+                    .flatMap { sequenceOf(it.first, it.second) }
+                    .flatten()
+                    .filter { it !is Token.TableValue }
+                    .toList(),
+            )
 
         val descriptionsByName = mutableMapOf<String, String>()
         stream.dropUntil(::isName)
 
         while (stream.peek() != null) {
-            val name = stream.consumeOneOfType<Token.BoldPart>()
-                .text.trim { it == ':' || it.isWhitespace() }
+            val name =
+                stream.consumeOneOfType<Token.BoldPart>()
+                    .text.trim { it == ':' || it.isWhitespace() }
 
-            val description = MarkdownBuilder.buildMarkdown(
-                stream.consumeUntil { isName(it) || it is Token.Heading }
-                    .filterIsInstance<Token.ParagraphToken>()
-            ).replace(NEWLINES_TO_REMOVE_REGEX, " ")
+            val description =
+                MarkdownBuilder.buildMarkdown(
+                    stream.consumeUntil { isName(it) || it is Token.Heading }
+                        .filterIsInstance<Token.ParagraphToken>(),
+                ).replace(NEWLINES_TO_REMOVE_REGEX, " ")
 
             descriptionsByName[comparableName(name)] = description
 

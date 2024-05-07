@@ -39,7 +39,7 @@ fun WithContextMenu(
                     onClick = {
                         expanded = false
                         item.onClick()
-                    }
+                    },
                 ) {
                     Text(item.text, style = MaterialTheme.typography.subtitle1)
                 }

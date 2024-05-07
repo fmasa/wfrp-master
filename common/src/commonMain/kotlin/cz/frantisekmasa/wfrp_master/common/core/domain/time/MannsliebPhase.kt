@@ -11,7 +11,8 @@ enum class MannsliebPhase(
     NEW_MOON(Str.calendar_moon_phases_new_moon),
     FULL_MOON(Str.calendar_moon_phases_full_moon),
     WAXING(Str.calendar_moon_phases_waxing),
-    WANING(Str.calendar_moon_phases_waning);
+    WANING(Str.calendar_moon_phases_waning),
+    ;
 
     companion object {
         private const val MANNSLIEB_WAXING_PERIOD = 13

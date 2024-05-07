@@ -48,28 +48,41 @@ class AndroidAuthenticationManager(
 
     fun googleSignInContract(webClientId: String): ActivityResultContract<Int?, IntentResult> {
         return object : ActivityResultContract<Int?, IntentResult>() {
+            override fun createIntent(
+                context: Context,
+                input: Int?,
+            ) = getGoogleSignInIntent(context, webClientId)
 
-            override fun createIntent(context: Context, input: Int?) =
-                getGoogleSignInIntent(context, webClientId)
-
-            override fun parseResult(resultCode: Int, intent: Intent?): IntentResult {
+            override fun parseResult(
+                resultCode: Int,
+                intent: Intent?,
+            ): IntentResult {
                 Napier.d(resultCode.toString())
                 return IntentResult(resultCode, intent)
             }
         }
     }
 
-    private fun getGoogleSignInIntent(context: Context, webClientId: String): Intent {
+    private fun getGoogleSignInIntent(
+        context: Context,
+        webClientId: String,
+    ): Intent {
         return googleClient(context, webClientId).signInIntent
     }
 
-    suspend fun attemptToRestoreExistingGoogleSignIn(context: Context, webClientId: String): Boolean {
+    suspend fun attemptToRestoreExistingGoogleSignIn(
+        context: Context,
+        webClientId: String,
+    ): Boolean {
         val googleToken = obtainGoogleToken(context, webClientId)
 
         return googleToken != null && signInWithGoogleToken(googleToken)
     }
 
-    private suspend fun obtainGoogleToken(context: Context, webClientId: String): String? {
+    private suspend fun obtainGoogleToken(
+        context: Context,
+        webClientId: String,
+    ): String? {
         val lastAccount = GoogleSignIn.getLastSignedInAccount(context)
 
         if (lastAccount != null) {
@@ -85,12 +98,15 @@ class AndroidAuthenticationManager(
         }
     }
 
-    private fun googleClient(context: Context, webClientId: String) = GoogleSignIn.getClient(
+    private fun googleClient(
+        context: Context,
+        webClientId: String,
+    ) = GoogleSignIn.getClient(
         context,
         GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestIdToken(webClientId)
             .requestEmail()
-            .build()
+            .build(),
     )
 
     data class IntentResult(

@@ -60,27 +60,28 @@ fun ExperiencePointsDialog(
                                 }
 
                                 saving = true
-                                val newPoints = value.copy(
-                                    experience = currentPoints.toInt(),
-                                    spentExperience = spentPoints.toInt(),
-                                )
+                                val newPoints =
+                                    value.copy(
+                                        experience = currentPoints.toInt(),
+                                        spentExperience = spentPoints.toInt(),
+                                    )
 
                                 coroutineScope.launch(Dispatchers.IO) {
                                     save(newPoints)
 
                                     onDismissRequest()
                                 }
-                            }
+                            },
                         )
-                    }
+                    },
                 )
-            }
+            },
         ) {
             Column(
                 Modifier
                     .verticalScroll(rememberScrollState())
                     .padding(Spacing.bodyPadding),
-                verticalArrangement = Arrangement.spacedBy(Spacing.small)
+                verticalArrangement = Arrangement.spacedBy(Spacing.small),
             ) {
                 PointInput(
                     spentPoints,
@@ -98,7 +99,11 @@ fun ExperiencePointsDialog(
 }
 
 @Composable
-private fun PointInput(value: InputValue, label: String, validate: Boolean) {
+private fun PointInput(
+    value: InputValue,
+    label: String,
+    validate: Boolean,
+) {
     TextInput(
         label = label,
         value = value,

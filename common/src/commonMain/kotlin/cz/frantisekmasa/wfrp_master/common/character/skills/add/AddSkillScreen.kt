@@ -21,7 +21,6 @@ import dev.icerock.moko.resources.compose.stringResource
 class AddSkillScreen(
     private val characterId: CharacterId,
 ) : Screen {
-
     @Composable
     override fun Content() {
         val screenModel: AddSkillScreenModel = rememberScreenModel(arg = characterId)
@@ -34,10 +33,11 @@ class AddSkillScreen(
 
         val navigation = LocalNavigationTransaction.current
 
-        val addItemUiState = rememberAddItemUiState(
-            saver = screenModel::addSkill,
-            detailScreenFactory = { CharacterSkillDetailScreen(characterId, it.id) },
-        )
+        val addItemUiState =
+            rememberAddItemUiState(
+                saver = screenModel::addSkill,
+                detailScreenFactory = { CharacterSkillDetailScreen(characterId, it.id) },
+            )
 
         AddItemUi(
             state = addItemUiState,
@@ -61,9 +61,9 @@ class AddSkillScreen(
                     onDismissRequest = addItemUiState::openChoosingScreen,
                     onSave = {
                         addItemUiState.saveItem(
-                            Skill.fromCompendium(compendiumSkill, advances = it)
+                            Skill.fromCompendium(compendiumSkill, advances = it),
                         )
-                    }
+                    },
                 )
             },
             nonCompendiumItemForm = {
@@ -73,7 +73,7 @@ class AddSkillScreen(
                     characteristics = state.characteristics,
                     onDismissRequest = addItemUiState::openChoosingScreen,
                 )
-            }
+            },
         )
     }
 }

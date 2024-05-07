@@ -16,15 +16,17 @@ enum class Reach : NamedEnum, Parcelable {
     AVERAGE,
     LONG,
     VERY_LONG,
-    MASSIVE;
+    MASSIVE,
+    ;
 
-    override val translatableName: StringResource get() = when (this) {
-        PERSONAL -> Str.weapons_reach_personal
-        VERY_SHORT -> Str.weapons_reach_very_short
-        SHORT -> Str.weapons_reach_short
-        AVERAGE -> Str.weapons_reach_average
-        LONG -> Str.weapons_reach_long
-        VERY_LONG -> Str.weapons_reach_very_long
-        MASSIVE -> Str.weapons_reach_massive
-    }
+    override val translatableName: StringResource get() =
+        when (this) {
+            PERSONAL -> Str.weapons_reach_personal
+            VERY_SHORT -> Str.weapons_reach_very_short
+            SHORT -> Str.weapons_reach_short
+            AVERAGE -> Str.weapons_reach_average
+            LONG -> Str.weapons_reach_long
+            VERY_LONG -> Str.weapons_reach_very_long
+            MASSIVE -> Str.weapons_reach_massive
+        }
 }

@@ -19,19 +19,18 @@ class SkillCompendiumScreenModel(
     characterItems: CharacterItemRepository<CharacterSkill>,
     parties: PartyRepository,
 ) : CharacterItemCompendiumItemScreenModel<Skill, CharacterSkill>(
-    partyId,
-    firestore,
-    compendium,
-    characterItems,
-    parties,
-) {
-
+        partyId,
+        firestore,
+        compendium,
+        characterItems,
+        parties,
+    ) {
     override suspend fun updateCharacterItem(
         transaction: Transaction,
         party: Party,
         characterId: CharacterId,
         existing: CharacterSkill,
-        new: CharacterSkill
+        new: CharacterSkill,
     ) {
         characterItems.save(transaction, characterId, new)
     }

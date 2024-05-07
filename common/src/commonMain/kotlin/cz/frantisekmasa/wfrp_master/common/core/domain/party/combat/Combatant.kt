@@ -20,10 +20,12 @@ data class Combatant(
     val advantage: Advantage = Advantage.ZERO,
     val conditions: CurrentConditions? = null,
 ) : Parcelable {
-
     fun withAdvantage(advantage: Advantage) = copy(advantage = advantage)
+
     fun withInitiative(initiative: Int) = copy(initiative = initiative)
+
     fun withWounds(wounds: Wounds) = copy(wounds = wounds)
+
     fun withConditions(conditions: CurrentConditions) = copy(conditions = conditions)
 
     fun areSameEntity(other: Combatant): Boolean {

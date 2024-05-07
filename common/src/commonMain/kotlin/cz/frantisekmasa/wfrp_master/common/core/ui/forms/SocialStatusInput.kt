@@ -13,7 +13,10 @@ import cz.frantisekmasa.wfrp_master.common.core.domain.character.SocialStatus
 import dev.icerock.moko.resources.compose.stringResource
 
 @Composable
-fun SocialStatusInput(value: SocialStatus, onValueChange: (SocialStatus) -> Unit) {
+fun SocialStatusInput(
+    value: SocialStatus,
+    onValueChange: (SocialStatus) -> Unit,
+) {
     Column {
         SelectBoxLabel(stringResource(Str.character_label_status))
         Row(
@@ -31,12 +34,12 @@ fun SocialStatusInput(value: SocialStatus, onValueChange: (SocialStatus) -> Unit
                 value = value.standing,
                 onIncrement = {
                     onValueChange(
-                        value.copy(standing = (value.standing + 1))
+                        value.copy(standing = (value.standing + 1)),
                     )
                 },
                 onDecrement = {
                     onValueChange(
-                        value.copy(standing = (value.standing - 1).coerceAtLeast(0))
+                        value.copy(standing = (value.standing - 1).coerceAtLeast(0)),
                     )
                 },
             )

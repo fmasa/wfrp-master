@@ -11,13 +11,14 @@ import kotlin.coroutines.EmptyCoroutineContext
 fun CoroutineScope.launchLogged(
     context: CoroutineContext = EmptyCoroutineContext,
     start: CoroutineStart = CoroutineStart.DEFAULT,
-    block: suspend CoroutineScope.() -> Unit
-): Job = launch(context, start) {
-    try {
-        block()
-    } catch (e: Throwable) {
-        Napier.e(e.toString(), e)
+    block: suspend CoroutineScope.() -> Unit,
+): Job =
+    launch(context, start) {
+        try {
+            block()
+        } catch (e: Throwable) {
+            Napier.e(e.toString(), e)
 
-        throw e
+            throw e
+        }
     }
-}

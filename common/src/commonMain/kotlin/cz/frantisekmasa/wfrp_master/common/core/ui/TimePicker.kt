@@ -4,9 +4,13 @@ import androidx.compose.runtime.Composable
 import java.time.LocalTime
 
 @Composable
-expect fun timePicker(time: LocalTime, onTimeChange: TimePicker.(LocalTime) -> Unit): TimePicker
+expect fun timePicker(
+    time: LocalTime,
+    onTimeChange: TimePicker.(LocalTime) -> Unit,
+): TimePicker
 
 interface TimePicker {
     fun show()
+
     fun hide()
 }

@@ -1,7 +1,6 @@
 package cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.parsers
 
 interface PdfStructure {
-
     /**
      * Are PDF tokens sorted by their position on page?
      */
@@ -12,7 +11,10 @@ interface PdfStructure {
      */
     val tableFootnotesAsNormalText get() = false
 
-    fun areSameStyle(a: TextPosition, b: TextPosition): Boolean {
+    fun areSameStyle(
+        a: TextPosition,
+        b: TextPosition,
+    ): Boolean {
         return a.getFont().getName() == b.getFont().getName() &&
             a.getFontSizeInPt() == b.getFontSizeInPt() &&
             a.getHeight() == b.getHeight()

@@ -33,7 +33,7 @@ fun SkillDetail(
                 navigationIcon = { CloseButton(onDismissRequest) },
                 title = { Text(skill.name) },
             )
-        }
+        },
     ) {
         Column(Modifier.verticalScroll(rememberScrollState())) {
             subheadBar()
@@ -61,11 +61,14 @@ fun SkillDetailBody(
 
         SingleLineTextValue(
             label = stringResource(Str.skills_label_advanced),
-            value = stringResource(
-                if (advanced)
-                    Str.common_ui_boolean_yes
-                else Str.common_ui_boolean_no,
-            ),
+            value =
+                stringResource(
+                    if (advanced) {
+                        Str.common_ui_boolean_yes
+                    } else {
+                        Str.common_ui_boolean_no
+                    },
+                ),
         )
 
         RichText(Modifier.padding(top = Spacing.small)) {

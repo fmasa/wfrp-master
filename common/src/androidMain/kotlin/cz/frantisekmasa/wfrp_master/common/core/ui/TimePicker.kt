@@ -10,7 +10,10 @@ import dev.icerock.moko.resources.compose.stringResource
 import java.time.LocalTime
 
 @Composable
-actual fun timePicker(time: LocalTime, onTimeChange: TimePicker.(LocalTime) -> Unit): TimePicker {
+actual fun timePicker(
+    time: LocalTime,
+    onTimeChange: TimePicker.(LocalTime) -> Unit,
+): TimePicker {
     val dialog = remember { MaterialDialog() }
     val timePicker = VanpraTimePicker(dialog)
 
@@ -18,7 +21,7 @@ actual fun timePicker(time: LocalTime, onTimeChange: TimePicker.(LocalTime) -> U
         buttons = {
             positiveButton(stringResource(Str.common_ui_button_save))
             negativeButton(stringResource(Str.common_ui_button_cancel))
-        }
+        },
     ) {
         title(stringResource(Str.calendar_title_select_time))
         timepicker(time, onTimeChange = { timePicker.onTimeChange(it) })

@@ -18,7 +18,6 @@ class AvailableCompendiumItemsFactory(
     private val parties: PartyRepository,
     private val userProvider: UserProvider,
 ) : ScreenModel {
-
     fun <A : CharacterItem<A, B>, B : CompendiumItem<B>> create(
         partyId: PartyId,
         compendium: Compendium<B>,
@@ -29,27 +28,32 @@ class AvailableCompendiumItemsFactory(
                 parties.getLive(partyId)
                     .right()
                     .map { it.gameMasterId }
-                    .distinctUntilChanged()
+                    .distinctUntilChanged(),
             ) { items, gameMasterId ->
-                val filteredItems = if (gameMasterId == null || gameMasterId == userProvider.userId)
-                    items
-                else items.filter { it.isVisibleToPlayers }
+                val filteredItems =
+                    if (gameMasterId == null || gameMasterId == userProvider.userId) {
+                        items
+                    } else {
+                        items.filter { it.isVisibleToPlayers }
+                    }
 
                 AvailableCompendiumItems(
                     availableCompendiumItems = filteredItems.toImmutableList(),
                     isCompendiumEmpty = filteredItems.isNotEmpty(),
                 )
             }.combine(filterCharacterItems) { state, existing ->
-                val existingCompendiumIds = existing
-                    .asSequence()
-                    .mapNotNull { it.compendiumId }
-                    .toSet()
+                val existingCompendiumIds =
+                    existing
+                        .asSequence()
+                        .mapNotNull { it.compendiumId }
+                        .toSet()
 
                 state.copy(
-                    availableCompendiumItems = state.availableCompendiumItems
-                        .asSequence()
-                        .filter { it.id !in existingCompendiumIds }
-                        .toImmutableList()
+                    availableCompendiumItems =
+                        state.availableCompendiumItems
+                            .asSequence()
+                            .filter { it.id !in existingCompendiumIds }
+                            .toImmutableList(),
                 )
             }
     }

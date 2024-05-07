@@ -34,7 +34,10 @@ import kotlinx.coroutines.launch
 import org.kodein.di.compose.rememberInstance
 
 @Composable
-fun UserTipCard(tip: UserTip, modifier: Modifier = Modifier) {
+fun UserTipCard(
+    tip: UserTip,
+    modifier: Modifier = Modifier,
+) {
     val dismissedTipsHolder: DismissedUserTipsHolder by rememberInstance()
     val dismissedTips = dismissedTipsHolder.dismissedTips.collectWithLifecycle(null).value
 
@@ -63,7 +66,7 @@ fun UserTipCard(tip: UserTip, modifier: Modifier = Modifier) {
                         processing = true
 
                         coroutineScope.launch { dismissedTipsHolder.dismissTip(tip) }
-                    }
+                    },
                 ) {
                     Text(stringResource(Str.common_ui_button_dismiss).uppercase())
                 }
@@ -75,16 +78,19 @@ fun UserTipCard(tip: UserTip, modifier: Modifier = Modifier) {
                 ) {
                     Text(stringResource(Str.common_ui_button_keep))
                 }
-            }
+            },
         )
     }
 
     val isLightTheme = MaterialTheme.colors.isLight
 
     Card(
-        backgroundColor = if (isLightTheme)
-            Theme.fixedColors.warning
-        else MaterialTheme.colors.surface,
+        backgroundColor =
+            if (isLightTheme) {
+                Theme.fixedColors.warning
+            } else {
+                MaterialTheme.colors.surface
+            },
         border = if (isLightTheme) null else BorderStroke(1.dp, Theme.fixedColors.warning),
         modifier = modifier.clickable { dialogVisible = true },
     ) {

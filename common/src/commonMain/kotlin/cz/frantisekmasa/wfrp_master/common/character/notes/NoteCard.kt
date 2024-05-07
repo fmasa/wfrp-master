@@ -60,7 +60,7 @@ fun NoteCard(
                 text = title(),
                 actions = {
                     CardEditButton(onClick = { editDialogOpened = true })
-                }
+                },
             )
 
             RichText {
@@ -99,9 +99,9 @@ private fun EditNoteDialog(
                                     onUpdate(noteValue.value)
                                     onDismissRequest()
                                 }
-                            }
+                            },
                         )
-                    }
+                    },
                 )
             },
         ) {

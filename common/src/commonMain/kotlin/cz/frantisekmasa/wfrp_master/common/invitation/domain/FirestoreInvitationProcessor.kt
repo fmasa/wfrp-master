@@ -13,41 +13,49 @@ import kotlinx.serialization.Serializable
 
 class FirestoreInvitationProcessor(
     private val firestore: FirebaseFirestore,
-    private val parties: PartyRepository
+    private val parties: PartyRepository,
 ) : InvitationProcessor {
+    override suspend fun accept(
+        userId: UserId,
+        invitation: Invitation,
+    ): InvitationProcessingResult =
+        firestore.runTransaction {
+            if (isAlreadyInParty(userId, invitation.partyId)) {
+                return@runTransaction InvitationProcessingResult.AlreadyInParty
+            }
 
-    override suspend fun accept(userId: UserId, invitation: Invitation): InvitationProcessingResult = firestore.runTransaction {
-        if (isAlreadyInParty(userId, invitation.partyId)) {
-            return@runTransaction InvitationProcessingResult.AlreadyInParty
+            firestore.collection("users")
+                .document(userId.toString())
+                .set(
+                    strategy = InvitationsUpdate.serializer(),
+                    data =
+                        InvitationsUpdate(
+                            invitations =
+                                arrayUnion(
+                                    mapOf(
+                                        "partyId" to invitation.partyId.toString(),
+                                        "accessCode" to invitation.accessCode,
+                                    ),
+                                ),
+                        ),
+                )
+
+            firestore.collection("parties")
+                .document(invitation.partyId.toString())
+                .update("users" to arrayUnion(userId.toString()))
+
+            return@runTransaction InvitationProcessingResult.Success
         }
-
-        firestore.collection("users")
-            .document(userId.toString())
-            .set(
-                strategy = InvitationsUpdate.serializer(),
-                data = InvitationsUpdate(
-                    invitations = arrayUnion(
-                        mapOf(
-                            "partyId" to invitation.partyId.toString(),
-                            "accessCode" to invitation.accessCode
-                        )
-                    )
-                ),
-            )
-
-        firestore.collection("parties")
-            .document(invitation.partyId.toString())
-            .update("users" to arrayUnion(userId.toString()))
-
-        return@runTransaction InvitationProcessingResult.Success
-    }
 
     @Serializable
     private data class InvitationsUpdate(
         val invitations: FieldValue,
     )
 
-    private suspend fun Transaction.isAlreadyInParty(userId: UserId, partyId: PartyId): Boolean {
+    private suspend fun Transaction.isAlreadyInParty(
+        userId: UserId,
+        partyId: PartyId,
+    ): Boolean {
         return try {
             parties.get(this, partyId).isMember(userId)
         } catch (e: PartyNotFound) {

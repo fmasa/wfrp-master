@@ -22,11 +22,11 @@ actual fun SystemBarsChangingEffect() {
     LaunchedEffect(colors.isLight, systemUi) {
         withContext(Dispatchers.Main) {
             systemUi.setStatusBarColor(
-                if (colors.isLight) lightSystemColor else darkSystemColor
+                if (colors.isLight) lightSystemColor else darkSystemColor,
             )
 
             systemUi.setNavigationBarColor(
-                if (colors.isLight) lightNavigationBarColor else darkSystemColor
+                if (colors.isLight) lightNavigationBarColor else darkSystemColor,
             )
         }
     }

@@ -48,7 +48,7 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.DraggableListFor
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.EmptyUI
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.FullScreenProgress
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.ItemIcon
-import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.VisualOnlyIconDescription
+import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.VISUAL_ONLY_ICON_DESCRIPTION
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.rememberScreenModel
 import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.FilterBar
 import cz.frantisekmasa.wfrp_master.common.encounters.domain.Encounter
@@ -57,17 +57,19 @@ import dev.icerock.moko.resources.compose.stringResource
 class EncountersScreen(
     private val partyId: PartyId,
 ) : Screen {
-
     @Composable
     override fun Content() {
         val screenModel: EncountersScreenModel = rememberScreenModel(arg = partyId)
 
         var showCompleted by rememberSaveable { mutableStateOf(false) }
 
-        val encounters = (
-            if (showCompleted)
-                screenModel.allEncounters
-            else screenModel.notCompletedEncounters
+        val encounters =
+            (
+                if (showCompleted) {
+                    screenModel.allEncounters
+                } else {
+                    screenModel.notCompletedEncounters
+                }
             ).collectWithLifecycle(null).value
 
         if (encounters == null) {
@@ -81,21 +83,20 @@ class EncountersScreen(
             topBar = {
                 TopAppBar(
                     navigationIcon = { HamburgerButton() },
-                    title = { Text(stringResource(Str.encounters_title)) }
+                    title = { Text(stringResource(Str.encounters_title)) },
                 )
             },
             floatingActionButton = {
                 AddEncounterButton(
                     onCreateEncounterRequest = { createDialogOpened = true },
                 )
-            }
+            },
         ) {
-
             if (createDialogOpened) {
                 EncounterDialog(
                     existingEncounter = null,
                     screenModel = screenModel,
-                    onDismissRequest = { createDialogOpened = false }
+                    onDismissRequest = { createDialogOpened = false },
                 )
             }
 
@@ -140,7 +141,10 @@ private fun AddEncounterButton(onCreateEncounterRequest: () -> Unit) {
 }
 
 @Composable
-private fun AllEncountersList(encounters: List<Encounter>, onClick: (Encounter) -> Unit) {
+private fun AllEncountersList(
+    encounters: List<Encounter>,
+    onClick: (Encounter) -> Unit,
+) {
     LazyColumn {
         items(encounters) { encounter ->
             EncounterItem(
@@ -165,10 +169,11 @@ fun EncounterItem(
                 if (draggable) {
                     Icon(
                         Icons.Rounded.DragIndicator,
-                        VisualOnlyIconDescription,
-                        modifier = Modifier.height(
-                            with(ItemIcon.Size.Small) { dimensions + padding * 2 }
-                        )
+                        VISUAL_ONLY_ICON_DESCRIPTION,
+                        modifier =
+                            Modifier.height(
+                                with(ItemIcon.Size.Small) { dimensions + padding * 2 },
+                            ),
                     )
                 }
             },
@@ -186,7 +191,7 @@ fun EncounterItem(
                         contentDescription = stringResource(Str.encounters_label_completed),
                     )
                 }
-            }
+            },
         )
         Divider()
     }
@@ -219,14 +224,17 @@ private fun ActiveEncounterList(
             modifier = Modifier.fillMaxHeight(),
             onReorder = {
                 screenModel.reorderEncounters(
-                    it.mapIndexed { index, encounter -> encounter.id to index }.toMap()
+                    it.mapIndexed { index, encounter -> encounter.id to index }.toMap(),
                 )
             },
         ) { _, encounter, isDragged ->
             Surface(
-                color = if (isDragged)
-                    MaterialTheme.colors.surface
-                else Color.Transparent,
+                color =
+                    if (isDragged) {
+                        MaterialTheme.colors.surface
+                    } else {
+                        Color.Transparent
+                    },
                 elevation = if (isDragged) 1.dp else 0.dp,
             ) {
                 EncounterItem(

@@ -13,11 +13,10 @@ class CharacterSkillDetailScreenModel(
     userProvider: UserProvider,
     partyRepository: PartyRepository,
 ) : CharacterItemScreenModel<Skill>(
-    characterId,
-    skillRepository,
-    userProvider,
-    partyRepository,
-) {
-
+        characterId,
+        skillRepository,
+        userProvider,
+        partyRepository,
+    ) {
     suspend fun saveSkill(skill: Skill) = skillRepository.save(characterId, skill)
 }

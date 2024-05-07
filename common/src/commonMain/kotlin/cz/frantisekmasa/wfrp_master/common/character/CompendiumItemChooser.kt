@@ -55,11 +55,14 @@ internal fun <T : CompendiumItem<T>> CompendiumItemChooser(
                 EmptyUI(
                     icon = emptyUiIcon,
                     text = stringResource(Str.compendium_messages_no_items),
-                    subText = if (state.isCompendiumEmpty)
-                        stringResource(
-                            Str.compendium_messages_no_items_in_compendium_subtext_player
-                        )
-                    else null,
+                    subText =
+                        if (state.isCompendiumEmpty) {
+                            stringResource(
+                                Str.compendium_messages_no_items_in_compendium_subtext_player,
+                            )
+                        } else {
+                            null
+                        },
                 )
             },
             searchPlaceholder = stringResource(Str.compendium_search_placeholder),
@@ -67,18 +70,19 @@ internal fun <T : CompendiumItem<T>> CompendiumItemChooser(
             searchableValue = { it.name },
         ) { item ->
             ListItem(
-                modifier = Modifier.clickable(
-                    onClick = {
-                        processing = true
-                        coroutineScope.launch(Dispatchers.IO) {
-                            try {
-                                onSelect(item)
-                            } finally {
-                                processing = false
+                modifier =
+                    Modifier.clickable(
+                        onClick = {
+                            processing = true
+                            coroutineScope.launch(Dispatchers.IO) {
+                                try {
+                                    onSelect(item)
+                                } finally {
+                                    processing = false
+                                }
                             }
-                        }
-                    }
-                ),
+                        },
+                    ),
                 icon = {
                     if (customIcon != null) {
                         customIcon(item)
@@ -86,16 +90,17 @@ internal fun <T : CompendiumItem<T>> CompendiumItemChooser(
                         ItemIcon(icon(item), ItemIcon.Size.Small)
                     }
                 },
-                text = { Text(item.name) }
+                text = { Text(item.name) },
             )
         }
 
         if (onCustomItemRequest != null && customItemButtonText != "") {
             Surface(elevation = 8.dp) {
                 OutlinedButton(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(Spacing.bodyPadding),
+                    modifier =
+                        Modifier
+                            .fillMaxWidth()
+                            .padding(Spacing.bodyPadding),
                     onClick = onCustomItemRequest,
                 ) {
                     Text(customItemButtonText)

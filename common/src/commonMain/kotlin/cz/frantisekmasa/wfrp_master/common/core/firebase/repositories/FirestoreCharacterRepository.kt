@@ -22,9 +22,12 @@ import kotlinx.coroutines.flow.map
 class FirestoreCharacterRepository(
     firestore: FirebaseFirestore,
 ) : CharacterRepository {
-    private val parties = firestore.collection(Schema.Parties)
+    private val parties = firestore.collection(Schema.PARTIES)
 
-    override suspend fun save(partyId: PartyId, character: Character) {
+    override suspend fun save(
+        partyId: PartyId,
+        character: Character,
+    ) {
         Napier.d("Saving character $character in party $partyId to firestore")
         characters(partyId)
             .document(character.id)
@@ -39,7 +42,7 @@ class FirestoreCharacterRepository(
     override fun save(
         transaction: Transaction,
         partyId: PartyId,
-        character: Character
+        character: Character,
     ) {
         Napier.d("Saving character $character in party $partyId to firestore")
 
@@ -54,9 +57,10 @@ class FirestoreCharacterRepository(
 
     override suspend fun get(characterId: CharacterId): Character {
         try {
-            val snapshot = characters(characterId.partyId)
-                .document(characterId.id)
-                .get()
+            val snapshot =
+                characters(characterId.partyId)
+                    .document(characterId.id)
+                    .get()
 
             if (!snapshot.exists) {
                 throw CharacterNotFound(characterId)
@@ -73,12 +77,17 @@ class FirestoreCharacterRepository(
             .document(characterId.id)
             .snapshots
             .map {
-                if (it.exists)
+                if (it.exists) {
                     it.data(Character.serializer()).right()
-                else CharacterNotFound(characterId).left()
+                } else {
+                    CharacterNotFound(characterId).left()
+                }
             }
 
-    override suspend fun hasCharacterInParty(userId: String, partyId: PartyId): Boolean {
+    override suspend fun hasCharacterInParty(
+        userId: String,
+        partyId: PartyId,
+    ): Boolean {
         return characters(partyId)
             .where("userId", equalTo = userId)
             .get()
@@ -97,7 +106,10 @@ class FirestoreCharacterRepository(
             .map { it.data(Character.serializer()) }
     }
 
-    override fun inParty(partyId: PartyId, types: Set<CharacterType>): Flow<List<Character>> {
+    override fun inParty(
+        partyId: PartyId,
+        types: Set<CharacterType>,
+    ): Flow<List<Character>> {
         return characters(partyId)
             .where { "archived" equalTo false }
             .where { "type" inArray types.map { it.name } }
@@ -110,5 +122,5 @@ class FirestoreCharacterRepository(
 
     private fun characters(partyId: PartyId) =
         parties.document(partyId.toString())
-            .collection(Schema.Characters)
+            .collection(Schema.CHARACTERS)
 }

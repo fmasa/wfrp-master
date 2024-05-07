@@ -18,7 +18,10 @@ class CareerCompendiumScreenModel(
 ) : CompendiumItemScreenModel<Career>(partyId, compendium) {
     val careers: Flow<List<Career>> = compendium.liveForParty(partyId)
 
-    suspend fun saveLevel(careerId: Uuid, level: Career.Level) {
+    suspend fun saveLevel(
+        careerId: Uuid,
+        level: Career.Level,
+    ) {
         val career = compendium.getItem(partyId, careerId)
         val existingIndex = career.levels.indexOfFirst { it.id == level.id }
 

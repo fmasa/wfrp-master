@@ -122,19 +122,21 @@ data class CareerLevelDialogData(
     }
 
     override fun toValue(): Career.Level {
-        val incomeSkills = incomeSkills
-            .commaSeparatedValues()
-            .map {
-                Career.Skill(expression = it, isIncomeSkill = true)
-            }
+        val incomeSkills =
+            incomeSkills
+                .commaSeparatedValues()
+                .map {
+                    Career.Skill(expression = it, isIncomeSkill = true)
+                }
 
-        val nonIncomeSkills = skills
-            .commaSeparatedValues()
-            .map {
-                Career.Skill(expression = it, isIncomeSkill = false)
-            }
-            // User may fill this skill in both fields, this will deduplicate these skills
-            .filter { skill -> incomeSkills.none { it.expression == skill.expression } }
+        val nonIncomeSkills =
+            skills
+                .commaSeparatedValues()
+                .map {
+                    Career.Skill(expression = it, isIncomeSkill = false)
+                }
+                // User may fill this skill in both fields, this will deduplicate these skills
+                .filter { skill -> incomeSkills.none { it.expression == skill.expression } }
 
         return Career.Level(
             id = id ?: uuid4(),
@@ -149,43 +151,55 @@ data class CareerLevelDialogData(
 
     companion object {
         @Composable
-        fun fromCareerLevel(level: Career.Level?, existingLevelNames: Set<String>): CareerLevelDialogData {
+        fun fromCareerLevel(
+            level: Career.Level?,
+            existingLevelNames: Set<String>,
+        ): CareerLevelDialogData {
             val errorLevelWithNameExists = stringResource(Str.careers_messages_level_with_name_exists)
             return CareerLevelDialogData(
                 id = level?.id,
-                name = inputValue(
-                    level?.name ?: "",
-                    Rules.NotBlank(),
-                    Rule {
-                        if (it.trim() in existingLevelNames)
-                            errorLevelWithNameExists
-                        else null
-                    }
-                ),
-                status = rememberSaveable(level) {
-                    mutableStateOf(
-                        level?.status ?: SocialStatus(SocialStatus.Tier.BRASS, 0)
-                    )
-                },
-                characteristics = rememberSaveable(level) {
-                    mutableStateOf(level?.characteristics ?: emptySet())
-                },
-                incomeSkills = inputValue(
-                    level?.skills
-                        ?.filter { it.isIncomeSkill }
-                        ?.joinToString(", ") { it.expression } ?: ""
-                ),
-                skills = inputValue(
-                    level?.skills
-                        ?.filterNot { it.isIncomeSkill }
-                        ?.joinToString(", ") { it.expression } ?: ""
-                ),
-                talents = inputValue(
-                    level?.talents?.joinToString(", ") ?: ""
-                ),
-                trappings = inputValue(
-                    level?.trappings?.joinToString(", ") ?: ""
-                )
+                name =
+                    inputValue(
+                        level?.name ?: "",
+                        Rules.NotBlank(),
+                        Rule {
+                            if (it.trim() in existingLevelNames) {
+                                errorLevelWithNameExists
+                            } else {
+                                null
+                            }
+                        },
+                    ),
+                status =
+                    rememberSaveable(level) {
+                        mutableStateOf(
+                            level?.status ?: SocialStatus(SocialStatus.Tier.BRASS, 0),
+                        )
+                    },
+                characteristics =
+                    rememberSaveable(level) {
+                        mutableStateOf(level?.characteristics ?: emptySet())
+                    },
+                incomeSkills =
+                    inputValue(
+                        level?.skills
+                            ?.filter { it.isIncomeSkill }
+                            ?.joinToString(", ") { it.expression } ?: "",
+                    ),
+                skills =
+                    inputValue(
+                        level?.skills
+                            ?.filterNot { it.isIncomeSkill }
+                            ?.joinToString(", ") { it.expression } ?: "",
+                    ),
+                talents =
+                    inputValue(
+                        level?.talents?.joinToString(", ") ?: "",
+                    ),
+                trappings =
+                    inputValue(
+                        level?.trappings?.joinToString(", ") ?: "",
+                    ),
             )
         }
     }

@@ -26,15 +26,16 @@ class SkillTestScreenModel(
     suspend fun performSkillTest(
         character: Character,
         compendiumSkill: CompendiumSkill,
-        testModifier: Int
+        testModifier: Int,
     ): TestResult? {
         val characteristic = character.characteristics.get(compendiumSkill.characteristic)
-        val advances = characterSkills.findAllForCharacter(CharacterId(partyId, character.id))
-            .first()
-            .asSequence()
-            .filter { it.characteristic == compendiumSkill.characteristic }
-            .filter { it.name.equals(compendiumSkill.name, ignoreCase = true) }
-            .maxOfOrNull { it.advances }
+        val advances =
+            characterSkills.findAllForCharacter(CharacterId(partyId, character.id))
+                .first()
+                .asSequence()
+                .filter { it.characteristic == compendiumSkill.characteristic }
+                .filter { it.name.equals(compendiumSkill.name, ignoreCase = true) }
+                .maxOfOrNull { it.advances }
 
         // Characters cannot use advanced skills that they don't have at least one advance in
         // see Basic and Advanced Skills on page 117 of Rulebook

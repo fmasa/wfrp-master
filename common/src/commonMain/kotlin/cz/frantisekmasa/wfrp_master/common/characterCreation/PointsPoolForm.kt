@@ -20,7 +20,6 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.forms.inputValue
 import dev.icerock.moko.resources.compose.stringResource
 
 object PointsPoolForm {
-
     @Stable
     class Data(
         val maxWounds: InputValue,
@@ -29,36 +28,41 @@ object PointsPoolForm {
     ) : HydratedFormData<Points> {
         companion object {
             @Composable
-            fun empty() = Data(
-                maxWounds = inputValue("", Rules.IfNotBlank(Rules.PositiveInteger())),
-                fatePoints = inputValue("", Rules.IfNotBlank(Rules(Rules.NonNegativeInteger()))),
-                resiliencePoints = inputValue(
-                    "",
-                    Rules.IfNotBlank(Rules(Rules.NonNegativeInteger()))
-                ),
-            )
+            fun empty() =
+                Data(
+                    maxWounds = inputValue("", Rules.ifNotBlank(Rules.PositiveInteger())),
+                    fatePoints = inputValue("", Rules.ifNotBlank(Rules(Rules.NonNegativeInteger()))),
+                    resiliencePoints =
+                        inputValue(
+                            "",
+                            Rules.ifNotBlank(Rules(Rules.NonNegativeInteger())),
+                        ),
+                )
         }
 
-        override fun isValid(): Boolean =
-            listOf(maxWounds, fatePoints, resiliencePoints).all { it.isValid() }
+        override fun isValid(): Boolean = listOf(maxWounds, fatePoints, resiliencePoints).all { it.isValid() }
 
-        override fun toValue(): Points = Points(
-            corruption = 0,
-            fate = toValue(fatePoints.value),
-            fortune = toValue(fatePoints.value),
-            wounds = 0,
-            maxWounds = maxWounds.value.toIntOrNull(),
-            resilience = toValue(resiliencePoints.value),
-            resolve = toValue(resiliencePoints.value),
-            sin = 0,
-            experience = 0,
-            spentExperience = 0,
-        )
+        override fun toValue(): Points =
+            Points(
+                corruption = 0,
+                fate = toValue(fatePoints.value),
+                fortune = toValue(fatePoints.value),
+                wounds = 0,
+                maxWounds = maxWounds.value.toIntOrNull(),
+                resilience = toValue(resiliencePoints.value),
+                resolve = toValue(resiliencePoints.value),
+                sin = 0,
+                experience = 0,
+                spentExperience = 0,
+            )
     }
 }
 
 @Composable
-fun PointsPoolForm(data: PointsPoolForm.Data, validate: Boolean) {
+fun PointsPoolForm(
+    data: PointsPoolForm.Data,
+    validate: Boolean,
+) {
     Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(16.dp)) {
         PointInput(
             data.maxWounds,

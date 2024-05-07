@@ -11,9 +11,11 @@ class Application : BaseApplication() {
         super.onCreate()
 
         Napier.base(
-            if (BuildKonfig.isDebugMode)
+            if (BuildKonfig.isDebugMode) {
                 DebugAntilog()
-            else ErrorReportingAntilog()
+            } else {
+                ErrorReportingAntilog()
+            },
         )
     }
 }

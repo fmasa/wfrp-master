@@ -41,11 +41,12 @@ fun <T> ChipList(
             for ((itemValue, itemLabel) in items) {
                 Chip(
                     selected = itemValue == value,
-                    modifier = Modifier.clickable {
-                        if (itemValue != value) {
-                            onValueChange(itemValue)
-                        }
-                    },
+                    modifier =
+                        Modifier.clickable {
+                            if (itemValue != value) {
+                                onValueChange(itemValue)
+                            }
+                        },
                 ) {
                     Text(itemLabel)
                 }
@@ -88,14 +89,15 @@ fun Chip(
         shape = RoundedCornerShape(Spacing.small),
         color = color,
     ) {
-        val textStyle = MaterialTheme.typography.body2.copy(
-            textAlign = TextAlign.Center,
-            color = LocalContentColor.current
-        )
+        val textStyle =
+            MaterialTheme.typography.body2.copy(
+                textAlign = TextAlign.Center,
+                color = LocalContentColor.current,
+            )
 
         Box(
             Modifier.widthIn(
-                min = with(LocalDensity.current) { textStyle.fontSize.toDp() * 3 }
+                min = with(LocalDensity.current) { textStyle.fontSize.toDp() * 3 },
             ).padding(padding),
             contentAlignment = Alignment.Center,
         ) {

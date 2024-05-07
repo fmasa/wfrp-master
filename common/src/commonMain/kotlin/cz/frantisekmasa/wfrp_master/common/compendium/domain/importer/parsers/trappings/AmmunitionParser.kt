@@ -25,27 +25,30 @@ class AmmunitionParser(
         descriptionPages: IntRange,
     ): List<Trapping> {
         val parser = TableParser()
-        val lexer = DefaultLayoutPdfLexer(
-            document,
-            structure,
-            mergeSubsequentTokens = false,
-            sortTokens = true,
-        )
-        val table = parser.findTables(lexer, structure, tablePage, findNames = true)
-            .filter { it.name.contains("ammunition", ignoreCase = true) }
-            .asSequence()
-            .flatMap { parser.parseTable(it.tokens, columnCount = 7) }
+        val lexer =
+            DefaultLayoutPdfLexer(
+                document,
+                structure,
+                mergeSubsequentTokens = false,
+                sortTokens = true,
+            )
+        val table =
+            parser.findTables(lexer, structure, tablePage, findNames = true)
+                .filter { it.name.contains("ammunition", ignoreCase = true) }
+                .asSequence()
+                .flatMap { parser.parseTable(it.tokens, columnCount = 7) }
 
         val descriptionsByName = descriptionParser.parse(document, structure, descriptionPages)
 
         return table
             .filter { it.heading != null }
             .flatMap { section ->
-                val weaponGroups = matchEnumSetOrNull<RangedWeaponGroup>(
-                    section.heading!!.replace("*", ""),
-                    separator = "and",
-                )
-                    ?: error("Invalid ranged weapon groups: ${section.heading}")
+                val weaponGroups =
+                    matchEnumSetOrNull<RangedWeaponGroup>(
+                        section.heading!!.replace("*", ""),
+                        separator = "and",
+                    )
+                        ?: error("Invalid ranged weapon groups: ${section.heading}")
 
                 section.rows.map { row ->
                     val price = PriceParser.parse(row[1])
@@ -54,14 +57,15 @@ class AmmunitionParser(
                     val comparableName = descriptionParser.comparableName(name)
                     val qualitiesAndFlaws = row[6]
 
-                    val footnoteNumbers = sequenceOf(
-                        section.heading,
-                        name,
-                        damage,
-                        qualitiesAndFlaws,
-                    )
-                        .flatMap { parser.findFootnoteReferences(it) }
-                        .toSet()
+                    val footnoteNumbers =
+                        sequenceOf(
+                            section.heading,
+                            name,
+                            damage,
+                            qualitiesAndFlaws,
+                        )
+                            .flatMap { parser.findFootnoteReferences(it) }
+                            .toSet()
 
                     Trapping(
                         id = uuid4(),
@@ -69,36 +73,40 @@ class AmmunitionParser(
                         price = if (price is PriceParser.Amount) price.money else Money.ZERO,
                         packSize = packSize,
                         encumbrance = Encumbrance(row[2].toDoubleOrNull() ?: 0.0),
-                        availability = matchEnumOrNull<Availability>(
-                            row[3],
-                            mapOf("Rarce" to Availability.RARE)
-                        )
-                            ?: error("Invalid availability ${row[3]}"),
-                        trappingType = TrappingType.Ammunition(
-                            weaponGroups = weaponGroups,
-                            damage = DamageExpression(if (damage == "-") "+0" else damage),
-                            range = range(row[4].trim()),
-                            qualities = parseFeatures(qualitiesAndFlaws),
-                            flaws = parseFeatures(qualitiesAndFlaws),
-                        ),
-                        description = buildString {
-                            val footnotes = footnoteNumbers.mapNotNull { section.footnotes[it] }
+                        availability =
+                            matchEnumOrNull<Availability>(
+                                row[3],
+                                mapOf("Rarce" to Availability.RARE),
+                            )
+                                ?: error("Invalid availability ${row[3]}"),
+                        trappingType =
+                            TrappingType.Ammunition(
+                                weaponGroups = weaponGroups,
+                                damage = DamageExpression(if (damage == "-") "+0" else damage),
+                                range = range(row[4].trim()),
+                                qualities = parseFeatures(qualitiesAndFlaws),
+                                flaws = parseFeatures(qualitiesAndFlaws),
+                            ),
+                        description =
+                            buildString {
+                                val footnotes = footnoteNumbers.mapNotNull { section.footnotes[it] }
 
-                            footnotes.forEach {
-                                append(it)
-                                append('\n')
-                            }
+                                footnotes.forEach {
+                                    append(it)
+                                    append('\n')
+                                }
 
-                            val description = descriptionsByName.firstOrNull {
-                                comparableName.startsWith(it.first, ignoreCase = true)
-                            }?.second ?: return@buildString
+                                val description =
+                                    descriptionsByName.firstOrNull {
+                                        comparableName.startsWith(it.first, ignoreCase = true)
+                                    }?.second ?: return@buildString
 
-                            if (footnotes.isNotEmpty()) {
-                                append('\n')
-                            }
+                                if (footnotes.isNotEmpty()) {
+                                    append('\n')
+                                }
 
-                            append(description)
-                        },
+                                append(description)
+                            },
                         isVisibleToPlayers = true,
                     )
                 }
@@ -123,7 +131,7 @@ class AmmunitionParser(
                 append(if (value[0] == '–') '-' else value[0])
                 append(' ')
                 append(value.drop(1))
-            }
+            },
         )
     }
 }

@@ -30,11 +30,12 @@ fun SkillTestDialog(
         var step: SkillTestDialogStep by rememberSaveable { mutableStateOf(SkillTestDialogStep.SkillPicking) }
 
         when (val currentStep = step) {
-            SkillTestDialogStep.SkillPicking -> SkillChooser(
-                screenModel = screenModel,
-                onDismissRequest = onDismissRequest,
-                onSkillSelected = { step = SkillTestDialogStep.Options(selectedSkill = it) }
-            )
+            SkillTestDialogStep.SkillPicking ->
+                SkillChooser(
+                    screenModel = screenModel,
+                    onDismissRequest = onDismissRequest,
+                    onSkillSelected = { step = SkillTestDialogStep.Options(selectedSkill = it) },
+                )
             is SkillTestDialogStep.Options -> {
                 val coroutineScope = rememberCoroutineScope()
 
@@ -45,30 +46,36 @@ fun SkillTestDialog(
                     onNewSkillPickingRequest = { step = SkillTestDialogStep.SkillPicking },
                     onExecute = { characters, testModifier ->
                         coroutineScope.launch(Dispatchers.IO) {
-                            val results = characters.map {
-                                async {
-                                    val testResult = screenModel.performSkillTest(
-                                        it,
-                                        currentStep.selectedSkill,
-                                        testModifier,
-                                    )
+                            val results =
+                                characters.map {
+                                    async {
+                                        val testResult =
+                                            screenModel.performSkillTest(
+                                                it,
+                                                currentStep.selectedSkill,
+                                                testModifier,
+                                            )
 
-                                    RollResult(
-                                        characterId = it.id,
-                                        characterName = it.name,
-                                        roll = if (testResult != null)
-                                            Roll.Test(currentStep.selectedSkill.name, testResult)
-                                        else Roll.CharacterDoesNotHaveAdvances,
-                                    )
+                                        RollResult(
+                                            characterId = it.id,
+                                            characterName = it.name,
+                                            roll =
+                                                if (testResult != null) {
+                                                    Roll.Test(currentStep.selectedSkill.name, testResult)
+                                                } else {
+                                                    Roll.CharacterDoesNotHaveAdvances
+                                                },
+                                        )
+                                    }
                                 }
-                            }
 
-                            step = SkillTestDialogStep.ShowResults(
-                                testName = currentStep.selectedSkill.name,
-                                results = results.awaitAll()
-                            )
+                            step =
+                                SkillTestDialogStep.ShowResults(
+                                    testName = currentStep.selectedSkill.name,
+                                    results = results.awaitAll(),
+                                )
                         }
-                    }
+                    },
                 )
             }
             is SkillTestDialogStep.ShowResults -> {
@@ -76,7 +83,7 @@ fun SkillTestDialog(
                     testName = stringResource(Str.tests_title_test, currentStep.testName),
                     onDismissRequest = onDismissRequest,
                     results = currentStep.results,
-                    onRerollRequest = { step = currentStep.rerollForCharacter(it) }
+                    onRerollRequest = { step = currentStep.rerollForCharacter(it) },
                 )
             }
         }
@@ -93,11 +100,12 @@ private sealed class SkillTestDialogStep : Parcelable {
     @Parcelize
     data class ShowResults(
         val testName: String,
-        val results: List<RollResult>
+        val results: List<RollResult>,
     ) : SkillTestDialogStep() {
-        fun rerollForCharacter(characterId: String) = copy(
-            results = results.map { if (it.characterId == characterId) it.reroll() else it }
-        )
+        fun rerollForCharacter(characterId: String) =
+            copy(
+                results = results.map { if (it.characterId == characterId) it.reroll() else it },
+            )
     }
 }
 
@@ -128,7 +136,7 @@ internal sealed class Roll : Parcelable {
     @Immutable
     data class Test(
         val testName: String,
-        val result: TestResult
+        val result: TestResult,
     ) : Roll() {
         override fun reroll() = copy(result = result.copy(rollValue = dice.roll()))
 

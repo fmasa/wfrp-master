@@ -35,7 +35,7 @@ fun ChangelogAction(
                 settingsScreenModel.updateLastSeenVersion(currentVersion)
             }
             onClick()
-        }
+        },
     ) {
         BadgedBox(
             badge = {
@@ -44,7 +44,7 @@ fun ChangelogAction(
                 if (version != "loading" && version != currentVersion) {
                     Badge(backgroundColor = Theme.fixedColors.accent)
                 }
-            }
+            },
         ) {
             Icon(
                 Icons.Rounded.Notifications,

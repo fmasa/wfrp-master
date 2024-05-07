@@ -19,21 +19,20 @@ class TraitCompendiumScreenModel(
     compendium: Compendium<Trait>,
     characterItems: CharacterItemRepository<CharacterTrait>,
     private val effectManager: EffectManager,
-    parties: PartyRepository
+    parties: PartyRepository,
 ) : CharacterItemCompendiumItemScreenModel<Trait, CharacterTrait>(
-    partyId,
-    firestore,
-    compendium,
-    characterItems,
-    parties,
-) {
-
+        partyId,
+        firestore,
+        compendium,
+        characterItems,
+        parties,
+    ) {
     override suspend fun updateCharacterItem(
         transaction: Transaction,
         party: Party,
         characterId: CharacterId,
         existing: CharacterTrait,
-        new: CharacterTrait
+        new: CharacterTrait,
     ) {
         effectManager.saveItem(
             transaction,

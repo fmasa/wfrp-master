@@ -45,12 +45,12 @@ fun InfoIcon(
                         },
                         title = { Text(title) },
                     )
-                }
+                },
             ) {
                 Column(
                     Modifier
                         .verticalScroll(rememberScrollState())
-                        .padding(Spacing.bodyPadding)
+                        .padding(Spacing.bodyPadding),
                 ) {
                     RichText {
                         Markdown(text)

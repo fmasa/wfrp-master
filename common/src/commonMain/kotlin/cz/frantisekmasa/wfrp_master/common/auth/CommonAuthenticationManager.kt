@@ -19,29 +19,31 @@ class CommonAuthenticationManager(
 ) : UserProvider {
     private val coroutineScope = CoroutineScope(Dispatchers.Default)
 
-    val user = auth.authStateChanged
-        .map {
-            it?.let {
-                User(
-                    id = UserId(it.uid),
-                    email = if (supportsEmail) it.email else null,
-                )
+    val user =
+        auth.authStateChanged
+            .map {
+                it?.let {
+                    User(
+                        id = UserId(it.uid),
+                        email = if (supportsEmail) it.email else null,
+                    )
+                }
             }
-        }
-        .stateIn(
-            coroutineScope,
-            SharingStarted.Eagerly,
-            auth.currentUser?.let {
-                User(
-                    id = UserId(it.uid),
-                    email = if (supportsEmail) it.email else null,
-                )
-            }
-        )
+            .stateIn(
+                coroutineScope,
+                SharingStarted.Eagerly,
+                auth.currentUser?.let {
+                    User(
+                        id = UserId(it.uid),
+                        email = if (supportsEmail) it.email else null,
+                    )
+                },
+            )
 
-    val authenticated: StateFlow<Boolean?> = user
-        .map { it != null }
-        .stateIn(coroutineScope, SharingStarted.Eagerly, null)
+    val authenticated: StateFlow<Boolean?> =
+        user
+            .map { it != null }
+            .stateIn(coroutineScope, SharingStarted.Eagerly, null)
 
     override val userId: UserId? get() = user.value?.id
 

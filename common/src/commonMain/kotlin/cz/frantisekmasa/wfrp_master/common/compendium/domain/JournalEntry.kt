@@ -21,7 +21,6 @@ data class JournalEntry(
     val parents: List<String>,
     override val isVisibleToPlayers: Boolean = false,
 ) : CompendiumItem<JournalEntry>() {
-
     init {
         require(name.isNotBlank()) { "Name cannot be blank" }
         require(name.trim() == name) { "Name cannot have leading or trailing whitespaces" }
@@ -35,8 +34,7 @@ data class JournalEntry(
 
     override fun duplicate() = copy(id = uuid4(), name = duplicateName())
 
-    override fun changeVisibility(isVisibleToPlayers: Boolean) =
-        copy(isVisibleToPlayers = isVisibleToPlayers)
+    override fun changeVisibility(isVisibleToPlayers: Boolean) = copy(isVisibleToPlayers = isVisibleToPlayers)
 
     companion object {
         const val NAME_MAX_LENGTH = 50

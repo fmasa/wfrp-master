@@ -39,7 +39,7 @@ fun SkillsScreen(
             modifier
                 .padding(Spacing.small)
                 .fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(Spacing.medium)
+            horizontalArrangement = Arrangement.spacedBy(Spacing.medium),
         ) {
             CardContainer(Modifier.weight(1f)) {
                 LazyColumn(Modifier.fillMaxWidth()) {
@@ -53,7 +53,6 @@ fun SkillsScreen(
             }
 
             CardContainer(Modifier.weight(1f)) {
-
                 LazyColumn(Modifier.fillMaxWidth()) {
                     talentsCard(
                         characterId = characterId,

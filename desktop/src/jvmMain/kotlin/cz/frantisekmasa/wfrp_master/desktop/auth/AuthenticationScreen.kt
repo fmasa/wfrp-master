@@ -78,23 +78,24 @@ fun AuthenticationScreen() {
 
             coroutineScope.launch(Dispatchers.IO) {
                 auth.signIn(email.value, password.value).mapLeft {
-                    error = when (it) {
-                        SignInError.InvalidPassword -> {
-                            errorInvalidPassword
+                    error =
+                        when (it) {
+                            SignInError.InvalidPassword -> {
+                                errorInvalidPassword
+                            }
+                            SignInError.InvalidEmail -> {
+                                errorInvalidEmail
+                            }
+                            SignInError.EmailNotFound -> {
+                                errorEmailNotFound
+                            }
+                            SignInError.TooManyAttempts -> {
+                                errorTooManyAttempts
+                            }
+                            SignInError.UnknownError -> {
+                                errorUnknown
+                            }
                         }
-                        SignInError.InvalidEmail -> {
-                            errorInvalidEmail
-                        }
-                        SignInError.EmailNotFound -> {
-                            errorEmailNotFound
-                        }
-                        SignInError.TooManyAttempts -> {
-                            errorTooManyAttempts
-                        }
-                        SignInError.UnknownError -> {
-                            errorUnknown
-                        }
-                    }
 
                     processing = false
                 }
@@ -113,14 +114,14 @@ fun AuthenticationScreen() {
         Card(
             Modifier
                 .width(400.dp)
-                .align(Alignment.Center)
+                .align(Alignment.Center),
         ) {
             Column(Modifier.padding(Spacing.large)) {
                 error?.let {
                     Box(
                         Modifier.fillMaxWidth()
                             .padding(bottom = Spacing.medium),
-                        contentAlignment = Alignment.Center
+                        contentAlignment = Alignment.Center,
                     ) {
                         ErrorMessage(it, textAlign = TextAlign.Center)
                     }

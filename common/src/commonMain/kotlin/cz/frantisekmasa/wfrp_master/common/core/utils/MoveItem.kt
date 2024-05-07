@@ -1,6 +1,9 @@
 package cz.frantisekmasa.wfrp_master.common.core.utils
 
-fun <T> List<T>.moveItem(sourceIndex: Int, targetIndex: Int): List<T> {
+fun <T> List<T>.moveItem(
+    sourceIndex: Int,
+    targetIndex: Int,
+): List<T> {
     if (sourceIndex == targetIndex) {
         return this
     }

@@ -13,7 +13,7 @@ actual fun rememberPlatformSoundPlayer(sound: Resources.Sound): SoundPlayer {
 }
 
 class KorauSoundPlayer(
-    private val sound: Resources.Sound
+    private val sound: Resources.Sound,
 ) : SoundPlayer {
     private var audioData: AudioData? = null
 
@@ -28,9 +28,10 @@ class KorauSoundPlayer(
             return data
         }
 
-        val loadedData = SoundPlayer::class.java.getResourceAsStream("/" + sound.path)
-            ?.let { WAV.decode(it.readBytes()) }
-            ?: error("Could not decode ${sound.path}")
+        val loadedData =
+            SoundPlayer::class.java.getResourceAsStream("/" + sound.path)
+                ?.let { WAV.decode(it.readBytes()) }
+                ?: error("Could not decode ${sound.path}")
 
         audioData = loadedData
 

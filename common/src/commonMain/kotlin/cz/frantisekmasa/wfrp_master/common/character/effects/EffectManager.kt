@@ -23,7 +23,6 @@ class EffectManager(
     private val talents: TalentRepository,
     private val translatorFactory: Translator.Factory,
 ) {
-
     suspend fun reapplyWithDifferentLanguage(
         transaction: Transaction,
         partyId: PartyId,
@@ -37,22 +36,24 @@ class EffectManager(
         var updatedCharacter = character
 
         val originalTranslator = translatorFactory.create(originalLanguage)
-        val originalEffects = effectSources
-            .asSequence()
-            .map { it.getEffects(originalTranslator) }
-            .filter { it.isNotEmpty() }
-            .toList()
+        val originalEffects =
+            effectSources
+                .asSequence()
+                .map { it.getEffects(originalTranslator) }
+                .filter { it.isNotEmpty() }
+                .toList()
 
         originalEffects.forEachIndexed { index, effects ->
             updatedCharacter = updatedCharacter.revert(effects, originalEffects.drop(index).flatten())
         }
 
         val newTranslator = translatorFactory.create(newLanguage)
-        val newEffects = effectSources
-            .asSequence()
-            .map { it.getEffects(newTranslator) }
-            .filter { it.isNotEmpty() }
-            .toList()
+        val newEffects =
+            effectSources
+                .asSequence()
+                .map { it.getEffects(newTranslator) }
+                .filter { it.isNotEmpty() }
+                .toList()
 
         newEffects.forEachIndexed { index, effects ->
             updatedCharacter = updatedCharacter.apply(effects, newEffects.take(index).flatten())
@@ -70,37 +71,40 @@ class EffectManager(
         repository: CharacterItemRepository<T>,
         item: T,
         previousItemVersion: T?,
-    ): Unit where T : EffectSource, T : CharacterItem<T, *> = coroutineScope {
-        val translator = translator(party.settings.language)
+    ): Unit where T : EffectSource, T : CharacterItem<T, *> =
+        coroutineScope {
+            val translator = translator(party.settings.language)
 
-        val newEffects = item.getEffects(translator)
-        val previousEffects = previousItemVersion?.getEffects(translator) ?: emptyList()
+            val newEffects = item.getEffects(translator)
+            val previousEffects = previousItemVersion?.getEffects(translator) ?: emptyList()
 
-        if (newEffects == previousEffects) {
-            // Fast path, no need to load other effect sources and update character
+            if (newEffects == previousEffects) {
+                // Fast path, no need to load other effect sources and update character
+                repository.save(transaction, characterId, item)
+                return@coroutineScope
+            }
+
+            val characterDeferred = async(Dispatchers.IO) { characters.get(characterId) }
+            val effectSources = effects(characterId, translator)
+
+            val otherEffects =
+                effectSources
+                    .filter { it.sourceId != item.id }
+                    .flatMap { it.effects }
+                    .toList()
+
+            val character = characterDeferred.await()
+            val updatedCharacter =
+                character
+                    .revert(previousEffects, otherEffects)
+                    .apply(newEffects, otherEffects)
+
+            if (updatedCharacter != character) {
+                characters.save(transaction, characterId.partyId, updatedCharacter)
+            }
+
             repository.save(transaction, characterId, item)
-            return@coroutineScope
         }
-
-        val characterDeferred = async(Dispatchers.IO) { characters.get(characterId) }
-        val effectSources = effects(characterId, translator)
-
-        val otherEffects = effectSources
-            .filter { it.sourceId != item.id }
-            .flatMap { it.effects }
-            .toList()
-
-        val character = characterDeferred.await()
-        val updatedCharacter = character
-            .revert(previousEffects, otherEffects)
-            .apply(newEffects, otherEffects)
-
-        if (updatedCharacter != character) {
-            characters.save(transaction, characterId.partyId, updatedCharacter)
-        }
-
-        repository.save(transaction, characterId, item)
-    }
 
     suspend fun <T> removeItem(
         transaction: Transaction,
@@ -108,26 +112,28 @@ class EffectManager(
         characterId: CharacterId,
         repository: CharacterItemRepository<T>,
         item: T,
-    ): Unit where T : EffectSource, T : CharacterItem<T, *> = coroutineScope {
-        val translator = translator(party.settings.language)
+    ): Unit where T : EffectSource, T : CharacterItem<T, *> =
+        coroutineScope {
+            val translator = translator(party.settings.language)
 
-        val characterDeferred = async(Dispatchers.IO) { characters.get(characterId) }
-        val effectSources = effects(characterId, translator)
+            val characterDeferred = async(Dispatchers.IO) { characters.get(characterId) }
+            val effectSources = effects(characterId, translator)
 
-        val otherEffects = effectSources
-            .filter { it.sourceId != item.id }
-            .flatMap { it.effects }
-            .toList()
+            val otherEffects =
+                effectSources
+                    .filter { it.sourceId != item.id }
+                    .flatMap { it.effects }
+                    .toList()
 
-        val character = characterDeferred.await()
-        val updatedCharacter = character.revert(item.getEffects(translator), otherEffects)
+            val character = characterDeferred.await()
+            val updatedCharacter = character.revert(item.getEffects(translator), otherEffects)
 
-        if (updatedCharacter != character) {
-            characters.save(transaction, characterId.partyId, updatedCharacter)
+            if (updatedCharacter != character) {
+                characters.save(transaction, characterId.partyId, updatedCharacter)
+            }
+
+            repository.remove(transaction, characterId, item.id)
         }
-
-        repository.remove(transaction, characterId, item.id)
-    }
 
     private suspend fun effectSources(characterId: CharacterId): Sequence<EffectSource> {
         return coroutineScope {

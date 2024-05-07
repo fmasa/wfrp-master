@@ -92,19 +92,20 @@ internal fun CharacteristicsScreen(
 
             TestResultScreen(
                 testName = stringResource(Str.tests_roll),
-                results = listOf(
-                    RollResult(
-                        characterId.toString(),
-                        character.name,
-                        currentRoll,
-                    )
-                ),
+                results =
+                    listOf(
+                        RollResult(
+                            characterId.toString(),
+                            character.name,
+                            currentRoll,
+                        ),
+                    ),
                 onRerollRequest = {
                     roll = currentRoll.reroll()
 
                     coroutineScope.launch(Dispatchers.IO) { rollSound.play() }
                 },
-                onDismissRequest = { roll = null }
+                onDismissRequest = { roll = null },
             )
         }
     }
@@ -117,7 +118,7 @@ internal fun CharacteristicsScreen(
             FloatingActionsMenu(
                 state = menuState,
                 onToggleRequest = { menuState = it },
-                icon = drawableResource(Resources.Drawable.DiceRoll)
+                icon = drawableResource(Resources.Drawable.DiceRoll),
             ) {
                 for (dice in listOf("1d100", "1d10")) {
                     ExtendedFloatingActionButton(
@@ -127,11 +128,11 @@ internal fun CharacteristicsScreen(
 
                             val expression = Expression.fromString(dice)
                             roll = Roll.Generic(expression, expression.evaluate())
-                        }
+                        },
                     )
                 }
             }
-        }
+        },
     ) {
         Column(
             Modifier
@@ -220,7 +221,10 @@ private fun CharacterTopPanel(
 }
 
 @Stable
-private fun careerName(career: CompendiumCareer?, character: Character): String {
+private fun careerName(
+    career: CompendiumCareer?,
+    character: Character,
+): String {
     if (career == null) {
         return character.career
     }
@@ -229,7 +233,11 @@ private fun careerName(career: CompendiumCareer?, character: Character): String 
 }
 
 @Composable
-private fun WoundsBadge(character: Character, points: Points, update: (Points) -> Unit) {
+private fun WoundsBadge(
+    character: Character,
+    points: Points,
+    update: (Points) -> Unit,
+) {
     var dialogVisible by remember { mutableStateOf(false) }
     val wounds = character.wounds
 
@@ -238,7 +246,7 @@ private fun WoundsBadge(character: Character, points: Points, update: (Points) -
         Text(
             stringResource(Str.points_wounds),
             fontWeight = FontWeight.Normal,
-            modifier = Modifier.padding(start = Spacing.small)
+            modifier = Modifier.padding(start = Spacing.small),
         )
     }
 
@@ -259,13 +267,16 @@ private fun WoundsBadge(character: Character, points: Points, update: (Points) -
                 if (wounds.current > 0) {
                     update(points.copy(wounds = wounds.current - 1))
                 }
-            }
+            },
         )
     }
 }
 
 @Composable
-private fun PointsDialog(onDismissRequest: () -> Unit, content: @Composable BoxScope.() -> Unit) {
+private fun PointsDialog(
+    onDismissRequest: () -> Unit,
+    content: @Composable BoxScope.() -> Unit,
+) {
     Dialog(onDismissRequest = onDismissRequest) {
         Surface(shape = MaterialTheme.shapes.medium) {
             Box(
@@ -280,7 +291,10 @@ private fun PointsDialog(onDismissRequest: () -> Unit, content: @Composable BoxS
 }
 
 @Composable
-private fun PointsRow(points: Points, update: (Points) -> Unit) {
+private fun PointsRow(
+    points: Points,
+    update: (Points) -> Unit,
+) {
     Row(Modifier.fillMaxWidth()) {
         val pools =
             listOf(PointPool.FATE, PointPool.FORTUNE, PointPool.RESOLVE, PointPool.RESILIENCE)
@@ -297,7 +311,7 @@ private fun PointsRow(points: Points, update: (Points) -> Unit) {
             ) {
                 Text(
                     value.toString(),
-                    style = MaterialTheme.typography.h6
+                    style = MaterialTheme.typography.h6,
                 )
                 Text(
                     pool.localizedName,
@@ -311,7 +325,7 @@ private fun PointsRow(points: Points, update: (Points) -> Unit) {
                         label = pool.localizedName,
                         value = value,
                         onIncrement = { points.modify(pool, +1).onSuccess(update) },
-                        onDecrement = { points.modify(pool, -1).onSuccess(update) }
+                        onDecrement = { points.modify(pool, -1).onSuccess(update) },
                     )
                 }
             }
@@ -324,20 +338,21 @@ private fun CharacteristicsCard(values: Stats) {
     CardRow {
         Column(verticalArrangement = Arrangement.spacedBy(Spacing.small)) {
             val breakpoint = LocalBreakpoint.current
-            val characteristics = remember(breakpoint) {
-                listOf(
-                    Characteristic.WEAPON_SKILL,
-                    Characteristic.BALLISTIC_SKILL,
-                    Characteristic.STRENGTH,
-                    Characteristic.TOUGHNESS,
-                    Characteristic.INITIATIVE,
-                    Characteristic.AGILITY,
-                    Characteristic.DEXTERITY,
-                    Characteristic.INTELLIGENCE,
-                    Characteristic.WILL_POWER,
-                    Characteristic.FELLOWSHIP,
-                ).let { it.chunked(if (breakpoint > Breakpoint.XSmall) it.size else it.size / 2) }
-            }
+            val characteristics =
+                remember(breakpoint) {
+                    listOf(
+                        Characteristic.WEAPON_SKILL,
+                        Characteristic.BALLISTIC_SKILL,
+                        Characteristic.STRENGTH,
+                        Characteristic.TOUGHNESS,
+                        Characteristic.INITIATIVE,
+                        Characteristic.AGILITY,
+                        Characteristic.DEXTERITY,
+                        Characteristic.INTELLIGENCE,
+                        Characteristic.WILL_POWER,
+                        Characteristic.FELLOWSHIP,
+                    ).let { it.chunked(if (breakpoint > Breakpoint.XSmall) it.size else it.size / 2) }
+                }
 
             characteristics.forEach { characteristicInRow ->
                 Row(Modifier.fillMaxWidth()) {
@@ -409,22 +424,24 @@ private fun CareerSection(
     val navigation = LocalNavigationTransaction.current
 
     Column(
-        if (career != null)
+        if (career != null) {
             Modifier.clickable {
                 navigation.navigate(
                     CompendiumCareerDetailScreen(
                         partyId,
-                        career.career.id
-                    )
+                        career.career.id,
+                    ),
                 )
             }
-        else Modifier
+        } else {
+            Modifier
+        },
     ) {
         Text(careerName, fontWeight = FontWeight.Bold)
         CompositionLocalProvider(LocalContentAlpha provides ContentAlpha.medium) {
             Text(
                 "$socialClass · ${status.tier.localizedName} ${status.standing}",
-                style = MaterialTheme.typography.caption
+                style = MaterialTheme.typography.caption,
             )
         }
     }

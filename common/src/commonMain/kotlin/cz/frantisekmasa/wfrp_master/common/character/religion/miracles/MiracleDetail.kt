@@ -39,7 +39,7 @@ fun MiracleDetail(
                 },
                 title = { Text(miracle.name) },
             )
-        }
+        },
     ) {
         Column(Modifier.verticalScroll(rememberScrollState())) {
             MiracleDetailBody(

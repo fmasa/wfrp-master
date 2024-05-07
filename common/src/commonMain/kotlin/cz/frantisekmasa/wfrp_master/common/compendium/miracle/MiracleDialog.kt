@@ -30,11 +30,14 @@ fun MiracleDialog(
     val formData = MiracleFormData.fromItem(miracle)
 
     CompendiumItemDialog(
-        title = stringResource(
-            if (miracle == null)
-                Str.miracles_title_new
-            else Str.miracles_title_edit
-        ),
+        title =
+            stringResource(
+                if (miracle == null) {
+                    Str.miracles_title_new
+                } else {
+                    Str.miracles_title_edit
+                },
+            ),
         formData = formData,
         saver = onSaveRequest,
         onDismissRequest = onDismissRequest,
@@ -47,14 +50,14 @@ fun MiracleDialog(
                 label = stringResource(Str.miracles_label_name),
                 value = formData.name,
                 validate = validate,
-                maxLength = Miracle.NAME_MAX_LENGTH
+                maxLength = Miracle.NAME_MAX_LENGTH,
             )
 
             TextInput(
                 label = stringResource(Str.miracles_label_cult_name),
                 value = formData.cultName,
                 validate = validate,
-                maxLength = Miracle.CULT_NAME_MAX_LENGTH
+                maxLength = Miracle.CULT_NAME_MAX_LENGTH,
             )
 
             TextInput(
@@ -103,29 +106,30 @@ private data class MiracleFormData(
 ) : CompendiumItemFormData<Miracle> {
     companion object {
         @Composable
-        fun fromItem(item: Miracle?) = MiracleFormData(
-            id = remember(item) { item?.id ?: uuid4() },
-            name = inputValue(item?.name ?: "", Rules.NotBlank()),
-            cultName = inputValue(item?.cultName ?: ""),
-            range = inputValue(item?.range ?: ""),
-            target = inputValue(item?.target ?: ""),
-            duration = inputValue(item?.duration ?: ""),
-            effect = inputValue(item?.effect ?: ""),
-            isVisibleToPlayers = item?.isVisibleToPlayers ?: false,
-        )
+        fun fromItem(item: Miracle?) =
+            MiracleFormData(
+                id = remember(item) { item?.id ?: uuid4() },
+                name = inputValue(item?.name ?: "", Rules.NotBlank()),
+                cultName = inputValue(item?.cultName ?: ""),
+                range = inputValue(item?.range ?: ""),
+                target = inputValue(item?.target ?: ""),
+                duration = inputValue(item?.duration ?: ""),
+                effect = inputValue(item?.effect ?: ""),
+                isVisibleToPlayers = item?.isVisibleToPlayers ?: false,
+            )
     }
 
-    override fun toValue() = Miracle(
-        id = id,
-        name = name.value,
-        cultName = cultName.value,
-        range = range.value,
-        target = target.value,
-        duration = duration.value,
-        effect = effect.value,
-        isVisibleToPlayers = isVisibleToPlayers,
-    )
+    override fun toValue() =
+        Miracle(
+            id = id,
+            name = name.value,
+            cultName = cultName.value,
+            range = range.value,
+            target = target.value,
+            duration = duration.value,
+            effect = effect.value,
+            isVisibleToPlayers = isVisibleToPlayers,
+        )
 
-    override fun isValid() =
-        listOf(name, cultName, range, target, duration, effect).all { it.isValid() }
+    override fun isValid() = listOf(name, cultName, range, target, duration, effect).all { it.isValid() }
 }

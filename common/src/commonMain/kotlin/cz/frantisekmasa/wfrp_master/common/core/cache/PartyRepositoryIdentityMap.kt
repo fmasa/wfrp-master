@@ -14,14 +14,15 @@ import kotlin.jvm.Synchronized
 
 internal class PartyRepositoryIdentityMap(
     maxEntries: Int,
-    private val inner: PartyRepository
+    private val inner: PartyRepository,
 ) : PartyRepository by inner {
     private val scope = CoroutineScope(Dispatchers.IO)
 
     private val identityMap = IdentityMap<PartyId, Flow<Either<PartyNotFound, Party>>>(maxEntries)
 
     @Synchronized
-    override fun getLive(id: PartyId) = identityMap.getOrPut(id) {
-        inner.getLive(id).shareIn(scope, SharingStarted.WhileSubscribed(), 1)
-    }
+    override fun getLive(id: PartyId) =
+        identityMap.getOrPut(id) {
+            inner.getLive(id).shareIn(scope, SharingStarted.WhileSubscribed(), 1)
+        }
 }

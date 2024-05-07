@@ -23,7 +23,10 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.forms.HydratedFormData
 import dev.icerock.moko.resources.compose.stringResource
 
 @Composable
-fun VisibleTabsSection(character: Character, screenModel: CharacterScreenModel) {
+fun VisibleTabsSection(
+    character: Character,
+    screenModel: CharacterScreenModel,
+) {
     val data = VisibleTabsFormData.fromCharacter(character)
     FormScreen(
         title = stringResource(Str.character_title_visible_tabs),
@@ -32,7 +35,7 @@ fun VisibleTabsSection(character: Character, screenModel: CharacterScreenModel) 
             screenModel.update { character ->
                 character.updateHiddenTabs(CharacterTab.values().toSet() - it.visibleTabs)
             }
-        }
+        },
     ) { validate ->
 
         if (validate && !data.isValid()) {
@@ -40,7 +43,7 @@ fun VisibleTabsSection(character: Character, screenModel: CharacterScreenModel) 
                 text = stringResource(Str.character_error_visible_tab_required),
                 textAlign = TextAlign.Center,
                 color = MaterialTheme.colors.error,
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth(),
             )
         }
 
@@ -54,12 +57,15 @@ fun VisibleTabsSection(character: Character, screenModel: CharacterScreenModel) 
                             onCheckedChange = { checked ->
                                 val visibleTabs = data.visibleTabs.value
 
-                                data.visibleTabs.value = if (checked)
-                                    visibleTabs + tab
-                                else visibleTabs - tab
-                            }
+                                data.visibleTabs.value =
+                                    if (checked) {
+                                        visibleTabs + tab
+                                    } else {
+                                        visibleTabs - tab
+                                    }
+                            },
                         )
-                    }
+                    },
                 )
             }
         }
@@ -69,7 +75,6 @@ fun VisibleTabsSection(character: Character, screenModel: CharacterScreenModel) 
 private data class VisibleTabsFormData(
     val visibleTabs: MutableState<Set<CharacterTab>>,
 ) : HydratedFormData<VisibleTabsData> {
-
     override fun isValid() = visibleTabs.value.isNotEmpty()
 
     override fun toValue() = VisibleTabsData(visibleTabs.value)
@@ -80,7 +85,7 @@ private data class VisibleTabsFormData(
             return VisibleTabsFormData(
                 remember(character.hiddenTabs) {
                     mutableStateOf(CharacterTab.values().toSet() - character.hiddenTabs)
-                }
+                },
             )
         }
     }

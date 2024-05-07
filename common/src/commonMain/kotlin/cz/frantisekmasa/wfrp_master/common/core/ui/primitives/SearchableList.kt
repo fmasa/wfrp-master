@@ -48,7 +48,6 @@ import dev.icerock.moko.resources.compose.stringResource
 object SearchableList {
     @Immutable
     sealed interface Data<out T> {
-
         @Immutable
         data class Loaded<T>(val items: List<T>) : Data<T>
 
@@ -89,10 +88,11 @@ fun <T : Any> SearchableList(
                         Text(title)
                     }
 
-                    val textSelectionColors = TextSelectionColors(
-                        handleColor = MaterialTheme.colors.onPrimary,
-                        backgroundColor = MaterialTheme.colors.onPrimary.copy(alpha = ContentAlpha.disabled),
-                    )
+                    val textSelectionColors =
+                        TextSelectionColors(
+                            handleColor = MaterialTheme.colors.onPrimary,
+                            backgroundColor = MaterialTheme.colors.onPrimary.copy(alpha = ContentAlpha.disabled),
+                        )
                     CompositionLocalProvider(
                         LocalTextSelectionColors provides textSelectionColors,
                     ) {
@@ -103,10 +103,11 @@ fun <T : Any> SearchableList(
                                 onValueChange = { searchedValue = it },
                                 singleLine = true,
                                 placeholder = { Text(searchPlaceholder) },
-                                modifier = Modifier
-                                    .alpha(if (searchVisible) 1f else 0f)
-                                    .focusRequester(focusRequester)
-                                    .onFocusChanged { isFocused = it.hasFocus }
+                                modifier =
+                                    Modifier
+                                        .alpha(if (searchVisible) 1f else 0f)
+                                        .focusRequester(focusRequester)
+                                        .onFocusChanged { isFocused = it.hasFocus },
                             )
                         }
                     }
@@ -149,18 +150,18 @@ fun <T : Any> SearchableList(
                             onClick = {
                                 searchedValue = ""
                                 searchActive = false
-                            }
+                            },
                         )
                     } else {
                         IconAction(
                             Icons.Rounded.Search,
                             stringResource(Str.common_ui_button_dismiss),
-                            onClick = { searchActive = true }
+                            onClick = { searchActive = true },
                         )
                     }
                 },
             )
-        }
+        },
     ) {
         when (data) {
             SearchableList.Data.Loading -> {
@@ -180,22 +181,25 @@ fun <T : Any> SearchableList(
                     return@Scaffold
                 }
 
-                val filteredItems = remember(searchedValue, searchableValue, items) {
-                    if (searchedValue == "")
-                        items
-                    else items
-                        .asSequence()
-                        .filter {
-                            searchableValue(it).contains(
-                                searchedValue,
-                                ignoreCase = true
-                            )
+                val filteredItems =
+                    remember(searchedValue, searchableValue, items) {
+                        if (searchedValue == "") {
+                            items
+                        } else {
+                            items
+                                .asSequence()
+                                .filter {
+                                    searchableValue(it).contains(
+                                        searchedValue,
+                                        ignoreCase = true,
+                                    )
+                                }
+                                .sortedByDescending {
+                                    searchableValue(it).startsWith(searchedValue, ignoreCase = true)
+                                }
+                                .toList()
                         }
-                        .sortedByDescending {
-                            searchableValue(it).startsWith(searchedValue, ignoreCase = true)
-                        }
-                        .toList()
-                }
+                    }
 
                 if (filteredItems.isEmpty()) {
                     EmptyUI(
@@ -207,12 +211,16 @@ fun <T : Any> SearchableList(
                 }
 
                 LazyColumn(
-                    contentPadding = PaddingValues(
-                        top = Spacing.medium,
-                        bottom = if (floatingActionButton != null)
-                            Spacing.bottomPaddingUnderFab
-                        else Spacing.medium,
-                    ),
+                    contentPadding =
+                        PaddingValues(
+                            top = Spacing.medium,
+                            bottom =
+                                if (floatingActionButton != null) {
+                                    Spacing.bottomPaddingUnderFab
+                                } else {
+                                    Spacing.medium
+                                },
+                        ),
                 ) {
                     items(filteredItems, key = key, itemContent = itemContent)
                 }

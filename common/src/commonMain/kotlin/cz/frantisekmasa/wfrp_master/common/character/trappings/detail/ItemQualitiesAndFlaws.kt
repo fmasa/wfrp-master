@@ -10,9 +10,7 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.text.SingleLineTextValue
 import dev.icerock.moko.resources.compose.stringResource
 
 @Composable
-fun ItemQualitiesAndFlaws(
-    trapping: InventoryItem,
-) {
+fun ItemQualitiesAndFlaws(trapping: InventoryItem) {
     Column {
         if (trapping.itemQualities.isNotEmpty()) {
             val itemQualities = trapping.itemQualities.map { it.localizedName }

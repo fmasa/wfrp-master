@@ -48,7 +48,6 @@ import dev.icerock.moko.parcelize.Parcelize
 import dev.icerock.moko.resources.compose.stringResource
 
 sealed interface SelectedCareer : Parcelable {
-
     @Parcelize
     data class CompendiumCareer(
         val value: Character.CompendiumCareer,
@@ -72,22 +71,25 @@ fun CareerSelectBox(
     value: SelectedCareer?,
     onValueChange: (SelectedCareer) -> Unit,
 ) {
-    val items = remember(careers) {
-        careers
-            .flatMap { career -> career.levels.map { it to career } }
-            .map { careerLevelName(it.first, it.second) }
-            .sortedBy { it.name }
-            .map { it to it.name }
-    }
+    val items =
+        remember(careers) {
+            careers
+                .flatMap { career -> career.levels.map { it to career } }
+                .map { careerLevelName(it.first, it.second) }
+                .sortedBy { it.name }
+                .map { it to it.name }
+        }
 
     val itemValue by derivedStateOf {
         when (value) {
-            is SelectedCareer.CompendiumCareer -> items.firstOrNull { (item, _) ->
-                item.careerId == value.value.careerId && item.levelId == value.value.levelId
-            }?.first?.name
+            is SelectedCareer.CompendiumCareer ->
+                items.firstOrNull { (item, _) ->
+                    item.careerId == value.value.careerId && item.levelId == value.value.levelId
+                }?.first?.name
             SelectedCareer.NoCareer -> null
-            is SelectedCareer.NonCompendiumCareer -> value.careerName.takeIf { it != "" }
-                ?: value.socialClass
+            is SelectedCareer.NonCompendiumCareer ->
+                value.careerName.takeIf { it != "" }
+                    ?: value.socialClass
             else -> null
         }
     }
@@ -124,7 +126,7 @@ fun CareerSelectBox(
                     contentDescription = stringResource(Str.careers_button_clear_select_box),
                     onClick = {
                         onValueChange(SelectedCareer.NoCareer)
-                    }
+                    },
                 )
             }
         }
@@ -138,14 +140,13 @@ private fun CareerChooserDialog(
     onChoose: (SelectedCareer) -> Unit,
     onDismissRequest: () -> Unit,
 ) {
-
     FullScreenDialog(
         onDismissRequest = onDismissRequest,
     ) {
         var customCareer by rememberSaveable {
             mutableStateOf(
                 currentValue is SelectedCareer.NonCompendiumCareer &&
-                    currentValue != SelectedCareer.NoCareer
+                    currentValue != SelectedCareer.NoCareer,
             )
         }
 
@@ -156,7 +157,7 @@ private fun CareerChooserDialog(
                 onSubmit = {
                     onChoose(it)
                     onDismissRequest()
-                }
+                },
             )
 
             return@FullScreenDialog
@@ -172,40 +173,48 @@ private fun CareerChooserDialog(
                 searchPlaceholder = stringResource(Str.careers_search_placeholder),
                 emptyUi = {
                     EmptyUI(
-                        text = stringResource(
-                            Str.character_creation_messages_no_careers_in_compendium,
-                        ),
-                        subText = stringResource(
-                            Str.compendium_messages_no_items_in_compendium_subtext_player,
-                        ),
+                        text =
+                            stringResource(
+                                Str.character_creation_messages_no_careers_in_compendium,
+                            ),
+                        subText =
+                            stringResource(
+                                Str.compendium_messages_no_items_in_compendium_subtext_player,
+                            ),
                         icon = Resources.Drawable.Career,
                     )
                 },
                 key = { it.first.levelId },
             ) { (level, label) ->
                 ListItem(
-                    modifier = Modifier.clickable(
-                        onClick = {
-                            onChoose(
-                                SelectedCareer.CompendiumCareer(
-                                    Character.CompendiumCareer(
-                                        careerId = level.careerId,
-                                        levelId = level.levelId,
+                    modifier =
+                        Modifier.clickable(
+                            onClick = {
+                                onChoose(
+                                    SelectedCareer.CompendiumCareer(
+                                        Character.CompendiumCareer(
+                                            careerId = level.careerId,
+                                            levelId = level.levelId,
+                                        ),
+                                        level.socialStatus,
                                     ),
-                                    level.socialStatus,
                                 )
-                            )
-                            onDismissRequest()
-                        }
-                    ),
+                                onDismissRequest()
+                            },
+                        ),
                     icon = {
                         ItemIcon(
                             Resources.Drawable.Career,
                             ItemIcon.Size.Small,
-                            backgroundColor = if (
-                                currentValue is SelectedCareer.CompendiumCareer &&
-                                currentValue.value.levelId == level.levelId
-                            ) MaterialTheme.colors.primaryVariant else defaultBackgroundColor()
+                            backgroundColor =
+                                if (
+                                    currentValue is SelectedCareer.CompendiumCareer &&
+                                    currentValue.value.levelId == level.levelId
+                                ) {
+                                    MaterialTheme.colors.primaryVariant
+                                } else {
+                                    defaultBackgroundColor()
+                                },
                         )
                     },
                     text = { Text(label) },
@@ -214,9 +223,10 @@ private fun CareerChooserDialog(
 
             Surface(elevation = 8.dp) {
                 OutlinedButton(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(Spacing.medium),
+                    modifier =
+                        Modifier
+                            .fillMaxWidth()
+                            .padding(Spacing.medium),
                     onClick = { customCareer = true },
                 ) {
                     Text(stringResource(Str.character_label_custom_career))
@@ -249,13 +259,13 @@ fun NonCompendiumCareerForm(
                                 SelectedCareer.NonCompendiumCareer(
                                     careerName = careerName.value,
                                     socialClass = socialClass.value,
-                                )
+                                ),
                             )
-                        }
+                        },
                     )
-                }
+                },
             )
-        }
+        },
     ) {
         Column(
             Modifier
@@ -288,7 +298,10 @@ private data class CareerLevel(
     val socialStatus: SocialStatus,
 )
 
-private fun careerLevelName(level: Career.Level, career: Career): CareerLevel {
+private fun careerLevelName(
+    level: Career.Level,
+    career: Career,
+): CareerLevel {
     val levelNumber = career.levels.indexOfFirst { it.id == level.id } + 1
 
     return CareerLevel(

@@ -8,7 +8,7 @@ actual fun AlertDialog(
     onDismissRequest: () -> Unit,
     text: @Composable () -> Unit,
     confirmButton: @Composable () -> Unit,
-    dismissButton: @Composable () -> Unit
+    dismissButton: @Composable () -> Unit,
 ) {
     PlatformAlertDialog(
         onDismissRequest = onDismissRequest,

@@ -13,7 +13,6 @@ import kotlinx.serialization.Serializable
 class ChangelogScreenModel(
     private val http: HttpClient,
 ) : ScreenModel {
-
     suspend fun loadReleases(): List<Release>? {
         return try {
             http.get("https://api.github.com/repos/fmasa/wfrp-master/releases?per_page=100")

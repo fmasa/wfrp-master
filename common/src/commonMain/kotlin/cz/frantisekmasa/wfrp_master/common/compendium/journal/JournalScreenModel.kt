@@ -25,23 +25,28 @@ class JournalScreenModel(
     userProvider: UserProvider,
     parties: PartyRepository,
 ) : ScreenModel {
-    val isGameMaster = parties.getLive(partyId)
-        .right()
-        .map { userProvider.userId == it.gameMasterId }
-        .distinctUntilChanged()
+    val isGameMaster =
+        parties.getLive(partyId)
+            .right()
+            .map { userProvider.userId == it.gameMasterId }
+            .distinctUntilChanged()
 
-    private val items = compendium.liveForParty(partyId)
-        .combine(isGameMaster) { items, isGameMaster ->
-            if (isGameMaster)
-                items
-            else items.filter { it.isVisibleToPlayers }
-        }
+    private val items =
+        compendium.liveForParty(partyId)
+            .combine(isGameMaster) { items, isGameMaster ->
+                if (isGameMaster) {
+                    items
+                } else {
+                    items.filter { it.isVisibleToPlayers }
+                }
+            }
 
-    val entries = items
-        .map { entries ->
-            entries.map(JournalEntryItem::fromEntry)
-        }
-        .distinctUntilChanged()
+    val entries =
+        items
+            .map { entries ->
+                entries.map(JournalEntryItem::fromEntry)
+            }
+            .distinctUntilChanged()
 
     data class JournalEntryItem(
         override val id: Uuid,
@@ -85,17 +90,19 @@ class JournalScreenModel(
         }
     }
 
-    val entriesTree: Flow<List<TreeItem>> = items.map { items ->
-        val pinned = items.filter { it.isPinned }
-            .map {
-                TreeItem.Item(
-                    JournalEntryItem.fromEntry(it),
-                    isPinned = true,
-                )
-            }
+    val entriesTree: Flow<List<TreeItem>> =
+        items.map { items ->
+            val pinned =
+                items.filter { it.isPinned }
+                    .map {
+                        TreeItem.Item(
+                            JournalEntryItem.fromEntry(it),
+                            isPinned = true,
+                        )
+                    }
 
-        pinned + buildTree(items)
-    }
+            pinned + buildTree(items)
+        }
 
     private fun buildTree(items: List<JournalEntry>): List<TreeItem> {
         val folders = mutableMapOf<String, MutableList<JournalEntry>>()
@@ -110,9 +117,10 @@ class JournalScreenModel(
             }
         }
 
-        entries += folders
-            .asSequence()
-            .map { (folder, subItems) -> TreeItem.Folder(folder, buildTree(subItems)) }
+        entries +=
+            folders
+                .asSequence()
+                .map { (folder, subItems) -> TreeItem.Folder(folder, buildTree(subItems)) }
 
         return entries.sortedBy { it.name }
     }

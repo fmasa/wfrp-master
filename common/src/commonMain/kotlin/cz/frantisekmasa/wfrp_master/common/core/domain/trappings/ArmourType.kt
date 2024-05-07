@@ -8,18 +8,19 @@ import dev.icerock.moko.parcelize.Parcelize
 
 @Parcelize
 @Immutable
-enum class ArmourType: NamedEnum, Parcelable {
+enum class ArmourType : NamedEnum, Parcelable {
     SOFT_LEATHER,
     BOILED_LEATHER,
     MAIL,
     PLATE,
-    OTHER,;
+    OTHER, ;
 
-    override val translatableName get() = when (this) {
-        SOFT_LEATHER -> Str.armour_types_soft_leather
-        BOILED_LEATHER -> Str.armour_types_boiled_leather
-        MAIL -> Str.armour_types_mail
-        PLATE -> Str.armour_types_plate
-        OTHER -> Str.armour_types_other
-    }
+    override val translatableName get() =
+        when (this) {
+            SOFT_LEATHER -> Str.armour_types_soft_leather
+            BOILED_LEATHER -> Str.armour_types_boiled_leather
+            MAIL -> Str.armour_types_mail
+            PLATE -> Str.armour_types_plate
+            OTHER -> Str.armour_types_other
+        }
 }

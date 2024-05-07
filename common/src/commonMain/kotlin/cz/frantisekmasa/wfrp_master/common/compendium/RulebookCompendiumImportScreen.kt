@@ -100,10 +100,11 @@ class RulebookCompendiumImportScreen(
         }
 
         Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .verticalScroll(rememberScrollState())
-                .padding(Spacing.bodyPadding)
+            modifier =
+                Modifier
+                    .fillMaxSize()
+                    .verticalScroll(rememberScrollState())
+                    .padding(Spacing.bodyPadding),
         ) {
             Text(
                 stringResource(Str.compendium_rulebook_import_prompt_title),
@@ -114,20 +115,22 @@ class RulebookCompendiumImportScreen(
                 stringResource(Str.compendium_rulebook_import_prompt_subtitle),
                 textAlign = TextAlign.Center,
                 fontWeight = FontWeight.SemiBold,
-                modifier = Modifier
-                    .padding(bottom = Spacing.medium)
-                    .align(Alignment.CenterHorizontally),
+                modifier =
+                    Modifier
+                        .padding(bottom = Spacing.medium)
+                        .align(Alignment.CenterHorizontally),
             )
 
-            val books = remember {
-                listOf(
-                    CoreRulebook,
-                    UpInArms,
-                    WindsOfMagic,
-                    ArchivesOfTheEmpire1,
-                    EnemyInShadowsCompanion,
-                )
-            }
+            val books =
+                remember {
+                    listOf(
+                        CoreRulebook,
+                        UpInArms,
+                        WindsOfMagic,
+                        ArchivesOfTheEmpire1,
+                        EnemyInShadowsCompanion,
+                    )
+                }
 
             books.forEach { book ->
                 key(book) {
@@ -140,36 +143,40 @@ class RulebookCompendiumImportScreen(
                 modifier = Modifier.align(Alignment.CenterHorizontally),
                 color = MaterialTheme.colors.onSurface.copy(alpha = ContentAlpha.medium),
                 textAlign = TextAlign.Center,
-                style = MaterialTheme.typography.body2
+                style = MaterialTheme.typography.body2,
             )
         }
     }
 
     @Composable
-    private fun BookRow(book: Book, onStateChange: (ImportDialogState?) -> Unit) {
+    private fun BookRow(
+        book: Book,
+        onStateChange: (ImportDialogState?) -> Unit,
+    ) {
         val initializePdfBox = pdfBoxInitializer()
 
         val errorOutOfMemory = stringResource(Str.compendium_messages_out_of_memory)
         val errorImportFailed = stringResource(Str.compendium_messages_rulebook_import_failed)
-        val fileChooser = ImportFileChooser(
-            onStateChange = onStateChange,
-            importerFactory = {
-                initializePdfBox()
-                PdfCompendiumImporter(loadDocument(it.stream), book)
-            },
-            errorMessageFactory = {
-                when (it) {
-                    is OutOfMemoryError -> errorOutOfMemory
-                    else -> errorImportFailed
-                }
-            }
-        )
+        val fileChooser =
+            ImportFileChooser(
+                onStateChange = onStateChange,
+                importerFactory = {
+                    initializePdfBox()
+                    PdfCompendiumImporter(loadDocument(it.stream), book)
+                },
+                errorMessageFactory = {
+                    when (it) {
+                        is OutOfMemoryError -> errorOutOfMemory
+                        else -> errorImportFailed
+                    }
+                },
+            )
 
         Card {
             Column(
                 Modifier.fillMaxWidth()
                     .clickable { fileChooser.open(FileType.PDF) }
-                    .padding(Spacing.small)
+                    .padding(Spacing.small),
             ) {
                 Text(book.name)
                 CompositionLocalProvider(LocalContentAlpha provides ContentAlpha.medium) {
@@ -184,7 +191,6 @@ class RulebookCompendiumImportScreen(
     @Composable
     @Stable
     private fun items(book: Book): String {
-
         return buildList {
             if (book is SkillSource) {
                 add(stringResource(Str.compendium_title_skills))

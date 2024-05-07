@@ -40,11 +40,14 @@ fun SkillDialog(
     val formData = SkillFormData.fromItem(skill)
 
     CompendiumItemDialog(
-        title = stringResource(
-            if (skill == null)
-                Str.skills_title_new
-            else Str.skills_title_edit
-        ),
+        title =
+            stringResource(
+                if (skill == null) {
+                    Str.skills_title_new
+                } else {
+                    Str.skills_title_edit
+                },
+            ),
         formData = formData,
         saver = onSaveRequest,
         onDismissRequest = onDismissRequest,
@@ -57,7 +60,7 @@ fun SkillDialog(
                 label = stringResource(Str.skills_label_name),
                 value = formData.name,
                 validate = validate,
-                maxLength = Skill.NAME_MAX_LENGTH
+                maxLength = Skill.NAME_MAX_LENGTH,
             )
 
             TextInput(
@@ -71,22 +74,24 @@ fun SkillDialog(
 
             ChipList(
                 label = stringResource(Str.skills_label_characteristic),
-                items = Characteristic.values()
-                    .map { it to stringResource(it.shortcut) },
+                items =
+                    Characteristic.values()
+                        .map { it to stringResource(it.shortcut) },
                 value = formData.characteristic.value,
-                onValueChange = { formData.characteristic.value = it }
+                onValueChange = { formData.characteristic.value = it },
             )
 
             Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = 8.dp),
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 8.dp),
                 contentAlignment = Alignment.TopCenter,
             ) {
                 CheckboxWithText(
                     text = stringResource(Str.skills_label_advanced),
                     checked = formData.advanced.value,
-                    onCheckedChange = { formData.advanced.value = it }
+                    onCheckedChange = { formData.advanced.value = it },
                 )
             }
         }
@@ -104,24 +109,26 @@ private data class SkillFormData(
 ) : CompendiumItemFormData<Skill> {
     companion object {
         @Composable
-        fun fromItem(item: Skill?) = SkillFormData(
-            id = remember { item?.id ?: uuid4() },
-            name = inputValue(item?.name ?: "", Rules.NotBlank()),
-            description = inputValue(item?.description ?: ""),
-            characteristic = rememberSaveable { mutableStateOf(item?.characteristic ?: Characteristic.AGILITY) },
-            advanced = checkboxValue(item?.advanced ?: false),
-            isVisibleToPlayers = item?.isVisibleToPlayers ?: false,
-        )
+        fun fromItem(item: Skill?) =
+            SkillFormData(
+                id = remember { item?.id ?: uuid4() },
+                name = inputValue(item?.name ?: "", Rules.NotBlank()),
+                description = inputValue(item?.description ?: ""),
+                characteristic = rememberSaveable { mutableStateOf(item?.characteristic ?: Characteristic.AGILITY) },
+                advanced = checkboxValue(item?.advanced ?: false),
+                isVisibleToPlayers = item?.isVisibleToPlayers ?: false,
+            )
     }
 
-    override fun toValue() = Skill(
-        id = id,
-        name = name.value,
-        description = description.value,
-        characteristic = characteristic.value,
-        advanced = advanced.value,
-        isVisibleToPlayers = isVisibleToPlayers,
-    )
+    override fun toValue() =
+        Skill(
+            id = id,
+            name = name.value,
+            description = description.value,
+            characteristic = characteristic.value,
+            advanced = advanced.value,
+            isVisibleToPlayers = isVisibleToPlayers,
+        )
 
     override fun isValid() =
         name.isValid() &&

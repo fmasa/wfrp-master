@@ -13,11 +13,14 @@ class UuidSerializer : KSerializer<Uuid> {
 
     override val descriptor = serializer.descriptor
 
-    override fun deserialize(decoder: Decoder): Uuid =
-        uuidFrom(serializer.deserialize(decoder))
+    override fun deserialize(decoder: Decoder): Uuid = uuidFrom(serializer.deserialize(decoder))
 
-    override fun serialize(encoder: Encoder, value: Uuid) =
-        serializer.serialize(encoder, value.toString())
+    override fun serialize(
+        encoder: Encoder,
+        value: Uuid,
+    ) = serializer.serialize(encoder, value.toString())
 }
 
-typealias UuidAsString = @Serializable(UuidSerializer::class) Uuid
+typealias UuidAsString =
+    @Serializable(UuidSerializer::class)
+    Uuid

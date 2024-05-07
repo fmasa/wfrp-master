@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.Flow
 
 class PartyScreenModel(
     partyId: PartyId,
-    parties: PartyRepository
+    parties: PartyRepository,
 ) : ScreenModel {
     val party: Flow<Party> = parties.getLive(partyId).right()
 }

@@ -56,22 +56,24 @@ internal fun QrCodeScanner(
                     {
                         val cameraProvider = cameraProviderFuture.get()
 
-                        val preview = Preview.Builder()
-                            .build()
-                            .apply {
-                                setSurfaceProvider(view.surfaceProvider)
-                            }
+                        val preview =
+                            Preview.Builder()
+                                .build()
+                                .apply {
+                                    setSurfaceProvider(view.surfaceProvider)
+                                }
 
                         @SuppressLint("RestrictedApi")
-                        val analysis = ImageAnalysis.Builder()
-                            .setImageQueueDepth(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
-                            .build()
-                            .apply {
-                                setAnalyzer(
-                                    executor,
-                                    QrCodeScannerAnalyser(onQrCodesDetected = onSuccessfulScan)
-                                )
-                            }
+                        val analysis =
+                            ImageAnalysis.Builder()
+                                .setImageQueueDepth(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
+                                .build()
+                                .apply {
+                                    setAnalyzer(
+                                        executor,
+                                        QrCodeScannerAnalyser(onQrCodesDetected = onSuccessfulScan),
+                                    )
+                                }
 
                         try {
                             cameraProvider.unbindAll()
@@ -81,13 +83,13 @@ internal fun QrCodeScanner(
                                 lifecycleOwner,
                                 CameraSelector.DEFAULT_BACK_CAMERA,
                                 preview,
-                                analysis
+                                analysis,
                             )
                         } catch (e: Exception) {
                             Napier.e("Camera binding failed", e)
                         }
                     },
-                    ContextCompat.getMainExecutor(context)
+                    ContextCompat.getMainExecutor(context),
                 )
             },
         )

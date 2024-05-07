@@ -39,16 +39,14 @@ fun <Q : Quality, F : Flaw> TrappingFeatureList(
                 }.joinToString(", ")
             },
             modifier = modifier,
-            style = MaterialTheme.typography.body2
+            style = MaterialTheme.typography.body2,
         )
     }
 }
 
 @Composable
 @Stable
-fun <T : TrappingFeature> translateFeatures(
-    features: Map<T, Rating>,
-): List<String> {
+fun <T : TrappingFeature> translateFeatures(features: Map<T, Rating>): List<String> {
     return features.map { (feature, rating) ->
         val name = feature.localizedName
 

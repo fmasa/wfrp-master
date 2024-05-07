@@ -12,7 +12,6 @@ class CompendiumMiracleDetailScreen(
     private val partyId: PartyId,
     private val miracleId: Uuid,
 ) : Screen {
-
     @Composable
     override fun Content() {
         val screenModel: MiracleCompendiumScreenModel = rememberScreenModel(arg = partyId)
@@ -28,7 +27,7 @@ class CompendiumMiracleDetailScreen(
                     duration = it.duration,
                     effect = it.effect,
                 )
-            }
+            },
         ) { item, onDismissRequest ->
             MiracleDialog(
                 miracle = item,

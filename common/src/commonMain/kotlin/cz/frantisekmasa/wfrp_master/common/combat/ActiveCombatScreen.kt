@@ -98,17 +98,22 @@ class ActiveCombatScreen(
         val combatants = remember { viewModel.combatants() }.collectWithLifecycle(null).value
         val isGameMaster = LocalUser.current.id == party?.gameMasterId
 
-        val (openedCombatant, setOpenedCombatant) = rememberSaveable {
-            mutableStateOf<CombatantItem?>(null)
-        }
-        val freshCombatant = if (openedCombatant != null)
-            combatants?.firstOrNull { it.areSameEntity(openedCombatant) }
-        else null
+        val (openedCombatant, setOpenedCombatant) =
+            rememberSaveable {
+                mutableStateOf<CombatantItem?>(null)
+            }
+        val freshCombatant =
+            if (openedCombatant != null) {
+                combatants?.firstOrNull { it.areSameEntity(openedCombatant) }
+            } else {
+                null
+            }
 
-        val bottomSheetState = rememberModalBottomSheetState(
-            ModalBottomSheetValue.Hidden,
-            skipHalfExpanded = true,
-        )
+        val bottomSheetState =
+            rememberModalBottomSheetState(
+                ModalBottomSheetValue.Hidden,
+                skipHalfExpanded = true,
+            )
 
         val isGroupAdvantageSystemEnabled by derivedStateOf {
             party?.settings?.advantageSystem == AdvantageSystem.GROUP_ADVANTAGE
@@ -171,24 +176,25 @@ class ActiveCombatScreen(
                             CharacterDetailScreen(
                                 freshCombatant.characterId,
                                 comingFromCombat = true,
-                            )
+                            ),
                         )
                         coroutineScope.launch { bottomSheetState.hide() }
                     },
-                    onRemoveRequest = combatantId?.let {
-                        {
-                            coroutineScope.launch {
-                                if (combatants?.size == 1) {
-                                    viewModel.endCombat()
-                                    navigation.goBack()
-                                } else {
-                                    viewModel.removeCombatant(combatantId)
-                                    setOpenedCombatant(null)
-                                    bottomSheetState.hide()
+                    onRemoveRequest =
+                        combatantId?.let {
+                            {
+                                coroutineScope.launch {
+                                    if (combatants?.size == 1) {
+                                        viewModel.endCombat()
+                                        navigation.goBack()
+                                    } else {
+                                        viewModel.removeCombatant(combatantId)
+                                        setOpenedCombatant(null)
+                                        bottomSheetState.hide()
+                                    }
                                 }
                             }
-                        }
-                    }
+                        },
                 )
             },
         ) {
@@ -208,7 +214,7 @@ class ActiveCombatScreen(
                                 IconAction(
                                     drawableResource(Resources.Drawable.JournalEntry),
                                     stringResource(Str.compendium_title_journal),
-                                    onClick = { navigation.navigate(JournalScreen(partyId)) }
+                                    onClick = { navigation.navigate(JournalScreen(partyId)) },
                                 )
 
                                 if (!isGameMaster) {
@@ -225,10 +231,10 @@ class ActiveCombatScreen(
                                                 viewModel.endCombat()
                                                 navigation.goBack()
                                             }
-                                        }
+                                        },
                                     )
                                 }
-                            }
+                            },
                         )
                     },
                 ) {
@@ -262,7 +268,7 @@ class ActiveCombatScreen(
                         Column(
                             Modifier
                                 .weight(1f)
-                                .verticalScroll(rememberScrollState())
+                                .verticalScroll(rememberScrollState()),
                         ) {
                             key(combatants) {
                                 CombatantList(
@@ -297,8 +303,11 @@ class ActiveCombatScreen(
     }
 
     @Stable
-    private fun canEditCombatant(userId: UserId, isGameMaster: Boolean, combatant: CombatantItem) =
-        isGameMaster || combatant.userId == userId
+    private fun canEditCombatant(
+        userId: UserId,
+        isGameMaster: Boolean,
+        combatant: CombatantItem,
+    ) = isGameMaster || combatant.userId == userId
 
     @Composable
     private fun GroupAdvantageBar(
@@ -364,9 +373,10 @@ class ActiveCombatScreen(
     ) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = modifier
-                .padding(vertical = 4.dp)
-                .then(modifier)
+            modifier =
+                modifier
+                    .padding(vertical = 4.dp)
+                    .then(modifier),
         ) {
             Text(label, style = MaterialTheme.typography.subtitle1)
             Text(
@@ -377,7 +387,11 @@ class ActiveCombatScreen(
     }
 
     @Composable
-    private fun BottomBar(turn: Int, round: Int, viewModel: CombatScreenModel) {
+    private fun BottomBar(
+        turn: Int,
+        round: Int,
+        viewModel: CombatScreenModel,
+    ) {
         val coroutineScope = rememberCoroutineScope()
 
         BottomAppBar(backgroundColor = MaterialTheme.colors.surface) {
@@ -403,7 +417,7 @@ class ActiveCombatScreen(
                 IconButton(
                     onClick = {
                         coroutineScope.launch(Dispatchers.IO) { viewModel.nextTurn() }
-                    }
+                    },
                 ) {
                     Icon(
                         Icons.Rounded.ArrowForward,
@@ -440,12 +454,14 @@ class ActiveCombatScreen(
                 combatant,
                 isGameMaster = isGameMaster,
                 isDragged = isDragged,
-                modifier = when {
-                    canEditCombatant(userId, isGameMaster, combatant) -> Modifier.clickable {
-                        onCombatantClicked(combatant)
-                    }
-                    else -> Modifier
-                }
+                modifier =
+                    when {
+                        canEditCombatant(userId, isGameMaster, combatant) ->
+                            Modifier.clickable {
+                                onCombatantClicked(combatant)
+                            }
+                        else -> Modifier
+                    },
             )
         }
     }
@@ -456,23 +472,25 @@ class ActiveCombatScreen(
         combatant: CombatantItem,
         isDragged: Boolean,
         isGameMaster: Boolean,
-        modifier: Modifier
+        modifier: Modifier,
     ) {
         Surface(
             modifier = modifier,
             elevation = if (isDragged) 6.dp else 2.dp,
             shape = MaterialTheme.shapes.medium,
         ) {
-            Row(Modifier.height(IntrinsicSize.Max)) { /* TODO: REMOVE COMMENT */
+            Row(Modifier.height(IntrinsicSize.Max)) { // TODO: REMOVE COMMENT
                 Box(
                     Modifier
                         .fillMaxHeight()
                         .background(
-                            if (onTurn)
+                            if (onTurn) {
                                 MaterialTheme.colors.primary
-                            else MaterialTheme.colors.onSurface.copy(alpha = ContentAlpha.disabled)
+                            } else {
+                                MaterialTheme.colors.onSurface.copy(alpha = ContentAlpha.disabled)
+                            },
                         )
-                        .width(Spacing.small)
+                        .width(Spacing.small),
                 )
 
                 Column {
@@ -503,21 +521,23 @@ class ActiveCombatScreen(
                                     Text("A: $advantage", fontWeight = FontWeight.Bold)
                                 }
                             }
-                        }
+                        },
                     )
 
                     val conditions by derivedStateOf { combatant.conditions }
 
                     if (!conditions.areEmpty()) {
                         Row(
-                            modifier = Modifier
-                                .padding(bottom = Spacing.small)
-                                .padding(horizontal = Spacing.medium)
-                                .fillMaxWidth(),
-                            horizontalArrangement = Arrangement.spacedBy(
-                                Spacing.small,
-                                Alignment.End,
-                            )
+                            modifier =
+                                Modifier
+                                    .padding(bottom = Spacing.small)
+                                    .padding(horizontal = Spacing.medium)
+                                    .fillMaxWidth(),
+                            horizontalArrangement =
+                                Arrangement.spacedBy(
+                                    Spacing.small,
+                                    Alignment.End,
+                                ),
                         ) {
                             val conditionsList by derivedStateOf { conditions.toList() }
                             conditionsList.forEach { (condition, count) ->
@@ -534,7 +554,10 @@ class ActiveCombatScreen(
 }
 
 @Composable
-private fun WoundsBar(current: Int, max: Int) {
+private fun WoundsBar(
+    current: Int,
+    max: Int,
+) {
     if (max == 0) {
         return
     }
@@ -544,22 +567,25 @@ private fun WoundsBar(current: Int, max: Int) {
 
         Surface(
             shape = RoundedCornerShape(2.dp),
-            modifier = Modifier
-                .padding(top = Spacing.small, start = Spacing.tiny)
-                .fillMaxWidth()
+            modifier =
+                Modifier
+                    .padding(top = Spacing.small, start = Spacing.tiny)
+                    .fillMaxWidth(),
         ) {
             Box(
                 Modifier.fillMaxWidth()
-                    .background(Color(183, 28, 28))
+                    .background(Color(183, 28, 28)),
             ) {
                 Box(
                     Modifier.fillMaxWidth(current.toFloat() / max)
                         .background(
-                            if (MaterialTheme.colors.isLight)
+                            if (MaterialTheme.colors.isLight) {
                                 Color(76, 175, 80)
-                            else Color(129, 199, 132)
+                            } else {
+                                Color(129, 199, 132)
+                            },
                         )
-                        .height(4.dp)
+                        .height(4.dp),
                 )
             }
         }

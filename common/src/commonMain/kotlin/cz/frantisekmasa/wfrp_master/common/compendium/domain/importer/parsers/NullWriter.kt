@@ -30,7 +30,11 @@ class NullWriter : Writer() {
     }
 
     @Throws(IOException::class)
-    override fun append(csq: CharSequence?, start: Int, end: Int): Writer {
+    override fun append(
+        csq: CharSequence?,
+        start: Int,
+        end: Int,
+    ): Writer {
         ensureOpen()
         if (csq != null) {
             Objects.checkFromToIndex(start, end, csq.length)
@@ -45,7 +49,11 @@ class NullWriter : Writer() {
     }
 
     @Throws(IOException::class)
-    override fun write(cbuf: CharArray, off: Int, len: Int) {
+    override fun write(
+        cbuf: CharArray,
+        off: Int,
+        len: Int,
+    ) {
         Objects.checkFromIndexSize(off, len, cbuf.size)
         ensureOpen()
     }
@@ -56,7 +64,11 @@ class NullWriter : Writer() {
     }
 
     @Throws(IOException::class)
-    override fun write(str: String, off: Int, len: Int) {
+    override fun write(
+        str: String,
+        off: Int,
+        len: Int,
+    ) {
         Objects.checkFromIndexSize(off, len, str.length)
         ensureOpen()
     }

@@ -10,7 +10,10 @@ import cz.frantisekmasa.wfrp_master.common.network.LocalConnectivityChecker
 import cz.frantisekmasa.wfrp_master.common.network.ReactiveNetworkConnectivityChecker
 
 @Composable
-fun ProvideActivity(activity: AppCompatActivity, content: @Composable () -> Unit) {
+fun ProvideActivity(
+    activity: AppCompatActivity,
+    content: @Composable () -> Unit,
+) {
     CompositionLocalProvider(
         LocalActivity provides activity,
         LocalSystemUiController provides rememberSystemUiController(activity.window),

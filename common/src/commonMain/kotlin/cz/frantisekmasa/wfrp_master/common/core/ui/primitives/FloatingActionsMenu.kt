@@ -27,37 +27,38 @@ enum class MenuState {
     EXPANDED,
 }
 
-private fun toState(state: MenuState) = when (state) {
-    MenuState.COLLAPSED -> MenuState.EXPANDED
-    MenuState.EXPANDED -> MenuState.COLLAPSED
-}
+private fun toState(state: MenuState) =
+    when (state) {
+        MenuState.COLLAPSED -> MenuState.EXPANDED
+        MenuState.EXPANDED -> MenuState.COLLAPSED
+    }
 
-private const val animationLengthMillis = 200
+private const val ANIMATION_DURATION_MS = 200
 
 @Composable
 fun FloatingActionsMenu(
     state: MenuState,
     onToggleRequest: (MenuState) -> Unit,
     icon: Painter,
-    subButtons: @Composable ColumnScope.() -> Unit
+    subButtons: @Composable ColumnScope.() -> Unit,
 ) {
     val transition = updateTransition(state)
 
-    val menuOpacity by transition.animateFloat({ tween(animationLengthMillis) }) { currentState ->
+    val menuOpacity by transition.animateFloat({ tween(ANIMATION_DURATION_MS) }) { currentState ->
         when (currentState) {
             MenuState.COLLAPSED -> 0f
             MenuState.EXPANDED -> 1f
         }
     }
 
-    val iconRotation by transition.animateFloat({ tween(animationLengthMillis) }) { currentState ->
+    val iconRotation by transition.animateFloat({ tween(ANIMATION_DURATION_MS) }) { currentState ->
         when (currentState) {
             MenuState.COLLAPSED -> 0f
             MenuState.EXPANDED -> 90f + 45f
         }
     }
 
-    val menuYOffset by transition.animateDp({ tween(animationLengthMillis) }) { currentState ->
+    val menuYOffset by transition.animateDp({ tween(ANIMATION_DURATION_MS) }) { currentState ->
         when (currentState) {
             MenuState.COLLAPSED -> 0.dp
             MenuState.EXPANDED -> 20.dp
@@ -68,9 +69,10 @@ fun FloatingActionsMenu(
         Column(
             horizontalAlignment = Alignment.End,
             verticalArrangement = Arrangement.spacedBy(menuYOffset),
-            modifier = Modifier
-                .alpha(menuOpacity)
-                .padding(bottom = menuYOffset)
+            modifier =
+                Modifier
+                    .alpha(menuOpacity)
+                    .padding(bottom = menuYOffset),
         ) {
             if (state == MenuState.EXPANDED) {
                 subButtons()

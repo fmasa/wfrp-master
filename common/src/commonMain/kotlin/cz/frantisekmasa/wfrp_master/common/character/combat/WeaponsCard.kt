@@ -36,7 +36,7 @@ fun WeaponsCard(
     CardContainer(
         Modifier
             .padding(horizontal = 8.dp)
-            .padding(bottom = 8.dp)
+            .padding(bottom = 8.dp),
     ) {
         CardTitle(stringResource(Str.character_title_weapons))
 
@@ -65,7 +65,10 @@ fun WeaponsCard(
 }
 
 @Composable
-private fun WeaponList(weapons: List<EquippedWeapon>, onTrappingClick: (InventoryItem) -> Unit) {
+private fun WeaponList(
+    weapons: List<EquippedWeapon>,
+    onTrappingClick: (InventoryItem) -> Unit,
+) {
     weapons.forEach { equippedWeapon ->
         key(equippedWeapon.trapping.id) {
             val weapon = equippedWeapon.weapon
@@ -74,23 +77,26 @@ private fun WeaponList(weapons: List<EquippedWeapon>, onTrappingClick: (Inventor
                 modifier = Modifier.clickable { onTrappingClick(equippedWeapon.trapping) },
                 icon = { ItemIcon(trappingIcon(equippedWeapon.weapon), ItemIcon.Size.Small) },
                 text = { Text(equippedWeapon.trapping.name) },
-                secondaryText = if (
-                    weapon.qualities.isNotEmpty() ||
-                    weapon.flaws.isNotEmpty() ||
-                    equippedWeapon.trapping.itemQualities.isNotEmpty() ||
-                    equippedWeapon.trapping.itemFlaws.isNotEmpty()
-                )
-                    (
-                        {
-                            TrappingFeatureList(
-                                equippedWeapon.trapping,
-                                weapon.qualities,
-                                weapon.flaws,
-                                Modifier.fillMaxWidth()
-                            )
-                        }
+                secondaryText =
+                    if (
+                        weapon.qualities.isNotEmpty() ||
+                        weapon.flaws.isNotEmpty() ||
+                        equippedWeapon.trapping.itemQualities.isNotEmpty() ||
+                        equippedWeapon.trapping.itemFlaws.isNotEmpty()
+                    ) {
+                        (
+                            {
+                                TrappingFeatureList(
+                                    equippedWeapon.trapping,
+                                    weapon.qualities,
+                                    weapon.flaws,
+                                    Modifier.fillMaxWidth(),
+                                )
+                            }
                         )
-                else null,
+                    } else {
+                        null
+                    },
                 trailing = {
                     Column(horizontalAlignment = Alignment.CenterHorizontally) {
                         Text(
@@ -101,13 +107,15 @@ private fun WeaponList(weapons: List<EquippedWeapon>, onTrappingClick: (Inventor
 
                         val damageExpression = weapon.damage.formatted()
                         Text(
-                            if (damageExpression.startsWith("+"))
+                            if (damageExpression.startsWith("+")) {
                                 damageExpression
-                            else "+$damageExpression",
-                            style = MaterialTheme.typography.overline
+                            } else {
+                                "+$damageExpression"
+                            },
+                            style = MaterialTheme.typography.overline,
                         )
                     }
-                }
+                },
             )
         }
     }

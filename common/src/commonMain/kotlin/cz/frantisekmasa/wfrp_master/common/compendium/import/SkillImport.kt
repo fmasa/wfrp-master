@@ -22,22 +22,24 @@ data class SkillImport(
         description.requireMaxLength(Skill.DESCRIPTION_MAX_LENGTH, "talent description")
     }
 
-    fun toSkill() = Skill(
-        id = uuid4(),
-        name = name,
-        description = description,
-        characteristic = characteristic,
-        advanced = advanced,
-        isVisibleToPlayers = isVisibleToPlayers,
-    )
+    fun toSkill() =
+        Skill(
+            id = uuid4(),
+            name = name,
+            description = description,
+            characteristic = characteristic,
+            advanced = advanced,
+            isVisibleToPlayers = isVisibleToPlayers,
+        )
 
     companion object {
-        fun fromSkill(skill: Skill) = SkillImport(
-            name = skill.name,
-            description = skill.description,
-            characteristic = skill.characteristic,
-            advanced = skill.advanced,
-            isVisibleToPlayers = skill.isVisibleToPlayers,
-        )
+        fun fromSkill(skill: Skill) =
+            SkillImport(
+                name = skill.name,
+                description = skill.description,
+                characteristic = skill.characteristic,
+                advanced = skill.advanced,
+                isVisibleToPlayers = skill.isVisibleToPlayers,
+            )
     }
 }

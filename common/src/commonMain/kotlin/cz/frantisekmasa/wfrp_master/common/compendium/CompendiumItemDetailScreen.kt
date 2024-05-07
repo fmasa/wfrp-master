@@ -35,8 +35,9 @@ fun <A : CompendiumItem<A>> Screen.CompendiumItemDetailScreen(
     detail: @Composable (A) -> Unit,
     editDialog: @Composable (item: A, onDismissRequest: () -> Unit) -> Unit,
 ) {
-    val itemOrError = remember { screenModel.get(id) }
-        .collectWithLifecycle(null).value
+    val itemOrError =
+        remember { screenModel.get(id) }
+            .collectWithLifecycle(null).value
 
     if (itemOrError == null) {
         FullScreenProgress()
@@ -77,12 +78,14 @@ fun <A : CompendiumItem<A>> Screen.CompendiumItemDetailScreen(
                     )
                 },
             )
-        }
+        },
     ) {
         Column(
-            if (scrollable)
+            if (scrollable) {
                 Modifier.verticalScroll(rememberScrollState())
-            else Modifier
+            } else {
+                Modifier
+            },
         ) {
             VisibilitySwitchBar(
                 visible = item.isVisibleToPlayers,

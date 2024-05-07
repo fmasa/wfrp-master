@@ -11,7 +11,10 @@ import androidx.compose.ui.Modifier
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
 
 @Composable
-fun SettingsCard(modifier: Modifier = Modifier, content: @Composable ColumnScope.() -> Unit) {
+fun SettingsCard(
+    modifier: Modifier = Modifier,
+    content: @Composable ColumnScope.() -> Unit,
+) {
     Box(modifier.padding(bottom = Spacing.medium)) {
         Card(shape = MaterialTheme.shapes.large) {
             Column {

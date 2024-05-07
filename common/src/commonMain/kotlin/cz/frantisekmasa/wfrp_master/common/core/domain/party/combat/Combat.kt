@@ -17,7 +17,6 @@ data class Combat(
     private val round: Int = 1,
     val groupAdvantage: GroupAdvantage = GroupAdvantage(Advantage.ZERO, Advantage.ZERO),
 ) : Parcelable {
-
     init {
         require(turn >= 1 && turn <= combatants.size)
         require(round >= 1)
@@ -26,7 +25,9 @@ data class Combat(
     }
 
     fun getCombatants() = combatants
+
     fun getTurn() = turn
+
     fun getRound() = round
 
     fun previousTurn(): Combat {
@@ -34,15 +35,19 @@ data class Combat(
             return this
         }
 
-        return if (turn == 1)
+        return if (turn == 1) {
             copy(turn = combatants.size, round = round - 1)
-        else copy(turn = turn - 1)
+        } else {
+            copy(turn = turn - 1)
+        }
     }
 
     fun nextTurn(): Combat {
-        return if (turn == combatants.size)
+        return if (turn == combatants.size) {
             copy(turn = 1, round = round + 1)
-        else copy(turn = turn + 1)
+        } else {
+            copy(turn = turn + 1)
+        }
     }
 
     fun updateCombatant(combatant: Combatant): Combat {
@@ -51,9 +56,10 @@ data class Combat(
         require(index != -1) { "Combatant of same entity as $combatant was not found" }
 
         return copy(
-            combatants = combatants.toMutableList()
-                .also { it[index] = combatant }
-                .toList()
+            combatants =
+                combatants.toMutableList()
+                    .also { it[index] = combatant }
+                    .toList(),
         )
     }
 
@@ -63,8 +69,7 @@ data class Combat(
         return copy(combatants = reorderedCombatants)
     }
 
-    private fun <T> List<T>.containsSameItems(other: List<T>) =
-        other.size == size || other.containsAll(this)
+    private fun <T> List<T>.containsSameItems(other: List<T>) = other.size == size || other.containsAll(this)
 
     fun removeCombatant(id: Uuid): Combat? {
         return removeFirstCombatant { it.id == id }
@@ -86,11 +91,12 @@ data class Combat(
         return copy(
             combatants = combatants.filterIndexed { index, _ -> index != removedIndex },
             round = if (isOnTurn && turn == combatants.size) round + 1 else round,
-            turn = when {
-                isOnTurn && turn == combatants.size -> 1 // Going to next combatant, effectively ending round
-                turn > removedIndex + 1 -> turn - 1 // Reducing number of turns
-                else -> turn // Active combatant is before NPC
-            }
+            turn =
+                when {
+                    isOnTurn && turn == combatants.size -> 1 // Going to next combatant, effectively ending round
+                    turn > removedIndex + 1 -> turn - 1 // Reducing number of turns
+                    else -> turn // Active combatant is before NPC
+                },
         )
     }
 

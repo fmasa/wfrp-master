@@ -119,13 +119,13 @@ fun TrappingsScreen(
                         IconButton(
                             onClick = {
                                 navigation.navigate(
-                                    AddTrappingScreen(characterId, containerId = null)
+                                    AddTrappingScreen(characterId, containerId = null),
                                 )
-                            }
+                            },
                         ) {
                             Icon(Icons.Rounded.Add, stringResource(Str.trappings_title_add))
                         }
-                    }
+                    },
                 )
             }
         }
@@ -135,7 +135,7 @@ fun TrappingsScreen(
                 EmptyUI(
                     text = stringResource(Str.trappings_messages_no_items),
                     Resources.Drawable.TrappingContainer,
-                    size = EmptyUI.Size.Small
+                    size = EmptyUI.Size.Small,
                 )
             }
         }
@@ -155,17 +155,18 @@ fun TrappingsScreen(
                     trapping = trapping,
                     onClick = {
                         navigation.navigate(
-                            CharacterTrappingDetailScreen(characterId, trapping.item.id)
+                            CharacterTrappingDetailScreen(characterId, trapping.item.id),
                         )
                     },
                     onRemove = { onRemove(trapping.item) },
                     onDuplicate = { onDuplicate(trapping.item) },
-                    additionalContextItems = listOf(
-                        ContextMenu.Item(
-                            stringResource(Str.trappings_button_move_to_container),
-                            onClick = { addToContainerDialogTrapping = trapping.item },
-                        )
-                    )
+                    additionalContextItems =
+                        listOf(
+                            ContextMenu.Item(
+                                stringResource(Str.trappings_button_move_to_container),
+                                onClick = { addToContainerDialogTrapping = trapping.item },
+                            ),
+                        ),
                 )
             }
         }
@@ -190,7 +191,7 @@ private fun CharacterEncumbrance(
         )
         Text(
             "$current / $max",
-            color = if (current > max) MaterialTheme.colors.error else LocalContentColor.current
+            color = if (current > max) MaterialTheme.colors.error else LocalContentColor.current,
         )
     }
 }

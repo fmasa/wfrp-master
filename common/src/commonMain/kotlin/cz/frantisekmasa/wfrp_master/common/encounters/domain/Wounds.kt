@@ -13,9 +13,10 @@ import kotlin.math.min
 @Parcelize
 data class Wounds(
     val current: Int,
-    val max: Int
+    val max: Int,
 ) : Parcelable {
     fun restore(restored: Int): Wounds = copy(current = min(max, current + restored))
+
     fun lose(lost: Int): Wounds = copy(current = max(0, current - lost))
 
     companion object {

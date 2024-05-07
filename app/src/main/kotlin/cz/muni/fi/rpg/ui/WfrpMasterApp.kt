@@ -46,7 +46,7 @@ fun WfrpMasterApp() {
                                 }
 
                                 true
-                            }
+                            },
                         ) { navigator ->
                             SnackbarScaffold {
                                 DrawerShell(drawerState) {

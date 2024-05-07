@@ -48,9 +48,8 @@ import kotlinx.coroutines.launch
 import kotlin.coroutines.EmptyCoroutineContext
 
 class JournalScreen(
-    private val partyId: PartyId
+    private val partyId: PartyId,
 ) : CompendiumScreen() {
-
     @Composable
     override fun Content() {
         val screenModel: JournalScreenModel = rememberScreenModel(arg = partyId)
@@ -65,15 +64,16 @@ class JournalScreen(
                 onSaveRequest = {
                     screenModel.save(it)
                     navigation.navigate(JournalEntryScreen(partyId, it.id))
-                }
+                },
             )
         }
 
         val coroutineScope = rememberCoroutineScope { EmptyCoroutineContext + Dispatchers.IO }
 
         SearchableList(
-            data = screenModel.entries.collectWithLifecycle(null).value
-                ?.let { SearchableList.Data.Loaded(it) } ?: SearchableList.Data.Loading,
+            data =
+                screenModel.entries.collectWithLifecycle(null).value
+                    ?.let { SearchableList.Data.Loaded(it) } ?: SearchableList.Data.Loading,
             emptyUi = {
                 EmptyUI(
                     text = stringResource(Str.journal_messages_no_entries),
@@ -128,7 +128,7 @@ class JournalScreen(
                         stringResource(Str.compendium_icon_add_compendium_item),
                     )
                 }
-            }
+            },
         )
     }
 
@@ -142,18 +142,19 @@ class JournalScreen(
         isGameMaster: Boolean,
     ) {
         WithContextMenu(
-            items = listOf(
-                ContextMenu.Item(
-                    stringResource(Str.common_ui_button_duplicate),
-                    onClick = {
-                        coroutineScope.launch { screenModel.duplicate(entry.id) }
-                    }
+            items =
+                listOf(
+                    ContextMenu.Item(
+                        stringResource(Str.common_ui_button_duplicate),
+                        onClick = {
+                            coroutineScope.launch { screenModel.duplicate(entry.id) }
+                        },
+                    ),
+                    ContextMenu.Item(
+                        stringResource(Str.common_ui_button_remove),
+                        onClick = { coroutineScope.launch { screenModel.remove(entry.id) } },
+                    ),
                 ),
-                ContextMenu.Item(
-                    stringResource(Str.common_ui_button_remove),
-                    onClick = { coroutineScope.launch { screenModel.remove(entry.id) } }
-                ),
-            ),
             onClick = { onClick() },
         ) {
             ListItem(
@@ -184,7 +185,6 @@ class JournalScreen(
         isGameMaster: Boolean,
     ) {
         Column {
-
             when (item) {
                 is TreeItem.Item -> {
                     JournalListItem(
@@ -211,7 +211,7 @@ class JournalScreen(
                         Column(
                             Modifier
                                 .padding(start = Spacing.large)
-                                .animateContentSize()
+                                .animateContentSize(),
                         ) {
                             if (expanded) {
                                 item.items.forEachIndexed { index, subItem ->

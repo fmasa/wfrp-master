@@ -52,7 +52,10 @@ internal fun QrCode(data: String) {
     }
 }
 
-private suspend fun createQrCode(data: String, size: Int): ImageBitmap {
+private suspend fun createQrCode(
+    data: String,
+    size: Int,
+): ImageBitmap {
     return withContext(Dispatchers.Default) {
         val writer = QRCodeWriter()
         val hints = mapOf(EncodeHintType.CHARACTER_SET to "UTF-8")

@@ -25,7 +25,10 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.forms.inputValue
 import dev.icerock.moko.resources.compose.stringResource
 
 @Composable
-fun BasicsSection(character: Character, screenModel: CharacterScreenModel) {
+fun BasicsSection(
+    character: Character,
+    screenModel: CharacterScreenModel,
+) {
     val data = BasicFormData.fromCharacter(character)
 
     FormScreen(
@@ -41,7 +44,7 @@ fun BasicsSection(character: Character, screenModel: CharacterScreenModel) {
                     publicName = it.publicName,
                 )
             }
-        }
+        },
     ) { validate ->
         TextInput(
             label = stringResource(Str.character_label_name),
@@ -97,23 +100,25 @@ private data class BasicFormData(
         return listOf(name, motivation).all { it.isValid() }
     }
 
-    override fun toValue() = BasicData(
-        name = name.value,
-        publicName = publicName.value.takeIf { it.isNotBlank() },
-        race = race.value,
-        motivation = motivation.value,
-        note = note.value,
-    )
+    override fun toValue() =
+        BasicData(
+            name = name.value,
+            publicName = publicName.value.takeIf { it.isNotBlank() },
+            race = race.value,
+            motivation = motivation.value,
+            note = note.value,
+        )
 
     companion object {
         @Composable
-        fun fromCharacter(character: Character) = BasicFormData(
-            name = inputValue(character.name, Rules.NotBlank()),
-            publicName = inputValue(character.publicName ?: "", Rules.NotBlank()),
-            race = rememberSaveable(character.id) { mutableStateOf(character.race) },
-            motivation = inputValue(character.motivation),
-            note = inputValue(character.note),
-        )
+        fun fromCharacter(character: Character) =
+            BasicFormData(
+                name = inputValue(character.name, Rules.NotBlank()),
+                publicName = inputValue(character.publicName ?: "", Rules.NotBlank()),
+                race = rememberSaveable(character.id) { mutableStateOf(character.race) },
+                motivation = inputValue(character.motivation),
+                note = inputValue(character.note),
+            )
     }
 }
 

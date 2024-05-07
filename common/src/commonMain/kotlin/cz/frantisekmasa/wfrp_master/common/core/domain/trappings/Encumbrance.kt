@@ -18,9 +18,10 @@ value class Encumbrance(private val value: Double) : Parcelable {
         val Zero: Encumbrance = Encumbrance(0.0)
         private val formatter = DecimalFormat("#,##0.###")
 
-        fun maximumForCharacter(characteristics: Stats): Encumbrance = Encumbrance(
-            (characteristics.strengthBonus + characteristics.toughnessBonus).toDouble()
-        )
+        fun maximumForCharacter(characteristics: Stats): Encumbrance =
+            Encumbrance(
+                (characteristics.strengthBonus + characteristics.toughnessBonus).toDouble(),
+            )
     }
 
     init {
@@ -28,8 +29,11 @@ value class Encumbrance(private val value: Double) : Parcelable {
     }
 
     operator fun compareTo(other: Encumbrance) = value.compareTo(other.value)
+
     operator fun times(multiplier: Int) = Encumbrance(value * multiplier)
+
     operator fun plus(addend: Encumbrance) = Encumbrance(value + addend.value)
+
     operator fun minus(other: Encumbrance) = Encumbrance((value - other.value).coerceAtLeast(0.0))
 
     override fun toString(): String = formatter.format(value)

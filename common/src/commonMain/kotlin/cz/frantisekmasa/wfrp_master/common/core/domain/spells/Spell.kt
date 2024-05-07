@@ -22,12 +22,15 @@ data class Spell(
     val castingNumber: Int,
     val effect: String,
     val lore: SpellLore? = null,
-    val memorized: Boolean = true, // TODO: Remove default value and migrate stored data
+    // TODO: Remove default value and migrate stored data
+    val memorized: Boolean = true,
 ) : CharacterItem<Spell, CompendiumSpell> {
-
-    val effectiveCastingNumber: Int get() = if (memorized)
-        castingNumber
-    else castingNumber * 2
+    val effectiveCastingNumber: Int get() =
+        if (memorized) {
+            castingNumber
+        } else {
+            castingNumber * 2
+        }
 
     init {
         require(name.isNotBlank()) { "Name must not be blank" }

@@ -63,13 +63,14 @@ actual class InvitationScannerScreen : Screen {
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center,
-                modifier = Modifier.fillMaxHeight().padding(contentPadding)
+                modifier = Modifier.fillMaxHeight().padding(contentPadding),
             ) {
                 val screenModel: InvitationScreenModel = rememberScreenModel()
 
-                val (invitation, setInvitation) = rememberSaveable {
-                    mutableStateOf<Invitation?>(null)
-                }
+                val (invitation, setInvitation) =
+                    rememberSaveable {
+                        mutableStateOf<Invitation?>(null)
+                    }
 
                 when {
                     invitation != null -> {
@@ -89,7 +90,10 @@ actual class InvitationScannerScreen : Screen {
     }
 
     @Composable
-    private fun Scanner(screenModel: InvitationScreenModel, onSuccessfulScan: (Invitation) -> Unit) {
+    private fun Scanner(
+        screenModel: InvitationScreenModel,
+        onSuccessfulScan: (Invitation) -> Unit,
+    ) {
         val coroutineScope = rememberCoroutineScope()
         val camera = rememberPermissionState(Manifest.permission.CAMERA)
 
@@ -175,7 +179,6 @@ actual class InvitationScannerScreen : Screen {
 
     @Composable
     private fun Alternative() {
-
         HorizontalLine()
 
         Text(
@@ -190,7 +193,7 @@ actual class InvitationScannerScreen : Screen {
             Intent().apply {
                 action = Settings.ACTION_APPLICATION_DETAILS_SETTINGS
                 data = Uri.fromParts("package", packageName, null)
-            }
+            },
         )
     }
 }

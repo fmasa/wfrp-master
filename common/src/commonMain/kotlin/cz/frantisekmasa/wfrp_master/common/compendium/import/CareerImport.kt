@@ -30,30 +30,33 @@ data class CareerImport(
         }
     }
 
-    fun toCareer() = Career(
-        id = uuid4(),
-        name = name,
-        description = description,
-        socialClass = socialClass,
-        races = races,
-        levels = levels.map {
-            Career.Level(
-                id = uuid4(),
-                name = it.name,
-                status = it.status,
-                characteristics = it.characteristics,
-                skills = it.skills.map { skill ->
-                    Career.Skill(
-                        skill.expression,
-                        skill.isIncomeSkill
+    fun toCareer() =
+        Career(
+            id = uuid4(),
+            name = name,
+            description = description,
+            socialClass = socialClass,
+            races = races,
+            levels =
+                levels.map {
+                    Career.Level(
+                        id = uuid4(),
+                        name = it.name,
+                        status = it.status,
+                        characteristics = it.characteristics,
+                        skills =
+                            it.skills.map { skill ->
+                                Career.Skill(
+                                    skill.expression,
+                                    skill.isIncomeSkill,
+                                )
+                            },
+                        talents = it.talents,
+                        trappings = it.trappings,
                     )
                 },
-                talents = it.talents,
-                trappings = it.trappings,
-            )
-        },
-        isVisibleToPlayers = isVisibleToPlayers,
-    )
+            isVisibleToPlayers = isVisibleToPlayers,
+        )
 
     @Serializable
     @Immutable
@@ -78,27 +81,30 @@ data class CareerImport(
     }
 
     companion object {
-        fun fromCareer(career: Career) = CareerImport(
-            name = career.name,
-            description = career.description,
-            socialClass = career.socialClass,
-            races = career.races,
-            levels = career.levels.map {
-                Level(
-                    name = it.name,
-                    status = it.status,
-                    characteristics = it.characteristics,
-                    skills = it.skills.map { skill ->
-                        Skill(
-                            skill.expression,
-                            skill.isIncomeSkill
+        fun fromCareer(career: Career) =
+            CareerImport(
+                name = career.name,
+                description = career.description,
+                socialClass = career.socialClass,
+                races = career.races,
+                levels =
+                    career.levels.map {
+                        Level(
+                            name = it.name,
+                            status = it.status,
+                            characteristics = it.characteristics,
+                            skills =
+                                it.skills.map { skill ->
+                                    Skill(
+                                        skill.expression,
+                                        skill.isIncomeSkill,
+                                    )
+                                },
+                            talents = it.talents,
+                            trappings = it.trappings,
                         )
                     },
-                    talents = it.talents,
-                    trappings = it.trappings,
-                )
-            },
-            isVisibleToPlayers = career.isVisibleToPlayers,
-        )
+                isVisibleToPlayers = career.isVisibleToPlayers,
+            )
     }
 }

@@ -72,16 +72,16 @@ fun TrappingFromCompendiumForm(
                                         itemFlaws = flawValues.value,
                                         quantity = quantityField.toInt().coerceAtLeast(1),
                                         note = noteField.value,
-                                    )
+                                    ),
                                 )
                                 onDismissRequest()
                             }
                         },
                         enabled = !saving,
                     )
-                }
+                },
             )
-        }
+        },
     ) {
         Column(
             Modifier
@@ -89,7 +89,6 @@ fun TrappingFromCompendiumForm(
                 .padding(Spacing.bodyPadding),
             verticalArrangement = Arrangement.spacedBy(Spacing.small),
         ) {
-
             TextInput(
                 label = stringResource(Str.trappings_label_note),
                 value = noteField,

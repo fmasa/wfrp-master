@@ -24,35 +24,39 @@ class CharacterScreenModel(
     private val userProvider: UserProvider,
     partyRepository: PartyRepository,
 ) : ScreenModel {
-
     val character: Flow<Character> = characters.getLive(characterId).right()
 
     private val party = partyRepository.getLive(characterId.partyId).right()
 
-    val isGameMaster = party
-        .map { it.gameMasterId == userProvider.userId }
-        .distinctUntilChanged()
+    val isGameMaster =
+        party
+            .map { it.gameMasterId == userProvider.userId }
+            .distinctUntilChanged()
 
-    val allCareers: Flow<List<Career>> = careerCompendium.liveForParty(characterId.partyId)
-        .combine(party) { careers, party ->
-            if (userProvider.userId == party.gameMasterId) {
-                return@combine careers
+    val allCareers: Flow<List<Career>> =
+        careerCompendium.liveForParty(characterId.partyId)
+            .combine(party) { careers, party ->
+                if (userProvider.userId == party.gameMasterId) {
+                    return@combine careers
+                }
+
+                careers.filter { it.isVisibleToPlayers }
             }
 
-            careers.filter { it.isVisibleToPlayers }
+    val career: Flow<CurrentCareer?> =
+        combine(character, allCareers) { character, allCareers ->
+            val currentCareer = character.compendiumCareer ?: return@combine null
+
+            val career =
+                allCareers.firstOrNull { it.id == currentCareer.careerId }
+                    ?: return@combine null
+
+            val level =
+                career.levels.firstOrNull { it.id == currentCareer.levelId }
+                    ?: return@combine null
+
+            CurrentCareer(career, level)
         }
-
-    val career: Flow<CurrentCareer?> = combine(character, allCareers) { character, allCareers ->
-        val currentCareer = character.compendiumCareer ?: return@combine null
-
-        val career = allCareers.firstOrNull { it.id == currentCareer.careerId }
-            ?: return@combine null
-
-        val level = career.levels.firstOrNull { it.id == currentCareer.levelId }
-            ?: return@combine null
-
-        CurrentCareer(career, level)
-    }
 
     @Immutable
     data class CurrentCareer(

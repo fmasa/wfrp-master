@@ -31,7 +31,6 @@ import kotlinx.coroutines.launch
 
 class CharacterSkillDetailScreen(characterId: CharacterId, skillId: Uuid) :
     CharacterItemDetailScreen(characterId, skillId) {
-
     @Composable
     override fun Content() {
         val screenModel: CharacterSkillDetailScreenModel = rememberScreenModel(arg = characterId)
@@ -39,8 +38,9 @@ class CharacterSkillDetailScreen(characterId: CharacterId, skillId: Uuid) :
 
         Detail(screenModel) { skill, isGameMaster ->
             val navigation = LocalNavigationTransaction.current
-            val characteristics = characterScreenModel.character
-                .collectWithLifecycle(null).value?.characteristics
+            val characteristics =
+                characterScreenModel.character
+                    .collectWithLifecycle(null).value?.characteristics
 
             if (characteristics == null) {
                 FullScreenProgress()
@@ -67,9 +67,10 @@ class CharacterSkillDetailScreen(characterId: CharacterId, skillId: Uuid) :
                         SkillRating(
                             label = stringResource(Str.skills_label_rating),
                             value = characteristics.get(skill.characteristic) + skill.advances,
-                            modifier = Modifier
-                                .padding(top = Spacing.extraLarge)
-                                .align(Alignment.CenterHorizontally),
+                            modifier =
+                                Modifier
+                                    .padding(top = Spacing.extraLarge)
+                                    .align(Alignment.CenterHorizontally),
                         )
 
                         if (isGameMaster) {
@@ -80,12 +81,12 @@ class CharacterSkillDetailScreen(characterId: CharacterId, skillId: Uuid) :
                                         CompendiumSkillDetailScreen(
                                             screenModel.characterId.partyId,
                                             skill.compendiumId,
-                                        )
+                                        ),
                                     )
-                                }
+                                },
                             )
                         }
-                    }
+                    },
                 )
             } else {
                 NonCompendiumSkillForm(
@@ -103,7 +104,7 @@ class CharacterSkillDetailScreen(characterId: CharacterId, skillId: Uuid) :
 private fun AdvancesBar(
     advances: Int,
     minAdvances: Int,
-    onAdvancesChange: (advances: Int) -> Unit
+    onAdvancesChange: (advances: Int) -> Unit,
 ) {
     SubheadBar {
         Row(
@@ -119,7 +120,7 @@ private fun AdvancesBar(
                     if (advances > minAdvances) {
                         onAdvancesChange(advances - 1)
                     }
-                }
+                },
             )
         }
     }

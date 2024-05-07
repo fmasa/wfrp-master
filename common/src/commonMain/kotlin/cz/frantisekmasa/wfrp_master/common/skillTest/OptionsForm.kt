@@ -33,7 +33,7 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.forms.SelectBox
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.SelectBoxToggle
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.FullScreenProgress
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
-import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.VisualOnlyIconDescription
+import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.VISUAL_ONLY_ICON_DESCRIPTION
 import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.TopBarAction
 import dev.icerock.moko.resources.compose.stringResource
 import kotlin.math.absoluteValue
@@ -75,11 +75,11 @@ internal fun OptionsForm(
                                 selectedCharacterIds.map { charactersById.getValue(it) }.toSet(),
                                 difficulty,
                             )
-                        }
+                        },
                     )
-                }
+                },
             )
-        }
+        },
     ) {
         if (characters == null) {
             FullScreenProgress()
@@ -98,8 +98,9 @@ internal fun OptionsForm(
             ) {
                 Icon(
                     drawableResource(selectedSkill.characteristic.getIcon()),
-                    VisualOnlyIconDescription, // TODO: Add characteristic-derived description
-                    Modifier.width(24.dp)
+                    // TODO: Add characteristic-derived description
+                    VISUAL_ONLY_ICON_DESCRIPTION,
+                    Modifier.width(24.dp),
                 )
                 Text(selectedSkill.name, Modifier.padding(start = Spacing.small))
             }
@@ -108,7 +109,7 @@ internal fun OptionsForm(
                 label = stringResource(Str.tests_label_difficulty),
                 value = difficulty,
                 onValueChange = { difficulty = it },
-                items = difficultyOptions()
+                items = difficultyOptions(),
             )
 
             CharacterList(
@@ -119,7 +120,7 @@ internal fun OptionsForm(
                 },
                 onCharacterUnselected = {
                     selectedCharacterIds = selectedCharacterIds.filter { id -> id != it }.toSet()
-                }
+                },
             )
         }
     }
@@ -154,11 +155,12 @@ private fun CharacterList(
                         onCheckedChange = onValueChange,
                     )
                 },
-                modifier = Modifier.toggleable(
-                    value = selectedCharacterIds.contains(character.id),
-                    onValueChange = onValueChange,
-                ),
-                text = { Text(character.name) }
+                modifier =
+                    Modifier.toggleable(
+                        value = selectedCharacterIds.contains(character.id),
+                        onValueChange = onValueChange,
+                    ),
+                text = { Text(character.name) },
             )
         }
     }
@@ -179,7 +181,8 @@ private fun difficultyOptions(): List<Pair<Int, String>> {
     }
 }
 
-private val Int.signSymbol get() = when {
-    this < 0 -> "-"
-    else -> "+"
-}
+private val Int.signSymbol get() =
+    when {
+        this < 0 -> "-"
+        else -> "+"
+    }

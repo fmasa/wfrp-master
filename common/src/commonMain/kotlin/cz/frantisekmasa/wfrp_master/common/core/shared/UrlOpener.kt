@@ -6,5 +6,8 @@ import androidx.compose.runtime.Composable
 expect fun rememberUrlOpener(): UrlOpener
 
 fun interface UrlOpener {
-    fun open(url: String, isGooglePlayLink: Boolean)
+    fun open(
+        url: String,
+        isGooglePlayLink: Boolean,
+    )
 }

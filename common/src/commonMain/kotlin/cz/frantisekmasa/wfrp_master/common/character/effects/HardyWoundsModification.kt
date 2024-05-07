@@ -8,24 +8,31 @@ class HardyWoundsModification(private val timesTaken: Int) : CharacterEffect {
         require(timesTaken > 0)
     }
 
-    override fun apply(character: Character, otherEffects: List<CharacterEffect>): Character {
+    override fun apply(
+        character: Character,
+        otherEffects: List<CharacterEffect>,
+    ): Character {
         val modifiers = character.woundsModifiers
 
         return character.modifyWounds(
             modifiers.copy(
                 extraToughnessBonusMultiplier = modifiers.extraToughnessBonusMultiplier + timesTaken,
-            )
+            ),
         )
     }
 
-    override fun revert(character: Character, otherEffects: List<CharacterEffect>): Character {
+    override fun revert(
+        character: Character,
+        otherEffects: List<CharacterEffect>,
+    ): Character {
         val modifiers = character.woundsModifiers
 
         return character.modifyWounds(
             modifiers.copy(
-                extraToughnessBonusMultiplier = (modifiers.extraToughnessBonusMultiplier - timesTaken)
-                    .coerceAtLeast(0),
-            )
+                extraToughnessBonusMultiplier =
+                    (modifiers.extraToughnessBonusMultiplier - timesTaken)
+                        .coerceAtLeast(0),
+            ),
         )
     }
 

@@ -72,7 +72,6 @@ class CompendiumCareerDetailScreen(
     private val partyId: PartyId,
     private val careerId: Uuid,
 ) : Screen {
-
     override val key = "parties/$partyId/compendium/careers/$careerId"
 
     @Composable
@@ -82,17 +81,19 @@ class CompendiumCareerDetailScreen(
 
         val party = partyScreenModel.party.collectWithLifecycle(null).value
 
-        val career = remember { screenModel.get(careerId) }
-            .collectWithLifecycle(null)
-            .value
+        val career =
+            remember { screenModel.get(careerId) }
+                .collectWithLifecycle(null)
+                .value
 
         if (career == null || party == null) {
             FullScreenProgress()
             return
         }
 
-        val careerValue = career.orNull()
-            ?.takeIf { it.isVisibleToPlayers || party.gameMasterId == LocalUser.current.id }
+        val careerValue =
+            career.orNull()
+                ?.takeIf { it.isVisibleToPlayers || party.gameMasterId == LocalUser.current.id }
 
         val snackbarHolder = LocalPersistentSnackbarHolder.current
         val navigation = LocalNavigationTransaction.current
@@ -122,12 +123,17 @@ class CompendiumCareerDetailScreen(
     }
 
     @Composable
-    private fun Detail(career: Career, party: Party, screenModel: CareerCompendiumScreenModel) {
-        val (dialogState, setDialogState) = remember {
-            mutableStateOf<LevelDialogState>(
-                LevelDialogState.Closed
-            )
-        }
+    private fun Detail(
+        career: Career,
+        party: Party,
+        screenModel: CareerCompendiumScreenModel,
+    ) {
+        val (dialogState, setDialogState) =
+            remember {
+                mutableStateOf<LevelDialogState>(
+                    LevelDialogState.Closed,
+                )
+            }
 
         val isGameMaster = LocalUser.current.id == party.gameMasterId
         val levelNames = remember(career) { career.levels.map { it.name }.toSet() }
@@ -165,12 +171,13 @@ class CompendiumCareerDetailScreen(
                         if (editDialogOpened) {
                             CareerFormDialog(
                                 title = stringResource(Str.careers_title_edit_career),
-                                existingCareer = CareerData(
-                                    name = career.name,
-                                    description = career.description,
-                                    races = career.races,
-                                    socialClass = career.socialClass,
-                                ),
+                                existingCareer =
+                                    CareerData(
+                                        name = career.name,
+                                        description = career.description,
+                                        races = career.races,
+                                        socialClass = career.socialClass,
+                                    ),
                                 onSaveRequest = {
                                     screenModel.update(
                                         career.copy(
@@ -178,7 +185,7 @@ class CompendiumCareerDetailScreen(
                                             description = it.description,
                                             socialClass = it.socialClass,
                                             races = it.races,
-                                        )
+                                        ),
                                     )
                                 },
                                 onDismissRequest = { editDialogOpened = false },
@@ -189,10 +196,10 @@ class CompendiumCareerDetailScreen(
                             IconAction(
                                 Icons.Rounded.Edit,
                                 stringResource(Str.careers_title_edit_career),
-                                onClick = { editDialogOpened = true }
+                                onClick = { editDialogOpened = true },
                             )
                         }
-                    }
+                    },
                 )
             },
             floatingActionButton = {
@@ -201,7 +208,7 @@ class CompendiumCareerDetailScreen(
                         Icon(Icons.Rounded.Add, stringResource(Str.careers_title_add_level))
                     }
                 }
-            }
+            },
         ) {
             val tabDetail = stringResource(Str.careers_tab_detail)
             val tabLevels = stringResource(Str.careers_tab_levels)
@@ -231,7 +238,7 @@ class CompendiumCareerDetailScreen(
                                 SingleLineTextValue(
                                     stringResource(Str.careers_label_races),
                                     career.races.map { it.localizedName }
-                                        .joinToString(", ")
+                                        .joinToString(", "),
                                 )
                             }
 
@@ -290,9 +297,12 @@ private fun LevelList(
 
             Card(
                 elevation = if (isDragged) 6.dp else 2.dp,
-                modifier = if (isGameMaster)
-                    modifier.clickable { onClick(level) }
-                else modifier
+                modifier =
+                    if (isGameMaster) {
+                        modifier.clickable { onClick(level) }
+                    } else {
+                        modifier
+                    },
             ) {
                 ListItem(
                     modifier = Modifier.padding(Spacing.medium),
@@ -309,7 +319,7 @@ private fun LevelList(
                                 append(level.status.tier.localizedName)
                                 append(' ')
                                 append(level.status.standing.toString())
-                            }
+                            },
                         )
                     },
                     secondaryText = {
@@ -321,9 +331,10 @@ private fun LevelList(
                                         append(": ")
                                     }
 
-                                    val characteristics = remember(level.characteristics) {
-                                        Characteristic.ORDER.filter { it in level.characteristics }
-                                    }
+                                    val characteristics =
+                                        remember(level.characteristics) {
+                                            Characteristic.ORDER.filter { it in level.characteristics }
+                                        }
 
                                     if (characteristics.isEmpty()) {
                                         append("—")
@@ -336,7 +347,7 @@ private fun LevelList(
                                             append(", ")
                                         }
                                     }
-                                }
+                                },
                             )
                             Text(
                                 buildAnnotatedString {
@@ -363,7 +374,7 @@ private fun LevelList(
                                                 append(", ")
                                             }
                                         }
-                                }
+                                },
                             )
                             Text(
                                 buildAnnotatedString {
@@ -384,7 +395,7 @@ private fun LevelList(
                                                 append(", ")
                                             }
                                         }
-                                }
+                                },
                             )
 
                             Text(
@@ -405,10 +416,10 @@ private fun LevelList(
                                             append(", ")
                                         }
                                     }
-                                }
+                                },
                             )
                         }
-                    }
+                    },
                 )
             }
         }

@@ -11,11 +11,13 @@ import dev.icerock.moko.parcelize.Parcelize
 enum class WeaponEquip : NamedEnum, Parcelable {
     BOTH_HANDS,
     PRIMARY_HAND,
-    OFF_HAND;
+    OFF_HAND,
+    ;
 
-    override val translatableName get() = when (this) {
-        BOTH_HANDS -> Str.weapons_equip_both_hands
-        PRIMARY_HAND -> Str.weapons_equip_primary_hand
-        OFF_HAND -> Str.weapons_equip_off_hand
-    }
+    override val translatableName get() =
+        when (this) {
+            BOTH_HANDS -> Str.weapons_equip_both_hands
+            PRIMARY_HAND -> Str.weapons_equip_primary_hand
+            OFF_HAND -> Str.weapons_equip_off_hand
+        }
 }

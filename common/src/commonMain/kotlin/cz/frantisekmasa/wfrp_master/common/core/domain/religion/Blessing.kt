@@ -21,7 +21,6 @@ data class Blessing(
     val duration: String,
     val effect: String,
 ) : CharacterItem<Blessing, CompendiumBlessing> {
-
     init {
         require(name.isNotBlank()) { "Name must not be blank" }
         name.requireMaxLength(CompendiumBlessing.NAME_MAX_LENGTH, "name")
@@ -44,14 +43,15 @@ data class Blessing(
     override fun unlinkFromCompendium() = copy(compendiumId = null)
 
     companion object {
-        fun fromCompendium(blessing: cz.frantisekmasa.wfrp_master.common.compendium.domain.Blessing): Blessing = Blessing(
-            id = uuid4(),
-            compendiumId = blessing.id,
-            name = blessing.name,
-            range = blessing.range,
-            target = blessing.target,
-            duration = blessing.duration,
-            effect = blessing.effect,
-        )
+        fun fromCompendium(blessing: cz.frantisekmasa.wfrp_master.common.compendium.domain.Blessing): Blessing =
+            Blessing(
+                id = uuid4(),
+                compendiumId = blessing.id,
+                name = blessing.name,
+                range = blessing.range,
+                target = blessing.target,
+                duration = blessing.duration,
+                effect = blessing.effect,
+            )
     }
 }

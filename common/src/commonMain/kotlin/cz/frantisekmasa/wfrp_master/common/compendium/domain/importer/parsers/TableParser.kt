@@ -7,30 +7,36 @@ class TableParser {
         tablePage: Int,
         findNames: Boolean,
     ): List<Table> {
-        val tokens = lexer.getTokens(tablePage)
-            .toList()
+        val tokens =
+            lexer.getTokens(tablePage)
+                .toList()
 
         val tables = mutableListOf<Table>()
 
         val stream = TokenStream(tokens)
 
         while (stream.peek() != null) {
-            val tableName = if (findNames) {
-                stream.dropUntil { it is Token.BoxHeader || it is Token.TableValue }
-                stream.consumeWhileOfType<Token.BoxHeader>().joinToString("") { it.text }
-            } else ""
+            val tableName =
+                if (findNames) {
+                    stream.dropUntil { it is Token.BoxHeader || it is Token.TableValue }
+                    stream.consumeWhileOfType<Token.BoxHeader>().joinToString("") { it.text }
+                } else {
+                    ""
+                }
 
             stream.dropUntil { it is Token.TableValue }
             stream.dropWhile { it is Token.TableHeadCell }
 
-            tables += Table(
-                name = tableName,
-                tokens = stream.consumeWhile {
-                    it is Token.TableHeading ||
-                        it is Token.BodyCellPart || it is Token.ItalicsPart ||
-                        (it is Token.NormalPart && structure.tableFootnotesAsNormalText)
-                },
-            )
+            tables +=
+                Table(
+                    name = tableName,
+                    tokens =
+                        stream.consumeWhile {
+                            it is Token.TableHeading ||
+                                it is Token.BodyCellPart || it is Token.ItalicsPart ||
+                                (it is Token.NormalPart && structure.tableFootnotesAsNormalText)
+                        },
+                )
         }
 
         return tables
@@ -52,7 +58,7 @@ class TableParser {
             token is Token.NormalPart ||
                 token is Token.BodyCellPart ||
                 token is Token.ItalicsPart
-            ) && token.text.startsWith("*")
+        ) && token.text.startsWith("*")
     }
 
     private fun parseFootnotes(stream: TokenStream): Map<Int, String> {
@@ -80,8 +86,8 @@ class TableParser {
                                 }
                             }
                             .filterIsInstance<Token.ParagraphToken>()
-                            .toList()
-                    )
+                            .toList(),
+                    ),
                 )
             }
         }
@@ -91,79 +97,84 @@ class TableParser {
         tokens: List<Token>,
         columnCount: Int,
     ): List<TableSection> {
-        val stream = TokenStream(
-            tokens.filter { it is Token.TableValue || it is Token.NormalPart || it is Token.ItalicsPart }
-        )
+        val stream =
+            TokenStream(
+                tokens.filter { it is Token.TableValue || it is Token.NormalPart || it is Token.ItalicsPart },
+            )
 
         stream.dropUntil { it is Token.TableHeading || it is Token.BodyCellPart }
 
-        val tableSections = buildList {
-            var heading: String? = null
-            val rows = mutableListOf<List<String>>()
-            var footnotes = mapOf<Int, String>()
+        val tableSections =
+            buildList {
+                var heading: String? = null
+                val rows = mutableListOf<List<String>>()
+                var footnotes = mapOf<Int, String>()
 
-            while (stream.peek() != null) {
-                if (isFootnoteStart(stream.peek())) {
-                    footnotes = parseFootnotes(stream)
-                    continue
-                }
-
-                if (stream.peek() is Token.TableHeading) {
-                    if (rows.isNotEmpty()) {
-                        add(TableSection(heading, rows.toList(), footnotes))
-                        rows.clear()
-                        footnotes = emptyMap()
+                while (stream.peek() != null) {
+                    if (isFootnoteStart(stream.peek())) {
+                        footnotes = parseFootnotes(stream)
+                        continue
                     }
 
-                    heading = stream.consumeOneOfType<Token.TableHeading>().text
-                }
+                    if (stream.peek() is Token.TableHeading) {
+                        if (rows.isNotEmpty()) {
+                            add(TableSection(heading, rows.toList(), footnotes))
+                            rows.clear()
+                            footnotes = emptyMap()
+                        }
 
-                val cells = mutableListOf<String>()
-                lateinit var lastToken: Token.BodyCellPart
-
-                for (column in 0 until columnCount) {
-                    val nextToken = stream.peek()
-                    val isLastColumn = column == columnCount - 1
-
-                    // Handle empty last column
-                    if (
-                        isLastColumn &&
-                        nextToken is Token.BodyCellPart &&
-                        nextToken.y > lastToken.y + lastToken.height
-                    ) {
-                        cells += ""
-                        break
+                        heading = stream.consumeOneOfType<Token.TableHeading>().text
                     }
 
-                    try {
-                        lastToken = stream.consumeOneOfType<Token.BodyCellPart>()
-                    } catch (e: Throwable) {
-                        throw e
+                    val cells = mutableListOf<String>()
+                    lateinit var lastToken: Token.BodyCellPart
+
+                    for (column in 0 until columnCount) {
+                        val nextToken = stream.peek()
+                        val isLastColumn = column == columnCount - 1
+
+                        // Handle empty last column
+                        if (
+                            isLastColumn &&
+                            nextToken is Token.BodyCellPart &&
+                            nextToken.y > lastToken.y + lastToken.height
+                        ) {
+                            cells += ""
+                            break
+                        }
+
+                        try {
+                            lastToken = stream.consumeOneOfType<Token.BodyCellPart>()
+                        } catch (e: Throwable) {
+                            throw e
+                        }
+                        var text = lastToken.text
+
+                        val hasAnotherLine =
+                            if (isLastColumn) {
+                                (text.endsWith(", ") || text.endsWith(" or ")) // e.g. list of weapon qualities in last column
+                            } else {
+                                (text.endsWith(" ") || text.endsWith("’s")) // e.g. "10% \n Perception
+                            }
+
+                        if (hasAnotherLine) {
+                            text += stream.consumeOneOfType<Token.BodyCellPart>().text
+                        }
+
+                        cells += text
                     }
-                    var text = lastToken.text
 
-                    val hasAnotherLine = if (isLastColumn)
-                        (text.endsWith(", ") || text.endsWith(" or ")) // e.g. list of weapon qualities in last column
-                    else (text.endsWith(" ") || text.endsWith("’s")) // e.g. "10% \n Perception
-
-                    if (hasAnotherLine) {
-                        text += stream.consumeOneOfType<Token.BodyCellPart>().text
+                    if (stream.peek() is Token.NormalPart && !isFootnoteStart(stream.peek())) {
+                        stream.dropUntil { it is Token.TableHeading || it is Token.BodyCellPart }
                     }
 
-                    cells += text
+                    rows += cells
                 }
 
-                if (stream.peek() is Token.NormalPart && !isFootnoteStart(stream.peek())) {
-                    stream.dropUntil { it is Token.TableHeading || it is Token.BodyCellPart }
+                if (rows.isNotEmpty()) {
+                    add(TableSection(heading, rows.toList(), footnotes))
                 }
-
-                rows += cells
             }
-
-            if (rows.isNotEmpty()) {
-                add(TableSection(heading, rows.toList(), footnotes))
-            }
-        }
 
         if (tableSections.isEmpty()) {
             return emptyList()
@@ -173,7 +184,7 @@ class TableParser {
             it.copy(
                 // Sometimes footnotes are defined for all sections at the end of the table
                 // this makes sure we can use them.
-                footnotes = tableSections.last().footnotes + it.footnotes
+                footnotes = tableSections.last().footnotes + it.footnotes,
             )
         }
     }

@@ -73,16 +73,18 @@ internal fun ImportDialog(
 ) {
     FullScreenDialog(onDismissRequest = onDismissRequest) {
         when (state) {
-            ImportDialogState.LoadingItems -> Surface {
-                FullScreenProgress()
-            }
-            is ImportDialogState.PickingItemsToImport -> ImportedItemsPicker(
-                state = state,
-                onDismissRequest = onDismissRequest,
-                onComplete = onComplete,
-                partyId = partyId,
-                screen = screen,
-            )
+            ImportDialogState.LoadingItems ->
+                Surface {
+                    FullScreenProgress()
+                }
+            is ImportDialogState.PickingItemsToImport ->
+                ImportedItemsPicker(
+                    state = state,
+                    onDismissRequest = onDismissRequest,
+                    onComplete = onComplete,
+                    partyId = partyId,
+                    screen = screen,
+                )
         }
     }
 }
@@ -95,20 +97,21 @@ private fun ImportedItemsPicker(
     onDismissRequest: () -> Unit,
     onComplete: () -> Unit,
 ) {
-    val steps = remember(state) {
-        sequenceOf(
-            ItemsScreen.SKILLS to state.skills.isNotEmpty(),
-            ItemsScreen.TALENTS to state.talents.isNotEmpty(),
-            ItemsScreen.SPELLS to state.spells.isNotEmpty(),
-            ItemsScreen.BLESSINGS to state.blessings.isNotEmpty(),
-            ItemsScreen.MIRACLES to state.miracles.isNotEmpty(),
-            ItemsScreen.TRAITS to state.miracles.isNotEmpty(),
-            ItemsScreen.CAREERS to state.careers.isNotEmpty(),
-            ItemsScreen.TRAPPINGS to state.trappings.isNotEmpty(),
-        ).filter { it.second }
-            .map { it.first }
-            .toList()
-    }
+    val steps =
+        remember(state) {
+            sequenceOf(
+                ItemsScreen.SKILLS to state.skills.isNotEmpty(),
+                ItemsScreen.TALENTS to state.talents.isNotEmpty(),
+                ItemsScreen.SPELLS to state.spells.isNotEmpty(),
+                ItemsScreen.BLESSINGS to state.blessings.isNotEmpty(),
+                ItemsScreen.MIRACLES to state.miracles.isNotEmpty(),
+                ItemsScreen.TRAITS to state.miracles.isNotEmpty(),
+                ItemsScreen.CAREERS to state.careers.isNotEmpty(),
+                ItemsScreen.TRAPPINGS to state.trappings.isNotEmpty(),
+            ).filter { it.second }
+                .map { it.first }
+                .toList()
+        }
     var step by remember(state) { mutableStateOf(steps.firstOrNull() ?: ItemsScreen.SKILLS) }
     val goToNextStep = { current: ItemsScreen ->
         val index = steps.indexOf(current)
@@ -222,30 +225,33 @@ private fun <T : CompendiumItem<T>> ItemPicker(
             topBar = {
                 TopAppBar(
                     navigationIcon = { CloseButton(onClose) },
-                    title = { Text(stringResource(Str.compendium_title_import_dialog)) }
+                    title = { Text(stringResource(Str.compendium_title_import_dialog)) },
                 )
             },
-            content = { FullScreenProgress() }
+            content = { FullScreenProgress() },
         )
         return
     }
 
-    val existingItemsByName = remember(existingItemsList) {
-        existingItemsList.associateBy { it.name }
-    }
-
-    val (unchangedItems, changedItems) = remember(items, existingItemsByName) {
-        items.partition {
-            val existingItem = existingItemsByName[it.name]
-
-            existingItem != null && it.replace(existingItem) == existingItem
+    val existingItemsByName =
+        remember(existingItemsList) {
+            existingItemsList.associateBy { it.name }
         }
-    }
 
-    val selectedItems = remember(changedItems, existingItemsByName, replaceExistingByDefault) {
-        changedItems.map { it.id to (replaceExistingByDefault || it.name !in existingItemsByName) }
-            .toMutableStateMap()
-    }
+    val (unchangedItems, changedItems) =
+        remember(items, existingItemsByName) {
+            items.partition {
+                val existingItem = existingItemsByName[it.name]
+
+                existingItem != null && it.replace(existingItem) == existingItem
+            }
+        }
+
+    val selectedItems =
+        remember(changedItems, existingItemsByName, replaceExistingByDefault) {
+            changedItems.map { it.id to (replaceExistingByDefault || it.name !in existingItemsByName) }
+                .toMutableStateMap()
+        }
     val atLeastOneSelected = selectedItems.containsValue(true)
 
     var saving by remember { mutableStateOf(false) }
@@ -259,12 +265,13 @@ private fun <T : CompendiumItem<T>> ItemPicker(
                 actions = {
                     val coroutineScope = rememberCoroutineScope()
                     TopBarAction(
-                        text = stringResource(
-                            when {
-                                atLeastOneSelected -> Str.common_ui_button_save
-                                else -> Str.common_ui_button_skip
-                            }
-                        ),
+                        text =
+                            stringResource(
+                                when {
+                                    atLeastOneSelected -> Str.common_ui_button_save
+                                    else -> Str.common_ui_button_skip
+                                },
+                            ),
                         enabled = !isLoading,
                         onClick = {
                             coroutineScope.launch {
@@ -279,12 +286,14 @@ private fun <T : CompendiumItem<T>> ItemPicker(
                                                 .map {
                                                     val existingItem = existingItemsByName[it.name]
 
-                                                    if (existingItem != null)
+                                                    if (existingItem != null) {
                                                         ImportAction.Update(it.replace(existingItem))
-                                                    else ImportAction.CreateNew(it)
+                                                    } else {
+                                                        ImportAction.CreateNew(it)
+                                                    }
                                                 }
                                                 .distinctBy { it.item.id }
-                                                .toList()
+                                                .toList(),
                                         )
                                     }
                                 }
@@ -292,9 +301,9 @@ private fun <T : CompendiumItem<T>> ItemPicker(
                                 onContinue()
                                 saving = false
                             }
-                        }
+                        },
                     )
-                }
+                },
             )
         },
     ) {
@@ -336,9 +345,9 @@ private fun <T : CompendiumItem<T>> ItemPicker(
                             onClick = {
                                 val shouldSelectAllItems = checkboxState == ToggleableState.Off
                                 selectedItems.putAll(
-                                    selectedItems.map { it.key to shouldSelectAllItems }
+                                    selectedItems.map { it.key to shouldSelectAllItems },
                                 )
-                            }
+                            },
                         )
                     }
                     items(changedItems) { item ->
@@ -349,22 +358,28 @@ private fun <T : CompendiumItem<T>> ItemPicker(
                                     onCheckedChange = { selectedItems[item.id] = it },
                                 )
                             },
-                            modifier = Modifier.toggleable(
-                                value = selectedItems[item.id] ?: false,
-                                onValueChange = { selectedItems[item.id] = it },
-                            ),
+                            modifier =
+                                Modifier.toggleable(
+                                    value = selectedItems[item.id] ?: false,
+                                    onValueChange = { selectedItems[item.id] = it },
+                                ),
                             text = { Text(item.name) },
-                            secondaryText = if (item.name in existingItemsByName) {
-                                {
-                                    Text(
-                                        stringResource(
-                                            if (selectedItems[item.id] == true)
-                                                Str.compendium_messages_will_replace_existing_item
-                                            else Str.compendium_messages_item_already_exists
+                            secondaryText =
+                                if (item.name in existingItemsByName) {
+                                    {
+                                        Text(
+                                            stringResource(
+                                                if (selectedItems[item.id] == true) {
+                                                    Str.compendium_messages_will_replace_existing_item
+                                                } else {
+                                                    Str.compendium_messages_item_already_exists
+                                                },
+                                            ),
                                         )
-                                    )
-                                }
-                            } else null
+                                    }
+                                } else {
+                                    null
+                                },
                         )
                     }
                 }

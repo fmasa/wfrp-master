@@ -6,7 +6,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.text.style.TextAlign
 
 @Composable
-fun ErrorMessage(message: String, textAlign: TextAlign? = null) {
+fun ErrorMessage(
+    message: String,
+    textAlign: TextAlign? = null,
+) {
     Text(
         message,
         color = MaterialTheme.colors.error,

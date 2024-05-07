@@ -7,18 +7,20 @@ import dev.icerock.moko.parcelize.Parcelize
 
 @Parcelize
 @Immutable
-enum class ItemFlaw: TrappingFeature, NamedEnum {
+enum class ItemFlaw : TrappingFeature, NamedEnum {
     BULKY,
     UGLY,
     SHODDY,
-    UNRELIABLE;
+    UNRELIABLE,
+    ;
 
     override val hasRating get() = false
     override val ratingUnit get() = null
-    override val translatableName get() = when (this) {
-        BULKY -> Str.trappings_flaws_bulky
-        UGLY -> Str.trappings_flaws_ugly
-        SHODDY -> Str.trappings_flaws_shoddy
-        UNRELIABLE -> Str.trappings_flaws_unreliable
-    }
+    override val translatableName get() =
+        when (this) {
+            BULKY -> Str.trappings_flaws_bulky
+            UGLY -> Str.trappings_flaws_ugly
+            SHODDY -> Str.trappings_flaws_shoddy
+            UNRELIABLE -> Str.trappings_flaws_unreliable
+        }
 }

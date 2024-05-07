@@ -8,9 +8,10 @@ import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.Navigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 
-val LocalNavigationTransaction = staticCompositionLocalOf<NavigationTransaction> {
-    error("NavigationTransaction was not set")
-}
+val LocalNavigationTransaction =
+    staticCompositionLocalOf<NavigationTransaction> {
+        error("NavigationTransaction was not set")
+    }
 
 /**
  * Prevents double navigation when multiple Navigator pushes are attempted in quick succession.
@@ -60,7 +61,10 @@ class NavigationTransaction(
 }
 
 @Composable
-fun ProvideNavigationTransaction(screen: Screen, content: @Composable () -> Unit) {
+fun ProvideNavigationTransaction(
+    screen: Screen,
+    content: @Composable () -> Unit,
+) {
     val navigator = LocalNavigator.currentOrThrow
     val transaction = NavigationTransaction(screen, navigator)
 

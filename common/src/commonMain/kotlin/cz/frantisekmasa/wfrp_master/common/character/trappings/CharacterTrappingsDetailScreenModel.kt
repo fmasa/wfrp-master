@@ -21,35 +21,38 @@ class CharacterTrappingsDetailScreenModel(
     characters: CharacterRepository,
     private val trappingSaver: TrappingSaver,
 ) : CharacterItemScreenModel<InventoryItem>(
-    characterId,
-    inventoryItems,
-    userProvider,
-    partyRepository
-) {
-
+        characterId,
+        inventoryItems,
+        userProvider,
+        partyRepository,
+    ) {
     private val character = characters.getLive(characterId).right()
 
-    val inventory: Flow<List<TrappingItem>> = inventoryItems.findAllForCharacter(characterId)
-        .map { items ->
-            val (storedItems, notStoredItems) = items.partition { it.containerId != null }
-            val storedItemsByContainer = storedItems.groupBy { it.containerId }
+    val inventory: Flow<List<TrappingItem>> =
+        inventoryItems.findAllForCharacter(characterId)
+            .map { items ->
+                val (storedItems, notStoredItems) = items.partition { it.containerId != null }
+                val storedItemsByContainer = storedItems.groupBy { it.containerId }
 
-            notStoredItems.map { item ->
-                val type = item.trappingType
+                notStoredItems.map { item ->
+                    val type = item.trappingType
 
-                if (type is TrappingType.Container)
-                    TrappingItem.Container(
-                        item,
-                        type,
-                        storedItemsByContainer[item.id] ?: emptyList(),
-                    )
-                else TrappingItem.SeparateTrapping(item)
+                    if (type is TrappingType.Container) {
+                        TrappingItem.Container(
+                            item,
+                            type,
+                            storedItemsByContainer[item.id] ?: emptyList(),
+                        )
+                    } else {
+                        TrappingItem.SeparateTrapping(item)
+                    }
+                }
             }
-        }
 
-    val strengthBonus: Flow<Int> = character
-        .map { it.characteristics.strengthBonus }
-        .distinctUntilChanged()
+    val strengthBonus: Flow<Int> =
+        character
+            .map { it.characteristics.strengthBonus }
+            .distinctUntilChanged()
 
     override suspend fun saveItem(item: InventoryItem) {
         trappingSaver.saveInventoryItem(characterId, item)

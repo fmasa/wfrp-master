@@ -25,7 +25,7 @@ import kotlinx.coroutines.launch
 fun RemovePartyDialog(
     party: Party,
     screenModel: PartyListScreenModel,
-    onDismissRequest: () -> Unit
+    onDismissRequest: () -> Unit,
 ) {
     var removing by remember { mutableStateOf(false) }
 
@@ -46,7 +46,7 @@ fun RemovePartyDialog(
         dismissButton = {
             TextButton(
                 enabled = !removing,
-                onClick = onDismissRequest
+                onClick = onDismissRequest,
             ) {
                 Text(stringResource(Str.common_ui_button_cancel).uppercase())
             }
@@ -74,6 +74,6 @@ fun RemovePartyDialog(
             ) {
                 Text(stringResource(Str.common_ui_button_remove).uppercase())
             }
-        }
+        },
     )
 }

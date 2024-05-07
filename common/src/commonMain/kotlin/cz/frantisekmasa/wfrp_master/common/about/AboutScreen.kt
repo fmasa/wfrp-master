@@ -29,19 +29,20 @@ object AboutScreen : Screen {
             topBar = {
                 TopAppBar(
                     title = { Text(stringResource(Str.about_title)) },
-                    navigationIcon = { BackButton() }
+                    navigationIcon = { BackButton() },
                 )
-            }
+            },
         ) {
             Column(Modifier.verticalScroll(rememberScrollState())) {
                 Column(
                     horizontalAlignment = Alignment.CenterHorizontally,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 20.dp)
-                        .padding(top = 40.dp)
+                    modifier =
+                        Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 20.dp)
+                            .padding(top = 40.dp),
                 ) {
-                    Text(FixedStrings.appName, style = MaterialTheme.typography.h4)
+                    Text(FixedStrings.APP_NAME, style = MaterialTheme.typography.h4)
                     Text(LocalStaticConfiguration.current.version, Modifier.padding(bottom = 8.dp))
                     Text(stringResource(Str.about_body), textAlign = TextAlign.Center)
 

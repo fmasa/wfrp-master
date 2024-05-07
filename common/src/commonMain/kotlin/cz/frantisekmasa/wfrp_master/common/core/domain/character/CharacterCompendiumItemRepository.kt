@@ -6,7 +6,11 @@ import cz.frantisekmasa.wfrp_master.common.core.domain.party.PartyId
 import dev.gitlive.firebase.firestore.Transaction
 
 interface CharacterCompendiumItemRepository<T> {
-    fun save(transaction: Transaction, characterId: CharacterId, item: T)
+    fun save(
+        transaction: Transaction,
+        characterId: CharacterId,
+        item: T,
+    )
 
     suspend fun findByCompendiumId(
         partyId: PartyId,

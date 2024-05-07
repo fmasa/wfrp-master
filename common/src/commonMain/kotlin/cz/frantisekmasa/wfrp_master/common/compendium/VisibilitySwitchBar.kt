@@ -24,7 +24,10 @@ import dev.icerock.moko.resources.compose.stringResource
 import kotlinx.coroutines.Dispatchers
 
 @Composable
-fun VisibilitySwitchBar(visible: Boolean, onChange: suspend (Boolean) -> Unit) {
+fun VisibilitySwitchBar(
+    visible: Boolean,
+    onChange: suspend (Boolean) -> Unit,
+) {
     SubheadBar {
         Row(
             Modifier.fillMaxWidth(),
@@ -39,9 +42,11 @@ fun VisibilitySwitchBar(visible: Boolean, onChange: suspend (Boolean) -> Unit) {
                 )
 
                 Text(
-                    if (visible)
+                    if (visible) {
                         stringResource(Str.compendium_visible_to_players_true)
-                    else stringResource(Str.compendium_visible_to_players_false)
+                    } else {
+                        stringResource(Str.compendium_visible_to_players_false)
+                    },
                 )
             }
 
@@ -66,7 +71,7 @@ fun VisibilitySwitchBar(visible: Boolean, onChange: suspend (Boolean) -> Unit) {
                             setSaving(false)
                         }
                     }
-                }
+                },
             )
         }
     }

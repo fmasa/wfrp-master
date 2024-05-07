@@ -24,7 +24,10 @@ fun SubheadBar(text: String) {
 }
 
 @Composable
-fun SubheadBar(modifier: Modifier = Modifier, content: @Composable () -> Unit) {
+fun SubheadBar(
+    modifier: Modifier = Modifier,
+    content: @Composable () -> Unit,
+) {
     Surface(elevation = 2.dp) {
         Box(
             modifier = modifier.fillMaxWidth().padding(Spacing.large),

@@ -49,9 +49,9 @@ fun TransactionDialog(
     onDismissRequest: () -> Unit,
 ) {
     FullScreenDialog(onDismissRequest = onDismissRequest) {
-        val crowns = inputValue("", Rules.IfNotBlank(Rules.PositiveInteger()))
-        val shillings = inputValue("", Rules.IfNotBlank(Rules.PositiveInteger()))
-        val pennies = inputValue("", Rules.IfNotBlank(Rules.PositiveInteger()))
+        val crowns = inputValue("", Rules.ifNotBlank(Rules.PositiveInteger()))
+        val shillings = inputValue("", Rules.ifNotBlank(Rules.PositiveInteger()))
+        val pennies = inputValue("", Rules.ifNotBlank(Rules.PositiveInteger()))
         var operation by rememberSaveable { mutableStateOf(Operation.ADD) }
 
         var validate by remember { mutableStateOf(false) }
@@ -64,23 +64,25 @@ fun TransactionDialog(
                     navigationIcon = { CloseButton(onClick = onDismissRequest) },
                     actions = {
                         val coroutineScope = rememberCoroutineScope()
-                        val notEnoughMoneyMessage = stringResource(
-                            Str.trappings_money_messages_not_enough_money
-                        )
+                        val notEnoughMoneyMessage =
+                            stringResource(
+                                Str.trappings_money_messages_not_enough_money,
+                            )
                         var saving by remember { mutableStateOf(false) }
 
                         SaveAction(
                             enabled = !saving,
                             onClick = {
-                                if (! listOf(crowns, shillings, pennies).all { it.isValid() }) {
+                                if (!listOf(crowns, shillings, pennies).all { it.isValid() }) {
                                     validate = true
                                 }
 
-                                val money = Money.sum(
-                                    Money.crowns(crowns.toIntValue()),
-                                    Money.shillings(shillings.toIntValue()),
-                                    Money.pennies(pennies.toIntValue()),
-                                )
+                                val money =
+                                    Money.sum(
+                                        Money.crowns(crowns.toIntValue()),
+                                        Money.shillings(shillings.toIntValue()),
+                                        Money.pennies(pennies.toIntValue()),
+                                    )
 
                                 if (money.isZero()) {
                                     onDismissRequest()
@@ -104,9 +106,9 @@ fun TransactionDialog(
                                 }
                             },
                         )
-                    }
+                    },
                 )
-            }
+            },
         ) {
             Column {
                 SubheadBar(
@@ -114,7 +116,7 @@ fun TransactionDialog(
                         crowns.value = balance.getCrowns().toInputValue()
                         shillings.value = balance.getShillings().toInputValue()
                         pennies.value = balance.getPennies().toInputValue()
-                    }
+                    },
                 ) {
                     Row(horizontalArrangement = Arrangement.spacedBy(Spacing.small)) {
                         Text(
@@ -132,14 +134,15 @@ fun TransactionDialog(
                     Modifier
                         .verticalScroll(rememberScrollState())
                         .padding(Spacing.bodyPadding),
-                    verticalArrangement = Arrangement.spacedBy(Spacing.small)
+                    verticalArrangement = Arrangement.spacedBy(Spacing.small),
                 ) {
                     Row(
                         Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.spacedBy(
-                            Spacing.large,
-                            Alignment.CenterHorizontally
-                        )
+                        horizontalArrangement =
+                            Arrangement.spacedBy(
+                                Spacing.large,
+                                Alignment.CenterHorizontally,
+                            ),
                     ) {
                         RadioButtonWithText(
                             selected = operation == Operation.ADD,
@@ -190,7 +193,11 @@ fun TransactionDialog(
 }
 
 @Composable
-private fun RowScope.CoinInput(value: InputValue, label: String, validate: Boolean) {
+private fun RowScope.CoinInput(
+    value: InputValue,
+    label: String,
+    validate: Boolean,
+) {
     TextInput(
         modifier = Modifier.weight(1f),
         label = label,
@@ -208,7 +215,11 @@ private fun Int.toInputValue(): String = if (this == 0) "" else toString()
 private fun InputValue.toIntValue(): Int = value.toIntOrNull() ?: 0
 
 @Composable
-private fun RadioButtonWithText(text: String, selected: Boolean, onClick: () -> Unit) {
+private fun RadioButtonWithText(
+    text: String,
+    selected: Boolean,
+    onClick: () -> Unit,
+) {
     Row(verticalAlignment = Alignment.CenterVertically) {
         RadioButton(selected = selected, onClick = onClick)
         Text(text)

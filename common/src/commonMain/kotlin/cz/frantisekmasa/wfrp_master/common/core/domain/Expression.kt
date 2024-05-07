@@ -30,14 +30,20 @@ interface Expression : Parcelable {
     companion object {
         private val CONSTANT_REGEX = Regex("(?<![a-zA-Z0-9])[a-zA-Z]+(?![a-zA-Z0-9])")
 
-        fun fromString(text: String, constants: Map<String, Int> = emptyMap()): Expression =
+        fun fromString(
+            text: String,
+            constants: Map<String, Int> = emptyMap(),
+        ): Expression =
             try {
                 RollExpressionGrammar(constants).parseToEnd(text)
             } catch (e: ParseException) {
                 throw InvalidExpression(e)
             }
 
-        fun substituteConstants(expression: String, substitutions: Map<String, String>): String {
+        fun substituteConstants(
+            expression: String,
+            substitutions: Map<String, String>,
+        ): String {
             return expression.replace(CONSTANT_REGEX) { substitutions[it.value] ?: it.value }
         }
 
@@ -86,7 +92,9 @@ private data class DiceRoll(
 
         return (0 until count).sumOf { dice.roll() }
     }
+
     override fun isDeterministic() = false
+
     override fun toString(): String = "${count}d$sides"
 }
 
@@ -97,7 +105,9 @@ private data class Multiplication(
     private val b: Expression,
 ) : Expression {
     override fun evaluate() = a.evaluate() * b.evaluate()
+
     override fun isDeterministic() = a.isDeterministic() && b.isDeterministic()
+
     override fun toString(): String = "$a × $b"
 }
 
@@ -118,6 +128,7 @@ private data class Division(
     }
 
     override fun isDeterministic() = dividend.isDeterministic() && divisor.isDeterministic()
+
     override fun toString(): String = "$dividend ÷ $divisor"
 }
 
@@ -128,7 +139,9 @@ private data class Addition(
     private val b: Expression,
 ) : Expression {
     override fun evaluate() = a.evaluate() + b.evaluate()
+
     override fun isDeterministic() = a.isDeterministic() && b.isDeterministic()
+
     override fun toString(): String = "$a + $b"
 }
 
@@ -139,7 +152,9 @@ private data class Subtraction(
     private val b: Expression,
 ) : Expression {
     override fun evaluate() = a.evaluate() - b.evaluate()
+
     override fun isDeterministic() = a.isDeterministic() && b.isDeterministic()
+
     override fun toString(): String = "$a - $b"
 }
 
@@ -147,7 +162,9 @@ private data class Subtraction(
 @Immutable
 private data class IntegerLiteral(private val value: Int) : Expression {
     override fun evaluate() = value
+
     override fun isDeterministic() = true
+
     override fun toString(): String = "$value"
 }
 
@@ -177,7 +194,7 @@ private class RollExpressionGrammar(val constants: Map<String, Int>) : Grammar<E
         Regex(
             constants.keys.sortedByDescending { it.length }.joinToString("|"),
             RegexOption.IGNORE_CASE,
-        )
+        ),
     )
     val integer by regexToken("([1-9][0-9]*)|0")
     val multiply by literalToken("*")
@@ -207,7 +224,7 @@ private class RollExpressionGrammar(val constants: Map<String, Int>) : Grammar<E
                     comma,
                 ).map { MaxFunction(it.terms) } *
                 skip(rightParenthesis)
-            ) or
+        ) or
         (
             skip(minFunctionName) *
                 skip(leftParenthesis) *
@@ -219,7 +236,7 @@ private class RollExpressionGrammar(val constants: Map<String, Int>) : Grammar<E
                     comma,
                 ).map { MinFunction(it.terms) } *
                 skip(rightParenthesis)
-            ) or
+        ) or
         (skip(leftParenthesis) * parser(this::rootParser) * skip(rightParenthesis))
 
     val multiplicationOrDivision by leftAssociative(term, multiply or divide) { l, operator, r ->
@@ -228,6 +245,6 @@ private class RollExpressionGrammar(val constants: Map<String, Int>) : Grammar<E
 
     override val rootParser: Parser<Expression> by leftAssociative(
         multiplicationOrDivision,
-        plus or minus
+        plus or minus,
     ) { l, operator, r -> if (operator.type == plus) Addition(l, r) else Subtraction(l, r) }
 }

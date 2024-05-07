@@ -15,15 +15,16 @@ class AddSpellScreenModel(
     compendium: Compendium<CompendiumSpell>,
     availableCompendiumItemsFactory: AvailableCompendiumItemsFactory,
 ) : ScreenModel {
-    val state = availableCompendiumItemsFactory.create(
-        characterId.partyId,
-        compendium = compendium,
-        filterCharacterItems = spells.findAllForCharacter(characterId),
-    ).map {
-        AddSpellScreenState(
-            availableCompendiumItems = it,
-        )
-    }
+    val state =
+        availableCompendiumItemsFactory.create(
+            characterId.partyId,
+            compendium = compendium,
+            filterCharacterItems = spells.findAllForCharacter(characterId),
+        ).map {
+            AddSpellScreenState(
+                availableCompendiumItems = it,
+            )
+        }
 
     suspend fun saveItem(spell: Spell) {
         spells.save(characterId, spell)

@@ -11,12 +11,13 @@ fun EditPlayerDataDialog(
 ) {
     TrappingFromCompendiumForm(
         itemName = trapping.name,
-        data = TrappingFromCompendiumPlayerData(
-            itemQualities = trapping.itemQualities,
-            itemFlaws = trapping.itemFlaws,
-            quantity = trapping.quantity,
-            note = trapping.note,
-        ),
+        data =
+            TrappingFromCompendiumPlayerData(
+                itemQualities = trapping.itemQualities,
+                itemFlaws = trapping.itemFlaws,
+                quantity = trapping.quantity,
+                note = trapping.note,
+            ),
         onSaveRequest = {
             onSaveRequest(
                 trapping.update(
@@ -24,7 +25,7 @@ fun EditPlayerDataDialog(
                     itemFlaws = it.itemFlaws,
                     quantity = it.quantity,
                     note = it.note,
-                )
+                ),
             )
             onDismissRequest()
         },

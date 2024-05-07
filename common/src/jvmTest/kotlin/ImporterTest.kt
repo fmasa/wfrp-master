@@ -17,7 +17,6 @@ import kotlin.test.assertTrue
 
 @Ignore
 class ImporterTest {
-
     @Test
     fun `careers import (Core Rulebook)`() {
         withCoreRuleBook { document ->
@@ -121,8 +120,8 @@ class ImporterTest {
                         4 + // Daemonology Spells
                         4 + // Necromancy Spells
                         3 // Chaos Spells
-                    ),
-                spells.size
+                ),
+                spells.size,
             )
         }
     }
@@ -135,8 +134,8 @@ class ImporterTest {
                 (
                     8 * SpellLore.values().size + // Arcane Spells
                         (8 * 24) // Color spells
-                    ),
-                spells.size
+                ),
+                spells.size,
             )
         }
     }
@@ -149,7 +148,7 @@ class ImporterTest {
                 (
                     9 * 4 + // Chaos Arcane Spells
                         14 // Tzeentch Spells
-                    ),
+                ),
                 spells.size,
             )
         }
@@ -255,7 +254,7 @@ class ImporterTest {
 
     private fun withEnemyInShadowsCompanion(block: (Document) -> Unit) {
         loadDocument(
-            javaClass.getResourceAsStream("enemy_in_shadows_companion.pdf") as InputStream
+            javaClass.getResourceAsStream("enemy_in_shadows_companion.pdf") as InputStream,
         ).use(block)
     }
 

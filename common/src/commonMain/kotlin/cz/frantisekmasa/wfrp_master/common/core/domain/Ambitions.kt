@@ -10,7 +10,7 @@ import kotlinx.serialization.Serializable
 @Immutable
 data class Ambitions(
     val shortTerm: String,
-    val longTerm: String
+    val longTerm: String,
 ) : Parcelable {
     companion object {
         const val MAX_LENGTH = 400

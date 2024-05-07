@@ -39,16 +39,15 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
 object ChangelogScreen : Screen {
-
     @Composable
     override fun Content() {
         Scaffold(
             topBar = {
                 TopAppBar(
                     navigationIcon = { BackButton() },
-                    title = { Text(stringResource(Str.changelog_title)) }
+                    title = { Text(stringResource(Str.changelog_title)) },
                 )
-            }
+            },
         ) {
             val screenModel: ChangelogScreenModel = rememberScreenModel()
             val (state, setState) = rememberSaveable { mutableStateOf<State>(State.Loading) }
@@ -58,9 +57,11 @@ object ChangelogScreen : Screen {
                     val releases = screenModel.loadReleases()
 
                     setState(
-                        if (releases == null)
+                        if (releases == null) {
                             State.Error
-                        else State.Loaded(releases)
+                        } else {
+                            State.Loaded(releases)
+                        },
                     )
                 }
             }
@@ -103,9 +104,9 @@ object ChangelogScreen : Screen {
                                     onClick = {
                                         urlOpener.open(
                                             "https://github.com/fmasa/wfrp-master/releases",
-                                            isGooglePlayLink = false
+                                            isGooglePlayLink = false,
                                         )
-                                    }
+                                    },
                                 ) {
                                     Text(stringResource(Str.changelog_github_button).uppercase())
                                 }

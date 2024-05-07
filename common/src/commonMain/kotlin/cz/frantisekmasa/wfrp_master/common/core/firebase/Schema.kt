@@ -1,32 +1,32 @@
 package cz.frantisekmasa.wfrp_master.common.core.firebase
 
 object Schema {
-    const val Parties = "parties"
-    const val Characters = "characters"
+    const val PARTIES = "parties"
+    const val CHARACTERS = "characters"
 
     object Party {
-        const val Encounters = "encounters"
+        const val ENCOUNTERS = "encounters"
     }
 
     object Character {
-        const val Blessings = "blessings"
-        const val InventoryItems = "inventory"
-        const val Miracles = "miracles"
-        const val Skills = "skills"
-        const val Spells = "spells"
-        const val Talents = "talents"
-        const val Traits = "traits"
+        const val BLESSINGS = "blessings"
+        const val INVENTORY_ITEMS = "inventory"
+        const val MIRACLES = "miracles"
+        const val SKILLS = "skills"
+        const val SPELLS = "spells"
+        const val TALENTS = "talents"
+        const val TRAITS = "traits"
     }
 
     object Compendium {
-        const val Blessings = "blessings"
-        const val Miracles = "miracles"
-        const val Skills = "skills"
-        const val Spells = "spells"
-        const val Talents = "talents"
-        const val Traits = "traits"
-        const val Trappings = "trappings"
-        const val Careers = "careers"
-        const val Journal = "journal"
+        const val BLESSINGS = "blessings"
+        const val MIRACLES = "miracles"
+        const val SKILLS = "skills"
+        const val SPELLS = "spells"
+        const val TALENTS = "talents"
+        const val TRAITS = "traits"
+        const val TRAPPINGS = "trappings"
+        const val CAREERS = "careers"
+        const val JOURNAL = "journal"
     }
 }

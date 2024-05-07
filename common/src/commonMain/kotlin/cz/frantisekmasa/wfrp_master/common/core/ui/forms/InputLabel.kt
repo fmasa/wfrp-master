@@ -9,7 +9,10 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun InputLabel(label: String, bottomPadding: Dp = 4.dp) {
+fun InputLabel(
+    label: String,
+    bottomPadding: Dp = 4.dp,
+) {
     Text(
         label,
         style = MaterialTheme.typography.body2,

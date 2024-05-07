@@ -20,7 +20,7 @@ import kotlinx.coroutines.flow.map
 class FirestoreEncounterRepository(
     private val firestore: FirebaseFirestore,
 ) : EncounterRepository {
-    private val parties = firestore.collection(Schema.Parties)
+    private val parties = firestore.collection(Schema.PARTIES)
 
     override suspend fun get(id: EncounterId): Encounter {
         try {
@@ -45,12 +45,17 @@ class FirestoreEncounterRepository(
             .document(id.encounterId.toString())
             .snapshots
             .map { snapshot ->
-                if (snapshot.exists)
+                if (snapshot.exists) {
                     snapshot.data(Encounter.serializer()).right()
-                else EncounterNotFound(id).left()
+                } else {
+                    EncounterNotFound(id).left()
+                }
             }
 
-    override suspend fun save(partyId: PartyId, vararg encounters: Encounter) {
+    override suspend fun save(
+        partyId: PartyId,
+        vararg encounters: Encounter,
+    ) {
         firestore.runTransaction {
             encounters.forEach { encounter ->
                 set(
@@ -75,18 +80,19 @@ class FirestoreEncounterRepository(
     }
 
     override suspend fun getNextPosition(partyId: PartyId): Int {
-        val snapshot = encounters(partyId)
-            .orderBy("position", Direction.DESCENDING)
-            .get()
+        val snapshot =
+            encounters(partyId)
+                .orderBy("position", Direction.DESCENDING)
+                .get()
 
-        val lastPosition = snapshot.documents
-            .firstOrNull()
-            ?.data(Encounter.serializer())
-            ?.position ?: -1
+        val lastPosition =
+            snapshot.documents
+                .firstOrNull()
+                ?.data(Encounter.serializer())
+                ?.position ?: -1
 
         return lastPosition + 1
     }
 
-    private fun encounters(partyId: PartyId) =
-        parties.document(partyId.toString()).collection(Schema.Party.Encounters)
+    private fun encounters(partyId: PartyId) = parties.document(partyId.toString()).collection(Schema.Party.ENCOUNTERS)
 }

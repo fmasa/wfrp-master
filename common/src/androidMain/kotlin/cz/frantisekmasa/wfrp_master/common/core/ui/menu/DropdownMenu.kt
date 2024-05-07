@@ -18,7 +18,7 @@ actual fun DropdownMenu(
         expanded = expanded,
         modifier = modifier,
         onDismissRequest = onDismissRequest,
-        content = content
+        content = content,
     )
 }
 

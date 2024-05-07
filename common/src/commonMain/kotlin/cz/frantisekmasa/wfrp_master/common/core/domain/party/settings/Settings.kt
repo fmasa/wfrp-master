@@ -34,7 +34,7 @@ value class AdvantageCapExpression(val value: String) : Parcelable {
         value.requireMaxLength(MAX_LENGTH, "value")
         require(
             value == "" ||
-                Expression.fromString(value, constantsFrom(Stats.ZERO)).isDeterministic()
+                Expression.fromString(value, constantsFrom(Stats.ZERO)).isDeterministic(),
         ) { "Advantage expression must be deterministic" }
     }
 
@@ -45,62 +45,63 @@ value class AdvantageCapExpression(val value: String) : Parcelable {
     ) : NamedEnum {
         AGILITY(
             "Ag",
-            Str.characteristics_agility_shortcut, { it.get(Characteristic.AGILITY) },
+            Str.characteristics_agility_shortcut,
+            { it.get(Characteristic.AGILITY) },
         ),
         AGILITY_BONUS(
             "AgB",
             Str.characteristics_agility_bonus_shortcut,
-            { it.getBonus(Characteristic.AGILITY) }
+            { it.getBonus(Characteristic.AGILITY) },
         ),
         BALLISTIC_SKILL(
             "BS",
             Str.characteristics_ballistic_skill_shortcut,
-            { it.get(Characteristic.BALLISTIC_SKILL) }
+            { it.get(Characteristic.BALLISTIC_SKILL) },
         ),
         BALLISTIC_SKILL_BONUS(
             "BSB",
             Str.characteristics_ballistic_skill_bonus_shortcut,
-            { it.getBonus(Characteristic.BALLISTIC_SKILL) }
+            { it.getBonus(Characteristic.BALLISTIC_SKILL) },
         ),
         DEXTERITY(
             "Dex",
             Str.characteristics_dexterity_shortcut,
-            { it.get(Characteristic.DEXTERITY) }
+            { it.get(Characteristic.DEXTERITY) },
         ),
         DEXTERITY_BONUS(
             "DexB",
             Str.characteristics_dexterity_bonus_shortcut,
-            { it.getBonus(Characteristic.DEXTERITY) }
+            { it.getBonus(Characteristic.DEXTERITY) },
         ),
         INITIATIVE(
             "I",
             Str.characteristics_initiative_shortcut,
-            { it.get(Characteristic.INITIATIVE) }
+            { it.get(Characteristic.INITIATIVE) },
         ),
         INITIATIVE_BONUS(
             "IB",
             Str.characteristics_initiative_bonus_shortcut,
-            { it.getBonus(Characteristic.INITIATIVE) }
+            { it.getBonus(Characteristic.INITIATIVE) },
         ),
         INTELLIGENCE(
             "Int",
             Str.characteristics_intelligence_shortcut,
-            { it.get(Characteristic.INTELLIGENCE) }
+            { it.get(Characteristic.INTELLIGENCE) },
         ),
         INTELLIGENCE_BONUS(
             "IntB",
             Str.characteristics_intelligence_bonus_shortcut,
-            { it.getBonus(Characteristic.INTELLIGENCE) }
+            { it.getBonus(Characteristic.INTELLIGENCE) },
         ),
         FELLOWSHIP(
             "Fel",
             Str.characteristics_fellowship_shortcut,
-            { it.get(Characteristic.FELLOWSHIP) }
+            { it.get(Characteristic.FELLOWSHIP) },
         ),
         FELLOWSHIP_BONUS(
             "FelB",
             Str.characteristics_fellowship_bonus_shortcut,
-            { it.getBonus(Characteristic.FELLOWSHIP) }
+            { it.getBonus(Characteristic.FELLOWSHIP) },
         ),
         STRENGTH(
             "S",
@@ -110,37 +111,37 @@ value class AdvantageCapExpression(val value: String) : Parcelable {
         STRENGTH_BONUS(
             "SB",
             Str.characteristics_strength_bonus_shortcut,
-            { it.getBonus(Characteristic.STRENGTH) }
+            { it.getBonus(Characteristic.STRENGTH) },
         ),
         TOUGHNESS(
             "T",
             Str.characteristics_toughness_shortcut,
-            { it.get(Characteristic.TOUGHNESS) }
+            { it.get(Characteristic.TOUGHNESS) },
         ),
         TOUGHNESS_BONUS(
             "TB",
             Str.characteristics_toughness_bonus_shortcut,
-            { it.getBonus(Characteristic.TOUGHNESS) }
+            { it.getBonus(Characteristic.TOUGHNESS) },
         ),
         WEAPON_SKILL(
             "WS",
             Str.characteristics_weapon_skill_shortcut,
-            { it.get(Characteristic.WEAPON_SKILL) }
+            { it.get(Characteristic.WEAPON_SKILL) },
         ),
         WEAPON_SKILL_BONUS(
             "WSB",
             Str.characteristics_weapon_skill_bonus_shortcut,
-            { it.getBonus(Characteristic.WEAPON_SKILL) }
+            { it.getBonus(Characteristic.WEAPON_SKILL) },
         ),
         WILL_POWER(
             "WP",
             Str.characteristics_will_power_shortcut,
-            { it.get(Characteristic.WILL_POWER) }
+            { it.get(Characteristic.WILL_POWER) },
         ),
         WILL_POWER_BONUS(
             "WPB",
             Str.characteristics_will_power_bonus_shortcut,
-            { it.getBonus(Characteristic.WILL_POWER) }
+            { it.getBonus(Characteristic.WILL_POWER) },
         ),
     }
 
@@ -152,7 +153,7 @@ value class AdvantageCapExpression(val value: String) : Parcelable {
         return Advantage(
             Expression.fromString(value, constantsFrom(characteristics))
                 .evaluate()
-                .coerceAtLeast(0)
+                .coerceAtLeast(0),
         )
     }
 
@@ -160,6 +161,7 @@ value class AdvantageCapExpression(val value: String) : Parcelable {
         const val MAX_LENGTH = 100
 
         fun isValid(value: String) = runCatching { AdvantageCapExpression(value) }.isSuccess
+
         fun constantsFrom(characteristics: Stats): Map<String, Int> {
             return Constant.values().associate { it.value to it.provider(characteristics) }
         }

@@ -56,15 +56,15 @@ fun ChangeAmbitionsDialog(
                                     save(
                                         Ambitions(
                                             shortTerm = shortTerm.value,
-                                            longTerm = longTerm.value
-                                        )
+                                            longTerm = longTerm.value,
+                                        ),
                                     )
 
                                     onDismissRequest()
                                 }
-                            }
+                            },
                         )
-                    }
+                    },
                 )
             },
         ) {

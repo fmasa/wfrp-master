@@ -46,23 +46,25 @@ fun InvitationConfirmation(
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center,
-        modifier = Modifier.fillMaxHeight()
+        modifier = Modifier.fillMaxHeight(),
     ) {
         Text(
-            text = stringResource(
-                Str.parties_messages_invitation_confirmation,
-                invitation.partyName,
-            ),
+            text =
+                stringResource(
+                    Str.parties_messages_invitation_confirmation,
+                    invitation.partyName,
+                ),
             style = MaterialTheme.typography.h5,
             textAlign = TextAlign.Center,
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
         )
 
         val userId = LocalUser.current.id
         val snackbarHolder = LocalPersistentSnackbarHolder.current
-        val errorInvalidInvitationToken = stringResource(
-            Str.parties_messages_invalid_invitation_token
-        )
+        val errorInvalidInvitationToken =
+            stringResource(
+                Str.parties_messages_invalid_invitation_token,
+            )
         val errorAlreadyMember = stringResource(Str.parties_messages_already_member)
 
         PrimaryButton(
@@ -91,7 +93,7 @@ fun InvitationConfirmation(
                         }
                     }
                 }
-            }
+            },
         )
     }
 }
@@ -99,7 +101,7 @@ fun InvitationConfirmation(
 private fun showError(
     message: String,
     snackbarHolder: PersistentSnackbarHolder,
-    cause: Throwable? = null
+    cause: Throwable? = null,
 ) {
     snackbarHolder.showSnackbar(message, SnackbarDuration.Short)
     Napier.i("Invitation processing error: $message", cause)

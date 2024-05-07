@@ -55,7 +55,7 @@ import dev.icerock.moko.resources.compose.stringResource
 fun ImperialCalendar(
     actions: @Composable RowScope.() -> Unit,
     date: ImperialDate,
-    onDateChange: (ImperialDate) -> Unit
+    onDateChange: (ImperialDate) -> Unit,
 ) {
     Scaffold(
         topBar = {
@@ -63,9 +63,8 @@ fun ImperialCalendar(
                 title = { Text(stringResource(Str.calendar_title_select_date)) },
                 actions = actions,
             )
-        }
+        },
     ) {
-
         Column {
             var activeScreen by rememberSaveable { mutableStateOf(ActiveScreen.DAYS_OF_MONTH) }
             var activeMonth by rememberSaveable { mutableStateOf(ActiveMonth.forDate(date)) }
@@ -80,7 +79,7 @@ fun ImperialCalendar(
                 Row(
                     Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.Center,
-                    verticalAlignment = Alignment.CenterVertically
+                    verticalAlignment = Alignment.CenterVertically,
                 ) {
                     when (activeScreen) {
                         ActiveScreen.YEARS -> {
@@ -90,30 +89,30 @@ fun ImperialCalendar(
                                         activeYearRange =
                                             activeYearRange.move(-YEAR_ROWS * YEAR_COLUMNS)
                                     }
-                                }
+                                },
                             ) {
                                 Icon(
                                     Icons.Rounded.ArrowBackIos,
                                     stringResource(Str.calendar_icon_previous_years),
-                                    tint = MaterialTheme.colors.primaryVariant
+                                    tint = MaterialTheme.colors.primaryVariant,
                                 )
                             }
 
                             Text(
                                 "${activeYearRange.first} - ${activeYearRange.last}",
-                                style = MaterialTheme.typography.h6
+                                style = MaterialTheme.typography.h6,
                             )
 
                             IconButton(
                                 onClick = {
                                     activeYearRange =
                                         activeYearRange.move(+YEAR_ROWS * YEAR_COLUMNS)
-                                }
+                                },
                             ) {
                                 Icon(
                                     Icons.Rounded.ArrowForwardIos,
                                     stringResource(Str.calendar_icon_next_years),
-                                    tint = MaterialTheme.colors.primaryVariant
+                                    tint = MaterialTheme.colors.primaryVariant,
                                 )
                             }
                         }
@@ -123,7 +122,7 @@ fun ImperialCalendar(
                                 Icon(
                                     Icons.Rounded.ArrowBackIos,
                                     stringResource(Str.calendar_icon_previous_month),
-                                    tint = MaterialTheme.colors.primaryVariant
+                                    tint = MaterialTheme.colors.primaryVariant,
                                 )
                             }
 
@@ -137,7 +136,7 @@ fun ImperialCalendar(
                                 Icon(
                                     Icons.Rounded.ArrowForwardIos,
                                     stringResource(Str.calendar_icon_next_month),
-                                    tint = MaterialTheme.colors.primaryVariant
+                                    tint = MaterialTheme.colors.primaryVariant,
                                 )
                             }
                         }
@@ -151,20 +150,22 @@ fun ImperialCalendar(
                     .padding(Spacing.bodyPadding),
             ) {
                 when (activeScreen) {
-                    ActiveScreen.YEARS -> YearPicker(
-                        selectedYear = activeMonth.year,
-                        firstYear = activeYearRange.first,
-                        onYearChange = {
-                            activeMonth = activeMonth.copy(year = it)
-                            activeScreen = ActiveScreen.DAYS_OF_MONTH
-                        }
-                    )
+                    ActiveScreen.YEARS ->
+                        YearPicker(
+                            selectedYear = activeMonth.year,
+                            firstYear = activeYearRange.first,
+                            onYearChange = {
+                                activeMonth = activeMonth.copy(year = it)
+                                activeScreen = ActiveScreen.DAYS_OF_MONTH
+                            },
+                        )
 
-                    ActiveScreen.DAYS_OF_MONTH -> DayPicker(
-                        activeMonth,
-                        date,
-                        onDateChange
-                    )
+                    ActiveScreen.DAYS_OF_MONTH ->
+                        DayPicker(
+                            activeMonth,
+                            date,
+                            onDateChange,
+                        )
                 }
             }
         }
@@ -175,7 +176,7 @@ fun ImperialCalendar(
 private fun YearPicker(
     selectedYear: Int,
     firstYear: Int,
-    onYearChange: (Int) -> Unit
+    onYearChange: (Int) -> Unit,
 ) {
     val activeYearRange = firstYear until firstYear + YEAR_COLUMNS * YEAR_ROWS
 
@@ -188,19 +189,25 @@ private fun YearPicker(
 
                         val isSelected = selectedYear == year
 
-                        val modifier = if (isSelected)
-                            Modifier.background(MaterialTheme.colors.primary, CircleShape)
-                        else Modifier
+                        val modifier =
+                            if (isSelected) {
+                                Modifier.background(MaterialTheme.colors.primary, CircleShape)
+                            } else {
+                                Modifier
+                            }
 
                         IconButton(
                             onClick = { onYearChange(year) },
-                            modifier = modifier
+                            modifier = modifier,
                         ) {
                             Text(
                                 year.toString(),
-                                color = if (isSelected)
-                                    MaterialTheme.colors.onPrimary
-                                else LocalContentColor.current
+                                color =
+                                    if (isSelected) {
+                                        MaterialTheme.colors.onPrimary
+                                    } else {
+                                        LocalContentColor.current
+                                    },
                             )
                         }
                     }
@@ -236,15 +243,18 @@ private fun StandaloneDay(
 private fun DayPicker(
     month: ActiveMonth,
     date: ImperialDate,
-    onDateChange: (ImperialDate) -> Unit
+    onDateChange: (ImperialDate) -> Unit,
 ) {
     val daysOfWeek = ImperialDate.DayOfWeek.values()
     val numberOfDays = month.month.numberOfDays
 
     Column(Modifier.fillMaxWidth()) {
-        val selectedDayOfMonth = if (ActiveMonth.forDate(date) == month)
-            date.day.fold({ 0 }, { it.first })
-        else null
+        val selectedDayOfMonth =
+            if (ActiveMonth.forDate(date) == month) {
+                date.day.fold({ 0 }, { it.first })
+            } else {
+                null
+            }
 
         month.month.standaloneDayAtTheBeginning?.let { day ->
             StandaloneDay(
@@ -275,9 +285,9 @@ private fun DayPicker(
                     val days = 1..numberOfDays
 
                     for (
-                        weekDays in (daysOfPreviousMonth + days).chunked(
-                            daysOfWeek.size
-                        )
+                    weekDays in (daysOfPreviousMonth + days).chunked(
+                        daysOfWeek.size,
+                    )
                     ) {
                         Week(
                             weekDays,
@@ -294,7 +304,11 @@ private fun DayPicker(
 }
 
 @Composable
-private fun RowScope.Week(days: List<Int?>, selectedDay: Int?, onDaySelect: (Int) -> Unit) {
+private fun RowScope.Week(
+    days: List<Int?>,
+    selectedDay: Int?,
+    onDaySelect: (Int) -> Unit,
+) {
     Column(
         horizontalAlignment = Alignment.End,
         verticalArrangement = Arrangement.spacedBy(8.dp),
@@ -303,29 +317,35 @@ private fun RowScope.Week(days: List<Int?>, selectedDay: Int?, onDaySelect: (Int
         for (day in days) {
             val isSelected = selectedDay != null && day == selectedDay
 
-            val modifier = if (isSelected)
-                Modifier.background(MaterialTheme.colors.primary, CircleShape)
-            else Modifier
+            val modifier =
+                if (isSelected) {
+                    Modifier.background(MaterialTheme.colors.primary, CircleShape)
+                } else {
+                    Modifier
+                }
 
             Box(
                 modifier
                     .clickable(
                         onClick = { day?.let(onDaySelect) },
                         interactionSource = remember { MutableInteractionSource() },
-                        indication = rememberRipple(bounded = false, radius = 24.dp)
+                        indication = rememberRipple(bounded = false, radius = 24.dp),
                     )
                     .size(36.dp)
                     .padding(8.dp),
-                contentAlignment = Alignment.Center
+                contentAlignment = Alignment.Center,
             ) {
                 day?.let {
                     Text(
                         it.toString(),
                         style = MaterialTheme.typography.body2,
                         fontWeight = FontWeight.SemiBold,
-                        color = if (isSelected)
-                            MaterialTheme.colors.onPrimary
-                        else MaterialTheme.colors.onSurface
+                        color =
+                            if (isSelected) {
+                                MaterialTheme.colors.onPrimary
+                            } else {
+                                MaterialTheme.colors.onSurface
+                            },
                     )
                 }
             }
@@ -337,47 +357,53 @@ private fun RowScope.Week(days: List<Int?>, selectedDay: Int?, onDaySelect: (Int
 @Parcelize
 private data class ActiveMonth(val month: ImperialDate.Month, val year: Int) : Parcelable {
     companion object {
-        fun forDate(date: ImperialDate): ActiveMonth = ActiveMonth(
-            month = date.day.fold(
-                { day ->
-                    ImperialDate.Month.values().first { it.standaloneDayAtTheBeginning == day }
-                },
-                { it.second }
-            ),
-            year = date.year,
-        )
+        fun forDate(date: ImperialDate): ActiveMonth =
+            ActiveMonth(
+                month =
+                    date.day.fold(
+                        { day ->
+                            ImperialDate.Month.values().first { it.standaloneDayAtTheBeginning == day }
+                        },
+                        { it.second },
+                    ),
+                year = date.year,
+            )
     }
 
     val firstDay: ImperialDate.DayOfWeek?
-        get() = ImperialDate.of(
-            1,
-            month.ordinal + 1,
-            year
-        ).dayOfWeek
+        get() =
+            ImperialDate.of(
+                1,
+                month.ordinal + 1,
+                year,
+            ).dayOfWeek
 
-    fun previousMonth() = when (month) {
-        ImperialDate.Month.values().first() -> ActiveMonth(
-            ImperialDate.Month.values().last(),
-            year - 1
-        )
+    fun previousMonth() =
+        when (month) {
+            ImperialDate.Month.values().first() ->
+                ActiveMonth(
+                    ImperialDate.Month.values().last(),
+                    year - 1,
+                )
 
-        else -> ActiveMonth(ImperialDate.Month.values()[month.ordinal - 1], year)
-    }
+            else -> ActiveMonth(ImperialDate.Month.values()[month.ordinal - 1], year)
+        }
 
-    fun nextMonth() = when (month) {
-        ImperialDate.Month.values().last() -> ActiveMonth(
-            ImperialDate.Month.values().first(),
-            year + 1
-        )
+    fun nextMonth() =
+        when (month) {
+            ImperialDate.Month.values().last() ->
+                ActiveMonth(
+                    ImperialDate.Month.values().first(),
+                    year + 1,
+                )
 
-        else -> ActiveMonth(ImperialDate.Month.values()[month.ordinal + 1], year)
-    }
+            else -> ActiveMonth(ImperialDate.Month.values()[month.ordinal + 1], year)
+        }
 
     override fun toString() = "${month.readableName}, $year"
 }
 
 private class IntRangeSaver : Saver<IntRange, Pair<Int, Int>> {
-
     override fun restore(value: Pair<Int, Int>) = value.first..value.second
 
     override fun SaverScope.save(value: IntRange) = value.first to value.last
@@ -385,10 +411,11 @@ private class IntRangeSaver : Saver<IntRange, Pair<Int, Int>> {
 
 private enum class ActiveScreen {
     YEARS,
-    DAYS_OF_MONTH
+    DAYS_OF_MONTH,
 }
 
 private fun listOfNulls(size: Int) = (0 until size).map { null }
+
 private fun IntRange.move(modifier: Int) = first + modifier..last + modifier
 
 private const val YEAR_ROWS = 5

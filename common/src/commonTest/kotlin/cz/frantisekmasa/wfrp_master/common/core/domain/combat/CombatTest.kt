@@ -9,14 +9,16 @@ import kotlin.test.assertEquals
 import kotlin.test.assertNull
 
 class CombatTest {
-    private val combat = Combat(
-        encounterId = uuid4(),
-        combatants = listOf(
-            Combatant(characterId = uuid4().toString(), initiative = 10, advantage = Advantage.ZERO, id = uuid4()),
-            Combatant(characterId = uuid4().toString(), initiative = 10, advantage = Advantage.ZERO, id = uuid4()),
-            Combatant(characterId = uuid4().toString(), initiative = 10, advantage = Advantage.ZERO, id = uuid4()),
+    private val combat =
+        Combat(
+            encounterId = uuid4(),
+            combatants =
+                listOf(
+                    Combatant(characterId = uuid4().toString(), initiative = 10, advantage = Advantage.ZERO, id = uuid4()),
+                    Combatant(characterId = uuid4().toString(), initiative = 10, advantage = Advantage.ZERO, id = uuid4()),
+                    Combatant(characterId = uuid4().toString(), initiative = 10, advantage = Advantage.ZERO, id = uuid4()),
+                ),
         )
-    )
 
     @Test
     fun `removeCombatant() does nothing if combatant is not in combat`() {
@@ -41,7 +43,7 @@ class CombatTest {
                 combatants = listOf(combat.getCombatants()[1], combat.getCombatants()[2]),
             ),
             combat.copy(turn = 2)
-                .removeCombatant(combat.getCombatants()[0].id!!)
+                .removeCombatant(combat.getCombatants()[0].id!!),
         )
     }
 
@@ -51,7 +53,7 @@ class CombatTest {
             1000,
             combat.copy(round = 1000)
                 .removeCombatant(combat.getCombatants()[0].id!!)
-                ?.getRound()
+                ?.getRound(),
         )
     }
 
@@ -63,7 +65,7 @@ class CombatTest {
                 combatants = listOf(combat.getCombatants()[1], combat.getCombatants()[2]),
             ),
             combat.copy(turn = 2)
-                .removeCombatant(combat.getCombatants()[0].id!!)
+                .removeCombatant(combat.getCombatants()[0].id!!),
         )
     }
 
@@ -76,7 +78,7 @@ class CombatTest {
                 combatants = listOf(combat.getCombatants()[0], combat.getCombatants()[1]),
             ),
             combat.copy(turn = 3)
-                .removeCombatant(combat.getCombatants()[2].id!!)
+                .removeCombatant(combat.getCombatants()[2].id!!),
         )
     }
 
@@ -84,7 +86,7 @@ class CombatTest {
     fun `combat is ended when last combatant is removed`() {
         assertNull(
             combat.copy(combatants = listOf(combat.getCombatants()[0]))
-                .removeCombatant(combat.getCombatants()[0].id!!)
+                .removeCombatant(combat.getCombatants()[0].id!!),
         )
     }
 }

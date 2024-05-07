@@ -22,26 +22,27 @@ import cz.frantisekmasa.wfrp_master.common.localization.FixedStrings
 @Composable
 fun SplashScreen(content: (@Composable () -> Unit)? = null) {
     Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .splashBackground()
-            .padding(Spacing.bodyPadding),
+        modifier =
+            Modifier
+                .fillMaxSize()
+                .splashBackground()
+                .padding(Spacing.bodyPadding),
         contentAlignment = Alignment.Center,
     ) {
         Column(
             verticalArrangement = Arrangement.spacedBy(Spacing.small, Alignment.CenterVertically),
-            horizontalAlignment = Alignment.CenterHorizontally
+            horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             Column(
-                horizontalAlignment = Alignment.CenterHorizontally
+                horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 Image(
                     drawableResource(Resources.Drawable.SplashScreenIcon),
-                    FixedStrings.appName,
-                    Modifier.size(140.dp)
+                    FixedStrings.APP_NAME,
+                    Modifier.size(140.dp),
                 )
                 Text(
-                    FixedStrings.appName,
+                    FixedStrings.APP_NAME,
                     style = MaterialTheme.typography.h6,
                     color = Theme.fixedColors.splashScreenContent,
                 )

@@ -12,7 +12,6 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 
 class HardyWoundsModificationTest {
-
     @Test
     fun `applying modification adds current TB to max Wounds`() {
         val character = character()
@@ -61,32 +60,34 @@ class HardyWoundsModificationTest {
             status = SocialStatus(SocialStatus.Tier.BRASS, 1),
             psychology = "",
             motivation = "",
-            characteristicsBase = Stats(
-                10,
-                10,
-                10,
-                10,
-                20,
-                10,
-                10,
-                10,
-                10,
-                10,
-            ),
+            characteristicsBase =
+                Stats(
+                    10,
+                    10,
+                    10,
+                    10,
+                    20,
+                    10,
+                    10,
+                    10,
+                    10,
+                    10,
+                ),
             characteristicsAdvances = Stats.ZERO,
-            points = Points(
-                corruption = 0,
-                fate = 0,
-                fortune = 0,
-                maxWounds = null,
-                wounds = 0,
-                resilience = 0,
-                resolve = 0,
-                sin = 0,
-                experience = 0,
-                spentExperience = 0,
-                hardyWoundsBonus = 0,
-            ),
+            points =
+                Points(
+                    corruption = 0,
+                    fate = 0,
+                    fortune = 0,
+                    maxWounds = null,
+                    wounds = 0,
+                    resilience = 0,
+                    resolve = 0,
+                    sin = 0,
+                    experience = 0,
+                    spentExperience = 0,
+                    hardyWoundsBonus = 0,
+                ),
             socialClass = "Warriors",
             race = Race.HUMAN,
         )

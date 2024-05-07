@@ -19,7 +19,7 @@ fun LanguageDialog(
         items = Language.values().toList(),
         selected = selected,
         onDismissRequest = onDismissRequest,
-        onSelect = onSelect
+        onSelect = onSelect,
     ) { language ->
         Column {
             Text(language.localizedName)

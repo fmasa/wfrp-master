@@ -41,33 +41,36 @@ class CareerCharacteristicsParser(
 
         return buildList {
             for (rectangle in rectangleProcessor.rectangles) {
-                val characteristic = stripper.characteristicCells.firstOrNull { cell ->
-                    rectangle.points.minOf { it.first } <= cell.xRange.start &&
-                        rectangle.points.maxOf { it.second } >= cell.xRange.endInclusive
-                } ?: continue
+                val characteristic =
+                    stripper.characteristicCells.firstOrNull { cell ->
+                        rectangle.points.minOf { it.first } <= cell.xRange.start &&
+                            rectangle.points.maxOf { it.second } >= cell.xRange.endInclusive
+                    } ?: continue
 
                 add(
                     UpgradableCharacteristic(
                         characteristic = characteristic.characteristic,
-                        level = when (rectangle.color) {
-                            Color.BRONZE -> 2
-                            Color.SILVER -> 3
-                            Color.GOLD -> 4
-                        }
-                    )
+                        level =
+                            when (rectangle.color) {
+                                Color.BRONZE -> 2
+                                Color.SILVER -> 3
+                                Color.GOLD -> 4
+                            },
+                    ),
                 )
             }
 
             for (cross in stripper.crosses.take(3)) {
-                val characteristic = stripper.characteristicCells.firstOrNull { cell ->
-                    (cell.xRange.start + cell.xRange.endInclusive) / 2 in cross.xRange
-                } ?: continue
+                val characteristic =
+                    stripper.characteristicCells.firstOrNull { cell ->
+                        (cell.xRange.start + cell.xRange.endInclusive) / 2 in cross.xRange
+                    } ?: continue
 
                 add(
                     UpgradableCharacteristic(
                         characteristic = characteristic.characteristic,
                         level = 1,
-                    )
+                    ),
                 )
             }
         }
@@ -93,25 +96,30 @@ class CareerCharacteristicsParser(
         override fun onPageEnter() {
         }
 
-        override fun onTextLine(text: String, textPositions: List<TextPosition>) {
+        override fun onTextLine(
+            text: String,
+            textPositions: List<TextPosition>,
+        ) {
             val position = textPositions[0]
-            val type = structure.resolveToken(
-                TextToken(
-                    text = position.getUnicode(),
-                    fontName = position.getFont().getName(),
-                    height = position.getHeight(),
-                    fontSizePt = position.getFontSizeInPt(),
-                    y = position.getY(),
+            val type =
+                structure.resolveToken(
+                    TextToken(
+                        text = position.getUnicode(),
+                        fontName = position.getFont().getName(),
+                        height = position.getHeight(),
+                        fontSizePt = position.getFontSizeInPt(),
+                        y = position.getY(),
+                    ),
                 )
-            )
 
             if (type is Token.TableHeadCell || type is Token.TableHeading) {
                 val characteristic = CHARACTERISTICS[text.lowercase()] ?: return
 
-                characteristicCells += CharacteristicCell(
-                    characteristic,
-                    textPositions[0].getX()..textPositions.last().getEndX(),
-                )
+                characteristicCells +=
+                    CharacteristicCell(
+                        characteristic,
+                        textPositions[0].getX()..textPositions.last().getEndX(),
+                    )
             }
 
             if (type is Token.CrossIcon) {
@@ -133,42 +141,44 @@ class CareerCharacteristicsParser(
 
         override fun appendRectangle(
             points: List<Pair<Double, Double>>,
-            components: List<Float>
+            components: List<Float>,
         ) {
             val color = COLORS[components] ?: return
 
-            rectangles += Rectangle(
-                points = points,
-                color = color,
-            )
+            rectangles +=
+                Rectangle(
+                    points = points,
+                    color = color,
+                )
         }
     }
 
     companion object {
-        private val COLORS = mapOf(
-            // CMYK colors
-            listOf(0.00f, 0.41f, 0.60f, 0.25f) to Color.BRONZE,
-            listOf(0f, 0.07f, 1f, 0f) to Color.GOLD,
-            listOf(0f, 0f, 0f, 0.25f) to Color.SILVER,
+        private val COLORS =
+            mapOf(
+                // CMYK colors
+                listOf(0.00f, 0.41f, 0.60f, 0.25f) to Color.BRONZE,
+                listOf(0f, 0.07f, 1f, 0f) to Color.GOLD,
+                listOf(0f, 0f, 0f, 0.25f) to Color.SILVER,
+                // RGB 0-1 colors
+                listOf(0.779f, 0.785f, 0.793f) to Color.SILVER,
+                listOf(0.765f, 0.515f, 0.346f) to Color.BRONZE,
+                listOf(1.0f, 0.889f, 0.0f) to Color.GOLD,
+            )
 
-            // RGB 0-1 colors
-            listOf(0.779f, 0.785f, 0.793f) to Color.SILVER,
-            listOf(0.765f, 0.515f, 0.346f) to Color.BRONZE,
-            listOf(1.0f, 0.889f, 0.0f) to Color.GOLD,
-        )
-
-        val CHARACTERISTICS = mapOf(
-            "agi" to Characteristic.AGILITY,
-            "ag" to Characteristic.AGILITY,
-            "bs" to Characteristic.BALLISTIC_SKILL,
-            "dex" to Characteristic.DEXTERITY,
-            "i" to Characteristic.INITIATIVE,
-            "int" to Characteristic.INTELLIGENCE,
-            "fel" to Characteristic.FELLOWSHIP,
-            "s" to Characteristic.STRENGTH,
-            "t" to Characteristic.TOUGHNESS,
-            "ws" to Characteristic.WEAPON_SKILL,
-            "wp" to Characteristic.WILL_POWER,
-        )
+        val CHARACTERISTICS =
+            mapOf(
+                "agi" to Characteristic.AGILITY,
+                "ag" to Characteristic.AGILITY,
+                "bs" to Characteristic.BALLISTIC_SKILL,
+                "dex" to Characteristic.DEXTERITY,
+                "i" to Characteristic.INITIATIVE,
+                "int" to Characteristic.INTELLIGENCE,
+                "fel" to Characteristic.FELLOWSHIP,
+                "s" to Characteristic.STRENGTH,
+                "t" to Characteristic.TOUGHNESS,
+                "ws" to Characteristic.WEAPON_SKILL,
+                "wp" to Characteristic.WILL_POWER,
+            )
     }
 }

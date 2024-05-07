@@ -8,7 +8,7 @@ import dev.icerock.moko.resources.StringResource
 @Parcelize
 @Immutable
 enum class WeaponFlaw(
-    override val hasRating: Boolean = false
+    override val hasRating: Boolean = false,
 ) : Flaw {
     DANGEROUS,
     IMPRECISE,
@@ -16,15 +16,17 @@ enum class WeaponFlaw(
     SLOW,
     TIRING,
     UNBALANCED, // Up in Arms
-    UNDAMAGING;
+    UNDAMAGING,
+    ;
 
-    override val translatableName: StringResource get() = when (this) {
-        DANGEROUS -> Str.weapons_flaws_dangerous
-        IMPRECISE -> Str.weapons_flaws_imprecise
-        RELOAD -> Str.weapons_flaws_reload
-        SLOW -> Str.weapons_flaws_slow
-        TIRING -> Str.weapons_flaws_tiring
-        UNBALANCED -> Str.weapons_flaws_unbalanced
-        UNDAMAGING -> Str.weapons_flaws_undamaging
-    }
+    override val translatableName: StringResource get() =
+        when (this) {
+            DANGEROUS -> Str.weapons_flaws_dangerous
+            IMPRECISE -> Str.weapons_flaws_imprecise
+            RELOAD -> Str.weapons_flaws_reload
+            SLOW -> Str.weapons_flaws_slow
+            TIRING -> Str.weapons_flaws_tiring
+            UNBALANCED -> Str.weapons_flaws_unbalanced
+            UNDAMAGING -> Str.weapons_flaws_undamaging
+        }
 }

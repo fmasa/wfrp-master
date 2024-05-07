@@ -19,26 +19,28 @@ class AddBasicSkillsScreenModel(
     private val skills: CharacterItemRepository<Skill>,
     compendium: Compendium<CompendiumSkill>,
 ) : ScreenModel {
+    private val notAddedBasicSkills: Flow<List<CompendiumSkill>> =
+        combine(
+            compendium.liveForParty(characterId.partyId),
+            skills.findAllForCharacter(characterId),
+        ) { compendiumSkills, characterSkills ->
+            val existingCompendiumIds =
+                characterSkills
+                    .asSequence()
+                    .mapNotNull { it.compendiumId }
+                    .toSet()
 
-    private val notAddedBasicSkills: Flow<List<CompendiumSkill>> = combine(
-        compendium.liveForParty(characterId.partyId),
-        skills.findAllForCharacter(characterId)
-    ) { compendiumSkills, characterSkills ->
-        val existingCompendiumIds = characterSkills
-            .asSequence()
-            .mapNotNull { it.compendiumId }
-            .toSet()
+            compendiumSkills
+                .asSequence()
+                .filterNot { it.advanced }
+                .filterNot { it.id in existingCompendiumIds }
+                .toList()
+        }
 
-        compendiumSkills
-            .asSequence()
-            .filterNot { it.advanced }
-            .filterNot { it.id in existingCompendiumIds }
-            .toList()
-    }
-
-    val state: Flow<AddBasicSkillsScreenState> = notAddedBasicSkills.map {
-        AddBasicSkillsScreenState(it.size)
-    }
+    val state: Flow<AddBasicSkillsScreenState> =
+        notAddedBasicSkills.map {
+            AddBasicSkillsScreenState(it.size)
+        }
 
     suspend fun addBasicSkills() {
         // XXX: This should ideally be in transaction/batch, but it randomly crashes for some reason

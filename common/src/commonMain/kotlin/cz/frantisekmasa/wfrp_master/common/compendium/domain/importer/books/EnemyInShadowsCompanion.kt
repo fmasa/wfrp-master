@@ -10,39 +10,46 @@ import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.parsers.To
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.sources.SpellSource
 
 object EnemyInShadowsCompanion : Book, SpellSource {
-
     override val name = "Enemy in Shadows - Companion"
 
-    private const val pageOffset = 2
+    private const val PAGE_OFFSET = 2
 
     override fun importSpells(document: Document): List<Spell> {
         return SpellParser(
-            specialLores = mapOf(
-                "Chaos Arcane Spells" to setOf(
-                    SpellLore.NURGLE,
-                    SpellLore.SLAANESH,
-                    SpellLore.TZEENTCH,
+            specialLores =
+                mapOf(
+                    "Chaos Arcane Spells" to
+                        setOf(
+                            SpellLore.NURGLE,
+                            SpellLore.SLAANESH,
+                            SpellLore.TZEENTCH,
+                        ),
                 ),
-            ),
             ignoredSpellLikeHeadings = setOf("Lore Attribute"),
         ).import(
             document,
             this,
-            pageRanges = sequenceOf(79 + pageOffset..83 + pageOffset)
+            pageRanges = sequenceOf(79 + PAGE_OFFSET..83 + PAGE_OFFSET),
         ).map { it.copy(isVisibleToPlayers = false) }
     }
 
-    override fun areSameStyle(a: TextPosition, b: TextPosition): Boolean {
+    override fun areSameStyle(
+        a: TextPosition,
+        b: TextPosition,
+    ): Boolean {
         return super.areSameStyle(a, b) || arePartsOfHeading2(a, b)
     }
 
-    private fun arePartsOfHeading2(a: TextPosition, b: TextPosition): Boolean {
+    private fun arePartsOfHeading2(
+        a: TextPosition,
+        b: TextPosition,
+    ): Boolean {
         // Some special symbols have different height
         return a.getFont().getName().endsWith("CaslonAntique-Bold-SC700") &&
             a.getFont().getName().endsWith("CaslonAntique-Bold-SC700") && (
-            a.getFontSizeInPt() == b.getFontSizeInPt() || (
-                minOf(a.getFontSizeInPt(), b.getFontSizeInPt()) == 12f &&
-                    maxOf(a.getFontSizeInPt(), b.getFontSizeInPt()) == 18f
+                a.getFontSizeInPt() == b.getFontSizeInPt() || (
+                    minOf(a.getFontSizeInPt(), b.getFontSizeInPt()) == 12f &&
+                        maxOf(a.getFontSizeInPt(), b.getFontSizeInPt()) == 18f
                 )
             )
     }

@@ -15,7 +15,6 @@ class NpcsScreenModel(
     private val functions: FirebaseFunctions,
     private val characters: CharacterRepository,
 ) : ScreenModel {
-
     val npcs: Flow<List<Character>> = characters.inParty(partyId, CharacterType.NPC)
 
     suspend fun archiveNpc(npc: Character) {
@@ -28,8 +27,8 @@ class NpcsScreenModel(
             DuplicateCharacterRequest(
                 partyId = partyId,
                 characterId = npc.id,
-                newName = duplicateName(npc.name)
-            )
+                newName = duplicateName(npc.name),
+            ),
         )
     }
 

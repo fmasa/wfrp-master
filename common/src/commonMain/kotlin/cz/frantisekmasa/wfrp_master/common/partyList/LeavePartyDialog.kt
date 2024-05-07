@@ -20,7 +20,11 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 @Composable
-fun LeavePartyDialog(party: Party, screenModel: PartyListScreenModel, onDismissRequest: () -> Unit) {
+fun LeavePartyDialog(
+    party: Party,
+    screenModel: PartyListScreenModel,
+    onDismissRequest: () -> Unit,
+) {
     var removing by remember { mutableStateOf(false) }
     AlertDialog(
         onDismissRequest = onDismissRequest,
@@ -32,7 +36,7 @@ fun LeavePartyDialog(party: Party, screenModel: PartyListScreenModel, onDismissR
         dismissButton = {
             TextButton(
                 enabled = !removing,
-                onClick = onDismissRequest
+                onClick = onDismissRequest,
             ) {
                 Text(stringResource(Str.common_ui_button_cancel).uppercase())
             }
@@ -54,6 +58,6 @@ fun LeavePartyDialog(party: Party, screenModel: PartyListScreenModel, onDismissR
             ) {
                 Text(stringResource(Str.parties_button_leave).uppercase())
             }
-        }
+        },
     )
 }

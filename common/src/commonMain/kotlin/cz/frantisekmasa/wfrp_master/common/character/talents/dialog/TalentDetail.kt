@@ -31,7 +31,7 @@ fun TalentDetail(
                 navigationIcon = { CloseButton(onDismissRequest) },
                 title = { Text(talent.name) },
             )
-        }
+        },
     ) {
         Column(Modifier.verticalScroll(rememberScrollState())) {
             subheadBar()

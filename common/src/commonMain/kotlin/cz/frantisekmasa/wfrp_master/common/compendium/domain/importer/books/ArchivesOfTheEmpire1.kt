@@ -15,7 +15,6 @@ import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.sources.Tr
 import cz.frantisekmasa.wfrp_master.common.core.domain.SocialClass
 
 object ArchivesOfTheEmpire1 : Book, CareerSource, TrappingSource {
-
     override val name = "Archives of the Empire — Volume I"
     override val tableFootnotesAsNormalText: Boolean = true
 
@@ -27,7 +26,7 @@ object ArchivesOfTheEmpire1 : Book, CareerSource, TrappingSource {
                 sequenceOf(
                     SocialClass.RANGERS to 88..90,
                     SocialClass.WARRIORS to 91..91,
-                )
+                ),
             )
     }
 
@@ -37,15 +36,15 @@ object ArchivesOfTheEmpire1 : Book, CareerSource, TrappingSource {
         return buildList {
             addAll(
                 MeleeWeaponsParser(document, this@ArchivesOfTheEmpire1, descriptionParser)
-                    .parse(92, 94..94)
+                    .parse(92, 94..94),
             )
             addAll(
                 RangedWeaponsParser(document, this@ArchivesOfTheEmpire1, descriptionParser)
-                    .parse(93, 94..94)
+                    .parse(93, 94..94),
             )
             addAll(
                 AmmunitionParser(document, this@ArchivesOfTheEmpire1, descriptionParser)
-                    .parse(93, 94..94)
+                    .parse(93, 94..94),
             )
         }
     }

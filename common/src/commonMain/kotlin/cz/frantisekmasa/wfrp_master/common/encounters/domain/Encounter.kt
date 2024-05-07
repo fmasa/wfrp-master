@@ -25,24 +25,36 @@ data class Encounter(
         validate(name, description)
     }
 
-    fun update(name: String, description: String): Encounter {
+    fun update(
+        name: String,
+        description: String,
+    ): Encounter {
         validate(name, description)
 
         return copy(
             name = name,
-            description = description
+            description = description,
         )
     }
 
-    fun withCharacterCount(characterId: LocalCharacterId, count: Int): Encounter {
+    fun withCharacterCount(
+        characterId: LocalCharacterId,
+        count: Int,
+    ): Encounter {
         return copy(
-            characters = if (count < 1)
-                characters - characterId
-            else characters + mapOf(characterId to count)
+            characters =
+                if (count < 1) {
+                    characters - characterId
+                } else {
+                    characters + mapOf(characterId to count)
+                },
         )
     }
 
-    private fun validate(name: String, description: String) {
+    private fun validate(
+        name: String,
+        description: String,
+    ) {
         require(name.isNotBlank() && name.length <= NAME_MAX_LENGTH)
         require(description.length <= DESCRIPTION_MAX_LENGTH)
     }

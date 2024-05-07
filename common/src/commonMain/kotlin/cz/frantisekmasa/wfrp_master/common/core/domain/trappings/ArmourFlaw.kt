@@ -6,15 +6,16 @@ import dev.icerock.moko.parcelize.Parcelize
 
 @Parcelize
 @Immutable
-enum class ArmourFlaw(
-) : Flaw {
+enum class ArmourFlaw() : Flaw {
     PARTIAL,
-    WEAKPOINTS;
+    WEAKPOINTS,
+    ;
 
-    override val translatableName get() = when (this) {
-        PARTIAL -> Str.armour_flaws_partial
-        WEAKPOINTS -> Str.armour_flaws_weakpoints
-    }
+    override val translatableName get() =
+        when (this) {
+            PARTIAL -> Str.armour_flaws_partial
+            WEAKPOINTS -> Str.armour_flaws_weakpoints
+        }
 
     override val hasRating: Boolean get() = false
 }

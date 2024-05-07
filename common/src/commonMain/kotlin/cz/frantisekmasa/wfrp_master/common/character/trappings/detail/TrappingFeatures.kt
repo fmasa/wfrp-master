@@ -14,11 +14,14 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.text.SingleLineTextValue
 import dev.icerock.moko.resources.compose.stringResource
 
 @Composable
-fun TrappingFeatures(qualities: Map<out Quality, Rating>, flaws: Map<out Flaw, Rating>) {
+fun TrappingFeatures(
+    qualities: Map<out Quality, Rating>,
+    flaws: Map<out Flaw, Rating>,
+) {
     if (qualities.isNotEmpty()) {
         SingleLineTextValue(
             stringResource(Str.trappings_label_qualities),
-            translateFeatures(qualities).joinToString(", ")
+            translateFeatures(qualities).joinToString(", "),
         )
     } else {
         SingleLineTextValue(stringResource(Str.trappings_label_qualities), none())
@@ -36,7 +39,8 @@ fun TrappingFeatures(qualities: Map<out Quality, Rating>, flaws: Map<out Flaw, R
 
 @Composable
 @Stable
-private fun none() = AnnotatedString(
-    stringResource(Str.trappings_none),
-    SpanStyle(fontStyle = FontStyle.Italic),
-)
+private fun none() =
+    AnnotatedString(
+        stringResource(Str.trappings_none),
+        SpanStyle(fontStyle = FontStyle.Italic),
+    )

@@ -41,7 +41,7 @@ internal fun LazyListScope.traitsCard(
                     ) {
                         Icon(Icons.Rounded.Add, stringResource(Str.traits_title_add))
                     }
-                }
+                },
             )
         }
     }
@@ -57,7 +57,7 @@ internal fun LazyListScope.traitsCard(
             trait,
             onClick = {
                 navigation.navigate(
-                    CharacterTraitDetailScreen(characterId, trait.id)
+                    CharacterTraitDetailScreen(characterId, trait.id),
                 )
             },
             onRemove = { onRemove(trait) },
@@ -81,9 +81,10 @@ private fun TraitItem(
         CardItem(
             name = derivedStateOf { trait.evaluatedName }.value,
             onClick = onClick,
-            contextMenuItems = listOf(
-                ContextMenu.Item(stringResource(Str.common_ui_button_remove), onClick = { onRemove() })
-            ),
+            contextMenuItems =
+                listOf(
+                    ContextMenu.Item(stringResource(Str.common_ui_button_remove), onClick = { onRemove() }),
+                ),
             showDivider = false,
         )
     }

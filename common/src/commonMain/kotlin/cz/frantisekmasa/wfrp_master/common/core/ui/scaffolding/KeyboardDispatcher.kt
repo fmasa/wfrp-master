@@ -7,14 +7,15 @@ import androidx.compose.ui.input.key.KeyEvent
 import androidx.compose.ui.input.key.key
 
 class KeyboardDispatcher {
-
     private val afterChildrenListeners = mutableMapOf<Any?, (KeyEvent) -> Boolean>()
     private val beforeChildrenListeners = mutableMapOf<Any?, (KeyEvent) -> Boolean>()
 
     private fun listeners(beforeChildren: Boolean): MutableMap<Any?, (KeyEvent) -> Boolean> {
-        return if (beforeChildren)
+        return if (beforeChildren) {
             beforeChildrenListeners
-        else afterChildrenListeners
+        } else {
+            afterChildrenListeners
+        }
     }
 
     fun register(
@@ -25,11 +26,18 @@ class KeyboardDispatcher {
         listeners(beforeChildren)[key] = effect
     }
 
-    fun deregister(key: Any?, beforeChildren: Boolean, effect: (KeyEvent) -> Boolean) {
+    fun deregister(
+        key: Any?,
+        beforeChildren: Boolean,
+        effect: (KeyEvent) -> Boolean,
+    ) {
         listeners(beforeChildren).remove(key, effect)
     }
 
-    fun dispatch(event: KeyEvent, beforeChildren: Boolean): Boolean {
+    fun dispatch(
+        event: KeyEvent,
+        beforeChildren: Boolean,
+    ): Boolean {
         return listeners(beforeChildren).any { it.value(event) }
     }
 }

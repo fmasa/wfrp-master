@@ -68,7 +68,7 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.EmptyUI
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.FullScreenProgress
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.ItemIcon
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
-import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.VisualOnlyIconDescription
+import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.VISUAL_ONLY_ICON_DESCRIPTION
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.rememberScreenModel
 import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.OptionsAction
 import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.SubheadBar
@@ -80,9 +80,8 @@ import kotlinx.coroutines.launch
 import kotlin.coroutines.EmptyCoroutineContext
 
 class EncounterDetailScreen(
-    private val encounterId: EncounterId
+    private val encounterId: EncounterId,
 ) : Screen {
-
     @Composable
     override fun Content() {
         val screenModel: EncounterDetailScreenModel = rememberScreenModel(arg = encounterId)
@@ -112,7 +111,7 @@ class EncounterDetailScreen(
                                 screenModel = screenModel,
                             )
                         }
-                    }
+                    },
                 )
             },
             floatingActionButtonPosition = FabPosition.Center,
@@ -121,7 +120,7 @@ class EncounterDetailScreen(
                     icon = {
                         Icon(
                             drawableResource(Resources.Drawable.Encounter),
-                            VisualOnlyIconDescription,
+                            VISUAL_ONLY_ICON_DESCRIPTION,
                             Modifier.width(24.dp),
                         )
                     },
@@ -150,14 +149,14 @@ class EncounterDetailScreen(
                         },
                     )
                 }
-            }
+            },
         )
     }
 
     @Composable
     private fun TopAppBarActions(
         encounter: Encounter,
-        screenModel: EncounterDetailScreenModel
+        screenModel: EncounterDetailScreenModel,
     ) {
         val coroutineScope = rememberCoroutineScope()
 
@@ -195,7 +194,7 @@ class EncounterDetailScreen(
                                     screenModel.remove()
                                     navigation.goBack()
                                 }
-                            }
+                            },
                         ) {
                             Text(stringResource(Str.common_ui_button_remove).uppercase())
                         }
@@ -204,12 +203,12 @@ class EncounterDetailScreen(
                         TextButton(onClick = { dialogOpened = false }) {
                             Text(stringResource(Str.common_ui_button_cancel).uppercase())
                         }
-                    }
+                    },
                 )
             }
 
             DropdownMenuItem(
-                onClick = { dialogOpened = true }
+                onClick = { dialogOpened = true },
             ) {
                 Text(stringResource(Str.common_ui_button_remove))
             }
@@ -219,7 +218,7 @@ class EncounterDetailScreen(
     @Composable
     private fun MainContainer(
         encounter: Encounter,
-        screenModel: EncounterDetailScreenModel
+        screenModel: EncounterDetailScreenModel,
     ) {
         val coroutineScope = rememberCoroutineScope { EmptyCoroutineContext + Dispatchers.IO }
 
@@ -243,7 +242,7 @@ class EncounterDetailScreen(
                             coroutineScope.launch(Dispatchers.IO) {
                                 screenModel.updateEncounter(encounter.copy(completed = it))
                             }
-                        }
+                        },
                     )
                 }
             }
@@ -261,7 +260,7 @@ class EncounterDetailScreen(
         CardContainer(
             Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 8.dp)
+                .padding(horizontal = 8.dp),
         ) {
             CardTitle(stringResource(Str.encounters_title_description))
 
@@ -288,7 +287,7 @@ private fun NpcCharacterList(
     CardContainer(
         Modifier
             .fillMaxWidth()
-            .padding(8.dp)
+            .padding(8.dp),
     ) {
         CardTitle(stringResource(Str.npcs_title_plural))
 
@@ -329,7 +328,7 @@ private fun NpcCharacterList(
                         coroutineScope.launch(Dispatchers.IO) {
                             screenModel.updateEncounter(encounter.withCharacterCount(npc.id, count))
                         }
-                    }
+                    },
                 )
             }
         }
@@ -346,7 +345,7 @@ private fun NpcCharacterList(
 
         Box(
             Modifier.fillMaxWidth(),
-            contentAlignment = Alignment.TopCenter
+            contentAlignment = Alignment.TopCenter,
         ) {
             PrimaryButton(
                 stringResource(Str.npcs_button_add_npc),
@@ -373,14 +372,15 @@ private fun NpcItem(
             NumberPicker(
                 value = count,
                 onIncrement = { onCountChange(count + 1) },
-                onDecrement = { onCountChange((count - 1).coerceAtLeast(0)) }
+                onDecrement = { onCountChange((count - 1).coerceAtLeast(0)) },
             )
         },
-        contextMenuItems = listOf(
-            ContextMenu.Item(
-                text = stringResource(Str.common_ui_button_open),
-                onClick = onDetailRequest,
+        contextMenuItems =
+            listOf(
+                ContextMenu.Item(
+                    text = stringResource(Str.common_ui_button_open),
+                    onClick = onDetailRequest,
+                ),
             ),
-        ),
     )
 }

@@ -12,7 +12,6 @@ class CompendiumTalentDetailScreen(
     private val partyId: PartyId,
     private val talentId: Uuid,
 ) : Screen {
-
     @Composable
     override fun Content() {
         val screenModel: TalentCompendiumScreenModel = rememberScreenModel(arg = partyId)
@@ -26,7 +25,7 @@ class CompendiumTalentDetailScreen(
                     tests = it.tests,
                     description = it.description,
                 )
-            }
+            },
         ) { item, onDismissRequest ->
             TalentDialog(
                 talent = item,

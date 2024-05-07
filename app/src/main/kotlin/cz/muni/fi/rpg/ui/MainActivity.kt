@@ -17,11 +17,12 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val configuration = StaticConfiguration(
-            isProduction = !BuildKonfig.isDebugMode,
-            version = BuildKonfig.versionName,
-            platform = Platform.Android,
-        )
+        val configuration =
+            StaticConfiguration(
+                isProduction = !BuildKonfig.isDebugMode,
+                version = BuildKonfig.versionName,
+                platform = Platform.Android,
+            )
 
         setContent {
             CompositionLocalProvider(

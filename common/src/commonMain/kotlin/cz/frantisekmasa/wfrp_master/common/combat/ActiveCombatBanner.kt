@@ -25,7 +25,7 @@ fun ActiveCombatBanner(partyId: PartyId) {
                 .fillMaxWidth()
                 .padding(Spacing.bodyPadding),
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween
+            horizontalArrangement = Arrangement.SpaceBetween,
         ) {
             Text(stringResource(Str.combat_messages_combat_in_progress))
 

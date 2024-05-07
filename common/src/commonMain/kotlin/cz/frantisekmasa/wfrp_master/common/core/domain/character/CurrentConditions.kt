@@ -10,7 +10,7 @@ import kotlinx.serialization.Serializable
 @Immutable
 @Parcelize
 class CurrentConditions private constructor(
-    private val conditions: Map<Condition, Int>
+    private val conditions: Map<Condition, Int>,
 ) : Parcelable {
     companion object {
         fun none() = CurrentConditions(emptyMap())
@@ -23,7 +23,7 @@ class CurrentConditions private constructor(
         conditions.fold(this) { acc, condition ->
             val count = (acc.conditions[condition] ?: 0)
 
-            if (! condition.isStackable() && count == 1) {
+            if (!condition.isStackable() && count == 1) {
                 acc
             } else {
                 withCondition(condition, count + 1)
@@ -36,6 +36,7 @@ class CurrentConditions private constructor(
             1 -> CurrentConditions(conditions.filterKeys { it != condition })
             else -> withCondition(condition, count - 1)
         }
+
     fun count(condition: Condition) = conditions.getOrElse(condition, { 0 })
 
     @Stable
@@ -49,13 +50,17 @@ class CurrentConditions private constructor(
             .toList()
     }
 
-    private fun withCondition(condition: Condition, count: Int) = CurrentConditions(
+    private fun withCondition(
+        condition: Condition,
+        count: Int,
+    ) = CurrentConditions(
         mapOf(
             *conditions.toList().toTypedArray(),
-            condition to count
-        )
+            condition to count,
+        ),
     )
 
     override fun equals(other: Any?) = other is CurrentConditions && conditions == other.conditions
+
     override fun hashCode() = conditions.hashCode()
 }

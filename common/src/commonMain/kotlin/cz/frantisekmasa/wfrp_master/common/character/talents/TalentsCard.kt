@@ -41,7 +41,7 @@ internal fun LazyListScope.talentsCard(
                     ) {
                         Icon(Icons.Rounded.Add, stringResource(Str.talents_title_add))
                     }
-                }
+                },
             )
         }
     }
@@ -56,7 +56,7 @@ internal fun LazyListScope.talentsCard(
                     CharacterTalentDetailScreen(
                         characterId,
                         talent.id,
-                    )
+                    ),
                 )
             },
             onRemove = { onRemove(talent) },
@@ -80,9 +80,10 @@ private fun TalentItem(
         CardItem(
             name = talent.name,
             onClick = onClick,
-            contextMenuItems = listOf(
-                ContextMenu.Item(stringResource(Str.common_ui_button_remove), onClick = { onRemove() })
-            ),
+            contextMenuItems =
+                listOf(
+                    ContextMenu.Item(stringResource(Str.common_ui_button_remove), onClick = { onRemove() }),
+                ),
             badge = { Text("+ ${talent.taken}") },
             showDivider = false,
         )

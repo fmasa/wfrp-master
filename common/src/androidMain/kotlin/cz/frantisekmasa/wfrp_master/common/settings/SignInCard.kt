@@ -46,7 +46,7 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.dialogs.DialogProgress
 import cz.frantisekmasa.wfrp_master.common.core.ui.dialogs.DialogTitle
 import cz.frantisekmasa.wfrp_master.common.core.ui.navigation.LocalNavigationTransaction
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
-import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.VisualOnlyIconDescription
+import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.VISUAL_ONLY_ICON_DESCRIPTION
 import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.LocalPersistentSnackbarHolder
 import cz.frantisekmasa.wfrp_master.common.partyList.PartyListScreen
 import dev.icerock.moko.resources.compose.stringResource
@@ -78,45 +78,47 @@ actual fun SignInCard(settingsScreenModel: SettingsScreenModel) {
         )
     }
 
-    val launcher = rememberLauncherForActivityResult(contract) { result ->
-        coroutineScope.launch(Dispatchers.IO) {
-            try {
-                GoogleSignIn.getSignedInAccountFromIntent(result.intent)
-                    .await()
-                    .idToken?.let { idToken ->
-                        try {
-                            authManager.linkAccountToGoogle(idToken)
-                        } catch (e: FirebaseAuthUserCollisionException) {
-                            Napier.d(
-                                "Account \"${e.email}\" is already associated with another account",
-                                e,
-                            )
+    val launcher =
+        rememberLauncherForActivityResult(contract) { result ->
+            coroutineScope.launch(Dispatchers.IO) {
+                try {
+                    GoogleSignIn.getSignedInAccountFromIntent(result.intent)
+                        .await()
+                        .idToken?.let { idToken ->
+                            try {
+                                authManager.linkAccountToGoogle(idToken)
+                            } catch (e: FirebaseAuthUserCollisionException) {
+                                Napier.d(
+                                    "Account \"${e.email}\" is already associated with another account",
+                                    e,
+                                )
 
-                            pendingSingInConfirmation = PendingSingInConfirmation(idToken)
+                                pendingSingInConfirmation = PendingSingInConfirmation(idToken)
+                            }
                         }
+                } catch (e: Throwable) {
+                    Napier.e("Google sign-in failed", e)
+                    withContext(Dispatchers.Main) {
+                        Toast.makeText(
+                            context,
+                            "Google authentication failed",
+                            Toast.LENGTH_SHORT,
+                        ).show()
                     }
-            } catch (e: Throwable) {
-                Napier.e("Google sign-in failed", e)
-                withContext(Dispatchers.Main) {
-                    Toast.makeText(
-                        context,
-                        "Google authentication failed",
-                        Toast.LENGTH_SHORT
-                    ).show()
                 }
             }
         }
-    }
 
     CardContainer(
         Modifier
             .fillMaxWidth()
-            .padding(horizontal = 8.dp)
+            .padding(horizontal = 8.dp),
     ) {
         Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 8.dp),
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 8.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             CardTitle(stringResource(Str.settings_title_account))
@@ -130,17 +132,17 @@ actual fun SignInCard(settingsScreenModel: SettingsScreenModel) {
                 Text(
                     stringResource(Str.authentication_messages_not_signed_in_description),
                     textAlign = TextAlign.Center,
-                    modifier = Modifier.padding(bottom = 8.dp)
+                    modifier = Modifier.padding(bottom = 8.dp),
                 )
 
                 OutlinedButton(onClick = { launcher.launch(CODE_GOOGLE_SIGN_IN) }) {
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.spacedBy(4.dp)
+                        horizontalArrangement = Arrangement.spacedBy(4.dp),
                     ) {
                         Image(
                             drawableResource(Resources.Drawable.GoogleLogo),
-                            VisualOnlyIconDescription,
+                            VISUAL_ONLY_ICON_DESCRIPTION,
                         )
                         Text(stringResource(Str.authentication_button_sign_in))
                     }
@@ -189,8 +191,8 @@ fun ConfirmSignInDialog(
                             Column {
                                 Text(
                                     stringResource(
-                                        Str.authentication_messages_lose_access_to_parties
-                                    )
+                                        Str.authentication_messages_lose_access_to_parties,
+                                    ),
                                 )
                                 Text(
                                     partyNames!!.joinToString("\n"),
@@ -203,9 +205,10 @@ fun ConfirmSignInDialog(
 
                 Row(
                     horizontalArrangement = Arrangement.spacedBy(Spacing.small, Alignment.End),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(bottom = Spacing.small, end = Spacing.small),
+                    modifier =
+                        Modifier
+                            .fillMaxWidth()
+                            .padding(bottom = Spacing.small, end = Spacing.small),
                 ) {
                     TextButton(enabled = !loading, onClick = onDismissRequest) {
                         Text(stringResource(Str.common_ui_button_cancel).uppercase())
@@ -214,9 +217,10 @@ fun ConfirmSignInDialog(
                     val snackbarHolder = LocalPersistentSnackbarHolder.current
                     val navigation = LocalNavigationTransaction.current
 
-                    val googleSignInFailedMessage = stringResource(
-                        Str.messages_authentication_google_sign_in_failed
-                    )
+                    val googleSignInFailedMessage =
+                        stringResource(
+                            Str.messages_authentication_google_sign_in_failed,
+                        )
                     TextButton(
                         enabled = !loading,
                         onClick = {
@@ -241,7 +245,7 @@ fun ConfirmSignInDialog(
                                     navigation.goBackTo { it is PartyListScreen }
                                 }
                             }
-                        }
+                        },
                     ) {
                         Text(stringResource(Str.authentication_button_sign_in).uppercase())
                     }

@@ -35,11 +35,14 @@ internal fun NonCompendiumTalentForm(
     val formData = NonCompendiumTalentFormData.fromTalent(existingTalent)
 
     FormDialog(
-        title = stringResource(
-            if (existingTalent != null)
-                Str.talents_title_edit
-            else Str.talents_title_new
-        ),
+        title =
+            stringResource(
+                if (existingTalent != null) {
+                    Str.talents_title_edit
+                } else {
+                    Str.talents_title_new
+                },
+            ),
         onDismissRequest = onDismissRequest,
         formData = formData,
         onSave = onSave,
@@ -63,7 +66,7 @@ internal fun NonCompendiumTalentForm(
                 onIncrement = { formData.taken.value++ },
                 onDecrement = {
                     formData.taken.value = (formData.taken.value - 1).coerceAtLeast(1)
-                }
+                },
             )
         }
 
@@ -102,25 +105,27 @@ private class NonCompendiumTalentFormData(
 ) : HydratedFormData<Talent> {
     companion object {
         @Composable
-        fun fromTalent(talent: Talent?): NonCompendiumTalentFormData = NonCompendiumTalentFormData(
-            id = remember { talent?.id ?: uuid4() },
-            name = inputValue(talent?.name ?: "", Rules.NotBlank()),
-            tests = inputValue(talent?.tests ?: ""),
-            maxTimesTaken = inputValue(talent?.maxTimesTaken ?: ""),
-            description = inputValue(talent?.description ?: ""),
-            taken = rememberSaveable { mutableStateOf(talent?.taken ?: 1) },
-        )
+        fun fromTalent(talent: Talent?): NonCompendiumTalentFormData =
+            NonCompendiumTalentFormData(
+                id = remember { talent?.id ?: uuid4() },
+                name = inputValue(talent?.name ?: "", Rules.NotBlank()),
+                tests = inputValue(talent?.tests ?: ""),
+                maxTimesTaken = inputValue(talent?.maxTimesTaken ?: ""),
+                description = inputValue(talent?.description ?: ""),
+                taken = rememberSaveable { mutableStateOf(talent?.taken ?: 1) },
+            )
     }
 
-    override fun toValue(): Talent = Talent(
-        id = id,
-        compendiumId = null,
-        name = name.value,
-        tests = tests.value,
-        maxTimesTaken = maxTimesTaken.value,
-        description = description.value.trim(),
-        taken = taken.value,
-    )
+    override fun toValue(): Talent =
+        Talent(
+            id = id,
+            compendiumId = null,
+            name = name.value,
+            tests = tests.value,
+            maxTimesTaken = maxTimesTaken.value,
+            description = description.value.trim(),
+            taken = taken.value,
+        )
 
     override fun isValid() = name.isValid() && description.isValid() && taken.value > 0
 }

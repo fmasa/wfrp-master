@@ -7,7 +7,6 @@ import java.util.Locale
 
 @Immutable
 interface Translator {
-
     val locale: Locale
 
     fun translate(name: StringResource): String

@@ -45,44 +45,54 @@ object CharacterBasicInfoForm {
     ) : FormData {
         companion object {
             @Composable
-            fun empty(characterType: CharacterType, careers: List<Career>): Data {
+            fun empty(
+                characterType: CharacterType,
+                careers: List<Career>,
+            ): Data {
                 return fromDefaults(null, characterType, careers)
             }
 
             @Composable
-            private fun fromDefaults(character: Character?, characterType: CharacterType, careers: List<Career>) = Data(
+            private fun fromDefaults(
+                character: Character?,
+                characterType: CharacterType,
+                careers: List<Career>,
+            ) = Data(
                 characterType = characterType,
                 name = inputValue(character?.name ?: "", Rules.NotBlank()),
                 publicName = inputValue(character?.publicName ?: ""),
                 socialClass = inputValue(character?.socialClass ?: ""),
-                career = rememberSaveable {
-                    mutableStateOf(
-                        character?.let {
-                            val compendiumCareer = character.compendiumCareer
-                            compendiumCareer?.let {
-                                SelectedCareer.CompendiumCareer(
-                                    compendiumCareer,
-                                    character.status,
+                career =
+                    rememberSaveable {
+                        mutableStateOf(
+                            character?.let {
+                                val compendiumCareer = character.compendiumCareer
+                                compendiumCareer?.let {
+                                    SelectedCareer.CompendiumCareer(
+                                        compendiumCareer,
+                                        character.status,
+                                    )
+                                } ?: SelectedCareer.NonCompendiumCareer(
+                                    character.career,
+                                    character.socialClass,
                                 )
-                            } ?: SelectedCareer.NonCompendiumCareer(
-                                character.career,
-                                character.socialClass,
-                            )
-                        }
-                    )
-                },
-                race = rememberSaveable {
-                    mutableStateOf(if (character == null) Race.HUMAN else character.race)
-                },
+                            },
+                        )
+                    },
+                race =
+                    rememberSaveable {
+                        mutableStateOf(if (character == null) Race.HUMAN else character.race)
+                    },
                 psychology = inputValue(character?.psychology ?: ""),
                 motivation = inputValue(character?.motivation ?: ""),
                 note = inputValue(character?.note ?: ""),
-                status = rememberSaveable {
-                    mutableStateOf(
-                        character?.status
-                            ?: SocialStatus(SocialStatus.Tier.BRASS, 0)
-                    )
-                },
+                status =
+                    rememberSaveable {
+                        mutableStateOf(
+                            character?.status
+                                ?: SocialStatus(SocialStatus.Tier.BRASS, 0),
+                        )
+                    },
                 careers = careers,
             )
         }

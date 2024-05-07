@@ -24,7 +24,7 @@ import kotlinx.coroutines.withContext
 @Composable
 actual fun InvitationDialogContent(
     invitation: Invitation,
-    screenModel: InvitationScreenModel
+    screenModel: InvitationScreenModel,
 ) {
     val (json, setJson) = remember { mutableStateOf<String?>(null) }
 

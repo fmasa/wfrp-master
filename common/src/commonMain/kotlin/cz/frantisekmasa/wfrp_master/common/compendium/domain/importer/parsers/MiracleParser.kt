@@ -4,64 +4,67 @@ import com.benasher44.uuid.uuid4
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.Miracle
 
 class MiracleParser {
-
     fun import(
         document: Document,
         structure: PdfStructure,
         pages: Sequence<Int>,
-    ): List<Miracle> = buildList {
-        val lexer = TwoColumnPdfLexer(document, structure)
+    ): List<Miracle> =
+        buildList {
+            val lexer = TwoColumnPdfLexer(document, structure)
 
-        val tokens = pages
-            .flatMap { lexer.getTokens(it).toList() }
-            .flatten()
-            .toList()
+            val tokens =
+                pages
+                    .flatMap { lexer.getTokens(it).toList() }
+                    .flatten()
+                    .toList()
 
-        val stream = TokenStream(tokens)
+            val stream = TokenStream(tokens)
 
-        stream.dropUntil { isCultHeading(it) }
+            stream.dropUntil { isCultHeading(it) }
 
-        lateinit var cultName: String
+            lateinit var cultName: String
 
-        while (stream.peek() is Token.Heading3 || isCultHeading(stream.peek())) {
-            if (isCultHeading(stream.peek())) {
-                cultName = extractCultName(stream.consumeOneOfType<Token.Heading2>().text).trim()
-            }
+            while (stream.peek() is Token.Heading3 || isCultHeading(stream.peek())) {
+                if (isCultHeading(stream.peek())) {
+                    cultName = extractCultName(stream.consumeOneOfType<Token.Heading2>().text).trim()
+                }
 
-            val name = stream.consumeOneOfType<Token.Heading3>().text.trim()
+                val name = stream.consumeOneOfType<Token.Heading3>().text.trim()
 
-            // Range: <String>
-            stream.consumeOneOfType<Token.BoldPart>()
-            val range = stream.consumeOneOfType<Token.NormalPart>().text
+                // Range: <String>
+                stream.consumeOneOfType<Token.BoldPart>()
+                val range = stream.consumeOneOfType<Token.NormalPart>().text
 
-            // Target: <String>
-            stream.consumeOneOfType<Token.BoldPart>()
-            val target = stream.consumeOneOfType<Token.NormalPart>().text
+                // Target: <String>
+                stream.consumeOneOfType<Token.BoldPart>()
+                val target = stream.consumeOneOfType<Token.NormalPart>().text
 
-            // Duration: <String>
-            stream.consumeOneOfType<Token.BoldPart>()
-            val (duration, effectStart) = stream.consumeOneOfType<Token.NormalPart>().text
-                .split('\n', limit = 2)
+                // Duration: <String>
+                stream.consumeOneOfType<Token.BoldPart>()
+                val (duration, effectStart) =
+                    stream.consumeOneOfType<Token.NormalPart>().text
+                        .split('\n', limit = 2)
 
-            val effect = MarkdownBuilder.buildMarkdown(
-                listOf(Token.NormalPart(effectStart)) +
-                    stream.consumeUntil { it is Token.Heading3 || isCultHeading(it) }
-                        .filterIsInstance<Token.ParagraphToken>()
-            )
+                val effect =
+                    MarkdownBuilder.buildMarkdown(
+                        listOf(Token.NormalPart(effectStart)) +
+                            stream.consumeUntil { it is Token.Heading3 || isCultHeading(it) }
+                                .filterIsInstance<Token.ParagraphToken>(),
+                    )
 
-            add(
-                Miracle(
-                    id = uuid4(),
-                    name = name,
-                    range = range.trim(),
-                    target = target.trim(),
-                    duration = duration.trim(),
-                    cultName = cultName,
-                    effect = effect,
+                add(
+                    Miracle(
+                        id = uuid4(),
+                        name = name,
+                        range = range.trim(),
+                        target = target.trim(),
+                        duration = duration.trim(),
+                        cultName = cultName,
+                        effect = effect,
+                    ),
                 )
-            )
+            }
         }
-    }
 
     private fun isCultHeading(token: Token?): Boolean {
         if (token !is Token.TextToken) {

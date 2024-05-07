@@ -8,7 +8,6 @@ import kotlinx.serialization.Serializable
 @JvmInline
 @Serializable
 value class UserId internal constructor(private val value: String) : Parcelable {
-
     init {
         require(value.isNotBlank()) { "UserId cannot be blank" }
     }

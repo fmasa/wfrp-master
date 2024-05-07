@@ -42,54 +42,63 @@ class CompendiumExportScreenModel(
     private val trappingCompendium: Compendium<Trapping>,
     parties: PartyRepository,
 ) : ScreenModel {
-
     val party: Flow<Party> = parties.getLive(partyId).right()
 
     suspend fun buildExportJson(): String {
         return coroutineScope {
-            val skills = async {
-                skillCompendium.liveForParty(partyId).first().map(SkillImport::fromSkill)
-            }
-            val talents = async {
-                talentsCompendium.liveForParty(partyId).first().map(TalentImport::fromTalent)
-            }
-            val spells = async {
-                spellCompendium.liveForParty(partyId).first().map(SpellImport::fromSpell)
-            }
-            val blessings = async {
-                blessingCompendium.liveForParty(partyId).first().map(BlessingImport::fromBlessing)
-            }
-            val miracles = async {
-                miracleCompendium.liveForParty(partyId).first().map(MiracleImport::fromMiracle)
-            }
-            val traits = async {
-                traitCompendium.liveForParty(partyId).first().map(TraitImport::fromTrait)
-            }
-            val careers = async {
-                careerCompendium.liveForParty(partyId).first().map(CareerImport::fromCareer)
-            }
-            val trappings = async {
-                trappingCompendium.liveForParty(partyId).first().map(TrappingImport::fromTrapping)
-            }
+            val skills =
+                async {
+                    skillCompendium.liveForParty(partyId).first().map(SkillImport::fromSkill)
+                }
+            val talents =
+                async {
+                    talentsCompendium.liveForParty(partyId).first().map(TalentImport::fromTalent)
+                }
+            val spells =
+                async {
+                    spellCompendium.liveForParty(partyId).first().map(SpellImport::fromSpell)
+                }
+            val blessings =
+                async {
+                    blessingCompendium.liveForParty(partyId).first().map(BlessingImport::fromBlessing)
+                }
+            val miracles =
+                async {
+                    miracleCompendium.liveForParty(partyId).first().map(MiracleImport::fromMiracle)
+                }
+            val traits =
+                async {
+                    traitCompendium.liveForParty(partyId).first().map(TraitImport::fromTrait)
+                }
+            val careers =
+                async {
+                    careerCompendium.liveForParty(partyId).first().map(CareerImport::fromCareer)
+                }
+            val trappings =
+                async {
+                    trappingCompendium.liveForParty(partyId).first().map(TrappingImport::fromTrapping)
+                }
 
-            val bundle = CompendiumBundle(
-                skills = skills.await(),
-                talents = talents.await(),
-                spells = spells.await(),
-                blessings = blessings.await(),
-                miracles = miracles.await(),
-                traits = traits.await(),
-                careers = careers.await(),
-                trappings = trappings.await(),
-            )
+            val bundle =
+                CompendiumBundle(
+                    skills = skills.await(),
+                    talents = talents.await(),
+                    spells = spells.await(),
+                    blessings = blessings.await(),
+                    miracles = miracles.await(),
+                    traits = traits.await(),
+                    careers = careers.await(),
+                    trappings = trappings.await(),
+                )
 
             json.encodeToString(serializer(), bundle)
         }
     }
 
     companion object {
-        private val json = Json {
-            encodeDefaults = true
-        }
+        private val json =
+            Json {
+                encodeDefaults = true
+            }
     }
 }

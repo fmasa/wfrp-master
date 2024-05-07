@@ -26,7 +26,7 @@ import cz.frantisekmasa.wfrp_master.common.auth.LocalWebClientId
 import cz.frantisekmasa.wfrp_master.common.core.shared.Resources
 import cz.frantisekmasa.wfrp_master.common.core.shared.drawableResource
 import cz.frantisekmasa.wfrp_master.common.core.ui.flow.collectWithLifecycle
-import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.VisualOnlyIconDescription
+import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.VISUAL_ONLY_ICON_DESCRIPTION
 import cz.frantisekmasa.wfrp_master.common.shell.SplashScreen
 import dev.icerock.moko.resources.compose.stringResource
 import io.github.aakira.napier.Napier
@@ -36,61 +36,62 @@ import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
 
 @Composable
-fun StartupScreen(authenticationManager: AndroidAuthenticationManager): Unit = Box {
+fun StartupScreen(authenticationManager: AndroidAuthenticationManager): Unit =
+    Box {
+        var signInButtonVisible by rememberSaveable { mutableStateOf(false) }
 
-    var signInButtonVisible by rememberSaveable { mutableStateOf(false) }
+        val authenticated by authenticationManager.common.authenticated.collectWithLifecycle()
 
-    val authenticated by authenticationManager.common.authenticated.collectWithLifecycle()
+        Napier.d("Authenticated: $authenticated")
 
-    Napier.d("Authenticated: $authenticated")
-
-    if (authenticated != false) {
-        SplashScreen()
-        // We could not determine whether user is logged in yet or there is delay between
-        // recompositions (user is already authenticated, but startup screen is still visible)
-        return
-    }
-
-    val webClientId = LocalWebClientId.current
-    val context = LocalContext.current
-
-    val startGoogleSignInFlow = rememberGoogleSignInLauncher(
-        authenticationManager = authenticationManager,
-        onFailure = { signInButtonVisible = true },
-    )
-
-    LaunchedEffect(Unit) {
-        withContext(Dispatchers.Default) {
-            // If user signed in via Google before, try to sign in him directly
-            if (authenticationManager.attemptToRestoreExistingGoogleSignIn(context, webClientId)) {
-                return@withContext
-            }
-
-            withContext(Dispatchers.Main) { startGoogleSignInFlow() }
+        if (authenticated != false) {
+            SplashScreen()
+            // We could not determine whether user is logged in yet or there is delay between
+            // recompositions (user is already authenticated, but startup screen is still visible)
+            return
         }
-    }
 
-    if (signInButtonVisible) {
-        SplashScreen {
-            Button(
-                onClick = startGoogleSignInFlow
-            ) {
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(4.dp)
+        val webClientId = LocalWebClientId.current
+        val context = LocalContext.current
+
+        val startGoogleSignInFlow =
+            rememberGoogleSignInLauncher(
+                authenticationManager = authenticationManager,
+                onFailure = { signInButtonVisible = true },
+            )
+
+        LaunchedEffect(Unit) {
+            withContext(Dispatchers.Default) {
+                // If user signed in via Google before, try to sign in him directly
+                if (authenticationManager.attemptToRestoreExistingGoogleSignIn(context, webClientId)) {
+                    return@withContext
+                }
+
+                withContext(Dispatchers.Main) { startGoogleSignInFlow() }
+            }
+        }
+
+        if (signInButtonVisible) {
+            SplashScreen {
+                Button(
+                    onClick = startGoogleSignInFlow,
                 ) {
-                    Image(
-                        drawableResource(Resources.Drawable.GoogleLogo),
-                        VisualOnlyIconDescription,
-                    )
-                    Text(stringResource(Str.authentication_button_sign_in))
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(4.dp),
+                    ) {
+                        Image(
+                            drawableResource(Resources.Drawable.GoogleLogo),
+                            VISUAL_ONLY_ICON_DESCRIPTION,
+                        )
+                        Text(stringResource(Str.authentication_button_sign_in))
+                    }
                 }
             }
+        } else {
+            SplashScreen()
         }
-    } else {
-        SplashScreen()
     }
-}
 
 @Composable
 private fun rememberGoogleSignInLauncher(
@@ -102,29 +103,30 @@ private fun rememberGoogleSignInLauncher(
     val coroutineScope = rememberCoroutineScope()
 
     return key(contract, coroutineScope) {
-        val launcher = rememberLauncherForActivityResult(contract) { result ->
-            if (result.resultCode == 0) {
-                Napier.d("Google Sign-In dialog was dismissed")
-                onFailure()
-                return@rememberLauncherForActivityResult
-            }
-
-            coroutineScope.launch(Dispatchers.IO) {
-                try {
-                    GoogleSignIn.getSignedInAccountFromIntent(result.intent)
-                        .await()
-                        .idToken
-                        ?.let { idToken -> authenticationManager.signInWithGoogleToken(idToken) }
-                } catch (e: Throwable) {
+        val launcher =
+            rememberLauncherForActivityResult(contract) { result ->
+                if (result.resultCode == 0) {
+                    Napier.d("Google Sign-In dialog was dismissed")
                     onFailure()
+                    return@rememberLauncherForActivityResult
+                }
+
+                coroutineScope.launch(Dispatchers.IO) {
+                    try {
+                        GoogleSignIn.getSignedInAccountFromIntent(result.intent)
+                            .await()
+                            .idToken
+                            ?.let { idToken -> authenticationManager.signInWithGoogleToken(idToken) }
+                    } catch (e: Throwable) {
+                        onFailure()
+                    }
                 }
             }
-        }
 
         return@key remember(launcher, onFailure) {
             {
                 try {
-                    launcher.launch(GoogleSignInCode)
+                    launcher.launch(GOOGLE_SIGN_IN_CODE)
                 } catch (e: Throwable) {
                     onFailure()
                 }
@@ -133,4 +135,4 @@ private fun rememberGoogleSignInLauncher(
     }
 }
 
-private const val GoogleSignInCode = 100
+private const val GOOGLE_SIGN_IN_CODE = 100

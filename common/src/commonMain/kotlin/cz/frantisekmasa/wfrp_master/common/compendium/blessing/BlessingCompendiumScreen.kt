@@ -20,9 +20,8 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.rememberScreenMode
 import dev.icerock.moko.resources.compose.stringResource
 
 class BlessingCompendiumScreen(
-    private val partyId: PartyId
+    private val partyId: PartyId,
 ) : CompendiumScreen() {
-
     @Composable
     override fun Content() {
         val screenModel: BlessingCompendiumScreenModel = rememberScreenModel(arg = partyId)
@@ -45,10 +44,11 @@ class BlessingCompendiumScreen(
             emptyUI = {
                 EmptyUI(
                     text = stringResource(Str.blessings_messages_no_blessings_in_compendium),
-                    subText = stringResource(
-                        Str.blessings_messages_no_blessings_in_compendium_subtext,
-                    ),
-                    icon = Resources.Drawable.Blessing
+                    subText =
+                        stringResource(
+                            Str.blessings_messages_no_blessings_in_compendium_subtext,
+                        ),
+                    icon = Resources.Drawable.Blessing,
                 )
             },
             remover = screenModel::remove,

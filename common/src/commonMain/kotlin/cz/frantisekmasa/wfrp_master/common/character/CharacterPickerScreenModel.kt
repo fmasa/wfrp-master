@@ -14,14 +14,17 @@ class CharacterPickerScreenModel(
     private val partyId: PartyId,
     private val characters: CharacterRepository,
 ) : ScreenModel {
-
     private val playerCharacters = characters.inParty(partyId, CharacterType.PLAYER_CHARACTER)
 
-    val unassignedPlayerCharacters = playerCharacters.map {
-        it.filter { character -> character.userId == null }
-    }
+    val unassignedPlayerCharacters =
+        playerCharacters.map {
+            it.filter { character -> character.userId == null }
+        }
 
-    suspend fun assignCharacter(character: Character, userId: UserId) {
+    suspend fun assignCharacter(
+        character: Character,
+        userId: UserId,
+    ) {
         characters.save(partyId, character.assignToUser(userId))
     }
 

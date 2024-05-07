@@ -24,11 +24,14 @@ internal fun NonCompendiumMiracleForm(
 ) {
     val formData = NonCompendiumMiracleFormData.fromMiracle(existingMiracle)
     FormDialog(
-        title = stringResource(
-            if (existingMiracle != null)
-                Str.miracles_title_edit
-            else Str.miracles_title_new
-        ),
+        title =
+            stringResource(
+                if (existingMiracle != null) {
+                    Str.miracles_title_edit
+                } else {
+                    Str.miracles_title_new
+                },
+            ),
         onDismissRequest = onDismissRequest,
         formData = formData,
         onSave = onSave,
@@ -37,14 +40,14 @@ internal fun NonCompendiumMiracleForm(
             label = stringResource(Str.miracles_label_name),
             value = formData.name,
             validate = validate,
-            maxLength = CompendiumMiracle.NAME_MAX_LENGTH
+            maxLength = CompendiumMiracle.NAME_MAX_LENGTH,
         )
 
         TextInput(
             label = stringResource(Str.miracles_label_cult_name),
             value = formData.cultName,
             validate = validate,
-            maxLength = CompendiumMiracle.CULT_NAME_MAX_LENGTH
+            maxLength = CompendiumMiracle.CULT_NAME_MAX_LENGTH,
         )
 
         TextInput(
@@ -90,28 +93,29 @@ private data class NonCompendiumMiracleFormData(
 ) : HydratedFormData<Miracle> {
     companion object {
         @Composable
-        fun fromMiracle(miracle: Miracle?) = NonCompendiumMiracleFormData(
-            id = remember(miracle) { miracle?.id ?: uuid4() },
-            name = inputValue(miracle?.name ?: "", Rules.NotBlank()),
-            cultName = inputValue(miracle?.cultName ?: ""),
-            range = inputValue(miracle?.range ?: ""),
-            target = inputValue(miracle?.target ?: ""),
-            duration = inputValue(miracle?.duration ?: ""),
-            effect = inputValue(miracle?.effect ?: ""),
-        )
+        fun fromMiracle(miracle: Miracle?) =
+            NonCompendiumMiracleFormData(
+                id = remember(miracle) { miracle?.id ?: uuid4() },
+                name = inputValue(miracle?.name ?: "", Rules.NotBlank()),
+                cultName = inputValue(miracle?.cultName ?: ""),
+                range = inputValue(miracle?.range ?: ""),
+                target = inputValue(miracle?.target ?: ""),
+                duration = inputValue(miracle?.duration ?: ""),
+                effect = inputValue(miracle?.effect ?: ""),
+            )
     }
 
-    override fun toValue() = Miracle(
-        id = id,
-        compendiumId = null,
-        name = name.value,
-        cultName = cultName.value,
-        range = range.value,
-        target = target.value,
-        duration = duration.value,
-        effect = effect.value,
-    )
+    override fun toValue() =
+        Miracle(
+            id = id,
+            compendiumId = null,
+            name = name.value,
+            cultName = cultName.value,
+            range = range.value,
+            target = target.value,
+            duration = duration.value,
+            effect = effect.value,
+        )
 
-    override fun isValid() =
-        listOf(name, cultName, range, target, duration, effect).all { it.isValid() }
+    override fun isValid() = listOf(name, cultName, range, target, duration, effect).all { it.isValid() }
 }

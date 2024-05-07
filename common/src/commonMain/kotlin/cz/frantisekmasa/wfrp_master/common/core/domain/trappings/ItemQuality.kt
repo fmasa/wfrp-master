@@ -12,14 +12,16 @@ enum class ItemQuality : TrappingFeature, NamedEnum {
     DURABLE,
     FINE,
     LIGHTWEIGHT,
-    PRACTICAL;
+    PRACTICAL,
+    ;
 
     override val hasRating get() = false
     override val ratingUnit get() = null
-    override val translatableName: StringResource get() = when (this) {
-        DURABLE -> Str.trappings_qualities_durable
-        FINE -> Str.trappings_qualities_fine
-        LIGHTWEIGHT -> Str.trappings_qualities_lightweight
-        PRACTICAL -> Str.trappings_qualities_practical
-    }
+    override val translatableName: StringResource get() =
+        when (this) {
+            DURABLE -> Str.trappings_qualities_durable
+            FINE -> Str.trappings_qualities_fine
+            LIGHTWEIGHT -> Str.trappings_qualities_lightweight
+            PRACTICAL -> Str.trappings_qualities_practical
+        }
 }

@@ -15,7 +15,6 @@ class SettingsScreenModel(
     private val parties: PartyRepository,
     private val storage: SettingsStorage,
 ) : ScreenModel {
-
     val darkMode: Flow<Boolean?> by lazy { getPreference(AppSettings.DARK_MODE) }
     val soundEnabled: Flow<Boolean?> by lazy { getPreference(AppSettings.SOUND_ENABLED) }
     val lastSeenVersion: Flow<String?> by lazy { storage.watch(AppSettings.LAST_SEEN_VERSION) }

@@ -10,11 +10,12 @@ class AndroidTranslator(
     context: Context,
     language: Language,
 ) : Translator {
-    private val context = context.createConfigurationContext(
-        Configuration(context.resources.configuration).apply {
-            setLocale(language.locale)
-        }
-    )
+    private val context =
+        context.createConfigurationContext(
+            Configuration(context.resources.configuration).apply {
+                setLocale(language.locale)
+            },
+        )
 
     override val locale: Locale = language.locale
 

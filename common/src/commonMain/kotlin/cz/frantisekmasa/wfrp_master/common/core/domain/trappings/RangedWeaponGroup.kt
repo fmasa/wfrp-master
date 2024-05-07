@@ -9,8 +9,7 @@ import dev.icerock.moko.resources.StringResource
 
 @Parcelize
 @Immutable
-enum class RangedWeaponGroup(
-) : NamedEnum, Parcelable {
+enum class RangedWeaponGroup() : NamedEnum, Parcelable {
     BLACKPOWDER,
     BOW,
     CROSSBOW,
@@ -18,16 +17,18 @@ enum class RangedWeaponGroup(
     ENGINEERING,
     EXPLOSIVES,
     SLING,
-    THROWING;
+    THROWING,
+    ;
 
-    override val translatableName: StringResource get() = when (this) {
-        BLACKPOWDER -> Str.weapons_ranged_groups_blackpowder
-        BOW -> Str.weapons_ranged_groups_bow
-        CROSSBOW -> Str.weapons_ranged_groups_crossbow
-        ENTANGLING -> Str.weapons_ranged_groups_entangling
-        ENGINEERING -> Str.weapons_ranged_groups_engineering
-        EXPLOSIVES -> Str.weapons_ranged_groups_explosives
-        SLING -> Str.weapons_ranged_groups_sling
-        THROWING -> Str.weapons_ranged_groups_throwing
-    }
+    override val translatableName: StringResource get() =
+        when (this) {
+            BLACKPOWDER -> Str.weapons_ranged_groups_blackpowder
+            BOW -> Str.weapons_ranged_groups_bow
+            CROSSBOW -> Str.weapons_ranged_groups_crossbow
+            ENTANGLING -> Str.weapons_ranged_groups_entangling
+            ENGINEERING -> Str.weapons_ranged_groups_engineering
+            EXPLOSIVES -> Str.weapons_ranged_groups_explosives
+            SLING -> Str.weapons_ranged_groups_sling
+            THROWING -> Str.weapons_ranged_groups_throwing
+        }
 }

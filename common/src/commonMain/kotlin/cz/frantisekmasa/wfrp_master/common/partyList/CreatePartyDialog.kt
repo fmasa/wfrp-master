@@ -79,11 +79,12 @@ fun CreatePartyDialog(
 
                                 coroutineScope.launch(Dispatchers.IO) {
                                     try {
-                                        val partyId = screenModel.createParty(
-                                            partyName.value,
-                                            language,
-                                            userId,
-                                        )
+                                        val partyId =
+                                            screenModel.createParty(
+                                                partyName.value,
+                                                language,
+                                                userId,
+                                            )
 
                                         onSuccess(partyId)
                                     } catch (e: CouldNotConnectToBackend) {
@@ -103,11 +104,11 @@ fun CreatePartyDialog(
 
                                     saving = false
                                 }
-                            }
+                            },
                         )
-                    }
+                    },
                 )
-            }
+            },
         ) {
             Column(
                 Modifier
@@ -129,17 +130,18 @@ fun CreatePartyDialog(
                         SelectBox(
                             value = language,
                             onValueChange = { language = it },
-                            items = remember {
-                                Language.values()
-                                    .map { it to it.localizedName }
-                                    .sortedBy { it.second }
-                            },
+                            items =
+                                remember {
+                                    Language.values()
+                                        .map { it to it.localizedName }
+                                        .sortedBy { it.second }
+                                },
                         )
                     }
 
                     InfoIcon(
                         title = label,
-                        text = stringResource(Str.parties_language_explanation)
+                        text = stringResource(Str.parties_language_explanation),
                     )
                 }
             }

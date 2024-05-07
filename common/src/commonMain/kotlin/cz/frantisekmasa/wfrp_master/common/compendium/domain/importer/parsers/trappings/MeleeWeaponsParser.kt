@@ -20,29 +20,30 @@ class MeleeWeaponsParser(
     private val structure: PdfStructure,
     private val descriptionParser: TrappingDescriptionParser,
 ) {
-
     fun parse(
         tablePage: Int,
         descriptionPages: IntRange,
     ): List<Trapping> {
         val parser = TableParser()
         val lexer = DefaultLayoutPdfLexer(document, structure, mergeSubsequentTokens = false)
-        val table = parser.findTables(lexer, structure, tablePage, findNames = false)
-            .asSequence()
-            .flatMap { parser.parseTable(it.tokens, columnCount = 7) }
+        val table =
+            parser.findTables(lexer, structure, tablePage, findNames = false)
+                .asSequence()
+                .flatMap { parser.parseTable(it.tokens, columnCount = 7) }
 
         val descriptionsByName = descriptionParser.parse(document, structure, descriptionPages)
 
         return table
             .filter { it.heading != null }
             .flatMap { section ->
-                val group = matchEnumOrNull<MeleeWeaponGroup>(
-                    section.heading!!.replace("*", ""),
-                    mapOf(
-                        "PARRYING" to MeleeWeaponGroup.PARRY,
+                val group =
+                    matchEnumOrNull<MeleeWeaponGroup>(
+                        section.heading!!.replace("*", ""),
+                        mapOf(
+                            "PARRYING" to MeleeWeaponGroup.PARRY,
+                        ),
                     )
-                )
-                    ?: error("Invalid weapon group ${section.heading}")
+                        ?: error("Invalid weapon group ${section.heading}")
 
                 section.rows.map { row ->
                     val name = row[0].trim()
@@ -52,8 +53,9 @@ class MeleeWeaponsParser(
                     val damage = row[5].trim()
                     val qualitiesAndFlaws = row[6]
 
-                    val footnoteNumbers = sequenceOf(damage, qualitiesAndFlaws)
-                        .flatMap { parser.findFootnoteReferences(it) }
+                    val footnoteNumbers =
+                        sequenceOf(damage, qualitiesAndFlaws)
+                            .flatMap { parser.findFootnoteReferences(it) }
 
                     Trapping(
                         id = uuid4(),
@@ -61,54 +63,58 @@ class MeleeWeaponsParser(
                         price = if (price is PriceParser.Amount) price.money else Money.ZERO,
                         packSize = 1,
                         encumbrance = Encumbrance(encumbrance.toDoubleOrNull() ?: 0.0),
-                        availability = matchEnumOrNull(
-                            row[3].trim(),
-                            mapOf(
-                                "N/A" to Availability.COMMON,
-                                "–" to Availability.COMMON,
-                            ),
-                        ) ?: error("Invalid Availability ${row[3]}"),
-                        trappingType = TrappingType.MeleeWeapon(
-                            group = group,
-                            reach = matchEnumOrNull(
-                                reach,
+                        availability =
+                            matchEnumOrNull(
+                                row[3].trim(),
                                 mapOf(
-                                    "N/A" to Reach.AVERAGE,
-                                    "Medium" to Reach.AVERAGE,
-                                    "Varies" to Reach.AVERAGE
+                                    "N/A" to Availability.COMMON,
+                                    "–" to Availability.COMMON,
                                 ),
-                            ) ?: error("Invalid Reach ${row[4]}"),
-                            damage = DamageExpression(damage.replace("*", "")),
-                            qualities = parseFeatures(qualitiesAndFlaws),
-                            flaws = parseFeatures(qualitiesAndFlaws),
-                        ),
-                        description = buildString {
-                            if (encumbrance == "Varies") {
-                                append("**Price:** Varies\n")
-                            }
-
-                            if (reach == "Varies") {
-                                append("**Reach:** Varies\n")
-                            }
-
-                            val footnotes = footnoteNumbers.mapNotNull { section.footnotes[it] }
-
-                            footnotes.forEach {
-                                append(it)
-                                append('\n')
-                            }
-
-                            val comparableName = descriptionParser.comparableName(name)
-                            descriptionsByName.firstOrNull {
-                                comparableName.startsWith(it.first, ignoreCase = true)
-                            }?.let {
-                                if (isNotEmpty()) {
-                                    append("\n")
+                            ) ?: error("Invalid Availability ${row[3]}"),
+                        trappingType =
+                            TrappingType.MeleeWeapon(
+                                group = group,
+                                reach =
+                                    matchEnumOrNull(
+                                        reach,
+                                        mapOf(
+                                            "N/A" to Reach.AVERAGE,
+                                            "Medium" to Reach.AVERAGE,
+                                            "Varies" to Reach.AVERAGE,
+                                        ),
+                                    ) ?: error("Invalid Reach ${row[4]}"),
+                                damage = DamageExpression(damage.replace("*", "")),
+                                qualities = parseFeatures(qualitiesAndFlaws),
+                                flaws = parseFeatures(qualitiesAndFlaws),
+                            ),
+                        description =
+                            buildString {
+                                if (encumbrance == "Varies") {
+                                    append("**Price:** Varies\n")
                                 }
 
-                                append(it.second)
-                            }
-                        },
+                                if (reach == "Varies") {
+                                    append("**Reach:** Varies\n")
+                                }
+
+                                val footnotes = footnoteNumbers.mapNotNull { section.footnotes[it] }
+
+                                footnotes.forEach {
+                                    append(it)
+                                    append('\n')
+                                }
+
+                                val comparableName = descriptionParser.comparableName(name)
+                                descriptionsByName.firstOrNull {
+                                    comparableName.startsWith(it.first, ignoreCase = true)
+                                }?.let {
+                                    if (isNotEmpty()) {
+                                        append("\n")
+                                    }
+
+                                    append(it.second)
+                                }
+                            },
                         isVisibleToPlayers = true,
                     )
                 }

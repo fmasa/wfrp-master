@@ -15,14 +15,16 @@ class Rules(private vararg val rules: Rule) : Rule {
         fun NotBlank() = rule(stringResource(Str.validation_not_blank)) { it.isNotBlank() }
 
         @Composable
-        fun PositiveInteger() = rule(stringResource(Str.validation_positive_integer)) {
-            it.toIntOrNull() != null && it.toInt() > 0
-        }
+        fun PositiveInteger() =
+            rule(stringResource(Str.validation_positive_integer)) {
+                it.toIntOrNull() != null && it.toInt() > 0
+            }
 
         @Composable
-        fun NonNegativeInteger() = rule(stringResource(Str.validation_non_negative)) {
-            it.toIntOrNull() != null && it.toInt() >= 0
-        }
+        fun NonNegativeInteger() =
+            rule(stringResource(Str.validation_non_negative)) {
+                it.toIntOrNull() != null && it.toInt() >= 0
+            }
 
         /**
          * This is useful usually for inputs that:
@@ -31,13 +33,14 @@ class Rules(private vararg val rules: Rule) : Rule {
          */
         fun withEmptyMessage(rule: Rule) = Rule { if (rule.errorMessage(it) != null) "" else null }
 
-        fun IfNotBlank(rule: Rule): Rule = Rule {
-            if (it.isBlank()) {
-                null
-            } else {
-                rule.errorMessage(it)
+        fun ifNotBlank(rule: Rule): Rule =
+            Rule {
+                if (it.isBlank()) {
+                    null
+                } else {
+                    rule.errorMessage(it)
+                }
             }
-        }
     }
 
     override fun errorMessage(value: String): String? {
@@ -81,7 +84,11 @@ data class CallbackRule(
 
 @Composable
 @Stable
-fun rule(errorMessage: String, validate: (String) -> Boolean): Rule = CallbackRule(
-    errorMessage,
-    validate,
-)
+fun rule(
+    errorMessage: String,
+    validate: (String) -> Boolean,
+): Rule =
+    CallbackRule(
+        errorMessage,
+        validate,
+    )

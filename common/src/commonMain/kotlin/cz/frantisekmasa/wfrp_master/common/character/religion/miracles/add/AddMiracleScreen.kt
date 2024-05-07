@@ -20,7 +20,6 @@ import dev.icerock.moko.resources.compose.stringResource
 class AddMiracleScreen(
     private val characterId: CharacterId,
 ) : Screen {
-
     @Composable
     override fun Content() {
         val screenModel: AddMiracleScreenModel = rememberScreenModel(arg = characterId)
@@ -31,10 +30,11 @@ class AddMiracleScreen(
             return
         }
 
-        val addItemUiState = rememberAddItemUiState(
-            saver = screenModel::addMiracle,
-            detailScreenFactory = { CharacterMiracleDetailScreen(characterId, it.id) },
-        )
+        val addItemUiState =
+            rememberAddItemUiState(
+                saver = screenModel::addMiracle,
+                detailScreenFactory = { CharacterMiracleDetailScreen(characterId, it.id) },
+            )
 
         AddItemUi(
             state = addItemUiState,
@@ -58,7 +58,7 @@ class AddMiracleScreen(
                     onSave = screenModel::addMiracle,
                     onDismissRequest = addItemUiState::openChoosingScreen,
                 )
-            }
+            },
         )
     }
 }

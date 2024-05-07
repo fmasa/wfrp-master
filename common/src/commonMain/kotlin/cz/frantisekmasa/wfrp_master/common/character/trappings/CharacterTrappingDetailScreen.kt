@@ -86,7 +86,7 @@ private fun TrappingDetail(
     screenModel: CharacterTrappingsDetailScreenModel,
     isGameMaster: Boolean,
     onEditRequest: () -> Unit,
-    onOpenDetailRequest: (InventoryItem) -> Unit
+    onOpenDetailRequest: (InventoryItem) -> Unit,
 ) {
     Scaffold(
         topBar = {
@@ -99,7 +99,7 @@ private fun TrappingDetail(
                         stringResource(Str.character_title_edit),
                         onClick = onEditRequest,
                     )
-                }
+                },
             )
         },
     ) {
@@ -129,17 +129,18 @@ private fun TrappingDetail(
                 val navigation = LocalNavigationTransaction.current
 
                 CompendiumButton(
-                    modifier = Modifier
-                        .padding(top = Spacing.bodyPadding)
-                        .align(Alignment.CenterHorizontally),
+                    modifier =
+                        Modifier
+                            .padding(top = Spacing.bodyPadding)
+                            .align(Alignment.CenterHorizontally),
                     onClick = {
                         navigation.navigate(
                             CompendiumTrappingDetailScreen(
                                 screenModel.characterId.partyId,
                                 trapping.compendiumId,
-                            )
+                            ),
                         )
-                    }
+                    },
                 )
             }
 
@@ -213,7 +214,7 @@ private fun TrappingDetail(
                     onRemoveFromContainerRequest = screenModel::removeFromContainer,
                     onAddToContainerRequest = {
                         screenModel.addToContainer(trapping = it, container = trapping)
-                    }
+                    },
                 )
             }
             is TrappingType.ClothingOrAccessory -> {

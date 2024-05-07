@@ -38,11 +38,14 @@ fun SpellDialog(
     val formData = SpellFormData.fromItem(spell)
 
     CompendiumItemDialog(
-        title = stringResource(
-            if (spell == null)
-                Str.spells_title_add
-            else Str.spells_title_edit
-        ),
+        title =
+            stringResource(
+                if (spell == null) {
+                    Str.spells_title_add
+                } else {
+                    Str.spells_title_edit
+                },
+            ),
         formData = formData,
         saver = onSaveRequest,
         onDismissRequest = onDismissRequest,
@@ -55,7 +58,7 @@ fun SpellDialog(
                 label = stringResource(Str.spells_label_name),
                 value = formData.name,
                 validate = validate,
-                maxLength = Spell.NAME_MAX_LENGTH
+                maxLength = Spell.NAME_MAX_LENGTH,
             )
 
             val lores = SpellLore.values().map { it to it.localizedName }
@@ -63,15 +66,16 @@ fun SpellDialog(
                 label = stringResource(Str.spells_label_lore),
                 value = formData.lore.value,
                 onValueChange = { formData.lore.value = it },
-                items = remember(lores) { lores.sortedBy { it.second } } +
-                    (null to stringResource(Str.spells_lores_other)),
+                items =
+                    remember(lores) { lores.sortedBy { it.second } } +
+                        (null to stringResource(Str.spells_lores_other)),
             )
 
             TextInput(
                 label = stringResource(Str.spells_label_lore_legacy),
                 value = formData.customLore,
                 validate = validate,
-                maxLength = Spell.LORE_MAX_LENGTH
+                maxLength = Spell.LORE_MAX_LENGTH,
             )
 
             TextInput(
@@ -131,36 +135,39 @@ private data class SpellFormData(
 ) : CompendiumItemFormData<Spell> {
     companion object {
         @Composable
-        fun fromItem(item: Spell?) = SpellFormData(
-            id = remember(item) { item?.id ?: uuid4() },
-            isNew = item == null,
-            name = inputValue(item?.name ?: "", Rules.NotBlank()),
-            customLore = inputValue(item?.customLore ?: ""),
-            lore = rememberSaveable(item) { mutableStateOf(item?.lore) },
-            range = inputValue(item?.range ?: ""),
-            target = inputValue(item?.target ?: ""),
-            duration = inputValue(item?.duration ?: ""),
-            castingNumber = inputValue(
-                item?.castingNumber?.toString() ?: "0",
-                Rules.NonNegativeInteger(),
-            ),
-            effect = inputValue(item?.effect ?: ""),
-            isVisibleToPlayers = item?.isVisibleToPlayers ?: false,
-        )
+        fun fromItem(item: Spell?) =
+            SpellFormData(
+                id = remember(item) { item?.id ?: uuid4() },
+                isNew = item == null,
+                name = inputValue(item?.name ?: "", Rules.NotBlank()),
+                customLore = inputValue(item?.customLore ?: ""),
+                lore = rememberSaveable(item) { mutableStateOf(item?.lore) },
+                range = inputValue(item?.range ?: ""),
+                target = inputValue(item?.target ?: ""),
+                duration = inputValue(item?.duration ?: ""),
+                castingNumber =
+                    inputValue(
+                        item?.castingNumber?.toString() ?: "0",
+                        Rules.NonNegativeInteger(),
+                    ),
+                effect = inputValue(item?.effect ?: ""),
+                isVisibleToPlayers = item?.isVisibleToPlayers ?: false,
+            )
     }
 
-    override fun toValue() = Spell(
-        id = id,
-        name = name.value,
-        lore = lore.value,
-        customLore = customLore.value,
-        range = range.value,
-        target = target.value,
-        duration = duration.value,
-        castingNumber = castingNumber.value.toInt(),
-        effect = effect.value,
-        isVisibleToPlayers = isVisibleToPlayers,
-    )
+    override fun toValue() =
+        Spell(
+            id = id,
+            name = name.value,
+            lore = lore.value,
+            customLore = customLore.value,
+            range = range.value,
+            target = target.value,
+            duration = duration.value,
+            castingNumber = castingNumber.value.toInt(),
+            effect = effect.value,
+            isVisibleToPlayers = isVisibleToPlayers,
+        )
 
     override fun isValid() =
         listOf(name, customLore, range, target, duration, castingNumber, effect).all { it.isValid() } &&

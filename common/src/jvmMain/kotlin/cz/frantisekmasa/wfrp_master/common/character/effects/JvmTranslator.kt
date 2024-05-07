@@ -7,7 +7,6 @@ import java.util.Locale
 class JvmTranslator(
     private val language: Language,
 ) : Translator {
-
     override val locale: Locale = language.locale
 
     override fun translate(name: StringResource): String {

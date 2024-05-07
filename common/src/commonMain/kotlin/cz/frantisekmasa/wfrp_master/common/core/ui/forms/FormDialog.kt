@@ -103,11 +103,11 @@ private fun <T> FullScreenForm(
                                     onSave(formData.toValue())
                                 }
                             }
-                        }
+                        },
                     )
-                }
+                },
             )
-        }
+        },
     ) {
         if (saving) {
             FullScreenProgress()

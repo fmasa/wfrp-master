@@ -9,7 +9,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun CardRow(modifier: Modifier = Modifier, content: @Composable RowScope.() -> Unit) {
+fun CardRow(
+    modifier: Modifier = Modifier,
+    content: @Composable RowScope.() -> Unit,
+) {
     Surface(modifier = modifier, elevation = 2.dp) {
         Row(
             Modifier.padding(horizontal = Spacing.large, vertical = Spacing.large),

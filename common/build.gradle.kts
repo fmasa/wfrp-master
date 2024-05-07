@@ -143,7 +143,6 @@ kotlin {
                 // Network availability check
                 implementation(libs.reactivenetwork.rx2)
                 implementation(libs.kotlinx.coroutines.rx2)
-
             }
         }
 
@@ -200,9 +199,12 @@ buildkonfig {
     exposeObjectWithName = "BuildKonfig"
 
     defaultConfigs {
-        val properties = if (File("local.properties").exists())
-            loadProperties("local.properties")
-        else Properties()
+        val properties =
+            if (File("local.properties").exists()) {
+                loadProperties("local.properties")
+            } else {
+                Properties()
+            }
 
         buildConfigField(STRING, "functionsEmulatorUrl", properties.getOrDefault("dev.functionsEmulatorUrl", "").toString())
         buildConfigField(STRING, "firestoreEmulatorUrl", properties.getOrDefault("dev.firestoreEmulatorUrls", "").toString())

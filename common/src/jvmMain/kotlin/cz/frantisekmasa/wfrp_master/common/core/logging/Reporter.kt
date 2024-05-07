@@ -13,6 +13,9 @@ actual object Reporter {
     actual fun recordThrowable(throwable: Throwable) {
     }
 
-    actual fun recordEvent(name: String, parameters: Map<String, String>) {
+    actual fun recordEvent(
+        name: String,
+        parameters: Map<String, String>,
+    ) {
     }
 }

@@ -2,7 +2,6 @@ package cz.frantisekmasa.wfrp_master.common.core.shared
 
 object Resources {
     enum class Drawable(val path: String) {
-
         // Characteristics
         Agility("drawable/ic_agility.xml"),
         BallisticSkill("drawable/ic_ballistic_skill.xml"),
@@ -87,6 +86,6 @@ object Resources {
     }
 
     enum class Sound(val path: String) {
-        DiceRoll("raw/roll_sound.wav")
+        DiceRoll("raw/roll_sound.wav"),
     }
 }

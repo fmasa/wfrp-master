@@ -46,13 +46,13 @@ fun ImportFileChooser(
                         careers.await(),
                         trappings.await(),
                         replaceExistingByDefault = false,
-                    )
+                    ),
                 )
             }
         }.onFailure {
             Napier.e(it.toString(), it)
 
-            snackbarHolder.showSnackbar(errorMessageFactory(it), SnackbarDuration.Long,)
+            snackbarHolder.showSnackbar(errorMessageFactory(it), SnackbarDuration.Long)
 
             onStateChange(null)
         }

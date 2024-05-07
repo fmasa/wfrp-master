@@ -7,6 +7,7 @@ interface ConnectivityChecker {
     val availability: Flow<Boolean>
 }
 
-val LocalConnectivityChecker = staticCompositionLocalOf<ConnectivityChecker> {
-    error("Connectivity checker not provided")
-}
+val LocalConnectivityChecker =
+    staticCompositionLocalOf<ConnectivityChecker> {
+        error("Connectivity checker not provided")
+    }

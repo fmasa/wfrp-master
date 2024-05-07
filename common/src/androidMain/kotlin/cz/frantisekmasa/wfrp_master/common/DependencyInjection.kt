@@ -12,14 +12,15 @@ import org.kodein.di.DI
 import org.kodein.di.bindSingleton
 import org.kodein.di.instance
 
-actual val platformModule = DI.Module("android") {
+actual val platformModule =
+    DI.Module("android") {
 
-    bindSingleton { SettingsStorage(instance()) }
-    bindSingleton { CommonAuthenticationManager(instance(), supportsEmail = true) }
-    bindSingleton { AndroidAuthenticationManager(instance(), instance()) }
+        bindSingleton { SettingsStorage(instance()) }
+        bindSingleton { CommonAuthenticationManager(instance(), supportsEmail = true) }
+        bindSingleton { AndroidAuthenticationManager(instance(), instance()) }
 
-    bindSingleton {
-        val context: Context = instance()
-        Translator.Factory { AndroidTranslator(context, it) }
+        bindSingleton {
+            val context: Context = instance()
+            Translator.Factory { AndroidTranslator(context, it) }
+        }
     }
-}

@@ -21,8 +21,8 @@ class EncumbranceTest {
                     initiative = 45,
                     fellowship = 20,
                     willPower = 15,
-                )
-            ).toString()
+                ),
+            ).toString(),
         )
     }
 

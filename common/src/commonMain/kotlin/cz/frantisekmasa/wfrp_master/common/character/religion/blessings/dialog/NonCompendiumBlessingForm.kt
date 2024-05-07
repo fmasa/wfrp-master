@@ -25,11 +25,14 @@ internal fun NonCompendiumBlessingForm(
     val formData = NonCompendiumBlessingFormData.fromBlessing(existingBlessing)
 
     FormDialog(
-        title = stringResource(
-            if (existingBlessing != null)
-                Str.blessings_title_edit
-            else Str.blessings_title_new
-        ),
+        title =
+            stringResource(
+                if (existingBlessing != null) {
+                    Str.blessings_title_edit
+                } else {
+                    Str.blessings_title_new
+                },
+            ),
         onDismissRequest = onDismissRequest,
         formData = formData,
         onSave = onSave,
@@ -38,7 +41,7 @@ internal fun NonCompendiumBlessingForm(
             label = stringResource(Str.blessings_label_name),
             value = formData.name,
             validate = validate,
-            maxLength = CompendiumBlessing.NAME_MAX_LENGTH
+            maxLength = CompendiumBlessing.NAME_MAX_LENGTH,
         )
 
         TextInput(
@@ -83,26 +86,27 @@ private data class NonCompendiumBlessingFormData(
 ) : HydratedFormData<Blessing> {
     companion object {
         @Composable
-        fun fromBlessing(blessing: Blessing?) = NonCompendiumBlessingFormData(
-            id = remember(blessing) { blessing?.id ?: uuid4() },
-            name = inputValue(blessing?.name ?: "", Rules.NotBlank()),
-            range = inputValue(blessing?.range ?: ""),
-            target = inputValue(blessing?.target ?: ""),
-            duration = inputValue(blessing?.duration ?: ""),
-            effect = inputValue(blessing?.effect ?: ""),
-        )
+        fun fromBlessing(blessing: Blessing?) =
+            NonCompendiumBlessingFormData(
+                id = remember(blessing) { blessing?.id ?: uuid4() },
+                name = inputValue(blessing?.name ?: "", Rules.NotBlank()),
+                range = inputValue(blessing?.range ?: ""),
+                target = inputValue(blessing?.target ?: ""),
+                duration = inputValue(blessing?.duration ?: ""),
+                effect = inputValue(blessing?.effect ?: ""),
+            )
     }
 
-    override fun toValue() = Blessing(
-        id = id,
-        compendiumId = null,
-        name = name.value,
-        range = range.value,
-        target = target.value,
-        duration = duration.value,
-        effect = effect.value,
-    )
+    override fun toValue() =
+        Blessing(
+            id = id,
+            compendiumId = null,
+            name = name.value,
+            range = range.value,
+            target = target.value,
+            duration = duration.value,
+            effect = effect.value,
+        )
 
-    override fun isValid() =
-        listOf(name, range, target, duration, effect).all { it.isValid() }
+    override fun isValid() = listOf(name, range, target, duration, effect).all { it.isValid() }
 }

@@ -8,20 +8,26 @@ import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.sum
 class AdditionalEncumbrance(
     private val bonus: Encumbrance,
 ) : CharacterEffect {
-
-    override fun apply(character: Character, otherEffects: List<CharacterEffect>): Character {
+    override fun apply(
+        character: Character,
+        otherEffects: List<CharacterEffect>,
+    ): Character {
         return character.modifyEncumbranceBonus(
-            bonus + otherEffects.filterIsInstance<AdditionalEncumbrance>()
-                .map { it.bonus }
-                .sum()
+            bonus +
+                otherEffects.filterIsInstance<AdditionalEncumbrance>()
+                    .map { it.bonus }
+                    .sum(),
         )
     }
 
-    override fun revert(character: Character, otherEffects: List<CharacterEffect>): Character {
+    override fun revert(
+        character: Character,
+        otherEffects: List<CharacterEffect>,
+    ): Character {
         return character.modifyEncumbranceBonus(
             otherEffects.filterIsInstance<AdditionalEncumbrance>()
                 .map { it.bonus }
-                .sum()
+                .sum(),
         )
     }
 

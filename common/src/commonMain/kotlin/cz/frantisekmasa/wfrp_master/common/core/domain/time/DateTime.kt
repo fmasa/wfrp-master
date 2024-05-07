@@ -12,9 +12,8 @@ import kotlinx.serialization.Serializable
 data class DateTime(
     @SerialName("imperialDay")
     val date: ImperialDate,
-    private val minutes: Int
+    private val minutes: Int,
 ) : Parcelable {
-
     companion object {
         private fun toMinutes(time: TimeOfDay) = time.hour * 60 + time.minute
     }

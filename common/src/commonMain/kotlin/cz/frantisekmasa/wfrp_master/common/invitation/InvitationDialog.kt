@@ -32,14 +32,14 @@ fun InvitationDialog(
                     navigationIcon = { CloseButton(onClick = onDismissRequest) },
                     title = { Text(stringResource(Str.parties_title_invite_players)) },
                 )
-            }
+            },
         ) {
             Column(
                 Modifier
                     .fillMaxSize()
                     .verticalScroll(rememberScrollState())
                     .padding(Spacing.bodyPadding),
-                verticalArrangement = Arrangement.spacedBy(Spacing.small, Alignment.CenterVertically)
+                verticalArrangement = Arrangement.spacedBy(Spacing.small, Alignment.CenterVertically),
             ) {
                 InvitationDialogContent(invitation, screenModel)
             }

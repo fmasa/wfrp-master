@@ -21,9 +21,8 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.rememberScreenMode
 import dev.icerock.moko.resources.compose.stringResource
 
 class TrappingCompendiumScreen(
-    private val partyId: PartyId
+    private val partyId: PartyId,
 ) : CompendiumScreen() {
-
     @Composable
     override fun Content() {
         val screenModel: TrappingCompendiumScreenModel = rememberScreenModel(arg = partyId)
@@ -37,7 +36,7 @@ class TrappingCompendiumScreen(
                 onSaveRequest = {
                     screenModel.createNew(it)
                     navigation.navigate(CompendiumTrappingDetailScreen(partyId, it.id))
-                }
+                },
             )
         }
 

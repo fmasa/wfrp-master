@@ -12,9 +12,8 @@ import com.google.zxing.qrcode.QRCodeReader
 import io.github.aakira.napier.Napier
 
 class QrCodeScannerAnalyser(
-    private val onQrCodesDetected: (qrCodeData: String) -> Unit
+    private val onQrCodesDetected: (qrCodeData: String) -> Unit,
 ) : ImageAnalysis.Analyzer {
-
     companion object {
         private val reader = QRCodeReader()
     }
@@ -43,20 +42,21 @@ class QrCodeScannerAnalyser(
 
             Napier.d("Creating bitmap for image (${image.width}x${image.height})")
 
-            val binaryBitmap = BinaryBitmap(
-                HybridBinarizer(
-                    PlanarYUVLuminanceSource(
-                        bytes,
-                        image.width,
-                        image.height,
-                        0,
-                        0,
-                        image.width,
-                        image.height,
-                        false
-                    )
+            val binaryBitmap =
+                BinaryBitmap(
+                    HybridBinarizer(
+                        PlanarYUVLuminanceSource(
+                            bytes,
+                            image.width,
+                            image.height,
+                            0,
+                            0,
+                            image.width,
+                            image.height,
+                            false,
+                        ),
+                    ),
                 )
-            )
 
             val result = reader.decode(binaryBitmap)
             onQrCodesDetected(result.text)

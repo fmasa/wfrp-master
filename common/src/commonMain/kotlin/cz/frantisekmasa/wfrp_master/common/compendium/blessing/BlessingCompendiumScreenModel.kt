@@ -19,19 +19,18 @@ class BlessingCompendiumScreenModel(
     characterItems: CharacterItemRepository<CharacterBlessing>,
     parties: PartyRepository,
 ) : CharacterItemCompendiumItemScreenModel<Blessing, CharacterBlessing>(
-    partyId,
-    firestore,
-    compendium,
-    characterItems,
-    parties,
-) {
-
+        partyId,
+        firestore,
+        compendium,
+        characterItems,
+        parties,
+    ) {
     override suspend fun updateCharacterItem(
         transaction: Transaction,
         party: Party,
         characterId: CharacterId,
         existing: CharacterBlessing,
-        new: CharacterBlessing
+        new: CharacterBlessing,
     ) {
         characterItems.save(transaction, characterId, new)
     }

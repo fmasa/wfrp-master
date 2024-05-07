@@ -21,7 +21,10 @@ actual object Reporter {
         crashlytics.recordException(throwable)
     }
 
-    actual fun recordEvent(name: String, parameters: Map<String, String>) {
+    actual fun recordEvent(
+        name: String,
+        parameters: Map<String, String>,
+    ) {
         Firebase.analytics.logEvent(name) {
             parameters.forEach { (name, value) ->
                 param(name, value)

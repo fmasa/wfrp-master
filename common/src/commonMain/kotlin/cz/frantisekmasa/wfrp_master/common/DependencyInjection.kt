@@ -91,7 +91,6 @@ import dev.gitlive.firebase.auth.auth
 import dev.gitlive.firebase.firestore.firestore
 import dev.gitlive.firebase.functions.functions
 import io.ktor.client.HttpClient
-import io.ktor.client.engine.HttpClientEngine
 import io.ktor.client.engine.cio.CIO
 import io.ktor.client.plugins.cache.HttpCache
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
@@ -108,341 +107,343 @@ import org.kodein.di.bindSingleton
 import org.kodein.di.instance
 import kotlin.random.Random
 
-val appModule = DI.Module("Common") {
-    import(platformModule)
+val appModule =
+    DI.Module("Common") {
+        import(platformModule)
 
-    bindSingleton {
-        Json {
-            encodeDefaults = true
-            serializersModule = SerializersModule {
-                contextual(UuidSerializer())
+        bindSingleton {
+            Json {
+                encodeDefaults = true
+                serializersModule =
+                    SerializersModule {
+                        contextual(UuidSerializer())
+                    }
             }
         }
-    }
 
-    bindSingleton { Firebase.auth }
+        bindSingleton { Firebase.auth }
 
-    bindSingleton<Compendium<Skill>> {
-        FirestoreCompendium(Schema.Compendium.Skills, instance(), serializer())
-    }
+        bindSingleton<Compendium<Skill>> {
+            FirestoreCompendium(Schema.Compendium.SKILLS, instance(), serializer())
+        }
 
-    bindSingleton<Compendium<Talent>> {
-        FirestoreCompendium(Schema.Compendium.Talents, instance(), serializer())
-    }
+        bindSingleton<Compendium<Talent>> {
+            FirestoreCompendium(Schema.Compendium.TALENTS, instance(), serializer())
+        }
 
-    bindSingleton<Compendium<Spell>> {
-        FirestoreCompendium(Schema.Compendium.Spells, instance(), serializer())
-    }
+        bindSingleton<Compendium<Spell>> {
+            FirestoreCompendium(Schema.Compendium.SPELLS, instance(), serializer())
+        }
 
-    bindSingleton<Compendium<Blessing>> {
-        FirestoreCompendium(Schema.Compendium.Blessings, instance(), serializer())
-    }
+        bindSingleton<Compendium<Blessing>> {
+            FirestoreCompendium(Schema.Compendium.BLESSINGS, instance(), serializer())
+        }
 
-    bindSingleton<Compendium<Miracle>> {
-        FirestoreCompendium(Schema.Compendium.Miracles, instance(), serializer())
-    }
+        bindSingleton<Compendium<Miracle>> {
+            FirestoreCompendium(Schema.Compendium.MIRACLES, instance(), serializer())
+        }
 
-    bindSingleton<Compendium<Trait>> {
-        FirestoreCompendium(Schema.Compendium.Traits, instance(), serializer())
-    }
+        bindSingleton<Compendium<Trait>> {
+            FirestoreCompendium(Schema.Compendium.TRAITS, instance(), serializer())
+        }
 
-    bindSingleton<Compendium<Career>> {
-        FirestoreCompendium(Schema.Compendium.Careers, instance(), serializer())
-    }
+        bindSingleton<Compendium<Career>> {
+            FirestoreCompendium(Schema.Compendium.CAREERS, instance(), serializer())
+        }
 
-    bindSingleton<Compendium<Trapping>> {
-        FirestoreCompendium(Schema.Compendium.Trappings, instance(), serializer())
-    }
+        bindSingleton<Compendium<Trapping>> {
+            FirestoreCompendium(Schema.Compendium.TRAPPINGS, instance(), serializer())
+        }
 
-    bindSingleton<Compendium<JournalEntry>> {
-        FirestoreCompendium(Schema.Compendium.Journal, instance(), serializer())
-    }
+        bindSingleton<Compendium<JournalEntry>> {
+            FirestoreCompendium(Schema.Compendium.JOURNAL, instance(), serializer())
+        }
 
-    bindSingleton { DismissedUserTipsHolder(instance()) }
+        bindSingleton { DismissedUserTipsHolder(instance()) }
 
-    bindSingleton<InvitationProcessor> { FirestoreInvitationProcessor(instance(), instance()) }
-    bindSingleton<SkillRepository> { characterItemRepository(Schema.Character.Skills) }
-    bindSingleton<TalentRepository> { characterItemRepository(Schema.Character.Talents) }
-    bindSingleton<SpellRepository> { characterItemRepository(Schema.Character.Spells) }
-    bindSingleton<BlessingRepository> { characterItemRepository(Schema.Character.Blessings) }
-    bindSingleton<MiracleRepository> { characterItemRepository(Schema.Character.Miracles) }
-    bindSingleton<InventoryItemRepository> { characterItemRepository(Schema.Character.InventoryItems) }
-    bindSingleton<TraitRepository> { characterItemRepository(Schema.Character.Traits) }
+        bindSingleton<InvitationProcessor> { FirestoreInvitationProcessor(instance(), instance()) }
+        bindSingleton<SkillRepository> { characterItemRepository(Schema.Character.SKILLS) }
+        bindSingleton<TalentRepository> { characterItemRepository(Schema.Character.TALENTS) }
+        bindSingleton<SpellRepository> { characterItemRepository(Schema.Character.SPELLS) }
+        bindSingleton<BlessingRepository> { characterItemRepository(Schema.Character.BLESSINGS) }
+        bindSingleton<MiracleRepository> { characterItemRepository(Schema.Character.MIRACLES) }
+        bindSingleton<InventoryItemRepository> { characterItemRepository(Schema.Character.INVENTORY_ITEMS) }
+        bindSingleton<TraitRepository> { characterItemRepository(Schema.Character.TRAITS) }
 
-    bindSingleton<CharacterRepository> {
-        CharacterRepositoryIdentityMap(10, FirestoreCharacterRepository(instance()))
-    }
-    bindSingleton<PartyRepository> {
-        PartyRepositoryIdentityMap(10, FirestorePartyRepository(instance()))
-    }
+        bindSingleton<CharacterRepository> {
+            CharacterRepositoryIdentityMap(10, FirestoreCharacterRepository(instance()))
+        }
+        bindSingleton<PartyRepository> {
+            PartyRepositoryIdentityMap(10, FirestorePartyRepository(instance()))
+        }
 
-    bindSingleton<EncounterRepository> { FirestoreEncounterRepository(instance()) }
+        bindSingleton<EncounterRepository> { FirestoreEncounterRepository(instance()) }
 
-    bindSingleton<CharacterAvatarChanger> { CloudFunctionCharacterAvatarChanger(instance()) }
+        bindSingleton<CharacterAvatarChanger> { CloudFunctionCharacterAvatarChanger(instance()) }
 
-    bindFactory { characterId: CharacterId ->
-        CharacterTrappingsDetailScreenModel(
-            characterId,
-            instance(),
-            instance(),
-            instance(),
-            instance(),
-            instance(),
-        )
-    }
+        bindFactory { characterId: CharacterId ->
+            CharacterTrappingsDetailScreenModel(
+                characterId,
+                instance(),
+                instance(),
+                instance(),
+                instance(),
+                instance(),
+            )
+        }
 
-    /**
-     * ViewModels
-     */
+        /**
+         * ViewModels
+         */
 
-    bindFactory { characterId: CharacterId ->
-        CharacterCombatScreenModel(characterId, instance(), instance())
-    }
-    bindFactory { characterId: CharacterId -> CharacteristicsScreenModel(characterId, instance()) }
-    bindFactory { characterId: CharacterId ->
-        CharacterScreenModel(
-            characterId,
-            instance(),
-            instance(),
-            instance(),
-            instance(),
-            instance(),
-        )
-    }
-    bindFactory { characterId: CharacterId ->
-        CharacterDetailScreenModel(
-            characterId,
-            instance(),
-            instance(),
-            instance(),
-            instance(),
-            instance(),
-            instance(),
-            instance(),
-            instance(),
-            instance(),
-            instance(),
-            instance(),
-            instance(),
-            instance(),
-            instance(),
-        )
-    }
-    bindFactory { partyId: PartyId -> CharacterPickerScreenModel(partyId, instance()) }
-    bindFactory { partyId: PartyId -> EncountersScreenModel(partyId, instance()) }
-    bindFactory { partyId: PartyId -> PartyScreenModel(partyId, instance()) }
-    bindFactory { encounterId: EncounterId ->
-        EncounterDetailScreenModel(encounterId, instance(), instance(), instance())
-    }
-    bindFactory { characterId: CharacterId ->
-        CharacterSkillDetailScreenModel(characterId, instance(), instance(), instance())
-    }
-    bindFactory { characterId: CharacterId ->
-        AddSkillScreenModel(characterId, instance(), instance(), instance(), instance())
-    }
-    bindFactory { characterId: CharacterId ->
-        AddBasicSkillsScreenModel(characterId, instance(), instance())
-    }
-    bindFactory { characterId: CharacterId ->
-        CharacterSpellDetailScreenModel(characterId, instance(), instance(), instance())
-    }
-    bindFactory { characterId: CharacterId ->
-        AddSpellScreenModel(characterId, instance(), instance(), instance())
-    }
-    bindFactory { characterId: CharacterId ->
-        CharacterTalentDetailScreenModel(
-            characterId,
-            instance(),
-            instance(),
-            instance(),
-            instance(),
-            instance(),
-        )
-    }
+        bindFactory { characterId: CharacterId ->
+            CharacterCombatScreenModel(characterId, instance(), instance())
+        }
+        bindFactory { characterId: CharacterId -> CharacteristicsScreenModel(characterId, instance()) }
+        bindFactory { characterId: CharacterId ->
+            CharacterScreenModel(
+                characterId,
+                instance(),
+                instance(),
+                instance(),
+                instance(),
+                instance(),
+            )
+        }
+        bindFactory { characterId: CharacterId ->
+            CharacterDetailScreenModel(
+                characterId,
+                instance(),
+                instance(),
+                instance(),
+                instance(),
+                instance(),
+                instance(),
+                instance(),
+                instance(),
+                instance(),
+                instance(),
+                instance(),
+                instance(),
+                instance(),
+                instance(),
+            )
+        }
+        bindFactory { partyId: PartyId -> CharacterPickerScreenModel(partyId, instance()) }
+        bindFactory { partyId: PartyId -> EncountersScreenModel(partyId, instance()) }
+        bindFactory { partyId: PartyId -> PartyScreenModel(partyId, instance()) }
+        bindFactory { encounterId: EncounterId ->
+            EncounterDetailScreenModel(encounterId, instance(), instance(), instance())
+        }
+        bindFactory { characterId: CharacterId ->
+            CharacterSkillDetailScreenModel(characterId, instance(), instance(), instance())
+        }
+        bindFactory { characterId: CharacterId ->
+            AddSkillScreenModel(characterId, instance(), instance(), instance(), instance())
+        }
+        bindFactory { characterId: CharacterId ->
+            AddBasicSkillsScreenModel(characterId, instance(), instance())
+        }
+        bindFactory { characterId: CharacterId ->
+            CharacterSpellDetailScreenModel(characterId, instance(), instance(), instance())
+        }
+        bindFactory { characterId: CharacterId ->
+            AddSpellScreenModel(characterId, instance(), instance(), instance())
+        }
+        bindFactory { characterId: CharacterId ->
+            CharacterTalentDetailScreenModel(
+                characterId,
+                instance(),
+                instance(),
+                instance(),
+                instance(),
+                instance(),
+            )
+        }
 
-    bindSingleton {
-        AvailableCompendiumItemsFactory(instance(), instance())
-    }
+        bindSingleton {
+            AvailableCompendiumItemsFactory(instance(), instance())
+        }
 
-    bindFactory { characterId: CharacterId ->
-        AddTalentScreenModel(
-            characterId,
-            instance(),
-            instance(),
-            instance(),
-            instance(),
-            instance(),
-            instance(),
-        )
-    }
-    bindFactory { characterId: CharacterId ->
-        CharacterMiracleDetailScreenModel(characterId, instance(), instance(), instance())
-    }
-    bindFactory { characterId: CharacterId ->
-        AddMiracleScreenModel(characterId, instance(), instance(), instance())
-    }
-    bindFactory { characterId: CharacterId ->
-        CharacterBlessingDetailScreenModel(characterId, instance(), instance(), instance())
-    }
-    bindFactory { characterId: CharacterId ->
-        AddBlessingScreenModel(characterId, instance(), instance(), instance())
-    }
-    bindFactory { characterId: CharacterId ->
-        AddTraitScreenModel(
-            characterId,
-            instance(),
-            instance(),
-            instance(),
-            instance(),
-            instance(),
-            instance(),
-        )
-    }
-    bindFactory { characterId: CharacterId ->
-        AddTrappingScreenModel(
-            characterId,
-            instance(),
-            instance(),
-            instance(),
-        )
-    }
+        bindFactory { characterId: CharacterId ->
+            AddTalentScreenModel(
+                characterId,
+                instance(),
+                instance(),
+                instance(),
+                instance(),
+                instance(),
+                instance(),
+            )
+        }
+        bindFactory { characterId: CharacterId ->
+            CharacterMiracleDetailScreenModel(characterId, instance(), instance(), instance())
+        }
+        bindFactory { characterId: CharacterId ->
+            AddMiracleScreenModel(characterId, instance(), instance(), instance())
+        }
+        bindFactory { characterId: CharacterId ->
+            CharacterBlessingDetailScreenModel(characterId, instance(), instance(), instance())
+        }
+        bindFactory { characterId: CharacterId ->
+            AddBlessingScreenModel(characterId, instance(), instance(), instance())
+        }
+        bindFactory { characterId: CharacterId ->
+            AddTraitScreenModel(
+                characterId,
+                instance(),
+                instance(),
+                instance(),
+                instance(),
+                instance(),
+                instance(),
+            )
+        }
+        bindFactory { characterId: CharacterId ->
+            AddTrappingScreenModel(
+                characterId,
+                instance(),
+                instance(),
+                instance(),
+            )
+        }
 
-    bindFactory { partyId: PartyId ->
-        BlessingCompendiumScreenModel(partyId, instance(), instance(), instance(), instance())
-    }
-    bindFactory { partyId: PartyId ->
-        CareerCompendiumScreenModel(partyId, instance(), instance(), instance())
-    }
-    bindFactory { partyId: PartyId ->
-        MiracleCompendiumScreenModel(partyId, instance(), instance(), instance(), instance())
-    }
-    bindFactory { partyId: PartyId ->
-        SkillCompendiumScreenModel(partyId, instance(), instance(), instance(), instance())
-    }
-    bindFactory { partyId: PartyId ->
-        SpellCompendiumScreenModel(partyId, instance(), instance(), instance(), instance())
-    }
-    bindFactory { partyId: PartyId ->
-        TalentCompendiumScreenModel(partyId, instance(), instance(), instance(), instance(), instance())
-    }
-    bindFactory { partyId: PartyId ->
-        TraitCompendiumScreenModel(partyId, instance(), instance(), instance(), instance(), instance())
-    }
-    bindFactory { partyId: PartyId ->
-        TrappingCompendiumScreenModel(partyId, instance(), instance(), instance(), instance())
-    }
-    bindFactory { partyId: PartyId ->
-        JournalScreenModel(partyId, instance(), instance(), instance(), instance())
-    }
+        bindFactory { partyId: PartyId ->
+            BlessingCompendiumScreenModel(partyId, instance(), instance(), instance(), instance())
+        }
+        bindFactory { partyId: PartyId ->
+            CareerCompendiumScreenModel(partyId, instance(), instance(), instance())
+        }
+        bindFactory { partyId: PartyId ->
+            MiracleCompendiumScreenModel(partyId, instance(), instance(), instance(), instance())
+        }
+        bindFactory { partyId: PartyId ->
+            SkillCompendiumScreenModel(partyId, instance(), instance(), instance(), instance())
+        }
+        bindFactory { partyId: PartyId ->
+            SpellCompendiumScreenModel(partyId, instance(), instance(), instance(), instance())
+        }
+        bindFactory { partyId: PartyId ->
+            TalentCompendiumScreenModel(partyId, instance(), instance(), instance(), instance(), instance())
+        }
+        bindFactory { partyId: PartyId ->
+            TraitCompendiumScreenModel(partyId, instance(), instance(), instance(), instance(), instance())
+        }
+        bindFactory { partyId: PartyId ->
+            TrappingCompendiumScreenModel(partyId, instance(), instance(), instance(), instance())
+        }
+        bindFactory { partyId: PartyId ->
+            JournalScreenModel(partyId, instance(), instance(), instance(), instance())
+        }
 
-    bindSingleton { EffectManager(instance(), instance(), instance(), instance()) }
-    bindSingleton { TrappingSaver(instance(), instance()) }
-    bindFactory { characterId: CharacterId ->
-        CharacterTraitDetailScreenModel(
-            characterId,
-            instance(),
-            instance(),
-            instance(),
-            instance(),
-            instance(),
-        )
-    }
-    bindProvider { InvitationScreenModel(instance(), instance(), instance()) }
-    bindProvider { PartyListScreenModel(instance()) }
-    bindProvider { SettingsScreenModel(instance(), instance()) }
-    bindFactory { partyId: PartyId ->
-        CharacterCreationScreenModel(
-            partyId,
-            instance(),
-            instance(),
-            instance(),
-            instance(),
-        )
-    }
-    bindFactory { partyId: PartyId ->
-        CompendiumExportScreenModel(
-            partyId,
-            instance(),
-            instance(),
-            instance(),
-            instance(),
-            instance(),
-            instance(),
-            instance(),
-            instance(),
-            instance(),
-        )
-    }
-    bindFactory { partyId: PartyId -> GameMasterScreenModel(partyId, instance(), instance()) }
-    bindFactory { partyId: PartyId ->
-        NpcsScreenModel(
-            partyId,
-            instance(),
-            instance(),
-        )
-    }
-    bindFactory { partyId: PartyId ->
-        SkillTestScreenModel(partyId, instance(), instance(), instance())
-    }
-    bindFactory { partyId: PartyId ->
-        CombatScreenModel(
-            partyId,
-            Random,
-            instance(),
-            instance(),
-            instance(),
-            instance(),
-            instance(),
-            instance(),
-            instance(),
-            instance(),
-            instance(),
-        )
-    }
-    bindFactory { partyId: PartyId ->
-        PartySettingsScreenModel(partyId, instance(), instance(), instance(), instance())
-    }
+        bindSingleton { EffectManager(instance(), instance(), instance(), instance()) }
+        bindSingleton { TrappingSaver(instance(), instance()) }
+        bindFactory { characterId: CharacterId ->
+            CharacterTraitDetailScreenModel(
+                characterId,
+                instance(),
+                instance(),
+                instance(),
+                instance(),
+                instance(),
+            )
+        }
+        bindProvider { InvitationScreenModel(instance(), instance(), instance()) }
+        bindProvider { PartyListScreenModel(instance()) }
+        bindProvider { SettingsScreenModel(instance(), instance()) }
+        bindFactory { partyId: PartyId ->
+            CharacterCreationScreenModel(
+                partyId,
+                instance(),
+                instance(),
+                instance(),
+                instance(),
+            )
+        }
+        bindFactory { partyId: PartyId ->
+            CompendiumExportScreenModel(
+                partyId,
+                instance(),
+                instance(),
+                instance(),
+                instance(),
+                instance(),
+                instance(),
+                instance(),
+                instance(),
+                instance(),
+            )
+        }
+        bindFactory { partyId: PartyId -> GameMasterScreenModel(partyId, instance(), instance()) }
+        bindFactory { partyId: PartyId ->
+            NpcsScreenModel(
+                partyId,
+                instance(),
+                instance(),
+            )
+        }
+        bindFactory { partyId: PartyId ->
+            SkillTestScreenModel(partyId, instance(), instance(), instance())
+        }
+        bindFactory { partyId: PartyId ->
+            CombatScreenModel(
+                partyId,
+                Random,
+                instance(),
+                instance(),
+                instance(),
+                instance(),
+                instance(),
+                instance(),
+                instance(),
+                instance(),
+                instance(),
+            )
+        }
+        bindFactory { partyId: PartyId ->
+            PartySettingsScreenModel(partyId, instance(), instance(), instance(), instance())
+        }
 
-    bindProvider {
+        bindProvider {
 
-        ChangelogScreenModel(
-            HttpClient(CIO) {
-                install(HttpCache)
-                install(ContentNegotiation) {
-                    json(
-                        Json {
-                            ignoreUnknownKeys = true
-                            encodeDefaults = true
-                        }
-                    )
+            ChangelogScreenModel(
+                HttpClient(CIO) {
+                    install(HttpCache)
+                    install(ContentNegotiation) {
+                        json(
+                            Json {
+                                ignoreUnknownKeys = true
+                                encodeDefaults = true
+                            },
+                        )
+                    }
+                },
+            )
+        }
+
+        bindSingleton {
+            Firebase.firestore.apply {
+                @Suppress("KotlinConstantConditions")
+                if (BuildKonfig.firestoreEmulatorUrl != "") {
+                    val (host, port) = BuildKonfig.firestoreEmulatorUrl.split(':')
+                    useEmulator(host, port.toInt())
                 }
             }
-        )
-    }
+        }
 
-    bindSingleton {
-        Firebase.firestore.apply {
-            @Suppress("KotlinConstantConditions")
-            if (BuildKonfig.firestoreEmulatorUrl != "") {
-                val (host, port) = BuildKonfig.firestoreEmulatorUrl.split(':')
-                useEmulator(host, port.toInt())
+        bindSingleton {
+            Firebase.functions.apply {
+                @Suppress("KotlinConstantConditions")
+                if (BuildKonfig.functionsEmulatorUrl != "") {
+                    val (host, port) = BuildKonfig.functionsEmulatorUrl.split(':')
+                    useEmulator(host, port.toInt())
+                }
             }
         }
     }
-
-    bindSingleton {
-        Firebase.functions.apply {
-            @Suppress("KotlinConstantConditions")
-            if (BuildKonfig.functionsEmulatorUrl != "") {
-                val (host, port) = BuildKonfig.functionsEmulatorUrl.split(':')
-                useEmulator(host, port.toInt())
-            }
-        }
-    }
-}
 
 private inline fun <reified T : CharacterItem<T, C>, C : CompendiumItem<C>> DirectDI.characterItemRepository(
-    collectionName: String
+    collectionName: String,
 ): CharacterItemRepository<T> {
     return FirestoreCharacterItemRepository(
         collectionName,

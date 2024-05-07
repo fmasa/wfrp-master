@@ -34,7 +34,7 @@ fun BlessingDetail(
                 },
                 title = { Text(blessing.name) },
             )
-        }
+        },
     ) {
         Column(Modifier.verticalScroll(rememberScrollState())) {
             subheadBar()

@@ -10,17 +10,18 @@ class HeadingDescriptionParser : TrappingDescriptionParser {
     override fun parse(
         document: Document,
         structure: PdfStructure,
-        pages: IntRange
+        pages: IntRange,
     ): List<Pair<String, String>> {
         val lexer = TwoColumnPdfLexer(document, structure)
-        val stream = TokenStream(
-            pages
-                .asSequence()
-                .map { lexer.getTokens(it) }
-                .flatMap { sequenceOf(it.first, it.second) }
-                .flatten()
-                .toList()
-        )
+        val stream =
+            TokenStream(
+                pages
+                    .asSequence()
+                    .map { lexer.getTokens(it) }
+                    .flatMap { sequenceOf(it.first, it.second) }
+                    .flatten()
+                    .toList(),
+            )
 
         return buildList {
             while (stream.peek() != null) {

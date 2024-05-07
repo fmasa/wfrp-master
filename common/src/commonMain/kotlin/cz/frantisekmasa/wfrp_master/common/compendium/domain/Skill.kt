@@ -34,6 +34,5 @@ data class Skill(
 
     override fun duplicate() = copy(id = uuid4(), name = duplicateName())
 
-    override fun changeVisibility(isVisibleToPlayers: Boolean) =
-        copy(isVisibleToPlayers = isVisibleToPlayers)
+    override fun changeVisibility(isVisibleToPlayers: Boolean) = copy(isVisibleToPlayers = isVisibleToPlayers)
 }

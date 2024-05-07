@@ -45,7 +45,7 @@ fun SpellDetail(
                 },
                 title = { Text(spell.name) },
             )
-        }
+        },
     ) {
         Column(Modifier.verticalScroll(rememberScrollState())) {
             subheadBar()
@@ -76,9 +76,10 @@ fun SpellDetailBody(
     Column(Modifier.padding(Spacing.bodyPadding)) {
         if (lore != null) {
             Row(
-                modifier = Modifier
-                    .align(Alignment.CenterHorizontally)
-                    .padding(bottom = Spacing.large),
+                modifier =
+                    Modifier
+                        .align(Alignment.CenterHorizontally)
+                        .padding(bottom = Spacing.large),
                 horizontalArrangement = Arrangement.spacedBy(Spacing.small),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
@@ -99,7 +100,7 @@ fun SpellDetailBody(
                 }
 
                 append(effectiveCastingNumber.toString())
-            }
+            },
         )
 
         SingleLineTextValue(stringResource(Str.spells_label_range), range)

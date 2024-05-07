@@ -36,7 +36,7 @@ fun TraitDetail(
                 title = { Text(remember(trait) { trait.evaluatedName }) },
                 actions = actions,
             )
-        }
+        },
     ) {
         Column(Modifier.verticalScroll(rememberScrollState())) {
             subheadBar()
@@ -58,9 +58,10 @@ fun TraitDetailBody(
         if (specifications.isNotEmpty()) {
             SingleLineTextValue(
                 label = stringResource(Str.traits_label_specifications),
-                value = remember(specifications) {
-                    specifications.sorted().joinToString(", ")
-                },
+                value =
+                    remember(specifications) {
+                        specifications.sorted().joinToString(", ")
+                    },
             )
         }
 

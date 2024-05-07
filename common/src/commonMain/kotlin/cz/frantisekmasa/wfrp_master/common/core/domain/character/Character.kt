@@ -49,12 +49,12 @@ data class Character(
     val hiddenTabs: Set<CharacterTab> = emptySet(),
     val size: Size? = null,
 ) : Parcelable {
-
     val characteristics: Stats get() = characteristicsBase + characteristicsAdvances
-    val wounds: Wounds get() = Wounds(
-        points.wounds,
-        calculateMaxWounds(size ?: race?.size, points, hasHardyTalent, woundsModifiers, characteristics),
-    )
+    val wounds: Wounds get() =
+        Wounds(
+            points.wounds,
+            calculateMaxWounds(size ?: race?.size, points, hasHardyTalent, woundsModifiers, characteristics),
+        )
 
     val maxEncumbrance: Encumbrance
         get() = Encumbrance.maximumForCharacter(characteristics) + encumbranceBonus
@@ -78,13 +78,14 @@ data class Character(
         require(mutation.length <= MUTATION_MAX_LENGTH) { "Mutation is too long" }
         require(note.length <= NOTE_MAX_LENGTH) { "Note is too long" }
 
-        val maxWounds = calculateMaxWounds(
-            size ?: race?.size,
-            points,
-            hasHardyTalent,
-            woundsModifiers,
-            characteristics,
-        )
+        val maxWounds =
+            calculateMaxWounds(
+                size ?: race?.size,
+                points,
+                hasHardyTalent,
+                woundsModifiers,
+                characteristics,
+            )
         require(points.wounds <= maxWounds) { "Wounds (${points.wounds} are greater than max Wounds ($maxWounds)" }
     }
 
@@ -95,55 +96,64 @@ data class Character(
         val levelId: UuidAsString,
     ) : Parcelable
 
-    fun updateCharacteristics(base: Stats, advances: Stats): Character {
+    fun updateCharacteristics(
+        base: Stats,
+        advances: Stats,
+    ): Character {
         return copy(
             characteristicsBase = base,
             characteristicsAdvances = advances,
-            points = points.copy(
-                wounds = points.wounds.coerceAtMost(
-                    calculateMaxWounds(
-                        size ?: race?.size,
-                        points,
-                        hasHardyTalent,
-                        woundsModifiers,
-                        base + advances,
-                    )
-                )
-            )
+            points =
+                points.copy(
+                    wounds =
+                        points.wounds.coerceAtMost(
+                            calculateMaxWounds(
+                                size ?: race?.size,
+                                points,
+                                hasHardyTalent,
+                                woundsModifiers,
+                                base + advances,
+                            ),
+                        ),
+                ),
         )
     }
 
     fun changeSize(size: Size?): Character {
         return copy(
             size = size,
-            points = points.copy(
-                wounds = points.wounds.coerceAtMost(
-                    calculateMaxWounds(
-                        size ?: race?.size,
-                        points,
-                        hasHardyTalent,
-                        woundsModifiers,
-                        characteristics
-                    )
-                )
-            )
+            points =
+                points.copy(
+                    wounds =
+                        points.wounds.coerceAtMost(
+                            calculateMaxWounds(
+                                size ?: race?.size,
+                                points,
+                                hasHardyTalent,
+                                woundsModifiers,
+                                characteristics,
+                            ),
+                        ),
+                ),
         )
     }
 
     fun modifyWounds(woundsModifiers: WoundsModifiers): Character {
         return copy(
             woundsModifiers = woundsModifiers,
-            points = points.copy(
-                wounds = points.wounds.coerceAtMost(
-                    calculateMaxWounds(
-                        size ?: race?.size,
-                        points,
-                        hasHardyTalent,
-                        woundsModifiers,
-                        characteristics
-                    )
-                )
-            )
+            points =
+                points.copy(
+                    wounds =
+                        points.wounds.coerceAtMost(
+                            calculateMaxWounds(
+                                size ?: race?.size,
+                                points,
+                                hasHardyTalent,
+                                woundsModifiers,
+                                characteristics,
+                            ),
+                        ),
+                ),
         )
     }
 
@@ -168,41 +178,49 @@ data class Character(
         publicName: String?,
         race: Race?,
         motivation: String,
-        note: String
+        note: String,
     ) = copy(
         name = name,
         publicName = publicName,
         race = race,
         motivation = motivation,
         note = note,
-        points = points.coerceWoundsAtMost(
-            calculateMaxWounds(
-                size ?: race?.size,
-                points,
-                hasHardyTalent,
-                woundsModifiers,
-                characteristics,
-            )
-        )
-    )
-
-    fun updateMaxWounds(maxWounds: Int?, hasHardyTalent: Boolean): Character {
-        val newPoints = points.copy(maxWounds = maxWounds)
-        return copy(
-            hasHardyTalent = hasHardyTalent,
-            points = newPoints.coerceWoundsAtMost(
+        points =
+            points.coerceWoundsAtMost(
                 calculateMaxWounds(
                     size ?: race?.size,
-                    newPoints,
+                    points,
                     hasHardyTalent,
                     woundsModifiers,
                     characteristics,
-                )
+                ),
             ),
+    )
+
+    fun updateMaxWounds(
+        maxWounds: Int?,
+        hasHardyTalent: Boolean,
+    ): Character {
+        val newPoints = points.copy(maxWounds = maxWounds)
+        return copy(
+            hasHardyTalent = hasHardyTalent,
+            points =
+                newPoints.coerceWoundsAtMost(
+                    calculateMaxWounds(
+                        size ?: race?.size,
+                        newPoints,
+                        hasHardyTalent,
+                        woundsModifiers,
+                        characteristics,
+                    ),
+                ),
         )
     }
 
-    fun updateWellBeing(corruptionPoints: Int, psychology: String): Character {
+    fun updateWellBeing(
+        corruptionPoints: Int,
+        psychology: String,
+    ): Character {
         return copy(
             points = points.copy(corruption = corruptionPoints),
             psychology = psychology,
@@ -226,9 +244,10 @@ data class Character(
         }
     }
 
-    fun refreshWounds(): Character = copy(
-        points = points.copy(wounds = wounds.max)
-    )
+    fun refreshWounds(): Character =
+        copy(
+            points = points.copy(wounds = wounds.max),
+        )
 
     fun updatePoints(newPoints: Points) = copy(points = newPoints)
 
@@ -236,10 +255,11 @@ data class Character(
 
     fun updateConditions(newConditions: CurrentConditions) = copy(conditions = newConditions)
 
-    fun archive() = copy(
-        isArchived = true,
-        userId = null,
-    )
+    fun archive() =
+        copy(
+            isArchived = true,
+            userId = null,
+        )
 
     fun assignToUser(userId: UserId): Character {
         require(this.userId == null) {
@@ -254,15 +274,17 @@ data class Character(
 
     fun unlinkFromUser() = copy(userId = null)
 
-    fun turnIntoNPC() = copy(
-        type = CharacterType.NPC,
-        userId = null,
-    )
+    fun turnIntoNPC() =
+        copy(
+            type = CharacterType.NPC,
+            userId = null,
+        )
 
-    fun turnIntoPlayerCharacter() = copy(
-        type = CharacterType.PLAYER_CHARACTER,
-        publicName = null,
-    )
+    fun turnIntoPlayerCharacter() =
+        copy(
+            type = CharacterType.PLAYER_CHARACTER,
+            publicName = null,
+        )
 
     companion object {
         const val NAME_MAX_LENGTH = 50
@@ -292,19 +314,23 @@ data class Character(
                 return manualMaxWounds
             }
 
-            val baseWounds = Wounds.calculateMax(
-                size = size ?: Size.AVERAGE,
-                toughnessBonus = toughnessBonus,
-                strengthBonus = characteristics.strengthBonus,
-                willPowerBonus = if (modifiers.isConstruct)
-                    characteristics.strengthBonus
-                else characteristics.willPowerBonus
-            )
+            val baseWounds =
+                Wounds.calculateMax(
+                    size = size ?: Size.AVERAGE,
+                    toughnessBonus = toughnessBonus,
+                    strengthBonus = characteristics.strengthBonus,
+                    willPowerBonus =
+                        if (modifiers.isConstruct) {
+                            characteristics.strengthBonus
+                        } else {
+                            characteristics.willPowerBonus
+                        },
+                )
             return (
                 baseWounds +
                     modifiers.extraToughnessBonusMultiplier * toughnessBonus +
                     (if (hasHardyTalent) toughnessBonus else 0)
-                ) *
+            ) *
                 modifiers.afterMultiplier
         }
     }

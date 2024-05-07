@@ -21,7 +21,6 @@ import dev.icerock.moko.resources.compose.stringResource
 class AddSpellScreen(
     private val characterId: CharacterId,
 ) : Screen {
-
     @Composable
     override fun Content() {
         val screenModel: AddSpellScreenModel = rememberScreenModel(arg = characterId)
@@ -32,10 +31,11 @@ class AddSpellScreen(
             return
         }
 
-        val addItemUiState = rememberAddItemUiState(
-            saver = screenModel::saveItem,
-            detailScreenFactory = { CharacterSpellDetailScreen(characterId, it.id) },
-        )
+        val addItemUiState =
+            rememberAddItemUiState(
+                saver = screenModel::saveItem,
+                detailScreenFactory = { CharacterSpellDetailScreen(characterId, it.id) },
+            )
         AddItemUi(
             state = addItemUiState,
             chooser = {
@@ -60,7 +60,7 @@ class AddSpellScreen(
                     existingSpell = null,
                     onDismissRequest = addItemUiState::openChoosingScreen,
                 )
-            }
+            },
         )
     }
 }

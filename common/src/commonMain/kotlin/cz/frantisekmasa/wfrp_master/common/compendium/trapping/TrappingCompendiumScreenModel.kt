@@ -19,13 +19,12 @@ class TrappingCompendiumScreenModel(
     characterItems: CharacterItemRepository<InventoryItem>,
     parties: PartyRepository,
 ) : CharacterItemCompendiumItemScreenModel<Trapping, InventoryItem>(
-    partyId,
-    firestore,
-    compendium,
-    characterItems,
-    parties,
-) {
-
+        partyId,
+        firestore,
+        compendium,
+        characterItems,
+        parties,
+    ) {
     override suspend fun updateCharacterItem(
         transaction: Transaction,
         party: Party,

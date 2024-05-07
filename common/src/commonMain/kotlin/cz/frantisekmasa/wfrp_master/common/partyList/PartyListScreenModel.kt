@@ -12,9 +12,8 @@ import io.github.aakira.napier.Napier
 import kotlinx.coroutines.flow.Flow
 
 class PartyListScreenModel(
-    private val parties: PartyRepository
+    private val parties: PartyRepository,
 ) : ScreenModel {
-
     fun liveForUser(userId: UserId): Flow<List<Party>> {
         return parties.forUserLive(userId)
     }
@@ -32,13 +31,14 @@ class PartyListScreenModel(
         gameMasterId: UserId,
     ): PartyId {
         val partyId = PartyId.generate()
-        val party = Party(
-            id = partyId,
-            name = partyName,
-            settings = Settings(language = language),
-            gameMasterId = gameMasterId,
-            users = setOf(gameMasterId)
-        )
+        val party =
+            Party(
+                id = partyId,
+                name = partyName,
+                settings = Settings(language = language),
+                gameMasterId = gameMasterId,
+                users = setOf(gameMasterId),
+            )
 
         parties.save(party)
 
@@ -48,7 +48,10 @@ class PartyListScreenModel(
         return partyId
     }
 
-    suspend fun leaveParty(partyId: PartyId, userId: UserId) {
+    suspend fun leaveParty(
+        partyId: PartyId,
+        userId: UserId,
+    ) {
         parties.update(partyId) { it.leave(userId) }
     }
 }

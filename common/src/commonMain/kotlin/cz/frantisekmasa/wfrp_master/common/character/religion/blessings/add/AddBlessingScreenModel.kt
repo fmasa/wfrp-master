@@ -15,16 +15,16 @@ class AddBlessingScreenModel(
     compendium: Compendium<CompendiumBlessing>,
     availableCompendiumItemsFactory: AvailableCompendiumItemsFactory,
 ) : ScreenModel {
-
-    val state = availableCompendiumItemsFactory.create(
-        partyId = characterId.partyId,
-        compendium = compendium,
-        filterCharacterItems = blessings.findAllForCharacter(characterId),
-    ).map { compendiumItemChooserState ->
-        AddBlessingScreenState(
-            availableCompendiumItems = compendiumItemChooserState,
-        )
-    }
+    val state =
+        availableCompendiumItemsFactory.create(
+            partyId = characterId.partyId,
+            compendium = compendium,
+            filterCharacterItems = blessings.findAllForCharacter(characterId),
+        ).map { compendiumItemChooserState ->
+            AddBlessingScreenState(
+                availableCompendiumItems = compendiumItemChooserState,
+            )
+        }
 
     suspend fun addBlessing(blessing: Blessing) {
         blessings.save(characterId, blessing)

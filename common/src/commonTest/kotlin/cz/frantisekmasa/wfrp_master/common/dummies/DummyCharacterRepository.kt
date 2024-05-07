@@ -14,14 +14,20 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 
 class DummyCharacterRepository : CharacterRepository {
-
     private val characters = mutableMapOf<PartyId, MutableMap<String, Character>>()
 
-    override suspend fun save(partyId: PartyId, character: Character) {
+    override suspend fun save(
+        partyId: PartyId,
+        character: Character,
+    ) {
         characters.getOrPut(partyId) { mutableMapOf() }[character.id] = character
     }
 
-    override fun save(transaction: Transaction, partyId: PartyId, character: Character) {
+    override fun save(
+        transaction: Transaction,
+        partyId: PartyId,
+        character: Character,
+    ) {
         characters.getOrPut(partyId) { mutableMapOf() }[character.id] = character
     }
 
@@ -33,25 +39,34 @@ class DummyCharacterRepository : CharacterRepository {
     override fun getLive(characterId: CharacterId): Flow<Either<CharacterNotFound, Character>> {
         return flowOf(
             characters[characterId.partyId]?.get(characterId.id)
-                .rightIfNotNull { CharacterNotFound(characterId) }
+                .rightIfNotNull { CharacterNotFound(characterId) },
         )
     }
 
-    override suspend fun hasCharacterInParty(userId: String, partyId: PartyId): Boolean {
+    override suspend fun hasCharacterInParty(
+        userId: String,
+        partyId: PartyId,
+    ): Boolean {
         return characters[partyId]?.any { it.value.userId?.toString() == userId } ?: false
     }
 
-    override suspend fun findByCompendiumCareer(partyId: PartyId, careerId: Uuid): List<Character> {
+    override suspend fun findByCompendiumCareer(
+        partyId: PartyId,
+        careerId: Uuid,
+    ): List<Character> {
         return characters[partyId]
             ?.values
             ?.filter { it.compendiumCareer?.careerId == careerId } ?: emptyList()
     }
 
-    override fun inParty(partyId: PartyId, types: Set<CharacterType>): Flow<List<Character>> {
+    override fun inParty(
+        partyId: PartyId,
+        types: Set<CharacterType>,
+    ): Flow<List<Character>> {
         return flowOf(
             characters[partyId]
                 ?.values
-                ?.filter { it.type in types } ?: emptyList()
+                ?.filter { it.type in types } ?: emptyList(),
         )
     }
 }

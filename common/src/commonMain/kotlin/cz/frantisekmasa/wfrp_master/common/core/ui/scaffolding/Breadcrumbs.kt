@@ -15,7 +15,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import cafe.adriel.voyager.core.screen.Screen
 import cz.frantisekmasa.wfrp_master.common.core.ui.navigation.LocalNavigationTransaction
-import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.VisualOnlyIconDescription
+import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.VISUAL_ONLY_ICON_DESCRIPTION
 
 @Composable
 fun Breadcrumbs(content: BreadcrumbsScope.() -> Unit) {
@@ -28,7 +28,7 @@ fun Breadcrumbs(content: BreadcrumbsScope.() -> Unit) {
             scope.levels.forEachIndexed { index, breadcrumbLevel ->
                 key(index) {
                     if (index != 0) {
-                        Icon(Icons.Rounded.ArrowForwardIos, VisualOnlyIconDescription)
+                        Icon(Icons.Rounded.ArrowForwardIos, VISUAL_ONLY_ICON_DESCRIPTION)
                     }
 
                     val destination = breadcrumbLevel.destination
@@ -38,7 +38,7 @@ fun Breadcrumbs(content: BreadcrumbsScope.() -> Unit) {
                             onClick = {
                                 val key = destination().key
                                 navigation.goBackTo { it.key == key }
-                            }
+                            },
                         ) {
                             Text(breadcrumbLevel.label)
                         }
@@ -52,13 +52,19 @@ fun Breadcrumbs(content: BreadcrumbsScope.() -> Unit) {
 }
 
 interface BreadcrumbsScope {
-    fun level(label: String, destination: (() -> Screen)? = null)
+    fun level(
+        label: String,
+        destination: (() -> Screen)? = null,
+    )
 }
 
 private class BreadcrumbsScopeImpl : BreadcrumbsScope {
     val levels = mutableListOf<BreadcrumbLevel>()
 
-    override fun level(label: String, destination: (() -> Screen)?) {
+    override fun level(
+        label: String,
+        destination: (() -> Screen)?,
+    ) {
         this.levels.add(BreadcrumbLevel(label, destination))
     }
 }

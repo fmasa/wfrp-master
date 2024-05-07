@@ -15,16 +15,16 @@ class AddMiracleScreenModel(
     compendium: Compendium<CompendiumMiracle>,
     availableCompendiumItemsFactory: AvailableCompendiumItemsFactory,
 ) : ScreenModel {
-
-    val state = availableCompendiumItemsFactory.create(
-        partyId = characterId.partyId,
-        compendium = compendium,
-        filterCharacterItems = miracles.findAllForCharacter(characterId)
-    ).map { compendiumItemChooserState ->
-        AddMiracleScreenState(
-            availableCompendiumItems = compendiumItemChooserState,
-        )
-    }
+    val state =
+        availableCompendiumItemsFactory.create(
+            partyId = characterId.partyId,
+            compendium = compendium,
+            filterCharacterItems = miracles.findAllForCharacter(characterId),
+        ).map { compendiumItemChooserState ->
+            AddMiracleScreenState(
+                availableCompendiumItems = compendiumItemChooserState,
+            )
+        }
 
     suspend fun addMiracle(miracle: Miracle) {
         miracles.save(characterId, miracle)

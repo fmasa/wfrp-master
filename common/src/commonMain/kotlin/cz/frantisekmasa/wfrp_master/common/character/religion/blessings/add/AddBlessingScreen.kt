@@ -20,7 +20,6 @@ import dev.icerock.moko.resources.compose.stringResource
 class AddBlessingScreen(
     private val characterId: CharacterId,
 ) : Screen {
-
     @Composable
     override fun Content() {
         val screenModel: AddBlessingScreenModel = rememberScreenModel(arg = characterId)
@@ -31,10 +30,11 @@ class AddBlessingScreen(
             return
         }
 
-        val addItemUiState = rememberAddItemUiState(
-            saver = screenModel::addBlessing,
-            detailScreenFactory = { CharacterBlessingDetailScreen(characterId, it.id) },
-        )
+        val addItemUiState =
+            rememberAddItemUiState(
+                saver = screenModel::addBlessing,
+                detailScreenFactory = { CharacterBlessingDetailScreen(characterId, it.id) },
+            )
 
         AddItemUi(
             state = addItemUiState,
@@ -58,7 +58,7 @@ class AddBlessingScreen(
                     onDismissRequest = addItemUiState::openChoosingScreen,
                     onSave = screenModel::addBlessing,
                 )
-            }
+            },
         )
     }
 }

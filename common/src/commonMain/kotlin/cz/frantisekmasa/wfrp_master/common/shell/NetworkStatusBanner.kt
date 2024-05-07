@@ -19,7 +19,7 @@ import androidx.compose.ui.unit.dp
 import cz.frantisekmasa.wfrp_master.common.Str
 import cz.frantisekmasa.wfrp_master.common.core.ui.flow.collectWithLifecycle
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
-import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.VisualOnlyIconDescription
+import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.VISUAL_ONLY_ICON_DESCRIPTION
 import cz.frantisekmasa.wfrp_master.common.network.LocalConnectivityChecker
 import dev.icerock.moko.resources.compose.stringResource
 
@@ -41,7 +41,7 @@ fun NetworkStatusBanner() {
         ) {
             Icon(
                 Icons.Rounded.CloudOff,
-                VisualOnlyIconDescription,
+                VISUAL_ONLY_ICON_DESCRIPTION,
                 Modifier.size(18.dp),
             )
             Text(stringResource(Str.messages_no_internet))

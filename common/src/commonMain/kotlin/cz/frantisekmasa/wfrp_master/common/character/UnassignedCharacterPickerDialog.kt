@@ -60,21 +60,22 @@ fun UnassignedCharacterPickerDialog(
                         val userId = LocalUser.current.id
 
                         ListItem(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .clickable {
-                                    coroutineScope.launchLogged(Dispatchers.IO) {
-                                        setSaving(true)
-                                        assignCharacter(character, userId)
-                                        onAssigned(CharacterId(partyId, character.id))
-                                    }
-                                },
+                            modifier =
+                                Modifier
+                                    .fillMaxWidth()
+                                    .clickable {
+                                        coroutineScope.launchLogged(Dispatchers.IO) {
+                                            setSaving(true)
+                                            assignCharacter(character, userId)
+                                            onAssigned(CharacterId(partyId, character.id))
+                                        }
+                                    },
                             icon = { CharacterAvatar(character.avatarUrl, ItemIcon.Size.Small) },
                             text = { Text(character.name) },
                         )
                     }
                 }
             }
-        }
+        },
     )
 }

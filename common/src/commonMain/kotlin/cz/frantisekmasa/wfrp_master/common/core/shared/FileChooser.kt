@@ -5,9 +5,7 @@ import kotlinx.coroutines.CoroutineScope
 import java.io.InputStream
 
 @Composable
-expect fun rememberFileChooser(
-    onFileChoose: suspend CoroutineScope.(Result<ReadableFile>) -> Unit
-): FileChooser
+expect fun rememberFileChooser(onFileChoose: suspend CoroutineScope.(Result<ReadableFile>) -> Unit): FileChooser
 
 @Composable
 expect fun rememberFileSaver(
@@ -24,6 +22,7 @@ expect class ReadableFile {
 
 expect class WriteableFile {
     fun writeBytes(bytes: ByteArray)
+
     fun close()
 }
 
@@ -38,5 +37,5 @@ fun interface FileSaver {
 enum class FileType {
     IMAGE,
     PDF,
-    JSON
+    JSON,
 }
