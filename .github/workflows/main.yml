@@ -91,7 +91,8 @@ jobs:
   checks-passed:
     name: Wait for all checks
     needs:
-      - unit-tests
+      - unit-tests-android
+      - unit-tests-jvm
       - firestore-tests
       - ktlint
     runs-on: ubuntu-20.04
