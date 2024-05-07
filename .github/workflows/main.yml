@@ -56,7 +56,7 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
 
-      - run: ./gradlew jar
+      - run: ./gradlew jvmTest
 
       - uses: hydraulic-software/conveyor/actions/build@v1
         with:
