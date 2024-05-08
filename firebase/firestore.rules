@@ -294,7 +294,8 @@ service cloud.firestore {
 
             match /characters/{characterId} {
                 allow create: if hasAccessToParty()
-                                && isValidCharacter(request.resource.data);
+                                && isValidCharacter(request.resource.data)
+                                && (isGameMaster() || request.resource.data.userId == request.auth.uid);
                 allow update: if canEditCharacter()
                               && isValidCharacter(request.resource.data);
                 allow read: if hasAccessToParty();
@@ -543,10 +544,7 @@ service cloud.firestore {
                             "encumbranceBonus"
                         ].hasAll(character.keys())
                         && character.id == characterId
-                        && (
-                            (character.userId != null && character.userId == request.auth.uid) ||
-                            (isGameMaster() && (character.userId == null || character.userId in get(/databases/$(database)/documents/parties/$(partyId)).data.users))
-                        )
+                        && (character.userId == null || character.userId in get(/databases/$(database)/documents/parties/$(partyId)).data.users)
                         && character.type in ["PLAYER_CHARACTER", "NPC"]
                         && character.name is string && isNotBlank(character.name) && character.name.size() <= 50
                         && (character.publicName == null || (character.publicName is string && isNotBlank(character.publicName) && character.publicName.size() <= 50))
