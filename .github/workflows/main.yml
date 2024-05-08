@@ -36,14 +36,8 @@ jobs:
     container: alvrme/alpine-android:android-34-jdk17
     steps:
       - uses: actions/checkout@v2
-      - uses: actions/cache@v3
-        with:
-          path: |
-            ~/.gradle/caches
-            ~/.gradle/wrapper
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
-          restore-keys: |
-            ${{ runner.os }}-gradle-
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v3
       - run: ./gradlew --no-daemon --parallel testDebugUnitTest
 
   unit-tests-jvm:
@@ -51,35 +45,28 @@ jobs:
     runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v2
-      - uses: actions/cache@v3
-        with:
-          path: |
-            ~/.gradle/caches
-            ~/.gradle/wrapper
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
-          restore-keys: |
-            ${{ runner.os }}-gradle-
       - uses: actions/setup-java@v3
         with:
           distribution: 'temurin'
           java-version: '17'
-      - run: ./gradlew --no-daemon --parallel jvmTest
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v3
+      - name: Execute Gradle build
+        run: ./gradlew jvmTest
 
   ktlint:
     name: Code style (ktlint)
     runs-on: ubuntu-22.04
-    container: alvrme/alpine-android:android-34-jdk17
     steps:
       - uses: actions/checkout@v2
-      - uses: actions/cache@v3
+      - uses: actions/setup-java@v3
         with:
-          path: |
-            ~/.gradle/caches
-            ~/.gradle/wrapper
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
-          restore-keys: |
-            ${{ runner.os }}-gradle-
-      - run: ./gradlew --no-daemon --parallel ktlintCheck
+          distribution: 'temurin'
+          java-version: '17'
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v3
+      - name: Execute Gradle build
+        run: ./gradlew ktlintCheck
 
   checks-passed:
     name: Wait for all checks
@@ -107,14 +94,8 @@ jobs:
       KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
     steps:
       - uses: actions/checkout@v2
-      - uses: actions/cache@v3
-        with:
-          path: |
-            ~/.gradle/caches
-            ~/.gradle/wrapper
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
-          restore-keys: |
-            ${{ runner.os }}-gradle-
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v3
       - run: echo "$KEYSTORE_FILE_BASE64" | base64 -d > app/.keystore
       - run: echo "SUPPLY_VERSION_CODE=$((950 + $GITHUB_RUN_NUMBER))" >> $GITHUB_ENV
       - run: echo "SUPPLY_VERSION_NAME=$(.github/workflows/version.sh)" >> $GITHUB_ENV
