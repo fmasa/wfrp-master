@@ -25,7 +25,6 @@ import dev.icerock.moko.resources.compose.stringResource
 
 class CharacterTraitDetailScreen(characterId: CharacterId, traitId: Uuid) :
     CharacterItemDetailScreen(characterId, traitId) {
-
     @Composable
     override fun Content() {
         val screenModel: CharacterTraitDetailScreenModel = rememberScreenModel(arg = characterId)
@@ -53,17 +52,18 @@ class CharacterTraitDetailScreen(characterId: CharacterId, traitId: Uuid) :
                     subheadBar = {
                         if (isGameMaster) {
                             CompendiumButton(
-                                modifier = Modifier
-                                    .align(Alignment.CenterHorizontally)
-                                    .padding(top = Spacing.bodyPadding),
+                                modifier =
+                                    Modifier
+                                        .align(Alignment.CenterHorizontally)
+                                        .padding(top = Spacing.bodyPadding),
                                 onClick = {
                                     navigation.navigate(
                                         CompendiumTraitDetailScreen(
                                             screenModel.characterId.partyId,
                                             trait.compendiumId,
-                                        )
+                                        ),
                                     )
-                                }
+                                },
                             )
                         }
                     },
@@ -72,10 +72,10 @@ class CharacterTraitDetailScreen(characterId: CharacterId, traitId: Uuid) :
                             IconAction(
                                 Icons.Rounded.Edit,
                                 stringResource(Str.traits_title_edit),
-                                onClick = { edit = true }
+                                onClick = { edit = true },
                             )
                         }
-                    }
+                    },
                 )
             }
         }

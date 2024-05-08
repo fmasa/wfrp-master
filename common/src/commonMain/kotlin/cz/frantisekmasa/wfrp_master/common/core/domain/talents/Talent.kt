@@ -23,12 +23,13 @@ data class Talent(
     override val id: UuidAsString,
     override val compendiumId: UuidAsString? = null,
     val name: String,
-    val tests: String = "", // TODO: Remove default value in 3.0
-    val maxTimesTaken: String = "", // TODO: Remove default value in 3.0
+    // TODO: Remove default value in 3.0
+    val tests: String = "",
+    // TODO: Remove default value in 3.0
+    val maxTimesTaken: String = "",
     val description: String,
-    val taken: Int
+    val taken: Int,
 ) : CharacterItem<Talent, CompendiumTalent>, EffectSource {
-
     @Stable
     override fun getEffects(translator: Translator): List<CharacterEffect> {
         val name = name.trim()
@@ -63,7 +64,10 @@ data class Talent(
         const val DESCRIPTION_MAX_LENGTH = 1500
         const val MAX_TIMES_TAKEN_MAX_LENGTH = CompendiumTalent.MAX_TIMES_TAKEN_MAX_LENGTH
 
-        fun fromCompendium(compendiumTalent: CompendiumTalent, timesTaken: Int): Talent {
+        fun fromCompendium(
+            compendiumTalent: CompendiumTalent,
+            timesTaken: Int,
+        ): Talent {
             return Talent(
                 id = uuid4(),
                 compendiumId = compendiumTalent.id,

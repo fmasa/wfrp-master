@@ -19,9 +19,8 @@ data class Skill(
     val characteristic: Characteristic,
     val name: String,
     val description: String,
-    val advances: Int = 0
+    val advances: Int = 0,
 ) : CharacterItem<Skill, CompendiumSkill> {
-
     init {
         require(name.isNotEmpty())
         require(advances >= MIN_ADVANCES)
@@ -45,7 +44,10 @@ data class Skill(
         val DESCRIPTION_MAX_LENGTH get() = CompendiumSkill.DESCRIPTION_MAX_LENGTH
         const val MIN_ADVANCES = 0
 
-        fun fromCompendium(compendiumSkill: CompendiumSkill, advances: Int): Skill {
+        fun fromCompendium(
+            compendiumSkill: CompendiumSkill,
+            advances: Int,
+        ): Skill {
             return Skill(
                 id = uuid4(),
                 compendiumId = compendiumSkill.id,

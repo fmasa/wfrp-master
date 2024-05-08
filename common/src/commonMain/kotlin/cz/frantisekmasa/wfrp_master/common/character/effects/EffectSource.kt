@@ -4,7 +4,6 @@ import androidx.compose.runtime.Stable
 import com.benasher44.uuid.Uuid
 
 interface EffectSource {
-
     val id: Uuid
 
     @Stable

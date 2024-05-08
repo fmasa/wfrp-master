@@ -45,7 +45,7 @@ fun QuantityBar(
                     if (quantity > 1) {
                         onQuantityChange(quantity - 1)
                     }
-                }
+                },
             )
         }
     }

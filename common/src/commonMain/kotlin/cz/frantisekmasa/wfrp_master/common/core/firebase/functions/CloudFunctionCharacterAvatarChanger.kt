@@ -19,11 +19,12 @@ class CloudFunctionCharacterAvatarChanger(
         withContext(Dispatchers.IO) {
             functions.httpsCallable("changeCharacterAvatar")(
                 strategy = ChangeAvatarRequest.serializer(),
-                data = ChangeAvatarRequest(
-                    partyId = characterId.partyId,
-                    characterId = characterId.id,
-                    imageData = image.encodeBase64(),
-                ),
+                data =
+                    ChangeAvatarRequest(
+                        partyId = characterId.partyId,
+                        characterId = characterId.id,
+                        imageData = image.encodeBase64(),
+                    ),
             )
         }
     }
@@ -39,10 +40,11 @@ class CloudFunctionCharacterAvatarChanger(
         withContext(Dispatchers.IO) {
             functions.httpsCallable("removeCharacterAvatar")(
                 strategy = RemoveAvatarRequest.serializer(),
-                data = RemoveAvatarRequest(
-                    partyId = characterId.partyId,
-                    characterId = characterId.id,
-                )
+                data =
+                    RemoveAvatarRequest(
+                        partyId = characterId.partyId,
+                        characterId = characterId.id,
+                    ),
             )
         }
     }

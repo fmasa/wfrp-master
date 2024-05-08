@@ -29,7 +29,7 @@ import cz.frantisekmasa.wfrp_master.common.core.shared.drawableResource
 import cz.frantisekmasa.wfrp_master.common.core.ui.cards.CardContainer
 import cz.frantisekmasa.wfrp_master.common.core.ui.cards.CardEditButton
 import cz.frantisekmasa.wfrp_master.common.core.ui.cards.CardTitle
-import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.VisualOnlyIconDescription
+import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.VISUAL_ONLY_ICON_DESCRIPTION
 import dev.icerock.moko.resources.compose.stringResource
 
 @Composable
@@ -52,23 +52,28 @@ fun AmbitionsCard(
     }
 
     CardContainer(
-        modifier = Modifier
-            .fillMaxWidth()
-            .then(modifier),
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .then(modifier),
         bodyPadding = PaddingValues(start = 8.dp, end = 8.dp),
     ) {
         CardTitle(
             title,
             titleIcon,
-            actions = if (onSave != null)
-                ({ CardEditButton(onClick = { dialogOpened = true }) })
-            else null
+            actions =
+                if (onSave != null) {
+                    ({ CardEditButton(onClick = { dialogOpened = true }) })
+                } else {
+                    null
+                },
         )
 
-        val ambitionList = listOf(
-            stringResource(Str.ambition_label_short_term) to ambitions.shortTerm,
-            stringResource(Str.ambition_label_long_term) to ambitions.longTerm,
-        )
+        val ambitionList =
+            listOf(
+                stringResource(Str.ambition_label_short_term) to ambitions.shortTerm,
+                stringResource(Str.ambition_label_long_term) to ambitions.longTerm,
+            )
 
         for ((label, value) in ambitionList) {
             Column(Modifier.padding(top = 4.dp)) {
@@ -79,7 +84,7 @@ fun AmbitionsCard(
                         Row(verticalAlignment = Alignment.CenterVertically) {
                             Icon(
                                 drawableResource(Resources.Drawable.None),
-                                VisualOnlyIconDescription
+                                VISUAL_ONLY_ICON_DESCRIPTION,
                             )
                             Text(
                                 stringResource(Str.ambition_messages_not_filled),

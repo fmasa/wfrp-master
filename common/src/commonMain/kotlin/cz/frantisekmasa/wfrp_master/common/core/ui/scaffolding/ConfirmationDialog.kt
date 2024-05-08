@@ -45,7 +45,7 @@ fun ConfirmationDialog(
                         onConfirmation()
                         onDismissRequest()
                     }
-                }
+                },
             ) {
                 Text(confirmationButtonText)
             }
@@ -53,11 +53,11 @@ fun ConfirmationDialog(
         dismissButton = {
             TextButton(
                 enabled = !processing,
-                onClick = onDismissRequest
+                onClick = onDismissRequest,
             ) {
                 Text(stringResource(Str.common_ui_button_cancel).uppercase())
             }
-        }
+        },
     )
 }
 

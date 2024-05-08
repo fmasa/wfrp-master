@@ -1,7 +1,7 @@
 package cz.frantisekmasa.wfrp_master.common.character
 
 import cafe.adriel.voyager.core.model.ScreenModel
-import cafe.adriel.voyager.core.model.coroutineScope
+import cafe.adriel.voyager.core.model.screenModelScope
 import cz.frantisekmasa.wfrp_master.common.character.characteristics.CharacteristicsScreenState
 import cz.frantisekmasa.wfrp_master.common.character.characteristics.CompendiumCareer
 import cz.frantisekmasa.wfrp_master.common.character.combat.CharacterCombatScreenState
@@ -84,147 +84,166 @@ class CharacterDetailScreenModel(
     private val userProvider: UserProvider,
     private val spells: SpellRepository,
 ) : ScreenModel {
-
     private val character = characters.getLive(characterId).right()
-    private val skillsScreenState = combine(
-        character,
-        skills.findAllForCharacter(characterId),
-        talents.findAllForCharacter(characterId),
-        traits.findAllForCharacter(characterId),
-    ) { character, skills, talents, traits ->
-        SkillsScreenState(
-            characteristics = character.characteristics,
-            skills = skills.toImmutableList(),
-            talents = talents.toImmutableList(),
-            traits = traits.toImmutableList(),
-        )
-    }
+    private val skillsScreenState =
+        combine(
+            character,
+            skills.findAllForCharacter(characterId),
+            talents.findAllForCharacter(characterId),
+            traits.findAllForCharacter(characterId),
+        ) { character, skills, talents, traits ->
+            SkillsScreenState(
+                characteristics = character.characteristics,
+                skills = skills.toImmutableList(),
+                talents = talents.toImmutableList(),
+                traits = traits.toImmutableList(),
+            )
+        }
 
-    private val religionScreenState = combine(
-        blessings.findAllForCharacter(characterId),
-        miracles.findAllForCharacter(characterId),
-    ) { blessings, miracles ->
-        ReligionScreenState(
-            blessings = blessings.toImmutableList(),
-            miracles = miracles.toImmutableList(),
-        )
-    }
+    private val religionScreenState =
+        combine(
+            blessings.findAllForCharacter(characterId),
+            miracles.findAllForCharacter(characterId),
+        ) { blessings, miracles ->
+            ReligionScreenState(
+                blessings = blessings.toImmutableList(),
+                miracles = miracles.toImmutableList(),
+            )
+        }
 
-    private val maxEncumbrance: Flow<Encumbrance> = character
-        .map { it.maxEncumbrance }
-        .distinctUntilChanged()
+    private val maxEncumbrance: Flow<Encumbrance> =
+        character
+            .map { it.maxEncumbrance }
+            .distinctUntilChanged()
 
     private val trappingsFlow = trappings.findAllForCharacter(characterId)
 
-    private val inventory: Flow<List<TrappingItem>> = trappingsFlow.map { items ->
-        val (storedItems, notStoredItems) = items.partition { it.containerId != null }
-        val storedItemsByContainer = storedItems.groupBy { it.containerId }
+    private val inventory: Flow<List<TrappingItem>> =
+        trappingsFlow.map { items ->
+            val (storedItems, notStoredItems) = items.partition { it.containerId != null }
+            val storedItemsByContainer = storedItems.groupBy { it.containerId }
 
-        notStoredItems.map { item ->
-            val type = item.trappingType
+            notStoredItems.map { item ->
+                val type = item.trappingType
 
-            if (type is TrappingType.Container)
-                TrappingItem.Container(
-                    item,
-                    type,
-                    storedItemsByContainer[item.id] ?: emptyList(),
-                )
-            else TrappingItem.SeparateTrapping(item)
+                if (type is TrappingType.Container) {
+                    TrappingItem.Container(
+                        item,
+                        type,
+                        storedItemsByContainer[item.id] ?: emptyList(),
+                    )
+                } else {
+                    TrappingItem.SeparateTrapping(item)
+                }
+            }
         }
-    }
 
     private val currentEncumbrance: Flow<Encumbrance> =
         trappingsFlow.map { items -> items.map { it.effectiveEncumbrance }.sum() }
             .distinctUntilChanged()
 
-    private val money: Flow<Money> = character
-        .map { it.money }
-        .distinctUntilChanged()
+    private val money: Flow<Money> =
+        character
+            .map { it.money }
+            .distinctUntilChanged()
 
-    private val trappingsScreenState: Flow<TrappingsScreenState> = combine(
-        inventory,
-        currentEncumbrance,
-        maxEncumbrance,
-        money,
-    ) { trappings, currentEncumbrance, maxEncumbrance, money ->
-        TrappingsScreenState(
-            currentEncumbrance = currentEncumbrance,
-            maxEncumbrance = maxEncumbrance,
-            money = money,
-            trappings = trappings.toImmutableList(),
-        )
-    }
+    private val trappingsScreenState: Flow<TrappingsScreenState> =
+        combine(
+            inventory,
+            currentEncumbrance,
+            maxEncumbrance,
+            money,
+        ) { trappings, currentEncumbrance, maxEncumbrance, money ->
+            TrappingsScreenState(
+                currentEncumbrance = currentEncumbrance,
+                maxEncumbrance = maxEncumbrance,
+                money = money,
+                trappings = trappings.toImmutableList(),
+            )
+        }
 
-    private val characteristicsScreenState: Flow<CharacteristicsScreenState> = character
-        .map { it.compendiumCareer }
-        .distinctUntilChanged()
-        .flatMapLatest { characterCareer ->
-            if (characterCareer == null) {
-                return@flatMapLatest flowOf(null)
-            }
-
-            careerCompendium.getLive(characterId.partyId, characterCareer.careerId)
-                .map {
-                    val career = it.orNull() ?: return@map null
-                    val level = career.levels.firstOrNull { it.id == characterCareer.levelId }
-                        ?: return@map null
-
-                    CompendiumCareer(career, level)
+    private val characteristicsScreenState: Flow<CharacteristicsScreenState> =
+        character
+            .map { it.compendiumCareer }
+            .distinctUntilChanged()
+            .flatMapLatest { characterCareer ->
+                if (characterCareer == null) {
+                    return@flatMapLatest flowOf(null)
                 }
-        }.map { CharacteristicsScreenState(it) }
+
+                careerCompendium.getLive(characterId.partyId, characterCareer.careerId)
+                    .map {
+                        val career = it.orNull() ?: return@map null
+                        val level =
+                            career.levels.firstOrNull { it.id == characterCareer.levelId }
+                                ?: return@map null
+
+                        CompendiumCareer(career, level)
+                    }
+            }.map { CharacteristicsScreenState(it) }
 
     private val party: Flow<Party> = parties.getLive(characterId.partyId).right()
 
-    private val characterPickerState: Flow<CharacterPickerState> = combine(
-        characters.inParty(characterId.partyId, CharacterType.PLAYER_CHARACTER),
-        party.map { it.gameMasterId == null || it.gameMasterId == userProvider.userId },
-    ) { playerCharacters, isGameMaster ->
-        val userId = userProvider.userId
+    private val characterPickerState: Flow<CharacterPickerState> =
+        combine(
+            characters.inParty(characterId.partyId, CharacterType.PLAYER_CHARACTER),
+            party.map { it.gameMasterId == null || it.gameMasterId == userProvider.userId },
+        ) { playerCharacters, isGameMaster ->
+            val userId = userProvider.userId
 
-        CharacterPickerState(
-            assignableCharacters = if (isGameMaster)
-                persistentListOf()
-            else playerCharacters
+            CharacterPickerState(
+                assignableCharacters =
+                    if (isGameMaster) {
+                        persistentListOf()
+                    } else {
+                        playerCharacters
+                            .asSequence()
+                            .filter { it.userId == null }
+                            .toImmutableList()
+                    },
+                allCharacters =
+                    if (isGameMaster) {
+                        playerCharacters.toImmutableList()
+                    } else {
+                        playerCharacters
+                            .asSequence()
+                            .filter { it.userId == userId }
+                            .toImmutableList()
+                    },
+            )
+        }
+
+    private val notesScreenState: Flow<NotesScreenState> =
+        combine(
+            character,
+            party,
+        ) { character, party ->
+            NotesScreenState(
+                characterType = character.type,
+                partyAmbitions = party.ambitions,
+                characterAmbitions = character.ambitions,
+                characterNote = character.note,
+                characterMotivation = character.motivation,
+            )
+        }
+
+    private val spellsScreenState: Flow<SpellsScreenState> =
+        spells.findAllForCharacter(characterId)
+            .map { SpellsScreenState(it.toImmutableList()) }
+
+    private val equippedWeapons: Flow<ImmutableMap<WeaponEquip, List<EquippedWeapon>>> =
+        combine(
+            trappingsFlow,
+            character.map { it.characteristics.strengthBonus }
+                .distinctUntilChanged(),
+        ) { trappings, strengthBonus ->
+            trappings
                 .asSequence()
-                .filter { it.userId == null }
-                .toImmutableList(),
-            allCharacters = if (isGameMaster)
-                playerCharacters.toImmutableList()
-            else playerCharacters
-                .asSequence()
-                .filter { it.userId == userId }
-                .toImmutableList()
-        )
-    }
-
-    private val notesScreenState: Flow<NotesScreenState> = combine(
-        character,
-        party,
-    ) { character, party ->
-        NotesScreenState(
-            characterType = character.type,
-            partyAmbitions = party.ambitions,
-            characterAmbitions = character.ambitions,
-            characterNote = character.note,
-            characterMotivation = character.motivation,
-        )
-    }
-
-    private val spellsScreenState: Flow<SpellsScreenState> = spells.findAllForCharacter(characterId)
-        .map { SpellsScreenState(it.toImmutableList()) }
-
-    private val equippedWeapons: Flow<ImmutableMap<WeaponEquip, List<EquippedWeapon>>> = combine(
-        trappingsFlow,
-        character.map { it.characteristics.strengthBonus }
-            .distinctUntilChanged()
-    ) { trappings, strengthBonus ->
-        trappings
-            .asSequence()
-            .mapNotNull { EquippedWeapon.fromTrappingOrNull(it, strengthBonus) }
-            .sortedBy { it.trapping.name }
-            .groupBy { it.equip }
-            .toImmutableMap()
-    }
+                .mapNotNull { EquippedWeapon.fromTrappingOrNull(it, strengthBonus) }
+                .sortedBy { it.trapping.name }
+                .groupBy { it.equip }
+                .toImmutableMap()
+        }
 
     private val armourPoints: Flow<Armour> = trappingsFlow.map { items -> Armour.fromItems(items) }
 
@@ -247,50 +266,53 @@ class CharacterDetailScreenModel(
                 .toImmutableMap()
         }
 
-    private val combatScreenState: Flow<CharacterCombatScreenState> = combine(
-        equippedWeapons,
-        armourPieces,
-        armourPoints,
-        character
-            .map { it.characteristics.toughnessBonus }
-            .distinctUntilChanged()
-    ) { equippedWeapons, armourPieces, armourPoints, toughnessBonus ->
-        CharacterCombatScreenState(
-            equippedWeapons = equippedWeapons,
-            armourPieces = armourPieces,
-            armourPoints = armourPoints,
-            toughnessBonus = toughnessBonus,
-        )
-    }
+    private val combatScreenState: Flow<CharacterCombatScreenState> =
+        combine(
+            equippedWeapons,
+            armourPieces,
+            armourPoints,
+            character
+                .map { it.characteristics.toughnessBonus }
+                .distinctUntilChanged(),
+        ) { equippedWeapons, armourPieces, armourPoints, toughnessBonus ->
+            CharacterCombatScreenState(
+                equippedWeapons = equippedWeapons,
+                armourPieces = armourPieces,
+                armourPoints = armourPoints,
+                toughnessBonus = toughnessBonus,
+            )
+        }
 
-    val state: Flow<CharacterDetailScreenState> = combine(
-        combine(character, party, ::Pair),
-        combine(skillsScreenState, religionScreenState, ::Pair),
-        combine(characteristicsScreenState, trappingsScreenState, ::Pair),
-        combine(notesScreenState, spellsScreenState, ::Pair),
-        combine(characterPickerState, combatScreenState, ::Pair),
-    ) { (character, party),
-        (skillsScreenState, religionScreenState),
-        (characteristicsScreenState, trappingsScreenState),
-        (notesScreenState, spellsScreenState),
-        (characterPickerState, combatScreenState) ->
-        CharacterDetailScreenState(
-            characterId = characterId,
-            character = character,
-            partyName = party.name,
-            isCombatActive = party.activeCombat != null,
-            conditionsScreenState = ConditionsScreenState(character.conditions),
-            skillsScreenState = skillsScreenState,
-            religionScreenState = religionScreenState,
-            characteristicsScreenState = characteristicsScreenState,
-            notesScreenState = notesScreenState,
-            isGameMaster = party.gameMasterId == null || party.gameMasterId == userProvider.userId,
-            characterPickerState = characterPickerState,
-            trappingsScreenState = trappingsScreenState,
-            spellsScreenState = spellsScreenState,
-            combatScreenState = combatScreenState,
-        )
-    }
+    val state: Flow<CharacterDetailScreenState> =
+        combine(
+            combine(character, party, ::Pair),
+            combine(skillsScreenState, religionScreenState, ::Pair),
+            combine(characteristicsScreenState, trappingsScreenState, ::Pair),
+            combine(notesScreenState, spellsScreenState, ::Pair),
+            combine(characterPickerState, combatScreenState, ::Pair),
+        ) { (character, party),
+            (skillsScreenState, religionScreenState),
+            (characteristicsScreenState, trappingsScreenState),
+            (notesScreenState, spellsScreenState),
+            (characterPickerState, combatScreenState),
+            ->
+            CharacterDetailScreenState(
+                characterId = characterId,
+                character = character,
+                partyName = party.name,
+                isCombatActive = party.activeCombat != null,
+                conditionsScreenState = ConditionsScreenState(character.conditions),
+                skillsScreenState = skillsScreenState,
+                religionScreenState = religionScreenState,
+                characteristicsScreenState = characteristicsScreenState,
+                notesScreenState = notesScreenState,
+                isGameMaster = party.gameMasterId == null || party.gameMasterId == userProvider.userId,
+                characterPickerState = characterPickerState,
+                trappingsScreenState = trappingsScreenState,
+                spellsScreenState = spellsScreenState,
+                combatScreenState = combatScreenState,
+            )
+        }
 
     suspend fun updateCharacter(change: (Character) -> Character) {
         val character = characters.get(characterId)
@@ -304,13 +326,13 @@ class CharacterDetailScreenModel(
     }
 
     fun updatePoints(points: Points) {
-        coroutineScope.launch(Dispatchers.IO) {
+        screenModelScope.launch(Dispatchers.IO) {
             updateCharacter { it.updatePoints(points) }
         }
     }
 
     fun updateConditions(conditions: CurrentConditions) {
-        coroutineScope.launch(Dispatchers.IO) {
+        screenModelScope.launch(Dispatchers.IO) {
             updateCharacter { it.updateConditions(conditions) }
         }
     }
@@ -327,12 +349,15 @@ class CharacterDetailScreenModel(
         updateCharacter { it.copy(ambitions = ambitions) }
     }
 
-    suspend fun assignCharacter(character: Character, userId: UserId) {
+    suspend fun assignCharacter(
+        character: Character,
+        userId: UserId,
+    ) {
         characters.save(characterId.partyId, character.assignToUser(userId))
     }
 
     fun removeTrait(trait: Trait) {
-        coroutineScope.launch(Dispatchers.IO) {
+        screenModelScope.launch(Dispatchers.IO) {
             firestore.runTransaction {
                 effectManager.removeItem(
                     this,
@@ -346,7 +371,7 @@ class CharacterDetailScreenModel(
     }
 
     fun removeTalent(talent: Talent) {
-        coroutineScope.launch(Dispatchers.IO) {
+        screenModelScope.launch(Dispatchers.IO) {
             firestore.runTransaction {
                 effectManager.removeItem(
                     this,
@@ -360,31 +385,31 @@ class CharacterDetailScreenModel(
     }
 
     fun removeSkill(skill: Skill) {
-        coroutineScope.launch(Dispatchers.IO) {
+        screenModelScope.launch(Dispatchers.IO) {
             skills.remove(characterId, skill.id)
         }
     }
 
     fun removeBlessing(blessing: Blessing) {
-        coroutineScope.launch(Dispatchers.IO) {
+        screenModelScope.launch(Dispatchers.IO) {
             blessings.remove(characterId, blessing.id)
         }
     }
 
     fun removeMiracle(miracle: Miracle) {
-        coroutineScope.launch(Dispatchers.IO) {
+        screenModelScope.launch(Dispatchers.IO) {
             miracles.remove(characterId, miracle.id)
         }
     }
 
     fun removeTrapping(trapping: InventoryItem) {
-        coroutineScope.launch(Dispatchers.IO) {
+        screenModelScope.launch(Dispatchers.IO) {
             trappings.remove(characterId, trapping.id)
         }
     }
 
     fun removeSpell(spell: Spell) {
-        coroutineScope.launch(Dispatchers.IO) {
+        screenModelScope.launch(Dispatchers.IO) {
             spells.remove(characterId, spell.id)
         }
     }
@@ -394,7 +419,7 @@ class CharacterDetailScreenModel(
     }
 
     fun duplicateTrapping(trapping: InventoryItem) {
-        coroutineScope.launch(Dispatchers.IO) {
+        screenModelScope.launch(Dispatchers.IO) {
             trappings.save(characterId, trapping.duplicate())
         }
     }
@@ -417,7 +442,7 @@ class CharacterDetailScreenModel(
         if (trappingType is TrappingType.Container) {
             updatedTrappings.addAll(
                 trappingSaver.takeAllItemsFromContainer(characterId, trapping)
-                    .map { it.addToContainer(container.id) }
+                    .map { it.addToContainer(container.id) },
             )
         }
 

@@ -1,23 +1,4 @@
-buildscript {
-    dependencies {
-        classpath("com.android.tools.build:gradle:7.4.2")
-        classpath("org.jetbrains.compose:compose-gradle-plugin:${Versions.compose}")
-
-        classpath(kotlin("gradle-plugin", Versions.kotlin))
-        classpath(kotlin("serialization", Versions.kotlin))
-
-        classpath("dev.icerock.moko:resources-generator:0.23.0")
-
-        // Firebase-related dependencies
-        classpath("com.google.gms:google-services:4.3.14")
-        classpath("com.google.firebase:firebase-crashlytics-gradle:2.7.1")
-        // classpath("com.google.firebase:perf-plugin:1.4.0")
-    }
-
-    repositories {
-        gradlePluginPortal()
-    }
-}
+import org.jlleitschuh.gradle.ktlint.KtlintExtension
 
 allprojects {
     repositories {
@@ -25,17 +6,26 @@ allprojects {
         mavenCentral()
         maven(url = "https://jitpack.io")
     }
-}
 
-subprojects {
-    apply(plugin = "org.jlleitschuh.gradle.ktlint")
+    apply(plugin = rootProject.libs.plugins.ktlint.get().pluginId)
+
+    configure<KtlintExtension> {
+        filter {
+            exclude { it.file.path.contains("build/generated") }
+            exclude { it.file.path.contains("build/buildkonfig") }
+        }
+    }
 }
 
 plugins {
-    id("org.jlleitschuh.gradle.ktlint") version "10.1.0"
-    kotlin("plugin.serialization") version Versions.kotlin
-}
-
-tasks.register("clean", Delete::class) {
-    delete(rootProject.buildDir)
+    alias(libs.plugins.android.application) apply false
+    alias(libs.plugins.buildkonfig) apply false
+    alias(libs.plugins.crashlytics) apply false
+    alias(libs.plugins.compose) apply false
+    alias(libs.plugins.google.services) apply false
+    alias(libs.plugins.kotlin.multiplatform) apply false
+    alias(libs.plugins.kotlin.serialization) apply false
+    alias(libs.plugins.kotlin.parcelize) apply false
+    alias(libs.plugins.ktlint)
+    alias(libs.plugins.moko.resources) apply false
 }

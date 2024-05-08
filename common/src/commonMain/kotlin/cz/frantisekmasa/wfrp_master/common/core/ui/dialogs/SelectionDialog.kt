@@ -33,7 +33,7 @@ fun <T> SelectionDialog(
     selected: T,
     onDismissRequest: () -> Unit,
     onSelect: (T) -> Unit,
-    itemContent: @Composable (T) -> Unit
+    itemContent: @Composable (T) -> Unit,
 ) {
     Dialog(onDismissRequest = onDismissRequest) {
         Surface(shape = MaterialTheme.shapes.medium) {
@@ -51,14 +51,15 @@ fun <T> SelectionDialog(
                 )
 
                 Column(
-                    Modifier.verticalScroll(rememberScrollState())
+                    Modifier.verticalScroll(rememberScrollState()),
                 ) {
                     for (item in items) {
                         key(item) {
                             Row(
-                                modifier = Modifier
-                                    .padding(horizontal = Spacing.medium)
-                                    .clickableWithoutIndication { currentItem = item },
+                                modifier =
+                                    Modifier
+                                        .padding(horizontal = Spacing.medium)
+                                        .clickableWithoutIndication { currentItem = item },
                                 verticalAlignment = Alignment.CenterVertically,
                             ) {
                                 RadioButton(

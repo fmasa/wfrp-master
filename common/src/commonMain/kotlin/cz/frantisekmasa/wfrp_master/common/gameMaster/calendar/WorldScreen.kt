@@ -42,7 +42,7 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.dialogs.FullScreenDialog
 import cz.frantisekmasa.wfrp_master.common.core.ui.navigation.LocalNavigationTransaction
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.ItemIcon
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
-import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.VisualOnlyIconDescription
+import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.VISUAL_ONLY_ICON_DESCRIPTION
 import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.SaveAction
 import cz.frantisekmasa.wfrp_master.common.core.ui.timePicker
 import cz.frantisekmasa.wfrp_master.common.encounters.EncountersScreen
@@ -65,7 +65,7 @@ internal fun WorldScreen(
             .background(MaterialTheme.colors.background)
             .verticalScroll(rememberScrollState())
             .padding(top = 6.dp)
-            .padding(horizontal = Spacing.small)
+            .padding(horizontal = Spacing.small),
     ) {
         CalendarCard(screenModel, party.time)
         NavigationCard(party.id)
@@ -73,7 +73,10 @@ internal fun WorldScreen(
 }
 
 @Composable
-private fun CalendarCard(screenModel: GameMasterScreenModel, dateTime: DateTime) {
+private fun CalendarCard(
+    screenModel: GameMasterScreenModel,
+    dateTime: DateTime,
+) {
     CardContainer {
         Column(Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
             Time(
@@ -120,21 +123,25 @@ private fun NavigationCard(partyId: PartyId) {
 }
 
 @Composable
-private fun Time(screenModel: GameMasterScreenModel, time: DateTime.TimeOfDay) {
+private fun Time(
+    screenModel: GameMasterScreenModel,
+    time: DateTime.TimeOfDay,
+) {
     val coroutineScope = rememberCoroutineScope()
 
-    val dialog = timePicker(
-        remember(time) { LocalTime.of(time.hour, time.minute) },
-        onTimeChange = { newTime ->
-            coroutineScope.launch(Dispatchers.IO) {
-                screenModel.changeTime {
-                    it.withTime(DateTime.TimeOfDay(newTime.getHour(), newTime.getMinute()))
-                }
+    val dialog =
+        timePicker(
+            remember(time) { LocalTime.of(time.hour, time.minute) },
+            onTimeChange = { newTime ->
+                coroutineScope.launch(Dispatchers.IO) {
+                    screenModel.changeTime {
+                        it.withTime(DateTime.TimeOfDay(newTime.getHour(), newTime.getMinute()))
+                    }
 
-                hide()
-            }
-        }
-    )
+                    hide()
+                }
+            },
+        )
 
     Text(
         time.format(),
@@ -144,7 +151,10 @@ private fun Time(screenModel: GameMasterScreenModel, time: DateTime.TimeOfDay) {
 }
 
 @Composable
-private fun Date(screenModel: GameMasterScreenModel, date: ImperialDate) {
+private fun Date(
+    screenModel: GameMasterScreenModel,
+    date: ImperialDate,
+) {
     var dialogVisible by rememberSaveable { mutableStateOf(false) }
 
     if (dialogVisible) {
@@ -162,9 +172,9 @@ private fun Date(screenModel: GameMasterScreenModel, date: ImperialDate) {
                                 screenModel.changeTime { it.copy(date = selectedDate) }
                                 dialogVisible = false
                             }
-                        }
+                        },
                     )
-                }
+                },
             )
         }
     }
@@ -172,14 +182,14 @@ private fun Date(screenModel: GameMasterScreenModel, date: ImperialDate) {
     Text(
         date.format(),
         modifier = Modifier.clickable(onClick = { dialogVisible = true }),
-        style = MaterialTheme.typography.h6
+        style = MaterialTheme.typography.h6,
     )
     Text(YearSeason.at(date).readableName, modifier = Modifier.padding(top = 8.dp))
 
     Row(verticalAlignment = Alignment.CenterVertically) {
         Icon(
             Icons.Rounded.NightsStay,
-            VisualOnlyIconDescription,
+            VISUAL_ONLY_ICON_DESCRIPTION,
             Modifier.padding(end = 4.dp),
         )
         Text(
@@ -187,7 +197,7 @@ private fun Date(screenModel: GameMasterScreenModel, date: ImperialDate) {
                 append(stringResource(Str.calendar_mannslieb_phase))
                 append(": ")
                 append(MannsliebPhase.at(date).localizedName)
-            }
+            },
         )
     }
 }

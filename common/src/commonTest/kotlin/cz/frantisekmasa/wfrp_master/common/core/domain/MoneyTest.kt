@@ -6,7 +6,6 @@ import kotlin.test.assertFailsWith
 import kotlin.test.assertSame
 
 class MoneyTest {
-
     @Test
     fun `two instances with same amount are equal`() {
         assertEquals(Money.pennies(20), Money.pennies(20))
@@ -55,7 +54,7 @@ class MoneyTest {
     fun `prevents integer overflow`() {
         assertEquals(
             Money.pennies(Int.MAX_VALUE),
-            Money.pennies(Int.MAX_VALUE) + Money.pennies(Int.MAX_VALUE)
+            Money.pennies(Int.MAX_VALUE) + Money.pennies(Int.MAX_VALUE),
         )
     }
 }

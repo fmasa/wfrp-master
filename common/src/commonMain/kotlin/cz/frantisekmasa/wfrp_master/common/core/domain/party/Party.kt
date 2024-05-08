@@ -20,17 +20,19 @@ import kotlinx.serialization.Serializable
 data class Party(
     val id: PartyId,
     val name: String,
-    val gameMasterId: UserId?, // Remove support for single-player parties in 1.14
+    // Remove support for single-player parties in 1.14
+    val gameMasterId: UserId?,
     private val users: Set<UserId>,
     private val archived: Boolean = false,
     val ambitions: Ambitions = Ambitions("", ""),
-    val time: DateTime = DateTime(
-        ImperialDate.of(ImperialDate.StandaloneDay.HEXENSTAG, 2512),
-        DateTime.TimeOfDay(12, 0)
-    ),
+    val time: DateTime =
+        DateTime(
+            ImperialDate.of(ImperialDate.StandaloneDay.HEXENSTAG, 2512),
+            DateTime.TimeOfDay(12, 0),
+        ),
     val activeCombat: Combat? = null,
     val settings: Settings = Settings(),
-    private val accessCode: String = uuid4().toString()
+    private val accessCode: String = uuid4().toString(),
 ) : Parcelable {
     companion object {
         const val NAME_MAX_LENGTH = 50
@@ -50,8 +52,11 @@ data class Party(
 
     fun archive() = copy(archived = true)
 
-    fun startCombat(encounterId: EncounterId, combatants: List<Combatant>) = copy(
-        activeCombat = Combat(encounterId.encounterId, combatants)
+    fun startCombat(
+        encounterId: EncounterId,
+        combatants: List<Combatant>,
+    ) = copy(
+        activeCombat = Combat(encounterId.encounterId, combatants),
     )
 
     fun updateCombat(combat: Combat): Party {
@@ -70,9 +75,10 @@ data class Party(
 
     fun changeTime(time: DateTime) = copy(time = time)
 
-    fun leave(userId: UserId) = copy(
-        users = users.filter { it != userId }.toSet()
-    )
+    fun leave(userId: UserId) =
+        copy(
+            users = users.filter { it != userId }.toSet(),
+        )
 
     fun isMember(userId: UserId): Boolean = userId in users
 }

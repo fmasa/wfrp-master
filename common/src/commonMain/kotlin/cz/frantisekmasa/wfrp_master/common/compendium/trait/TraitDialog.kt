@@ -31,11 +31,14 @@ fun TraitDialog(
 
     CompendiumItemDialog(
         onDismissRequest = onDismissRequest,
-        title = stringResource(
-            if (trait == null)
-                Str.traits_title_new
-            else Str.traits_title_edit
-        ),
+        title =
+            stringResource(
+                if (trait == null) {
+                    Str.traits_title_new
+                } else {
+                    Str.traits_title_edit
+                },
+            ),
         formData = formData,
         saver = onSaveRequest,
     ) { validate ->
@@ -47,7 +50,7 @@ fun TraitDialog(
                 label = stringResource(Str.traits_label_name),
                 value = formData.name,
                 validate = validate,
-                maxLength = Trait.NAME_MAX_LENGTH
+                maxLength = Trait.NAME_MAX_LENGTH,
             )
 
             TextInput(
@@ -79,28 +82,33 @@ private data class TraitFormData(
 ) : CompendiumItemFormData<Trait> {
     companion object {
         @Composable
-        fun fromTrait(trait: Trait?) = TraitFormData(
-            id = remember { trait?.id ?: uuid4() },
-            name = inputValue(trait?.name ?: "", Rules.NotBlank()),
-            specifications = inputValue(trait?.specifications?.joinToString(",") ?: ""),
-            description = inputValue(trait?.description ?: ""),
-            isVisibleToPlayers = trait?.isVisibleToPlayers ?: false,
-        )
+        fun fromTrait(trait: Trait?) =
+            TraitFormData(
+                id = remember { trait?.id ?: uuid4() },
+                name = inputValue(trait?.name ?: "", Rules.NotBlank()),
+                specifications = inputValue(trait?.specifications?.joinToString(",") ?: ""),
+                description = inputValue(trait?.description ?: ""),
+                isVisibleToPlayers = trait?.isVisibleToPlayers ?: false,
+            )
     }
 
-    override fun toValue() = Trait(
-        id = id,
-        name = name.value,
-        specifications = if (specifications.value == "")
-            emptySet()
-        else specifications.value
-            .split(',')
-            .asSequence()
-            .map { it.trim() }
-            .toSet(),
-        description = description.value,
-        isVisibleToPlayers = isVisibleToPlayers,
-    )
+    override fun toValue() =
+        Trait(
+            id = id,
+            name = name.value,
+            specifications =
+                if (specifications.value == "") {
+                    emptySet()
+                } else {
+                    specifications.value
+                        .split(',')
+                        .asSequence()
+                        .map { it.trim() }
+                        .toSet()
+                },
+            description = description.value,
+            isVisibleToPlayers = isVisibleToPlayers,
+        )
 
     override fun isValid() = listOf(name, specifications, description).all { it.isValid() }
 }

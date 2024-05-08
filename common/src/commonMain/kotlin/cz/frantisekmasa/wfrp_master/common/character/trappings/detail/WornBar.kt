@@ -52,16 +52,19 @@ fun WornBar(
                             onChange(
                                 trapping.copy(
                                     containerId = null,
-                                    trappingType = if (wearable.worn)
-                                        wearable.takeOff()
-                                    else wearable.takeOn()
-                                )
+                                    trappingType =
+                                        if (wearable.worn) {
+                                            wearable.takeOff()
+                                        } else {
+                                            wearable.takeOn()
+                                        },
+                                ),
                             )
                         } finally {
                             saving = false
                         }
                     }
-                }
+                },
             )
         }
     }

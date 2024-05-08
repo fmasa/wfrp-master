@@ -47,9 +47,12 @@ interface Filter {
     }
 
     class MaxLength(private val maxLength: Int) : Filter {
-        override fun process(value: String) = if (value.length <= maxLength)
-            value
-        else value.substring(0, maxLength)
+        override fun process(value: String) =
+            if (value.length <= maxLength) {
+                value
+            } else {
+                value.substring(0, maxLength)
+            }
     }
 
     object SingleLine : Filter {
@@ -130,16 +133,23 @@ private fun TextInputImpl(
         }
 
         val errorMessage = if (validate) rules.errorMessage(value) else null
-        val borderColor = if (errorMessage != null)
-            MaterialTheme.colors.error
-        else Colors.inputBorderColor()
+        val borderColor =
+            if (errorMessage != null) {
+                MaterialTheme.colors.error
+            } else {
+                Colors.inputBorderColor()
+            }
 
         Surface(
             shape = RoundedCornerShape(Spacing.tiny),
             border = BorderStroke(1.dp, borderColor),
-            color = if (MaterialTheme.colors.isLight)
-                MaterialTheme.colors.surface else
-                Color(33, 33, 33), // TODO: Move to Theme
+            color =
+                if (MaterialTheme.colors.isLight) {
+                    MaterialTheme.colors.surface
+                } else {
+                    Color(33, 33, 33)
+                },
+            // TODO: Move to Theme
         ) {
             val textStyle = LocalTextStyle.current
             val textColor = MaterialTheme.colors.onSurface
@@ -161,10 +171,11 @@ private fun TextInputImpl(
                     textStyle = textStyle.copy(color = textColor),
                     singleLine = !multiLine,
                     visualTransformation = visualTransformation,
-                    modifier = textFieldModifier
-                        .fillMaxWidth()
-                        .padding(Spacing.medium)
-                        .then(if (multiLine) Modifier.heightIn(min = 48.dp) else Modifier),
+                    modifier =
+                        textFieldModifier
+                            .fillMaxWidth()
+                            .padding(Spacing.medium)
+                            .then(if (multiLine) Modifier.heightIn(min = 48.dp) else Modifier),
                 )
 
                 if (placeholder != null && value.isEmpty()) {
@@ -214,6 +225,7 @@ class InputValue(
 ) {
     @InternalTextInputApi
     var rawTextFieldValue by state
+
     @OptIn(InternalTextInputApi::class)
     var value: String
         get() = normalize(rawTextFieldValue)
@@ -224,7 +236,9 @@ class InputValue(
     fun isValid() = rules.errorMessage(value) == null
 
     fun toInt(): Int = value.toInt()
+
     fun toIntOrNull(): Int? = value.toIntOrNull()
+
     fun toDouble(): Double = value.toDouble()
 }
 
@@ -232,7 +246,10 @@ class InputValue(
 fun inputValue(default: String) = InputValue(rememberSaveable { mutableStateOf(default) }, Rules.NoRules)
 
 @Composable
-fun inputValue(default: String, vararg rules: Rule) = InputValue(
+fun inputValue(
+    default: String,
+    vararg rules: Rule,
+) = InputValue(
     rememberSaveable { mutableStateOf(default) },
     Rules(*rules),
 )

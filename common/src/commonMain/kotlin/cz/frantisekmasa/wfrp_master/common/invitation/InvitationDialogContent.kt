@@ -8,4 +8,7 @@ import cz.frantisekmasa.wfrp_master.common.core.domain.party.Invitation
  * Every platform should at least provide invitation link which can be used from all platforms.
  */
 @Composable
-expect fun InvitationDialogContent(invitation: Invitation, screenModel: InvitationScreenModel)
+expect fun InvitationDialogContent(
+    invitation: Invitation,
+    screenModel: InvitationScreenModel,
+)

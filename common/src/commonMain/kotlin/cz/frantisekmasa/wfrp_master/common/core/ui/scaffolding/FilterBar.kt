@@ -11,7 +11,10 @@ import androidx.compose.ui.unit.dp
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
 
 @Composable
-fun FilterBar(modifier: Modifier = Modifier, content: @Composable () -> Unit) {
+fun FilterBar(
+    modifier: Modifier = Modifier,
+    content: @Composable () -> Unit,
+) {
     Surface(elevation = 2.dp) {
         Box(
             modifier = modifier.fillMaxWidth().padding(Spacing.tiny),

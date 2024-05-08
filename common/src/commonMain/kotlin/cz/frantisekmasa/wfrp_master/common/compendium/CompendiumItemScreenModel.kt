@@ -13,7 +13,6 @@ abstract class CompendiumItemScreenModel<A : CompendiumItem<A>>(
     private val partyId: PartyId,
     protected val compendium: Compendium<A>,
 ) : ScreenModel {
-
     val items: Flow<List<A>> = compendium.liveForParty(partyId)
 
     suspend fun createNew(compendiumItem: A) {
@@ -43,6 +42,7 @@ abstract class CompendiumItemScreenModel<A : CompendiumItem<A>>(
 
     sealed class ImportAction<T : CompendiumItem<T>>(val item: T) {
         class CreateNew<T : CompendiumItem<T>>(item: T) : ImportAction<T>(item)
+
         class Update<T : CompendiumItem<T>>(item: T) : ImportAction<T>(item)
     }
 

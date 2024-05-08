@@ -33,7 +33,7 @@ fun <T> DraggableListFor(
     onReorder: (List<T>) -> Unit,
     modifier: Modifier = Modifier,
     itemSpacing: Dp = 0.dp,
-    itemContent: @Composable (index: Int, item: T, isDragged: Boolean) -> Unit
+    itemContent: @Composable (index: Int, item: T, isDragged: Boolean) -> Unit,
 ) {
     val dragY = remember { Animatable(0f) }
     var draggedItemIndex by remember { mutableStateOf<Int?>(null) }
@@ -53,16 +53,18 @@ fun <T> DraggableListFor(
                                 draggedItemIndex = index
                             },
                             onDragEnd = {
-                                val newIndex = newItemIndex(
-                                    draggedItemIndex = draggedItemIndex!!,
-                                    draggedItemYCoordinate = calculateYCoordinateOfDraggedItem(
-                                        dragY,
+                                val newIndex =
+                                    newItemIndex(
+                                        draggedItemIndex = draggedItemIndex!!,
+                                        draggedItemYCoordinate =
+                                            calculateYCoordinateOfDraggedItem(
+                                                dragY,
+                                                placeableHeights,
+                                                draggedItemIndex,
+                                            )!!,
                                         placeableHeights,
-                                        draggedItemIndex,
-                                    )!!,
-                                    placeableHeights,
-                                    itemSpacingPx
-                                )
+                                        itemSpacingPx,
+                                    )
 
                                 if (index != newIndex) {
                                     onReorder(items.moveItem(index, newIndex))
@@ -76,9 +78,9 @@ fun <T> DraggableListFor(
                                     change.consume()
                                 }
                             },
-                            onDragCancel = { draggedItemIndex = null }
+                            onDragCancel = { draggedItemIndex = null },
                         )
-                    }
+                    },
                 ) {
                     itemContent(index, item, draggedItemIndex == index)
                 }
@@ -90,33 +92,38 @@ fun <T> DraggableListFor(
 
         val emptySpaceHeight =
             (draggedItemIndex?.let { placeables[it].height } ?: 0) + itemSpacingPx
-        val draggedItemYCoordinate = calculateYCoordinateOfDraggedItem(
-            dragY,
-            placeableHeights,
-            draggedItemIndex
-        )
+        val draggedItemYCoordinate =
+            calculateYCoordinateOfDraggedItem(
+                dragY,
+                placeableHeights,
+                draggedItemIndex,
+            )
 
         var y = 0
 
         layout(
             width = constraints.maxWidth,
-            height = if (constraints.hasBoundedHeight)
-                constraints.maxHeight
-            else placeableHeights.sum() + (placeableHeights.size - 1) * itemSpacingPx,
+            height =
+                if (constraints.hasBoundedHeight) {
+                    constraints.maxHeight
+                } else {
+                    placeableHeights.sum() + (placeableHeights.size - 1) * itemSpacingPx
+                },
         ) {
             placeables.forEachIndexed { index, placeable ->
                 val isDragged = draggedItemIndex == index
 
                 placeable.placeRelative(
                     x = 0,
-                    y = when {
-                        draggedItemYCoordinate == null -> y
-                        index == draggedItemIndex -> draggedItemYCoordinate
-                        y < draggedItemYCoordinate && index > draggedItemIndex!! -> y - emptySpaceHeight
-                        y > draggedItemYCoordinate && index < draggedItemIndex!! -> y + emptySpaceHeight
-                        else -> y
-                    },
-                    if (isDragged) 2f else 1f
+                    y =
+                        when {
+                            draggedItemYCoordinate == null -> y
+                            index == draggedItemIndex -> draggedItemYCoordinate
+                            y < draggedItemYCoordinate && index > draggedItemIndex!! -> y - emptySpaceHeight
+                            y > draggedItemYCoordinate && index < draggedItemIndex!! -> y + emptySpaceHeight
+                            else -> y
+                        },
+                    if (isDragged) 2f else 1f,
                 )
 
                 y += itemSpacingPx + placeable.height

@@ -33,7 +33,7 @@ fun ConditionsDialog(
                     navigationIcon = { CloseButton(onDismissRequest) },
                     title = { Text(stringResource(Str.character_tab_conditions)) },
                 )
-            }
+            },
         ) {
             ConditionsForm(
                 modifier = Modifier.fillMaxSize(),
@@ -44,7 +44,7 @@ fun ConditionsDialog(
                             screenModel.updateConditions(combatantItem, newConditions)
                         }
                     }
-                }
+                },
             )
         }
     }

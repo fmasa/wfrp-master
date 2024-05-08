@@ -27,26 +27,28 @@ data class MiracleImport(
         cultName.requireMaxLength(Miracle.CULT_NAME_MAX_LENGTH, "miracle cultName")
     }
 
-    fun toMiracle() = Miracle(
-        id = uuid4(),
-        name = name,
-        range = range,
-        target = target,
-        duration = duration,
-        effect = effect,
-        cultName = cultName,
-        isVisibleToPlayers = isVisibleToPlayers,
-    )
+    fun toMiracle() =
+        Miracle(
+            id = uuid4(),
+            name = name,
+            range = range,
+            target = target,
+            duration = duration,
+            effect = effect,
+            cultName = cultName,
+            isVisibleToPlayers = isVisibleToPlayers,
+        )
 
     companion object {
-        fun fromMiracle(miracle: Miracle) = MiracleImport(
-            name = miracle.name,
-            range = miracle.range,
-            target = miracle.target,
-            duration = miracle.duration,
-            effect = miracle.effect,
-            cultName = miracle.cultName,
-            isVisibleToPlayers = miracle.isVisibleToPlayers,
-        )
+        fun fromMiracle(miracle: Miracle) =
+            MiracleImport(
+                name = miracle.name,
+                range = miracle.range,
+                target = miracle.target,
+                duration = miracle.duration,
+                effect = miracle.effect,
+                cultName = miracle.cultName,
+                isVisibleToPlayers = miracle.isVisibleToPlayers,
+            )
     }
 }

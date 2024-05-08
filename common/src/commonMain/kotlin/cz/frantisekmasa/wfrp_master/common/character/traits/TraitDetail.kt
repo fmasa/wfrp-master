@@ -13,8 +13,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.halilibo.richtext.markdown.Markdown
-import com.halilibo.richtext.ui.RichText
+import com.halilibo.richtext.commonmark.Markdown
+import com.halilibo.richtext.ui.material.RichText
 import cz.frantisekmasa.wfrp_master.common.Str
 import cz.frantisekmasa.wfrp_master.common.core.domain.traits.Trait
 import cz.frantisekmasa.wfrp_master.common.core.ui.buttons.CloseButton
@@ -36,7 +36,7 @@ fun TraitDetail(
                 title = { Text(remember(trait) { trait.evaluatedName }) },
                 actions = actions,
             )
-        }
+        },
     ) {
         Column(Modifier.verticalScroll(rememberScrollState())) {
             subheadBar()
@@ -58,9 +58,10 @@ fun TraitDetailBody(
         if (specifications.isNotEmpty()) {
             SingleLineTextValue(
                 label = stringResource(Str.traits_label_specifications),
-                value = remember(specifications) {
-                    specifications.sorted().joinToString(", ")
-                },
+                value =
+                    remember(specifications) {
+                        specifications.sorted().joinToString(", ")
+                    },
             )
         }
 

@@ -21,16 +21,16 @@ class AddTalentScreenModel(
     private val parties: PartyRepository,
     availableCompendiumItemsFactory: AvailableCompendiumItemsFactory,
 ) : ScreenModel {
-
-    val state = availableCompendiumItemsFactory.create(
-        partyId = characterId.partyId,
-        compendium = compendium,
-        filterCharacterItems = talents.findAllForCharacter(characterId),
-    ).map { compendiumItemChooserState ->
-        AddTalentScreenState(
-            availableCompendiumItems = compendiumItemChooserState,
-        )
-    }
+    val state =
+        availableCompendiumItemsFactory.create(
+            partyId = characterId.partyId,
+            compendium = compendium,
+            filterCharacterItems = talents.findAllForCharacter(characterId),
+        ).map { compendiumItemChooserState ->
+            AddTalentScreenState(
+                availableCompendiumItems = compendiumItemChooserState,
+            )
+        }
 
     suspend fun addTalent(talent: Talent) {
         firestore.runTransaction {

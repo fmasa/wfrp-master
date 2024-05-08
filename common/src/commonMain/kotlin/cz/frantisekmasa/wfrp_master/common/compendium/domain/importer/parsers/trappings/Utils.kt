@@ -8,16 +8,20 @@ inline fun <reified T : Enum<T>> matchEnumOrNull(
         return aliases.getValue(value)
     }
 
-    val comparableValue = value
-        .replace('-', '_')
-        .replace(' ', '_')
+    val comparableValue =
+        value
+            .replace('-', '_')
+            .replace(' ', '_')
 
     return enumValues<T>().firstOrNull { feature ->
         feature.name.equals(comparableValue, ignoreCase = true)
     }
 }
 
-inline fun <reified T : Enum<T>> matchEnumSetOrNull(value: String, separator: String): Set<T>? {
+inline fun <reified T : Enum<T>> matchEnumSetOrNull(
+    value: String,
+    separator: String,
+): Set<T>? {
     val items = value.split(separator, ignoreCase = true)
     val enums = items.mapNotNull { matchEnumOrNull<T>(it.trim()) }
 
@@ -40,8 +44,9 @@ inline fun <reified T : Enum<T>> parseFeatures(value: String): Map<T, Int> {
         .splitToSequence(",")
         .map { it.trim() }
         .mapNotNull {
-            val (_, name, rating) = FEATURE_REGEX.matchEntire(it)?.groupValues
-                ?: error("Invalid feature $it")
+            val (_, name, rating) =
+                FEATURE_REGEX.matchEntire(it)?.groupValues
+                    ?: error("Invalid feature $it")
             val feature = matchEnumOrNull<T>(name.trim()) ?: return@mapNotNull null
 
             feature to (rating.toIntOrNull() ?: 1)
@@ -49,13 +54,16 @@ inline fun <reified T : Enum<T>> parseFeatures(value: String): Map<T, Int> {
 }
 
 fun parseNameAndPackSize(value: String): Pair<String, Int> {
-    val result = NAME_WITH_COUNT_PATTERN.matchEntire(value)
-        ?: return value to 1
+    val result =
+        NAME_WITH_COUNT_PATTERN.matchEntire(value)
+            ?: return value to 1
 
     return Pair(
         result.groupValues[1],
-        if (result.groupValues[2] == "dozen")
+        if (result.groupValues[2] == "dozen") {
             12
-        else result.groupValues[2].toInt(),
+        } else {
+            result.groupValues[2].toInt()
+        },
     )
 }

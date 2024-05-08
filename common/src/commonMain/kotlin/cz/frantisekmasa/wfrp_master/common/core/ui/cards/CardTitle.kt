@@ -21,7 +21,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.VisualOnlyIconDescription
+import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.VISUAL_ONLY_ICON_DESCRIPTION
 
 @Composable
 fun CardTitle(
@@ -45,16 +45,16 @@ private fun CardTitle(
     Row(
         horizontalArrangement = Arrangement.Center,
         verticalAlignment = Alignment.CenterVertically,
-        modifier = Modifier.fillMaxWidth()
+        modifier = Modifier.fillMaxWidth(),
     ) {
         if (painter != null) {
             Image(
                 painter,
-                VisualOnlyIconDescription,
+                VISUAL_ONLY_ICON_DESCRIPTION,
                 Modifier.padding(end = 4.dp)
                     .width(24.dp)
                     .height(24.dp),
-                colorFilter = ColorFilter.tint(MaterialTheme.colors.onSurface)
+                colorFilter = ColorFilter.tint(MaterialTheme.colors.onSurface),
             )
         }
 

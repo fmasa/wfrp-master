@@ -22,7 +22,6 @@ import dev.icerock.moko.resources.compose.stringResource
 class TraitCompendiumScreen(
     private val partyId: PartyId,
 ) : CompendiumScreen() {
-
     @Composable
     override fun Content() {
         val screenModel: TraitCompendiumScreenModel = rememberScreenModel(arg = partyId)
@@ -36,7 +35,7 @@ class TraitCompendiumScreen(
                 onSaveRequest = {
                     screenModel.createNew(it)
                     navigation.navigate(CompendiumTraitDetailScreen(partyId, it.id))
-                }
+                },
             )
         }
 

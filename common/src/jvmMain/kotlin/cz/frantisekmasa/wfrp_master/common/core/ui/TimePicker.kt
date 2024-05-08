@@ -12,7 +12,7 @@ import java.time.LocalTime
 @Composable
 actual fun timePicker(
     time: LocalTime,
-    onTimeChange: TimePicker.(LocalTime) -> Unit
+    onTimeChange: TimePicker.(LocalTime) -> Unit,
 ): TimePicker {
     val snackbarHolder = LocalPersistentSnackbarHolder.current
     val errorMessage = stringResource(Str.messages_non_desktop_feature)

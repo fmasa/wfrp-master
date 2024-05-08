@@ -16,9 +16,8 @@ import kotlinx.coroutines.flow.Flow
 class GameMasterScreenModel(
     private val partyId: PartyId,
     private val parties: PartyRepository,
-    private val characterRepository: CharacterRepository
+    private val characterRepository: CharacterRepository,
 ) : ScreenModel {
-
     val party: Flow<Party> = parties.getLive(partyId).right()
 
     val playerCharacters: Flow<List<Character>> = characterRepository.inParty(partyId, CharacterType.PLAYER_CHARACTER)

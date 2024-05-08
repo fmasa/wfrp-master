@@ -63,32 +63,36 @@ class JsonCompendiumExportScreen(
     }
 
     @Composable
-    private fun MainContainer(partyName: String, screenModel: CompendiumExportScreenModel) {
+    private fun MainContainer(
+        partyName: String,
+        screenModel: CompendiumExportScreenModel,
+    ) {
         val snackbarHolder = LocalPersistentSnackbarHolder.current
         var exporting by remember { mutableStateOf(false) }
 
         val messageExportFailed = stringResource(Str.compendium_messages_export_failed)
-        val fileSaver = rememberFileSaver(
-            FileType.JSON,
-            "$partyName-compendium",
-        ) { result ->
-            result.mapCatching { file ->
-                try {
-                    exporting = true
-                    val json = screenModel.buildExportJson()
-                    file.writeBytes(json.toByteArray())
-                } finally {
-                    file.close()
+        val fileSaver =
+            rememberFileSaver(
+                FileType.JSON,
+                "$partyName-compendium",
+            ) { result ->
+                result.mapCatching { file ->
+                    try {
+                        exporting = true
+                        val json = screenModel.buildExportJson()
+                        file.writeBytes(json.toByteArray())
+                    } finally {
+                        file.close()
+                        exporting = false
+                    }
+                }.onFailure {
+                    Napier.e(it.toString(), it)
+
+                    snackbarHolder.showSnackbar(messageExportFailed, SnackbarDuration.Long)
+
                     exporting = false
                 }
-            }.onFailure {
-                Napier.e(it.toString(), it)
-
-                snackbarHolder.showSnackbar(messageExportFailed, SnackbarDuration.Long)
-
-                exporting = false
             }
-        }
 
         if (exporting) {
             FullScreenProgress()

@@ -32,11 +32,14 @@ fun JournalEntryDialog(
     val formData = JournalEntryFormData.fromEntry(entry)
 
     CompendiumItemDialog(
-        title = stringResource(
-            if (entry == null)
-                Str.journal_title_new_entry
-            else Str.journal_title_edit_entry
-        ),
+        title =
+            stringResource(
+                if (entry == null) {
+                    Str.journal_title_new_entry
+                } else {
+                    Str.journal_title_edit_entry
+                },
+            ),
         formData = formData,
         saver = onSaveRequest,
         onDismissRequest = onDismissRequest,
@@ -49,7 +52,7 @@ fun JournalEntryDialog(
                 label = stringResource(Str.journal_label_entry_name),
                 value = formData.name,
                 validate = validate,
-                maxLength = JournalEntry.NAME_MAX_LENGTH
+                maxLength = JournalEntry.NAME_MAX_LENGTH,
             )
 
             TextInput(
@@ -98,18 +101,20 @@ private data class JournalEntryFormData(
     val isPinned: Boolean,
     val isVisibleToPlayers: Boolean,
 ) : CompendiumItemFormData<JournalEntry> {
-    override fun toValue() = JournalEntry(
-        id = id,
-        name = name.value,
-        parents = parents.value
-            .split(JournalEntry.PARENT_SEPARATOR)
-            .filter { it.isNotBlank() }
-            .map { it.trim() },
-        text = text.value,
-        gmText = gmText.value,
-        isPinned = isPinned,
-        isVisibleToPlayers = isVisibleToPlayers,
-    )
+    override fun toValue() =
+        JournalEntry(
+            id = id,
+            name = name.value,
+            parents =
+                parents.value
+                    .split(JournalEntry.PARENT_SEPARATOR)
+                    .filter { it.isNotBlank() }
+                    .map { it.trim() },
+            text = text.value,
+            gmText = gmText.value,
+            isPinned = isPinned,
+            isVisibleToPlayers = isVisibleToPlayers,
+        )
 
     override fun isValid() =
         name.isValid() &&
@@ -119,17 +124,19 @@ private data class JournalEntryFormData(
 
     companion object {
         @Composable
-        fun fromEntry(item: JournalEntry?) = JournalEntryFormData(
-            id = remember { item?.id ?: uuid4() },
-            name = inputValue(item?.name ?: "", Rules.NotBlank()),
-            parents = inputValue(
-                (item?.parents ?: emptyList())
-                    .joinToString(" ${JournalEntry.PARENT_SEPARATOR} ")
-            ),
-            text = inputValue(item?.text ?: ""),
-            gmText = inputValue(item?.gmText ?: ""),
-            isPinned = item?.isPinned ?: false,
-            isVisibleToPlayers = item?.isVisibleToPlayers ?: false,
-        )
+        fun fromEntry(item: JournalEntry?) =
+            JournalEntryFormData(
+                id = remember { item?.id ?: uuid4() },
+                name = inputValue(item?.name ?: "", Rules.NotBlank()),
+                parents =
+                    inputValue(
+                        (item?.parents ?: emptyList())
+                            .joinToString(" ${JournalEntry.PARENT_SEPARATOR} "),
+                    ),
+                text = inputValue(item?.text ?: ""),
+                gmText = inputValue(item?.gmText ?: ""),
+                isPinned = item?.isPinned ?: false,
+                isVisibleToPlayers = item?.isVisibleToPlayers ?: false,
+            )
     }
 }

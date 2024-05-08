@@ -13,11 +13,14 @@ import cz.frantisekmasa.wfrp_master.common.Str
 import cz.frantisekmasa.wfrp_master.common.core.shared.Resources
 import cz.frantisekmasa.wfrp_master.common.core.shared.drawableResource
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
-import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.VisualOnlyIconDescription
+import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.VISUAL_ONLY_ICON_DESCRIPTION
 import dev.icerock.moko.resources.compose.stringResource
 
 @Composable
-fun CompendiumButton(modifier: Modifier, onClick: () -> Unit) {
+fun CompendiumButton(
+    modifier: Modifier,
+    onClick: () -> Unit,
+) {
     OutlinedButton(
         modifier = modifier,
         onClick = onClick,
@@ -25,8 +28,8 @@ fun CompendiumButton(modifier: Modifier, onClick: () -> Unit) {
         Box(Modifier.padding(end = Spacing.small)) {
             Icon(
                 drawableResource(Resources.Drawable.Compendium),
-                VisualOnlyIconDescription,
-                Modifier.size(16.dp)
+                VISUAL_ONLY_ICON_DESCRIPTION,
+                Modifier.size(16.dp),
             )
         }
         Text(stringResource(Str.compendium_title))

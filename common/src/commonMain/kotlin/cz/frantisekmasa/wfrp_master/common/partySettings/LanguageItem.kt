@@ -27,8 +27,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.halilibo.richtext.markdown.Markdown
-import com.halilibo.richtext.ui.RichText
+import com.halilibo.richtext.commonmark.Markdown
+import com.halilibo.richtext.ui.material.RichText
 import cz.frantisekmasa.wfrp_master.common.Str
 import cz.frantisekmasa.wfrp_master.common.core.domain.localizedName
 import cz.frantisekmasa.wfrp_master.common.core.ui.buttons.CloseButton
@@ -46,7 +46,10 @@ import dev.icerock.moko.resources.compose.stringResource
 import kotlinx.coroutines.Dispatchers
 
 @Composable
-fun LanguageItem(language: Language, screenModel: PartySettingsScreenModel) {
+fun LanguageItem(
+    language: Language,
+    screenModel: PartySettingsScreenModel,
+) {
     var dialogVisible by rememberSaveable { mutableStateOf(false) }
 
     ListItem(
@@ -97,9 +100,9 @@ private fun PartyLanguageDialog(
                                         saving = false
                                     }
                                 }
-                            }
+                            },
                         )
-                    }
+                    },
                 )
             },
         ) {
@@ -111,15 +114,16 @@ private fun PartyLanguageDialog(
             Column(
                 Modifier
                     .verticalScroll(rememberScrollState())
-                    .padding(Spacing.bodyPadding)
+                    .padding(Spacing.bodyPadding),
             ) {
                 SelectBox(
                     value = newLanguage,
-                    items = remember {
-                        Language.values()
-                            .map { it to it.localizedName }
-                            .sortedBy { it.second }
-                    },
+                    items =
+                        remember {
+                            Language.values()
+                                .map { it to it.localizedName }
+                                .sortedBy { it.second }
+                        },
                     onValueChange = { newLanguage = it },
                 )
 
@@ -127,9 +131,12 @@ private fun PartyLanguageDialog(
 
                 val isLightTheme = MaterialTheme.colors.isLight
                 Card(
-                    backgroundColor = if (isLightTheme)
-                        Theme.fixedColors.warning
-                    else MaterialTheme.colors.surface,
+                    backgroundColor =
+                        if (isLightTheme) {
+                            Theme.fixedColors.warning
+                        } else {
+                            MaterialTheme.colors.surface
+                        },
                     border = if (isLightTheme) null else BorderStroke(1.dp, Theme.fixedColors.warning),
                 ) {
                     Row(

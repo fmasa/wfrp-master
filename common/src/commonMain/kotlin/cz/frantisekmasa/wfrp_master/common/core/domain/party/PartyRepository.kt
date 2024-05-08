@@ -7,23 +7,31 @@ import dev.gitlive.firebase.firestore.Transaction
 import kotlinx.coroutines.flow.Flow
 
 interface PartyRepository {
-
     /**
      * @throws CouldNotConnectToBackend when repository cannot connect to server
      */
     suspend fun save(party: Party)
 
-    fun save(transaction: Transaction, party: Party)
+    fun save(
+        transaction: Transaction,
+        party: Party,
+    )
 
     /**
      * @throws PartyNotFound
      */
-    suspend fun update(id: PartyId, mutator: (Party) -> Party)
+    suspend fun update(
+        id: PartyId,
+        mutator: (Party) -> Party,
+    )
 
     /**
      * @throws PartyNotFound
      */
-    suspend fun get(transaction: Transaction, id: PartyId): Party
+    suspend fun get(
+        transaction: Transaction,
+        id: PartyId,
+    ): Party
 
     fun getLive(id: PartyId): Flow<Either<PartyNotFound, Party>>
 

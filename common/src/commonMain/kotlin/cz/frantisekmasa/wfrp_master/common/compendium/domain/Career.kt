@@ -21,7 +21,6 @@ data class Career(
     val levels: List<Level>,
     override val isVisibleToPlayers: Boolean = true,
 ) : CompendiumItem<Career>() {
-
     companion object {
         const val NAME_MAX_LENGTH = 50
         const val DESCRIPTION_MAX_LENGTH = 3000
@@ -41,18 +40,18 @@ data class Career(
 
         return copy(
             id = original.id,
-            levels = levels.map {
-                val originalLevel = originalLevelsByName[it.name]
+            levels =
+                levels.map {
+                    val originalLevel = originalLevelsByName[it.name]
 
-                if (originalLevel != null) it.copy(id = originalLevel.id) else it
-            }
+                    if (originalLevel != null) it.copy(id = originalLevel.id) else it
+                },
         )
     }
 
     override fun duplicate(): Career = copy(id = uuid4(), name = duplicateName())
 
-    override fun changeVisibility(isVisibleToPlayers: Boolean) =
-        copy(isVisibleToPlayers = isVisibleToPlayers)
+    override fun changeVisibility(isVisibleToPlayers: Boolean) = copy(isVisibleToPlayers = isVisibleToPlayers)
 
     @Parcelize
     @Serializable

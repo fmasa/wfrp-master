@@ -16,7 +16,6 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.rememberScreenMode
 
 class CharacterMiracleDetailScreen(characterId: CharacterId, miracleId: Uuid) :
     CharacterItemDetailScreen(characterId, miracleId) {
-
     @Composable
     override fun Content() {
         val screenModel: CharacterMiracleDetailScreenModel = rememberScreenModel(arg = characterId)
@@ -30,17 +29,18 @@ class CharacterMiracleDetailScreen(characterId: CharacterId, miracleId: Uuid) :
                     subheadBar = {
                         if (isGameMaster) {
                             CompendiumButton(
-                                modifier = Modifier
-                                    .align(Alignment.CenterHorizontally)
-                                    .padding(top = Spacing.bodyPadding),
+                                modifier =
+                                    Modifier
+                                        .align(Alignment.CenterHorizontally)
+                                        .padding(top = Spacing.bodyPadding),
                                 onClick = {
                                     navigation.navigate(
                                         CompendiumMiracleDetailScreen(
                                             screenModel.characterId.partyId,
                                             miracle.compendiumId,
-                                        )
+                                        ),
                                     )
-                                }
+                                },
                             )
                         }
                     },

@@ -38,7 +38,6 @@ import dev.icerock.moko.resources.compose.stringResource
 class GameMasterScreen(
     private val partyId: PartyId,
 ) : Screen {
-
     override val key = "party/$partyId"
 
     @Composable
@@ -65,9 +64,9 @@ class GameMasterScreen(
                                 navigation.navigate(PartySettingsScreen(party.id))
                             },
                         )
-                    }
+                    },
                 )
-            }
+            },
         ) {
             if (party == null) {
                 Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
@@ -106,7 +105,7 @@ class GameMasterScreen(
                             screenModel = screenModel,
                             onCharacterOpenRequest = {
                                 navigation.navigate(
-                                    CharacterDetailScreen(CharacterId(party.id, it.id))
+                                    CharacterDetailScreen(CharacterId(party.id, it.id)),
                                 )
                             },
                             onCharacterCreateRequest = {
@@ -115,7 +114,7 @@ class GameMasterScreen(
                                         partyId,
                                         CharacterType.PLAYER_CHARACTER,
                                         it,
-                                    )
+                                    ),
                                 )
                             },
                         )

@@ -51,11 +51,12 @@ fun StartCombatDialog(
         LaunchedEffect(encounter.id) {
             withContext(Dispatchers.IO) {
                 val charactersAsync = async { screenModel.loadCharacters() }
-                val npcCharactersAsync = async {
-                    screenModel.loadNpcs()
-                        .map { it to (encounter.characters[it.id] ?: 0) }
-                        .filter { (_, count) -> count > 0 }
-                }
+                val npcCharactersAsync =
+                    async {
+                        screenModel.loadNpcs()
+                            .map { it to (encounter.characters[it.id] ?: 0) }
+                            .filter { (_, count) -> count > 0 }
+                    }
 
                 characters.putAll(charactersAsync.await().associateWith { true })
                 npcCharacters.putAll(npcCharactersAsync.await())
@@ -83,13 +84,14 @@ fun StartCombatDialog(
                                     onComplete()
                                 }
                             },
-                            enabled = !saving &&
-                                npcCharacters.any { it.value > 0 } &&
-                                isAtLeastOneChecked(characters),
+                            enabled =
+                                !saving &&
+                                    npcCharacters.any { it.value > 0 } &&
+                                    isAtLeastOneChecked(characters),
                         )
-                    }
+                    },
                 )
-            }
+            },
         ) {
             Column(
                 // TODO: Consider LazyColumn
@@ -111,6 +113,7 @@ fun StartCombatDialog(
 }
 
 private fun isAtLeastOneChecked(items: Map<out Any, Boolean>) = items.containsValue(true)
+
 private fun <T> pickCheckedOnes(items: Map<T, Boolean>): List<T> =
     items.filterValues { it }
         .keys
@@ -120,7 +123,7 @@ private fun <T> pickCheckedOnes(items: Map<T, Boolean>): List<T> =
 private fun <T> CombatantList(
     title: String,
     items: MutableMap<T, Boolean>,
-    nameFactory: (T) -> String
+    nameFactory: (T) -> String,
 ) {
     CardContainer(Modifier.fillMaxWidth()) {
         CardTitle(title)
@@ -133,11 +136,12 @@ private fun <T> CombatantList(
                         onCheckedChange = { items[item] = it },
                     )
                 },
-                modifier = Modifier.toggleable(
-                    value = items[item] ?: false,
-                    onValueChange = { items[item] = it },
-                ),
-                text = { Text(nameFactory(item)) }
+                modifier =
+                    Modifier.toggleable(
+                        value = items[item] ?: false,
+                        onValueChange = { items[item] = it },
+                    ),
+                text = { Text(nameFactory(item)) },
             )
         }
     }

@@ -18,17 +18,19 @@ enum class Condition(
     PRONE(Str.conditions_prone),
     STUNNED(Str.conditions_stunned),
     SURPRISED(Str.conditions_surprised),
-    UNCONSCIOUS(Str.conditions_unconscious);
+    UNCONSCIOUS(Str.conditions_unconscious),
+    ;
 
     @Suppress("unused") // TODO: This may be used in future
-    fun getFutureConditions(): Array<Condition> = when (this) {
-        BLEEDING -> arrayOf(FATIGUED)
-        BROKEN -> arrayOf(FATIGUED)
-        POISONED -> arrayOf(FATIGUED)
-        STUNNED -> arrayOf(FATIGUED)
-        UNCONSCIOUS -> arrayOf(PRONE, FATIGUED)
-        else -> emptyArray()
-    }
+    fun getFutureConditions(): Array<Condition> =
+        when (this) {
+            BLEEDING -> arrayOf(FATIGUED)
+            BROKEN -> arrayOf(FATIGUED)
+            POISONED -> arrayOf(FATIGUED)
+            STUNNED -> arrayOf(FATIGUED)
+            UNCONSCIOUS -> arrayOf(PRONE, FATIGUED)
+            else -> emptyArray()
+        }
 
-    fun isStackable() = ! arrayOf(PRONE, SURPRISED, UNCONSCIOUS).contains(this)
+    fun isStackable() = !arrayOf(PRONE, SURPRISED, UNCONSCIOUS).contains(this)
 }

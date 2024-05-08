@@ -55,17 +55,20 @@ fun EquipBar(
                         onChange(
                             trapping.copy(
                                 containerId = null,
-                                trappingType = if (equip == null)
-                                    weapon.unequip()
-                                else weapon.equip(equip)
-                            )
+                                trappingType =
+                                    if (equip == null) {
+                                        weapon.unequip()
+                                    } else {
+                                        weapon.equip(equip)
+                                    },
+                            ),
                         )
                     } finally {
                         saving = false
                         dialogOpened = false
                     }
                 }
-            }
+            },
         ) {
             Text(it?.localizedName ?: stringResource(Str.weapons_equip_not_equipped))
         }
@@ -80,11 +83,11 @@ fun EquipBar(
             Text(stringResource(Str.weapons_label_equip))
 
             Row(
-                Modifier.clickable { dialogOpened = true }
+                Modifier.clickable { dialogOpened = true },
             ) {
                 Text(
                     weapon.equipped?.localizedName
-                        ?: stringResource(Str.weapons_equip_not_equipped)
+                        ?: stringResource(Str.weapons_equip_not_equipped),
                 )
                 Icon(
                     Icons.Rounded.ExpandMore,

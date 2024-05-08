@@ -8,9 +8,16 @@ import dev.gitlive.firebase.firestore.Transaction
 import kotlinx.coroutines.flow.Flow
 
 interface CharacterRepository {
-    suspend fun save(partyId: PartyId, character: Character)
+    suspend fun save(
+        partyId: PartyId,
+        character: Character,
+    )
 
-    fun save(transaction: Transaction, partyId: PartyId, character: Character)
+    fun save(
+        transaction: Transaction,
+        partyId: PartyId,
+        character: Character,
+    )
 
     /**
      * @throws CharacterNotFound
@@ -19,13 +26,25 @@ interface CharacterRepository {
 
     fun getLive(characterId: CharacterId): Flow<Either<CharacterNotFound, Character>>
 
-    suspend fun hasCharacterInParty(userId: String, partyId: PartyId): Boolean
+    suspend fun hasCharacterInParty(
+        userId: String,
+        partyId: PartyId,
+    ): Boolean
 
-    suspend fun findByCompendiumCareer(partyId: PartyId, careerId: Uuid): List<Character>
+    suspend fun findByCompendiumCareer(
+        partyId: PartyId,
+        careerId: Uuid,
+    ): List<Character>
 
-    fun inParty(partyId: PartyId, type: CharacterType): Flow<List<Character>> {
+    fun inParty(
+        partyId: PartyId,
+        type: CharacterType,
+    ): Flow<List<Character>> {
         return inParty(partyId, setOf(type))
     }
 
-    fun inParty(partyId: PartyId, types: Set<CharacterType>): Flow<List<Character>>
+    fun inParty(
+        partyId: PartyId,
+        types: Set<CharacterType>,
+    ): Flow<List<Character>>
 }

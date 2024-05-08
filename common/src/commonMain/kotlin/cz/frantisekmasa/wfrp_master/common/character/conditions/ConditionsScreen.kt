@@ -31,7 +31,7 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
 fun ConditionsScreen(
     state: ConditionsScreenState,
     updateConditions: (CurrentConditions) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     ConditionsForm(
         modifier = modifier,
@@ -63,21 +63,22 @@ fun ConditionsForm(
 private fun ConditionRow(
     condition: Condition,
     state: CurrentConditions,
-    update: (CurrentConditions) -> Unit
+    update: (CurrentConditions) -> Unit,
 ) {
     Row(
         Modifier
             .fillMaxWidth()
             .background(MaterialTheme.colors.surface)
             .padding(vertical = 2.dp, horizontal = 12.dp),
-        verticalAlignment = Alignment.CenterVertically
+        verticalAlignment = Alignment.CenterVertically,
     ) {
         ConditionIcon(condition)
         Text(
             condition.localizedName,
-            modifier = Modifier
-                .weight(1f)
-                .padding(start = 8.dp),
+            modifier =
+                Modifier
+                    .weight(1f)
+                    .padding(start = 8.dp),
         )
 
         val count = state.count(condition)
@@ -94,35 +95,41 @@ private fun ConditionRow(
                 checked = count != 0,
                 onCheckedChange = { checked ->
                     update(
-                        if (checked)
+                        if (checked) {
                             state.addConditions(condition)
-                        else state.removeCondition(condition)
+                        } else {
+                            state.removeCondition(condition)
+                        },
                     )
-                }
+                },
             )
         }
     }
 }
 
 @Composable
-fun ConditionIcon(condition: Condition, size: Dp = 28.dp) {
-    val iconRes = when (condition) {
-        Condition.ABLAZE -> Resources.Drawable.ConditionAblaze
-        Condition.BLINDED -> Resources.Drawable.ConditionBlinded
-        Condition.BROKEN -> Resources.Drawable.ConditionBroken
-        Condition.DEAFENED -> Resources.Drawable.ConditionDeafened
-        Condition.ENTANGLED -> Resources.Drawable.ConditionEntangled
-        Condition.FATIGUED -> Resources.Drawable.ConditionFatigued
-        Condition.POISONED -> Resources.Drawable.ConditionPoisoned
-        Condition.PRONE -> Resources.Drawable.ConditionProne
-        Condition.STUNNED -> Resources.Drawable.ConditionStunned
-        Condition.SURPRISED -> Resources.Drawable.ConditionSurprised
-        Condition.UNCONSCIOUS -> Resources.Drawable.ConditionUnconscious
-        Condition.BLEEDING -> Resources.Drawable.ConditionBleeding
-    }
+fun ConditionIcon(
+    condition: Condition,
+    size: Dp = 28.dp,
+) {
+    val iconRes =
+        when (condition) {
+            Condition.ABLAZE -> Resources.Drawable.ConditionAblaze
+            Condition.BLINDED -> Resources.Drawable.ConditionBlinded
+            Condition.BROKEN -> Resources.Drawable.ConditionBroken
+            Condition.DEAFENED -> Resources.Drawable.ConditionDeafened
+            Condition.ENTANGLED -> Resources.Drawable.ConditionEntangled
+            Condition.FATIGUED -> Resources.Drawable.ConditionFatigued
+            Condition.POISONED -> Resources.Drawable.ConditionPoisoned
+            Condition.PRONE -> Resources.Drawable.ConditionProne
+            Condition.STUNNED -> Resources.Drawable.ConditionStunned
+            Condition.SURPRISED -> Resources.Drawable.ConditionSurprised
+            Condition.UNCONSCIOUS -> Resources.Drawable.ConditionUnconscious
+            Condition.BLEEDING -> Resources.Drawable.ConditionBleeding
+        }
     Image(
         drawableResource(iconRes),
         condition.localizedName,
-        Modifier.size(size)
+        Modifier.size(size),
     )
 }

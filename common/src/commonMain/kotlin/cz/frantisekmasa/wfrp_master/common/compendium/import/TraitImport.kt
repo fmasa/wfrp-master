@@ -26,20 +26,22 @@ data class TraitImport(
         description.requireMaxLength(Trait.DESCRIPTION_MAX_LENGTH, "trait description")
     }
 
-    fun toTrait() = Trait(
-        id = uuid4(),
-        name = name,
-        specifications = specifications,
-        description = description,
-        isVisibleToPlayers = isVisibleToPlayers,
-    )
+    fun toTrait() =
+        Trait(
+            id = uuid4(),
+            name = name,
+            specifications = specifications,
+            description = description,
+            isVisibleToPlayers = isVisibleToPlayers,
+        )
 
     companion object {
-        fun fromTrait(trait: Trait) = TraitImport(
-            name = trait.name,
-            specifications = trait.specifications,
-            description = trait.description,
-            isVisibleToPlayers = trait.isVisibleToPlayers,
-        )
+        fun fromTrait(trait: Trait) =
+            TraitImport(
+                name = trait.name,
+                specifications = trait.specifications,
+                description = trait.description,
+                isVisibleToPlayers = trait.isVisibleToPlayers,
+            )
     }
 }

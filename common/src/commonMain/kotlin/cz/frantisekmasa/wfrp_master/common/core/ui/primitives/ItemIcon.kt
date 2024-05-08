@@ -26,21 +26,24 @@ object ItemIcon {
     enum class Size {
         Small,
         Large,
-        XLarge;
+        XLarge,
+        ;
 
         val dimensions: Dp
-            get() = when (this) {
-                Small -> 20.dp
-                Large -> 24.dp
-                XLarge -> 48.dp
-            }
+            get() =
+                when (this) {
+                    Small -> 20.dp
+                    Large -> 24.dp
+                    XLarge -> 48.dp
+                }
 
         val padding: Dp
-            get() = when (this) {
-                Small -> 10.dp
-                Large -> 12.dp
-                XLarge -> 24.dp
-            }
+            get() =
+                when (this) {
+                    Small -> 10.dp
+                    Large -> 12.dp
+                    XLarge -> 24.dp
+                }
     }
 }
 
@@ -56,12 +59,15 @@ fun ItemIcon(
 
     Image(
         rememberImagePainter(url).value,
-        VisualOnlyIconDescription, // TODO: Provide mechanism to specify what does this image means, such as: ("Character's image", "Strength-based skill", etc.)
-        modifier = modifier
-            .clip(CircleShape)
-            .background(backgroundColor, CircleShape)
-            .width(dimensions)
-            .height(dimensions)
+        // TODO: Provide mechanism to specify what does this image means,
+        //  such as: ("Character's image", "Strength-based skill", etc.)
+        VISUAL_ONLY_ICON_DESCRIPTION,
+        modifier =
+            modifier
+                .clip(CircleShape)
+                .background(backgroundColor, CircleShape)
+                .width(dimensions)
+                .height(dimensions),
     )
 }
 
@@ -89,22 +95,29 @@ fun ItemIcon(
 }
 
 @Composable
-private fun ItemIcon(painter: Painter, size: ItemIcon.Size, backgroundColor: Color, tint: Color) {
+private fun ItemIcon(
+    painter: Painter,
+    size: ItemIcon.Size,
+    backgroundColor: Color,
+    tint: Color,
+) {
     Image(
         painter,
-        VisualOnlyIconDescription, // TODO: Provide mechanism to specify what does this image means, such as: ("Character's image", "Strength-based skill", etc.)
+        // TODO: Provide mechanism to specify what does this image means,
+        //  such as: ("Character's image", "Strength-based skill", etc.)
+        VISUAL_ONLY_ICON_DESCRIPTION,
         colorFilter = ColorFilter.tint(tint),
-        modifier = Modifier
-            .background(backgroundColor, CircleShape)
-            .padding(size.padding)
-            .width(size.dimensions)
-            .height(size.dimensions)
+        modifier =
+            Modifier
+                .background(backgroundColor, CircleShape)
+                .padding(size.padding)
+                .width(size.dimensions)
+                .height(size.dimensions),
     )
 }
 
 @Composable
-fun defaultBackgroundColor() =
-    MaterialTheme.colors.onSurface.copy(alpha = ContentAlpha.medium)
+fun defaultBackgroundColor() = MaterialTheme.colors.onSurface.copy(alpha = ContentAlpha.medium)
 
 @Composable
 private fun defaultTint(): Color = MaterialTheme.colors.surface

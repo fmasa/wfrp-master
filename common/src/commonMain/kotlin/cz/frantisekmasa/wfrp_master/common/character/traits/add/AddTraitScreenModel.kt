@@ -21,11 +21,12 @@ class AddTraitScreenModel(
     private val parties: PartyRepository,
     availableCompendiumItemsFactory: AvailableCompendiumItemsFactory,
 ) : ScreenModel {
-    val state = availableCompendiumItemsFactory.create(
-        partyId = characterId.partyId,
-        compendium = compendium,
-        filterCharacterItems = traits.findAllForCharacter(characterId),
-    ).map { AddTraitScreenState(availableCompendiumItems = it) }
+    val state =
+        availableCompendiumItemsFactory.create(
+            partyId = characterId.partyId,
+            compendium = compendium,
+            filterCharacterItems = traits.findAllForCharacter(characterId),
+        ).map { AddTraitScreenState(availableCompendiumItems = it) }
 
     suspend fun saveNewTrait(trait: Trait) {
         firestore.runTransaction {

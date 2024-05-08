@@ -4,7 +4,6 @@ import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.parsers.Do
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.parsers.PdfStructure
 
 interface TrappingDescriptionParser {
-
     fun parse(
         document: Document,
         structure: PdfStructure,

@@ -14,7 +14,10 @@ data class EquippedWeapon(
     val damage: Damage,
 ) {
     companion object {
-        fun fromTrappingOrNull(trapping: InventoryItem, strengthBonus: Int): EquippedWeapon? {
+        fun fromTrappingOrNull(
+            trapping: InventoryItem,
+            strengthBonus: Int,
+        ): EquippedWeapon? {
             val type = trapping.trappingType
 
             if (type !is TrappingType.Weapon) {
@@ -27,10 +30,11 @@ data class EquippedWeapon(
                 trapping = trapping,
                 weapon = type,
                 equip = equip,
-                damage = type.damage.calculate(
-                    strengthBonus = strengthBonus,
-                    successLevels = 0,
-                )
+                damage =
+                    type.damage.calculate(
+                        strengthBonus = strengthBonus,
+                        successLevels = 0,
+                    ),
             )
         }
     }

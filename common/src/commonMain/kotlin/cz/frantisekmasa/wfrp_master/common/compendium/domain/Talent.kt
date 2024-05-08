@@ -13,7 +13,8 @@ import kotlinx.serialization.Serializable
 data class Talent(
     override val id: UuidAsString,
     override val name: String,
-    val tests: String = "", // TODO: Remove default value in 3.0
+    // TODO: Remove default value in 3.0
+    val tests: String = "",
     val maxTimesTaken: String,
     val description: String,
     override val isVisibleToPlayers: Boolean = true,
@@ -37,6 +38,5 @@ data class Talent(
 
     override fun duplicate() = copy(id = uuid4(), name = duplicateName())
 
-    override fun changeVisibility(isVisibleToPlayers: Boolean) =
-        copy(isVisibleToPlayers = isVisibleToPlayers)
+    override fun changeVisibility(isVisibleToPlayers: Boolean) = copy(isVisibleToPlayers = isVisibleToPlayers)
 }

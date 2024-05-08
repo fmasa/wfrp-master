@@ -60,9 +60,10 @@ fun CombatantSheet(
                 .animateContentSize(),
             verticalArrangement = Arrangement.spacedBy(Spacing.small),
         ) {
-            val statBlockData = remember(combatant.combatant.id) {
-                viewModel.getStatBlockData(combatant.characterId)
-            }.collectWithLifecycle()
+            val statBlockData =
+                remember(combatant.combatant.id) {
+                    viewModel.getStatBlockData(combatant.characterId)
+                }.collectWithLifecycle()
 
             if (statBlockData == null) {
                 Box(
@@ -81,7 +82,7 @@ fun CombatantSheet(
                 Text(
                     combatant.name,
                     style = MaterialTheme.typography.h6,
-                    modifier = Modifier.clickable(onClick = onDetailOpenRequest)
+                    modifier = Modifier.clickable(onClick = onDetailOpenRequest),
                 )
 
                 if (onRemoveRequest != null) {
@@ -135,7 +136,10 @@ fun CombatantSheet(
 }
 
 @Composable
-private fun CombatantWounds(combatant: CombatantItem, viewModel: CombatScreenModel) {
+private fun CombatantWounds(
+    combatant: CombatantItem,
+    viewModel: CombatScreenModel,
+) {
     val coroutineScope = rememberCoroutineScope()
     val updateWounds = { wounds: Wounds ->
         coroutineScope.launch(Dispatchers.IO) {
@@ -171,7 +175,7 @@ private fun CombatantAdvantage(
     AdvantagePicker(
         label = stringResource(Str.combat_label_advantage),
         value = advantage,
-        onChange = { updateAdvantage(it.coerceAtMost(advantageCap)) }
+        onChange = { updateAdvantage(it.coerceAtMost(advantageCap)) },
     )
 }
 
@@ -192,8 +196,9 @@ private fun ConditionsBox(
     }
 
     Box(
-        modifier = modifier.clickable { conditionsDialogOpened = true }
-            .fillMaxWidth(),
+        modifier =
+            modifier.clickable { conditionsDialogOpened = true }
+                .fillMaxWidth(),
         contentAlignment = Alignment.Center,
     ) {
         val conditions = combatant.conditions

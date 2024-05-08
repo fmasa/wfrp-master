@@ -19,19 +19,18 @@ class MiracleCompendiumScreenModel(
     characterItems: CharacterItemRepository<CharacterMiracle>,
     parties: PartyRepository,
 ) : CharacterItemCompendiumItemScreenModel<Miracle, CharacterMiracle>(
-    partyId,
-    firestore,
-    compendium,
-    characterItems,
-    parties,
-) {
-
+        partyId,
+        firestore,
+        compendium,
+        characterItems,
+        parties,
+    ) {
     override suspend fun updateCharacterItem(
         transaction: Transaction,
         party: Party,
         characterId: CharacterId,
         existing: CharacterMiracle,
-        new: CharacterMiracle
+        new: CharacterMiracle,
     ) {
         characterItems.save(transaction, characterId, new)
     }

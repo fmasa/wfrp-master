@@ -22,14 +22,17 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.settings.SettingsTitle
 import dev.icerock.moko.resources.compose.stringResource
 
 @Composable
-fun ExperienceSection(character: Character, screenModel: CharacterScreenModel) {
+fun ExperienceSection(
+    character: Character,
+    screenModel: CharacterScreenModel,
+) {
     Scaffold(
         topBar = {
             TopAppBar(
                 navigationIcon = { BackButton() },
                 title = { Text(stringResource(Str.character_title_experience)) },
             )
-        }
+        },
     ) {
         SettingsCard {
             ExperiencePointsSection(character, screenModel)
@@ -39,7 +42,10 @@ fun ExperienceSection(character: Character, screenModel: CharacterScreenModel) {
 }
 
 @Composable
-private fun ExperiencePointsSection(character: Character, screenModel: CharacterScreenModel) {
+private fun ExperiencePointsSection(
+    character: Character,
+    screenModel: CharacterScreenModel,
+) {
     var experienceDialogVisible by rememberSaveable { mutableStateOf(false) }
 
     if (experienceDialogVisible) {
@@ -48,7 +54,7 @@ private fun ExperiencePointsSection(character: Character, screenModel: Character
             save = {
                 screenModel.update { character -> character.updatePoints(it) }
             },
-            onDismissRequest = { experienceDialogVisible = false }
+            onDismissRequest = { experienceDialogVisible = false },
         )
     }
 
@@ -57,17 +63,21 @@ private fun ExperiencePointsSection(character: Character, screenModel: Character
     ListItem(
         text = { Text(stringResource(Str.points_label_current_experience)) },
         secondaryText = { Text(character.points.experience.toString()) },
-        modifier = Modifier.clickable { experienceDialogVisible = true }
+        modifier = Modifier.clickable { experienceDialogVisible = true },
     )
 
     ListItem(
         text = { Text(stringResource(Str.points_label_spent_experience)) },
         secondaryText = { Text(character.points.spentExperience.toString()) },
-        modifier = Modifier.clickable { experienceDialogVisible = true }
+        modifier = Modifier.clickable { experienceDialogVisible = true },
     )
 }
+
 @Composable
-private fun AmbitionsSection(character: Character, screenModel: CharacterScreenModel) {
+private fun AmbitionsSection(
+    character: Character,
+    screenModel: CharacterScreenModel,
+) {
     var ambitionsDialogVisible by rememberSaveable { mutableStateOf(false) }
 
     if (ambitionsDialogVisible) {
@@ -86,12 +96,12 @@ private fun AmbitionsSection(character: Character, screenModel: CharacterScreenM
     ListItem(
         text = { Text(stringResource(Str.ambition_label_short_term)) },
         secondaryText = { Text(character.ambitions.shortTerm) },
-        modifier = Modifier.clickable { ambitionsDialogVisible = true }
+        modifier = Modifier.clickable { ambitionsDialogVisible = true },
     )
 
     ListItem(
         text = { Text(stringResource(Str.ambition_label_long_term)) },
         secondaryText = { Text(character.ambitions.longTerm) },
-        modifier = Modifier.clickable { ambitionsDialogVisible = true }
+        modifier = Modifier.clickable { ambitionsDialogVisible = true },
     )
 }

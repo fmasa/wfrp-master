@@ -4,7 +4,6 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 
 class MoveItemTest {
-
     @Test
     fun `sourceIndex is before targetIndex`() {
         val data = listOf(1, 2, 3, 4, 5)

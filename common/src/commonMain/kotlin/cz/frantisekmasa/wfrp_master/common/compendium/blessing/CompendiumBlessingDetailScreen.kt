@@ -12,7 +12,6 @@ class CompendiumBlessingDetailScreen(
     private val partyId: PartyId,
     private val blessingId: Uuid,
 ) : Screen {
-
     @Composable
     override fun Content() {
         val screenModel: BlessingCompendiumScreenModel = rememberScreenModel(arg = partyId)
@@ -27,7 +26,7 @@ class CompendiumBlessingDetailScreen(
                     duration = it.duration,
                     effect = it.effect,
                 )
-            }
+            },
         ) { item, onDismissRequest ->
             BlessingDialog(
                 blessing = item,

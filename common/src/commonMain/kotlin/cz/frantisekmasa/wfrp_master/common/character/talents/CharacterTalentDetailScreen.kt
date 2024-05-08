@@ -27,7 +27,6 @@ import kotlinx.coroutines.launch
 
 class CharacterTalentDetailScreen(characterId: CharacterId, talentId: Uuid) :
     CharacterItemDetailScreen(characterId, talentId) {
-
     @Composable
     override fun Content() {
         val screenModel: CharacterTalentDetailScreenModel = rememberScreenModel(arg = characterId)
@@ -53,17 +52,18 @@ class CharacterTalentDetailScreen(characterId: CharacterId, talentId: Uuid) :
 
                         if (isGameMaster) {
                             CompendiumButton(
-                                modifier = Modifier
-                                    .align(Alignment.CenterHorizontally)
-                                    .padding(top = Spacing.bodyPadding),
+                                modifier =
+                                    Modifier
+                                        .align(Alignment.CenterHorizontally)
+                                        .padding(top = Spacing.bodyPadding),
                                 onClick = {
                                     navigation.navigate(
                                         CompendiumTalentDetailScreen(
                                             screenModel.characterId.partyId,
                                             talent.compendiumId,
-                                        )
+                                        ),
                                     )
-                                }
+                                },
                             )
                         }
                     },
@@ -80,7 +80,10 @@ class CharacterTalentDetailScreen(characterId: CharacterId, talentId: Uuid) :
 }
 
 @Composable
-private fun TimesTakenBar(timesTaken: Int, onTimesTakenChange: (timesTaken: Int) -> Unit) {
+private fun TimesTakenBar(
+    timesTaken: Int,
+    onTimesTakenChange: (timesTaken: Int) -> Unit,
+) {
     SubheadBar {
         Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
             Text(
@@ -94,7 +97,7 @@ private fun TimesTakenBar(timesTaken: Int, onTimesTakenChange: (timesTaken: Int)
                     if (timesTaken > 1) {
                         onTimesTakenChange(timesTaken - 1)
                     }
-                }
+                },
             )
         }
     }

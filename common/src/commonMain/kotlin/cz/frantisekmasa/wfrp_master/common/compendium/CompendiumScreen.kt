@@ -34,7 +34,6 @@ import kotlinx.coroutines.launch
 import kotlin.coroutines.EmptyCoroutineContext
 
 abstract class CompendiumScreen() : Screen {
-
     enum class Type(
         override val translatableName: StringResource,
         val screen: (PartyId) -> Screen,
@@ -63,8 +62,9 @@ abstract class CompendiumScreen() : Screen {
         val coroutineScope = rememberCoroutineScope { EmptyCoroutineContext + Dispatchers.IO }
 
         SearchableList(
-            data = liveItems.collectWithLifecycle(null).value
-                ?.let { SearchableList.Data.Loaded(it) } ?: SearchableList.Data.Loading,
+            data =
+                liveItems.collectWithLifecycle(null).value
+                    ?.let { SearchableList.Data.Loaded(it) } ?: SearchableList.Data.Loading,
             emptyUi = emptyUI,
             title = type.localizedName,
             searchPlaceholder = "",
@@ -73,18 +73,19 @@ abstract class CompendiumScreen() : Screen {
             key = { it.id },
             itemContent = { item ->
                 WithContextMenu(
-                    items = listOf(
-                        ContextMenu.Item(
-                            stringResource(Str.common_ui_button_duplicate),
-                            onClick = {
-                                coroutineScope.launch { newItemSaver(item.duplicate()) }
-                            }
+                    items =
+                        listOf(
+                            ContextMenu.Item(
+                                stringResource(Str.common_ui_button_duplicate),
+                                onClick = {
+                                    coroutineScope.launch { newItemSaver(item.duplicate()) }
+                                },
+                            ),
+                            ContextMenu.Item(
+                                stringResource(Str.common_ui_button_remove),
+                                onClick = { coroutineScope.launch { remover(item) } },
+                            ),
                         ),
-                        ContextMenu.Item(
-                            stringResource(Str.common_ui_button_remove),
-                            onClick = { coroutineScope.launch { remover(item) } }
-                        ),
-                    ),
                     onClick = { onClick(item) },
                 ) {
                     itemContent(item)
@@ -97,7 +98,7 @@ abstract class CompendiumScreen() : Screen {
                         stringResource(Str.compendium_icon_add_compendium_item),
                     )
                 }
-            }
+            },
         )
     }
 }

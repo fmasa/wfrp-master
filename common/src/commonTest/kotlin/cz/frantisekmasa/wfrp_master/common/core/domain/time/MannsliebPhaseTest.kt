@@ -4,7 +4,6 @@ import kotlin.test.Test
 import kotlin.test.assertSame
 
 class MannsliebPhaseTest {
-
     @Test
     fun `waning period`() {
         assertSame(MannsliebPhase.WANING, MannsliebPhase.at(ImperialDate.of(1, 1, 1)))
@@ -25,9 +24,9 @@ class MannsliebPhaseTest {
             MannsliebPhase.at(
                 ImperialDate.of(
                     ImperialDate.StandaloneDay.HEXENSTAG,
-                    1
-                )
-            )
+                    1,
+                ),
+            ),
         )
         assertSame(MannsliebPhase.FULL_MOON, MannsliebPhase.at(ImperialDate.of(18, 2, 1)))
     }

@@ -18,8 +18,9 @@ data class Spell(
     val duration: String,
     val castingNumber: Int,
     val effect: String,
+    // TODO: Remove this in favor of [lore] enum
     @SerialName("lore")
-    val customLore: String, // TODO: Remove this in favor of [lore] enum
+    val customLore: String,
     @SerialName("loreType")
     val lore: SpellLore? = null,
     override val isVisibleToPlayers: Boolean = true,
@@ -48,6 +49,5 @@ data class Spell(
 
     override fun duplicate() = copy(id = uuid4(), name = duplicateName())
 
-    override fun changeVisibility(isVisibleToPlayers: Boolean) =
-        copy(isVisibleToPlayers = isVisibleToPlayers)
+    override fun changeVisibility(isVisibleToPlayers: Boolean) = copy(isVisibleToPlayers = isVisibleToPlayers)
 }

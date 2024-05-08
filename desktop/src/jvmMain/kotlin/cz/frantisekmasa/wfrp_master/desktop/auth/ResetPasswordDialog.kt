@@ -32,12 +32,13 @@ fun ResetPasswordDialog(
     auth: JvmAuthenticationManager,
     onDismissRequest: () -> Unit,
 ) {
-    val email = inputValue(
-        "",
-        CallbackRule(
-            stringResource(Str.authentication_messages_invalid_email)
-        ) { EMAIL_REGEX.matches(it) }
-    )
+    val email =
+        inputValue(
+            "",
+            CallbackRule(
+                stringResource(Str.authentication_messages_invalid_email),
+            ) { EMAIL_REGEX.matches(it) },
+        )
 
     var validate by remember { mutableStateOf(false) }
     var processing by remember { mutableStateOf(false) }
@@ -99,11 +100,11 @@ fun ResetPasswordDialog(
                             }
                         }
                     }
-                }
+                },
             ) {
                 Text(stringResource(Str.authentication_button_send).uppercase())
             }
-        }
+        },
     )
 }
 

@@ -20,8 +20,8 @@ value class AmmunitionRangeExpression(val value: String) : Parcelable {
         require(
             Expression.fromString(
                 value,
-                Constant.values().associate { it.value to 1 }
-            ).isDeterministic()
+                Constant.values().associate { it.value to 1 },
+            ).isDeterministic(),
         ) { "Yards expression must be deterministic" }
     }
 
@@ -29,7 +29,7 @@ value class AmmunitionRangeExpression(val value: String) : Parcelable {
         override val value: String,
         override val translatableName: StringResource,
     ) : Expression.Constant {
-        WEAPON_RANGE("WeaponRange", Str.trappings_expression_constants_weapon_range)
+        WEAPON_RANGE("WeaponRange", Str.trappings_expression_constants_weapon_range),
     }
 
     @Composable

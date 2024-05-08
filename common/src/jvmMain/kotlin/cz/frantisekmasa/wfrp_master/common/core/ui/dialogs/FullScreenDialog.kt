@@ -32,18 +32,19 @@ actual fun FullScreenDialog(
     content: @Composable () -> Unit,
 ) {
     CompositionLocalProvider(
-        LocalKeyboardDispatcher provides remember { KeyboardDispatcher() }
+        LocalKeyboardDispatcher provides remember { KeyboardDispatcher() },
     ) {
         val keyboardDispatcher = LocalKeyboardDispatcher.current
         Popup(
-            popupPositionProvider = object : PopupPositionProvider {
-                override fun calculatePosition(
-                    anchorBounds: IntRect,
-                    windowSize: IntSize,
-                    layoutDirection: LayoutDirection,
-                    popupContentSize: IntSize
-                ): IntOffset = IntOffset.Zero
-            },
+            popupPositionProvider =
+                object : PopupPositionProvider {
+                    override fun calculatePosition(
+                        anchorBounds: IntRect,
+                        windowSize: IntSize,
+                        layoutDirection: LayoutDirection,
+                        popupContentSize: IntSize,
+                    ): IntOffset = IntOffset.Zero
+                },
             focusable = true,
             onDismissRequest = onDismissRequest,
             onPreviewKeyEvent = {
@@ -64,7 +65,7 @@ actual fun FullScreenDialog(
 
             Box(
                 modifier = Modifier.fillMaxSize(),
-                contentAlignment = Alignment.Center
+                contentAlignment = Alignment.Center,
             ) {
                 LocalScreenWidth.current
                 Surface(

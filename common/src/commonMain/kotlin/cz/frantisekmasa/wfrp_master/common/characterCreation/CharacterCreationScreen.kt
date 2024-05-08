@@ -1,7 +1,7 @@
 package cz.frantisekmasa.wfrp_master.common.characterCreation
 
 import androidx.compose.animation.AnimatedContent
-import androidx.compose.animation.AnimatedContentScope
+import androidx.compose.animation.AnimatedContentTransitionScope.SlideDirection
 import androidx.compose.animation.core.snap
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
@@ -51,7 +51,7 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.flow.collectWithLifecycle
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.FormData
 import cz.frantisekmasa.wfrp_master.common.core.ui.navigation.LocalNavigationTransaction
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.FullScreenProgress
-import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.VisualOnlyIconDescription
+import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.VISUAL_ONLY_ICON_DESCRIPTION
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.rememberScreenModel
 import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.SubheadBar
 import dev.icerock.moko.resources.compose.stringResource
@@ -74,9 +74,9 @@ class CharacterCreationScreen(
             topBar = {
                 TopAppBar(
                     title = { Text(stringResource(Str.character_creation_title)) },
-                    navigationIcon = { BackButton() }
+                    navigationIcon = { BackButton() },
                 )
-            }
+            },
         ) {
             MainContainer(partyId, type, userId)
         }
@@ -84,7 +84,11 @@ class CharacterCreationScreen(
 }
 
 @Composable
-private fun Screen.MainContainer(partyId: PartyId, type: CharacterType, userId: UserId?) {
+private fun Screen.MainContainer(
+    partyId: PartyId,
+    type: CharacterType,
+    userId: UserId?,
+) {
     val screenModel: CharacterCreationScreenModel = rememberScreenModel(arg = partyId)
     val coroutineScope = rememberCoroutineScope()
 
@@ -107,35 +111,37 @@ private fun Screen.MainContainer(partyId: PartyId, type: CharacterType, userId: 
     val saveCharacter = {
         formState.value = FormState.CREATING_CHARACTER
         coroutineScope.launch(Dispatchers.IO) {
-            val characterId = screenModel.createCharacter(
-                userId,
-                type,
-                basicInfo,
-                characteristics,
-                points
-            )
+            val characterId =
+                screenModel.createCharacter(
+                    userId,
+                    type,
+                    basicInfo,
+                    characteristics,
+                    points,
+                )
 
             navigation.replace(CharacterDetailScreen(characterId))
         }
     }
-    val steps = listOf(
-        WizardStep(stringResource(Str.character_creation_step_basic_info), basicInfo) {
-            CharacterBasicInfoForm(it, validate = validate.value)
-        },
-        WizardStep(stringResource(Str.character_creation_step_attributes), characteristics) {
-            CharacterCharacteristicsForm(it, validate = validate.value)
-        },
-        WizardStep(stringResource(Str.character_creation_step_point_pools), points) {
-            PointsPoolForm(it, validate = validate.value)
-        }
-    )
+    val steps =
+        listOf(
+            WizardStep(stringResource(Str.character_creation_step_basic_info), basicInfo) {
+                CharacterBasicInfoForm(it, validate = validate.value)
+            },
+            WizardStep(stringResource(Str.character_creation_step_attributes), characteristics) {
+                CharacterCharacteristicsForm(it, validate = validate.value)
+            },
+            WizardStep(stringResource(Str.character_creation_step_point_pools), points) {
+                PointsPoolForm(it, validate = validate.value)
+            },
+        )
 
     Column(Modifier.fillMaxSize()) {
         Column(
             Modifier
                 .weight(1f)
                 .background(MaterialTheme.colors.background)
-                .verticalScroll(rememberScrollState())
+                .verticalScroll(rememberScrollState()),
         ) {
             SubheadBar(steps[currentStepIndex.value].label)
 
@@ -145,9 +151,12 @@ private fun Screen.MainContainer(partyId: PartyId, type: CharacterType, userId: 
                     if (initialState == targetState) {
                         fadeIn(snap(), 0f) with fadeOut(snap(), 0f)
                     } else {
-                        val direction = if (targetState > initialState)
-                            AnimatedContentScope.SlideDirection.Start
-                        else AnimatedContentScope.SlideDirection.End
+                        val direction =
+                            if (targetState > initialState) {
+                                SlideDirection.Start
+                            } else {
+                                SlideDirection.End
+                            }
                         val animationSpec = tween<IntOffset>(250)
                         slideIntoContainer(direction, animationSpec) with
                             slideOutOfContainer(direction, animationSpec)
@@ -191,7 +200,7 @@ private fun BottomBar(
         Box(
             Modifier
                 .fillMaxWidth()
-                .background(MaterialTheme.colors.surface)
+                .background(MaterialTheme.colors.surface),
         ) {
             val buttonModifier = Modifier.padding(8.dp)
             var saving by remember { mutableStateOf(false) }
@@ -206,7 +215,7 @@ private fun BottomBar(
                 ) {
                     Icon(
                         Icons.Rounded.ArrowBackIos,
-                        VisualOnlyIconDescription,
+                        VISUAL_ONLY_ICON_DESCRIPTION,
                         tint = MaterialTheme.colors.primaryVariant,
                     )
                     Text(
@@ -238,7 +247,7 @@ private fun BottomBar(
                             }
 
                             onFinish()
-                        }
+                        },
                     )
                 }
             } else {
@@ -286,7 +295,7 @@ private fun NextButton(
         Text(label.uppercase())
         Icon(
             Icons.Rounded.ArrowForwardIos,
-            VisualOnlyIconDescription,
+            VISUAL_ONLY_ICON_DESCRIPTION,
             tint = MaterialTheme.colors.primaryVariant,
         )
     }

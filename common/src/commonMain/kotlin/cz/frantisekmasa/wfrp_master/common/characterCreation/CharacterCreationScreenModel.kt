@@ -28,14 +28,15 @@ class CharacterCreationScreenModel(
     private val userProvider: UserProvider,
     parties: PartyRepository,
 ) : ScreenModel {
-    val careers: Flow<List<Career>> = careerCompendium.liveForParty(partyId)
-        .combine(parties.getLive(partyId).right()) { careers, party ->
-            if (userProvider.userId == party.gameMasterId) {
-                careers
-            } else {
-                careers.filter { it.isVisibleToPlayers }
+    val careers: Flow<List<Career>> =
+        careerCompendium.liveForParty(partyId)
+            .combine(parties.getLive(partyId).right()) { careers, party ->
+                if (userProvider.userId == party.gameMasterId) {
+                    careers
+                } else {
+                    careers.filter { it.isVisibleToPlayers }
+                }
             }
-        }
 
     suspend fun createCharacter(
         userId: UserId?,
@@ -72,15 +73,15 @@ class CharacterCreationScreenModel(
                         motivation = info.motivation.value,
                         note = info.note.value,
                         compendiumCareer = if (career is SelectedCareer.CompendiumCareer) career.value else null,
-                    ).refreshWounds()
+                    ).refreshWounds(),
                 )
 
                 Reporter.recordEvent(
                     "create_character",
                     mapOf(
                         "party_id" to characterId.partyId.toString(),
-                        "character_id" to characterId.id
-                    )
+                        "character_id" to characterId.id,
+                    ),
                 )
 
                 characterId

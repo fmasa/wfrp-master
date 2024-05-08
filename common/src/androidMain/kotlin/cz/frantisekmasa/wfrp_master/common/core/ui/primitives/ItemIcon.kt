@@ -12,11 +12,12 @@ import coil.request.ImageRequest
 
 @Composable
 internal actual fun rememberImagePainter(url: String): State<Painter> {
-    val painter = rememberAsyncImagePainter(
-        ImageRequest.Builder(LocalContext.current)
-            .data(url)
-            .build()
-    )
+    val painter =
+        rememberAsyncImagePainter(
+            ImageRequest.Builder(LocalContext.current)
+                .data(url)
+                .build(),
+        )
 
     return derivedStateOf { painter }
 }

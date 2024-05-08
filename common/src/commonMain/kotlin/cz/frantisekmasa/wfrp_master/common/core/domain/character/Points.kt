@@ -21,7 +21,7 @@ data class Points(
     val experience: Int,
     val spentExperience: Int = 0,
     @Deprecated("Hardy is calculated from stats automatically")
-    val hardyWoundsBonus: Int = 0
+    val hardyWoundsBonus: Int = 0,
 ) : Parcelable {
     init {
         // TODO: Ensure fortune & resolve is not negative
@@ -33,7 +33,10 @@ data class Points(
         require(spentExperience >= 0)
     }
 
-    fun modify(pool: PointPool, value: Int): Result<Points> {
+    fun modify(
+        pool: PointPool,
+        value: Int,
+    ): Result<Points> {
         return runCatching {
             when (pool) {
                 PointPool.FATE -> copy(fate = fate + value)

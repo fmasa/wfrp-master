@@ -12,9 +12,8 @@ import kotlin.jvm.JvmInline
 @Parcelize
 @Immutable
 value class ImperialDate(
-    private val imperialDay: Int
+    private val imperialDay: Int,
 ) : Comparable<ImperialDate>, Parcelable {
-
     init {
         require(imperialDay >= 0)
     }
@@ -34,7 +33,7 @@ value class ImperialDate(
     @Immutable
     enum class Month(
         val readableName: String,
-        val standaloneDayAtTheBeginning: StandaloneDay? = null
+        val standaloneDayAtTheBeginning: StandaloneDay? = null,
     ) {
         NACHEXEN("Nachexen", StandaloneDay.HEXENSTAG),
         JAHRDRUNG("Jahrdrung"),
@@ -47,13 +46,15 @@ value class ImperialDate(
         BRAUZEIT("Brauzeit", StandaloneDay.MITTHERBST),
         KALDEZEIT("Kaldezeit"),
         ULRICZEIT("Ulriczeit"),
-        VORHEXEN("Vorhexen", StandaloneDay.MONSTILLE);
+        VORHEXEN("Vorhexen", StandaloneDay.MONSTILLE),
+        ;
 
         val numberOfDays: Int
-            get() = when (this) {
-                NACHEXEN, NACHGEHEIM -> 32
-                else -> 33
-            }
+            get() =
+                when (this) {
+                    NACHEXEN, NACHGEHEIM -> 32
+                    else -> 33
+                }
     }
 
     @Immutable
@@ -70,7 +71,10 @@ value class ImperialDate(
         const val DAYS_IN_YEAR = 400
         private const val DAYS_IN_WEEK = 8
 
-        fun of(day: StandaloneDay, year: Int): ImperialDate {
+        fun of(
+            day: StandaloneDay,
+            year: Int,
+        ): ImperialDate {
             require(year > 0) { "Year must be >= 1." }
 
             return ImperialDate(
@@ -78,12 +82,15 @@ value class ImperialDate(
                     Month.values()
                         .takeWhile { it.standaloneDayAtTheBeginning != day }
                         .map { it.numberOfDays + if (it.standaloneDayAtTheBeginning != null) 1 else 0 }
-                        .sum()
+                        .sum(),
             )
         }
 
-        fun of(day: Int, month: Int, year: Int): ImperialDate {
-
+        fun of(
+            day: Int,
+            month: Int,
+            year: Int,
+        ): ImperialDate {
             require(month in 1..Month.values().size) { "Invalid month" }
 
             val monthInYear = Month.values()[month - 1]
@@ -91,18 +98,23 @@ value class ImperialDate(
             require(day in 1..monthInYear.numberOfDays) { "$day is not valid day number of $month" }
             require(year > 0) { "Year must be >= 1." }
 
-            val imperialDay = (year - 1) * DAYS_IN_YEAR +
-                // Days in previous months
-                Month.values().takeWhile { it != monthInYear }
-                    .map { it.numberOfDays + if (it.standaloneDayAtTheBeginning != null) 1 else 0 }
-                    .sum() +
-                // Days in current month
-                if (monthInYear.standaloneDayAtTheBeginning != null) day else day - 1
+            val imperialDay =
+                (year - 1) * DAYS_IN_YEAR +
+                    // Days in previous months
+                    Month.values().takeWhile { it != monthInYear }
+                        .map { it.numberOfDays + if (it.standaloneDayAtTheBeginning != null) 1 else 0 }
+                        .sum() +
+                    // Days in current month
+                    if (monthInYear.standaloneDayAtTheBeginning != null) day else day - 1
 
             return ImperialDate(imperialDay)
         }
 
-        fun of(day: Int, month: Month, year: Int): ImperialDate = of(day, month.ordinal + 1, year)
+        fun of(
+            day: Int,
+            month: Month,
+            year: Int,
+        ): ImperialDate = of(day, month.ordinal + 1, year)
     }
 
     val dayOfWeek: DayOfWeek?
@@ -113,13 +125,14 @@ value class ImperialDate(
                     val firstWeekDayOfYear =
                         (year - 1) * (DAYS_IN_YEAR - StandaloneDay.values().size) + DayOfWeek.MARKTAG.ordinal
 
-                    val firstWeekDayOfMonth = Month.values()
-                        .takeWhile { it < month }
-                        .map { it.numberOfDays }
-                        .sum() + firstWeekDayOfYear
+                    val firstWeekDayOfMonth =
+                        Month.values()
+                            .takeWhile { it < month }
+                            .map { it.numberOfDays }
+                            .sum() + firstWeekDayOfYear
 
                     DayOfWeek.values()[(firstWeekDayOfMonth + day - 1) % DayOfWeek.values().size]
-                }
+                },
             )
         }
 
@@ -127,6 +140,7 @@ value class ImperialDate(
     val year: Int get() = imperialDay / DAYS_IN_YEAR + if (imperialDay < 0) -1 else 1
 
     fun removeDay() = addDays(-1)
+
     fun addWeek() = addDays(DAYS_IN_WEEK)
 
     override fun compareTo(other: ImperialDate) = imperialDay.compareTo(other.imperialDay)
@@ -159,7 +173,7 @@ value class ImperialDate(
     fun format(): String {
         return day.fold(
             { "${it.readableName}, $year" },
-            { "${it.first} ${it.second.readableName}, ${dayOfWeek?.readableName}, $year" }
+            { "${it.first} ${it.second.readableName}, ${dayOfWeek?.readableName}, $year" },
         )
     }
 }

@@ -26,21 +26,25 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.UserTipCard
 import dev.icerock.moko.resources.compose.stringResource
 
 @Composable
-fun MaxWoundsSection(character: Character, screenModel: CharacterScreenModel) {
+fun MaxWoundsSection(
+    character: Character,
+    screenModel: CharacterScreenModel,
+) {
     val formData = WoundsFormData.fromCharacter(character)
     FormScreen(
         title = stringResource(Str.points_wounds),
         formData = formData,
         onSave = { data ->
             screenModel.update { it.updateMaxWounds(data.maxWounds, data.hardyTalent) }
-        }
+        },
     ) { validate ->
         Column(Modifier.padding(top = 20.dp)) {
             TextInput(
                 label = stringResource(Str.points_max_wounds),
-                modifier = Modifier
-                    .fillMaxWidth(0.3f)
-                    .padding(bottom = 12.dp),
+                modifier =
+                    Modifier
+                        .fillMaxWidth(0.3f)
+                        .padding(bottom = 12.dp),
                 value = formData.maxWounds,
                 maxLength = 3,
                 keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
@@ -56,7 +60,7 @@ fun MaxWoundsSection(character: Character, screenModel: CharacterScreenModel) {
                 CheckboxWithText(
                     text = stringResource(Str.points_label_hardy),
                     checked = formData.hardyTalent.value,
-                    onCheckedChange = { formData.hardyTalent.value = it }
+                    onCheckedChange = { formData.hardyTalent.value = it },
                 )
             }
         }
@@ -72,23 +76,24 @@ private data class WoundsFormData(
     val maxWounds: InputValue,
     val hardyTalent: MutableState<Boolean>,
 ) : HydratedFormData<WoundsData> {
-
     override fun isValid(): Boolean = maxWounds.isValid()
 
-    override fun toValue(): WoundsData = WoundsData(
-        maxWounds.value.toIntOrNull(),
-        hardyTalent.value
-    )
+    override fun toValue(): WoundsData =
+        WoundsData(
+            maxWounds.value.toIntOrNull(),
+            hardyTalent.value,
+        )
 
     companion object {
         @Composable
         fun fromCharacter(character: Character) =
             WoundsFormData(
-                maxWounds = inputValue(
-                    character.points.maxWounds?.toString() ?: "",
-                    Rules.IfNotBlank(Rules.PositiveInteger()),
-                ),
-                hardyTalent = rememberSaveable { mutableStateOf(character.hasHardyTalent) }
+                maxWounds =
+                    inputValue(
+                        character.points.maxWounds?.toString() ?: "",
+                        Rules.ifNotBlank(Rules.PositiveInteger()),
+                    ),
+                hardyTalent = rememberSaveable { mutableStateOf(character.hasHardyTalent) },
             )
     }
 }

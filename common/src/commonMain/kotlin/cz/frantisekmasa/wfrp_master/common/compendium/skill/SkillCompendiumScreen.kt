@@ -20,9 +20,8 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.rememberScreenMode
 import dev.icerock.moko.resources.compose.stringResource
 
 class SkillCompendiumScreen(
-    private val partyId: PartyId
+    private val partyId: PartyId,
 ) : CompendiumScreen() {
-
     @Composable
     override fun Content() {
         val screenModel: SkillCompendiumScreenModel = rememberScreenModel(arg = partyId)
@@ -36,7 +35,7 @@ class SkillCompendiumScreen(
                 onSaveRequest = {
                     screenModel.createNew(it)
                     navigation.navigate(CompendiumSkillDetailScreen(partyId, it.id))
-                }
+                },
             )
         }
 

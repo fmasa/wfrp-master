@@ -10,7 +10,6 @@ import cz.frantisekmasa.wfrp_master.common.core.domain.character.SocialStatus
 class CareerParser(
     private val convertTablesToText: Boolean = false,
 ) {
-
     fun import(
         document: Document,
         structure: PdfStructure,
@@ -25,22 +24,26 @@ class CareerParser(
                     .map { page ->
                         val columns = lexer.getTokens(page)
 
-                        val career = parseCareerPage(
-                            socialClass,
-                            columns.first,
-                            columns.second,
-                        )
+                        val career =
+                            parseCareerPage(
+                                socialClass,
+                                columns.first,
+                                columns.second,
+                            )
 
-                        val characteristics = characteristicsParser.findCharacteristics(page)
-                            .groupBy({ it.level - 1 }, { it.characteristic })
+                        val characteristics =
+                            characteristicsParser.findCharacteristics(page)
+                                .groupBy({ it.level - 1 }, { it.characteristic })
 
                         career.copy(
-                            levels = career.levels.mapIndexed { index, level ->
-                                level.copy(
-                                    characteristics = characteristics[index]?.toSet()
-                                        ?: emptySet()
-                                )
-                            }
+                            levels =
+                                career.levels.mapIndexed { index, level ->
+                                    level.copy(
+                                        characteristics =
+                                            characteristics[index]?.toSet()
+                                                ?: emptySet(),
+                                    )
+                                },
                         )
                     }
             }.toList()
@@ -51,30 +54,35 @@ class CareerParser(
         firstColumn: Sequence<Token>,
         secondColumn: Sequence<Token>,
     ): Career {
-        val stream = TokenStream(
-            if (convertTablesToText)
-                firstColumn
-                    .map {
-                        when (it) {
-                            is Token.BodyCellPart -> Token.NormalPart(it.text)
-                            is Token.TableHeadCell -> Token.BoldPart(it.text)
-                            else -> it
-                        }
-                    }.toList()
-            else firstColumn.toList()
-        )
+        val stream =
+            TokenStream(
+                if (convertTablesToText) {
+                    firstColumn
+                        .map {
+                            when (it) {
+                                is Token.BodyCellPart -> Token.NormalPart(it.text)
+                                is Token.TableHeadCell -> Token.BoldPart(it.text)
+                                else -> it
+                            }
+                        }.toList()
+                } else {
+                    firstColumn.toList()
+                },
+            )
 
-        val name = stream.consumeOneOfType<Token.Heading>().text
-            .trim()
-            .splitToSequence(' ', '\n')
-            .map { it.lowercase() }
-            .map { word -> word.replaceFirstChar { if (it.isLowerCase()) it.titlecase() else it.toString() } }
-            .joinToString(" ")
+        val name =
+            stream.consumeOneOfType<Token.Heading>().text
+                .trim()
+                .splitToSequence(' ', '\n')
+                .map { it.lowercase() }
+                .map { word -> word.replaceFirstChar { if (it.isLowerCase()) it.titlecase() else it.toString() } }
+                .joinToString(" ")
 
-        val text = stream.consumeOneOfType<Token.NormalPart>().text
-            .lineSequence()
-            .filter { it.isNotBlank() }
-            .toList()
+        val text =
+            stream.consumeOneOfType<Token.NormalPart>().text
+                .lineSequence()
+                .filter { it.isNotBlank() }
+                .toList()
 
         val descriptionStart = mutableListOf<Token.ParagraphToken>()
 
@@ -82,15 +90,16 @@ class CareerParser(
             descriptionStart += text.drop(1).map { Token.NormalPart(it) }
         }
 
-        val species = text[0]
-            .splitToSequence(",")
-            .map { it.trim() }
-            .map { value ->
-                Race.values().first {
-                    value.contains(it.name.replace("_", " "), ignoreCase = true)
+        val species =
+            text[0]
+                .splitToSequence(",")
+                .map { it.trim() }
+                .map { value ->
+                    Race.values().first {
+                        value.contains(it.name.replace("_", " "), ignoreCase = true)
+                    }
                 }
-            }
-            .toSet()
+                .toSet()
 
         if (descriptionStart.isEmpty()) {
             descriptionStart += stream.consumeOneOfType<Token.ItalicsPart>()
@@ -98,12 +107,15 @@ class CareerParser(
             descriptionStart += stream.consumeWhileOfType<Token.ParagraphToken>()
         }
 
-        val description = descriptionStart +
-            secondColumn.filterIsInstance<Token.ParagraphToken>().map {
-                if (it is Token.ItalicsPart)
-                    Token.BlockQuote(it.text)
-                else it
-            }
+        val description =
+            descriptionStart +
+                secondColumn.filterIsInstance<Token.ParagraphToken>().map {
+                    if (it is Token.ItalicsPart) {
+                        Token.BlockQuote(it.text)
+                    } else {
+                        it
+                    }
+                }
 
         val isAttributesSection: (Token) -> Boolean = {
             it is Token.BoxHeader ||
@@ -114,50 +126,57 @@ class CareerParser(
         stream.dropUntil(isAttributesSection)
         stream.dropWhile(isAttributesSection)
 
-        val levels = (0 until 4).map {
-            val (levelName, status) = stream.consumeOneOfType<Token.BoldPart>().text
-                .split("\n")
-                .first()
-                .let { fixLevelLine(it) }
-                .splitToSequence(levelLineDelimiterRegex)
-                .map { it.trim() }
-                .toList()
+        val levels =
+            (0 until 4).map {
+                val (levelName, status) =
+                    stream.consumeOneOfType<Token.BoldPart>().text
+                        .split("\n")
+                        .first()
+                        .let { fixLevelLine(it) }
+                        .splitToSequence(levelLineDelimiterRegex)
+                        .map { it.trim() }
+                        .toList()
 
-            stream.dropWhile { it is Token.BoldPart }
+                stream.dropWhile { it is Token.BoldPart }
 
-            val skills = stream.consumeUntil { it is Token.BoldPart }
-                .filterIsInstance<Token.ParagraphToken>()
+                val skills =
+                    stream.consumeUntil { it is Token.BoldPart }
+                        .filterIsInstance<Token.ParagraphToken>()
 
-            stream.dropWhile { it is Token.BoldPart }
+                stream.dropWhile { it is Token.BoldPart }
 
-            val talents = buildText(
-                stream.consumeUntil { it is Token.BoldPart }
-                    .filterIsInstance<Token.ParagraphToken>()
-            )
+                val talents =
+                    buildText(
+                        stream.consumeUntil { it is Token.BoldPart }
+                            .filterIsInstance<Token.ParagraphToken>(),
+                    )
 
-            stream.dropWhile { it is Token.BoldPart }
+                stream.dropWhile { it is Token.BoldPart }
 
-            val trappings = buildText(
-                stream.consumeUntil { it is Token.BoldPart }
-                    .filterIsInstance<Token.ParagraphToken>()
-            )
+                val trappings =
+                    buildText(
+                        stream.consumeUntil { it is Token.BoldPart }
+                            .filterIsInstance<Token.ParagraphToken>(),
+                    )
 
-            val (tier, standing) = status
-                .splitToSequence(" ")
-                .map { it.trim() }
-                .toList()
+                val (tier, standing) =
+                    status
+                        .splitToSequence(" ")
+                        .map { it.trim() }
+                        .toList()
 
-            CareerLevel(
-                name = levelName.trim(),
-                status = SocialStatus(
-                    SocialStatus.Tier.values().first { it.name.equals(tier, ignoreCase = true) },
-                    standing.toInt()
-                ),
-                skills = skills,
-                talents = talents,
-                trappings = trappings,
-            )
-        }
+                CareerLevel(
+                    name = levelName.trim(),
+                    status =
+                        SocialStatus(
+                            SocialStatus.Tier.values().first { it.name.equals(tier, ignoreCase = true) },
+                            standing.toInt(),
+                        ),
+                    skills = skills,
+                    talents = talents,
+                    trappings = trappings,
+                )
+            }
 
         stream.assertEnd()
 
@@ -169,26 +188,30 @@ class CareerParser(
             description = MarkdownBuilder.buildMarkdown(description),
             socialClass = socialClass,
             races = species,
-            levels = levels.map { level ->
-                Career.Level(
-                    id = uuid4(),
-                    name = level.name,
-                    status = level.status,
-                    characteristics = emptySet(),
-                    skills = buildText(level.skills)
-                        .splitToSequence(",")
-                        .map { it.trim() }
-                        .filter { it.isNotEmpty() }
-                        .map { Career.Skill(it, it == incomeSkill) }
-                        .toList(),
-                    talents = level.talents.splitToSequence(",")
-                        .map { it.trim() }
-                        .toList(),
-                    trappings = level.trappings.splitToSequence(",")
-                        .map { it.trim() }
-                        .toList(),
-                )
-            },
+            levels =
+                levels.map { level ->
+                    Career.Level(
+                        id = uuid4(),
+                        name = level.name,
+                        status = level.status,
+                        characteristics = emptySet(),
+                        skills =
+                            buildText(level.skills)
+                                .splitToSequence(",")
+                                .map { it.trim() }
+                                .filter { it.isNotEmpty() }
+                                .map { Career.Skill(it, it == incomeSkill) }
+                                .toList(),
+                        talents =
+                            level.talents.splitToSequence(",")
+                                .map { it.trim() }
+                                .toList(),
+                        trappings =
+                            level.trappings.splitToSequence(",")
+                                .map { it.trim() }
+                                .toList(),
+                    )
+                },
         )
     }
 

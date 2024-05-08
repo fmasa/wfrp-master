@@ -11,12 +11,11 @@ data class TrappingsScreenState(
     val currentEncumbrance: Encumbrance,
     val maxEncumbrance: Encumbrance,
     val money: Money,
-    val trappings: ImmutableList<TrappingItem>
+    val trappings: ImmutableList<TrappingItem>,
 )
 
 @Immutable
 sealed interface TrappingItem {
-
     val item: InventoryItem
     val allItems: List<InventoryItem>
 

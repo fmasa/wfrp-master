@@ -45,29 +45,33 @@ fun CharacterAvatar(
                                 null,
                                 Modifier
                                     .fillMaxWidth()
-                                    .aspectRatio(1f)
+                                    .aspectRatio(1f),
                             )
                         },
                         confirmButton = {
                             TextButton(onClick = { dialogVisible = false }) {
                                 Text(stringResource(Str.common_ui_button_dismiss).uppercase())
                             }
-                        }
+                        },
                     )
                 }
 
                 ItemIcon(
                     url = url,
                     size = size,
-                    modifier = if (zoomable)
-                        Modifier.clickable(
-                            interactionSource = remember { MutableInteractionSource() },
-                            indication = rememberRipple(
-                                bounded = false,
-                            ),
-                            onClick = { dialogVisible = true },
-                        )
-                    else Modifier
+                    modifier =
+                        if (zoomable) {
+                            Modifier.clickable(
+                                interactionSource = remember { MutableInteractionSource() },
+                                indication =
+                                    rememberRipple(
+                                        bounded = false,
+                                    ),
+                                onClick = { dialogVisible = true },
+                            )
+                        } else {
+                            Modifier
+                        },
                 )
             }
         }

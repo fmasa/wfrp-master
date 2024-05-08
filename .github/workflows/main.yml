@@ -30,42 +30,49 @@ jobs:
       - run: yarn install
       - run: yarn test
 
-  unit-tests:
-    name: Unit tests
+  unit-tests-android:
+    name: Unit tests (Android)
     runs-on: ubuntu-22.04
-    container: alvrme/alpine-android:android-33-jdk17
+    container: alvrme/alpine-android:android-34-jdk17
     steps:
       - uses: actions/checkout@v2
-      - uses: actions/cache@v3
-        with:
-          path: |
-            ~/.gradle/caches
-            ~/.gradle/wrapper
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
-          restore-keys: |
-            ${{ runner.os }}-gradle-
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v3
       - run: ./gradlew --no-daemon --parallel testDebugUnitTest
+
+  unit-tests-jvm:
+    name: Unit tests (JVM)
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v3
+      - name: Execute Gradle build
+        run: ./gradlew jvmTest
 
   ktlint:
     name: Code style (ktlint)
     runs-on: ubuntu-22.04
-    container: alvrme/alpine-android:android-30-jdk17
     steps:
       - uses: actions/checkout@v2
-      - uses: actions/cache@v3
+      - uses: actions/setup-java@v3
         with:
-          path: |
-            ~/.gradle/caches
-            ~/.gradle/wrapper
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
-          restore-keys: |
-            ${{ runner.os }}-gradle-
-      - run: ./gradlew --no-daemon --parallel ktlintCheck
+          distribution: 'temurin'
+          java-version: '17'
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v3
+      - name: Execute Gradle build
+        run: ./gradlew ktlintCheck
 
   checks-passed:
     name: Wait for all checks
     needs:
-      - unit-tests
+      - unit-tests-android
+      - unit-tests-jvm
       - firestore-tests
       - ktlint
     runs-on: ubuntu-20.04
@@ -79,7 +86,7 @@ jobs:
     if: github.ref == 'refs/heads/master' || github.ref_type == 'tag'
     needs: [checks-passed]
     runs-on: ubuntu-22.04
-    container: alvrme/alpine-android:android-30-jdk17
+    container: alvrme/alpine-android:android-34-jdk17
     environment: production
     env:
       KEYSTORE_FILE_BASE64: ${{ secrets.KEYSTORE_FILE_BASE64 }}
@@ -87,14 +94,8 @@ jobs:
       KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
     steps:
       - uses: actions/checkout@v2
-      - uses: actions/cache@v3
-        with:
-          path: |
-            ~/.gradle/caches
-            ~/.gradle/wrapper
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
-          restore-keys: |
-            ${{ runner.os }}-gradle-
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v3
       - run: echo "$KEYSTORE_FILE_BASE64" | base64 -d > app/.keystore
       - run: echo "SUPPLY_VERSION_CODE=$((950 + $GITHUB_RUN_NUMBER))" >> $GITHUB_ENV
       - run: echo "SUPPLY_VERSION_NAME=$(.github/workflows/version.sh)" >> $GITHUB_ENV
@@ -131,6 +132,7 @@ jobs:
       - run: bundle install -j $(nproc)
       - run: bundle exec fastlane deploy
       - run: '[ "$GITHUB_REF_TYPE" = "tag" ] && bundle exec fastlane production || echo "Skipped"'
+
   firebase-deploy:
     name: "Firebase deploy"
     if: github.ref == 'refs/heads/master' || github.ref_type == 'tag'

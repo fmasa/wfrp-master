@@ -9,13 +9,15 @@ import java.io.InputStream
 typealias FileChooseListener = suspend CoroutineScope.(Result<ReadableFile>) -> Unit
 typealias FileLocationListener = suspend CoroutineScope.(Result<WriteableFile>) -> Unit
 
-val LocalFileChooserFactory = staticCompositionLocalOf<(FileChooseListener) -> FileChooser> {
-    error("LocalFileChooser was not set")
-}
+val LocalFileChooserFactory =
+    staticCompositionLocalOf<(FileChooseListener) -> FileChooser> {
+        error("LocalFileChooser was not set")
+    }
 
-val LocalFileSaverFactory = staticCompositionLocalOf<(FileLocationListener) -> FileSaver> {
-    error("LocalFileChooser was not set")
-}
+val LocalFileSaverFactory =
+    staticCompositionLocalOf<(FileLocationListener) -> FileSaver> {
+        error("LocalFileChooser was not set")
+    }
 
 @Composable
 actual fun rememberFileChooser(onFileChoose: FileChooseListener): FileChooser {
@@ -32,7 +34,7 @@ actual fun rememberFileSaver(
 }
 
 actual class ReadableFile(
-    actual val stream: InputStream
+    actual val stream: InputStream,
 ) {
     actual fun readBytes(): ByteArray = stream.readBytes()
 }

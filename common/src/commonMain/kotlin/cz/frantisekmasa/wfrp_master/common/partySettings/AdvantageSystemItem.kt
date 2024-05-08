@@ -38,16 +38,17 @@ fun AdvantageSystemItem(
                     dialogVisible = false
                 }
             },
-            onDismissRequest = { dialogVisible = false }
+            onDismissRequest = { dialogVisible = false },
         )
     }
 
     ListItem(
         text = { Text(stringResource(Str.combat_advantage_system_config_option)) },
         secondaryText = { Text(currentSystem.localizedName) },
-        modifier = Modifier.clickable {
-            dialogVisible = true
-        }
+        modifier =
+            Modifier.clickable {
+                dialogVisible = true
+            },
     )
 }
 
@@ -55,14 +56,14 @@ fun AdvantageSystemItem(
 private fun AdvantageSystemDialog(
     selected: AdvantageSystem,
     onSelect: (AdvantageSystem) -> Unit,
-    onDismissRequest: () -> Unit
+    onDismissRequest: () -> Unit,
 ) {
     SelectionDialog(
         title = stringResource(Str.combat_advantage_system_prompt),
         items = AdvantageSystem.values().toList(),
         selected = selected,
         onDismissRequest = onDismissRequest,
-        onSelect = onSelect
+        onSelect = onSelect,
     ) { strategy ->
         Text(strategy.localizedName)
     }

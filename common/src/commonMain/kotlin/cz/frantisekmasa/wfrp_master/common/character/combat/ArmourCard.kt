@@ -52,16 +52,17 @@ fun ArmourCard(
     CardContainer(
         Modifier
             .padding(horizontal = 8.dp)
-            .padding(bottom = 8.dp)
+            .padding(bottom = 8.dp),
     ) {
         CardTitle(stringResource(Str.armour_title))
 
         Row(
             modifier = Modifier.padding(top = Spacing.large),
-            horizontalArrangement = Arrangement.spacedBy(
-                Spacing.large,
-                Alignment.CenterHorizontally
-            ),
+            horizontalArrangement =
+                Arrangement.spacedBy(
+                    Spacing.large,
+                    Alignment.CenterHorizontally,
+                ),
         ) {
             Row(
                 horizontalArrangement = Arrangement.End,
@@ -131,14 +132,17 @@ private fun Location(
 
     Row(
         verticalAlignment = Alignment.CenterVertically,
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(start = Spacing.large, top = Spacing.large)
-            .let {
-                if (trappings.isNotEmpty())
-                    it.clickable { expanded = !expanded }
-                else it
-            }
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .padding(start = Spacing.large, top = Spacing.large)
+                .let {
+                    if (trappings.isNotEmpty()) {
+                        it.clickable { expanded = !expanded }
+                    } else {
+                        it
+                    }
+                },
     ) {
         Row(Modifier.weight(1f)) {
             Row {
@@ -153,9 +157,11 @@ private fun Location(
 
             if (trappings.isNotEmpty()) {
                 Icon(
-                    if (expanded)
+                    if (expanded) {
                         Icons.Rounded.ExpandLess
-                    else Icons.Rounded.ExpandMore,
+                    } else {
+                        Icons.Rounded.ExpandMore
+                    },
                     null,
                 )
             }
@@ -176,29 +182,32 @@ private fun Location(
                 ListItem(
                     modifier = Modifier.clickable { onTrappingClick(item.trapping) },
                     text = { Text(item.trapping.name) },
-                    secondaryText = if (
-                        armour.qualities.isNotEmpty() ||
-                        armour.flaws.isNotEmpty() ||
-                        item.trapping.itemQualities.isNotEmpty() ||
-                        item.trapping.itemFlaws.isNotEmpty()
-                    )
-                        (
-                            {
-                                TrappingFeatureList(
-                                    item.trapping,
-                                    armour.qualities,
-                                    armour.flaws,
-                                    Modifier.fillMaxWidth()
-                                )
-                            }
+                    secondaryText =
+                        if (
+                            armour.qualities.isNotEmpty() ||
+                            armour.flaws.isNotEmpty() ||
+                            item.trapping.itemQualities.isNotEmpty() ||
+                            item.trapping.itemFlaws.isNotEmpty()
+                        ) {
+                            (
+                                {
+                                    TrappingFeatureList(
+                                        item.trapping,
+                                        armour.qualities,
+                                        armour.flaws,
+                                        Modifier.fillMaxWidth(),
+                                    )
+                                }
                             )
-                    else null,
+                        } else {
+                            null
+                        },
                     trailing = {
                         Text(
                             text = armour.points.value.toString(),
                             style = MaterialTheme.typography.body2,
                         )
-                    }
+                    },
                 )
             }
         }

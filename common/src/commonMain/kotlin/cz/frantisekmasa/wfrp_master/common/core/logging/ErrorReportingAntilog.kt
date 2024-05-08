@@ -8,7 +8,7 @@ class ErrorReportingAntilog : Antilog() {
         priority: LogLevel,
         tag: String?,
         throwable: Throwable?,
-        message: String?
+        message: String?,
     ) {
         message?.let { Reporter.log(it) }
 

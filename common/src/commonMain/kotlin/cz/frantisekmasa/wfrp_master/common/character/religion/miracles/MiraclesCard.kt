@@ -29,7 +29,7 @@ internal fun MiraclesCard(
     CardContainer(
         Modifier
             .padding(horizontal = 8.dp)
-            .padding(bottom = 8.dp)
+            .padding(bottom = 8.dp),
     ) {
         Column(Modifier.padding(horizontal = 6.dp)) {
             CardTitle(stringResource(Str.miracles_title))
@@ -38,7 +38,7 @@ internal fun MiraclesCard(
                 EmptyUI(
                     stringResource(Str.miracles_messages_character_has_no_miracles),
                     Resources.Drawable.Miracle,
-                    size = EmptyUI.Size.Small
+                    size = EmptyUI.Size.Small,
                 )
             } else {
                 val navigation = LocalNavigationTransaction.current
@@ -48,7 +48,7 @@ internal fun MiraclesCard(
                         miracle,
                         onClick = {
                             navigation.navigate(
-                                CharacterMiracleDetailScreen(characterId, miracle.id)
+                                CharacterMiracleDetailScreen(characterId, miracle.id),
                             )
                         },
                         onRemove = { onRemove(miracle) },
@@ -75,11 +75,12 @@ private fun MiracleItem(
     CardItem(
         name = miracle.name,
         onClick = onClick,
-        contextMenuItems = listOf(
-            ContextMenu.Item(
-                stringResource(Str.common_ui_button_remove),
-                onClick = { onRemove() },
-            )
-        ),
+        contextMenuItems =
+            listOf(
+                ContextMenu.Item(
+                    stringResource(Str.common_ui_button_remove),
+                    onClick = { onRemove() },
+                ),
+            ),
     )
 }

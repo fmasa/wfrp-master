@@ -28,6 +28,7 @@ data class Miracle(
         const val EFFECT_MAX_LENGTH = 1000
         const val CULT_NAME_MAX_LENGTH = 50
     }
+
     init {
         require(name.isNotBlank()) { "Name must not be blank" }
         name.requireMaxLength(NAME_MAX_LENGTH, "name")
@@ -42,6 +43,5 @@ data class Miracle(
 
     override fun duplicate() = copy(id = uuid4(), name = duplicateName())
 
-    override fun changeVisibility(isVisibleToPlayers: Boolean) =
-        copy(isVisibleToPlayers = isVisibleToPlayers)
+    override fun changeVisibility(isVisibleToPlayers: Boolean) = copy(isVisibleToPlayers = isVisibleToPlayers)
 }

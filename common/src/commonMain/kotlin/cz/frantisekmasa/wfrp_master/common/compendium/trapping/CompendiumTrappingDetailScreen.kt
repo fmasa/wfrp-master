@@ -33,7 +33,6 @@ class CompendiumTrappingDetailScreen(
     private val partyId: PartyId,
     private val trappingId: Uuid,
 ) : Screen {
-
     @Composable
     override fun Content() {
         val screenModel: TrappingCompendiumScreenModel = rememberScreenModel(arg = partyId)
@@ -41,14 +40,16 @@ class CompendiumTrappingDetailScreen(
         CompendiumItemDetailScreen(
             id = trappingId,
             screenModel = screenModel,
-            scrollable = false, // Trapping details are by themself scrollable
+            // Trapping details are by themself scrollable
+            scrollable = false,
             detail = { trapping ->
                 val subheadBar: @Composable ColumnScope.() -> Unit = {
                     Column(
                         horizontalAlignment = Alignment.CenterHorizontally,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(top = Spacing.bodyPadding),
+                        modifier =
+                            Modifier
+                                .fillMaxWidth()
+                                .padding(top = Spacing.bodyPadding),
                     ) {
                         if (trapping.packSize > 1) {
                             Text(stringResource(Str.trappings_pack_size, trapping.packSize))
@@ -236,7 +237,7 @@ class CompendiumTrappingDetailScreen(
                         )
                     }
                 }
-            }
+            },
         ) { item, onDismissRequest ->
             TrappingDialog(
                 existingTrapping = item,

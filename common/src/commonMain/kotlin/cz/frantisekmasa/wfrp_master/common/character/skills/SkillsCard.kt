@@ -92,7 +92,7 @@ internal fun LazyListScope.skillsCard(
                 EmptyUI(
                     text = stringResource(Str.skills_messages_character_has_no_skills),
                     icon = Resources.Drawable.Skill,
-                    size = EmptyUI.Size.Small
+                    size = EmptyUI.Size.Small,
                 )
             }
         }
@@ -109,7 +109,7 @@ internal fun LazyListScope.skillsCard(
                     CharacterSkillDetailScreen(
                         characterId,
                         skill.id,
-                    )
+                    ),
                 )
             },
             onRemove = { onRemove(skill) },
@@ -132,21 +132,25 @@ private fun SkillItem(
         }
 
         WithContextMenu(
-            items = listOf(
-                ContextMenu.Item(
-                    stringResource(Str.common_ui_button_remove),
-                    onClick = { onRemove() }
-                )
-            ),
+            items =
+                listOf(
+                    ContextMenu.Item(
+                        stringResource(Str.common_ui_button_remove),
+                        onClick = { onRemove() },
+                    ),
+                ),
             onClick = onClick,
         ) {
             ListItem(
                 text = {
                     Text(
                         skill.name,
-                        fontWeight = if (skill.advances > 0)
-                            FontWeight.SemiBold
-                        else FontWeight.Normal
+                        fontWeight =
+                            if (skill.advances > 0) {
+                                FontWeight.SemiBold
+                            } else {
+                                FontWeight.Normal
+                            },
                     )
                 },
                 trailing = { TestNumber(skill, characteristics) },
@@ -156,7 +160,10 @@ private fun SkillItem(
 }
 
 @Composable
-private fun TestNumber(skill: Skill, characteristics: Stats) {
+private fun TestNumber(
+    skill: Skill,
+    characteristics: Stats,
+) {
     val testNumber = skill.advances + skill.characteristic.characteristicValue(characteristics)
 
     Row {

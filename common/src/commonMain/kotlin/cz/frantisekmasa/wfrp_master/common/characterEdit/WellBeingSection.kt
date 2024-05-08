@@ -20,7 +20,10 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.forms.inputValue
 import dev.icerock.moko.resources.compose.stringResource
 
 @Composable
-fun WellBeingSection(character: Character, screenModel: CharacterScreenModel) {
+fun WellBeingSection(
+    character: Character,
+    screenModel: CharacterScreenModel,
+) {
     val formData = WellBeingFormData.fromCharacter(character)
 
     FormScreen(
@@ -30,7 +33,7 @@ fun WellBeingSection(character: Character, screenModel: CharacterScreenModel) {
             screenModel.update { character ->
                 character.updateWellBeing(it.corruptionPoints, it.psychology)
             }
-        }
+        },
     ) { validate ->
         NumberPicker(
             modifier = Modifier.align(Alignment.CenterHorizontally),
@@ -43,7 +46,7 @@ fun WellBeingSection(character: Character, screenModel: CharacterScreenModel) {
                 if (currentValue > 0) {
                     formData.corruptionPoints.value--
                 }
-            }
+            },
         )
 
         TextInput(
@@ -62,18 +65,20 @@ private data class WellBeingFormData(
 ) : HydratedFormData<WellBeingData> {
     override fun isValid(): Boolean = psychology.isValid()
 
-    override fun toValue(): WellBeingData = WellBeingData(
-        corruptionPoints = corruptionPoints.value,
-        psychology = psychology.value,
-    )
+    override fun toValue(): WellBeingData =
+        WellBeingData(
+            corruptionPoints = corruptionPoints.value,
+            psychology = psychology.value,
+        )
 
     companion object {
         @Composable
         fun fromCharacter(character: Character): WellBeingFormData {
             return WellBeingFormData(
-                corruptionPoints = rememberSaveable(character) {
-                    mutableStateOf(character.points.corruption)
-                },
+                corruptionPoints =
+                    rememberSaveable(character) {
+                        mutableStateOf(character.points.corruption)
+                    },
                 psychology = inputValue(character.psychology),
             )
         }

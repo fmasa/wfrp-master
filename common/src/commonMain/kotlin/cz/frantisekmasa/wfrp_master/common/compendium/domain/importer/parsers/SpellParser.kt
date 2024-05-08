@@ -9,7 +9,6 @@ class SpellParser(
     private val ignoredSpellLikeHeadings: Set<String> = emptySet(),
     private val isEnd: (Token?) -> Boolean = { it == null },
 ) {
-
     fun import(
         document: Document,
         structure: PdfStructure,
@@ -22,12 +21,16 @@ class SpellParser(
             .toList()
     }
 
-    private fun parseFromPages(lexer: TwoColumnPdfLexer, pages: IntRange): Sequence<Spell> =
+    private fun parseFromPages(
+        lexer: TwoColumnPdfLexer,
+        pages: IntRange,
+    ): Sequence<Spell> =
         sequence {
-            val tokens = pages.asSequence()
-                .flatMap { lexer.getTokens(it).toList() }
-                .flatten()
-                .toList()
+            val tokens =
+                pages.asSequence()
+                    .flatMap { lexer.getTokens(it).toList() }
+                    .flatten()
+                    .toList()
 
             val stream = TokenStream(tokens)
 
@@ -47,17 +50,18 @@ class SpellParser(
                             yield(
                                 spell.copy(
                                     id = uuid4(),
-                                    name = buildString {
-                                        append(spell.name)
-                                        append(" (")
-                                        append(
-                                            lore.name.lowercase()
-                                                .replaceFirstChar { it.titlecase() }
-                                        )
-                                        append(")")
-                                    },
+                                    name =
+                                        buildString {
+                                            append(spell.name)
+                                            append(" (")
+                                            append(
+                                                lore.name.lowercase()
+                                                    .replaceFirstChar { it.titlecase() },
+                                            )
+                                            append(")")
+                                        },
                                     lore = lore,
-                                )
+                                ),
                             )
                         }
                     }
@@ -67,68 +71,70 @@ class SpellParser(
             }
         }
 
-    private fun consumeSpells(stream: TokenStream): Sequence<Spell> = sequence {
-        stream.dropUntil { token ->
-            token is Token.Heading3 &&
-                ignoredSpellLikeHeadings.none { token.text.trim().equals(it, ignoreCase = true) }
-        }
-
-        while (stream.peek() is Token.Heading3) {
-            val name = stream.consumeOneOfType<Token.Heading3>().text.trim()
-
-            // CN: <Int>
-            stream.consumeOneOfType<Token.BoldPart>()
-            val castingNumber = stream.consumeOneOfType<Token.NormalPart>().text.trim().toInt()
-
-            // Range: <String>
-            stream.consumeOneOfType<Token.BoldPart>()
-            val range = consumeAtLeastOneLine(stream)
-
-            // Target: <String>
-            stream.consumeOneOfType<Token.BoldPart>()
-
-            lateinit var duration: String
-            lateinit var effectStart: String
-            lateinit var target: String
-
-            val targetTokenText = consumeAtLeastOneLine(stream)
-
-            if (stream.peek() is Token.BoldPart) {
-                target = targetTokenText
-                stream.consumeOneOfType<Token.BoldPart>() // Duration:
-
-                val lines = consumeAtLeastOneLine(stream).split('\n', limit = 2)
-
-                duration = lines[0]
-                effectStart = lines[1]
-            } else {
-                // See "Purple Pall of Shyish" - which has wrong formatting
-                val lines = targetTokenText.split('\n', limit = 3)
-
-                target = lines[0].trim()
-                duration = lines[1].replace("Duration:", "").trim()
-                effectStart = lines[2]
+    private fun consumeSpells(stream: TokenStream): Sequence<Spell> =
+        sequence {
+            stream.dropUntil { token ->
+                token is Token.Heading3 &&
+                    ignoredSpellLikeHeadings.none { token.text.trim().equals(it, ignoreCase = true) }
             }
 
-            yield(
-                Spell(
-                    id = uuid4(),
-                    name = name,
-                    range = range.trim(),
-                    target = target.trim(),
-                    duration = duration.trim(),
-                    castingNumber = castingNumber,
-                    effect = MarkdownBuilder.buildMarkdown(
-                        listOf(
-                            listOf(Token.NormalPart(effectStart)),
-                            stream.consumeUntil { it is Token.Heading },
-                        ).flatten().filterIsInstance<Token.ParagraphToken>()
+            while (stream.peek() is Token.Heading3) {
+                val name = stream.consumeOneOfType<Token.Heading3>().text.trim()
+
+                // CN: <Int>
+                stream.consumeOneOfType<Token.BoldPart>()
+                val castingNumber = stream.consumeOneOfType<Token.NormalPart>().text.trim().toInt()
+
+                // Range: <String>
+                stream.consumeOneOfType<Token.BoldPart>()
+                val range = consumeAtLeastOneLine(stream)
+
+                // Target: <String>
+                stream.consumeOneOfType<Token.BoldPart>()
+
+                lateinit var duration: String
+                lateinit var effectStart: String
+                lateinit var target: String
+
+                val targetTokenText = consumeAtLeastOneLine(stream)
+
+                if (stream.peek() is Token.BoldPart) {
+                    target = targetTokenText
+                    stream.consumeOneOfType<Token.BoldPart>() // Duration:
+
+                    val lines = consumeAtLeastOneLine(stream).split('\n', limit = 2)
+
+                    duration = lines[0]
+                    effectStart = lines[1]
+                } else {
+                    // See "Purple Pall of Shyish" - which has wrong formatting
+                    val lines = targetTokenText.split('\n', limit = 3)
+
+                    target = lines[0].trim()
+                    duration = lines[1].replace("Duration:", "").trim()
+                    effectStart = lines[2]
+                }
+
+                yield(
+                    Spell(
+                        id = uuid4(),
+                        name = name,
+                        range = range.trim(),
+                        target = target.trim(),
+                        duration = duration.trim(),
+                        castingNumber = castingNumber,
+                        effect =
+                            MarkdownBuilder.buildMarkdown(
+                                listOf(
+                                    listOf(Token.NormalPart(effectStart)),
+                                    stream.consumeUntil { it is Token.Heading },
+                                ).flatten().filterIsInstance<Token.ParagraphToken>(),
+                            ),
+                        customLore = "",
                     ),
-                    customLore = "",
                 )
-            )
+            }
         }
-    }
 
     private fun consumeAtLeastOneLine(stream: TokenStream): String {
         var text = stream.consumeOneOfType<Token.NormalPart>().text
@@ -151,10 +157,11 @@ class SpellParser(
 
         return (token is Token.Heading1 || token is Token.Heading2) &&
             (
-                specialLores.keys.any { it.equals(text, ignoreCase = true) } || text.matches(
-                    loreHeadingRegex
-                )
-                )
+                specialLores.keys.any { it.equals(text, ignoreCase = true) } ||
+                    text.matches(
+                        loreHeadingRegex,
+                    )
+            )
     }
 
     private fun extractLore(text: String): Set<SpellLore> {
@@ -169,8 +176,8 @@ class SpellParser(
         return setOf(
             SpellLore.valueOf(
                 requireNotNull(loreHeadingRegex.matchEntire(text)).groupValues[2]
-                    .uppercase()
-            )
+                    .uppercase(),
+            ),
         )
     }
 

@@ -27,7 +27,6 @@ open class FirestoreCharacterItemRepository<T : CharacterItem<T, *>>(
     private val firestore: FirebaseFirestore,
     private val serializer: KSerializer<T>,
 ) : CharacterItemRepository<T> {
-
     override fun findAllForCharacter(characterId: CharacterId): Flow<List<T>> =
         itemCollection(characterId)
             .orderBy("name")
@@ -38,29 +37,41 @@ open class FirestoreCharacterItemRepository<T : CharacterItem<T, *>>(
 
     override fun getLive(
         characterId: CharacterId,
-        itemId: Uuid
+        itemId: Uuid,
     ): Flow<Either<CompendiumItemNotFound, T>> {
         return itemCollection(characterId)
             .document(itemId.toString())
             .snapshots
             .map {
-                if (it.exists)
+                if (it.exists) {
                     it.data(serializer).right()
-                else CompendiumItemNotFound(null).left()
+                } else {
+                    CompendiumItemNotFound(null).left()
+                }
             }
     }
 
-    override suspend fun remove(characterId: CharacterId, itemId: Uuid) {
+    override suspend fun remove(
+        characterId: CharacterId,
+        itemId: Uuid,
+    ) {
         itemCollection(characterId)
             .document(itemId.toString())
             .delete()
     }
 
-    override fun remove(transaction: Transaction, characterId: CharacterId, itemId: Uuid) {
+    override fun remove(
+        transaction: Transaction,
+        characterId: CharacterId,
+        itemId: Uuid,
+    ) {
         transaction.delete(itemCollection(characterId).document(itemId.toString()))
     }
 
-    override suspend fun save(characterId: CharacterId, item: T) {
+    override suspend fun save(
+        characterId: CharacterId,
+        item: T,
+    ) {
         itemCollection(characterId)
             .document(item.id.toString())
             .set(
@@ -74,7 +85,7 @@ open class FirestoreCharacterItemRepository<T : CharacterItem<T, *>>(
     override fun save(
         transaction: Transaction,
         characterId: CharacterId,
-        item: T
+        item: T,
     ) {
         transaction.set(
             itemCollection(characterId).document(item.id.toString()),
@@ -86,12 +97,12 @@ open class FirestoreCharacterItemRepository<T : CharacterItem<T, *>>(
 
     override suspend fun findByCompendiumId(
         partyId: PartyId,
-        compendiumItemId: Uuid
+        compendiumItemId: Uuid,
     ): List<Pair<CharacterId, T>> {
         return coroutineScope {
-            firestore.collection(Schema.Parties)
+            firestore.collection(Schema.PARTIES)
                 .document(partyId.toString())
-                .collection(Schema.Characters)
+                .collection(Schema.CHARACTERS)
                 .where("archived", equalTo = false)
                 .get()
                 .documents
@@ -112,9 +123,9 @@ open class FirestoreCharacterItemRepository<T : CharacterItem<T, *>>(
     }
 
     protected fun itemCollection(characterId: CharacterId) =
-        firestore.collection(Schema.Parties)
+        firestore.collection(Schema.PARTIES)
             .document(characterId.partyId.toString())
-            .collection(Schema.Characters)
+            .collection(Schema.CHARACTERS)
             .document(characterId.id)
             .collection(collectionName)
 }

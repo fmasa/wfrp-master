@@ -71,7 +71,6 @@ data class CharacterDetailScreen(
     private val comingFromCombat: Boolean = false,
     private val initialTab: CharacterTab = CharacterTab.values().first(),
 ) : Screen {
-
     override val key = "parties/$characterId"
 
     @Composable
@@ -91,9 +90,11 @@ data class CharacterDetailScreen(
 
         var currentTab by rememberSaveable(tabs) {
             mutableStateOf(
-                if (initialTab in tabs)
+                if (initialTab in tabs) {
                     initialTab
-                else tabs.firstOrNull()
+                } else {
+                    tabs.firstOrNull()
+                },
             )
         }
 
@@ -116,16 +117,16 @@ data class CharacterDetailScreen(
                         IconAction(
                             drawableResource(Resources.Drawable.JournalEntry),
                             stringResource(Str.compendium_title_journal),
-                            onClick = { navigation.navigate(JournalScreen(characterId.partyId)) }
+                            onClick = { navigation.navigate(JournalScreen(characterId.partyId)) },
                         )
                         IconAction(
                             Icons.Rounded.Edit,
                             stringResource(Str.character_title_edit),
                             onClick = { navigation.navigate(CharacterEditScreen(characterId)) },
                         )
-                    }
+                    },
                 )
-            }
+            },
         ) {
             MainContainer(
                 isGameMaster = state.isGameMaster,
@@ -166,19 +167,22 @@ data class CharacterDetailScreen(
                                 characterId = it,
                                 comingFromCombat = comingFromCombat,
                                 initialTab = currentTab ?: CharacterTab.values().first(),
-                            )
+                            ),
                         )
                         unassignedCharactersDialogOpened = false
-                    }
+                    },
                 )
             }
 
             var dropdownOpened by remember { mutableStateOf(false) }
 
             Row(
-                modifier = if (state.allCharacters.size > 1 || canAddCharacters)
-                    Modifier.clickable { dropdownOpened = true }
-                else Modifier,
+                modifier =
+                    if (state.allCharacters.size > 1 || canAddCharacters) {
+                        Modifier.clickable { dropdownOpened = true }
+                    } else {
+                        Modifier
+                    },
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 Column {
@@ -193,7 +197,7 @@ data class CharacterDetailScreen(
 
             DropdownMenu(
                 dropdownOpened,
-                onDismissRequest = { dropdownOpened = false }
+                onDismissRequest = { dropdownOpened = false },
             ) {
                 state.allCharacters.forEach { otherCharacter ->
                     key(otherCharacter.id) {
@@ -204,9 +208,10 @@ data class CharacterDetailScreen(
                                         CharacterDetailScreen(
                                             characterId = CharacterId(partyId, otherCharacter.id),
                                             comingFromCombat = comingFromCombat,
-                                            initialTab = currentTab ?: CharacterTab.values()
-                                                .first(),
-                                        )
+                                            initialTab =
+                                                currentTab ?: CharacterTab.values()
+                                                    .first(),
+                                        ),
                                     )
                                 } else {
                                     dropdownOpened = false
@@ -238,9 +243,9 @@ data class CharacterDetailScreen(
                                     partyId,
                                     CharacterType.PLAYER_CHARACTER,
                                     userId,
-                                )
+                                ),
                             )
-                        }
+                        },
                     ) {
                         Icon(Icons.Rounded.Add, null, modifier = Modifier.size(24.dp))
                         Text(stringResource(Str.character_button_add))
@@ -288,7 +293,7 @@ data class CharacterDetailScreen(
 
                 LaunchedEffect(Unit) {
                     navigation.navigate(
-                        CharacterEditScreen(characterId, CharacterEditScreen.Section.VISIBLE_TABS)
+                        CharacterEditScreen(characterId, CharacterEditScreen.Section.VISIBLE_TABS),
                     )
                 }
                 return@Column
@@ -296,9 +301,10 @@ data class CharacterDetailScreen(
 
             TabPager(
                 Modifier.weight(1f),
-                initialPage = remember(tabs) {
-                    tabs.indices.firstOrNull { tabs[it] == initialTab } ?: 0
-                },
+                initialPage =
+                    remember(tabs) {
+                        tabs.indices.firstOrNull { tabs[it] == initialTab } ?: 0
+                    },
                 onPageChange = { onTabChange(tabs[it]) },
             ) {
                 val modifier = Modifier.fillMaxHeight()

@@ -36,32 +36,35 @@ object WfrpMasterApplication {
                     LocalUrlOpener provides DesktopUrlOpener,
                     LocalFileChooserFactory provides { NativeFileChooser(coroutineScope, it) },
                     LocalFileSaverFactory provides { NativeFileSaver(coroutineScope, it) },
-                    LocalStaticConfiguration provides StaticConfiguration(
-                        isProduction = true,
-                        version = "dev",
-                        platform = Platform.Desktop,
-                    ),
+                    LocalStaticConfiguration provides
+                        StaticConfiguration(
+                            isProduction = true,
+                            version = "dev",
+                            platform = Platform.Desktop,
+                        ),
                 ) {
-                    val windows = rememberSaveable {
-                        mutableStateListOf(
-                            ApplicationWindowState(
-                                initialScreen = PartyListScreen,
-                                key = UUID.randomUUID(),
-                                isPrimary = true,
+                    val windows =
+                        rememberSaveable {
+                            mutableStateListOf(
+                                ApplicationWindowState(
+                                    initialScreen = PartyListScreen,
+                                    key = UUID.randomUUID(),
+                                    isPrimary = true,
+                                ),
                             )
-                        )
-                    }
+                        }
 
                     windows.forEach { window ->
                         key(window.key) {
                             ApplicationWindow(
                                 initialScreen = window.initialScreen,
                                 onNewWindowRequest = { initialScreen ->
-                                    windows += ApplicationWindowState(
-                                        initialScreen = initialScreen,
-                                        key = UUID.randomUUID(),
-                                        isPrimary = false,
-                                    )
+                                    windows +=
+                                        ApplicationWindowState(
+                                            initialScreen = initialScreen,
+                                            key = UUID.randomUUID(),
+                                            isPrimary = false,
+                                        )
                                 },
                                 onCloseRequest = {
                                     if (window.isPrimary) {

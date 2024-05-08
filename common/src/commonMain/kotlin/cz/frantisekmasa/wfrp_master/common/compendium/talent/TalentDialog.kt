@@ -31,11 +31,14 @@ fun TalentDialog(
 
     CompendiumItemDialog(
         onDismissRequest = onDismissRequest,
-        title = stringResource(
-            if (talent == null)
-                Str.talents_title_new
-            else Str.talents_title_edit
-        ),
+        title =
+            stringResource(
+                if (talent == null) {
+                    Str.talents_title_new
+                } else {
+                    Str.talents_title_edit
+                },
+            ),
         formData = formData,
         saver = onSaveRequest,
     ) { validate ->
@@ -47,7 +50,7 @@ fun TalentDialog(
                 label = stringResource(Str.talents_label_name),
                 value = formData.name,
                 validate = validate,
-                maxLength = Talent.NAME_MAX_LENGTH
+                maxLength = Talent.NAME_MAX_LENGTH,
             )
 
             TextInput(
@@ -87,24 +90,26 @@ private data class TalentFormData(
 ) : CompendiumItemFormData<Talent> {
     companion object {
         @Composable
-        fun fromTalent(talent: Talent?) = TalentFormData(
-            id = remember { talent?.id ?: uuid4() },
-            name = inputValue(talent?.name ?: "", Rules.NotBlank()),
-            tests = inputValue(talent?.tests ?: ""),
-            maxTimesTaken = inputValue(talent?.maxTimesTaken ?: ""),
-            description = inputValue(talent?.description ?: ""),
-            isVisibleToPlayers = talent?.isVisibleToPlayers ?: false,
-        )
+        fun fromTalent(talent: Talent?) =
+            TalentFormData(
+                id = remember { talent?.id ?: uuid4() },
+                name = inputValue(talent?.name ?: "", Rules.NotBlank()),
+                tests = inputValue(talent?.tests ?: ""),
+                maxTimesTaken = inputValue(talent?.maxTimesTaken ?: ""),
+                description = inputValue(talent?.description ?: ""),
+                isVisibleToPlayers = talent?.isVisibleToPlayers ?: false,
+            )
     }
 
-    override fun toValue() = Talent(
-        id = id,
-        name = name.value,
-        tests = tests.value.trim(),
-        maxTimesTaken = maxTimesTaken.value,
-        description = description.value,
-        isVisibleToPlayers = isVisibleToPlayers,
-    )
+    override fun toValue() =
+        Talent(
+            id = id,
+            name = name.value,
+            tests = tests.value.trim(),
+            maxTimesTaken = maxTimesTaken.value,
+            description = description.value,
+            isVisibleToPlayers = isVisibleToPlayers,
+        )
 
     override fun isValid() = listOf(name, maxTimesTaken, description).all { it.isValid() }
 }

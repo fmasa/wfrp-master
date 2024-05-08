@@ -20,7 +20,6 @@ import dev.icerock.moko.resources.compose.stringResource
 class AddTraitScreen(
     private val characterId: CharacterId,
 ) : Screen {
-
     @Composable
     override fun Content() {
         val screenModel: AddTraitScreenModel = rememberScreenModel(arg = characterId)
@@ -31,10 +30,11 @@ class AddTraitScreen(
             return
         }
 
-        val addItemUiState = rememberAddItemUiState(
-            saver = screenModel::saveNewTrait,
-            detailScreenFactory = { CharacterTraitDetailScreen(characterId, it.id) }
-        )
+        val addItemUiState =
+            rememberAddItemUiState(
+                saver = screenModel::saveNewTrait,
+                detailScreenFactory = { CharacterTraitDetailScreen(characterId, it.id) },
+            )
 
         AddItemUi(
             state = addItemUiState,

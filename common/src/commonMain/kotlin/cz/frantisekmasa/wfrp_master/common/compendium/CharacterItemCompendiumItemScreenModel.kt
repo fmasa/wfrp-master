@@ -18,7 +18,6 @@ abstract class CharacterItemCompendiumItemScreenModel<A : CompendiumItem<A>, B :
     protected val characterItems: CharacterItemRepository<B>,
     private val parties: PartyRepository,
 ) : CompendiumItemScreenModel<A>(partyId, compendium) {
-
     override suspend fun update(compendiumItem: A) {
         val characterItems = characterItems.findByCompendiumId(partyId, compendiumItem.id)
 

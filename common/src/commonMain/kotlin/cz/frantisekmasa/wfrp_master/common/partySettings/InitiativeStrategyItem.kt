@@ -38,16 +38,17 @@ internal fun InitiativeStrategyItem(
                     dialogVisible = false
                 }
             },
-            onDismissRequest = { dialogVisible = false }
+            onDismissRequest = { dialogVisible = false },
         )
     }
 
     ListItem(
         text = { Text(stringResource(Str.combat_initiative_strategy_config_option)) },
         secondaryText = { Text(strategy.localizedName) },
-        modifier = Modifier.clickable {
-            dialogVisible = true
-        }
+        modifier =
+            Modifier.clickable {
+                dialogVisible = true
+            },
     )
 }
 
@@ -55,14 +56,14 @@ internal fun InitiativeStrategyItem(
 private fun InitiativeStrategyDialog(
     selected: InitiativeStrategy,
     onSelect: (InitiativeStrategy) -> Unit,
-    onDismissRequest: () -> Unit
+    onDismissRequest: () -> Unit,
 ) {
     SelectionDialog(
         title = stringResource(Str.combat_initiative_strategy_prompt),
         items = InitiativeStrategy.values().toList(),
         selected = selected,
         onDismissRequest = onDismissRequest,
-        onSelect = onSelect
+        onSelect = onSelect,
     ) { strategy ->
         Text(strategy.localizedName)
     }

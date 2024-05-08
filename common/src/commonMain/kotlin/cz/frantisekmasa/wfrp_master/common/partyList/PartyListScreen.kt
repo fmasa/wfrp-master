@@ -48,7 +48,7 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.FloatingActionsMen
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.ItemIcon
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.MenuState
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
-import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.VisualOnlyIconDescription
+import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.VISUAL_ONLY_ICON_DESCRIPTION
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.rememberScreenModel
 import cz.frantisekmasa.wfrp_master.common.gameMaster.GameMasterScreen
 import cz.frantisekmasa.wfrp_master.common.invitation.InvitationScannerScreen
@@ -75,7 +75,7 @@ object PartyListScreen : Screen {
                     createPartyDialogVisible = false
                     navigation.navigate(GameMasterScreen(partyId))
                 },
-                onDismissRequest = { createPartyDialogVisible = false }
+                onDismissRequest = { createPartyDialogVisible = false },
             )
         }
 
@@ -91,7 +91,7 @@ object PartyListScreen : Screen {
                             rememberScreenModel(),
                             onClick = { navigation.navigate(ChangelogScreen) },
                         )
-                    }
+                    },
                 )
             },
             modifier = Modifier.fillMaxHeight(),
@@ -105,7 +105,7 @@ object PartyListScreen : Screen {
                     onStateChangeRequest = { menuState = it },
                     onCreatePartyRequest = { createPartyDialogVisible = true },
                 )
-            }
+            },
         ) {
             var removePartyDialogState by remember {
                 mutableStateOf<DialogState<Party>>(DialogState.Closed())
@@ -138,9 +138,11 @@ object PartyListScreen : Screen {
                 parties,
                 onClick = {
                     navigation.navigate(
-                        if (it.gameMasterId == userId)
+                        if (it.gameMasterId == userId) {
                             GameMasterScreen(it.id)
-                        else CharacterPickerScreen(it.id)
+                        } else {
+                            CharacterPickerScreen(it.id)
+                        },
                     )
                 },
                 onRemove = { removePartyDialogState = DialogState.Opened(it) },
@@ -165,25 +167,25 @@ private fun Menu(
             val navigation = LocalNavigationTransaction.current
 
             ExtendedFloatingActionButton(
-                icon = { Icon(Icons.Rounded.Camera, VisualOnlyIconDescription) },
+                icon = { Icon(Icons.Rounded.Camera, VISUAL_ONLY_ICON_DESCRIPTION) },
                 text = { Text(stringResource(Str.parties_title_join_via_qr_code)) },
                 onClick = {
                     navigation.navigate(InvitationScannerScreen())
                     onStateChangeRequest(MenuState.COLLAPSED)
-                }
+                },
             )
 
             // TODO: Add alternative that allows entering URL directly
         }
         ExtendedFloatingActionButton(
             icon = {
-                Icon(Icons.Rounded.GroupAdd, VisualOnlyIconDescription)
+                Icon(Icons.Rounded.GroupAdd, VISUAL_ONLY_ICON_DESCRIPTION)
             },
             text = { Text(stringResource(Str.parties_title_create_party)) },
             onClick = {
                 onCreatePartyRequest()
                 onStateChangeRequest(MenuState.COLLAPSED)
-            }
+            },
         )
     }
 }
@@ -196,9 +198,12 @@ fun PartyItem(party: Party) {
         ListItem(
             icon = { ItemIcon(Icons.Rounded.Group, ItemIcon.Size.Large) },
             text = { Text(party.name) },
-            trailing = if (playersCount > 0)
-                ({ Text(stringResource(Plurals.parties_player_count, playersCount, playersCount)) })
-            else null,
+            trailing =
+                if (playersCount > 0) {
+                    ({ Text(stringResource(Plurals.parties_player_count, playersCount, playersCount)) })
+                } else {
+                    null
+                },
         )
         Divider()
     }
@@ -250,17 +255,20 @@ fun PartyList(
 
             WithContextMenu(
                 onClick = { onClick(party) },
-                items = listOf(
-                    if (isGameMaster)
-                        ContextMenu.Item(
-                            stringResource(Str.common_ui_button_remove),
-                            onClick = { onRemove(party) },
-                        )
-                    else ContextMenu.Item(
-                        stringResource(Str.parties_button_leave),
-                        onClick = { onLeaveRequest(party) },
-                    )
-                )
+                items =
+                    listOf(
+                        if (isGameMaster) {
+                            ContextMenu.Item(
+                                stringResource(Str.common_ui_button_remove),
+                                onClick = { onRemove(party) },
+                            )
+                        } else {
+                            ContextMenu.Item(
+                                stringResource(Str.parties_button_leave),
+                                onClick = { onLeaveRequest(party) },
+                            )
+                        },
+                    ),
             ) {
                 PartyItem(party)
             }

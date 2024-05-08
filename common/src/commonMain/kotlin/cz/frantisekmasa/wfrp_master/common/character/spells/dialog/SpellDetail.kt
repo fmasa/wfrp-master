@@ -19,8 +19,8 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
-import com.halilibo.richtext.markdown.Markdown
-import com.halilibo.richtext.ui.RichText
+import com.halilibo.richtext.commonmark.Markdown
+import com.halilibo.richtext.ui.material.RichText
 import cz.frantisekmasa.wfrp_master.common.Str
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.SpellLore
 import cz.frantisekmasa.wfrp_master.common.compendium.spell.SpellLoreIcon
@@ -45,7 +45,7 @@ fun SpellDetail(
                 },
                 title = { Text(spell.name) },
             )
-        }
+        },
     ) {
         Column(Modifier.verticalScroll(rememberScrollState())) {
             subheadBar()
@@ -76,9 +76,10 @@ fun SpellDetailBody(
     Column(Modifier.padding(Spacing.bodyPadding)) {
         if (lore != null) {
             Row(
-                modifier = Modifier
-                    .align(Alignment.CenterHorizontally)
-                    .padding(bottom = Spacing.large),
+                modifier =
+                    Modifier
+                        .align(Alignment.CenterHorizontally)
+                        .padding(bottom = Spacing.large),
                 horizontalArrangement = Arrangement.spacedBy(Spacing.small),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
@@ -99,7 +100,7 @@ fun SpellDetailBody(
                 }
 
                 append(effectiveCastingNumber.toString())
-            }
+            },
         )
 
         SingleLineTextValue(stringResource(Str.spells_label_range), range)

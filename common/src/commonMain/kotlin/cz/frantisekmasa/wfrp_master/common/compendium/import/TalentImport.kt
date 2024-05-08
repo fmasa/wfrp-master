@@ -22,21 +22,23 @@ data class TalentImport(
         description.requireMaxLength(Talent.DESCRIPTION_MAX_LENGTH, "talent description")
     }
 
-    fun toTalent() = Talent(
-        id = uuid4(),
-        name = name,
-        maxTimesTaken = maxTimesTaken,
-        description = description,
-        isVisibleToPlayers = isVisibleToPlayers,
-    )
+    fun toTalent() =
+        Talent(
+            id = uuid4(),
+            name = name,
+            maxTimesTaken = maxTimesTaken,
+            description = description,
+            isVisibleToPlayers = isVisibleToPlayers,
+        )
 
     companion object {
-        fun fromTalent(talent: Talent) = TalentImport(
-            name = talent.name,
-            associatedTests = talent.tests,
-            maxTimesTaken = talent.maxTimesTaken,
-            description = talent.description,
-            isVisibleToPlayers = talent.isVisibleToPlayers,
-        )
+        fun fromTalent(talent: Talent) =
+            TalentImport(
+                name = talent.name,
+                associatedTests = talent.tests,
+                maxTimesTaken = talent.maxTimesTaken,
+                description = talent.description,
+                isVisibleToPlayers = talent.isVisibleToPlayers,
+            )
     }
 }

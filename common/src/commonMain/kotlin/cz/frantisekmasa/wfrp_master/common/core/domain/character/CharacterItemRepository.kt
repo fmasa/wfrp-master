@@ -17,26 +17,43 @@ interface CharacterItemRepository<T> : CharacterCompendiumItemRepository<T> {
      */
     fun findAllForCharacter(characterId: CharacterId): Flow<List<T>>
 
-    fun getLive(characterId: CharacterId, itemId: Uuid): Flow<Either<CompendiumItemNotFound, T>>
+    fun getLive(
+        characterId: CharacterId,
+        itemId: Uuid,
+    ): Flow<Either<CompendiumItemNotFound, T>>
 
     /**
      * Removes given skill item character's skill list
      * or does nothing if given item is not associated to user
      */
-    suspend fun remove(characterId: CharacterId, itemId: Uuid)
+    suspend fun remove(
+        characterId: CharacterId,
+        itemId: Uuid,
+    )
 
     /**
      * Removes given skill item character's skill list
      * or does nothing if given item is not associated to user
      */
-    fun remove(transaction: Transaction, characterId: CharacterId, itemId: Uuid)
+    fun remove(
+        transaction: Transaction,
+        characterId: CharacterId,
+        itemId: Uuid,
+    )
 
     /**
      * Inserts item to character's item list or updates it if it already exists
      */
-    suspend fun save(characterId: CharacterId, item: T)
+    suspend fun save(
+        characterId: CharacterId,
+        item: T,
+    )
 
-    override fun save(transaction: Transaction, characterId: CharacterId, item: T)
+    override fun save(
+        transaction: Transaction,
+        characterId: CharacterId,
+        item: T,
+    )
 
     override suspend fun findByCompendiumId(
         partyId: PartyId,

@@ -52,7 +52,6 @@ object CoreRulebook :
     BlessingSource,
     MiracleSource,
     TrappingSource {
-
     override val name: String = "Core Rulebook"
     override val tableFootnotesAsNormalText: Boolean = true
 
@@ -94,10 +93,11 @@ object CoreRulebook :
 
     override fun importSpells(document: Document): List<Spell> {
         return SpellParser(
-            specialLores = mapOf(
-                "Petty Spells" to setOf(SpellLore.PETTY),
-                "Arcane Spells" to SpellLore.values().toSet() - SpellLore.PETTY,
-            ),
+            specialLores =
+                mapOf(
+                    "Petty Spells" to setOf(SpellLore.PETTY),
+                    "Arcane Spells" to SpellLore.values().toSet() - SpellLore.PETTY,
+                ),
         ).import(document, this, sequenceOf(240..257))
     }
 
@@ -117,20 +117,20 @@ object CoreRulebook :
             addAll(
                 MeleeWeaponsParser(document, structure, descriptionParser).parse(
                     294,
-                    IntRange.EMPTY
-                )
+                    IntRange.EMPTY,
+                ),
             )
             addAll(
                 RangedWeaponsParser(document, structure, descriptionParser).parse(
                     295,
-                    IntRange.EMPTY
-                )
+                    IntRange.EMPTY,
+                ),
             )
             addAll(
-                AmmunitionParser(document, structure, descriptionParser).parse(296, IntRange.EMPTY)
+                AmmunitionParser(document, structure, descriptionParser).parse(296, IntRange.EMPTY),
             )
             addAll(
-                ArmourParser().parse(document, structure, 300, IntRange.EMPTY)
+                ArmourParser().parse(document, structure, 300, IntRange.EMPTY),
             )
 
             val basicTrappingsParser = BasicTrappingsParser(document, structure, descriptionParser)
@@ -141,7 +141,7 @@ object CoreRulebook :
                     301..301,
                     Column.LEFT,
                     additionalColumn = 3,
-                )
+                ),
             )
             addAll(
                 basicTrappingsParser.parse(
@@ -149,7 +149,7 @@ object CoreRulebook :
                     302,
                     302..302,
                     Column.LEFT,
-                )
+                ),
             )
             addAll(
                 basicTrappingsParser.parse(
@@ -157,7 +157,7 @@ object CoreRulebook :
                     302,
                     302..303,
                     Column.RIGHT,
-                )
+                ),
             )
             addAll(
                 basicTrappingsParser.parse(
@@ -165,7 +165,7 @@ object CoreRulebook :
                     303,
                     303..304,
                     Column.LEFT,
-                )
+                ),
             )
             addAll(
                 basicTrappingsParser.parse(
@@ -173,7 +173,7 @@ object CoreRulebook :
                     303,
                     303..304,
                     Column.RIGHT,
-                )
+                ),
             )
             addAll(
                 basicTrappingsParser.parse(
@@ -181,15 +181,16 @@ object CoreRulebook :
                     304,
                     304..305,
                     Column.LEFT,
-                )
+                ),
             )
             addAll(
                 basicTrappingsParser.parse(
                     { TrappingType.TradeTools },
                     305,
-                    IntRange.EMPTY, // There are only descriptions for specific professions
+                    // There are only descriptions for specific professions
+                    IntRange.EMPTY,
                     Column.LEFT,
-                )
+                ),
             )
             addAll(
                 basicTrappingsParser.parse(
@@ -197,7 +198,7 @@ object CoreRulebook :
                     306,
                     306..307,
                     Column.RIGHT,
-                )
+                ),
             )
             addAll(
                 basicTrappingsParser.parse(
@@ -205,7 +206,7 @@ object CoreRulebook :
                     307,
                     307..307,
                     Column.LEFT,
-                )
+                ),
             )
             addAll(
                 basicTrappingsParser.parse(
@@ -213,7 +214,7 @@ object CoreRulebook :
                     308,
                     308..308,
                     Column.LEFT,
-                )
+                ),
             )
             addAll(
                 basicTrappingsParser.parse(
@@ -221,18 +222,24 @@ object CoreRulebook :
                     308,
                     309..309,
                     Column.RIGHT,
-                )
+                ),
             )
         }.sortedBy { it.name }
     }
 
-    override fun areSameStyle(a: TextPosition, b: TextPosition): Boolean {
+    override fun areSameStyle(
+        a: TextPosition,
+        b: TextPosition,
+    ): Boolean {
         return super.areSameStyle(a, b) ||
             arePartsOfHeading2(a, b) ||
             arePartsOfHeading3(a, b)
     }
 
-    private fun arePartsOfHeading2(a: TextPosition, b: TextPosition): Boolean {
+    private fun arePartsOfHeading2(
+        a: TextPosition,
+        b: TextPosition,
+    ): Boolean {
         // Some headings are a mix of 12pt and 18pt font
         return a.getFont().getName() == b.getFont().getName() &&
             a.getFont().getName() == "CaslonAntique-Bold-SC700" &&
@@ -240,7 +247,10 @@ object CoreRulebook :
             max(a.getFontSizeInPt(), b.getFontSizeInPt()) == 18f
     }
 
-    private fun arePartsOfHeading3(a: TextPosition, b: TextPosition): Boolean {
+    private fun arePartsOfHeading3(
+        a: TextPosition,
+        b: TextPosition,
+    ): Boolean {
         // Heading 3 may contain Italics
         return a.getFont().getName() == b.getFont().getName() &&
             a.getFont().getName() == "ACaslonPro-Bold" &&
@@ -314,7 +324,10 @@ object CoreRulebook :
         return null
     }
 
-    private fun heightEquals(first: Float, second: Float): Boolean {
+    private fun heightEquals(
+        first: Float,
+        second: Float,
+    ): Boolean {
         return abs(first - second) < 0.01
     }
 }

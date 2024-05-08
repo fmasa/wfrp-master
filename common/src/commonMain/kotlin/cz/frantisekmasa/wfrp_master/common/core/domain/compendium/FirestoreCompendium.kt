@@ -24,7 +24,6 @@ class FirestoreCompendium<T : CompendiumItem<T>>(
     private val firestore: FirebaseFirestore,
     private val serializer: KSerializer<T>,
 ) : Compendium<T>, CoroutineScope by CoroutineScope(Dispatchers.IO) {
-
     override fun liveForParty(partyId: PartyId): Flow<List<T>> =
         collection(partyId)
             .orderBy("name")
@@ -33,13 +32,16 @@ class FirestoreCompendium<T : CompendiumItem<T>>(
                 snapshot.documents.map { it.data(serializer) }
             }
 
-    override suspend fun getItem(partyId: PartyId, itemId: Uuid): T {
+    override suspend fun getItem(
+        partyId: PartyId,
+        itemId: Uuid,
+    ): T {
         try {
             val snapshot = collection(partyId).document(itemId.toString()).get()
 
             if (!snapshot.exists) {
                 throw CompendiumItemNotFound(
-                    "Compendium item $itemId was not found in collection $collectionName"
+                    "Compendium item $itemId was not found in collection $collectionName",
                 )
             }
 
@@ -47,22 +49,30 @@ class FirestoreCompendium<T : CompendiumItem<T>>(
         } catch (e: FirebaseFirestoreException) {
             throw CompendiumItemNotFound(
                 "Compendium item $itemId was not found in collection $collectionName",
-                e
+                e,
             )
         }
     }
 
-    override fun getLive(partyId: PartyId, itemId: Uuid): Flow<Either<CompendiumItemNotFound, T>> {
+    override fun getLive(
+        partyId: PartyId,
+        itemId: Uuid,
+    ): Flow<Either<CompendiumItemNotFound, T>> {
         return collection(partyId).document(itemId.toString())
             .snapshots
             .map {
-                if (it.exists)
+                if (it.exists) {
                     it.data(serializer).right()
-                else CompendiumItemNotFound("Compendium item $itemId was not found").left()
+                } else {
+                    CompendiumItemNotFound("Compendium item $itemId was not found").left()
+                }
             }
     }
 
-    override suspend fun saveItems(partyId: PartyId, items: List<T>) {
+    override suspend fun saveItems(
+        partyId: PartyId,
+        items: List<T>,
+    ) {
         items.chunked(MAX_BATCH_SIZE).forEach { chunk ->
             firestore.runTransaction {
                 chunk.forEach { item ->
@@ -80,7 +90,11 @@ class FirestoreCompendium<T : CompendiumItem<T>>(
         }
     }
 
-    override fun save(transaction: Transaction, partyId: PartyId, item: T) {
+    override fun save(
+        transaction: Transaction,
+        partyId: PartyId,
+        item: T,
+    ) {
         Napier.d("Saving compendium item $item")
         transaction.set(
             documentRef = collection(partyId).document(item.id.toString()),
@@ -91,14 +105,18 @@ class FirestoreCompendium<T : CompendiumItem<T>>(
         )
     }
 
-    override suspend fun remove(transaction: Transaction, partyId: PartyId, item: T) {
+    override suspend fun remove(
+        transaction: Transaction,
+        partyId: PartyId,
+        item: T,
+    ) {
         transaction.delete(
             collection(partyId).document(item.id.toString()),
         )
     }
 
     private fun collection(partyId: PartyId) =
-        firestore.collection(Schema.Parties)
+        firestore.collection(Schema.PARTIES)
             .document(partyId.toString())
             .collection(collectionName)
 

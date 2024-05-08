@@ -16,8 +16,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import com.halilibo.richtext.markdown.Markdown
-import com.halilibo.richtext.ui.RichText
+import com.halilibo.richtext.commonmark.Markdown
+import com.halilibo.richtext.ui.material.RichText
 import cz.frantisekmasa.wfrp_master.common.Str
 import cz.frantisekmasa.wfrp_master.common.core.ui.buttons.CloseButton
 import cz.frantisekmasa.wfrp_master.common.core.ui.cards.CardContainer
@@ -60,7 +60,7 @@ fun NoteCard(
                 text = title(),
                 actions = {
                     CardEditButton(onClick = { editDialogOpened = true })
-                }
+                },
             )
 
             RichText {
@@ -99,9 +99,9 @@ private fun EditNoteDialog(
                                     onUpdate(noteValue.value)
                                     onDismissRequest()
                                 }
-                            }
+                            },
                         )
-                    }
+                    },
                 )
             },
         ) {

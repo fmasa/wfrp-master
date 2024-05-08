@@ -7,11 +7,16 @@ interface InvitationProcessor {
     /**
      * Gives user access to the party
      */
-    suspend fun accept(userId: UserId, invitation: Invitation): InvitationProcessingResult
+    suspend fun accept(
+        userId: UserId,
+        invitation: Invitation,
+    ): InvitationProcessingResult
 }
 
 sealed interface InvitationProcessingResult {
     object Success : InvitationProcessingResult
+
     object AlreadyInParty : InvitationProcessingResult
+
     data class InvalidInvitation(val message: String, val cause: Throwable?) : InvitationProcessingResult
 }

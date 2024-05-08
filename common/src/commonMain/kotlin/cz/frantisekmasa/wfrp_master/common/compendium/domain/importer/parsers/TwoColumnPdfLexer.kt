@@ -11,7 +11,6 @@ class TwoColumnPdfLexer(
     private val structure: PdfStructure,
     private val mergeSubsequentTokens: Boolean = true,
 ) {
-
     fun getTokens(page: Int): Pair<Sequence<Token>, Sequence<Token>> {
         val stripper = TextStripper()
         stripper.setStartPage(page)
@@ -24,7 +23,7 @@ class TwoColumnPdfLexer(
                 .mapNotNull(structure::resolveToken),
             stripper.columns[1].tokens
                 .asSequence()
-                .mapNotNull(structure::resolveToken)
+                .mapNotNull(structure::resolveToken),
         )
     }
 
@@ -55,10 +54,11 @@ class TwoColumnPdfLexer(
         }
 
         override fun onPageEnter() {
-            val characters = textCharactersByArticle
-                .asSequence()
-                .flatten()
-                .filter { structure.resolveToken(createToken("", it)) != null }
+            val characters =
+                textCharactersByArticle
+                    .asSequence()
+                    .flatten()
+                    .filter { structure.resolveToken(createToken("", it)) != null }
 
             val minX = characters.minOf { it.getX() }
             val maxX = characters.maxOf { it.getEndX() }
@@ -66,13 +66,19 @@ class TwoColumnPdfLexer(
             pageCenter = (minX + maxX) / 2
         }
 
-        override fun onTextLine(text: String, textPositions: List<TextPosition>) {
+        override fun onTextLine(
+            text: String,
+            textPositions: List<TextPosition>,
+        ) {
             val touchedColumns = mutableSetOf<Column>()
 
             for (position in textPositions) {
-                val column = if (position.getX() <= pageCenter)
-                    columns[0]
-                else columns[1]
+                val column =
+                    if (position.getX() <= pageCenter) {
+                        columns[0]
+                    } else {
+                        columns[1]
+                    }
 
                 touchedColumns += column
                 val lastPosition = column.lastTextPosition
@@ -103,7 +109,10 @@ class TwoColumnPdfLexer(
         }
     }
 
-    private fun createToken(text: String, position: TextPosition): TextToken {
+    private fun createToken(
+        text: String,
+        position: TextPosition,
+    ): TextToken {
         return TextToken(
             text = text,
             fontName = position.getFont().getName(),

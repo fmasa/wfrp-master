@@ -21,16 +21,18 @@ class JvmAuthenticationManager(
     private val auth: FirebaseAuth,
     private val http: HttpClient,
 ) {
-    val status: Flow<AuthenticationStatus?> = auth.authStateChanged.map { user ->
-        if (user == null) {
-            AuthenticationStatus.NotAuthenticated
-        } else {
-            AuthenticationStatus.Authenticated(user)
+    val status: Flow<AuthenticationStatus?> =
+        auth.authStateChanged.map { user ->
+            if (user == null) {
+                AuthenticationStatus.NotAuthenticated
+            } else {
+                AuthenticationStatus.Authenticated(user)
+            }
         }
-    }
 
     sealed interface AuthenticationStatus {
         data class Authenticated(val user: FirebaseUser) : AuthenticationStatus
+
         object NotAuthenticated : AuthenticationStatus
     }
 
@@ -39,16 +41,20 @@ class JvmAuthenticationManager(
         InvalidPassword,
         EmailNotFound,
         TooManyAttempts,
-        UnknownError
+        UnknownError,
     }
 
-    suspend fun signIn(email: String, password: String): Either<SignInError, Unit> {
-        val response = http.post(
-            "https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=$API_KEY"
-        ) {
-            contentType(ContentType.Application.Json)
-            setBody(SignInRequest(email, password))
-        }
+    suspend fun signIn(
+        email: String,
+        password: String,
+    ): Either<SignInError, Unit> {
+        val response =
+            http.post(
+                "https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=$API_KEY",
+            ) {
+                contentType(ContentType.Application.Json)
+                setBody(SignInRequest(email, password))
+            }
 
         if (response.status == HttpStatusCode.OK) {
             auth.signInWithEmailAndPassword(email, password)
@@ -92,17 +98,18 @@ class JvmAuthenticationManager(
      * https://firebase.google.com/docs/reference/rest/auth#section-send-password-reset-email
      */
     suspend fun resetPassword(email: String): PasswordResetResult {
-        val response = http.post(
-            "https://identitytoolkit.googleapis.com/v1/accounts:sendOobCode?key=$API_KEY"
-        ) {
-            contentType(ContentType.Application.Json)
-            setBody(
-                PasswordResetRequest(
-                    requestType = "PASSWORD_RESET",
-                    email = email,
+        val response =
+            http.post(
+                "https://identitytoolkit.googleapis.com/v1/accounts:sendOobCode?key=$API_KEY",
+            ) {
+                contentType(ContentType.Application.Json)
+                setBody(
+                    PasswordResetRequest(
+                        requestType = "PASSWORD_RESET",
+                        email = email,
+                    ),
                 )
-            )
-        }
+            }
 
         if (response.status != HttpStatusCode.OK) {
             val body = response.body<Failure>()
@@ -125,7 +132,9 @@ class JvmAuthenticationManager(
 
     sealed interface PasswordResetResult {
         object Success : PasswordResetResult
+
         object EmailNotFound : PasswordResetResult
+
         object UnknownError : PasswordResetResult
     }
 

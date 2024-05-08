@@ -30,7 +30,6 @@ import dev.icerock.moko.resources.compose.stringResource
 class CompendiumListScreen(
     private val partyId: PartyId,
 ) : Screen {
-
     @Composable
     override fun Content() {
         val screenModel: PartyScreenModel = rememberScreenModel(arg = partyId)
@@ -54,7 +53,7 @@ class CompendiumListScreen(
                             DropdownMenuItem(
                                 onClick = {
                                     navigation.navigate(RulebookCompendiumImportScreen(partyId))
-                                }
+                                },
                             ) {
                                 Text(stringResource(Str.compendium_button_import_from_rulebook))
                             }
@@ -62,7 +61,7 @@ class CompendiumListScreen(
                             DropdownMenuItem(
                                 onClick = {
                                     navigation.navigate(JsonCompendiumImportScreen(partyId))
-                                }
+                                },
                             ) {
                                 Text(stringResource(Str.compendium_button_import_file))
                             }
@@ -70,14 +69,14 @@ class CompendiumListScreen(
                             DropdownMenuItem(
                                 onClick = {
                                     navigation.navigate(JsonCompendiumExportScreen(partyId))
-                                }
+                                },
                             ) {
                                 Text(stringResource(Str.compendium_button_export_file))
                             }
                         }
-                    }
+                    },
                 )
-            }
+            },
         ) {
             CardContainer(
                 Modifier

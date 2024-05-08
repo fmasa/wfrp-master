@@ -84,27 +84,31 @@ data class CareerFormData(
         return listOf(name, description).all { it.isValid() } && races.value.isNotEmpty()
     }
 
-    override fun toValue() = CareerData(
-        name = name.value,
-        description = description.value,
-        socialClass = socialClass.value,
-        races = races.value,
-    )
+    override fun toValue() =
+        CareerData(
+            name = name.value,
+            description = description.value,
+            socialClass = socialClass.value,
+            races = races.value,
+        )
 
     companion object {
         @Composable
-        fun fromCareerData(careerData: CareerData?) = CareerFormData(
-            name = inputValue(careerData?.name ?: "", Rules.NotBlank()),
-            description = inputValue(careerData?.description ?: ""),
-            socialClass = rememberSaveable(careerData) {
-                mutableStateOf(careerData?.socialClass ?: SocialClass.ACADEMICS)
-            },
-            races = rememberSaveable(careerData) {
-                mutableStateOf(
-                    careerData?.races ?: emptySet()
-                )
-            },
-        )
+        fun fromCareerData(careerData: CareerData?) =
+            CareerFormData(
+                name = inputValue(careerData?.name ?: "", Rules.NotBlank()),
+                description = inputValue(careerData?.description ?: ""),
+                socialClass =
+                    rememberSaveable(careerData) {
+                        mutableStateOf(careerData?.socialClass ?: SocialClass.ACADEMICS)
+                    },
+                races =
+                    rememberSaveable(careerData) {
+                        mutableStateOf(
+                            careerData?.races ?: emptySet(),
+                        )
+                    },
+            )
     }
 }
 

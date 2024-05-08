@@ -61,17 +61,22 @@ object CharacterCharacteristicsForm {
             }
 
             @Composable
-            private fun toPair(base: Stats?, advances: Stats?, getValue: (Stats) -> Int) = Pair(
+            private fun toPair(
+                base: Stats?,
+                advances: Stats?,
+                getValue: (Stats) -> Int,
+            ) = Pair(
                 characteristicValue(base?.let(getValue)),
                 characteristicValue(advances?.let(getValue)),
             )
 
             @Composable
-            private fun characteristicValue(defaultValue: Int?) = inputValue(
-                defaultValue?.toTextValue() ?: "",
-                // Inputs are too thin to show error message
-                Rules.withEmptyMessage(Rules.IfNotBlank(Rules.NonNegativeInteger()))
-            )
+            private fun characteristicValue(defaultValue: Int?) =
+                inputValue(
+                    defaultValue?.toTextValue() ?: "",
+                    // Inputs are too thin to show error message
+                    Rules.withEmptyMessage(Rules.ifNotBlank(Rules.NonNegativeInteger())),
+                )
 
             private fun Int.toTextValue() = if (this == 0) "" else this.toString()
         }
@@ -90,32 +95,35 @@ object CharacterCharacteristicsForm {
                 fellowship,
             ).all { (base, advances) -> base.isValid() && advances.isValid() }
 
-        override fun toValue(): Value = Value(
-            base = Stats(
-                weaponSkill = toValue(weaponSkill.first.value),
-                ballisticSkill = toValue(ballisticSkill.first.value),
-                strength = toValue(strength.first.value),
-                toughness = toValue(toughness.first.value),
-                initiative = toValue(initiative.first.value),
-                agility = toValue(agility.first.value),
-                dexterity = toValue(dexterity.first.value),
-                intelligence = toValue(intelligence.first.value),
-                willPower = toValue(willPower.first.value),
-                fellowship = toValue(fellowship.first.value),
-            ),
-            advances = Stats(
-                weaponSkill = toValue(weaponSkill.second.value),
-                ballisticSkill = toValue(ballisticSkill.second.value),
-                strength = toValue(strength.second.value),
-                toughness = toValue(toughness.second.value),
-                initiative = toValue(initiative.second.value),
-                agility = toValue(agility.second.value),
-                dexterity = toValue(dexterity.second.value),
-                intelligence = toValue(intelligence.second.value),
-                willPower = toValue(willPower.second.value),
-                fellowship = toValue(fellowship.second.value),
-            ),
-        )
+        override fun toValue(): Value =
+            Value(
+                base =
+                    Stats(
+                        weaponSkill = toValue(weaponSkill.first.value),
+                        ballisticSkill = toValue(ballisticSkill.first.value),
+                        strength = toValue(strength.first.value),
+                        toughness = toValue(toughness.first.value),
+                        initiative = toValue(initiative.first.value),
+                        agility = toValue(agility.first.value),
+                        dexterity = toValue(dexterity.first.value),
+                        intelligence = toValue(intelligence.first.value),
+                        willPower = toValue(willPower.first.value),
+                        fellowship = toValue(fellowship.first.value),
+                    ),
+                advances =
+                    Stats(
+                        weaponSkill = toValue(weaponSkill.second.value),
+                        ballisticSkill = toValue(ballisticSkill.second.value),
+                        strength = toValue(strength.second.value),
+                        toughness = toValue(toughness.second.value),
+                        initiative = toValue(initiative.second.value),
+                        agility = toValue(agility.second.value),
+                        dexterity = toValue(dexterity.second.value),
+                        intelligence = toValue(intelligence.second.value),
+                        willPower = toValue(willPower.second.value),
+                        fellowship = toValue(fellowship.second.value),
+                    ),
+            )
 
         private fun toValue(value: String) = value.toIntOrNull() ?: 0
     }
@@ -131,18 +139,19 @@ fun CharacterCharacteristicsForm(
     data: CharacterCharacteristicsForm.Data,
     validate: Boolean,
 ) {
-    val characteristics = listOf(
-        stringResource(Str.characteristics_weapon_skill) to data.weaponSkill,
-        stringResource(Str.characteristics_ballistic_skill) to data.ballisticSkill,
-        stringResource(Str.characteristics_strength) to data.strength,
-        stringResource(Str.characteristics_toughness) to data.toughness,
-        stringResource(Str.characteristics_initiative) to data.initiative,
-        stringResource(Str.characteristics_agility) to data.agility,
-        stringResource(Str.characteristics_dexterity) to data.dexterity,
-        stringResource(Str.characteristics_intelligence) to data.intelligence,
-        stringResource(Str.characteristics_will_power) to data.willPower,
-        stringResource(Str.characteristics_fellowship) to data.fellowship,
-    )
+    val characteristics =
+        listOf(
+            stringResource(Str.characteristics_weapon_skill) to data.weaponSkill,
+            stringResource(Str.characteristics_ballistic_skill) to data.ballisticSkill,
+            stringResource(Str.characteristics_strength) to data.strength,
+            stringResource(Str.characteristics_toughness) to data.toughness,
+            stringResource(Str.characteristics_initiative) to data.initiative,
+            stringResource(Str.characteristics_agility) to data.agility,
+            stringResource(Str.characteristics_dexterity) to data.dexterity,
+            stringResource(Str.characteristics_intelligence) to data.intelligence,
+            stringResource(Str.characteristics_will_power) to data.willPower,
+            stringResource(Str.characteristics_fellowship) to data.fellowship,
+        )
 
     Column(verticalArrangement = Arrangement.spacedBy(20.dp)) {
         for (rowCharacteristics in characteristics.chunked(2)) {
@@ -168,7 +177,7 @@ private fun CharacteristicInputs(
     label: String,
     validate: Boolean,
     modifier: Modifier,
-    baseAndAdvances: Pair<InputValue, InputValue>
+    baseAndAdvances: Pair<InputValue, InputValue>,
 ) {
     Column(modifier) {
         Text(label, Modifier.align(Alignment.CenterHorizontally))
@@ -182,13 +191,15 @@ private fun CharacteristicInputs(
             val advances = baseAndAdvances.second
 
             val focusManager = LocalFocusManager.current
-            val keyboardOptions = KeyboardOptions.Default.copy(
-                keyboardType = KeyboardType.Number,
-                imeAction = ImeAction.Next,
-            )
-            val keyboardActions = KeyboardActions(
-                onNext = { focusManager.moveFocus(FocusDirection.Next) }
-            )
+            val keyboardOptions =
+                KeyboardOptions.Default.copy(
+                    keyboardType = KeyboardType.Number,
+                    imeAction = ImeAction.Next,
+                )
+            val keyboardActions =
+                KeyboardActions(
+                    onNext = { focusManager.moveFocus(FocusDirection.Next) },
+                )
 
             TextInput(
                 modifier = Modifier.weight(1f),

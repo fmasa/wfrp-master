@@ -28,7 +28,6 @@ import kotlinx.coroutines.launch
 
 class CharacterSpellDetailScreen(characterId: CharacterId, spellId: Uuid) :
     CharacterItemDetailScreen(characterId, spellId) {
-
     @Composable
     override fun Content() {
         val screenModel: CharacterSpellDetailScreenModel = rememberScreenModel(arg = characterId)
@@ -63,17 +62,18 @@ class CharacterSpellDetailScreen(characterId: CharacterId, spellId: Uuid) :
 
                         if (isGameMaster) {
                             CompendiumButton(
-                                modifier = Modifier
-                                    .align(Alignment.CenterHorizontally)
-                                    .padding(top = Spacing.bodyPadding),
+                                modifier =
+                                    Modifier
+                                        .align(Alignment.CenterHorizontally)
+                                        .padding(top = Spacing.bodyPadding),
                                 onClick = {
                                     navigation.navigate(
                                         CompendiumSpellDetailScreen(
                                             characterId.partyId,
                                             spell.compendiumId,
-                                        )
+                                        ),
                                     )
-                                }
+                                },
                             )
                         }
                     },

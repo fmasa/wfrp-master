@@ -9,12 +9,13 @@ import kotlinx.coroutines.flow.map
 class DismissedUserTipsHolder(
     private val settingsStorage: SettingsStorage,
 ) {
-    val dismissedTips: Flow<Set<UserTip>> = settingsStorage.watch(DISMISSED_TIPS)
-        .map { dismissedTips ->
-            dismissedTips
-                ?.mapNotNull { UserTip.values().firstOrNull { tip -> tip.name == it } }
-                ?.toSet() ?: emptySet()
-        }
+    val dismissedTips: Flow<Set<UserTip>> =
+        settingsStorage.watch(DISMISSED_TIPS)
+            .map { dismissedTips ->
+                dismissedTips
+                    ?.mapNotNull { UserTip.values().firstOrNull { tip -> tip.name == it } }
+                    ?.toSet() ?: emptySet()
+            }
 
     suspend fun dismissTip(tip: UserTip) {
         settingsStorage.edit(DISMISSED_TIPS) { dismissedTips ->

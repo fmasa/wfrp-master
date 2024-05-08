@@ -17,11 +17,15 @@ data class Money(private val pennies: Int) : Parcelable, Comparable<Money> {
         val ZERO = Money(0)
 
         fun pennies(pennies: Int) = Money(pennies)
+
         fun shillings(shillings: Int) = Money(shillings * PENNIES_IN_SHILLING)
+
         fun crowns(crowns: Int) = shillings(crowns * SHILLINGS_IN_CROWNS)
 
-        fun sum(a: Money, vararg addends: Money): Money =
-            addends.fold(a) { x, y -> x + y }
+        fun sum(
+            a: Money,
+            vararg addends: Money,
+        ): Money = addends.fold(a) { x, y -> x + y }
     }
 
     init {
@@ -36,9 +40,10 @@ data class Money(private val pennies: Int) : Parcelable, Comparable<Money> {
 
     fun isZero(): Boolean = pennies == 0
 
-    operator fun plus(other: Money) = Money(
-        min(pennies.toLong() + other.pennies.toLong(), Int.MAX_VALUE.toLong()).toInt()
-    )
+    operator fun plus(other: Money) =
+        Money(
+            min(pennies.toLong() + other.pennies.toLong(), Int.MAX_VALUE.toLong()).toInt(),
+        )
 
     operator fun minus(other: Money) = Money(pennies - other.pennies)
 

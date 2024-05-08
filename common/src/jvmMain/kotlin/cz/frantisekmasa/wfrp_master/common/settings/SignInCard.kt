@@ -26,12 +26,13 @@ actual fun SignInCard(settingsScreenModel: SettingsScreenModel) {
     CardContainer(
         Modifier
             .fillMaxWidth()
-            .padding(horizontal = 8.dp)
+            .padding(horizontal = 8.dp),
     ) {
         Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 8.dp),
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 8.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             CardTitle(stringResource(Str.settings_title_account))
@@ -51,7 +52,7 @@ actual fun SignInCard(settingsScreenModel: SettingsScreenModel) {
                     coroutineScope.launchLogged(Dispatchers.IO) {
                         auth.logout()
                     }
-                }
+                },
             )
         }
     }

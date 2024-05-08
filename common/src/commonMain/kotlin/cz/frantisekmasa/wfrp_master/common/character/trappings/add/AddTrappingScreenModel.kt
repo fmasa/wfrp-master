@@ -17,13 +17,13 @@ class AddTrappingScreenModel(
     private val trappings: InventoryItemRepository,
     availableCompendiumItemsFactory: AvailableCompendiumItemsFactory,
 ) : ScreenModel {
-
-    val state: Flow<AddTrappingScreenState> = availableCompendiumItemsFactory.create(
-        partyId = characterId.partyId,
-        compendium = compendium,
-        // Intentionally showing Trappings Character already has
-        filterCharacterItems = flowOf(emptyList<InventoryItem>()),
-    ).map { AddTrappingScreenState(it) }
+    val state: Flow<AddTrappingScreenState> =
+        availableCompendiumItemsFactory.create(
+            partyId = characterId.partyId,
+            compendium = compendium,
+            // Intentionally showing Trappings Character already has
+            filterCharacterItems = flowOf(emptyList<InventoryItem>()),
+        ).map { AddTrappingScreenState(it) }
 
     suspend fun saveTrapping(trapping: InventoryItem) {
         trappings.save(characterId, trapping)

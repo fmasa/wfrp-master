@@ -121,23 +121,27 @@ fun StatBlock(
                     (
                         sequenceOf(it.damage.value.toString()) +
                             sequenceOf(
-                                if (weapon is TrappingType.RangedWeapon)
+                                if (weapon is TrappingType.RangedWeapon) {
                                     listOf(
                                         weapon.range.calculate(
                                             strengthBonus = characteristics.strengthBonus,
-                                        ).value.toString()
+                                        ).value.toString(),
                                     )
-                                else emptyList(),
-                                if (weapon.equipped == WeaponEquip.OFF_HAND)
+                                } else {
+                                    emptyList()
+                                },
+                                if (weapon.equipped == WeaponEquip.OFF_HAND) {
                                     listOf(WeaponEquip.OFF_HAND.localizedName)
-                                else emptyList(),
+                                } else {
+                                    emptyList()
+                                },
                                 translateFeatures(weapon.qualities),
                                 translateFeatures(weapon.flaws),
                                 translateFeatures(it.trapping.itemQualities.associateWith { 1 }),
                                 translateFeatures(it.trapping.itemFlaws.associateWith { 1 }),
                             ).flatten()
                                 .sorted()
-                        ).joinToString(", ")
+                    ).joinToString(", "),
                 )
                 append(')')
             }
@@ -216,7 +220,7 @@ fun StatBlock(
     }
 }
 
-private const val SkillTag = "[skill]"
+private const val SKILL_TAG = "[skill]"
 
 @Composable
 private fun <T> CharacterItemList(
@@ -231,33 +235,35 @@ private fun <T> CharacterItemList(
     }
 
     val formattedItems = items.map { key(it) to value(it) }
-    val text = remember(formattedItems, key, value) {
-        buildAnnotatedString {
-            withStyle(SpanStyle(fontWeight = FontWeight.Bold)) {
-                append(title)
-                append(": ")
-            }
-
-            formattedItems.forEachIndexed { index, (key, value) ->
-                withAnnotation(SkillTag, key) {
-                    append(value)
+    val text =
+        remember(formattedItems, key, value) {
+            buildAnnotatedString {
+                withStyle(SpanStyle(fontWeight = FontWeight.Bold)) {
+                    append(title)
+                    append(": ")
                 }
 
-                if (index != items.lastIndex) {
-                    append(", ")
+                formattedItems.forEachIndexed { index, (key, value) ->
+                    withAnnotation(SKILL_TAG, key) {
+                        append(value)
+                    }
+
+                    if (index != items.lastIndex) {
+                        append(", ")
+                    }
                 }
             }
         }
-    }
 
     val navigation = LocalNavigationTransaction.current
     ClickableText(
         text,
-        style = MaterialTheme.typography.body2.copy(
-            color = LocalContentColor.current.copy(alpha = LocalContentAlpha.current),
-        )
+        style =
+            MaterialTheme.typography.body2.copy(
+                color = LocalContentColor.current.copy(alpha = LocalContentAlpha.current),
+            ),
     ) { offset ->
-        text.getStringAnnotations(SkillTag, offset, offset)
+        text.getStringAnnotations(SKILL_TAG, offset, offset)
             .firstOrNull()
             ?.let { range ->
                 navigation.navigate(detail(items.first { key(it) == range.item }))
@@ -280,14 +286,14 @@ private fun CompactCharacteristicsTable(characteristics: Stats) {
                 ) {
                     Text(
                         text = stringResource(characteristic.shortcut),
-                        modifier = Modifier.padding(vertical = Spacing.tiny)
+                        modifier = Modifier.padding(vertical = Spacing.tiny),
                     )
 
                     Divider(color = MaterialTheme.colors.onSurface)
 
                     Text(
                         text = characteristics.get(characteristic).toString(),
-                        modifier = Modifier.padding(vertical = Spacing.tiny)
+                        modifier = Modifier.padding(vertical = Spacing.tiny),
                     )
                 }
             }
@@ -295,9 +301,10 @@ private fun CompactCharacteristicsTable(characteristics: Stats) {
             if (characteristic != lastCharacteristic) {
                 Divider(
                     color = MaterialTheme.colors.onSurface,
-                    modifier = Modifier
-                        .fillMaxHeight()
-                        .width(1.dp)
+                    modifier =
+                        Modifier
+                            .fillMaxHeight()
+                            .width(1.dp),
                 )
             }
         }

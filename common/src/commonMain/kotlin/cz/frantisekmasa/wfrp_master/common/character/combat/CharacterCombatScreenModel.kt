@@ -21,15 +21,18 @@ class CharacterCombatScreenModel(
     characterRepository: CharacterRepository,
 ) : ScreenModel {
     private val trappingsFlow = trappingRepository.findAllForCharacter(characterId)
-    private val characterFlow = characterRepository.getLive(characterId)
-        .right()
-    private val strengthBonusFlow = characterFlow
-        .map { it.characteristics.strengthBonus }
-        .distinctUntilChanged()
+    private val characterFlow =
+        characterRepository.getLive(characterId)
+            .right()
+    private val strengthBonusFlow =
+        characterFlow
+            .map { it.characteristics.strengthBonus }
+            .distinctUntilChanged()
 
-    val toughnessBonus: Flow<Int> = characterFlow
-        .map { it.characteristics.toughnessBonus }
-        .distinctUntilChanged()
+    val toughnessBonus: Flow<Int> =
+        characterFlow
+            .map { it.characteristics.toughnessBonus }
+            .distinctUntilChanged()
 
     val equippedWeapons: Flow<List<Pair<WeaponEquip, List<EquippedWeapon>>>> =
         trappingsFlow
@@ -48,19 +51,20 @@ class CharacterCombatScreenModel(
 
     val armour: Flow<Armour> = trappingsFlow.map { items -> Armour.fromItems(items) }
 
-    val armourPieces: Flow<Map<HitLocation, List<WornArmourPiece>>> = trappingsFlow.map { trappings ->
-        val locations = mutableMapOf<HitLocation, MutableList<WornArmourPiece>>()
+    val armourPieces: Flow<Map<HitLocation, List<WornArmourPiece>>> =
+        trappingsFlow.map { trappings ->
+            val locations = mutableMapOf<HitLocation, MutableList<WornArmourPiece>>()
 
-        trappings
-            .asSequence()
-            .mapNotNull(WornArmourPiece::fromTrappingOrNull)
-            .sortedBy { it.trapping.name }
-            .forEach { piece ->
-                piece.armour.locations.forEach { location ->
-                    locations.getOrPut(location) { mutableListOf() } += (piece)
+            trappings
+                .asSequence()
+                .mapNotNull(WornArmourPiece::fromTrappingOrNull)
+                .sortedBy { it.trapping.name }
+                .forEach { piece ->
+                    piece.armour.locations.forEach { location ->
+                        locations.getOrPut(location) { mutableListOf() } += (piece)
+                    }
                 }
-            }
 
-        locations
-    }
+            locations
+        }
 }

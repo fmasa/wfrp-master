@@ -29,7 +29,6 @@ import androidx.compose.ui.geometry.Size as ComposeSize
 
 object EmptyUI {
     enum class Size {
-
         /**
          * Should be used, when there are more lists on a screen and this empty UI is only related
          * to part of it
@@ -39,22 +38,29 @@ object EmptyUI {
         /**
          * Should be used when main content of screen is empty
          */
-        Large;
+        Large,
+
+        ;
 
         val textStyle: TextStyle
             @Composable
-            get() = when (this) {
-                Small -> MaterialTheme.typography.subtitle1
-                Large -> MaterialTheme.typography.h6
-            }
+            get() =
+                when (this) {
+                    Small -> MaterialTheme.typography.subtitle1
+                    Large -> MaterialTheme.typography.h6
+                }
 
         @Stable
-        fun modifier(intrinsicSize: ComposeSize): Modifier = when (this) {
-            Small -> Modifier.iconSize(60.dp, intrinsicSize).padding(top = 16.dp)
-            Large -> Modifier.iconSize(64.dp, intrinsicSize)
-        }
+        fun modifier(intrinsicSize: ComposeSize): Modifier =
+            when (this) {
+                Small -> Modifier.iconSize(60.dp, intrinsicSize).padding(top = 16.dp)
+                Large -> Modifier.iconSize(64.dp, intrinsicSize)
+            }
 
-        private fun Modifier.iconSize(width: Dp, intrinsicSize: ComposeSize): Modifier {
+        private fun Modifier.iconSize(
+            width: Dp,
+            intrinsicSize: ComposeSize,
+        ): Modifier {
             if (intrinsicSize.width == intrinsicSize.height) {
                 return size(width)
             }
@@ -69,7 +75,7 @@ fun EmptyUI(
     text: String,
     icon: Resources.Drawable,
     subText: String? = null,
-    size: EmptyUI.Size = EmptyUI.Size.Large
+    size: EmptyUI.Size = EmptyUI.Size.Large,
 ) {
     EmptyUI(text, drawableResource(icon), subText, size)
 }
@@ -79,7 +85,7 @@ fun EmptyUI(
     text: String,
     icon: ImageVector,
     subText: String? = null,
-    size: EmptyUI.Size = EmptyUI.Size.Large
+    size: EmptyUI.Size = EmptyUI.Size.Large,
 ) {
     EmptyUI(text, rememberVectorPainter(icon), subText, size)
 }
@@ -89,7 +95,7 @@ fun EmptyUI(
     text: String,
     iconPainter: Painter,
     subText: String? = null,
-    size: EmptyUI.Size = EmptyUI.Size.Large
+    size: EmptyUI.Size = EmptyUI.Size.Large,
 ) {
     val disabledColor = MaterialTheme.colors.onSurface.copy(ContentAlpha.disabled)
 
@@ -100,7 +106,7 @@ fun EmptyUI(
 
         Image(
             iconPainter,
-            contentDescription = VisualOnlyIconDescription,
+            contentDescription = VISUAL_ONLY_ICON_DESCRIPTION,
             modifier = size.modifier(iconPainter.intrinsicSize),
             colorFilter = ColorFilter.tint(disabledColor),
         )

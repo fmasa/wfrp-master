@@ -27,7 +27,6 @@ import io.ktor.http.Url
 class InvitationLinkScreen(
     private val url: String,
 ) : Screen {
-
     @Composable
     override fun Content() {
         val navigation = LocalNavigationTransaction.current
@@ -36,16 +35,17 @@ class InvitationLinkScreen(
             topBar = {
                 TopAppBar(
                     navigationIcon = { BackButton() },
-                    title = { Text(stringResource(Str.parties_title_join)) }
+                    title = { Text(stringResource(Str.parties_title_join)) },
                 )
             },
         ) {
             val screenModel: InvitationScreenModel = rememberScreenModel()
 
             val userId = LocalUser.current.id
-            val parties = remember { screenModel.userParties(userId) }
-                .collectWithLifecycle(null)
-                .value
+            val parties =
+                remember { screenModel.userParties(userId) }
+                    .collectWithLifecycle(null)
+                    .value
 
             if (parties == null) {
                 FullScreenProgress()
@@ -58,9 +58,10 @@ class InvitationLinkScreen(
             val invalidInvitationError = stringResource(Str.messages_invitation_error_invitation_invalid)
 
             LaunchedEffect(url) {
-                val loadedInvitation = Url(url).parameters[QUERY_PARAMETER]?.let {
-                    screenModel.deserializeInvitation(it)
-                }
+                val loadedInvitation =
+                    Url(url).parameters[QUERY_PARAMETER]?.let {
+                        screenModel.deserializeInvitation(it)
+                    }
 
                 if (loadedInvitation != null) {
                     invitation = loadedInvitation

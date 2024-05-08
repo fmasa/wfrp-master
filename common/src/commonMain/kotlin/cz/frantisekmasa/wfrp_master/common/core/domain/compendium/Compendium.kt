@@ -9,15 +9,20 @@ import dev.gitlive.firebase.firestore.Transaction
 import kotlinx.coroutines.flow.Flow
 
 interface Compendium<T : CompendiumItem<T>> {
-
     fun liveForParty(partyId: PartyId): Flow<List<T>>
 
     /**
      * @throws CompendiumItemNotFound
      */
-    suspend fun getItem(partyId: PartyId, itemId: Uuid): T
+    suspend fun getItem(
+        partyId: PartyId,
+        itemId: Uuid,
+    ): T
 
-    suspend fun findItem(partyId: PartyId, itemId: Uuid): T? {
+    suspend fun findItem(
+        partyId: PartyId,
+        itemId: Uuid,
+    ): T? {
         return try {
             getItem(partyId, itemId)
         } catch (e: CompendiumItemNotFound) {
@@ -25,18 +30,32 @@ interface Compendium<T : CompendiumItem<T>> {
         }
     }
 
-    fun getLive(partyId: PartyId, itemId: Uuid): Flow<Either<CompendiumItemNotFound, T>>
+    fun getLive(
+        partyId: PartyId,
+        itemId: Uuid,
+    ): Flow<Either<CompendiumItemNotFound, T>>
 
     /**
      * Updates item if it exists and creates it if it doesn't
      */
-    suspend fun saveItems(partyId: PartyId, items: List<T>)
+    suspend fun saveItems(
+        partyId: PartyId,
+        items: List<T>,
+    )
 
-    fun save(transaction: Transaction, partyId: PartyId, item: T)
+    fun save(
+        transaction: Transaction,
+        partyId: PartyId,
+        item: T,
+    )
 
     /**
      * Removes item if it's persisted,
      * otherwise does nothing.
      */
-    suspend fun remove(transaction: Transaction, partyId: PartyId, item: T)
+    suspend fun remove(
+        transaction: Transaction,
+        partyId: PartyId,
+        item: T,
+    )
 }

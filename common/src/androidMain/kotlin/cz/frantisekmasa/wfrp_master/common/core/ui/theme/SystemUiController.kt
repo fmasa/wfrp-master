@@ -12,9 +12,10 @@ fun rememberSystemUiController(window: Window): SystemUiController {
     return remember { SystemUiController(window) }
 }
 
-val LocalSystemUiController = staticCompositionLocalOf<SystemUiController> {
-    error("System UI Controller was not initialized. Did you forget to call ProvideActivity?")
-}
+val LocalSystemUiController =
+    staticCompositionLocalOf<SystemUiController> {
+        error("System UI Controller was not initialized. Did you forget to call ProvideActivity?")
+    }
 
 class SystemUiController(private val window: Window) {
     fun setStatusBarColor(color: Color) {

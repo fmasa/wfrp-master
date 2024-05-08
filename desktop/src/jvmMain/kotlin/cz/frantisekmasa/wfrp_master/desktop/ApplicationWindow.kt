@@ -40,7 +40,7 @@ fun ApplicationWindow(
         LocalKeyboardDispatcher provides keyboardDispatcher,
     ) {
         Window(
-            title = FixedStrings.appName,
+            title = FixedStrings.APP_NAME,
             onCloseRequest = onCloseRequest,
             onPreviewKeyEvent = {
                 keyboardDispatcher.dispatch(it, beforeChildren = true)
@@ -65,7 +65,7 @@ fun ApplicationWindow(
                                     }
 
                                     true
-                                }
+                                },
                             ) { navigator ->
                                 DrawerShell(drawerState) {
                                     val screen = navigator.lastItem

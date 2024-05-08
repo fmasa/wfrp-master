@@ -5,7 +5,10 @@ import java.awt.Desktop
 import java.net.URI
 
 object DesktopUrlOpener : UrlOpener {
-    override fun open(url: String, isGooglePlayLink: Boolean) {
+    override fun open(
+        url: String,
+        isGooglePlayLink: Boolean,
+    ) {
         if (!Desktop.isDesktopSupported()) {
             return
         }

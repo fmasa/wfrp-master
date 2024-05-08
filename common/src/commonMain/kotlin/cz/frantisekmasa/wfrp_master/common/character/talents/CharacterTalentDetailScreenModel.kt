@@ -17,13 +17,15 @@ class CharacterTalentDetailScreenModel(
     userProvider: UserProvider,
     private val partyRepository: PartyRepository,
 ) : CharacterItemScreenModel<Talent>(
-    characterId,
-    talentRepository,
-    userProvider,
-    partyRepository,
-) {
-
-    suspend fun updateTalent(talent: Talent, existingTalent: Talent?) {
+        characterId,
+        talentRepository,
+        userProvider,
+        partyRepository,
+    ) {
+    suspend fun updateTalent(
+        talent: Talent,
+        existingTalent: Talent?,
+    ) {
         firestore.runTransaction {
             effectManager.saveItem(
                 this,

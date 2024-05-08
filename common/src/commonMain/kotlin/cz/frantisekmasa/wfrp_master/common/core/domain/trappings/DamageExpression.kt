@@ -19,7 +19,7 @@ import kotlin.jvm.JvmInline
 value class DamageExpression(val value: String) : Parcelable {
     init {
         require(
-            expression(value, strengthBonus = 1).isDeterministic()
+            expression(value, strengthBonus = 1).isDeterministic(),
         ) { "Yards expression must be deterministic" }
     }
 
@@ -38,7 +38,10 @@ value class DamageExpression(val value: String) : Parcelable {
     }
 
     @Stable
-    fun calculate(strengthBonus: Int, successLevels: Int): Damage {
+    fun calculate(
+        strengthBonus: Int,
+        successLevels: Int,
+    ): Damage {
         val damage = expression(value, strengthBonus).evaluate()
 
         return Damage((damage + successLevels).coerceAtLeast(0))

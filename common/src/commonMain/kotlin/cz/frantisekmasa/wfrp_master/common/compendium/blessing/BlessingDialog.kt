@@ -30,11 +30,14 @@ fun BlessingDialog(
     val formData = BlessingFormData.fromItem(blessing)
 
     CompendiumItemDialog(
-        title = stringResource(
-            if (blessing == null)
-                Str.blessings_title_new
-            else Str.blessings_title_edit
-        ),
+        title =
+            stringResource(
+                if (blessing == null) {
+                    Str.blessings_title_new
+                } else {
+                    Str.blessings_title_edit
+                },
+            ),
         formData = formData,
         saver = onSaveRequest,
         onDismissRequest = onDismissRequest,
@@ -47,7 +50,7 @@ fun BlessingDialog(
                 label = stringResource(Str.blessings_label_name),
                 value = formData.name,
                 validate = validate,
-                maxLength = Blessing.NAME_MAX_LENGTH
+                maxLength = Blessing.NAME_MAX_LENGTH,
             )
 
             TextInput(
@@ -95,27 +98,28 @@ private data class BlessingFormData(
 ) : CompendiumItemFormData<Blessing> {
     companion object {
         @Composable
-        fun fromItem(item: Blessing?) = BlessingFormData(
-            id = remember(item) { item?.id ?: uuid4() },
-            name = inputValue(item?.name ?: "", Rules.NotBlank()),
-            range = inputValue(item?.range ?: ""),
-            target = inputValue(item?.target ?: ""),
-            duration = inputValue(item?.duration ?: ""),
-            effect = inputValue(item?.effect ?: ""),
-            isVisibleToPlayers = item?.isVisibleToPlayers ?: false,
-        )
+        fun fromItem(item: Blessing?) =
+            BlessingFormData(
+                id = remember(item) { item?.id ?: uuid4() },
+                name = inputValue(item?.name ?: "", Rules.NotBlank()),
+                range = inputValue(item?.range ?: ""),
+                target = inputValue(item?.target ?: ""),
+                duration = inputValue(item?.duration ?: ""),
+                effect = inputValue(item?.effect ?: ""),
+                isVisibleToPlayers = item?.isVisibleToPlayers ?: false,
+            )
     }
 
-    override fun toValue() = Blessing(
-        id = id,
-        name = name.value,
-        range = range.value,
-        target = target.value,
-        duration = duration.value,
-        effect = effect.value,
-        isVisibleToPlayers = isVisibleToPlayers,
-    )
+    override fun toValue() =
+        Blessing(
+            id = id,
+            name = name.value,
+            range = range.value,
+            target = target.value,
+            duration = duration.value,
+            effect = effect.value,
+            isVisibleToPlayers = isVisibleToPlayers,
+        )
 
-    override fun isValid() =
-        listOf(name, range, target, duration, effect).all { it.isValid() }
+    override fun isValid() = listOf(name, range, target, duration, effect).all { it.isValid() }
 }

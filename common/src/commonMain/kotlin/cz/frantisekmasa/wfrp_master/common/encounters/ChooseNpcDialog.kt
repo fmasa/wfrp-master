@@ -61,17 +61,18 @@ fun ChooseNpcDialog(
             },
         ) { item ->
             ListItem(
-                modifier = Modifier.clickable(
-                    onClick = {
-                        saving = false
-                        coroutineScope.launch(Dispatchers.IO) {
-                            screenModel.updateEncounter(
-                                encounter.withCharacterCount(item.id, 1)
-                            )
-                            onDismissRequest()
-                        }
-                    }
-                ),
+                modifier =
+                    Modifier.clickable(
+                        onClick = {
+                            saving = false
+                            coroutineScope.launch(Dispatchers.IO) {
+                                screenModel.updateEncounter(
+                                    encounter.withCharacterCount(item.id, 1),
+                                )
+                                onDismissRequest()
+                            }
+                        },
+                    ),
                 icon = {
                     CharacterAvatar(
                         item.avatarUrl,
@@ -79,7 +80,7 @@ fun ChooseNpcDialog(
                         size = ItemIcon.Size.Small,
                     )
                 },
-                text = { Text(item.name) }
+                text = { Text(item.name) },
             )
         }
     }

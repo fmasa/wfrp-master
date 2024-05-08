@@ -12,7 +12,6 @@ class CompendiumSpellDetailScreen(
     private val partyId: PartyId,
     private val spellId: Uuid,
 ) : Screen {
-
     @Composable
     override fun Content() {
         val screenModel: SpellCompendiumScreenModel = rememberScreenModel(arg = partyId)
@@ -30,7 +29,7 @@ class CompendiumSpellDetailScreen(
                     duration = it.duration,
                     effect = it.effect,
                 )
-            }
+            },
         ) { item, onDismissRequest ->
             SpellDialog(
                 spell = item,

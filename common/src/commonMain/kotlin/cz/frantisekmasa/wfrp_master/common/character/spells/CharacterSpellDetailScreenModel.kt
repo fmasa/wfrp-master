@@ -13,11 +13,11 @@ class CharacterSpellDetailScreenModel(
     userProvider: UserProvider,
     partyRepository: PartyRepository,
 ) : CharacterItemScreenModel<Spell>(
-    characterId,
-    spellRepository,
-    userProvider,
-    partyRepository,
-) {
+        characterId,
+        spellRepository,
+        userProvider,
+        partyRepository,
+    ) {
     suspend fun saveSpell(spell: Spell) {
         spellRepository.save(characterId, spell)
     }

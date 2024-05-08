@@ -6,7 +6,6 @@ import kotlin.test.assertSame
 import kotlin.test.assertTrue
 
 class ExpressionTest {
-
     @Test
     fun `evaluation of simple arithmetics`() {
         assertSame(1, "1".evaluate())
@@ -89,11 +88,12 @@ class ExpressionTest {
                 false
             } catch (e: InvalidExpression) {
                 true
-            }
+            },
         )
     }
 
     private fun String.evaluate() = Expression.fromString(this).evaluate()
+
     private fun String.substitute(vararg substitutions: Pair<String, String>): String {
         return Expression.substituteConstants(this, substitutions.toMap())
     }

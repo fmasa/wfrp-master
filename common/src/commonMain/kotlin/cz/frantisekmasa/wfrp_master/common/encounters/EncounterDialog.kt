@@ -23,11 +23,14 @@ fun EncounterDialog(
         val formData = EncounterDialogFormData.fromEncounter(existingEncounter)
 
         FormDialog(
-            title = stringResource(
-                if (existingEncounter != null)
-                    Str.encounters_title_edit
-                else Str.encounters_title_create
-            ),
+            title =
+                stringResource(
+                    if (existingEncounter != null) {
+                        Str.encounters_title_edit
+                    } else {
+                        Str.encounters_title_create
+                    },
+                ),
             onDismissRequest = onDismissRequest,
             formData = formData,
             onSave = {
@@ -36,7 +39,7 @@ fun EncounterDialog(
                 } else {
                     screenModel.createEncounter(it.name, it.description)
                 }
-            }
+            },
         ) { validate ->
             TextInput(
                 label = stringResource(Str.encounters_label_name),
@@ -61,7 +64,6 @@ private class EncounterDialogFormData(
     val name: InputValue,
     val description: InputValue,
 ) : HydratedFormData<EncounterDialogFormData.Value> {
-
     data class Value(
         val name: String,
         val description: String,
@@ -73,9 +75,10 @@ private class EncounterDialogFormData(
 
     companion object {
         @Composable
-        fun fromEncounter(encounter: Encounter?) = EncounterDialogFormData(
-            name = inputValue(encounter?.name ?: "", Rules.NotBlank()),
-            description = inputValue(encounter?.description ?: ""),
-        )
+        fun fromEncounter(encounter: Encounter?) =
+            EncounterDialogFormData(
+                name = inputValue(encounter?.name ?: "", Rules.NotBlank()),
+                description = inputValue(encounter?.description ?: ""),
+            )
     }
 }

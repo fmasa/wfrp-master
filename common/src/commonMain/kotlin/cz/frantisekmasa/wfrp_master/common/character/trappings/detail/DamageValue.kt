@@ -11,7 +11,10 @@ import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.DamageExpressio
 
 @Composable
 @Stable
-fun damageValue(damage: DamageExpression, strengthBonus: Int?): AnnotatedString {
+fun damageValue(
+    damage: DamageExpression,
+    strengthBonus: Int?,
+): AnnotatedString {
     return buildAnnotatedString {
         val formatted = damage.formatted()
 
@@ -31,7 +34,7 @@ fun damageValue(damage: DamageExpression, strengthBonus: Int?): AnnotatedString 
                 damage.calculate(
                     strengthBonus = strengthBonus,
                     successLevels = 0,
-                ).value.toString()
+                ).value.toString(),
             )
             append(")")
         }

@@ -22,7 +22,6 @@ import cz.frantisekmasa.wfrp_master.common.core.domain.SocialClass
 import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.MeleeWeaponGroup
 
 object UpInArms : Book, CareerSource, TalentSource, TrappingSource {
-
     override val name = "Up in Arms"
     override val tokensSorted: Boolean = false
 
@@ -58,7 +57,7 @@ object UpInArms : Book, CareerSource, TalentSource, TrappingSource {
                     tablePage = 88,
                     descriptionPages = 88..89,
                     column = Column.LEFT,
-                )
+                ),
             )
             yieldAll(meleeWeaponsParser.parse(91, 91..91))
             yieldAll(meleeWeaponsParser.parse(92, 92..92))
@@ -74,9 +73,11 @@ object UpInArms : Book, CareerSource, TalentSource, TrappingSource {
             if (
                 it.name == "Warhammer" &&
                 (it.trappingType as MeleeWeapon).group == MeleeWeaponGroup.BASIC
-            )
+            ) {
                 it.copy(name = "Warhammer (Basic)")
-            else it
+            } else {
+                it
+            }
         }.toList()
     }
 

@@ -14,9 +14,8 @@ import kotlin.jvm.Synchronized
 
 class CharacterRepositoryIdentityMap(
     maxEntries: Int,
-    private val inner: CharacterRepository
+    private val inner: CharacterRepository,
 ) : CharacterRepository by inner {
-
     private val scope = CoroutineScope(Dispatchers.IO)
     private val identityMap =
         IdentityMap<CharacterId, Flow<Either<CharacterNotFound, Character>>>(maxEntries)

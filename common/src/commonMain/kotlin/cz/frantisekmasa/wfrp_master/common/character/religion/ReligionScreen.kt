@@ -38,7 +38,7 @@ fun ReligionScreen(
     Column(
         modifier
             .background(MaterialTheme.colors.background)
-            .verticalScroll(rememberScrollState())
+            .verticalScroll(rememberScrollState()),
     ) {
         SinPoints(character, updateCharacter)
 
@@ -64,7 +64,7 @@ private fun SinPoints(
     TopPanel {
         Row(
             horizontalArrangement = Arrangement.Center,
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
         ) {
             val points = character.points
             val coroutineScope = rememberCoroutineScope()
@@ -84,7 +84,7 @@ private fun SinPoints(
                 label = stringResource(Str.points_label_sin_points),
                 value = sinPoints,
                 onIncrement = { updateSinPoints(sinPoints + 1) },
-                onDecrement = { updateSinPoints((sinPoints - 1).coerceAtLeast(0)) }
+                onDecrement = { updateSinPoints((sinPoints - 1).coerceAtLeast(0)) },
             )
         }
     }

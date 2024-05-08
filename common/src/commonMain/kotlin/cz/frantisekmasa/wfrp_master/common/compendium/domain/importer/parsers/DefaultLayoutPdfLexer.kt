@@ -11,7 +11,6 @@ class DefaultLayoutPdfLexer(
     private val mergeSubsequentTokens: Boolean = true,
     private val sortTokens: Boolean = false,
 ) {
-
     fun getTokens(page: Int): Sequence<Token> {
         val stripper = TextStripper()
         stripper.setSortByPosition(sortTokens && !structure.tokensSorted)
@@ -44,7 +43,10 @@ class DefaultLayoutPdfLexer(
             tokens += createToken(text, position)
         }
 
-        override fun onTextLine(text: String, textPositions: List<TextPosition>) {
+        override fun onTextLine(
+            text: String,
+            textPositions: List<TextPosition>,
+        ) {
             var lastPositionInLine: TextPosition? = null
 
             for (position in textPositions) {
@@ -55,9 +57,9 @@ class DefaultLayoutPdfLexer(
                     (
                         !structure.areSameStyle(
                             lastPosition,
-                            position
+                            position,
                         ) && position.getUnicode() != " "
-                        )
+                    )
                 ) {
                     buildToken()
                     lastTextPosition = position
@@ -95,7 +97,10 @@ class DefaultLayoutPdfLexer(
         }
     }
 
-    private fun createToken(text: String, position: TextPosition): TextToken {
+    private fun createToken(
+        text: String,
+        position: TextPosition,
+    ): TextToken {
         return TextToken(
             text = text,
             fontName = position.getFont().getName(),

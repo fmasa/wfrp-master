@@ -38,7 +38,7 @@ import cz.frantisekmasa.wfrp_master.common.core.shared.Resources
 import cz.frantisekmasa.wfrp_master.common.core.shared.drawableResource
 import cz.frantisekmasa.wfrp_master.common.core.shared.rememberUrlOpener
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
-import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.VisualOnlyIconDescription
+import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.VISUAL_ONLY_ICON_DESCRIPTION
 import cz.frantisekmasa.wfrp_master.common.localization.FixedStrings
 import cz.frantisekmasa.wfrp_master.common.settings.SettingsScreen
 import dev.icerock.moko.resources.compose.stringResource
@@ -73,33 +73,34 @@ fun AppDrawer(drawerState: DrawerState) {
             text = stringResource(Str.drawer_wiki),
             onClick = {
                 urlOpener.open(
-                    FixedStrings.githubWikiUrl,
+                    FixedStrings.GITHUB_WIKI_URL,
                     isGooglePlayLink = false,
                 )
-            }
+            },
         )
 
         DrawerItem(
             icon = Icons.Rounded.Star,
             text = stringResource(Str.drawer_rate_app),
             onClick = {
-                urlOpener.open(FixedStrings.googlePlayUrl, isGooglePlayLink = true)
+                urlOpener.open(FixedStrings.GOOGLE_PLAY_URL, isGooglePlayLink = true)
             },
         )
 
         DrawerItem(
             icon = Icons.Rounded.Policy,
             text = stringResource(Str.drawer_privacy_policy),
-            onClick = debounced(300.milliseconds) {
-                urlOpener.open(FixedStrings.privacyPolicyUrl, isGooglePlayLink = false)
-            }
+            onClick =
+                debounced(300.milliseconds) {
+                    urlOpener.open(FixedStrings.PRIVACY_POLICY_URL, isGooglePlayLink = false)
+                },
         )
 
         DrawerItem(
             icon = Icons.Rounded.BugReport,
             text = stringResource(Str.drawer_report_issue),
             onClick = {
-                urlOpener.open(FixedStrings.githubIssuesUrl, isGooglePlayLink = false)
+                urlOpener.open(FixedStrings.GITHUB_ISSUES_URL, isGooglePlayLink = false)
             },
         )
 
@@ -123,7 +124,7 @@ private fun DrawerItem(
     icon: ImageVector,
     text: String,
     onClick: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     Row(
         Modifier
@@ -134,7 +135,7 @@ private fun DrawerItem(
         horizontalArrangement = Arrangement.spacedBy(Spacing.medium),
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        Icon(icon, VisualOnlyIconDescription)
+        Icon(icon, VISUAL_ONLY_ICON_DESCRIPTION)
         Text(
             text,
             style = MaterialTheme.typography.caption.copy(fontWeight = FontWeight.SemiBold),
@@ -159,11 +160,11 @@ private fun DrawerHeader() {
         ) {
             Image(
                 drawableResource(Resources.Drawable.SplashScreenIcon),
-                VisualOnlyIconDescription,
+                VISUAL_ONLY_ICON_DESCRIPTION,
                 Modifier.size(80.dp),
             )
             Text(
-                FixedStrings.appName,
+                FixedStrings.APP_NAME,
                 style = MaterialTheme.typography.h6,
                 color = contentColorFor(MaterialTheme.colors.primarySurface),
             )

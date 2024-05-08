@@ -13,8 +13,8 @@ class CharacterBlessingDetailScreenModel(
     userProvider: UserProvider,
     partyRepository: PartyRepository,
 ) : CharacterItemScreenModel<Blessing>(
-    characterId,
-    repository,
-    userProvider,
-    partyRepository,
-)
+        characterId,
+        repository,
+        userProvider,
+        partyRepository,
+    )

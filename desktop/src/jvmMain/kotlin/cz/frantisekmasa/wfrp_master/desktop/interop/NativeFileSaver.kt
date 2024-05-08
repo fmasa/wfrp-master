@@ -14,23 +14,27 @@ class NativeFileSaver(
     private val onFileChoose: FileLocationListener,
 ) : FileSaver {
     override fun selectLocation() {
-        val dialog = FileDialog(JFrame("Save file"), "Save file", FileDialog.SAVE).apply {
-            isVisible = true
-        }
+        val dialog =
+            FileDialog(JFrame("Save file"), "Save file", FileDialog.SAVE).apply {
+                isVisible = true
+            }
 
         val directory = dialog.directory
         val fileName = dialog.file
 
-        val file = if (directory.isNullOrBlank() || fileName.isNullOrBlank())
-            null
-        else File("$directory/$fileName")
+        val file =
+            if (directory.isNullOrBlank() || fileName.isNullOrBlank()) {
+                null
+            } else {
+                File("$directory/$fileName")
+            }
 
         coroutineScope.launch {
             onFileChoose(
                 when (file) {
                     null -> Result.failure(Exception("File not selected"))
                     else -> Result.success(WriteableFile(file))
-                }
+                },
             )
         }
     }

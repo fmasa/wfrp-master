@@ -46,7 +46,6 @@ data class CharacterEditScreen(
     private val characterId: CharacterId,
     private val section: Section? = null,
 ) : Screen {
-
     override val key = "parties/${characterId.partyId}/character/${characterId.id}/$section"
 
     enum class Section {
@@ -84,16 +83,17 @@ data class CharacterEditScreen(
         }
 
         Scaffold(
-            topBar = { TopBar(character.name) }
+            topBar = { TopBar(character.name) },
         ) {
             Column(Modifier.verticalScroll(rememberScrollState())) {
                 EditableCharacterAvatar(
                     screenModel = screenModel,
                     character = character,
-                    modifier = Modifier
-                        .zIndex(2f)
-                        .align(Alignment.CenterHorizontally)
-                        .padding(top = Spacing.large),
+                    modifier =
+                        Modifier
+                            .zIndex(2f)
+                            .align(Alignment.CenterHorizontally)
+                            .padding(top = Spacing.large),
                 )
 
                 val navigation = LocalNavigationTransaction.current
@@ -104,7 +104,7 @@ data class CharacterEditScreen(
                 SettingsCard(
                     Modifier
                         .offset(y = -(ItemIcon.Size.XLarge.dimensions * 3 / 4))
-                        .zIndex(1f)
+                        .zIndex(1f),
                 ) {
                     SettingsTitle(stringResource(Str.character_title_general_settings))
 
@@ -128,9 +128,9 @@ data class CharacterEditScreen(
                             Text(
                                 Characteristic.values()
                                     .map { stringResource(it.shortcut) }
-                                    .joinToString(", ")
+                                    .joinToString(", "),
                             )
-                        }
+                        },
                     )
 
                     ListItem(
@@ -163,7 +163,7 @@ data class CharacterEditScreen(
                                     Str.character_tabs_visible,
                                     tabs.size - character.hiddenTabs.size,
                                     tabs.size,
-                                )
+                                ),
                             )
                         },
                         modifier = Modifier.clickable { openSection(Section.VISIBLE_TABS) },
@@ -175,9 +175,10 @@ data class CharacterEditScreen(
                     var removalDialogOpened by remember { mutableStateOf(false) }
 
                     if (removalDialogOpened) {
-                        val messageCharacterRemoved = stringResource(
-                            Str.character_messages_character_removed
-                        )
+                        val messageCharacterRemoved =
+                            stringResource(
+                                Str.character_messages_character_removed,
+                            )
                         CharacterRemovalDialog(
                             character = character,
                             onDismissRequest = { removalDialogOpened = false },

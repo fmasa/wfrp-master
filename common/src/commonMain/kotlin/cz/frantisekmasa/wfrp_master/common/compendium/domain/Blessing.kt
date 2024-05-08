@@ -38,8 +38,7 @@ data class Blessing(
 
     override fun replace(original: Blessing) = copy(id = original.id)
 
-    override fun changeVisibility(isVisibleToPlayers: Boolean) =
-        copy(isVisibleToPlayers = !isVisibleToPlayers)
+    override fun changeVisibility(isVisibleToPlayers: Boolean) = copy(isVisibleToPlayers = !isVisibleToPlayers)
 
     override fun duplicate() = copy(id = uuid4(), name = duplicateName())
 }

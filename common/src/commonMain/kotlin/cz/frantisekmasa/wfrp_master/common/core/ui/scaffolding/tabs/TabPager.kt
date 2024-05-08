@@ -31,15 +31,17 @@ fun TabPager(
     initialPage: Int = 0,
     onPageChange: ((Int) -> Unit)? = null,
     beyondBoundsPageCount: Int = 0,
-    content: TabPagerScope.() -> Unit
+    content: TabPagerScope.() -> Unit,
 ) {
     Column(modifier) {
         val scope = TabCollector()
         scope.apply(content)
 
-        val pagerState = rememberPagerState(
-            initialPage = initialPage,
-        )
+        val pagerState =
+            rememberPagerState(
+                initialPage = initialPage,
+                pageCount = { scope.tabNames.size },
+            )
 
         if (onPageChange !== null) {
             val currentPage = pagerState.currentPage
@@ -101,7 +103,6 @@ fun TabPager(
         }
 
         HorizontalPager(
-            pageCount = scope.tabNames.size,
             state = pagerState,
             modifier = Modifier.fillMaxWidth(),
             beyondBoundsPageCount = beyondBoundsPageCount,
@@ -112,7 +113,10 @@ fun TabPager(
 }
 
 interface TabPagerScope {
-    fun tab(name: @Composable () -> String, content: @Composable () -> Unit)
+    fun tab(
+        name: @Composable () -> String,
+        content: @Composable () -> Unit,
+    )
 }
 
 private class TabCollector : TabPagerScope {
@@ -122,13 +126,19 @@ private class TabCollector : TabPagerScope {
     val tabNames: List<@Composable () -> String> get() = _tabNames
     val tabContents: List<@Composable () -> Unit> get() = _tabContents
 
-    override fun tab(name: @Composable () -> String, content: @Composable () -> Unit) {
+    override fun tab(
+        name: @Composable () -> String,
+        content: @Composable () -> Unit,
+    ) {
         _tabNames += name
         _tabContents += content
     }
 }
 
-fun TabPagerScope.tab(name: String, content: @Composable () -> Unit) = tab(
+fun TabPagerScope.tab(
+    name: String,
+    content: @Composable () -> Unit,
+) = tab(
     name = { name },
     content = content,
 )
@@ -148,44 +158,48 @@ private fun Modifier.pagerTabIndicatorOffset(
         val previousTab = tabPositions.getOrNull(currentPage - 1)
         val nextTab = tabPositions.getOrNull(currentPage + 1)
         val fraction = pagerState.currentPageOffsetFraction
-        val indicatorWidth = when {
-            fraction > 0 && nextTab != null -> {
-                lerp(currentTab.width, nextTab.width, fraction).roundToPx()
+        val indicatorWidth =
+            when {
+                fraction > 0 && nextTab != null -> {
+                    lerp(currentTab.width, nextTab.width, fraction).roundToPx()
+                }
+
+                fraction < 0 && previousTab != null ->
+                    lerp(
+                        currentTab.width,
+                        previousTab.width,
+                        -fraction,
+                    ).roundToPx()
+
+                else -> currentTab.width.roundToPx()
             }
 
-            fraction < 0 && previousTab != null -> lerp(
-                currentTab.width,
-                previousTab.width,
-                -fraction
-            ).roundToPx()
+        val indicatorOffset =
+            when {
+                fraction > 0 && nextTab != null -> {
+                    lerp(currentTab.left, nextTab.left, fraction).roundToPx()
+                }
 
-            else -> currentTab.width.roundToPx()
-        }
+                fraction < 0 && previousTab != null -> {
+                    lerp(currentTab.left, previousTab.left, -fraction).roundToPx()
+                }
 
-        val indicatorOffset = when {
-            fraction > 0 && nextTab != null -> {
-                lerp(currentTab.left, nextTab.left, fraction).roundToPx()
+                else -> currentTab.left.roundToPx()
             }
-
-            fraction < 0 && previousTab != null -> {
-                lerp(currentTab.left, previousTab.left, -fraction).roundToPx()
-            }
-
-            else -> currentTab.left.roundToPx()
-        }
-        val placeable = measurable.measure(
-            Constraints(
-                minWidth = indicatorWidth,
-                maxWidth = indicatorWidth,
-                minHeight = 0,
-                maxHeight = constraints.maxHeight
+        val placeable =
+            measurable.measure(
+                Constraints(
+                    minWidth = indicatorWidth,
+                    maxWidth = indicatorWidth,
+                    minHeight = 0,
+                    maxHeight = constraints.maxHeight,
+                ),
             )
-        )
 
         return@layout layout(constraints.maxWidth, maxOf(placeable.height, constraints.minHeight)) {
             placeable.placeRelative(
                 indicatorOffset,
-                maxOf(constraints.minHeight - placeable.height, 0)
+                maxOf(constraints.minHeight - placeable.height, 0),
             )
         }
     }

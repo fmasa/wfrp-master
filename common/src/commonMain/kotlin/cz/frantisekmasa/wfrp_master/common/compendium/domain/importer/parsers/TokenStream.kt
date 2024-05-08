@@ -6,7 +6,10 @@ class TokenStream(
     var cursor: Int = 0
         private set
 
-    fun consumeWhile(max: Int = Int.MAX_VALUE, predicate: (Token) -> Boolean): List<Token> {
+    fun consumeWhile(
+        max: Int = Int.MAX_VALUE,
+        predicate: (Token) -> Boolean,
+    ): List<Token> {
         return sequence {
             var consumed = 0
 

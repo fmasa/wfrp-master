@@ -40,6 +40,6 @@ fun Startup(content: @Composable () -> Unit) {
 
     CompositionLocalProvider(
         LocalUser provides user,
-        content = content
+        content = content,
     )
 }

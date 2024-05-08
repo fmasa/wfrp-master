@@ -20,22 +20,23 @@ class AddSkillScreenModel(
     characters: CharacterRepository,
     availableCompendiumItemsFactory: AvailableCompendiumItemsFactory,
 ) : ScreenModel {
-    val state = combine(
-        availableCompendiumItemsFactory.create(
-            characterId.partyId,
-            compendium = compendium,
-            filterCharacterItems = skills.findAllForCharacter(characterId),
-        ),
-        characters.getLive(characterId)
-            .right()
-            .map { it.characteristics }
-            .distinctUntilChanged(),
-    ) { compendiumItemChooserState, characteristics ->
-        AddSkillScreenState(
-            availableCompendiumItems = compendiumItemChooserState,
-            characteristics = characteristics,
-        )
-    }
+    val state =
+        combine(
+            availableCompendiumItemsFactory.create(
+                characterId.partyId,
+                compendium = compendium,
+                filterCharacterItems = skills.findAllForCharacter(characterId),
+            ),
+            characters.getLive(characterId)
+                .right()
+                .map { it.characteristics }
+                .distinctUntilChanged(),
+        ) { compendiumItemChooserState, characteristics ->
+            AddSkillScreenState(
+                availableCompendiumItems = compendiumItemChooserState,
+                characteristics = characteristics,
+            )
+        }
 
     suspend fun addSkill(skill: Skill) {
         skills.save(characterId, skill)

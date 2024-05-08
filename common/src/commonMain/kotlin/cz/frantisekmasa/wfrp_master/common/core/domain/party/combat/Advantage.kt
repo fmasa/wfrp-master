@@ -11,7 +11,6 @@ import kotlin.jvm.JvmInline
 @Parcelize
 @Serializable
 value class Advantage(val value: Int) : Comparable<Advantage>, Parcelable {
-
     init {
         require(value >= 0) { "Advantage cannot be negative" }
     }
@@ -27,6 +26,7 @@ value class Advantage(val value: Int) : Comparable<Advantage>, Parcelable {
     }
 
     override fun compareTo(other: Advantage): Int = value.compareTo(other.value)
+
     override fun toString(): String = value.toString()
 
     companion object {

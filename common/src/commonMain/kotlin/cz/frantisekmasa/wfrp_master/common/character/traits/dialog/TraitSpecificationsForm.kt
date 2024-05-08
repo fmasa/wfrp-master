@@ -22,23 +22,28 @@ internal fun TraitSpecificationsForm(
     onSave: suspend (Map<String, String>) -> Unit,
     onDismissRequest: () -> Unit,
 ) {
-    val specifications = remember(defaultSpecifications.keys) {
-        defaultSpecifications.keys.sorted()
-    }
-    val formData = TraitSpecificationsForm.FormData(
-        rememberSaveable(existingTrait?.id, specifications) {
-            specifications.associateWith {
-                mutableStateOf(defaultSpecifications.getValue(it))
-            }
+    val specifications =
+        remember(defaultSpecifications.keys) {
+            defaultSpecifications.keys.sorted()
         }
-    )
+    val formData =
+        TraitSpecificationsForm.FormData(
+            rememberSaveable(existingTrait?.id, specifications) {
+                specifications.associateWith {
+                    mutableStateOf(defaultSpecifications.getValue(it))
+                }
+            },
+        )
 
     FormDialog(
-        title = stringResource(
-            if (existingTrait != null)
-                Str.traits_title_edit
-            else Str.traits_title_new
-        ),
+        title =
+            stringResource(
+                if (existingTrait != null) {
+                    Str.traits_title_edit
+                } else {
+                    Str.traits_title_new
+                },
+            ),
         formData = formData,
         onDismissRequest = onDismissRequest,
         onSave = { onSave(formData.inputValues.mapValues { it.value.value }) },
@@ -59,7 +64,7 @@ object TraitSpecificationsForm {
     enum class SavingResult { SUCCESS, COMPENDIUM_ITEM_WAS_REMOVED }
 
     data class FormData(
-        val inputValues: Map<String, MutableState<String>>
+        val inputValues: Map<String, MutableState<String>>,
     ) : HydratedFormData<Map<String, String>> {
         override fun isValid(): Boolean = inputValues.all { it.value.value.isNotBlank() }
 

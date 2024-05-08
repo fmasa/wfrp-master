@@ -55,7 +55,7 @@ fun ArmourDetailBody(
 
             SingleLineTextValue(
                 stringResource(Str.armour_label_armour_points),
-                points.value.toString()
+                points.value.toString(),
             )
 
             if (characterTrapping != null) {

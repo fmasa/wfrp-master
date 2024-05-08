@@ -9,7 +9,10 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.forms.FormScreen
 import dev.icerock.moko.resources.compose.stringResource
 
 @Composable
-fun CharacteristicsSection(character: Character, screenModel: CharacterScreenModel) {
+fun CharacteristicsSection(
+    character: Character,
+    screenModel: CharacterScreenModel,
+) {
     val formData = CharacterCharacteristicsForm.Data.fromCharacter(character)
 
     FormScreen(
@@ -17,7 +20,7 @@ fun CharacteristicsSection(character: Character, screenModel: CharacterScreenMod
         formData = formData,
         onSave = { data ->
             screenModel.update { it.updateCharacteristics(data.base, data.advances) }
-        }
+        },
     ) { validate ->
         CharacterCharacteristicsForm(formData, validate)
     }

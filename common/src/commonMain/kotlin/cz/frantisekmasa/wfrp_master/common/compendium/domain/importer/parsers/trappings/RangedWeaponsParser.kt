@@ -21,7 +21,6 @@ class RangedWeaponsParser(
     private val structure: PdfStructure,
     private val descriptionParser: TrappingDescriptionParser,
 ) {
-
     fun parse(
         tablePage: Int,
         descriptionPages: IntRange,
@@ -29,28 +28,33 @@ class RangedWeaponsParser(
         val parser = TableParser()
         val lexer = DefaultLayoutPdfLexer(document, structure, mergeSubsequentTokens = false)
 
-        val table = parser.findTables(lexer, structure, tablePage, findNames = true)
-            .asSequence()
-            .filter { it.name.contains("weapons", ignoreCase = true) }
-            .flatMap { parser.parseTable(it.tokens, columnCount = 7) }
+        val table =
+            parser.findTables(lexer, structure, tablePage, findNames = true)
+                .asSequence()
+                .filter { it.name.contains("weapons", ignoreCase = true) }
+                .flatMap { parser.parseTable(it.tokens, columnCount = 7) }
 
         val descriptionsByName = descriptionParser.parse(document, structure, descriptionPages)
 
         return table
             .filter { it.heading != null }
             .flatMap { section ->
-                val group = matchEnumOrNull<RangedWeaponGroup>(section.heading!!.replace("*", ""))
-                    ?: error("Invalid weapon group ${section.heading}")
+                val group =
+                    matchEnumOrNull<RangedWeaponGroup>(section.heading!!.replace("*", ""))
+                        ?: error("Invalid weapon group ${section.heading}")
 
-                val defaultQualities = if (
-                    group == RangedWeaponGroup.BLACKPOWDER ||
-                    group == RangedWeaponGroup.ENGINEERING
-                )
-                    mapOf(
-                        WeaponQuality.DAMAGING to 1,
-                        WeaponQuality.BLACKPOWDER to 1,
-                    )
-                else emptyMap()
+                val defaultQualities =
+                    if (
+                        group == RangedWeaponGroup.BLACKPOWDER ||
+                        group == RangedWeaponGroup.ENGINEERING
+                    ) {
+                        mapOf(
+                            WeaponQuality.DAMAGING to 1,
+                            WeaponQuality.BLACKPOWDER to 1,
+                        )
+                    } else {
+                        emptyMap()
+                    }
 
                 section.rows.map { row ->
                     val name = row[0]
@@ -59,14 +63,15 @@ class RangedWeaponsParser(
                     val comparableName = descriptionParser.comparableName(name)
                     val qualitiesAndFlaws = row[6]
 
-                    val footnoteNumbers = sequenceOf(
-                        section.heading,
-                        name,
-                        damage,
-                        qualitiesAndFlaws,
-                    )
-                        .flatMap { parser.findFootnoteReferences(it) }
-                        .toSet()
+                    val footnoteNumbers =
+                        sequenceOf(
+                            section.heading,
+                            name,
+                            damage,
+                            qualitiesAndFlaws,
+                        )
+                            .flatMap { parser.findFootnoteReferences(it) }
+                            .toSet()
 
                     Trapping(
                         id = uuid4(),
@@ -74,49 +79,58 @@ class RangedWeaponsParser(
                         price = if (price is PriceParser.Amount) price.money else Money.ZERO,
                         packSize = 1,
                         encumbrance = Encumbrance(row[2].trim().toDoubleOrNull() ?: 0.0),
-                        availability = matchEnumOrNull(
-                            row[3].trim(),
-                            mapOf(
-                                "N/A" to Availability.COMMON,
-                                "–" to Availability.COMMON,
+                        availability =
+                            matchEnumOrNull(
+                                row[3].trim(),
+                                mapOf(
+                                    "N/A" to Availability.COMMON,
+                                    "–" to Availability.COMMON,
+                                ),
+                            ) ?: error("Invalid Availability ${row[3]}"),
+                        trappingType =
+                            TrappingType.RangedWeapon(
+                                group = group,
+                                range =
+                                    WeaponRangeExpression(
+                                        row[4]
+                                            .replace("x", " * ")
+                                            .replace("×", " * ")
+                                            .replace("  ", " ")
+                                            .trim(),
+                                    ),
+                                damage =
+                                    DamageExpression(
+                                        if (damage == "–") {
+                                            "0"
+                                        } else {
+                                            damage.trim { it.isWhitespace() || it == '*' }
+                                        },
+                                    ),
+                                qualities =
+                                    parseFeatures<WeaponQuality>(qualitiesAndFlaws) +
+                                        defaultQualities,
+                                flaws = parseFeatures(qualitiesAndFlaws),
                             ),
-                        ) ?: error("Invalid Availability ${row[3]}"),
-                        trappingType = TrappingType.RangedWeapon(
-                            group = group,
-                            range = WeaponRangeExpression(
-                                row[4]
-                                    .replace("x", " * ")
-                                    .replace("×", " * ")
-                                    .replace("  ", " ")
-                                    .trim()
-                            ),
-                            damage = DamageExpression(
-                                if (damage == "–")
-                                    "0"
-                                else damage.trim { it.isWhitespace() || it == '*' }
-                            ),
-                            qualities = parseFeatures<WeaponQuality>(qualitiesAndFlaws) +
-                                defaultQualities,
-                            flaws = parseFeatures(qualitiesAndFlaws),
-                        ),
-                        description = buildString {
-                            val footnotes = footnoteNumbers.mapNotNull { section.footnotes[it] }
+                        description =
+                            buildString {
+                                val footnotes = footnoteNumbers.mapNotNull { section.footnotes[it] }
 
-                            footnotes.forEach {
-                                append(it)
-                                append('\n')
-                            }
+                                footnotes.forEach {
+                                    append(it)
+                                    append('\n')
+                                }
 
-                            val description = descriptionsByName.firstOrNull {
-                                comparableName.startsWith(it.first, ignoreCase = true)
-                            }?.second ?: return@buildString
+                                val description =
+                                    descriptionsByName.firstOrNull {
+                                        comparableName.startsWith(it.first, ignoreCase = true)
+                                    }?.second ?: return@buildString
 
-                            if (footnotes.isNotEmpty()) {
-                                append('\n')
-                            }
+                                if (footnotes.isNotEmpty()) {
+                                    append('\n')
+                                }
 
-                            append(description)
-                        },
+                                append(description)
+                            },
                         isVisibleToPlayers = true,
                     )
                 }

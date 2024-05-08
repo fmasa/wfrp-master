@@ -25,7 +25,6 @@ class AddTrappingScreen(
     private val characterId: CharacterId,
     private val containerId: Uuid?,
 ) : Screen {
-
     @Composable
     override fun Content() {
         val screenModel: AddTrappingScreenModel = rememberScreenModel(arg = characterId)
@@ -36,10 +35,11 @@ class AddTrappingScreen(
             return
         }
 
-        val addItemUiState = rememberAddItemUiState(
-            saver = screenModel::saveTrapping,
-            detailScreenFactory = { CharacterTrappingDetailScreen(characterId, it.id) },
-        )
+        val addItemUiState =
+            rememberAddItemUiState(
+                saver = screenModel::saveTrapping,
+                detailScreenFactory = { CharacterTrappingDetailScreen(characterId, it.id) },
+            )
 
         AddItemUi(
             state = addItemUiState,
@@ -59,25 +59,29 @@ class AddTrappingScreen(
             specification = { compendiumTrapping ->
                 TrappingFromCompendiumForm(
                     itemName = compendiumTrapping.name,
-                    data = TrappingFromCompendiumPlayerData(
-                        itemQualities = emptySet(),
-                        itemFlaws = emptySet(),
-                        quantity = 1,
-                        note = "",
-                    ),
+                    data =
+                        TrappingFromCompendiumPlayerData(
+                            itemQualities = emptySet(),
+                            itemFlaws = emptySet(),
+                            quantity = 1,
+                            note = "",
+                        ),
                     onSaveRequest = {
-                        val item = InventoryItem.fromCompendium(
-                            compendiumTrapping,
-                            it.itemQualities,
-                            it.itemFlaws,
-                            it.quantity,
-                            it.note,
-                        )
+                        val item =
+                            InventoryItem.fromCompendium(
+                                compendiumTrapping,
+                                it.itemQualities,
+                                it.itemFlaws,
+                                it.quantity,
+                                it.note,
+                            )
 
                         addItemUiState.saveItem(
-                            if (containerId != null)
+                            if (containerId != null) {
                                 item.addToContainer(containerId)
-                            else item
+                            } else {
+                                item
+                            },
                         )
                     },
                     onDismissRequest = addItemUiState::openChoosingScreen,
@@ -90,7 +94,7 @@ class AddTrappingScreen(
                     onDismissRequest = addItemUiState::openChoosingScreen,
                     defaultContainerId = null,
                 )
-            }
+            },
         )
     }
 }

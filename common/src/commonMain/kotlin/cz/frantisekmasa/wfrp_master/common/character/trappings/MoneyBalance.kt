@@ -16,14 +16,17 @@ import cz.frantisekmasa.wfrp_master.common.Str
 import cz.frantisekmasa.wfrp_master.common.core.domain.Money
 import cz.frantisekmasa.wfrp_master.common.core.shared.Resources
 import cz.frantisekmasa.wfrp_master.common.core.shared.drawableResource
-import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.VisualOnlyIconDescription
+import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.VISUAL_ONLY_ICON_DESCRIPTION
 import dev.icerock.moko.resources.compose.stringResource
 
 @Composable
-fun MoneyBalance(value: Money, modifier: Modifier = Modifier) {
+fun MoneyBalance(
+    value: Money,
+    modifier: Modifier = Modifier,
+) {
     Row(
         modifier,
-        horizontalArrangement = Arrangement.spacedBy(8.dp, Alignment.End)
+        horizontalArrangement = Arrangement.spacedBy(8.dp, Alignment.End),
     ) {
         ProvideTextStyle(MaterialTheme.typography.body1) {
             MoneyIcon(colorGold)
@@ -32,7 +35,7 @@ fun MoneyBalance(value: Money, modifier: Modifier = Modifier) {
                     append(value.getCrowns())
                     append(" ")
                     append(stringResource(Str.trappings_money_gold_coins_shortcut))
-                }
+                },
             )
 
             MoneyIcon(colorSilver)
@@ -41,7 +44,7 @@ fun MoneyBalance(value: Money, modifier: Modifier = Modifier) {
                     append(value.getShillings())
                     append(" ")
                     append(stringResource(Str.trappings_money_silver_shillings_shortcut))
-                }
+                },
             )
 
             MoneyIcon(colorBrass)
@@ -50,7 +53,7 @@ fun MoneyBalance(value: Money, modifier: Modifier = Modifier) {
                     append(value.getPennies())
                     append(" ")
                     append(stringResource(Str.trappings_money_brass_pennies_shortcut))
-                }
+                },
             )
         }
     }
@@ -60,9 +63,9 @@ fun MoneyBalance(value: Money, modifier: Modifier = Modifier) {
 private fun MoneyIcon(tint: Color) {
     Icon(
         drawableResource(Resources.Drawable.TrappingCoins),
-        VisualOnlyIconDescription,
+        VISUAL_ONLY_ICON_DESCRIPTION,
         tint = tint,
-        modifier = Modifier.size(18.dp)
+        modifier = Modifier.size(18.dp),
     )
 }
 

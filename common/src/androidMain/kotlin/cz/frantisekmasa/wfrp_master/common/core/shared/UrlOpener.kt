@@ -15,7 +15,7 @@ actual fun rememberUrlOpener(): UrlOpener {
                 if (isGooglePlayLink) {
                     setPackage("com.android.vending")
                 }
-            }
+            },
         )
     }
 }

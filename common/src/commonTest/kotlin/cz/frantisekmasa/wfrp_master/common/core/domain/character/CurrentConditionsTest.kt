@@ -16,7 +16,7 @@ class CurrentConditionsTest {
     fun `adding missing condition sets condition count to one`() {
         assertEquals(
             mapOf(Condition.FATIGUED to 1),
-            CurrentConditions.none().addConditions(Condition.FATIGUED).toMap()
+            CurrentConditions.none().addConditions(Condition.FATIGUED).toMap(),
         )
     }
 
@@ -27,7 +27,7 @@ class CurrentConditionsTest {
             CurrentConditions.none()
                 .addConditions(Condition.FATIGUED)
                 .addConditions(Condition.FATIGUED)
-                .toMap()
+                .toMap(),
         )
     }
 
@@ -37,7 +37,7 @@ class CurrentConditionsTest {
             CurrentConditions.none().addConditions(Condition.FATIGUED),
             CurrentConditions.none()
                 .addConditions(Condition.FATIGUED, Condition.FATIGUED)
-                .removeCondition(Condition.FATIGUED)
+                .removeCondition(Condition.FATIGUED),
         )
     }
 
@@ -47,7 +47,7 @@ class CurrentConditionsTest {
             CurrentConditions.none(),
             CurrentConditions.none()
                 .addConditions(Condition.FATIGUED)
-                .removeCondition(Condition.FATIGUED)
+                .removeCondition(Condition.FATIGUED),
         )
     }
 

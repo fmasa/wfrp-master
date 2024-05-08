@@ -27,7 +27,7 @@ value class WeaponRangeExpression(val value: String) : Parcelable {
         override val value: String,
         override val translatableName: StringResource,
     ) : Expression.Constant {
-        STRENGTH_BONUS("SB", Str.characteristics_strength_bonus_shortcut)
+        STRENGTH_BONUS("SB", Str.characteristics_strength_bonus_shortcut),
     }
 
     @Composable
@@ -52,7 +52,7 @@ value class WeaponRangeExpression(val value: String) : Parcelable {
         ): Expression {
             return Expression.fromString(
                 value,
-                mapOf(Constant.STRENGTH_BONUS.value to strengthBonus)
+                mapOf(Constant.STRENGTH_BONUS.value to strengthBonus),
             )
         }
 

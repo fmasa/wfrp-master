@@ -14,11 +14,13 @@ enum class Race(
     WOOD_ELF(Str.races_wood_elf),
     HALFLING(Str.races_halfling),
     GNOME(Str.races_gnome),
-    OGRE(Str.races_ogre);
+    OGRE(Str.races_ogre),
+    ;
 
-    val size: Size get() = when (this) {
-        HALFLING, GNOME -> Size.SMALL
-        OGRE -> Size.LARGE
-        else -> Size.AVERAGE
-    }
+    val size: Size get() =
+        when (this) {
+            HALFLING, GNOME -> Size.SMALL
+            OGRE -> Size.LARGE
+            else -> Size.AVERAGE
+        }
 }

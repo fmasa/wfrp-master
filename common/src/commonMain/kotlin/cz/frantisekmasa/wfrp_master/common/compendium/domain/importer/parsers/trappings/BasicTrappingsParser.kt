@@ -18,7 +18,6 @@ class BasicTrappingsParser(
     private val structure: PdfStructure,
     private val descriptionParser: TrappingDescriptionParser,
 ) {
-
     enum class Column { LEFT, RIGHT }
 
     fun parse(
@@ -28,31 +27,36 @@ class BasicTrappingsParser(
         column: Column,
         additionalColumn: Int? = null,
     ): List<Trapping> {
-        val columns = TwoColumnPdfLexer(document, structure, mergeSubsequentTokens = false)
-            .getTokens(tablePage)
+        val columns =
+            TwoColumnPdfLexer(document, structure, mergeSubsequentTokens = false)
+                .getTokens(tablePage)
 
         val columnTokens = (if (column == Column.LEFT) columns.first else columns.second).toList()
 
-        val tokens = (
-            if (columnTokens.any { it is Token.Heading })
-                columnTokens.dropWhile { it !is Token.Heading }
-            else columnTokens
-            )
-            .asSequence()
-            .dropWhile { it !is Token.BodyCellPart }
-            .takeWhile { it !is Token.BoldPart }
-            .toList()
-
-        val table = TableParser().parseTable(
-            tokens.mapNotNull {
-                when (it) {
-                    is Token.BodyCellPart -> it
-                    is Token.NormalPart -> Token.BodyCellPart(it.text, y = 0f, height = Float.MAX_VALUE)
-                    else -> null
+        val tokens =
+            (
+                if (columnTokens.any { it is Token.Heading }) {
+                    columnTokens.dropWhile { it !is Token.Heading }
+                } else {
+                    columnTokens
                 }
-            },
-            columnCount = if (additionalColumn != null) 5 else 4,
-        )
+            )
+                .asSequence()
+                .dropWhile { it !is Token.BodyCellPart }
+                .takeWhile { it !is Token.BoldPart }
+                .toList()
+
+        val table =
+            TableParser().parseTable(
+                tokens.mapNotNull {
+                    when (it) {
+                        is Token.BodyCellPart -> it
+                        is Token.NormalPart -> Token.BodyCellPart(it.text, y = 0f, height = Float.MAX_VALUE)
+                        else -> null
+                    }
+                },
+                columnCount = if (additionalColumn != null) 5 else 4,
+            )
 
         val descriptionsByName = descriptionParser.parse(document, structure, descriptionPages)
 
@@ -60,9 +64,12 @@ class BasicTrappingsParser(
             .asSequence()
             .flatMap { section ->
                 section.rows.mapNotNull { fullRow ->
-                    val row = if (additionalColumn == null)
-                        fullRow
-                    else fullRow.take(additionalColumn) + fullRow.drop(additionalColumn + 1)
+                    val row =
+                        if (additionalColumn == null) {
+                            fullRow
+                        } else {
+                            fullRow.take(additionalColumn) + fullRow.drop(additionalColumn + 1)
+                        }
                     val encumbrance = row[2].trim()
                     val reach = row[3].trim()
                     var (name, packSize) = parseNameAndPackSize(row[0].trim())
@@ -86,38 +93,40 @@ class BasicTrappingsParser(
                         price = if (price is PriceParser.Amount) price.money else Money.ZERO,
                         packSize = packSize,
                         encumbrance = Encumbrance(encumbrance.toDoubleOrNull() ?: 0.0),
-                        availability = matchEnumOrNull(
-                            row[3].trim(),
-                            mapOf(
-                                "N/A" to Availability.COMMON,
-                                "–" to Availability.COMMON,
-                            ),
-                        ) ?: error("Invalid Availability ${row[3]}"),
+                        availability =
+                            matchEnumOrNull(
+                                row[3].trim(),
+                                mapOf(
+                                    "N/A" to Availability.COMMON,
+                                    "–" to Availability.COMMON,
+                                ),
+                            ) ?: error("Invalid Availability ${row[3]}"),
                         trappingType = typeFactory(additionalColumn?.let { fullRow[it] } ?: ""),
-                        description = buildString {
-                            if (encumbrance == "Varies") {
-                                append("**Price:** Varies\n")
-                            }
-
-                            if (row[1].trim().endsWith('+')) {
-                                append("**Price noted is a minimum price**")
-                            }
-
-                            if (reach == "Varies") {
-                                append("**Reach:** Varies\n")
-                            }
-
-                            val comparableName = descriptionParser.comparableName(name)
-                            descriptionsByName.firstOrNull {
-                                comparableName.startsWith(it.first, ignoreCase = true)
-                            }?.let {
-                                if (isNotEmpty()) {
-                                    append("\n")
+                        description =
+                            buildString {
+                                if (encumbrance == "Varies") {
+                                    append("**Price:** Varies\n")
                                 }
 
-                                append(it.second)
-                            }
-                        },
+                                if (row[1].trim().endsWith('+')) {
+                                    append("**Price noted is a minimum price**")
+                                }
+
+                                if (reach == "Varies") {
+                                    append("**Reach:** Varies\n")
+                                }
+
+                                val comparableName = descriptionParser.comparableName(name)
+                                descriptionsByName.firstOrNull {
+                                    comparableName.startsWith(it.first, ignoreCase = true)
+                                }?.let {
+                                    if (isNotEmpty()) {
+                                        append("\n")
+                                    }
+
+                                    append(it.second)
+                                }
+                            },
                         isVisibleToPlayers = true,
                     )
                 }

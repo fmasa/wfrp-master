@@ -41,7 +41,7 @@ internal fun TestResultScreen(
             items(results, key = { it.characterId }) { result ->
                 TestResultCard(
                     result = result,
-                    onRerollRequest = { onRerollRequest(result.characterId) }
+                    onRerollRequest = { onRerollRequest(result.characterId) },
                 )
             }
         }
@@ -80,7 +80,7 @@ private fun TestResultCard(
                                 Str.tests_roll_label,
                                 testResult.rollValue,
                                 testResult.testedValue,
-                            )
+                            ),
                         )
 
                         if (testResult.isFumble) {
@@ -88,7 +88,7 @@ private fun TestResultCard(
                         } else if (testResult.isCritical) {
                             append(stringResource(Str.tests_critical))
                         }
-                    }
+                    },
                 )
 
                 SingleLineTextValue(

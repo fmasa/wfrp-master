@@ -12,7 +12,7 @@ actual fun DropdownMenu(
     expanded: Boolean,
     onDismissRequest: () -> Unit,
     modifier: Modifier,
-    content: @Composable ColumnScope.() -> Unit
+    content: @Composable ColumnScope.() -> Unit,
 ) {
     PlatformDropdownMenu(
         expanded = expanded,
@@ -26,7 +26,7 @@ actual fun DropdownMenu(
 actual fun DropdownMenuItem(
     onClick: () -> Unit,
     modifier: Modifier,
-    content: @Composable RowScope.() -> Unit
+    content: @Composable RowScope.() -> Unit,
 ) {
     PlatformDropdownMenuItem(
         onClick = onClick,

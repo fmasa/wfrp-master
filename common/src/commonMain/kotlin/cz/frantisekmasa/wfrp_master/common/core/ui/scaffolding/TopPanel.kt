@@ -14,9 +14,10 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
 fun TopPanel(content: @Composable () -> Unit) {
     Box {
         Card(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(bottom = Spacing.small),
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = Spacing.small),
             elevation = 2.dp,
             shape = RectangleShape,
             content = content,

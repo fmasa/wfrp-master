@@ -66,7 +66,7 @@ internal fun Screen.PartySummaryScreen(
     if (skillTestDialogVisible) {
         SkillTestDialog(
             screenModel = rememberScreenModel(arg = partyId),
-            onDismissRequest = { skillTestDialogVisible = false }
+            onDismissRequest = { skillTestDialogVisible = false },
         )
     }
 
@@ -79,16 +79,17 @@ internal fun Screen.PartySummaryScreen(
                     stringResource(Str.tests_button_hidden_skill_test),
                 )
             }
-        }
+        },
     ) {
         Column(
             Modifier
                 .background(MaterialTheme.colors.background)
                 .verticalScroll(rememberScrollState())
-                .padding(bottom = Spacing.bottomPaddingUnderFab)
+                .padding(bottom = Spacing.bottomPaddingUnderFab),
         ) {
-            val party = screenModel.party.collectWithLifecycle(null).value
-                ?: return@Column
+            val party =
+                screenModel.party.collectWithLifecycle(null).value
+                    ?: return@Column
 
             var invitationDialogVisible by remember { mutableStateOf(false) }
 
@@ -145,7 +146,7 @@ private fun PlayersCard(
     CardContainer(
         Modifier
             .fillMaxWidth()
-            .padding(8.dp)
+            .padding(8.dp),
     ) {
         Column(Modifier.fillMaxWidth()) {
             CardTitle(stringResource(Str.parties_title_characters))
@@ -157,7 +158,7 @@ private fun PlayersCard(
                     CircularProgressIndicator(
                         Modifier
                             .align(Alignment.CenterHorizontally)
-                            .padding(vertical = 16.dp)
+                            .padding(vertical = 16.dp),
                     )
                 }
                 playerCharacters.isEmpty() -> {
@@ -205,16 +206,17 @@ private fun PlayersCard(
 private fun CharacterItem(
     character: Character,
     onCharacterOpenRequest: (Character) -> Unit,
-    onRemoveCharacter: (Character) -> Unit
+    onRemoveCharacter: (Character) -> Unit,
 ) {
     CardItem(
         name = character.name,
         icon = { CharacterAvatar(character.avatarUrl, ItemIcon.Size.Small) },
         onClick = { onCharacterOpenRequest(character) },
-        contextMenuItems = listOf(
-            ContextMenu.Item(stringResource(Str.common_ui_button_remove)) {
-                onRemoveCharacter(character)
-            }
-        )
+        contextMenuItems =
+            listOf(
+                ContextMenu.Item(stringResource(Str.common_ui_button_remove)) {
+                    onRemoveCharacter(character)
+                },
+            ),
     )
 }

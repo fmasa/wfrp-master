@@ -46,8 +46,9 @@ class PartySettingsScreenModel(
                 party.updateSettings(party.settings.copy(language = language)),
             )
 
-            val allCharacters = characters.inParty(partyId, CharacterType.values().toSet())
-                .first()
+            val allCharacters =
+                characters.inParty(partyId, CharacterType.values().toSet())
+                    .first()
             for (character in allCharacters) {
                 effectManager.reapplyWithDifferentLanguage(
                     this,

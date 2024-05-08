@@ -8,16 +8,17 @@ import androidx.compose.ui.composed
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 
-fun Modifier.splashBackground() = composed {
-    val darkMode = !MaterialTheme.colors.isLight
+fun Modifier.splashBackground() =
+    composed {
+        val darkMode = !MaterialTheme.colors.isLight
 
-    if (darkMode) {
-        background(MaterialTheme.colors.primarySurface)
-    } else {
-        background(
-            Brush.verticalGradient(
-                listOf(Color(181, 12, 15), Color(138, 11, 14))
+        if (darkMode) {
+            background(MaterialTheme.colors.primarySurface)
+        } else {
+            background(
+                Brush.verticalGradient(
+                    listOf(Color(181, 12, 15), Color(138, 11, 14)),
+                ),
             )
-        )
+        }
     }
-}

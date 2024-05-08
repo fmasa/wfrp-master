@@ -9,5 +9,5 @@ import kotlinx.serialization.Serializable
 data class Invitation(
     val partyId: PartyId,
     val partyName: String,
-    val accessCode: String
+    val accessCode: String,
 ) : Parcelable

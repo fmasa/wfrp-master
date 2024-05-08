@@ -19,22 +19,25 @@ class ArmourParser {
         document: Document,
         structure: PdfStructure,
         tablePage: Int,
-        @Suppress("UNUSED_PARAMETER") // Will be used in the future
+        // Will be used in the future
+        @Suppress("UNUSED_PARAMETER")
         descriptionPages: IntRange,
     ): List<Trapping> {
-        val table = TableParser().parseTable(
-            DefaultLayoutPdfLexer(document, structure, mergeSubsequentTokens = false)
-                .getTokens(tablePage)
-                .toList(),
-            columnCount = 8,
-        )
+        val table =
+            TableParser().parseTable(
+                DefaultLayoutPdfLexer(document, structure, mergeSubsequentTokens = false)
+                    .getTokens(tablePage)
+                    .toList(),
+                columnCount = 8,
+            )
 
         return table
             .asSequence()
             .filter { it.heading != null }
             .flatMap { section ->
-                val armourType = matchEnumOrNull<ArmourType>(section.heading!!.replace("*", ""))
-                    ?: error("Invalid armour type ${section.heading}")
+                val armourType =
+                    matchEnumOrNull<ArmourType>(section.heading!!.replace("*", ""))
+                        ?: error("Invalid armour type ${section.heading}")
 
                 section.rows.map { row ->
                     val price = PriceParser.parse(row[1])
@@ -46,18 +49,23 @@ class ArmourParser {
                         price = if (price is PriceParser.Amount) price.money else Money.ZERO,
                         packSize = 1,
                         encumbrance = Encumbrance(row[2].toDoubleOrNull() ?: 0.0),
-                        availability = Availability.values()
-                            .first { it.name.equals(row[3], ignoreCase = true) },
-                        trappingType = TrappingType.Armour(
-                            type = armourType,
-                            locations = locations(row[5]),
-                            points = ArmourPoints(row[6].toInt()),
-                            qualities = parseFeatures(row[7]),
-                            flaws = parseFeatures(row[7]),
-                        ),
-                        description = if (penalty != "")
-                            "**Penalty**: $penalty\n"
-                        else "",
+                        availability =
+                            Availability.values()
+                                .first { it.name.equals(row[3], ignoreCase = true) },
+                        trappingType =
+                            TrappingType.Armour(
+                                type = armourType,
+                                locations = locations(row[5]),
+                                points = ArmourPoints(row[6].toInt()),
+                                qualities = parseFeatures(row[7]),
+                                flaws = parseFeatures(row[7]),
+                            ),
+                        description =
+                            if (penalty != "") {
+                                "**Penalty**: $penalty\n"
+                            } else {
+                                ""
+                            },
                         isVisibleToPlayers = true,
                     )
                 }

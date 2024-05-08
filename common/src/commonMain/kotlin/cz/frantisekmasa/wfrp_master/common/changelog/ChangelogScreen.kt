@@ -22,8 +22,8 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import cafe.adriel.voyager.core.screen.Screen
-import com.halilibo.richtext.markdown.Markdown
-import com.halilibo.richtext.ui.RichText
+import com.halilibo.richtext.commonmark.Markdown
+import com.halilibo.richtext.ui.material.RichText
 import cz.frantisekmasa.wfrp_master.common.Str
 import cz.frantisekmasa.wfrp_master.common.core.shared.rememberUrlOpener
 import cz.frantisekmasa.wfrp_master.common.core.ui.buttons.BackButton
@@ -39,16 +39,15 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
 object ChangelogScreen : Screen {
-
     @Composable
     override fun Content() {
         Scaffold(
             topBar = {
                 TopAppBar(
                     navigationIcon = { BackButton() },
-                    title = { Text(stringResource(Str.changelog_title)) }
+                    title = { Text(stringResource(Str.changelog_title)) },
                 )
-            }
+            },
         ) {
             val screenModel: ChangelogScreenModel = rememberScreenModel()
             val (state, setState) = rememberSaveable { mutableStateOf<State>(State.Loading) }
@@ -58,9 +57,11 @@ object ChangelogScreen : Screen {
                     val releases = screenModel.loadReleases()
 
                     setState(
-                        if (releases == null)
+                        if (releases == null) {
                             State.Error
-                        else State.Loaded(releases)
+                        } else {
+                            State.Loaded(releases)
+                        },
                     )
                 }
             }
@@ -89,13 +90,8 @@ object ChangelogScreen : Screen {
                                     style = MaterialTheme.typography.h5,
                                 )
 
-                                RichText {
-                                    Markdown(
-                                        release.description,
-                                        onLinkClicked = {
-                                            urlOpener.open(it, isGooglePlayLink = false)
-                                        }
-                                    )
+                                RichText(linkClickHandler = { urlOpener.open(it, isGooglePlayLink = false) }) {
+                                    Markdown(release.description)
                                 }
 
                                 HorizontalLine()
@@ -108,9 +104,9 @@ object ChangelogScreen : Screen {
                                     onClick = {
                                         urlOpener.open(
                                             "https://github.com/fmasa/wfrp-master/releases",
-                                            isGooglePlayLink = false
+                                            isGooglePlayLink = false,
                                         )
-                                    }
+                                    },
                                 ) {
                                     Text(stringResource(Str.changelog_github_button).uppercase())
                                 }

@@ -107,7 +107,7 @@ fun ContainerDetail(
                     onClick = {
                         menuState = MenuState.COLLAPSED
                         trappingPickerOpened = true
-                    }
+                    },
                 )
 
                 val navigation = LocalNavigationTransaction.current
@@ -121,12 +121,12 @@ fun ContainerDetail(
                             AddTrappingScreen(
                                 characterId = characterId,
                                 containerId = trapping.id,
-                            )
+                            ),
                         )
-                    }
+                    },
                 )
             }
-        }
+        },
     ) {
         Column(Modifier.verticalScroll(rememberScrollState())) {
             subheadBar()
@@ -153,17 +153,20 @@ fun ContainerDetail(
                     buildAnnotatedString {
                         withStyle(
                             SpanStyle(
-                                color = if (currentlyCarries > container.carries)
-                                    MaterialTheme.colors.error
-                                else Color.Unspecified
-                            )
+                                color =
+                                    if (currentlyCarries > container.carries) {
+                                        MaterialTheme.colors.error
+                                    } else {
+                                        Color.Unspecified
+                                    },
+                            ),
                         ) {
                             append(currentlyCarries.toString())
                         }
 
                         append("/")
                         append(container.carries.toString())
-                    }
+                    },
                 )
 
                 TrappingDescription(trapping)
@@ -181,8 +184,9 @@ fun ContainerDetail(
                 CardContainer(Modifier.padding(horizontal = Spacing.small)) {
                     Text(
                         stringResource(Str.trappings_messages_cannot_store_trappings_in_container_stored_in_container),
-                        modifier = Modifier.align(Alignment.CenterHorizontally)
-                            .padding(horizontal = Spacing.small)
+                        modifier =
+                            Modifier.align(Alignment.CenterHorizontally)
+                                .padding(horizontal = Spacing.small),
                     )
                 }
             }
@@ -208,7 +212,7 @@ private fun StoredTrappingsCard(
                 EmptyUI(
                     text = stringResource(Str.trappings_messages_no_items),
                     Resources.Drawable.TrappingContainer,
-                    size = EmptyUI.Size.Small
+                    size = EmptyUI.Size.Small,
                 )
             } else {
                 trappings.forEachIndexed { index, trapping ->
@@ -227,13 +231,14 @@ private fun StoredTrappingsCard(
                                         onRemoveRequest(trapping)
                                     }
                                 },
-                                additionalContextItems = listOf(
-                                    ContextMenu.Item(stringResource(Str.trappings_button_take_out)) {
-                                        coroutineScope.launchLogged(Dispatchers.IO) {
-                                            onRemoveFromContainerRequest(trapping)
-                                        }
-                                    }
-                                )
+                                additionalContextItems =
+                                    listOf(
+                                        ContextMenu.Item(stringResource(Str.trappings_button_take_out)) {
+                                            coroutineScope.launchLogged(Dispatchers.IO) {
+                                                onRemoveFromContainerRequest(trapping)
+                                            }
+                                        },
+                                    ),
                             )
 
                             if (index != trappings.lastIndex) {

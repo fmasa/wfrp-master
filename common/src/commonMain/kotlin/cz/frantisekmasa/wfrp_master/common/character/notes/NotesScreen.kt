@@ -37,7 +37,7 @@ fun NotesScreen(
         Column(
             Modifier
                 .verticalScroll(rememberScrollState())
-                .padding(Spacing.small)
+                .padding(Spacing.small),
         ) {
             NoteCard(
                 title = { stringResource(Str.character_note) },
@@ -75,9 +75,12 @@ private fun AmbitionsContainer(
     Container(
         horizontalArrangement = Arrangement.spacedBy(Spacing.gutterSize()),
     ) {
-        val size = if (breakpoint > Breakpoint.XSmall)
-            ColumnSize.HalfWidth
-        else ColumnSize.FullWidth
+        val size =
+            if (breakpoint > Breakpoint.XSmall) {
+                ColumnSize.HalfWidth
+            } else {
+                ColumnSize.FullWidth
+            }
 
         column(size) {
             AmbitionsCard(

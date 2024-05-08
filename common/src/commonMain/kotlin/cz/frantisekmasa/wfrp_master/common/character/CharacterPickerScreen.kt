@@ -43,14 +43,14 @@ import dev.icerock.moko.resources.compose.stringResource
 data class CharacterPickerScreen(
     private val partyId: PartyId,
 ) : Screen {
-
     @Composable
     override fun Content() {
         val screenModel: CharacterPickerScreenModel = rememberScreenModel(arg = partyId)
         val userId = LocalUser.current.id
 
-        val characters = remember { screenModel.allUserCharacters(userId) }
-            .collectWithLifecycle(null).value
+        val characters =
+            remember { screenModel.allUserCharacters(userId) }
+                .collectWithLifecycle(null).value
 
         if (characters == null) {
             FullScreenProgress()
@@ -63,17 +63,17 @@ data class CharacterPickerScreen(
             topBar = {
                 TopAppBar(
                     navigationIcon = { BackButton() },
-                    title = { Text(stringResource(Str.character_title_select_character)) }
+                    title = { Text(stringResource(Str.character_title_select_character)) },
                 )
-            }
+            },
         ) {
             when {
                 characters.size == 1 -> {
                     LaunchedEffect(Unit) {
                         navigation.replace(
                             CharacterDetailScreen(
-                                CharacterId(partyId, characters.first().id)
-                            )
+                                CharacterId(partyId, characters.first().id),
+                            ),
                         )
                     }
                 }
@@ -102,10 +102,10 @@ data class CharacterPickerScreen(
                         onClick = {
                             navigation.replace(
                                 CharacterDetailScreen(
-                                    CharacterId(partyId, character.id)
-                                )
+                                    CharacterId(partyId, character.id),
+                                ),
                             )
-                        }
+                        },
                     )
                 }
             }
@@ -133,22 +133,26 @@ data class CharacterPickerScreen(
                 assignCharacter = screenModel::assignCharacter,
                 onAssigned = {
                     navigation.replace(CharacterDetailScreen(it))
-                }
+                },
             )
         }
 
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(Spacing.bodyPadding)
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .padding(Spacing.bodyPadding),
         ) {
             EmptyUI(
                 text = stringResource(Str.character_messages_no_character_in_party),
                 icon = Resources.Drawable.Character,
-                subText = if (unassignedCharacters.isNotEmpty())
-                    stringResource(Str.character_messages_unassigned_characters_exist)
-                else null,
+                subText =
+                    if (unassignedCharacters.isNotEmpty()) {
+                        stringResource(Str.character_messages_unassigned_characters_exist)
+                    } else {
+                        null
+                    },
             )
 
             if (unassignedCharacters.isNotEmpty()) {
@@ -165,9 +169,9 @@ data class CharacterPickerScreen(
                             partyId,
                             CharacterType.PLAYER_CHARACTER,
                             userId = userId,
-                        )
+                        ),
                     )
-                }
+                },
             ) {
                 Text(stringResource(Str.character_button_add).uppercase())
             }

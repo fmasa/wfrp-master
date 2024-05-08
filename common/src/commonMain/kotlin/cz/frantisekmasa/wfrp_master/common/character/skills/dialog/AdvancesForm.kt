@@ -31,9 +31,10 @@ internal fun AdvancesForm(
     isAdvanced: Boolean,
     onDismissRequest: () -> Unit,
 ) {
-    val formData = AdvancesForm.Data(
-        rememberSaveable(compendiumSkill.id) { mutableStateOf(1) },
-    )
+    val formData =
+        AdvancesForm.Data(
+            rememberSaveable(compendiumSkill.id) { mutableStateOf(1) },
+        )
 
     FormDialog(
         title = stringResource(Str.skills_title_new),
@@ -56,27 +57,26 @@ internal fun AdvancesForm(
                     if (formData.advances > minAdvances) {
                         formData.advances--
                     }
-                }
+                },
             )
         }
 
         SkillRating(
             label = compendiumSkill.name,
             value = characteristics.get(compendiumSkill.characteristic) + formData.advances,
-            modifier = Modifier
-                .padding(top = Spacing.large)
-                .align(Alignment.CenterHorizontally),
+            modifier =
+                Modifier
+                    .padding(top = Spacing.large)
+                    .align(Alignment.CenterHorizontally),
         )
     }
 }
 
 object AdvancesForm {
-
     @Stable
     data class Data(
         private val advancesState: MutableState<Int>,
     ) : HydratedFormData<Int> {
-
         var advances by advancesState
 
         override fun isValid(): Boolean = true

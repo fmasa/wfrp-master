@@ -22,7 +22,10 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.withContext
 
 @Composable
-fun CareerSection(character: Character, screenModel: CharacterScreenModel) {
+fun CareerSection(
+    character: Character,
+    screenModel: CharacterScreenModel,
+) {
     val data = CareerFormData.fromCharacter(character)
 
     FormScreen(
@@ -37,11 +40,12 @@ fun CareerSection(character: Character, screenModel: CharacterScreenModel) {
                     compendiumCareer = it.compendiumCareer,
                 )
             }
-        }
+        },
     ) { _ ->
-        val (careers, setCareers) = rememberSaveable {
-            mutableStateOf<List<Career>?>(null)
-        }
+        val (careers, setCareers) =
+            rememberSaveable {
+                mutableStateOf<List<Career>?>(null)
+            }
 
         LaunchedEffect(Unit) {
             withContext(Dispatchers.IO) {
@@ -76,41 +80,44 @@ data class CareerFormData(
     val career: MutableState<SelectedCareer>,
     val status: MutableState<SocialStatus>,
 ) : HydratedFormData<CareerData> {
-
     override fun isValid(): Boolean = true
 
     override fun toValue(): CareerData {
         return when (val career = career.value) {
-            is SelectedCareer.CompendiumCareer -> CareerData(
-                careerName = "",
-                socialClass = "",
-                status = status.value,
-                compendiumCareer = career.value,
-            )
-            is SelectedCareer.NonCompendiumCareer -> CareerData(
-                careerName = career.careerName,
-                socialClass = career.socialClass,
-                status = status.value,
-                compendiumCareer = null,
-            )
+            is SelectedCareer.CompendiumCareer ->
+                CareerData(
+                    careerName = "",
+                    socialClass = "",
+                    status = status.value,
+                    compendiumCareer = career.value,
+                )
+            is SelectedCareer.NonCompendiumCareer ->
+                CareerData(
+                    careerName = career.careerName,
+                    socialClass = career.socialClass,
+                    status = status.value,
+                    compendiumCareer = null,
+                )
         }
     }
 
     companion object {
         @Composable
-        fun fromCharacter(character: Character) = CareerFormData(
-            career = rememberSaveable(character.id) {
-                mutableStateOf(
-                    character.compendiumCareer?.let {
-                        SelectedCareer.CompendiumCareer(it, character.status)
-                    } ?: SelectedCareer.NonCompendiumCareer(
-                        character.career,
-                        character.socialClass,
-                    )
-                )
-            },
-            status = rememberSaveable(character.id) { mutableStateOf(character.status) },
-        )
+        fun fromCharacter(character: Character) =
+            CareerFormData(
+                career =
+                    rememberSaveable(character.id) {
+                        mutableStateOf(
+                            character.compendiumCareer?.let {
+                                SelectedCareer.CompendiumCareer(it, character.status)
+                            } ?: SelectedCareer.NonCompendiumCareer(
+                                character.career,
+                                character.socialClass,
+                            ),
+                        )
+                    },
+                status = rememberSaveable(character.id) { mutableStateOf(character.status) },
+            )
     }
 }
 
@@ -118,5 +125,5 @@ data class CareerData(
     val careerName: String,
     val socialClass: String,
     val status: SocialStatus,
-    val compendiumCareer: Character.CompendiumCareer?
+    val compendiumCareer: Character.CompendiumCareer?,
 )

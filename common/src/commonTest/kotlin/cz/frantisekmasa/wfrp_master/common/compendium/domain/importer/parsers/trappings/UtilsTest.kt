@@ -5,7 +5,6 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 
 class UtilsTest {
-
     @Test
     fun `matchEnum() parses all feature types`() {
         assertEquals(
@@ -14,7 +13,7 @@ class UtilsTest {
                 WeaponQuality.DAMAGING to 1,
                 WeaponQuality.SHIELD to 2,
             ),
-            parseFeatures("Slash (3A), Damaging*, Shield 2, Unknown")
+            parseFeatures("Slash (3A), Damaging*, Shield 2, Unknown"),
         )
     }
 }

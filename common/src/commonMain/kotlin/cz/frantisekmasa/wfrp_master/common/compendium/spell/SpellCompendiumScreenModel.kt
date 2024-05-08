@@ -19,19 +19,18 @@ class SpellCompendiumScreenModel(
     characterItems: CharacterItemRepository<CharacterSpell>,
     parties: PartyRepository,
 ) : CharacterItemCompendiumItemScreenModel<Spell, CharacterSpell>(
-    partyId,
-    firestore,
-    compendium,
-    characterItems,
-    parties,
-) {
-
+        partyId,
+        firestore,
+        compendium,
+        characterItems,
+        parties,
+    ) {
     override suspend fun updateCharacterItem(
         transaction: Transaction,
         party: Party,
         characterId: CharacterId,
         existing: CharacterSpell,
-        new: CharacterSpell
+        new: CharacterSpell,
     ) {
         characterItems.save(transaction, characterId, new)
     }

@@ -34,27 +34,28 @@ fun TrappingItem(
     onClick: () -> Unit,
     onDuplicate: () -> Unit,
     onRemove: () -> Unit,
-    additionalContextItems: List<ContextMenu.Item> = emptyList()
+    additionalContextItems: List<ContextMenu.Item> = emptyList(),
 ) {
     WithContextMenu(
         onClick = onClick,
-        items = buildList {
-            addAll(additionalContextItems)
+        items =
+            buildList {
+                addAll(additionalContextItems)
 
-            add(
-                ContextMenu.Item(
-                    stringResource(Str.common_ui_button_duplicate),
-                    onClick = onDuplicate,
+                add(
+                    ContextMenu.Item(
+                        stringResource(Str.common_ui_button_duplicate),
+                        onClick = onDuplicate,
+                    ),
                 )
-            )
 
-            add(
-                ContextMenu.Item(
-                    stringResource(Str.common_ui_button_remove),
-                    onClick = onRemove,
+                add(
+                    ContextMenu.Item(
+                        stringResource(Str.common_ui_button_remove),
+                        onClick = onRemove,
+                    ),
                 )
-            )
-        }
+            },
     ) {
         TrappingItem(trapping)
     }
@@ -83,7 +84,7 @@ fun TrappingItem(
                         append(sorted.joinToString(", "))
                         append(')')
                     }
-                }
+                },
             )
         },
         trailing = {
@@ -97,7 +98,7 @@ fun TrappingItem(
                 if (encumbrance != Encumbrance.Zero) {
                     IconWithValue(
                         Resources.Drawable.TrappingEncumbrance,
-                        encumbrance.toString()
+                        encumbrance.toString(),
                     )
                 }
 
@@ -111,13 +112,16 @@ fun TrappingItem(
                     IconWithValue(
                         Resources.Drawable.TrappingContainer,
                         trapping.storedTrappings.size.toString(),
-                        textColor = if (currentlyCarries > trapping.container.carries)
-                            MaterialTheme.colors.error
-                        else LocalContentColor.current,
+                        textColor =
+                            if (currentlyCarries > trapping.container.carries) {
+                                MaterialTheme.colors.error
+                            } else {
+                                LocalContentColor.current
+                            },
                     )
                 }
             }
-        }
+        },
     )
 }
 
@@ -129,7 +133,7 @@ private fun IconWithValue(
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(Spacing.tiny)
+        horizontalArrangement = Arrangement.spacedBy(Spacing.tiny),
     ) {
         Icon(
             drawableResource(icon),

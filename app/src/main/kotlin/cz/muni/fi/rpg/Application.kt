@@ -1,5 +1,6 @@
 package cz.muni.fi.rpg
 
+import cz.frantisekmasa.wfrp_master.common.BuildKonfig
 import cz.frantisekmasa.wfrp_master.common.core.logging.ErrorReportingAntilog
 import io.github.aakira.napier.DebugAntilog
 import io.github.aakira.napier.Napier
@@ -10,9 +11,11 @@ class Application : BaseApplication() {
         super.onCreate()
 
         Napier.base(
-            if (BuildConfig.DEBUG)
+            if (BuildKonfig.isDebugMode) {
                 DebugAntilog()
-            else ErrorReportingAntilog()
+            } else {
+                ErrorReportingAntilog()
+            },
         )
     }
 }

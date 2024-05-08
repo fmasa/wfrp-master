@@ -20,16 +20,16 @@ abstract class CharacterItemDetailScreen(
     protected val characterId: CharacterId,
     private val itemId: Uuid,
 ) : Screen {
-
     @Composable
     protected fun <T : CharacterItem<T, *>> Detail(
         screenModel: CharacterItemScreenModel<T>,
         content: @Composable (T, isGameMaster: Boolean) -> Unit,
     ) {
         val isGameMaster = screenModel.isGameMaster.collectWithLifecycle(null).value
-        val itemOrError = remember(screenModel) { screenModel.getItem(itemId) }
-            .collectWithLifecycle(null)
-            .value
+        val itemOrError =
+            remember(screenModel) { screenModel.getItem(itemId) }
+                .collectWithLifecycle(null)
+                .value
 
         if (itemOrError == null || isGameMaster == null) {
             Surface {

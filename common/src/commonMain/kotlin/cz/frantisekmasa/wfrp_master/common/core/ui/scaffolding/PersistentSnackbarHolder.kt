@@ -9,27 +9,28 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-val LocalPersistentSnackbarHolder = staticCompositionLocalOf<PersistentSnackbarHolder> {
-    error("LocalSnackbarHostState was not initialized")
-}
+val LocalPersistentSnackbarHolder =
+    staticCompositionLocalOf<PersistentSnackbarHolder> {
+        error("LocalSnackbarHostState was not initialized")
+    }
 
 @Stable
 class PersistentSnackbarHolder(
     private val coroutineScope: CoroutineScope,
     private val snackbarHostState: SnackbarHostState,
 ) {
-
     fun showSnackbar(
         message: String,
         duration: SnackbarDuration = SnackbarDuration.Short,
-        action: SnackbarAction? = null
+        action: SnackbarAction? = null,
     ) {
         coroutineScope.launch(Dispatchers.Default) {
-            val result = snackbarHostState.showSnackbar(
-                message = message,
-                duration = duration,
-                actionLabel = action?.label,
-            )
+            val result =
+                snackbarHostState.showSnackbar(
+                    message = message,
+                    duration = duration,
+                    actionLabel = action?.label,
+                )
 
             if (result == SnackbarResult.ActionPerformed && action != null) {
                 action.onPerform()

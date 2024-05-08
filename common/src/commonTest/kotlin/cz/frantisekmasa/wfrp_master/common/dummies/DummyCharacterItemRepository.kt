@@ -21,32 +21,46 @@ class DummyCharacterItemRepository<T : CharacterItem<T, *>> : CharacterItemRepos
 
     override fun getLive(
         characterId: CharacterId,
-        itemId: Uuid
+        itemId: Uuid,
     ): Flow<Either<CompendiumItemNotFound, T>> {
         return flowOf(
-            items[characterId]?.get(itemId).rightIfNotNull { CompendiumItemNotFound(null) }
+            items[characterId]?.get(itemId).rightIfNotNull { CompendiumItemNotFound(null) },
         )
     }
 
-    override suspend fun remove(characterId: CharacterId, itemId: Uuid) {
+    override suspend fun remove(
+        characterId: CharacterId,
+        itemId: Uuid,
+    ) {
         items[characterId]?.remove(itemId)
     }
 
-    override fun remove(transaction: Transaction, characterId: CharacterId, itemId: Uuid) {
+    override fun remove(
+        transaction: Transaction,
+        characterId: CharacterId,
+        itemId: Uuid,
+    ) {
         items[characterId]?.remove(itemId)
     }
 
-    override suspend fun save(characterId: CharacterId, item: T) {
+    override suspend fun save(
+        characterId: CharacterId,
+        item: T,
+    ) {
         items.getOrPut(characterId) { mutableMapOf() }[item.id] = item
     }
 
-    override fun save(transaction: Transaction, characterId: CharacterId, item: T) {
+    override fun save(
+        transaction: Transaction,
+        characterId: CharacterId,
+        item: T,
+    ) {
         items.getOrPut(characterId) { mutableMapOf() }[item.id] = item
     }
 
     override suspend fun findByCompendiumId(
         partyId: PartyId,
-        compendiumItemId: Uuid
+        compendiumItemId: Uuid,
     ): List<Pair<CharacterId, T>> {
         return items
             .asSequence()

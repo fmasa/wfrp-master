@@ -16,7 +16,7 @@ fun FlowRow(
 ) {
     Layout(
         modifier = modifier,
-        content = content
+        content = content,
     ) { measurables, constraints ->
         val placeables = measurables.map { it.measure(constraints) }
         val rows = mutableListOf<Row>()
@@ -31,11 +31,14 @@ fun FlowRow(
                     Row(
                         spacing = horizontalSpacingPx,
                         maxWidth = constraints.maxWidth,
-                        y = if (lastRow != null)
-                            lastRow.y + lastRow.height + verticalSpacingPx
-                        else 0,
+                        y =
+                            if (lastRow != null) {
+                                lastRow.y + lastRow.height + verticalSpacingPx
+                            } else {
+                                0
+                            },
                         firstChild = placeable,
-                    )
+                    ),
                 )
             } else {
                 rows.last().addChild(placeable)

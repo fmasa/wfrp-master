@@ -12,7 +12,6 @@ class TrappingSaver(
     private val trappings: InventoryItemRepository,
     private val firestore: FirebaseFirestore,
 ) {
-
     suspend fun addToContainer(
         characterId: CharacterId,
         trapping: InventoryItem,
@@ -32,7 +31,7 @@ class TrappingSaver(
         if (trappingType is TrappingType.Container) {
             updatedTrappings.addAll(
                 takeAllItemsFromContainer(characterId, trapping)
-                    .map { it.addToContainer(container.id) }
+                    .map { it.addToContainer(container.id) },
             )
         }
 
@@ -45,7 +44,10 @@ class TrappingSaver(
         }
     }
 
-    suspend fun saveInventoryItem(characterId: CharacterId, inventoryItem: InventoryItem) {
+    suspend fun saveInventoryItem(
+        characterId: CharacterId,
+        inventoryItem: InventoryItem,
+    ) {
         val itemsRemovedFromContainer = takeAllItemsFromContainer(characterId, inventoryItem)
 
         firestore.runTransaction {
@@ -59,7 +61,10 @@ class TrappingSaver(
         }
     }
 
-    suspend fun removeInventoryItem(characterId: CharacterId, inventoryItem: InventoryItem) {
+    suspend fun removeInventoryItem(
+        characterId: CharacterId,
+        inventoryItem: InventoryItem,
+    ) {
         val itemsPreviouslyStoredInContainer = takeAllItemsFromContainer(characterId, inventoryItem)
 
         firestore.runTransaction {

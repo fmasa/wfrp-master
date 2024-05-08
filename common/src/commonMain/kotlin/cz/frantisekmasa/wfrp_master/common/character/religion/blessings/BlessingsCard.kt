@@ -29,7 +29,7 @@ internal fun BlessingsCard(
     CardContainer(
         Modifier
             .padding(horizontal = 8.dp)
-            .padding(bottom = 8.dp)
+            .padding(bottom = 8.dp),
     ) {
         Column(Modifier.padding(horizontal = 6.dp)) {
             CardTitle(stringResource(Str.blessings_title))
@@ -38,7 +38,7 @@ internal fun BlessingsCard(
                 EmptyUI(
                     stringResource(Str.blessings_messages_character_has_no_blessings),
                     Resources.Drawable.Blessing,
-                    size = EmptyUI.Size.Small
+                    size = EmptyUI.Size.Small,
                 )
             } else {
                 val navigation = LocalNavigationTransaction.current
@@ -48,7 +48,7 @@ internal fun BlessingsCard(
                         blessing,
                         onClick = {
                             navigation.navigate(
-                                CharacterBlessingDetailScreen(characterId, blessing.id)
+                                CharacterBlessingDetailScreen(characterId, blessing.id),
                             )
                         },
                         onRemove = { onRemove(blessing) },
@@ -75,8 +75,9 @@ private fun BlessingItem(
     CardItem(
         name = blessing.name,
         onClick = onClick,
-        contextMenuItems = listOf(
-            ContextMenu.Item(stringResource(Str.common_ui_button_remove), onClick = { onRemove() }),
-        ),
+        contextMenuItems =
+            listOf(
+                ContextMenu.Item(stringResource(Str.common_ui_button_remove), onClick = { onRemove() }),
+            ),
     )
 }

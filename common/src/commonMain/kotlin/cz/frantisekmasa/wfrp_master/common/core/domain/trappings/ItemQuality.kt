@@ -8,14 +8,20 @@ import dev.icerock.moko.resources.StringResource
 
 @Parcelize
 @Immutable
-enum class ItemQuality(
-    override val translatableName: StringResource,
-) : TrappingFeature, NamedEnum {
-    DURABLE(Str.trappings_qualities_durable),
-    FINE(Str.trappings_qualities_fine),
-    LIGHTWEIGHT(Str.trappings_qualities_lightweight),
-    PRACTICAL(Str.trappings_qualities_practical);
+enum class ItemQuality : TrappingFeature, NamedEnum {
+    DURABLE,
+    FINE,
+    LIGHTWEIGHT,
+    PRACTICAL,
+    ;
 
     override val hasRating get() = false
     override val ratingUnit get() = null
+    override val translatableName: StringResource get() =
+        when (this) {
+            DURABLE -> Str.trappings_qualities_durable
+            FINE -> Str.trappings_qualities_fine
+            LIGHTWEIGHT -> Str.trappings_qualities_lightweight
+            PRACTICAL -> Str.trappings_qualities_practical
+        }
 }

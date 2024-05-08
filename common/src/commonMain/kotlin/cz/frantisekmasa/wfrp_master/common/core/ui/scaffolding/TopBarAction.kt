@@ -56,11 +56,12 @@ fun OptionsAction(content: @Composable ColumnScope.() -> Unit) {
     IconAction(
         Icons.Filled.MoreVert,
         stringResource(Str.common_ui_label_open_context_menu),
-        onClick = { contextMenuExpanded = true }
+        onClick = { contextMenuExpanded = true },
     )
 
     DropdownMenu(
-        expanded = contextMenuExpanded, onDismissRequest = { contextMenuExpanded = false },
+        expanded = contextMenuExpanded,
+        onDismissRequest = { contextMenuExpanded = false },
         content = content,
     )
 }
@@ -98,7 +99,7 @@ fun IconAction(
             icon,
             description,
             tint = tint,
-            modifier = Modifier.size(24.dp)
+            modifier = Modifier.size(24.dp),
         )
     }
 }

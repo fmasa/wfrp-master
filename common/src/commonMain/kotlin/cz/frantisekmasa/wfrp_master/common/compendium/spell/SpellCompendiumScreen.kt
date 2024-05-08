@@ -19,9 +19,8 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.rememberScreenMode
 import dev.icerock.moko.resources.compose.stringResource
 
 class SpellCompendiumScreen(
-    private val partyId: PartyId
+    private val partyId: PartyId,
 ) : CompendiumScreen() {
-
     @Composable
     override fun Content() {
         val screenModel: SpellCompendiumScreenModel = rememberScreenModel(arg = partyId)
@@ -45,7 +44,7 @@ class SpellCompendiumScreen(
                 EmptyUI(
                     text = stringResource(Str.spells_messages_no_spells_in_compendium),
                     subText = stringResource(Str.spells_messages_no_spells_in_compendium_subtext),
-                    icon = Resources.Drawable.Spell
+                    icon = Resources.Drawable.Spell,
                 )
             },
             remover = screenModel::remove,

@@ -22,11 +22,11 @@ abstract class CharacterItemScreenModel<T : CharacterItem<T, *>>(
     private val userProvider: UserProvider,
     partyRepository: PartyRepository,
 ) : ScreenModel {
-
-    val isGameMaster = partyRepository.getLive(characterId.partyId)
-        .right()
-        .map { it.gameMasterId == userProvider.userId }
-        .distinctUntilChanged()
+    val isGameMaster =
+        partyRepository.getLive(characterId.partyId)
+            .right()
+            .map { it.gameMasterId == userProvider.userId }
+            .distinctUntilChanged()
 
     fun getItem(itemId: Uuid): Flow<Either<CompendiumItemNotFound, T>> {
         return repository.getLive(characterId, itemId)

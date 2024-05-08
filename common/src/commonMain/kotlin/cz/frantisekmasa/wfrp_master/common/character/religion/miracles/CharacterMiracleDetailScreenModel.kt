@@ -13,8 +13,8 @@ class CharacterMiracleDetailScreenModel(
     userProvider: UserProvider,
     partyRepository: PartyRepository,
 ) : CharacterItemScreenModel<Miracle>(
-    characterId,
-    repository,
-    userProvider,
-    partyRepository,
-)
+        characterId,
+        repository,
+        userProvider,
+        partyRepository,
+    )

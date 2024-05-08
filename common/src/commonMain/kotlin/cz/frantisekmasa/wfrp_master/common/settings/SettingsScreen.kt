@@ -46,9 +46,9 @@ object SettingsScreen : Screen {
                 topBar = {
                     TopAppBar(
                         navigationIcon = { BackButton() },
-                        title = { Text(stringResource(Str.settings_title)) }
+                        title = { Text(stringResource(Str.settings_title)) },
                     )
-                }
+                },
             ) {
                 Column(
                     Modifier
@@ -57,7 +57,6 @@ object SettingsScreen : Screen {
                         .padding(top = 6.dp),
                     verticalArrangement = Arrangement.spacedBy(Spacing.medium),
                 ) {
-
                     SignInCard(screenModel)
 
                     SettingsCard {
@@ -86,7 +85,7 @@ private fun SoundCard(viewModel: SettingsScreenModel) {
     SwitchItem(
         name = stringResource(Str.settings_sound),
         value = viewModel.soundEnabled.collectWithLifecycle(null).value ?: false,
-        onChange = { viewModel.toggleSound(it) }
+        onChange = { viewModel.toggleSound(it) },
     )
 }
 
@@ -114,7 +113,7 @@ private fun LanguageCard(screenModel: SettingsScreenModel) {
     ListItem(
         text = { Text(stringResource(Str.settings_language)) },
         secondaryText = { Text(language.localizedName) },
-        modifier = Modifier.clickable { setDialogOpened(true) }
+        modifier = Modifier.clickable { setDialogOpened(true) },
     )
 }
 
@@ -125,9 +124,10 @@ private fun SwitchItem(
     onChange: suspend (newValue: Boolean) -> Unit,
     enabled: Boolean = true,
 ) {
-    val color = LocalContentColor.current.copy(
-        alpha = if (enabled) ContentAlpha.high else ContentAlpha.disabled
-    )
+    val color =
+        LocalContentColor.current.copy(
+            alpha = if (enabled) ContentAlpha.high else ContentAlpha.disabled,
+        )
 
     ListItem(
         text = {
@@ -144,8 +144,8 @@ private fun SwitchItem(
                     coroutineScope.launch {
                         onChange(!checked)
                     }
-                }
+                },
             )
-        }
+        },
     )
 }

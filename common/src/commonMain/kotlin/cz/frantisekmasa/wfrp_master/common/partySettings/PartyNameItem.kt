@@ -13,7 +13,10 @@ import cz.frantisekmasa.wfrp_master.common.Str
 import dev.icerock.moko.resources.compose.stringResource
 
 @Composable
-fun PartyNameItem(partyName: String, viewModel: PartySettingsScreenModel) {
+fun PartyNameItem(
+    partyName: String,
+    viewModel: PartySettingsScreenModel,
+) {
     var dialogVisible by remember { mutableStateOf(false) }
 
     ListItem(

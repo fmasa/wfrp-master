@@ -38,7 +38,10 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 @Composable
-fun AdvantageCapItem(settings: Settings, screenModel: PartySettingsScreenModel) {
+fun AdvantageCapItem(
+    settings: Settings,
+    screenModel: PartySettingsScreenModel,
+) {
     val title = stringResource(Str.combat_advantage_cap)
 
     if (settings.advantageSystem == AdvantageSystem.GROUP_ADVANTAGE) {
@@ -48,7 +51,7 @@ fun AdvantageCapItem(settings: Settings, screenModel: PartySettingsScreenModel) 
                 Disabled {
                     Text(stringResource(Str.combat_messages_does_not_apply_to_group_advantage))
                 }
-            }
+            },
         )
 
         return
@@ -93,10 +96,11 @@ fun AdvantageCapDialog(
 ) {
     FullScreenDialog(onDismissRequest = onDismissRequest) {
         var validate by remember { mutableStateOf(false) }
-        val newExpression = inputValue(
-            currentExpression.value,
-            rule(stringResource(Str.validation_invalid_expression), AdvantageCapExpression::isValid)
-        )
+        val newExpression =
+            inputValue(
+                currentExpression.value,
+                rule(stringResource(Str.validation_invalid_expression), AdvantageCapExpression::isValid),
+            )
 
         Scaffold(
             topBar = {
@@ -120,18 +124,19 @@ fun AdvantageCapDialog(
                                 coroutineScope.launch(Dispatchers.IO) {
                                     viewModel.updateSettings {
                                         it.copy(
-                                            advantageCap = AdvantageCapExpression(
-                                                newExpression.value
-                                            )
+                                            advantageCap =
+                                                AdvantageCapExpression(
+                                                    newExpression.value,
+                                                ),
                                         )
                                     }
                                     onDismissRequest()
                                 }
-                            }
+                            },
                         )
-                    }
+                    },
                 )
-            }
+            },
         ) {
             Column(
                 Modifier
@@ -143,16 +148,18 @@ fun AdvantageCapDialog(
                     value = newExpression,
                     validate = validate,
                     maxLength = AdvantageCapExpression.MAX_LENGTH,
-                    helperText = stringResource(
-                        Str.common_ui_expression_helper,
-                        AdvantageVariables.joinToString(", "),
-                    ),
+                    helperText =
+                        stringResource(
+                            Str.common_ui_expression_helper,
+                            AdvantageVariables.joinToString(", "),
+                        ),
                 )
             }
         }
     }
 }
 
-private val AdvantageVariables = AdvantageCapExpression.constantsFrom(Stats.ZERO)
-    .keys
-    .sorted()
+private val AdvantageVariables =
+    AdvantageCapExpression.constantsFrom(Stats.ZERO)
+        .keys
+        .sorted()

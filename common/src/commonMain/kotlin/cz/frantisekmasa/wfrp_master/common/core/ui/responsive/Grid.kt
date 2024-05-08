@@ -77,7 +77,7 @@ interface ContainerScope {
 
     fun column(
         size: ColumnSize = ColumnSize.FullWidth,
-        content: @Composable ColumnScope.() -> Unit
+        content: @Composable ColumnScope.() -> Unit,
     )
 }
 
@@ -125,7 +125,7 @@ private class ContainerScopeImpl(override val breakpoint: Breakpoint) : Containe
 
     override fun column(
         size: ColumnSize,
-        content: @Composable ColumnScope.() -> Unit
+        content: @Composable ColumnScope.() -> Unit,
     ) {
         columns += Column(size.value, content)
     }
@@ -141,5 +141,5 @@ enum class Breakpoint(val minWidth: Dp) {
     Small(480.dp),
     Medium(840.dp),
     Large(1280.dp),
-    XLarge(1440.dp)
+    XLarge(1440.dp),
 }

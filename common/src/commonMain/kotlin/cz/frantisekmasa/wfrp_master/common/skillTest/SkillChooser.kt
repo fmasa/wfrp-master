@@ -21,7 +21,7 @@ import dev.icerock.moko.resources.compose.stringResource
 internal fun SkillChooser(
     screenModel: SkillTestScreenModel,
     onDismissRequest: () -> Unit,
-    onSkillSelected: (Skill) -> Unit
+    onSkillSelected: (Skill) -> Unit,
 ) {
     val skills by screenModel.skills.collectWithLifecycle(null)
     val data by derivedStateOf {
@@ -46,7 +46,7 @@ internal fun SkillChooser(
         ListItem(
             modifier = Modifier.clickable(onClick = { onSkillSelected(skill) }),
             icon = { ItemIcon(skill.characteristic.getIcon(), ItemIcon.Size.Small) },
-            text = { Text(skill.name) }
+            text = { Text(skill.name) },
         )
     }
 }

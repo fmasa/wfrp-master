@@ -10,7 +10,10 @@ import androidx.compose.ui.text.font.FontWeight
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
 
 @Composable
-fun SingleLineTextValue(label: String, value: AnnotatedString) {
+fun SingleLineTextValue(
+    label: String,
+    value: AnnotatedString,
+) {
     if (value.isBlank()) return
 
     Row {
@@ -24,6 +27,9 @@ fun SingleLineTextValue(label: String, value: AnnotatedString) {
 }
 
 @Composable
-fun SingleLineTextValue(label: String, value: String) {
+fun SingleLineTextValue(
+    label: String,
+    value: String,
+) {
     SingleLineTextValue(label, AnnotatedString(value))
 }

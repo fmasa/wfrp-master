@@ -14,6 +14,6 @@ fun HorizontalLine(modifier: Modifier = Modifier) {
     Divider(
         color = MaterialTheme.colors.onBackground.copy(ContentAlpha.disabled),
         thickness = (2f / LocalDensity.current.density).dp,
-        modifier = modifier.padding(top = 20.dp)
+        modifier = modifier.padding(top = 20.dp),
     )
 }

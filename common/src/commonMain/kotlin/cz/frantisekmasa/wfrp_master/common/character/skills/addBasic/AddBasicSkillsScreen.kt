@@ -15,7 +15,6 @@ import dev.icerock.moko.resources.compose.stringResource
 class AddBasicSkillsScreen(
     private val characterId: CharacterId,
 ) : Screen {
-
     object FormData : HydratedFormData<Unit> {
         override fun isValid(): Boolean = true
 
@@ -45,7 +44,7 @@ class AddBasicSkillsScreen(
                     stringResource(
                         Str.skills_messages_add_basic_skills_explanation,
                         state.basicSkillsCount,
-                    )
+                    ),
                 )
             }
         }

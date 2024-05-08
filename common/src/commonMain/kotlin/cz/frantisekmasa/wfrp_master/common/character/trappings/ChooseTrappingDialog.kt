@@ -46,15 +46,16 @@ fun ChooseTrappingDialog(
         ) { trapping ->
             TrappingItem(
                 trapping,
-                modifier = Modifier.clickable(
-                    onClick = {
-                        saving = false
-                        coroutineScope.launch(Dispatchers.IO) {
-                            onSelected(trapping)
-                            onDismissRequest()
-                        }
-                    }
-                ),
+                modifier =
+                    Modifier.clickable(
+                        onClick = {
+                            saving = false
+                            coroutineScope.launch(Dispatchers.IO) {
+                                onSelected(trapping)
+                                onDismissRequest()
+                            }
+                        },
+                    ),
             )
         }
     }

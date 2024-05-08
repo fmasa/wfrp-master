@@ -12,19 +12,24 @@ import java.util.prefs.Preferences
 actual class SettingsStorage() {
     private val preferences = Preferences.userRoot().node("wfrp-master")
 
-    private val data = callbackFlow<Preferences> {
-        trySend(preferences)
+    private val data =
+        callbackFlow<Preferences> {
+            trySend(preferences)
 
-        val listener = PreferenceChangeListener {
-            trySend(it.node)
+            val listener =
+                PreferenceChangeListener {
+                    trySend(it.node)
+                }
+
+            preferences.addPreferenceChangeListener(listener)
+
+            awaitClose { preferences.removePreferenceChangeListener(listener) }
         }
 
-        preferences.addPreferenceChangeListener(listener)
-
-        awaitClose { preferences.removePreferenceChangeListener(listener) }
-    }
-
-    actual suspend fun <T> edit(key: SettingsKey<T>, update: (T?) -> T?) {
+    actual suspend fun <T> edit(
+        key: SettingsKey<T>,
+        update: (T?) -> T?,
+    ) {
         val newValue = update(key.get(preferences))
 
         if (newValue == null) {
@@ -50,35 +55,40 @@ actual class SettingsStorage() {
 actual class SettingsKey<T>(
     val name: String,
     val set: (Preferences, T) -> Unit,
-    val get: (Preferences) -> T?
+    val get: (Preferences) -> T?,
 )
 
-actual fun booleanSettingsKey(name: String): SettingsKey<Boolean> = SettingsKey(
-    name = name,
-    get = { if (name in it.keys()) it.getBoolean(name, false) else null },
-    set = { preferences, value -> preferences.putBoolean(name, value) },
-)
+actual fun booleanSettingsKey(name: String): SettingsKey<Boolean> =
+    SettingsKey(
+        name = name,
+        get = { if (name in it.keys()) it.getBoolean(name, false) else null },
+        set = { preferences, value -> preferences.putBoolean(name, value) },
+    )
 
-actual fun stringSetKey(name: String): SettingsKey<Set<String>> = SettingsKey(
-    name = name,
-    get = { preferences ->
-        if (name in preferences.keys())
-            preferences.get(name, "")
-                .split(',')
-                .map { it.decodeBase64String() }
-                .toSet()
-        else null
-    },
-    set = { preferences, value ->
-        preferences.put(
-            name,
-            value.joinToString(",") { it.encodeBase64() },
-        )
-    },
-)
+actual fun stringSetKey(name: String): SettingsKey<Set<String>> =
+    SettingsKey(
+        name = name,
+        get = { preferences ->
+            if (name in preferences.keys()) {
+                preferences.get(name, "")
+                    .split(',')
+                    .map { it.decodeBase64String() }
+                    .toSet()
+            } else {
+                null
+            }
+        },
+        set = { preferences, value ->
+            preferences.put(
+                name,
+                value.joinToString(",") { it.encodeBase64() },
+            )
+        },
+    )
 
-actual fun stringKey(name: String): SettingsKey<String> = SettingsKey(
-    name = name,
-    get = { if (name in it.keys()) it.get(name, "") else null },
-    set = { preferences, value -> preferences.put(name, value) },
-)
+actual fun stringKey(name: String): SettingsKey<String> =
+    SettingsKey(
+        name = name,
+        get = { if (name in it.keys()) it.get(name, "") else null },
+        set = { preferences, value -> preferences.put(name, value) },
+    )

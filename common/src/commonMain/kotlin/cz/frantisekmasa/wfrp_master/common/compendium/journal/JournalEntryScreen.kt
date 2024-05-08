@@ -28,8 +28,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
 import com.benasher44.uuid.Uuid
-import com.halilibo.richtext.markdown.Markdown
-import com.halilibo.richtext.ui.RichText
+import com.halilibo.richtext.commonmark.Markdown
+import com.halilibo.richtext.ui.material.RichText
 import cz.frantisekmasa.wfrp_master.common.Str
 import cz.frantisekmasa.wfrp_master.common.compendium.VisibilitySwitchBar
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.JournalEntry
@@ -41,7 +41,7 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.flow.collectWithLifecycle
 import cz.frantisekmasa.wfrp_master.common.core.ui.navigation.LocalNavigationTransaction
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.FullScreenProgress
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
-import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.VisualOnlyIconDescription
+import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.VISUAL_ONLY_ICON_DESCRIPTION
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.rememberScreenModel
 import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.IconAction
 import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.LocalPersistentSnackbarHolder
@@ -54,14 +54,14 @@ class JournalEntryScreen(
     private val partyId: PartyId,
     private val entryId: Uuid,
 ) : Screen {
-
     @Composable
     override fun Content() {
         val screenModel: JournalScreenModel = rememberScreenModel(arg = partyId)
 
         val isGameMaster = screenModel.isGameMaster.collectWithLifecycle(null).value
-        val entryOrError = remember { screenModel.get(entryId) }
-            .collectWithLifecycle(null).value
+        val entryOrError =
+            remember { screenModel.get(entryId) }
+                .collectWithLifecycle(null).value
 
         if (entryOrError == null || isGameMaster == null) {
             FullScreenProgress()
@@ -108,7 +108,7 @@ class JournalEntryScreen(
                         }
                     },
                 )
-            }
+            },
         ) {
             Column(Modifier.verticalScroll(rememberScrollState())) {
                 if (isGameMaster) {
@@ -121,7 +121,7 @@ class JournalEntryScreen(
                 Column(
                     Modifier
                         .padding(Spacing.bodyPadding)
-                        .fillMaxWidth()
+                        .fillMaxWidth(),
                 ) {
                     if (isGameMaster) {
                         val coroutineScope = rememberCoroutineScope()
@@ -139,7 +139,7 @@ class JournalEntryScreen(
 
                         Box(
                             Modifier.align(Alignment.CenterHorizontally)
-                                .padding(bottom = Spacing.medium)
+                                .padding(bottom = Spacing.medium),
                         ) {
                             if (entry.isPinned) {
                                 Button(
@@ -167,7 +167,7 @@ class JournalEntryScreen(
                             remember(entry.parents) {
                                 entry.parents
                                     .joinToString(" ${JournalEntry.PARENT_SEPARATOR} ")
-                            }
+                            },
                         )
                         Markdown(entry.text)
                     }
@@ -191,8 +191,8 @@ class JournalEntryScreen(
         Box(Modifier.padding(end = Spacing.small)) {
             Icon(
                 Icons.Rounded.PushPin,
-                VisualOnlyIconDescription,
-                Modifier.size(16.dp)
+                VISUAL_ONLY_ICON_DESCRIPTION,
+                Modifier.size(16.dp),
             )
         }
     }

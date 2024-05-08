@@ -25,16 +25,20 @@ internal fun TimesTakenForm(
     onSave: suspend (timesTaken: Int) -> Unit,
     onDismissRequest: () -> Unit,
 ) {
-    val formData = TimesTakenForm.FormData(
-        rememberSaveable { mutableStateOf(existingTalent?.taken ?: 1) }
-    )
+    val formData =
+        TimesTakenForm.FormData(
+            rememberSaveable { mutableStateOf(existingTalent?.taken ?: 1) },
+        )
 
     FormDialog(
-        title = stringResource(
-            if (existingTalent != null)
-                Str.talents_title_edit
-            else Str.talents_title_new
-        ),
+        title =
+            stringResource(
+                if (existingTalent != null) {
+                    Str.talents_title_edit
+                } else {
+                    Str.talents_title_new
+                },
+            ),
         formData = formData,
         onDismissRequest = onDismissRequest,
         onSave = onSave,
@@ -51,7 +55,7 @@ internal fun TimesTakenForm(
                     if (formData.timesTaken > 1) {
                         formData.timesTaken--
                     }
-                }
+                },
             )
         }
     }
@@ -62,7 +66,6 @@ object TimesTakenForm {
     data class FormData(
         private val timesTakenState: MutableState<Int>,
     ) : HydratedFormData<Int> {
-
         var timesTaken by timesTakenState
 
         override fun isValid(): Boolean = true

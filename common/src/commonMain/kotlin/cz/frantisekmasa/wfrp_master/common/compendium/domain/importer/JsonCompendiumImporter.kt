@@ -18,13 +18,14 @@ import kotlinx.serialization.json.decodeFromStream
 import java.io.InputStream
 
 class JsonCompendiumImporter(stream: InputStream) : CompendiumImporter {
-    private val data: Result<CompendiumBundle> = runCatching {
-        try {
-            json.decodeFromStream(stream)
-        } catch (e: IllegalArgumentException) {
-            throw ExceptionWithUserMessage(e.message ?: "Unknown error", e)
+    private val data: Result<CompendiumBundle> =
+        runCatching {
+            try {
+                json.decodeFromStream(stream)
+            } catch (e: IllegalArgumentException) {
+                throw ExceptionWithUserMessage(e.message ?: "Unknown error", e)
+            }
         }
-    }
 
     override suspend fun importSkills(): List<Skill> {
         return data.getOrThrow().skills.map { it.toSkill() }
@@ -59,8 +60,9 @@ class JsonCompendiumImporter(stream: InputStream) : CompendiumImporter {
     }
 
     companion object {
-        private val json = Json {
-            ignoreUnknownKeys = true
-        }
+        private val json =
+            Json {
+                ignoreUnknownKeys = true
+            }
     }
 }

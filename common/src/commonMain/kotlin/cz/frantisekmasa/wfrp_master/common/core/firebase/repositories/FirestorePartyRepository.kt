@@ -19,9 +19,9 @@ import io.github.aakira.napier.Napier
 import kotlinx.coroutines.flow.map
 
 class FirestorePartyRepository(
-    private val firestore: FirebaseFirestore
+    private val firestore: FirebaseFirestore,
 ) : PartyRepository {
-    private val parties = firestore.collection(Schema.Parties)
+    private val parties = firestore.collection(Schema.PARTIES)
 
     override suspend fun save(party: Party) {
         Napier.d("Saving party $party to firestore")
@@ -45,7 +45,10 @@ class FirestorePartyRepository(
         }
     }
 
-    override fun save(transaction: Transaction, party: Party) {
+    override fun save(
+        transaction: Transaction,
+        party: Party,
+    ) {
         Napier.d("Saving party $party to firestore")
 
         transaction.set(
@@ -57,9 +60,11 @@ class FirestorePartyRepository(
         )
     }
 
-    override suspend fun update(id: PartyId, mutator: (Party) -> Party) {
+    override suspend fun update(
+        id: PartyId,
+        mutator: (Party) -> Party,
+    ) {
         firestore.runTransaction {
-
             val party = get(this, id)
             val updatedParty = mutator(party)
 
@@ -69,7 +74,10 @@ class FirestorePartyRepository(
         }
     }
 
-    override suspend fun get(transaction: Transaction, id: PartyId): Party {
+    override suspend fun get(
+        transaction: Transaction,
+        id: PartyId,
+    ): Party {
         val snapshot = transaction.get(parties.document(id.toString()))
 
         if (!snapshot.exists) {
@@ -83,14 +91,17 @@ class FirestorePartyRepository(
         parties.document(id.toString())
             .snapshots
             .map { snapshot ->
-                if (snapshot.exists)
+                if (snapshot.exists) {
                     snapshot.data(Party.serializer()).right()
-                else PartyNotFound(id).left()
+                } else {
+                    PartyNotFound(id).left()
+                }
             }
 
-    override fun forUserLive(userId: UserId) = queryForUser(userId)
-        .snapshots
-        .map { it.toPartyList() }
+    override fun forUserLive(userId: UserId) =
+        queryForUser(userId)
+            .snapshots
+            .map { it.toPartyList() }
 
     override suspend fun forUser(userId: UserId) =
         queryForUser(userId)
@@ -101,7 +112,8 @@ class FirestorePartyRepository(
         return documents.map { it.data(Party.serializer()) }
     }
 
-    private fun queryForUser(userId: UserId) = parties
-        .where("users", arrayContains = userId.toString())
-        .where("archived", equalTo = false)
+    private fun queryForUser(userId: UserId) =
+        parties
+            .where("users", arrayContains = userId.toString())
+            .where("archived", equalTo = false)
 }

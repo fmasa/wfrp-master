@@ -6,7 +6,6 @@ import kotlin.test.assertEquals
 import kotlin.test.assertSame
 
 class ImperialDateTest {
-
     @Test
     fun `first regular day of calendar is Marktag`() {
         assertSame(ImperialDate.DayOfWeek.MARKTAG, ImperialDate(1).dayOfWeek)
@@ -27,7 +26,7 @@ class ImperialDateTest {
         assertSame(ImperialDate.DayOfWeek.MARKTAG, ImperialDate(1).dayOfWeek)
         assertSame(
             ImperialDate.DayOfWeek.AUBENTAG,
-            ImperialDate.of(1, 1, 9).removeDay().removeDay().dayOfWeek
+            ImperialDate.of(1, 1, 9).removeDay().removeDay().dayOfWeek,
         )
     }
 

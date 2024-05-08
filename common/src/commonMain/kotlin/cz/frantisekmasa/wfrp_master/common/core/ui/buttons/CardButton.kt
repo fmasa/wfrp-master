@@ -11,7 +11,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun CardButton(text: String, onClick: () -> Unit) {
+fun CardButton(
+    text: String,
+    onClick: () -> Unit,
+) {
     Box(
         contentAlignment = Alignment.TopCenter,
         modifier = Modifier.fillMaxWidth().padding(top = 16.dp),

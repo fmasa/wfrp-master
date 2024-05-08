@@ -106,9 +106,10 @@ fun SelectBoxToggle(
             modifier = Modifier.clickable(onClick = onClick),
         ) {
             Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(Spacing.medium),
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(Spacing.medium),
                 horizontalArrangement = Arrangement.SpaceBetween,
             ) {
                 Row(Modifier.weight(1f), content = content)

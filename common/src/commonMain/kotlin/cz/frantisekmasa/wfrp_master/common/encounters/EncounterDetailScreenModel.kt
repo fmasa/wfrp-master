@@ -23,9 +23,11 @@ class EncounterDetailScreenModel(
 
     suspend fun remove() {
         parties.update(encounterId.partyId) { party ->
-            if (party.activeCombat?.encounterId == encounterId.encounterId)
+            if (party.activeCombat?.encounterId == encounterId.encounterId) {
                 party.endCombat()
-            else party
+            } else {
+                party
+            }
         }
 
         encounters.remove(encounterId)

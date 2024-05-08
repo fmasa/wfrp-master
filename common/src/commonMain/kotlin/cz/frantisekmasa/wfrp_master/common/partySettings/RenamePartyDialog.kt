@@ -98,11 +98,11 @@ fun RenamePartyDialog(
 
                                     saving = false
                                 }
-                            }
+                            },
                         )
-                    }
+                    },
                 )
-            }
+            },
         ) {
             Column(
                 Modifier

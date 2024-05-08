@@ -32,7 +32,9 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import cafe.adriel.voyager.core.screen.Screen
 import com.google.accompanist.permissions.PermissionState
+import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
+import com.google.accompanist.permissions.shouldShowRationale
 import cz.frantisekmasa.wfrp_master.common.Str
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.Invitation
 import cz.frantisekmasa.wfrp_master.common.core.ui.buttons.BackButton
@@ -57,17 +59,18 @@ actual class InvitationScannerScreen : Screen {
                 )
             },
             modifier = Modifier.fillMaxHeight(),
-        ) {
+        ) { contentPadding ->
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center,
-                modifier = Modifier.fillMaxHeight()
+                modifier = Modifier.fillMaxHeight().padding(contentPadding),
             ) {
                 val screenModel: InvitationScreenModel = rememberScreenModel()
 
-                val (invitation, setInvitation) = rememberSaveable {
-                    mutableStateOf<Invitation?>(null)
-                }
+                val (invitation, setInvitation) =
+                    rememberSaveable {
+                        mutableStateOf<Invitation?>(null)
+                    }
 
                 when {
                     invitation != null -> {
@@ -87,12 +90,15 @@ actual class InvitationScannerScreen : Screen {
     }
 
     @Composable
-    private fun Scanner(screenModel: InvitationScreenModel, onSuccessfulScan: (Invitation) -> Unit) {
+    private fun Scanner(
+        screenModel: InvitationScreenModel,
+        onSuccessfulScan: (Invitation) -> Unit,
+    ) {
         val coroutineScope = rememberCoroutineScope()
         val camera = rememberPermissionState(Manifest.permission.CAMERA)
 
         when {
-            camera.hasPermission -> {
+            camera.status.isGranted -> {
                 SubheadBar(stringResource(Str.parties_messages_qr_code_scanning_prompt))
                 QrCodeScanner(
                     modifier = Modifier.fillMaxSize(),
@@ -104,7 +110,7 @@ actual class InvitationScannerScreen : Screen {
                     },
                 )
             }
-            !camera.permissionRequested || camera.shouldShowRationale -> PermissionRequestScreen(camera)
+            camera.status.shouldShowRationale -> PermissionRequestScreen(camera)
             else -> PermissionDeniedScreen()
         }
     }
@@ -112,9 +118,7 @@ actual class InvitationScannerScreen : Screen {
     @Composable
     private fun PermissionRequestScreen(camera: PermissionState) {
         ScreenBody {
-            if (!camera.permissionRequested) {
-                SideEffect { camera.launchPermissionRequest() }
-            }
+            SideEffect { camera.launchPermissionRequest() }
 
             Text(
                 stringResource(Str.permissions_camera_required),
@@ -175,7 +179,6 @@ actual class InvitationScannerScreen : Screen {
 
     @Composable
     private fun Alternative() {
-
         HorizontalLine()
 
         Text(
@@ -190,7 +193,7 @@ actual class InvitationScannerScreen : Screen {
             Intent().apply {
                 action = Settings.ACTION_APPLICATION_DETAILS_SETTINGS
                 data = Uri.fromParts("package", packageName, null)
-            }
+            },
         )
     }
 }

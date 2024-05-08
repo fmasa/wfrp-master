@@ -35,7 +35,6 @@ data class InventoryItem(
     val itemFlaws: Set<ItemFlaw> = emptySet(),
     override val compendiumId: UuidAsString? = null,
 ) : CharacterItem<InventoryItem, Trapping> {
-
     init {
         require(quantity > 0) { "Quantity must be greater than 0" }
         note.requireMaxLength(NOTE_MAX_LENGTH, "note")
@@ -65,45 +64,52 @@ data class InventoryItem(
 
     val totalEncumbrance: Encumbrance get() = encumbrance * quantity
 
-    override fun updateFromCompendium(compendiumItem: Trapping): InventoryItem = copy(
-        name = compendiumItem.name,
-        encumbrance = compendiumItem.encumbrance + encumbranceModifier(itemQualities, itemFlaws),
-        trappingType = trappingType?.updateFromCompendium(compendiumItem.trappingType)
-            ?: TrappingType.fromCompendium(compendiumItem.trappingType)
-    )
+    override fun updateFromCompendium(compendiumItem: Trapping): InventoryItem =
+        copy(
+            name = compendiumItem.name,
+            encumbrance = compendiumItem.encumbrance + encumbranceModifier(itemQualities, itemFlaws),
+            trappingType =
+                trappingType?.updateFromCompendium(compendiumItem.trappingType)
+                    ?: TrappingType.fromCompendium(compendiumItem.trappingType),
+        )
 
     fun update(
         itemQualities: Set<ItemQuality>,
         itemFlaws: Set<ItemFlaw>,
         quantity: Int,
         note: String,
-    ): InventoryItem = copy(
-        encumbrance = encumbrance -
-            encumbranceModifier(this.itemQualities, this.itemFlaws) +
-            encumbranceModifier(this.itemQualities, this.itemFlaws),
-        itemQualities = itemQualities,
-        itemFlaws = itemFlaws,
-        quantity = quantity,
-        note = note,
-    )
+    ): InventoryItem =
+        copy(
+            encumbrance =
+                encumbrance -
+                    encumbranceModifier(this.itemQualities, this.itemFlaws) +
+                    encumbranceModifier(this.itemQualities, this.itemFlaws),
+            itemQualities = itemQualities,
+            itemFlaws = itemFlaws,
+            quantity = quantity,
+            note = note,
+        )
 
     override fun unlinkFromCompendium() = copy(compendiumId = null)
 
-    fun duplicate(): InventoryItem = copy(
-        id = uuid4(),
-        name = if (compendiumId == null) duplicateName(name) else name,
-    )
+    fun duplicate(): InventoryItem =
+        copy(
+            id = uuid4(),
+            name = if (compendiumId == null) duplicateName(name) else name,
+        )
 
     fun addToContainer(containerId: InventoryItemId): InventoryItem {
         return when (trappingType) {
-            is TrappingType.WearableTrapping -> copy(
-                trappingType = trappingType.takeOff(),
-                containerId = containerId,
-            )
-            is TrappingType.Weapon -> copy(
-                trappingType = trappingType.unequip(),
-                containerId = containerId,
-            )
+            is TrappingType.WearableTrapping ->
+                copy(
+                    trappingType = trappingType.takeOff(),
+                    containerId = containerId,
+                )
+            is TrappingType.Weapon ->
+                copy(
+                    trappingType = trappingType.unequip(),
+                    containerId = containerId,
+                )
             else -> copy(containerId = containerId)
         }
     }
@@ -137,7 +143,7 @@ data class InventoryItem(
 
         private fun encumbranceModifier(
             itemQualities: Set<ItemQuality>,
-            itemFlaws: Set<ItemFlaw>
+            itemFlaws: Set<ItemFlaw>,
         ): Encumbrance {
             var modifier = Encumbrance.Zero
 

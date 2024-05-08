@@ -26,17 +26,19 @@ data class Trait(
     val specificationValues: Map<String, String>,
     val description: String,
 ) : CharacterItem<Trait, CompendiumTrait>, EffectSource {
-
     @Stable
-    val evaluatedName get(): String = specificationValues
-        .toList()
-        .fold(name) { name, (search, replacement) ->
-            val lastIndex = name.lastIndexOf(search)
+    val evaluatedName get(): String =
+        specificationValues
+            .toList()
+            .fold(name) { name, (search, replacement) ->
+                val lastIndex = name.lastIndexOf(search)
 
-            if (lastIndex != -1)
-                name.replaceRange(lastIndex, lastIndex + search.length, replacement)
-            else name
-        }
+                if (lastIndex != -1) {
+                    name.replaceRange(lastIndex, lastIndex + search.length, replacement)
+                } else {
+                    name
+                }
+            }
 
     @Stable
     override fun getEffects(translator: Translator): List<CharacterEffect> {

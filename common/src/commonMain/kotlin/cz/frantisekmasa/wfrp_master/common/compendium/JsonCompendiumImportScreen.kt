@@ -83,17 +83,18 @@ class JsonCompendiumImportScreen(
 
         val errorJsonImportFailed = stringResource(Str.compendium_messages_json_import_failed)
         val errorOutOfMemory = stringResource(Str.compendium_messages_out_of_memory)
-        val fileChooser = ImportFileChooser(
-            onStateChange = { importState = it },
-            importerFactory = { JsonCompendiumImporter(it.stream) },
-            errorMessageFactory = {
-                when (it) {
-                    is ExceptionWithUserMessage -> it.message ?: errorJsonImportFailed
-                    is OutOfMemoryError -> errorOutOfMemory
-                    else -> errorJsonImportFailed
-                }
-            }
-        )
+        val fileChooser =
+            ImportFileChooser(
+                onStateChange = { importState = it },
+                importerFactory = { JsonCompendiumImporter(it.stream) },
+                errorMessageFactory = {
+                    when (it) {
+                        is ExceptionWithUserMessage -> it.message ?: errorJsonImportFailed
+                        is OutOfMemoryError -> errorOutOfMemory
+                        else -> errorJsonImportFailed
+                    }
+                },
+            )
 
         Column(
             modifier = Modifier.fillMaxSize().padding(Spacing.bodyPadding),
@@ -121,7 +122,7 @@ class JsonCompendiumImportScreen(
                 stringResource(Str.compendium_assurance),
                 color = MaterialTheme.colors.onSurface.copy(alpha = ContentAlpha.medium),
                 textAlign = TextAlign.Center,
-                style = MaterialTheme.typography.body2
+                style = MaterialTheme.typography.body2,
             )
         }
     }

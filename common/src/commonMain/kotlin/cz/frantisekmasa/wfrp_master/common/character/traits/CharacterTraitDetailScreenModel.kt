@@ -18,12 +18,11 @@ class CharacterTraitDetailScreenModel(
     userProvider: UserProvider,
     private val partyRepository: PartyRepository,
 ) : CharacterItemScreenModel<Trait>(
-    characterId,
-    traitRepository,
-    userProvider,
-    partyRepository,
-) {
-
+        characterId,
+        traitRepository,
+        userProvider,
+        partyRepository,
+    ) {
     suspend fun saveTrait(
         trait: Trait,
         existingTrait: Trait?,

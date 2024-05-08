@@ -78,7 +78,7 @@ class NpcsScreen(
                                 screenModel.archiveNpc(npcToRemove)
                                 processing = false
                             }
-                        }
+                        },
                     ) {
                         Text(stringResource(Str.common_ui_button_remove).uppercase())
                     }
@@ -87,7 +87,7 @@ class NpcsScreen(
                     TextButton(onClick = { setNpcToRemove(null) }) {
                         Text(stringResource(Str.common_ui_button_cancel).uppercase())
                     }
-                }
+                },
             )
         }
 
@@ -109,13 +109,13 @@ class NpcsScreen(
                 FloatingActionButton(
                     onClick = {
                         navigation.navigate(
-                            CharacterCreationScreen(partyId, CharacterType.NPC, null)
+                            CharacterCreationScreen(partyId, CharacterType.NPC, null),
                         )
-                    }
+                    },
                 ) {
                     Icon(Icons.Rounded.Add, stringResource(Str.npcs_button_add_npc))
                 }
-            }
+            },
         ) { npc ->
             Column {
                 val unknownErrorMessage = stringResource(Str.messages_error_unknown)
@@ -125,24 +125,25 @@ class NpcsScreen(
                     onClick = {
                         navigation.navigate(CharacterDetailScreen(CharacterId(partyId, npc.id)))
                     },
-                    items = listOf(
-                        ContextMenu.Item(stringResource(Str.common_ui_button_duplicate)) {
-                            coroutineScope.launch(Dispatchers.IO) {
-                                processing = true
-                                try {
-                                    screenModel.duplicate(npc)
-                                } catch (e: Exception) {
-                                    Napier.e("Failed to duplicate NPC", e)
-                                    snackbarHolder.showSnackbar(unknownErrorMessage)
-                                } finally {
-                                    processing = false
+                    items =
+                        listOf(
+                            ContextMenu.Item(stringResource(Str.common_ui_button_duplicate)) {
+                                coroutineScope.launch(Dispatchers.IO) {
+                                    processing = true
+                                    try {
+                                        screenModel.duplicate(npc)
+                                    } catch (e: Exception) {
+                                        Napier.e("Failed to duplicate NPC", e)
+                                        snackbarHolder.showSnackbar(unknownErrorMessage)
+                                    } finally {
+                                        processing = false
+                                    }
                                 }
-                            }
-                        },
-                        ContextMenu.Item(stringResource(Str.common_ui_button_remove)) {
-                            setNpcToRemove(npc)
-                        }
-                    )
+                            },
+                            ContextMenu.Item(stringResource(Str.common_ui_button_remove)) {
+                                setNpcToRemove(npc)
+                            },
+                        ),
                 ) {
                     ListItem(
                         icon = {

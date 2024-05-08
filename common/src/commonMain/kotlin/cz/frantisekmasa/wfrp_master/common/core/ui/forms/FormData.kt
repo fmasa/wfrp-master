@@ -9,7 +9,6 @@ interface FormData {
 }
 
 interface HydratedFormData<T> : FormData {
-
     /**
      * Returns value hydrated from form fields or throws exception.
      *

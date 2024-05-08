@@ -10,8 +10,8 @@ import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import com.halilibo.richtext.markdown.Markdown
-import com.halilibo.richtext.ui.RichText
+import com.halilibo.richtext.commonmark.Markdown
+import com.halilibo.richtext.ui.material.RichText
 import cz.frantisekmasa.wfrp_master.common.Str
 import cz.frantisekmasa.wfrp_master.common.core.domain.Characteristic
 import cz.frantisekmasa.wfrp_master.common.core.domain.localizedName
@@ -33,7 +33,7 @@ fun SkillDetail(
                 navigationIcon = { CloseButton(onDismissRequest) },
                 title = { Text(skill.name) },
             )
-        }
+        },
     ) {
         Column(Modifier.verticalScroll(rememberScrollState())) {
             subheadBar()
@@ -61,11 +61,14 @@ fun SkillDetailBody(
 
         SingleLineTextValue(
             label = stringResource(Str.skills_label_advanced),
-            value = stringResource(
-                if (advanced)
-                    Str.common_ui_boolean_yes
-                else Str.common_ui_boolean_no,
-            ),
+            value =
+                stringResource(
+                    if (advanced) {
+                        Str.common_ui_boolean_yes
+                    } else {
+                        Str.common_ui_boolean_no
+                    },
+                ),
         )
 
         RichText(Modifier.padding(top = Spacing.small)) {

@@ -21,18 +21,18 @@ fun CardContainer(
     Box(
         Modifier
             .padding(vertical = 6.dp)
-            .then(modifier)
+            .then(modifier),
     ) {
         Card(
             modifier = Modifier.fillMaxWidth(),
             elevation = 2.dp,
-            shape = RoundedCornerShape(4.dp)
+            shape = RoundedCornerShape(4.dp),
         ) {
             Column(
                 Modifier
                     .padding(vertical = 16.dp, horizontal = 8.dp)
                     .padding(bodyPadding),
-                content = content
+                content = content,
             )
         }
     }

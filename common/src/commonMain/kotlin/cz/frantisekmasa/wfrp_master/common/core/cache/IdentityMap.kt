@@ -3,7 +3,6 @@ package cz.frantisekmasa.wfrp_master.common.core.cache
 import kotlin.jvm.Synchronized
 
 class IdentityMap<K, V>(private val maxEntries: Int) {
-
     private var order = ArrayDeque<K>()
     private val items = mutableMapOf<K, V>()
 
@@ -12,7 +11,10 @@ class IdentityMap<K, V>(private val maxEntries: Int) {
     }
 
     @Synchronized
-    fun getOrPut(key: K, defaultValue: () -> V): V {
+    fun getOrPut(
+        key: K,
+        defaultValue: () -> V,
+    ): V {
         if (items.containsKey(key)) {
             return items.getValue(key)
         }

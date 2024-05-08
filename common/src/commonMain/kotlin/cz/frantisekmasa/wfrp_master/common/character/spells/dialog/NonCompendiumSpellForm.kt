@@ -39,11 +39,14 @@ internal fun NonCompendiumSpellForm(
     val formData = NonCompendiumSpellFormData.fromSpell(existingSpell)
 
     FormDialog(
-        title = stringResource(
-            if (existingSpell != null)
-                Str.spells_title_edit
-            else Str.spells_title_new
-        ),
+        title =
+            stringResource(
+                if (existingSpell != null) {
+                    Str.spells_title_edit
+                } else {
+                    Str.spells_title_new
+                },
+            ),
         onDismissRequest = onDismissRequest,
         formData = formData,
         onSave = onSave,
@@ -52,14 +55,15 @@ internal fun NonCompendiumSpellForm(
             label = stringResource(Str.spells_label_name),
             value = formData.name,
             validate = validate,
-            maxLength = Spell.NAME_MAX_LENGTH
+            maxLength = Spell.NAME_MAX_LENGTH,
         )
 
         Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = Spacing.small),
-            contentAlignment = Alignment.Center
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .padding(top = Spacing.small),
+            contentAlignment = Alignment.Center,
         ) {
             CheckboxWithText(
                 stringResource(Str.spells_label_memorized),
@@ -73,8 +77,9 @@ internal fun NonCompendiumSpellForm(
             label = stringResource(Str.spells_label_lore),
             value = formData.lore.value,
             onValueChange = { formData.lore.value = it },
-            items = remember(lores) { lores.sortedBy { it.second } } +
-                (null to stringResource(Str.spells_lores_other)),
+            items =
+                remember(lores) { lores.sortedBy { it.second } } +
+                    (null to stringResource(Str.spells_lores_other)),
         )
 
         TextInput(
@@ -130,34 +135,36 @@ private class NonCompendiumSpellFormData(
 ) : HydratedFormData<Spell> {
     companion object {
         @Composable
-        fun fromSpell(item: Spell?): NonCompendiumSpellFormData = NonCompendiumSpellFormData(
-            id = item?.id ?: uuid4(),
-            memorized = rememberSaveable { mutableStateOf(item?.memorized ?: false) },
-            name = inputValue(item?.name ?: "", Rules.NotBlank()),
-            range = inputValue(item?.range ?: ""),
-            target = inputValue(item?.target ?: ""),
-            duration = inputValue(item?.duration ?: ""),
-            castingNumber = inputValue(
-                item?.castingNumber?.toString() ?: "",
-                Rules.NonNegativeInteger(),
-            ),
-            effect = inputValue(item?.effect ?: ""),
-            lore = rememberSaveable { mutableStateOf(item?.lore) },
-        )
+        fun fromSpell(item: Spell?): NonCompendiumSpellFormData =
+            NonCompendiumSpellFormData(
+                id = item?.id ?: uuid4(),
+                memorized = rememberSaveable { mutableStateOf(item?.memorized ?: false) },
+                name = inputValue(item?.name ?: "", Rules.NotBlank()),
+                range = inputValue(item?.range ?: ""),
+                target = inputValue(item?.target ?: ""),
+                duration = inputValue(item?.duration ?: ""),
+                castingNumber =
+                    inputValue(
+                        item?.castingNumber?.toString() ?: "",
+                        Rules.NonNegativeInteger(),
+                    ),
+                effect = inputValue(item?.effect ?: ""),
+                lore = rememberSaveable { mutableStateOf(item?.lore) },
+            )
     }
 
-    override fun toValue(): Spell = Spell(
-        id = id,
-        name = name.value,
-        memorized = memorized.value,
-        range = range.value,
-        target = target.value,
-        lore = lore.value,
-        duration = duration.value,
-        castingNumber = castingNumber.value.toInt(),
-        effect = effect.value,
-    )
+    override fun toValue(): Spell =
+        Spell(
+            id = id,
+            name = name.value,
+            memorized = memorized.value,
+            range = range.value,
+            target = target.value,
+            lore = lore.value,
+            duration = duration.value,
+            castingNumber = castingNumber.value.toInt(),
+            effect = effect.value,
+        )
 
-    override fun isValid() =
-        listOf(name, range, target, duration, castingNumber, effect).all { it.isValid() }
+    override fun isValid() = listOf(name, range, target, duration, castingNumber, effect).all { it.isValid() }
 }

@@ -21,7 +21,10 @@ interface EncounterRepository {
     /**
      * Creates or updates encounter
      */
-    suspend fun save(partyId: PartyId, vararg encounters: Encounter)
+    suspend fun save(
+        partyId: PartyId,
+        vararg encounters: Encounter,
+    )
 
     /**
      * Returns flow which emits current list of all encounters in party sorted by their position

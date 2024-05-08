@@ -27,11 +27,12 @@ data class TestResult(
         get() = successLevel > 0 || rollValue <= testedValue
 
     val successLevel: Int
-        get() = when (rollValue) {
-            in 1..5 -> 1
-            in 96..100 -> -1
-            else -> testedValue / 10 - rollValue / 10
-        }
+        get() =
+            when (rollValue) {
+                in 1..5 -> 1
+                in 96..100 -> -1
+                else -> testedValue / 10 - rollValue / 10
+            }
 
     val successLevelText: String
         get() = (if (isSuccess) "+" else "") + successLevel
