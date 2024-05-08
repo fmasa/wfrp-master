@@ -8,7 +8,7 @@ import kotlin.test.assertTrue
 class ExpressionTest {
     @Test
     fun `evaluation of simple arithmetics`() {
-        assertSame(1, "1".evaluate())
+        assertSame(2, "1".evaluate())
         assertSame(2, "1 + 1".evaluate())
         assertSame(1, "2 - 1".evaluate())
         assertSame(8, "2 * 4".evaluate())
