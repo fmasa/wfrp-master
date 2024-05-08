@@ -44,5 +44,8 @@
 -keep, allowobfuscation, allowoptimization class * extends org.kodein.type.TypeReference
 -keep, allowobfuscation, allowoptimization class * extends org.kodein.type.JVMAbstractTypeToken$Companion$WrappingTest
 
+# See https://github.com/kosi-libs/Kodein/issues/205#issuecomment-510069695
+-keep, allowobfuscation, allowoptimization interface cz.frantisekmasa.wfrp_master.**
+
 -dontwarn com.gemalto.jp2.JP2Decoder
 -dontwarn org.slf4j.impl.StaticLoggerBinder
