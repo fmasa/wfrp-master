@@ -358,6 +358,8 @@ val appModule =
                 instance(),
                 instance(),
                 instance(),
+                instance(),
+                instance(),
             )
         }
         bindFactory { partyId: PartyId ->

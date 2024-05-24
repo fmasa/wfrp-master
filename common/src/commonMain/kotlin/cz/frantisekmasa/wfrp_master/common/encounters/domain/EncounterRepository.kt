@@ -13,6 +13,13 @@ interface EncounterRepository {
      */
     suspend fun get(id: EncounterId): Encounter
 
+    suspend fun find(id: EncounterId): Encounter? =
+        try {
+            get(id)
+        } catch (e: EncounterNotFound) {
+            null
+        }
+
     /**
      * Returns Encounter as flow that emits when stored version changes
      */
