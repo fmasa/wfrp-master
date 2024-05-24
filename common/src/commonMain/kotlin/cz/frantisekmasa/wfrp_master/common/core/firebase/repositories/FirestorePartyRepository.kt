@@ -9,6 +9,7 @@ import cz.frantisekmasa.wfrp_master.common.core.domain.party.PartyId
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.PartyNotFound
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.PartyRepository
 import cz.frantisekmasa.wfrp_master.common.core.firebase.Schema
+import cz.frantisekmasa.wfrp_master.common.core.firebase.firestore.setWithTopLevelFieldsMerge
 import dev.gitlive.firebase.firestore.FirebaseFirestore
 import dev.gitlive.firebase.firestore.FirebaseFirestoreException
 import dev.gitlive.firebase.firestore.FirestoreExceptionCode
@@ -28,12 +29,9 @@ class FirestorePartyRepository(
 
         try {
             firestore.runTransaction {
-                set(
+                setWithTopLevelFieldsMerge(
                     documentRef = parties.document(party.id.toString()),
-                    strategy = Party.serializer(),
                     data = party,
-                    merge = true,
-                    encodeDefaults = true,
                 )
             }
         } catch (e: FirebaseFirestoreException) {
@@ -51,12 +49,9 @@ class FirestorePartyRepository(
     ) {
         Napier.d("Saving party $party to firestore")
 
-        transaction.set(
+        transaction.setWithTopLevelFieldsMerge(
             documentRef = parties.document(party.id.toString()),
-            strategy = Party.serializer(),
             data = party,
-            merge = true,
-            encodeDefaults = true,
         )
     }
 

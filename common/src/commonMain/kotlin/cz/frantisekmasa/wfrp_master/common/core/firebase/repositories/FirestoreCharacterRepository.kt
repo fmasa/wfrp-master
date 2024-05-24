@@ -10,6 +10,7 @@ import cz.frantisekmasa.wfrp_master.common.core.domain.character.CharacterType
 import cz.frantisekmasa.wfrp_master.common.core.domain.identifiers.CharacterId
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.PartyId
 import cz.frantisekmasa.wfrp_master.common.core.firebase.Schema
+import cz.frantisekmasa.wfrp_master.common.core.firebase.firestore.setWithTopLevelFieldsMerge
 import dev.gitlive.firebase.firestore.FirebaseFirestore
 import dev.gitlive.firebase.firestore.FirebaseFirestoreException
 import dev.gitlive.firebase.firestore.Transaction
@@ -31,11 +32,9 @@ class FirestoreCharacterRepository(
         Napier.d("Saving character $character in party $partyId to firestore")
         characters(partyId)
             .document(character.id)
-            .set(
+            .setWithTopLevelFieldsMerge(
                 strategy = Character.serializer(),
                 data = character,
-                merge = true,
-                encodeDefaults = true,
             )
     }
 
@@ -46,12 +45,10 @@ class FirestoreCharacterRepository(
     ) {
         Napier.d("Saving character $character in party $partyId to firestore")
 
-        transaction.set(
+        transaction.setWithTopLevelFieldsMerge(
             documentRef = characters(partyId).document(character.id),
             strategy = Character.serializer(),
             data = character,
-            merge = true,
-            encodeDefaults = true,
         )
     }
 

@@ -10,6 +10,7 @@ import cz.frantisekmasa.wfrp_master.common.core.domain.character.CharacterItemRe
 import cz.frantisekmasa.wfrp_master.common.core.domain.identifiers.CharacterId
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.PartyId
 import cz.frantisekmasa.wfrp_master.common.core.firebase.Schema
+import cz.frantisekmasa.wfrp_master.common.core.firebase.firestore.setWithTopLevelFieldsMerge
 import dev.gitlive.firebase.firestore.FirebaseFirestore
 import dev.gitlive.firebase.firestore.Transaction
 import dev.gitlive.firebase.firestore.orderBy
@@ -74,11 +75,9 @@ open class FirestoreCharacterItemRepository<T : CharacterItem<T, *>>(
     ) {
         itemCollection(characterId)
             .document(item.id.toString())
-            .set(
+            .setWithTopLevelFieldsMerge(
                 data = item,
                 strategy = serializer,
-                merge = true,
-                encodeDefaults = true,
             )
     }
 
@@ -87,11 +86,10 @@ open class FirestoreCharacterItemRepository<T : CharacterItem<T, *>>(
         characterId: CharacterId,
         item: T,
     ) {
-        transaction.set(
+        transaction.setWithTopLevelFieldsMerge(
             itemCollection(characterId).document(item.id.toString()),
             data = item,
-            merge = true,
-            encodeDefaults = true,
+            strategy = serializer,
         )
     }
 
