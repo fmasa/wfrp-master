@@ -6,6 +6,7 @@ import cz.frantisekmasa.wfrp_master.common.core.connectivity.CouldNotConnectToBa
 import cz.frantisekmasa.wfrp_master.common.core.domain.identifiers.EncounterId
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.PartyId
 import cz.frantisekmasa.wfrp_master.common.core.firebase.Schema
+import cz.frantisekmasa.wfrp_master.common.core.firebase.firestore.setWithTopLevelFieldsMerge
 import cz.frantisekmasa.wfrp_master.common.encounters.domain.Encounter
 import cz.frantisekmasa.wfrp_master.common.encounters.domain.EncounterNotFound
 import cz.frantisekmasa.wfrp_master.common.encounters.domain.EncounterRepository
@@ -58,11 +59,9 @@ class FirestoreEncounterRepository(
     ) {
         firestore.runTransaction {
             encounters.forEach { encounter ->
-                set(
+                setWithTopLevelFieldsMerge(
                     documentRef = encounters(partyId).document(encounter.id.toString()),
                     data = encounter,
-                    merge = true,
-                    encodeDefaults = true,
                 )
             }
         }

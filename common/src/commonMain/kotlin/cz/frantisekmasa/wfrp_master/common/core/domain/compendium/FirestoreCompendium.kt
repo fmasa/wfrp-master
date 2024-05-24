@@ -8,6 +8,7 @@ import cz.frantisekmasa.wfrp_master.common.compendium.domain.CompendiumItem
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.exceptions.CompendiumItemNotFound
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.PartyId
 import cz.frantisekmasa.wfrp_master.common.core.firebase.Schema
+import cz.frantisekmasa.wfrp_master.common.core.firebase.firestore.setWithTopLevelFieldsMerge
 import dev.gitlive.firebase.firestore.FirebaseFirestore
 import dev.gitlive.firebase.firestore.FirebaseFirestoreException
 import dev.gitlive.firebase.firestore.Transaction
@@ -78,12 +79,10 @@ class FirestoreCompendium<T : CompendiumItem<T>>(
                 chunk.forEach { item ->
                     Napier.d("Saving Compendium item $item to $collectionName compendium of party $partyId")
 
-                    set(
+                    setWithTopLevelFieldsMerge(
                         documentRef = collection(partyId).document(item.id.toString()),
                         strategy = serializer,
                         data = item,
-                        encodeDefaults = true,
-                        merge = true,
                     )
                 }
             }
@@ -96,12 +95,10 @@ class FirestoreCompendium<T : CompendiumItem<T>>(
         item: T,
     ) {
         Napier.d("Saving compendium item $item")
-        transaction.set(
+        transaction.setWithTopLevelFieldsMerge(
             documentRef = collection(partyId).document(item.id.toString()),
             strategy = serializer,
             data = item,
-            merge = true,
-            encodeDefaults = true,
         )
     }
 
