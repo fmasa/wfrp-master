@@ -12,7 +12,7 @@ import cz.frantisekmasa.wfrp_master.common.encounters.domain.EncounterRepository
 import kotlinx.coroutines.flow.Flow
 
 class EncounterDetailScreenModel(
-    private val encounterId: EncounterId,
+    val encounterId: EncounterId,
     private val encounters: EncounterRepository,
     private val characters: CharacterRepository,
     private val parties: PartyRepository,

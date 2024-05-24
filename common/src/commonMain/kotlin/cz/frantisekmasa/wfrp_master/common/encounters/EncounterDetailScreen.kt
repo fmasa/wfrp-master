@@ -74,6 +74,7 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.OptionsAction
 import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.SubheadBar
 import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.Subtitle
 import cz.frantisekmasa.wfrp_master.common.encounters.domain.Encounter
+import cz.frantisekmasa.wfrp_master.common.npcs.NpcsScreenModel
 import dev.icerock.moko.resources.compose.stringResource
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -85,6 +86,7 @@ class EncounterDetailScreen(
     @Composable
     override fun Content() {
         val screenModel: EncounterDetailScreenModel = rememberScreenModel(arg = encounterId)
+        val npcsScreenModel: NpcsScreenModel = rememberScreenModel(arg = encounterId.partyId)
 
         var startCombatDialogVisible by rememberSaveable { mutableStateOf(false) }
         val encounter = screenModel.encounter.collectWithLifecycle(null).value
@@ -134,7 +136,7 @@ class EncounterDetailScreen(
                     return@Scaffold
                 }
 
-                MainContainer(encounter, screenModel)
+                MainContainer(encounter, screenModel, npcsScreenModel)
 
                 if (startCombatDialogVisible) {
                     val navigation = LocalNavigationTransaction.current
@@ -219,6 +221,7 @@ class EncounterDetailScreen(
     private fun MainContainer(
         encounter: Encounter,
         screenModel: EncounterDetailScreenModel,
+        npcsScreenModel: NpcsScreenModel,
     ) {
         val coroutineScope = rememberCoroutineScope { EmptyCoroutineContext + Dispatchers.IO }
 
@@ -251,7 +254,7 @@ class EncounterDetailScreen(
 
             DescriptionCard(screenModel)
 
-            NpcCharacterList(encounterId.partyId, encounter, screenModel)
+            NpcCharacterList(encounterId.partyId, encounter, screenModel, npcsScreenModel)
         }
     }
 
@@ -283,6 +286,7 @@ private fun NpcCharacterList(
     partyId: PartyId,
     encounter: Encounter,
     screenModel: EncounterDetailScreenModel,
+    npcsScreenModel: NpcsScreenModel,
 ) {
     CardContainer(
         Modifier
@@ -337,8 +341,9 @@ private fun NpcCharacterList(
 
         if (chooseNpcDialogVisible) {
             ChooseNpcDialog(
-                encounter,
-                screenModel,
+                encounter = encounter,
+                screenModel = screenModel,
+                npcsScreenModel = npcsScreenModel,
                 onDismissRequest = { chooseNpcDialogVisible = false },
             )
         }

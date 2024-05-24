@@ -45,6 +45,7 @@ import cz.frantisekmasa.wfrp_master.common.Str
 import cz.frantisekmasa.wfrp_master.common.character.CharacterDetailScreen
 import cz.frantisekmasa.wfrp_master.common.core.auth.UserId
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.CharacterType
+import cz.frantisekmasa.wfrp_master.common.core.domain.identifiers.EncounterId
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.PartyId
 import cz.frantisekmasa.wfrp_master.common.core.ui.buttons.BackButton
 import cz.frantisekmasa.wfrp_master.common.core.ui.flow.collectWithLifecycle
@@ -67,6 +68,7 @@ class CharacterCreationScreen(
     val partyId: PartyId,
     val type: CharacterType,
     val userId: UserId?,
+    val encounterId: EncounterId? = null,
 ) : Screen {
     @Composable
     override fun Content() {
@@ -78,7 +80,12 @@ class CharacterCreationScreen(
                 )
             },
         ) {
-            MainContainer(partyId, type, userId)
+            MainContainer(
+                partyId = partyId,
+                type = type,
+                userId = userId,
+                encounterId = encounterId,
+            )
         }
     }
 }
@@ -88,6 +95,7 @@ private fun Screen.MainContainer(
     partyId: PartyId,
     type: CharacterType,
     userId: UserId?,
+    encounterId: EncounterId?,
 ) {
     val screenModel: CharacterCreationScreenModel = rememberScreenModel(arg = partyId)
     val coroutineScope = rememberCoroutineScope()
@@ -118,6 +126,7 @@ private fun Screen.MainContainer(
                     basicInfo,
                     characteristics,
                     points,
+                    encounterId,
                 )
 
             navigation.replace(CharacterDetailScreen(characterId))

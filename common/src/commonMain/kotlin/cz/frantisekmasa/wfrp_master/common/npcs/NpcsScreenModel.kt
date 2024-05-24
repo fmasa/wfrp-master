@@ -11,7 +11,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.serialization.Serializable
 
 class NpcsScreenModel(
-    private val partyId: PartyId,
+    val partyId: PartyId,
     private val functions: FirebaseFunctions,
     private val characters: CharacterRepository,
 ) : ScreenModel {
