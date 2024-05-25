@@ -110,7 +110,6 @@ export abstract class Suite {
                 resilience: 10,
                 resolve: 5,
                 sin: 4,
-                hardyWoundsBonus: 0,
             },
             ambitions: {
                 shortTerm: 'Kill monsters!',
@@ -123,7 +122,6 @@ export abstract class Suite {
                 pennies: 1000,
             },
             note: "",
-            hardyTalent: false,
             conditions: {
                 conditions: {}
             },

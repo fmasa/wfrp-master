@@ -23,7 +23,7 @@ class CharacterTest {
             race = Race.HALFLING,
             characteristicsBase = Stats(20, 40, 2, 4, 80, 5, 5, 4, 0, 10),
             characteristicsAdvances = Stats(20, 40, 2, 4, 80, 5, 5, 4, 0, 10),
-            points = Points(0, 4, 4, 5, 5, 0, 0, 0, 0, 0, 0),
+            points = Points(0, 4, 4, 5, 5, 0, 0, 0, 0, 0),
         )
 
     @Test
@@ -67,7 +67,7 @@ class CharacterTest {
                 race = Race.HALFLING,
                 characteristicsBase = Stats(20, 40, 2, 4, 80, 5, 5, 4, 0, 10),
                 characteristicsAdvances = Stats(20, 40, 2, 4, 80, 5, 5, 4, 0, 10),
-                points = Points(0, 4, 4, 5, 5, 0, 0, 0, 0, 0, 0),
+                points = Points(0, 4, 4, 5, 5, 0, 0, 0, 0, 0),
             )
 
         val playerCharacter = character.turnIntoPlayerCharacter()

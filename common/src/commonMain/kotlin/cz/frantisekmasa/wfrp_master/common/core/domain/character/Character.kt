@@ -40,7 +40,6 @@ data class Character(
     val conditions: CurrentConditions = CurrentConditions.none(),
     val mutation: String = "",
     val note: String = "",
-    @SerialName("hardyTalent") val hasHardyTalent: Boolean = false,
     val woundsModifiers: WoundsModifiers = WoundsModifiers(),
     val encumbranceBonus: Encumbrance = Encumbrance.Zero,
     @SerialName("archived") val isArchived: Boolean = false,
@@ -53,7 +52,7 @@ data class Character(
     val wounds: Wounds get() =
         Wounds(
             points.wounds,
-            calculateMaxWounds(size ?: race?.size, points, hasHardyTalent, woundsModifiers, characteristics),
+            calculateMaxWounds(size ?: race?.size, points, woundsModifiers, characteristics),
         )
 
     val maxEncumbrance: Encumbrance
@@ -82,7 +81,6 @@ data class Character(
             calculateMaxWounds(
                 size ?: race?.size,
                 points,
-                hasHardyTalent,
                 woundsModifiers,
                 characteristics,
             )
@@ -110,7 +108,6 @@ data class Character(
                             calculateMaxWounds(
                                 size ?: race?.size,
                                 points,
-                                hasHardyTalent,
                                 woundsModifiers,
                                 base + advances,
                             ),
@@ -129,7 +126,6 @@ data class Character(
                             calculateMaxWounds(
                                 size ?: race?.size,
                                 points,
-                                hasHardyTalent,
                                 woundsModifiers,
                                 characteristics,
                             ),
@@ -148,7 +144,6 @@ data class Character(
                             calculateMaxWounds(
                                 size ?: race?.size,
                                 points,
-                                hasHardyTalent,
                                 woundsModifiers,
                                 characteristics,
                             ),
@@ -190,26 +185,20 @@ data class Character(
                 calculateMaxWounds(
                     size ?: race?.size,
                     points,
-                    hasHardyTalent,
                     woundsModifiers,
                     characteristics,
                 ),
             ),
     )
 
-    fun updateMaxWounds(
-        maxWounds: Int?,
-        hasHardyTalent: Boolean,
-    ): Character {
+    fun updateMaxWounds(maxWounds: Int?): Character {
         val newPoints = points.copy(maxWounds = maxWounds)
         return copy(
-            hasHardyTalent = hasHardyTalent,
             points =
                 newPoints.coerceWoundsAtMost(
                     calculateMaxWounds(
                         size ?: race?.size,
                         newPoints,
-                        hasHardyTalent,
                         woundsModifiers,
                         characteristics,
                     ),
@@ -298,7 +287,6 @@ data class Character(
         private fun calculateMaxWounds(
             size: Size?,
             points: Points,
-            hasHardyTalent: Boolean,
             modifiers: WoundsModifiers,
             characteristics: Stats,
         ): Int {
@@ -306,11 +294,6 @@ data class Character(
             val toughnessBonus = characteristics.toughnessBonus
 
             if (manualMaxWounds != null) {
-                // TODO: Remove support for hasHardyTalent flag
-                if (hasHardyTalent) {
-                    return manualMaxWounds + toughnessBonus
-                }
-
                 return manualMaxWounds
             }
 
@@ -326,11 +309,7 @@ data class Character(
                             characteristics.willPowerBonus
                         },
                 )
-            return (
-                baseWounds +
-                    modifiers.extraToughnessBonusMultiplier * toughnessBonus +
-                    (if (hasHardyTalent) toughnessBonus else 0)
-            ) *
+            return (baseWounds + modifiers.extraToughnessBonusMultiplier * toughnessBonus) *
                 modifiers.afterMultiplier
         }
     }

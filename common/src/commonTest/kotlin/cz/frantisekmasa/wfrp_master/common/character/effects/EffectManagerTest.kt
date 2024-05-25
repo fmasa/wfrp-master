@@ -492,7 +492,6 @@ class EffectManagerTest {
                         sin = 0,
                         experience = 0,
                         spentExperience = 0,
-                        hardyWoundsBonus = 0,
                     ),
                 motivation = "",
                 psychology = "",

@@ -86,7 +86,6 @@ class HardyWoundsModificationTest {
                     sin = 0,
                     experience = 0,
                     spentExperience = 0,
-                    hardyWoundsBonus = 0,
                 ),
             socialClass = "Warriors",
             race = Race.HUMAN,
