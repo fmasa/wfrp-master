@@ -560,7 +560,7 @@ service cloud.firestore {
                         && areMoneyValid(character.money)
                         && areAmbitionsValid(character.ambitions)
                         && character.note is string && character.note.size() <= 2000
-                        && character.hardyTalent is bool
+                        && (! ("hardyTalent" in character) || character.hardyTalent is bool)
                         && (
                             character.hiddenTabs is list &&
                             character.hiddenTabs.toSet().size() == character.hiddenTabs.size() &&
@@ -642,7 +642,7 @@ service cloud.firestore {
                     && points.wounds is int
                     && points.experience is int
                     && (! ("spentExperience" in points) || points.experience is int)
-                    && points.hardyWoundsBonus is int;
+                    && (! ("hardyWoundsBonus " in points) || points.hardyWoundsBonus is int);
             }
 
             function areStatsValid(stats) {

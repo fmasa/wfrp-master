@@ -85,7 +85,6 @@ export interface Character {
         resilience: number,
         resolve: number,
         sin: number,
-        hardyWoundsBonus: number
     },
     woundsModifiers: {
         afterMultiplier: number,
@@ -105,7 +104,6 @@ export interface Character {
     money: {
         pennies: number,
     },
-    hardyTalent: boolean,
     note: string,
     conditions: Conditions,
     archived: boolean,

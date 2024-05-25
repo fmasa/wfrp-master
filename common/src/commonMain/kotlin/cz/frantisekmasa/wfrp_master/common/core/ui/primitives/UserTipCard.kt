@@ -110,6 +110,5 @@ fun UserTipCard(
 
 enum class UserTip(override val translatableName: StringResource) : NamedEnum {
     ARMOUR_TRAPPINGS(Str.armour_tip_trappings),
-    HARDY_TALENTS(Str.talents_tip_hardy_talent_checkbox),
     COMPENDIUM_LINK_MOVED(Str.parties_messages_compendium_card_moved),
 }

@@ -96,7 +96,7 @@ object CoreRulebook :
             specialLores =
                 mapOf(
                     "Petty Spells" to setOf(SpellLore.PETTY),
-                    "Arcane Spells" to SpellLore.values().toSet() - SpellLore.PETTY,
+                    "Arcane Spells" to SpellLore.entries.toSet() - SpellLore.PETTY,
                 ),
         ).import(document, this, sequenceOf(240..257))
     }
