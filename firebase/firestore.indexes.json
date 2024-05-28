@@ -8,6 +8,14 @@
         { "fieldPath": "type", "order": "ASCENDING" },
         { "fieldPath": "name", "order": "ASCENDING" }
       ]
+    },
+    {
+      "collectionGroup": "characters",
+      "queryScope": "COLLECTION_GROUP",
+      "fields": [
+        { "fieldPath":  "userId", "order": "ASCENDING" },
+        { "fieldPath": "archived", "order": "ASCENDING" }
+      ]
     }
   ],
   "fieldOverrides": []

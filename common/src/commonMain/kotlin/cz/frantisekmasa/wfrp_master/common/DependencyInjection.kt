@@ -349,7 +349,7 @@ val appModule =
             )
         }
         bindProvider { InvitationScreenModel(instance(), instance(), instance()) }
-        bindProvider { PartyListScreenModel(instance()) }
+        bindProvider { PartyListScreenModel(instance(), instance()) }
         bindProvider { SettingsScreenModel(instance(), instance()) }
         bindFactory { partyId: PartyId ->
             CharacterCreationScreenModel(
