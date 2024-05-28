@@ -3,6 +3,8 @@ package cz.frantisekmasa.wfrp_master.common.core.firebase.repositories
 import arrow.core.left
 import arrow.core.right
 import com.benasher44.uuid.Uuid
+import com.benasher44.uuid.uuidFrom
+import cz.frantisekmasa.wfrp_master.common.core.auth.UserId
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.Character
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.CharacterNotFound
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.CharacterRepository
@@ -21,7 +23,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
 class FirestoreCharacterRepository(
-    firestore: FirebaseFirestore,
+    private val firestore: FirebaseFirestore,
 ) : CharacterRepository {
     private val parties = firestore.collection(Schema.PARTIES)
 
@@ -81,15 +83,16 @@ class FirestoreCharacterRepository(
                 }
             }
 
-    override suspend fun hasCharacterInParty(
-        userId: String,
-        partyId: PartyId,
-    ): Boolean {
-        return characters(partyId)
-            .where("userId", equalTo = userId)
-            .get()
-            .documents
-            .isNotEmpty()
+    override fun getPlayerCharactersInAllPartiesLive(userId: UserId): Flow<List<Pair<PartyId, Character>>> {
+        return firestore.collectionGroup(Schema.CHARACTERS)
+            .where { ("userId" equalTo userId.toString()) and ("archived" equalTo false) }
+            .snapshots
+            .map { snapshot ->
+                snapshot.documents.map {
+                    PartyId(uuidFrom(it.reference.parent.parent!!.id)) to
+                        it.data(Character.serializer())
+                }
+            }
     }
 
     override suspend fun findByCompendiumCareer(

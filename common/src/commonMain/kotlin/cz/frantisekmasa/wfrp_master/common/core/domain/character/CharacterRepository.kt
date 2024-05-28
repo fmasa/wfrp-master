@@ -2,6 +2,7 @@ package cz.frantisekmasa.wfrp_master.common.core.domain.character
 
 import arrow.core.Either
 import com.benasher44.uuid.Uuid
+import cz.frantisekmasa.wfrp_master.common.core.auth.UserId
 import cz.frantisekmasa.wfrp_master.common.core.domain.identifiers.CharacterId
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.PartyId
 import dev.gitlive.firebase.firestore.Transaction
@@ -26,10 +27,7 @@ interface CharacterRepository {
 
     fun getLive(characterId: CharacterId): Flow<Either<CharacterNotFound, Character>>
 
-    suspend fun hasCharacterInParty(
-        userId: String,
-        partyId: PartyId,
-    ): Boolean
+    fun getPlayerCharactersInAllPartiesLive(userId: UserId): Flow<List<Pair<PartyId, Character>>>
 
     suspend fun findByCompendiumCareer(
         partyId: PartyId,

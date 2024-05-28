@@ -3,6 +3,7 @@ package cz.frantisekmasa.wfrp_master.common.dummies
 import arrow.core.Either
 import arrow.core.rightIfNotNull
 import com.benasher44.uuid.Uuid
+import cz.frantisekmasa.wfrp_master.common.core.auth.UserId
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.Character
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.CharacterNotFound
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.CharacterRepository
@@ -43,11 +44,19 @@ class DummyCharacterRepository : CharacterRepository {
         )
     }
 
-    override suspend fun hasCharacterInParty(
-        userId: String,
-        partyId: PartyId,
-    ): Boolean {
-        return characters[partyId]?.any { it.value.userId?.toString() == userId } ?: false
+    override fun getPlayerCharactersInAllPartiesLive(userId: UserId): Flow<List<Pair<PartyId, Character>>> {
+        return flowOf(
+            characters.entries
+                .asSequence()
+                .flatMap { (partyId, characters) ->
+                    characters
+                        .values
+                        .asSequence()
+                        .filter { it.userId == userId }
+                        .map { partyId to it }
+                }
+                .toList(),
+        )
     }
 
     override suspend fun findByCompendiumCareer(

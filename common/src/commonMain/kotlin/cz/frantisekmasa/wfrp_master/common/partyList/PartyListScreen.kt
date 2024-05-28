@@ -31,11 +31,14 @@ import cz.frantisekmasa.wfrp_master.common.Plurals
 import cz.frantisekmasa.wfrp_master.common.Str
 import cz.frantisekmasa.wfrp_master.common.changelog.ChangelogAction
 import cz.frantisekmasa.wfrp_master.common.changelog.ChangelogScreen
+import cz.frantisekmasa.wfrp_master.common.character.CharacterDetailScreen
 import cz.frantisekmasa.wfrp_master.common.character.CharacterPickerScreen
 import cz.frantisekmasa.wfrp_master.common.core.LocalStaticConfiguration
 import cz.frantisekmasa.wfrp_master.common.core.auth.LocalUser
 import cz.frantisekmasa.wfrp_master.common.core.config.Platform
+import cz.frantisekmasa.wfrp_master.common.core.domain.identifiers.CharacterId
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.Party
+import cz.frantisekmasa.wfrp_master.common.core.domain.party.PartyId
 import cz.frantisekmasa.wfrp_master.common.core.shared.Resources
 import cz.frantisekmasa.wfrp_master.common.core.ui.buttons.HamburgerButton
 import cz.frantisekmasa.wfrp_master.common.core.ui.dialogs.DialogState
@@ -52,6 +55,8 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.VISUAL_ONLY_ICON_D
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.rememberScreenModel
 import cz.frantisekmasa.wfrp_master.common.gameMaster.GameMasterScreen
 import cz.frantisekmasa.wfrp_master.common.invitation.InvitationScannerScreen
+import dev.icerock.moko.parcelize.Parcelable
+import dev.icerock.moko.parcelize.Parcelize
 import dev.icerock.moko.resources.compose.stringResource
 
 object PartyListScreen : Screen {
@@ -108,11 +113,11 @@ object PartyListScreen : Screen {
             },
         ) {
             var removePartyDialogState by remember {
-                mutableStateOf<DialogState<Party>>(DialogState.Closed())
+                mutableStateOf<DialogState<PartyListItem>>(DialogState.Closed())
             }
 
             var leavePartyDialogState by remember {
-                mutableStateOf<DialogState<Party>>(DialogState.Closed())
+                mutableStateOf<DialogState<PartyListItem>>(DialogState.Closed())
             }
 
             removePartyDialogState.IfOpened { party ->
@@ -138,10 +143,10 @@ object PartyListScreen : Screen {
                 parties,
                 onClick = {
                     navigation.navigate(
-                        if (it.gameMasterId == userId) {
-                            GameMasterScreen(it.id)
-                        } else {
-                            CharacterPickerScreen(it.id)
+                        when {
+                            it.isGameMaster -> GameMasterScreen(it.id)
+                            it.singleCharacterId != null -> CharacterDetailScreen(it.singleCharacterId)
+                            else -> CharacterPickerScreen(it.id)
                         },
                     )
                 },
@@ -191,13 +196,13 @@ private fun Menu(
 }
 
 @Composable
-fun PartyItem(party: Party) {
+fun PartyItem(item: PartyListItem) {
     Column {
-        val playersCount = party.playersCount
+        val playersCount = item.playersCount
 
         ListItem(
             icon = { ItemIcon(Icons.Rounded.Group, ItemIcon.Size.Large) },
-            text = { Text(party.name) },
+            text = { Text(item.name) },
             trailing =
                 if (playersCount > 0) {
                     ({ Text(stringResource(Plurals.parties_player_count, playersCount, playersCount)) })
@@ -212,10 +217,10 @@ fun PartyItem(party: Party) {
 @Composable
 private fun MainContainer(
     modifier: Modifier,
-    parties: List<Party>?,
-    onClick: (Party) -> Unit,
-    onRemove: (Party) -> Unit,
-    onLeaveRequest: (Party) -> Unit,
+    parties: List<PartyListItem>?,
+    onClick: (PartyListItem) -> Unit,
+    onRemove: (PartyListItem) -> Unit,
+    onLeaveRequest: (PartyListItem) -> Unit,
 ) {
     Box(modifier) {
         parties?.let {
@@ -240,38 +245,45 @@ private fun MainContainer(
 
 @Composable
 fun PartyList(
-    parties: List<Party>,
-    onClick: (Party) -> Unit,
-    onRemove: (Party) -> Unit,
-    onLeaveRequest: (Party) -> Unit,
+    parties: List<PartyListItem>,
+    onClick: (PartyListItem) -> Unit,
+    onRemove: (PartyListItem) -> Unit,
+    onLeaveRequest: (PartyListItem) -> Unit,
 ) {
     LazyColumn(
         Modifier.fillMaxHeight(),
         contentPadding = PaddingValues(top = Spacing.medium, bottom = Spacing.bottomPaddingUnderFab),
     ) {
-        items(parties, key = { it.id }) { party ->
-            val isGameMaster =
-                LocalUser.current.id == party.gameMasterId || party.gameMasterId == null
-
+        items(parties, key = { it.id }) { item ->
             WithContextMenu(
-                onClick = { onClick(party) },
+                onClick = { onClick(item) },
                 items =
                     listOf(
-                        if (isGameMaster) {
+                        if (item.isGameMaster) {
                             ContextMenu.Item(
                                 stringResource(Str.common_ui_button_remove),
-                                onClick = { onRemove(party) },
+                                onClick = { onRemove(item) },
                             )
                         } else {
                             ContextMenu.Item(
                                 stringResource(Str.parties_button_leave),
-                                onClick = { onLeaveRequest(party) },
+                                onClick = { onLeaveRequest(item) },
                             )
                         },
                     ),
             ) {
-                PartyItem(party)
+                PartyItem(item)
             }
         }
     }
 }
+
+@Parcelize
+data class PartyListItem(
+    val id: PartyId,
+    val party: Party,
+    val name: String,
+    val isGameMaster: Boolean,
+    val singleCharacterId: CharacterId?,
+    val playersCount: Int,
+) : Parcelable

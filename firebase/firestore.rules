@@ -2,6 +2,10 @@ rules_version = '2';
 
 service cloud.firestore {
     match /databases/{database}/documents {
+        // Let users search for all their Characters across the parties
+        match /{path=**}/characters/{characterId} {
+          allow read: if request.auth.uid != null || resource.data.userId == request.auth.uid;
+        }
 
         match /parties/{party=**} {
             allow read: if request.auth.uid != null
