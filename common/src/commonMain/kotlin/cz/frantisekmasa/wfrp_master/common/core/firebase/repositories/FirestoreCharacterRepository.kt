@@ -83,17 +83,6 @@ class FirestoreCharacterRepository(
                 }
             }
 
-    override suspend fun hasCharacterInParty(
-        userId: String,
-        partyId: PartyId,
-    ): Boolean {
-        return characters(partyId)
-            .where("userId", equalTo = userId)
-            .get()
-            .documents
-            .isNotEmpty()
-    }
-
     override fun getPlayerCharactersInAllPartiesLive(userId: UserId): Flow<List<Pair<PartyId, Character>>> {
         return firestore.collectionGroup(Schema.CHARACTERS)
             .where { ("userId" equalTo userId.toString()) and ("archived" equalTo false) }

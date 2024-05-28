@@ -27,11 +27,6 @@ interface CharacterRepository {
 
     fun getLive(characterId: CharacterId): Flow<Either<CharacterNotFound, Character>>
 
-    suspend fun hasCharacterInParty(
-        userId: String,
-        partyId: PartyId,
-    ): Boolean
-
     fun getPlayerCharactersInAllPartiesLive(userId: UserId): Flow<List<Pair<PartyId, Character>>>
 
     suspend fun findByCompendiumCareer(

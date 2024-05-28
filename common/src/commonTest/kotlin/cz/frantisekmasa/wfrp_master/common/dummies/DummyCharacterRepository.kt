@@ -44,13 +44,6 @@ class DummyCharacterRepository : CharacterRepository {
         )
     }
 
-    override suspend fun hasCharacterInParty(
-        userId: String,
-        partyId: PartyId,
-    ): Boolean {
-        return characters[partyId]?.any { it.value.userId?.toString() == userId } ?: false
-    }
-
     override fun getPlayerCharactersInAllPartiesLive(userId: UserId): Flow<List<Pair<PartyId, Character>>> {
         return flowOf(
             characters.entries
