@@ -8,9 +8,11 @@ import cz.frantisekmasa.wfrp_master.common.core.domain.party.PartyRepository
 import dev.gitlive.firebase.firestore.FieldValue
 import dev.gitlive.firebase.firestore.FieldValue.Companion.arrayUnion
 import dev.gitlive.firebase.firestore.FirebaseFirestore
+import dev.gitlive.firebase.firestore.FirebaseFirestoreException
 import dev.gitlive.firebase.firestore.Transaction
 import kotlinx.serialization.Serializable
 
+// TODO: Replace by cloud function
 class FirestoreInvitationProcessor(
     private val firestore: FirebaseFirestore,
     private val parties: PartyRepository,
@@ -59,6 +61,8 @@ class FirestoreInvitationProcessor(
         return try {
             parties.get(this, partyId).isMember(userId)
         } catch (e: PartyNotFound) {
+            false
+        } catch (e: FirebaseFirestoreException) {
             false
         }
     }
