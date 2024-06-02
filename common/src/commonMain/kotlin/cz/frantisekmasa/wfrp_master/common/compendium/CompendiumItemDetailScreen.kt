@@ -89,7 +89,7 @@ fun <A : CompendiumItem<A>> Screen.CompendiumItemDetailScreen(
         ) {
             VisibilitySwitchBar(
                 visible = item.isVisibleToPlayers,
-                onChange = { screenModel.update(item.changeVisibility(it)) },
+                onChange = { screenModel.changeVisibility(item, it) },
             )
 
             detail(item)
