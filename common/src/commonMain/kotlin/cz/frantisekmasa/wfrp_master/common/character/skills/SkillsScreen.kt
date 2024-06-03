@@ -9,16 +9,16 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.material.Divider
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import cz.frantisekmasa.wfrp_master.common.character.talents.TalentDataItem
 import cz.frantisekmasa.wfrp_master.common.character.talents.talentsCard
+import cz.frantisekmasa.wfrp_master.common.character.traits.TraitDataItem
 import cz.frantisekmasa.wfrp_master.common.character.traits.traitsCard
 import cz.frantisekmasa.wfrp_master.common.core.domain.Stats
 import cz.frantisekmasa.wfrp_master.common.core.domain.identifiers.CharacterId
-import cz.frantisekmasa.wfrp_master.common.core.domain.skills.Skill
-import cz.frantisekmasa.wfrp_master.common.core.domain.talents.Talent
-import cz.frantisekmasa.wfrp_master.common.core.domain.traits.Trait
 import cz.frantisekmasa.wfrp_master.common.core.ui.cards.CardContainer
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
 import cz.frantisekmasa.wfrp_master.common.core.ui.responsive.Breakpoint
@@ -30,10 +30,34 @@ fun SkillsScreen(
     characterId: CharacterId,
     state: SkillsScreenState,
     modifier: Modifier = Modifier,
-    removeSkill: (Skill) -> Unit,
-    removeTalent: (Talent) -> Unit,
-    removeTrait: (Trait) -> Unit,
+    removeSkill: (SkillDataItem) -> Unit,
+    removeTalent: (TalentDataItem) -> Unit,
+    removeTrait: (TraitDataItem) -> Unit,
 ) {
+    val skillsCard: LazyListScope.() -> Unit = {
+        skillsCard(
+            characterId = characterId,
+            skills = state.skills,
+            onRemove = removeSkill,
+        )
+    }
+
+    val talentsCard: LazyListScope.() -> Unit = {
+        talentsCard(
+            characterId = characterId,
+            talents = state.talents,
+            onRemove = removeTalent,
+        )
+    }
+
+    val traitsCard: LazyListScope.() -> Unit = {
+        traitsCard(
+            characterId = characterId,
+            traits = state.traits,
+            onRemove = removeTrait,
+        )
+    }
+
     if (LocalBreakpoint.current > Breakpoint.XSmall) {
         Row(
             modifier
@@ -43,32 +67,19 @@ fun SkillsScreen(
         ) {
             CardContainer(Modifier.weight(1f)) {
                 LazyColumn(Modifier.fillMaxWidth()) {
-                    skillsCard(
-                        characterId = characterId,
-                        skills = state.skills,
-                        onRemove = removeSkill,
-                        characteristics = state.characteristics,
-                    )
+                    skillsCard()
                 }
             }
 
             CardContainer(Modifier.weight(1f)) {
                 LazyColumn(Modifier.fillMaxWidth()) {
-                    talentsCard(
-                        characterId = characterId,
-                        talents = state.talents,
-                        onRemove = removeTalent,
-                    )
+                    talentsCard()
 
                     item {
                         SectionSeparator()
                     }
 
-                    traitsCard(
-                        characterId = characterId,
-                        traits = state.traits,
-                        onRemove = removeTrait,
-                    )
+                    traitsCard()
                 }
             }
         }
@@ -78,32 +89,19 @@ fun SkillsScreen(
                 .fillMaxWidth()
                 .fillMaxHeight(),
         ) {
-            skillsCard(
-                characterId = characterId,
-                skills = state.skills,
-                onRemove = removeSkill,
-                characteristics = state.characteristics,
-            )
+            skillsCard()
 
             item {
                 SectionSeparator()
             }
 
-            talentsCard(
-                characterId = characterId,
-                talents = state.talents,
-                onRemove = removeTalent,
-            )
+            talentsCard()
 
             item {
                 SectionSeparator()
             }
 
-            traitsCard(
-                characterId = characterId,
-                traits = state.traits,
-                onRemove = removeTrait,
-            )
+            traitsCard()
         }
     }
 }
@@ -118,7 +116,7 @@ private fun SectionSeparator() {
 
 data class SkillsScreenState(
     val characteristics: Stats,
-    val skills: ImmutableList<Skill>,
-    val talents: ImmutableList<Talent>,
-    val traits: ImmutableList<Trait>,
+    val skills: ImmutableList<SkillDataItem>,
+    val talents: ImmutableList<TalentDataItem>,
+    val traits: ImmutableList<TraitDataItem>,
 )

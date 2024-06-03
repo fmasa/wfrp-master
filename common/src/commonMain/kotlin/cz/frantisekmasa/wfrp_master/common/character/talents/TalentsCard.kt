@@ -12,10 +12,10 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Add
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import com.benasher44.uuid.Uuid
 import cz.frantisekmasa.wfrp_master.common.Str
 import cz.frantisekmasa.wfrp_master.common.character.talents.add.AddTalentScreen
 import cz.frantisekmasa.wfrp_master.common.core.domain.identifiers.CharacterId
-import cz.frantisekmasa.wfrp_master.common.core.domain.talents.Talent
 import cz.frantisekmasa.wfrp_master.common.core.ui.cards.CardItem
 import cz.frantisekmasa.wfrp_master.common.core.ui.cards.CardTitle
 import cz.frantisekmasa.wfrp_master.common.core.ui.cards.StickyHeader
@@ -27,8 +27,8 @@ import kotlinx.collections.immutable.ImmutableList
 
 internal fun LazyListScope.talentsCard(
     characterId: CharacterId,
-    talents: ImmutableList<Talent>,
-    onRemove: (Talent) -> Unit,
+    talents: ImmutableList<TalentDataItem>,
+    onRemove: (TalentDataItem) -> Unit,
 ) {
     stickyHeader(key = "talents-header") {
         StickyHeader {
@@ -67,7 +67,7 @@ internal fun LazyListScope.talentsCard(
 
 @Composable
 private fun TalentItem(
-    talent: Talent,
+    talent: TalentDataItem,
     onClick: () -> Unit,
     onRemove: () -> Unit,
     showDivider: Boolean,
@@ -89,3 +89,9 @@ private fun TalentItem(
         )
     }
 }
+
+data class TalentDataItem(
+    val id: Uuid,
+    val name: String,
+    val taken: Int,
+)

@@ -17,6 +17,12 @@ interface CharacterItemRepository<T> : CharacterCompendiumItemRepository<T> {
      */
     fun findAllForCharacter(characterId: CharacterId): Flow<List<T>>
 
+    suspend fun find(
+        transaction: Transaction,
+        characterId: CharacterId,
+        itemId: Uuid,
+    ): T?
+
     fun getLive(
         characterId: CharacterId,
         itemId: Uuid,

@@ -36,6 +36,20 @@ open class FirestoreCharacterItemRepository<T : CharacterItem<T, *>>(
                 snapshot.documents.map { it.data(serializer) }
             }
 
+    override suspend fun find(
+        transaction: Transaction,
+        characterId: CharacterId,
+        itemId: Uuid,
+    ): T? {
+        val document = transaction.get(itemCollection(characterId).document(itemId.toString()))
+
+        if (!document.exists) {
+            return null
+        }
+
+        return document.data(serializer)
+    }
+
     override fun getLive(
         characterId: CharacterId,
         itemId: Uuid,
