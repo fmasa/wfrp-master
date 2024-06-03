@@ -10,12 +10,11 @@ import androidx.compose.material.IconButton
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Add
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.derivedStateOf
 import androidx.compose.ui.Modifier
+import com.benasher44.uuid.Uuid
 import cz.frantisekmasa.wfrp_master.common.Str
 import cz.frantisekmasa.wfrp_master.common.character.traits.add.AddTraitScreen
 import cz.frantisekmasa.wfrp_master.common.core.domain.identifiers.CharacterId
-import cz.frantisekmasa.wfrp_master.common.core.domain.traits.Trait
 import cz.frantisekmasa.wfrp_master.common.core.ui.cards.CardItem
 import cz.frantisekmasa.wfrp_master.common.core.ui.cards.CardTitle
 import cz.frantisekmasa.wfrp_master.common.core.ui.cards.StickyHeader
@@ -27,8 +26,8 @@ import kotlinx.collections.immutable.ImmutableList
 
 internal fun LazyListScope.traitsCard(
     characterId: CharacterId,
-    traits: ImmutableList<Trait>,
-    onRemove: (Trait) -> Unit,
+    traits: ImmutableList<TraitDataItem>,
+    onRemove: (TraitDataItem) -> Unit,
 ) {
     stickyHeader(key = "traits-header") {
         StickyHeader {
@@ -68,7 +67,7 @@ internal fun LazyListScope.traitsCard(
 
 @Composable
 private fun TraitItem(
-    trait: Trait,
+    trait: TraitDataItem,
     onClick: () -> Unit,
     onRemove: () -> Unit,
     showDivider: Boolean,
@@ -79,7 +78,7 @@ private fun TraitItem(
         }
 
         CardItem(
-            name = derivedStateOf { trait.evaluatedName }.value,
+            name = trait.name,
             onClick = onClick,
             contextMenuItems =
                 listOf(
@@ -89,3 +88,8 @@ private fun TraitItem(
         )
     }
 }
+
+data class TraitDataItem(
+    val id: Uuid,
+    val name: String,
+)

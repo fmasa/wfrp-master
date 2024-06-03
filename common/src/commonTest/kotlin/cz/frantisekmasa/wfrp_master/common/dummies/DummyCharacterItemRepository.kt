@@ -28,6 +28,14 @@ class DummyCharacterItemRepository<T : CharacterItem<T, *>> : CharacterItemRepos
         )
     }
 
+    override suspend fun find(
+        transaction: Transaction,
+        characterId: CharacterId,
+        itemId: Uuid,
+    ): T? {
+        return items[characterId]?.get(itemId)
+    }
+
     override suspend fun remove(
         characterId: CharacterId,
         itemId: Uuid,

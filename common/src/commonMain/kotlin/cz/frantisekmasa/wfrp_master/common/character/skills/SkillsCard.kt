@@ -23,12 +23,11 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.benasher44.uuid.Uuid
 import cz.frantisekmasa.wfrp_master.common.Str
 import cz.frantisekmasa.wfrp_master.common.character.skills.add.AddSkillScreen
 import cz.frantisekmasa.wfrp_master.common.character.skills.addBasic.AddBasicSkillsScreen
-import cz.frantisekmasa.wfrp_master.common.core.domain.Stats
 import cz.frantisekmasa.wfrp_master.common.core.domain.identifiers.CharacterId
-import cz.frantisekmasa.wfrp_master.common.core.domain.skills.Skill
 import cz.frantisekmasa.wfrp_master.common.core.shared.Resources
 import cz.frantisekmasa.wfrp_master.common.core.ui.cards.CardTitle
 import cz.frantisekmasa.wfrp_master.common.core.ui.cards.StickyHeader
@@ -43,9 +42,8 @@ import kotlinx.collections.immutable.ImmutableList
 
 internal fun LazyListScope.skillsCard(
     characterId: CharacterId,
-    skills: ImmutableList<Skill>,
-    characteristics: Stats,
-    onRemove: (Skill) -> Unit,
+    skills: ImmutableList<SkillDataItem>,
+    onRemove: (SkillDataItem) -> Unit,
 ) {
     stickyHeader(key = "skills-header") {
         StickyHeader {
@@ -103,7 +101,6 @@ internal fun LazyListScope.skillsCard(
 
         SkillItem(
             skill,
-            characteristics,
             onClick = {
                 navigation.navigate(
                     CharacterSkillDetailScreen(
@@ -120,8 +117,7 @@ internal fun LazyListScope.skillsCard(
 
 @Composable
 private fun SkillItem(
-    skill: Skill,
-    characteristics: Stats,
+    skill: SkillDataItem,
     onClick: () -> Unit,
     onRemove: () -> Unit,
     showDivider: Boolean,
@@ -153,20 +149,22 @@ private fun SkillItem(
                             },
                     )
                 },
-                trailing = { TestNumber(skill, characteristics) },
+                trailing = { TestNumber(skill.testNumber) },
             )
         }
     }
 }
 
 @Composable
-private fun TestNumber(
-    skill: Skill,
-    characteristics: Stats,
-) {
-    val testNumber = skill.advances + skill.characteristic.characteristicValue(characteristics)
-
+private fun TestNumber(testNumber: Int) {
     Row {
         Text(testNumber.toString(), Modifier.padding(start = 4.dp))
     }
 }
+
+data class SkillDataItem(
+    val id: Uuid,
+    val name: String,
+    val advances: Int,
+    val testNumber: Int,
+)

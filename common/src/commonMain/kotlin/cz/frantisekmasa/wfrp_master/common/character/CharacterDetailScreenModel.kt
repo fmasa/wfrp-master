@@ -9,14 +9,20 @@ import cz.frantisekmasa.wfrp_master.common.character.conditions.ConditionsScreen
 import cz.frantisekmasa.wfrp_master.common.character.effects.EffectManager
 import cz.frantisekmasa.wfrp_master.common.character.notes.NotesScreenState
 import cz.frantisekmasa.wfrp_master.common.character.religion.ReligionScreenState
+import cz.frantisekmasa.wfrp_master.common.character.skills.SkillDataItem
 import cz.frantisekmasa.wfrp_master.common.character.skills.SkillsScreenState
+import cz.frantisekmasa.wfrp_master.common.character.spells.SpellDataItem
+import cz.frantisekmasa.wfrp_master.common.character.spells.SpellGroup
 import cz.frantisekmasa.wfrp_master.common.character.spells.SpellsScreenState
+import cz.frantisekmasa.wfrp_master.common.character.talents.TalentDataItem
+import cz.frantisekmasa.wfrp_master.common.character.traits.TraitDataItem
 import cz.frantisekmasa.wfrp_master.common.character.trappings.TrappingItem
 import cz.frantisekmasa.wfrp_master.common.character.trappings.TrappingSaver
 import cz.frantisekmasa.wfrp_master.common.character.trappings.TrappingsScreenState
 import cz.frantisekmasa.wfrp_master.common.combat.domain.EquippedWeapon
 import cz.frantisekmasa.wfrp_master.common.combat.domain.WornArmourPiece
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.Career
+import cz.frantisekmasa.wfrp_master.common.compendium.domain.SpellLore
 import cz.frantisekmasa.wfrp_master.common.core.auth.UserId
 import cz.frantisekmasa.wfrp_master.common.core.auth.UserProvider
 import cz.frantisekmasa.wfrp_master.common.core.domain.Ambitions
@@ -35,13 +41,9 @@ import cz.frantisekmasa.wfrp_master.common.core.domain.religion.Blessing
 import cz.frantisekmasa.wfrp_master.common.core.domain.religion.BlessingRepository
 import cz.frantisekmasa.wfrp_master.common.core.domain.religion.Miracle
 import cz.frantisekmasa.wfrp_master.common.core.domain.religion.MiracleRepository
-import cz.frantisekmasa.wfrp_master.common.core.domain.skills.Skill
 import cz.frantisekmasa.wfrp_master.common.core.domain.skills.SkillRepository
-import cz.frantisekmasa.wfrp_master.common.core.domain.spells.Spell
 import cz.frantisekmasa.wfrp_master.common.core.domain.spells.SpellRepository
-import cz.frantisekmasa.wfrp_master.common.core.domain.talents.Talent
 import cz.frantisekmasa.wfrp_master.common.core.domain.talents.TalentRepository
-import cz.frantisekmasa.wfrp_master.common.core.domain.traits.Trait
 import cz.frantisekmasa.wfrp_master.common.core.domain.traits.TraitRepository
 import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.Armour
 import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.Encumbrance
@@ -92,11 +94,34 @@ class CharacterDetailScreenModel(
             talents.findAllForCharacter(characterId),
             traits.findAllForCharacter(characterId),
         ) { character, skills, talents, traits ->
+            val characteristics = character.characteristics
+
             SkillsScreenState(
                 characteristics = character.characteristics,
-                skills = skills.toImmutableList(),
-                talents = talents.toImmutableList(),
-                traits = traits.toImmutableList(),
+                skills =
+                    skills.map {
+                        SkillDataItem(
+                            id = it.id,
+                            name = it.name,
+                            advances = it.advances,
+                            testNumber = characteristics[it.characteristic] + it.advances,
+                        )
+                    }.toImmutableList(),
+                talents =
+                    talents.map {
+                        TalentDataItem(
+                            id = it.id,
+                            name = it.name,
+                            taken = it.taken,
+                        )
+                    }.toImmutableList(),
+                traits =
+                    traits.map {
+                        TraitDataItem(
+                            id = it.id,
+                            name = it.evaluatedName,
+                        )
+                    }.toImmutableList(),
             )
         }
 
@@ -229,7 +254,30 @@ class CharacterDetailScreenModel(
 
     private val spellsScreenState: Flow<SpellsScreenState> =
         spells.findAllForCharacter(characterId)
-            .map { SpellsScreenState(it.toImmutableList()) }
+            .map { spells ->
+                SpellsScreenState(
+                    spells.groupBy { it.lore }
+                        .asSequence()
+                        .sortedBy { it.key?.ordinal ?: SpellLore.entries.size }
+                        .map { (lore, spellsInLore) ->
+                            SpellGroup(
+                                lore,
+                                spellsInLore
+                                    .map {
+                                        SpellDataItem(
+                                            id = it.id,
+                                            name = it.name,
+                                            castingNumber = it.effectiveCastingNumber,
+                                            isMemorized = it.memorized,
+                                        )
+                                    }
+                                    .toImmutableList(),
+                            )
+                        }
+                        .toImmutableList(),
+                )
+            }
+            .distinctUntilChanged()
 
     private val equippedWeapons: Flow<ImmutableMap<WeaponEquip, List<EquippedWeapon>>> =
         combine(
@@ -356,9 +404,11 @@ class CharacterDetailScreenModel(
         characters.save(characterId.partyId, character.assignToUser(userId))
     }
 
-    fun removeTrait(trait: Trait) {
+    fun removeTrait(traitItem: TraitDataItem) {
         screenModelScope.launch(Dispatchers.IO) {
             firestore.runTransaction {
+                val trait = traits.find(this, characterId, traitItem.id) ?: return@runTransaction
+
                 effectManager.removeItem(
                     this,
                     parties.get(this, characterId.partyId),
@@ -370,9 +420,11 @@ class CharacterDetailScreenModel(
         }
     }
 
-    fun removeTalent(talent: Talent) {
+    fun removeTalent(talentItem: TalentDataItem) {
         screenModelScope.launch(Dispatchers.IO) {
             firestore.runTransaction {
+                val talent = talents.find(this, characterId, talentItem.id) ?: return@runTransaction
+
                 effectManager.removeItem(
                     this,
                     parties.get(this, characterId.partyId),
@@ -384,7 +436,7 @@ class CharacterDetailScreenModel(
         }
     }
 
-    fun removeSkill(skill: Skill) {
+    fun removeSkill(skill: SkillDataItem) {
         screenModelScope.launch(Dispatchers.IO) {
             skills.remove(characterId, skill.id)
         }
@@ -408,7 +460,7 @@ class CharacterDetailScreenModel(
         }
     }
 
-    fun removeSpell(spell: Spell) {
+    fun removeSpell(spell: SpellDataItem) {
         screenModelScope.launch(Dispatchers.IO) {
             spells.remove(characterId, spell.id)
         }

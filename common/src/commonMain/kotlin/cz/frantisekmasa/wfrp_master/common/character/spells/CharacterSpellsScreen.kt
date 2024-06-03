@@ -16,13 +16,11 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Add
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.key
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import cz.frantisekmasa.wfrp_master.common.Str
 import cz.frantisekmasa.wfrp_master.common.character.spells.add.AddSpellScreen
-import cz.frantisekmasa.wfrp_master.common.compendium.domain.SpellLore
 import cz.frantisekmasa.wfrp_master.common.core.domain.identifiers.CharacterId
 import cz.frantisekmasa.wfrp_master.common.core.domain.localizedName
 import cz.frantisekmasa.wfrp_master.common.core.domain.spells.Spell
@@ -43,7 +41,7 @@ fun CharacterSpellsScreen(
     characterId: CharacterId,
     state: SpellsScreenState,
     modifier: Modifier,
-    onRemove: (Spell) -> Unit,
+    onRemove: (SpellDataItem) -> Unit,
 ) {
     val navigation = LocalNavigationTransaction.current
 
@@ -60,7 +58,7 @@ fun CharacterSpellsScreen(
     ) {
         MainContainer(
             characterId = characterId,
-            spells = state.spells,
+            spellGroups = state.spellGroups,
             onRemove = onRemove,
         )
     }
@@ -69,18 +67,10 @@ fun CharacterSpellsScreen(
 @Composable
 private fun MainContainer(
     characterId: CharacterId,
-    spells: ImmutableList<Spell>,
-    onRemove: (Spell) -> Unit,
+    spellGroups: ImmutableList<SpellGroup>,
+    onRemove: (SpellDataItem) -> Unit,
 ) {
-    val spellsByLore =
-        remember(spells) {
-            spells.groupBy { it.lore }
-                .asSequence()
-                .sortedBy { it.key?.ordinal ?: SpellLore.values().size }
-                .toList()
-        }
-
-    if (spellsByLore.isEmpty()) {
+    if (spellGroups.isEmpty()) {
         EmptyUI(
             text = stringResource(Str.spells_messages_character_has_no_spell),
             subText = stringResource(Str.spells_messages_character_has_no_spell_subtext),
@@ -97,7 +87,7 @@ private fun MainContainer(
                 end = Spacing.small,
             ),
     ) {
-        items(spellsByLore) { (lore, spells) ->
+        items(spellGroups) { (lore, spells) ->
             CardContainer(Modifier.padding(top = Spacing.small)) {
                 Column {
                     CardTitle(
@@ -134,7 +124,7 @@ private fun MainContainer(
 
 @Composable
 private fun SpellItem(
-    spell: Spell,
+    spell: SpellDataItem,
     onClick: () -> Unit,
     onRemove: () -> Unit,
     isLast: Boolean,
@@ -152,12 +142,12 @@ private fun SpellItem(
                 Row {
                     Text(stringResource(Str.spells_casting_number_shortcut))
                     Text(
-                        spell.effectiveCastingNumber.toString(),
+                        spell.castingNumber.toString(),
                         Modifier.padding(start = Spacing.tiny),
                     )
                 }
 
-                if (spell.memorized) {
+                if (spell.isMemorized) {
                     Icon(
                         drawableResource(Resources.Drawable.MemorizeSpell),
                         stringResource(Str.spells_label_memorized),

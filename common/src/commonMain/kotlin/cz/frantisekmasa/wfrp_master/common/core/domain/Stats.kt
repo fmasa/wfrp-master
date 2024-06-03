@@ -73,7 +73,7 @@ data class Stats(
         )
 
     @Stable
-    fun get(characteristic: Characteristic): Int =
+    operator fun get(characteristic: Characteristic): Int =
         when (characteristic) {
             Characteristic.AGILITY -> agility
             Characteristic.BALLISTIC_SKILL -> ballisticSkill
