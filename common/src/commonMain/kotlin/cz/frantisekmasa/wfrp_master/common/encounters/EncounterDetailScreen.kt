@@ -29,7 +29,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Edit
 import androidx.compose.material.primarySurface
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableStateOf
@@ -46,7 +45,6 @@ import cz.frantisekmasa.wfrp_master.common.character.CharacterDetailScreen
 import cz.frantisekmasa.wfrp_master.common.combat.ActiveCombatScreen
 import cz.frantisekmasa.wfrp_master.common.combat.StartCombatDialog
 import cz.frantisekmasa.wfrp_master.common.core.PartyScreenModel
-import cz.frantisekmasa.wfrp_master.common.core.domain.character.Character
 import cz.frantisekmasa.wfrp_master.common.core.domain.identifiers.CharacterId
 import cz.frantisekmasa.wfrp_master.common.core.domain.identifiers.EncounterId
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.PartyId
@@ -295,18 +293,13 @@ private fun NpcCharacterList(
     ) {
         CardTitle(stringResource(Str.npcs_title_plural))
 
-        val characters = screenModel.allNpcsCharacters.collectWithLifecycle(null).value
+        val npcs = screenModel.npcsInEncounter.collectWithLifecycle(null).value
 
-        if (characters == null) {
+        if (npcs == null) {
             Box(Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
                 CircularProgressIndicator()
             }
             return@CardContainer
-        }
-
-        val npcs by derivedStateOf {
-            characters.map { it to (encounter.characters[it.id] ?: 0) }
-                .filter { (_, count) -> count > 0 }
         }
 
         if (npcs.isEmpty()) {
@@ -320,11 +313,11 @@ private fun NpcCharacterList(
         val navigation = LocalNavigationTransaction.current
         val coroutineScope = rememberCoroutineScope()
 
-        npcs.forEach { (npc, count) ->
+        npcs.forEach { npc ->
             key(npc.id) {
                 NpcItem(
                     npc = npc,
-                    count = count,
+                    count = npc.count,
                     onDetailRequest = {
                         navigation.navigate(CharacterDetailScreen(CharacterId(partyId, npc.id)))
                     },
@@ -341,7 +334,6 @@ private fun NpcCharacterList(
 
         if (chooseNpcDialogVisible) {
             ChooseNpcDialog(
-                encounter = encounter,
                 screenModel = screenModel,
                 npcsScreenModel = npcsScreenModel,
                 onDismissRequest = { chooseNpcDialogVisible = false },
@@ -362,7 +354,7 @@ private fun NpcCharacterList(
 
 @Composable
 private fun NpcItem(
-    npc: Character,
+    npc: NpcInEncounter,
     count: Int,
     onDetailRequest: () -> Unit,
     onCountChange: (Int) -> Unit,
@@ -389,3 +381,10 @@ private fun NpcItem(
             ),
     )
 }
+
+data class NpcInEncounter(
+    val id: String,
+    val name: String,
+    val avatarUrl: String?,
+    val count: Int,
+)

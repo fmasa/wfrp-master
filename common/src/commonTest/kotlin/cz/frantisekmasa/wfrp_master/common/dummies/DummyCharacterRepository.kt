@@ -8,6 +8,7 @@ import cz.frantisekmasa.wfrp_master.common.core.domain.character.Character
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.CharacterNotFound
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.CharacterRepository
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.CharacterType
+import cz.frantisekmasa.wfrp_master.common.core.domain.character.LocalCharacterId
 import cz.frantisekmasa.wfrp_master.common.core.domain.identifiers.CharacterId
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.PartyId
 import dev.gitlive.firebase.firestore.Transaction
@@ -35,6 +36,17 @@ class DummyCharacterRepository : CharacterRepository {
     override suspend fun get(characterId: CharacterId): Character {
         return characters[characterId.partyId]?.get(characterId.id)
             ?: throw CharacterNotFound(characterId)
+    }
+
+    override fun findByIds(
+        partyId: PartyId,
+        characterIds: Set<LocalCharacterId>,
+    ): Flow<Map<LocalCharacterId, Character>> {
+        return flowOf(
+            characters[partyId]
+                ?.filterKeys { it in characterIds }
+                ?: emptyMap(),
+        )
     }
 
     override fun getLive(characterId: CharacterId): Flow<Either<CharacterNotFound, Character>> {

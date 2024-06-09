@@ -41,6 +41,33 @@ class FirestoreEncounterRepository(
         }
     }
 
+    override suspend fun update(
+        id: EncounterId,
+        mutator: (Encounter) -> Encounter,
+    ) {
+        val documentRef = encounters(id.partyId).document(id.encounterId.toString())
+
+        firestore.runTransaction {
+            val snapshot = get(documentRef)
+
+            if (!snapshot.exists) {
+                throw EncounterNotFound(id)
+            }
+
+            val encounter = snapshot.data(Encounter.serializer())
+            val updatedEncounter = mutator(encounter)
+
+            if (updatedEncounter == encounter) {
+                return@runTransaction
+            }
+
+            setWithTopLevelFieldsMerge(
+                documentRef = documentRef,
+                data = updatedEncounter,
+            )
+        }
+    }
+
     override fun getLive(id: EncounterId) =
         encounters(id.partyId)
             .document(id.encounterId.toString())

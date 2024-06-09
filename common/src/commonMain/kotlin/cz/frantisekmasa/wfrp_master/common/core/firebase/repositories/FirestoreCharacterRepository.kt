@@ -9,6 +9,7 @@ import cz.frantisekmasa.wfrp_master.common.core.domain.character.Character
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.CharacterNotFound
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.CharacterRepository
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.CharacterType
+import cz.frantisekmasa.wfrp_master.common.core.domain.character.LocalCharacterId
 import cz.frantisekmasa.wfrp_master.common.core.domain.identifiers.CharacterId
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.PartyId
 import cz.frantisekmasa.wfrp_master.common.core.firebase.Schema
@@ -20,6 +21,8 @@ import dev.gitlive.firebase.firestore.orderBy
 import dev.gitlive.firebase.firestore.where
 import io.github.aakira.napier.Napier
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 
 class FirestoreCharacterRepository(
@@ -69,6 +72,31 @@ class FirestoreCharacterRepository(
         } catch (e: FirebaseFirestoreException) {
             throw CharacterNotFound(characterId, e)
         }
+    }
+
+    override fun findByIds(
+        partyId: PartyId,
+        characterIds: Set<LocalCharacterId>,
+    ): Flow<Map<LocalCharacterId, Character>> {
+        val collection = characters(partyId)
+
+        if (characterIds.isEmpty()) {
+            return flowOf(emptyMap())
+        }
+
+        return characterIds.chunked(FIRESTORE_MAX_IN_ITEMS)
+            .map { chunk ->
+                collection
+                    .where { ("id" inArray chunk) and ("archived" equalTo false) }
+                    .snapshots
+                    .map { snapshot ->
+                        snapshot.documents.map {
+                            val character = it.data(Character.serializer())
+
+                            character.id to character
+                        }
+                    }
+            }.let { combine(it) { chunks -> chunks.asSequence().flatten().toMap() } }
     }
 
     override fun getLive(characterId: CharacterId) =
@@ -123,4 +151,8 @@ class FirestoreCharacterRepository(
     private fun characters(partyId: PartyId) =
         parties.document(partyId.toString())
             .collection(Schema.CHARACTERS)
+
+    companion object {
+        private const val FIRESTORE_MAX_IN_ITEMS = 30
+    }
 }

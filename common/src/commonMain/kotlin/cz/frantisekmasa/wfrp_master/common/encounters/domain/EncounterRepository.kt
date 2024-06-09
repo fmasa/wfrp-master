@@ -13,6 +13,16 @@ interface EncounterRepository {
      */
     suspend fun get(id: EncounterId): Encounter
 
+    /**
+     * Updates encounter
+     *
+     * @throws EncounterNotFound if encounter does not exist.
+     */
+    suspend fun update(
+        id: EncounterId,
+        mutator: (Encounter) -> Encounter,
+    )
+
     suspend fun find(id: EncounterId): Encounter? =
         try {
             get(id)

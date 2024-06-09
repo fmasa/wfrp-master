@@ -19,7 +19,6 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.dialogs.FullScreenDialog
 import cz.frantisekmasa.wfrp_master.common.core.ui.flow.collectWithLifecycle
 import cz.frantisekmasa.wfrp_master.common.core.ui.navigation.LocalNavigationTransaction
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.SearchableList
-import cz.frantisekmasa.wfrp_master.common.encounters.domain.Encounter
 import cz.frantisekmasa.wfrp_master.common.npcs.NpcList
 import cz.frantisekmasa.wfrp_master.common.npcs.NpcsScreenModel
 import dev.icerock.moko.resources.compose.stringResource
@@ -28,13 +27,12 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun ChooseNpcDialog(
-    encounter: Encounter,
     screenModel: EncounterDetailScreenModel,
     npcsScreenModel: NpcsScreenModel,
     onDismissRequest: () -> Unit,
 ) {
     FullScreenDialog(onDismissRequest) {
-        val npcs by screenModel.allNpcsCharacters.collectWithLifecycle(null)
+        val npcs by screenModel.notUsedNpcs.collectWithLifecycle(null)
         val navigation = LocalNavigationTransaction.current
         val coroutineScope = rememberCoroutineScope()
 
@@ -44,8 +42,7 @@ fun ChooseNpcDialog(
                 return@derivedStateOf SearchableList.Data.Loading
             }
 
-            npcs?.filter { it.id !in encounter.characters }
-                ?.let { SearchableList.Data.Loaded(it) }
+            npcs ?.let { SearchableList.Data.Loaded(it) }
                 ?: SearchableList.Data.Loading
         }
 
@@ -56,9 +53,7 @@ fun ChooseNpcDialog(
             onClick = { characterId ->
                 saving = false
                 coroutineScope.launch(Dispatchers.IO) {
-                    screenModel.updateEncounter(
-                        encounter.withCharacterCount(characterId.id, 1),
-                    )
+                    screenModel.addNewNpc(characterId.id)
                     onDismissRequest()
                 }
             },
