@@ -39,14 +39,16 @@ import cz.frantisekmasa.wfrp_master.common.core.utils.right
 import cz.frantisekmasa.wfrp_master.common.encounters.CombatantItem
 import cz.frantisekmasa.wfrp_master.common.encounters.domain.Wounds
 import io.github.aakira.napier.Napier
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.mapLatest
-import kotlinx.coroutines.flow.mapNotNull
 import kotlin.random.Random
 
 class CombatScreenModel(
@@ -83,6 +85,36 @@ class CombatScreenModel(
         combatFlow
             .mapLatest { it.groupAdvantage }
             .distinctUntilChanged()
+
+    private val combatantsFlow =
+        combatFlow
+            .map { it.getCombatants() }
+            .distinctUntilChanged()
+
+    private val charactersFlow =
+        combatantsFlow
+            .map { combatants -> combatants.map { it.characterId }.toSet() }
+            .distinctUntilChanged()
+            .flatMapLatest { characters.findByIds(partyId, it) }
+
+    val combatants: Flow<ImmutableList<CombatantItem>> =
+        combine(
+            combatantsFlow,
+            charactersFlow,
+        ) { combatants, characters ->
+            combatants
+                .asSequence()
+                .map { combatant ->
+                    val character = characters[combatant.characterId] ?: return@map null
+
+                    CombatantItem(
+                        characterId = CharacterId(partyId, character.id),
+                        character = character,
+                        combatant = combatant,
+                    )
+                }.filterNotNull()
+                .toImmutableList()
+        }
 
     suspend fun loadCharacters(): List<Character> = characters.inParty(partyId, CharacterType.PLAYER_CHARACTER).first()
 
@@ -199,33 +231,6 @@ class CombatScreenModel(
 
     suspend fun removeCombatant(combatantId: Uuid) {
         updateCombat { it.removeCombatant(combatantId) }
-    }
-
-    fun combatants(): Flow<List<CombatantItem>> {
-        val charactersFlow =
-            characters
-                .inParty(partyId, CharacterType.values().toSet())
-                .distinctUntilChanged()
-
-        val combatantsFlow =
-            party
-                .mapNotNull { it.activeCombat?.getCombatants() }
-                .distinctUntilChanged()
-
-        return combatantsFlow.combine(charactersFlow) { combatants, characters ->
-            val charactersById = characters.associateBy { it.id }
-
-            combatants
-                .map { combatant ->
-                    val character = charactersById[combatant.characterId] ?: return@map null
-
-                    CombatantItem(
-                        characterId = CharacterId(partyId, character.id),
-                        character = character,
-                        combatant = combatant,
-                    )
-                }.filterNotNull()
-        }
     }
 
     suspend fun endCombat() = parties.update(partyId) { it.endCombat() }

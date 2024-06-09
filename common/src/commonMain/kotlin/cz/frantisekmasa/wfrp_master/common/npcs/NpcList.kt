@@ -13,7 +13,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import cz.frantisekmasa.wfrp_master.common.Str
-import cz.frantisekmasa.wfrp_master.common.core.domain.character.Character
+import cz.frantisekmasa.wfrp_master.common.core.domain.character.LocalCharacterId
 import cz.frantisekmasa.wfrp_master.common.core.domain.identifiers.CharacterId
 import cz.frantisekmasa.wfrp_master.common.core.shared.Resources
 import cz.frantisekmasa.wfrp_master.common.core.ui.CharacterAvatar
@@ -36,25 +36,25 @@ fun NpcList(
     screenModel: NpcsScreenModel,
     floatingActionButton: @Composable () -> Unit,
     onClick: (CharacterId) -> Unit,
-    data: SearchableList.Data<Character>,
+    data: SearchableList.Data<NpcList.Item>,
 ) {
     var processing by remember { mutableStateOf(false) }
 
-    val (npcToRemove, setNpcToRemove) = remember { mutableStateOf<Character?>(null) }
+    val (npcIdToRemove, setNpcIdToRemove) = remember { mutableStateOf<LocalCharacterId?>(null) }
 
     val coroutineScope = rememberCoroutineScope()
 
-    if (npcToRemove != null) {
+    if (npcIdToRemove != null) {
         AlertDialog(
-            onDismissRequest = { setNpcToRemove(null) },
+            onDismissRequest = { setNpcIdToRemove(null) },
             text = { Text(stringResource(Str.npcs_messages_removal_confirmation)) },
             confirmButton = {
                 TextButton(
                     onClick = {
                         coroutineScope.launch(Dispatchers.IO) {
                             processing = true
-                            setNpcToRemove(null)
-                            screenModel.archiveNpc(npcToRemove)
+                            setNpcIdToRemove(null)
+                            screenModel.archiveNpc(npcIdToRemove)
                             processing = false
                         }
                     },
@@ -63,7 +63,7 @@ fun NpcList(
                 }
             },
             dismissButton = {
-                TextButton(onClick = { setNpcToRemove(null) }) {
+                TextButton(onClick = { setNpcIdToRemove(null) }) {
                     Text(stringResource(Str.common_ui_button_cancel).uppercase())
                 }
             },
@@ -106,7 +106,10 @@ fun NpcList(
                             coroutineScope.launch(Dispatchers.IO) {
                                 processing = true
                                 try {
-                                    screenModel.duplicate(npc)
+                                    screenModel.duplicate(
+                                        npcId = npc.id,
+                                        originalName = npc.name,
+                                    )
                                 } catch (e: Exception) {
                                     Napier.e("Failed to duplicate NPC", e)
                                     snackbarHolder.showSnackbar(unknownErrorMessage)
@@ -116,7 +119,7 @@ fun NpcList(
                             }
                         },
                         ContextMenu.Item(stringResource(Str.common_ui_button_remove)) {
-                            setNpcToRemove(npc)
+                            setNpcIdToRemove(npc.id)
                         },
                     ),
             ) {
@@ -135,4 +138,12 @@ fun NpcList(
             Divider()
         }
     }
+}
+
+object NpcList {
+    data class Item(
+        val id: LocalCharacterId,
+        val name: String,
+        val avatarUrl: String?,
+    )
 }

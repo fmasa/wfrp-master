@@ -39,7 +39,6 @@ import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
@@ -80,6 +79,7 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.OptionsAction
 import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.Subtitle
 import cz.frantisekmasa.wfrp_master.common.encounters.CombatantItem
 import dev.icerock.moko.resources.compose.stringResource
+import kotlinx.collections.immutable.ImmutableList
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -95,7 +95,7 @@ class ActiveCombatScreen(
         val navigation = LocalNavigationTransaction.current
 
         val party = viewModel.party.collectWithLifecycle(null).value
-        val combatants = remember { viewModel.combatants() }.collectWithLifecycle(null).value
+        val combatants = viewModel.combatants.collectWithLifecycle(null).value
         val isGameMaster = LocalUser.current.id == party?.gameMasterId
 
         val (openedCombatant, setOpenedCombatant) =
@@ -431,7 +431,7 @@ class ActiveCombatScreen(
     @Composable
     private fun CombatantList(
         coroutineScope: CoroutineScope,
-        combatants: List<CombatantItem>,
+        combatants: ImmutableList<CombatantItem>,
         viewModel: CombatScreenModel,
         turn: Int,
         isGameMaster: Boolean,

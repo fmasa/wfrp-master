@@ -25,6 +25,15 @@ interface CharacterRepository {
      */
     suspend fun get(characterId: CharacterId): Character
 
+    /**
+     * Returns map of characters with given ids.
+     * If character with given id is not found, it is not included in the result.
+     */
+    fun findByIds(
+        partyId: PartyId,
+        characterIds: Set<LocalCharacterId>,
+    ): Flow<Map<LocalCharacterId, Character>>
+
     fun getLive(characterId: CharacterId): Flow<Either<CharacterNotFound, Character>>
 
     fun getPlayerCharactersInAllPartiesLive(userId: UserId): Flow<List<Pair<PartyId, Character>>>
