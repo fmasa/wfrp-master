@@ -68,7 +68,7 @@ class TalentParser {
                     Talent(
                         id = uuid4(),
                         name = name,
-                        tests = tests,
+                        tests = tests.trim(' ', ':'),
                         maxTimesTaken = maxLine.trim(),
                         description = MarkdownBuilder.buildMarkdown(description),
                     ),

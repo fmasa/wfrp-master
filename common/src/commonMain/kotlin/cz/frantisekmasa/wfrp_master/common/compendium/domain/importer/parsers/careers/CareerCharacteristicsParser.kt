@@ -96,23 +96,24 @@ class CareerCharacteristicsParser(
         override fun onPageEnter() {
         }
 
+        private fun TextPosition.toToken() =
+            structure.resolveToken(
+                TextToken(
+                    text = getUnicode(),
+                    fontName = getFont().getName(),
+                    height = getHeight(),
+                    fontSizePt = getFontSizeInPt(),
+                    y = getY(),
+                ),
+            )
+
         override fun onTextLine(
             text: String,
             textPositions: List<TextPosition>,
         ) {
-            val position = textPositions[0]
-            val type =
-                structure.resolveToken(
-                    TextToken(
-                        text = position.getUnicode(),
-                        fontName = position.getFont().getName(),
-                        height = position.getHeight(),
-                        fontSizePt = position.getFontSizeInPt(),
-                        y = position.getY(),
-                    ),
-                )
+            val firstPositionType = textPositions[0].toToken()
 
-            if (type is Token.TableHeadCell || type is Token.TableHeading) {
+            if (firstPositionType is Token.TableHeadCell || firstPositionType is Token.TableHeading) {
                 val characteristic = CHARACTERISTICS[text.lowercase()] ?: return
 
                 characteristicCells +=
@@ -120,11 +121,17 @@ class CareerCharacteristicsParser(
                         characteristic,
                         textPositions[0].getX()..textPositions.last().getEndX(),
                     )
+                return
             }
 
-            if (type is Token.CrossIcon) {
-                crosses += Cross(position.getX()..position.getEndX())
-            }
+            val potentialCrossPositions =
+                listOf(
+                    textPositions.first(),
+                    textPositions.last(),
+                )
+
+            potentialCrossPositions.firstOrNull { it.toToken() == Token.CrossIcon }
+                ?.let { crosses += Cross(it.getX()..it.getEndX()) }
         }
 
         override fun onFinish() {

@@ -13,5 +13,6 @@ enum class SocialClass(
     RANGERS(Str.social_classes_rangers),
     RIVERFOLK(Str.social_classes_riverfolk),
     ROGUES(Str.social_classes_rogues),
+    SEAFARERS(Str.social_classes_seafarers), // See Sea of Claws page 63
     WARRIORS(Str.social_classes_warriors),
 }

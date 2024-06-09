@@ -4,6 +4,7 @@ import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.books.Arch
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.books.Book
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.books.CoreRulebook
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.books.EnemyInShadowsCompanion
+import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.books.SeaOfClaws
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.books.UpInArms
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.books.WindsOfMagic
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.parsers.Document
@@ -74,6 +75,20 @@ class ImporterTest {
     }
 
     @Test
+    fun `careers import (Sea of Claws)`() {
+        withBook(SeaOfClaws) { document ->
+            val careers = SeaOfClaws.importCareers(document)
+            assertEquals(9, careers.size)
+            careers.forEach {
+                assertEquals(3, it.levels[0].characteristics.size)
+                assertEquals(1, it.levels[1].characteristics.size)
+                assertEquals(1, it.levels[2].characteristics.size)
+                assertEquals(1, it.levels[3].characteristics.size)
+            }
+        }
+    }
+
+    @Test
     fun `skills import (Core Rulebook)`() {
         withBook(CoreRulebook) { document ->
             val skills = CoreRulebook.importSkills(document)
@@ -94,6 +109,14 @@ class ImporterTest {
         withBook(UpInArms) { document ->
             val talents = UpInArms.importTalents(document)
             assertEquals(12, talents.size)
+        }
+    }
+
+    @Test
+    fun `talents import (Sea of Claws)`() {
+        withBook(SeaOfClaws) { document ->
+            val talents = SeaOfClaws.importTalents(document)
+            assertEquals(3, talents.size)
         }
     }
 
@@ -150,6 +173,14 @@ class ImporterTest {
                 ),
                 spells.size,
             )
+        }
+    }
+
+    @Test
+    fun `spell import (Sea of Claws)`() {
+        withBook(SeaOfClaws) { document ->
+            val spells = SeaOfClaws.importSpells(document)
+            assertEquals(2 * 3, spells.size)
         }
     }
 

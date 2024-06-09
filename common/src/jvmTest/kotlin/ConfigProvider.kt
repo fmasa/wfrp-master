@@ -2,6 +2,7 @@ import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.books.Arch
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.books.Book
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.books.CoreRulebook
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.books.EnemyInShadowsCompanion
+import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.books.SeaOfClaws
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.books.UpInArms
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.books.WindsOfMagic
 import kotlinx.serialization.Serializable
@@ -31,6 +32,7 @@ object ConfigProvider {
             UpInArms -> "up_in_arms.pdf"
             EnemyInShadowsCompanion -> "enemy_in_shadows_companion.pdf"
             ArchivesOfTheEmpire1 -> "archives_of_the_empire_1.pdf"
+            SeaOfClaws -> "sea_of_claws.pdf"
             else -> null
         }
 
