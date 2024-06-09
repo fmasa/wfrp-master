@@ -79,6 +79,7 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.OptionsAction
 import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.Subtitle
 import cz.frantisekmasa.wfrp_master.common.encounters.CombatantItem
 import dev.icerock.moko.resources.compose.stringResource
+import kotlinx.collections.immutable.ImmutableList
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -430,7 +431,7 @@ class ActiveCombatScreen(
     @Composable
     private fun CombatantList(
         coroutineScope: CoroutineScope,
-        combatants: List<CombatantItem>,
+        combatants: ImmutableList<CombatantItem>,
         viewModel: CombatScreenModel,
         turn: Int,
         isGameMaster: Boolean,

@@ -39,6 +39,8 @@ import cz.frantisekmasa.wfrp_master.common.core.utils.right
 import cz.frantisekmasa.wfrp_master.common.encounters.CombatantItem
 import cz.frantisekmasa.wfrp_master.common.encounters.domain.Wounds
 import io.github.aakira.napier.Napier
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -95,12 +97,13 @@ class CombatScreenModel(
             .distinctUntilChanged()
             .flatMapLatest { characters.findByIds(partyId, it) }
 
-    val combatants =
+    val combatants: Flow<ImmutableList<CombatantItem>> =
         combine(
             combatantsFlow,
             charactersFlow,
         ) { combatants, characters ->
             combatants
+                .asSequence()
                 .map { combatant ->
                     val character = characters[combatant.characterId] ?: return@map null
 
@@ -110,6 +113,7 @@ class CombatScreenModel(
                         combatant = combatant,
                     )
                 }.filterNotNull()
+                .toImmutableList()
         }
 
     suspend fun loadCharacters(): List<Character> = characters.inParty(partyId, CharacterType.PLAYER_CHARACTER).first()

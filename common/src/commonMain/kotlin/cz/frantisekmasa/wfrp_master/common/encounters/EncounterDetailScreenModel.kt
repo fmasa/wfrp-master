@@ -13,6 +13,8 @@ import cz.frantisekmasa.wfrp_master.common.encounters.domain.EncounterNotFound
 import cz.frantisekmasa.wfrp_master.common.encounters.domain.EncounterRepository
 import cz.frantisekmasa.wfrp_master.common.npcs.NpcList
 import io.github.aakira.napier.Napier
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -26,12 +28,14 @@ class EncounterDetailScreenModel(
     private val parties: PartyRepository,
 ) : ScreenModel {
     val encounter: Flow<Encounter> = encounters.getLive(encounterId).right()
-    val notUsedNpcs: Flow<List<NpcList.Item>> =
+    val notUsedNpcs: Flow<ImmutableList<NpcList.Item>> =
         combine(
             encounter,
             characters.inParty(encounterId.partyId, CharacterType.NPC),
         ) { encounter, npcs ->
-            npcs.filter { it.id !in encounter.characters }
+            npcs
+                .asSequence()
+                .filter { it.id !in encounter.characters }
                 .map { npc ->
                     NpcList.Item(
                         id = npc.id,
@@ -39,6 +43,7 @@ class EncounterDetailScreenModel(
                         avatarUrl = npc.avatarUrl,
                     )
                 }
+                .toImmutableList()
         }
 
     private val npcs: Flow<List<Character>> =
@@ -48,7 +53,7 @@ class EncounterDetailScreenModel(
             .flatMapLatest { characters.findByIds(encounterId.partyId, it) }
             .map { characters -> characters.values.sortedBy { it.name } }
 
-    val npcsInEncounter: Flow<List<NpcInEncounter>> =
+    val npcsInEncounter: Flow<ImmutableList<NpcInEncounter>> =
         combine(npcs, encounter) { npcs, encounter ->
             npcs.map { npc ->
                 NpcInEncounter(
@@ -57,7 +62,7 @@ class EncounterDetailScreenModel(
                     avatarUrl = npc.avatarUrl,
                     count = encounter.characters[npc.id] ?: 0,
                 )
-            }
+            }.toImmutableList()
         }
 
     suspend fun remove() {
