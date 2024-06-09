@@ -2,6 +2,7 @@ package cz.frantisekmasa.wfrp_master.common.core.domain.party.combat
 
 import androidx.compose.runtime.Immutable
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.CurrentConditions
+import cz.frantisekmasa.wfrp_master.common.core.domain.character.LocalCharacterId
 import cz.frantisekmasa.wfrp_master.common.core.serialization.UuidAsString
 import cz.frantisekmasa.wfrp_master.common.encounters.domain.Wounds
 import dev.icerock.moko.parcelize.Parcelable
@@ -12,7 +13,7 @@ import kotlinx.serialization.Serializable
 @Immutable
 @Parcelize
 data class Combatant(
-    val characterId: String,
+    val characterId: LocalCharacterId,
     val id: UuidAsString? = null,
     val initiative: Int,
     val name: String? = null,

@@ -39,7 +39,6 @@ import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
@@ -95,7 +94,7 @@ class ActiveCombatScreen(
         val navigation = LocalNavigationTransaction.current
 
         val party = viewModel.party.collectWithLifecycle(null).value
-        val combatants = remember { viewModel.combatants() }.collectWithLifecycle(null).value
+        val combatants = viewModel.combatants.collectWithLifecycle(null).value
         val isGameMaster = LocalUser.current.id == party?.gameMasterId
 
         val (openedCombatant, setOpenedCombatant) =
