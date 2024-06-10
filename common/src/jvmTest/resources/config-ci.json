@@ -1,0 +1,5 @@
+{
+  "previousResultsPath": "{GITHUB_WORKSPACE}/rulebooks/parsed_results",
+  "outputPath": "{GITHUB_WORKSPACE}/rulebooks/output",
+  "rulebooksPath": "{GITHUB_WORKSPACE}/rulebooks"
+}

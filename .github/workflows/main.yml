@@ -49,6 +49,16 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: '17'
+      - name: Pull rulebooks test data
+        if: "! github.event.pull_request.head.repo.fork"
+        uses: actions/checkout@v2
+        with:
+          repository: fmasa/wfrp-master-rulebooks
+          token: ${{ secrets.RULEBOOKS_PULL_TOKEN }}
+          path: rulebooks
+      - name: Setup Rulebooks test config
+        if: "! github.event.pull_request.head.repo.fork"
+        run: sed -e "s,{GITHUB_WORKSPACE},$GITHUB_WORKSPACE,g" common/src/jvmTest/resources/config-ci.json > common/src/jvmTest/resources/config.json
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v3
       - name: Execute Gradle build

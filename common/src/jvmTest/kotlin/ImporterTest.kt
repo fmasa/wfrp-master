@@ -1,6 +1,7 @@
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.SpellLore
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.TrappingType
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.books.ArchivesOfTheEmpire1
+import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.books.Book
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.books.CoreRulebook
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.books.EnemyInShadowsCompanion
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.books.UpInArms
@@ -9,17 +10,15 @@ import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.parsers.Do
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.parsers.loadDocument
 import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.MeleeWeaponGroup
 import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.RangedWeaponGroup
-import java.io.InputStream
-import kotlin.test.Ignore
+import org.junit.Assume.assumeTrue
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
-@Ignore
 class ImporterTest {
     @Test
     fun `careers import (Core Rulebook)`() {
-        withCoreRuleBook { document ->
+        withBook(CoreRulebook) { document ->
             val careers = CoreRulebook.importCareers(document)
             assertEquals(64, careers.size)
             careers.forEach {
@@ -33,7 +32,7 @@ class ImporterTest {
 
     @Test
     fun `careers import (Winds of Magic)`() {
-        withWindsOfMagic { document ->
+        withBook(WindsOfMagic) { document ->
             val careers = WindsOfMagic.importCareers(document)
 
             assertEquals(11, careers.size)
@@ -48,7 +47,7 @@ class ImporterTest {
 
     @Test
     fun `careers import (Up in Arms)`() {
-        withUpInArms { document ->
+        withBook(UpInArms) { document ->
             val careers = UpInArms.importCareers(document)
             assertEquals(14, careers.size)
             careers.forEach {
@@ -62,7 +61,7 @@ class ImporterTest {
 
     @Test
     fun `careers import (Archives of the Empire I)`() {
-        withArchivesOfTheEmpire1 { document ->
+        withBook(ArchivesOfTheEmpire1) { document ->
             val careers = ArchivesOfTheEmpire1.importCareers(document)
             assertEquals(4, careers.size)
             careers.forEach {
@@ -76,7 +75,7 @@ class ImporterTest {
 
     @Test
     fun `skills import (Core Rulebook)`() {
-        withCoreRuleBook { document ->
+        withBook(CoreRulebook) { document ->
             val skills = CoreRulebook.importSkills(document)
             assertEquals(123, skills.size)
         }
@@ -84,7 +83,7 @@ class ImporterTest {
 
     @Test
     fun `talents import (Core Rulebook)`() {
-        withCoreRuleBook { document ->
+        withBook(CoreRulebook) { document ->
             val talents = CoreRulebook.importTalents(document)
             assertEquals(167, talents.size)
         }
@@ -92,7 +91,7 @@ class ImporterTest {
 
     @Test
     fun `talents import (Up in Arms)`() {
-        withUpInArms { document ->
+        withBook(UpInArms) { document ->
             val talents = UpInArms.importTalents(document)
             assertEquals(12, talents.size)
         }
@@ -100,7 +99,7 @@ class ImporterTest {
 
     @Test
     fun `traits import (Core Rulebook)`() {
-        withCoreRuleBook { document ->
+        withBook(CoreRulebook) { document ->
             val traits = CoreRulebook.importTraits(document)
             assertEquals(81, traits.size)
         }
@@ -108,7 +107,7 @@ class ImporterTest {
 
     @Test
     fun `spell import (Core Rulebook)`() {
-        withCoreRuleBook { document ->
+        withBook(CoreRulebook) { document ->
             val spells = CoreRulebook.importSpells(document)
             assertEquals(
                 (
@@ -128,11 +127,11 @@ class ImporterTest {
 
     @Test
     fun `spell import (Winds of Magic)`() {
-        withWindsOfMagic { document ->
+        withBook(WindsOfMagic) { document ->
             val spells = WindsOfMagic.importSpells(document)
             assertEquals(
                 (
-                    8 * SpellLore.values().size + // Arcane Spells
+                    8 * SpellLore.entries.size + // Arcane Spells
                         (8 * 24) // Color spells
                 ),
                 spells.size,
@@ -142,7 +141,7 @@ class ImporterTest {
 
     @Test
     fun `spell import (Enemy in Shadows - Companion)`() {
-        withEnemyInShadowsCompanion { document ->
+        withBook(EnemyInShadowsCompanion) { document ->
             val spells = EnemyInShadowsCompanion.importSpells(document)
             assertEquals(
                 (
@@ -156,7 +155,7 @@ class ImporterTest {
 
     @Test
     fun `blessings import (Core Rulebook)`() {
-        withCoreRuleBook { document ->
+        withBook(CoreRulebook) { document ->
             val blessings = CoreRulebook.importBlessings(document)
 
             assertEquals(19, blessings.size)
@@ -165,7 +164,7 @@ class ImporterTest {
 
     @Test
     fun `miracles import (Core Rulebook)`() {
-        withCoreRuleBook { document ->
+        withBook(CoreRulebook) { document ->
             val miracles = CoreRulebook.importMiracles(document)
 
             assertEquals(10 * 6, miracles.size)
@@ -174,7 +173,7 @@ class ImporterTest {
 
     @Test
     fun `trappings import (Core Rulebook)`() {
-        withCoreRuleBook { document ->
+        withBook(CoreRulebook) { document ->
             val trappings = CoreRulebook.importTrappings(document)
 
             assertEquals(227, trappings.size)
@@ -183,7 +182,7 @@ class ImporterTest {
 
     @Test
     fun `trappings import (Up in Arms)`() {
-        withUpInArms { document ->
+        withBook(UpInArms) { document ->
             val trappings = UpInArms.importTrappings(document)
             val countMeleeWeapons = { group: MeleeWeaponGroup ->
                 trappings.count { (it.trappingType as? TrappingType.MeleeWeapon)?.group == group }
@@ -210,7 +209,7 @@ class ImporterTest {
 
     @Test
     fun `trappings import (Winds of Magic)`() {
-        withWindsOfMagic { document ->
+        withBook(WindsOfMagic) { document ->
             val trappings = WindsOfMagic.importTrappings(document)
 
             assertEquals(
@@ -222,7 +221,7 @@ class ImporterTest {
 
     @Test
     fun `trappings import (Archives of the Empire I)`() {
-        withArchivesOfTheEmpire1 { document ->
+        withBook(ArchivesOfTheEmpire1) { document ->
             val trappings = ArchivesOfTheEmpire1.importTrappings(document)
 
             trappings.forEach { assertTrue { it.description.isNotBlank() } }
@@ -242,29 +241,12 @@ class ImporterTest {
         }
     }
 
-    private fun withCoreRuleBook(block: (Document) -> Unit) {
-        loadDocument(javaClass.getResourceAsStream("rulebook.pdf") as InputStream)
-            .use(block)
-    }
-
-    private fun withWindsOfMagic(block: (Document) -> Unit) {
-        loadDocument(javaClass.getResourceAsStream("winds_of_magic.pdf") as InputStream)
-            .use(block)
-    }
-
-    private fun withEnemyInShadowsCompanion(block: (Document) -> Unit) {
-        loadDocument(
-            javaClass.getResourceAsStream("enemy_in_shadows_companion.pdf") as InputStream,
-        ).use(block)
-    }
-
-    private fun withUpInArms(block: (Document) -> Unit) {
-        loadDocument(javaClass.getResourceAsStream("up_in_arms.pdf") as InputStream)
-            .use(block)
-    }
-
-    private fun withArchivesOfTheEmpire1(block: (Document) -> Unit) {
-        loadDocument(javaClass.getResourceAsStream("archives_of_the_empire_1.pdf") as InputStream)
-            .use(block)
+    private fun withBook(
+        book: Book,
+        block: (Document) -> Unit,
+    ) {
+        val pdf = ConfigProvider.getRulebookPdf(book)
+        assumeTrue("PDF is found", pdf != null && pdf.exists())
+        loadDocument(pdf!!.inputStream()).use(block)
     }
 }
