@@ -7,6 +7,7 @@ import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.Navigator
 import cafe.adriel.voyager.navigator.currentOrThrow
+import io.github.aakira.napier.Napier
 
 val LocalNavigationTransaction =
     staticCompositionLocalOf<NavigationTransaction> {
@@ -28,6 +29,7 @@ class NavigationTransaction(
             return
         }
 
+        Napier.d("Navigating to $screen", tag = TAG)
         navigator.push(screen)
     }
 
@@ -36,6 +38,7 @@ class NavigationTransaction(
             return
         }
 
+        Napier.d("Replaced current screen to $screen", tag = TAG)
         navigator.replace(screen)
     }
 
@@ -48,6 +51,7 @@ class NavigationTransaction(
             return
         }
 
+        Napier.d("Going back to previous screen", tag = TAG)
         navigator.pop()
     }
 
@@ -56,7 +60,12 @@ class NavigationTransaction(
             return
         }
 
+        Napier.d("Going back to specific previous screen", tag = TAG)
         navigator.popUntil(predicate)
+    }
+
+    companion object {
+        private const val TAG = "navigation"
     }
 }
 
