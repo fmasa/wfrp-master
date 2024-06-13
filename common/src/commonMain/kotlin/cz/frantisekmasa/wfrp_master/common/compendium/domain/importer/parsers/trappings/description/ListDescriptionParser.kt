@@ -44,7 +44,7 @@ class ListDescriptionParser : TrappingDescriptionParser {
                 MarkdownBuilder.buildMarkdown(
                     stream.consumeUntil { isName(it) || it is Token.Heading }
                         .filterIsInstance<Token.ParagraphToken>(),
-                ).replace(NEWLINES_TO_REMOVE_REGEX, " ")
+                ).replace(NEWLINES_TO_REMOVE_REGEX, " ").trim()
 
             descriptionsByName[comparableName(name)] = description
 

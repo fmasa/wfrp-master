@@ -29,7 +29,7 @@ class HeadingDescriptionParser : TrappingDescriptionParser {
                 val text = stream.consumeOneOfType<Token.NormalPart>().text.trim()
 
                 for (name in names(heading)) {
-                    add(name to text)
+                    add(name to text.trim())
                 }
             }
         }
