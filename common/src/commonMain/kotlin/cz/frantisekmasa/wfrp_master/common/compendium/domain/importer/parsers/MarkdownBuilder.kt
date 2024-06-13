@@ -87,6 +87,6 @@ object MarkdownBuilder {
 
                 appendLine(line)
             }
-        }.replace("  ", " ")
+        }.let { TextCleaner.clean(it) }
     }
 }

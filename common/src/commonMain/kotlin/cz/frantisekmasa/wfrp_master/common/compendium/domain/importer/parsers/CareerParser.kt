@@ -197,17 +197,19 @@ class CareerParser(
                         characteristics = emptySet(),
                         skills =
                             buildText(level.skills)
+                                // Skill list contains some specialised skills not separated by comma
+                                .replace(missingCommaSeparator, "), $1")
                                 .splitToSequence(",")
                                 .map { it.trim() }
                                 .filter { it.isNotEmpty() }
-                                .map { Career.Skill(it, it == incomeSkill) }
+                                .map { Career.Skill(TextCleaner.clean(it), it == incomeSkill) }
                                 .toList(),
                         talents =
-                            level.talents.splitToSequence(",")
+                            TextCleaner.clean(level.talents).splitToSequence(",")
                                 .map { it.trim() }
                                 .toList(),
                         trappings =
-                            level.trappings.splitToSequence(",")
+                            TextCleaner.clean(level.trappings).splitToSequence(",")
                                 .map { it.trim() }
                                 .toList(),
                     )
@@ -237,8 +239,6 @@ class CareerParser(
         return tokens.joinToString(" ") { it.text }
             .trimStart(':') // Fix leading : from Talents: and such
             .trimEnd() // Fix trailing "K" from Knight line in UiA
-            .replace("( ", "(")
-            .replace(") ", ")")
             .replace(Regex("[ \\n]+"), " ")
     }
 
@@ -263,5 +263,6 @@ class CareerParser(
     companion object {
         private val levelLineDelimiters = listOf('–', '—')
         private val levelLineDelimiterRegex = Regex("[${levelLineDelimiters.joinToString("|")}]")
+        private val missingCommaSeparator = Regex("""\) ([A-Z])""", RegexOption.IGNORE_CASE)
     }
 }

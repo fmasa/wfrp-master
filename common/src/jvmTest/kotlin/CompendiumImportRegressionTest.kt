@@ -21,11 +21,10 @@ import kotlinx.serialization.json.Json
 import kotlinx.serialization.serializer
 import org.junit.Assume.assumeTrue
 import java.io.File
-import java.nio.file.Path
 import kotlin.io.path.Path
 import kotlin.io.path.absolutePathString
 import kotlin.io.path.createDirectory
-import kotlin.io.path.createFile
+import kotlin.io.path.exists
 import kotlin.io.path.writeText
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -114,11 +113,9 @@ class CompendiumImportRegressionTest {
                     val outputPath =
                         Path(ConfigProvider.getOutputPath() ?: error("Output path not set"))
                     val file =
-                        outputPath.createDirectory()
-                            .resolve(bookName)
-                            .createDirectory()
+                        outputPath.also { if (!it.exists()) it.createDirectory() }
+                            .resolve(bookName).also { if (!it.exists()) it.createDirectory() }
                             .resolve("$name.json")
-                            .createFile()
 
                     println("Writing $name compendium import result to ${file.absolutePathString()}")
                     val result = json.encodeToString(serializationStrategy, items)
