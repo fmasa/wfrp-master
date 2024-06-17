@@ -172,7 +172,7 @@ class Miracles extends CharacterSubCollectionSuite {
                 {name: "a".repeat(51)},
 
                 // Target too long
-                {target: "a".repeat(51)},
+                {target: "a".repeat(201)},
 
                 // Description too long
                 {effect: "a".repeat(1001)},

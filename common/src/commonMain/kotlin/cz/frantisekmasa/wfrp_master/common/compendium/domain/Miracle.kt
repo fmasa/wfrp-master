@@ -23,7 +23,7 @@ data class Miracle(
     companion object {
         const val NAME_MAX_LENGTH = 50
         const val RANGE_MAX_LENGTH = 50
-        const val TARGET_MAX_LENGTH = 50
+        const val TARGET_MAX_LENGTH = 200
         const val DURATION_MAX_LENGTH = 50
         const val EFFECT_MAX_LENGTH = 1000
         const val CULT_NAME_MAX_LENGTH = 50
