@@ -3,6 +3,7 @@ import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.books.Arch
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.books.Book
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.books.CoreRulebook
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.books.EnemyInShadowsCompanion
+import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.books.SeaOfClaws
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.books.UpInArms
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.books.WindsOfMagic
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.parsers.loadDocument
@@ -53,6 +54,11 @@ class CompendiumImportRegressionTest {
     @Test
     fun `Archives of The Empire I`() {
         assertMatchesPreviousRuns(ArchivesOfTheEmpire1)
+    }
+
+    @Test
+    fun `Sea of Claws`() {
+        assertMatchesPreviousRuns(SeaOfClaws)
     }
 
     private fun assertMatchesPreviousRuns(book: Book) {

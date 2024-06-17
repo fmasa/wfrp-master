@@ -147,7 +147,7 @@ service cloud.firestore {
                         && miracle.id is string && miracle.id == miracleId && isValidUuid(miracle.id)
                         && miracle.name is string && isNotBlank(miracle.name) && miracle.name.size() <= 50
                         && miracle.range is string && miracle.range.size() <= 50
-                        && miracle.target is string && miracle.target.size() <= 50
+                        && miracle.target is string && miracle.target.size() <= 200
                         && miracle.duration is string && miracle.duration.size() <= 50
                         && miracle.effect is string && miracle.effect.size() <= 1000
                         && miracle.cultName is string && miracle.cultName.size() <= 50
@@ -477,7 +477,7 @@ service cloud.firestore {
                         && miracle.id is string && miracle.id == miracleId && isValidUuid(miracle.id)
                         && miracle.name is string && isNotBlank(miracle.name) && miracle.name.size() <= 50
                         && miracle.range is string && miracle.range.size() <= 50
-                        && miracle.target is string && miracle.target.size() <= 50
+                        && miracle.target is string && miracle.target.size() <= 200
                         && miracle.duration is string && miracle.duration.size() <= 50
                         && miracle.effect is string && miracle.effect.size() <= 1000
                         && miracle.cultName is string && miracle.cultName.size() <= 50

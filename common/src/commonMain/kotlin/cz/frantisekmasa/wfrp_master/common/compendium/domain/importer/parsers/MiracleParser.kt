@@ -26,7 +26,8 @@ class MiracleParser {
 
             while (stream.peek() is Token.Heading3 || isCultHeading(stream.peek())) {
                 if (isCultHeading(stream.peek())) {
-                    cultName = extractCultName(stream.consumeOneOfType<Token.Heading2>().text).trim()
+                    cultName = extractCultName(stream.consumeOneOfType<Token.Heading>().text).trim()
+                    stream.dropUntil { it is Token.Heading3 }
                 }
 
                 val name = stream.consumeOneOfType<Token.Heading3>().text.trim()
@@ -37,7 +38,10 @@ class MiracleParser {
 
                 // Target: <String>
                 stream.consumeOneOfType<Token.BoldPart>()
-                val target = stream.consumeOneOfType<Token.NormalPart>().text
+                val targetTokens = stream.consumeUntil { it is Token.BoldPart && it.text == "Duration: " }
+                val target =
+                    MarkdownBuilder.buildMarkdown(targetTokens.filterIsInstance<Token.ParagraphToken>())
+                        .replace("\n", " ")
 
                 // Duration: <String>
                 stream.consumeOneOfType<Token.BoldPart>()
@@ -73,7 +77,7 @@ class MiracleParser {
 
         val text = token.text.trim()
 
-        return (token is Token.Heading2) && text.matches(cultHeadingRegex)
+        return (token is Token.Heading2 || token is Token.Heading1) && text.matches(cultHeadingRegex)
     }
 
     private fun extractCultName(text: String): String {

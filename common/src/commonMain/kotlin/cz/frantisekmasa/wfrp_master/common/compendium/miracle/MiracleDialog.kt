@@ -72,6 +72,7 @@ fun MiracleDialog(
                 value = formData.target,
                 validate = validate,
                 maxLength = Miracle.TARGET_MAX_LENGTH,
+                helperText = stringResource(Str.common_ui_markdown_supported_note),
             )
 
             TextInput(

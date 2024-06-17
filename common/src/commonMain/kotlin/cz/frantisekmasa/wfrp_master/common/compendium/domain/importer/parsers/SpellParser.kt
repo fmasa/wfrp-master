@@ -5,7 +5,7 @@ import cz.frantisekmasa.wfrp_master.common.compendium.domain.Spell
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.SpellLore
 
 class SpellParser(
-    private val specialLores: Map<String, Set<SpellLore>>,
+    private val specialLores: Map<String, Set<SpellLore>> = emptyMap(),
     private val ignoredSpellLikeHeadings: Set<String> = emptySet(),
     private val isEnd: (Token?) -> Boolean = { it == null },
 ) {

@@ -9,6 +9,7 @@ import cz.frantisekmasa.wfrp_master.common.core.domain.character.SocialStatus
 
 class CareerParser(
     private val convertTablesToText: Boolean = false,
+    private val hasAttributesInRightColumn: Boolean = false,
 ) {
     fun import(
         document: Document,
@@ -54,10 +55,11 @@ class CareerParser(
         firstColumn: Sequence<Token>,
         secondColumn: Sequence<Token>,
     ): Career {
+        val blockWithAttributes = if (hasAttributesInRightColumn) firstColumn + secondColumn else firstColumn
         val stream =
             TokenStream(
                 if (convertTablesToText) {
-                    firstColumn
+                    blockWithAttributes
                         .map {
                             when (it) {
                                 is Token.BodyCellPart -> Token.NormalPart(it.text)
@@ -66,7 +68,7 @@ class CareerParser(
                             }
                         }.toList()
                 } else {
-                    firstColumn.toList()
+                    (blockWithAttributes).toList()
                 },
             )
 
@@ -155,7 +157,7 @@ class CareerParser(
 
                 val trappings =
                     buildText(
-                        stream.consumeUntil { it is Token.BoldPart }
+                        stream.consumeUntil { it is Token.BoldPart || (it is Token.ItalicsPart && it.text.startsWith('‘')) }
                             .filterIsInstance<Token.ParagraphToken>(),
                     )
 
@@ -177,8 +179,6 @@ class CareerParser(
                     trappings = trappings,
                 )
             }
-
-        stream.assertEnd()
 
         val incomeSkill = parseIncomeSkill(levels[0].skills)
 

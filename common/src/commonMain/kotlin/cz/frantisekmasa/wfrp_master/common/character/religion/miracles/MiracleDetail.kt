@@ -22,6 +22,7 @@ import cz.frantisekmasa.wfrp_master.common.core.domain.religion.Miracle
 import cz.frantisekmasa.wfrp_master.common.core.ui.buttons.CloseButton
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
 import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.SubheadBar
+import cz.frantisekmasa.wfrp_master.common.core.ui.text.SingleLineMarkdownValue
 import cz.frantisekmasa.wfrp_master.common.core.ui.text.SingleLineTextValue
 import dev.icerock.moko.resources.compose.stringResource
 
@@ -78,7 +79,7 @@ fun MiracleDetailBody(
 
         Column(Modifier.padding(Spacing.bodyPadding)) {
             SingleLineTextValue(stringResource(Str.miracles_label_range), range)
-            SingleLineTextValue(stringResource(Str.miracles_label_target), target)
+            SingleLineMarkdownValue(stringResource(Str.miracles_label_target), target)
             SingleLineTextValue(stringResource(Str.miracles_label_duration), duration)
 
             RichText(Modifier.padding(top = 8.dp)) {
