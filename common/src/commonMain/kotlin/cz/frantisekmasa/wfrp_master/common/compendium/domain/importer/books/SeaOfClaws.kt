@@ -32,16 +32,20 @@ object SeaOfClaws : Book, SpellSource, TalentSource, CareerSource, MiracleSource
     }
 
     override fun importCareers(document: Document): List<Career> {
-        return CareerParser(
-            convertTablesToText = true,
-            hasAttributesInRightColumn = true,
-        ).import(
+        return CareerParser(convertTablesToText = true).import(
             document,
             this,
             sequenceOf(
-                SocialClass.SEAFARERS to listOf(64, 66, 68, 70, 72, 74, 76, 78, 90),
+                SocialClass.SEAFARERS to listOf(64, 68, 70, 72, 74, 76, 78, 90),
             ),
-        )
+        ) +
+            CareerParser(convertTablesToText = true, hasAttributesInRightColumn = true).import(
+                document,
+                this,
+                sequenceOf(
+                    SocialClass.SEAFARERS to listOf(66),
+                ),
+            )
     }
 
     override fun importMiracles(document: Document): List<Miracle> {
