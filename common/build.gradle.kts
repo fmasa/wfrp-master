@@ -207,7 +207,7 @@ buildkonfig {
             }
 
         buildConfigField(STRING, "functionsEmulatorUrl", properties.getOrDefault("dev.functionsEmulatorUrl", "").toString())
-        buildConfigField(STRING, "firestoreEmulatorUrl", properties.getOrDefault("dev.firestoreEmulatorUrls", "").toString())
+        buildConfigField(STRING, "firestoreEmulatorUrl", properties.getOrDefault("dev.firestoreEmulatorUrl", "").toString())
         buildConfigField(STRING, "versionName", System.getenv("SUPPLY_VERSION_NAME") ?: "dev")
         buildConfigField(BOOLEAN, "isDebugMode", properties.getOrDefault("dev.debugMode", "false").toString())
     }
