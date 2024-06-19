@@ -242,6 +242,7 @@ service cloud.firestore {
                         "RANGERS",
                         "RIVERFOLK",
                         "ROGUES",
+                        "SEAFARERS",
                         "WARRIORS",
                     ];
                 }
