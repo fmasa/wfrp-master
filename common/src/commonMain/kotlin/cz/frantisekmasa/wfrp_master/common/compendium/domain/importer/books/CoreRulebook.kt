@@ -2,16 +2,17 @@ package cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.books
 
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.Blessing
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.Career
+import cz.frantisekmasa.wfrp_master.common.compendium.domain.Disease
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.Miracle
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.Skill
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.Spell
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.SpellLore
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.Talent
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.Trait
-import cz.frantisekmasa.wfrp_master.common.compendium.domain.Trapping
-import cz.frantisekmasa.wfrp_master.common.compendium.domain.TrappingType
+import cz.frantisekmasa.wfrp_master.common.compendium.domain.Trapping import cz.frantisekmasa.wfrp_master.common.compendium.domain.TrappingType
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.parsers.BlessingParser
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.parsers.CareerParser
+import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.parsers.DiseaseParser
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.parsers.Document
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.parsers.MiracleParser
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.parsers.SkillParser
@@ -30,6 +31,7 @@ import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.parsers.tr
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.parsers.trappings.description.ListDescriptionParser
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.sources.BlessingSource
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.sources.CareerSource
+import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.sources.DiseaseSource
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.sources.MiracleSource
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.sources.SkillSource
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.sources.SpellSource
@@ -51,7 +53,8 @@ object CoreRulebook :
     SpellSource,
     BlessingSource,
     MiracleSource,
-    TrappingSource {
+    TrappingSource,
+    DiseaseSource {
     override val name: String = "Core Rulebook"
     override val tableFootnotesAsNormalText: Boolean = true
 
@@ -225,6 +228,10 @@ object CoreRulebook :
                 ),
             )
         }.sortedBy { it.name }
+    }
+
+    override fun importDiseases(document: Document): List<Disease> {
+        return DiseaseParser().import(document, this, (186..188).asSequence())
     }
 
     override fun areSameStyle(

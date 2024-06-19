@@ -274,6 +274,10 @@
     <string name="common_ui_button_save">Save</string>
     <string name="common_ui_button_skip">Skip</string>
     <string name="common_ui_button_yes">Yes</string>
+    <string name="common_ui_button_add_item">Add item</string>
+    <string name="common_ui_duration_days">days</string>
+    <string name="common_ui_duration_hours">hours</string>
+    <string name="common_ui_duration_minutes">minutes</string>
     <string name="common_ui_decrement">Decrement value</string>
     <string name="common_ui_dismiss_tip_confirmation">Do you really want to dismiss this tip?</string>
     <string name="common_ui_expression_helper">Allowed operators: +,-,/,*,(,), MIN(…), MAX(…) and variables: %s</string>
@@ -288,7 +292,11 @@
     <string name="common_ui_label_open_drawer">Open navigation drawer</string>
     <string name="common_ui_label_previous_screen">Return to previous screen</string>
     <string name="common_ui_markdown_supported_note">Markdown formatting is supported</string>
+    <string name="common_ui_messages_no_items">No items</string>
     <string name="common_ui_select_all">Select All</string>
+    <string name="common_ui_units_days">days</string>
+    <string name="common_ui_units_hours">hours</string>
+    <string name="common_ui_units_minutes">minutes</string>
     <string name="compendium_assurance">The file is not saved anywhere and never leaves your device.</string>
     <string name="compendium_button_export">Save Export</string>
     <string name="compendium_button_export_file">Export file</string>
@@ -303,6 +311,7 @@
     <string name="compendium_messages_item_already_exists">Item already exists</string>
     <string name="compendium_messages_json_import_failed">JSON import failed. Check that you provided valid WFRP Master export.</string>
     <string name="compendium_messages_no_changed_items">There are no changed items to import</string>
+    <string name="compendium_messages_no_character_items">No items</string>
     <string name="compendium_messages_no_items">No items in compendium</string>
     <string name="compendium_messages_no_items_in_compendium_subtext_player">Your GM has to add them first.</string>
     <string name="compendium_messages_out_of_memory">PDF import failed. Not enough available RAM on device.</string>
@@ -312,6 +321,7 @@
     <string name="compendium_pick_prompt_blessings">Select which blessings you want to import.</string>
     <string name="compendium_pick_prompt_careers">Select which careers you want to import.</string>
     <string name="compendium_pick_prompt_miracles">Select which miracles you want to import.</string>
+    <string name="compendium_pick_prompt_diseases">Select which diseases you want to import.</string>
     <string name="compendium_pick_prompt_skills">Select which skills you want to import.</string>
     <string name="compendium_pick_prompt_spells">Select which spells you want to import.</string>
     <string name="compendium_pick_prompt_talents">Select which talents you want to import.</string>
@@ -323,6 +333,7 @@
     <string name="compendium_title">Compendium</string>
     <string name="compendium_title_blessings">Blessings</string>
     <string name="compendium_title_careers">Careers</string>
+    <string name="compendium_title_diseases">Diseases</string>
     <string name="compendium_title_export_compendium">Export Compendium</string>
     <string name="compendium_title_import_compendium">Import Compendium</string>
     <string name="compendium_title_import_dialog">Importing Rulebook…</string>
@@ -347,6 +358,29 @@
     <string name="conditions_stunned">Stunned</string>
     <string name="conditions_surprised">Surprised</string>
     <string name="conditions_unconscious">Unconscious</string>
+
+    <string name="diseases_button_add_non_compendium">…or add non-Compendium disease</string>
+    <string name="diseases_label_name">Name</string>
+    <string name="diseases_label_contraction">Contraction</string>
+    <string name="diseases_label_diagnosed">Diagnosed</string>
+    <string name="diseases_label_not_diagnosed">Not diagnosed</string>
+    <string name="diseases_label_description">Description (optional)</string>
+    <string name="diseases_label_duration">Duration</string>
+    <string name="diseases_label_healed">Healed</string>
+    <string name="diseases_label_incubation">Incubation</string>
+    <string name="diseases_label_permanent_effects">Permanent</string>
+    <string name="diseases_label_permanent_effects_optional">Permanent (optional)</string>
+    <string name="diseases_label_symptoms">Symptoms</string>
+    <string name="diseases_symptoms_helper">Comma separated list of Symptoms</string>
+    <string name="diseases_title_edit">Edit Disease</string>
+    <string name="diseases_title_diseases">Diseases</string>
+    <string name="diseases_title_new">New Disease</string>
+    <string name="diseases_title_choose_compendium_disease">Choose Compendium disease…</string>
+    <string name="diseases_messages_no_diseases_in_compendium">No diseases</string>
+    <string name="diseases_messages_no_diseases_in_compendium_subtext">There are no diseases in your compendium yet.</string>
+    <string name="diseases_messages_visible_to_player_false">Invisible to player</string>
+    <string name="diseases_messages_visible_to_player_true">Visible to player</string>
+
     <string name="drawer_privacy_policy">Privacy Policy</string>
     <string name="drawer_rate_app">Rate the App</string>
     <string name="drawer_report_issue">Report an Issue</string>

@@ -31,11 +31,29 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.menu.DropdownMenuItem
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
 import dev.icerock.moko.resources.compose.stringResource
 
+@Deprecated("Use overload accepting items as list")
 @Composable
 inline fun <reified T : NamedEnum> SelectBox(
     value: T,
     noinline onValueChange: (T) -> Unit,
     items: Array<T>,
+    modifier: Modifier = Modifier,
+    label: String? = null,
+) {
+    SelectBox(
+        value = value,
+        onValueChange = onValueChange,
+        items = items.toList(),
+        modifier = modifier,
+        label = label,
+    )
+}
+
+@Composable
+inline fun <reified T : NamedEnum> SelectBox(
+    value: T,
+    noinline onValueChange: (T) -> Unit,
+    items: List<T>,
     modifier: Modifier = Modifier,
     label: String? = null,
 ) {

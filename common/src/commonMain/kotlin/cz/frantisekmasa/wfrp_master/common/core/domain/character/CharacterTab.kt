@@ -14,5 +14,6 @@ enum class CharacterTab(
     SPELLS(Str.character_tab_spells),
     RELIGION(Str.character_tab_religions),
     TRAPPINGS(Str.character_tab_trappings),
+    WELL_BEING(Str.character_title_well_being),
     NOTES(Str.character_tab_notes),
 }

@@ -179,11 +179,11 @@ service cloud.firestore {
 
             match /trappings/{trappingId} {
                 allow read: if hasAccessToParty();
-                allow create: if isGameMaster() && isValidTrait(request.resource.data);
-                allow update: if isGameMaster() && isValidTrait(request.resource.data);
+                allow create: if isGameMaster() && isValidTrapping(request.resource.data);
+                allow update: if isGameMaster() && isValidTrapping(request.resource.data);
                 allow delete: if isGameMaster();
 
-                function isValidTrait(trapping) {
+                function isValidTrapping(trapping) {
                     return [
                            "id",
                            "name",
@@ -203,6 +203,36 @@ service cloud.firestore {
                            && trapping.packSize is number && trapping.packSize >= 1
                            && trapping.description is string && trapping.description.size() <= 2500
                            && trapping.isVisibleToPlayers is bool;
+                }
+            }
+
+            match /diseases/{diseaseId} {
+                allow read: if hasAccessToParty();
+                allow create: if isGameMaster() && isValidDisease(request.resource.data);
+                allow update: if isGameMaster() && isValidDisease(request.resource.data);
+                allow delete: if isGameMaster();
+
+                function isValidDisease(disease) {
+                    return [
+                           "id",
+                           "name",
+                           "contraction",
+                           "incubation",
+                           "duration",
+                           "symptoms",
+                           "permanentEffects",
+                           "description",
+                           "isVisibleToPlayers"
+                           ].hasAll(disease.keys())
+                           && disease.id is string && disease.id == diseaseId && isValidUuid(disease.id)
+                           && disease.name is string && isNotBlank(disease.name) && disease.name.size() <= 50
+                           && disease.contraction is string && disease.contraction.size() <= 500
+                           && disease.incubation is string && disease.incubation.size() <= 100
+                           && disease.duration is string && disease.duration.size() <= 500
+                           && disease.symptoms is list
+                           && disease.permanentEffects is string && disease.permanentEffects.size() <= 200
+                           && disease.description is string && disease.description.size() <= 1000
+                           && disease.isVisibleToPlayers is bool;
                 }
             }
 
@@ -489,6 +519,36 @@ service cloud.firestore {
                     }
                 }
 
+                match /diseases/{diseaseId} {
+                    allow read: if hasAccessToParty();
+                    allow create: if canEditCharacter() && isValidDisease(request.resource.data);
+                    allow update: if canEditCharacter() && isValidDisease(request.resource.data);
+                    allow delete: if canEditCharacter();
+
+                    function isValidDisease(disease) {
+                        return disease.keys().toSet() == ["id", "name", "description", "symptoms", "permanentEffects", "incubation", "duration", "isDiagnosed", "compendiumId", "note"].toSet()
+                        && disease.id is string && disease.id == diseaseId && isValidUuid(disease.id)
+                        && disease.name is string && isNotBlank(disease.name) && disease.name.size() <= 50
+                        && disease.description is string && disease.description.size() <= 1000
+                        && disease.symptoms is list
+                        && disease.permanentEffects is string && disease.permanentEffects.size() <= 200
+                        && isValidCountdown(disease.incubation)
+                        && isValidCountdown(disease.duration)
+                        && disease.isDiagnosed is bool
+                        && (
+                            disease.compendiumId == null
+                            || (disease.compendiumId is string && exists(/databases/$(database)/documents/parties/$(partyId)/diseases/$(disease.compendiumId)))
+                        )
+                        && disease.note is string && disease.note.size() <= 500;
+                    }
+
+                    function isValidCountdown(countdown) {
+                        return countdown.keys().toSet() == ["value", "unit"].toSet()
+                        && countdown.value is int && countdown.value >= 0
+                        && countdown.unit in ["DAYS", "HOURS", "MINUTES"];
+                    }
+                }
+
                 match /features/{featureName} {
                     allow read: if hasAccessToParty();
                     allow create: if canEditCharacter() && isValidFeature(request.resource.data);
@@ -601,25 +661,25 @@ service cloud.firestore {
                                 && character.status.tier in ["BRASS", "SILVER", "GOLD"]
                                 && character.status.standing is int && character.status.standing >= 0
                         )
-                        && (
-                            character.woundsModifiers is map &&
-                            [
-                                "afterMultiplier",
-                                "extraToughnessBonusMultiplier",
-                                "isConstruct"
-                            ].hasAll(character.woundsModifiers.keys()) &&
-                            character.woundsModifiers.afterMultiplier is int &&
-                            character.woundsModifiers.extraToughnessBonusMultiplier is int &&
-                            (! ("isConstruct" in character.woundsModifiers) || character.woundsModifiers.isConstruct is bool)
-                        )
-                        && (character.compendiumCareer == null || (
-                            character.compendiumCareer is map &&
-                            character.compendiumCareer.keys().toSet() == ["careerId", "levelId"].toSet() &&
-                            character.compendiumCareer.careerId is string && isValidUuid(character.compendiumCareer.careerId) &&
-                            character.compendiumCareer.levelId is string && isValidUuid(character.compendiumCareer.levelId)
-                        ))
+                        && areValidWoundsModifiers(character.woundsModifiers)
+                        && (character.compendiumCareer == null || isCompendiumCareerValid(character.compendiumCareer))
                         && character.encumbranceBonus is number && character.encumbranceBonus >= 0;
                 }
+            }
+
+            function areValidWoundsModifiers(woundsModifiers) {
+                return woundsModifiers is map
+                    && ["afterMultiplier", "extraToughnessBonusMultiplier", "isConstruct"].hasAll(woundsModifiers.keys())
+                    && woundsModifiers.afterMultiplier is int
+                    && woundsModifiers.extraToughnessBonusMultiplier is int
+                    && (! ("isConstruct" in woundsModifiers) || woundsModifiers.isConstruct is bool);
+            }
+
+            function isCompendiumCareerValid(career) {
+                return career is map
+                    && career.keys().toSet() == ["careerId", "levelId"].toSet()
+                    && career.careerId is string && isValidUuid(career.careerId)
+                    && career.levelId is string && isValidUuid(career.levelId);
             }
 
             function arePointsValid(points) {

@@ -33,9 +33,11 @@ import cz.frantisekmasa.wfrp_master.common.Str
 import cz.frantisekmasa.wfrp_master.common.compendium.CompendiumItemScreenModel.ImportAction
 import cz.frantisekmasa.wfrp_master.common.compendium.blessing.BlessingCompendiumScreenModel
 import cz.frantisekmasa.wfrp_master.common.compendium.career.CareerCompendiumScreenModel
+import cz.frantisekmasa.wfrp_master.common.compendium.disease.DiseaseCompendiumScreenModel
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.Blessing
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.Career
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.CompendiumItem
+import cz.frantisekmasa.wfrp_master.common.compendium.domain.Disease
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.Miracle
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.Skill
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.Spell
@@ -108,13 +110,15 @@ private fun ImportedItemsPicker(
                 ItemsScreen.TRAITS to state.miracles.isNotEmpty(),
                 ItemsScreen.CAREERS to state.careers.isNotEmpty(),
                 ItemsScreen.TRAPPINGS to state.trappings.isNotEmpty(),
+                ItemsScreen.DISEASES to state.diseases.isNotEmpty(),
             ).filter { it.second }
                 .map { it.first }
                 .toList()
         }
     var step by remember(state) { mutableStateOf(steps.firstOrNull() ?: ItemsScreen.SKILLS) }
-    val goToNextStep = { current: ItemsScreen ->
-        val index = steps.indexOf(current)
+
+    val onContinue = {
+        val index = steps.indexOf(step)
 
         if (index == -1 || index == steps.lastIndex) {
             onComplete()
@@ -130,7 +134,7 @@ private fun ImportedItemsPicker(
                     label = stringResource(Str.compendium_pick_prompt_skills),
                     items = state.skills,
                     screenModel = screen.rememberScreenModel<PartyId, SkillCompendiumScreenModel>(arg = partyId),
-                    onContinue = { goToNextStep(ItemsScreen.SKILLS) },
+                    onContinue = onContinue,
                     onClose = onDismissRequest,
                     replaceExistingByDefault = state.replaceExistingByDefault,
                 )
@@ -140,7 +144,7 @@ private fun ImportedItemsPicker(
                     label = stringResource(Str.compendium_pick_prompt_talents),
                     items = state.talents,
                     screenModel = screen.rememberScreenModel<PartyId, TalentCompendiumScreenModel>(arg = partyId),
-                    onContinue = { goToNextStep(ItemsScreen.TALENTS) },
+                    onContinue = onContinue,
                     onClose = onDismissRequest,
                     replaceExistingByDefault = state.replaceExistingByDefault,
                 )
@@ -150,7 +154,7 @@ private fun ImportedItemsPicker(
                     label = stringResource(Str.compendium_pick_prompt_spells),
                     items = state.spells,
                     screenModel = screen.rememberScreenModel<PartyId, SpellCompendiumScreenModel>(arg = partyId),
-                    onContinue = { goToNextStep(ItemsScreen.SPELLS) },
+                    onContinue = onContinue,
                     onClose = onDismissRequest,
                     replaceExistingByDefault = state.replaceExistingByDefault,
                 )
@@ -160,7 +164,7 @@ private fun ImportedItemsPicker(
                     label = stringResource(Str.compendium_pick_prompt_blessings),
                     items = state.blessings,
                     screenModel = screen.rememberScreenModel<PartyId, BlessingCompendiumScreenModel>(arg = partyId),
-                    onContinue = { goToNextStep(ItemsScreen.BLESSINGS) },
+                    onContinue = onContinue,
                     onClose = onDismissRequest,
                     replaceExistingByDefault = state.replaceExistingByDefault,
                 )
@@ -170,7 +174,7 @@ private fun ImportedItemsPicker(
                     label = stringResource(Str.compendium_pick_prompt_miracles),
                     items = state.miracles,
                     screenModel = screen.rememberScreenModel<PartyId, MiracleCompendiumScreenModel>(arg = partyId),
-                    onContinue = { goToNextStep(ItemsScreen.MIRACLES) },
+                    onContinue = onContinue,
                     onClose = onDismissRequest,
                     replaceExistingByDefault = state.replaceExistingByDefault,
                 )
@@ -180,7 +184,7 @@ private fun ImportedItemsPicker(
                     label = stringResource(Str.compendium_pick_prompt_traits),
                     items = state.traits,
                     screenModel = screen.rememberScreenModel<PartyId, TraitCompendiumScreenModel>(arg = partyId),
-                    onContinue = { goToNextStep(ItemsScreen.TRAITS) },
+                    onContinue = onContinue,
                     onClose = onDismissRequest,
                     replaceExistingByDefault = state.replaceExistingByDefault,
                 )
@@ -190,7 +194,7 @@ private fun ImportedItemsPicker(
                     label = stringResource(Str.compendium_pick_prompt_careers),
                     items = state.careers,
                     screenModel = screen.rememberScreenModel<PartyId, CareerCompendiumScreenModel>(arg = partyId),
-                    onContinue = { goToNextStep(ItemsScreen.CAREERS) },
+                    onContinue = onContinue,
                     onClose = onDismissRequest,
                     replaceExistingByDefault = state.replaceExistingByDefault,
                 )
@@ -200,7 +204,17 @@ private fun ImportedItemsPicker(
                     label = stringResource(Str.compendium_pick_prompt_trappings),
                     items = state.trappings,
                     screenModel = screen.rememberScreenModel<PartyId, TrappingCompendiumScreenModel>(arg = partyId),
-                    onContinue = { goToNextStep(ItemsScreen.TRAPPINGS) },
+                    onContinue = onContinue,
+                    onClose = onDismissRequest,
+                    replaceExistingByDefault = state.replaceExistingByDefault,
+                )
+            }
+            ItemsScreen.DISEASES -> {
+                ItemPicker(
+                    label = stringResource(Str.compendium_pick_prompt_diseases),
+                    items = state.diseases,
+                    screenModel = screen.rememberScreenModel<PartyId, DiseaseCompendiumScreenModel>(arg = partyId),
+                    onContinue = onContinue,
                     onClose = onDismissRequest,
                     replaceExistingByDefault = state.replaceExistingByDefault,
                 )
@@ -403,6 +417,7 @@ sealed class ImportDialogState {
         val traits: List<Trait>,
         val careers: List<Career>,
         val trappings: List<Trapping>,
+        val diseases: List<Disease>,
         val replaceExistingByDefault: Boolean,
     ) : ImportDialogState()
 }
@@ -417,4 +432,5 @@ private enum class ItemsScreen {
     TRAITS,
     CAREERS,
     TRAPPINGS,
+    DISEASES,
 }

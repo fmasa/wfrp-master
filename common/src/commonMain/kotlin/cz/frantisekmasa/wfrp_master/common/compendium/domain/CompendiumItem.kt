@@ -4,7 +4,7 @@ import com.benasher44.uuid.Uuid
 import cz.frantisekmasa.wfrp_master.common.core.utils.duplicateName
 import dev.icerock.moko.parcelize.Parcelable
 
-sealed class CompendiumItem<T : CompendiumItem<T>> : Parcelable {
+abstract class CompendiumItem<T : CompendiumItem<T>> : Parcelable {
     abstract val id: Uuid
     abstract val name: String
     abstract val isVisibleToPlayers: Boolean
