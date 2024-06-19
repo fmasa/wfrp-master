@@ -58,6 +58,9 @@ data class Character(
     val maxEncumbrance: Encumbrance
         get() = Encumbrance.maximumForCharacter(characteristics) + encumbranceBonus
 
+    // Rulebook page 183
+    val corruptionPointsBuffer: Int get() = characteristics.willPowerBonus + characteristics.toughnessBonus
+
     init {
         require(userId == null || type == CharacterType.PLAYER_CHARACTER) {
             "Only Player Characters can have associated user"

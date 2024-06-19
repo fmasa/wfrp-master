@@ -8,4 +8,5 @@ import kotlinx.collections.immutable.ImmutableList
 data class AvailableCompendiumItems<T : CompendiumItem<T>>(
     val availableCompendiumItems: ImmutableList<T>,
     val isCompendiumEmpty: Boolean,
+    val isGameMaster: Boolean,
 )

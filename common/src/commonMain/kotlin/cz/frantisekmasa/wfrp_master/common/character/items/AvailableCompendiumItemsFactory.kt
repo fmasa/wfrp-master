@@ -30,8 +30,9 @@ class AvailableCompendiumItemsFactory(
                     .map { it.gameMasterId }
                     .distinctUntilChanged(),
             ) { items, gameMasterId ->
+                val isGameMaster = gameMasterId == null || gameMasterId == userProvider.userId
                 val filteredItems =
-                    if (gameMasterId == null || gameMasterId == userProvider.userId) {
+                    if (isGameMaster) {
                         items
                     } else {
                         items.filter { it.isVisibleToPlayers }
@@ -40,6 +41,7 @@ class AvailableCompendiumItemsFactory(
                 AvailableCompendiumItems(
                     availableCompendiumItems = filteredItems.toImmutableList(),
                     isCompendiumEmpty = filteredItems.isNotEmpty(),
+                    isGameMaster = isGameMaster,
                 )
             }.combine(filterCharacterItems) { state, existing ->
                 val existingCompendiumIds =

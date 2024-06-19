@@ -77,7 +77,12 @@ fun EmptyUI(
     subText: String? = null,
     size: EmptyUI.Size = EmptyUI.Size.Large,
 ) {
-    EmptyUI(text, drawableResource(icon), subText, size)
+    EmptyUI(
+        text = text,
+        iconPainter = drawableResource(icon),
+        subText = subText,
+        size = size,
+    )
 }
 
 @Composable
@@ -87,29 +92,43 @@ fun EmptyUI(
     subText: String? = null,
     size: EmptyUI.Size = EmptyUI.Size.Large,
 ) {
-    EmptyUI(text, rememberVectorPainter(icon), subText, size)
+    EmptyUI(Modifier, text, rememberVectorPainter(icon), subText, size)
+}
+
+@Composable
+fun CompactEmptyUI(text: String) {
+    EmptyUI(
+        modifier = Modifier.padding(top = Spacing.small),
+        text = text,
+        iconPainter = null,
+        subText = null,
+        size = EmptyUI.Size.Small,
+    )
 }
 
 @Composable
 fun EmptyUI(
+    modifier: Modifier = Modifier,
     text: String,
-    iconPainter: Painter,
+    iconPainter: Painter?,
     subText: String? = null,
     size: EmptyUI.Size = EmptyUI.Size.Large,
 ) {
     val disabledColor = MaterialTheme.colors.onSurface.copy(ContentAlpha.disabled)
 
-    Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.fillMaxWidth()) {
+    Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = modifier.fillMaxWidth()) {
         if (size == EmptyUI.Size.Large) {
             Spacer(Modifier.fillMaxHeight(0.35f))
         }
 
-        Image(
-            iconPainter,
-            contentDescription = VISUAL_ONLY_ICON_DESCRIPTION,
-            modifier = size.modifier(iconPainter.intrinsicSize),
-            colorFilter = ColorFilter.tint(disabledColor),
-        )
+        if (iconPainter != null) {
+            Image(
+                iconPainter,
+                contentDescription = VISUAL_ONLY_ICON_DESCRIPTION,
+                modifier = size.modifier(iconPainter.intrinsicSize),
+                colorFilter = ColorFilter.tint(disabledColor),
+            )
+        }
 
         Text(text, style = size.textStyle, textAlign = TextAlign.Center)
 
