@@ -765,4 +765,5 @@
     <string name="miracles_label_duration">Duración</string>
     <string name="authentication_messages_too_many_attempts">Demasiados intentos.
 \nInténtalo de nuevo en unos minutos o restablece tu contraseña.</string>
+    <string name="social_classes_seafarers">Marineros</string>
 </resources>
