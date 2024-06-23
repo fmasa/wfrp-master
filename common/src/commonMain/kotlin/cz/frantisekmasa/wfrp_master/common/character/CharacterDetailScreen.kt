@@ -16,6 +16,7 @@ import androidx.compose.material.icons.rounded.Edit
 import androidx.compose.material.icons.rounded.ExpandMore
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.Stable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableStateOf
@@ -28,6 +29,7 @@ import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
 import cz.frantisekmasa.wfrp_master.common.Str
 import cz.frantisekmasa.wfrp_master.common.character.characteristics.CharacteristicsScreen
+import cz.frantisekmasa.wfrp_master.common.character.characteristics.CompendiumCareer
 import cz.frantisekmasa.wfrp_master.common.character.combat.CharacterCombatScreen
 import cz.frantisekmasa.wfrp_master.common.character.conditions.ConditionsScreen
 import cz.frantisekmasa.wfrp_master.common.character.notes.NotesScreen
@@ -105,7 +107,8 @@ data class CharacterDetailScreen(
                     title = {
                         CharacterTitle(
                             partyId = state.characterId.partyId,
-                            partyName = state.partyName,
+                            // TODO: Use separate field in top level state
+                            career = state.characteristicsScreenState.compendiumCareer,
                             character = state.character,
                             currentTab = currentTab,
                             isGameMaster = state.isGameMaster,
@@ -141,9 +144,9 @@ data class CharacterDetailScreen(
     @Composable
     private fun CharacterTitle(
         partyId: PartyId,
-        partyName: String,
         state: CharacterPickerState,
         character: Character,
+        career: CompendiumCareer?,
         assignCharacter: suspend (Character, UserId) -> Unit,
         currentTab: CharacterTab?,
         isGameMaster: Boolean,
@@ -151,6 +154,9 @@ data class CharacterDetailScreen(
         val userId = LocalUser.current.id
         val canAddCharacters = !isGameMaster
         val navigation = LocalNavigationTransaction.current
+
+        val subtitle = ((character.race?.let { "${it.localizedName} " } ?: "") +
+                careerName(career, character)).takeIf { it.isNotBlank() }
 
         if (state.allCharacters.isNotEmpty() || canAddCharacters) {
             var unassignedCharactersDialogOpened by remember { mutableStateOf(false) }
@@ -187,7 +193,7 @@ data class CharacterDetailScreen(
             ) {
                 Column {
                     Text(character.name)
-                    Subtitle(partyName)
+                    subtitle?.let { Subtitle(it) }
                 }
 
                 if (state.allCharacters.size > 1 || canAddCharacters) {
@@ -255,7 +261,7 @@ data class CharacterDetailScreen(
         } else {
             Column {
                 Text(character.name)
-                Subtitle(partyName)
+                subtitle?.let { Subtitle(it) }
             }
         }
     }
@@ -397,4 +403,16 @@ private fun SkeletonScaffold() {
     Scaffold(topBar = { TopAppBar { } }) {
         FullScreenProgress()
     }
+}
+
+@Stable
+private fun careerName(
+    career: CompendiumCareer?,
+    character: Character,
+): String {
+    if (career == null) {
+        return character.career
+    }
+
+    return career.level.name
 }
