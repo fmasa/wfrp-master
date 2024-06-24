@@ -14,6 +14,7 @@ import dev.icerock.moko.parcelize.Parcelable
 import dev.icerock.moko.parcelize.Parcelize
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.json.JsonClassDiscriminator
 
 typealias LocalCharacterId = String
 
@@ -46,6 +47,7 @@ data class Character(
     val avatarUrl: String? = null,
     val money: Money = Money.ZERO,
     val hiddenTabs: Set<CharacterTab> = emptySet(),
+    val relationships: Map<LocalCharacterId, Relationship> = emptyMap(),
     val size: Size? = null,
 ) : Parcelable {
     val characteristics: Stats get() = characteristicsBase + characteristicsAdvances
@@ -85,6 +87,18 @@ data class Character(
                 characteristics,
             )
         require(points.wounds <= maxWounds) { "Wounds (${points.wounds} are greater than max Wounds ($maxWounds)" }
+        require(relationships.count { it.value is Relationship.Mount && it.value.riding } <= 1) {
+            "Character can ride at most one mount at he mount"
+        }
+    }
+
+    @JsonClassDiscriminator("type")
+    sealed interface Relationship {
+        @SerialName("FAMILIAR")
+        object Familiar : Relationship
+
+        @SerialName("MOUNT")
+        data class Mount(val riding: Boolean) : Relationship
     }
 
     @Parcelize

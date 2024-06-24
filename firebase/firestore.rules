@@ -546,7 +546,8 @@ service cloud.firestore {
                             "archived",
                             "woundsModifiers",
                             "compendiumCareer",
-                            "encumbranceBonus"
+                            "encumbranceBonus",
+                            "relationships",
                         ].hasAll(character.keys())
                         && character.id == characterId
                         && (character.userId == null || character.userId in get(/databases/$(database)/documents/parties/$(partyId)).data.users)
@@ -618,7 +619,8 @@ service cloud.firestore {
                             character.compendiumCareer.careerId is string && isValidUuid(character.compendiumCareer.careerId) &&
                             character.compendiumCareer.levelId is string && isValidUuid(character.compendiumCareer.levelId)
                         ))
-                        && character.encumbranceBonus is number && character.encumbranceBonus >= 0;
+                        && character.encumbranceBonus is number && character.encumbranceBonus >= 0
+                        && (! ("relationships" in character) || character.relationships is map);
                 }
             }
 
