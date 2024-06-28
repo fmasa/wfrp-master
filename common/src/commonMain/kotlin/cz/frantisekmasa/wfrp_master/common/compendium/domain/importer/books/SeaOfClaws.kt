@@ -1,10 +1,12 @@
 package cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.books
 
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.Career
+import cz.frantisekmasa.wfrp_master.common.compendium.domain.Disease
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.Miracle
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.Spell
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.Talent
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.parsers.CareerParser
+import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.parsers.DiseaseParser
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.parsers.Document
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.parsers.MiracleParser
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.parsers.SpellParser
@@ -13,6 +15,7 @@ import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.parsers.Te
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.parsers.TextToken
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.parsers.Token
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.sources.CareerSource
+import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.sources.DiseaseSource
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.sources.MiracleSource
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.sources.SpellSource
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.sources.TalentSource
@@ -20,7 +23,7 @@ import cz.frantisekmasa.wfrp_master.common.core.domain.SocialClass
 import kotlin.math.max
 import kotlin.math.min
 
-object SeaOfClaws : Book, SpellSource, TalentSource, CareerSource, MiracleSource {
+object SeaOfClaws : Book, SpellSource, TalentSource, CareerSource, MiracleSource, DiseaseSource {
     override val name = "Sea of Claws"
 
     override fun importSpells(document: Document): List<Spell> {
@@ -50,6 +53,11 @@ object SeaOfClaws : Book, SpellSource, TalentSource, CareerSource, MiracleSource
 
     override fun importMiracles(document: Document): List<Miracle> {
         return MiracleParser().import(document, this, sequenceOf(87, 91))
+    }
+
+    override fun importDiseases(document: Document): List<Disease> {
+        return DiseaseParser(convertTablesToText = true)
+            .import(document, this, sequenceOf(125))
     }
 
     override fun areSameStyle(

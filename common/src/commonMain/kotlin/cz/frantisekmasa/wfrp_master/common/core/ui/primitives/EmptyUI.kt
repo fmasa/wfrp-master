@@ -91,9 +91,19 @@ fun EmptyUI(
 }
 
 @Composable
+fun CompactEmptyUI(text: String) {
+    EmptyUI(
+        text = text,
+        iconPainter = null,
+        subText = null,
+        size = EmptyUI.Size.Small,
+    )
+}
+
+@Composable
 fun EmptyUI(
     text: String,
-    iconPainter: Painter,
+    iconPainter: Painter?,
     subText: String? = null,
     size: EmptyUI.Size = EmptyUI.Size.Large,
 ) {
@@ -104,12 +114,14 @@ fun EmptyUI(
             Spacer(Modifier.fillMaxHeight(0.35f))
         }
 
-        Image(
-            iconPainter,
-            contentDescription = VISUAL_ONLY_ICON_DESCRIPTION,
-            modifier = size.modifier(iconPainter.intrinsicSize),
-            colorFilter = ColorFilter.tint(disabledColor),
-        )
+        if (iconPainter != null) {
+            Image(
+                iconPainter,
+                contentDescription = VISUAL_ONLY_ICON_DESCRIPTION,
+                modifier = size.modifier(iconPainter.intrinsicSize),
+                colorFilter = ColorFilter.tint(disabledColor),
+            )
+        }
 
         Text(text, style = size.textStyle, textAlign = TextAlign.Center)
 

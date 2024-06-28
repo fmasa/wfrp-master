@@ -103,6 +103,7 @@ class CompendiumListScreen(
     private fun icon(compendiumType: CompendiumScreen.Type): Resources.Drawable {
         return when (compendiumType) {
             CompendiumScreen.Type.BLESSINGS -> Resources.Drawable.Blessing
+            CompendiumScreen.Type.DISEASES -> Resources.Drawable.Disease
             CompendiumScreen.Type.MIRACLES -> Resources.Drawable.Miracle
             CompendiumScreen.Type.SKILLS -> Resources.Drawable.Skill
             CompendiumScreen.Type.TALENTS -> Resources.Drawable.Talent

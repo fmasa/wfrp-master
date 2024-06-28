@@ -41,6 +41,7 @@ import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.parsers.lo
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.parsers.pdfBoxInitializer
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.sources.BlessingSource
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.sources.CareerSource
+import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.sources.DiseaseSource
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.sources.MiracleSource
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.sources.SkillSource
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.sources.SpellSource
@@ -224,6 +225,10 @@ class RulebookCompendiumImportScreen(
 
             if (book is TrappingSource) {
                 add(stringResource(Str.compendium_title_trappings))
+            }
+
+            if (book is DiseaseSource) {
+                add(stringResource(Str.compendium_title_diseases))
             }
         }.joinToString(", ")
     }

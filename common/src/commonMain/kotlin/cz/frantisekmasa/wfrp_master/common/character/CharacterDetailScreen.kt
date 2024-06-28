@@ -35,6 +35,7 @@ import cz.frantisekmasa.wfrp_master.common.character.religion.ReligionScreen
 import cz.frantisekmasa.wfrp_master.common.character.skills.SkillsScreen
 import cz.frantisekmasa.wfrp_master.common.character.spells.CharacterSpellsScreen
 import cz.frantisekmasa.wfrp_master.common.character.trappings.TrappingsScreen
+import cz.frantisekmasa.wfrp_master.common.character.wellBeing.WellBeingScreen
 import cz.frantisekmasa.wfrp_master.common.characterCreation.CharacterCreationScreen
 import cz.frantisekmasa.wfrp_master.common.characterEdit.CharacterEditScreen
 import cz.frantisekmasa.wfrp_master.common.combat.ActiveCombatBanner
@@ -372,6 +373,14 @@ data class CharacterDetailScreen(
                                     onAddToContainer = screenModelV2::addToContainer,
                                     onDuplicate = screenModelV2::duplicateTrapping,
                                     onRemove = screenModelV2::removeTrapping,
+                                    modifier = modifier,
+                                )
+                            }
+                            CharacterTab.WELL_BEING -> {
+                                WellBeingScreen(
+                                    characterId = characterId,
+                                    state = state.wellBeingScreenState,
+                                    removeDisease = screenModelV2::removeDisease,
                                     modifier = modifier,
                                 )
                             }

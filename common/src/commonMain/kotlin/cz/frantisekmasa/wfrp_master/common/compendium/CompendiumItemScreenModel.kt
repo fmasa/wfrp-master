@@ -23,6 +23,13 @@ abstract class CompendiumItemScreenModel<A : CompendiumItem<A>>(
         compendium.saveItems(partyId, compendiumItems)
     }
 
+    suspend fun changeVisibility(
+        compendiumItem: A,
+        isVisibleToPlayers: Boolean,
+    ) {
+        compendium.saveItems(partyId, listOf(compendiumItem.changeVisibility(isVisibleToPlayers)))
+    }
+
     abstract suspend fun update(compendiumItem: A)
 
     suspend fun import(actions: List<ImportAction<A>>) {
