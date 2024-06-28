@@ -600,9 +600,9 @@
     <string name="weapons_qualities_repeater">Ripetizione</string>
     <string name="weapons_qualities_shield">Scudo</string>
     <string name="weapons_qualities_slash">Mozzare</string>
-    <string name="weapons_qualities_spread">Spread</string>
+    <string name="weapons_qualities_spread">Dispersione</string>
     <string name="weapons_qualities_trap_blade">Intrappola Lama</string>
-    <string name="weapons_qualities_trip">Trip</string>
+    <string name="weapons_qualities_trip">Inciampo</string>
     <string name="weapons_qualities_unbreakable">Infrangibile</string>
     <string name="weapons_qualities_wrap">Avvolgente</string>
     <string name="weapons_ranged_groups_blackpowder">Armi da fuoco</string>
@@ -757,4 +757,7 @@
     <string name="journal_label_text">Testo</string>
     <string name="journal_label_entry_name">Nome</string>
     <string name="journal_title_edit_entry">Modifica Annotazione Diario</string>
+    <string name="social_classes_seafarers">Gente di Mare</string>
+    <string name="authentication_messages_too_many_attempts">Troppi tentativi.
+\nProva nuovamente tra qualche minuto o fai il reset della tua password.</string>
 </resources>
