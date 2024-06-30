@@ -8,6 +8,7 @@ allprojects {
     }
 
     apply(plugin = rootProject.libs.plugins.ktlint.get().pluginId)
+    apply(plugin = rootProject.libs.plugins.compose.guard.get().pluginId)
 
     configure<KtlintExtension> {
         filter {
@@ -27,5 +28,6 @@ plugins {
     alias(libs.plugins.kotlin.serialization) apply false
     alias(libs.plugins.kotlin.parcelize) apply false
     alias(libs.plugins.ktlint)
+    alias(libs.plugins.compose.guard) apply false
     alias(libs.plugins.moko.resources) apply false
 }

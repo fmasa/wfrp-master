@@ -8,6 +8,7 @@ better-parse = "0.4.4"
 camera = "1.3.3"
 coil-compose = "2.5.0"
 compose = "1.6.2"
+compose-guard = "2.0.0"
 crashlytics = "2.9.9"
 crashlytics-ktx = "18.6.4"
 datastore-preferences = "1.1.0"
@@ -106,3 +107,4 @@ android-application = { id = "com.android.application", version.ref = "android-g
 google-services = { id = "com.google.gms.google-services", version.ref = "google-services" }
 crashlytics = { id = "com.google.firebase.crashlytics", version.ref = "crashlytics" }
 moko-resources = { id = "dev.icerock.mobile.multiplatform-resources", version.ref = "moko-resources" }
+compose-guard = { id = "com.joetr.compose.guard", version.ref = "compose-guard" }
