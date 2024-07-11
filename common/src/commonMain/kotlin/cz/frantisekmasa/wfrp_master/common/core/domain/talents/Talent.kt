@@ -8,10 +8,10 @@ import cz.frantisekmasa.wfrp_master.common.character.effects.CharacterEffect
 import cz.frantisekmasa.wfrp_master.common.character.effects.CharacteristicChange
 import cz.frantisekmasa.wfrp_master.common.character.effects.EffectSource
 import cz.frantisekmasa.wfrp_master.common.character.effects.HardyWoundsModification
-import cz.frantisekmasa.wfrp_master.common.character.effects.Translator
 import cz.frantisekmasa.wfrp_master.common.core.common.requireMaxLength
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.CharacterItem
 import cz.frantisekmasa.wfrp_master.common.core.serialization.UuidAsString
+import cz.frantisekmasa.wfrp_master.common.localization.Translator
 import dev.icerock.moko.parcelize.Parcelize
 import kotlinx.serialization.Serializable
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.Talent as CompendiumTalent

@@ -5,6 +5,7 @@ package cz.frantisekmasa.wfrp_master.common.compendium.domain.importer
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.Blessing
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.Career
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.Disease
+import cz.frantisekmasa.wfrp_master.common.compendium.domain.JournalEntry
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.Miracle
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.Skill
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.Spell
@@ -62,6 +63,10 @@ class JsonCompendiumImporter(stream: InputStream) : CompendiumImporter {
 
     override suspend fun importDiseases(): List<Disease> {
         return data.getOrThrow().diseases.map { it.toDisease() }
+    }
+
+    override suspend fun importJournalEntries(): List<JournalEntry> {
+        return data.getOrThrow().journalEntries.map { it.toJournalEntry() }
     }
 
     companion object {

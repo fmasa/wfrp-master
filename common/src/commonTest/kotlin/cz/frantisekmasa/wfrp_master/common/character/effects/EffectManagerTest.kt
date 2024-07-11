@@ -15,6 +15,7 @@ import cz.frantisekmasa.wfrp_master.common.core.domain.talents.Talent
 import cz.frantisekmasa.wfrp_master.common.core.domain.traits.Trait
 import cz.frantisekmasa.wfrp_master.common.dummies.DummyCharacterItemRepository
 import cz.frantisekmasa.wfrp_master.common.dummies.DummyCharacterRepository
+import cz.frantisekmasa.wfrp_master.common.localization.Translator
 import cz.frantisekmasa.wfrp_master.common.settings.Language
 import dev.icerock.moko.resources.StringResource
 import io.mockk.every

@@ -9,7 +9,6 @@ import cz.frantisekmasa.wfrp_master.common.character.diseases.CountdownInput
 import cz.frantisekmasa.wfrp_master.common.character.diseases.CountdownInputData
 import cz.frantisekmasa.wfrp_master.common.character.diseases.DiagnosedSwitch
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.diseases.Countdown
-import cz.frantisekmasa.wfrp_master.common.core.domain.character.diseases.Disease
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.FormDialog
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.HydratedFormData
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.Rules
@@ -21,7 +20,7 @@ import cz.frantisekmasa.wfrp_master.common.compendium.domain.Disease as Compendi
 fun DiseaseSpecificationForm(
     isGameMaster: Boolean,
     compendiumDisease: CompendiumDisease?,
-    existingDisease: Disease?,
+    existingDisease: DiseaseSpecification.Data?,
     onSave: suspend (DiseaseSpecification.Data) -> Unit,
     onDismissRequest: () -> Unit,
 ) {
@@ -87,7 +86,7 @@ object DiseaseSpecification {
         companion object {
             @Composable
             fun fromDisease(
-                disease: Disease?,
+                disease: Data?,
                 isGameMaster: Boolean,
             ): FormData {
                 return FormData(

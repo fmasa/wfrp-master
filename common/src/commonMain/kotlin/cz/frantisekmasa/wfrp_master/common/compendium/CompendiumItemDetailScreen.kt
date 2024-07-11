@@ -15,10 +15,12 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import arrow.core.Either
 import cafe.adriel.voyager.core.screen.Screen
 import com.benasher44.uuid.Uuid
 import cz.frantisekmasa.wfrp_master.common.Str
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.CompendiumItem
+import cz.frantisekmasa.wfrp_master.common.compendium.domain.exceptions.CompendiumItemNotFound
 import cz.frantisekmasa.wfrp_master.common.core.ui.buttons.BackButton
 import cz.frantisekmasa.wfrp_master.common.core.ui.flow.collectWithLifecycle
 import cz.frantisekmasa.wfrp_master.common.core.ui.navigation.LocalNavigationTransaction
@@ -26,6 +28,8 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.FullScreenProgress
 import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.IconAction
 import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.LocalPersistentSnackbarHolder
 import dev.icerock.moko.resources.compose.stringResource
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 
 @Composable
 fun <A : CompendiumItem<A>> Screen.CompendiumItemDetailScreen(
@@ -35,9 +39,39 @@ fun <A : CompendiumItem<A>> Screen.CompendiumItemDetailScreen(
     detail: @Composable (A) -> Unit,
     editDialog: @Composable (item: A, onDismissRequest: () -> Unit) -> Unit,
 ) {
-    val itemOrError =
-        remember { screenModel.get(id) }
-            .collectWithLifecycle(null).value
+    CompendiumItemDetailScreen(
+        itemFlow =
+            remember {
+                screenModel.get(id).map { either ->
+                    either.map {
+                        DefaultCompendiumItemDetailScreenState(it)
+                    }
+                }
+            },
+        scrollable = scrollable,
+        detail = { detail(it.item) },
+        editDialog = editDialog,
+        screenModel = screenModel,
+    )
+}
+
+interface CompendiumItemDetailScreenState<T : CompendiumItem<T>> {
+    val item: T
+}
+
+private data class DefaultCompendiumItemDetailScreenState<T : CompendiumItem<T>>(
+    override val item: T,
+) : CompendiumItemDetailScreenState<T>
+
+@Composable
+fun <T : CompendiumItem<T>, A : CompendiumItemDetailScreenState<T>> Screen.CompendiumItemDetailScreen(
+    itemFlow: Flow<Either<CompendiumItemNotFound, A>>,
+    scrollable: Boolean = true,
+    screenModel: CompendiumItemScreenModel<T>,
+    detail: @Composable (A) -> Unit,
+    editDialog: @Composable (item: T, onDismissRequest: () -> Unit) -> Unit,
+) {
+    val itemOrError = itemFlow.collectWithLifecycle(null).value
 
     if (itemOrError == null) {
         FullScreenProgress()
@@ -62,14 +96,16 @@ fun <A : CompendiumItem<A>> Screen.CompendiumItemDetailScreen(
     var editDialogOpened by remember { mutableStateOf(false) }
 
     if (editDialogOpened) {
-        editDialog(item) { editDialogOpened = false }
+        editDialog(item.item) { editDialogOpened = false }
     }
+
+    val compendiumItem = item.item
 
     Scaffold(
         topBar = {
             TopAppBar(
                 navigationIcon = { BackButton() },
-                title = { Text(item.name) },
+                title = { Text(compendiumItem.name) },
                 actions = {
                     IconAction(
                         Icons.Rounded.Edit,
@@ -88,8 +124,8 @@ fun <A : CompendiumItem<A>> Screen.CompendiumItemDetailScreen(
             },
         ) {
             VisibilitySwitchBar(
-                visible = item.isVisibleToPlayers,
-                onChange = { screenModel.changeVisibility(item, it) },
+                visible = compendiumItem.isVisibleToPlayers,
+                onChange = { screenModel.changeVisibility(compendiumItem, it) },
             )
 
             detail(item)

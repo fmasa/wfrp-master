@@ -1,12 +1,10 @@
 package cz.frantisekmasa.wfrp_master.common.compendium.journal
 
 import androidx.compose.runtime.Immutable
-import arrow.core.Either
-import cafe.adriel.voyager.core.model.ScreenModel
 import com.benasher44.uuid.Uuid
+import cz.frantisekmasa.wfrp_master.common.compendium.CompendiumItemScreenModel
 import cz.frantisekmasa.wfrp_master.common.compendium.CompendiumListItem
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.JournalEntry
-import cz.frantisekmasa.wfrp_master.common.compendium.domain.exceptions.CompendiumItemNotFound
 import cz.frantisekmasa.wfrp_master.common.core.auth.UserProvider
 import cz.frantisekmasa.wfrp_master.common.core.domain.compendium.Compendium
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.PartyId
@@ -20,19 +18,21 @@ import kotlinx.coroutines.flow.map
 
 class JournalScreenModel(
     private val partyId: PartyId,
-    private val compendium: Compendium<JournalEntry>,
+    compendium: Compendium<JournalEntry>,
     private val firestore: FirebaseFirestore,
     userProvider: UserProvider,
     parties: PartyRepository,
-) : ScreenModel {
+) : CompendiumItemScreenModel<JournalEntry>(
+        partyId,
+        compendium,
+    ) {
     val isGameMaster =
         parties.getLive(partyId)
             .right()
             .map { userProvider.userId == it.gameMasterId }
             .distinctUntilChanged()
-
-    private val items =
-        compendium.liveForParty(partyId)
+    val entries =
+        items
             .combine(isGameMaster) { items, isGameMaster ->
                 if (isGameMaster) {
                     items
@@ -40,9 +40,6 @@ class JournalScreenModel(
                     items.filter { it.isVisibleToPlayers }
                 }
             }
-
-    val entries =
-        items
             .map { entries ->
                 entries.map(JournalEntryItem::fromEntry)
             }
@@ -141,15 +138,21 @@ class JournalScreenModel(
         }
     }
 
+    override suspend fun remove(compendiumItem: JournalEntry) {
+        remove(compendiumItem.id)
+    }
+
+    override suspend fun update(compendiumItem: JournalEntry) {
+        firestore.runTransaction {
+            compendium.save(this, partyId, compendiumItem)
+        }
+    }
+
     suspend fun remove(entryId: Uuid) {
         val entry = compendium.findItem(partyId, entryId) ?: return
 
         firestore.runTransaction {
             compendium.remove(this, partyId, entry)
         }
-    }
-
-    fun get(entryId: Uuid): Flow<Either<CompendiumItemNotFound, JournalEntry>> {
-        return compendium.getLive(partyId, entryId)
     }
 }

@@ -26,6 +26,7 @@ import cz.frantisekmasa.wfrp_master.common.combat.domain.EquippedWeapon
 import cz.frantisekmasa.wfrp_master.common.combat.domain.WornArmourPiece
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.Career
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.SpellLore
+import cz.frantisekmasa.wfrp_master.common.compendium.journal.rules.ConditionsJournalProvider
 import cz.frantisekmasa.wfrp_master.common.core.auth.UserId
 import cz.frantisekmasa.wfrp_master.common.core.auth.UserProvider
 import cz.frantisekmasa.wfrp_master.common.core.domain.Ambitions
@@ -58,6 +59,7 @@ import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.TrappingType
 import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.WeaponEquip
 import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.sum
 import cz.frantisekmasa.wfrp_master.common.core.utils.right
+import cz.frantisekmasa.wfrp_master.common.localization.Translator
 import dev.gitlive.firebase.firestore.FirebaseFirestore
 import io.github.aakira.napier.Napier
 import kotlinx.collections.immutable.ImmutableList
@@ -91,6 +93,8 @@ class CharacterDetailScreenModel(
     private val userProvider: UserProvider,
     private val spells: SpellRepository,
     private val diseases: DiseaseRepository,
+    private val conditionsJournalProvider: ConditionsJournalProvider,
+    private val translatorFactory: Translator.Factory,
 ) : ScreenModel {
     private val character = characters.getLive(characterId).right()
     private val skillsScreenState =
@@ -371,6 +375,19 @@ class CharacterDetailScreenModel(
             )
         }
 
+    private val conditionsScreenState =
+        combine(
+            character.map { it.conditions }
+                .distinctUntilChanged(),
+            party.map { it.settings.language }
+                .flatMapLatest { conditionsJournalProvider.getConditionsJournal(characterId.partyId, translatorFactory.create(it)) },
+        ) { conditions, conditionsJournal ->
+            ConditionsScreenState(
+                conditions = conditions,
+                conditionsJournal = conditionsJournal,
+            )
+        }
+
     val state: Flow<CharacterDetailScreenState> =
         combine(
             combine(character, party, skillsScreenState, ::Triple),
@@ -382,17 +399,19 @@ class CharacterDetailScreenModel(
             ),
             combine(notesScreenState, spellsScreenState, characterPickerState, ::Triple),
             combine(combatScreenState, wellBeingScreenState, isGameMaster, ::Triple),
+            conditionsScreenState,
         ) { (character, party, skillsScreenState),
             (religionScreenState, characteristicsScreenState, trappingsScreenState),
             (notesScreenState, spellsScreenState, characterPickerState),
             (combatScreenState, wellBeingScreenState, isGameMaster),
+            conditionsScreenState,
             ->
             CharacterDetailScreenState(
                 characterId = characterId,
                 character = character,
                 partyName = party.name,
                 isCombatActive = party.activeCombat != null,
-                conditionsScreenState = ConditionsScreenState(character.conditions),
+                conditionsScreenState = conditionsScreenState,
                 skillsScreenState = skillsScreenState,
                 religionScreenState = religionScreenState,
                 characteristicsScreenState = characteristicsScreenState,

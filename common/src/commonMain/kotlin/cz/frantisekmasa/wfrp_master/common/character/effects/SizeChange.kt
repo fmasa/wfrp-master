@@ -3,6 +3,7 @@ package cz.frantisekmasa.wfrp_master.common.character.effects
 import cz.frantisekmasa.wfrp_master.common.Str
 import cz.frantisekmasa.wfrp_master.common.core.domain.Size
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.Character
+import cz.frantisekmasa.wfrp_master.common.localization.Translator
 import java.util.Locale
 
 /**

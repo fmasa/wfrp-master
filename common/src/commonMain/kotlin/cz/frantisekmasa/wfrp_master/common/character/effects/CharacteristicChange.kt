@@ -3,6 +3,7 @@ package cz.frantisekmasa.wfrp_master.common.character.effects
 import cz.frantisekmasa.wfrp_master.common.Str
 import cz.frantisekmasa.wfrp_master.common.core.domain.Stats
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.Character
+import cz.frantisekmasa.wfrp_master.common.localization.Translator
 
 open class CharacteristicChange(
     private val plus: Stats = Stats.ZERO,
@@ -33,9 +34,7 @@ open class CharacteristicChange(
             name: String,
             translator: Translator,
         ): CharacteristicChange? {
-            val cleanName = name.lowercase(translator.locale)
-
-            if (cleanName == translator.translate(Str.character_effect_big)) {
+            if (name.equals(translator.translate(Str.character_effect_big), ignoreCase = true)) {
                 return CharacteristicChange(
                     plus =
                         Stats.ZERO.copy(
@@ -49,7 +48,7 @@ open class CharacteristicChange(
                 )
             }
 
-            if (cleanName == translator.translate(Str.character_effect_brute)) {
+            if (name.equals(translator.translate(Str.character_effect_brute), ignoreCase = true)) {
                 return CharacteristicChange(
                     plus =
                         Stats.ZERO.copy(
@@ -63,7 +62,7 @@ open class CharacteristicChange(
                 )
             }
 
-            if (cleanName == translator.translate(Str.character_effect_clever)) {
+            if (name.equals(translator.translate(Str.character_effect_clever), ignoreCase = true)) {
                 return CharacteristicChange(
                     plus =
                         Stats.ZERO.copy(
@@ -73,7 +72,7 @@ open class CharacteristicChange(
                 )
             }
 
-            if (cleanName == translator.translate(Str.character_effect_cunning)) {
+            if (name.equals(translator.translate(Str.character_effect_cunning), ignoreCase = true)) {
                 return CharacteristicChange(
                     plus =
                         Stats.ZERO.copy(
@@ -84,7 +83,7 @@ open class CharacteristicChange(
                 )
             }
 
-            if (cleanName == translator.translate(Str.character_effect_elite)) {
+            if (name.equals(translator.translate(Str.character_effect_elite), ignoreCase = true)) {
                 return CharacteristicChange(
                     plus =
                         Stats.ZERO.copy(
@@ -95,7 +94,7 @@ open class CharacteristicChange(
                 )
             }
 
-            if (cleanName == translator.translate(Str.character_effect_leader)) {
+            if (name.equals(translator.translate(Str.character_effect_leader), ignoreCase = true)) {
                 return CharacteristicChange(
                     plus =
                         Stats.ZERO.copy(
@@ -105,7 +104,7 @@ open class CharacteristicChange(
                 )
             }
 
-            if (cleanName == translator.translate(Str.character_effect_tough)) {
+            if (name.equals(translator.translate(Str.character_effect_tough), ignoreCase = true)) {
                 return CharacteristicChange(
                     plus =
                         Stats.ZERO.copy(
@@ -115,7 +114,7 @@ open class CharacteristicChange(
                 )
             }
 
-            if (cleanName == translator.translate(Str.character_effect_brute)) {
+            if (name.equals(translator.translate(Str.character_effect_brute), ignoreCase = true)) {
                 return CharacteristicChange(
                     plus =
                         Stats.ZERO.copy(
@@ -131,9 +130,7 @@ open class CharacteristicChange(
             name: String,
             translator: Translator,
         ): CharacteristicChange? {
-            val cleanName = name.lowercase()
-
-            if (cleanName == translator.translate(Str.character_effect_savvy)) {
+            if (name.equals(translator.translate(Str.character_effect_savvy), ignoreCase = true)) {
                 return CharacteristicChange(
                     plus =
                         Stats.ZERO.copy(
@@ -142,7 +139,7 @@ open class CharacteristicChange(
                 )
             }
 
-            if (cleanName == translator.translate(Str.character_effect_suave)) {
+            if (name.equals(translator.translate(Str.character_effect_suave), ignoreCase = true)) {
                 return CharacteristicChange(
                     plus =
                         Stats.ZERO.copy(
@@ -151,7 +148,7 @@ open class CharacteristicChange(
                 )
             }
 
-            if (cleanName == translator.translate(Str.character_effect_marksman)) {
+            if (name.equals(translator.translate(Str.character_effect_marksman), ignoreCase = true)) {
                 return CharacteristicChange(
                     plus =
                         Stats.ZERO.copy(
@@ -160,7 +157,7 @@ open class CharacteristicChange(
                 )
             }
 
-            if (cleanName == translator.translate(Str.character_effect_very_strong)) {
+            if (name.equals(translator.translate(Str.character_effect_very_strong), ignoreCase = true)) {
                 return CharacteristicChange(
                     plus =
                         Stats.ZERO.copy(
@@ -169,7 +166,7 @@ open class CharacteristicChange(
                 )
             }
 
-            if (cleanName == translator.translate(Str.character_effect_sharp)) {
+            if (name.equals(translator.translate(Str.character_effect_sharp), ignoreCase = true)) {
                 return CharacteristicChange(
                     plus =
                         Stats.ZERO.copy(
@@ -178,7 +175,7 @@ open class CharacteristicChange(
                 )
             }
 
-            if (cleanName == translator.translate(Str.character_effect_lightning_reflexes)) {
+            if (name.equals(translator.translate(Str.character_effect_lightning_reflexes), ignoreCase = true)) {
                 return CharacteristicChange(
                     plus =
                         Stats.ZERO.copy(
@@ -187,7 +184,7 @@ open class CharacteristicChange(
                 )
             }
 
-            if (cleanName == translator.translate(Str.character_effect_coolheaded)) {
+            if (name.equals(translator.translate(Str.character_effect_coolheaded), ignoreCase = true)) {
                 return CharacteristicChange(
                     plus =
                         Stats.ZERO.copy(
@@ -196,7 +193,7 @@ open class CharacteristicChange(
                 )
             }
 
-            if (cleanName == translator.translate(Str.character_effect_very_resilient)) {
+            if (name.equals(translator.translate(Str.character_effect_very_resilient), ignoreCase = true)) {
                 return CharacteristicChange(
                     plus =
                         Stats.ZERO.copy(
@@ -205,7 +202,7 @@ open class CharacteristicChange(
                 )
             }
 
-            if (cleanName == translator.translate(Str.character_effect_nimble_fingered)) {
+            if (name.equals(translator.translate(Str.character_effect_nimble_fingered), ignoreCase = true)) {
                 return CharacteristicChange(
                     plus =
                         Stats.ZERO.copy(
@@ -214,7 +211,7 @@ open class CharacteristicChange(
                 )
             }
 
-            if (cleanName == translator.translate(Str.character_effect_warrior_born)) {
+            if (name.equals(translator.translate(Str.character_effect_warrior_born), ignoreCase = true)) {
                 return CharacteristicChange(
                     plus =
                         Stats.ZERO.copy(

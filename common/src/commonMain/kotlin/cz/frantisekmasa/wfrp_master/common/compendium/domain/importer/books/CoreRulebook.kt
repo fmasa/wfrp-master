@@ -3,6 +3,7 @@ package cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.books
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.Blessing
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.Career
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.Disease
+import cz.frantisekmasa.wfrp_master.common.compendium.domain.JournalEntry
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.Miracle
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.Skill
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.Spell
@@ -16,13 +17,16 @@ import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.parsers.Ca
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.parsers.DiseaseParser
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.parsers.Document
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.parsers.MiracleParser
+import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.parsers.RulesParser
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.parsers.SkillParser
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.parsers.SpellParser
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.parsers.TalentParser
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.parsers.TextPosition
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.parsers.TextToken
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.parsers.Token
+import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.parsers.TokenStream
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.parsers.TraitParser
+import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.parsers.TwoColumnPdfLexer
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.parsers.trappings.AmmunitionParser
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.parsers.trappings.ArmourParser
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.parsers.trappings.BasicTrappingsParser
@@ -33,6 +37,7 @@ import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.parsers.tr
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.sources.BlessingSource
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.sources.CareerSource
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.sources.DiseaseSource
+import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.sources.JournalEntrySource
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.sources.MiracleSource
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.sources.SkillSource
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.sources.SpellSource
@@ -55,7 +60,8 @@ object CoreRulebook :
     BlessingSource,
     MiracleSource,
     TrappingSource,
-    DiseaseSource {
+    DiseaseSource,
+    JournalEntrySource {
     override val name: String = "Core Rulebook"
     override val tableFootnotesAsNormalText: Boolean = true
 
@@ -235,6 +241,44 @@ object CoreRulebook :
         return DiseaseParser().import(document, this, (186..188).asSequence())
     }
 
+    override fun importJournalEntries(document: Document): List<JournalEntry> {
+        val lexer = TwoColumnPdfLexer(document, this)
+        return sequence {
+            fun parseRules(
+                pages: IntRange,
+                excludedBoxes: Set<String> = emptySet(),
+                predicate: (JournalEntry) -> Boolean,
+            ) = RulesParser(excludedBoxes = excludedBoxes).import(
+                TokenStream(
+                    pages.asSequence()
+                        .flatMap { lexer.getTokens(it).toList() }
+                        .flatten(),
+                ),
+            ).filter(predicate)
+
+            yieldAll(
+                parseRules(
+                    167..169,
+                    excludedBoxes = setOf("Complete Condition List"),
+                ) { it.parents == listOf("Conditions", "Master Condition List") },
+            )
+            yieldAll(
+                parseRules(
+                    189..190,
+                    excludedBoxes = setOf("Stirring Nurgle’s Cauldron"),
+                ) { it.parents == listOf("Disease and Infection", "Symptoms") },
+            )
+            yieldAll(
+                parseRules(
+                    189..190,
+                    excludedBoxes = setOf("Stirring Nurgle’s Cauldron"),
+                ) { it.parents == listOf("Disease and Infection", "Symptoms") },
+            )
+        }
+            .map { it.copy(parents = listOf("Rules") + it.parents) }
+            .toList()
+    }
+
     override fun areSameStyle(
         a: TextPosition,
         b: TextPosition,
@@ -269,6 +313,10 @@ object CoreRulebook :
     override fun resolveToken(textToken: TextToken): Token? {
         if (textToken.fontName == "CaslonAntique" && textToken.fontSizePt == 15f) {
             return Token.BoxHeader(textToken.text)
+        }
+
+        if (textToken.fontName == "CaslonAntique" && textToken.fontSizePt == 10f) {
+            return Token.BoxContent(textToken.text)
         }
 
         if (textToken.fontName == "CaslonAntique,Bold") {

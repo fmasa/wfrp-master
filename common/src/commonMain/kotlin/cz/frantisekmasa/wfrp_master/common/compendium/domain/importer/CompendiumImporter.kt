@@ -3,6 +3,7 @@ package cz.frantisekmasa.wfrp_master.common.compendium.domain.importer
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.Blessing
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.Career
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.Disease
+import cz.frantisekmasa.wfrp_master.common.compendium.domain.JournalEntry
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.Miracle
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.Skill
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.Spell
@@ -28,4 +29,6 @@ interface CompendiumImporter {
     suspend fun importTrappings(): List<Trapping>
 
     suspend fun importDiseases(): List<Disease>
+
+    suspend fun importJournalEntries(): List<JournalEntry>
 }

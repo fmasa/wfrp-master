@@ -4,4 +4,5 @@ import cz.frantisekmasa.wfrp_master.common.core.domain.character.CurrentConditio
 
 data class ConditionsScreenState(
     val conditions: CurrentConditions,
+    val conditionsJournal: ConditionsJournal,
 )

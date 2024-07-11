@@ -1,89 +1,44 @@
 package cz.frantisekmasa.wfrp_master.common.character.diseases
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.Scaffold
+import androidx.compose.material.Chip
 import androidx.compose.material.Text
-import androidx.compose.material.TopAppBar
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.Edit
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.key
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontWeight
+import com.benasher44.uuid.Uuid
 import com.halilibo.richtext.commonmark.Markdown
 import com.halilibo.richtext.ui.material.RichText
 import cz.frantisekmasa.wfrp_master.common.Str
-import cz.frantisekmasa.wfrp_master.common.core.domain.character.diseases.Disease
-import cz.frantisekmasa.wfrp_master.common.core.ui.buttons.CloseButton
+import cz.frantisekmasa.wfrp_master.common.compendium.journal.JournalEntryScreen
+import cz.frantisekmasa.wfrp_master.common.core.domain.party.PartyId
+import cz.frantisekmasa.wfrp_master.common.core.ui.navigation.LocalNavigationTransaction
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
-import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.IconAction
+import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.LocalPersistentSnackbarHolder
 import cz.frantisekmasa.wfrp_master.common.core.ui.text.SingleLineTextValue
 import dev.icerock.moko.resources.compose.stringResource
-
-@Composable
-fun DiseaseDetail(
-    disease: Disease,
-    subheadBar: @Composable ColumnScope.() -> Unit,
-    onEditRequest: () -> Unit,
-    onDismissRequest: () -> Unit,
-    isGameMaster: Boolean,
-) {
-    Scaffold(
-        topBar = {
-            TopAppBar(
-                navigationIcon = { CloseButton(onDismissRequest) },
-                title = { Text(disease.name) },
-                actions = {
-                    IconAction(
-                        Icons.Rounded.Edit,
-                        stringResource(Str.character_title_edit),
-                        onClick = onEditRequest,
-                    )
-                },
-            )
-        },
-    ) {
-        Column(Modifier.verticalScroll(rememberScrollState())) {
-            subheadBar()
-            DiseaseDetailBody(
-                subheadBar = {
-                    if (isGameMaster) {
-                        SingleLineTextValue(
-                            label = stringResource(Str.diseases_label_diagnosed),
-                            value =
-                                stringResource(
-                                    if (disease.isDiagnosed) {
-                                        Str.common_ui_boolean_yes
-                                    } else {
-                                        Str.common_ui_boolean_no
-                                    },
-                                ),
-                        )
-                    }
-                },
-                symptoms = disease.symptoms,
-                permanentEffects = disease.permanentEffects,
-                description = disease.description,
-            )
-        }
-    }
-}
+import kotlinx.collections.immutable.ImmutableList
 
 @Composable
 fun DiseaseDetailBody(
     subheadBar: @Composable ColumnScope.() -> Unit = {},
-    symptoms: List<String>,
+    partyId: PartyId,
+    symptoms: ImmutableList<Symptom>,
     permanentEffects: String,
     description: String,
 ) {
     Column(Modifier.padding(Spacing.bodyPadding)) {
         subheadBar()
 
-        SingleLineTextValue(
-            label = stringResource(Str.diseases_label_symptoms),
-            value = symptoms.joinToString(", "),
+        SymptomList(
+            partyId = partyId,
+            symptoms = symptoms,
         )
 
         SingleLineTextValue(
@@ -93,6 +48,52 @@ fun DiseaseDetailBody(
 
         RichText(Modifier.padding(top = Spacing.small)) {
             Markdown(description)
+        }
+    }
+}
+
+data class Symptom(
+    val name: String,
+    val journalEntryId: Uuid?,
+    val journalEntryName: String,
+)
+
+@Composable
+private fun SymptomList(
+    partyId: PartyId,
+    symptoms: ImmutableList<Symptom>,
+) {
+    if (symptoms.isEmpty()) return
+
+    Column {
+        Text(
+            "${stringResource(Str.diseases_label_symptoms)}:",
+            fontWeight = FontWeight.Bold,
+            modifier = Modifier.padding(end = Spacing.tiny),
+        )
+        @OptIn(ExperimentalLayoutApi::class)
+        FlowRow(
+            horizontalArrangement = Arrangement.spacedBy(Spacing.tiny),
+        ) {
+            val navigation = LocalNavigationTransaction.current
+            val snackbarHolder = LocalPersistentSnackbarHolder.current
+
+            symptoms.forEach { symptom ->
+                key(symptom.name) {
+                    val notFoundMessage = stringResource(Str.journal_messages_entry_not_found, symptom.journalEntryName)
+                    Chip(
+                        onClick = {
+                            if (symptom.journalEntryId != null) {
+                                navigation.navigate(JournalEntryScreen(partyId, symptom.journalEntryId))
+                            } else {
+                                snackbarHolder.showSnackbar(notFoundMessage)
+                            }
+                        },
+                    ) {
+                        Text(symptom.name)
+                    }
+                }
+            }
         }
     }
 }

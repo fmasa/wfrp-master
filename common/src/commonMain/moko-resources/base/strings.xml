@@ -322,6 +322,7 @@
     <string name="compendium_pick_prompt_careers">Select which careers you want to import.</string>
     <string name="compendium_pick_prompt_miracles">Select which miracles you want to import.</string>
     <string name="compendium_pick_prompt_diseases">Select which diseases you want to import.</string>
+    <string name="compendium_pick_prompt_journal">Select which journal entries you want to import.</string>
     <string name="compendium_pick_prompt_skills">Select which skills you want to import.</string>
     <string name="compendium_pick_prompt_spells">Select which spells you want to import.</string>
     <string name="compendium_pick_prompt_talents">Select which talents you want to import.</string>
@@ -410,6 +411,11 @@
     <string name="journal_title_new_entry">New Journal Entry</string>
     <string name="journal_messages_no_entries">No entries</string>
     <string name="journal_messages_no_entries_subtext">There are no entries in your journal yet.</string>
+    <string name="journal_messages_entry_not_found">Journal entry "%s" was not found</string>
+
+    <string name="journal_folder_symptoms">Rules / Disease and Infection / Symptoms</string>
+    <string name="journal_folder_conditions">Rules / Conditions / Master Condition List</string>
+
     <string name="messages_authentication_google_sign_in_failed">Google sign-in failed</string>
     <string name="messages_avatar_changed">Avatar was changed</string>
     <string name="messages_avatar_removed">Avatar was removed</string>

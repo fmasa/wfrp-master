@@ -43,7 +43,11 @@ import cz.frantisekmasa.wfrp_master.common.compendium.domain.Spell
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.Talent
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.Trait
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.Trapping
+import cz.frantisekmasa.wfrp_master.common.compendium.journal.FirestoreJournal
+import cz.frantisekmasa.wfrp_master.common.compendium.journal.Journal
 import cz.frantisekmasa.wfrp_master.common.compendium.journal.JournalScreenModel
+import cz.frantisekmasa.wfrp_master.common.compendium.journal.rules.ConditionsJournalProvider
+import cz.frantisekmasa.wfrp_master.common.compendium.journal.rules.DiseaseSymptomProvider
 import cz.frantisekmasa.wfrp_master.common.compendium.miracle.MiracleCompendiumScreenModel
 import cz.frantisekmasa.wfrp_master.common.compendium.skill.SkillCompendiumScreenModel
 import cz.frantisekmasa.wfrp_master.common.compendium.spell.SpellCompendiumScreenModel
@@ -163,6 +167,9 @@ val appModule =
         bindSingleton<Compendium<JournalEntry>> {
             FirestoreCompendium(Schema.Compendium.JOURNAL, instance(), serializer())
         }
+        bindSingleton<Journal> { FirestoreJournal(instance()) }
+        bindSingleton { ConditionsJournalProvider(instance()) }
+        bindSingleton { DiseaseSymptomProvider(instance(), instance(), instance()) }
 
         bindSingleton<Compendium<Disease>> {
             FirestoreCompendium(Schema.Compendium.DISEASES, instance(), serializer())
@@ -238,6 +245,8 @@ val appModule =
                 instance(),
                 instance(),
                 instance(),
+                instance(),
+                instance(),
             )
         }
         bindFactory { partyId: PartyId -> CharacterPickerScreenModel(partyId, instance()) }
@@ -272,7 +281,7 @@ val appModule =
             )
         }
         bindFactory { characterId: CharacterId ->
-            CharacterDiseaseDetailScreenModel(characterId, instance(), instance(), instance())
+            CharacterDiseaseDetailScreenModel(characterId, instance(), instance(), instance(), instance())
         }
 
         bindSingleton {
@@ -355,7 +364,7 @@ val appModule =
             TrappingCompendiumScreenModel(partyId, instance(), instance(), instance(), instance())
         }
         bindFactory { partyId: PartyId ->
-            DiseaseCompendiumScreenModel(partyId, instance(), instance(), instance(), instance())
+            DiseaseCompendiumScreenModel(partyId, instance(), instance(), instance(), instance(), instance())
         }
         bindFactory { partyId: PartyId ->
             JournalScreenModel(partyId, instance(), instance(), instance(), instance())
@@ -400,6 +409,7 @@ val appModule =
                 instance(),
                 instance(),
                 instance(),
+                instance(),
             )
         }
         bindFactory { partyId: PartyId -> GameMasterScreenModel(partyId, instance(), instance()) }
@@ -417,6 +427,8 @@ val appModule =
             CombatScreenModel(
                 partyId,
                 Random,
+                instance(),
+                instance(),
                 instance(),
                 instance(),
                 instance(),

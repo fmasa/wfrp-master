@@ -3,8 +3,8 @@ package cz.frantisekmasa.wfrp_master.common
 import cz.frantisekmasa.wfrp_master.common.auth.CommonAuthenticationManager
 import cz.frantisekmasa.wfrp_master.common.auth.JvmAuthenticationManager
 import cz.frantisekmasa.wfrp_master.common.character.effects.JvmTranslator
-import cz.frantisekmasa.wfrp_master.common.character.effects.Translator
 import cz.frantisekmasa.wfrp_master.common.core.shared.SettingsStorage
+import cz.frantisekmasa.wfrp_master.common.localization.Translator
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.cio.CIO
 import io.ktor.client.plugins.cache.HttpCache
