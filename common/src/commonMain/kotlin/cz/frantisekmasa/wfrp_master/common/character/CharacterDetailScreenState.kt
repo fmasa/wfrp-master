@@ -8,6 +8,7 @@ import cz.frantisekmasa.wfrp_master.common.character.religion.ReligionScreenStat
 import cz.frantisekmasa.wfrp_master.common.character.skills.SkillsScreenState
 import cz.frantisekmasa.wfrp_master.common.character.spells.SpellsScreenState
 import cz.frantisekmasa.wfrp_master.common.character.trappings.TrappingsScreenState
+import cz.frantisekmasa.wfrp_master.common.character.wellBeing.WellBeingScreenState
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.Character
 import cz.frantisekmasa.wfrp_master.common.core.domain.identifiers.CharacterId
 import kotlinx.collections.immutable.ImmutableList
@@ -25,6 +26,7 @@ data class CharacterDetailScreenState(
     val notesScreenState: NotesScreenState,
     val characterPickerState: CharacterPickerState,
     val trappingsScreenState: TrappingsScreenState,
+    val wellBeingScreenState: WellBeingScreenState,
     val combatScreenState: CharacterCombatScreenState,
     val isGameMaster: Boolean,
 )

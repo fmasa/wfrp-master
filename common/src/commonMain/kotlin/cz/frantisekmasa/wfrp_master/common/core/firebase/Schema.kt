@@ -10,6 +10,7 @@ object Schema {
 
     object Character {
         const val BLESSINGS = "blessings"
+        const val DISEASES = "diseases"
         const val INVENTORY_ITEMS = "inventory"
         const val MIRACLES = "miracles"
         const val SKILLS = "skills"
@@ -28,5 +29,6 @@ object Schema {
         const val TRAPPINGS = "trappings"
         const val CAREERS = "careers"
         const val JOURNAL = "journal"
+        const val DISEASES = "diseases"
     }
 }

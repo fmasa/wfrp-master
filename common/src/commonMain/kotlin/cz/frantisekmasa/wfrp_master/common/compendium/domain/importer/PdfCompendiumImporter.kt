@@ -2,6 +2,7 @@ package cz.frantisekmasa.wfrp_master.common.compendium.domain.importer
 
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.Blessing
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.Career
+import cz.frantisekmasa.wfrp_master.common.compendium.domain.Disease
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.Miracle
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.Skill
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.Spell
@@ -12,6 +13,7 @@ import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.books.Book
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.parsers.Document
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.sources.BlessingSource
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.sources.CareerSource
+import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.sources.DiseaseSource
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.sources.MiracleSource
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.sources.SkillSource
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.sources.SpellSource
@@ -96,5 +98,13 @@ class PdfCompendiumImporter(
         }
 
         return book.importTrappings(document)
+    }
+
+    override suspend fun importDiseases(): List<Disease> {
+        if (book !is DiseaseSource) {
+            return emptyList()
+        }
+
+        return book.importDiseases(document)
     }
 }

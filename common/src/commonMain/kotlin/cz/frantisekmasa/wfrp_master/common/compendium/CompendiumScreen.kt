@@ -11,6 +11,7 @@ import cafe.adriel.voyager.core.screen.Screen
 import cz.frantisekmasa.wfrp_master.common.Str
 import cz.frantisekmasa.wfrp_master.common.compendium.blessing.BlessingCompendiumScreen
 import cz.frantisekmasa.wfrp_master.common.compendium.career.CareerCompendiumScreen
+import cz.frantisekmasa.wfrp_master.common.compendium.disease.DiseaseCompendiumScreen
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.CompendiumItem
 import cz.frantisekmasa.wfrp_master.common.compendium.miracle.MiracleCompendiumScreen
 import cz.frantisekmasa.wfrp_master.common.compendium.skill.SkillCompendiumScreen
@@ -46,6 +47,7 @@ abstract class CompendiumScreen() : Screen {
         TRAITS(Str.compendium_title_traits, ::TraitCompendiumScreen),
         CAREERS(Str.compendium_title_careers, ::CareerCompendiumScreen),
         TRAPPINGS(Str.compendium_title_trappings, ::TrappingCompendiumScreen),
+        DISEASES(Str.compendium_title_diseases, ::DiseaseCompendiumScreen),
     }
 
     @Composable

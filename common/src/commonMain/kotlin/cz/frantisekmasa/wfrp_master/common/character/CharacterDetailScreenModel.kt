@@ -19,6 +19,9 @@ import cz.frantisekmasa.wfrp_master.common.character.traits.TraitDataItem
 import cz.frantisekmasa.wfrp_master.common.character.trappings.TrappingItem
 import cz.frantisekmasa.wfrp_master.common.character.trappings.TrappingSaver
 import cz.frantisekmasa.wfrp_master.common.character.trappings.TrappingsScreenState
+import cz.frantisekmasa.wfrp_master.common.character.wellBeing.CorruptionPoints
+import cz.frantisekmasa.wfrp_master.common.character.wellBeing.WellBeingScreenState
+import cz.frantisekmasa.wfrp_master.common.character.wellBeing.diseases.DiseaseItem
 import cz.frantisekmasa.wfrp_master.common.combat.domain.EquippedWeapon
 import cz.frantisekmasa.wfrp_master.common.combat.domain.WornArmourPiece
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.Career
@@ -33,6 +36,8 @@ import cz.frantisekmasa.wfrp_master.common.core.domain.character.CharacterReposi
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.CharacterType
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.CurrentConditions
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.Points
+import cz.frantisekmasa.wfrp_master.common.core.domain.character.diseases.Disease
+import cz.frantisekmasa.wfrp_master.common.core.domain.character.diseases.DiseaseRepository
 import cz.frantisekmasa.wfrp_master.common.core.domain.compendium.Compendium
 import cz.frantisekmasa.wfrp_master.common.core.domain.identifiers.CharacterId
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.Party
@@ -85,6 +90,7 @@ class CharacterDetailScreenModel(
     private val parties: PartyRepository,
     private val userProvider: UserProvider,
     private val spells: SpellRepository,
+    private val diseases: DiseaseRepository,
 ) : ScreenModel {
     private val character = characters.getLive(characterId).right()
     private val skillsScreenState =
@@ -208,11 +214,14 @@ class CharacterDetailScreenModel(
             }.map { CharacteristicsScreenState(it) }
 
     private val party: Flow<Party> = parties.getLive(characterId.partyId).right()
+    private val isGameMaster: Flow<Boolean> =
+        party.map { it.gameMasterId == null || it.gameMasterId == userProvider.userId }
+            .distinctUntilChanged()
 
     private val characterPickerState: Flow<CharacterPickerState> =
         combine(
             characters.inParty(characterId.partyId, CharacterType.PLAYER_CHARACTER),
-            party.map { it.gameMasterId == null || it.gameMasterId == userProvider.userId },
+            isGameMaster,
         ) { playerCharacters, isGameMaster ->
             val userId = userProvider.userId
 
@@ -331,18 +340,52 @@ class CharacterDetailScreenModel(
             )
         }
 
+    private val wellBeingScreenState: Flow<WellBeingScreenState> =
+        combine(
+            character.map {
+                CorruptionPoints(
+                    current = it.points.corruption,
+                    buffer = it.corruptionPointsBuffer,
+                )
+            }.distinctUntilChanged(),
+            diseases.findAllForCharacter(characterId),
+            isGameMaster,
+        ) { corruptionPoints, diseases, isGameMaster ->
+            WellBeingScreenState(
+                corruptionPoints = corruptionPoints,
+                diseases =
+                    diseases
+                        .filter { it.isDiagnosed || isGameMaster }
+                        // Intentionally showing Trappings Character already has
+                        .sortedWith(compareBy<Disease> { it.isHealed }.thenBy { it.name })
+                        .map {
+                            DiseaseItem(
+                                id = it.id,
+                                name = it.name,
+                                incubation = it.incubation,
+                                duration = it.duration,
+                                isDiagnosed = it.isDiagnosed,
+                                isHealed = it.isHealed,
+                            )
+                        }.toImmutableList(),
+            )
+        }
+
     val state: Flow<CharacterDetailScreenState> =
         combine(
-            combine(character, party, ::Pair),
-            combine(skillsScreenState, religionScreenState, ::Pair),
-            combine(characteristicsScreenState, trappingsScreenState, ::Pair),
-            combine(notesScreenState, spellsScreenState, ::Pair),
-            combine(characterPickerState, combatScreenState, ::Pair),
-        ) { (character, party),
-            (skillsScreenState, religionScreenState),
-            (characteristicsScreenState, trappingsScreenState),
-            (notesScreenState, spellsScreenState),
-            (characterPickerState, combatScreenState),
+            combine(character, party, skillsScreenState, ::Triple),
+            combine(
+                religionScreenState,
+                characteristicsScreenState,
+                trappingsScreenState,
+                ::Triple,
+            ),
+            combine(notesScreenState, spellsScreenState, characterPickerState, ::Triple),
+            combine(combatScreenState, wellBeingScreenState, isGameMaster, ::Triple),
+        ) { (character, party, skillsScreenState),
+            (religionScreenState, characteristicsScreenState, trappingsScreenState),
+            (notesScreenState, spellsScreenState, characterPickerState),
+            (combatScreenState, wellBeingScreenState, isGameMaster),
             ->
             CharacterDetailScreenState(
                 characterId = characterId,
@@ -354,9 +397,10 @@ class CharacterDetailScreenModel(
                 religionScreenState = religionScreenState,
                 characteristicsScreenState = characteristicsScreenState,
                 notesScreenState = notesScreenState,
-                isGameMaster = party.gameMasterId == null || party.gameMasterId == userProvider.userId,
+                isGameMaster = isGameMaster,
                 characterPickerState = characterPickerState,
                 trappingsScreenState = trappingsScreenState,
+                wellBeingScreenState = wellBeingScreenState,
                 spellsScreenState = spellsScreenState,
                 combatScreenState = combatScreenState,
             )
@@ -463,6 +507,12 @@ class CharacterDetailScreenModel(
     fun removeSpell(spell: SpellDataItem) {
         screenModelScope.launch(Dispatchers.IO) {
             spells.remove(characterId, spell.id)
+        }
+    }
+
+    fun removeDisease(disease: DiseaseItem) {
+        screenModelScope.launch(Dispatchers.IO) {
+            diseases.remove(characterId, disease.id)
         }
     }
 

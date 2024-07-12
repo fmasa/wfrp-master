@@ -6,6 +6,7 @@ import cz.frantisekmasa.wfrp_master.common.character.CharacterPickerScreenModel
 import cz.frantisekmasa.wfrp_master.common.character.CharacterScreenModel
 import cz.frantisekmasa.wfrp_master.common.character.characteristics.CharacteristicsScreenModel
 import cz.frantisekmasa.wfrp_master.common.character.combat.CharacterCombatScreenModel
+import cz.frantisekmasa.wfrp_master.common.character.diseases.CharacterDiseaseDetailScreenModel
 import cz.frantisekmasa.wfrp_master.common.character.effects.EffectManager
 import cz.frantisekmasa.wfrp_master.common.character.items.AvailableCompendiumItemsFactory
 import cz.frantisekmasa.wfrp_master.common.character.religion.blessings.CharacterBlessingDetailScreenModel
@@ -24,14 +25,17 @@ import cz.frantisekmasa.wfrp_master.common.character.traits.add.AddTraitScreenMo
 import cz.frantisekmasa.wfrp_master.common.character.trappings.CharacterTrappingsDetailScreenModel
 import cz.frantisekmasa.wfrp_master.common.character.trappings.TrappingSaver
 import cz.frantisekmasa.wfrp_master.common.character.trappings.add.AddTrappingScreenModel
+import cz.frantisekmasa.wfrp_master.common.character.wellBeing.diseases.AddDiseaseScreenModel
 import cz.frantisekmasa.wfrp_master.common.characterCreation.CharacterCreationScreenModel
 import cz.frantisekmasa.wfrp_master.common.combat.CombatScreenModel
 import cz.frantisekmasa.wfrp_master.common.compendium.CompendiumExportScreenModel
 import cz.frantisekmasa.wfrp_master.common.compendium.blessing.BlessingCompendiumScreenModel
 import cz.frantisekmasa.wfrp_master.common.compendium.career.CareerCompendiumScreenModel
+import cz.frantisekmasa.wfrp_master.common.compendium.disease.DiseaseCompendiumScreenModel
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.Blessing
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.Career
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.CompendiumItem
+import cz.frantisekmasa.wfrp_master.common.compendium.domain.Disease
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.JournalEntry
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.Miracle
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.Skill
@@ -53,6 +57,7 @@ import cz.frantisekmasa.wfrp_master.common.core.domain.character.CharacterAvatar
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.CharacterItem
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.CharacterItemRepository
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.CharacterRepository
+import cz.frantisekmasa.wfrp_master.common.core.domain.character.diseases.DiseaseRepository
 import cz.frantisekmasa.wfrp_master.common.core.domain.compendium.Compendium
 import cz.frantisekmasa.wfrp_master.common.core.domain.compendium.FirestoreCompendium
 import cz.frantisekmasa.wfrp_master.common.core.domain.identifiers.CharacterId
@@ -159,6 +164,10 @@ val appModule =
             FirestoreCompendium(Schema.Compendium.JOURNAL, instance(), serializer())
         }
 
+        bindSingleton<Compendium<Disease>> {
+            FirestoreCompendium(Schema.Compendium.DISEASES, instance(), serializer())
+        }
+
         bindSingleton { DismissedUserTipsHolder(instance()) }
 
         bindSingleton<InvitationProcessor> { FirestoreInvitationProcessor(instance(), instance()) }
@@ -169,6 +178,7 @@ val appModule =
         bindSingleton<MiracleRepository> { characterItemRepository(Schema.Character.MIRACLES) }
         bindSingleton<InventoryItemRepository> { characterItemRepository(Schema.Character.INVENTORY_ITEMS) }
         bindSingleton<TraitRepository> { characterItemRepository(Schema.Character.TRAITS) }
+        bindSingleton<DiseaseRepository> { characterItemRepository(Schema.Character.DISEASES) }
 
         bindSingleton<CharacterRepository> {
             CharacterRepositoryIdentityMap(10, FirestoreCharacterRepository(instance()))
@@ -227,6 +237,7 @@ val appModule =
                 instance(),
                 instance(),
                 instance(),
+                instance(),
             )
         }
         bindFactory { partyId: PartyId -> CharacterPickerScreenModel(partyId, instance()) }
@@ -259,6 +270,9 @@ val appModule =
                 instance(),
                 instance(),
             )
+        }
+        bindFactory { characterId: CharacterId ->
+            CharacterDiseaseDetailScreenModel(characterId, instance(), instance(), instance())
         }
 
         bindSingleton {
@@ -307,6 +321,14 @@ val appModule =
                 instance(),
             )
         }
+        bindFactory { characterId: CharacterId ->
+            AddDiseaseScreenModel(
+                characterId,
+                instance(),
+                instance(),
+                instance(),
+            )
+        }
 
         bindFactory { partyId: PartyId ->
             BlessingCompendiumScreenModel(partyId, instance(), instance(), instance(), instance())
@@ -331,6 +353,9 @@ val appModule =
         }
         bindFactory { partyId: PartyId ->
             TrappingCompendiumScreenModel(partyId, instance(), instance(), instance(), instance())
+        }
+        bindFactory { partyId: PartyId ->
+            DiseaseCompendiumScreenModel(partyId, instance(), instance(), instance(), instance())
         }
         bindFactory { partyId: PartyId ->
             JournalScreenModel(partyId, instance(), instance(), instance(), instance())
@@ -365,6 +390,7 @@ val appModule =
         bindFactory { partyId: PartyId ->
             CompendiumExportScreenModel(
                 partyId,
+                instance(),
                 instance(),
                 instance(),
                 instance(),

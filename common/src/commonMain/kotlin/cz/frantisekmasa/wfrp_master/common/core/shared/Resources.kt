@@ -33,6 +33,7 @@ object Resources {
         Talent("drawable/ic_skills.xml"),
         Trait("drawable/ic_traits.xml"),
         Career("drawable/ic_skills.xml"), // TODO: Change the icon
+        Disease("drawable/ic_disease.xml"),
         JournalEntry("drawable/ic_journal.xml"),
 
         // Conditions
