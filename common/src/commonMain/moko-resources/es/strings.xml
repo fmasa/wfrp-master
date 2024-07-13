@@ -766,4 +766,36 @@
     <string name="authentication_messages_too_many_attempts">Demasiados intentos.
 \nInténtalo de nuevo en unos minutos o restablece tu contraseña.</string>
     <string name="social_classes_seafarers">Marineros</string>
+    <string name="common_ui_duration_days">días</string>
+    <string name="common_ui_units_days">días</string>
+    <string name="compendium_title_diseases">Enfermedades</string>
+    <string name="common_ui_duration_hours">horas</string>
+    <string name="common_ui_units_hours">horas</string>
+    <string name="common_ui_duration_minutes">minutos</string>
+    <string name="diseases_label_name">Nombre</string>
+    <string name="common_ui_messages_no_items">Sin artículos</string>
+    <string name="compendium_messages_no_character_items">Sin elementos</string>
+    <string name="diseases_button_add_non_compendium">...o añadir enfermedades que no sean del compendio</string>
+    <string name="compendium_pick_prompt_diseases">Selecciona las enfermedades que deseas importar.</string>
+    <string name="diseases_symptoms_helper">Lista de síntomas separada por comas</string>
+    <string name="diseases_label_contraction">Contracción</string>
+    <string name="diseases_label_diagnosed">Diagnosticado</string>
+    <string name="diseases_title_diseases">Enfermedades</string>
+    <string name="diseases_label_duration">Duración</string>
+    <string name="diseases_title_edit">Editar la enfermedad</string>
+    <string name="diseases_label_healed">Curado</string>
+    <string name="diseases_label_incubation">Incubación</string>
+    <string name="diseases_messages_visible_to_player_false">Invisible para el jugador</string>
+    <string name="diseases_title_new">Nueva enfermedad</string>
+    <string name="diseases_label_not_diagnosed">Sin diagnosticar</string>
+    <string name="diseases_label_permanent_effects">Permanente</string>
+    <string name="diseases_label_permanent_effects_optional">Permanente (opcional)</string>
+    <string name="diseases_label_symptoms">Síntomas</string>
+    <string name="diseases_messages_no_diseases_in_compendium_subtext">Aún no hay enfermedades en tu compendio.</string>
+    <string name="diseases_messages_visible_to_player_true">Visible al jugador</string>
+    <string name="diseases_title_choose_compendium_disease">Elegir compendio para la enfermedad…</string>
+    <string name="common_ui_button_add_item">Añadir elemento</string>
+    <string name="diseases_label_description">Descripción (opcional)</string>
+    <string name="common_ui_units_minutes">minutos</string>
+    <string name="diseases_messages_no_diseases_in_compendium">Sin enfermedades</string>
 </resources>
