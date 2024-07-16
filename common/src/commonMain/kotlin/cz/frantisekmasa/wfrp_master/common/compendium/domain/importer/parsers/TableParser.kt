@@ -24,6 +24,10 @@ class TableParser {
                     ""
                 }
 
+            if (stream.peek() is Token.BoxContent) {
+                continue
+            }
+
             stream.dropUntil { it is Token.TableValue }
             stream.dropWhile { it is Token.TableHeadCell }
 

@@ -12,6 +12,7 @@ object Spacing {
     val medium = 12.dp
     val small = 8.dp
     val tiny = 4.dp
+    val extraTiny = 3.dp
     val bodyPadding = extraLarge
 
     val bottomPaddingUnderFab = 80.dp

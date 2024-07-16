@@ -2,6 +2,7 @@ package cz.frantisekmasa.wfrp_master.common.character.effects
 
 import cz.frantisekmasa.wfrp_master.common.Str
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.Character
+import cz.frantisekmasa.wfrp_master.common.localization.Translator
 
 class HardyWoundsModification(private val timesTaken: Int) : CharacterEffect {
     init {

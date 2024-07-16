@@ -30,6 +30,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import cz.frantisekmasa.wfrp_master.common.Str
 import cz.frantisekmasa.wfrp_master.common.character.conditions.ConditionIcon
+import cz.frantisekmasa.wfrp_master.common.character.conditions.ConditionsJournal
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.combat.Advantage
 import cz.frantisekmasa.wfrp_master.common.core.ui.StatBlock
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.NumberPicker
@@ -49,6 +50,7 @@ fun CombatantSheet(
     viewModel: CombatScreenModel,
     isGroupAdvantageSystemEnabled: Boolean,
     advantageCap: Advantage,
+    conditionsJournal: ConditionsJournal,
     onRemoveRequest: (() -> Unit)?,
     onDetailOpenRequest: () -> Unit,
 ) {
@@ -110,6 +112,7 @@ fun CombatantSheet(
                 modifier = Modifier.padding(bottom = Spacing.small),
                 combatant = combatant,
                 screenModel = viewModel,
+                conditionsJournal = conditionsJournal,
             )
 
             StatBlock(
@@ -184,6 +187,7 @@ private fun ConditionsBox(
     modifier: Modifier,
     combatant: CombatantItem,
     screenModel: CombatScreenModel,
+    conditionsJournal: ConditionsJournal,
 ) {
     var conditionsDialogOpened by remember { mutableStateOf(false) }
 
@@ -192,6 +196,7 @@ private fun ConditionsBox(
             combatantItem = combatant,
             screenModel = screenModel,
             onDismissRequest = { conditionsDialogOpened = false },
+            conditionsJournal = conditionsJournal,
         )
     }
 

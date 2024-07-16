@@ -1,4 +1,4 @@
-package cz.frantisekmasa.wfrp_master.common.character.effects
+package cz.frantisekmasa.wfrp_master.common.localization
 
 import androidx.compose.runtime.Immutable
 import cz.frantisekmasa.wfrp_master.common.settings.Language

@@ -3,6 +3,7 @@ package cz.frantisekmasa.wfrp_master.common.combat
 import cafe.adriel.voyager.core.model.ScreenModel
 import com.benasher44.uuid.Uuid
 import com.benasher44.uuid.uuid4
+import cz.frantisekmasa.wfrp_master.common.character.conditions.ConditionsJournal
 import cz.frantisekmasa.wfrp_master.common.combat.domain.ArmourPart
 import cz.frantisekmasa.wfrp_master.common.combat.domain.EquippedWeapon
 import cz.frantisekmasa.wfrp_master.common.combat.domain.WornArmourPiece
@@ -10,6 +11,7 @@ import cz.frantisekmasa.wfrp_master.common.combat.domain.initiative.BonusesPlus1
 import cz.frantisekmasa.wfrp_master.common.combat.domain.initiative.InitiativeCharacteristicStrategy
 import cz.frantisekmasa.wfrp_master.common.combat.domain.initiative.InitiativePlus1d10Strategy
 import cz.frantisekmasa.wfrp_master.common.combat.domain.initiative.InitiativeTestStrategy
+import cz.frantisekmasa.wfrp_master.common.compendium.journal.rules.ConditionsJournalProvider
 import cz.frantisekmasa.wfrp_master.common.core.domain.HitLocation
 import cz.frantisekmasa.wfrp_master.common.core.domain.Stats
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.Character
@@ -38,6 +40,7 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.FlowStatBlockData
 import cz.frantisekmasa.wfrp_master.common.core.utils.right
 import cz.frantisekmasa.wfrp_master.common.encounters.CombatantItem
 import cz.frantisekmasa.wfrp_master.common.encounters.domain.Wounds
+import cz.frantisekmasa.wfrp_master.common.localization.Translator
 import io.github.aakira.napier.Napier
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
@@ -63,6 +66,8 @@ class CombatScreenModel(
     private val miracles: MiracleRepository,
     private val traits: TraitRepository,
     private val trappings: InventoryItemRepository,
+    private val conditionsJournalProvider: ConditionsJournalProvider,
+    private val translatorFactory: Translator.Factory,
 ) : ScreenModel {
     val party: Flow<Party> = parties.getLive(partyId).right()
 
@@ -115,6 +120,13 @@ class CombatScreenModel(
                 }.filterNotNull()
                 .toImmutableList()
         }
+
+    val conditionsJournal: Flow<ConditionsJournal> =
+        party.map { it.settings.language }
+            .distinctUntilChanged()
+            .flatMapLatest {
+                conditionsJournalProvider.getConditionsJournal(partyId, translatorFactory.create(it))
+            }
 
     suspend fun loadCharacters(): List<Character> = characters.inParty(partyId, CharacterType.PLAYER_CHARACTER).first()
 

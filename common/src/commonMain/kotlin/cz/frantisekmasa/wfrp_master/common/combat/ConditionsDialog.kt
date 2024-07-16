@@ -9,6 +9,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import cz.frantisekmasa.wfrp_master.common.Str
 import cz.frantisekmasa.wfrp_master.common.character.conditions.ConditionsForm
+import cz.frantisekmasa.wfrp_master.common.character.conditions.ConditionsJournal
 import cz.frantisekmasa.wfrp_master.common.core.ui.buttons.CloseButton
 import cz.frantisekmasa.wfrp_master.common.core.ui.dialogs.FullScreenDialog
 import cz.frantisekmasa.wfrp_master.common.encounters.CombatantItem
@@ -22,6 +23,7 @@ fun ConditionsDialog(
     combatantItem: CombatantItem,
     screenModel: CombatScreenModel,
     onDismissRequest: () -> Unit,
+    conditionsJournal: ConditionsJournal,
 ) {
     FullScreenDialog(onDismissRequest = onDismissRequest) {
         val conditions = combatantItem.conditions
@@ -38,6 +40,7 @@ fun ConditionsDialog(
             ConditionsForm(
                 modifier = Modifier.fillMaxSize(),
                 conditions = conditions,
+                conditionsJournal = conditionsJournal,
                 onUpdate = { newConditions ->
                     coroutineScope.launch {
                         withContext(Dispatchers.IO) {

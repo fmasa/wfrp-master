@@ -4,6 +4,7 @@ import cafe.adriel.voyager.core.model.ScreenModel
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.Blessing
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.Career
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.Disease
+import cz.frantisekmasa.wfrp_master.common.compendium.domain.JournalEntry
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.Miracle
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.Skill
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.Spell
@@ -14,6 +15,7 @@ import cz.frantisekmasa.wfrp_master.common.compendium.import.BlessingImport
 import cz.frantisekmasa.wfrp_master.common.compendium.import.CareerImport
 import cz.frantisekmasa.wfrp_master.common.compendium.import.CompendiumBundle
 import cz.frantisekmasa.wfrp_master.common.compendium.import.DiseaseImport
+import cz.frantisekmasa.wfrp_master.common.compendium.import.JournalEntryImport
 import cz.frantisekmasa.wfrp_master.common.compendium.import.MiracleImport
 import cz.frantisekmasa.wfrp_master.common.compendium.import.SkillImport
 import cz.frantisekmasa.wfrp_master.common.compendium.import.SpellImport
@@ -43,6 +45,7 @@ class CompendiumExportScreenModel(
     private val traitCompendium: Compendium<Trait>,
     private val trappingCompendium: Compendium<Trapping>,
     private val diseaseCompendium: Compendium<Disease>,
+    private val journalEntryCompendium: Compendium<JournalEntry>,
     parties: PartyRepository,
 ) : ScreenModel {
     val party: Flow<Party> = parties.getLive(partyId).right()
@@ -85,6 +88,10 @@ class CompendiumExportScreenModel(
                 async {
                     diseaseCompendium.liveForParty(partyId).first().map(DiseaseImport::fromDisease)
                 }
+            val journalEntries =
+                async {
+                    journalEntryCompendium.liveForParty(partyId).first().map(JournalEntryImport::fromJournalEntry)
+                }
 
             val bundle =
                 CompendiumBundle(
@@ -97,6 +104,7 @@ class CompendiumExportScreenModel(
                     careers = careers.await(),
                     trappings = trappings.await(),
                     diseases = diseases.await(),
+                    journalEntries = journalEntries.await(),
                 )
 
             json.encodeToString(serializer(), bundle)

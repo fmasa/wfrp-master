@@ -10,6 +10,7 @@ import cz.frantisekmasa.wfrp_master.common.core.domain.party.Party
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.PartyId
 import cz.frantisekmasa.wfrp_master.common.core.domain.talents.TalentRepository
 import cz.frantisekmasa.wfrp_master.common.core.domain.traits.TraitRepository
+import cz.frantisekmasa.wfrp_master.common.localization.Translator
 import cz.frantisekmasa.wfrp_master.common.settings.Language
 import dev.gitlive.firebase.firestore.Transaction
 import kotlinx.coroutines.Dispatchers

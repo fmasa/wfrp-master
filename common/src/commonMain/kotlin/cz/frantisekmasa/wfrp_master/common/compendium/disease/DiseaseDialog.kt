@@ -124,7 +124,7 @@ private data class DiseaseFormData(
                 duration = inputValue(item?.duration ?: "", Rules.NotBlank()),
                 description = inputValue(item?.description ?: "", Rules.NotBlank()),
                 contraction = inputValue(item?.contraction ?: "", Rules.NotBlank()),
-                incubation = inputValue(item?.incubation ?: "", Rules.NotBlank()),
+                incubation = inputValue(item?.incubation ?: ""),
                 symptoms = inputValue(item?.symptoms?.joinToString(", ") ?: "", Rules.NotBlank()),
                 permanentEffects = inputValue(item?.permanentEffects ?: ""),
             )

@@ -38,12 +38,14 @@ import cz.frantisekmasa.wfrp_master.common.compendium.domain.Blessing
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.Career
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.CompendiumItem
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.Disease
+import cz.frantisekmasa.wfrp_master.common.compendium.domain.JournalEntry
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.Miracle
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.Skill
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.Spell
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.Talent
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.Trait
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.Trapping
+import cz.frantisekmasa.wfrp_master.common.compendium.journal.JournalScreenModel
 import cz.frantisekmasa.wfrp_master.common.compendium.miracle.MiracleCompendiumScreenModel
 import cz.frantisekmasa.wfrp_master.common.compendium.skill.SkillCompendiumScreenModel
 import cz.frantisekmasa.wfrp_master.common.compendium.spell.SpellCompendiumScreenModel
@@ -79,6 +81,7 @@ internal fun ImportDialog(
                 Surface {
                     FullScreenProgress()
                 }
+
             is ImportDialogState.PickingItemsToImport ->
                 ImportedItemsPicker(
                     state = state,
@@ -111,6 +114,7 @@ private fun ImportedItemsPicker(
                 ItemsScreen.CAREERS to state.careers.isNotEmpty(),
                 ItemsScreen.TRAPPINGS to state.trappings.isNotEmpty(),
                 ItemsScreen.DISEASES to state.diseases.isNotEmpty(),
+                ItemsScreen.JOURNAL to state.journalEntries.isNotEmpty(),
             ).filter { it.second }
                 .map { it.first }
                 .toList()
@@ -133,89 +137,136 @@ private fun ImportedItemsPicker(
                 ItemPicker(
                     label = stringResource(Str.compendium_pick_prompt_skills),
                     items = state.skills,
-                    screenModel = screen.rememberScreenModel<PartyId, SkillCompendiumScreenModel>(arg = partyId),
+                    screenModel =
+                        screen.rememberScreenModel<PartyId, SkillCompendiumScreenModel>(
+                            arg = partyId,
+                        ),
                     onContinue = onContinue,
                     onClose = onDismissRequest,
                     replaceExistingByDefault = state.replaceExistingByDefault,
                 )
             }
+
             ItemsScreen.TALENTS -> {
                 ItemPicker(
                     label = stringResource(Str.compendium_pick_prompt_talents),
                     items = state.talents,
-                    screenModel = screen.rememberScreenModel<PartyId, TalentCompendiumScreenModel>(arg = partyId),
+                    screenModel =
+                        screen.rememberScreenModel<PartyId, TalentCompendiumScreenModel>(
+                            arg = partyId,
+                        ),
                     onContinue = onContinue,
                     onClose = onDismissRequest,
                     replaceExistingByDefault = state.replaceExistingByDefault,
                 )
             }
+
             ItemsScreen.SPELLS -> {
                 ItemPicker(
                     label = stringResource(Str.compendium_pick_prompt_spells),
                     items = state.spells,
-                    screenModel = screen.rememberScreenModel<PartyId, SpellCompendiumScreenModel>(arg = partyId),
+                    screenModel =
+                        screen.rememberScreenModel<PartyId, SpellCompendiumScreenModel>(
+                            arg = partyId,
+                        ),
                     onContinue = onContinue,
                     onClose = onDismissRequest,
                     replaceExistingByDefault = state.replaceExistingByDefault,
                 )
             }
+
             ItemsScreen.BLESSINGS -> {
                 ItemPicker(
                     label = stringResource(Str.compendium_pick_prompt_blessings),
                     items = state.blessings,
-                    screenModel = screen.rememberScreenModel<PartyId, BlessingCompendiumScreenModel>(arg = partyId),
+                    screenModel =
+                        screen.rememberScreenModel<PartyId, BlessingCompendiumScreenModel>(
+                            arg = partyId,
+                        ),
                     onContinue = onContinue,
                     onClose = onDismissRequest,
                     replaceExistingByDefault = state.replaceExistingByDefault,
                 )
             }
+
             ItemsScreen.MIRACLES -> {
                 ItemPicker(
                     label = stringResource(Str.compendium_pick_prompt_miracles),
                     items = state.miracles,
-                    screenModel = screen.rememberScreenModel<PartyId, MiracleCompendiumScreenModel>(arg = partyId),
+                    screenModel =
+                        screen.rememberScreenModel<PartyId, MiracleCompendiumScreenModel>(
+                            arg = partyId,
+                        ),
                     onContinue = onContinue,
                     onClose = onDismissRequest,
                     replaceExistingByDefault = state.replaceExistingByDefault,
                 )
             }
+
             ItemsScreen.TRAITS -> {
                 ItemPicker(
                     label = stringResource(Str.compendium_pick_prompt_traits),
                     items = state.traits,
-                    screenModel = screen.rememberScreenModel<PartyId, TraitCompendiumScreenModel>(arg = partyId),
+                    screenModel =
+                        screen.rememberScreenModel<PartyId, TraitCompendiumScreenModel>(
+                            arg = partyId,
+                        ),
                     onContinue = onContinue,
                     onClose = onDismissRequest,
                     replaceExistingByDefault = state.replaceExistingByDefault,
                 )
             }
+
             ItemsScreen.CAREERS -> {
                 ItemPicker(
                     label = stringResource(Str.compendium_pick_prompt_careers),
                     items = state.careers,
-                    screenModel = screen.rememberScreenModel<PartyId, CareerCompendiumScreenModel>(arg = partyId),
+                    screenModel =
+                        screen.rememberScreenModel<PartyId, CareerCompendiumScreenModel>(
+                            arg = partyId,
+                        ),
                     onContinue = onContinue,
                     onClose = onDismissRequest,
                     replaceExistingByDefault = state.replaceExistingByDefault,
                 )
             }
+
             ItemsScreen.TRAPPINGS -> {
                 ItemPicker(
                     label = stringResource(Str.compendium_pick_prompt_trappings),
                     items = state.trappings,
-                    screenModel = screen.rememberScreenModel<PartyId, TrappingCompendiumScreenModel>(arg = partyId),
+                    screenModel =
+                        screen.rememberScreenModel<PartyId, TrappingCompendiumScreenModel>(
+                            arg = partyId,
+                        ),
                     onContinue = onContinue,
                     onClose = onDismissRequest,
                     replaceExistingByDefault = state.replaceExistingByDefault,
                 )
             }
+
             ItemsScreen.DISEASES -> {
                 ItemPicker(
                     label = stringResource(Str.compendium_pick_prompt_diseases),
                     items = state.diseases,
-                    screenModel = screen.rememberScreenModel<PartyId, DiseaseCompendiumScreenModel>(arg = partyId),
+                    screenModel =
+                        screen.rememberScreenModel<PartyId, DiseaseCompendiumScreenModel>(
+                            arg = partyId,
+                        ),
                     onContinue = onContinue,
                     onClose = onDismissRequest,
+                    replaceExistingByDefault = state.replaceExistingByDefault,
+                )
+            }
+
+            ItemsScreen.JOURNAL -> {
+                ItemPicker(
+                    label = stringResource(Str.compendium_pick_prompt_journal),
+                    items = state.journalEntries,
+                    screenModel = screen.rememberScreenModel<PartyId, JournalScreenModel>(arg = partyId),
+                    onContinue = onContinue,
+                    onClose = onDismissRequest,
+                    overlineText = { it.parents.joinToString(" ${JournalEntry.PARENT_SEPARATOR} ") },
                     replaceExistingByDefault = state.replaceExistingByDefault,
                 )
             }
@@ -230,6 +281,7 @@ private fun <T : CompendiumItem<T>> ItemPicker(
     onClose: () -> Unit,
     onContinue: () -> Unit,
     items: List<T>,
+    overlineText: ((T) -> String)? = null,
     replaceExistingByDefault: Boolean,
 ) {
     val existingItemsList = screenModel.items.collectWithLifecycle(null).value
@@ -326,7 +378,10 @@ private fun <T : CompendiumItem<T>> ItemPicker(
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
                     Text(label, textAlign = TextAlign.Center)
                     Text(
-                        stringResource(Str.compendium_messages_unchanged_items, unchangedItems.size),
+                        stringResource(
+                            Str.compendium_messages_unchanged_items,
+                            unchangedItems.size,
+                        ),
                         textAlign = TextAlign.Center,
                         style = MaterialTheme.typography.caption,
                     )
@@ -378,6 +433,7 @@ private fun <T : CompendiumItem<T>> ItemPicker(
                                     onValueChange = { selectedItems[item.id] = it },
                                 ),
                             text = { Text(item.name) },
+                            overlineText = overlineText?.let { { Text(it(item)) } },
                             secondaryText =
                                 if (item.name in existingItemsByName) {
                                     {
@@ -418,6 +474,7 @@ sealed class ImportDialogState {
         val careers: List<Career>,
         val trappings: List<Trapping>,
         val diseases: List<Disease>,
+        val journalEntries: List<JournalEntry>,
         val replaceExistingByDefault: Boolean,
     ) : ImportDialogState()
 }
@@ -433,4 +490,5 @@ private enum class ItemsScreen {
     CAREERS,
     TRAPPINGS,
     DISEASES,
+    JOURNAL,
 }

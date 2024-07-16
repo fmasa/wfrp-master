@@ -10,6 +10,7 @@ import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.parsers.lo
 import cz.frantisekmasa.wfrp_master.common.compendium.import.BlessingImport
 import cz.frantisekmasa.wfrp_master.common.compendium.import.CareerImport
 import cz.frantisekmasa.wfrp_master.common.compendium.import.DiseaseImport
+import cz.frantisekmasa.wfrp_master.common.compendium.import.JournalEntryImport
 import cz.frantisekmasa.wfrp_master.common.compendium.import.MiracleImport
 import cz.frantisekmasa.wfrp_master.common.compendium.import.SkillImport
 import cz.frantisekmasa.wfrp_master.common.compendium.import.SpellImport
@@ -81,6 +82,7 @@ class CompendiumImportRegressionTest {
                 import("traits", importer.importTraits().map(TraitImport::fromTrait))
                 import("trappings", importer.importTrappings().map(TrappingImport::fromTrapping))
                 import("diseases", importer.importDiseases().map(DiseaseImport::fromDisease))
+                import("journal", importer.importJournalEntries().map(JournalEntryImport::fromJournalEntry))
             }
         }
 

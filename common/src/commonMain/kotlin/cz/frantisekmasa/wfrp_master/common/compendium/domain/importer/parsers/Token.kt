@@ -60,4 +60,6 @@ sealed interface Token {
     object CrossIcon : Token
 
     class BoxHeader(override val text: String) : Token
+
+    class BoxContent(override val text: String) : Token
 }

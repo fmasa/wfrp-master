@@ -155,7 +155,7 @@ data class CharacterPickerScreen(
                     },
             )
 
-            if (unassignedCharacters.isNotEmpty()) {
+            if (unassignedCharacters.isEmpty()) {
                 OutlinedButton(onClick = { unassignedCharactersDialogVisible = true }) {
                     Text(stringResource(Str.character_button_link).uppercase())
                 }

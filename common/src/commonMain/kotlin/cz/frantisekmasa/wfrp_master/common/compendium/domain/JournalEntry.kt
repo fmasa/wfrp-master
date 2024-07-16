@@ -30,7 +30,11 @@ data class JournalEntry(
         gmText.requireMaxLength(TEXT_MAX_LENGTH, "GM Text")
     }
 
-    override fun replace(original: JournalEntry) = copy(id = original.id)
+    override fun replace(original: JournalEntry) =
+        copy(
+            id = original.id,
+            gmText = gmText.ifEmpty { original.gmText },
+        )
 
     override fun duplicate() = copy(id = uuid4(), name = duplicateName())
 

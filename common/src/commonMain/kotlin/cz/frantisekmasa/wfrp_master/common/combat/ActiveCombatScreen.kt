@@ -96,6 +96,7 @@ class ActiveCombatScreen(
 
         val party = viewModel.party.collectWithLifecycle(null).value
         val combatants = viewModel.combatants.collectWithLifecycle(null).value
+        val conditionsJournal = viewModel.conditionsJournal.collectWithLifecycle(null).value
         val isGameMaster = LocalUser.current.id == party?.gameMasterId
 
         val (openedCombatant, setOpenedCombatant) =
@@ -148,7 +149,7 @@ class ActiveCombatScreen(
                     return@ModalBottomSheetLayout
                 }
 
-                if (party == null || freshCombatant == null) {
+                if (party == null || freshCombatant == null || conditionsJournal == null) {
                     return@ModalBottomSheetLayout
                 }
 
@@ -171,6 +172,7 @@ class ActiveCombatScreen(
                     viewModel = viewModel,
                     advantageCap = advantageCap,
                     isGroupAdvantageSystemEnabled = isGroupAdvantageSystemEnabled,
+                    conditionsJournal = conditionsJournal,
                     onDetailOpenRequest = {
                         navigation.navigate(
                             CharacterDetailScreen(

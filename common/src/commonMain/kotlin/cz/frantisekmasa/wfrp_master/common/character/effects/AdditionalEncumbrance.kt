@@ -4,6 +4,7 @@ import cz.frantisekmasa.wfrp_master.common.Str
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.Character
 import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.Encumbrance
 import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.sum
+import cz.frantisekmasa.wfrp_master.common.localization.Translator
 
 class AdditionalEncumbrance(
     private val bonus: Encumbrance,
@@ -37,9 +38,7 @@ class AdditionalEncumbrance(
             translator: Translator,
             timesTaken: Int,
         ): AdditionalEncumbrance? {
-            val cleanName = name.lowercase()
-
-            if (cleanName == translator.translate(Str.character_effect_strong_back)) {
+            if (name.equals(translator.translate(Str.character_effect_strong_back), ignoreCase = true)) {
                 return AdditionalEncumbrance(Encumbrance(timesTaken.toDouble()))
             }
 

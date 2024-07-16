@@ -35,6 +35,7 @@ fun ImportFileChooser(
                 val careers = async { importer.importCareers() }
                 val trappings = async { importer.importTrappings() }
                 val diseases = async { importer.importDiseases() }
+                val journalEntries = async { importer.importJournalEntries() }
 
                 onStateChange(
                     ImportDialogState.PickingItemsToImport(
@@ -47,6 +48,7 @@ fun ImportFileChooser(
                         careers.await(),
                         trappings.await(),
                         diseases.await(),
+                        journalEntries.await(),
                         replaceExistingByDefault = false,
                     ),
                 )

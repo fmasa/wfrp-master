@@ -1,8 +1,11 @@
 package cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.parsers
 
 class TokenStream(
-    private val tokens: List<Token>,
+    private val tokens: PeekingIterator<Token>,
 ) {
+    constructor(tokens: List<Token>) : this(PeekingIterator(tokens.iterator()))
+    constructor(tokens: Sequence<Token>) : this(PeekingIterator(tokens.iterator()))
+
     var cursor: Int = 0
         private set
 
@@ -13,12 +16,12 @@ class TokenStream(
         return sequence {
             var consumed = 0
 
-            while (cursor <= tokens.lastIndex && consumed < max) {
-                if (!predicate(tokens[cursor])) {
+            while (tokens.hasNext() && consumed < max) {
+                if (!predicate(tokens.peek()!!)) {
                     return@sequence
                 }
 
-                yield(tokens[cursor])
+                yield(tokens.next())
                 cursor++
                 consumed++
             }
@@ -54,12 +57,30 @@ class TokenStream(
     }
 
     fun assertEnd() {
-        check(cursor > tokens.lastIndex) {
-            "Expected end of content, ${tokens[cursor]} found"
+        check(!tokens.hasNext()) {
+            "Expected end of content, ${tokens.peek()} found"
         }
     }
 
-    fun peek(): Token? {
-        return tokens.getOrNull(cursor)
+    fun peek(): Token? = tokens.peek()
+}
+
+class PeekingIterator<T : Any>(
+    private val iterator: Iterator<T>,
+) : Iterator<T> {
+    private var next: T? = if (iterator.hasNext()) iterator.next() else null
+
+    fun peek(): T? = next
+
+    // hasNext() and next() should behave the same as in the Iterator interface.
+    // Override them if needed.
+    override fun next(): T {
+        val result = next ?: throw NoSuchElementException()
+        next = if (iterator.hasNext()) iterator.next() else null
+        return result
+    }
+
+    override fun hasNext(): Boolean {
+        return next != null
     }
 }
