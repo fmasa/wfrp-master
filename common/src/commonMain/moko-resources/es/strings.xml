@@ -798,4 +798,9 @@
     <string name="diseases_label_description">Descripción (opcional)</string>
     <string name="common_ui_units_minutes">minutos</string>
     <string name="diseases_messages_no_diseases_in_compendium">Sin enfermedades</string>
+    <string name="character_effect_pure_soul">alma pura</string>
+    <string name="journal_folder_conditions">Reglas / Condiciones / Lista maestra de condiciones</string>
+    <string name="journal_messages_entry_not_found">No se encontró la entrada de la revista %s</string>
+    <string name="journal_folder_symptoms">Reglas / Enfermedades e infecciones / Síntomas</string>
+    <string name="compendium_pick_prompt_journal">Seleccione las entradas de diario que desea importar.</string>
 </resources>
