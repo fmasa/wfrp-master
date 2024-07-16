@@ -606,7 +606,8 @@ service cloud.firestore {
                             "archived",
                             "woundsModifiers",
                             "compendiumCareer",
-                            "encumbranceBonus"
+                            "encumbranceBonus",
+                            "corruptionBufferBonus"
                         ].hasAll(character.keys())
                         && character.id == characterId
                         && (character.userId == null || character.userId in get(/databases/$(database)/documents/parties/$(partyId)).data.users)
@@ -663,7 +664,8 @@ service cloud.firestore {
                         )
                         && areValidWoundsModifiers(character.woundsModifiers)
                         && (character.compendiumCareer == null || isCompendiumCareerValid(character.compendiumCareer))
-                        && character.encumbranceBonus is number && character.encumbranceBonus >= 0;
+                        && character.encumbranceBonus is number && character.encumbranceBonus >= 0
+                        && ( !("corruptionBufferBonus" in character) || (character.corruptionBufferBonus is int && character.corruptionBufferBonus >= 0));
                 }
             }
 

@@ -6,6 +6,7 @@ import com.benasher44.uuid.uuid4
 import cz.frantisekmasa.wfrp_master.common.character.effects.AdditionalEncumbrance
 import cz.frantisekmasa.wfrp_master.common.character.effects.CharacterEffect
 import cz.frantisekmasa.wfrp_master.common.character.effects.CharacteristicChange
+import cz.frantisekmasa.wfrp_master.common.character.effects.CorruptionPointsBufferBonus
 import cz.frantisekmasa.wfrp_master.common.character.effects.EffectSource
 import cz.frantisekmasa.wfrp_master.common.character.effects.HardyWoundsModification
 import cz.frantisekmasa.wfrp_master.common.core.common.requireMaxLength
@@ -38,6 +39,7 @@ data class Talent(
             HardyWoundsModification.fromTalentOrNull(name, translator, taken),
             CharacteristicChange.fromTalentNameOrNull(name, translator),
             AdditionalEncumbrance.fromTalentOrNull(name, translator, taken),
+            CorruptionPointsBufferBonus.fromTalentOrNull(name, translator, taken),
         )
     }
 

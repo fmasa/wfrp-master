@@ -382,6 +382,7 @@ data class CharacterDetailScreen(
                                     state = state.wellBeingScreenState,
                                     removeDisease = screenModelV2::removeDisease,
                                     modifier = modifier,
+                                    updateCharacter = screenModelV2::updateCharacter,
                                 )
                             }
                             CharacterTab.NOTES -> {
