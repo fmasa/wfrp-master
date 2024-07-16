@@ -6,7 +6,7 @@ import cz.frantisekmasa.wfrp_master.common.localization.Translator
 
 class CorruptionPointsBufferBonus(
     private val bonus: Int,
-): CharacterEffect {
+) : CharacterEffect {
     override fun apply(
         character: Character,
         otherEffects: List<CharacterEffect>,

@@ -110,17 +110,17 @@ data class Character(
             characteristicsBase = base,
             characteristicsAdvances = advances,
             points =
-            points.copy(
-                wounds =
-                points.wounds.coerceAtMost(
-                    calculateMaxWounds(
-                        size ?: race?.size,
-                        points,
-                        woundsModifiers,
-                        base + advances,
-                    ),
+                points.copy(
+                    wounds =
+                        points.wounds.coerceAtMost(
+                            calculateMaxWounds(
+                                size ?: race?.size,
+                                points,
+                                woundsModifiers,
+                                base + advances,
+                            ),
+                        ),
                 ),
-            ),
         )
     }
 
@@ -128,17 +128,17 @@ data class Character(
         return copy(
             size = size,
             points =
-            points.copy(
-                wounds =
-                points.wounds.coerceAtMost(
-                    calculateMaxWounds(
-                        size ?: race?.size,
-                        points,
-                        woundsModifiers,
-                        characteristics,
-                    ),
+                points.copy(
+                    wounds =
+                        points.wounds.coerceAtMost(
+                            calculateMaxWounds(
+                                size ?: race?.size,
+                                points,
+                                woundsModifiers,
+                                characteristics,
+                            ),
+                        ),
                 ),
-            ),
         )
     }
 
@@ -146,17 +146,17 @@ data class Character(
         return copy(
             woundsModifiers = woundsModifiers,
             points =
-            points.copy(
-                wounds =
-                points.wounds.coerceAtMost(
-                    calculateMaxWounds(
-                        size ?: race?.size,
-                        points,
-                        woundsModifiers,
-                        characteristics,
-                    ),
+                points.copy(
+                    wounds =
+                        points.wounds.coerceAtMost(
+                            calculateMaxWounds(
+                                size ?: race?.size,
+                                points,
+                                woundsModifiers,
+                                characteristics,
+                            ),
+                        ),
                 ),
-            ),
         )
     }
 
@@ -193,28 +193,28 @@ data class Character(
         motivation = motivation,
         note = note,
         points =
-        points.coerceWoundsAtMost(
-            calculateMaxWounds(
-                size ?: race?.size,
-                points,
-                woundsModifiers,
-                characteristics,
+            points.coerceWoundsAtMost(
+                calculateMaxWounds(
+                    size ?: race?.size,
+                    points,
+                    woundsModifiers,
+                    characteristics,
+                ),
             ),
-        ),
     )
 
     fun updateMaxWounds(maxWounds: Int?): Character {
         val newPoints = points.copy(maxWounds = maxWounds)
         return copy(
             points =
-            newPoints.coerceWoundsAtMost(
-                calculateMaxWounds(
-                    size ?: race?.size,
-                    newPoints,
-                    woundsModifiers,
-                    characteristics,
+                newPoints.coerceWoundsAtMost(
+                    calculateMaxWounds(
+                        size ?: race?.size,
+                        newPoints,
+                        woundsModifiers,
+                        characteristics,
+                    ),
                 ),
-            ),
         )
     }
 
@@ -315,11 +315,11 @@ data class Character(
                     toughnessBonus = toughnessBonus,
                     strengthBonus = characteristics.strengthBonus,
                     willPowerBonus =
-                    if (modifiers.isConstruct) {
-                        characteristics.strengthBonus
-                    } else {
-                        characteristics.willPowerBonus
-                    },
+                        if (modifiers.isConstruct) {
+                            characteristics.strengthBonus
+                        } else {
+                            characteristics.willPowerBonus
+                        },
                 )
             return (baseWounds + modifiers.extraToughnessBonusMultiplier * toughnessBonus) *
                 modifiers.afterMultiplier

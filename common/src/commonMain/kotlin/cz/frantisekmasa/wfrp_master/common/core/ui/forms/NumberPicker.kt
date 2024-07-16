@@ -25,6 +25,7 @@ import dev.icerock.moko.resources.compose.stringResource
 fun NumberPicker(
     value: Int,
     modifier: Modifier = Modifier,
+    max: Int? = null,
     label: String? = null,
     color: Color = MaterialTheme.colors.onSurface,
     onIncrement: () -> Unit,
@@ -59,7 +60,7 @@ fun NumberPicker(
             }
 
             Text(
-                value.toString(),
+                max?.let { "$value / $it" } ?: value.toString(),
                 style = MaterialTheme.typography.h5,
                 color = color,
             )
