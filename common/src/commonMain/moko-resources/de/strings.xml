@@ -763,4 +763,7 @@
     <string name="characteristics_fellowship_bonus_shortcut">CHB</string>
     <string name="social_status_brass">Messing</string>
     <string name="parties_messages_qr_code_scanning_prompt">Scannen Sie den von GM bereitgestellten Code</string>
+    <string name="common_ui_button_add_item">Item hinzufügen</string>
+    <string name="diseases_title_choose_compendium_disease">Kompendium-Krankheit wählen…</string>
+    <string name="diseases_symptoms_helper">Komma-separierte Liste an Symptomen</string>
 </resources>
