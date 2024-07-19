@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -36,43 +37,45 @@ fun RangedWeaponDetailBody(
     Column(Modifier.verticalScroll(rememberScrollState())) {
         subheadBar()
 
-        Column(Modifier.padding(Spacing.bodyPadding)) {
-            SingleLineTextValue(
-                stringResource(Str.trappings_label_type),
-                stringResource(Str.trappings_types_ranged_weapon),
-            )
-
-            if (characterTrapping != null) {
-                ItemQualitiesAndFlaws(characterTrapping)
-            }
-
-            EncumbranceBox(encumbrance, characterTrapping)
-
-            SingleLineTextValue(
-                stringResource(Str.weapons_label_damage),
-                damageValue(damage, strengthBonus = strengthBonus),
-            )
-
-            SingleLineTextValue(
-                stringResource(Str.weapons_label_group),
-                group.localizedName,
-            )
-
-            SingleLineTextValue(
-                stringResource(Str.weapons_label_range),
-                range.formatted(),
-            )
-
-            TrappingFeatures(qualities, flaws)
-
-            if (characterTrapping != null && characterTrapping.quantity > 0) {
+        SelectionContainer {
+            Column(Modifier.padding(Spacing.bodyPadding)) {
                 SingleLineTextValue(
-                    stringResource(Str.trappings_label_quantity),
-                    characterTrapping.quantity.toString(),
+                    stringResource(Str.trappings_label_type),
+                    stringResource(Str.trappings_types_ranged_weapon),
                 )
-            }
 
-            TrappingDescription(description)
+                if (characterTrapping != null) {
+                    ItemQualitiesAndFlaws(characterTrapping)
+                }
+
+                EncumbranceBox(encumbrance, characterTrapping)
+
+                SingleLineTextValue(
+                    stringResource(Str.weapons_label_damage),
+                    damageValue(damage, strengthBonus = strengthBonus),
+                )
+
+                SingleLineTextValue(
+                    stringResource(Str.weapons_label_group),
+                    group.localizedName,
+                )
+
+                SingleLineTextValue(
+                    stringResource(Str.weapons_label_range),
+                    range.formatted(),
+                )
+
+                TrappingFeatures(qualities, flaws)
+
+                if (characterTrapping != null && characterTrapping.quantity > 0) {
+                    SingleLineTextValue(
+                        stringResource(Str.trappings_label_quantity),
+                        characterTrapping.quantity.toString(),
+                    )
+                }
+
+                TrappingDescription(description)
+            }
         }
     }
 }

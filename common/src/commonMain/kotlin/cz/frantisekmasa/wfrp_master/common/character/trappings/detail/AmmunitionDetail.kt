@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -36,36 +37,38 @@ fun AmmunitionDetailBody(
     Column(Modifier.verticalScroll(rememberScrollState())) {
         subheadBar()
 
-        Column(Modifier.padding(Spacing.bodyPadding)) {
-            SingleLineTextValue(
-                stringResource(Str.trappings_label_type),
-                stringResource(Str.trappings_types_ammunition),
-            )
+        SelectionContainer {
+            Column(Modifier.padding(Spacing.bodyPadding)) {
+                SingleLineTextValue(
+                    stringResource(Str.trappings_label_type),
+                    stringResource(Str.trappings_types_ammunition),
+                )
 
-            if (characterTrapping != null) {
-                ItemQualitiesAndFlaws(characterTrapping)
+                if (characterTrapping != null) {
+                    ItemQualitiesAndFlaws(characterTrapping)
+                }
+
+                EncumbranceBox(
+                    encumbrance = encumbrance,
+                    characterTrapping = characterTrapping,
+                )
+
+                SingleLineTextValue(stringResource(Str.weapons_label_damage), damage.formatted())
+
+                SingleLineTextValue(stringResource(Str.weapons_label_range), range.formatted())
+
+                val weaponGroupsNames = weaponGroups.map { it.localizedName }
+                SingleLineTextValue(
+                    stringResource(Str.weapons_label_groups),
+                    remember(weaponGroupsNames) {
+                        weaponGroupsNames.sorted().joinToString(", ")
+                    },
+                )
+
+                TrappingFeatures(qualities, flaws)
+
+                TrappingDescription(description)
             }
-
-            EncumbranceBox(
-                encumbrance = encumbrance,
-                characterTrapping = characterTrapping,
-            )
-
-            SingleLineTextValue(stringResource(Str.weapons_label_damage), damage.formatted())
-
-            SingleLineTextValue(stringResource(Str.weapons_label_range), range.formatted())
-
-            val weaponGroupsNames = weaponGroups.map { it.localizedName }
-            SingleLineTextValue(
-                stringResource(Str.weapons_label_groups),
-                remember(weaponGroupsNames) {
-                    weaponGroupsNames.sorted().joinToString(", ")
-                },
-            )
-
-            TrappingFeatures(qualities, flaws)
-
-            TrappingDescription(description)
         }
     }
 }

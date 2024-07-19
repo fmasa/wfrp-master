@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
@@ -53,26 +54,28 @@ fun SkillDetailBody(
     advanced: Boolean,
     description: String,
 ) {
-    Column(Modifier.padding(Spacing.bodyPadding)) {
-        SingleLineTextValue(
-            label = stringResource(Str.skills_label_characteristic),
-            characteristic.localizedName,
-        )
+    SelectionContainer {
+        Column(Modifier.padding(Spacing.bodyPadding)) {
+            SingleLineTextValue(
+                label = stringResource(Str.skills_label_characteristic),
+                characteristic.localizedName,
+            )
 
-        SingleLineTextValue(
-            label = stringResource(Str.skills_label_advanced),
-            value =
-                stringResource(
-                    if (advanced) {
-                        Str.common_ui_boolean_yes
-                    } else {
-                        Str.common_ui_boolean_no
-                    },
-                ),
-        )
+            SingleLineTextValue(
+                label = stringResource(Str.skills_label_advanced),
+                value =
+                    stringResource(
+                        if (advanced) {
+                            Str.common_ui_boolean_yes
+                        } else {
+                            Str.common_ui_boolean_no
+                        },
+                    ),
+            )
 
-        RichText(Modifier.padding(top = Spacing.small)) {
-            Markdown(description)
+            RichText(Modifier.padding(top = Spacing.small)) {
+                Markdown(description)
+            }
         }
     }
 }

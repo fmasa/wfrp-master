@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Button
 import androidx.compose.material.Icon
@@ -118,66 +119,68 @@ class JournalEntryScreen(
                     )
                 }
 
-                Column(
-                    Modifier
-                        .padding(Spacing.bodyPadding)
-                        .fillMaxWidth(),
-                ) {
-                    if (isGameMaster) {
-                        val coroutineScope = rememberCoroutineScope()
-                        var saving by remember { mutableStateOf(false) }
-                        val pinToggle: () -> Unit = {
-                            saving = true
-                            coroutineScope.launchLogged(Dispatchers.IO) {
-                                try {
-                                    screenModel.save(entry.copy(isPinned = !entry.isPinned))
-                                } finally {
-                                    saving = false
+                SelectionContainer {
+                    Column(
+                        Modifier
+                            .padding(Spacing.bodyPadding)
+                            .fillMaxWidth(),
+                    ) {
+                        if (isGameMaster) {
+                            val coroutineScope = rememberCoroutineScope()
+                            var saving by remember { mutableStateOf(false) }
+                            val pinToggle: () -> Unit = {
+                                saving = true
+                                coroutineScope.launchLogged(Dispatchers.IO) {
+                                    try {
+                                        screenModel.save(entry.copy(isPinned = !entry.isPinned))
+                                    } finally {
+                                        saving = false
+                                    }
+                                }
+                            }
+
+                            Box(
+                                Modifier.align(Alignment.CenterHorizontally)
+                                    .padding(bottom = Spacing.medium),
+                            ) {
+                                if (entry.isPinned) {
+                                    Button(
+                                        onClick = pinToggle,
+                                        enabled = !saving,
+                                    ) {
+                                        PinIcon()
+                                        Text(stringResource(Str.journal_folder_unpin_cta))
+                                    }
+                                } else {
+                                    OutlinedButton(
+                                        onClick = pinToggle,
+                                        enabled = !saving,
+                                    ) {
+                                        PinIcon()
+                                        Text(stringResource(Str.journal_folder_pin_cta))
+                                    }
                                 }
                             }
                         }
 
-                        Box(
-                            Modifier.align(Alignment.CenterHorizontally)
-                                .padding(bottom = Spacing.medium),
-                        ) {
-                            if (entry.isPinned) {
-                                Button(
-                                    onClick = pinToggle,
-                                    enabled = !saving,
-                                ) {
-                                    PinIcon()
-                                    Text(stringResource(Str.journal_folder_unpin_cta))
-                                }
-                            } else {
-                                OutlinedButton(
-                                    onClick = pinToggle,
-                                    enabled = !saving,
-                                ) {
-                                    PinIcon()
-                                    Text(stringResource(Str.journal_folder_pin_cta))
-                                }
-                            }
+                        RichText {
+                            SingleLineTextValue(
+                                stringResource(Str.journal_label_parents),
+                                remember(entry.parents) {
+                                    entry.parents
+                                        .joinToString(" ${JournalEntry.PARENT_SEPARATOR} ")
+                                },
+                            )
+                            Markdown(entry.text)
                         }
-                    }
 
-                    RichText {
-                        SingleLineTextValue(
-                            stringResource(Str.journal_label_parents),
-                            remember(entry.parents) {
-                                entry.parents
-                                    .joinToString(" ${JournalEntry.PARENT_SEPARATOR} ")
-                            },
-                        )
-                        Markdown(entry.text)
-                    }
+                        if (isGameMaster && entry.gmText.isNotEmpty()) {
+                            CardContainer(Modifier.padding(top = Spacing.medium)) {
+                                CardTitle(stringResource(Str.journal_title_gm_text))
 
-                    if (isGameMaster && entry.gmText.isNotEmpty()) {
-                        CardContainer(Modifier.padding(top = Spacing.medium)) {
-                            CardTitle(stringResource(Str.journal_title_gm_text))
-
-                            RichText {
-                                Markdown(entry.gmText)
+                                RichText {
+                                    Markdown(entry.gmText)
+                                }
                             }
                         }
                     }

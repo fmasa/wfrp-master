@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
@@ -56,13 +57,15 @@ fun BlessingDetailBody(
     duration: String,
     effect: String,
 ) {
-    Column(Modifier.padding(Spacing.bodyPadding)) {
-        SingleLineTextValue(stringResource(Str.blessings_label_range), range)
-        SingleLineTextValue(stringResource(Str.blessings_label_target), target)
-        SingleLineTextValue(stringResource(Str.blessings_label_duration), duration)
+    SelectionContainer {
+        Column(Modifier.padding(Spacing.bodyPadding)) {
+            SingleLineTextValue(stringResource(Str.blessings_label_range), range)
+            SingleLineTextValue(stringResource(Str.blessings_label_target), target)
+            SingleLineTextValue(stringResource(Str.blessings_label_duration), duration)
 
-        RichText(Modifier.padding(top = 8.dp)) {
-            Markdown(effect)
+            RichText(Modifier.padding(top = 8.dp)) {
+                Markdown(effect)
+            }
         }
     }
 }
