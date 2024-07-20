@@ -87,7 +87,7 @@ object UpInArms : Book, CareerSource, TalentSource, TrappingSource {
         }
 
         if (textToken.fontName.endsWith("CaslonAntique-Bold")) {
-            if (textToken.fontSizePt == 19f) {
+            if (textToken.fontSizePt == 19f || textToken.fontSizePt == 22f) {
                 return Token.Heading1(textToken.text)
             }
 
