@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.material.ContentAlpha
 import androidx.compose.material.Icon
 import androidx.compose.material.LocalContentAlpha
@@ -75,26 +76,28 @@ fun AmbitionsCard(
                 stringResource(Str.ambition_label_long_term) to ambitions.longTerm,
             )
 
-        for ((label, value) in ambitionList) {
-            Column(Modifier.padding(top = 4.dp)) {
-                Text(label, fontWeight = FontWeight.Bold)
+        SelectionContainer {
+            for ((label, value) in ambitionList) {
+                Column(Modifier.padding(top = 4.dp)) {
+                    Text(label, fontWeight = FontWeight.Bold)
 
-                if (value.isBlank()) {
-                    CompositionLocalProvider(LocalContentAlpha provides ContentAlpha.medium) {
-                        Row(verticalAlignment = Alignment.CenterVertically) {
-                            Icon(
-                                drawableResource(Resources.Drawable.None),
-                                VISUAL_ONLY_ICON_DESCRIPTION,
-                            )
-                            Text(
-                                stringResource(Str.ambition_messages_not_filled),
-                                style = MaterialTheme.typography.body2,
-                                fontStyle = FontStyle.Italic,
-                            )
+                    if (value.isBlank()) {
+                        CompositionLocalProvider(LocalContentAlpha provides ContentAlpha.medium) {
+                            Row(verticalAlignment = Alignment.CenterVertically) {
+                                Icon(
+                                    drawableResource(Resources.Drawable.None),
+                                    VISUAL_ONLY_ICON_DESCRIPTION,
+                                )
+                                Text(
+                                    stringResource(Str.ambition_messages_not_filled),
+                                    style = MaterialTheme.typography.body2,
+                                    fontStyle = FontStyle.Italic,
+                                )
+                            }
                         }
+                    } else {
+                        Text(value)
                     }
-                } else {
-                    Text(value)
                 }
             }
         }

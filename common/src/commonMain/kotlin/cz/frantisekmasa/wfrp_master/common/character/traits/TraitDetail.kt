@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
@@ -54,19 +55,21 @@ fun TraitDetailBody(
     specifications: Set<String>,
     description: String,
 ) {
-    Column(Modifier.padding(Spacing.bodyPadding)) {
-        if (specifications.isNotEmpty()) {
-            SingleLineTextValue(
-                label = stringResource(Str.traits_label_specifications),
-                value =
-                    remember(specifications) {
-                        specifications.sorted().joinToString(", ")
-                    },
-            )
-        }
+    SelectionContainer {
+        Column(Modifier.padding(Spacing.bodyPadding)) {
+            if (specifications.isNotEmpty()) {
+                SingleLineTextValue(
+                    label = stringResource(Str.traits_label_specifications),
+                    value =
+                        remember(specifications) {
+                            specifications.sorted().joinToString(", ")
+                        },
+                )
+            }
 
-        RichText(Modifier.padding(top = 8.dp)) {
-            Markdown(description)
+            RichText(Modifier.padding(top = 8.dp)) {
+                Markdown(description)
+            }
         }
     }
 }

@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
@@ -64,26 +65,28 @@ fun MiracleDetailBody(
     duration: String,
     effect: String,
 ) {
-    Column {
-        SubheadBar {
-            Row(
-                Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically,
-            ) {
-                Text(cultName)
+    SelectionContainer {
+        Column {
+            SubheadBar {
+                Row(
+                    Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    Text(cultName)
+                }
             }
-        }
 
-        subheadBar()
+            subheadBar()
 
-        Column(Modifier.padding(Spacing.bodyPadding)) {
-            SingleLineTextValue(stringResource(Str.miracles_label_range), range)
-            SingleLineMarkdownValue(stringResource(Str.miracles_label_target), target)
-            SingleLineTextValue(stringResource(Str.miracles_label_duration), duration)
+            Column(Modifier.padding(Spacing.bodyPadding)) {
+                SingleLineTextValue(stringResource(Str.miracles_label_range), range)
+                SingleLineMarkdownValue(stringResource(Str.miracles_label_target), target)
+                SingleLineTextValue(stringResource(Str.miracles_label_duration), duration)
 
-            RichText(Modifier.padding(top = 8.dp)) {
-                Markdown(effect)
+                RichText(Modifier.padding(top = 8.dp)) {
+                    Markdown(effect)
+                }
             }
         }
     }

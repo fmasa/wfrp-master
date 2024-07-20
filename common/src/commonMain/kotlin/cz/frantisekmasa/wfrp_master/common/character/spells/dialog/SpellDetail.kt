@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
@@ -73,44 +74,46 @@ fun SpellDetailBody(
     duration: String,
     effect: String,
 ) {
-    Column(Modifier.padding(Spacing.bodyPadding)) {
-        if (lore != null) {
-            Row(
-                modifier =
-                    Modifier
-                        .align(Alignment.CenterHorizontally)
-                        .padding(bottom = Spacing.large),
-                horizontalArrangement = Arrangement.spacedBy(Spacing.small),
-                verticalAlignment = Alignment.CenterVertically,
-            ) {
-                SpellLoreIcon(lore)
-                Text(lore.localizedName, style = MaterialTheme.typography.h6)
+    SelectionContainer {
+        Column(Modifier.padding(Spacing.bodyPadding)) {
+            if (lore != null) {
+                Row(
+                    modifier =
+                        Modifier
+                            .align(Alignment.CenterHorizontally)
+                            .padding(bottom = Spacing.large),
+                    horizontalArrangement = Arrangement.spacedBy(Spacing.small),
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    SpellLoreIcon(lore)
+                    Text(lore.localizedName, style = MaterialTheme.typography.h6)
+                }
             }
-        }
 
-        SingleLineTextValue(
-            stringResource(Str.spells_casting_number_shortcut),
-            buildAnnotatedString {
-                if (castingNumber != effectiveCastingNumber) {
-                    withStyle(SpanStyle(textDecoration = TextDecoration.LineThrough)) {
-                        append(castingNumber.toString())
+            SingleLineTextValue(
+                stringResource(Str.spells_casting_number_shortcut),
+                buildAnnotatedString {
+                    if (castingNumber != effectiveCastingNumber) {
+                        withStyle(SpanStyle(textDecoration = TextDecoration.LineThrough)) {
+                            append(castingNumber.toString())
+                        }
+
+                        append(" ➔ ")
                     }
 
-                    append(" ➔ ")
-                }
+                    append(effectiveCastingNumber.toString())
+                },
+            )
 
-                append(effectiveCastingNumber.toString())
-            },
-        )
+            SingleLineTextValue(stringResource(Str.spells_label_range), range)
 
-        SingleLineTextValue(stringResource(Str.spells_label_range), range)
+            SingleLineTextValue(stringResource(Str.spells_label_target), target)
 
-        SingleLineTextValue(stringResource(Str.spells_label_target), target)
+            SingleLineTextValue(stringResource(Str.spells_label_duration), duration)
 
-        SingleLineTextValue(stringResource(Str.spells_label_duration), duration)
-
-        RichText(Modifier.padding(top = 8.dp)) {
-            Markdown(effect)
+            RichText(Modifier.padding(top = 8.dp)) {
+                Markdown(effect)
+            }
         }
     }
 }

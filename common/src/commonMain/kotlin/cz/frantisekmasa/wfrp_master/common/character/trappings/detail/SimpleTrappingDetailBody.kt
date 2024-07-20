@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -25,16 +26,18 @@ fun SimpleTrappingDetailBody(
     Column(Modifier.verticalScroll(rememberScrollState())) {
         subheadBar()
 
-        Column(Modifier.padding(Spacing.bodyPadding)) {
-            SingleLineTextValue(stringResource(Str.trappings_label_type), trappingType)
+        SelectionContainer {
+            Column(Modifier.padding(Spacing.bodyPadding)) {
+                SingleLineTextValue(stringResource(Str.trappings_label_type), trappingType)
 
-            if (characterTrapping != null) {
-                ItemQualitiesAndFlaws(characterTrapping)
+                if (characterTrapping != null) {
+                    ItemQualitiesAndFlaws(characterTrapping)
+                }
+
+                EncumbranceBox(encumbrance, characterTrapping)
+
+                TrappingDescription(description)
             }
-
-            EncumbranceBox(encumbrance, characterTrapping)
-
-            TrappingDescription(description)
         }
     }
 }

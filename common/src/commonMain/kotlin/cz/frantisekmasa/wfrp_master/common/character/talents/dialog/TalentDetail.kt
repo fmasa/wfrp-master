@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
@@ -51,15 +52,17 @@ fun TalentDetailBody(
     tests: String,
     description: String,
 ) {
-    Column(Modifier.padding(Spacing.bodyPadding)) {
-        SingleLineTextValue(stringResource(Str.talents_label_max_times_taken), maxTimesTaken)
+    SelectionContainer {
+        Column(Modifier.padding(Spacing.bodyPadding)) {
+            SingleLineTextValue(stringResource(Str.talents_label_max_times_taken), maxTimesTaken)
 
-        if (tests.isNotBlank()) {
-            SingleLineTextValue(stringResource(Str.talents_label_tests), tests)
-        }
+            if (tests.isNotBlank()) {
+                SingleLineTextValue(stringResource(Str.talents_label_tests), tests)
+            }
 
-        RichText {
-            Markdown(description)
+            RichText {
+                Markdown(description)
+            }
         }
     }
 }

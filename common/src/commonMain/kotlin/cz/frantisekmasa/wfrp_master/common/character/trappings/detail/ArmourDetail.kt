@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -35,38 +36,40 @@ fun ArmourDetailBody(
     Column(Modifier.verticalScroll(rememberScrollState())) {
         subheadBar()
 
-        Column(Modifier.padding(Spacing.bodyPadding)) {
-            SingleLineTextValue(
-                stringResource(Str.trappings_label_type),
-                TrappingTypeOption.ARMOUR.localizedName,
-            )
-
-            if (characterTrapping != null) {
-                ItemQualitiesAndFlaws(characterTrapping)
-            }
-
-            EncumbranceBox(encumbrance, characterTrapping)
-
-            val locationNames = locations.map { it.localizedName }
-            SingleLineTextValue(
-                stringResource(Str.armour_label_locations),
-                remember(locationNames) { locationNames.sorted().joinToString(", ") },
-            )
-
-            SingleLineTextValue(
-                stringResource(Str.armour_label_armour_points),
-                points.value.toString(),
-            )
-
-            if (characterTrapping != null) {
+        SelectionContainer {
+            Column(Modifier.padding(Spacing.bodyPadding)) {
                 SingleLineTextValue(
-                    stringResource(Str.trappings_label_quantity),
-                    characterTrapping.quantity.toString(),
+                    stringResource(Str.trappings_label_type),
+                    TrappingTypeOption.ARMOUR.localizedName,
                 )
-            }
 
-            TrappingFeatures(qualities, flaws)
-            TrappingDescription(description)
+                if (characterTrapping != null) {
+                    ItemQualitiesAndFlaws(characterTrapping)
+                }
+
+                EncumbranceBox(encumbrance, characterTrapping)
+
+                val locationNames = locations.map { it.localizedName }
+                SingleLineTextValue(
+                    stringResource(Str.armour_label_locations),
+                    remember(locationNames) { locationNames.sorted().joinToString(", ") },
+                )
+
+                SingleLineTextValue(
+                    stringResource(Str.armour_label_armour_points),
+                    points.value.toString(),
+                )
+
+                if (characterTrapping != null) {
+                    SingleLineTextValue(
+                        stringResource(Str.trappings_label_quantity),
+                        characterTrapping.quantity.toString(),
+                    )
+                }
+
+                TrappingFeatures(qualities, flaws)
+                TrappingDescription(description)
+            }
         }
     }
 }

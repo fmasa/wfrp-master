@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Divider
 import androidx.compose.material.ExtendedFloatingActionButton
@@ -144,32 +145,36 @@ fun ContainerDetail(
                     carriedItems.map { it.totalEncumbrance }.sum()
                 }
 
-                ItemQualitiesAndFlaws(trapping)
+                SelectionContainer {
+                    Column {
+                        ItemQualitiesAndFlaws(trapping)
 
-                EncumbranceBox(trapping)
+                        EncumbranceBox(trapping)
 
-                SingleLineTextValue(
-                    stringResource(Str.trappings_label_carries),
-                    buildAnnotatedString {
-                        withStyle(
-                            SpanStyle(
-                                color =
-                                    if (currentlyCarries > container.carries) {
-                                        MaterialTheme.colors.error
-                                    } else {
-                                        Color.Unspecified
-                                    },
-                            ),
-                        ) {
-                            append(currentlyCarries.toString())
-                        }
+                        SingleLineTextValue(
+                            stringResource(Str.trappings_label_carries),
+                            buildAnnotatedString {
+                                withStyle(
+                                    SpanStyle(
+                                        color =
+                                            if (currentlyCarries > container.carries) {
+                                                MaterialTheme.colors.error
+                                            } else {
+                                                Color.Unspecified
+                                            },
+                                    ),
+                                ) {
+                                    append(currentlyCarries.toString())
+                                }
 
-                        append("/")
-                        append(container.carries.toString())
-                    },
-                )
+                                append("/")
+                                append(container.carries.toString())
+                            },
+                        )
 
-                TrappingDescription(trapping)
+                        TrappingDescription(trapping)
+                    }
+                }
             }
 
             if (trapping.containerId == null) {
