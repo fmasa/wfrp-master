@@ -24,4 +24,5 @@ enum class SpellLore(
     SLAANESH(Str.spells_lores_slaanesh, "Dhar"),
     TZEENTCH(Str.spells_lores_tzeentch, "Dhar"),
     PETTY(Str.spells_lores_petty, null),
+    GREAT_MAW(Str.spells_lores_great_maw, null),
 }

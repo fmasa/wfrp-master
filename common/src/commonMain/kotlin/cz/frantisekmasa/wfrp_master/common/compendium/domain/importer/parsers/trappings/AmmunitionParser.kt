@@ -51,7 +51,7 @@ class AmmunitionParser(
                         ?: error("Invalid ranged weapon groups: ${section.heading}")
 
                 section.rows.map { row ->
-                    val price = PriceParser.parse(row[1])
+                    val price = row[1]
                     val damage = row[5].trim().replace("–", "-")
                     val (name, packSize) = parseNameAndPackSize(row[0].trim())
                     val comparableName = descriptionParser.comparableName(name)
@@ -63,14 +63,16 @@ class AmmunitionParser(
                             name,
                             damage,
                             qualitiesAndFlaws,
+                            price,
                         )
                             .flatMap { parser.findFootnoteReferences(it) }
                             .toSet()
 
+                    val priceValue = PriceParser.parse(price.replace("*", ""))
                     Trapping(
                         id = uuid4(),
                         name = name,
-                        price = if (price is PriceParser.Amount) price.money else Money.ZERO,
+                        price = if (priceValue is PriceParser.Amount) priceValue.money else Money.ZERO,
                         packSize = packSize,
                         encumbrance = Encumbrance(row[2].toDoubleOrNull() ?: 0.0),
                         availability =
@@ -82,14 +84,29 @@ class AmmunitionParser(
                         trappingType =
                             TrappingType.Ammunition(
                                 weaponGroups = weaponGroups,
-                                damage = DamageExpression(if (damage == "-") "+0" else damage),
+                                damage =
+                                    DamageExpression(
+                                        if (damage == "-" || damage == "—") {
+                                            "+0"
+                                        } else {
+                                            damage
+                                        },
+                                    ),
                                 range = range(row[4].trim()),
                                 qualities = parseFeatures(qualitiesAndFlaws),
                                 flaws = parseFeatures(qualitiesAndFlaws),
                             ),
                         description =
                             buildString {
-                                val footnotes = footnoteNumbers.mapNotNull { section.footnotes[it] }
+                                val footnotes =
+                                    footnoteNumbers.mapNotNull {
+                                        if (it in section.footnotes) {
+                                            section.footnotes[it]
+                                        } else {
+                                            // Up in Arms sometimes mismatches ** and * footnotes (See Ogre Ammunition)
+                                            section.footnotes[1]
+                                        }
+                                    }
 
                                 footnotes.forEach {
                                     append(it)

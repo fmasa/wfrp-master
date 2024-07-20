@@ -27,7 +27,12 @@ class MeleeWeaponsParser(
         val parser = TableParser()
         val lexer = DefaultLayoutPdfLexer(document, structure, mergeSubsequentTokens = false)
         val table =
-            parser.findTables(lexer, structure, tablePage, findNames = false)
+            parser.findTables(lexer, structure, tablePage, findNames = true)
+                .filter {
+                    it.name.isEmpty() ||
+                        it.name.contains("weapons", ignoreCase = true) ||
+                        it.name.contains("shield", ignoreCase = true)
+                }
                 .asSequence()
                 .flatMap { parser.parseTable(it.tokens, columnCount = 7) }
 
@@ -43,7 +48,7 @@ class MeleeWeaponsParser(
                             "PARRYING" to MeleeWeaponGroup.PARRY,
                         ),
                     )
-                        ?: error("Invalid weapon group ${section.heading}")
+                        ?: return@flatMap emptyList()
 
                 section.rows.map { row ->
                     val name = row[0].trim()

@@ -1,4 +1,5 @@
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.books.ArchivesOfTheEmpire1
+import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.books.ArchivesOfTheEmpire2
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.books.Book
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.books.CoreRulebook
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.books.EnemyInShadowsCompanion
@@ -32,6 +33,7 @@ object ConfigProvider {
             UpInArms -> "up_in_arms.pdf"
             EnemyInShadowsCompanion -> "enemy_in_shadows_companion.pdf"
             ArchivesOfTheEmpire1 -> "archives_of_the_empire_1.pdf"
+            ArchivesOfTheEmpire2 -> "archives_of_the_empire_2.pdf"
             SeaOfClaws -> "sea_of_claws.pdf"
             else -> null
         }

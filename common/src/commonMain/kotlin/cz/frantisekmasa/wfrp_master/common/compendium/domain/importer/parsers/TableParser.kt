@@ -38,6 +38,9 @@ class TableParser {
                         stream.consumeWhile {
                             it is Token.TableHeading ||
                                 it is Token.BodyCellPart || it is Token.ItalicsPart ||
+                                // Bold parts are sometimes used in footnotes but we want to make sure
+                                // that we do not pull description list items to the footnote as well
+                                (it is Token.BoldPart && !it.text.trim().endsWith(":")) ||
                                 (it is Token.NormalPart && structure.tableFootnotesAsNormalText)
                         },
                 )
@@ -68,7 +71,11 @@ class TableParser {
     private fun parseFootnotes(stream: TokenStream): Map<Int, String> {
         return buildMap {
             while (isFootnoteStart(stream.peek())) {
-                val footnoteTokens = stream.consumeWhile { '.' !in it.text } + stream.consumeOne()
+                val footnoteTokens =
+                    buildList {
+                        addAll(stream.consumeWhile { !it.text.trim().endsWith(".") })
+                        add(stream.consumeOne())
+                    }
                 val footnoteNumber =
                     footnoteTokens.sumOf { token -> token.text.count { it == '*' } }
 
@@ -103,7 +110,7 @@ class TableParser {
     ): List<TableSection> {
         val stream =
             TokenStream(
-                tokens.filter { it is Token.TableValue || it is Token.NormalPart || it is Token.ItalicsPart },
+                tokens.filter { it is Token.TableValue || it is Token.NormalPart || it is Token.ItalicsPart || it is Token.BoldPart },
             )
 
         stream.dropUntil { it is Token.TableHeading || it is Token.BodyCellPart }

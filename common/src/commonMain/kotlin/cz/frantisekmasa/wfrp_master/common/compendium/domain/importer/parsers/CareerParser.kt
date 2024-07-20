@@ -121,6 +121,7 @@ class CareerParser(
 
         val isAttributesSection: (Token) -> Boolean = {
             it is Token.BoxHeader ||
+                it is Token.Heading1 ||
                 it is Token.Heading2 ||
                 it is Token.TableHeading ||
                 it is Token.TableHeadCell
@@ -142,7 +143,7 @@ class CareerParser(
                 stream.dropWhile { it is Token.BoldPart }
 
                 val skills =
-                    stream.consumeUntil { it is Token.BoldPart }
+                    stream.consumeUntil { it is Token.BoldPart && it.text.startsWith("Talents") }
                         .filterIsInstance<Token.ParagraphToken>()
 
                 stream.dropWhile { it is Token.BoldPart }
@@ -249,7 +250,7 @@ class CareerParser(
                 skills[it].text.trim() != "or" &&
                     // Specialisations may use italics
                     (it == 0 || !skills[it - 1].text.endsWith("("))
-            }.firstNotNullOfOrNull { skills[it].text }
+            }.firstNotNullOfOrNull { skills[it].text.trim().replace("\n", "").trim(',') }
     }
 
     private data class CareerLevel(

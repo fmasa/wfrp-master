@@ -13,7 +13,7 @@ fun SpellLoreIcon(lore: SpellLore?) {
         when (lore) {
             SpellLore.BEASTS -> Resources.Drawable.LoreBeasts to Color(78, 52, 46)
             SpellLore.DEATH -> Resources.Drawable.LoreDeath to Color(106, 27, 154)
-            SpellLore.FIRE -> Resources.Drawable.LoreFire to Color(198, 40, 40)
+            SpellLore.FIRE -> Resources.Drawable.LoreFire to Color(230, 74, 25)
             SpellLore.HEAVENS -> Resources.Drawable.LoreHeavens to Color(57, 73, 171)
             SpellLore.METAL -> Resources.Drawable.LoreMetal to Color(255, 160, 0)
             SpellLore.LIFE -> Resources.Drawable.LoreLife to Color(124, 179, 66)
@@ -27,6 +27,7 @@ fun SpellLoreIcon(lore: SpellLore?) {
             SpellLore.SLAANESH -> Resources.Drawable.LoreSlaanesh to Color(173, 20, 87)
             SpellLore.TZEENTCH -> Resources.Drawable.LoreTzeentch to Color(142, 36, 170)
             SpellLore.PETTY -> Resources.Drawable.LorePettySpells to defaultBackgroundColor()
+            SpellLore.GREAT_MAW -> Resources.Drawable.LoreGreatMaw to Color(198, 40, 40)
             null -> Resources.Drawable.Spell to defaultBackgroundColor()
         }
 

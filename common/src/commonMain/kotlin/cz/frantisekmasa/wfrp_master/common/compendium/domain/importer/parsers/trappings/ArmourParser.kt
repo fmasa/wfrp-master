@@ -7,6 +7,7 @@ import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.parsers.De
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.parsers.Document
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.parsers.PdfStructure
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.parsers.TableParser
+import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.parsers.trappings.description.TrappingDescriptionParser
 import cz.frantisekmasa.wfrp_master.common.core.domain.HitLocation
 import cz.frantisekmasa.wfrp_master.common.core.domain.Money
 import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.ArmourPoints
@@ -14,25 +15,26 @@ import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.ArmourType
 import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.Availability
 import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.Encumbrance
 
-class ArmourParser {
+class ArmourParser(
+    private val document: Document,
+    private val structure: PdfStructure,
+    private val descriptionParser: TrappingDescriptionParser,
+) {
     fun parse(
-        document: Document,
-        structure: PdfStructure,
         tablePage: Int,
-        // Will be used in the future
-        @Suppress("UNUSED_PARAMETER")
         descriptionPages: IntRange,
     ): List<Trapping> {
+        val parser = TableParser()
+        val lexer = DefaultLayoutPdfLexer(document, structure, mergeSubsequentTokens = false)
         val table =
-            TableParser().parseTable(
-                DefaultLayoutPdfLexer(document, structure, mergeSubsequentTokens = false)
-                    .getTokens(tablePage)
-                    .toList(),
-                columnCount = 8,
-            )
+            parser.findTables(lexer, structure, tablePage, findNames = true)
+                .asSequence()
+                .filter { it.name.contains("armour", ignoreCase = true) }
+                .flatMap { parser.parseTable(it.tokens, columnCount = 8) }
+
+        val descriptionsByName = descriptionParser.parse(document, structure, descriptionPages)
 
         return table
-            .asSequence()
             .filter { it.heading != null }
             .flatMap { section ->
                 val armourType =
@@ -42,10 +44,17 @@ class ArmourParser {
                 section.rows.map { row ->
                     val price = PriceParser.parse(row[1])
                     val penalty = row[4].trim()
+                    val name = row[0].trim()
+                    val comparableName = descriptionParser.comparableName(name)
+
+                    val footnoteNumbers =
+                        sequenceOf(section.heading, name)
+                            .flatMap { parser.findFootnoteReferences(it) }
+                            .toSet()
 
                     Trapping(
                         id = uuid4(),
-                        name = row[0].trim(),
+                        name = name,
                         price = if (price is PriceParser.Amount) price.money else Money.ZERO,
                         packSize = 1,
                         encumbrance = Encumbrance(row[2].toDoubleOrNull() ?: 0.0),
@@ -61,10 +70,28 @@ class ArmourParser {
                                 flaws = parseFeatures(row[7]),
                             ),
                         description =
-                            if (penalty != "") {
-                                "**Penalty**: $penalty\n"
-                            } else {
-                                ""
+                            buildString {
+                                if (penalty != "" && penalty != "–") {
+                                    append("**Penalty**: $penalty\n")
+                                }
+
+                                val footnotes = footnoteNumbers.mapNotNull { section.footnotes[it] }
+
+                                footnotes.forEach {
+                                    append(it.trim())
+                                    append('\n')
+                                }
+
+                                val description =
+                                    descriptionsByName.firstOrNull {
+                                        comparableName.startsWith(it.first, ignoreCase = true)
+                                    }?.second ?: return@buildString
+
+                                if (isNotEmpty()) {
+                                    append('\n')
+                                }
+
+                                append(description)
                             },
                         isVisibleToPlayers = true,
                     )

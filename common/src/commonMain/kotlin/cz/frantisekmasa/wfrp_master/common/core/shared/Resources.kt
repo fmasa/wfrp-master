@@ -68,6 +68,7 @@ object Resources {
         LoreBeasts("drawable/ic_lore_beasts.xml"),
         LoreDeath("drawable/ic_lore_death.xml"),
         LoreFire("drawable/ic_lore_fire.xml"),
+        LoreGreatMaw("drawable/ic_lore_great_maw.xml"),
         LoreHeavens("drawable/ic_lore_heavens.xml"),
         LoreLife("drawable/ic_lore_life.xml"),
         LoreLight("drawable/ic_lore_light.xml"),

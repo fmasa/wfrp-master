@@ -1,6 +1,7 @@
 package cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.parsers.trappings.description
 
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.parsers.Document
+import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.parsers.MarkdownBuilder
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.parsers.PdfStructure
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.parsers.Token
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.parsers.TokenStream
@@ -25,11 +26,12 @@ class HeadingDescriptionParser : TrappingDescriptionParser {
 
         return buildList {
             while (stream.peek() != null) {
+                stream.dropUntil { it is Token.Heading3 }
                 val heading = stream.consumeOneOfType<Token.Heading3>().text
-                val text = stream.consumeOneOfType<Token.NormalPart>().text.trim()
+                val text = stream.consumeUntil { it is Token.Heading }
 
                 for (name in names(heading)) {
-                    add(name to text.trim())
+                    add(name to MarkdownBuilder.buildMarkdown(text.filterIsInstance<Token.ParagraphToken>()).trim())
                 }
             }
         }
