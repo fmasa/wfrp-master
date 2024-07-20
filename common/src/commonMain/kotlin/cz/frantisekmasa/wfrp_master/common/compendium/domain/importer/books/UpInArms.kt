@@ -7,6 +7,7 @@ import cz.frantisekmasa.wfrp_master.common.compendium.domain.TrappingType.MeleeW
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.parsers.CareerParser
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.parsers.Document
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.parsers.TalentParser
+import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.parsers.TextPosition
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.parsers.TextToken
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.parsers.Token
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.parsers.trappings.AmmunitionParser
@@ -79,6 +80,17 @@ object UpInArms : Book, CareerSource, TalentSource, TrappingSource {
                 it
             }
         }.toList()
+    }
+
+    override fun areSameStyle(
+        a: TextPosition,
+        b: TextPosition,
+    ): Boolean {
+        return super.areSameStyle(a, b) ||
+            (
+                a.getFont().getName() == b.getFont().getName() &&
+                    a.getFont().getName().endsWith("CaslonAntique-Bold-SC700")
+            )
     }
 
     override fun resolveToken(textToken: TextToken): Token? {

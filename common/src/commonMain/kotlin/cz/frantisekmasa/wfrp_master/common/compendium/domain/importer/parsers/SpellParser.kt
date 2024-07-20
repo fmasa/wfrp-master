@@ -7,6 +7,7 @@ import cz.frantisekmasa.wfrp_master.common.compendium.domain.SpellLore
 class SpellParser(
     private val specialLores: Map<String, Set<SpellLore>> = emptyMap(),
     private val ignoredSpellLikeHeadings: Set<String> = emptySet(),
+    private val ignoredLoreLikeHeadings: Set<String> = emptySet(),
     private val isEnd: (Token?) -> Boolean = { it == null },
 ) {
     fun import(
@@ -56,7 +57,10 @@ class SpellParser(
                                             append(" (")
                                             append(
                                                 lore.name.lowercase()
-                                                    .replaceFirstChar { it.titlecase() },
+                                                    .split('_')
+                                                    .joinToString(" ") { word ->
+                                                        word.replaceFirstChar { it.titlecase() }
+                                                    },
                                             )
                                             append(")")
                                         },
@@ -161,7 +165,8 @@ class SpellParser(
                     text.matches(
                         loreHeadingRegex,
                     )
-            )
+            ) &&
+            ignoredLoreLikeHeadings.none { it.equals(text, ignoreCase = true) }
     }
 
     private fun extractLore(text: String): Set<SpellLore> {
@@ -176,12 +181,14 @@ class SpellParser(
         return setOf(
             SpellLore.valueOf(
                 requireNotNull(loreHeadingRegex.matchEntire(text)).groupValues[2]
-                    .uppercase(),
+                    .uppercase()
+                    .replace("THE ", "")
+                    .replace(" ", "_"),
             ),
         )
     }
 
     companion object {
-        private val loreHeadingRegex = Regex("(The )?Lore of ([a-z]+)", RegexOption.IGNORE_CASE)
+        private val loreHeadingRegex = Regex("(The )?Lore of ([a-z ]+)", RegexOption.IGNORE_CASE)
     }
 }

@@ -25,6 +25,7 @@ object EnemyInShadowsCompanion : Book, SpellSource {
                             SpellLore.TZEENTCH,
                         ),
                 ),
+            ignoredLoreLikeHeadings = setOf("Lore of Chaos Spells"),
             ignoredSpellLikeHeadings = setOf("Lore Attribute"),
         ).import(
             document,

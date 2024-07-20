@@ -20,6 +20,7 @@ class RangedWeaponsParser(
     private val document: Document,
     private val structure: PdfStructure,
     private val descriptionParser: TrappingDescriptionParser,
+    private val rangedWeaponGroupResolver: (String) -> RangedWeaponGroup? = { null },
 ) {
     fun parse(
         tablePage: Int,
@@ -39,9 +40,11 @@ class RangedWeaponsParser(
         return table
             .filter { it.heading != null }
             .flatMap { section ->
+                val heading = section.heading!!.replace("*", "")
                 val group =
-                    matchEnumOrNull<RangedWeaponGroup>(section.heading!!.replace("*", ""))
-                        ?: error("Invalid weapon group ${section.heading}")
+                    rangedWeaponGroupResolver(heading)
+                        ?: matchEnumOrNull<RangedWeaponGroup>(heading)
+                        ?: return@flatMap emptyList()
 
                 val defaultQualities =
                     if (

@@ -34,6 +34,7 @@ import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.parsers.tr
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.parsers.trappings.MeleeWeaponsParser
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.parsers.trappings.RangedWeaponsParser
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.parsers.trappings.description.ListDescriptionParser
+import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.parsers.trappings.description.NullDescriptionParser
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.sources.BlessingSource
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.sources.CareerSource
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.sources.DiseaseSource
@@ -140,7 +141,7 @@ object CoreRulebook :
                 AmmunitionParser(document, structure, descriptionParser).parse(296, IntRange.EMPTY),
             )
             addAll(
-                ArmourParser().parse(document, structure, 300, IntRange.EMPTY),
+                ArmourParser(document, structure, NullDescriptionParser).parse(300, IntRange.EMPTY),
             )
 
             val basicTrappingsParser = BasicTrappingsParser(document, structure, descriptionParser)

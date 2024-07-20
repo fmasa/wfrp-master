@@ -3,7 +3,7 @@ package cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.parsers.t
 import cz.frantisekmasa.wfrp_master.common.core.domain.Money
 
 object PriceParser {
-    private val PRICE_REGEX = Regex("((\\d+) ?GC)? ?((\\d+|–|-)/(\\d+|–|-))?")
+    private val PRICE_REGEX = Regex("((\\d+) ?GC)? ?((\\d+|–|-)/(\\d+|–|-)?)?")
     private val PENNIES_REGEX = Regex("(\\d+)d")
 
     fun parse(text: String): Result {
@@ -34,7 +34,7 @@ object PriceParser {
             return Varies
         }
 
-        val result = PRICE_REGEX.matchEntire(text.trim()) ?: error("Invalid price $text")
+        val result = PRICE_REGEX.matchEntire(trimmedValue) ?: error("Invalid price $text")
 
         return Amount(
             Money.sum(
