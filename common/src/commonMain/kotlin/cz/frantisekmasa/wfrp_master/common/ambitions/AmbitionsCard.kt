@@ -77,26 +77,28 @@ fun AmbitionsCard(
             )
 
         SelectionContainer {
-            for ((label, value) in ambitionList) {
-                Column(Modifier.padding(top = 4.dp)) {
-                    Text(label, fontWeight = FontWeight.Bold)
+            Column {
+                for ((label, value) in ambitionList) {
+                    Column(Modifier.padding(top = 4.dp)) {
+                        Text(label, fontWeight = FontWeight.Bold)
 
-                    if (value.isBlank()) {
-                        CompositionLocalProvider(LocalContentAlpha provides ContentAlpha.medium) {
-                            Row(verticalAlignment = Alignment.CenterVertically) {
-                                Icon(
-                                    drawableResource(Resources.Drawable.None),
-                                    VISUAL_ONLY_ICON_DESCRIPTION,
-                                )
-                                Text(
-                                    stringResource(Str.ambition_messages_not_filled),
-                                    style = MaterialTheme.typography.body2,
-                                    fontStyle = FontStyle.Italic,
-                                )
+                        if (value.isBlank()) {
+                            CompositionLocalProvider(LocalContentAlpha provides ContentAlpha.medium) {
+                                Row(verticalAlignment = Alignment.CenterVertically) {
+                                    Icon(
+                                        drawableResource(Resources.Drawable.None),
+                                        VISUAL_ONLY_ICON_DESCRIPTION,
+                                    )
+                                    Text(
+                                        stringResource(Str.ambition_messages_not_filled),
+                                        style = MaterialTheme.typography.body2,
+                                        fontStyle = FontStyle.Italic,
+                                    )
+                                }
                             }
+                        } else {
+                            Text(value)
                         }
-                    } else {
-                        Text(value)
                     }
                 }
             }
