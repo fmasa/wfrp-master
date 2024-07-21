@@ -383,6 +383,7 @@
     <string name="diseases_messages_visible_to_player_false">Invisible to player</string>
     <string name="diseases_messages_visible_to_player_true">Visible to player</string>
 
+    <string name="drawer_kofi">Support me on Ko-fi</string>
     <string name="drawer_privacy_policy">Privacy Policy</string>
     <string name="drawer_rate_app">Rate the App</string>
     <string name="drawer_report_issue">Report an Issue</string>

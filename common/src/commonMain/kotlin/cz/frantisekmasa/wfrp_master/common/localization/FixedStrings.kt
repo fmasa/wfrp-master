@@ -6,4 +6,5 @@ object FixedStrings {
     const val PRIVACY_POLICY_URL: String = "https://dnd-master-58fca.web.app/privacy-policy.html"
     const val GITHUB_ISSUES_URL: String = "https://github.com/fmasa/wfrp-master/issues"
     const val GITHUB_WIKI_URL: String = "https://github.com/fmasa/wfrp-master/wiki"
+    const val KOFI_URL: String = "https://ko-fi.com/fmasa"
 }

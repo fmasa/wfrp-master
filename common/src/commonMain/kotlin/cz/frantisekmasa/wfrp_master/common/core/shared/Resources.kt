@@ -83,8 +83,9 @@ object Resources {
         LoreNurgle("drawable/ic_lore_nurgle.xml"),
         LoreTzeentch("drawable/ic_lore_tzeentch.xml"),
 
-        // Raster images
+        // 3rd-party icons
         GoogleLogo("drawable/google_logo.png"),
+        KofiLogo("drawable/kofi_logo.xml"),
     }
 
     enum class Sound(val path: String) {

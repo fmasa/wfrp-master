@@ -16,9 +16,9 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.contentColorFor
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.rounded.MenuBook
 import androidx.compose.material.icons.rounded.BugReport
 import androidx.compose.material.icons.rounded.Info
-import androidx.compose.material.icons.rounded.MenuBook
 import androidx.compose.material.icons.rounded.Policy
 import androidx.compose.material.icons.rounded.Settings
 import androidx.compose.material.icons.rounded.Star
@@ -27,13 +27,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import cz.frantisekmasa.wfrp_master.common.Str
 import cz.frantisekmasa.wfrp_master.common.about.AboutScreen
+import cz.frantisekmasa.wfrp_master.common.core.logging.Reporter
 import cz.frantisekmasa.wfrp_master.common.core.shared.Resources
 import cz.frantisekmasa.wfrp_master.common.core.shared.drawableResource
 import cz.frantisekmasa.wfrp_master.common.core.shared.rememberUrlOpener
@@ -55,7 +55,7 @@ fun AppDrawer(drawerState: DrawerState) {
         val navigator = LocalNavigator.currentOrThrow
 
         DrawerItem(
-            icon = Icons.Rounded.Settings,
+            icon = { Icon(Icons.Rounded.Settings, VISUAL_ONLY_ICON_DESCRIPTION) },
             text = stringResource(Str.settings_title),
             onClick = {
                 coroutineScope.launch { drawerState.close() }
@@ -69,7 +69,7 @@ fun AppDrawer(drawerState: DrawerState) {
         val urlOpener = rememberUrlOpener()
 
         DrawerItem(
-            icon = Icons.Rounded.MenuBook,
+            icon = { Icon(Icons.AutoMirrored.Rounded.MenuBook, VISUAL_ONLY_ICON_DESCRIPTION) },
             text = stringResource(Str.drawer_wiki),
             onClick = {
                 urlOpener.open(
@@ -80,7 +80,7 @@ fun AppDrawer(drawerState: DrawerState) {
         )
 
         DrawerItem(
-            icon = Icons.Rounded.Star,
+            icon = { Icon(Icons.Rounded.Star, VISUAL_ONLY_ICON_DESCRIPTION) },
             text = stringResource(Str.drawer_rate_app),
             onClick = {
                 urlOpener.open(FixedStrings.GOOGLE_PLAY_URL, isGooglePlayLink = true)
@@ -88,7 +88,7 @@ fun AppDrawer(drawerState: DrawerState) {
         )
 
         DrawerItem(
-            icon = Icons.Rounded.Policy,
+            icon = { Icon(Icons.Rounded.Policy, VISUAL_ONLY_ICON_DESCRIPTION) },
             text = stringResource(Str.drawer_privacy_policy),
             onClick =
                 debounced(300.milliseconds) {
@@ -97,7 +97,7 @@ fun AppDrawer(drawerState: DrawerState) {
         )
 
         DrawerItem(
-            icon = Icons.Rounded.BugReport,
+            icon = { Icon(Icons.Rounded.BugReport, VISUAL_ONLY_ICON_DESCRIPTION) },
             text = stringResource(Str.drawer_report_issue),
             onClick = {
                 urlOpener.open(FixedStrings.GITHUB_ISSUES_URL, isGooglePlayLink = false)
@@ -105,7 +105,22 @@ fun AppDrawer(drawerState: DrawerState) {
         )
 
         DrawerItem(
-            icon = Icons.Rounded.Info,
+            icon = {
+                Image(
+                    drawableResource(Resources.Drawable.KofiLogo),
+                    VISUAL_ONLY_ICON_DESCRIPTION,
+                    Modifier.size(Spacing.extraLarge),
+                )
+            },
+            text = stringResource(Str.drawer_kofi),
+            onClick = {
+                Reporter.recordEvent("kofi_item_clicked", emptyMap())
+                urlOpener.open(FixedStrings.KOFI_URL, isGooglePlayLink = false)
+            },
+        )
+
+        DrawerItem(
+            icon = { Icon(Icons.Rounded.Info, VISUAL_ONLY_ICON_DESCRIPTION) },
             text = stringResource(Str.about_title),
             onClick = {
                 coroutineScope.launch { drawerState.close() }
@@ -121,7 +136,7 @@ fun AppDrawer(drawerState: DrawerState) {
 
 @Composable
 private fun DrawerItem(
-    icon: ImageVector,
+    icon: @Composable () -> Unit,
     text: String,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
@@ -135,7 +150,7 @@ private fun DrawerItem(
         horizontalArrangement = Arrangement.spacedBy(Spacing.medium),
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        Icon(icon, VISUAL_ONLY_ICON_DESCRIPTION)
+        icon()
         Text(
             text,
             style = MaterialTheme.typography.caption.copy(fontWeight = FontWeight.SemiBold),
