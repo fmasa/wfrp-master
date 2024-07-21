@@ -6,6 +6,7 @@ import cz.frantisekmasa.wfrp_master.common.core.domain.compendium.Compendium
 import cz.frantisekmasa.wfrp_master.common.core.domain.identifiers.CharacterId
 import cz.frantisekmasa.wfrp_master.common.core.domain.spells.Spell
 import cz.frantisekmasa.wfrp_master.common.core.domain.spells.SpellRepository
+import cz.frantisekmasa.wfrp_master.common.core.logging.Reporting
 import kotlinx.coroutines.flow.map
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.Spell as CompendiumSpell
 
@@ -27,6 +28,7 @@ class AddSpellScreenModel(
         }
 
     suspend fun saveItem(spell: Spell) {
+        Reporting.record { characterItemAdded("spell") }
         spells.save(characterId, spell)
     }
 }

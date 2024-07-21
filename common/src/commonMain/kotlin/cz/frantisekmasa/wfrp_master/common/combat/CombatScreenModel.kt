@@ -221,7 +221,7 @@ class CombatScreenModel(
             it.startCombat(globalEncounterId, rollInitiativeForCombatants(it, combatants))
         }
 
-        Reporting.recordEvent("combat_started", mapOf("partyId" to partyId.toString()))
+        Reporting.record { combatStarted(partyId) }
     }
 
     private suspend fun characteristics(character: Character): Stats {

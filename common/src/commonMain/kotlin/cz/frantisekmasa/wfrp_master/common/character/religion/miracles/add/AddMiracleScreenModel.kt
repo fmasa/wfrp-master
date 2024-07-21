@@ -6,6 +6,7 @@ import cz.frantisekmasa.wfrp_master.common.core.domain.character.CharacterItemRe
 import cz.frantisekmasa.wfrp_master.common.core.domain.compendium.Compendium
 import cz.frantisekmasa.wfrp_master.common.core.domain.identifiers.CharacterId
 import cz.frantisekmasa.wfrp_master.common.core.domain.religion.Miracle
+import cz.frantisekmasa.wfrp_master.common.core.logging.Reporting
 import kotlinx.coroutines.flow.map
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.Miracle as CompendiumMiracle
 
@@ -27,6 +28,7 @@ class AddMiracleScreenModel(
         }
 
     suspend fun addMiracle(miracle: Miracle) {
+        Reporting.record { characterItemAdded("miracle") }
         miracles.save(characterId, miracle)
     }
 }

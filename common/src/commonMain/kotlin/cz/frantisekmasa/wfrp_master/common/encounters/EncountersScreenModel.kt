@@ -47,13 +47,7 @@ class EncountersScreenModel(
             ),
         )
 
-        Reporting.recordEvent(
-            "create_encounter",
-            mapOf(
-                "encounterId" to encounterId.toString(),
-                "partyId" to partyId.toString(),
-            ),
-        )
+        Reporting.record { encounterCreated(encounterId, partyId) }
     }
 
     suspend fun updateEncounter(

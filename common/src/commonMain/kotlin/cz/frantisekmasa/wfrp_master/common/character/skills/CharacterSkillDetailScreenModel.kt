@@ -6,6 +6,7 @@ import cz.frantisekmasa.wfrp_master.common.core.domain.identifiers.CharacterId
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.PartyRepository
 import cz.frantisekmasa.wfrp_master.common.core.domain.skills.Skill
 import cz.frantisekmasa.wfrp_master.common.core.domain.skills.SkillRepository
+import cz.frantisekmasa.wfrp_master.common.core.logging.Reporting
 
 class CharacterSkillDetailScreenModel(
     characterId: CharacterId,
@@ -18,5 +19,8 @@ class CharacterSkillDetailScreenModel(
         userProvider,
         partyRepository,
     ) {
-    suspend fun saveSkill(skill: Skill) = skillRepository.save(characterId, skill)
+    suspend fun saveSkill(skill: Skill) {
+        Reporting.record { characterItemAdded("skill") }
+        skillRepository.save(characterId, skill)
+    }
 }

@@ -63,7 +63,7 @@ class PartyListScreenModel(
         parties.save(party)
 
         Napier.d("Party $partyName was successfully created")
-        Reporting.recordEvent("create_party", mapOf("id" to party.id.toString()))
+        Reporting.record { partyCreated(partyId) }
 
         return partyId
     }

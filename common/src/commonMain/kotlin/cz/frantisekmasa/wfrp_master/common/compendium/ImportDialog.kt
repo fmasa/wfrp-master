@@ -53,6 +53,7 @@ import cz.frantisekmasa.wfrp_master.common.compendium.talent.TalentCompendiumScr
 import cz.frantisekmasa.wfrp_master.common.compendium.trait.TraitCompendiumScreenModel
 import cz.frantisekmasa.wfrp_master.common.compendium.trapping.TrappingCompendiumScreenModel
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.PartyId
+import cz.frantisekmasa.wfrp_master.common.core.logging.Reporting
 import cz.frantisekmasa.wfrp_master.common.core.ui.buttons.CloseButton
 import cz.frantisekmasa.wfrp_master.common.core.ui.dialogs.FullScreenDialog
 import cz.frantisekmasa.wfrp_master.common.core.ui.flow.collectWithLifecycle
@@ -125,6 +126,7 @@ private fun ImportedItemsPicker(
         val index = steps.indexOf(step)
 
         if (index == -1 || index == steps.lastIndex) {
+            Reporting.record { compendiumImportFinished(state.source) }
             onComplete()
         } else {
             step = steps[index + 1]
@@ -465,6 +467,7 @@ sealed class ImportDialogState {
 
     @Immutable
     data class PickingItemsToImport(
+        val source: String,
         val skills: List<Skill>,
         val talents: List<Talent>,
         val spells: List<Spell>,

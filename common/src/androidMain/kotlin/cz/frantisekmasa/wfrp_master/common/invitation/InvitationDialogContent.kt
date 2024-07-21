@@ -109,12 +109,5 @@ private fun startInvitationSendingIntent(
         ),
     )
 
-    Reporting.recordEvent(
-        "share",
-        mapOf(
-            "content_type" to "party_invitation",
-            "item_id" to invitation.partyId.toString(),
-            "method" to "link",
-        ),
-    )
+    Reporting.record { invitationLinkShared(invitation.partyId) }
 }

@@ -58,6 +58,7 @@ import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.InventoryItemRe
 import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.TrappingType
 import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.WeaponEquip
 import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.sum
+import cz.frantisekmasa.wfrp_master.common.core.logging.Reporting
 import cz.frantisekmasa.wfrp_master.common.core.utils.right
 import cz.frantisekmasa.wfrp_master.common.localization.Translator
 import dev.gitlive.firebase.firestore.FirebaseFirestore
@@ -380,7 +381,12 @@ class CharacterDetailScreenModel(
             character.map { it.conditions }
                 .distinctUntilChanged(),
             party.map { it.settings.language }
-                .flatMapLatest { conditionsJournalProvider.getConditionsJournal(characterId.partyId, translatorFactory.create(it)) },
+                .flatMapLatest {
+                    conditionsJournalProvider.getConditionsJournal(
+                        characterId.partyId,
+                        translatorFactory.create(it),
+                    )
+                },
         ) { conditions, conditionsJournal ->
             ConditionsScreenState(
                 conditions = conditions,
@@ -400,11 +406,12 @@ class CharacterDetailScreenModel(
             combine(notesScreenState, spellsScreenState, characterPickerState, ::Triple),
             combine(combatScreenState, wellBeingScreenState, isGameMaster, ::Triple),
             conditionsScreenState,
-        ) { (character, party, skillsScreenState),
-            (religionScreenState, characteristicsScreenState, trappingsScreenState),
-            (notesScreenState, spellsScreenState, characterPickerState),
-            (combatScreenState, wellBeingScreenState, isGameMaster),
-            conditionsScreenState,
+        ) {
+                (character, party, skillsScreenState),
+                (religionScreenState, characteristicsScreenState, trappingsScreenState),
+                (notesScreenState, spellsScreenState, characterPickerState),
+                (combatScreenState, wellBeingScreenState, isGameMaster),
+                conditionsScreenState,
             ->
             CharacterDetailScreenState(
                 characterId = characterId,
@@ -458,6 +465,7 @@ class CharacterDetailScreenModel(
 
     suspend fun updateCharacterAmbitions(ambitions: Ambitions) {
         updateCharacter { it.copy(ambitions = ambitions) }
+        Reporting.record { characterAmbitionsChanged(characterId) }
     }
 
     suspend fun assignCharacter(
@@ -541,6 +549,7 @@ class CharacterDetailScreenModel(
 
     fun duplicateTrapping(trapping: InventoryItem) {
         screenModelScope.launch(Dispatchers.IO) {
+            Reporting.record { characterItemDuplicated("trapping") }
             trappings.save(characterId, trapping.duplicate())
         }
     }

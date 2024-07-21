@@ -50,6 +50,7 @@ import cz.frantisekmasa.wfrp_master.common.core.domain.character.CharacterType
 import cz.frantisekmasa.wfrp_master.common.core.domain.identifiers.CharacterId
 import cz.frantisekmasa.wfrp_master.common.core.domain.localizedName
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.PartyId
+import cz.frantisekmasa.wfrp_master.common.core.logging.Reporting
 import cz.frantisekmasa.wfrp_master.common.core.shared.Resources
 import cz.frantisekmasa.wfrp_master.common.core.shared.drawableResource
 import cz.frantisekmasa.wfrp_master.common.core.ui.buttons.HamburgerButton
@@ -118,7 +119,10 @@ data class CharacterDetailScreen(
                         IconAction(
                             drawableResource(Resources.Drawable.JournalEntry),
                             stringResource(Str.compendium_title_journal),
-                            onClick = { navigation.navigate(JournalScreen(characterId.partyId)) },
+                            onClick = {
+                                Reporting.record { journalOpened("character_detail") }
+                                navigation.navigate(JournalScreen(characterId.partyId))
+                            },
                         )
                         IconAction(
                             Icons.Rounded.Edit,

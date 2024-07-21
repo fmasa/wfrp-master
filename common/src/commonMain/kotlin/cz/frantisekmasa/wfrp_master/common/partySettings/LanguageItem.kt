@@ -30,7 +30,6 @@ import androidx.compose.ui.unit.dp
 import com.halilibo.richtext.commonmark.Markdown
 import com.halilibo.richtext.ui.material.RichText
 import cz.frantisekmasa.wfrp_master.common.Str
-import cz.frantisekmasa.wfrp_master.common.core.domain.localizedName
 import cz.frantisekmasa.wfrp_master.common.core.ui.buttons.CloseButton
 import cz.frantisekmasa.wfrp_master.common.core.ui.dialogs.FullScreenDialog
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.SelectBox

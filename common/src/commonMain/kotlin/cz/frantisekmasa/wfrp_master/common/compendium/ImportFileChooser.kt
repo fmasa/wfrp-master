@@ -39,6 +39,7 @@ fun ImportFileChooser(
 
                 onStateChange(
                     ImportDialogState.PickingItemsToImport(
+                        source = importer.source,
                         skills.await(),
                         talents.await(),
                         spells.await(),

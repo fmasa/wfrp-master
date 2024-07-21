@@ -8,6 +8,7 @@ import cz.frantisekmasa.wfrp_master.common.core.domain.party.PartyRepository
 import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.InventoryItem
 import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.InventoryItemRepository
 import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.TrappingType
+import cz.frantisekmasa.wfrp_master.common.core.logging.Reporting
 import cz.frantisekmasa.wfrp_master.common.core.utils.right
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -63,6 +64,7 @@ class CharacterTrappingsDetailScreenModel(
     }
 
     suspend fun removeFromContainer(trapping: InventoryItem) {
+        Reporting.record { trappingRemovedFromContainer() }
         inventoryItems.save(characterId, trapping.copy(containerId = null))
     }
 
@@ -73,6 +75,7 @@ class CharacterTrappingsDetailScreenModel(
         trapping: InventoryItem,
         container: InventoryItem,
     ) {
+        Reporting.record { trappingAddedToContainer() }
         trappingSaver.addToContainer(characterId, trapping, container)
     }
 }

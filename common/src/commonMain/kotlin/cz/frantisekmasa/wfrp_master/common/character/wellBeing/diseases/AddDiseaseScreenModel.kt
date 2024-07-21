@@ -6,6 +6,7 @@ import cz.frantisekmasa.wfrp_master.common.core.domain.character.CharacterItemRe
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.diseases.Disease
 import cz.frantisekmasa.wfrp_master.common.core.domain.compendium.Compendium
 import cz.frantisekmasa.wfrp_master.common.core.domain.identifiers.CharacterId
+import cz.frantisekmasa.wfrp_master.common.core.logging.Reporting
 import kotlinx.coroutines.flow.map
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.Disease as CompendiumDisease
 
@@ -29,6 +30,7 @@ class AddDiseaseScreenModel(
         }
 
     suspend fun addDisease(disease: Disease) {
+        Reporting.record { characterItemAdded("disease") }
         diseases.save(characterId, disease)
     }
 }

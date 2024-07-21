@@ -8,6 +8,7 @@ import cz.frantisekmasa.wfrp_master.common.core.domain.party.Party
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.PartyId
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.PartyRepository
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.settings.Settings
+import cz.frantisekmasa.wfrp_master.common.core.logging.Reporting
 import cz.frantisekmasa.wfrp_master.common.core.utils.right
 import cz.frantisekmasa.wfrp_master.common.settings.Language
 import dev.gitlive.firebase.firestore.FirebaseFirestore
@@ -59,5 +60,7 @@ class PartySettingsScreenModel(
                 )
             }
         }
+
+        Reporting.record { partyLanguageChanged(partyId, language.name) }
     }
 }

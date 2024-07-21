@@ -93,14 +93,13 @@ class CharacterCreationScreenModel(
                     }
                 }
 
-                Reporting.recordEvent(
-                    "create_character",
-                    mapOf(
-                        "party_id" to characterId.partyId.toString(),
-                        "character_id" to characterId.id,
-                        "encounter_id" to (encounterId?.toString() ?: ""),
-                    ),
-                )
+                Reporting.record {
+                    characterCreated(
+                        characterId = characterId,
+                        encounterId = encounterId,
+                        type = type,
+                    )
+                }
 
                 characterId
             } catch (e: Throwable) {

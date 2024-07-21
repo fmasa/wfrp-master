@@ -51,6 +51,7 @@ import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.sources.Tr
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.sources.TrappingSource
 import cz.frantisekmasa.wfrp_master.common.core.PartyScreenModel
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.PartyId
+import cz.frantisekmasa.wfrp_master.common.core.logging.Reporting
 import cz.frantisekmasa.wfrp_master.common.core.shared.FileType
 import cz.frantisekmasa.wfrp_master.common.core.ui.buttons.BackButton
 import cz.frantisekmasa.wfrp_master.common.core.ui.flow.collectWithLifecycle
@@ -98,7 +99,7 @@ class RulebookCompendiumImportScreen(
                 partyId = partyId,
                 screen = this,
                 onDismissRequest = { importState = null },
-                onComplete = navigation::goBack,
+                onComplete = { navigation.goBack() },
             )
         }
 
@@ -180,7 +181,10 @@ class RulebookCompendiumImportScreen(
         Card {
             Column(
                 Modifier.fillMaxWidth()
-                    .clickable { fileChooser.open(FileType.PDF) }
+                    .clickable {
+                        Reporting.record { rulebookImportClicked(book.name) }
+                        fileChooser.open(FileType.PDF)
+                    }
                     .padding(Spacing.small),
             ) {
                 Text(book.name)

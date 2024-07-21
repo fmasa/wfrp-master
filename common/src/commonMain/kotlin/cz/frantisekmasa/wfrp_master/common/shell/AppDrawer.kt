@@ -58,6 +58,7 @@ fun AppDrawer(drawerState: DrawerState) {
             icon = { Icon(Icons.Rounded.Settings, VISUAL_ONLY_ICON_DESCRIPTION) },
             text = stringResource(Str.settings_title),
             onClick = {
+                Reporting.record { drawerItemClicked("settings") }
                 coroutineScope.launch { drawerState.close() }
                 if (navigator.lastItem !is SettingsScreen) {
                     // TODO: Make single-top
@@ -72,6 +73,7 @@ fun AppDrawer(drawerState: DrawerState) {
             icon = { Icon(Icons.AutoMirrored.Rounded.MenuBook, VISUAL_ONLY_ICON_DESCRIPTION) },
             text = stringResource(Str.drawer_wiki),
             onClick = {
+                Reporting.record { drawerItemClicked("wiki") }
                 urlOpener.open(
                     FixedStrings.GITHUB_WIKI_URL,
                     isGooglePlayLink = false,
@@ -83,6 +85,7 @@ fun AppDrawer(drawerState: DrawerState) {
             icon = { Icon(Icons.Rounded.Star, VISUAL_ONLY_ICON_DESCRIPTION) },
             text = stringResource(Str.drawer_rate_app),
             onClick = {
+                Reporting.record { drawerItemClicked("rate_app") }
                 urlOpener.open(FixedStrings.GOOGLE_PLAY_URL, isGooglePlayLink = true)
             },
         )
@@ -100,6 +103,7 @@ fun AppDrawer(drawerState: DrawerState) {
             icon = { Icon(Icons.Rounded.BugReport, VISUAL_ONLY_ICON_DESCRIPTION) },
             text = stringResource(Str.drawer_report_issue),
             onClick = {
+                Reporting.record { drawerItemClicked("bug_report") }
                 urlOpener.open(FixedStrings.GITHUB_ISSUES_URL, isGooglePlayLink = false)
             },
         )
@@ -114,7 +118,7 @@ fun AppDrawer(drawerState: DrawerState) {
             },
             text = stringResource(Str.drawer_kofi),
             onClick = {
-                Reporting.recordEvent("kofi_item_clicked", emptyMap())
+                Reporting.record { drawerItemClicked("kofi") }
                 urlOpener.open(FixedStrings.KOFI_URL, isGooglePlayLink = false)
             },
         )
@@ -123,6 +127,7 @@ fun AppDrawer(drawerState: DrawerState) {
             icon = { Icon(Icons.Rounded.Info, VISUAL_ONLY_ICON_DESCRIPTION) },
             text = stringResource(Str.about_title),
             onClick = {
+                Reporting.record { drawerItemClicked("about") }
                 coroutineScope.launch { drawerState.close() }
 
                 if (navigator.lastItem !is AboutScreen) {
