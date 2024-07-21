@@ -13,7 +13,7 @@ import cz.frantisekmasa.wfrp_master.common.core.domain.identifiers.CharacterId
 import cz.frantisekmasa.wfrp_master.common.core.domain.identifiers.EncounterId
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.PartyId
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.PartyRepository
-import cz.frantisekmasa.wfrp_master.common.core.logging.Reporter
+import cz.frantisekmasa.wfrp_master.common.core.logging.Reporting
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.SelectedCareer
 import cz.frantisekmasa.wfrp_master.common.core.utils.right
 import cz.frantisekmasa.wfrp_master.common.encounters.domain.EncounterRepository
@@ -93,14 +93,13 @@ class CharacterCreationScreenModel(
                     }
                 }
 
-                Reporter.recordEvent(
-                    "create_character",
-                    mapOf(
-                        "party_id" to characterId.partyId.toString(),
-                        "character_id" to characterId.id,
-                        "encounter_id" to (encounterId?.toString() ?: ""),
-                    ),
-                )
+                Reporting.record {
+                    characterCreated(
+                        characterId = characterId,
+                        encounterId = encounterId,
+                        type = type,
+                    )
+                }
 
                 characterId
             } catch (e: Throwable) {

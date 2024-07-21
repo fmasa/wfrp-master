@@ -4,12 +4,14 @@ import androidx.compose.runtime.Immutable
 import cafe.adriel.voyager.core.model.ScreenModel
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.Career
 import cz.frantisekmasa.wfrp_master.common.core.auth.UserProvider
+import cz.frantisekmasa.wfrp_master.common.core.domain.Ambitions
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.Character
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.CharacterAvatarChanger
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.CharacterRepository
 import cz.frantisekmasa.wfrp_master.common.core.domain.compendium.Compendium
 import cz.frantisekmasa.wfrp_master.common.core.domain.identifiers.CharacterId
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.PartyRepository
+import cz.frantisekmasa.wfrp_master.common.core.logging.Reporting
 import cz.frantisekmasa.wfrp_master.common.core.utils.right
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
@@ -64,6 +66,13 @@ class CharacterScreenModel(
         val level: Career.Level,
     )
 
+    suspend fun updateAmbitions(ambitions: Ambitions) {
+        update {
+            it.updateAmbitions(ambitions)
+        }
+        Reporting.record { characterAmbitionsChanged(characterId) }
+    }
+
     suspend fun update(change: (Character) -> Character) {
         val character = characters.get(characterId)
 
@@ -79,9 +88,11 @@ class CharacterScreenModel(
 
     suspend fun changeAvatar(image: ByteArray) {
         avatarChanger.changeAvatar(characterId, image)
+        Reporting.record { avatarChanged() }
     }
 
     suspend fun removeAvatar() {
         avatarChanger.removeAvatar(characterId)
+        Reporting.record { avatarRemoved() }
     }
 }

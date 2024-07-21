@@ -25,6 +25,7 @@ import cz.frantisekmasa.wfrp_master.common.core.domain.Characteristic
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.CharacterTab
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.CharacterType
 import cz.frantisekmasa.wfrp_master.common.core.domain.identifiers.CharacterId
+import cz.frantisekmasa.wfrp_master.common.core.logging.Reporting
 import cz.frantisekmasa.wfrp_master.common.core.ui.buttons.BackButton
 import cz.frantisekmasa.wfrp_master.common.core.ui.flow.collectWithLifecycle
 import cz.frantisekmasa.wfrp_master.common.core.ui.navigation.LocalNavigationTransaction
@@ -221,7 +222,10 @@ data class CharacterEditScreen(
                                     onDismissRequest = { setDialogOpened(false) },
                                     text = stringResource(Str.character_messages_turn_into_n_p_c_confirmation),
                                     confirmationButtonText = stringResource(Str.common_ui_button_yes),
-                                    onConfirmation = { screenModel.update { it.turnIntoNPC() } },
+                                    onConfirmation = {
+                                        screenModel.update { it.turnIntoNPC() }
+                                        Reporting.record { characterTurnedIntoNPC() }
+                                    },
                                 )
                             }
 
@@ -239,7 +243,10 @@ data class CharacterEditScreen(
                                     onDismissRequest = { setDialogOpened(false) },
                                     text = stringResource(Str.character_messages_unlink_from_player_confirmation),
                                     confirmationButtonText = stringResource(Str.common_ui_button_yes),
-                                    onConfirmation = { screenModel.update { it.unlinkFromUser() } },
+                                    onConfirmation = {
+                                        screenModel.update { it.unlinkFromUser() }
+                                        Reporting.record { characterUnlinkedFromUser() }
+                                    },
                                 )
                             }
 

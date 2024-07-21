@@ -6,6 +6,7 @@ import cz.frantisekmasa.wfrp_master.common.core.domain.character.CharacterItemRe
 import cz.frantisekmasa.wfrp_master.common.core.domain.compendium.Compendium
 import cz.frantisekmasa.wfrp_master.common.core.domain.identifiers.CharacterId
 import cz.frantisekmasa.wfrp_master.common.core.domain.skills.Skill
+import cz.frantisekmasa.wfrp_master.common.core.logging.Reporting
 import io.github.aakira.napier.Napier
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
@@ -50,6 +51,7 @@ class AddBasicSkillsScreenModel(
                     val id = uuid4()
                     Napier.d("Saving ${skill.name} as skill $id")
 
+                    Reporting.record { basicSkillsAdded() }
                     skills.save(
                         characterId,
                         Skill.fromCompendium(skill, 0),

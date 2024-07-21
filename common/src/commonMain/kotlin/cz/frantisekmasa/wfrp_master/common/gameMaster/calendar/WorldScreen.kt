@@ -36,6 +36,7 @@ import cz.frantisekmasa.wfrp_master.common.core.domain.time.DateTime
 import cz.frantisekmasa.wfrp_master.common.core.domain.time.ImperialDate
 import cz.frantisekmasa.wfrp_master.common.core.domain.time.MannsliebPhase
 import cz.frantisekmasa.wfrp_master.common.core.domain.time.YearSeason
+import cz.frantisekmasa.wfrp_master.common.core.logging.Reporting
 import cz.frantisekmasa.wfrp_master.common.core.shared.Resources
 import cz.frantisekmasa.wfrp_master.common.core.ui.cards.CardContainer
 import cz.frantisekmasa.wfrp_master.common.core.ui.dialogs.FullScreenDialog
@@ -115,7 +116,11 @@ private fun NavigationCard(partyId: PartyId) {
         )
 
         ListItem(
-            modifier = Modifier.clickable { navigation.navigate(JournalScreen(partyId)) },
+            modifier =
+                Modifier.clickable {
+                    Reporting.record { journalOpened("gm_screen") }
+                    navigation.navigate(JournalScreen(partyId))
+                },
             icon = { ItemIcon(Resources.Drawable.JournalEntry) },
             text = { Text(stringResource(Str.compendium_title_journal)) },
         )

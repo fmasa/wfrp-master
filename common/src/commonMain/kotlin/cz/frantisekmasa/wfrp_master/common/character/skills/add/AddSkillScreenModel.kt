@@ -7,6 +7,7 @@ import cz.frantisekmasa.wfrp_master.common.core.domain.character.CharacterReposi
 import cz.frantisekmasa.wfrp_master.common.core.domain.compendium.Compendium
 import cz.frantisekmasa.wfrp_master.common.core.domain.identifiers.CharacterId
 import cz.frantisekmasa.wfrp_master.common.core.domain.skills.Skill
+import cz.frantisekmasa.wfrp_master.common.core.logging.Reporting
 import cz.frantisekmasa.wfrp_master.common.core.utils.right
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -39,6 +40,7 @@ class AddSkillScreenModel(
         }
 
     suspend fun addSkill(skill: Skill) {
+        Reporting.record { characterItemAdded("skill") }
         skills.save(characterId, skill)
     }
 }

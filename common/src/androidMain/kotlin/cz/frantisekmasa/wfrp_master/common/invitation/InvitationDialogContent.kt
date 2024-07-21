@@ -23,7 +23,7 @@ import com.google.firebase.dynamiclinks.ktx.shortLinkAsync
 import com.google.firebase.ktx.Firebase
 import cz.frantisekmasa.wfrp_master.common.Str
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.Invitation
-import cz.frantisekmasa.wfrp_master.common.core.logging.Reporter
+import cz.frantisekmasa.wfrp_master.common.core.logging.Reporting
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.FullScreenProgress
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.VISUAL_ONLY_ICON_DESCRIPTION
 import dev.icerock.moko.resources.compose.stringResource
@@ -109,12 +109,5 @@ private fun startInvitationSendingIntent(
         ),
     )
 
-    Reporter.recordEvent(
-        "share",
-        mapOf(
-            "content_type" to "party_invitation",
-            "item_id" to invitation.partyId.toString(),
-            "method" to "link",
-        ),
-    )
+    Reporting.record { invitationLinkShared(invitation.partyId) }
 }

@@ -35,7 +35,7 @@ import cz.frantisekmasa.wfrp_master.common.core.domain.spells.SpellRepository
 import cz.frantisekmasa.wfrp_master.common.core.domain.talents.TalentRepository
 import cz.frantisekmasa.wfrp_master.common.core.domain.traits.TraitRepository
 import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.InventoryItemRepository
-import cz.frantisekmasa.wfrp_master.common.core.logging.Reporter
+import cz.frantisekmasa.wfrp_master.common.core.logging.Reporting
 import cz.frantisekmasa.wfrp_master.common.core.ui.FlowStatBlockData
 import cz.frantisekmasa.wfrp_master.common.core.utils.right
 import cz.frantisekmasa.wfrp_master.common.encounters.CombatantItem
@@ -221,7 +221,7 @@ class CombatScreenModel(
             it.startCombat(globalEncounterId, rollInitiativeForCombatants(it, combatants))
         }
 
-        Reporter.recordEvent("combat_started", mapOf("partyId" to partyId.toString()))
+        Reporting.record { combatStarted(partyId) }
     }
 
     private suspend fun characteristics(character: Character): Stats {

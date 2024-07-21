@@ -8,6 +8,7 @@ import cz.frantisekmasa.wfrp_master.common.core.domain.character.diseases.Diseas
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.diseases.DiseaseRepository
 import cz.frantisekmasa.wfrp_master.common.core.domain.identifiers.CharacterId
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.PartyRepository
+import cz.frantisekmasa.wfrp_master.common.core.logging.Reporting
 import kotlinx.coroutines.flow.map
 
 class CharacterDiseaseDetailScreenModel(
@@ -22,7 +23,10 @@ class CharacterDiseaseDetailScreenModel(
         userProvider,
         partyRepository,
     ) {
-    suspend fun saveDisease(disease: Disease) = diseaseRepository.save(characterId, disease)
+    suspend fun saveDisease(disease: Disease) {
+        Reporting.record { characterItemAdded("disease") }
+        diseaseRepository.save(characterId, disease)
+    }
 
     fun getDiseaseDetail(diseaseId: Uuid) =
         diseaseSymptomProvider.addSymptoms(

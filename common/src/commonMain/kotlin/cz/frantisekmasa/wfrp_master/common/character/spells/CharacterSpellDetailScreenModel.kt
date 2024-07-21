@@ -6,6 +6,7 @@ import cz.frantisekmasa.wfrp_master.common.core.domain.identifiers.CharacterId
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.PartyRepository
 import cz.frantisekmasa.wfrp_master.common.core.domain.spells.Spell
 import cz.frantisekmasa.wfrp_master.common.core.domain.spells.SpellRepository
+import cz.frantisekmasa.wfrp_master.common.core.logging.Reporting
 
 class CharacterSpellDetailScreenModel(
     characterId: CharacterId,
@@ -19,6 +20,7 @@ class CharacterSpellDetailScreenModel(
         partyRepository,
     ) {
     suspend fun saveSpell(spell: Spell) {
+        Reporting.record { characterItemAdded("spell") }
         spellRepository.save(characterId, spell)
     }
 }

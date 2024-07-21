@@ -5,6 +5,7 @@ import cz.frantisekmasa.wfrp_master.common.core.auth.UserId
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.Invitation
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.Party
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.PartyRepository
+import cz.frantisekmasa.wfrp_master.common.core.logging.Reporting
 import cz.frantisekmasa.wfrp_master.common.invitation.domain.InvitationProcessingResult
 import cz.frantisekmasa.wfrp_master.common.invitation.domain.InvitationProcessor
 import io.github.aakira.napier.Napier
@@ -24,7 +25,13 @@ class InvitationScreenModel(
         userId: UserId,
         invitation: Invitation,
     ): InvitationProcessingResult {
-        return withContext(Dispatchers.IO) { invitationProcessor.accept(userId, invitation) }
+        return withContext(Dispatchers.IO) {
+            invitationProcessor.accept(userId, invitation).also {
+                if (it is InvitationProcessingResult.Success) {
+                    Reporting.record { joinedParty(invitation.partyId) }
+                }
+            }
+        }
     }
 
     fun userParties(userId: UserId): Flow<List<Party>> {

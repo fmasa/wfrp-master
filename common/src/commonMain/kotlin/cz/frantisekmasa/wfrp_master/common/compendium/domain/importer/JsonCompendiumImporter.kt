@@ -20,6 +20,8 @@ import kotlinx.serialization.json.decodeFromStream
 import java.io.InputStream
 
 class JsonCompendiumImporter(stream: InputStream) : CompendiumImporter {
+    override val source: String = "json"
+
     private val data: Result<CompendiumBundle> =
         runCatching {
             try {

@@ -34,6 +34,7 @@ import cz.frantisekmasa.wfrp_master.common.core.domain.character.Condition
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.CurrentConditions
 import cz.frantisekmasa.wfrp_master.common.core.domain.localizedName
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.PartyId
+import cz.frantisekmasa.wfrp_master.common.core.logging.Reporting
 import cz.frantisekmasa.wfrp_master.common.core.shared.Resources
 import cz.frantisekmasa.wfrp_master.common.core.shared.drawableResource
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.NumberPicker
@@ -76,7 +77,10 @@ fun ConditionsForm(
                         condition = condition,
                         conditionsJournal = conditionsJournal,
                         state = conditions,
-                        update = onUpdate,
+                        update = {
+                            Reporting.record { conditionsChanged() }
+                            onUpdate(it)
+                        },
                         snackbarHostState = scaffoldState.snackbarHostState,
                     )
                     Divider()
@@ -112,6 +116,7 @@ private fun ConditionRow(
             modifier =
                 Modifier.clickable {
                     if (journalEntry.journalEntryId != null) {
+                        Reporting.record { journalOpened("conditions") }
                         navigation.navigate(
                             JournalEntryScreen(
                                 journalEntry.partyId,

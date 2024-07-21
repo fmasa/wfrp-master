@@ -12,6 +12,11 @@ import cz.frantisekmasa.wfrp_master.common.compendium.domain.Trait
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.Trapping
 
 interface CompendiumImporter {
+    /**
+     * Source name used for analytics
+     */
+    val source: String
+
     suspend fun importSkills(): List<Skill>
 
     suspend fun importTalents(): List<Talent>

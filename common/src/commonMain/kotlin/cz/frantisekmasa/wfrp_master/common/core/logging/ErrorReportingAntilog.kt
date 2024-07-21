@@ -10,12 +10,12 @@ class ErrorReportingAntilog : Antilog() {
         throwable: Throwable?,
         message: String?,
     ) {
-        message?.let { Reporter.log(it) }
+        message?.let { Reporting.log(it) }
 
         if (priority == LogLevel.WARNING || priority == LogLevel.ERROR) {
             when {
-                throwable != null -> Reporter.recordThrowable(throwable)
-                message != null -> Reporter.recordThrowable(Exception(message))
+                throwable != null -> Reporting.recordThrowable(throwable)
+                message != null -> Reporting.recordThrowable(Exception(message))
             }
         }
     }

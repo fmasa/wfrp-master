@@ -9,6 +9,7 @@ import cz.frantisekmasa.wfrp_master.common.character.CharacterItemDetailScreen
 import cz.frantisekmasa.wfrp_master.common.character.religion.blessings.dialog.NonCompendiumBlessingForm
 import cz.frantisekmasa.wfrp_master.common.compendium.blessing.CompendiumBlessingDetailScreen
 import cz.frantisekmasa.wfrp_master.common.core.domain.identifiers.CharacterId
+import cz.frantisekmasa.wfrp_master.common.core.logging.Reporting
 import cz.frantisekmasa.wfrp_master.common.core.ui.buttons.CompendiumButton
 import cz.frantisekmasa.wfrp_master.common.core.ui.navigation.LocalNavigationTransaction
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
@@ -48,7 +49,10 @@ class CharacterBlessingDetailScreen(characterId: CharacterId, blessingId: Uuid) 
                 )
             } else {
                 NonCompendiumBlessingForm(
-                    onSave = screenModel::saveItem,
+                    onSave = {
+                        Reporting.record { characterItemAdded("blessing") }
+                        screenModel.saveItem(it)
+                    },
                     existingBlessing = blessing,
                     onDismissRequest = navigation::goBack,
                 )

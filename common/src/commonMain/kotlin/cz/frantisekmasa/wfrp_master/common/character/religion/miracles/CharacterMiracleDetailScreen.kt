@@ -9,6 +9,7 @@ import cz.frantisekmasa.wfrp_master.common.character.CharacterItemDetailScreen
 import cz.frantisekmasa.wfrp_master.common.character.religion.miracles.dialog.NonCompendiumMiracleForm
 import cz.frantisekmasa.wfrp_master.common.compendium.miracle.CompendiumMiracleDetailScreen
 import cz.frantisekmasa.wfrp_master.common.core.domain.identifiers.CharacterId
+import cz.frantisekmasa.wfrp_master.common.core.logging.Reporting
 import cz.frantisekmasa.wfrp_master.common.core.ui.buttons.CompendiumButton
 import cz.frantisekmasa.wfrp_master.common.core.ui.navigation.LocalNavigationTransaction
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
@@ -48,7 +49,10 @@ class CharacterMiracleDetailScreen(characterId: CharacterId, miracleId: Uuid) :
                 )
             } else {
                 NonCompendiumMiracleForm(
-                    onSave = screenModel::saveItem,
+                    onSave = {
+                        Reporting.record { characterItemAdded("miracle") }
+                        screenModel.saveItem(it)
+                    },
                     existingMiracle = miracle,
                     onDismissRequest = navigation::goBack,
                 )

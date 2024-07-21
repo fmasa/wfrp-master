@@ -29,6 +29,8 @@ class PdfCompendiumImporter(
     private val document: Document,
     private val book: Book,
 ) : CompendiumImporter {
+    override val source: String = book.name
+
     private val mutex = Mutex()
 
     override suspend fun importSkills(): List<Skill> =

@@ -84,9 +84,7 @@ private fun AmbitionsSection(
         ChangeAmbitionsDialog(
             title = stringResource(Str.ambition_title_character_ambitions),
             defaults = character.ambitions,
-            save = {
-                screenModel.update { character -> character.updateAmbitions(it) }
-            },
+            save = { screenModel.updateAmbitions(it) },
             onDismissRequest = { ambitionsDialogVisible = false },
         )
     }

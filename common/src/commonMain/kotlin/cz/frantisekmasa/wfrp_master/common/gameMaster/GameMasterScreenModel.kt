@@ -10,6 +10,7 @@ import cz.frantisekmasa.wfrp_master.common.core.domain.party.Party
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.PartyId
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.PartyRepository
 import cz.frantisekmasa.wfrp_master.common.core.domain.time.DateTime
+import cz.frantisekmasa.wfrp_master.common.core.logging.Reporting
 import cz.frantisekmasa.wfrp_master.common.core.utils.right
 import kotlinx.coroutines.flow.Flow
 
@@ -39,5 +40,6 @@ class GameMasterScreenModel(
         parties.update(partyId) {
             it.updateAmbitions(ambitions)
         }
+        Reporting.record { partyAmbitionsChanged(partyId) }
     }
 }

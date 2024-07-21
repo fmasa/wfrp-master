@@ -3,6 +3,7 @@ package cz.frantisekmasa.wfrp_master.common.settings
 import cafe.adriel.voyager.core.model.ScreenModel
 import cz.frantisekmasa.wfrp_master.common.core.auth.UserId
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.PartyRepository
+import cz.frantisekmasa.wfrp_master.common.core.logging.Reporting
 import cz.frantisekmasa.wfrp_master.common.core.shared.SettingsKey
 import cz.frantisekmasa.wfrp_master.common.core.shared.SettingsStorage
 import cz.frantisekmasa.wfrp_master.common.core.shared.booleanSettingsKey
@@ -41,6 +42,7 @@ class SettingsScreenModel(
     }
 
     suspend fun updateLanguage(language: Language) {
+        Reporting.record { appLanguageChanged(language.name) }
         storage.edit(AppSettings.LANGUAGE, language.name)
     }
 

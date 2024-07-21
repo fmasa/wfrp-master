@@ -18,6 +18,7 @@ import com.halilibo.richtext.ui.material.RichText
 import cz.frantisekmasa.wfrp_master.common.Str
 import cz.frantisekmasa.wfrp_master.common.compendium.journal.JournalEntryScreen
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.PartyId
+import cz.frantisekmasa.wfrp_master.common.core.logging.Reporting
 import cz.frantisekmasa.wfrp_master.common.core.ui.navigation.LocalNavigationTransaction
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
 import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.LocalPersistentSnackbarHolder
@@ -84,6 +85,7 @@ private fun SymptomList(
                     Chip(
                         onClick = {
                             if (symptom.journalEntryId != null) {
+                                Reporting.record { journalOpened("disease_symptom") }
                                 navigation.navigate(JournalEntryScreen(partyId, symptom.journalEntryId))
                             } else {
                                 snackbarHolder.showSnackbar(notFoundMessage)
