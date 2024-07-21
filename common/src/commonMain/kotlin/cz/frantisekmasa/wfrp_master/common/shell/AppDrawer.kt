@@ -33,7 +33,7 @@ import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import cz.frantisekmasa.wfrp_master.common.Str
 import cz.frantisekmasa.wfrp_master.common.about.AboutScreen
-import cz.frantisekmasa.wfrp_master.common.core.logging.Reporter
+import cz.frantisekmasa.wfrp_master.common.core.logging.Reporting
 import cz.frantisekmasa.wfrp_master.common.core.shared.Resources
 import cz.frantisekmasa.wfrp_master.common.core.shared.drawableResource
 import cz.frantisekmasa.wfrp_master.common.core.shared.rememberUrlOpener
@@ -114,7 +114,7 @@ fun AppDrawer(drawerState: DrawerState) {
             },
             text = stringResource(Str.drawer_kofi),
             onClick = {
-                Reporter.recordEvent("kofi_item_clicked", emptyMap())
+                Reporting.recordEvent("kofi_item_clicked", emptyMap())
                 urlOpener.open(FixedStrings.KOFI_URL, isGooglePlayLink = false)
             },
         )

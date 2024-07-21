@@ -3,7 +3,7 @@ package cz.frantisekmasa.wfrp_master.common.auth
 import cz.frantisekmasa.wfrp_master.common.core.auth.User
 import cz.frantisekmasa.wfrp_master.common.core.auth.UserId
 import cz.frantisekmasa.wfrp_master.common.core.auth.UserProvider
-import cz.frantisekmasa.wfrp_master.common.core.logging.Reporter
+import cz.frantisekmasa.wfrp_master.common.core.logging.Reporting
 import dev.gitlive.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -49,7 +49,7 @@ class CommonAuthenticationManager(
 
     init {
         coroutineScope.launch {
-            user.collect { it?.let { Reporter.setUserId(it.id) } }
+            user.collect { it?.let { Reporting.setUserId(it.id) } }
         }
     }
 }

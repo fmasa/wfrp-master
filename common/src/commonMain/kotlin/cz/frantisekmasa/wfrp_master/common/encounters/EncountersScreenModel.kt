@@ -4,7 +4,7 @@ import cafe.adriel.voyager.core.model.ScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
 import cz.frantisekmasa.wfrp_master.common.core.domain.identifiers.EncounterId
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.PartyId
-import cz.frantisekmasa.wfrp_master.common.core.logging.Reporter
+import cz.frantisekmasa.wfrp_master.common.core.logging.Reporting
 import cz.frantisekmasa.wfrp_master.common.encounters.domain.Encounter
 import cz.frantisekmasa.wfrp_master.common.encounters.domain.EncounterRepository
 import kotlinx.coroutines.Deferred
@@ -47,7 +47,7 @@ class EncountersScreenModel(
             ),
         )
 
-        Reporter.recordEvent(
+        Reporting.recordEvent(
             "create_encounter",
             mapOf(
                 "encounterId" to encounterId.toString(),
