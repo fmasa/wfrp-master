@@ -792,9 +792,10 @@
     <string name="diseases_title_choose_compendium_disease">Seleziona una Malattia dal Compendio…</string>
     <string name="diseases_label_contraction">Contagio</string>
     <string name="common_ui_units_days">giorni</string>
-    <string name="diseases_messages_no_diseases_in_compendium_subtext">Non ci sono ancora malattia nel compendio.</string>
+    <string name="diseases_messages_no_diseases_in_compendium_subtext">Non ci sono malattie nel compendio.</string>
     <string name="diseases_messages_visible_to_player_false">Invisibile ai giocatori</string>
     <string name="diseases_title_new">Nuova Malattia</string>
     <string name="diseases_messages_visible_to_player_true">Visibile ai giocatori</string>
     <string name="diseases_messages_no_diseases_in_compendium">Nessuna Malattia</string>
+    <string name="drawer_kofi">Supportami su Ko-fi</string>
 </resources>
