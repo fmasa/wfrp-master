@@ -803,4 +803,5 @@
     <string name="journal_messages_entry_not_found">No se encontró la entrada de la revista %s</string>
     <string name="journal_folder_symptoms">Reglas / Enfermedades e infecciones / Síntomas</string>
     <string name="compendium_pick_prompt_journal">Seleccione las entradas de diario que desea importar.</string>
+    <string name="drawer_kofi">Apóyame en Ko-fi</string>
 </resources>
