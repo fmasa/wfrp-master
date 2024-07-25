@@ -804,4 +804,5 @@
     <string name="journal_folder_symptoms">Reglas / Enfermedades e infecciones / Síntomas</string>
     <string name="compendium_pick_prompt_journal">Seleccione las entradas de diario que desea importar.</string>
     <string name="drawer_kofi">Apóyame en Ko-fi</string>
+    <string name="spells_lores_great_maw">Great Maw</string>
 </resources>
