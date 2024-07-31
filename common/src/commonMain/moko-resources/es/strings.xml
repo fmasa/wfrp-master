@@ -567,7 +567,7 @@
     <string name="tests_cannot_test_against_unknown_advanced_skill">El personaje no puede hacer pruebas de Habilidad(es) avanzadas que no conoce.</string>
     <string name="spells_lores_heavens">Cielos</string>
     <string name="points_fate">Destino</string>
-    <string name="characteristics_weapon_skill_bonus_shortcut">BHP</string>
+    <string name="characteristics_weapon_skill_bonus_shortcut">BHA</string>
     <string name="talents_messages_no_talents_in_compendium">Ningún Talento</string>
     <string name="weapons_reach_very_short">Muy Corta</string>
     <string name="parties_messages_invitation_url_description">Los Jugadores pueden abrir esta URL en sus dispositivos para obtener acceso</string>
@@ -760,7 +760,7 @@
     <string name="armour_types_mail">De Malla</string>
     <string name="encounters_title_create">Generar un Encuentro</string>
     <string name="spells_lores_shadows">Sombras</string>
-    <string name="characteristics_weapon_skill_shortcut">HP</string>
+    <string name="characteristics_weapon_skill_shortcut">HA</string>
     <string name="compendium_messages_no_items_in_compendium_subtext_player">Tu DJ tiene que añadirlos primero.</string>
     <string name="miracles_label_duration">Duración</string>
     <string name="authentication_messages_too_many_attempts">Demasiados intentos.
