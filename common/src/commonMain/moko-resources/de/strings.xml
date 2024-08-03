@@ -766,4 +766,16 @@
     <string name="common_ui_button_add_item">Item hinzufügen</string>
     <string name="diseases_title_choose_compendium_disease">Kompendium-Krankheit wählen…</string>
     <string name="diseases_symptoms_helper">Komma-separierte Liste an Symptomen</string>
+    <string name="common_ui_units_minutes">Minuten</string>
+    <string name="compendium_messages_no_character_items">Keine Elemente</string>
+    <string name="common_ui_duration_days">Tage</string>
+    <string name="common_ui_duration_hours">Stunden</string>
+    <string name="common_ui_duration_minutes">Minuten</string>
+    <string name="common_ui_messages_no_items">Keine Elemente</string>
+    <string name="common_ui_units_days">Tage</string>
+    <string name="common_ui_units_hours">Stunden</string>
+    <string name="diseases_label_name">Name</string>
+    <string name="diseases_title_new">Neue Krankheit</string>
+    <string name="diseases_messages_no_diseases_in_compendium">Keine Krankheiten</string>
+    <string name="diseases_label_not_diagnosed">Nicht diagnostiziert</string>
 </resources>
