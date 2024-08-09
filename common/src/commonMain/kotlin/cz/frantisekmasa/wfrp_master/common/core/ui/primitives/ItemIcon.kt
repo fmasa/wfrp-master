@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.ContentAlpha
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
@@ -64,8 +65,8 @@ fun ItemIcon(
         VISUAL_ONLY_ICON_DESCRIPTION,
         modifier =
             modifier
-                .clip(CircleShape)
-                .background(backgroundColor, CircleShape)
+                .clip(RoundedCornerShape(Spacing.small))
+                .background(backgroundColor, RoundedCornerShape(Spacing.small))
                 .width(dimensions)
                 .height(dimensions),
     )
@@ -109,7 +110,7 @@ private fun ItemIcon(
         colorFilter = ColorFilter.tint(tint),
         modifier =
             Modifier
-                .background(backgroundColor, CircleShape)
+                .background(backgroundColor, RoundedCornerShape(Spacing.small))
                 .padding(size.padding)
                 .width(size.dimensions)
                 .height(size.dimensions),
