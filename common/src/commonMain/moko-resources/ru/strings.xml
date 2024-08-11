@@ -1,2 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <string name="character_tab_religions">Религия</string>
+    <string name="character_title_experience">Опыт</string>
+    <string name="character_title_select_character">Выбрать персонажа</string>
+    <string name="characteristics_will_power">Сила воли</string>
+    <string name="combat_hit_locations_left_arm">Левая рука</string>
+    <string name="combat_hit_locations_left_leg">Левая нога</string>
+    <string name="combat_initiative_strategies_initiative_plus_1d10">Инициатива + 1к10</string>
+    <string name="combat_label_allies">Союзники</string>
+    <string name="combat_initiative_strategy_prompt">Выбрать правила инициативы</string>
+    <string name="combat_icon_next_turn">Следующий ход</string>
+    <string name="combat_initiative_strategy_config_option">Правила инициативы</string>
+    <string name="common_ui_boolean_yes">Да</string>
+    <string name="combat_nth_round">"Раунд  %d"</string>
+    <string name="common_ui_boolean_no">Нет</string>
+    <string name="common_ui_button_cancel">Отмена</string>
+    <string name="combat_title">Бой</string>
+    <string name="combat_title_start_combat">Начать бой</string>
+    <string name="common_ui_duration_minutes">минуты</string>
+    <string name="common_ui_button_yes">Да</string>
+    <string name="common_ui_duration_hours">часы</string>
+    <string name="common_ui_button_save">Сохранить</string>
+    <string name="common_ui_button_skip">Пропустить</string>
+    <string name="character_title_career">Карьера</string>
+    <string name="character_tab_attributes">Параметры</string>
+    <string name="characteristics_strength">Сила</string>
+    <string name="combat_hit_locations_head">Голова</string>
+    <string name="combat_hit_locations_body">Тело</string>
+    <string name="combat_hit_locations_right_arm">Правая рука</string>
+    <string name="combat_hit_locations_right_leg">Права нога</string>
+    <string name="combat_button_end_combat">Закончить бой</string>
+    <string name="combat_label_enemies">Враги</string>
+    <string name="common_ui_duration_days">сутки</string>
+    <string name="common_ui_button_duplicate">Дублировать</string>
+    <string name="characteristics_agility">Ловкость</string>
+    <string name="character_title_weapons">Оружие</string>
+    <string name="characteristics_initiative">Инициатива</string>
+    <string name="combat_button_remove_combatant">Убрать из боя</string>
+    <string name="combat_icon_previous_turn">Предыдущий ход</string>
+    <string name="character_secondary_text_career">Карьера, Класс, Социальный статус</string>
+    <string name="characteristics_fellowship">Харизма</string>
+    <string name="authentication_label_password">Пароль</string>
+    <string name="blessings_label_name">Имя</string>
+</resources>
