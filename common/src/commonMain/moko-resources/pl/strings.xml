@@ -67,4 +67,63 @@
     <string name="blessings_label_target">Cel</string>
     <string name="authentication_button_reset_password">Zresetuj hasło</string>
     <string name="authentication_messages_duplicate_account">Konto już istnieje</string>
+    <string name="calendar_icon_next_month">Następny miesiąc</string>
+    <string name="calendar_icon_next_years">Następne lata</string>
+    <string name="calendar_icon_previous_month">Poprzedni miesiąc</string>
+    <string name="calendar_icon_previous_years">Poprzednie lata</string>
+    <string name="calendar_mannslieb_phase">Faza Mannslieba</string>
+    <string name="calendar_moon_phases_full_moon">Pełnia</string>
+    <string name="calendar_moon_phases_new_moon">Nów</string>
+    <string name="calendar_moon_phases_waning">Ubywający</string>
+    <string name="calendar_moon_phases_waxing">Przybywający</string>
+    <string name="calendar_title_select_date">Wybierz datę</string>
+    <string name="calendar_title_select_time">Wybierz godzinę</string>
+    <string name="careers_button_clear_select_box">Wyczyść listę wyboru profesji</string>
+    <string name="careers_comma_separated_skills_helper">Lista umiejętności oddzielonych przecinkiem</string>
+    <string name="careers_comma_separated_talents_helper">Lista talentów oddzielonych przecinkiem</string>
+    <string name="careers_comma_separated_trappings_helper">Lista przedmiotów oddzielonych przecinkiem</string>
+    <string name="careers_messages_level_with_name_exists">Poziom profesji o takiej nazwie już istnieje</string>
+    <string name="careers_messages_no_careers_in_compendium">Brak profesji</string>
+    <string name="careers_messages_no_careers_in_compendium_subtext">W twoim kompendium nie ma jeszcze żadnych profesji.</string>
+    <string name="careers_messages_no_level">Brak poziomów profesji</string>
+    <string name="careers_messages_no_level_subtext">Stwórz przynajmniej jeden poziom
+\naby postacie mogły używać tej profesji.</string>
+    <string name="careers_messages_not_found">Nie znaleziono profesji</string>
+    <string name="careers_tab_detail">Szczegóły</string>
+    <string name="careers_tab_levels">Poziomy</string>
+    <string name="careers_title_add_level">Dodaj poziom</string>
+    <string name="careers_title_edit_career">Edytuj profesję</string>
+    <string name="careers_title_edit_level">Edytuj poziom</string>
+    <string name="careers_title_new_career">Nowa profesja…</string>
+    <string name="changelog_could_not_load">Nie można załadować dziennika zmian</string>
+    <string name="changelog_github_button">Zobacz resztę na GitHub</string>
+    <string name="changelog_title">Dziennik zmian</string>
+    <string name="character_button_add">Dodaj nową postać</string>
+    <string name="character_button_change_avatar">Zmień portret</string>
+    <string name="character_button_link">Powiąż z istniejącą postacią</string>
+    <string name="character_button_remove_avatar">Usuń portret</string>
+    <string name="character_button_turn_into_n_p_c">Przekształć w BN</string>
+    <string name="character_button_turn_into_p_c">Przekształć w postać gracza</string>
+    <string name="character_button_unlink_from_player">Odłącz od gracza</string>
+    <string name="character_button_unlink_from_player_subtext">Postać będzie dostępna dla innego gracza</string>
+    <string name="character_creation_messages_no_careers_in_compendium">Brak profesji</string>
+    <string name="character_creation_step_attributes">Atrybuty</string>
+    <string name="character_creation_step_basic_info">Informacje podstawowe</string>
+    <string name="character_creation_step_point_pools">Pule punktów</string>
+    <string name="character_creation_title">Opisz swojego bohatera…</string>
+    <string name="character_effect_big">duży</string>
+    <string name="character_effect_brute">siłacz</string>
+    <string name="character_effect_clever">sprytny</string>
+    <string name="character_effect_construct">konstrukt</string>
+    <string name="character_effect_coolheaded">zimna krew</string>
+    <string name="careers_search_placeholder">Wyszukiwanie profesji</string>
+    <string name="about_attribution_dice_roll_sound">Dźwięki potrząsania i rzutu kośćmi zostały stworzone przez Mike\'a Koeniga (soundbible.com) i użyte na licencji CC BY 3.0.</string>
+    <string name="about_attribution_icons">Ikony zaprojektowane przez Delapouite i Lorc.
+\nDostępne pod adresem https://game-icons.net</string>
+    <string name="about_title">O programie</string>
+    <string name="about_title_attribution">Wkład</string>
+    <string name="armour_tip_trappings">Pancerz jest obliczany automatycznie na podstawie noszonych elementów wyposażenia.</string>
+    <string name="about_body">"Aplikacja została stworzona przez  Františka Mašę i jego studentów, a teraz jest rozwijana
+\nprzez Františka Mašę w czasie wolnym.
+\nJeśli podoba Ci się to oprogramowanie, rozważ proszę ocenę WFRP Master na Google Play."</string>
 </resources>
