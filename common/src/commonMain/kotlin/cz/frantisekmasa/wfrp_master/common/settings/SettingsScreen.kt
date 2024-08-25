@@ -25,6 +25,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
 import cz.frantisekmasa.wfrp_master.common.Str
+import cz.frantisekmasa.wfrp_master.common.core.LocalStaticConfiguration
+import cz.frantisekmasa.wfrp_master.common.core.config.Platform
 import cz.frantisekmasa.wfrp_master.common.core.ui.buttons.BackButton
 import cz.frantisekmasa.wfrp_master.common.core.ui.flow.collectWithLifecycle
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
@@ -61,6 +63,7 @@ object SettingsScreen : Screen {
 
                     SettingsCard {
                         SettingsTitle(stringResource(Str.settings_title_general))
+                        KeepScreenOnCard(screenModel)
                         SoundCard(screenModel)
                         DarkModeCard(screenModel)
                         LanguageCard(screenModel)
@@ -118,10 +121,23 @@ private fun LanguageCard(screenModel: SettingsScreenModel) {
 }
 
 @Composable
+private fun KeepScreenOnCard(screenModel: SettingsScreenModel) {
+    if (LocalStaticConfiguration.current.platform == Platform.Android) {
+        SwitchItem(
+            name = stringResource(Str.settings_keep_screen_on),
+            subText = stringResource(Str.settings_keep_screen_on_subtext),
+            value = screenModel.keepScreenOn.collectWithLifecycle(null).value ?: true,
+            onChange = { screenModel.toggleKeepScreenOn(it) },
+        )
+    }
+}
+
+@Composable
 private fun SwitchItem(
     name: String,
     value: Boolean?,
     onChange: suspend (newValue: Boolean) -> Unit,
+    subText: String? = null,
     enabled: Boolean = true,
 ) {
     val color =
@@ -147,5 +163,6 @@ private fun SwitchItem(
                 },
             )
         },
+        secondaryText = subText?.let { { Text(it, color = color) } },
     )
 }

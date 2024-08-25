@@ -18,6 +18,7 @@ class SettingsScreenModel(
 ) : ScreenModel {
     val darkMode: Flow<Boolean?> by lazy { getPreference(AppSettings.DARK_MODE) }
     val soundEnabled: Flow<Boolean?> by lazy { getPreference(AppSettings.SOUND_ENABLED) }
+    val keepScreenOn: Flow<Boolean?> by lazy { getPreference(AppSettings.KEEP_SCREEN_ON) }
     val lastSeenVersion: Flow<String?> by lazy { storage.watch(AppSettings.LAST_SEEN_VERSION) }
     val language: Flow<Language?> by lazy {
         storage.watch(AppSettings.LANGUAGE).map {
@@ -37,6 +38,10 @@ class SettingsScreenModel(
         storage.edit(AppSettings.SOUND_ENABLED, enabled)
     }
 
+    suspend fun toggleKeepScreenOn(enabled: Boolean) {
+        storage.edit(AppSettings.KEEP_SCREEN_ON, enabled)
+    }
+
     suspend fun updateLastSeenVersion(version: String) {
         storage.edit(AppSettings.LAST_SEEN_VERSION, version)
     }
@@ -54,6 +59,7 @@ class SettingsScreenModel(
 object AppSettings {
     val DARK_MODE = booleanSettingsKey("dark_mode")
     val SOUND_ENABLED = booleanSettingsKey("sound_enabled")
+    val KEEP_SCREEN_ON = booleanSettingsKey("keep_screen_on")
     val GOOGLE_SIGN_IN_DISMISSED = booleanSettingsKey("dismissed_google_sign_in")
     val LAST_SEEN_VERSION = stringKey("last_seen_version")
     val LANGUAGE = stringKey("language")
