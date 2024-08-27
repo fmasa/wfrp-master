@@ -805,4 +805,6 @@
     <string name="compendium_pick_prompt_journal">Seleccione las entradas de diario que desea importar.</string>
     <string name="drawer_kofi">Apóyame en Ko-fi</string>
     <string name="spells_lores_great_maw">Great Maw</string>
+    <string name="settings_keep_screen_on">Mantener pantalla encendida</string>
+    <string name="settings_keep_screen_on_subtext">Evitar el bloqueo automático de la pantalla</string>
 </resources>
