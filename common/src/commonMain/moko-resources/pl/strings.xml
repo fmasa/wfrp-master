@@ -176,7 +176,7 @@
     <string name="character_secondary_text_experience">PD, Ambicje</string>
     <string name="character_secondary_text_removal">Usuń postać na zawsze</string>
     <string name="character_secondary_text_well_being">Zepsucie, Urazy, Choroby, Psychologia</string>
-    <string name="character_secondary_text_wounds">Żywotność, Rozwinięcia Twardziela</string>
+    <string name="character_secondary_text_wounds">Maks. Żyw., Rozwinięcia Twardziela</string>
     <string name="character_tab_conditions">Stany</string>
     <string name="character_tab_notes">Notatki</string>
     <string name="character_tab_religions">Religia</string>
@@ -600,7 +600,7 @@
     <string name="points_label_current_experience">Aktualne PD</string>
     <string name="skills_label_characteristic">Cechy</string>
     <string name="talents_tip_hardy_talent_checkbox">Pole wyboru Twardziela zostanie usunięte w przyszłości.
-\nDodaj talent o nazwie Twardziel i usuń wartość Maks. Ran.</string>
+\nDodaj talent o nazwie Twardziel i usuń wartość Maks. Żyw.</string>
     <string name="weapons_qualities_impact">Druzgocząca</string>
     <string name="tests_button_hidden_skill_test">Ukryty test umiejętności</string>
     <string name="trappings_qualities_lightweight">Poręczny</string>
@@ -791,7 +791,7 @@
     <string name="spells_lores_great_maw">Wielka Paszcza</string>
     <string name="trappings_types_tool_or_kit">Narzędzia i zestawy</string>
     <string name="parties_messages_already_member">Jesteś już członkiem tej drużyny</string>
-    <string name="points_max_wounds">Maks. liczba ran</string>
+    <string name="points_max_wounds">Maks. Żyw.</string>
     <string name="settings_sound">Efekty dźwiękowe</string>
     <string name="spells_lores_petty">Magia Prosta</string>
     <string name="spells_messages_no_spells_in_compendium_subtext">W twoim kompendium nie ma jeszcze żadnych zaklęć.</string>
