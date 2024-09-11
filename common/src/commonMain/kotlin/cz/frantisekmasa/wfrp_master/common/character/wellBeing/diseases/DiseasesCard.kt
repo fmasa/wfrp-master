@@ -17,7 +17,7 @@ import com.benasher44.uuid.Uuid
 import cz.frantisekmasa.wfrp_master.common.Str
 import cz.frantisekmasa.wfrp_master.common.character.characterItemsCard
 import cz.frantisekmasa.wfrp_master.common.character.diseases.CharacterDiseaseDetailScreen
-import cz.frantisekmasa.wfrp_master.common.core.domain.character.diseases.Countdown
+import cz.frantisekmasa.wfrp_master.common.core.domain.character.Countdown
 import cz.frantisekmasa.wfrp_master.common.core.domain.identifiers.CharacterId
 import cz.frantisekmasa.wfrp_master.common.core.shared.Resources
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.ItemIcon

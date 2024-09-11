@@ -8,7 +8,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import com.benasher44.uuid.Uuid
 import com.benasher44.uuid.uuid4
 import cz.frantisekmasa.wfrp_master.common.Str
-import cz.frantisekmasa.wfrp_master.common.core.domain.character.diseases.Countdown
+import cz.frantisekmasa.wfrp_master.common.core.domain.character.Countdown
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.diseases.Disease
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.FormDialog
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.HydratedFormData
