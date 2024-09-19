@@ -3,13 +3,17 @@ package cz.frantisekmasa.wfrp_master.common.partyList
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Divider
 import androidx.compose.material.ExtendedFloatingActionButton
 import androidx.compose.material.Icon
 import androidx.compose.material.ListItem
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
@@ -51,6 +55,8 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.FloatingActionsMen
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.ItemIcon
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.MenuState
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
+import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.UserTip
+import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.UserTipCard
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.VISUAL_ONLY_ICON_DESCRIPTION
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.rememberScreenModel
 import cz.frantisekmasa.wfrp_master.common.gameMaster.GameMasterScreen
@@ -252,8 +258,20 @@ fun PartyList(
 ) {
     LazyColumn(
         Modifier.fillMaxHeight(),
-        contentPadding = PaddingValues(top = Spacing.medium, bottom = Spacing.bottomPaddingUnderFab),
+        contentPadding = PaddingValues(bottom = Spacing.bottomPaddingUnderFab),
     ) {
+        item {
+            UserTipCard(
+                UserTip.FEEDBACK_FORM,
+                modifier = Modifier.fillMaxWidth(),
+                shape = MaterialTheme.shapes.large,
+            )
+        }
+
+        item {
+            Spacer(modifier = Modifier.height(Spacing.medium))
+        }
+
         items(parties, key = { it.id }) { item ->
             WithContextMenu(
                 onClick = { onClick(item) },
