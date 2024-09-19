@@ -295,6 +295,7 @@
     <string name="common_ui_markdown_supported_note">Markdown formatting is supported</string>
     <string name="common_ui_messages_no_items">No items</string>
     <string name="common_ui_select_all">Select All</string>
+    <string name="common_ui_tip_feedback_form">Do you have 3 minutes to share feedback?</string>
     <string name="common_ui_units_days">days</string>
     <string name="common_ui_units_hours">hours</string>
     <string name="common_ui_units_minutes">minutes</string>
