@@ -807,4 +807,5 @@
     <string name="spells_lores_great_maw">Great Maw</string>
     <string name="settings_keep_screen_on">Mantener pantalla encendida</string>
     <string name="settings_keep_screen_on_subtext">Evitar el bloqueo automático de la pantalla</string>
+    <string name="common_ui_tip_feedback_form">¿Tienes 3 minutos para compartir tus comentarios?</string>
 </resources>
