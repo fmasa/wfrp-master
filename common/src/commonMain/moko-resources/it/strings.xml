@@ -802,4 +802,5 @@
     <string name="spells_lores_great_maw">Le Grandi Fauci</string>
     <string name="settings_keep_screen_on">Mantieni lo Schermo acceso</string>
     <string name="settings_keep_screen_on_subtext">Impedisce il blocco automatico dello schermo</string>
+    <string name="common_ui_tip_feedback_form">Hai 3 minuti per mandarci un tuo feedback?</string>
 </resources>
