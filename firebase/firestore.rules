@@ -638,7 +638,8 @@ service cloud.firestore {
                                     "SPELLS",
                                     "RELIGION",
                                     "TRAPPINGS",
-                                    "NOTES"
+                                    "NOTES",
+                                    "WELL_BEING"
                                 ].hasAll(character.hiddenTabs)
                         )
                         && (character.size == null || (
