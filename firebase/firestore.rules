@@ -236,6 +236,36 @@ service cloud.firestore {
                 }
             }
 
+            match /injuries/{injuryId} {
+                allow read: if hasAccessToParty();
+                allow create: if isGameMaster() && isValidInjury(request.resource.data);
+                allow update: if isGameMaster() && isValidInjury(request.resource.data);
+                allow delete: if isGameMaster();
+
+                function isValidInjury(disease) {
+                    return [
+                           "id",
+                           "name",
+                           "contraction",
+                           "incubation",
+                           "duration",
+                           "symptoms",
+                           "permanentEffects",
+                           "description",
+                           "isVisibleToPlayers"
+                           ].hasAll(disease.keys())
+                           && disease.id is string && disease.id == diseaseId && isValidUuid(disease.id)
+                           && disease.name is string && isNotBlank(disease.name) && disease.name.size() <= 50
+                           && disease.contraction is string && disease.contraction.size() <= 500
+                           && disease.incubation is string && disease.incubation.size() <= 100
+                           && disease.duration is string && disease.duration.size() <= 500
+                           && disease.symptoms is list
+                           && disease.permanentEffects is string && disease.permanentEffects.size() <= 200
+                           && disease.description is string && disease.description.size() <= 1000
+                           && disease.isVisibleToPlayers is bool;
+                }
+            }
+
             match /careers/{careerId} {
                 allow read: if hasAccessToParty();
                 allow create: if isGameMaster() && isValidCareer(request.resource.data);
