@@ -14,6 +14,7 @@ import dev.gitlive.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.map
 
 class JournalScreenModel(
@@ -31,15 +32,17 @@ class JournalScreenModel(
             .right()
             .map { userProvider.userId == it.gameMasterId }
             .distinctUntilChanged()
-    val entries =
-        items
-            .combine(isGameMaster) { items, isGameMaster ->
-                if (isGameMaster) {
-                    items
-                } else {
-                    items.filter { it.isVisibleToPlayers }
-                }
+    private val visibleItems =
+        items.combine(isGameMaster) { items, isGameMaster ->
+            if (isGameMaster) {
+                items
+            } else {
+                items.filter { it.isVisibleToPlayers }
             }
+        }
+
+    val entries =
+        visibleItems
             .map { entries ->
                 entries.map(JournalEntryItem::fromEntry)
             }
@@ -88,7 +91,7 @@ class JournalScreenModel(
     }
 
     val entriesTree: Flow<List<TreeItem>> =
-        items.map { items ->
+        visibleItems.map { items ->
             val pinned =
                 items.filter { it.isPinned }
                     .map {
