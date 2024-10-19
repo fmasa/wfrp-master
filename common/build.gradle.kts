@@ -102,6 +102,7 @@ kotlin {
             dependencies {
                 implementation(kotlin("test"))
                 implementation(libs.mockk)
+                implementation(libs.kotlinx.coroutines.test)
             }
         }
 
@@ -153,6 +154,11 @@ kotlin {
 
                 implementation(libs.korau)
                 implementation(libs.pdfbox)
+                implementation("dev.gitlive:firebase-java-sdk") {
+                    version {
+                        strictly("0.4.7")
+                    }
+                }
             }
         }
 
@@ -206,6 +212,7 @@ buildkonfig {
                 Properties()
             }
 
+        buildConfigField(STRING, "authEmulatorUrl", properties.getOrDefault("dev.authEmulatorUrl", "").toString())
         buildConfigField(STRING, "functionsEmulatorUrl", properties.getOrDefault("dev.functionsEmulatorUrl", "").toString())
         buildConfigField(STRING, "firestoreEmulatorUrl", properties.getOrDefault("dev.firestoreEmulatorUrl", "").toString())
         buildConfigField(STRING, "versionName", System.getenv("SUPPLY_VERSION_NAME") ?: "dev")

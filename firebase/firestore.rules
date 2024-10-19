@@ -236,6 +236,29 @@ service cloud.firestore {
                 }
             }
 
+            match /injuries/{injuryId} {
+                allow read: if hasAccessToParty();
+                allow create: if isGameMaster() && isValidInjury(request.resource.data);
+                allow update: if isGameMaster() && isValidInjury(request.resource.data);
+                allow delete: if isGameMaster();
+
+                function isValidInjury(injury) {
+                    return [
+                           "id",
+                           "name",
+                           "duration",
+                           "possibleLocations",
+                           "description",
+                           "isVisibleToPlayers"
+                           ].hasAll(injury.keys())
+                           && injury.id is string && injury.id == diseaseId && isValidUuid(injury.id)
+                           && injury.name is string && isNotBlank(injury.name) && injury.name.size() <= 50
+                           && injury.duration is string && injury.duration.size() <= 500
+                           && injury.description is string && injury.description.size() <= 1000
+                           && injury.isVisibleToPlayers is bool;
+                }
+            }
+
             match /careers/{careerId} {
                 allow read: if hasAccessToParty();
                 allow create: if isGameMaster() && isValidCareer(request.resource.data);
@@ -541,12 +564,34 @@ service cloud.firestore {
                         )
                         && disease.note is string && disease.note.size() <= 500;
                     }
+                }
 
-                    function isValidCountdown(countdown) {
-                        return countdown.keys().toSet() == ["value", "unit"].toSet()
-                        && countdown.value is int && countdown.value >= 0
-                        && countdown.unit in ["DAYS", "HOURS", "MINUTES"];
+                match /injuries/{injuryId} {
+                    allow read: if hasAccessToParty();
+                    allow create: if canEditCharacter() && isValidInjury(request.resource.data);
+                    allow update: if canEditCharacter() && isValidInjury(request.resource.data);
+                    allow delete: if canEditCharacter();
+
+                    function isValidInjury(injury) {
+                        return injury.keys().toSet() == ["id", "name", description", "duration", "location", "note", "compendiumId"].toSet()
+                        && injury.id is string && injury.id == diseaseId && isValidUuid(injury.id)
+                        && injury.name is string && isNotBlank(injury.name) && injury.name.size() <= 50
+                        && injury.description is string && injury.description.size() <= 1000
+                        && injury.location is string
+                        && isValidCountdown(disease.incubation)
+                        && (injury.duration == null || isValidCountdown(injury.duration))
+                        && (
+                            injury.compendiumId == null
+                            || (injury.compendiumId is string && exists(/databases/$(database)/documents/parties/$(partyId)/injuries/$(injury.compendiumId)))
+                        )
+                        && injury.note is string && injury.note.size() <= 500;
                     }
+                }
+
+                function isValidCountdown(countdown) {
+                    return countdown.keys().toSet() == ["value", "unit"].toSet()
+                    && countdown.value is int && countdown.value >= 0
+                    && countdown.unit in ["DAYS", "HOURS", "MINUTES"];
                 }
 
                 match /features/{featureName} {
