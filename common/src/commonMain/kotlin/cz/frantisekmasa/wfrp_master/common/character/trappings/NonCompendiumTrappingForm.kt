@@ -1,6 +1,5 @@
 package cz.frantisekmasa.wfrp_master.common.character.trappings
 
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
@@ -12,6 +11,11 @@ import androidx.compose.runtime.snapshots.SnapshotStateMap
 import androidx.compose.ui.text.input.KeyboardType
 import com.benasher44.uuid.uuid4
 import cz.frantisekmasa.wfrp_master.common.Str
+import cz.frantisekmasa.wfrp_master.common.compendium.trapping.ArmourFlawsPicker
+import cz.frantisekmasa.wfrp_master.common.compendium.trapping.ArmourLocationsPickers
+import cz.frantisekmasa.wfrp_master.common.compendium.trapping.ArmourQualitiesPicker
+import cz.frantisekmasa.wfrp_master.common.compendium.trapping.WeaponFlawsPicker
+import cz.frantisekmasa.wfrp_master.common.compendium.trapping.WeaponQualitiesPicker
 import cz.frantisekmasa.wfrp_master.common.core.domain.HitLocation
 import cz.frantisekmasa.wfrp_master.common.core.domain.NamedEnum
 import cz.frantisekmasa.wfrp_master.common.core.domain.localizedName
@@ -29,7 +33,6 @@ import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.ItemQuality
 import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.MeleeWeaponGroup
 import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.RangedWeaponGroup
 import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.Reach
-import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.TrappingFeature
 import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.TrappingType
 import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.WeaponEquip
 import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.WeaponFlaw
@@ -37,13 +40,11 @@ import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.WeaponQuality
 import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.WeaponRangeExpression
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.CheckboxList
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.CheckboxWithText
-import cz.frantisekmasa.wfrp_master.common.core.ui.forms.ErrorMessage
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.Filter
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.FormDialog
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.HydratedFormData
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.InputLabel
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.InputValue
-import cz.frantisekmasa.wfrp_master.common.core.ui.forms.NumberPicker
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.Rules
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.SelectBox
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.TextInput
@@ -176,23 +177,15 @@ private fun TrappingTypeForm(
                     onValueChange = { formData.armourType.value = it },
                     items = remember { ArmourType.values() },
                 )
-                ArmourLocationsPickers(formData, validate)
+                ArmourLocationsPickers(formData.armourLocations, validate)
                 TextInput(
                     label = stringResource(Str.armour_label_armour_points),
                     value = formData.armourPoints,
                     validate = validate,
                 )
                 WornCheckbox(formData)
-                TrappingFeaturePicker(
-                    stringResource(Str.armour_label_qualities),
-                    ArmourQuality.values(),
-                    formData.armourQualities,
-                )
-                TrappingFeaturePicker(
-                    stringResource(Str.armour_label_flaws),
-                    ArmourFlaw.values(),
-                    formData.armourFlaws,
-                )
+                ArmourQualitiesPicker(formData.armourQualities)
+                ArmourFlawsPicker(formData.armourFlaws)
             }
             TrappingTypeOption.CLOTHING_OR_ACCESSORY, TrappingTypeOption.PROSTHETIC -> {
                 WornCheckbox(formData)
@@ -282,26 +275,6 @@ private fun WornCheckbox(formData: TrappingTypeFormData) {
 }
 
 @Composable
-private fun ArmourLocationsPickers(
-    formData: TrappingTypeFormData,
-    validate: Boolean,
-) {
-    val selectedParts = formData.armourLocations
-
-    InputLabel(stringResource(Str.armour_label_locations))
-
-    CheckboxList(
-        items = HitLocation.values(),
-        text = { it.localizedName },
-        selected = selectedParts,
-    )
-
-    if (validate && selectedParts.value.isEmpty()) {
-        ErrorMessage(stringResource(Str.armour_messages_at_least_one_location_required))
-    }
-}
-
-@Composable
 private fun DamageInput(
     formData: TrappingTypeFormData,
     validate: Boolean,
@@ -320,55 +293,12 @@ private fun DamageInput(
 
 @Composable
 private fun WeaponQualitiesPicker(formData: TrappingTypeFormData) {
-    TrappingFeaturePicker(
-        stringResource(Str.weapons_label_qualities),
-        WeaponQuality.values(),
-        formData.weaponQualities,
-    )
+    WeaponQualitiesPicker(formData.weaponQualities)
 }
 
 @Composable
 private fun WeaponFlawsPicker(formData: TrappingTypeFormData) {
-    TrappingFeaturePicker(
-        stringResource(Str.weapons_label_flaws),
-        WeaponFlaw.values(),
-        formData.weaponFlaws,
-    )
-}
-
-@Composable
-private fun <T : TrappingFeature> TrappingFeaturePicker(
-    label: String,
-    options: Array<T>,
-    values: SnapshotStateMap<T, Int>,
-) {
-    Column {
-        InputLabel(label)
-        options.forEach { quality ->
-            CheckboxWithText(
-                text = quality.localizedName,
-                checked = values.containsKey(quality),
-                onCheckedChange = { checked ->
-                    if (checked) {
-                        values[quality] = 1
-                    } else {
-                        values.remove(quality)
-                    }
-                },
-                badge = {
-                    val rating = values[quality]
-
-                    if (rating != null && quality.hasRating) {
-                        NumberPicker(
-                            value = rating,
-                            onIncrement = { values[quality] = rating + 1 },
-                            onDecrement = { values[quality] = (rating - 1).coerceAtLeast(1) },
-                        )
-                    }
-                },
-            )
-        }
-    }
+    WeaponFlawsPicker(formData.weaponFlaws)
 }
 
 @Stable

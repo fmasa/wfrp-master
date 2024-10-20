@@ -221,22 +221,14 @@ private fun TrappingTypeForm(
                     onValueChange = { formData.armourType.value = it },
                     items = remember { ArmourType.values() },
                 )
-                ArmourLocationsPickers(formData, validate)
+                ArmourLocationsPickers(formData.armourLocations, validate)
                 TextInput(
                     label = stringResource(Str.armour_label_armour_points),
                     value = formData.armourPoints,
                     validate = validate,
                 )
-                TrappingFeaturePicker(
-                    stringResource(Str.armour_label_qualities),
-                    ArmourQuality.values(),
-                    formData.armourQualities,
-                )
-                TrappingFeaturePicker(
-                    stringResource(Str.armour_label_flaws),
-                    ArmourFlaw.values(),
-                    formData.armourFlaws,
-                )
+                ArmourQualitiesPicker(formData.armourQualities)
+                ArmourFlawsPicker(formData.armourFlaws)
             }
 
             TrappingTypeOption.CONTAINER -> {
@@ -306,21 +298,19 @@ private fun TrappingTypeForm(
 }
 
 @Composable
-private fun ArmourLocationsPickers(
-    formData: TrappingTypeFormData,
+fun ArmourLocationsPickers(
+    values: MutableState<Set<HitLocation>>,
     validate: Boolean,
 ) {
-    val selectedParts = formData.armourLocations
-
     InputLabel(stringResource(Str.armour_label_locations))
 
     CheckboxList(
         items = HitLocation.values(),
         text = { it.localizedName },
-        selected = selectedParts,
+        selected = values,
     )
 
-    if (validate && selectedParts.value.isEmpty()) {
+    if (validate && values.value.isEmpty()) {
         ErrorMessage(stringResource(Str.armour_messages_at_least_one_location_required))
     }
 }
@@ -347,26 +337,54 @@ private fun DamageInput(
 
 @Composable
 private fun WeaponQualitiesPicker(formData: TrappingTypeFormData) {
+    WeaponQualitiesPicker(formData.weaponQualities)
+}
+
+@Composable
+fun WeaponQualitiesPicker(values: SnapshotStateMap<WeaponQuality, Int>) {
     TrappingFeaturePicker(
         stringResource(Str.weapons_label_qualities),
-        WeaponQuality.values(),
-        formData.weaponQualities,
+        WeaponQuality.entries,
+        values,
     )
 }
 
 @Composable
 private fun WeaponFlawsPicker(formData: TrappingTypeFormData) {
+    WeaponFlawsPicker(formData.weaponFlaws)
+}
+
+@Composable
+fun WeaponFlawsPicker(values: SnapshotStateMap<WeaponFlaw, Int>) {
     TrappingFeaturePicker(
         stringResource(Str.weapons_label_flaws),
-        WeaponFlaw.values(),
-        formData.weaponFlaws,
+        WeaponFlaw.entries,
+        values,
+    )
+}
+
+@Composable
+fun ArmourQualitiesPicker(values: SnapshotStateMap<ArmourQuality, Int>) {
+    TrappingFeaturePicker(
+        stringResource(Str.armour_label_qualities),
+        ArmourQuality.entries,
+        values,
+    )
+}
+
+@Composable
+fun ArmourFlawsPicker(values: SnapshotStateMap<ArmourFlaw, Int>) {
+    TrappingFeaturePicker(
+        stringResource(Str.armour_label_qualities),
+        ArmourFlaw.entries,
+        values,
     )
 }
 
 @Composable
 private fun <T : TrappingFeature> TrappingFeaturePicker(
     label: String,
-    options: Array<T>,
+    options: List<T>,
     values: SnapshotStateMap<T, Int>,
 ) {
     Column {
