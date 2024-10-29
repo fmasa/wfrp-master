@@ -12,6 +12,7 @@ enum class Language(
     ES("Español", "Spanish", Locale("es_ES")),
     DE("Deutsch", "German", Locale.GERMAN),
     IT("Italiano", "Italian", Locale.ITALIAN),
+    RU("Русский", "Russian", Locale("ru-RU")),
     ;
 
     companion object {
