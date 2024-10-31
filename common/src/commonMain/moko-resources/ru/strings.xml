@@ -23,10 +23,10 @@
     <string name="common_ui_button_save">Сохранить</string>
     <string name="common_ui_button_skip">Пропустить</string>
     <string name="character_title_career">Карьера</string>
-    <string name="character_tab_attributes">Параметры</string>
+    <string name="character_tab_attributes">Характеристики</string>
     <string name="characteristics_strength">Сила</string>
     <string name="combat_hit_locations_head">Голова</string>
-    <string name="combat_hit_locations_body">Тело</string>
+    <string name="combat_hit_locations_body">Торс</string>
     <string name="combat_hit_locations_right_arm">Правая рука</string>
     <string name="combat_hit_locations_right_leg">Права нога</string>
     <string name="combat_button_end_combat">Закончить бой</string>
@@ -46,14 +46,14 @@
     <string name="ambition_title_party_ambitions">Амбиции группы</string>
     <string name="armour_flaws_partial">Неполный</string>
     <string name="armour_flaws_weakpoints">Уязвимый</string>
-    <string name="armour_label_armour_points">Очки доспеха (AP)</string>
-    <string name="armour_label_flaws">Недостатки доспеха</string>
-    <string name="armour_label_qualities">Достоинства доспеха</string>
-    <string name="armour_label_type">Тип доспеха</string>
+    <string name="armour_label_armour_points">Класс брони (КБ)</string>
+    <string name="armour_label_flaws">Недостатки брони</string>
+    <string name="armour_label_qualities">Достоинства брони</string>
+    <string name="armour_label_type">Тип брони</string>
     <string name="armour_qualities_flexible">Гибкий</string>
     <string name="armour_qualities_impenetrable">Непроницаемый</string>
     <string name="armour_shield">Щит</string>
-    <string name="armour_title">Доспех</string>
+    <string name="armour_title">Броня</string>
     <string name="armour_types_boiled_leather">Вареная кожа</string>
     <string name="armour_types_other">Другое</string>
     <string name="armour_types_plate">Латы</string>
@@ -137,7 +137,7 @@
     <string name="character_button_unlink_from_player">Открепить от игрока</string>
     <string name="character_button_unlink_from_player_subtext">Персонаж станет доступен другому игроку</string>
     <string name="character_creation_messages_no_careers_in_compendium">Нет карьер</string>
-    <string name="character_creation_step_attributes">Параметры</string>
+    <string name="character_creation_step_attributes">Характеристики</string>
     <string name="character_creation_title">Опишите своего персонажа…</string>
     <string name="character_effect_big">крупный</string>
     <string name="character_effect_brute">верзила</string>
@@ -152,7 +152,7 @@
     <string name="character_effect_sturdy">тяжеловес</string>
     <string name="character_effect_suave">учтивый</string>
     <string name="character_effect_swarm">рой</string>
-    <string name="character_creation_step_basic_info">Основная информация</string>
+    <string name="character_creation_step_basic_info">Основное</string>
     <string name="character_effect_construct">конструкт</string>
     <string name="character_effect_coolheaded">хладнокровный</string>
     <string name="character_effect_cunning">хитрый</string>
@@ -172,7 +172,7 @@
     <string name="character_tabs_visible">Отображается %1$d из %2$d вкладок</string>
     <string name="characteristics_dexterity_bonus_shortcut">ЛБ</string>
     <string name="characteristics_dexterity">Ловкость</string>
-    <string name="characteristics_ballistic_skill">Дистанционный бой</string>
+    <string name="characteristics_ballistic_skill">Дальний бой</string>
     <string name="combat_advantage_cap">Лимит преимущества</string>
     <string name="characteristics_will_power_shortcut">СВ</string>
     <string name="characteristics_will_power_bonus_shortcut">СВБ</string>
@@ -186,7 +186,7 @@
     <string name="common_ui_expression_helper">Допустимые операторы: +,-,/,*,(,), MIN(…), MAX(…) и переменные: %s</string>
     <string name="conditions_ablaze">Горящий</string>
     <string name="encounters_label_name">Название</string>
-    <string name="encounters_messages_no_encounters_subtext">Добавьте первое столкновение в группу.</string>
+    <string name="encounters_messages_no_encounters_subtext">Добавьте первое столкновение для вашей группы.</string>
     <string name="parties_messages_invitation_confirmation">Вы были приглашены в %s.</string>
     <string name="parties_messages_invitation_link_alternative">Вы также можете попросить ссылку с приглашением у вашего GM.</string>
     <string name="points_experience">XP</string>
@@ -200,7 +200,7 @@
     <string name="tests_label_difficulty">Сложность</string>
     <string name="trappings_label_availability">Доступность</string>
     <string name="trappings_money_balance">Баланс</string>
-    <string name="trappings_types_armour">Доспех</string>
+    <string name="trappings_types_armour">Броня</string>
     <string name="trappings_types_book_or_document">Книги и документы</string>
     <string name="weapons_qualities_accurate">Меткое</string>
     <string name="weapons_qualities_blackpowder">Пороховое</string>
@@ -217,7 +217,7 @@
     <string name="conditions_fatigued">Уставший</string>
     <string name="conditions_poisoned">Отравленный</string>
     <string name="conditions_deafened">Оглохший</string>
-    <string name="conditions_prone">Лежащий</string>
+    <string name="conditions_prone">Лежачий</string>
     <string name="diseases_label_name">Название</string>
     <string name="conditions_stunned">Оглушенный</string>
     <string name="conditions_surprised">Ошеломленный</string>
@@ -314,7 +314,7 @@
     <string name="weapons_qualities_entangle">Обездвиживающее</string>
     <string name="weapons_qualities_fast">Быстрое</string>
     <string name="weapons_qualities_impact">Пробивающее</string>
-    <string name="weapons_flaws_reload">Перезарядка</string>
+    <string name="weapons_flaws_reload">Перезаряжаемое</string>
     <string name="weapons_flaws_slow">Медленное</string>
     <string name="weapons_flaws_tiring">Изматывающее</string>
     <string name="trappings_types_ranged_weapon">Стрелковое оружие</string>
@@ -330,7 +330,7 @@
     <string name="weapons_qualities_trap_blade">Ловушка для меча</string>
     <string name="weapons_qualities_unbreakable">Неразрушимое</string>
     <string name="about_attribution_icons">Иконки созданы Delapouite и Lorc.\nДоступны на https://game-icons.net</string>
-    <string name="about_body">Это приложение создано František Maša и его студентами-сверстниками, а теперь разрабатывается\nв свободное время František Maša.\nЕсли вам понравилось приложение, пожалуйста, оцените WFRP Master а Google Play.</string>
+    <string name="about_body">Это приложение было создано František Maša и его сокурсниками, а теперь разрабатывается\nим в свободное время.\nЕсли вам понравилось приложение, пожалуйста, оцените WFRP Master в Google Play.</string>
     <string name="about_title">О нас</string>
     <string name="about_title_attribution">Авторство</string>
     <string name="ambition_label_long_term">Долгосрочные</string>
@@ -354,12 +354,12 @@
     <string name="character_messages_turn_into_p_c_confirmation">Вы действительно хотите превратить этого персонажа в персонажа игрока?</string>
     <string name="character_motivation">Мотивация</string>
     <string name="character_label_motivation">Мотивация (необязательно)</string>
-    <string name="character_secondary_text_well_being">Порча, травмы, болезни. психология</string>
+    <string name="character_secondary_text_well_being">Порча, травмы, болезни, псих. особенности</string>
     <string name="character_size_tiny">Крошечный</string>
     <string name="character_tab_skills_and_talents">Навыки и таланты</string>
     <string name="character_tab_combat">Сражение</string>
     <string name="character_tab_conditions">Состояния</string>
-    <string name="character_secondary_text_wounds">Макс. ран, развитие таланта Живучий</string>
+    <string name="character_secondary_text_wounds">Макс. ран, улучшения таланта Живучий</string>
     <string name="character_title_characteristics">Характеристики</string>
     <string name="character_title_basics">Основное</string>
     <string name="character_title_edit">Редактировать персонажа</string>
@@ -397,7 +397,7 @@
     <string name="common_ui_units_hours">часы</string>
     <string name="common_ui_item_does_not_exist">Элемент не существует.</string>
     <string name="common_ui_item_added">Элемент добавлен.</string>
-    <string name="common_ui_markdown_supported_note">Поддерживается форматирование Markdown</string>
+    <string name="common_ui_markdown_supported_note">Поддерживается Markdown</string>
     <string name="common_ui_units_minutes">минуты</string>
     <string name="compendium_messages_json_import_failed">Загрузка JSON не удалась. Проверьте правильность предоставленного файла экспорта WFRP Master.</string>
     <string name="compendium_messages_no_changed_items">Нет измененных элементов для загрузки</string>
@@ -427,7 +427,7 @@
     <string name="skills_title_select_skill">Выбрать навык</string>
     <string name="skills_title_skills">Навыки</string>
     <string name="spells_lores_petty">Малые заклинания</string>
-    <string name="tests_fumble">Заминка</string>
+    <string name="tests_fumble">Дубль</string>
     <string name="trappings_label_carries">Несет</string>
     <string name="trappings_availability_scarce">Дефицитный</string>
     <string name="trappings_money_crowns">Кроны</string>
@@ -472,7 +472,7 @@
     <string name="messages_search_not_found_subtext">Попробуйте изменить поисковый запрос.</string>
     <string name="miracles_label_cult_name">Название культа</string>
     <string name="miracles_label_effect">Эффект</string>
-    <string name="miracles_messages_character_has_no_miracles">Персонаж не знает никаких чудес.</string>
+    <string name="miracles_messages_character_has_no_miracles">Персонаж не знает чудес.</string>
     <string name="miracles_title">Чудеса</string>
     <string name="miracles_title_edit">Редактировать чудо</string>
     <string name="parties_image_qr_code_alt">QR-код приглашения</string>
@@ -561,7 +561,7 @@
     <string name="parties_title_characters">Персонажи</string>
     <string name="skills_label_characteristic">Характеристика</string>
     <string name="parties_tab_characters">Персонажи</string>
-    <string name="about_attribution_dice_roll_sound">Звуки встряхивания и броска кубов созданы Mike Koenig (soundbible.com) и использованы по лицензии CC BY 3.0 license</string>
+    <string name="about_attribution_dice_roll_sound">Звуки встряхивания и броска кубов созданы Mike Koenig (soundbible.com) и использованы по лицензии CC BY 3.0</string>
     <string name="skills_button_add_non_compendium">...или добавьте навык не из компендиума</string>
     <string name="skills_messages_character_has_no_skills">У персонажа нет никаких навыков.</string>
     <string name="diseases_title_choose_compendium_disease">Выберите болезни из компендиума…</string>
@@ -628,10 +628,10 @@
     <string name="character_creation_step_point_pools">Запасы очков</string>
     <string name="character_effect_very_strong">очень сильный</string>
     <string name="character_effect_warrior_born">прирожденный воин</string>
-    <string name="character_label_public_name">Имя видимо игрокам</string>
+    <string name="character_label_public_name">Имя, видимое игрокам</string>
     <string name="character_messages_no_character_in_party">В группе нет персонажей</string>
     <string name="character_label_race">Раса</string>
-    <string name="character_label_psychology">Психология (необязательно)</string>
+    <string name="character_label_psychology">Псих. особенности (необязательно)</string>
     <string name="character_label_status">Статус</string>
     <string name="character_messages_unassigned_characters_exist">Уже есть созданные GM незакрепленные персонажи, вы можете прикрепить одного из них себе.</string>
     <string name="character_secondary_text_basics">Имя, Раса, Мотивация</string>
@@ -663,7 +663,7 @@
     <string name="compendium_assurance">Файл нигде не сохраняется и никогда не покинет пределы вашего устройства.</string>
     <string name="compendium_messages_no_character_items">Нет элементов</string>
     <string name="compendium_title_trappings">Имущество</string>
-    <string name="compendium_visible_to_players_true">Видимо игрокам</string>
+    <string name="compendium_visible_to_players_true">Видно игрокам</string>
     <string name="diseases_label_permanent_effects">Постоянный</string>
     <string name="diseases_label_permanent_effects_optional">Постоянный (необязательно)</string>
     <string name="encounters_messages_no_encounters">Нет столкновений</string>
@@ -692,7 +692,7 @@
     <string name="drawer_rate_app">Оцените приложение</string>
     <string name="drawer_report_issue">Сообщить о проблеме</string>
     <string name="drawer_kofi">Поддержать меня на Ko-fi</string>
-    <string name="diseases_messages_visible_to_player_true">Видимо игрокам</string>
+    <string name="diseases_messages_visible_to_player_true">Видно игроку</string>
     <string name="drawer_wiki">Wiki</string>
     <string name="encounters_button_show_completed">Показать завершенные</string>
     <string name="journal_label_text">Текст</string>
