@@ -209,7 +209,7 @@
     <string name="common_ui_tip_feedback_form">У вас есть 3 минуты, чтобы оставить отзыв?</string>
     <string name="compendium_icon_add_compendium_item">Добавить предмет из компендиума</string>
     <string name="compendium_messages_no_items_in_compendium_subtext_player">Ваш GM должен сначала добавить их.</string>
-    <string name="compendium_messages_unchanged_items">%d существующих предметов не были изменены</string>
+    <string name="compendium_messages_unchanged_items">%d существующих элементов остается неизменными</string>
     <string name="compendium_title_blessings">Благословления</string>
     <string name="conditions_bleeding">Кровоточащий</string>
     <string name="conditions_broken">Сломленный</string>
