@@ -645,7 +645,7 @@
     <string name="character_title_well_being">Здоровье</string>
     <string name="combat_advantage_system_prompt">Выбрать правила преимущества</string>
     <string name="combat_advantage_unlimited">Неограничено</string>
-    <string name="combat_initiative_strategies_initiative_test">Противостоящая проверка инициативы</string>
+    <string name="combat_initiative_strategies_initiative_test">Встречная проверка инициативы</string>
     <string name="combat_messages_no_conditions">Нет состояний</string>
     <string name="combat_title_npc_combatants">НИПы</string>
     <string name="combat_messages_waiting_for_combat">Ожидание сражения…</string>
@@ -677,7 +677,7 @@
     <string name="races_wood_elf">Лесной эльф</string>
     <string name="races_ogre">Огр</string>
     <string name="settings_title">Настройки</string>
-    <string name="weapons_qualities_spread">Разброс</string>
+    <string name="weapons_qualities_spread">Разлет</string>
     <string name="weapons_qualities_slash">Рубящее</string>
     <string name="compendium_messages_no_items">В компендиуме нет элементов</string>
     <string name="compendium_messages_will_replace_existing_item">Заменит существующий элемент</string>
@@ -694,7 +694,7 @@
     <string name="drawer_kofi">Поддержать меня на Ko-fi</string>
     <string name="diseases_messages_visible_to_player_true">Видно игроку</string>
     <string name="drawer_wiki">Wiki</string>
-    <string name="encounters_button_show_completed">Показать завершенные</string>
+    <string name="encounters_button_show_completed">Показывать завершенные</string>
     <string name="journal_label_text">Текст</string>
     <string name="journal_label_gm_text">Текст (только для GM)</string>
     <string name="journal_title_new_entry">Новая журнальная запись</string>
@@ -760,7 +760,7 @@
     <string name="validation_positive_integer">Должно быть положительным числом без десятичных знаков</string>
     <string name="trappings_types_spell_ingredient">Ингредиенты для заклинания</string>
     <string name="weapons_equip_off_hand">Вторая рука</string>
-    <string name="weapons_equip_primary_hand">Основная рука</string>
+    <string name="weapons_equip_primary_hand">Ведущая рука</string>
     <string name="weapons_label_range">Дальность</string>
     <string name="weapons_label_qualities">Достоинства оружия</string>
     <string name="weapons_label_flaws">Недостатки оружия</string>
