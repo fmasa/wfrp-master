@@ -84,9 +84,13 @@ private fun TestResultCard(
                         )
 
                         if (testResult.isFumble) {
+                            append(" (")
                             append(stringResource(Str.tests_fumble))
+                            append(')')
                         } else if (testResult.isCritical) {
+                            append(" (")
                             append(stringResource(Str.tests_critical))
+                            append(')')
                         }
                     },
                 )
