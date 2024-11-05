@@ -1,2 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <plurals name="parties_player_count">
+        <item quantity="one">%d வீரர்</item>
+        <item quantity="other">%d வீரர்கள்</item>
+    </plurals>
+    <plurals name="duration_days">
+        <item quantity="one">%d நாள்</item>
+        <item quantity="other">%d நாட்கள்</item>
+    </plurals>
+    <plurals name="duration_hours">
+        <item quantity="one">%d மணி</item>
+        <item quantity="other">%d மணிநேரம்</item>
+    </plurals>
+    <plurals name="duration_minutes">
+        <item quantity="one">%d மணித்துளி</item>
+        <item quantity="other">%d நிமிடங்கள்</item>
+    </plurals>
+</resources>
