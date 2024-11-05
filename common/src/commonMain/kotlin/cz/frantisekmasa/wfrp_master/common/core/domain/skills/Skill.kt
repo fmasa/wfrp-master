@@ -40,7 +40,7 @@ data class Skill(
     override fun unlinkFromCompendium() = copy(compendiumId = null)
 
     companion object {
-        const val NAME_MAX_LENGTH = 50
+        const val NAME_MAX_LENGTH = CompendiumSkill.NAME_MAX_LENGTH
         val DESCRIPTION_MAX_LENGTH get() = CompendiumSkill.DESCRIPTION_MAX_LENGTH
         const val MIN_ADVANCES = 0
 

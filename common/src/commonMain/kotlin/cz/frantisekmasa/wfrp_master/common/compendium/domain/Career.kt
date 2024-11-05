@@ -6,6 +6,7 @@ import cz.frantisekmasa.wfrp_master.common.core.domain.SocialClass
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.Race
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.SocialStatus
 import cz.frantisekmasa.wfrp_master.common.core.serialization.UuidAsString
+import cz.frantisekmasa.wfrp_master.common.core.utils.duplicateName
 import dev.icerock.moko.parcelize.Parcelable
 import dev.icerock.moko.parcelize.Parcelize
 import kotlinx.serialization.Serializable
@@ -49,7 +50,7 @@ data class Career(
         )
     }
 
-    override fun duplicate(): Career = copy(id = uuid4(), name = duplicateName())
+    override fun duplicate(): Career = copy(id = uuid4(), name = duplicateName(name, NAME_MAX_LENGTH))
 
     override fun changeVisibility(isVisibleToPlayers: Boolean) = copy(isVisibleToPlayers = isVisibleToPlayers)
 
