@@ -1,6 +1,7 @@
 package cz.frantisekmasa.wfrp_master.common.npcs
 
 import cafe.adriel.voyager.core.model.ScreenModel
+import cz.frantisekmasa.wfrp_master.common.core.domain.character.Character
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.CharacterNotFound
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.CharacterRepository
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.CharacterType
@@ -49,7 +50,7 @@ class NpcsScreenModel(
             DuplicateCharacterRequest(
                 partyId = partyId,
                 characterId = npcId,
-                newName = duplicateName(originalName),
+                newName = duplicateName(originalName, Character.NAME_MAX_LENGTH),
             ),
         )
     }

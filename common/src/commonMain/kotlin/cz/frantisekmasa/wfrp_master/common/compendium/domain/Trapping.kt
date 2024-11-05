@@ -21,6 +21,7 @@ import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.WeaponQuality
 import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.WeaponRangeExpression
 import cz.frantisekmasa.wfrp_master.common.core.serialization.NullableSerializer
 import cz.frantisekmasa.wfrp_master.common.core.serialization.UuidAsString
+import cz.frantisekmasa.wfrp_master.common.core.utils.duplicateName
 import dev.gitlive.firebase.FirebaseClassDiscriminator
 import dev.icerock.moko.parcelize.Parcelable
 import dev.icerock.moko.parcelize.Parcelize
@@ -52,7 +53,7 @@ data class Trapping(
 
     override fun replace(original: Trapping) = copy(id = original.id)
 
-    override fun duplicate() = copy(id = uuid4(), name = duplicateName())
+    override fun duplicate() = copy(id = uuid4(), name = duplicateName(name, NAME_MAX_LENGTH))
 
     override fun changeVisibility(isVisibleToPlayers: Boolean) = copy(isVisibleToPlayers = isVisibleToPlayers)
 

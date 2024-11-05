@@ -58,7 +58,7 @@ data class Spell(
     override fun unlinkFromCompendium() = copy(compendiumId = null)
 
     companion object {
-        const val NAME_MAX_LENGTH = 50
+        const val NAME_MAX_LENGTH = CompendiumSpell.NAME_MAX_LENGTH
         const val RANGE_MAX_LENGTH = 50
         const val TARGET_MAX_LENGTH = 50
         const val DURATION_MAX_LENGTH = 50

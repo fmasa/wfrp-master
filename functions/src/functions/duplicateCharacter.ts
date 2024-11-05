@@ -14,7 +14,21 @@ type Character = {
     avatarUrl: string | null;
 }
 
+const isBlank = (str: string): boolean => {
+    return str.replace(/\s/g, '').length === 0;
+}
+
+const NAME_MAX_LENGTH = 50;
+
 export const duplicateCharacter = characterChange(RequestBody, async (body, character) => {
+    if (body.newName.length > NAME_MAX_LENGTH || isBlank(body.newName)) {
+        return {
+            status: "error",
+            error: 400,
+            message: `Invalid character name, it must be non-blank and less than ${NAME_MAX_LENGTH} characters long.`,
+        };
+    }
+
     const batch = firestore().batch();
     const newCharacterId = uuidv4();
     const newCharacter = character.parent.doc(newCharacterId);

@@ -3,6 +3,7 @@ package cz.frantisekmasa.wfrp_master.common.compendium.domain
 import androidx.compose.runtime.Immutable
 import com.benasher44.uuid.uuid4
 import cz.frantisekmasa.wfrp_master.common.core.serialization.UuidAsString
+import cz.frantisekmasa.wfrp_master.common.core.utils.duplicateName
 import dev.icerock.moko.parcelize.Parcelize
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -47,7 +48,7 @@ data class Spell(
 
     override fun replace(original: Spell) = copy(id = original.id)
 
-    override fun duplicate() = copy(id = uuid4(), name = duplicateName())
+    override fun duplicate() = copy(id = uuid4(), name = duplicateName(name, NAME_MAX_LENGTH))
 
     override fun changeVisibility(isVisibleToPlayers: Boolean) = copy(isVisibleToPlayers = isVisibleToPlayers)
 }

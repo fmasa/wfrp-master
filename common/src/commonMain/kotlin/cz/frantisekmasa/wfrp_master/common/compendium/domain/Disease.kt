@@ -4,6 +4,7 @@ import androidx.compose.runtime.Immutable
 import com.benasher44.uuid.uuid4
 import cz.frantisekmasa.wfrp_master.common.core.common.requireMaxLength
 import cz.frantisekmasa.wfrp_master.common.core.serialization.UuidAsString
+import cz.frantisekmasa.wfrp_master.common.core.utils.duplicateName
 import dev.icerock.moko.parcelize.Parcelize
 import kotlinx.serialization.Serializable
 
@@ -35,7 +36,7 @@ data class Disease(
     override fun duplicate() =
         copy(
             id = uuid4(),
-            name = duplicateName(),
+            name = duplicateName(name, NAME_MAX_LENGTH),
         )
 
     override fun replace(original: Disease) = copy(id = original.id)
