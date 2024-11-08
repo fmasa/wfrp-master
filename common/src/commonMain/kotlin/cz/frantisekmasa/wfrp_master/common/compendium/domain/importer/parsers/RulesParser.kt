@@ -6,6 +6,7 @@ import java.util.Locale
 
 class RulesParser(
     private val excludedBoxes: Set<String> = emptySet(),
+    private val excludedTables: Set<String> = emptySet(),
 ) {
     fun import(stream: TokenStream): Sequence<JournalEntry> =
         sequence {
@@ -68,6 +69,13 @@ class RulesParser(
 
                 if (
                     token is Token.BoxHeader &&
+                    excludedTables.any { it.equals(token.text.trim(), ignoreCase = true) }
+                ) {
+                    break
+                }
+
+                if (
+                    token is Token.BoxHeader &&
                     excludedBoxes.any { it.equals(token.text.trim(), ignoreCase = true) }
                 ) {
                     stream.dropWhile { it is Token.BoxContent }
@@ -92,7 +100,9 @@ class RulesParser(
     }
 
     private fun cleanupHeading(heading: String): String {
-        return heading.trim()
+        return heading
+            .replace("\t", " ")
+            .trim()
             .split(' ')
             .joinToString(" ") { word ->
                 if (NOT_CAPITALIZED_WORDS.any { it.equals(word, ignoreCase = true) }) {

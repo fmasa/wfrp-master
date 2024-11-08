@@ -244,40 +244,106 @@ object CoreRulebook :
 
     override fun importJournalEntries(document: Document): List<JournalEntry> {
         val lexer = TwoColumnPdfLexer(document, this)
-        return sequence {
+        return buildList {
             fun parseRules(
-                pages: IntRange,
+                pages: Iterable<Int>,
+                excludedTables: Set<String> = emptySet(),
                 excludedBoxes: Set<String> = emptySet(),
-                predicate: (JournalEntry) -> Boolean,
-            ) = RulesParser(excludedBoxes = excludedBoxes).import(
-                TokenStream(
-                    pages.asSequence()
-                        .flatMap { lexer.getTokens(it).toList() }
-                        .flatten(),
-                ),
-            ).filter(predicate)
+                commonParents: List<String>,
+                supportedParents: List<List<String>>,
+                tokenMapper: (Token) -> Token = { it },
+            ): List<JournalEntry> {
+                val entries =
+                    RulesParser(
+                        excludedBoxes = excludedBoxes,
+                        excludedTables = excludedTables,
+                    ).import(
+                        TokenStream(
+                            pages.asSequence()
+                                .flatMap { lexer.getTokens(it).toList() }
+                                .flatten()
+                                .map(tokenMapper),
+                        ),
+                    )
 
-            yieldAll(
+                return entries.filter { it.parents in supportedParents }
+                    .map { it.copy(parents = commonParents + it.parents) }
+                    .toList()
+            }
+
+            addAll(
                 parseRules(
                     167..169,
+                    commonParents = listOf("Rules"),
                     excludedBoxes = setOf("Complete Condition List"),
-                ) { it.parents == listOf("Conditions", "Master Condition List") },
+                    supportedParents =
+                        listOf(
+                            listOf("Conditions", "Master Condition List"),
+                        ),
+                ),
             )
-            yieldAll(
+            addAll(
                 parseRules(
                     189..190,
+                    commonParents = listOf("Rules"),
                     excludedBoxes = setOf("Stirring Nurgle’s Cauldron"),
-                ) { it.parents == listOf("Disease and Infection", "Symptoms") },
+                    supportedParents =
+                        listOf(
+                            listOf("Disease and Infection", "Symptoms"),
+                        ),
+                ),
             )
-            yieldAll(
+
+            val andDelimiter = Regex(" and ")
+            addAll(
                 parseRules(
-                    189..190,
-                    excludedBoxes = setOf("Stirring Nurgle’s Cauldron"),
-                ) { it.parents == listOf("Disease and Infection", "Symptoms") },
+                    291..300,
+                    commonParents = listOf("The Consumers’ Guide"),
+                    excludedTables =
+                        setOf(
+                            // This is actually Armour table, but since we are using two column lexer,
+                            // only half of the table heading is parsed
+                            "UR",
+                        ),
+                    excludedBoxes =
+                        setOf(
+                            "Options: Crafting Guilds",
+                        ),
+                    tokenMapper = { token ->
+                        if (token is Token.Heading3 && token.text == "Armour Flaws\n") {
+                            // This is incorrectly formatted in the PDF, see the bottom of page 300
+                            Token.Heading2(token.text)
+                        } else {
+                            token
+                        }
+                    },
+                    supportedParents =
+                        listOf(
+                            listOf("Craftsmanship", "Item Qualities"),
+                            listOf("Craftsmanship", "Item Flaws"),
+                            listOf("Weapons", "Melee Weapon Groups"),
+                            listOf("Weapons", "Ranged Weapon Groups"),
+                            listOf("Weapons", "Weapon Qualities"),
+                            listOf("Weapons", "Weapon Flaws"),
+                            listOf("Armour", "Armour Qualities"),
+                            listOf("Armour", "Armour Flaws"),
+                        ),
+                )
+                    .asSequence()
+                    // Ranged weapon group special rules are sometimes defined for multiple groups
+                    // See e.g. "Crossbows and Throwing" on page 297
+                    .flatMap {
+                        if (it.parents.last() != "Ranged Weapon Groups") {
+                            return@flatMap listOf(it)
+                        }
+
+                        it.name.split(andDelimiter).map { name ->
+                            it.copy(name = name.trim())
+                        }
+                    }
+                    .map { if (it.name == "Crossbows") it.copy(name = "Crossbow") else it }
             )
         }
-            .map { it.copy(parents = listOf("Rules") + it.parents) }
-            .toList()
     }
 
     override fun areSameStyle(
@@ -306,7 +372,7 @@ object CoreRulebook :
     ): Boolean {
         // Heading 3 may contain Italics
         return a.getFont().getName() == b.getFont().getName() &&
-            a.getFont().getName() == "ACaslonPro-Bold" &&
+            a.getFont().getName().endsWith("ACaslonPro-Bold") &&
             a.getFontSizeInPt() == b.getFontSizeInPt() &&
             a.getFontSizeInPt() == 12f
     }
@@ -342,7 +408,7 @@ object CoreRulebook :
             return Token.BoxHeader(textToken.text)
         }
 
-        if (textToken.fontName == "ACaslonPro-Bold" && textToken.fontSizePt == 12f) {
+        if (textToken.fontName.endsWith("ACaslonPro-Bold") && textToken.fontSizePt == 12f) {
             return Token.Heading3(textToken.text)
         }
 
