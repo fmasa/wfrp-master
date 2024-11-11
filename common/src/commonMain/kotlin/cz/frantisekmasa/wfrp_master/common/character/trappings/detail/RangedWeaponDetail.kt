@@ -9,6 +9,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import cz.frantisekmasa.wfrp_master.common.Str
+import cz.frantisekmasa.wfrp_master.common.compendium.journal.rules.TrappingJournal
 import cz.frantisekmasa.wfrp_master.common.core.domain.localizedName
 import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.DamageExpression
 import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.Encumbrance
@@ -29,6 +30,7 @@ fun RangedWeaponDetailBody(
     group: RangedWeaponGroup,
     qualities: Map<WeaponQuality, Int>,
     flaws: Map<WeaponFlaw, Int>,
+    trappingJournal: TrappingJournal,
     strengthBonus: Int?,
     description: String,
     encumbrance: Encumbrance,
@@ -45,7 +47,7 @@ fun RangedWeaponDetailBody(
                 )
 
                 if (characterTrapping != null) {
-                    ItemQualitiesAndFlaws(characterTrapping)
+                    ItemQualitiesAndFlaws(characterTrapping, trappingJournal)
                 }
 
                 EncumbranceBox(encumbrance, characterTrapping)
@@ -65,7 +67,7 @@ fun RangedWeaponDetailBody(
                     range.formatted(),
                 )
 
-                TrappingFeatures(qualities, flaws)
+                TrappingFeatures(qualities, flaws, trappingJournal.weaponQualities, trappingJournal.weaponFlaws)
 
                 if (characterTrapping != null && characterTrapping.quantity > 0) {
                     SingleLineTextValue(

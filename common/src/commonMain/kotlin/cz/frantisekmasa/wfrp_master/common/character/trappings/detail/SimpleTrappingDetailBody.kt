@@ -9,6 +9,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import cz.frantisekmasa.wfrp_master.common.Str
+import cz.frantisekmasa.wfrp_master.common.compendium.journal.rules.TrappingJournal
 import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.Encumbrance
 import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.InventoryItem
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
@@ -21,6 +22,7 @@ fun SimpleTrappingDetailBody(
     trappingType: String,
     encumbrance: Encumbrance,
     description: String,
+    trappingJournal: TrappingJournal,
     characterTrapping: InventoryItem? = null,
 ) {
     Column(Modifier.verticalScroll(rememberScrollState())) {
@@ -31,7 +33,7 @@ fun SimpleTrappingDetailBody(
                 SingleLineTextValue(stringResource(Str.trappings_label_type), trappingType)
 
                 if (characterTrapping != null) {
-                    ItemQualitiesAndFlaws(characterTrapping)
+                    ItemQualitiesAndFlaws(characterTrapping, trappingJournal)
                 }
 
                 EncumbranceBox(encumbrance, characterTrapping)

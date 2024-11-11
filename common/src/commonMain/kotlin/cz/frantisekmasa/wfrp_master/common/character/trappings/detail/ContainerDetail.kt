@@ -35,6 +35,7 @@ import cz.frantisekmasa.wfrp_master.common.Str
 import cz.frantisekmasa.wfrp_master.common.character.trappings.ChooseTrappingDialog
 import cz.frantisekmasa.wfrp_master.common.character.trappings.TrappingItem
 import cz.frantisekmasa.wfrp_master.common.character.trappings.add.AddTrappingScreen
+import cz.frantisekmasa.wfrp_master.common.compendium.journal.rules.TrappingJournal
 import cz.frantisekmasa.wfrp_master.common.core.domain.identifiers.CharacterId
 import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.InventoryItem
 import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.TrappingType
@@ -61,6 +62,7 @@ fun ContainerDetail(
     trapping: InventoryItem,
     container: TrappingType.Container,
     allItems: List<TrappingItem>?,
+    trappingJournal: TrappingJournal,
     onSaveRequest: suspend (InventoryItem) -> Unit,
     onOpenDetailRequest: (InventoryItem) -> Unit,
     onRemoveRequest: suspend (InventoryItem) -> Unit,
@@ -147,7 +149,7 @@ fun ContainerDetail(
 
                 SelectionContainer {
                     Column {
-                        ItemQualitiesAndFlaws(trapping)
+                        ItemQualitiesAndFlaws(trapping, trappingJournal)
 
                         EncumbranceBox(trapping)
 

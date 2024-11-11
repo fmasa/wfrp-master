@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import cafe.adriel.voyager.core.screen.Screen
@@ -21,7 +22,10 @@ import cz.frantisekmasa.wfrp_master.common.character.trappings.detail.RangedWeap
 import cz.frantisekmasa.wfrp_master.common.character.trappings.detail.SimpleTrappingDetailBody
 import cz.frantisekmasa.wfrp_master.common.character.trappings.detail.TrappingDescription
 import cz.frantisekmasa.wfrp_master.common.compendium.CompendiumItemDetailScreen
+import cz.frantisekmasa.wfrp_master.common.compendium.CompendiumItemDetailScreenState
+import cz.frantisekmasa.wfrp_master.common.compendium.domain.Trapping
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.TrappingType
+import cz.frantisekmasa.wfrp_master.common.compendium.journal.rules.TrappingJournal
 import cz.frantisekmasa.wfrp_master.common.core.domain.localizedName
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.PartyId
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
@@ -38,11 +42,13 @@ class CompendiumTrappingDetailScreen(
         val screenModel: TrappingCompendiumScreenModel = rememberScreenModel(arg = partyId)
 
         CompendiumItemDetailScreen(
-            id = trappingId,
+            itemFlow = remember { screenModel.getTrappingDetail(trappingId) },
             screenModel = screenModel,
             // Trapping details are by themself scrollable
             scrollable = false,
-            detail = { trapping ->
+            detail = { state ->
+                val trapping = state.item
+
                 val subheadBar: @Composable ColumnScope.() -> Unit = {
                     Column(
                         horizontalAlignment = Alignment.CenterHorizontally,
@@ -74,6 +80,7 @@ class CompendiumTrappingDetailScreen(
                             flaws = type.flaws,
                             encumbrance = trapping.encumbrance,
                             characterTrapping = null,
+                            trappingJournal = state.trappingJournal,
                         )
                     }
 
@@ -87,6 +94,7 @@ class CompendiumTrappingDetailScreen(
                             encumbrance = trapping.encumbrance,
                             description = trapping.description,
                             characterTrapping = null,
+                            trappingJournal = state.trappingJournal,
                         )
                     }
 
@@ -97,6 +105,7 @@ class CompendiumTrappingDetailScreen(
                             encumbrance = trapping.encumbrance,
                             description = trapping.description,
                             characterTrapping = null,
+                            trappingJournal = state.trappingJournal,
                         )
                     }
 
@@ -125,6 +134,7 @@ class CompendiumTrappingDetailScreen(
                             encumbrance = trapping.encumbrance,
                             description = trapping.description,
                             characterTrapping = null,
+                            trappingJournal = state.trappingJournal,
                         )
                     }
 
@@ -135,6 +145,7 @@ class CompendiumTrappingDetailScreen(
                             encumbrance = trapping.encumbrance,
                             description = trapping.description,
                             characterTrapping = null,
+                            trappingJournal = state.trappingJournal,
                         )
                     }
 
@@ -144,6 +155,7 @@ class CompendiumTrappingDetailScreen(
                             encumbrance = trapping.encumbrance,
                             description = trapping.description,
                             characterTrapping = null,
+                            trappingJournal = state.trappingJournal,
                         )
                     }
 
@@ -154,6 +166,7 @@ class CompendiumTrappingDetailScreen(
                             encumbrance = trapping.encumbrance,
                             description = trapping.description,
                             characterTrapping = null,
+                            trappingJournal = state.trappingJournal,
                         )
                     }
 
@@ -169,6 +182,7 @@ class CompendiumTrappingDetailScreen(
                             description = trapping.description,
                             encumbrance = trapping.encumbrance,
                             characterTrapping = null,
+                            trappingJournal = state.trappingJournal,
                         )
                     }
 
@@ -179,6 +193,7 @@ class CompendiumTrappingDetailScreen(
                             encumbrance = trapping.encumbrance,
                             description = trapping.description,
                             characterTrapping = null,
+                            trappingJournal = state.trappingJournal,
                         )
                     }
 
@@ -194,6 +209,7 @@ class CompendiumTrappingDetailScreen(
                             description = trapping.description,
                             encumbrance = trapping.encumbrance,
                             characterTrapping = null,
+                            trappingJournal = state.trappingJournal,
                         )
                     }
 
@@ -204,6 +220,7 @@ class CompendiumTrappingDetailScreen(
                             encumbrance = trapping.encumbrance,
                             description = trapping.description,
                             characterTrapping = null,
+                            trappingJournal = state.trappingJournal,
                         )
                     }
 
@@ -214,6 +231,7 @@ class CompendiumTrappingDetailScreen(
                             encumbrance = trapping.encumbrance,
                             description = trapping.description,
                             characterTrapping = null,
+                            trappingJournal = state.trappingJournal,
                         )
                     }
 
@@ -224,6 +242,7 @@ class CompendiumTrappingDetailScreen(
                             encumbrance = trapping.encumbrance,
                             description = trapping.description,
                             characterTrapping = null,
+                            trappingJournal = state.trappingJournal,
                         )
                     }
 
@@ -234,6 +253,7 @@ class CompendiumTrappingDetailScreen(
                             encumbrance = trapping.encumbrance,
                             description = trapping.description,
                             characterTrapping = null,
+                            trappingJournal = state.trappingJournal,
                         )
                     }
                 }
@@ -247,3 +267,8 @@ class CompendiumTrappingDetailScreen(
         }
     }
 }
+
+data class CompendiumTrappingDetailScreenState(
+    override val item: Trapping,
+    val trappingJournal: TrappingJournal,
+) : CompendiumItemDetailScreenState<Trapping>
