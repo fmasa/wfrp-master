@@ -11,6 +11,8 @@ import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.ArmourFlaw
 import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.ArmourQuality
 import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.ItemFlaw
 import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.ItemQuality
+import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.MeleeWeaponGroup
+import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.RangedWeaponGroup
 import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.WeaponFlaw
 import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.WeaponQuality
 import cz.frantisekmasa.wfrp_master.common.core.utils.right
@@ -46,6 +48,8 @@ class TrappingJournalProvider(
                         translator.translate(Str.journal_folder_armour_flaws),
                         translator.translate(Str.journal_folder_armour_qualities),
                         translator.translate(Str.journal_folder_armour_flaws),
+                        translator.translate(Str.journal_folder_weapon_melee_groups),
+                        translator.translate(Str.journal_folder_weapon_ranged_groups),
                     ),
                 ).map { entries ->
                     val journalEntries =
@@ -96,6 +100,20 @@ class TrappingJournalProvider(
                                 Str.journal_folder_armour_flaws,
                                 journalEntries,
                             ),
+                        meleeWeaponGroups =
+                            buildEntries(
+                                partyId,
+                                translator,
+                                Str.journal_folder_weapon_melee_groups,
+                                journalEntries,
+                            ),
+                        rangedWeaponGroups =
+                            buildEntries(
+                                partyId,
+                                translator,
+                                Str.journal_folder_weapon_ranged_groups,
+                                journalEntries,
+                            ),
                     )
                 }
             }
@@ -137,6 +155,8 @@ data class TrappingJournal(
     val weaponFlaws: ImmutableMap<WeaponFlaw, Entry>,
     val armourQualities: ImmutableMap<ArmourQuality, Entry>,
     val armourFlaws: ImmutableMap<ArmourFlaw, Entry>,
+    val meleeWeaponGroups: ImmutableMap<MeleeWeaponGroup, Entry>,
+    val rangedWeaponGroups: ImmutableMap<RangedWeaponGroup, Entry>,
 ) {
     data class Entry(
         val partyId: PartyId,
