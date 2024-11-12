@@ -26,6 +26,7 @@ data class TalentImport(
         Talent(
             id = uuid4(),
             name = name,
+            tests = associatedTests,
             maxTimesTaken = maxTimesTaken,
             description = description,
             isVisibleToPlayers = isVisibleToPlayers,
