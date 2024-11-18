@@ -48,6 +48,7 @@ import cz.frantisekmasa.wfrp_master.common.compendium.journal.Journal
 import cz.frantisekmasa.wfrp_master.common.compendium.journal.JournalScreenModel
 import cz.frantisekmasa.wfrp_master.common.compendium.journal.rules.ConditionsJournalProvider
 import cz.frantisekmasa.wfrp_master.common.compendium.journal.rules.DiseaseSymptomProvider
+import cz.frantisekmasa.wfrp_master.common.compendium.journal.rules.TrappingJournalProvider
 import cz.frantisekmasa.wfrp_master.common.compendium.miracle.MiracleCompendiumScreenModel
 import cz.frantisekmasa.wfrp_master.common.compendium.skill.SkillCompendiumScreenModel
 import cz.frantisekmasa.wfrp_master.common.compendium.spell.SpellCompendiumScreenModel
@@ -170,6 +171,7 @@ val appModule =
         bindSingleton<Journal> { FirestoreJournal(instance()) }
         bindSingleton { ConditionsJournalProvider(instance()) }
         bindSingleton { DiseaseSymptomProvider(instance(), instance(), instance()) }
+        bindSingleton { TrappingJournalProvider(instance(), instance(), instance()) }
 
         bindSingleton<Compendium<Disease>> {
             FirestoreCompendium(Schema.Compendium.DISEASES, instance(), serializer())
@@ -201,6 +203,7 @@ val appModule =
         bindFactory { characterId: CharacterId ->
             CharacterTrappingsDetailScreenModel(
                 characterId,
+                instance(),
                 instance(),
                 instance(),
                 instance(),
@@ -361,7 +364,7 @@ val appModule =
             TraitCompendiumScreenModel(partyId, instance(), instance(), instance(), instance(), instance())
         }
         bindFactory { partyId: PartyId ->
-            TrappingCompendiumScreenModel(partyId, instance(), instance(), instance(), instance())
+            TrappingCompendiumScreenModel(partyId, instance(), instance(), instance(), instance(), instance())
         }
         bindFactory { partyId: PartyId ->
             DiseaseCompendiumScreenModel(partyId, instance(), instance(), instance(), instance(), instance())

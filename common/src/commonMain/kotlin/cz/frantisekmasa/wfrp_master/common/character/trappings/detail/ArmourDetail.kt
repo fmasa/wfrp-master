@@ -11,6 +11,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import cz.frantisekmasa.wfrp_master.common.Str
 import cz.frantisekmasa.wfrp_master.common.character.trappings.TrappingTypeOption
+import cz.frantisekmasa.wfrp_master.common.compendium.journal.rules.TrappingJournal
 import cz.frantisekmasa.wfrp_master.common.core.domain.HitLocation
 import cz.frantisekmasa.wfrp_master.common.core.domain.localizedName
 import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.ArmourFlaw
@@ -29,6 +30,7 @@ fun ArmourDetailBody(
     points: ArmourPoints,
     qualities: Map<ArmourQuality, Int>,
     flaws: Map<ArmourFlaw, Int>,
+    trappingJournal: TrappingJournal,
     encumbrance: Encumbrance,
     description: String,
     characterTrapping: InventoryItem?,
@@ -44,7 +46,7 @@ fun ArmourDetailBody(
                 )
 
                 if (characterTrapping != null) {
-                    ItemQualitiesAndFlaws(characterTrapping)
+                    ItemQualitiesAndFlaws(characterTrapping, trappingJournal)
                 }
 
                 EncumbranceBox(encumbrance, characterTrapping)
@@ -67,7 +69,7 @@ fun ArmourDetailBody(
                     )
                 }
 
-                TrappingFeatures(qualities, flaws)
+                TrappingFeatures(qualities, flaws, trappingJournal.armourQualities, trappingJournal.armourFlaws)
                 TrappingDescription(description)
             }
         }

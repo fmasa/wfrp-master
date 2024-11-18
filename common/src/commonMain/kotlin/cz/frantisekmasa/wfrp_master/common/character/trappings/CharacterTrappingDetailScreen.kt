@@ -11,6 +11,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Edit
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -25,6 +26,7 @@ import cz.frantisekmasa.wfrp_master.common.character.trappings.detail.QuantityBa
 import cz.frantisekmasa.wfrp_master.common.character.trappings.detail.RangedWeaponDetailBody
 import cz.frantisekmasa.wfrp_master.common.character.trappings.detail.SimpleTrappingDetailBody
 import cz.frantisekmasa.wfrp_master.common.character.trappings.detail.WornBar
+import cz.frantisekmasa.wfrp_master.common.compendium.journal.rules.TrappingJournal
 import cz.frantisekmasa.wfrp_master.common.compendium.trapping.CompendiumTrappingDetailScreen
 import cz.frantisekmasa.wfrp_master.common.core.domain.identifiers.CharacterId
 import cz.frantisekmasa.wfrp_master.common.core.domain.localizedName
@@ -44,7 +46,7 @@ import dev.icerock.moko.resources.compose.stringResource
 
 class CharacterTrappingDetailScreen(
     characterId: CharacterId,
-    itemId: InventoryItemId,
+    private val itemId: InventoryItemId,
 ) : CharacterItemDetailScreen(characterId, itemId) {
     override val key =
         "parties/${characterId.partyId}/characters/${characterId.id}/trappings/$itemId"
@@ -53,8 +55,12 @@ class CharacterTrappingDetailScreen(
     override fun Content() {
         val screenModel: CharacterTrappingsDetailScreenModel = rememberScreenModel(arg = characterId)
 
-        Detail(screenModel) { trapping, isGameMaster ->
+        Detail(
+            remember { screenModel.getTrappingDetail(itemId) },
+            isGameMasterFlow = screenModel.isGameMaster,
+        ) { state, isGameMaster ->
             val (dialogOpened, setDialogOpened) = rememberSaveable { mutableStateOf(false) }
+            val trapping = state.trapping
 
             if (dialogOpened) {
                 EditTrappingDialog(
@@ -74,6 +80,7 @@ class CharacterTrappingDetailScreen(
                 onOpenDetailRequest = {
                     navigation.navigate(CharacterTrappingDetailScreen(characterId, it.id))
                 },
+                trappingJournal = state.trappingJournal,
             )
         }
     }
@@ -83,6 +90,7 @@ class CharacterTrappingDetailScreen(
 private fun TrappingDetail(
     characterId: CharacterId,
     trapping: InventoryItem,
+    trappingJournal: TrappingJournal,
     screenModel: CharacterTrappingsDetailScreenModel,
     isGameMaster: Boolean,
     onEditRequest: () -> Unit,
@@ -169,6 +177,7 @@ private fun TrappingDetail(
                     flaws = type.flaws,
                     encumbrance = trapping.encumbrance,
                     characterTrapping = trapping,
+                    trappingJournal = trappingJournal,
                 )
             }
             is TrappingType.Armour -> {
@@ -181,6 +190,7 @@ private fun TrappingDetail(
                     encumbrance = trapping.encumbrance,
                     description = trapping.description,
                     characterTrapping = trapping,
+                    trappingJournal = trappingJournal,
                 )
             }
             is TrappingType.SimpleTrapping -> {
@@ -190,6 +200,7 @@ private fun TrappingDetail(
                     encumbrance = trapping.encumbrance,
                     description = trapping.description,
                     characterTrapping = trapping,
+                    trappingJournal = trappingJournal,
                 )
             }
             null -> {
@@ -199,6 +210,7 @@ private fun TrappingDetail(
                     encumbrance = trapping.encumbrance,
                     description = trapping.description,
                     characterTrapping = trapping,
+                    trappingJournal = trappingJournal,
                 )
             }
             is TrappingType.Container -> {
@@ -215,6 +227,7 @@ private fun TrappingDetail(
                     onAddToContainerRequest = {
                         screenModel.addToContainer(trapping = it, container = trapping)
                     },
+                    trappingJournal = trappingJournal,
                 )
             }
             is TrappingType.ClothingOrAccessory -> {
@@ -224,6 +237,7 @@ private fun TrappingDetail(
                     encumbrance = trapping.encumbrance,
                     description = trapping.description,
                     characterTrapping = trapping,
+                    trappingJournal = trappingJournal,
                 )
             }
             is TrappingType.MeleeWeapon -> {
@@ -238,6 +252,7 @@ private fun TrappingDetail(
                     description = trapping.description,
                     encumbrance = trapping.encumbrance,
                     characterTrapping = trapping,
+                    trappingJournal = trappingJournal,
                 )
             }
             is TrappingType.Prosthetic -> {
@@ -247,6 +262,7 @@ private fun TrappingDetail(
                     encumbrance = trapping.encumbrance,
                     description = trapping.description,
                     characterTrapping = trapping,
+                    trappingJournal = trappingJournal,
                 )
             }
             is TrappingType.RangedWeapon -> {
@@ -261,8 +277,14 @@ private fun TrappingDetail(
                     description = trapping.description,
                     encumbrance = trapping.encumbrance,
                     characterTrapping = trapping,
+                    trappingJournal = trappingJournal,
                 )
             }
         }
     }
 }
+
+data class CharacterTrappingDetailScreenState(
+    val trapping: InventoryItem,
+    val trappingJournal: TrappingJournal,
+)

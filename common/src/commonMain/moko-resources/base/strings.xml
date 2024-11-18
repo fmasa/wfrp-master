@@ -418,6 +418,16 @@
 
     <string name="journal_folder_symptoms">Rules / Disease and Infection / Symptoms</string>
     <string name="journal_folder_conditions">Rules / Conditions / Master Condition List</string>
+    <string name="journal_folder_item_qualities">The Consumers’ Guide / Craftsmanship / Item Qualities</string>
+    <string name="journal_folder_item_flaws">The Consumers’ Guide / Craftsmanship / Item Flaws</string>
+    <string name="journal_folder_armour_qualities">The Consumers’ Guide / Armour / Armour Qualities</string>
+    <string name="journal_folder_armour_qualities">The Consumers’ Guide / Armour / Armour Qualities</string>
+    <string name="journal_folder_armour_flaws">The Consumers’ Guide / Armour / Armour Flaws</string>
+    <string name="journal_folder_armour_flaws">The Consumers’ Guide / Armour / Armour Flaws</string>
+    <string name="journal_folder_weapon_qualities">The Consumers’ Guide / Weapons / Weapon Qualities</string>
+    <string name="journal_folder_weapon_flaws">The Consumers’ Guide / Weapons / Weapon Flaws</string>
+    <string name="journal_folder_weapon_melee_groups">The Consumers’ Guide / Weapons / Melee Weapon Groups</string>
+    <string name="journal_folder_weapon_ranged_groups">The Consumers’ Guide / Weapons / Ranged Weapon Groups</string>
 
     <string name="messages_authentication_google_sign_in_failed">Google sign-in failed</string>
     <string name="messages_avatar_changed">Avatar was changed</string>

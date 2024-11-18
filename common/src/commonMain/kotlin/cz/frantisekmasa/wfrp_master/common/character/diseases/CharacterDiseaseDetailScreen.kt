@@ -172,7 +172,6 @@ class CharacterDiseaseDetailScreen(characterId: CharacterId, private val disease
                                 symptoms = state.symptoms,
                                 permanentEffects = disease.permanentEffects,
                                 description = disease.description,
-                                partyId = characterId.partyId,
                             )
                         }
                     }

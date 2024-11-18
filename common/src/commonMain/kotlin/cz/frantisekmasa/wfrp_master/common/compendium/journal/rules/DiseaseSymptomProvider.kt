@@ -52,6 +52,7 @@ class DiseaseSymptomProvider(
                         it,
                         symptomsByName[comparableSymptomName(it)]?.id,
                         (JOURNAL_PATH + listOf(it)).joinToString(" ${JournalEntry.PARENT_SEPARATOR} "),
+                        partyId,
                     )
                 }.toImmutableList()
         }

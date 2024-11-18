@@ -1,5 +1,7 @@
 package cz.frantisekmasa.wfrp_master.common.character.trappings
 
+import com.benasher44.uuid.Uuid
+import cz.frantisekmasa.wfrp_master.common.compendium.journal.rules.TrappingJournalProvider
 import cz.frantisekmasa.wfrp_master.common.core.CharacterItemScreenModel
 import cz.frantisekmasa.wfrp_master.common.core.auth.UserProvider
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.CharacterRepository
@@ -11,6 +13,7 @@ import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.TrappingType
 import cz.frantisekmasa.wfrp_master.common.core.logging.Reporting
 import cz.frantisekmasa.wfrp_master.common.core.utils.right
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 
@@ -21,6 +24,7 @@ class CharacterTrappingsDetailScreenModel(
     private val inventoryItems: InventoryItemRepository,
     characters: CharacterRepository,
     private val trappingSaver: TrappingSaver,
+    private val trappingJournalProvider: TrappingJournalProvider,
 ) : CharacterItemScreenModel<InventoryItem>(
         characterId,
         inventoryItems,
@@ -67,6 +71,12 @@ class CharacterTrappingsDetailScreenModel(
         Reporting.record { trappingRemovedFromContainer() }
         inventoryItems.save(characterId, trapping.copy(containerId = null))
     }
+
+    fun getTrappingDetail(trappingId: Uuid) =
+        getItem(trappingId)
+            .combine(trappingJournalProvider.getTrappingJournal(characterId.partyId)) { trappingOrError, trappingJournal ->
+                trappingOrError.map { CharacterTrappingDetailScreenState(it, trappingJournal) }
+            }
 
     /**
      * Returns true when trapping was added to container and false otherwise

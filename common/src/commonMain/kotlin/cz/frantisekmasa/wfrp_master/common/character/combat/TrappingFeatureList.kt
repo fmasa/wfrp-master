@@ -47,16 +47,5 @@ fun <Q : Quality, F : Flaw> TrappingFeatureList(
 @Composable
 @Stable
 fun <T : TrappingFeature> translateFeatures(features: Map<T, Rating>): List<String> {
-    return features.map { (feature, rating) ->
-        val name = feature.localizedName
-
-        if (!feature.hasRating) {
-            return@map name
-        }
-
-        val ratingUnit = feature.ratingUnit
-        val formattedRating = if (ratingUnit != null) "($rating$ratingUnit)" else rating.toString()
-
-        "$name $formattedRating"
-    }
+    return features.map { (feature, rating) -> feature.formatValue(rating) }
 }

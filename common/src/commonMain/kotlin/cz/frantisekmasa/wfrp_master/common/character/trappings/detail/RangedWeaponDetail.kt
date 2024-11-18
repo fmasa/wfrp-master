@@ -9,6 +9,8 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import cz.frantisekmasa.wfrp_master.common.Str
+import cz.frantisekmasa.wfrp_master.common.character.trappings.detail.journal.NamedEnumJournalItem
+import cz.frantisekmasa.wfrp_master.common.compendium.journal.rules.TrappingJournal
 import cz.frantisekmasa.wfrp_master.common.core.domain.localizedName
 import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.DamageExpression
 import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.Encumbrance
@@ -18,6 +20,7 @@ import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.WeaponFlaw
 import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.WeaponQuality
 import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.WeaponRangeExpression
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
+import cz.frantisekmasa.wfrp_master.common.core.ui.text.JournalItemValue
 import cz.frantisekmasa.wfrp_master.common.core.ui.text.SingleLineTextValue
 import dev.icerock.moko.resources.compose.stringResource
 
@@ -29,6 +32,7 @@ fun RangedWeaponDetailBody(
     group: RangedWeaponGroup,
     qualities: Map<WeaponQuality, Int>,
     flaws: Map<WeaponFlaw, Int>,
+    trappingJournal: TrappingJournal,
     strengthBonus: Int?,
     description: String,
     encumbrance: Encumbrance,
@@ -45,7 +49,7 @@ fun RangedWeaponDetailBody(
                 )
 
                 if (characterTrapping != null) {
-                    ItemQualitiesAndFlaws(characterTrapping)
+                    ItemQualitiesAndFlaws(characterTrapping, trappingJournal)
                 }
 
                 EncumbranceBox(encumbrance, characterTrapping)
@@ -55,17 +59,25 @@ fun RangedWeaponDetailBody(
                     damageValue(damage, strengthBonus = strengthBonus),
                 )
 
-                SingleLineTextValue(
-                    stringResource(Str.weapons_label_group),
-                    group.localizedName,
-                )
+                if (group.hasSpecialRules) {
+                    JournalItemValue(
+                        label = stringResource(Str.weapons_label_group),
+                        item = NamedEnumJournalItem(group, trappingJournal.rangedWeaponGroups.getValue(group)),
+                        itemType = "ranged_weapon_group",
+                    )
+                } else {
+                    SingleLineTextValue(
+                        stringResource(Str.weapons_label_group),
+                        group.localizedName,
+                    )
+                }
 
                 SingleLineTextValue(
                     stringResource(Str.weapons_label_range),
                     range.formatted(),
                 )
 
-                TrappingFeatures(qualities, flaws)
+                TrappingFeatures(qualities, flaws, trappingJournal.weaponQualities, trappingJournal.weaponFlaws)
 
                 if (characterTrapping != null && characterTrapping.quantity > 0) {
                     SingleLineTextValue(

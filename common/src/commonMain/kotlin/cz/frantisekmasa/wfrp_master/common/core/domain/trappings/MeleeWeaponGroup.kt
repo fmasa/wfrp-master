@@ -9,13 +9,18 @@ import dev.icerock.moko.resources.StringResource
 
 @Parcelize
 @Immutable
-enum class MeleeWeaponGroup : NamedEnum, Parcelable {
+enum class MeleeWeaponGroup(
+    /**
+     * If true, there will be a link to Journal entry with special rules for this group.
+     */
+    val hasSpecialRules: Boolean = false,
+) : NamedEnum, Parcelable {
     BASIC,
     BRAWLING,
-    CAVALRY,
+    CAVALRY(hasSpecialRules = true),
     FENCING,
-    FLAIL,
-    PARRY,
+    FLAIL(hasSpecialRules = true),
+    PARRY(hasSpecialRules = true),
     POLEARM,
     TWO_HANDED,
     ;

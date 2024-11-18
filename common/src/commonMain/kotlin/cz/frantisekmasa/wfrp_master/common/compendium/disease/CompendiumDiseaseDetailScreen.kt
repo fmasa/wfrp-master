@@ -58,7 +58,6 @@ class CompendiumDiseaseDetailScreen(
             symptoms = state.symptoms,
             permanentEffects = state.item.permanentEffects,
             description = state.item.description,
-            partyId = partyId,
         )
     }
 }

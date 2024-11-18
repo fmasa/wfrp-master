@@ -10,6 +10,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import cz.frantisekmasa.wfrp_master.common.Str
+import cz.frantisekmasa.wfrp_master.common.compendium.journal.rules.TrappingJournal
 import cz.frantisekmasa.wfrp_master.common.core.domain.localizedName
 import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.AmmunitionRangeExpression
 import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.DamageExpression
@@ -31,6 +32,7 @@ fun AmmunitionDetailBody(
     description: String,
     qualities: Map<WeaponQuality, Int>,
     flaws: Map<WeaponFlaw, Int>,
+    trappingJournal: TrappingJournal,
     encumbrance: Encumbrance,
     characterTrapping: InventoryItem?,
 ) {
@@ -45,7 +47,7 @@ fun AmmunitionDetailBody(
                 )
 
                 if (characterTrapping != null) {
-                    ItemQualitiesAndFlaws(characterTrapping)
+                    ItemQualitiesAndFlaws(characterTrapping, trappingJournal)
                 }
 
                 EncumbranceBox(
@@ -65,7 +67,7 @@ fun AmmunitionDetailBody(
                     },
                 )
 
-                TrappingFeatures(qualities, flaws)
+                TrappingFeatures(qualities, flaws, trappingJournal.weaponQualities, trappingJournal.weaponFlaws)
 
                 TrappingDescription(description)
             }

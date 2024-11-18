@@ -9,15 +9,20 @@ import dev.icerock.moko.resources.StringResource
 
 @Parcelize
 @Immutable
-enum class RangedWeaponGroup() : NamedEnum, Parcelable {
-    BLACKPOWDER,
+enum class RangedWeaponGroup(
+    /**
+     * If true, there will be a link to Journal entry with special rules for this group.
+     */
+    val hasSpecialRules: Boolean = false,
+) : NamedEnum, Parcelable {
+    BLACKPOWDER(hasSpecialRules = true),
     BOW,
-    CROSSBOW,
+    CROSSBOW(hasSpecialRules = true),
     ENTANGLING,
-    ENGINEERING,
-    EXPLOSIVES,
+    ENGINEERING(hasSpecialRules = true),
+    EXPLOSIVES(hasSpecialRules = true),
     SLING,
-    THROWING,
+    THROWING(hasSpecialRules = true),
     ;
 
     override val translatableName: StringResource get() =

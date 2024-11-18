@@ -1,15 +1,19 @@
 package cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.books
 
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.Career
+import cz.frantisekmasa.wfrp_master.common.compendium.domain.JournalEntry
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.Talent
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.Trapping
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.TrappingType.MeleeWeapon
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.parsers.CareerParser
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.parsers.Document
+import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.parsers.RulesParser
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.parsers.TalentParser
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.parsers.TextPosition
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.parsers.TextToken
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.parsers.Token
+import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.parsers.TokenStream
+import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.parsers.TwoColumnPdfLexer
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.parsers.trappings.AmmunitionParser
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.parsers.trappings.BasicTrappingsParser
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.parsers.trappings.BasicTrappingsParser.Column
@@ -17,12 +21,15 @@ import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.parsers.tr
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.parsers.trappings.RangedWeaponsParser
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.parsers.trappings.description.ListDescriptionParser
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.sources.CareerSource
+import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.sources.JournalEntrySource
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.sources.TalentSource
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.sources.TrappingSource
 import cz.frantisekmasa.wfrp_master.common.core.domain.SocialClass
 import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.MeleeWeaponGroup
+import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.WeaponFlaw
+import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.WeaponQuality
 
-object UpInArms : Book, CareerSource, TalentSource, TrappingSource {
+object UpInArms : Book, CareerSource, TalentSource, TrappingSource, JournalEntrySource {
     override val name = "Up in Arms"
     override val tokensSorted: Boolean = false
 
@@ -80,6 +87,78 @@ object UpInArms : Book, CareerSource, TalentSource, TrappingSource {
                 it
             }
         }.toList()
+    }
+
+    override fun importJournalEntries(document: Document): List<JournalEntry> {
+        val tokenStream =
+            TokenStream(
+                (89..90)
+                    .flatMap { page ->
+                        TwoColumnPdfLexer(document, UpInArms).getTokens(page)
+                            .toList()
+                            .asSequence()
+                            .flatten()
+                            .map {
+                                when (it) {
+                                    is Token.BoxHeader -> Token.Heading2(it.text)
+                                    else -> it
+                                }
+                            }
+                    },
+            )
+
+        return RulesParser().import(
+            tokenStream,
+            // Up in Arms qualities are structured as H1 -> H2 -> bold list items
+            headings =
+                RulesParser.HEADING_STRUCTURE.take(2) + { token ->
+                    val text = token.text
+                    token is Token.BoldPart &&
+                        (isEnumJournalEntry<WeaponQuality>(text) || isEnumJournalEntry<WeaponFlaw>(text))
+                },
+        )
+            .map {
+                it.copy(
+                    name =
+                        it.name
+                            .replace("rating", "Rating")
+                            .replace("xa", "XA")
+                            .trim(':'),
+                )
+            }
+            .mapNotNull { entry ->
+                // We intentionally store this in Consumer's Guide chapter, because we are looking
+                // up Qualities & Flaws in that Rules chapter and this allows replacement of entries
+                // imported from Core Rulebook
+                when {
+                    isEnumJournalEntry<WeaponQuality>(entry.name) ->
+                        entry.copy(
+                            parents =
+                                listOf(
+                                    "The Consumers’ Guide",
+                                    "Weapons",
+                                    "Weapon Qualities",
+                                ),
+                        )
+
+                    isEnumJournalEntry<WeaponFlaw>(entry.name) ->
+                        entry.copy(
+                            parents =
+                                listOf(
+                                    "The Consumers’ Guide",
+                                    "Weapons",
+                                    "Weapon Flaws",
+                                ),
+                        )
+
+                    else -> null
+                }
+            }
+            .toList()
+    }
+
+    private inline fun <reified T : Enum<T>> isEnumJournalEntry(name: String): Boolean {
+        return enumValues<T>().any { name.startsWith(it.name, ignoreCase = true) }
     }
 
     override fun areSameStyle(
