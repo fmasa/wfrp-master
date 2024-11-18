@@ -4,7 +4,7 @@ import arrow.core.NonEmptyList
 import arrow.core.nonEmptyListOf
 
 object MarkdownBuilder {
-    private const val BULLET_POINT_PLACEHOLDER = "<bullet-point>"
+    private const val BULLET_POINT_PLACEHOLDER = "•"
 
     fun buildMarkdown(tokens: List<Token.ParagraphToken>): String {
         val flattened = mutableListOf<NonEmptyList<Token.ParagraphToken>>()

@@ -7,4 +7,5 @@ object TextCleaner {
             .replace("( ", "(")
             .replace(" )", ")")
             .replace(" ,", ",")
+            .replace("\t", " ")
 }
