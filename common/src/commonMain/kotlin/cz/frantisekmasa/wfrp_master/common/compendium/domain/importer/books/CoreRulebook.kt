@@ -284,7 +284,7 @@ object CoreRulebook :
             )
             addAll(
                 parseRules(
-                    189..190,
+                    186..190,
                     commonParents = listOf("Rules"),
                     excludedBoxes = setOf("Stirring Nurgle’s Cauldron"),
                     supportedParents =
