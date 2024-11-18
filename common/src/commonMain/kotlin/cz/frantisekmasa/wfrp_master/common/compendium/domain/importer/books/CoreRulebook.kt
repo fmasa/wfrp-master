@@ -379,15 +379,15 @@ object CoreRulebook :
     }
 
     override fun resolveToken(textToken: TextToken): Token? {
-        if (textToken.fontName == "CaslonAntique" && textToken.fontSizePt == 15f) {
+        if (textToken.fontName.endsWith("CaslonAntique") && textToken.fontSizePt == 15f) {
             return Token.BoxHeader(textToken.text)
         }
 
-        if (textToken.fontName == "CaslonAntique" && textToken.fontSizePt == 10f) {
+        if (textToken.fontName.endsWith("CaslonAntique") && textToken.fontSizePt == 10f) {
             return Token.BoxContent(textToken.text)
         }
 
-        if (textToken.fontName == "CaslonAntique,Bold") {
+        if (textToken.fontName.endsWith("CaslonAntique,Bold")) {
             if (textToken.fontSizePt == 19f) {
                 return Token.Heading1(textToken.text)
             }
@@ -401,7 +401,7 @@ object CoreRulebook :
             return Token.CrossIcon
         }
 
-        if (textToken.fontName == "CaslonAntique-Bold-SC700") {
+        if (textToken.fontName.endsWith("CaslonAntique-Bold-SC700")) {
             if (textToken.fontSizePt == 12f || textToken.fontSizePt == 18f) {
                 return Token.Heading2(textToken.text)
             }
@@ -413,16 +413,16 @@ object CoreRulebook :
             return Token.Heading3(textToken.text)
         }
 
-        if (textToken.fontName.endsWith("HPBTHP+ACaslonPro-Regular") && textToken.text.startsWith("•")) {
+        if (textToken.text.startsWith("•")) {
             return Token.BulletPoint
         }
 
         if (textToken.fontSizePt == 9.0f) {
-            if (textToken.fontName == "ACaslonPro-Bold") {
+            if (textToken.fontName.endsWith("ACaslonPro-Bold")) {
                 return Token.BoldPart(textToken.text)
             }
 
-            if (textToken.fontName == "ACaslonPro-Regular") {
+            if (textToken.fontName.endsWith("ACaslonPro-Regular")) {
                 if (heightEquals(textToken.height, 6.39f)) {
                     return Token.ItalicsPart(textToken.text)
                 }
