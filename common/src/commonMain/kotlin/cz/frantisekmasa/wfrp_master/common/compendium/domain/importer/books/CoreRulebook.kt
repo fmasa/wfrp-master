@@ -342,6 +342,7 @@ object CoreRulebook :
                         }
                     }
                     .map { if (it.name == "Crossbows") it.copy(name = "Crossbow") else it }
+                    .map { it.copy(name = it.name.replace("(rating)", "(Rating)")) },
             )
         }
     }

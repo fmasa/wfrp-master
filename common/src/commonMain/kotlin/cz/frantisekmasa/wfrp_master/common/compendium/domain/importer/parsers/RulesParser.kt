@@ -8,34 +8,38 @@ class RulesParser(
     private val excludedBoxes: Set<String> = emptySet(),
     private val excludedTables: Set<String> = emptySet(),
 ) {
-    fun import(stream: TokenStream): Sequence<JournalEntry> =
+    fun import(
+        stream: TokenStream,
+        headings: List<(Token) -> Boolean> = HEADING_STRUCTURE,
+    ): Sequence<JournalEntry> =
         sequence {
-            stream.dropUntil(HEADING_STRUCTURE[0])
+            stream.dropUntil(headings[0])
 
-            yieldAll(parseSection(stream, parents = emptyList()))
+            yieldAll(parseSection(stream, parents = emptyList(), headings))
         }
 
     private fun parseSection(
         stream: TokenStream,
         parents: List<String>,
+        headings: List<(Token) -> Boolean>,
     ): Sequence<JournalEntry> =
         sequence {
             val depth = parents.size
-            val isCurrentLevelHeading = HEADING_STRUCTURE[depth]
-            val isChildHeading = HEADING_STRUCTURE.getOrNull(depth + 1) ?: { false }
+            val isCurrentLevelHeading = headings[depth]
+            val isChildHeading = headings.getOrNull(depth + 1) ?: { false }
 
             while (stream.peek() != null) {
                 if (!isCurrentLevelHeading(stream.peek()!!) && !isChildHeading(stream.peek()!!)) {
                     return@sequence
                 }
 
-                val heading = stream.consumeOneOfType<Token.Heading>()
+                val heading = stream.consumeOne()
                 assert(isCurrentLevelHeading(heading)) {
                     "Expected heading of level ${parents.size + 1}, $heading (${heading.text}) given"
                 }
                 val headingText = cleanupHeading(heading.text)
 
-                val content = stream.consumeUntil { it is Token.Heading }
+                val content = stream.consumeUntil { token -> headings.any { it(token) } }
 
                 if (content.isNotEmpty()) {
                     yield(
@@ -55,7 +59,7 @@ class RulesParser(
                 }
 
                 if (stream.peek()?.let(isChildHeading) == true) {
-                    yieldAll(parseSection(stream, parents + headingText))
+                    yieldAll(parseSection(stream, parents + headingText, headings))
                 }
             }
         }
@@ -116,7 +120,7 @@ class RulesParser(
 
     companion object {
         private val NOT_CAPITALIZED_WORDS = setOf("and", "of")
-        private val HEADING_STRUCTURE =
+        val HEADING_STRUCTURE =
             listOf<(Token) -> Boolean>(
                 { it is Token.Heading1 },
                 { it is Token.Heading2 },
