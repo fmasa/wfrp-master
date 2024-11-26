@@ -808,4 +808,12 @@
     <string name="settings_keep_screen_on">Mantener pantalla encendida</string>
     <string name="settings_keep_screen_on_subtext">Evitar el bloqueo automático de la pantalla</string>
     <string name="common_ui_tip_feedback_form">¿Tienes 3 minutos para compartir tus comentarios?</string>
+    <string name="journal_folder_armour_qualities">Guía del consumidor / Armadura / Cualidades de la armadura</string>
+    <string name="journal_folder_item_flaws">Guía del consumidor / Artesanía / Defectos de los artículos</string>
+    <string name="journal_folder_item_qualities">Guía del consumidor / Artesanía / Calidad de los artículos</string>
+    <string name="journal_folder_weapon_flaws">Guía del consumidor / Armas / Defectos de las armas</string>
+    <string name="journal_folder_weapon_qualities">Guía del consumidor / Armas / Cualidades de las armas</string>
+    <string name="journal_folder_armour_flaws">Guía del consumidor / Armadura / Defectos de la armadura</string>
+    <string name="journal_folder_weapon_melee_groups">Guía del consumidor / Armas / Grupos de armas cuerpo a cuerpo</string>
+    <string name="journal_folder_weapon_ranged_groups">Guía del consumidor / Armas / Grupos de armas a distancia</string>
 </resources>
