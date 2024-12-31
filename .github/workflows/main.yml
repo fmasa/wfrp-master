@@ -15,7 +15,7 @@ jobs:
   firestore-tests:
     name: Test Firestore rules
     runs-on: ubuntu-22.04
-    container: timbru31/java-node:11-jdk-erbium
+    container: timbru31/java-node:21-jdk-iron
     steps:
       - uses: actions/checkout@v2
       - name: Get yarn cache directory path
@@ -151,7 +151,7 @@ jobs:
     if: github.ref == 'refs/heads/master' || github.ref_type == 'tag'
     needs: [checks-passed]
     runs-on: ubuntu-22.04
-    container: timbru31/java-node:11-jdk-erbium
+    container: timbru31/java-node:21-jdk-iron
     environment: production
     env:
       FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
@@ -177,7 +177,7 @@ jobs:
     if: github.ref == 'refs/heads/master' || github.ref_type == 'tag'
     needs: [checks-passed]
     runs-on: ubuntu-22.04
-    container: timbru31/java-node:11-jdk-erbium
+    container: timbru31/java-node:21-jdk-iron
     environment: production
     steps:
       - uses: actions/checkout@v2

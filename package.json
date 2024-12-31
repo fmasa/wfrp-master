@@ -2,10 +2,10 @@
   "name": "@fmasa/dnd",
   "version": "1.0.0",
   "scripts": {
-    "test": "yarn firebase emulators:exec --only firestore 'mocha --timeout=10000 firebase/tests/**/*.ts'"
+    "test": "NODE_OPTIONS=--dns-result-order=ipv4first yarn firebase emulators:exec --only firestore 'mocha --timeout=10000 firebase/tests/**/*.ts'"
   },
   "devDependencies": {
-    "@firebase/testing": "^0.15.1",
+    "@firebase/testing": "^0.20.11",
     "@types/mocha": "^7.0.2",
     "firebase-admin": "^9.0.0",
     "fireway": "^0.2.3",
