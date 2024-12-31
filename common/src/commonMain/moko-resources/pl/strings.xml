@@ -108,7 +108,7 @@
     <string name="character_button_unlink_from_player_subtext">Postać będzie dostępna dla innego gracza</string>
     <string name="character_creation_messages_no_careers_in_compendium">Brak profesji</string>
     <string name="character_creation_step_attributes">Atrybuty</string>
-    <string name="character_creation_step_basic_info">Informacje podstawowe</string>
+    <string name="character_creation_step_basic_info">Informacje</string>
     <string name="character_creation_step_point_pools">Pule punktów</string>
     <string name="character_creation_title">Opisz swojego bohatera…</string>
     <string name="character_effect_big">duży</string>
@@ -427,7 +427,7 @@
     <string name="character_effect_pure_soul">czysta dusza</string>
     <string name="character_label_career">Profesja</string>
     <string name="character_label_characteristic_advances">Rozwinięcia</string>
-    <string name="character_label_characteristic_base">Początkowa</string>
+    <string name="character_label_characteristic_base">Bazowa</string>
     <string name="character_messages_no_equipped_weapons">Brak uzbrojenia</string>
     <string name="character_messages_unassigned_characters_exist">Istnieją już nieprzypisane postacie stworzone przez MG, możesz przypisać jedną z nich do siebie.</string>
     <string name="combat_title">Walka</string>
@@ -502,7 +502,7 @@
     <string name="permissions_camera_denied">Wymagane zezwolenie na korzystanie z kamery</string>
     <string name="permissions_camera_required">Wymagane zezwolenie na korzystanie z kamery</string>
     <string name="points_corruption">Punkty Zepsucia</string>
-    <string name="points_fate">Przeznaczenie</string>
+    <string name="points_fate">Przezn.</string>
     <string name="points_fortune">Szczęście</string>
     <string name="points_label_hardy">Twardziel (zwiększa maksymalne obrażenia o BWt)</string>
     <string name="races_gnome">Gnom</string>
@@ -680,10 +680,10 @@
     <string name="permissions_button_request_permission">Prośba o dostęp</string>
     <string name="permissions_messages_settings_screen_instructions">Prosimy o przyznanie dostępu na stronie ustawień.</string>
     <string name="points_experience">PD</string>
-    <string name="points_label_sin_points">punkty Grzechu</string>
+    <string name="points_label_sin_points">Punkty Grzechu</string>
     <string name="points_label_spent_experience">Wcześniej wydane PD</string>
     <string name="points_resilience">Bohater</string>
-    <string name="points_resolve">Determinacja</string>
+    <string name="points_resolve">Determin.</string>
     <string name="points_wounds">Żywotność</string>
     <string name="races_ogre">Ogr</string>
     <string name="races_wood_elf">Leśny elf</string>
