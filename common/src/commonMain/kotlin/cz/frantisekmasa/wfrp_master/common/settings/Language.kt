@@ -11,6 +11,7 @@ enum class Language(
     FR("Français", "French", Locale.FRENCH),
     ES("Español", "Spanish", Locale("es_ES")),
     DE("Deutsch", "German", Locale.GERMAN),
+    PL("Polski", "Polish", Locale("pl_PL")),
     IT("Italiano", "Italian", Locale.ITALIAN),
     RU("Русский", "Russian", Locale("ru-RU")),
     ;
