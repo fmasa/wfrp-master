@@ -522,8 +522,8 @@
     <string name="skills_title_edit">Edytuj umiejętność</string>
     <string name="social_classes_burghers">Mieszczanie</string>
     <string name="social_classes_courtiers">Dworzanie</string>
-    <string name="social_status_brass">Brązowy</string>
-    <string name="social_status_gold">Złoty</string>
+    <string name="social_status_brass">Brąz</string>
+    <string name="social_status_gold">Złoto</string>
     <string name="spells_casting_number_shortcut">PZ</string>
     <string name="spells_label_casting_number">Poziom Zaklęcia (PZ)</string>
     <string name="spells_label_duration">Czas trwania</string>
@@ -702,7 +702,7 @@
     <string name="social_classes_riverfolk">Wodniacy</string>
     <string name="social_classes_rogues">Łotry</string>
     <string name="social_classes_warriors">Wojownicy</string>
-    <string name="social_status_silver">Srebrny</string>
+    <string name="social_status_silver">Srebro</string>
     <string name="spells_button_add_non_compendium">...lub dodaj zaklęcie spoza Kompendium</string>
     <string name="spells_label_lore">Tradycja</string>
     <string name="spells_label_lore_legacy">Tradycja (stara)</string>
@@ -807,4 +807,13 @@
     <string name="spells_lores_shadows">Cienie</string>
     <string name="spells_messages_character_has_no_spell">Brak zaklęć</string>
     <string name="traits_title_new">Nowa cecha</string>
+    <string name="common_ui_tip_feedback_form">Czy masz 3 minuty na podzielenie się opinią?</string>
+    <string name="journal_folder_weapon_flaws">Przewodnik Konsumenta / Broń / Wady broni</string>
+    <string name="journal_folder_item_qualities">Przewodnik Konsumenta / Jakość wykonania / Zalety przedmiotów</string>
+    <string name="journal_folder_item_flaws">Przewodnik Konsumenta / Jakość wykonania / Wady przedmiotów</string>
+    <string name="journal_folder_armour_qualities">Przewodnik Konsumenta / Pancerze / Zalety pancerza</string>
+    <string name="journal_folder_armour_flaws">Przewodnik Konsumenta / Pancerze / Wady pancerza</string>
+    <string name="journal_folder_weapon_qualities">Przewodnik Konsumenta / Broń / Zalety broni</string>
+    <string name="journal_folder_weapon_melee_groups">Przewodnik Konsumenta / Broń / Kategorie broni białej</string>
+    <string name="journal_folder_weapon_ranged_groups">Przewodnik Konsumenta / Broń / Kategorie broni zasięgowej</string>
 </resources>
