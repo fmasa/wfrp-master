@@ -36,7 +36,7 @@ class ImporterTest {
         withBook(WindsOfMagic) { document ->
             val careers = WindsOfMagic.importCareers(document)
 
-            assertEquals(11, careers.size)
+            assertEquals(12, careers.size)
             careers.forEach {
                 assertEquals(3, it.levels[0].characteristics.size)
                 assertEquals(1, it.levels[1].characteristics.size)

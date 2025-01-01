@@ -23,14 +23,21 @@ object WindsOfMagic : Book, CareerSource, SpellSource, TrappingSource {
     override val name = "Winds of Magic"
 
     override fun importCareers(document: Document): List<Career> {
-        return CareerParser().import(
+        return CareerParser(
+            tokenMapper = {
+                when (it) {
+                    is Token.BodyCellPart -> Token.NormalPart(it.text)
+                    else -> it
+                }
+            },
+        ).import(
             document,
             this,
             sequenceOf(
                 SocialClass.WARRIORS to listOf(36),
                 SocialClass.ACADEMICS to listOf(38),
                 SocialClass.PEASANTS to listOf(42),
-                SocialClass.ACADEMICS to listOf(56, 68, 80, 92, 104, 116, 128, 140),
+                SocialClass.ACADEMICS to listOf(40, 56, 68, 80, 92, 104, 116, 128, 140),
             ),
         )
     }

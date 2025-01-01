@@ -34,7 +34,15 @@ object UpInArms : Book, CareerSource, TalentSource, TrappingSource, JournalEntry
     override val tokensSorted: Boolean = false
 
     override fun importCareers(document: Document): List<Career> {
-        return CareerParser(convertTablesToText = true).import(
+        return CareerParser(
+            tokenMapper = {
+                when (it) {
+                    is Token.BodyCellPart -> Token.NormalPart(it.text)
+                    is Token.TableHeadCell -> Token.BoldPart(it.text)
+                    else -> it
+                }
+            },
+        ).import(
             document,
             this,
             sequenceOf(
