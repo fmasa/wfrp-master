@@ -8,8 +8,8 @@ import cz.frantisekmasa.wfrp_master.common.core.domain.character.Race
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.SocialStatus
 
 class CareerParser(
-    private val convertTablesToText: Boolean = false,
     private val hasAttributesInRightColumn: Boolean = false,
+    private val tokenMapper: (Token) -> Token = { it },
 ) {
     fun import(
         document: Document,
@@ -56,21 +56,7 @@ class CareerParser(
         secondColumn: Sequence<Token>,
     ): Career {
         val blockWithAttributes = if (hasAttributesInRightColumn) firstColumn + secondColumn else firstColumn
-        val stream =
-            TokenStream(
-                if (convertTablesToText) {
-                    blockWithAttributes
-                        .map {
-                            when (it) {
-                                is Token.BodyCellPart -> Token.NormalPart(it.text)
-                                is Token.TableHeadCell -> Token.BoldPart(it.text)
-                                else -> it
-                            }
-                        }.toList()
-                } else {
-                    (blockWithAttributes).toList()
-                },
-            )
+        val stream = TokenStream(blockWithAttributes.map(tokenMapper).toList())
 
         val name =
             stream.consumeOneOfType<Token.Heading>().text

@@ -25,7 +25,15 @@ object ArchivesOfTheEmpire2 : Book, CareerSource, SpellSource, TrappingSource {
     override val tableFootnotesAsNormalText: Boolean = true
 
     override fun importCareers(document: Document): List<Career> {
-        return CareerParser(convertTablesToText = true)
+        return CareerParser(
+            tokenMapper = {
+                when (it) {
+                    is Token.BodyCellPart -> Token.NormalPart(it.text)
+                    is Token.TableHeadCell -> Token.BoldPart(it.text)
+                    else -> it
+                }
+            },
+        )
             .import(
                 document,
                 this,

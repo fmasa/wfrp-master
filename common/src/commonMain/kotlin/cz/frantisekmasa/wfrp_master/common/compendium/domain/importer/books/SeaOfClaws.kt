@@ -35,14 +35,22 @@ object SeaOfClaws : Book, SpellSource, TalentSource, CareerSource, MiracleSource
     }
 
     override fun importCareers(document: Document): List<Career> {
-        return CareerParser(convertTablesToText = true).import(
+        val tokenMapper: (Token) -> Token = {
+            when (it) {
+                is Token.BodyCellPart -> Token.NormalPart(it.text)
+                is Token.TableHeadCell -> Token.BoldPart(it.text)
+                else -> it
+            }
+        }
+
+        return CareerParser(tokenMapper = tokenMapper).import(
             document,
             this,
             sequenceOf(
                 SocialClass.SEAFARERS to listOf(64, 68, 70, 72, 74, 76, 78, 90),
             ),
         ) +
-            CareerParser(convertTablesToText = true, hasAttributesInRightColumn = true).import(
+            CareerParser(tokenMapper = tokenMapper, hasAttributesInRightColumn = true).import(
                 document,
                 this,
                 sequenceOf(
