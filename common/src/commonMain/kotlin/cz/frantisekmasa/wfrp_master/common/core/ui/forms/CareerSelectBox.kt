@@ -184,7 +184,7 @@ private fun CareerChooserDialog(
                         icon = Resources.Drawable.Career,
                     )
                 },
-                key = { it.first.levelId },
+                key = { it.first.careerId to it.first.levelId },
             ) { (level, label) ->
                 ListItem(
                     modifier =
