@@ -9,11 +9,11 @@ enum class Language(
 ) {
     EN("English", "English", Locale.ENGLISH),
     FR("Français", "French", Locale.FRENCH),
-    ES("Español", "Spanish", Locale("es_ES")),
+    ES("Español", "Spanish", Locale("es")),
     DE("Deutsch", "German", Locale.GERMAN),
-    PL("Polski", "Polish", Locale("pl_PL")),
+    PL("Polski", "Polish", Locale("pl")),
     IT("Italiano", "Italian", Locale.ITALIAN),
-    RU("Русский", "Russian", Locale("ru-RU")),
+    RU("Русский", "Russian", Locale("ru")),
     ;
 
     companion object {
