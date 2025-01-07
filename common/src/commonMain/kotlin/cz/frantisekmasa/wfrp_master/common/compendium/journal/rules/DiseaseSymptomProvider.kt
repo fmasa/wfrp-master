@@ -27,18 +27,18 @@ class DiseaseSymptomProvider(
         flow: Flow<T>,
         symptomsExtractor: (T) -> List<String>,
     ): Flow<Pair<T, ImmutableList<Symptom>>> {
-        val symptomsFlow =
+        val folderFlow =
             partyRepository.getLive(partyId).right()
                 .map { it.settings.language }
                 .distinctUntilChanged()
-                .flatMapLatest {
-                    journal.findByFolder(
-                        partyId,
-                        translatorFactory.create(it).translate(Str.journal_folder_symptoms),
-                    )
-                }
+                .map { translatorFactory.create(it).translate(Str.journal_folder_symptoms) }
 
-        return combine(flow, symptomsFlow) { item, allSymptoms ->
+        val symptomsFlow =
+            folderFlow.flatMapLatest { folder ->
+                journal.findByFolder(partyId, folder)
+            }
+
+        return combine(flow, symptomsFlow, folderFlow) { item, allSymptoms, folder ->
             val symptoms = symptomsExtractor(item)
 
             if (symptoms.isEmpty()) {
@@ -47,11 +47,11 @@ class DiseaseSymptomProvider(
 
             val symptomsByName = allSymptoms.associateBy { comparableSymptomName(it.name) }
             item to
-                symptoms.map {
+                symptoms.map { symptom ->
                     Symptom(
-                        it,
-                        symptomsByName[comparableSymptomName(it)]?.id,
-                        (JOURNAL_PATH + listOf(it)).joinToString(" ${JournalEntry.PARENT_SEPARATOR} "),
+                        symptom,
+                        symptomsByName[comparableSymptomName(symptom)]?.id,
+                        "$folder ${JournalEntry.PARENT_SEPARATOR} $symptom",
                         partyId,
                     )
                 }.toImmutableList()
@@ -66,6 +66,5 @@ class DiseaseSymptomProvider(
 
     companion object {
         private val SYMPTOM_SPECIFICATION_REGEX = Regex("\\([a-zA-Z ]+\\)")
-        private val JOURNAL_PATH = listOf("Rules", "Disease and Infection", "Symptoms")
     }
 }
