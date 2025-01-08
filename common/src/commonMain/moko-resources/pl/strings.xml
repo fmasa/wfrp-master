@@ -640,7 +640,7 @@
     <string name="weapons_qualities_precise">Precyzyjna</string>
     <string name="weapons_qualities_unbreakable">Niełamliwa</string>
     <string name="weapons_qualities_repeater">Wielostrzał</string>
-    <string name="weapons_qualities_trip">Nokautująca</string>
+    <string name="weapons_qualities_trip">Przewracająca</string>
     <string name="weapons_qualities_shield">Tarcza</string>
     <string name="weapons_qualities_trap_blade">Łamacz mieczy</string>
     <string name="character_effect_very_resilient">Niezwykle odporny</string>
