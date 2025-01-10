@@ -592,7 +592,7 @@
     <string name="weapons_ranged_groups_crossbow">Kusza</string>
     <string name="weapons_ranged_groups_entangling">Oplątująca</string>
     <string name="weapons_ranged_groups_explosives">Materiały wybuchowe</string>
-    <string name="weapons_reach_average">Średni</string>
+    <string name="weapons_reach_average">Średnia</string>
     <string name="weapons_label_equip">Na wyposażeniu</string>
     <string name="settings_keep_screen_on">Ekran zawsze włączony</string>
     <string name="parties_messages_compendium_card_moved">Karta Kompendium została przeniesiona do zakładki Świat.</string>
@@ -630,7 +630,7 @@
     <string name="weapons_flaws_slow">Powolna</string>
     <string name="validation_positive_integer">Musi być liczbą dodatnią bez miejsc po przecinku</string>
     <string name="weapons_flaws_tiring">Ciężka</string>
-    <string name="weapons_flaws_unbalanced">Niezbalansowana</string>
+    <string name="weapons_flaws_unbalanced">Niewyważona</string>
     <string name="weapons_label_range">Zasięg</string>
     <string name="weapons_label_reach">Długość</string>
     <string name="weapons_label_group">Grupa</string>
@@ -771,14 +771,14 @@
     <string name="weapons_melee_groups_parry">Parująca</string>
     <string name="weapons_melee_groups_two_handed">Dwuręczna</string>
     <string name="weapons_melee_groups_polearm">Drzewcowa</string>
-    <string name="weapons_qualities_slash">Tnąca</string>
+    <string name="weapons_qualities_slash">Sieczna</string>
     <string name="weapons_qualities_spread">Rozrzut</string>
     <string name="weapons_ranged_groups_throwing">Miotana</string>
     <string name="weapons_ranged_groups_sling">Proce</string>
     <string name="weapons_reach_personal">Kontaktowa</string>
-    <string name="weapons_reach_long">Daleki</string>
+    <string name="weapons_reach_long">Długa</string>
     <string name="weapons_reach_massive">Ogromna</string>
-    <string name="weapons_reach_short">Bliski</string>
+    <string name="weapons_reach_short">Krótka</string>
     <string name="weapons_reach_very_long">Bardzo długa</string>
     <string name="weapons_reach_very_short">Bardzo krótka</string>
     <string name="settings_keep_screen_on_subtext">Zapobiega automatycznej blokadzie ekranu</string>
