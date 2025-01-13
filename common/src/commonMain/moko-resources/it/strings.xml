@@ -803,4 +803,9 @@
     <string name="settings_keep_screen_on">Mantieni lo Schermo acceso</string>
     <string name="settings_keep_screen_on_subtext">Impedisce il blocco automatico dello schermo</string>
     <string name="common_ui_tip_feedback_form">Hai 3 minuti per mandarci un tuo feedback?</string>
+    <string name="journal_folder_armour_flaws">Guida agli Acquisti/ Armature / Difetti Armature</string>
+    <string name="journal_folder_armour_qualities">Guida agli Acquisti/ Armature / Qualità Armature</string>
+    <string name="journal_folder_weapon_melee_groups">Guida agli Acquisti/ Armi / Gruppi Armi da Mischia</string>
+    <string name="journal_folder_weapon_ranged_groups">Guida agli Acquisti/ Armi / Gruppi Armi A Distanza</string>
+    <string name="journal_folder_weapon_flaws">Guida agli Acquisti/ Armi / Difetti Armi</string>
 </resources>
