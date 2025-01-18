@@ -1,13 +1,13 @@
-import * as admin from 'firebase-admin';
-import { changeCharacterAvatar } from './functions/changeCharacterAvatar';
-import { removeCharacterAvatar } from './functions/removeCharacterAvatar';
-import { duplicateCharacter } from './functions/duplicateCharacter';
+import {changeCharacterAvatar} from "./functions/changeCharacterAvatar";
+import {removeCharacterAvatar} from "./functions/removeCharacterAvatar";
+import {duplicateCharacter} from "./functions/duplicateCharacter";
+import {initializeApp} from "firebase-admin/app";
 
-admin.initializeApp();
+initializeApp();
 
 export {
     changeCharacterAvatar,
     removeCharacterAvatar,
     duplicateCharacter,
-}
+};
 

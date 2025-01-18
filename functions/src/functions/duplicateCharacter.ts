@@ -1,7 +1,7 @@
-import {firestore, storage} from 'firebase-admin';
+import {firestore, storage} from "firebase-admin";
 import * as t from "io-ts";
 import {characterChange} from "../characterChange";
-import { v4 as uuidv4 } from "uuid";
+import {v4 as uuidv4} from "uuid";
 import {generateAvatarUrl, getAvatarPath, METADATA} from "../avatar";
 
 const RequestBody = t.interface({
@@ -15,8 +15,8 @@ type Character = {
 }
 
 const isBlank = (str: string): boolean => {
-    return str.replace(/\s/g, '').length === 0;
-}
+    return str.replace(/\s/g, "").length === 0;
+};
 
 const NAME_MAX_LENGTH = 50;
 
@@ -25,7 +25,8 @@ export const duplicateCharacter = characterChange(RequestBody, async (body, char
         return {
             status: "error",
             error: 400,
-            message: `Invalid character name, it must be non-blank and less than ${NAME_MAX_LENGTH} characters long.`,
+            message: "Invalid character name," +
+                `it must be non-blank and less than ${NAME_MAX_LENGTH} characters long.`,
         };
     }
 
@@ -34,11 +35,16 @@ export const duplicateCharacter = characterChange(RequestBody, async (body, char
     const newCharacter = character.parent.doc(newCharacterId);
     const characterData = (await character.get()).data() as Character;
 
-    const newCharacterData =         {
+    const newCharacterData = {
         ...characterData,
         id: newCharacterId,
         name: body.newName,
-        avatarUrl: await copyAvatar(characterData.avatarUrl, body.partyId, body.characterId, newCharacterId),
+        avatarUrl: await copyAvatar(
+            characterData.avatarUrl,
+            body.partyId,
+            body.characterId,
+            newCharacterId
+        ),
     };
 
     console.log("New character data", newCharacterData);
@@ -65,7 +71,7 @@ export const duplicateCharacter = characterChange(RequestBody, async (body, char
     return {
         status: "success",
     };
-})
+});
 
 const copyAvatar = async (
     avatarUrl: string | null,
@@ -86,14 +92,12 @@ const copyAvatar = async (
             return null;
         }
 
-        const copyResponse = await sourceFile.copy(
-            bucket.file(getAvatarPath(partyId, newCharacterId)),
-            {metadata: METADATA}
-        );
+        const destinationFile = bucket.file(getAvatarPath(partyId, newCharacterId));
+        await sourceFile.copy(destinationFile, {metadata: METADATA});
 
-        return await generateAvatarUrl(copyResponse, bucket);
+        return await generateAvatarUrl(destinationFile, bucket);
     } catch (e) {
         console.error(e);
         return null;
     }
-}
+};
