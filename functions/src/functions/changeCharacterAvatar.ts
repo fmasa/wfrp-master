@@ -1,6 +1,5 @@
-import {storage} from 'firebase-admin';
-import {file} from "tmp-promise";
-import * as sharp from "sharp";
+import {storage} from "firebase-admin";
+import sharp from "sharp";
 import * as t from "io-ts";
 import {characterChange} from "../characterChange";
 import {generateAvatarUrl, getAvatarPath, METADATA} from "../avatar";
@@ -13,33 +12,25 @@ const RequestBody = t.type({
     imageData: t.string,
 });
 
-export const changeCharacterAvatar = characterChange(RequestBody,async (body, character) => {
+export const changeCharacterAvatar = characterChange(RequestBody, async (body, character) => {
     const partyId = body.partyId;
     const characterId = body.characterId;
     const imageData = body.imageData;
 
-    const tempFile = await file();
-
-    await (await cropToRectangle(sharp(Buffer.from(imageData, "base64"))))
+    const avatar = await (await cropToRectangle(sharp(Buffer.from(imageData, "base64"))))
         .resize(imageSize, imageSize, {fit: "outside"})
         .webp()
-        .toFile(tempFile.path);
+        .toBuffer();
 
     const bucket = storage().bucket();
-    const response = await bucket.upload(
-        tempFile.path,
-        {
-            destination: getAvatarPath(partyId, characterId),
-            metadata: METADATA,
-        }
-    );
+    const file = bucket.file(getAvatarPath(partyId, characterId));
 
-    const url = await generateAvatarUrl(response, bucket);
+    await file.save(avatar, {metadata: METADATA});
+    const url = await generateAvatarUrl(file, bucket);
 
     console.debug(`File url: ${url}`);
 
     await character.update("avatarUrl", url);
-    await tempFile.cleanup();
 
     return {
         status: "success",
@@ -65,5 +56,5 @@ const cropToRectangle = async (image: sharp.Sharp): Promise<sharp.Sharp> => {
         left: Math.round((width - size) / 2),
         width: size,
         height: size,
-    })
-}
+    });
+};

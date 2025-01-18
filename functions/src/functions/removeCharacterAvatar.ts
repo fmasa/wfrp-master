@@ -1,5 +1,5 @@
 import * as t from "io-ts";
-import {storage} from "firebase-admin";
+import {getStorage} from "firebase-admin/storage";
 import {characterChange} from "../characterChange";
 
 const RequestBody = t.interface({
@@ -10,7 +10,7 @@ const RequestBody = t.interface({
 export const removeCharacterAvatar = characterChange(RequestBody, async (body, character) => {
     const {partyId, characterId} = body;
 
-    await storage()
+    await getStorage()
         .bucket()
         .deleteFiles({prefix: `images/parties/${partyId}/characters/${characterId}.webp`});
 
