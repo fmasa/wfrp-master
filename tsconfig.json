@@ -6,7 +6,8 @@
     "experimentalDecorators": true,
     "lib": [ "es2019", "dom" ],
     "esModuleInterop": true,
-    "outDir": "firebase-build"
+    "outDir": "firebase-build",
+    "skipLibCheck": true
   },
   "exclude": ["functions"]
 }
