@@ -6,6 +6,7 @@ import cz.frantisekmasa.wfrp_master.common.core.domain.NamedEnum
 import dev.icerock.moko.parcelize.Parcelable
 import dev.icerock.moko.parcelize.Parcelize
 import dev.icerock.moko.resources.StringResource
+import kotlin.math.abs
 
 @Parcelize
 @Immutable
@@ -24,18 +25,20 @@ data class TestResult(
         get() = isSuccess && rollsDouble()
 
     private val isSuccess: Boolean
-        get() = successLevel > 0 || rollValue <= testedValue
+        get() = rollValue < AUTO_FAILURE_THRESHOLD && (rollValue <= testedValue || rollValue <= AUTO_SUCCESS_THRESHOLD)
 
     val successLevel: Int
-        get() =
-            when (rollValue) {
-                in 1..5 -> 1
-                in 96..100 -> -1
+        get() {
+            val sl = testedValue / 10 - rollValue / 10
+            return when {
+                rollValue <= AUTO_SUCCESS_THRESHOLD -> maxOf(sl, 1)
+                rollValue >= AUTO_FAILURE_THRESHOLD -> minOf(sl, -1)
                 else -> testedValue / 10 - rollValue / 10
             }
+        }
 
     val successLevelText: String
-        get() = (if (isSuccess) "+" else "") + successLevel
+        get() = (if (isSuccess) "+" else "-") + abs(successLevel)
 
     val dramaticResult: DramaticResult
         get() {
@@ -65,5 +68,10 @@ data class TestResult(
         FAILURE(-3..-2, Str.tests_results_failure),
         IMPRESSIVE_FAILURE(-5..-4, Str.tests_results_impressive_failure),
         ASTOUNDING_FAILURE(Int.MIN_VALUE..-6, Str.tests_results_astounding_failure),
+    }
+
+    companion object {
+        private const val AUTO_SUCCESS_THRESHOLD = 5
+        private const val AUTO_FAILURE_THRESHOLD = 96
     }
 }
