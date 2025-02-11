@@ -26,6 +26,12 @@ class Rules(private vararg val rules: Rule) : Rule {
                 it.toIntOrNull() != null && it.toInt() >= 0
             }
 
+        @Composable
+        fun NonNegativeDecimal() =
+            rule(stringResource(Str.validation_non_negative)) {
+                it.toDoubleOrNull() != null && it.toDouble() >= 0
+            }
+
         /**
          * This is useful usually for inputs that:
          * - Have small width that doesn't allow us to show full error message
