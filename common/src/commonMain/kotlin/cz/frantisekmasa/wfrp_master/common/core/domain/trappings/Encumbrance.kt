@@ -6,6 +6,8 @@ import dev.icerock.moko.parcelize.Parcelable
 import dev.icerock.moko.parcelize.Parcelize
 import kotlinx.serialization.Serializable
 import java.text.DecimalFormat
+import java.text.DecimalFormatSymbols
+import java.util.Locale
 import kotlin.jvm.JvmInline
 
 @Parcelize
@@ -17,6 +19,7 @@ value class Encumbrance(private val value: Double) : Parcelable {
         val One: Encumbrance = Encumbrance(1.0)
         val Zero: Encumbrance = Encumbrance(0.0)
         private val formatter = DecimalFormat("#,##0.###")
+        private val inputFormatter = DecimalFormat("##0.###", DecimalFormatSymbols(Locale.ENGLISH))
 
         fun maximumForCharacter(characteristics: Stats): Encumbrance =
             Encumbrance(
@@ -37,6 +40,10 @@ value class Encumbrance(private val value: Double) : Parcelable {
     operator fun minus(other: Encumbrance) = Encumbrance((value - other.value).coerceAtLeast(0.0))
 
     override fun toString(): String = formatter.format(value)
+
+    fun toInputString(): String = inputFormatter.format(value)
+
+    fun toDouble(): Double = value
 }
 
 fun Iterable<Encumbrance>.sum(): Encumbrance = fold(Encumbrance.Zero) { a, b -> a + b }

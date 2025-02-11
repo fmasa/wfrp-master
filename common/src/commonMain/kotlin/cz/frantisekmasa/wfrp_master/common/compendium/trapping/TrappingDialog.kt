@@ -96,7 +96,7 @@ fun TrappingDialog(
                 maxLength = 8,
                 validate = validate,
                 keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
-                filters = listOf(Filter.DigitsAndDotSymbolsOnly),
+                filters = listOf(Filter.DecimalNumber),
             )
 
             TextInput(
@@ -490,7 +490,11 @@ private class TrappingFormData(
             TrappingFormData(
                 id = remember(item) { item?.id ?: uuid4() },
                 name = inputValue(item?.name ?: "", Rules.NotBlank()),
-                encumbrance = inputValue(item?.encumbrance?.toString() ?: "0"),
+                encumbrance =
+                    inputValue(
+                        item?.encumbrance?.toInputString() ?: "0",
+                        Rules.NonNegativeDecimal(),
+                    ),
                 description = inputValue(item?.description ?: ""),
                 type = TrappingTypeFormData.fromTrappingType(item?.trappingType),
                 isVisibleToPlayers = item?.isVisibleToPlayers ?: false,

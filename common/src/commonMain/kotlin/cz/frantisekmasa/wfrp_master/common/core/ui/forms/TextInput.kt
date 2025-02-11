@@ -36,14 +36,17 @@ import cz.frantisekmasa.wfrp_master.common.core.domain.Expression
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
 
 interface Filter {
-    companion object {
-        val DigitsAndDotSymbolsOnly: Filter = AllowedCharacters(('0'..'9').toList() + '.')
-    }
-
     fun process(value: String): String
 
-    private class AllowedCharacters(private val characters: List<Char>) : Filter {
-        override fun process(value: String) = value.filter { it in characters }
+    object DecimalNumber : Filter {
+        private val ALLOWED_CHARACTERS = ('0'..'9').toSet() + '.'
+
+        override fun process(value: String) =
+            value
+                .asSequence()
+                .map { if (it == ',') '.' else it }
+                .filter { it in ALLOWED_CHARACTERS }
+                .joinToString("")
     }
 
     class MaxLength(private val maxLength: Int) : Filter {

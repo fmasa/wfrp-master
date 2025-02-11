@@ -97,7 +97,7 @@ fun NonCompendiumTrappingForm(
             maxLength = 8,
             validate = validate,
             keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
-            filters = listOf(Filter.DigitsAndDotSymbolsOnly),
+            filters = listOf(Filter.DecimalNumber),
         )
 
         TextInput(
@@ -348,7 +348,11 @@ private class InventoryItemFormData(
         ) = InventoryItemFormData(
             id = remember(item) { item?.id ?: uuid4() },
             name = inputValue(item?.name ?: "", Rules.NotBlank()),
-            encumbrance = inputValue(item?.encumbrance?.toString() ?: "0"),
+            encumbrance =
+                inputValue(
+                    item?.encumbrance?.toInputString() ?: "0",
+                    Rules.NonNegativeDecimal(),
+                ),
             quantity = inputValue(item?.quantity?.toString() ?: "1", Rules.PositiveInteger()),
             itemQualities =
                 rememberSaveable(item?.id) {
