@@ -169,7 +169,5 @@ private data class SpellFormData(
             isVisibleToPlayers = isVisibleToPlayers,
         )
 
-    override fun isValid() =
-        listOf(name, customLore, range, target, duration, castingNumber, effect).all { it.isValid() } &&
-            (lore.value != null || !isNew)
+    override fun isValid() = listOf(name, customLore, range, target, duration, castingNumber, effect).all { it.isValid() }
 }
