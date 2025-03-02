@@ -3,13 +3,16 @@ package cz.frantisekmasa.wfrp_master.common.shell
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.statusBars
+import androidx.compose.foundation.layout.windowInsetsTopHeight
 import androidx.compose.material.DrawerState
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
@@ -165,13 +168,14 @@ private fun DrawerItem(
 
 @Composable
 private fun DrawerHeader() {
-    Box(
+    Column(
         Modifier
             .padding(bottom = Spacing.small)
             .fillMaxWidth()
             .splashBackground(),
-        contentAlignment = Alignment.Center,
+        horizontalAlignment = Alignment.CenterHorizontally,
     ) {
+        Spacer(Modifier.windowInsetsTopHeight(WindowInsets.statusBars))
         Row(
             Modifier
                 .padding(Spacing.large)

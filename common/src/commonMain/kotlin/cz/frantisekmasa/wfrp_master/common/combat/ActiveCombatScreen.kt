@@ -30,8 +30,8 @@ import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.ArrowBack
-import androidx.compose.material.icons.rounded.ArrowForward
+import androidx.compose.material.icons.automirrored.rounded.ArrowBack
+import androidx.compose.material.icons.automirrored.rounded.ArrowForward
 import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Stable
@@ -409,7 +409,7 @@ class ActiveCombatScreen(
                     },
                 ) {
                     Icon(
-                        Icons.Rounded.ArrowBack,
+                        Icons.AutoMirrored.Rounded.ArrowBack,
                         stringResource(Str.combat_icon_previous_turn),
                     )
                 }
@@ -422,7 +422,7 @@ class ActiveCombatScreen(
                     },
                 ) {
                     Icon(
-                        Icons.Rounded.ArrowForward,
+                        Icons.AutoMirrored.Rounded.ArrowForward,
                         stringResource(Str.combat_icon_next_turn),
                     )
                 }

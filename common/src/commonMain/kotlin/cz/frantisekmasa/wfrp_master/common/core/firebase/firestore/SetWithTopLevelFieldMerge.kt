@@ -1,10 +1,11 @@
 package cz.frantisekmasa.wfrp_master.common.core.firebase.firestore
 
 import dev.gitlive.firebase.EncodeSettings
-import dev.gitlive.firebase.encode
 import dev.gitlive.firebase.firestore.DocumentReference
 import dev.gitlive.firebase.firestore.Transaction
 import kotlinx.serialization.SerializationStrategy
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.jsonObject
 import kotlinx.serialization.serializer
 
 /**
@@ -70,8 +71,8 @@ private fun <T> getTopLevelFields(
     strategy: SerializationStrategy<T>,
     data: T,
 ): Array<String> {
-    return (encode(strategy, data, buildSettings) as Map<*, *>)
+    return Json.encodeToJsonElement(strategy, data)
+        .jsonObject
         .keys
-        .map { it as String }
         .toTypedArray()
 }

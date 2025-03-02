@@ -14,7 +14,6 @@ import dev.gitlive.firebase.firestore.Direction
 import dev.gitlive.firebase.firestore.FirebaseFirestore
 import dev.gitlive.firebase.firestore.FirebaseFirestoreException
 import dev.gitlive.firebase.firestore.FirestoreExceptionCode
-import dev.gitlive.firebase.firestore.orderBy
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 

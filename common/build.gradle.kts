@@ -1,15 +1,17 @@
 import com.codingfeline.buildkonfig.compiler.FieldSpec.Type.BOOLEAN
 import com.codingfeline.buildkonfig.compiler.FieldSpec.Type.STRING
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.konan.properties.Properties
 import org.jetbrains.kotlin.konan.properties.loadProperties
 
 plugins {
     id("com.android.library")
     alias(libs.plugins.kotlin.multiplatform)
+    alias(libs.plugins.compose)
+    alias(libs.plugins.compose.compiler)
     alias(libs.plugins.buildkonfig)
     kotlin("plugin.serialization")
     id("kotlin-parcelize")
-    id("org.jetbrains.compose")
     id("dev.icerock.mobile.multiplatform-resources")
 }
 
@@ -22,7 +24,9 @@ kotlin {
     jvm()
 
     tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
-        kotlinOptions.jvmTarget = "17"
+        compilerOptions {
+            jvmTarget.set(JvmTarget.JVM_17)
+        }
     }
 
     sourceSets {
@@ -107,8 +111,8 @@ kotlin {
 
         val androidMain by getting {
             dependencies {
-                api(libs.firebase.analytics.ktx)
-                implementation(libs.crashlytics.ktx)
+                api(libs.firebase.analytics)
+                implementation(libs.firebase.crashlytics)
 
                 // Permission management
                 implementation(libs.accompanist.permissions)

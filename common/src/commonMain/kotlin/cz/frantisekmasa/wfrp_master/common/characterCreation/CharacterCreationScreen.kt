@@ -6,7 +6,7 @@ import androidx.compose.animation.core.snap
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
-import androidx.compose.animation.with
+import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -27,8 +27,8 @@ import androidx.compose.material.Text
 import androidx.compose.material.TextButton
 import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.ArrowBackIos
-import androidx.compose.material.icons.rounded.ArrowForwardIos
+import androidx.compose.material.icons.automirrored.rounded.ArrowBackIos
+import androidx.compose.material.icons.automirrored.rounded.ArrowForwardIos
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -158,7 +158,7 @@ private fun Screen.MainContainer(
                 targetState = currentStepIndex.value,
                 transitionSpec = {
                     if (initialState == targetState) {
-                        fadeIn(snap(), 0f) with fadeOut(snap(), 0f)
+                        fadeIn(snap(), 0f) togetherWith fadeOut(snap(), 0f)
                     } else {
                         val direction =
                             if (targetState > initialState) {
@@ -167,7 +167,7 @@ private fun Screen.MainContainer(
                                 SlideDirection.End
                             }
                         val animationSpec = tween<IntOffset>(250)
-                        slideIntoContainer(direction, animationSpec) with
+                        slideIntoContainer(direction, animationSpec) togetherWith
                             slideOutOfContainer(direction, animationSpec)
                     }
                 },
@@ -223,7 +223,7 @@ private fun BottomBar(
                     },
                 ) {
                     Icon(
-                        Icons.Rounded.ArrowBackIos,
+                        Icons.AutoMirrored.Rounded.ArrowBackIos,
                         VISUAL_ONLY_ICON_DESCRIPTION,
                         tint = MaterialTheme.colors.primaryVariant,
                     )
@@ -303,7 +303,7 @@ private fun NextButton(
     ) {
         Text(label.uppercase())
         Icon(
-            Icons.Rounded.ArrowForwardIos,
+            Icons.AutoMirrored.Rounded.ArrowForwardIos,
             VISUAL_ONLY_ICON_DESCRIPTION,
             tint = MaterialTheme.colors.primaryVariant,
         )

@@ -8,7 +8,7 @@ import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.material.TextButton
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.ArrowForwardIos
+import androidx.compose.material.icons.automirrored.rounded.ArrowForwardIos
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.key
 import androidx.compose.ui.Alignment
@@ -28,7 +28,7 @@ fun Breadcrumbs(content: BreadcrumbsScope.() -> Unit) {
             scope.levels.forEachIndexed { index, breadcrumbLevel ->
                 key(index) {
                     if (index != 0) {
-                        Icon(Icons.Rounded.ArrowForwardIos, VISUAL_ONLY_ICON_DESCRIPTION)
+                        Icon(Icons.AutoMirrored.Rounded.ArrowForwardIos, VISUAL_ONLY_ICON_DESCRIPTION)
                     }
 
                     val destination = breadcrumbLevel.destination

@@ -30,7 +30,7 @@ fun TabPager(
     fullWidthTabs: Boolean = false,
     initialPage: Int = 0,
     onPageChange: ((Int) -> Unit)? = null,
-    beyondBoundsPageCount: Int = 0,
+    beyondViewportPageCount: Int = 0,
     content: TabPagerScope.() -> Unit,
 ) {
     Column(modifier) {
@@ -105,7 +105,7 @@ fun TabPager(
         HorizontalPager(
             state = pagerState,
             modifier = Modifier.fillMaxWidth(),
-            beyondBoundsPageCount = beyondBoundsPageCount,
+            beyondViewportPageCount = beyondViewportPageCount,
         ) { page ->
             scope.tabContents[page]()
         }

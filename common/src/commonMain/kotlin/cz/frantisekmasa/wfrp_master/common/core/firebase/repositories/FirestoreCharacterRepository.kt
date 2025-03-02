@@ -17,8 +17,6 @@ import cz.frantisekmasa.wfrp_master.common.core.firebase.firestore.setWithTopLev
 import dev.gitlive.firebase.firestore.FirebaseFirestore
 import dev.gitlive.firebase.firestore.FirebaseFirestoreException
 import dev.gitlive.firebase.firestore.Transaction
-import dev.gitlive.firebase.firestore.orderBy
-import dev.gitlive.firebase.firestore.where
 import io.github.aakira.napier.Napier
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
@@ -128,7 +126,7 @@ class FirestoreCharacterRepository(
         careerId: Uuid,
     ): List<Character> {
         return characters(partyId)
-            .where("compendiumCareer.careerId", equalTo = careerId.toString())
+            .where { "compendiumCareer.careerId" equalTo careerId.toString() }
             .get()
             .documents
             .map { it.data(Character.serializer()) }
