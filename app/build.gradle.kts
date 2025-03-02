@@ -5,7 +5,8 @@ plugins {
     id("com.google.gms.google-services")
     id("com.google.firebase.crashlytics")
     kotlin("plugin.serialization")
-    id("org.jetbrains.compose")
+    alias(libs.plugins.compose)
+    alias(libs.plugins.compose.compiler)
     // id("com.google.firebase.firebase-perf")
 }
 
@@ -92,7 +93,7 @@ dependencies {
     implementation(project(":common"))
     implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar"))))
     // Allow use of Java 8 APIs on older Android versions
-    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:1.2.2")
+    coreLibraryDesugaring(libs.desugar.jdk.libs)
 
     // Testing utilities
     testImplementation("junit:junit:4.13.2")

@@ -1,15 +1,29 @@
 package cz.frantisekmasa.wfrp_master.common.shell
 
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.imePadding
+import androidx.compose.foundation.layout.navigationBars
+import androidx.compose.foundation.layout.statusBars
+import androidx.compose.foundation.layout.windowInsetsPadding
+import androidx.compose.foundation.layout.windowInsetsTopHeight
+import androidx.compose.material.AppBarDefaults
 import androidx.compose.material.DrawerState
 import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.ModalDrawer
+import androidx.compose.material.Surface
+import androidx.compose.material.primarySurface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.key
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Modifier
 import cz.frantisekmasa.wfrp_master.common.core.shared.SettingsStorage
 import cz.frantisekmasa.wfrp_master.common.core.ui.buttons.LocalHamburgerButtonHandler
 import cz.frantisekmasa.wfrp_master.common.core.ui.flow.collectWithLifecycle
@@ -46,6 +60,7 @@ fun DrawerShell(
 
     key(language) {
         ModalDrawer(
+            modifier = Modifier.imePadding(),
             drawerState = drawerState,
             drawerContent = {
                 Column {
@@ -57,7 +72,26 @@ fun DrawerShell(
 
                 CompositionLocalProvider(
                     LocalHamburgerButtonHandler provides { coroutineScope.launch { drawerState.open() } },
-                    content = bodyContent,
+                    content = {
+                        HorizontalInsetsContainer {
+                            Column {
+                                Surface(
+                                    color = MaterialTheme.colors.primarySurface,
+                                    elevation = AppBarDefaults.TopAppBarElevation,
+                                    modifier = Modifier.fillMaxWidth(),
+                                ) {
+                                    Spacer(Modifier.windowInsetsTopHeight(WindowInsets.statusBars))
+                                }
+
+                                Box(
+                                    Modifier
+                                        .windowInsetsPadding(WindowInsets.navigationBars),
+                                ) {
+                                    bodyContent()
+                                }
+                            }
+                        }
+                    },
                 )
             },
         )

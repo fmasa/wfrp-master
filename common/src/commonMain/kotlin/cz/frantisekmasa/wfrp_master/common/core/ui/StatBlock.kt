@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.text.ClickableText
 import androidx.compose.material.Divider
 import androidx.compose.material.LocalContentAlpha
 import androidx.compose.material.LocalContentColor
@@ -23,10 +22,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.ExperimentalTextApi
+import androidx.compose.ui.text.LinkAnnotation
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.withAnnotation
+import androidx.compose.ui.text.withLink
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
@@ -220,8 +220,6 @@ fun StatBlock(
     }
 }
 
-private const val SKILL_TAG = "[skill]"
-
 @Composable
 private fun <T> CharacterItemList(
     title: String,
@@ -234,17 +232,24 @@ private fun <T> CharacterItemList(
         return
     }
 
-    val formattedItems = items.map { key(it) to value(it) }
+    val formattedItems = items.map { it to value(it) }
+    val navigation = LocalNavigationTransaction.current
+
     val text =
-        remember(formattedItems, key, value) {
+        remember(formattedItems, key, value, navigation) {
             buildAnnotatedString {
                 withStyle(SpanStyle(fontWeight = FontWeight.Bold)) {
                     append(title)
                     append(": ")
                 }
 
-                formattedItems.forEachIndexed { index, (key, value) ->
-                    withAnnotation(SKILL_TAG, key) {
+                formattedItems.forEachIndexed { index, (item, value) ->
+                    withLink(
+                        LinkAnnotation.Clickable(
+                            tag = key(item),
+                            linkInteractionListener = { navigation.navigate(detail(item)) },
+                        ),
+                    ) {
                         append(value)
                     }
 
@@ -255,20 +260,13 @@ private fun <T> CharacterItemList(
             }
         }
 
-    val navigation = LocalNavigationTransaction.current
-    ClickableText(
+    Text(
         text,
         style =
             MaterialTheme.typography.body2.copy(
                 color = LocalContentColor.current.copy(alpha = LocalContentAlpha.current),
             ),
-    ) { offset ->
-        text.getStringAnnotations(SKILL_TAG, offset, offset)
-            .firstOrNull()
-            ?.let { range ->
-                navigation.navigate(detail(items.first { key(it) == range.item }))
-            }
-    }
+    )
 }
 
 @Composable

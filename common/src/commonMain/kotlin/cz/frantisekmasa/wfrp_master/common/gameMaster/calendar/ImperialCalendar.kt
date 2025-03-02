@@ -25,9 +25,9 @@ import androidx.compose.material.Text
 import androidx.compose.material.TextButton
 import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.ArrowBackIos
-import androidx.compose.material.icons.rounded.ArrowForwardIos
-import androidx.compose.material.ripple.rememberRipple
+import androidx.compose.material.icons.automirrored.rounded.ArrowBackIos
+import androidx.compose.material.icons.automirrored.rounded.ArrowForwardIos
+import androidx.compose.material.ripple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.getValue
@@ -92,7 +92,7 @@ fun ImperialCalendar(
                                 },
                             ) {
                                 Icon(
-                                    Icons.Rounded.ArrowBackIos,
+                                    Icons.AutoMirrored.Rounded.ArrowBackIos,
                                     stringResource(Str.calendar_icon_previous_years),
                                     tint = MaterialTheme.colors.primaryVariant,
                                 )
@@ -110,7 +110,7 @@ fun ImperialCalendar(
                                 },
                             ) {
                                 Icon(
-                                    Icons.Rounded.ArrowForwardIos,
+                                    Icons.AutoMirrored.Rounded.ArrowForwardIos,
                                     stringResource(Str.calendar_icon_next_years),
                                     tint = MaterialTheme.colors.primaryVariant,
                                 )
@@ -120,7 +120,7 @@ fun ImperialCalendar(
                         ActiveScreen.DAYS_OF_MONTH -> {
                             IconButton(onClick = { activeMonth = activeMonth.previousMonth() }) {
                                 Icon(
-                                    Icons.Rounded.ArrowBackIos,
+                                    Icons.AutoMirrored.Rounded.ArrowBackIos,
                                     stringResource(Str.calendar_icon_previous_month),
                                     tint = MaterialTheme.colors.primaryVariant,
                                 )
@@ -134,7 +134,7 @@ fun ImperialCalendar(
 
                             IconButton(onClick = { activeMonth = activeMonth.nextMonth() }) {
                                 Icon(
-                                    Icons.Rounded.ArrowForwardIos,
+                                    Icons.AutoMirrored.Rounded.ArrowForwardIos,
                                     stringResource(Str.calendar_icon_next_month),
                                     tint = MaterialTheme.colors.primaryVariant,
                                 )
@@ -329,7 +329,7 @@ private fun RowScope.Week(
                     .clickable(
                         onClick = { day?.let(onDaySelect) },
                         interactionSource = remember { MutableInteractionSource() },
-                        indication = rememberRipple(bounded = false, radius = 24.dp),
+                        indication = ripple(bounded = false, radius = 24.dp),
                     )
                     .size(36.dp)
                     .padding(8.dp),

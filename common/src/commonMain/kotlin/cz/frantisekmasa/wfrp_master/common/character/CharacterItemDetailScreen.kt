@@ -68,6 +68,6 @@ abstract class CharacterItemDetailScreen(
             return
         }
 
-        content(item, isGameMaster = isGameMaster)
+        content(item, isGameMaster)
     }
 }

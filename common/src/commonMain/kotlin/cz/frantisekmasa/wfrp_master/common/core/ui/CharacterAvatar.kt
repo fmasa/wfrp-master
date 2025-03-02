@@ -9,7 +9,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.AlertDialog
 import androidx.compose.material.Text
 import androidx.compose.material.TextButton
-import androidx.compose.material.ripple.rememberRipple
+import androidx.compose.material.ripple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -64,7 +64,7 @@ fun CharacterAvatar(
                             Modifier.clickable(
                                 interactionSource = remember { MutableInteractionSource() },
                                 indication =
-                                    rememberRipple(
+                                    ripple(
                                         bounded = false,
                                     ),
                                 onClick = { dialogVisible = true },

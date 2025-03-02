@@ -1,13 +1,13 @@
 package cz.frantisekmasa.wfrp_master.common.core.logging
 
-import com.google.firebase.analytics.ktx.analytics
-import com.google.firebase.analytics.ktx.logEvent
-import com.google.firebase.crashlytics.FirebaseCrashlytics
-import com.google.firebase.ktx.Firebase
 import cz.frantisekmasa.wfrp_master.common.core.auth.UserId
+import dev.gitlive.firebase.Firebase
+import dev.gitlive.firebase.analytics.analytics
+import dev.gitlive.firebase.analytics.logEvent
+import dev.gitlive.firebase.crashlytics.crashlytics
 
 actual object Reporter {
-    private val crashlytics by lazy { FirebaseCrashlytics.getInstance() }
+    private val crashlytics by lazy { Firebase.crashlytics }
 
     actual fun setUserId(id: UserId) {
         crashlytics.setUserId(id.toString())

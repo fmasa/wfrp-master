@@ -15,7 +15,6 @@ import dev.gitlive.firebase.firestore.FirebaseFirestoreException
 import dev.gitlive.firebase.firestore.FirestoreExceptionCode
 import dev.gitlive.firebase.firestore.QuerySnapshot
 import dev.gitlive.firebase.firestore.Transaction
-import dev.gitlive.firebase.firestore.where
 import io.github.aakira.napier.Napier
 import kotlinx.coroutines.flow.map
 
@@ -109,6 +108,6 @@ class FirestorePartyRepository(
 
     private fun queryForUser(userId: UserId) =
         parties
-            .where("users", arrayContains = userId.toString())
-            .where("archived", equalTo = false)
+            .where { "users" contains userId.toString() }
+            .where { "archived" equalTo false }
 }

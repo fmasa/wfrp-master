@@ -12,7 +12,6 @@ import cz.frantisekmasa.wfrp_master.common.core.firebase.firestore.setWithTopLev
 import dev.gitlive.firebase.firestore.FirebaseFirestore
 import dev.gitlive.firebase.firestore.FirebaseFirestoreException
 import dev.gitlive.firebase.firestore.Transaction
-import dev.gitlive.firebase.firestore.orderBy
 import io.github.aakira.napier.Napier
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers

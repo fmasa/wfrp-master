@@ -215,7 +215,7 @@ class CompendiumCareerDetailScreen(
 
             TabPager(
                 fullWidthTabs = true,
-                beyondBoundsPageCount = 1,
+                beyondViewportPageCount = 1,
             ) {
                 tab(tabDetail) {
                     Column(Modifier.fillMaxHeight()) {

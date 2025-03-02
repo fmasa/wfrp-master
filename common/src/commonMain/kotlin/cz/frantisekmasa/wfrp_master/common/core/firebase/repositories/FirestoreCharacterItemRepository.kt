@@ -13,8 +13,6 @@ import cz.frantisekmasa.wfrp_master.common.core.firebase.Schema
 import cz.frantisekmasa.wfrp_master.common.core.firebase.firestore.setWithTopLevelFieldsMerge
 import dev.gitlive.firebase.firestore.FirebaseFirestore
 import dev.gitlive.firebase.firestore.Transaction
-import dev.gitlive.firebase.firestore.orderBy
-import dev.gitlive.firebase.firestore.where
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
@@ -115,7 +113,7 @@ open class FirestoreCharacterItemRepository<T : CharacterItem<T, *>>(
             firestore.collection(Schema.PARTIES)
                 .document(partyId.toString())
                 .collection(Schema.CHARACTERS)
-                .where("archived", equalTo = false)
+                .where { "archived" equalTo false }
                 .get()
                 .documents
                 .map { character ->
@@ -123,7 +121,7 @@ open class FirestoreCharacterItemRepository<T : CharacterItem<T, *>>(
                         val characterId = CharacterId(partyId, character.id)
 
                         itemCollection(characterId)
-                            .where("compendiumId", equalTo = compendiumItemId.toString())
+                            .where { "compendiumId" equalTo compendiumItemId.toString() }
                             .get()
                             .documents
                             .map { it.data(serializer) }

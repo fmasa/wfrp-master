@@ -29,7 +29,6 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.rememberScreenMode
 import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.Breadcrumbs
 import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.IconAction
 import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.tabs.TabPager
-import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.tabs.tab
 import cz.frantisekmasa.wfrp_master.common.gameMaster.calendar.WorldScreen
 import cz.frantisekmasa.wfrp_master.common.partyList.PartyListScreen
 import cz.frantisekmasa.wfrp_master.common.partySettings.PartySettingsScreen
@@ -91,7 +90,7 @@ class GameMasterScreen(
 
                 TabPager(
                     modifier = Modifier.weight(1f),
-                    beyondBoundsPageCount = 1,
+                    beyondViewportPageCount = 1,
                     fullWidthTabs = true,
                 ) {
                     val modifier = Modifier.fillMaxSize()
