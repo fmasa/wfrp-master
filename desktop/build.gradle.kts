@@ -5,7 +5,7 @@ plugins {
     kotlin("multiplatform") // kotlin("jvm") doesn't work well in IDEA/AndroidStudio (https://github.com/JetBrains/compose-jb/issues/22)
     alias(libs.plugins.compose)
     alias(libs.plugins.compose.compiler)
-    id("dev.hydraulic.conveyor") version "1.4"
+    id("dev.hydraulic.conveyor") version "1.12"
 }
 
 configurations.all {
