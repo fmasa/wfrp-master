@@ -39,14 +39,13 @@ jobs:
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v3
 
-      - run: ./gradlew jar
+      - run: ./gradlew jvmJar
 
-      - uses: hydraulic-software/conveyor/actions/build@v1
+      - uses: hydraulic-software/conveyor/actions/build@v17.0
         with:
           command: make site
           signing_key: ${{ secrets.SIGNING_KEY }}
           agree_to_license: 1
-          conveyor_version: "8.0"
           cache_key: conveyor-${{ matrix.os }}-${{ matrix.arch }}
 
       - uses: actions/upload-artifact@v4
