@@ -67,11 +67,16 @@ suspend fun <T : Any> DocumentReference.setWithTopLevelFieldsMerge(
     )
 }
 
+private val json =
+    Json {
+        encodeDefaults = true
+    }
+
 private fun <T> getTopLevelFields(
     strategy: SerializationStrategy<T>,
     data: T,
 ): Array<String> {
-    return Json.encodeToJsonElement(strategy, data)
+    return json.encodeToJsonElement(strategy, data)
         .jsonObject
         .keys
         .toTypedArray()
