@@ -111,7 +111,7 @@ private fun ImportedItemsPicker(
                 ItemsScreen.SPELLS to state.spells.isNotEmpty(),
                 ItemsScreen.BLESSINGS to state.blessings.isNotEmpty(),
                 ItemsScreen.MIRACLES to state.miracles.isNotEmpty(),
-                ItemsScreen.TRAITS to state.miracles.isNotEmpty(),
+                ItemsScreen.TRAITS to state.traits.isNotEmpty(),
                 ItemsScreen.CAREERS to state.careers.isNotEmpty(),
                 ItemsScreen.TRAPPINGS to state.trappings.isNotEmpty(),
                 ItemsScreen.DISEASES to state.diseases.isNotEmpty(),
