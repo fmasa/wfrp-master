@@ -35,6 +35,9 @@
     kotlinx.serialization.KSerializer serializer(...);
 }
 
+# Voyager
+-keepnames class * implements cafe.adriel.voyager.core.screen.Screen
+
 # Kodein
 -keepattributes Signature
 
