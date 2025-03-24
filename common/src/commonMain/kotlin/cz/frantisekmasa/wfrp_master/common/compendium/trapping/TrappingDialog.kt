@@ -439,17 +439,17 @@ private class PriceFormData(
                 crowns =
                     inputValue(
                         money?.getCrowns()?.toString() ?: "",
-                        Rules.NonNegativeInteger(),
+                        Rules.ifNotBlank(Rules.NonNegativeInteger()),
                     ),
                 shillings =
                     inputValue(
                         money?.getShillings()?.toString() ?: "",
-                        Rules.NonNegativeInteger(),
+                        Rules.ifNotBlank(Rules.NonNegativeInteger()),
                     ),
                 pennies =
                     inputValue(
                         money?.getPennies()?.toString() ?: "",
-                        Rules.NonNegativeInteger(),
+                        Rules.ifNotBlank(Rules.NonNegativeInteger()),
                     ),
             )
         }
