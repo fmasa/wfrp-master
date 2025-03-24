@@ -4,6 +4,8 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -110,20 +112,24 @@ class CompendiumTrappingDetailScreen(
                     }
 
                     is TrappingType.Container -> {
-                        Column(Modifier.padding(Spacing.bodyPadding)) {
-                            SingleLineTextValue(
-                                stringResource(Str.trappings_label_type),
-                                TrappingTypeOption.CONTAINER.localizedName,
-                            )
+                        Column(Modifier.verticalScroll(rememberScrollState())) {
+                            subheadBar()
 
-                            SingleLineTextValue(
-                                stringResource(Str.trappings_label_carries),
-                                type.carries.toString(),
-                            )
+                            Column(Modifier.padding(Spacing.bodyPadding)) {
+                                SingleLineTextValue(
+                                    stringResource(Str.trappings_label_type),
+                                    TrappingTypeOption.CONTAINER.localizedName,
+                                )
 
-                            EncumbranceBox(trapping.encumbrance, null)
+                                SingleLineTextValue(
+                                    stringResource(Str.trappings_label_carries),
+                                    type.carries.toString(),
+                                )
 
-                            TrappingDescription(trapping.description)
+                                EncumbranceBox(trapping.encumbrance, null)
+
+                                TrappingDescription(trapping.description)
+                            }
                         }
                     }
 
@@ -151,6 +157,7 @@ class CompendiumTrappingDetailScreen(
 
                     TrappingType.FoodOrDrink -> {
                         SimpleTrappingDetailBody(
+                            subheadBar = subheadBar,
                             trappingType = TrappingTypeOption.FOOD_OR_DRINK.localizedName,
                             encumbrance = trapping.encumbrance,
                             description = trapping.description,
