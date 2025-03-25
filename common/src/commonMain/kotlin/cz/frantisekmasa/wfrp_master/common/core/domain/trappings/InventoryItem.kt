@@ -33,6 +33,7 @@ data class InventoryItem(
     val trappingType: TrappingType? = null,
     val itemQualities: Set<ItemQuality> = emptySet(),
     val itemFlaws: Set<ItemFlaw> = emptySet(),
+    val isEncumbranceCounted: Boolean = true,
     override val compendiumId: UuidAsString? = null,
 ) : CharacterItem<InventoryItem, Trapping> {
     init {
@@ -42,6 +43,10 @@ data class InventoryItem(
 
     @Stable
     val effectiveEncumbrance: Encumbrance get() {
+        if (!isEncumbranceCounted) {
+            return Encumbrance.Zero
+        }
+
         if (containerId != null) {
             // Encumbrance of items carried in a container are ignored, see rulebook page 301
             return Encumbrance.Zero
@@ -76,6 +81,7 @@ data class InventoryItem(
     fun update(
         itemQualities: Set<ItemQuality>,
         itemFlaws: Set<ItemFlaw>,
+        isEncumbranceCounted: Boolean,
         quantity: Int,
         note: String,
     ): InventoryItem =
@@ -86,6 +92,7 @@ data class InventoryItem(
                     encumbranceModifier(this.itemQualities, this.itemFlaws),
             itemQualities = itemQualities,
             itemFlaws = itemFlaws,
+            isEncumbranceCounted = isEncumbranceCounted,
             quantity = quantity,
             note = note,
         )

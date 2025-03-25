@@ -342,7 +342,7 @@ service cloud.firestore {
                     allow delete: if canEditCharacter();
 
                     function isValidInventoryItem(item) {
-                        return ["id", "name", "description", "note", "quantity", "encumbrance", "trappingType", "containerId", "compendiumId", "itemQualities", "itemFlaws"].hasAll(item.keys())
+                        return ["id", "name", "description", "note", "quantity", "encumbrance", "trappingType", "containerId", "compendiumId", "itemQualities", "itemFlaws", "isEncumbranceCounted"].hasAll(item.keys())
                             && item.id is string && item.id == itemId && isValidUuid(item.id)
                             && item.name is string && isNotBlank(item.name) && item.name.size() <= 50
                             && item.description is string && item.description.size() <= 2500
@@ -353,7 +353,8 @@ service cloud.firestore {
                                 || item.containerId == null || containerExists(item.containerId)
                             )
                             && (! ("note" in item) || (item.note is string && item.note.size() <= 500))
-                            && (!("compendiumId" in item) || (item.compendiumId == null || (item.compendiumId is string && exists(/databases/$(database)/documents/parties/$(partyId)/trappings/$(item.compendiumId)))));
+                            && (!("compendiumId" in item) || (item.compendiumId == null || (item.compendiumId is string && exists(/databases/$(database)/documents/parties/$(partyId)/trappings/$(item.compendiumId)))))
+                            && (!("isEncumbranceCounted" in item) || item.isEncumbranceCounted is bool);
                     }
 
                     function containerExists(containerId) {
