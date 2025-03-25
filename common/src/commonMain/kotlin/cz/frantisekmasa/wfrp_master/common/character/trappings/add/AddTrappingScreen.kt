@@ -65,6 +65,7 @@ class AddTrappingScreen(
                             itemFlaws = emptySet(),
                             quantity = 1,
                             note = "",
+                            isEncumbranceCounted = true,
                         ),
                     onSaveRequest = {
                         val item =

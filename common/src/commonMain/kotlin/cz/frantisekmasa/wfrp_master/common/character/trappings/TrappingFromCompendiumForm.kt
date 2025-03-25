@@ -46,6 +46,7 @@ fun TrappingFromCompendiumForm(
     val noteField = inputValue(data.note)
     val qualityValues = rememberSaveable { mutableStateOf(data.itemQualities) }
     val flawValues = rememberSaveable { mutableStateOf(data.itemFlaws) }
+    val isEncumbranceCounted = rememberSaveable { mutableStateOf(data.isEncumbranceCounted) }
     var validate by remember { mutableStateOf(false) }
 
     Scaffold(
@@ -72,6 +73,7 @@ fun TrappingFromCompendiumForm(
                                         itemFlaws = flawValues.value,
                                         quantity = quantityField.toInt().coerceAtLeast(1),
                                         note = noteField.value,
+                                        isEncumbranceCounted = isEncumbranceCounted.value,
                                     ),
                                 )
                                 onDismissRequest()
@@ -114,12 +116,16 @@ fun TrappingFromCompendiumForm(
                 selected = flawValues,
             )
 
-            TextInput(
-                label = stringResource(Str.trappings_label_quantity),
-                value = quantityField,
-                validate = validate,
-                keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
-            )
+            Column {
+                TextInput(
+                    label = stringResource(Str.trappings_label_quantity),
+                    value = quantityField,
+                    validate = validate,
+                    keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
+                )
+
+                EncumbranceCountedCheckbox(isEncumbranceCounted)
+            }
         }
     }
 }
@@ -129,4 +135,5 @@ data class TrappingFromCompendiumPlayerData(
     val itemFlaws: Set<ItemFlaw>,
     val quantity: Int,
     val note: String,
+    val isEncumbranceCounted: Boolean,
 )

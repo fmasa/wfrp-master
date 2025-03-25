@@ -17,12 +17,14 @@ fun EditPlayerDataDialog(
                 itemFlaws = trapping.itemFlaws,
                 quantity = trapping.quantity,
                 note = trapping.note,
+                isEncumbranceCounted = trapping.isEncumbranceCounted,
             ),
         onSaveRequest = {
             onSaveRequest(
                 trapping.update(
                     itemQualities = it.itemQualities,
                     itemFlaws = it.itemFlaws,
+                    isEncumbranceCounted = it.isEncumbranceCounted,
                     quantity = it.quantity,
                     note = it.note,
                 ),

@@ -678,6 +678,8 @@
     <string name="trappings_availability_rare">Rare</string>
     <string name="trappings_availability_scarce">Scarce</string>
     <string name="trappings_label_availability">Availability</string>
+    <string name="trappings_label_encumbrance_counted">Count Encumbrance</string>
+    <string name="trappings_label_encumbrance_counted_subtext">Add this encumbrance to character\'s encumbrance (uncheck if not carried around e.g. a cart)</string>
     <string name="trappings_label_carries">Carries</string>
     <string name="trappings_label_description">Description (optional)</string>
     <string name="trappings_label_encumbrance_per_unit">Encumbrance (per unit)</string>

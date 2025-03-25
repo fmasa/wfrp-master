@@ -1,5 +1,6 @@
 package cz.frantisekmasa.wfrp_master.common.character.trappings
 
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
@@ -91,14 +92,18 @@ fun NonCompendiumTrappingForm(
             keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
         )
 
-        TextInput(
-            label = stringResource(Str.trappings_label_encumbrance_per_unit),
-            value = formData.encumbrance,
-            maxLength = 8,
-            validate = validate,
-            keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
-            filters = listOf(Filter.DecimalNumber),
-        )
+        Column {
+            TextInput(
+                label = stringResource(Str.trappings_label_encumbrance_per_unit),
+                value = formData.encumbrance,
+                maxLength = 8,
+                validate = validate,
+                keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
+                filters = listOf(Filter.DecimalNumber),
+            )
+
+            EncumbranceCountedCheckbox(formData.isEncumbranceCounted)
+        }
 
         TextInput(
             label = stringResource(Str.trappings_label_description),
@@ -170,6 +175,7 @@ private fun TrappingTypeForm(
                 WeaponQualitiesPicker(formData)
                 WeaponFlawsPicker(formData)
             }
+
             TrappingTypeOption.ARMOUR -> {
                 SelectBox(
                     label = stringResource(Str.armour_label_type),
@@ -187,9 +193,11 @@ private fun TrappingTypeForm(
                 ArmourQualitiesPicker(formData.armourQualities)
                 ArmourFlawsPicker(formData.armourFlaws)
             }
+
             TrappingTypeOption.CLOTHING_OR_ACCESSORY, TrappingTypeOption.PROSTHETIC -> {
                 WornCheckbox(formData)
             }
+
             TrappingTypeOption.CONTAINER -> {
                 TextInput(
                     label = stringResource(Str.trappings_label_carries),
@@ -198,6 +206,7 @@ private fun TrappingTypeForm(
                 )
                 WornCheckbox(formData)
             }
+
             TrappingTypeOption.MELEE_WEAPON -> {
                 WeaponEquipSelect(formData)
                 SelectBox(
@@ -216,6 +225,7 @@ private fun TrappingTypeForm(
                 WeaponQualitiesPicker(formData)
                 WeaponFlawsPicker(formData)
             }
+
             TrappingTypeOption.RANGED_WEAPON -> {
                 WeaponEquipSelect(formData)
                 SelectBox(
@@ -241,6 +251,7 @@ private fun TrappingTypeForm(
                 WeaponQualitiesPicker(formData)
                 WeaponFlawsPicker(formData)
             }
+
             TrappingTypeOption.BOOK_OR_DOCUMENT,
             TrappingTypeOption.DRUG_OR_POISON,
             TrappingTypeOption.MISCELLANEOUS,
@@ -249,7 +260,8 @@ private fun TrappingTypeForm(
             TrappingTypeOption.SPELL_INGREDIENT,
             TrappingTypeOption.TOOL_OR_KIT,
             TrappingTypeOption.TRADE_TOOLS,
-            -> {}
+            -> {
+            }
         }
 }
 
@@ -312,6 +324,7 @@ private class InventoryItemFormData(
     val itemFlaws: MutableState<Set<ItemFlaw>>,
     val description: InputValue,
     val type: TrappingTypeFormData,
+    val isEncumbranceCounted: MutableState<Boolean>,
 ) : HydratedFormData<InventoryItem> {
     override fun isValid() = listOf(name, encumbrance, quantity, description).all { it.isValid() } && type.isValid()
 
@@ -337,6 +350,7 @@ private class InventoryItemFormData(
                     containerId
                 },
             compendiumId = null,
+            isEncumbranceCounted = isEncumbranceCounted.value,
         )
     }
 
@@ -365,6 +379,12 @@ private class InventoryItemFormData(
             description = inputValue(item?.description ?: ""),
             type = TrappingTypeFormData.fromTrappingType(item?.trappingType),
             containerId = item?.containerId ?: defaultContainerId,
+            isEncumbranceCounted =
+                rememberSaveable {
+                    mutableStateOf(
+                        item?.isEncumbranceCounted ?: true,
+                    )
+                },
         )
     }
 }
@@ -396,6 +416,7 @@ private class TrappingTypeFormData(
                     ammunitionWeaponGroups.value.isNotEmpty() &&
                     damage.isValid()
             }
+
             TrappingTypeOption.ARMOUR -> armourLocations.value.isNotEmpty() && armourPoints.isValid()
             TrappingTypeOption.CONTAINER -> carries.isValid()
             TrappingTypeOption.MELEE_WEAPON -> damage.isValid()
@@ -423,6 +444,7 @@ private class TrappingTypeFormData(
                     flaws = weaponFlaws.toMap(),
                     damage = DamageExpression(damage.value),
                 )
+
             TrappingTypeOption.ARMOUR ->
                 TrappingType.Armour(
                     locations = armourLocations.value,
@@ -432,16 +454,19 @@ private class TrappingTypeFormData(
                     qualities = armourQualities.toMap(),
                     flaws = armourFlaws.toMap(),
                 )
+
             TrappingTypeOption.BOOK_OR_DOCUMENT -> TrappingType.BookOrDocument
             TrappingTypeOption.CLOTHING_OR_ACCESSORY ->
                 TrappingType.ClothingOrAccessory(
                     worn = worn.value,
                 )
+
             TrappingTypeOption.CONTAINER ->
                 TrappingType.Container(
                     carries = Encumbrance(carries.toDouble()),
                     worn = worn.value,
                 )
+
             TrappingTypeOption.DRUG_OR_POISON -> TrappingType.DrugOrPoison
             TrappingTypeOption.FOOD_OR_DRINK -> TrappingType.FoodOrDrink
             TrappingTypeOption.HERB_OR_DRAUGHT -> TrappingType.HerbOrDraught
@@ -454,6 +479,7 @@ private class TrappingTypeFormData(
                     flaws = weaponFlaws.toMap(),
                     equipped = weaponEquipped.value,
                 )
+
             TrappingTypeOption.PROSTHETIC -> TrappingType.Prosthetic(worn = worn.value)
             TrappingTypeOption.RANGED_WEAPON ->
                 TrappingType.RangedWeapon(
@@ -464,6 +490,7 @@ private class TrappingTypeFormData(
                     flaws = weaponFlaws.toMap(),
                     equipped = weaponEquipped.value,
                 )
+
             TrappingTypeOption.SPELL_INGREDIENT -> TrappingType.SpellIngredient
             TrappingTypeOption.MISCELLANEOUS -> null
             TrappingTypeOption.TOOL_OR_KIT -> TrappingType.ToolOrKit
@@ -484,6 +511,7 @@ private class TrappingTypeFormData(
                         weaponQualities = type.qualities,
                         weaponFlaws = type.flaws,
                     )
+
                 is TrappingType.Armour ->
                     fromDefaults(
                         type = TrappingTypeOption.ARMOUR,
@@ -494,18 +522,21 @@ private class TrappingTypeFormData(
                         armourFlaws = type.flaws,
                         worn = type.worn,
                     )
+
                 is TrappingType.BookOrDocument -> fromDefaults(TrappingTypeOption.BOOK_OR_DOCUMENT)
                 is TrappingType.ClothingOrAccessory ->
                     fromDefaults(
                         type = TrappingTypeOption.CLOTHING_OR_ACCESSORY,
                         worn = type.worn,
                     )
+
                 is TrappingType.Container ->
                     fromDefaults(
                         type = TrappingTypeOption.CONTAINER,
                         carries = type.carries,
                         worn = type.worn,
                     )
+
                 is TrappingType.DrugOrPoison -> fromDefaults(TrappingTypeOption.DRUG_OR_POISON)
                 is TrappingType.HerbOrDraught -> fromDefaults(TrappingTypeOption.HERB_OR_DRAUGHT)
                 is TrappingType.MeleeWeapon ->
@@ -518,11 +549,13 @@ private class TrappingTypeFormData(
                         weaponFlaws = type.flaws,
                         weaponEquipped = type.equipped,
                     )
+
                 is TrappingType.Prosthetic ->
                     fromDefaults(
                         type = TrappingTypeOption.PROSTHETIC,
                         worn = type.worn,
                     )
+
                 is TrappingType.RangedWeapon ->
                     fromDefaults(
                         type = TrappingTypeOption.RANGED_WEAPON,
@@ -533,6 +566,7 @@ private class TrappingTypeFormData(
                         weaponFlaws = type.flaws,
                         weaponEquipped = type.equipped,
                     )
+
                 is TrappingType.SpellIngredient -> fromDefaults(TrappingTypeOption.SPELL_INGREDIENT)
                 TrappingType.FoodOrDrink -> fromDefaults(TrappingTypeOption.FOOD_OR_DRINK)
                 TrappingType.ToolOrKit -> fromDefaults(TrappingTypeOption.TOOL_OR_KIT)
