@@ -9,12 +9,18 @@ import dev.icerock.moko.parcelize.Parcelize
 enum class ArmourQuality : Quality {
     FLEXIBLE,
     IMPENETRABLE,
+    OVERCOAT,
+    REINFORCED,
+    VISOR,
     ;
 
     override val translatableName get() =
         when (this) {
             FLEXIBLE -> Str.armour_qualities_flexible
             IMPENETRABLE -> Str.armour_qualities_impenetrable
+            OVERCOAT -> Str.armour_qualities_overcoat
+            REINFORCED -> Str.armour_qualities_reinforced
+            VISOR -> Str.armour_qualities_visor
         }
     override val hasRating: Boolean get() = false
 }
