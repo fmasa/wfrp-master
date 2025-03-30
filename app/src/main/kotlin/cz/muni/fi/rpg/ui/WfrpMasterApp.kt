@@ -35,7 +35,8 @@ import org.kodein.di.instance
 fun WfrpMasterApp() {
     ProvideDIContainer {
         val settings: SettingsStorage by localDI().instance()
-        val keepScreenOn = settings.watch(AppSettings.KEEP_SCREEN_ON).collectWithLifecycle(null).value ?: true
+        val keepScreenOn =
+            settings.watch(AppSettings.KEEP_SCREEN_ON).collectWithLifecycle(null).value ?: true
 
         if (keepScreenOn) {
             KeepScreenOn()
@@ -43,26 +44,26 @@ fun WfrpMasterApp() {
 
         Theme {
             Startup {
-                ScreenWithBreakpoints {
-                    Column {
-                        NetworkStatusBanner()
-                        val intent = LocalActivity.current.intent
-                        val drawerState = rememberDrawerState(DrawerValue.Closed)
-                        val coroutineScope = rememberCoroutineScope()
+                Column {
+                    NetworkStatusBanner()
+                    val intent = LocalActivity.current.intent
+                    val drawerState = rememberDrawerState(DrawerValue.Closed)
+                    val coroutineScope = rememberCoroutineScope()
 
-                        Navigator(
-                            screens = rememberInitialScreens(intent?.data),
-                            onBackPressed = {
-                                if (drawerState.isOpen) {
-                                    coroutineScope.launch { drawerState.close() }
-                                    return@Navigator false
-                                }
+                    Navigator(
+                        screens = rememberInitialScreens(intent?.data),
+                        onBackPressed = {
+                            if (drawerState.isOpen) {
+                                coroutineScope.launch { drawerState.close() }
+                                return@Navigator false
+                            }
 
-                                true
-                            },
-                        ) { navigator ->
-                            SnackbarScaffold {
-                                DrawerShell(drawerState) {
+                            true
+                        },
+                    ) { navigator ->
+                        SnackbarScaffold {
+                            DrawerShell(drawerState) {
+                                ScreenWithBreakpoints {
                                     SlideTransition(navigator) {
                                         ProvideNavigationTransaction(it) {
                                             it.Content()
