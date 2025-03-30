@@ -2,6 +2,7 @@
 
 package cz.frantisekmasa.wfrp_master.common.core.ui
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
@@ -11,8 +12,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.Divider
-import androidx.compose.material.LocalContentAlpha
-import androidx.compose.material.LocalContentColor
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -22,12 +21,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.ExperimentalTextApi
-import androidx.compose.ui.text.LinkAnnotation
-import androidx.compose.ui.text.SpanStyle
-import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.withLink
-import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
 import cz.frantisekmasa.wfrp_master.common.Str
@@ -56,7 +50,9 @@ import cz.frantisekmasa.wfrp_master.common.core.domain.traits.Trait
 import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.TrappingType
 import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.WeaponEquip
 import cz.frantisekmasa.wfrp_master.common.core.ui.flow.collectWithLifecycle
+import cz.frantisekmasa.wfrp_master.common.core.ui.forms.Chip
 import cz.frantisekmasa.wfrp_master.common.core.ui.navigation.LocalNavigationTransaction
+import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.FlowRow
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
 import dev.icerock.moko.resources.compose.stringResource
 import kotlinx.coroutines.flow.Flow
@@ -232,41 +228,23 @@ private fun <T> CharacterItemList(
         return
     }
 
-    val formattedItems = items.map { it to value(it) }
     val navigation = LocalNavigationTransaction.current
 
-    val text =
-        remember(formattedItems, key, value, navigation) {
-            buildAnnotatedString {
-                withStyle(SpanStyle(fontWeight = FontWeight.Bold)) {
-                    append(title)
-                    append(": ")
-                }
+    Text(
+        text = title,
+        fontWeight = FontWeight.Bold,
+        modifier = Modifier.padding(top = Spacing.small),
+    )
 
-                formattedItems.forEachIndexed { index, (item, value) ->
-                    withLink(
-                        LinkAnnotation.Clickable(
-                            tag = key(item),
-                            linkInteractionListener = { navigation.navigate(detail(item)) },
-                        ),
-                    ) {
-                        append(value)
-                    }
-
-                    if (index != items.lastIndex) {
-                        append(", ")
-                    }
-                }
+    FlowRow(verticalSpacing = Spacing.tiny, horizontalSpacing = Spacing.tiny) {
+        items.forEach { item ->
+            key(key(item)) {
+                Chip(
+                    modifier = Modifier.clickable { navigation.navigate(detail(item)) },
+                ) { Text(value(item)) }
             }
         }
-
-    Text(
-        text,
-        style =
-            MaterialTheme.typography.body2.copy(
-                color = LocalContentColor.current.copy(alpha = LocalContentAlpha.current),
-            ),
-    )
+    }
 }
 
 @Composable
