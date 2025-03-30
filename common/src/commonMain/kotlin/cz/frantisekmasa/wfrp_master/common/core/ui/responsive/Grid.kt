@@ -22,6 +22,7 @@ import androidx.compose.ui.unit.dp
 import io.github.aakira.napier.Napier
 
 val LocalScreenWidth = compositionLocalOf<Dp> { error("Wrap your screen by ScreenWithBreakpoints") }
+val LocalScreenHeight = compositionLocalOf<Dp> { error("Wrap your screen by ScreenWithBreakpoints") }
 val LocalBreakpoint = staticCompositionLocalOf<Breakpoint> { error("Wrap your screen by ScreenWithBreakpoints") }
 private const val GRID_COLUMNS = 12
 
@@ -35,6 +36,7 @@ fun ScreenWithBreakpoints(content: @Composable () -> Unit) {
         CompositionLocalProvider(
             LocalBreakpoint provides breakpoint,
             LocalScreenWidth provides maxWidth,
+            LocalScreenHeight provides maxHeight,
             content = content,
         )
     }

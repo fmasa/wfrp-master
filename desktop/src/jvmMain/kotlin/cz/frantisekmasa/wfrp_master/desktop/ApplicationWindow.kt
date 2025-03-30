@@ -52,22 +52,22 @@ fun ApplicationWindow(
             Theme {
                 SnackbarScaffold {
                     Startup {
-                        ScreenWithBreakpoints {
-                            val drawerState = rememberDrawerState(DrawerValue.Closed)
-                            val coroutineScope = rememberCoroutineScope()
+                        val drawerState = rememberDrawerState(DrawerValue.Closed)
+                        val coroutineScope = rememberCoroutineScope()
 
-                            Navigator(
-                                screens = listOf(initialScreen),
-                                onBackPressed = {
-                                    if (drawerState.isOpen) {
-                                        coroutineScope.launch { drawerState.close() }
-                                        return@Navigator false
-                                    }
+                        Navigator(
+                            screens = listOf(initialScreen),
+                            onBackPressed = {
+                                if (drawerState.isOpen) {
+                                    coroutineScope.launch { drawerState.close() }
+                                    return@Navigator false
+                                }
 
-                                    true
-                                },
-                            ) { navigator ->
-                                DrawerShell(drawerState) {
+                                true
+                            },
+                        ) { navigator ->
+                            DrawerShell(drawerState) {
+                                ScreenWithBreakpoints {
                                     val screen = navigator.lastItem
 
                                     navigator.saveableState("currentScreen") {
