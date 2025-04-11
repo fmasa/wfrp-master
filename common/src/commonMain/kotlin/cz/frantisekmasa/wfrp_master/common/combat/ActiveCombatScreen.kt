@@ -61,6 +61,7 @@ import cz.frantisekmasa.wfrp_master.common.core.domain.party.PartyId
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.combat.Advantage
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.combat.GroupAdvantage
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.settings.AdvantageSystem
+import cz.frantisekmasa.wfrp_master.common.core.shared.BackHandler
 import cz.frantisekmasa.wfrp_master.common.core.shared.Resources
 import cz.frantisekmasa.wfrp_master.common.core.shared.drawableResource
 import cz.frantisekmasa.wfrp_master.common.core.ui.CharacterAvatar
@@ -118,6 +119,12 @@ class ActiveCombatScreen(
 
         val isGroupAdvantageSystemEnabled by derivedStateOf {
             party?.settings?.advantageSystem == AdvantageSystem.GROUP_ADVANTAGE
+        }
+
+        BackHandler(
+            enabled = bottomSheetState.isVisible && bottomSheetState.targetValue != ModalBottomSheetValue.Hidden,
+        ) {
+            coroutineScope.launch { bottomSheetState.hide() }
         }
 
         ModalBottomSheetLayout(
