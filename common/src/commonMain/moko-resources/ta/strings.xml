@@ -165,7 +165,7 @@
     <string name="compendium_json_import_prompt_warning_explanation">எனவே WFRP மாச்டரின் அதே பதிப்பிலிருந்து ஏற்றுமதி வேலை செய்யும் போது, முந்தைய பதிப்புகளிலிருந்து ஏற்றுமதி சரியாக வேலை செய்யாது.</string>
     <string name="compendium_messages_export_failed">சாதொபொகு ஏற்றுமதி தோல்வியடைந்தது.</string>
     <string name="compendium_messages_item_already_exists">உருப்படி ஏற்கனவே உள்ளது</string>
-    <string name="compendium_messages_unchanged_items">தற்போதுள்ள உருப்படிகள் மாறாமல் உள்ளன</string>
+    <string name="compendium_messages_unchanged_items">தற்போதுள்ள %d உருப்படிகள் மாறாமல் உள்ளன</string>
     <string name="compendium_messages_will_replace_existing_item">இருக்கும் உருப்படியை மாற்றும்</string>
     <string name="compendium_pick_prompt_blessings">நீங்கள் இறக்குமதி செய்ய விரும்பும் எந்த ஆசீர்வாதங்களைத் தேர்ந்தெடுக்கவும்.</string>
     <string name="compendium_pick_prompt_careers">நீங்கள் இறக்குமதி செய்ய விரும்பும் எந்த வேலைகளைத் தேர்ந்தெடுக்கவும்.</string>
@@ -321,7 +321,7 @@
     <string name="tests_results_astounding_failure">அதிர்ச்சியூட்டும் தோல்வி</string>
     <string name="tests_results_success">செய்</string>
     <string name="tests_roll">உருளம்</string>
-    <string name="tests_roll_label">%1$d vs %2$d</string>
+    <string name="tests_roll_label">இதற்கு%1$d எதிர் %2$d</string>
     <string name="tests_success_level_shortcut">எச்.எல்</string>
     <string name="tests_title_skill_test">திறன் சோதனை செய்யுங்கள்</string>
     <string name="tests_title_test">%s சோதனை</string>
@@ -361,7 +361,7 @@
     <string name="trappings_money_subtract">கழிக்கவும்</string>
     <string name="trappings_money_title_new_transaction">புதிய பண பரிவர்த்தனை</string>
     <string name="trappings_none">எதுவுமில்லை</string>
-    <string name="trappings_pack_size">%d துண்டுகளின் ஒரு பொதிக்கான விலை</string>
+    <string name="trappings_pack_size">ஒரு %d துண்டுகளின் பொதிக்கான விலை</string>
     <string name="trappings_title">டிராப்பிங்ச்</string>
     <string name="trappings_title_add">பொறி சேர்க்கவும்</string>
     <string name="trappings_title_edit">பொறி திருத்து</string>
@@ -591,7 +591,7 @@
     <string name="character_tab_religions">மதம்</string>
     <string name="character_tab_spells">எழுத்துப்பிழைகள்</string>
     <string name="character_tab_trappings">டிராப்பிங்ச்</string>
-    <string name="character_tabs_visible">%1$d %2$d தாவல்கள் தெரியும்</string>
+    <string name="character_tabs_visible">%1$d தாவல்கள் %2$d இல் தெரியும்</string>
     <string name="character_title_basics">அடிப்படைகள்</string>
     <string name="character_title_career">தொழில்</string>
     <string name="character_title_characteristics">பண்புகள்</string>
