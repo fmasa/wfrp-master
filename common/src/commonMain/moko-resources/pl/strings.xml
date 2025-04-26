@@ -816,4 +816,6 @@
     <string name="journal_folder_weapon_qualities">Przewodnik Konsumenta / Broń / Zalety broni</string>
     <string name="journal_folder_weapon_melee_groups">Przewodnik Konsumenta / Broń / Kategorie broni białej</string>
     <string name="journal_folder_weapon_ranged_groups">Przewodnik Konsumenta / Broń / Kategorie broni zasięgowej</string>
+    <string name="trappings_label_encumbrance_counted_subtext">Dodaj to obciążenie do obciążenia postaci (odznacz, jeśli nie jest noszone, np. w wózku)</string>
+    <string name="trappings_label_encumbrance_counted">Oblicz Obciążenie</string>
 </resources>
