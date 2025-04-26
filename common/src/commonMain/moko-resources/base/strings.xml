@@ -11,6 +11,7 @@
     <string name="ambition_title_character_ambitions">Character ambitions</string>
     <string name="ambition_title_party_ambitions">Party ambitions</string>
     <string name="armour_flaws_partial">Partial</string>
+    <string name="armour_flaws_requires_kit">Requires Kit</string>
     <string name="armour_flaws_weakpoints">Weakpoints</string>
     <string name="armour_label_armour_points">Armour Points (AP)</string>
     <string name="armour_label_flaws">Armour Flaws</string>
@@ -20,6 +21,9 @@
     <string name="armour_messages_at_least_one_location_required">At least one location is required</string>
     <string name="armour_qualities_flexible">Flexible</string>
     <string name="armour_qualities_impenetrable">Impenetrable</string>
+    <string name="armour_qualities_overcoat">Overcoat</string>
+    <string name="armour_qualities_reinforced">Reinforced</string>
+    <string name="armour_qualities_visor">Visor</string>
     <string name="armour_shield">Shield</string>
     <string name="armour_tip_trappings">Armour is auto-calculated from worn armour trappings.</string>
     <string name="armour_title">Armour</string>
