@@ -39,6 +39,7 @@ import cz.frantisekmasa.wfrp_master.common.core.domain.Characteristic
 import cz.frantisekmasa.wfrp_master.common.core.domain.Expression
 import cz.frantisekmasa.wfrp_master.common.core.domain.Stats
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.Character
+import cz.frantisekmasa.wfrp_master.common.core.domain.character.CurrentConditions
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.Points
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.Points.PointPool
 import cz.frantisekmasa.wfrp_master.common.core.domain.identifiers.CharacterId
@@ -196,20 +197,6 @@ private fun CharacterTopPanel(
                         Modifier.padding(start = Spacing.medium),
                         horizontalAlignment = Alignment.End,
                     ) {
-                        Text(
-                            character.name,
-                            style = MaterialTheme.typography.h6,
-                            softWrap = false,
-                            overflow = TextOverflow.Ellipsis,
-                        )
-                        Text(
-                            (character.race?.let { "${it.localizedName} " } ?: "") +
-                                careerName(career, character),
-                            style = MaterialTheme.typography.caption,
-                            softWrap = false,
-                            overflow = TextOverflow.Ellipsis,
-                        )
-
                         WoundsBadge(character, points, update = onUpdate)
                     }
                 }
@@ -218,18 +205,6 @@ private fun CharacterTopPanel(
             column(size) { PointsRow(points, update = onUpdate) }
         }
     }
-}
-
-@Stable
-private fun careerName(
-    career: CompendiumCareer?,
-    character: Character,
-): String {
-    if (career == null) {
-        return character.career
-    }
-
-    return career.level.name
 }
 
 @Composable
