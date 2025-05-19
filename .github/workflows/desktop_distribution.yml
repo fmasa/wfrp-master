@@ -11,8 +11,13 @@ on:
 
 # Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
 permissions:
-  contents: read
+  # Needed for reading repository contents (read)
+  # and uploading assets to Github Releases (write)
+  contents: write
+  # Needed for deploying to GitHub Pages
   pages: write
+  # Needed for getting the OIDC token for the Github Pages deployment
+  # See https://github.com/actions/deploy-pages?tab=readme-ov-file#oidc
   id-token: write
 
 # Allow only one concurrent deployment, skipping runs queued between the run in-progress and latest queued.
@@ -25,54 +30,56 @@ jobs:
   # Single deploy job since we're just deploying
   conveyor:
     name: "Create desktop distributions"
-    environment: production
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-22.04
     env:
       CONVEYOR_AGREE_TO_LICENSE: "1"
       APP_VERSION: ${{ github.ref_name }}
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-java@v3
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Java
+        uses: actions/setup-java@v3
         with:
           distribution: 'temurin'
           java-version: '17'
-      - name: Setup Gradle
+
+      - name: Set up Gradle
         uses: gradle/actions/setup-gradle@v3
 
-      - run: ./gradlew jvmJar
+      - name: Build JAR
+        run: ./gradlew jvmJar
 
-      - uses: hydraulic-software/conveyor/actions/build@v17.0
+      - name: Build desktop distributions
+        uses: hydraulic-software/conveyor/actions/build@v17.0
         with:
           command: make site
           signing_key: ${{ secrets.SIGNING_KEY }}
           agree_to_license: 1
           cache_key: conveyor-${{ matrix.os }}-${{ matrix.arch }}
 
-      - uses: actions/upload-artifact@v4
-        with:
-          name: download-page
-          path: output
-          retention-days: 1
+      - name: Extract download page files from output
+        run: |
+          mkdir -p pages_output/download
+          mv output/download.html pages_output/download/index.html
+          mv output/icon.png pages_output/download
 
-  deploy:
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    runs-on: ubuntu-latest
-    needs: [conveyor]
-    steps:
-      - name: Download a single artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: download-page
-          path: download
-      - run: mv download/download.html download/index.html
+      - name: Upload artifacts to Github Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh release upload "$GITHUB_REF_NAME" output/* --clobber
+
       - name: Setup Pages
         uses: actions/configure-pages@v3
+
       - name: Upload artifact
-        uses: actions/upload-pages-artifact@v1
+        uses: actions/upload-pages-artifact@v3
         with:
-          path: '.'
+          path: pages_output
+
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v2
+        uses: actions/deploy-pages@v4
