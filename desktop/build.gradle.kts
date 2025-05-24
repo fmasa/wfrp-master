@@ -54,9 +54,7 @@ compose.desktop {
             packageVersion = System.getenv("APP_VERSION") ?: "1.0.0"
 
             windows {
-                menuGroup = "Compose Examples"
-                // see https://wixtoolset.org/documentation/manual/v3/howtos/general/generate_guids.html
-                upgradeUuid = "BF9CDA6A-1391-46D5-9ED5-383D6E68CCEB"
+                upgradeUuid = "F73A74E2-BF36-4883-B4AE-ABC289D0816C"
             }
 
             nativeDistributions {
