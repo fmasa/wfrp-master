@@ -88,7 +88,7 @@ jobs:
       - unit-tests-jvm
       - firestore-tests
       - ktlint
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     container:
       image: fmasa/lebeda:7.4-ci
     steps:
