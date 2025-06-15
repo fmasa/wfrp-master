@@ -124,7 +124,6 @@ kotlin {
 
                 // Authentication
                 api(libs.play.services.auth)
-                implementation(libs.firebase.dynamic.links.ktx)
 
                 // Shared Preferences DataStore
                 api(libs.datastore.preferences)

@@ -1,0 +1,14 @@
+[
+  {
+    "relation": [
+      "delegate_permission/common.handle_all_urls"
+    ],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "cz.frantisekmasa.dnd",
+      "sha256_cert_fingerprints": [
+        "E2:C6:D6:EC:B9:ED:D4:ED:BE:0B:98:3A:69:9D:70:EB:95:71:C0:6F:7E:A1:CB:FF:6D:92:75:80:8F:80:CE:1B"
+      ]
+    }
+  }
+]

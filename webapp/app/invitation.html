@@ -11,19 +11,17 @@
 <div id="header">
     <h1>WFRP Master</h1>
 </div>
-<div id="message">
-    <div class="main-screenshot">
-        <img src="/screenshot.png" alt="Screenshot of WFRP Master" style="width: 100%">
-        <a href="https://play.google.com/store/apps/details?id=cz.frantisekmasa.dnd&pcampaignid=pcampaignidMKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1"><img
-                alt="Get it on Google Play"
-                width="200"
-                src="https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png"/></a>
-    </div>
+<div id="message" class="text-center">
     <h1>Invitation</h1>
     <p>You have been invited to WFRP Master party.</p>
     <p>Open this page on your Android device to join it, or scan QR code below in WFRP Master app.</p>
     <div id="qrCode" style="margin: auto; width: 200px"></div>
-    <div class="clear"></div>
+    <p>If you are visiting this page on your Android device and the app did not open <a id="open-app" href="">click here</a>.</p>
+    <p>If you don't have the app installed yet, you can <a href="https://play.google.com/store/apps/details?id=cz.frantisekmasa.dnd&pcampaignid=pcampaignidMKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1">install it from Google Play</a>.</p>
+    <a href="https://play.google.com/store/apps/details?id=cz.frantisekmasa.dnd&pcampaignid=pcampaignidMKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1"><img
+            alt="Get it on Google Play"
+            width="200"
+            src="https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png"/></a>
 </div>
 <div id="footer">
     <p>WFRP Master</p>
@@ -31,7 +29,7 @@
     <a href="/privacy-policy.html">Privacy Policy</a>
 </div>
 <script src="https://cdn.rawgit.com/davidshimjs/qrcodejs/gh-pages/qrcode.min.js"></script>
-<script>
+<script type="text/javascript">
     const urlParams = new URLSearchParams(window.location.search);
     const invitation = urlParams.get('invitation');
 
@@ -40,6 +38,8 @@
         width: 200,
         height: 200,
     });
+
+    document.getElementById("open-app").href = "wfrp-master://invitation?invitation=" + encodeURIComponent(invitation);
 </script>
 </body>
 </html>
