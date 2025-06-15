@@ -113,6 +113,15 @@ open class CharacteristicChange(
                 )
             }
 
+            if (name.equals(translator.translate(Str.character_effect_swarm), ignoreCase = true)) {
+                return CharacteristicChange(
+                    plus =
+                        Stats.ZERO.copy(
+                            weaponSkill = 10,
+                        ),
+                )
+            }
+
             if (name.equals(translator.translate(Str.character_effect_tough), ignoreCase = true)) {
                 return CharacteristicChange(
                     plus =
