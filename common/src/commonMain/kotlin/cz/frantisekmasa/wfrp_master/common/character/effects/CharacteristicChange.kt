@@ -114,15 +114,6 @@ open class CharacteristicChange(
                 )
             }
 
-            if (name.equals(translator.translate(Str.character_effect_brute), ignoreCase = true)) {
-                return CharacteristicChange(
-                    plus =
-                        Stats.ZERO.copy(
-                            weaponSkill = 10,
-                        ),
-                )
-            }
-
             return null
         }
 
