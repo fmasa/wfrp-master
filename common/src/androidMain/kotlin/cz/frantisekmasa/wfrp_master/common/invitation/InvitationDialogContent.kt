@@ -16,11 +16,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
-import androidx.core.net.toUri
-import com.google.firebase.dynamiclinks.ktx.androidParameters
-import com.google.firebase.dynamiclinks.ktx.dynamicLinks
-import com.google.firebase.dynamiclinks.ktx.shortLinkAsync
-import com.google.firebase.ktx.Firebase
 import cz.frantisekmasa.wfrp_master.common.Str
 import cz.frantisekmasa.wfrp_master.common.core.domain.party.Invitation
 import cz.frantisekmasa.wfrp_master.common.core.logging.Reporting
@@ -28,7 +23,6 @@ import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.FullScreenProgress
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.VISUAL_ONLY_ICON_DESCRIPTION
 import dev.icerock.moko.resources.compose.stringResource
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
 
 @Composable
@@ -74,15 +68,10 @@ private suspend fun buildSharingOptions(
 ): SharingOptions {
     return withContext(Dispatchers.IO) {
         val json = screenModel.serializeInvitation(invitation)
-        val link =
-            Firebase.dynamicLinks.shortLinkAsync {
-                link = InvitationLinkScreen.deepLink(json).toString().toUri()
-                androidParameters { }
-                domainUriPrefix = "https://wfrp.page.link"
-            }
+        val link = InvitationLinkScreen.deepLink(json).toString()
 
         SharingOptions(
-            link = link.await().shortLink.toString(),
+            link = link,
             json = json,
         )
     }

@@ -23,6 +23,7 @@
     <p>You have been invited to WFRP Master party.</p>
     <p>Open this page on your Android device to join it, or scan QR code below in WFRP Master app.</p>
     <div id="qrCode" style="margin: auto; width: 200px"></div>
+    <p>If you are visiting this page on your Android device and the app did not open <a id="open-app" href="">click here</a>.</p>
     <div class="clear"></div>
 </div>
 <div id="footer">
@@ -31,7 +32,7 @@
     <a href="/privacy-policy.html">Privacy Policy</a>
 </div>
 <script src="https://cdn.rawgit.com/davidshimjs/qrcodejs/gh-pages/qrcode.min.js"></script>
-<script>
+<script type="text/javascript">
     const urlParams = new URLSearchParams(window.location.search);
     const invitation = urlParams.get('invitation');
 
@@ -40,6 +41,8 @@
         width: 200,
         height: 200,
     });
+
+    document.getElementById("open-app").href = "wfrp-master://invitation?invitation=" + encodeURIComponent(invitation);
 </script>
 </body>
 </html>
