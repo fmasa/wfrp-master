@@ -94,6 +94,15 @@ open class CharacteristicChange(
                 )
             }
 
+            if (name.equals(translator.translate(Str.character_effect_fast), ignoreCase = true)) {
+                return CharacteristicChange(
+                    plus =
+                        Stats.ZERO.copy(
+                            agility = 10,
+                        ),
+                )
+            }
+
             if (name.equals(translator.translate(Str.character_effect_leader), ignoreCase = true)) {
                 return CharacteristicChange(
                     plus =
