@@ -94,6 +94,15 @@ open class CharacteristicChange(
                 )
             }
 
+            if (name.equals(translator.translate(Str.character_effect_fast), ignoreCase = true)) {
+                return CharacteristicChange(
+                    plus =
+                        Stats.ZERO.copy(
+                            agility = 10,
+                        ),
+                )
+            }
+
             if (name.equals(translator.translate(Str.character_effect_leader), ignoreCase = true)) {
                 return CharacteristicChange(
                     plus =
@@ -110,15 +119,6 @@ open class CharacteristicChange(
                         Stats.ZERO.copy(
                             toughness = 10,
                             willPower = 10,
-                        ),
-                )
-            }
-
-            if (name.equals(translator.translate(Str.character_effect_brute), ignoreCase = true)) {
-                return CharacteristicChange(
-                    plus =
-                        Stats.ZERO.copy(
-                            weaponSkill = 10,
                         ),
                 )
             }
