@@ -7,6 +7,7 @@ import cz.frantisekmasa.wfrp_master.common.character.effects.CharacterEffect
 import cz.frantisekmasa.wfrp_master.common.character.effects.CharacteristicChange
 import cz.frantisekmasa.wfrp_master.common.character.effects.ConstructWoundsModification
 import cz.frantisekmasa.wfrp_master.common.character.effects.EffectSource
+import cz.frantisekmasa.wfrp_master.common.character.effects.HardyWoundsModification
 import cz.frantisekmasa.wfrp_master.common.character.effects.SizeChange
 import cz.frantisekmasa.wfrp_master.common.character.effects.SwarmWoundsModification
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.CharacterItem
@@ -49,6 +50,7 @@ data class Trait(
             CharacteristicChange.fromTraitNameOrNull(name, translator),
             SwarmWoundsModification.fromTraitNameOrNull(name, translator),
             ConstructWoundsModification.fromTraitNameOrNull(name, translator),
+            HardyWoundsModification.fromTraitNameOrNull(name, translator),
         )
     }
 
