@@ -51,5 +51,18 @@ class HardyWoundsModification(private val timesTaken: Int) : CharacterEffect {
 
             return null
         }
+
+        fun fromTraitNameOrNull(
+            name: String,
+            translator: Translator,
+        ): HardyWoundsModification? {
+            val effectName = translator.translate(Str.character_effect_hardy)
+
+            if (name.equals(effectName, ignoreCase = true)) {
+                return HardyWoundsModification(1)
+            }
+
+            return null
+        }
     }
 }
