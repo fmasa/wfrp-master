@@ -17,12 +17,9 @@ import com.benasher44.uuid.Uuid
 import cz.frantisekmasa.wfrp_master.common.Str
 import cz.frantisekmasa.wfrp_master.common.character.characterItemsCard
 import cz.frantisekmasa.wfrp_master.common.character.diseases.CharacterDiseaseDetailScreen
-import cz.frantisekmasa.wfrp_master.common.core.domain.character.diseases.Countdown
+import cz.frantisekmasa.wfrp_master.common.core.domain.character.Countdown
 import cz.frantisekmasa.wfrp_master.common.core.domain.identifiers.CharacterId
 import cz.frantisekmasa.wfrp_master.common.core.shared.Resources
-import cz.frantisekmasa.wfrp_master.common.core.ui.menu.WithContextMenu
-import cz.frantisekmasa.wfrp_master.common.core.ui.navigation.LocalNavigationTransaction
-import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.ContextMenu
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.ItemIcon
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
 import dev.icerock.moko.resources.compose.stringResource
@@ -35,77 +32,61 @@ fun LazyListScope.diseasesCard(
 ) {
     characterItemsCard(
         title = { stringResource(Str.diseases_title_diseases) },
+        leadingDivider = true,
         key = "diseases",
         id = DiseaseItem::id,
         items = diseases,
         newItemScreen = { AddDiseaseScreen(characterId) },
+        detailScreen = { disease -> CharacterDiseaseDetailScreen(characterId, disease.id) },
+        onRemove = onRemoveRequest,
         item = { disease ->
-            val navigation = LocalNavigationTransaction.current
-            WithContextMenu(
-                items =
-                    listOf(
-                        ContextMenu.Item(
-                            stringResource(Str.common_ui_button_remove),
-                            onClick = { onRemoveRequest(disease) },
-                        ),
-                    ),
-                onClick = {
-                    navigation.navigate(
-                        CharacterDiseaseDetailScreen(
-                            characterId,
-                            disease.id,
-                        ),
-                    )
-                },
-            ) {
-                ListItem(
-                    text = { Text(disease.name) },
-                    icon = { ItemIcon(Resources.Drawable.Disease) },
-                    secondaryText =
-                        if (!disease.isDiagnosed) {
-                            (
-                                {
-                                    Row(
-                                        verticalAlignment = Alignment.CenterVertically,
-                                        horizontalArrangement = Arrangement.spacedBy(Spacing.tiny),
-                                    ) {
-                                        Icon(
-                                            Icons.Rounded.VisibilityOff,
-                                            stringResource(Str.diseases_messages_visible_to_player_false),
-                                            Modifier.height(Spacing.large),
-                                        )
-                                        Text(
-                                            stringResource(Str.diseases_label_not_diagnosed),
-                                        )
-                                    }
+            ListItem(
+                text = { Text(disease.name) },
+                icon = { ItemIcon(Resources.Drawable.Disease) },
+                secondaryText =
+                    if (!disease.isDiagnosed) {
+                        (
+                            {
+                                Row(
+                                    verticalAlignment = Alignment.CenterVertically,
+                                    horizontalArrangement = Arrangement.spacedBy(Spacing.tiny),
+                                ) {
+                                    Icon(
+                                        Icons.Rounded.VisibilityOff,
+                                        stringResource(Str.diseases_messages_visible_to_player_false),
+                                        Modifier.height(Spacing.large),
+                                    )
+                                    Text(
+                                        stringResource(Str.diseases_label_not_diagnosed),
+                                    )
                                 }
-                            )
-                        } else {
-                            null
-                        },
-                    trailing = {
-                        when {
-                            disease.isHealed -> {
-                                Text(stringResource(Str.diseases_label_healed))
                             }
-
-                            disease.incubation.value > 0 -> {
-                                Time(
-                                    stringResource(Str.diseases_label_incubation),
-                                    disease.incubation,
-                                )
-                            }
-
-                            else -> {
-                                Time(
-                                    stringResource(Str.diseases_label_duration),
-                                    disease.duration,
-                                )
-                            }
-                        }
+                        )
+                    } else {
+                        null
                     },
-                )
-            }
+                trailing = {
+                    when {
+                        disease.isHealed -> {
+                            Text(stringResource(Str.diseases_label_healed))
+                        }
+
+                        disease.incubation.value > 0 -> {
+                            Time(
+                                stringResource(Str.diseases_label_incubation),
+                                disease.incubation,
+                            )
+                        }
+
+                        else -> {
+                            Time(
+                                stringResource(Str.diseases_label_duration),
+                                disease.duration,
+                            )
+                        }
+                    }
+                },
+            )
         },
     )
 }
