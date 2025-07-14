@@ -6,4 +6,9 @@ data class TextToken(
     val height: Float,
     val fontSizePt: Float,
     val y: Float,
-)
+) {
+    val metadata get() = Token.Metadata(
+        y = y,
+        height = height,
+        )
+}

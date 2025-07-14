@@ -130,7 +130,7 @@ class SpellParser(
                         effect =
                             MarkdownBuilder.buildMarkdown(
                                 listOf(
-                                    listOf(Token.NormalPart(effectStart)),
+                                    listOf(Token.NormalPart(effectStart, Token.Metadata.Empty)),
                                     stream.consumeUntil { it is Token.Heading },
                                 ).flatten().filterIsInstance<Token.ParagraphToken>(),
                             ),

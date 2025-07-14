@@ -89,12 +89,12 @@ class RulesParser(
                 if (token is Token.BoxHeader) {
                     // Make sure we do not merge two boxes
                     add(Token.BlankLine)
-                    add(Token.BlockQuote("### ${cleanupHeading(token.text)}"))
+                    add(Token.BlockQuote("### ${cleanupHeading(token.text)}", Token.Metadata.Empty))
                     continue
                 }
 
                 if (token is Token.BoxContent) {
-                    add(Token.BlockQuote(token.text))
+                    add(Token.BlockQuote(token.text, token.metadata))
                     continue
                 }
 

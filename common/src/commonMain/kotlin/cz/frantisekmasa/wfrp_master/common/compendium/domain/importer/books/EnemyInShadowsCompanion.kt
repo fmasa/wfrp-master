@@ -60,30 +60,30 @@ object EnemyInShadowsCompanion : Book, SpellSource {
             (textToken.fontSizePt == 12f || textToken.fontSizePt == 18f) &&
             textToken.fontName.endsWith("CaslonAntique-Bold-SC700")
         ) {
-            return Token.Heading2(textToken.text)
+            return Token.Heading2(textToken)
         }
 
         if (
             (textToken.fontSizePt == 19f || textToken.fontSizePt == 22f) &&
             textToken.fontName.endsWith("CaslonAntique-Bold")
         ) {
-            return Token.Heading2(textToken.text)
+            return Token.Heading2(textToken)
         }
 
         if (textToken.fontSizePt == 12f && textToken.fontName.endsWith("ACaslonPro-Bold")) {
-            return Token.Heading3(textToken.text)
+            return Token.Heading3(textToken)
         }
 
         if (textToken.fontSizePt == 10f || textToken.fontSizePt == 9f) {
             if (textToken.fontName.endsWith("ACaslonPro-Bold")) {
-                return Token.BoldPart(textToken.text)
+                return Token.BoldPart(textToken)
             }
 
             if (textToken.fontName.endsWith("ACaslonPro-Italic")) {
-                return Token.ItalicsPart(textToken.text)
+                return Token.ItalicsPart(textToken)
             }
             if (textToken.fontName.endsWith("ACaslonPro-Regular")) {
-                return Token.NormalPart(textToken.text)
+                return Token.NormalPart(textToken)
             }
         }
 

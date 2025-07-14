@@ -6,6 +6,7 @@ import arrow.core.nonEmptyListOf
 object MarkdownBuilder {
     private const val BULLET_POINT_PLACEHOLDER = "•"
 
+    // TODO: Use different tokens that parser tokens
     fun buildMarkdown(tokens: List<Token.ParagraphToken>): String {
         val flattened = mutableListOf<NonEmptyList<Token.ParagraphToken>>()
 

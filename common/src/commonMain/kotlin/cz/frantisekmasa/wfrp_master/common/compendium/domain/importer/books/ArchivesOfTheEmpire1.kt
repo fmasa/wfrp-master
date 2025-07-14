@@ -51,26 +51,26 @@ object ArchivesOfTheEmpire1 : Book, CareerSource, TrappingSource {
 
     override fun resolveToken(textToken: TextToken): Token? {
         if (textToken.fontName.endsWith("CaslonAntique-Bold-SC700")) {
-            return Token.BoxHeader(textToken.text)
+            return Token.BoxHeader(textToken)
         }
 
         if (textToken.fontName.endsWith("CaslonAntique")) {
             if (textToken.fontSizePt == 11f) {
-                return Token.TableHeading(textToken.text)
+                return Token.TableHeading(textToken.text, textToken.metadata)
             }
 
             if (textToken.fontSizePt == 15f) {
-                return Token.BoxHeader(textToken.text)
+                return Token.BoxHeader(textToken)
             }
         }
 
         if (textToken.fontName.endsWith("CaslonAntique-Bold")) {
             if (textToken.fontSizePt == 19f || textToken.fontSizePt == 22f) {
-                return Token.Heading1(textToken.text)
+                return Token.Heading1(textToken.text, textToken.metadata)
             }
 
             if (textToken.fontSizePt == 10f) {
-                return Token.TableHeadCell(textToken.text)
+                return Token.TableHeadCell(textToken)
             }
         }
 
@@ -79,28 +79,24 @@ object ArchivesOfTheEmpire1 : Book, CareerSource, TrappingSource {
         }
 
         if (textToken.fontSizePt == 12f && textToken.fontName.endsWith("ACaslonPro-Bold")) {
-            return Token.Heading3(textToken.text)
+            return Token.Heading3(textToken)
         }
 
         if (textToken.fontSizePt == 8f && textToken.fontName.endsWith("ACaslonPro-Regular")) {
-            return Token.BodyCellPart(
-                text = textToken.text,
-                y = textToken.y,
-                height = textToken.height,
-            )
+            return Token.BodyCellPart(textToken)
         }
 
         if (textToken.fontSizePt == 9f) {
             if (textToken.fontName.endsWith("ACaslonPro-Bold")) {
-                return Token.BoldPart(textToken.text)
+                return Token.BoldPart(textToken)
             }
 
             if (textToken.fontName.endsWith("ACaslonPro-Italic")) {
-                return Token.ItalicsPart(textToken.text)
+                return Token.ItalicsPart(textToken)
             }
 
             if (textToken.fontName.endsWith("ACaslonPro-Regular")) {
-                return Token.NormalPart(textToken.text)
+                return Token.NormalPart(textToken)
             }
         }
 

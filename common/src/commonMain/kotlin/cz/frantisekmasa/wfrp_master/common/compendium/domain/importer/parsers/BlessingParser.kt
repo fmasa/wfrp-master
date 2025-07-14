@@ -39,7 +39,7 @@ class BlessingParser {
 
                 val effect =
                     MarkdownBuilder.buildMarkdown(
-                        listOf(Token.NormalPart(effectStart)) +
+                        listOf(Token.NormalPart(effectStart, Token.Metadata.Empty)) +
                             stream.consumeUntil { it is Token.Heading3 }
                                 .filterIsInstance<Token.ParagraphToken>(),
                     )

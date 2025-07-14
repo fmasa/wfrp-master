@@ -51,7 +51,10 @@ class BasicTrappingsParser(
                 tokens.mapNotNull {
                     when (it) {
                         is Token.BodyCellPart -> it
-                        is Token.NormalPart -> Token.BodyCellPart(it.text, y = 0f, height = Float.MAX_VALUE)
+                        is Token.NormalPart -> Token.BodyCellPart(
+                            text = it.text,
+                            metadata = it.metadata,
+                        )
                         else -> null
                     }
                 },

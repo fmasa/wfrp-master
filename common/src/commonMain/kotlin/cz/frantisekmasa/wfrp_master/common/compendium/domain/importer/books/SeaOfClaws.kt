@@ -37,8 +37,8 @@ object SeaOfClaws : Book, SpellSource, TalentSource, CareerSource, MiracleSource
     override fun importCareers(document: Document): List<Career> {
         val tokenMapper: (Token) -> Token = {
             when (it) {
-                is Token.BodyCellPart -> Token.NormalPart(it.text)
-                is Token.TableHeadCell -> Token.BoldPart(it.text)
+                is Token.BodyCellPart -> Token.NormalPart(it.text, it.metadata)
+                is Token.TableHeadCell -> Token.BoldPart(it.text, it.metadata)
                 else -> it
             }
         }
@@ -90,25 +90,25 @@ object SeaOfClaws : Book, SpellSource, TalentSource, CareerSource, MiracleSource
     override fun resolveToken(textToken: TextToken): Token? {
         if (textToken.fontSizePt == 10f) {
             if (textToken.fontName.endsWith("ACaslonPro-Bold")) {
-                return Token.BoldPart(textToken.text)
+                return Token.BoldPart(textToken)
             }
 
             if (textToken.fontName.endsWith("ACaslonPro-Italic")) {
-                return Token.ItalicsPart(textToken.text)
+                return Token.ItalicsPart(textToken)
             }
 
             if (textToken.fontName.endsWith("ACaslonPro-Regular")) {
-                return Token.NormalPart(textToken.text)
+                return Token.NormalPart(textToken)
             }
         }
 
         if (textToken.fontName.endsWith("CaslonAntique-Bold")) {
             if (textToken.fontSizePt == 22f) {
-                return Token.Heading1(textToken.text)
+                return Token.Heading1(textToken)
             }
 
             if (textToken.fontSizePt == 10f) {
-                return Token.TableHeading(textToken.text)
+                return Token.TableHeading(textToken)
             }
         }
 
@@ -117,29 +117,31 @@ object SeaOfClaws : Book, SpellSource, TalentSource, CareerSource, MiracleSource
         }
 
         if (textToken.fontSizePt == 12f && textToken.fontName.endsWith("ACaslonPro-Bold")) {
-            return Token.Heading3(textToken.text)
+            return Token.Heading3(textToken)
         }
 
         if (textToken.fontSizePt == 9f) {
             if (textToken.fontName.endsWith("ACaslonPro-Regular")) {
                 return Token.BodyCellPart(
                     text = textToken.text,
-                    y = textToken.y,
-                    height = textToken.height,
+                    metadata = Token.Metadata(
+                        y = textToken.y,
+                        height = textToken.height,
+                    )
                 )
             }
 
             if (textToken.fontName.endsWith("ACaslonPro-Bold")) {
-                return Token.TableHeadCell(textToken.text)
+                return Token.TableHeadCell(textToken)
             }
         }
 
         if (textToken.fontName.endsWith("CaslonAntique-Bold-SC700")) {
             if (textToken.fontSizePt == 12f || textToken.fontSizePt == 18f) {
-                return Token.Heading2(textToken.text)
+                return Token.Heading2(textToken)
             }
 
-            return Token.BoxHeader(textToken.text)
+            return Token.BoxHeader(textToken)
         }
 
         return null

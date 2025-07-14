@@ -75,7 +75,7 @@ class CareerParser(
         val descriptionStart = mutableListOf<Token.ParagraphToken>()
 
         if (text.size > 1) {
-            descriptionStart += text.drop(1).map { Token.NormalPart(it) }
+            descriptionStart += text.drop(1).map { Token.NormalPart(it, Token.Metadata.Empty) }
         }
 
         val species =
@@ -99,7 +99,7 @@ class CareerParser(
             descriptionStart +
                 secondColumn.filterIsInstance<Token.ParagraphToken>().map {
                     if (it is Token.ItalicsPart) {
-                        Token.BlockQuote(it.text)
+                        Token.BlockQuote(it.text, it.metadata)
                     } else {
                         it
                     }

@@ -51,7 +51,7 @@ class MiracleParser {
 
                 val effect =
                     MarkdownBuilder.buildMarkdown(
-                        listOf(Token.NormalPart(effectStart)) +
+                        listOf(Token.NormalPart(effectStart, Token.Metadata.Empty)) +
                             stream.consumeUntil { it is Token.Heading3 || isCultHeading(it) }
                                 .filterIsInstance<Token.ParagraphToken>(),
                     )
