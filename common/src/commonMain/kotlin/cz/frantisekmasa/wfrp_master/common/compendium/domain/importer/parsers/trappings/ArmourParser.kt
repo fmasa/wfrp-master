@@ -5,6 +5,7 @@ import cz.frantisekmasa.wfrp_master.common.compendium.domain.Trapping
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.TrappingType
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.parsers.DefaultLayoutPdfLexer
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.parsers.Document
+import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.parsers.Lexer
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.parsers.PdfStructure
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.parsers.TableParser
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.parsers.trappings.description.TrappingDescriptionParser
@@ -19,13 +20,14 @@ class ArmourParser(
     private val document: Document,
     private val structure: PdfStructure,
     private val descriptionParser: TrappingDescriptionParser,
+    private val lexerModifier: (Lexer) -> Lexer = { it },
 ) {
     fun parse(
         tablePage: Int,
         descriptionPages: IntRange,
     ): List<Trapping> {
         val parser = TableParser()
-        val lexer = DefaultLayoutPdfLexer(document, structure, mergeSubsequentTokens = false)
+        val lexer = lexerModifier(DefaultLayoutPdfLexer(document, structure, mergeSubsequentTokens = false))
         val table =
             parser.findTables(lexer, structure, tablePage, findNames = true)
                 .asSequence()
@@ -38,13 +40,13 @@ class ArmourParser(
             .filter { it.heading != null }
             .flatMap { section ->
                 val armourType =
-                    matchEnumOrNull<ArmourType>(section.heading!!.replace("*", ""))
+                    matchEnumOrNull<ArmourType>(normalizeName(section.heading!!.replace("*", "")))
                         ?: error("Invalid armour type ${section.heading}")
 
                 section.rows.map { row ->
                     val price = PriceParser.parse(row[1])
                     val penalty = row[4].trim()
-                    val name = row[0].trim()
+                    val name = normalizeName(row[0].trim())
                     val comparableName = descriptionParser.comparableName(name)
 
                     val footnoteNumbers =
@@ -65,13 +67,13 @@ class ArmourParser(
                             TrappingType.Armour(
                                 type = armourType,
                                 locations = locations(row[5]),
-                                points = ArmourPoints(row[6].toInt()),
+                                points = ArmourPoints(optionalValue(row[6])?.toInt() ?: 0),
                                 qualities = parseFeatures(row[7]),
                                 flaws = parseFeatures(row[7]),
                             ),
                         description =
                             buildString {
-                                if (penalty != "" && penalty != "–") {
+                                if(optionalValue(penalty) != null) {
                                     append("**Penalty**: $penalty\n")
                                 }
 
@@ -114,5 +116,18 @@ class ArmourParser(
                 HitLocation.values()
                     .filter { location -> location.name.equals(it, ignoreCase = true) }
             }.toSet()
+    }
+
+    private fun optionalValue(value: String): String? {
+        // Archives of the Empire 3 uses "–" for empty cells
+        return value.takeIf { value.isNotBlank() && value.trim() != "–" && value.trim() != "-" }
+    }
+
+    private fun normalizeName(name: String): String {
+        return name
+            // Archives of the Empire 3 uses "Chainmail" instead of "Mail"
+            .replace("Chainmail", "Mail", ignoreCase = true)
+            // Archives of the Empire 3 uses plural in Armour table
+            .replace("Soft Kits", "Soft Kit", ignoreCase = true)
     }
 }
