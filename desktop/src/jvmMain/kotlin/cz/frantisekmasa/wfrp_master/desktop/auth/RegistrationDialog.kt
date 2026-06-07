@@ -15,11 +15,13 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import cz.frantisekmasa.wfrp_master.common.Str
 import cz.frantisekmasa.wfrp_master.common.auth.JvmAuthenticationManager
-import cz.frantisekmasa.wfrp_master.common.auth.JvmAuthenticationManager.PasswordResetResult
+import cz.frantisekmasa.wfrp_master.common.auth.JvmAuthenticationManager.RegistrationResult
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.CallbackRule
+import cz.frantisekmasa.wfrp_master.common.core.ui.forms.Rules
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.TextInput
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.inputValue
 import cz.frantisekmasa.wfrp_master.common.core.ui.scaffolding.LocalPersistentSnackbarHolder
@@ -28,7 +30,7 @@ import dev.icerock.moko.resources.compose.stringResource
 import kotlinx.coroutines.Dispatchers
 
 @Composable
-fun ResetPasswordDialog(
+fun RegistrationDialog(
     auth: JvmAuthenticationManager,
     onDismissRequest: () -> Unit,
 ) {
@@ -39,13 +41,22 @@ fun ResetPasswordDialog(
                 stringResource(Str.authentication_messages_invalid_email),
             ) { EMAIL_REGEX.matches(it) },
         )
-
+    val password =
+        inputValue(
+            "",
+            Rules(
+                Rules.NotBlank(),
+                CallbackRule(stringResource(Str.authentication_messages_password_too_short, PASSWORD_MIN_LENGTH)) {
+                    it.length >= PASSWORD_MIN_LENGTH
+                },
+            ),
+        )
     var validate by remember { mutableStateOf(false) }
     var processing by remember { mutableStateOf(false) }
 
     AlertDialog(
         onDismissRequest = onDismissRequest,
-        title = { Text(stringResource(Str.authentication_button_reset_password)) },
+        title = { Text(stringResource(Str.authentication_button_register)) },
         text = {
             Column(Modifier.width(400.dp)) {
                 if (processing) {
@@ -55,6 +66,13 @@ fun ResetPasswordDialog(
                         label = stringResource(Str.authentication_label_email),
                         value = email,
                         validate = validate,
+                        modifier = Modifier.fillMaxWidth(),
+                    )
+                    TextInput(
+                        label = stringResource(Str.authentication_label_password),
+                        value = password,
+                        validate = validate,
+                        visualTransformation = PasswordVisualTransformation(),
                         modifier = Modifier.fillMaxWidth(),
                     )
                 }
@@ -68,9 +86,11 @@ fun ResetPasswordDialog(
         confirmButton = {
             val coroutineScope = rememberCoroutineScope()
             val snackbarHolder = LocalPersistentSnackbarHolder.current
-            val errorEmailNotFound = stringResource(Str.authentication_messages_email_not_found)
+            val errorEmailExists = stringResource(Str.authentication_messages_registration_email_exists)
             val errorUnknown = stringResource(Str.messages_error_unknown)
-            val messageEmailSent = stringResource(Str.authentication_messages_reset_password_email_sent)
+            val errorWeakPassword = stringResource(Str.authentication_messages_registration_weak_password)
+            val errorTooManyAttempts = stringResource(Str.authentication_messages_too_many_attempts)
+            val messageSuccess = stringResource(Str.authentication_messages_registration_success)
 
             TextButton(
                 enabled = !processing,
@@ -80,18 +100,26 @@ fun ResetPasswordDialog(
                         processing = true
                         coroutineScope.launchLogged(Dispatchers.IO) {
                             try {
-                                when (auth.resetPassword(email.value)) {
-                                    PasswordResetResult.Success -> {
+                                when (val result = auth.register(email.value, password.value)) {
+                                    RegistrationResult.Success -> {
                                         snackbarHolder.showSnackbar(
-                                            messageEmailSent,
+                                            messageSuccess,
                                             SnackbarDuration.Long,
                                         )
                                         onDismissRequest()
                                     }
-                                    PasswordResetResult.EmailNotFound -> {
-                                        snackbarHolder.showSnackbar(errorEmailNotFound)
+
+                                    RegistrationResult.EmailExists -> {
+                                        snackbarHolder.showSnackbar(errorEmailExists)
                                     }
-                                    PasswordResetResult.UnknownError -> {
+
+                                    RegistrationResult.TooManyAttempts -> {
+                                        snackbarHolder.showSnackbar(errorTooManyAttempts)
+                                    }
+                                    is RegistrationResult.WeakPassword -> {
+                                        snackbarHolder.showSnackbar("$errorWeakPassword\n${result.criteria}")
+                                    }
+                                    RegistrationResult.UnknownError -> {
                                         snackbarHolder.showSnackbar(errorUnknown)
                                     }
                                 }
@@ -102,7 +130,7 @@ fun ResetPasswordDialog(
                     }
                 },
             ) {
-                Text(stringResource(Str.authentication_button_send).uppercase())
+                Text(stringResource(Str.authentication_button_register).uppercase())
             }
         },
     )
