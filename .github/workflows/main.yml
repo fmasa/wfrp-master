@@ -17,12 +17,16 @@ jobs:
     runs-on: ubuntu-22.04
     container: timbru31/java-node:21-jdk-iron
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
+        with:
+          persist-credentials: false
       - name: Get yarn cache directory path
         id: yarn-cache-dir-path
         run: echo "::set-output name=dir::$(yarn cache dir)"
 
-      - uses: actions/cache@v3
+      - uses: actions/cache@6f8efc29b200d32929f49075959781ed54ec270c # v3.5.0
+        # only enable the cache if the ref is not a tag
+        if: ${{ !startsWith(github.ref, 'refs/tags/') && github.ref != 'refs/heads/master'  }}
         id: yarn-cache
         with:
           path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
@@ -38,7 +42,9 @@ jobs:
     runs-on: ubuntu-22.04
     container: alvrme/alpine-android:android-34-jdk17
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
+        with:
+          persist-credentials: false
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v3
       - run: ./gradlew --no-daemon --parallel testDebugUnitTest
@@ -47,18 +53,21 @@ jobs:
     name: Unit tests (JVM)
     runs-on: ubuntu-22.04
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
+        with:
+          persist-credentials: false
       - uses: actions/setup-java@v3
         with:
           distribution: 'temurin'
           java-version: '17'
       - name: Pull rulebooks test data
         if: "! github.event.pull_request.head.repo.fork"
-        uses: actions/checkout@v2
+        uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
         with:
           repository: fmasa/wfrp-master-rulebooks
           token: ${{ secrets.RULEBOOKS_PULL_TOKEN }}
           path: rulebooks
+          persist-credentials: false
       - name: Setup Rulebooks test config
         if: "! github.event.pull_request.head.repo.fork"
         run: sed -e "s,{GITHUB_WORKSPACE},$GITHUB_WORKSPACE,g" common/src/jvmTest/resources/config-ci.json > common/src/jvmTest/resources/config.json
@@ -71,7 +80,9 @@ jobs:
     name: Code style (ktlint)
     runs-on: ubuntu-22.04
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
+        with:
+          persist-credentials: false
       - uses: actions/setup-java@v3
         with:
           distribution: 'temurin'
@@ -106,7 +117,9 @@ jobs:
       KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
       KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
+        with:
+          persist-credentials: false
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v3
       - run: echo "$KEYSTORE_FILE_BASE64" | base64 -d > app/.keystore
@@ -135,7 +148,9 @@ jobs:
       PLAY_STORE_JSON_FILE: ${{ secrets.PLAY_STORE_JSON_FILE }}
       SUPPLY_UPLOAD_MAX_RETRIES: '5'
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
+        with:
+          persist-credentials: false
       - name: Download a single artifact
         uses: actions/download-artifact@v4
         with:
@@ -156,19 +171,9 @@ jobs:
     env:
       FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
     steps:
-      - uses: actions/checkout@v2
-      - name: Get yarn cache directory path
-        id: yarn-cache-dir-path
-        run: echo "::set-output name=dir::$(yarn cache dir)"
-
-      - uses: actions/cache@v3
-        id: yarn-cache
+      - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
         with:
-          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
-          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-yarn-
-
+          persist-credentials: false
       - run: yarn install
       - run: yarn firebase deploy
 
@@ -180,18 +185,9 @@ jobs:
     container: timbru31/java-node:21-jdk-iron
     environment: production
     steps:
-      - uses: actions/checkout@v2
-      - name: Get yarn cache directory path
-        id: yarn-cache-dir-path
-        run: echo "::set-output name=dir::$(yarn cache dir)"
-      - uses: actions/cache@v3
-        id: yarn-cache
+      - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
         with:
-          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
-          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-yarn-
-
+          persist-credentials: false
       - run: yarn install
       - run: yarn tsc
       - id: auth
