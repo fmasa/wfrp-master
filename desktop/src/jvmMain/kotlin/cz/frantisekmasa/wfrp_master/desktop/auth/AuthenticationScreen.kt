@@ -63,6 +63,7 @@ fun AuthenticationScreen() {
 
         val errorInvalidEmail = stringResource(Str.authentication_messages_invalid_email)
         val errorEmailNotFound = stringResource(Str.authentication_messages_email_not_found)
+        val errorEmailNotVerified = stringResource(Str.authentication_messages_email_not_verified)
         val errorInvalidPassword = stringResource(Str.authentication_messages_invalid_password)
         val errorUnknown = stringResource(Str.authentication_messages_unknown_error)
         val errorTooManyAttempts = stringResource(Str.authentication_messages_too_many_attempts)
@@ -88,6 +89,9 @@ fun AuthenticationScreen() {
                             }
                             SignInError.EmailNotFound -> {
                                 errorEmailNotFound
+                            }
+                            SignInError.EmailNotVerified -> {
+                                errorEmailNotVerified
                             }
                             SignInError.TooManyAttempts -> {
                                 errorTooManyAttempts
@@ -162,6 +166,22 @@ fun AuthenticationScreen() {
                     onClick = { resetPasswordDialogVisible = true },
                 ) {
                     Text(stringResource(Str.authentication_button_reset_password))
+                }
+
+                var registrationDialogVisible by remember { mutableStateOf(false) }
+
+                if (registrationDialogVisible) {
+                    RegistrationDialog(
+                        auth = auth,
+                        onDismissRequest = { registrationDialogVisible = false },
+                    )
+                }
+
+                TextButton(
+                    modifier = Modifier.align(Alignment.CenterHorizontally),
+                    onClick = { registrationDialogVisible = true },
+                ) {
+                    Text(stringResource(Str.authentication_button_register))
                 }
             }
         }

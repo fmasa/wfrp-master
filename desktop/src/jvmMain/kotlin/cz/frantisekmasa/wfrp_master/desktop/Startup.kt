@@ -21,7 +21,7 @@ import kotlin.time.Duration.Companion.seconds
 fun Startup(content: @Composable () -> Unit) {
     val auth: JvmAuthenticationManager by localDI().instance()
 
-    val user = auth.common.user.collectAsState(null).value
+    val user = auth.user.collectAsState(null).value
     var authenticationScreenVisible by remember { mutableStateOf(false) }
 
     if (authenticationScreenVisible && user == null) {

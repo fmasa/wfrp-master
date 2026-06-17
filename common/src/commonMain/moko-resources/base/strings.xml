@@ -31,6 +31,7 @@
     <string name="authentication_button_sign_in">Sign in</string>
     <string name="authentication_button_log_out">Log out</string>
     <string name="authentication_button_reset_password">Reset password</string>
+    <string name="authentication_button_register">Register</string>
     <string name="authentication_button_send">Send</string>
     <string name="authentication_label_email">Email</string>
     <string name="authentication_label_password">Password</string>
@@ -39,9 +40,15 @@
     <string name="authentication_messages_google_account_collision">There is already different WFRP Master account associated with given Google account.\nDo you want to sign in to that account instead?</string>
     <string name="authentication_messages_invalid_email">Invalid email</string>
     <string name="authentication_messages_invalid_password">Invalid password</string>
+    <string name="authentication_messages_email_not_verified">Account is waiting for email verification. New verification link was sent to your email address.</string>
     <string name="authentication_messages_lose_access_to_parties">You will lose access to these parties:</string>
     <string name="authentication_messages_not_signed_in_description">You are not signed-in.\nSigning-in lets you keep access to parties between devices.</string>
-    <string name="authentication_messages_reset_password_email_sent">Email with instructions for password reset was sent</string>
+    <string name="authentication_messages_password_too_short">Must be at least %d characters long</string>
+    <string name="authentication_messages_registration_email_exists">Account with this email already exists.</string>
+    <string name="authentication_messages_registration_success">Account was successfully created.\nOpen verification link sent to your email to activate the account.</string>
+    <string name="authentication_messages_verification_link_sent">Account is not verified yet. Verification link was sent to your email.</string>
+    <string name="authentication_messages_registration_weak_password">Password is too weak:</string>
+    <string name="authentication_messages_reset_password_email_sent">Email with instructions for password reset was sent.</string>
     <string name="authentication_messages_signed_in_as">You are signed-in as</string>
     <string name="authentication_messages_too_many_attempts">Too many attempts.\nTry again in a few minutes or reset your password.</string>
     <string name="authentication_messages_unknown_error">Unknown error occurred</string>
