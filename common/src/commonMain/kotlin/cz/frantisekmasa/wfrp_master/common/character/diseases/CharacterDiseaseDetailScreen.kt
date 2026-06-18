@@ -28,7 +28,7 @@ import cz.frantisekmasa.wfrp_master.common.character.CharacterItemDetailScreen
 import cz.frantisekmasa.wfrp_master.common.character.wellBeing.diseases.DiseaseSpecification
 import cz.frantisekmasa.wfrp_master.common.character.wellBeing.diseases.DiseaseSpecificationForm
 import cz.frantisekmasa.wfrp_master.common.compendium.disease.CompendiumDiseaseDetailScreen
-import cz.frantisekmasa.wfrp_master.common.core.domain.character.diseases.Countdown
+import cz.frantisekmasa.wfrp_master.common.core.domain.character.Countdown
 import cz.frantisekmasa.wfrp_master.common.core.domain.character.diseases.Disease
 import cz.frantisekmasa.wfrp_master.common.core.domain.identifiers.CharacterId
 import cz.frantisekmasa.wfrp_master.common.core.domain.localizedName

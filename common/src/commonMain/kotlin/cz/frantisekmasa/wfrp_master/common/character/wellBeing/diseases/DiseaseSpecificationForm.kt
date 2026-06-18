@@ -8,7 +8,7 @@ import cz.frantisekmasa.wfrp_master.common.Str
 import cz.frantisekmasa.wfrp_master.common.character.diseases.CountdownInput
 import cz.frantisekmasa.wfrp_master.common.character.diseases.CountdownInputData
 import cz.frantisekmasa.wfrp_master.common.character.diseases.DiagnosedSwitch
-import cz.frantisekmasa.wfrp_master.common.core.domain.character.diseases.Countdown
+import cz.frantisekmasa.wfrp_master.common.core.domain.character.Countdown
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.FormDialog
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.HydratedFormData
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.Rules

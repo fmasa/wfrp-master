@@ -2,22 +2,16 @@ package cz.frantisekmasa.wfrp_master.common.character.trappings
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.material.Divider
 import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
 import androidx.compose.material.LocalContentColor
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.Add
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
@@ -29,6 +23,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import cz.frantisekmasa.wfrp_master.common.Str
+import cz.frantisekmasa.wfrp_master.common.character.characterItemsCard
 import cz.frantisekmasa.wfrp_master.common.character.trappings.add.AddTrappingScreen
 import cz.frantisekmasa.wfrp_master.common.core.domain.Money
 import cz.frantisekmasa.wfrp_master.common.core.domain.identifiers.CharacterId
@@ -36,9 +31,6 @@ import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.Encumbrance
 import cz.frantisekmasa.wfrp_master.common.core.domain.trappings.InventoryItem
 import cz.frantisekmasa.wfrp_master.common.core.shared.Resources
 import cz.frantisekmasa.wfrp_master.common.core.shared.drawableResource
-import cz.frantisekmasa.wfrp_master.common.core.ui.cards.CardTitle
-import cz.frantisekmasa.wfrp_master.common.core.ui.cards.StickyHeader
-import cz.frantisekmasa.wfrp_master.common.core.ui.navigation.LocalNavigationTransaction
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.ContextMenu
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.EmptyUI
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.Spacing
@@ -109,67 +101,41 @@ fun TrappingsScreen(
             }
         }
 
-        stickyHeader {
-            StickyHeader {
-                Divider()
-                CardTitle(
-                    stringResource(Str.trappings_title),
-                    actions = {
-                        val navigation = LocalNavigationTransaction.current
-                        IconButton(
-                            onClick = {
-                                navigation.navigate(
-                                    AddTrappingScreen(characterId, containerId = null),
-                                )
-                            },
-                        ) {
-                            Icon(Icons.Rounded.Add, stringResource(Str.trappings_title_add))
-                        }
-                    },
-                )
-            }
-        }
-
-        if (state.trappings.isEmpty()) {
-            item("trappings-empty-ui") {
+        characterItemsCard(
+            leadingDivider = true,
+            title = { stringResource(Str.trappings_title) },
+            key = "trappings",
+            id = { it.item.id },
+            items = state.trappings,
+            newItemScreen = { AddTrappingScreen(characterId, containerId = null) },
+            noItems = {
                 EmptyUI(
-                    text = stringResource(Str.trappings_messages_no_items),
+                    stringResource(Str.trappings_messages_no_items),
                     Resources.Drawable.TrappingContainer,
                     size = EmptyUI.Size.Small,
                 )
-            }
-        }
-
-        itemsIndexed(
-            state.trappings,
-            key = { _, it -> it.item.id },
-        ) { index, trapping ->
-            Column {
-                if (index != 0) {
-                    Divider()
-                }
-
-                val navigation = LocalNavigationTransaction.current
-
-                TrappingItem(
-                    trapping = trapping,
-                    onClick = {
-                        navigation.navigate(
-                            CharacterTrappingDetailScreen(characterId, trapping.item.id),
-                        )
-                    },
-                    onRemove = { onRemove(trapping.item) },
-                    onDuplicate = { onDuplicate(trapping.item) },
-                    additionalContextItems =
-                        listOf(
-                            ContextMenu.Item(
-                                stringResource(Str.trappings_button_move_to_container),
-                                onClick = { addToContainerDialogTrapping = trapping.item },
-                            ),
-                        ),
+            },
+            detailScreen = { trapping ->
+                CharacterTrappingDetailScreen(
+                    characterId,
+                    trapping.item.id,
                 )
-            }
-        }
+            },
+            onRemove = { onRemove(it.item) },
+            contextMenuItems = {
+                listOf(
+                    ContextMenu.Item(
+                        stringResource(Str.trappings_button_move_to_container),
+                        onClick = { addToContainerDialogTrapping = it.item },
+                    ),
+                    ContextMenu.Item(
+                        stringResource(Str.common_ui_button_duplicate),
+                        onClick = { onDuplicate(it.item) },
+                    ),
+                )
+            },
+            item = { trapping -> TrappingItem(trapping) },
+        )
     }
 }
 

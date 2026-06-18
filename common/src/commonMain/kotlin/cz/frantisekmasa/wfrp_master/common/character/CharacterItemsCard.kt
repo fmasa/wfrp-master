@@ -13,8 +13,10 @@ import cafe.adriel.voyager.core.screen.Screen
 import cz.frantisekmasa.wfrp_master.common.Str
 import cz.frantisekmasa.wfrp_master.common.core.ui.cards.CardTitle
 import cz.frantisekmasa.wfrp_master.common.core.ui.cards.StickyHeader
+import cz.frantisekmasa.wfrp_master.common.core.ui.menu.WithContextMenu
 import cz.frantisekmasa.wfrp_master.common.core.ui.navigation.LocalNavigationTransaction
 import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.CompactEmptyUI
+import cz.frantisekmasa.wfrp_master.common.core.ui.primitives.ContextMenu
 import dev.icerock.moko.resources.compose.stringResource
 import kotlinx.collections.immutable.ImmutableList
 
@@ -25,10 +27,21 @@ fun <T> LazyListScope.characterItemsCard(
     items: ImmutableList<T>,
     actions: (@Composable () -> Unit)? = null,
     newItemScreen: () -> Screen,
+    detailScreen: (T) -> Screen,
+    contextMenuItems: @Composable (T) -> List<ContextMenu.Item> = { emptyList() },
+    leadingDivider: Boolean = false,
+    onRemove: (T) -> Unit,
+    noItems: @Composable () -> Unit = {
+        CompactEmptyUI(stringResource(Str.common_ui_messages_no_items))
+    },
     item: @Composable (T) -> Unit,
 ) {
     stickyHeader(key = "$key-header") {
         StickyHeader {
+            if (leadingDivider) {
+                Divider()
+            }
+
             CardTitle(
                 title(),
                 actions = {
@@ -49,7 +62,7 @@ fun <T> LazyListScope.characterItemsCard(
     if (items.isEmpty()) {
         item(key = "$key-empty-ui") {
             if (items.isEmpty()) {
-                CompactEmptyUI(stringResource(Str.common_ui_messages_no_items))
+                noItems()
             }
         }
     }
@@ -60,7 +73,18 @@ fun <T> LazyListScope.characterItemsCard(
                 Divider()
             }
 
-            item(it)
+            val navigation = LocalNavigationTransaction.current
+            WithContextMenu(
+                items =
+                    contextMenuItems(it) +
+                        ContextMenu.Item(
+                            stringResource(Str.common_ui_button_remove),
+                            onClick = { onRemove(it) },
+                        ),
+                onClick = { navigation.navigate(detailScreen(it)) },
+            ) {
+                item(it)
+            }
         }
     }
 }

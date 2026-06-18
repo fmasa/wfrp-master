@@ -15,7 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
 import com.halilibo.richtext.commonmark.Markdown
 import com.halilibo.richtext.ui.material.RichText
-import cz.frantisekmasa.wfrp_master.common.core.domain.character.diseases.Countdown
+import cz.frantisekmasa.wfrp_master.common.core.domain.character.Countdown
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.InputValue
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.SelectBox
 import cz.frantisekmasa.wfrp_master.common.core.ui.forms.TextInput
