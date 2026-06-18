@@ -134,7 +134,7 @@
     <string name="skills_title_choose_compendium_skill">Choisir la compétence du Compendium…</string>
     <string name="social_classes_courtiers">Courtiers</string>
     <string name="social_classes_academics">Académie</string>
-    <string name="spells_casting_number_shortcut">VL</string>
+    <string name="spells_casting_number_shortcut">NI</string>
     <string name="social_status_gold">Or</string>
     <string name="spells_lores_daemonology">Démonologie</string>
     <string name="spells_lores_fire">Feu</string>
@@ -165,7 +165,7 @@
     <string name="trappings_availability_common">Commun</string>
     <string name="trappings_availability_exotic">Exotique</string>
     <string name="trappings_label_availability">Disponibilité</string>
-    <string name="trappings_label_carries">Porteurs</string>
+    <string name="trappings_label_carries">Contenu</string>
     <string name="trappings_label_description">Description (optionnel)</string>
     <string name="trappings_label_flaws">Faiblesses</string>
     <string name="trappings_flaws_bulky">Encombrement</string>
@@ -189,12 +189,12 @@
     <string name="weapons_flaws_dangerous">Dangereux</string>
     <string name="weapons_label_damage">Dommages</string>
     <string name="weapons_label_equip">Équipé</string>
-    <string name="weapons_melee_groups_brawling">Combat</string>
+    <string name="weapons_melee_groups_brawling">Bagarre</string>
     <string name="weapons_melee_groups_cavalry">Cavalerie</string>
-    <string name="weapons_melee_groups_basic">De base</string>
-    <string name="weapons_melee_groups_fencing">Clôture</string>
+    <string name="weapons_melee_groups_basic">Base</string>
+    <string name="weapons_melee_groups_fencing">Escrime</string>
     <string name="weapons_melee_groups_flail">Fléau</string>
-    <string name="weapons_qualities_blast">Explosion (Indice)</string>
+    <string name="weapons_qualities_blast">Explosion</string>
     <string name="weapons_qualities_damaging">Dévastatrice</string>
     <string name="weapons_qualities_defensive">Défensif</string>
     <string name="weapons_qualities_entangle">Immobilisante</string>
@@ -414,7 +414,7 @@
     <string name="weapons_equip_not_equipped">Non équipé</string>
     <string name="weapons_equip_off_hand">Main secondaire</string>
     <string name="weapons_reach_long">Long</string>
-    <string name="weapons_reach_massive">Massive</string>
+    <string name="weapons_reach_massive">Considérable</string>
     <string name="authentication_messages_invalid_password">Mot de passe incorrect</string>
     <string name="about_attribution_dice_roll_sound">Le son de Shake And Roll Dice a été créé par Mike Koenig (soundbible.com) et utilisé sous licence CC BY 3.0.</string>
     <string name="about_body">Cette application a été créé par František Maša et ses camarades de classe.
@@ -641,7 +641,7 @@
     <string name="trappings_search_placeholder">Rechercher dans les objets…</string>
     <string name="trappings_title_select_container">Sélectionner un conteneur</string>
     <string name="trappings_types_trade_tools">Outils commerciaux</string>
-    <string name="trappings_types_tool_or_kit">Outils et kits</string>
+    <string name="trappings_types_tool_or_kit">Outils et nécessaires</string>
     <string name="trappings_title_stored_trappings">Objet stocké</string>
     <string name="trappings_title_select_trapping">Objet sélectionner</string>
     <string name="trappings_title">Inventaire</string>
@@ -658,16 +658,16 @@
     <string name="weapons_flaws_slow">Lente</string>
     <string name="weapons_label_qualities">Qualités des armes</string>
     <string name="weapons_label_groups">Groupes d\'armes</string>
-    <string name="weapons_melee_groups_parry">Armes de défense</string>
-    <string name="weapons_melee_groups_polearm">Arme à feu</string>
+    <string name="weapons_melee_groups_parry">Parade</string>
+    <string name="weapons_melee_groups_polearm">Armes d\'Hast</string>
     <string name="weapons_label_range">Portée</string>
-    <string name="weapons_label_reach">Portée</string>
+    <string name="weapons_label_reach">Allonge</string>
     <string name="weapons_qualities_wrap">A enroulement</string>
     <string name="weapons_qualities_unbreakable">Incassable</string>
     <string name="weapons_qualities_trip">Trip</string>
     <string name="weapons_qualities_penetrating">Perforante</string>
     <string name="weapons_qualities_pistol">Pistolet</string>
-    <string name="weapons_qualities_repeater">A répétition (indice)</string>
+    <string name="weapons_qualities_repeater">Répétition</string>
     <string name="weapons_qualities_trap_blade">Piège-lame</string>
     <string name="weapons_qualities_spread">Spread</string>
     <string name="weapons_qualities_slash">Slash</string>
@@ -679,7 +679,7 @@
     <string name="weapons_reach_very_long">Très longue</string>
     <string name="weapons_reach_short">Courte</string>
     <string name="points_resolve">Détermination</string>
-    <string name="weapons_qualities_shield">Protectrice (indice)</string>
+    <string name="weapons_qualities_shield">Protectrice</string>
     <string name="weapons_qualities_pummel">Assommante</string>
     <string name="weapons_qualities_impale">Empaleuse</string>
     <string name="weapons_melee_groups_two_handed">Deux mains</string>
@@ -687,7 +687,7 @@
     <string name="skills_messages_no_skills_in_compendium_subtext">Il n\'y a pas encore de compétences dans votre compendium.</string>
     <string name="authentication_messages_google_account_collision">Il existe déjà un compte WFRP Master associé à un compte Google donné.
 \nVoulez-vous vous connecter à ce compte à la place \?</string>
-    <string name="trappings_expression_constants_weapon_range">ArmeDePortee</string>
+    <string name="trappings_expression_constants_weapon_range">PorteeDeLArme</string>
     <string name="characteristics_fellowship_bonus_shortcut">BSoc</string>
     <string name="characteristics_toughness_shortcut">E</string>
     <string name="characteristics_intelligence_bonus_shortcut">BInt</string>
