@@ -6,6 +6,24 @@ on:
       version:
         required: true
         type: string
+      github-release:
+        required: true
+        type: boolean
+    secrets:
+      signing-key:
+        required: true
+      keystore-file-base64:
+        required: true
+      keystore-password:
+        required: true
+      key-password:
+        required: true
+      play-store-json-file:
+        required: true
+      firebase-token:
+        required: true
+      google-application-credentials-base64:
+        required: true
 
 # Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
 permissions:
@@ -39,11 +57,12 @@ jobs:
       - id: auth
         uses: google-github-actions/auth@7c6bc770dae815cd3e89ee6cdf493a5fab2cc093 # v3.0.0
         with:
-          credentials_json: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS_BASE64 }}
+          credentials_json: ${{ secrets.google-application-credentials-base64 }}
       - run: yarn fireway migrate --path firebase-build/migrations
 
   conveyor:
     name: "Create desktop distributions"
+    if: ${{ inputs.github_release }} 
     needs: [firestore-migrations]
     environment:
       name: github-pages
@@ -74,7 +93,7 @@ jobs:
         uses: hydraulic-software/conveyor/actions/build@7944fcb4085b3519af85a980e8987b5a4d526f20 # v17.0
         with:
           command: make site
-          signing_key: ${{ secrets.SIGNING_KEY }}
+          signing_key: ${{ secrets.signing-key }}
           agree_to_license: 1
           cache_key: conveyor-${{ matrix.os }}-${{ matrix.arch }}
 
@@ -87,7 +106,8 @@ jobs:
       - name: Upload artifacts to Github Release
         env:
           GH_TOKEN: ${{ github.token }}
-        run: gh release upload "$GITHUB_REF_NAME" output/* --clobber
+          RELEASE_VERSION: ${{ inputs.version }}
+        run: gh release upload "$RELEASE_VERSION" output/* --clobber
 
       - name: Setup Pages
         uses: actions/configure-pages@45bfe0192ca1faeb007ade9deae92b16b8254a0d # v6.0.0
@@ -107,9 +127,9 @@ jobs:
     container: alvrme/alpine-android:android-34-jdk17
     environment: production
     env:
-      KEYSTORE_FILE_BASE64: ${{ secrets.KEYSTORE_FILE_BASE64 }}
-      KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
-      KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
+      KEYSTORE_PASSWORD: ${{ secrets.keystore-password }}
+      KEY_PASSWORD: ${{ secrets.key-password }}
+      SUPPLY_VERSION_NAME: ${{ inputs.version }}
     steps:
       - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
         with:
@@ -118,9 +138,8 @@ jobs:
         uses: gradle/actions/setup-gradle@3f131e8634966bd73d06cc69884922b02e6faf92 # v6.2.0
         with:
           cache-disabled: true
-      - run: echo "$KEYSTORE_FILE_BASE64" | base64 -d > app/.keystore
-      - run: echo "SUPPLY_VERSION_CODE=$((950 + $GITHUB_RUN_NUMBER))" >> $GITHUB_ENV
-      - run: echo "SUPPLY_VERSION_NAME=$(.github/workflows/version.sh)" >> $GITHUB_ENV
+      - run: echo ${{ secrets.keystore-file-base64 }} | base64 -d > app/.keystore
+      - run: echo 'SUPPLY_VERSION_CODE="$((950 + $GITHUB_RUN_NUMBER))"' >> $GITHUB_ENV
       - run: 'echo "version code: $SUPPLY_VERSION_CODE, version name: $SUPPLY_VERSION_NAME"'
       - run: ./gradlew bundleRelease
       - run: mv app/build/outputs/bundle/release/app-release.aab .
@@ -142,7 +161,6 @@ jobs:
     environment: production
     env:
       PLAY_STORE_TRACK: internal
-      PLAY_STORE_JSON_FILE: ${{ secrets.PLAY_STORE_JSON_FILE }}
       SUPPLY_UPLOAD_MAX_RETRIES: '5'
     steps:
       - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
@@ -153,7 +171,7 @@ jobs:
         with:
           name: bundle
       - run: apk add build-base
-      - run: echo "$PLAY_STORE_JSON_FILE" > fastlane/play_store_credentials.json
+      - run: echo "${{ secrets.play-store-json-file }}" > fastlane/play_store_credentials.json
       - run: bundle install -j $(nproc)
       - run: bundle exec fastlane deploy
       - run: '[ "$GITHUB_REF_TYPE" = "tag" ] && bundle exec fastlane production || echo "Skipped"'
@@ -165,7 +183,7 @@ jobs:
     container: timbru31/java-node:21-jdk-iron
     environment: production
     env:
-      FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+      FIREBASE_TOKEN: ${{ secrets.firebase-token }}
     steps:
       - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
         with:

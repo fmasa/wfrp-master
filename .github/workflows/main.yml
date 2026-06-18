@@ -16,27 +16,65 @@ permissions: {}
 jobs:
   checks:
     name: "Checks"
-    uses: ./.github/checks.yml
+    uses: ./.github/workflows/checks.yml
+    secrets:
+      rulebooks-pull-token: ${{ secrets.RULEBOOKS_PULL_TOKEN }}
+
+  master-version-name:
+    if: github.ref == 'refs/heads/master' && github.event_name == 'push'
+    name: "Build master version name"
+    runs-on: ubuntu-22.04
+    outputs:
+      version: ${{ steps.version.outputs.version }}
+    steps:
+      - id: version
+        run: echo version="dev-$(echo ${{github.sha}} | cut -c 1-7)"  >> "$GITHUB_OUTPUT" 
 
   release-master:
     name: "Release (testing)"
-    if: github.ref == 'refs/heads/master'
-    runs-on: ubuntu-22.04
-    needs: [checks]
-    steps:
-      - name: Get short SHA
-        id: get-short-sha
-        run: |
-          id=$(echo ${{github.sha}} | cut -c 1-7)
-          echo "::set-output name=id::$id"
-      - uses: ./.github/release.yml
-        with:
-          version:  ${{ format('dev-{0}', steps.get-short-sha.outputs.id) }}
+    needs: [checks, master-version-name]
+    uses: ./.github/workflows/release.yml
+    with:
+      version:  ${{ needs.master-version-name.outputs.version }}
+      # Does not deploy desktop version
+      # Desktop version currently requires existing Github Release to upload
+      # artifacts.
+      # TODO: Create pre-release automatically for each commit on master
+      github-release: false
+    secrets:
+      signing-key: ${{ secrets.SIGNING_KEY }}
+      keystore-file-base64: ${{ secrets.KEYSTORE_FILE_BASE64 }}
+      keystore-password: ${{ secrets.KEYSTORE_PASSWORD }}
+      key-password: ${{ secrets.KEY_PASSWORD }}
+      play-store-json-file: ${{ secrets.PLAY_STORE_JSON_FILE }}
+      firebase-token: ${{ secrets.FIREBASE_TOKEN }}
+      google-application-credentials-base64: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS_BASE64 }}
+    permissions:
+      # Matching permissions required by the workflow,
+      # see the release.yml for rationale
+      contents: write
+      pages: write
+      id-token: write
 
   release-tag:
     name: "Release (production)"
     if: github.ref_type == 'tag'
     needs: [checks]
-    uses: ./.github/release.yml
+    uses: ./.github/workflows/release.yml
     with:
       version: ${{ github.ref_name }}
+      github-release: true
+    secrets:
+      signing-key: ${{ secrets.SIGNING_KEY }}
+      keystore-file-base64: ${{ secrets.KEYSTORE_FILE_BASE64 }}
+      keystore-password: ${{ secrets.KEYSTORE_PASSWORD }}
+      key-password: ${{ secrets.KEY_PASSWORD }}
+      play-store-json-file: ${{ secrets.PLAY_STORE_JSON_FILE }}
+      firebase-token: ${{ secrets.FIREBASE_TOKEN }}
+      google-application-credentials-base64: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS_BASE64 }}
+    permissions:
+      # Matching permissions required by the workflow,
+      # see the release.yml for rationale
+      contents: write
+      pages: write
+      id-token: write
