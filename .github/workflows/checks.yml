@@ -2,6 +2,9 @@ name: Checks
 
 on:
   workflow_call:
+    secrets:
+      rulebooks-pull-token:
+        required: true
 
 env:
   ACTIONS_ALLOW_USE_UNSECURE_NODE_VERSION: true
@@ -61,7 +64,7 @@ jobs:
         uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
         with:
           repository: fmasa/wfrp-master-rulebooks
-          token: ${{ secrets.RULEBOOKS_PULL_TOKEN }}
+          token: ${{ secrets.rulebooks-pull-token }}
           path: rulebooks
           persist-credentials: false
       - name: Setup Rulebooks test config
