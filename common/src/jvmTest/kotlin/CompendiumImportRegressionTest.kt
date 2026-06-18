@@ -1,6 +1,7 @@
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.PdfCompendiumImporter
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.books.ArchivesOfTheEmpire1
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.books.ArchivesOfTheEmpire2
+import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.books.ArchivesOfTheEmpire3
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.books.Book
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.books.CoreRulebook
 import cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.books.EnemyInShadowsCompanion
@@ -62,6 +63,11 @@ class CompendiumImportRegressionTest {
     @Test
     fun `Archives of The Empire II`() {
         assertMatchesPreviousRuns(ArchivesOfTheEmpire2)
+    }
+
+    @Test
+    fun `Archives of The Empire III`() {
+        assertMatchesPreviousRuns(ArchivesOfTheEmpire3)
     }
 
     @Test

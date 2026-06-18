@@ -10,8 +10,8 @@ class DefaultLayoutPdfLexer(
     private val structure: PdfStructure,
     private val mergeSubsequentTokens: Boolean = true,
     private val sortTokens: Boolean = false,
-) {
-    fun getTokens(page: Int): Sequence<Token> {
+): Lexer {
+    override fun getTokens(page: Int): Sequence<Token> {
         val stripper = TextStripper()
         stripper.setSortByPosition(sortTokens && !structure.tokensSorted)
         stripper.setStartPage(page)

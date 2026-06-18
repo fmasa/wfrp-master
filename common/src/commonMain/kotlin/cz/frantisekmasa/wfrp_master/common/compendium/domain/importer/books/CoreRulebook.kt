@@ -312,7 +312,7 @@ object CoreRulebook :
                     tokenMapper = { token ->
                         if (token is Token.Heading3 && token.text == "Armour Flaws\n") {
                             // This is incorrectly formatted in the PDF, see the bottom of page 300
-                            Token.Heading2(token.text)
+                            Token.Heading2(token.text, token.metadata)
                         } else {
                             token
                         }
@@ -380,20 +380,20 @@ object CoreRulebook :
 
     override fun resolveToken(textToken: TextToken): Token? {
         if (textToken.fontName.endsWith("CaslonAntique") && textToken.fontSizePt == 15f) {
-            return Token.BoxHeader(textToken.text)
+            return Token.BoxHeader(textToken)
         }
 
         if (textToken.fontName.endsWith("CaslonAntique") && textToken.fontSizePt == 10f) {
-            return Token.BoxContent(textToken.text)
+            return Token.BoxContent(textToken)
         }
 
         if (textToken.fontName.endsWith("CaslonAntique,Bold")) {
             if (textToken.fontSizePt == 19f) {
-                return Token.Heading1(textToken.text)
+                return Token.Heading1(textToken)
             }
 
             if (textToken.fontSizePt == 10f && textToken.text.isNotBlank()) {
-                return Token.TableHeadCell(textToken.text)
+                return Token.TableHeadCell(textToken)
             }
         }
 
@@ -403,14 +403,14 @@ object CoreRulebook :
 
         if (textToken.fontName.endsWith("CaslonAntique-Bold-SC700")) {
             if (textToken.fontSizePt == 12f || textToken.fontSizePt == 18f) {
-                return Token.Heading2(textToken.text)
+                return Token.Heading2(textToken)
             }
 
-            return Token.BoxHeader(textToken.text)
+            return Token.BoxHeader(textToken)
         }
 
         if (textToken.fontName.endsWith("ACaslonPro-Bold") && textToken.fontSizePt == 12f) {
-            return Token.Heading3(textToken.text)
+            return Token.Heading3(textToken)
         }
 
         if (textToken.text.startsWith("•")) {
@@ -419,16 +419,16 @@ object CoreRulebook :
 
         if (textToken.fontSizePt == 9.0f) {
             if (textToken.fontName.endsWith("ACaslonPro-Bold")) {
-                return Token.BoldPart(textToken.text)
+                return Token.BoldPart(textToken)
             }
 
             if (textToken.fontName.endsWith("ACaslonPro-Regular")) {
                 if (heightEquals(textToken.height, 6.39f)) {
-                    return Token.ItalicsPart(textToken.text)
+                    return Token.ItalicsPart(textToken)
                 }
 
                 if (heightEquals(textToken.height, 6.2f)) {
-                    return Token.NormalPart(textToken.text)
+                    return Token.NormalPart(textToken)
                 }
             }
         }
@@ -436,13 +436,15 @@ object CoreRulebook :
         if (textToken.fontSizePt == 8f && textToken.fontName.endsWith("ACaslonPro-Regular")) {
             return Token.BodyCellPart(
                 text = textToken.text,
-                y = textToken.y,
-                height = textToken.height,
+                metadata = Token.Metadata(
+                    y = textToken.y,
+                    height = textToken.height
+                )
             )
         }
 
         if (textToken.fontSizePt == 11f && textToken.fontName.endsWith("CaslonAntique")) {
-            return Token.TableHeading(textToken.text)
+            return Token.TableHeading(textToken)
         }
 
         return null

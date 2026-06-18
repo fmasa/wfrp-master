@@ -25,8 +25,8 @@ class DiseaseParser(
                         tokens
                             .map {
                                 when (it) {
-                                    is Token.BodyCellPart -> Token.NormalPart(it.text)
-                                    is Token.TableHeadCell -> Token.BoldPart(it.text)
+                                    is Token.BodyCellPart -> Token.NormalPart(it.text, it.metadata)
+                                    is Token.TableHeadCell -> Token.BoldPart(it.text, it.metadata)
                                     else -> it
                                 }
                             }.toList()

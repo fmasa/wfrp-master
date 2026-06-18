@@ -1,8 +1,15 @@
 package cz.frantisekmasa.wfrp_master.common.compendium.domain.importer.parsers
 
+/**
+ * Parses table in format:
+ *
+ * <BoxHeader>
+ * <Header cells>+
+ * (<Head
+ */
 class TableParser {
     fun findTables(
-        lexer: DefaultLayoutPdfLexer,
+        lexer: Lexer,
         structure: PdfStructure,
         tablePage: Int,
         findNames: Boolean,
@@ -86,13 +93,13 @@ class TableParser {
                             .asSequence()
                             .map {
                                 when (it) {
-                                    is Token.BodyCellPart -> Token.NormalPart(it.text)
+                                    is Token.BodyCellPart -> Token.NormalPart(it.text, it.metadata)
                                     else -> it
                                 }
                             }
                             .map {
                                 when (it) {
-                                    is Token.NormalPart -> Token.NormalPart(it.text.replace("*", ""))
+                                    is Token.NormalPart -> Token.NormalPart(it.text.replace("*", ""), it.metadata)
                                     else -> it
                                 }
                             }
@@ -148,7 +155,7 @@ class TableParser {
                         if (
                             isLastColumn &&
                             nextToken is Token.BodyCellPart &&
-                            nextToken.y > lastToken.y + lastToken.height
+                            nextToken.metadata.y > lastToken.metadata.y + lastToken.metadata.height
                         ) {
                             cells += ""
                             break
@@ -163,7 +170,7 @@ class TableParser {
 
                         val hasAnotherLine =
                             if (isLastColumn) {
-                                (text.endsWith(", ") || text.endsWith(" or ")) // e.g. list of weapon qualities in last column
+                                (text.endsWith(", ") || text.endsWith(" or ") || text.endsWith(" ")) // e.g. list of weapon qualities in last column
                             } else {
                                 (text.endsWith(" ") || text.endsWith("’s")) // e.g. "10% \n Perception
                             }

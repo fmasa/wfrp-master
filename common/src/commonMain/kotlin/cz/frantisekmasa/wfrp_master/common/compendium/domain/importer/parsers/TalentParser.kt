@@ -34,7 +34,7 @@ class TalentParser {
                         append('\n')
                     }.split('\n', limit = 2)
 
-                description += Token.NormalPart(descriptionStart)
+                description += Token.NormalPart(descriptionStart, Token.Metadata.Empty)
 
                 var tests = ""
 
@@ -53,7 +53,7 @@ class TalentParser {
                         )
 
                     tests = testsLine
-                    description += Token.NormalPart(descriptionStart2)
+                    description += Token.NormalPart(descriptionStart2, Token.Metadata.Empty)
                 }
 
                 description +=

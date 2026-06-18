@@ -37,8 +37,8 @@ object UpInArms : Book, CareerSource, TalentSource, TrappingSource, JournalEntry
         return CareerParser(
             tokenMapper = {
                 when (it) {
-                    is Token.BodyCellPart -> Token.NormalPart(it.text)
-                    is Token.TableHeadCell -> Token.BoldPart(it.text)
+                    is Token.BodyCellPart -> Token.NormalPart(it.text, it.metadata)
+                    is Token.TableHeadCell -> Token.BoldPart(it.text, it.metadata)
                     else -> it
                 }
             },
@@ -108,7 +108,7 @@ object UpInArms : Book, CareerSource, TalentSource, TrappingSource, JournalEntry
                             .flatten()
                             .map {
                                 when (it) {
-                                    is Token.BoxHeader -> Token.Heading2(it.text)
+                                    is Token.BoxHeader -> Token.Heading2(it.text, it.metadata)
                                     else -> it
                                 }
                             }
@@ -182,20 +182,20 @@ object UpInArms : Book, CareerSource, TalentSource, TrappingSource, JournalEntry
 
     override fun resolveToken(textToken: TextToken): Token? {
         if (textToken.fontName.endsWith("CaslonAntique-Bold-SC700")) {
-            return Token.BoxHeader(textToken.text)
+            return Token.BoxHeader(textToken)
         }
 
         if (textToken.fontName.endsWith("CaslonAntique-Bold")) {
             if (textToken.fontSizePt == 19f || textToken.fontSizePt == 22f) {
-                return Token.Heading1(textToken.text)
+                return Token.Heading1(textToken)
             }
 
             if (textToken.fontSizePt == 10f) {
-                return Token.TableHeading(textToken.text)
+                return Token.TableHeading(textToken)
             }
 
             if (textToken.fontSizePt == 15f) {
-                return Token.BoxHeader(textToken.text)
+                return Token.BoxHeader(textToken)
             }
         }
 
@@ -204,36 +204,38 @@ object UpInArms : Book, CareerSource, TalentSource, TrappingSource, JournalEntry
         }
 
         if (textToken.fontSizePt == 12f && textToken.fontName.endsWith("ACaslonPro-Bold")) {
-            return Token.Heading3(textToken.text)
+            return Token.Heading3(textToken)
         }
 
         if (textToken.fontSizePt == 10f || textToken.fontSizePt == 9f) {
             if (textToken.fontName.endsWith("ACaslonPro-Bold")) {
                 if (textToken.height == 6.201f) {
-                    return Token.TableHeadCell(textToken.text)
+                    return Token.TableHeadCell(textToken)
                 }
 
-                return Token.BoldPart(textToken.text)
+                return Token.BoldPart(textToken)
             }
 
             if (textToken.fontName.endsWith("ACaslonPro-Italic")) {
-                return Token.ItalicsPart(textToken.text)
+                return Token.ItalicsPart(textToken)
             }
 
             if (textToken.fontName.endsWith("ACaslonPro-Regular")) {
                 if (textToken.height == 6.201f) {
                     return Token.BodyCellPart(
                         text = textToken.text,
-                        y = textToken.y,
-                        height = textToken.height,
+                        metadata = Token.Metadata(
+                            y = textToken.y,
+                            height = textToken.height
+                        )
                     )
                 }
 
-                return Token.NormalPart(textToken.text)
+                return Token.NormalPart(textToken)
             }
 
             if (textToken.fontName.endsWith("ACaslonPro-BoldItalic")) {
-                return Token.BoldItalicPart(textToken.text)
+                return Token.BoldItalicPart(textToken)
             }
         }
 

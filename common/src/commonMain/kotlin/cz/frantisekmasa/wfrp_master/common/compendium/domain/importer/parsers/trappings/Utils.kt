@@ -10,6 +10,7 @@ inline fun <reified T : Enum<T>> matchEnumOrNull(
 
     val comparableValue =
         value
+            .trim()
             .replace('-', '_')
             .replace(' ', '_')
 

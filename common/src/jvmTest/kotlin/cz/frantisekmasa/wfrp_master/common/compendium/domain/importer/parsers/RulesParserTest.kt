@@ -6,22 +6,23 @@ import kotlin.test.assertEquals
 class RulesParserTest {
     @Test
     fun `correctly parses nested headings`() {
+        val metadata = Token.Metadata(y = 0f, height = 0f)
         val tokens =
             listOf(
-                Token.Heading1("Heading 1"),
-                Token.NormalPart("Text 1"),
-                Token.Heading2("Heading 1.1"),
-                Token.NormalPart("Text 1.1"),
-                Token.Heading3("Heading 1.1.1"),
-                Token.NormalPart("Text 1.1.1"),
-                Token.Heading2("Heading 1.2"),
-                Token.NormalPart("Text 1.2"),
-                Token.Heading2("Heading 1.3"),
-                Token.NormalPart("Text 1.3"),
-                Token.Heading3("Text 1.3.1"),
-                Token.NormalPart("Text 1.3.1"),
-                Token.Heading1("Heading 2"),
-                Token.NormalPart("Text 2"),
+                Token.Heading1("Heading 1", metadata),
+                Token.NormalPart("Text 1", metadata),
+                Token.Heading2("Heading 1.1", metadata),
+                Token.NormalPart("Text 1.1", metadata),
+                Token.Heading3("Heading 1.1.1", metadata),
+                Token.NormalPart("Text 1.1.1", metadata),
+                Token.Heading2("Heading 1.2", metadata),
+                Token.NormalPart("Text 1.2", metadata),
+                Token.Heading2("Heading 1.3", metadata),
+                Token.NormalPart("Text 1.3", metadata),
+                Token.Heading3("Text 1.3.1", metadata),
+                Token.NormalPart("Text 1.3.1", metadata),
+                Token.Heading1("Heading 2", metadata),
+                Token.NormalPart("Text 2", metadata),
             )
 
         assertEquals(
@@ -42,15 +43,16 @@ class RulesParserTest {
 
     @Test
     fun `flattens entries that have only child sections`() {
+        val metadata = Token.Metadata(y = 0f, height = 0f)
         val tokens =
             listOf(
-                Token.Heading1("Heading 1"),
-                Token.Heading1("Heading 2"),
-                Token.NormalPart("Text 2"),
-                Token.Heading2("Heading 2.1"),
-                Token.Heading2("Heading 2.2"),
-                Token.Heading3("Heading 2.2.1"),
-                Token.NormalPart("Text 2.2.1"),
+                Token.Heading1("Heading 1", metadata),
+                Token.Heading1("Heading 2", metadata),
+                Token.NormalPart("Text 2", metadata),
+                Token.Heading2("Heading 2.1", metadata),
+                Token.Heading2("Heading 2.2", metadata),
+                Token.Heading3("Heading 2.2.1", metadata),
+                Token.NormalPart("Text 2.2.1", metadata),
             )
 
         assertEquals(
@@ -66,16 +68,17 @@ class RulesParserTest {
 
     @Test
     fun `unifies casing for heading`() {
+        val metadata = Token.Metadata(y = 0f, height = 0f)
         val tokens =
             listOf(
                 // Words will be title cased
-                Token.Heading1("headinG 1"),
-                Token.NormalPart("Text 1"),
-                Token.Heading2("Heading 1.1"),
-                Token.NormalPart("Text 1.1"),
+                Token.Heading1("headinG 1", metadata),
+                Token.NormalPart("Text 1", metadata),
+                Token.Heading2("Heading 1.1", metadata),
+                Token.NormalPart("Text 1.1", metadata),
                 // "of" and "and" are not title cased
-                Token.Heading2("heading of rules and other"),
-                Token.NormalPart("Text 1.2"),
+                Token.Heading2("heading of rules and other", metadata),
+                Token.NormalPart("Text 1.2", metadata),
             )
 
         assertEquals(
