@@ -185,7 +185,7 @@
     <string name="authentication_messages_not_signed_in_description">No estás registrado.
 \nRegistrarte te permite mantener el acceso a los grupos entre dispositivos.</string>
     <string name="careers_messages_no_careers_in_compendium">Ninguna Carrera</string>
-    <string name="about_attribution_dice_roll_sound">El sonido de Batir y Lanzar los Dados fue creado por Mike Koenig (soundbible.com) y usado a través de licencia CC BY 3.0</string>
+    <string name="about_attribution_dice_roll_sound">El sonido Shake And Roll Dice fue creado por Mike Koenig (soundbible.com) y usado a través de licencia CC BY 3.0</string>
     <string name="conditions_deafened">Ensordecido</string>
     <string name="characteristics_dexterity">Destreza</string>
     <string name="character_messages_no_equipped_weapons">Ningún arma equipada</string>
@@ -226,7 +226,7 @@
     <string name="compendium_title_export_compendium">Exportar Compendio</string>
     <string name="parties_messages_no_parties">Ningún grupo</string>
     <string name="skills_label_characteristic">Característica</string>
-    <string name="authentication_messages_email_not_found">Email no encontrado</string>
+    <string name="authentication_messages_email_not_found">Correo electrónico no encontrado</string>
     <string name="careers_comma_separated_skills_helper">Lista de Habilidades separadas por coma</string>
     <string name="common_ui_label_previous_screen">Volver a la pantalla anterior</string>
     <string name="characteristics_initiative_shortcut">Ini</string>
@@ -254,7 +254,7 @@
     <string name="skills_button_add_non_compendium">…o añade una habilidad que no está en el Compendio</string>
     <string name="trappings_qualities_durable">Duradero</string>
     <string name="trappings_label_price">Precio</string>
-    <string name="authentication_messages_reset_password_email_sent">Se ha enviado un email con las instrucciones para restablecer la contraseña</string>
+    <string name="authentication_messages_reset_password_email_sent">Se ha enviado un correo electrónico con las instrucciones para restablecer la contraseña</string>
     <string name="weapons_flaws_imprecise">Imprecisa</string>
     <string name="weapons_label_reach">Longitud</string>
     <string name="blessings_label_duration">Duración</string>
@@ -495,7 +495,7 @@
     <string name="parties_messages_create_error_no_connection">Tienes que estar conectado a internet para crear grupos</string>
     <string name="combat_initiative_strategies_initiative_test">Prueba de Iniciativa Enfrentada</string>
     <string name="weapons_flaws_tiring">Fatigosa</string>
-    <string name="authentication_label_email">Email</string>
+    <string name="authentication_label_email">Correo electrónico</string>
     <string name="calendar_moon_phases_new_moon">Luna Nueva</string>
     <string name="weapons_qualities_trip">Obstaculizante</string>
     <string name="trappings_label_item_qualities">Cualidades de objeto</string>
@@ -816,4 +816,14 @@
     <string name="journal_folder_armour_flaws">Guía del consumidor / Armadura / Defectos de la armadura</string>
     <string name="journal_folder_weapon_melee_groups">Guía del consumidor / Armas / Grupos de armas cuerpo a cuerpo</string>
     <string name="journal_folder_weapon_ranged_groups">Guía del consumidor / Armas / Grupos de armas a distancia</string>
+    <string name="authentication_messages_email_not_verified">La cuenta está a la espera de verificación por correo electrónico. Se ha enviado un nuevo enlace de verificación.</string>
+    <string name="authentication_messages_registration_success">La cuenta se ha creado correctamente.\nAbre el enlace de verficación enviado a tu correo electrónico para activarla.</string>
+    <string name="authentication_messages_registration_email_exists">Ya hay una cuenta existente con este correo electrónico.</string>
+    <string name="authentication_messages_verification_link_sent">La cuenta no está verificada aún. El enlace de verificación se te ha enviado por correo electrónico.</string>
+    <string name="trappings_label_encumbrance_counted_subtext">Añade esta impedimenta a la impedimenta del personaje (desmarcar si no lo lleva encima, por ejemplo un carro)</string>
+    <string name="trappings_label_encumbrance_counted">Cuenta de impedimenta</string>
+    <string name="character_effect_fast">rápido</string>
+    <string name="authentication_messages_password_too_short">Debe ser de al menos %d carácteres de larga</string>
+    <string name="authentication_messages_registration_weak_password">La contraseña es demasiado débil:</string>
+    <string name="authentication_button_register">Registro</string>
 </resources>
